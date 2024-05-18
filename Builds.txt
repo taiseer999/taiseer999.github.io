@@ -60,7 +60,7 @@ description="Kodi 21 Arabic AZR skin."
 
 name="cos Build - Arabic - Kodi 21 - By Taiseer."
 version="1"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=vuiVIDXVQuAtj0CUUy2I%2Bkwj2HUkQC29dvvXTS1Jg6aHTK3TMcgB26TH9WOJc2dp&expiry=Dn1dYuuyCiWblB0x%2F8jurA%3D%3D&mac=50c92f31fc73ec5fb0967540d65cc53ecf78cbcc1d757212424ad4c0d26073fa"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=rbwjzrQW1whcswRcOgBDLztlnb4Pdb6l5r5tCDLgb%2BlUy4rnPRPRXBBigUZv0oG%2F&expiry=SkSgx8s9FrLzBmBiUXKM0Q%3D%3D&mac=8d07c3039c5405f18c8172af864ff4d79d3bc8d2301c80ed7122de36d3590fb5"
 minor="http://"
 gui="http://"
 kodi="21"
