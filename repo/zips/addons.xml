@@ -163,4 +163,22 @@
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
+</addon><addon id="taiseer.repository" name="taiseer.repository" version="1" provider-name="taiseer999">
+    <extension point="xbmc.addon.repository" name="Example Repository">
+        <dir>
+            <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/</datadir>
+        </dir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>taiseer999.github.io</summary>
+        <description>Arabic Kodi</description>
+        <disclaimer />
+        <platform>all</platform>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon></addons>
