@@ -61,7 +61,7 @@ SPACER = '='
 # You can edit these however you want, just make sure that you have a %s in each of the
 # THEME's so it grabs the text from the menu item
 COLOR1 = 'white'
-COLOR2 = 'limegreen'
+COLOR2 = 'orange'
 # Primary menu items   / {0} is the menu item and is required
 THEME1 = u'[COLOR {color1}]{{}}[/COLOR]'.format(color1=COLOR1)
 # Build Names          / {0} is the menu item and is required
@@ -114,7 +114,7 @@ NOTIFICATION = ''
 HEADERTYPE = 'Text'
 # Font size of header
 FONTHEADER = 'Font14'
-HEADERMESSAGE = '[COLOR limegreen][B]Open[/B][/COLOR]Wizard'
+HEADERMESSAGE = '[COLOR orange][B]Open[/B][/COLOR]Wizard'
 # url to image if using Image 424x180
 HEADERIMAGE = 'http://'
 # Font for Notification Window
