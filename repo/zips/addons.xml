@@ -148,9 +148,9 @@
 </addon><addon id="repository.taiseer" name="taiseer999" version="1" provider-name="taiseer999">
     <extension point="xbmc.addon.repository" name="repository.taiseer">
         <dir>
-            <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/</datadir>
+            <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/</datadir>
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
