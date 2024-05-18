@@ -18,7 +18,7 @@ description="Kodi Build with Arctic Fuse Arabic for Kodi 21+ ONLY By Taiseer."
 
 name="Lite Builds - Arabic - Kodi 21 - By Taiseer."
 version="1.4"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=1BD8pRXnFHzEdj4Vc1W%2FMz3pSIOIMUBhAY0aUqL7AjLwiXAkhuI%2FeXsV8HBGAi2J&expiry=qnR%2BlY9%2Bj1gILwUV2QwO6A%3D%3D&mac=a65e91f3f9bb549e7512cc4659fed6deb96429c307db18289470e546daae07e4"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=NBLgV6CCj6sRwlm%2B0%2FvZbvRciQw9bPdAj0UrwH3w5D%2BXoFlFbV2x%2BACRWIfnisnE&expiry=tjlVxK0SpQGsFHvYHMSJxQ%3D%3D&mac=04eacbcfe67af4e7c48463774c3a237b941a5b1e33533a48cb3511e706d0e7a7"
 minor="http://"
 gui="http://"
 kodi="21"
