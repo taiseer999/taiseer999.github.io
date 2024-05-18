@@ -4,7 +4,7 @@ zip="url.to.wizard"
 
 name="Lite Cream Build - Arabic - Kodi 21 - By Taiseer."
 version="2.2"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=DRsnOllXbxBLPxuKxw%2Bgd21PKzI4VzmeSpJe90D3TGrrtkOczZItGjxqekuIGUf6&expiry=B4Z8APpPQA147uy5gQS7rA%3D%3D&mac=f4a14f11184034cba3100d87db090c96b657c23e75ccc0a0f8066c3fa83c7eb9"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=ZSliAmpPejnykSBo5auNrlAccKSfnaZu71stlio4ITykQRJ9U4eiGM3rEoVnjy8O&expiry=AfLW8%2BfN0UHhlezv9h6qTA%3D%3D&mac=e3da0f3e809f27c3250a2b4de7af2a52732b100fd7718efb195bc90a01ed2d64"
 minor="http://"
 gui="http://"
 kodi="21"
