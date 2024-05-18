@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="taiseer.repository" name="taiseer.repository" version="1" provider-name="taiseer999">
-    <extension point="xbmc.addon.repository" name="Example Repository">
+    <extension point="xbmc.addon.repository" name="Taiseer.repository">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml.md5</checksum>
@@ -8,7 +8,7 @@
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary>taiseer999.github.io</summary>
+        <summary>taiseer.repository</summary>
         <description>Arabic Kodi</description>
         <disclaimer></disclaimer>
         <platform>all</platform>
