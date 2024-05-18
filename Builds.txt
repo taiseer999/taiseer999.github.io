@@ -32,7 +32,7 @@ description="Kodi 21 Arabic Fentastic + nimbus skins."
 
 name="Netflix Build - Arabic - Kodi 21 - By Taiseer."
 version="1.2"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=waQBmqG8Cx16U0xtoVRnyAGc8OpFFk2D%2BUUAbDuX%2BrYLtaRSYHbYT4FtGHd9ToYr&expiry=vsQAyCaGGUSvycR9YQPslQ%3D%3D&mac=184c23a596527508ea81750492f311a71853df1b0e9dfeaf804e7cfec25b34d0"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=yUCEblhy52hxLWfBTSLrPy6mx0BffMYTl7r8jaLpyMWyuG%2FgiPs2MxNAQv%2Batb4R&expiry=7Fwe2tSAR0w5aJrsg1Ww3w%3D%3D&mac=d6e6bf3038628a93d8dcb1c88e78a5ae50270e7b22b765fc189d347445b09de2"
 minor="http://"
 gui="http://"
 kodi="21"
