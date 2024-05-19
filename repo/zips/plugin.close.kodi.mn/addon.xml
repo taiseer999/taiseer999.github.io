@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.close.kodi.mn" name="[COLOR aqua]Force Close Kodi Matrix and Nexus[/COLOR] " version="0.0.1" provider-name="Aliunde">
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Force Close Kodi Nexus</summary>
+    <description lang="en">Force Close Kodi Matrix and Nexus, Credits to Based_Skid</description>
+	<assets>
+		<icon>icon.png</icon>
+		<fanart>fanart.jpg</fanart>
+	</assets>
+    <platform>all</platform>
+  </extension>
+</addon>
