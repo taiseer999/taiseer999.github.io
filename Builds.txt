@@ -74,7 +74,7 @@ description="Kodi 21 Arabic AZR skin."
 
 name="cos Build - Arabic - Kodi 21 - By Taiseer."
 version="1"
-url="https://www.dropbox.com/scl/fi/s8slv3x1pa62noxglljvt/coz-build.zip?rlkey=q49muzw5qfoz02no90vzt8bwd&st=q37nvuya&dl=0"
+url="https://www.dropbox.com/scl/fi/s8slv3x1pa62noxglljvt/coz-build.zip?rlkey=q49muzw5qfoz02no90vzt8bwd&st=q37nvuya&dl=1"
 minor="http://"
 gui="http://"
 kodi="21"
