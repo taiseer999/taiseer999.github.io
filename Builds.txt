@@ -73,7 +73,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic AZR skin."
 
 name="cos Build - Arabic - Kodi 21 - By Taiseer."
-version="1"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=rbwjzrQW1whcswRcOgBDLztlnb4Pdb6l5r5tCDLgb%2BlUy4rnPRPRXBBigUZv0oG%2F&expiry=NNVf%2BPgkCaFF4x9ZgnNwqQ%3D%3D&mac=168a6600e7d9c44dba180baa8191e8b1d927090ed459d1f5a8fce7b8652a6fef"
 minor="http://"
 gui="http://"
