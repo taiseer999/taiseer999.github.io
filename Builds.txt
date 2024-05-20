@@ -59,7 +59,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic Titan BINGIE MOD Arabic skin."
 
 name="AZR Build - Arabic - Kodi 21 - By Taiseer."
-version="1.1"
+version="1.2"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=Z7iSg9jmVnU8FSdhBuLXV6TzY553HJ5vF1Hxnh%2F6K7x4u0LaPOyXcAWrZEB4yNHQ&expiry=3HEyXwBhJ1GgYZ2rsPpqfQ%3D%3D&mac=2c11dc64537cf123193d14aecbc825fe82600b05d8420a392ead13d91a133ec9"
 minor="http://"
 gui="http://"
