@@ -16,7 +16,7 @@
     
     <extension point="xbmc.addon.metadata">
         <summary lang="en">[COLOR orange]Open[/COLOR]Wizard</summary>
-        <description lang="en">[COLOR blue]Open[/COLOR]Wizard offers many maintenance features, selective add-on data saving, and automated build installs.</description>
+        <description lang="en">[COLOR orange]Open[/COLOR]Wizard offers many maintenance features, selective add-on data saving, and automated build installs.</description>
         <platform>all</platform>
         <reuselanguageinvoker>false</reuselanguageinvoker>
         <source>https://www.github.com/a4k-openproject/plugin.program.openwizard/</source>
