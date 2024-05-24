@@ -186,7 +186,7 @@
 			<fanart>fanart.png</fanart>
 		</assets>
 	</extension>
-</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.14.0" provider-name="Unknown">
+</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.15.0" provider-name="Unknown">
     <requires>
       <import addon="script.module.requests" />
       <import addon="vfs.libarchive" optional="true" />
@@ -197,7 +197,7 @@
         <summary lang="en">a4kSubtitles - Multi-Source Subtitles Addon</summary>
         <description>
 Multi-source subtitles addon optimized for Seren and a4kScrapers.
-Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, Subscene, Addic7ed
+Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, SubDL, Addic7ed
         </description>
         <platform>all</platform>
         <reuselanguageinvoker>true</reuselanguageinvoker>
@@ -211,6 +211,10 @@ Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, Subscene, Addic7ed
             <screenshot>screenshot-03.png</screenshot>
         </assets>
         <news>
+[v3.15.0]:
+  * Remove Subscene
+  * Add SubDL
+
 [v3.14.0]:
   * Handle invalid `VideoPlayer.IMDBNumber` meta
 
