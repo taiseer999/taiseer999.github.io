@@ -1,0 +1,2360 @@
+<?xml version="1.0" ?>
+<includes>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-homemenu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.Home.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">Home</param>
+                <param name="visible">True</param>
+                <!-- Sidemenu Widgets for homemenu 0 الرئيسية -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100601</param>
+                    <param name="groupid">100701</param>
+                    <param name="label">الافلام المشهورة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(303).ListItem.Property(guid),guid-45be094d) | [Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)]] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100602) | Control.IsVisible(100603) | Control.IsVisible(100604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100601</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-45be094d,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,الرئيسية,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,0,Home)</onfocus>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100602</param>
+                    <param name="groupid">100702</param>
+                    <param name="label">المسلسلات المشهورة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(303).ListItem.Property(guid),guid-45be094d) | [Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)]] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100603) | Control.IsVisible(100604) | Control.IsVisible(100605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100602</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-45be094d,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,الرئيسية,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,0,Home)</onfocus>
+                </include>
+                <!-- Sidemenu Widgets for homemenu 1 الافلام -->
+                <!-- Sidemenu Widgets for homemenu 2 المسلسلات -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">102601</param>
+                    <param name="groupid">102701</param>
+                    <param name="label">In-Progress</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(102601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(303).ListItem.Property(guid),guid-abc97734) | [Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)]] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">102801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(102602) | Control.IsVisible(102603) | Control.IsVisible(102604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://video/tvshows/inprogressshows.xml</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102601</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-abc97734,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,المسلسلات,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">102602</param>
+                    <param name="groupid">102702</param>
+                    <param name="label">Top Rated</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(102602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(303).ListItem.Property(guid),guid-abc97734) | [Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)]] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">102802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(102603) | Control.IsVisible(102604) | Control.IsVisible(102605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">special://skin/extras/playlists/TopRatedTvShows.xsp</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102602</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-abc97734,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,المسلسلات,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">102603</param>
+                    <param name="groupid">102703</param>
+                    <param name="label">Recent</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(102603)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(303).ListItem.Property(guid),guid-abc97734) | [Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)]] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">102803</param>
+                    <param name="shortstack_visible">[Control.IsVisible(102604) | Control.IsVisible(102605) | Control.IsVisible(102606)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">special://skin/extras/playlists/RecentTvShows.xsp</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102603) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102603</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102603</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-abc97734,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,المسلسلات,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">102604</param>
+                    <param name="groupid">102704</param>
+                    <param name="label">Random</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(102604)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(303).ListItem.Property(guid),guid-abc97734) | [Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)]] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">102804</param>
+                    <param name="shortstack_visible">[Control.IsVisible(102605) | Control.IsVisible(102606) | Control.IsVisible(102607)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.Home.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">special://skin/extras/playlists/RandomTvShows.xsp</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102604) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102604</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102604</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-abc97734,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,المسلسلات,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <!-- Sidemenu Widgets for homemenu 3 الاضافات -->
+                <!-- Sidemenu Widgets for homemenu 4 الطقس -->
+                <!-- Classic Widgets for homemenu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-homemenu-widgets-selector">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1101menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1101.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1101</param>
+                <param name="visible">True</param>
+                <!-- Classic Widgets for 1101menu -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100601</param>
+                    <param name="groupid">100701</param>
+                    <param name="label">تكملة المشاهدة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100602) | Control.IsVisible(100603) | Control.IsVisible(100604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;list_name=%d8%aa%d9%83%d9%85%d9%84%d8%a9%20%d8%a7%d9%84%d9%85%d8%b4%d8%a7%d9%87%d8%af%d8%a9%20%d8%a7%d9%84%d8%a3%d9%81%d9%84%d8%a7%d9%85&amp;tmdb_type=movie</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100601</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100602</param>
+                    <param name="groupid">100702</param>
+                    <param name="label">شاهدتها مؤخرًا</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100603) | Control.IsVisible(100604) | Control.IsVisible(100605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100602</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100603</param>
+                    <param name="groupid">100703</param>
+                    <param name="label">قائمة المشاهدة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100603)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100803</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100604) | Control.IsVisible(100605) | Control.IsVisible(100606)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;list_name=%d8%a7%d9%84%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%d9%82%d8%a7%d8%a6%d9%85%d8%a9%20%d8%a7%d9%84%d9%85%d8%b4%d8%a7%d9%87%d8%af%d8%a9&amp;tmdb_type=movie</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100603) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100603</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100603</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100604</param>
+                    <param name="groupid">100704</param>
+                    <param name="label">الأفلام المفضلة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100604)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100804</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100605) | Control.IsVisible(100606) | Control.IsVisible(100607)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_favorites&amp;list_name=%d8%a7%d9%84%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%d8%a7%d9%84%d9%85%d9%81%d8%b6%d9%84%d8%a9&amp;tmdb_type=movie</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100604) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100604</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100604</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100605</param>
+                    <param name="groupid">100705</param>
+                    <param name="label">التجميعات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100605)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100805</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100606) | Control.IsVisible(100607) | Control.IsVisible(100608)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_collection&amp;list_name=%d8%a7%d9%84%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%d8%a7%d9%84%d8%aa%d8%ac%d9%85%d9%8a%d8%b9%d8%a7%d8%aa&amp;tmdb_type=movie</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100605) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100605</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100605</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100606</param>
+                    <param name="groupid">100706</param>
+                    <param name="label">استنادًا على الأكثر مشاهدة الأفلام</param>
+                    <param name="usewidgetlabel">True</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100606)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100806</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100607) | Control.IsVisible(100608) | Control.IsVisible(100609)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_becausemostwatched&amp;tmdb_type=movie</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100606) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100606</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100606</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100607</param>
+                    <param name="groupid">100707</param>
+                    <param name="label">تصنيف للافلام</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100607)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100807</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100608) | Control.IsVisible(100609) | Control.IsVisible(100610)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100607) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100607</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100607</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100608</param>
+                    <param name="groupid">100708</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100607.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100608)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100607)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100607)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100808</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100609) | Control.IsVisible(100610) | Control.IsVisible(100611)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100607.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100608) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100608</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100608</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100609</param>
+                    <param name="groupid">100709</param>
+                    <param name="label">النوع</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100609)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100809</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100610) | Control.IsVisible(100611) | Control.IsVisible(100612)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Geners.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100609) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100609</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100609</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100610</param>
+                    <param name="groupid">100710</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100609.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100610)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100609)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100609)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100810</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100611) | Control.IsVisible(100612) | Control.IsVisible(100613)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100609.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100610) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100610</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100610</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100611</param>
+                    <param name="groupid">100711</param>
+                    <param name="label">كوري</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Circle_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100611)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100811</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100612) | Control.IsVisible(100613) | Control.IsVisible(100614)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100611) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100611</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100611</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100612</param>
+                    <param name="groupid">100712</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100611.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100612)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100611)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100611)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100812</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100613) | Control.IsVisible(100614) | Control.IsVisible(100615)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1101.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100611.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100612) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100612</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100612</param>
+                    </include>
+                </include>
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1101menu-widgets-selector">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1102menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1102.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1102</param>
+                <param name="visible">True</param>
+                <!-- Classic Widgets for 1102menu -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100601</param>
+                    <param name="groupid">100701</param>
+                    <param name="label">تكملة المشاهدة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100602) | Control.IsVisible(100603) | Control.IsVisible(100604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;list_name=%d8%aa%d9%83%d9%85%d9%84%d8%a9%20%d8%a7%d9%84%d9%85%d8%b4%d8%a7%d9%87%d8%af%d8%a9%20%d8%a7%d9%84%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100601</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100602</param>
+                    <param name="groupid">100702</param>
+                    <param name="label">تكملة مشاهدة الحلقات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100603) | Control.IsVisible(100604) | Control.IsVisible(100605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100602</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100603</param>
+                    <param name="groupid">100703</param>
+                    <param name="label">حلقاتك التالية</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100603)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100803</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100604) | Control.IsVisible(100605) | Control.IsVisible(100606)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100603) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100603</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100603</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100604</param>
+                    <param name="groupid">100704</param>
+                    <param name="label">شاهدتها مؤخرًا</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100604)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100804</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100605) | Control.IsVisible(100606) | Control.IsVisible(100607)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100604) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100604</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100604</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100605</param>
+                    <param name="groupid">100705</param>
+                    <param name="label">قائمة المشاهدة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100605)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100805</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100606) | Control.IsVisible(100607) | Control.IsVisible(100608)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;list_name=%d8%a7%d9%84%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20%d9%82%d8%a7%d8%a6%d9%85%d8%a9%20%d8%a7%d9%84%d9%85%d8%b4%d8%a7%d9%87%d8%af%d8%a9&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100605) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100605</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100605</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100606</param>
+                    <param name="groupid">100706</param>
+                    <param name="label">المفضلة</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100606)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100806</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100607) | Control.IsVisible(100608) | Control.IsVisible(100609)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_favorites&amp;list_name=%d8%a7%d9%84%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20%d8%a7%d9%84%d9%85%d9%81%d8%b6%d9%84%d8%a9&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100606) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100606</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100606</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100607</param>
+                    <param name="groupid">100707</param>
+                    <param name="label">التجميعات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100607)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100807</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100608) | Control.IsVisible(100609) | Control.IsVisible(100610)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_collection&amp;list_name=%d8%a7%d9%84%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20%d8%a7%d9%84%d8%aa%d8%ac%d9%85%d9%8a%d8%b9%d8%a7%d8%aa&amp;tmdb_type=tv</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100607) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100607</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100607</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100608</param>
+                    <param name="groupid">100708</param>
+                    <param name="label">التصنيف</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100608)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100808</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100609) | Control.IsVisible(100610) | Control.IsVisible(100611)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100608) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100608</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100608</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100609</param>
+                    <param name="groupid">100709</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100608.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100609)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100608)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100608)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100809</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100610) | Control.IsVisible(100611) | Control.IsVisible(100612)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100608.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100609) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100609</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100609</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100610</param>
+                    <param name="groupid">100710</param>
+                    <param name="label">النوع</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100610)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100810</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100611) | Control.IsVisible(100612) | Control.IsVisible(100613)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=TV+Shows+Geners.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100610) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100610</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100610</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100611</param>
+                    <param name="groupid">100711</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100610.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100611)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100610)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100610)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100811</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100612) | Control.IsVisible(100613) | Control.IsVisible(100614)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100610.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100611) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100611</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100611</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100612</param>
+                    <param name="groupid">100712</param>
+                    <param name="label">الشبكات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Circle_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100612)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100812</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100613) | Control.IsVisible(100614) | Control.IsVisible(100615)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://video/tvnetwork/</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100612) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100612</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100612</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100613</param>
+                    <param name="groupid">100713</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100612.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100613)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100612)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100612)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100813</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100614) | Control.IsVisible(100615) | Control.IsVisible(100616)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100612.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100613) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100613</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100613</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100614</param>
+                    <param name="groupid">100714</param>
+                    <param name="label">كوري</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Circle_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100614)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100814</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100615) | Control.IsVisible(100616) | Control.IsVisible(100617)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Kdrama+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100614) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100614</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100614</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">100615</param>
+                    <param name="groupid">100715</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100614.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(100615)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Classic_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[True] + [Control.IsVisible(100614)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100614)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">100815</param>
+                    <param name="shortstack_visible">[Control.IsVisible(100616) | Control.IsVisible(100617) | Control.IsVisible(100618)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1102.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100614.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100615) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100615</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100615</param>
+                    </include>
+                </include>
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1102menu-widgets-selector">
+</include>
+    <!-- Static Mainmenu -->
+    <include name="skinvariables-1103menu-staticitems">
+        <item>
+            <label>عشوائي الأفلام الصنف</label>
+            <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fgenre.png/</icon>
+            <property name="path">plugin://plugin.video.themoviedb.helper/?info=random_genres&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+            <property name="menu">1103menu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[0]</property>
+            <property name="guid">guid-63217a45</property>
+            <property name="target">videos</property>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style">Square</property>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget">True</property>
+            <property name="sidemenu_guid"/>
+            <property name="sidemenu_label"/>
+            <label2>$LOCALIZE[24000]</label2>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=random_genres&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>عشوائي المسلسلات الصنف</label>
+            <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fgenre.png/</icon>
+            <property name="path">plugin://plugin.video.themoviedb.helper/?info=random_genres&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+            <property name="menu">1103menu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[1]</property>
+            <property name="guid">guid-59acf088</property>
+            <property name="target">videos</property>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style">Square</property>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget">True</property>
+            <property name="sidemenu_guid"/>
+            <property name="sidemenu_label"/>
+            <label2>$LOCALIZE[24000]</label2>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=random_genres&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Genres</label>
+            <icon/>
+            <property name="path">musicdb://genres/</property>
+            <property name="menu">1103menu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[2]</property>
+            <property name="guid">guid-40f5c53b</property>
+            <property name="target">music</property>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style">Square</property>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget">True</property>
+            <property name="sidemenu_guid"/>
+            <property name="sidemenu_label"/>
+            <label2>$LOCALIZE[249]</label2>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(music,musicdb://genres/,return)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Top 100</label>
+            <icon/>
+            <property name="path">library://music/top100/</property>
+            <property name="menu">1103menu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-9789d326</property>
+            <property name="target">music</property>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style">Square</property>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget">True</property>
+            <property name="sidemenu_guid"/>
+            <property name="sidemenu_label"/>
+            <label2>$LOCALIZE[249]</label2>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(music,library://music/top100/,return)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Years</label>
+            <icon/>
+            <property name="path">musicdb://years/</property>
+            <property name="menu">1103menu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[4]</property>
+            <property name="guid">guid-478344a3</property>
+            <property name="target">music</property>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style">Square</property>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget">True</property>
+            <property name="sidemenu_guid"/>
+            <property name="sidemenu_label"/>
+            <label2>$LOCALIZE[249]</label2>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(music,musicdb://years/,return)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[39031]</label>
+            <icon/>
+            <property name="path">ActivateWindow(Music,Files,return)</property>
+            <property name="menu">1103menu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[5]</property>
+            <property name="guid">guid-123c2440</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style"/>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget"/>
+            <property name="sidemenu_guid"/>
+            <property name="sidemenu_label"/>
+            <label2/>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(Music,Files,return)</onclick>
+            <visible>True</visible>
+        </item>
+    </include>
+    <!-- Dynamic Submenus -->
+    <include name="skinvariables-1103menu-submenu">
+        <include content="Hub_Submenu_List">
+            <param name="id">302</param>
+            <param name="ondown">400</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_Home</param>
+            <param name="hidden_button_prefix">Item.0302.</param>
+            <param name="window_id">1103</param>
+            <param name="submenu_widget_highlight">[$EXP[Exp_Hubs_Spotlight_IsSlide] + !$EXP[Exp_Hubs_Spotlight_IsDisabled]]</param>
+            <param name="submenu_widget_id">601</param>
+            <include content="Action_SkinVariables_ShortcutList_Onclick">
+                <param name="id">302</param>
+            </include>
+            <content/>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-63217a45)</visible>
+        </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">302</param>
+            <param name="ondown">400</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_Home</param>
+            <param name="hidden_button_prefix">Item.1302.</param>
+            <param name="window_id">1103</param>
+            <param name="submenu_widget_highlight">[$EXP[Exp_Hubs_Spotlight_IsSlide] + !$EXP[Exp_Hubs_Spotlight_IsDisabled]]</param>
+            <param name="submenu_widget_id">1601</param>
+            <include content="Action_SkinVariables_ShortcutList_Onclick">
+                <param name="id">302</param>
+            </include>
+            <content/>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-59acf088)</visible>
+        </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">302</param>
+            <param name="ondown">400</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_Home</param>
+            <param name="hidden_button_prefix">Item.2302.</param>
+            <param name="window_id">1103</param>
+            <param name="submenu_widget_highlight">[$EXP[Exp_Hubs_Spotlight_IsSlide] + !$EXP[Exp_Hubs_Spotlight_IsDisabled]]</param>
+            <param name="submenu_widget_id">2601</param>
+            <content target="music" sortby="label" sortorder="ascending" limit="" browse="$VAR[Defs_BrowseLimitedLists]">musicdb://genres/</content>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-40f5c53b)</visible>
+        </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">302</param>
+            <param name="ondown">400</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_Home</param>
+            <param name="hidden_button_prefix">Item.3302.</param>
+            <param name="window_id">1103</param>
+            <param name="submenu_widget_highlight">[$EXP[Exp_Hubs_Spotlight_IsSlide] + !$EXP[Exp_Hubs_Spotlight_IsDisabled]]</param>
+            <param name="submenu_widget_id">3601</param>
+            <content target="music" sortby="label" sortorder="ascending" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://music/top100/</content>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-9789d326)</visible>
+        </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">302</param>
+            <param name="ondown">400</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_Home</param>
+            <param name="hidden_button_prefix">Item.4302.</param>
+            <param name="window_id">1103</param>
+            <param name="submenu_widget_highlight">[$EXP[Exp_Hubs_Spotlight_IsSlide] + !$EXP[Exp_Hubs_Spotlight_IsDisabled]]</param>
+            <param name="submenu_widget_id">4601</param>
+            <content target="music" sortby="label" sortorder="ascending" limit="" browse="$VAR[Defs_BrowseLimitedLists]">musicdb://years/</content>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-478344a3)</visible>
+        </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">302</param>
+            <param name="ondown">400</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_Home</param>
+            <param name="hidden_button_prefix">Item.5302.</param>
+            <param name="window_id">1103</param>
+            <param name="submenu_widget_highlight">[$EXP[Exp_Hubs_Spotlight_IsSlide] + !$EXP[Exp_Hubs_Spotlight_IsDisabled]]</param>
+            <param name="submenu_widget_id">5601</param>
+            <content target="music" sortby="" sortorder="ascending" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://music/</content>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-123c2440)</visible>
+        </include>
+    </include>
+    <!-- Category Spotlights -->
+    <include name="skinvariables-1103menu-spotlight">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1103menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1103.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1103</param>
+                <param name="visible">True</param>
+                <!-- Adaptive Widgets for Category 1103menu 0 عشوائي الأفلام الصنف -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">601</param>
+                    <param name="groupid">701</param>
+                    <param name="label">$INFO[Window.Property(Item.0302.SpecialFolderLabel)]</param>
+                    <param name="usewidgetlabel">True</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-63217a45)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">[!String.IsEmpty(Window.Property(Item.0302.SpecialFolderPath)) | Control.HasFocus(302) | Control.HasFocus(300)]</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(602) | Control.IsVisible(603) | Control.IsVisible(604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(Item.0302.SpecialFolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">601</param>
+                    </include>
+                </include>
+                <!-- Standard Widgets for Category 1103menu 0 عشوائي الأفلام الصنف -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">602</param>
+                    <param name="groupid">702</param>
+                    <param name="label">عشوائي الأفلام الصنف</param>
+                    <param name="usewidgetlabel">True</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-63217a45)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(603) | Control.IsVisible(604) | Control.IsVisible(605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=random_genres&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">602</param>
+                    </include>
+                </include>
+                <!-- Adaptive Widgets for Category 1103menu 1 عشوائي المسلسلات الصنف -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">1601</param>
+                    <param name="groupid">1701</param>
+                    <param name="label">$INFO[Window.Property(Item.1302.SpecialFolderLabel)]</param>
+                    <param name="usewidgetlabel">True</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(1601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-59acf088)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">[!String.IsEmpty(Window.Property(Item.1302.SpecialFolderPath)) | Control.HasFocus(302) | Control.HasFocus(300)]</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">1801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(1602) | Control.IsVisible(1603) | Control.IsVisible(1604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(Item.1302.SpecialFolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(1601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">1601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">1601</param>
+                    </include>
+                </include>
+                <!-- Standard Widgets for Category 1103menu 1 عشوائي المسلسلات الصنف -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">1602</param>
+                    <param name="groupid">1702</param>
+                    <param name="label">عشوائي المسلسلات الصنف</param>
+                    <param name="usewidgetlabel">True</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(1602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-59acf088)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">1802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(1603) | Control.IsVisible(1604) | Control.IsVisible(1605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=random_genres&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(1602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">1602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">1602</param>
+                    </include>
+                </include>
+                <!-- Adaptive Widgets for Category 1103menu 2 Genres -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">2601</param>
+                    <param name="groupid">2701</param>
+                    <param name="label">$INFO[Window.Property(Item.2302.SpecialFolderLabel)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(2601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-40f5c53b)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">[!String.IsEmpty(Window.Property(Item.2302.SpecialFolderPath)) | Control.HasFocus(302) | Control.HasFocus(300)]</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">2801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(2602) | Control.IsVisible(2603) | Control.IsVisible(2604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="music" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(Item.2302.SpecialFolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(2601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">2601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">2601</param>
+                    </include>
+                </include>
+                <!-- Standard Widgets for Category 1103menu 2 Genres -->
+                <!-- Adaptive Widgets for Category 1103menu 3 Top 100 -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">3601</param>
+                    <param name="groupid">3701</param>
+                    <param name="label">$INFO[Window.Property(Item.3302.SpecialFolderLabel)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(3601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-9789d326)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">[!String.IsEmpty(Window.Property(Item.3302.SpecialFolderPath)) | Control.HasFocus(302) | Control.HasFocus(300)]</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">3801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(3602) | Control.IsVisible(3603) | Control.IsVisible(3604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="music" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(Item.3302.SpecialFolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(3601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">3601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">3601</param>
+                    </include>
+                </include>
+                <!-- Standard Widgets for Category 1103menu 3 Top 100 -->
+                <!-- Adaptive Widgets for Category 1103menu 4 Years -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">4601</param>
+                    <param name="groupid">4701</param>
+                    <param name="label">$INFO[Window.Property(Item.4302.SpecialFolderLabel)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(4601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-478344a3)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">[!String.IsEmpty(Window.Property(Item.4302.SpecialFolderPath)) | Control.HasFocus(302) | Control.HasFocus(300)]</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">4801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(4602) | Control.IsVisible(4603) | Control.IsVisible(4604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="music" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(Item.4302.SpecialFolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(4601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">4601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">4601</param>
+                    </include>
+                </include>
+                <!-- Standard Widgets for Category 1103menu 4 Years -->
+                <!-- Adaptive Widgets for Category 1103menu 5 $LOCALIZE[39031] -->
+                <!-- Standard Widgets for Category 1103menu 5 $LOCALIZE[39031] -->
+                <include content="Widget_Row" condition="True">
+                    <param name="id">5601</param>
+                    <param name="groupid">5701</param>
+                    <param name="label">Music</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(5601)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-123c2440)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">5801</param>
+                    <param name="shortstack_visible">[Control.IsVisible(5602) | Control.IsVisible(5603) | Control.IsVisible(5604)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="music" limit="" browse="$VAR[Defs_BrowseLimitedLists]">musicdb://</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(5601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">5601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">5601</param>
+                    </include>
+                </include>
+                <include content="Widget_Row" condition="True">
+                    <param name="id">5602</param>
+                    <param name="groupid">5702</param>
+                    <param name="label">$LOCALIZE[1038]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Square_Row</param>
+                    <param name="transition_include">true</param>
+                    <param name="transition_hidden">Control.HasFocus(5602)</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">SetFocus(300)</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-123c2440)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="shortstack_enabled">False</param>
+                    <param name="shortstack_id">5802</param>
+                    <param name="shortstack_visible">[Control.IsVisible(5603) | Control.IsVisible(5604) | Control.IsVisible(5605)]</param>
+                    <param name="widgetfade_include">!Skin.HasSetting(Hub.1103.WidgetSelector)</param>
+                    <description/>
+                    <content sortby="" sortorder="ascending" target="music" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/audio/</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(5602) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">5602</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">5602</param>
+                    </include>
+                </include>
+                <!-- Global Widgets for 1103menu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1103menu-widgets-selector">
+</include>
+    <!-- Static Mainmenu -->
+    <include name="skinvariables-1104menu-staticitems">
+</include>
+    <!-- Dynamic Submenus -->
+    <include name="skinvariables-1104menu-submenu">
+</include>
+    <!-- Category Spotlights -->
+    <include name="skinvariables-1104menu-spotlight">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1104menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1104.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1104.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1104</param>
+                <param name="visible">True</param>
+                <!-- Global Widgets for 1104menu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1104menu-widgets-selector">
+</include>
+    <!-- Static Mainmenu -->
+    <include name="skinvariables-1106menu-staticitems">
+</include>
+    <!-- Dynamic Submenus -->
+    <include name="skinvariables-1106menu-submenu">
+</include>
+    <!-- Category Spotlights -->
+    <include name="skinvariables-1106menu-spotlight">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1106menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1106.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1106.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1106</param>
+                <param name="visible">True</param>
+                <!-- Global Widgets for 1106menu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1106menu-widgets-selector">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1107menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1107.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1107.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1107</param>
+                <param name="visible">True</param>
+                <!-- Classic Widgets for 1107menu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1107menu-widgets-selector">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1108menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1108.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1108.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1108</param>
+                <param name="visible">True</param>
+                <!-- Classic Widgets for 1108menu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1108menu-widgets-selector">
+</include>
+    <!-- Standard Widgets -->
+    <include name="skinvariables-1109menu-widgets">
+        <!-- Widget Group -->
+        <include content="Hub_Menu_Group">
+            <include content="Hub_Widgets_Grouplist">
+                <param name="id">400</param>
+                <param name="bumperid">401</param>
+                <param name="furnitureid">499</param>
+                <param name="widgets_only">Skin.HasSetting(Hub.1109.DisableSubmenu)</param>
+                <param name="endrow_selector">Skin.HasSetting(Hub.1109.WidgetSelector)</param>
+                <param name="endrow_selector_id">419</param>
+                <param name="window_id">1109</param>
+                <param name="visible">True</param>
+                <!-- Classic Widgets for 1109menu -->
+            </include>
+        </include>
+    </include>
+    <!-- Selector Widgets -->
+    <include name="skinvariables-1109menu-widgets-selector">
+</include>
+    <!-- Home Extended Global -->
+    <include name="skinvariables-homemenu-extended-global">
+</include>
+    <!-- 1101 Extended Global -->
+    <include name="skinvariables-1101menu-extended-global">
+</include>
+    <!-- 1102 Extended Global -->
+    <include name="skinvariables-1102menu-extended-global">
+</include>
+    <!-- 1103 Extended Global -->
+    <include name="skinvariables-1103menu-extended-global">
+</include>
+    <!-- 1104 Extended Global -->
+    <include name="skinvariables-1104menu-extended-global">
+</include>
+    <!-- 1106 Extended Global -->
+    <include name="skinvariables-1106menu-extended-global">
+</include>
+    <!-- 1107 Extended Global -->
+    <include name="skinvariables-1107menu-extended-global">
+</include>
+    <!-- 1108 Extended Global -->
+    <include name="skinvariables-1108menu-extended-global">
+</include>
+    <!-- 1109 Extended Global -->
+    <include name="skinvariables-1109menu-extended-global">
+</include>
+    <!-- Static Power Main Menu -->
+    <include name="skinvariables-powermainmenu-staticitems">
+        <item>
+            <label>ضبط Widgets</label>
+            <icon>special://skin/extras/icons/shapes.png</icon>
+            <property name="path">RunScript(script.skinvariables,&quot;run_executebuiltin=SetProperty(Shortcuts.EditMenu,menu=sidemenu,Home)||sleep=0.2||ActivateWindow(1115)&quot;)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[0]</property>
+            <property name="guid">guid-9277afe9</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>RunScript(script.skinvariables,&quot;run_executebuiltin=SetProperty(Shortcuts.EditMenu,menu=sidemenu,Home)||sleep=0.2||ActivateWindow(1115)&quot;)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>مدير الحسابات</label>
+            <icon>special://skin/extras/icons/arrow-right-to-city.png</icon>
+            <property name="path">RunScript(script.module.accountmgr)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[1]</property>
+            <property name="guid">guid-44cdbd43</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>RunScript(script.module.accountmgr)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>إعدادات TMDbhelper</label>
+            <icon>special://skin/extras/icons/configure.png</icon>
+            <property name="path">RunPlugin(plugin://plugin.video.themoviedb.helper/?info=dir_settings)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[2]</property>
+            <property name="guid">guid-3d05f2b0</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=dir_settings)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>تغير المظهر</label>
+            <icon>special://skin/extras/icons/paintbucket2.png</icon>
+            <property name="path">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2Fstorage%2F.kodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2Fstorage%2F.kodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-4a37b1d3</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2Fstorage%2F.kodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2Fstorage%2F.kodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[1036]</label>
+            <icon>special://skin/extras/icons/favourites2.png</icon>
+            <property name="path">ActivateWindow(1160)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[4]</property>
+            <property name="guid">guid-37a73973</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>ActivateWindow(1160)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Restart خروج او</label>
+            <icon>special://skin/extras/icons/kodi.png</icon>
+            <property name="path">PlayMedia(plugin://plugin.program.openwizardTaiseer/?mode=forceclose)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[5]</property>
+            <property name="guid">guid-e57982f9</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>PlayMedia(plugin://plugin.program.openwizardTaiseer/?mode=forceclose)</onclick>
+            <visible>True</visible>
+        </item>
+    </include>
+    <!-- Static Power Side Menu -->
+    <include name="skinvariables-powersidemenu-staticitems">
+        <include content="Dialog_Side_Button">
+            <param name="id">03</param>
+            <param name="label">ضبط Widgets</param>
+            <param name="icon">special://skin/extras/icons/shapes.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>RunScript(script.skinvariables,&quot;run_executebuiltin=SetProperty(Shortcuts.EditMenu,menu=sidemenu,Home)||sleep=0.2||ActivateWindow(1115)&quot;)</onclick>
+        </include>
+        <include content="Dialog_Side_Button">
+            <param name="id">04</param>
+            <param name="label">Reload المظهر</param>
+            <param name="icon">special://skin/extras/icons/rotate.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>ReloadSkin</onclick>
+        </include>
+        <include content="Dialog_Side_Button">
+            <param name="id">05</param>
+            <param name="label">Android التحول ل</param>
+            <param name="icon">special://skin/extras/icons/android.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>System.ExecWait(&quot;/usr/sbin/rebootfromnand&quot;)</onclick>
+            <onclick>Reboot()</onclick>
+        </include>
+        <include content="Dialog_Side_Button">
+            <param name="id">06</param>
+            <param name="label">Restart خروج او</param>
+            <param name="icon">special://skin/extras/icons/kodi.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>PlayMedia(plugin://plugin.program.openwizard/?mode=forceclose)</onclick>
+        </include>
+        <include content="Dialog_Side_Button">
+            <param name="id">07</param>
+            <param name="label">إعادة تشغيل</param>
+            <param name="icon">special://skin/extras/icons/coreelec.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>Reboot</onclick>
+        </include>
+        <include content="Dialog_Side_Button">
+            <param name="id">08</param>
+            <param name="label">السكون</param>
+            <param name="icon">special://skin/extras/icons/bed.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>Suspend</onclick>
+        </include>
+        <include content="Dialog_Side_Button">
+            <param name="id">09</param>
+            <param name="label">Power</param>
+            <param name="icon">special://skin/extras/icons/power.png</param>
+            <param name="visible">True</param>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>Powerdown</onclick>
+        </include>
+    </include>
+    <!-- Options Tray Items -->
+    <include name="skinvariables-options-tray-staticitems">
+        <item>
+            <label>الملفات</label>
+            <icon>special://skin/extras/icons/filebox.png</icon>
+            <property name="path">ActivateWindow(filemanager)</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[1]</property>
+            <property name="guid">guid-b42f266b</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>ActivateWindow(filemanager)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label> المظهر </label>
+            <icon>special://skin/extras/icons/paintbrush.png</icon>
+            <property name="path">ActivateWindow(skinsettings)</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[2]</property>
+            <property name="guid">guid-6b5e8d07</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>ActivateWindow(skinsettings)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label> الإضافات </label>
+            <icon>special://skin/extras/icons/addons.png</icon>
+            <property name="path">ActivateWindow(addonbrowser)</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-9fcb304d</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>ActivateWindow(addonbrowser)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[5]</label>
+            <icon>special://skin/extras/icons/settings.png</icon>
+            <property name="path">ActivateWindow(settings)</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[4]</property>
+            <property name="guid">guid-2c13bb72</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>ActivateWindow(settings)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>إعادة التحميل
+</label>
+            <icon>special://skin/extras/icons/update.png</icon>
+            <property name="path">ReloadSkin()</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[5]</property>
+            <property name="guid">guid-5aa174d4</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>ReloadSkin()</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Android </label>
+            <icon>special://skin/extras/icons/android.png</icon>
+            <property name="path">RebootToAndroid</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[6]</property>
+            <property name="guid">guid-e518cef2</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>System.ExecWait(&quot;/usr/sbin/rebootfromnand&quot;)</onclick>
+            <onclick>Reboot()</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>السكون</label>
+            <icon>special://skin/extras/icons/bed.png</icon>
+            <property name="path">Suspend</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[7]</property>
+            <property name="guid">guid-290f1b31</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>Suspend</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>أعادة  التشغيل </label>
+            <icon>special://skin/extras/icons/recycle.png</icon>
+            <property name="path">Reboot</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[8]</property>
+            <property name="guid">guid-75f0e072</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>Reboot</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>خروج</label>
+            <icon>special://skin/extras/icons/right-to-bracket.png</icon>
+            <property name="path">Quit</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[9]</property>
+            <property name="guid">guid-d0d5bac5</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>Quit</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Power</label>
+            <icon>special://skin/extras/icons/power.png</icon>
+            <property name="path">Powerdown</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[10]</property>
+            <property name="guid">guid-c92fd6a2</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>Powerdown</onclick>
+            <visible>True</visible>
+        </item>
+    </include>
+    <!-- Static Sidemenu -->
+    <include name="skinvariables-sidemenu-staticitems">
+        <item>
+            <label>الرئيسية</label>
+            <icon>special://skin/extras/icons/home.png</icon>
+            <property name="path">ActivateWindow(Home)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[0]</property>
+            <property name="guid">guid-45be094d</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression">home</property>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="widgets_first_id">$NUMBER[100601]</property>
+            <onclick condition="Window.IsVisible(1172)">Dialog.Close(1172,true)</onclick>
+            <onclick condition="Window.IsVisible(1172) + Window.IsMedia">ReplaceWindow(Home)</onclick>
+            <onclick>ActivateWindow(Home)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>الافلام</label>
+            <icon>special://skin/extras/icons/film.png</icon>
+            <property name="path">ActivateWindow(1101)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[1]</property>
+            <property name="guid">guid-17cc49ee</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="widgets_first_id">$NUMBER[101601]</property>
+            <onclick condition="Window.IsVisible(1172)">Dialog.Close(1172,true)</onclick>
+            <onclick condition="Window.IsVisible(1172) + Window.IsMedia">ReplaceWindow(Home)</onclick>
+            <onclick>SetProperty(Hub.ResetDefaultControl,True,1101)</onclick>
+            <onclick>SetProperty(Hub.Header,الافلام,1101)</onclick>
+            <onclick>ActivateWindow(1101)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>المسلسلات</label>
+            <icon>special://skin/extras/icons/tv.png</icon>
+            <property name="path">ActivateWindow(1102)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[2]</property>
+            <property name="guid">guid-abc97734</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression">tvshows</property>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="widgets_first_id">$NUMBER[102601]</property>
+            <onclick condition="Window.IsVisible(1172)">Dialog.Close(1172,true)</onclick>
+            <onclick condition="Window.IsVisible(1172) + Window.IsMedia">ReplaceWindow(Home)</onclick>
+            <onclick>SetProperty(Hub.ResetDefaultControl,True,1102)</onclick>
+            <onclick>SetProperty(Hub.Header,المسلسلات,1102)</onclick>
+            <onclick>ActivateWindow(1102)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>الاضافات</label>
+            <icon>special://skin/extras/icons/addon.png</icon>
+            <property name="path">ActivateWindow(1132)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-af07e6f3</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="widgets_first_id">$NUMBER[103601]</property>
+            <onclick condition="Window.IsVisible(1172)">Dialog.Close(1172,true)</onclick>
+            <onclick condition="Window.IsVisible(1172) + Window.IsMedia">ReplaceWindow(Home)</onclick>
+            <onclick>ActivateWindow(1132)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>الطقس</label>
+            <icon>special://skin/extras/icons/sun2.png</icon>
+            <property name="path">ActivateWindow(weather)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[4]</property>
+            <property name="guid">guid-e2a685fc</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="widgets_first_id">$NUMBER[104601]</property>
+            <onclick condition="Window.IsVisible(1172)">Dialog.Close(1172,true)</onclick>
+            <onclick condition="Window.IsVisible(1172) + Window.IsMedia">ReplaceWindow(Home)</onclick>
+            <onclick>ActivateWindow(weather)</onclick>
+            <visible>True</visible>
+        </item>
+    </include>
+    <!-- Sidemenu Spotlights -->
+    <include name="skinvariables-sidemenu-spotlight">
+</include>
+    <!-- Search Extended -->
+    <include name="skinvariables-searchmenu-widgets">
+        <include content="_Widget_Row">
+            <param name="id">5001</param>
+            <param name="groupid">5101</param>
+            <param name="label">Movies</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">True</param>
+            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="transition_include">true</param>
+            <param name="transition_hidden">Control.HasFocus(5001)</param>
+            <param name="widgetfade_include">true</param>
+            <include content="Action_View_Movement_OnLeftRight">
+                <param name="id">5001</param>
+                <param name="backid">5000</param>
+                <param name="onback">[Integer.IsEqual(Container(5001).CurrentItem,1)]</param>
+            </include>
+            <onfocus>SetProperty(TMDbHelper.WidgetContainer,5001)</onfocus>
+            <onfocus>SetProperty(Transition.WidgetStyle,List_Poster_Row,Home)</onfocus>
+            <onunfocus>ClearProperty(Transition.WidgetStyle,Home)</onunfocus>
+            <include content="Object_ContentDynamic">
+                <param name="sortby"/>
+                <param name="sortorder">ascending</param>
+                <param name="target">videos</param>
+                <param name="limit"/>
+                <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                <param name="content">$VAR[Path_SearchTerm,videodb://movies/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22movies%22%7D]</param>
+            </include>
+        </include>
+        <include content="_Widget_Row">
+            <param name="id">5002</param>
+            <param name="groupid">5102</param>
+            <param name="label">TV Shows</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">True</param>
+            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="transition_include">true</param>
+            <param name="transition_hidden">Control.HasFocus(5002)</param>
+            <param name="widgetfade_include">true</param>
+            <include content="Action_View_Movement_OnLeftRight">
+                <param name="id">5002</param>
+                <param name="backid">5000</param>
+                <param name="onback">[Integer.IsEqual(Container(5002).CurrentItem,1)]</param>
+            </include>
+            <onfocus>SetProperty(TMDbHelper.WidgetContainer,5002)</onfocus>
+            <onfocus>SetProperty(Transition.WidgetStyle,List_Poster_Row,Home)</onfocus>
+            <onunfocus>ClearProperty(Transition.WidgetStyle,Home)</onunfocus>
+            <include content="Object_ContentDynamic">
+                <param name="sortby"/>
+                <param name="sortorder">ascending</param>
+                <param name="target">videos</param>
+                <param name="limit"/>
+                <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                <param name="content">$VAR[Path_SearchTerm,videodb://tvshows/titles/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22title%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22tvshows%22%7D]</param>
+            </include>
+        </include>
+        <include content="_Widget_Row">
+            <param name="id">5003</param>
+            <param name="groupid">5103</param>
+            <param name="label">Albums</param>
+            <param name="include">List_Square_Row</param>
+            <param name="visible">True</param>
+            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="transition_include">true</param>
+            <param name="transition_hidden">Control.HasFocus(5003)</param>
+            <param name="widgetfade_include">true</param>
+            <include content="Action_View_Movement_OnLeftRight">
+                <param name="id">5003</param>
+                <param name="backid">5000</param>
+                <param name="onback">[Integer.IsEqual(Container(5003).CurrentItem,1)]</param>
+            </include>
+            <onfocus>SetProperty(TMDbHelper.WidgetContainer,5003)</onfocus>
+            <onfocus>SetProperty(Transition.WidgetStyle,List_Square_Row,Home)</onfocus>
+            <onunfocus>ClearProperty(Transition.WidgetStyle,Home)</onunfocus>
+            <include content="Object_ContentDynamic">
+                <param name="sortby"/>
+                <param name="sortorder">ascending</param>
+                <param name="target">music</param>
+                <param name="limit"/>
+                <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                <param name="content">$VAR[Path_SearchTerm,musicdb://albums/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22album%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22albums%22%7D]</param>
+            </include>
+        </include>
+        <include content="_Widget_Row">
+            <param name="id">5004</param>
+            <param name="groupid">5104</param>
+            <param name="label">Artists</param>
+            <param name="include">List_Square_Row</param>
+            <param name="visible">True</param>
+            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="transition_include">true</param>
+            <param name="transition_hidden">Control.HasFocus(5004)</param>
+            <param name="widgetfade_include">true</param>
+            <include content="Action_View_Movement_OnLeftRight">
+                <param name="id">5004</param>
+                <param name="backid">5000</param>
+                <param name="onback">[Integer.IsEqual(Container(5004).CurrentItem,1)]</param>
+            </include>
+            <onfocus>SetProperty(TMDbHelper.WidgetContainer,5004)</onfocus>
+            <onfocus>SetProperty(Transition.WidgetStyle,List_Square_Row,Home)</onfocus>
+            <onunfocus>ClearProperty(Transition.WidgetStyle,Home)</onunfocus>
+            <include content="Object_ContentDynamic">
+                <param name="sortby"/>
+                <param name="sortorder">ascending</param>
+                <param name="target">music</param>
+                <param name="limit"/>
+                <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                <param name="content">$VAR[Path_SearchTerm,musicdb://artists/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22artist%22%2C%22operator%22%3A%22contains%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22artists%22%7D]</param>
+            </include>
+        </include>
+        <include content="_Widget_Row">
+            <param name="id">5005</param>
+            <param name="groupid">5105</param>
+            <param name="label">Movies (TMDb)</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">True</param>
+            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="transition_include">true</param>
+            <param name="transition_hidden">Control.HasFocus(5005)</param>
+            <param name="widgetfade_include">true</param>
+            <include content="Action_View_Movement_OnLeftRight">
+                <param name="id">5005</param>
+                <param name="backid">5000</param>
+                <param name="onback">[Integer.IsEqual(Container(5005).CurrentItem,1)]</param>
+            </include>
+            <onfocus>SetProperty(TMDbHelper.WidgetContainer,5005)</onfocus>
+            <onfocus>SetProperty(Transition.WidgetStyle,List_Poster_Row,Home)</onfocus>
+            <onunfocus>ClearProperty(Transition.WidgetStyle,Home)</onunfocus>
+            <include content="Object_ContentDynamic">
+                <param name="sortby"/>
+                <param name="sortorder">ascending</param>
+                <param name="target">videos</param>
+                <param name="limit"/>
+                <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                <param name="content">$VAR[Path_SearchTerm,plugin://plugin.video.themoviedb.helper?info=search&amp;type=movie&amp;query=,&amp;nextpage=false&amp;fanarttv=false&amp;cacheonly=true]</param>
+            </include>
+        </include>
+        <include content="_Widget_Row">
+            <param name="id">5006</param>
+            <param name="groupid">5106</param>
+            <param name="label">TV Shows (TMDb)</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">True</param>
+            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus()] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="transition_include">true</param>
+            <param name="transition_hidden">Control.HasFocus(5006)</param>
+            <param name="widgetfade_include">true</param>
+            <include content="Action_View_Movement_OnLeftRight">
+                <param name="id">5006</param>
+                <param name="backid">5000</param>
+                <param name="onback">[Integer.IsEqual(Container(5006).CurrentItem,1)]</param>
+            </include>
+            <onfocus>SetProperty(TMDbHelper.WidgetContainer,5006)</onfocus>
+            <onfocus>SetProperty(Transition.WidgetStyle,List_Poster_Row,Home)</onfocus>
+            <onunfocus>ClearProperty(Transition.WidgetStyle,Home)</onunfocus>
+            <include content="Object_ContentDynamic">
+                <param name="sortby"/>
+                <param name="sortorder">ascending</param>
+                <param name="target">videos</param>
+                <param name="limit"/>
+                <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                <param name="content">$VAR[Path_SearchTerm,plugin://plugin.video.themoviedb.helper?info=search&amp;type=tv&amp;query=,&amp;nextpage=false&amp;fanarttv=false&amp;cacheonly=true]</param>
+            </include>
+        </include>
+    </include>
+</includes>
