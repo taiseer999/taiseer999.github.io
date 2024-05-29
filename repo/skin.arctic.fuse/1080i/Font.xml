@@ -37,108 +37,108 @@
         <font>
             <name>font_huge_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>49</size>
+            <size>47</size>
         </font>
         <font>
             <name>font_head_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>42</size>
+            <size>40</size>
         </font>
         <font>
             <name>font_midi_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>37</size>
+            <size>35</size>
         </font>
         <font>
             <name>font_main_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>32</size>
+            <size>30</size>
         </font>
         <font>
             <name>font_mini_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>28</size>
+            <size>26</size>
         </font>
         <font>
             <name>font_tiny_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>24</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_hint_black</name>
             <style>uppercase</style>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>18</size>
+            <size>16</size>
         </font>
 
         <!-- Bold Fonts -->
         <font>
             <name>font_huge_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>49</size>
+            <size>47</size>
         </font>
         <font>
             <name>font_head_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>42</size>
+            <size>40</size>
         </font>
         <font>
             <name>font_midi_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>37</size>
+            <size>35</size>
         </font>
         <font>
             <name>font_main_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>32</size>
+            <size>30</size>
         </font>
         <font>
             <name>font_mini_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>28</size>
+            <size>26</size>
         </font>
         <font>
             <name>font_tiny_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>24</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_hint_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>18</size>
+            <size>16</size>
         </font>
 
         <!-- Standard Fonts -->
         <font>
             <name>font_midi</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>35</size>
+            <size>31</size>
         </font>
         <font>
             <name>font_main</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>30</size>
+            <size>27</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>26</size>
+            <size>21</size>
         </font>
         <font>
             <name>font_tiny</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>22</size>
+            <size>17</size>
         </font>
         <font>
             <name>font_hint</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>16</size>
+            <size>12</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_hint_button</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>16</size>
+            <size>12</size>
             <linespacing>1.15</linespacing>
         </font>
 
