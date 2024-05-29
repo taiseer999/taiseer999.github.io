@@ -51,7 +51,7 @@
                         <bottom>-40</bottom>
 
                         <onleft>68</onleft>
-                        <onback>9094</onback>
+                        <onback>68</onback>
                         <onup>SetFocus(6000,2)</onup>
                         <ondown>SetFocus(6000,2)</ondown>
 

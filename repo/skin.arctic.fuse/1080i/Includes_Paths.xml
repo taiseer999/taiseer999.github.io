@@ -21,11 +21,6 @@
         <value>noop</value>
     </variable>
 
-    <variable name="Path_Search_ReverseInhibit">
-        <value condition="[Window.Previous(Home) + !Skin.HasSetting(Hub.Home.DisableSubmenu)] | [Window.Previous(1101) + !Skin.HasSetting(Hub.1101.DisableSubmenu)] | [Window.Previous(1102) + !Skin.HasSetting(Hub.1102.DisableSubmenu)] | [Window.Previous(1103) + !Skin.HasSetting(Hub.1103.DisableSubmenu)] | [Window.Previous(1104) + !Skin.HasSetting(Hub.1104.DisableSubmenu)] | [Window.Previous(1106) + !Skin.HasSetting(Hub.1106.DisableSubmenu)] | [Window.Previous(1107) + !Skin.HasSetting(Hub.1107.DisableSubmenu)] | [Window.Previous(1108) + !Skin.HasSetting(Hub.1108.DisableSubmenu)] | [Window.Previous(1109) + !Skin.HasSetting(Hub.1109.DisableSubmenu)]">InhibitTransition</value>
-        <value>ReverseTransition</value>
-    </variable>
-
     <variable name="Path_SkinVariables_1304_EditMode">
         <value condition="!String.EndsWith(Container(304).ListItem.Property(menu),-widgetsonly) + !String.EndsWith(Container(304).ListItem.Property(menu),-globalwidgets)">$INFO[Container(304).ListItem.Property(mode),mode=,]</value>
     </variable>

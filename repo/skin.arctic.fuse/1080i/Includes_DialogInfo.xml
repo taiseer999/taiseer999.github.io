@@ -24,8 +24,8 @@
     </include>
 
     <include name="DialogInfo_InfoPanel_Group">
-        <visible>!String.IsEqual(Window.Property(DetailsView),Artwork) | Skin.String(Home.SideMenuCollapse,Topbar)</visible>
-        <include content="Animation_Fade_In" condition="!Skin.String(Home.SideMenuCollapse,Topbar)">
+        <visible>!String.IsEqual(Window.Property(DetailsView),Artwork) | $EXP[Exp_HomeMenu_IsTopBar]</visible>
+        <include content="Animation_Fade_In" condition="!$EXP[Exp_HomeMenu_IsTopBar]">
             <param name="type">Visible</param>
             <param name="delay">400</param>
         </include>
@@ -50,7 +50,7 @@
                 </include>
             </control>
             <control type="group">
-                <include condition="Skin.String(Home.SideMenuCollapse,Topbar)">Animation_View_Topbar</include>
+                <include condition="$EXP[Exp_HomeMenu_IsTopBar]">Animation_View_Topbar</include>
                 <include condition="$EXP[Exp_Footer_BottomLeft_IsVisible]">Animation_Transition_InfoPanel_Open</include>
                 <!-- <include content="Animation_Fade_Out" condition="!$EXP[Exp_Footer_BottomLeft_IsVisible]">
                     <param name="type">WindowClose</param>
@@ -103,10 +103,10 @@
     </include>
 
     <include name="DialogInfo_List_Movement">
-        <param name="onright_condition">!Skin.String(Home.SideMenuCollapse,Topbar)</param>
+        <param name="onright_condition">!$EXP[Exp_HomeMenu_IsTopBar]</param>
         <param name="onup_condition">true</param>
         <param name="ondown_condition">true</param>
-        <param name="onleft_condition">!Skin.String(Home.SideMenuCollapse,Topbar)</param>
+        <param name="onleft_condition">!$EXP[Exp_HomeMenu_IsTopBar]</param>
         <definition>
             <onright condition="$PARAM[onright_condition]">SetFocus($PARAM[id],0,absolute)</onright>
             <onright condition="$PARAM[onright_condition]">4000</onright>
@@ -573,8 +573,8 @@
                     <onclick>SetProperty(Item_Label,$INFO[Container(5003).ListItem.Label],1122)</onclick>
                     <onclick>SetProperty(Item_Label2,$VAR[Label_VideoInfo_CastAge],1122)</onclick>
 
-                    <ondown condition="Skin.String(Home.SideMenuCollapse,Topbar)">4000</ondown>
-                    <onup condition="Skin.String(Home.SideMenuCollapse,Topbar)">4000</onup>
+                    <ondown condition="$EXP[Exp_HomeMenu_IsTopBar]">4000</ondown>
+                    <onup condition="$EXP[Exp_HomeMenu_IsTopBar]">4000</onup>
 
 
                     <!-- <onclick>SetProperty(CustomDialogSettingsTitle,$INFO[Container(5003).ListItem.Label],Home)</onclick>
@@ -1667,7 +1667,7 @@
                         </include>
                     </control>
                     <control type="group">
-                        <include condition="Skin.String(Home.SideMenuCollapse,Topbar)">Animation_View_Topbar</include>
+                        <include condition="$EXP[Exp_HomeMenu_IsTopBar]">Animation_View_Topbar</include>
                         <include content="Hub_Widgets_Group_Furniture">
                             <param name="visible">true</param>
                             <param name="include_conditionalfade">false</param>
@@ -1686,19 +1686,25 @@
         </definition>
     </include>
 
+    <include name="DialogInfo_Recommendations_Widgets_Animation_Half_WindowChange">
+        <include content="Animation_Half_WindowChange">
+            <param name="windowopen_up">!$EXP[Exp_SettingsDialogs_Prev] + $EXP[Exp_ReverseTransition]</param>
+            <param name="windowopen_down">!$EXP[Exp_SettingsDialogs_Prev] + !$EXP[Exp_ReverseTransition]</param>
+            <param name="windowclose_up">!$EXP[Exp_SettingsDialogs_Next] + $EXP[Exp_ReverseTransition]</param>
+            <param name="windowclose_down">!$EXP[Exp_SettingsDialogs_Next] + !$EXP[Exp_ReverseTransition]</param>
+        </include>
+    </include>
+
     <include name="DialogInfo_Recommendations_Widgets_Grouplist">
         <param name="onup">PreviousMenu</param>
         <param name="ondown">330</param>
+        <param name="widget_windowchange_animation">true</param>
         <definition>
             <control type="grouplist" id="5000">
                 <onup>$PARAM[onup]</onup>
                 <ondown>$PARAM[ondown]</ondown>
-                <include content="Animation_Half_WindowChange">
-                    <param name="windowopen_up">!$EXP[Exp_SettingsDialogs_Prev] + !String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                    <param name="windowopen_down">!$EXP[Exp_SettingsDialogs_Prev] + String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                    <param name="windowclose_up">!$EXP[Exp_SettingsDialogs_Next] + !String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                    <param name="windowclose_down">!$EXP[Exp_SettingsDialogs_Next] + String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                </include>
+                <include condition="![$PARAM[widget_windowchange_animation]]">Animation_Half_WindowChange_UpDown</include>
+                <include condition="$PARAM[widget_windowchange_animation]">DialogInfo_Recommendations_Widgets_Animation_Half_WindowChange</include>
                 <orientation>vertical</orientation>
                 <control type="group" id="5999">
                     <height>widget_tbump_h</height>

@@ -59,11 +59,6 @@
                             <icon>special://skin/extras/icons/filter.png</icon>
                             <label>$LOCALIZE[587]</label>
                             <onclick>Dialog.Close(1171,true)</onclick>
-                            <onclick condition="Window.IsVisible(videos)">SetProperty(FocusFilter,True,videos)</onclick>
-                            <onclick condition="Window.IsVisible(music)">SetProperty(FocusFilter,True,music)</onclick>
-                            <onclick condition="Window.IsVisible(pictures)">SetProperty(FocusFilter,True,pictures)</onclick>
-                            <onclick condition="Window.IsVisible(programs)">SetProperty(FocusFilter,True,programs)</onclick>
-                            <onclick condition="Window.IsVisible(games)">SetProperty(FocusFilter,True,games)</onclick>
                             <onclick>AlarmClock(refocus,SetFocus(64),00:00,silent)</onclick>
                             <visible>Window.IsMedia | Window.IsVisible(1105)</visible>
                         </item>

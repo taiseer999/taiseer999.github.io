@@ -150,10 +150,10 @@
                 <control type="grouplist" id="310">
                     <orientation>horizontal</orientation>
 
-                    <include content="Action_Widget_Top" condition="!Skin.String(Home.SideMenuCollapse,Topbar)">
+                    <include content="Action_Widget_Top" condition="!$EXP[Exp_HomeMenu_IsTopBar]">
                         <param name="id">311</param>
                     </include>
-                    <onup condition="Skin.String(Home.SideMenuCollapse,Topbar)">SetFocus(303)</onup>
+                    <onup condition="$EXP[Exp_HomeMenu_IsTopBar]">SetFocus(303)</onup>
 
                     <include content="Action_View_Movement_OnLeftRight">
                         <param name="id">311</param>

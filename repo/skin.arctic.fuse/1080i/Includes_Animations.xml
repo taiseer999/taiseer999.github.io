@@ -409,10 +409,10 @@
 
     <include name="Animation_Half_WindowChange_UpDown">
         <include content="Animation_Half_WindowChange">
-            <param name="windowopen_up">[$EXP[Exp_InfoPanelWindows_Prev_03] + String.IsEmpty(Window(Home).Property(ReverseTransition))]</param>
-            <param name="windowopen_down">[$EXP[Exp_InfoPanelWindows_Prev_01] | [$EXP[Exp_InfoPanelWindows_Prev_03] + !String.IsEmpty(Window(Home).Property(ReverseTransition))]]</param>
-            <param name="windowclose_up">[$EXP[Exp_InfoPanelWindows_Next_03] + String.IsEmpty(Window(Home).Property(ReverseTransition))]</param>
-            <param name="windowclose_down">[$EXP[Exp_InfoPanelWindows_Next_01] | [$EXP[Exp_InfoPanelWindows_Next_03] + !String.IsEmpty(Window(Home).Property(ReverseTransition))]]</param>
+            <param name="windowopen_up">[$EXP[Exp_InfoPanelWindows_Prev_03] + !$EXP[Exp_ReverseTransition]]</param>
+            <param name="windowopen_down">[$EXP[Exp_InfoPanelWindows_Prev_01] | [$EXP[Exp_InfoPanelWindows_Prev_03] + $EXP[Exp_ReverseTransition]]]</param>
+            <param name="windowclose_up">[$EXP[Exp_InfoPanelWindows_Next_03] + !$EXP[Exp_ReverseTransition]]</param>
+            <param name="windowclose_down">[$EXP[Exp_InfoPanelWindows_Next_01] | [$EXP[Exp_InfoPanelWindows_Next_03] + $EXP[Exp_ReverseTransition]]]</param>
         </include>
     </include>
 

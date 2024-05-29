@@ -69,7 +69,8 @@
 
 
 
-    <expression name="Exp_HomeMenu_IsTopBar">[Skin.String(Home.SideMenuCollapse,Topbar)]</expression>
+    <expression name="Exp_HomeMenu_Info_IsHorizontal">[[Skin.String(Home.SideMenuCollapse,Topbar) + !Skin.HasSetting(Sidemenu.SwapInfoPosition)] | [!Skin.String(Home.SideMenuCollapse,Topbar) + Skin.HasSetting(Sidemenu.SwapInfoPosition)]]</expression>
+    <expression name="Exp_HomeMenu_IsTopBar">[[!$EXP[Exp_InfoDialogs] + Skin.String(Home.SideMenuCollapse,Topbar)] | [$EXP[Exp_InfoDialogs] + $EXP[Exp_HomeMenu_Info_IsHorizontal]]]</expression>
 
     <expression name="Exp_Navigation_OnWrap">[$EXP[Exp_HomeMenu_IsTopBar] | $EXP[Exp_Navigation_OnMenu] | !$EXP[Exp_HomeMenu_IsExpanded]]</expression>
     <expression name="Exp_Navigation_OnBump">[!Skin.HasSetting(Navigation.DisableOptionsOnLeft) + !$EXP[Exp_Navigation_OnWrap]]</expression>
@@ -78,16 +79,19 @@
     <expression name="Exp_Navigation_OnParent">[Skin.String(Navigation.OnBack,Parent) | [$EXP[Exp_HomeMenu_IsTopBar] + Skin.String(Navigation.OnBack,Menu)]]</expression>
     <expression name="Exp_Navigation_OnPrevious">[Skin.String(Navigation.OnBack,Previous) | String.IsEmpty(Skin.String(Navigation.OnBack))]</expression>
 
-    <expression name="Exp_HomeMenu_IsExpanded">[[Skin.String(Home.SideMenuCollapse,Library) + [Window.IsVisible(Home) | [Window.Previous(Home) + [Window.IsVisible(1181) | Window.IsVisible(1182) | Window.IsVisible(1185)]]]] | [Skin.String(Home.SideMenuCollapse,Hubs) + [$EXP[Exp_Window_IsHub] | [$EXP[Exp_Window_IsHub_Prev] + [Window.IsVisible(1181) | Window.IsVisible(1182) | Window.IsVisible(1185)]]]] | [Skin.String(Home.SideMenuCollapse,Never)]]</expression>
+    <expression name="Exp_HomeMenu_IsExpanded">[[Skin.String(Home.SideMenuCollapse,Library) + [Window.IsVisible(Home) | [Window.Previous(Home) + [Window.IsVisible(1181) | Window.IsVisible(1182) | Window.IsVisible(1185) | Window.IsVisible(1105)]]]] | [Skin.String(Home.SideMenuCollapse,Hubs) + [$EXP[Exp_Window_IsHub] | [$EXP[Exp_Window_IsHub_Prev] + [Window.IsVisible(1181) | Window.IsVisible(1182) | Window.IsVisible(1185) | Window.IsVisible(1105)]]]] | [Skin.String(Home.SideMenuCollapse,Never)]]</expression>
 
     <!-- <expression name="Exp_HomeMenu_IsStatic">[[$EXP[Exp_HomeMenu_IsExpanded] + [!$EXP[Exp_InfoDialogs] | Skin.String(Info.SideMenuCollapse,Match)]] | [$EXP[Exp_InfoDialogs] + Skin.String(Info.SideMenuCollapse,Always)]]</expression> -->
-    <expression name="Exp_HomeMenu_IsStatic">[[$EXP[Exp_HomeMenu_IsExpanded] + !$EXP[Exp_InfoDialogs]] | [$EXP[Exp_InfoDialogs] + !Skin.String(Home.SideMenuCollapse,Topbar)]]</expression>
+    <expression name="Exp_HomeMenu_IsStatic">[[$EXP[Exp_HomeMenu_IsExpanded] + !$EXP[Exp_InfoDialogs]] | [$EXP[Exp_InfoDialogs] + !$EXP[Exp_HomeMenu_IsTopBar]]]</expression>
 
     <expression name="Exp_Window_IsHub">[Window.IsVisible(Home) | Window.IsVisible(1101) | Window.IsVisible(1102) | Window.IsVisible(1103) | Window.IsVisible(1104) | Window.IsVisible(1106) | Window.IsVisible(1107) | Window.IsVisible(1108) | Window.IsVisible(1109)]</expression>
 
     <expression name="Exp_Window_IsHub_Prev">[Window.Previous(Home) | Window.Previous(1101) | Window.Previous(1102) | Window.Previous(1103) | Window.Previous(1104) | Window.Previous(1106) | Window.Previous(1107) | Window.Previous(1108) | Window.Previous(1109)]</expression>
 
     <expression name="Exp_Window_IsClassicHub">[[Window.IsVisible(Home) + Skin.HasSetting(Hub.Home.DisableSubmenu)] | [Window.IsVisible(1101) + Skin.HasSetting(Hub.1101.DisableSubmenu)] | [Window.IsVisible(1102) + Skin.HasSetting(Hub.1102.DisableSubmenu)] | [Window.IsVisible(1103) + Skin.HasSetting(Hub.1103.DisableSubmenu)] | [Window.IsVisible(1104) + Skin.HasSetting(Hub.1104.DisableSubmenu)] | [Window.IsVisible(1106) + Skin.HasSetting(Hub.1106.DisableSubmenu)] | [Window.IsVisible(1107) + Skin.HasSetting(Hub.1107.DisableSubmenu)] | [Window.IsVisible(1108) + Skin.HasSetting(Hub.1108.DisableSubmenu)] | [Window.IsVisible(1109) + Skin.HasSetting(Hub.1109.DisableSubmenu)]]</expression>
+
+    <!-- <expression name="Exp_ReverseTransition">[Window.IsVisible(1105) | Window.IsVisible(1185) | ![Window.IsNext(1185) | Window.IsPrevious(1185) | Window.IsNext(1105) | Window.IsPrevious(1105)]]</expression> -->
+    <expression name="Exp_ReverseTransition">[False]</expression>
 
     <!-- ==== -->
     <!-- Hubs -->
@@ -110,7 +114,7 @@
     <expression name="Exp_Hubs_Submenu_HasFocus">[Integer.IsEqual(Window.Property(Slide.WidgetContainer),302) | Control.HasFocus(302)]</expression>
 
     <expression name="Exp_Hubs_Spotlight_IsDisabled">[Skin.HasSetting(Background.DisableSpotlight)]</expression>
-    <expression name="Exp_Hubs_Spotlight_IsFanart">[!$EXP[Exp_Hubs_Spotlight_IsDisabled] + Skin.HasSetting(Background.EnableSpotlightSlide) + Skin.String(Home.SideMenuCollapse,Topbar)]</expression>
+    <expression name="Exp_Hubs_Spotlight_IsFanart">[!$EXP[Exp_Hubs_Spotlight_IsDisabled] + Skin.HasSetting(Background.EnableSpotlightSlide) + $EXP[Exp_HomeMenu_IsTopBar]]</expression>
     <expression name="Exp_Hubs_Spotlight_IsSlide">[[!$EXP[Exp_Hubs_Spotlight_IsDisabled] + Skin.HasSetting(Background.EnableSpotlightSlide)] | $EXP[Exp_Hubs_Spotlight_IsFanart] | $EXP[Exp_Hubs_Spotlight_IsDisabled]]</expression>
     <expression name="Exp_Hubs_Spotlight_IsMini">[False]</expression>
 
@@ -171,13 +175,13 @@
 
     <expression name="Exp_InfoPanelWindows_Next">[$EXP[Exp_InfoPanelWindows_Next_01] | $EXP[Exp_InfoPanelWindows_Next_02] | $EXP[Exp_InfoPanelWindows_Next_03]]</expression>
     <expression name="Exp_InfoPanelWindows_Next_01">[False]</expression>
-    <expression name="Exp_InfoPanelWindows_Next_02">[Window.Next(favouritesbrowser) | Window.Next(Programs) | Window.Next(Pictures) | Window.Next(Videos) | Window.Next(Music) | Window.Next(VideoPlaylist) | Window.Next(MusicPlaylist) | Window.Next(Games) | Window.Next(Home) | Window.Next(1101) | Window.Next(1102) | Window.Next(1103) | Window.Next(1104) | Window.Next(1105) | Window.Next(1106) | Window.Next(1107) | Window.Next(1108) | Window.Next(1109) | [[Window.Next(MyPVRGuide.xml) | Window.Next(MyPVRChannels.xml)] + Skin.HasSetting(Views.UseHalfPVRGuide)] | Window.Next(MyPVRRecordings.xml) | Window.Next(MyPVRTimers.xml) | Window.Next(MyPVRSearch.xml)]</expression>
-    <expression name="Exp_InfoPanelWindows_Next_03">[Window.Next(1181) | Window.Next(1182) | Window.Next(1183) | Window.Next(1185) | Window.Next(1130) | Window.Next(1131) | Window.Next(1132) | Window.Next(1133)]</expression>
+    <expression name="Exp_InfoPanelWindows_Next_02">[Window.Next(favouritesbrowser) | Window.Next(Programs) | Window.Next(Pictures) | Window.Next(Videos) | Window.Next(Music) | Window.Next(VideoPlaylist) | Window.Next(MusicPlaylist) | Window.Next(Games) | Window.Next(Home) | Window.Next(1101) | Window.Next(1102) | Window.Next(1103) | Window.Next(1104) | Window.Next(1106) | Window.Next(1107) | Window.Next(1108) | Window.Next(1109) | Window.Next(1185) | Window.Next(1105) | [[Window.Next(MyPVRGuide.xml) | Window.Next(MyPVRChannels.xml)] + Skin.HasSetting(Views.UseHalfPVRGuide)] | Window.Next(MyPVRRecordings.xml) | Window.Next(MyPVRTimers.xml) | Window.Next(MyPVRSearch.xml)]</expression>
+    <expression name="Exp_InfoPanelWindows_Next_03">[Window.Next(1181) | Window.Next(1182) | Window.Next(1183) | Window.Next(1130) | Window.Next(1131) | Window.Next(1132) | Window.Next(1133)]</expression>
 
     <expression name="Exp_InfoPanelWindows_Prev">[$EXP[Exp_InfoPanelWindows_Prev_01] | $EXP[Exp_InfoPanelWindows_Prev_02] | $EXP[Exp_InfoPanelWindows_Prev_03]]</expression>
     <expression name="Exp_InfoPanelWindows_Prev_01">[False]</expression>
-    <expression name="Exp_InfoPanelWindows_Prev_02">[Window.Previous(favouritesbrowser) | Window.Previous(Programs) | Window.Previous(Pictures) | Window.Previous(Videos) | Window.Previous(Music) | Window.Previous(VideoPlaylist) | Window.Previous(MusicPlaylist) | Window.Previous(Games) | Window.Previous(Home) | Window.Previous(1101) | Window.Previous(1102) | Window.Previous(1103) | Window.Previous(1104) | Window.Previous(1105) | Window.Previous(1106) | Window.Previous(1107) | Window.Previous(1108) | Window.Previous(1109) | [[Window.Previous(MyPVRGuide.xml) | Window.Previous(MyPVRChannels.xml)] + Skin.HasSetting(Views.UseHalfPVRGuide)] | Window.Previous(MyPVRRecordings.xml) | Window.Previous(MyPVRTimers.xml) | Window.Previous(MyPVRSearch.xml)]</expression>
-    <expression name="Exp_InfoPanelWindows_Prev_03">[Window.Previous(1181) | Window.Previous(1182) | Window.Previous(1183) | Window.Previous(1185) | Window.Previous(1130) | Window.Previous(1131) | Window.Previous(1132) | Window.Previous(1133)]</expression>
+    <expression name="Exp_InfoPanelWindows_Prev_02">[Window.Previous(favouritesbrowser) | Window.Previous(Programs) | Window.Previous(Pictures) | Window.Previous(Videos) | Window.Previous(Music) | Window.Previous(VideoPlaylist) | Window.Previous(MusicPlaylist) | Window.Previous(Games) | Window.Previous(Home) | Window.Previous(1101) | Window.Previous(1102) | Window.Previous(1103) | Window.Previous(1104) | Window.Previous(1106) | Window.Previous(1107) | Window.Previous(1108) | Window.Previous(1109) | Window.Previous(1185) | Window.Previous(1105) | [[Window.Previous(MyPVRGuide.xml) | Window.Previous(MyPVRChannels.xml)] + Skin.HasSetting(Views.UseHalfPVRGuide)] | Window.Previous(MyPVRRecordings.xml) | Window.Previous(MyPVRTimers.xml) | Window.Previous(MyPVRSearch.xml)]</expression>
+    <expression name="Exp_InfoPanelWindows_Prev_03">[Window.Previous(1181) | Window.Previous(1182) | Window.Previous(1183) | Window.Previous(1130) | Window.Previous(1131) | Window.Previous(1132) | Window.Previous(1133)]</expression>
 
     <!-- =============== -->
     <!-- ListItem Status -->
@@ -234,10 +238,10 @@
         <value condition="Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + Skin.String(Home.SideMenuCollapse,Library)">True</value>
     </variable>
     <variable name="Exp_Var_Layout_IsCombined">
-        <value condition="Skin.HasSetting(Hub.Home.DisableSubmenu) + Skin.HasSetting(Hub.Home.WidgetSelector) + Skin.String(Home.SideMenuCollapse,Topbar)">True</value>
+        <value condition="Skin.HasSetting(Hub.Home.DisableSubmenu) + Skin.HasSetting(Hub.Home.WidgetSelector) + $EXP[Exp_HomeMenu_IsTopBar]">True</value>
     </variable>
     <variable name="Exp_Var_Layout_IsCompound">
-        <value condition="!Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + Skin.String(Home.SideMenuCollapse,Topbar)">True</value>
+        <value condition="!Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.WidgetSelector) + $EXP[Exp_HomeMenu_IsTopBar]">True</value>
     </variable>
 
 </includes>

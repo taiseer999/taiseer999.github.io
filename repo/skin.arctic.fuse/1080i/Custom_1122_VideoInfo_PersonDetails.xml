@@ -23,10 +23,10 @@
             <include content="DialogInfo_Recommendations_Widgets_Grouplist">
                 <param name="onup">333</param>
                 <param name="ondown">noop</param>
-                <onleft condition="!Skin.String(Home.SideMenuCollapse,Topbar)">303</onleft>
-                <onright condition="!Skin.String(Home.SideMenuCollapse,Topbar)">332</onright>
-                <ondown condition="!Skin.String(Home.SideMenuCollapse,Topbar)">330</ondown>
-                <ondown condition="Skin.String(Home.SideMenuCollapse,Topbar)">303</ondown>
+                <onleft condition="!$EXP[Exp_HomeMenu_IsTopBar]">303</onleft>
+                <onright condition="!$EXP[Exp_HomeMenu_IsTopBar]">332</onright>
+                <ondown condition="!$EXP[Exp_HomeMenu_IsTopBar]">330</ondown>
+                <ondown condition="$EXP[Exp_HomeMenu_IsTopBar]">303</ondown>
 
                 <control type="button" id="5098">
                     <height>0</height>
@@ -88,10 +88,10 @@
         </include>
 
         <control type="group">
-            <include condition="Skin.String(Home.SideMenuCollapse,Topbar)">Animation_Home_Topbar</include>
-            <include condition="!Skin.String(Home.SideMenuCollapse,Topbar)">Animation_Home_SlideOver</include>
-            <include condition="!Skin.String(Home.SideMenuCollapse,Topbar) + Skin.HasSetting(SideMenu.EnableSearchAndOptions)">Home_Menu_SearchAndOptions</include>
-            <include content="DialogInfo_ButtonGroup_Basic" condition="!Skin.String(Home.SideMenuCollapse,Topbar)">
+            <include condition="$EXP[Exp_HomeMenu_IsTopBar]">Animation_Home_Topbar</include>
+            <include condition="!$EXP[Exp_HomeMenu_IsTopBar]">Animation_Home_SlideOver</include>
+            <include condition="!$EXP[Exp_HomeMenu_IsTopBar] + Skin.HasSetting(SideMenu.EnableSearchAndOptions)">Home_Menu_SearchAndOptions</include>
+            <include content="DialogInfo_ButtonGroup_Basic" condition="!$EXP[Exp_HomeMenu_IsTopBar]">
                 <param name="include">Items_PersonCredits_MenuBar</param>
                 <param name="vertical">true</param>
                 <param name="id">303</param>
@@ -100,7 +100,7 @@
                 <onup condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">SetFocus(61)</onup>
                 <ondown condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">SetFocus(61)</ondown>
             </include>
-            <include content="DialogInfo_ButtonGroup_Basic" condition="Skin.String(Home.SideMenuCollapse,Topbar)">
+            <include content="DialogInfo_ButtonGroup_Basic" condition="$EXP[Exp_HomeMenu_IsTopBar]">
                 <param name="include">Items_PersonCredits_MenuBar</param>
                 <param name="vertical">false</param>
                 <param name="id">303</param>

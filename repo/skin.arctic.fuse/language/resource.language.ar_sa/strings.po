@@ -1003,7 +1003,7 @@ msgstr "العنوان الرئيسي"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31209"
 msgid "Boxes"
-msgstr "داخل مربعات"
+msgstr "داخل إطار"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31210"
@@ -1299,7 +1299,7 @@ msgstr "اضغط للاسفل لظهور شريط التمرير"
 #: /1080i/Includes_Items.xml
 msgctxt "#31274"
 msgid "Icon"
-msgstr "آيقونة"
+msgstr "أيقونة"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31275"
@@ -1328,7 +1328,7 @@ msgstr "أيقونات استديو الانتاج"
 #: /1080i/SkinSettings.xml
 msgctxt "#31280"
 msgid "Seekbar displays plot with title details"
-msgstr "اظهار الحبكة نع تفاصيل العنوان مع شريط البحث"
+msgstr "اظهار الحبكة مع تفاصيل العنوان على شريط البحث"
 
 #: /1080i/Includes_Shortcuts_Pallette.xml
 msgctxt "#31281"
@@ -1567,7 +1567,7 @@ msgstr "كتابي"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31330"
 msgid "Crop"
-msgstr "مصغر"
+msgstr "Clearlogo - مصغر"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31331"
@@ -1769,12 +1769,12 @@ msgstr "طريقة تصنيف"
 #: /1080i/Includes_Items.xml
 msgctxt "#31372"
 msgid "Options tray"
-msgstr "خيارات المنيو السفلى"
+msgstr "خيارات قائمة الشريط السفلى"
 
 #: /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31373"
 msgid "Stacked"
-msgstr "مرصوصة"
+msgstr "غير مجمعة"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31374"
@@ -1823,7 +1823,7 @@ msgstr "انتاج"
 #: /1080i/SkinSettings.xml
 msgctxt "#31384"
 msgid "Tray labels"
-msgstr "وضع مسميات لاختصازات القائمة السفلية"
+msgstr "وضع مسميات لاختصارات القائمة السفلية"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31385"
@@ -2045,7 +2045,7 @@ msgstr "متأقلم تلقائياً"
 #: /1080i/Custom_1116_Dialog_Shortcuts.xml
 msgctxt "#31433"
 msgid "Edit side widgets"
-msgstr " widgets الجانية تحرير"
+msgstr "تحرير الwidget الاضافية"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31434"
@@ -2089,12 +2089,17 @@ msgstr "FlixArt حجم صورة الفيديو بالواجهة الرئيسية
 #: /1080i/Includes_Labels.xml
 msgctxt "#31442"
 msgid "Parent"
-msgstr "الام
+msgstr "الاقسام الرئيسية"
 
 #: /1080i/Custom_1116_Dialog_Shortcuts.xml
 msgctxt "#31443"
 msgid "Open path in dialog"
 msgstr """
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31446"
+msgid "Bump"
+msgstr "لا شئ"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31448"

@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="window" id="1185">
+    <defaultcontrol always="true">9098</defaultcontrol>
+    <menucontrol>303</menucontrol>
 
-    <include content="Object_DefaultControl" condition="![String.IsEmpty(Window(Home).Property(SideMenu.HasFocus)) | ![Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)]]">
-        <param name="defaultcontrol">9097</param>
-    </include>
-    <include content="Object_DefaultControl" condition="[String.IsEmpty(Window(Home).Property(SideMenu.HasFocus)) | ![Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)]]">
-        <param name="defaultcontrol">9098</param>
-    </include>
-
+    <include>Action_Blur_Onload</include>
     <onload>ClearProperty(TMDbHelper.Image.Override,Home)</onload>
-    <onload>SetFocus(5001)</onload>
-    <onload condition="![String.IsEmpty(Window(Home).Property(SideMenu.HasFocus)) | ![Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)]]">SetFocus(9097)</onload>
-    <onload condition="![String.IsEmpty(Window(Home).Property(SideMenu.HasFocus)) | ![Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)]]">AlarmClock(refocus,SetFocus(9097),00:00,silent)</onload>
-    <onload condition="[String.IsEmpty(Window(Home).Property(SideMenu.HasFocus)) | ![Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)]]">SetFocus(9098)</onload>
-    <onload condition="[String.IsEmpty(Window(Home).Property(SideMenu.HasFocus)) | ![Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)]]">AlarmClock(refocus,SetFocus(9098),00:00,silent)</onload>
-
+    <onload>SetFocus(9098)</onload>
+    <onload>AlarmClock(refocus,SetFocus(9098),00:00,silent)</onload>
     <include>Action_PreserveTransitionProp_Onload</include>
 
     <controls>
@@ -29,6 +21,7 @@
                 </include>
                 <include content="DialogInfo_Recommendations_Widgets_Grouplist">
                     <param name="onup">9098</param>
+                    <param name="widget_windowchange_animation">false</param>
                     <include>skinvariables-searchmenu-widgets</include>
                     <control type="group" id="5099">
                         <height>0</height>
@@ -50,12 +43,6 @@
                 </include>
             </control>
             <control type="group">
-                <!-- <include content="Animation_Half_WindowChange">
-                    <param name="windowopen_up">!$EXP[Exp_SettingsDialogs_Prev] + !String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                    <param name="windowopen_down">!$EXP[Exp_SettingsDialogs_Prev] + String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                    <param name="windowclose_up">!$EXP[Exp_SettingsDialogs_Next] + !String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                    <param name="windowclose_down">!$EXP[Exp_SettingsDialogs_Next] + String.IsEmpty(Window(Home).Property(ReverseTransition))</param>
-                </include> -->
                 <visible>String.IsEmpty(Control.GetLabel(9099).index(1)) | Integer.IsEqual(Container(5000).NumItems,0)</visible>
                 <control type="grouplist">
                     <left>view_side</left>
@@ -95,7 +82,6 @@
             <include content="DialogInfo_Recommendations_Furniture">
                 <param name="header_visible">false</param>
             </include>
-            <include>Search_View_Edit_SideButton</include>
             <control type="group">
                 <include>Animation_View_SlideOver</include>
                 <include>Animation_Group_Bumper</include>

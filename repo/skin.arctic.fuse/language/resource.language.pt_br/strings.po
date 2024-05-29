@@ -2099,6 +2099,16 @@ msgid "Expand labels from minimised"
 msgstr "Expandir rótulos de minimizados"
 
 #: /1080i/SkinSettings.xml
+msgctxt "#31445"
+msgid "Substituir a pesquisa pelo descobrir"
+msgstr ""
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31446"
+msgid "Bump"
+msgstr "Ressalto"
+
+#: /1080i/SkinSettings.xml
 msgctxt "#31448"
 msgid "Show \"More\" item on limited widgets"
 msgstr "Mostrar o item \"Mais\" em widgets limitados"

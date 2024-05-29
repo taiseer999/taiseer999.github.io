@@ -58,6 +58,38 @@
         <include>Search_Filter_ListType</include>
     </include>
 
+    <include name="Search_Filter_MouseButton_OnClick">
+        <onclick condition="Window.IsVisible(1185)">ActivateWindow(1105)</onclick>
+        <onclick condition="Window.IsVisible(1185)">SetFocus(64)</onclick>
+        <onclick condition="Window.IsVisible(1105)">SetFocus(8000)</onclick>
+        <onclick condition="Window.IsMedia">SetFocus(64)</onclick>
+    </include>
+
+    <include name="Search_Filter_MouseButton">
+        <param name="vertical">false</param>
+        <definition>
+            <control type="button" id="305">
+                <texturenofocus />
+                <include>Texture_KeyboardButton</include>
+                <width>80</width>
+                <height>80</height>
+                <centerleft>50%</centerleft>
+                <centertop>50%</centertop>
+                <include>Search_Filter_MouseButton_OnClick</include>
+            </control>
+            <control type="image">
+                <texture colordiffuse="$VAR[Layout_Home_Menu_Color_NF]">special://skin/extras/icons/filter.png</texture>
+                <bordersize>icon_home_bordersize</bordersize>
+                <visible>!Control.HasFocus(305)</visible>
+            </control>
+            <control type="image">
+                <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/filter.png</texture>
+                <bordersize>icon_home_bordersize</bordersize>
+                <visible>Control.HasFocus(305)</visible>
+            </control>
+        </definition>
+    </include>
+
     <include name="Search_Filter_ListType">
         <control type="group">
             <include>Dimension_DialogSideMenu</include>
@@ -109,14 +141,14 @@
     </include>
 
     <include name="Search_Filter_Selector_ContentItems">
-        <!-- <item>
-            <label>$LOCALIZE[342] $LOCALIZE[1397] $LOCALIZE[20343] (TMDb)</label>
+        <item>
+            <label>$LOCALIZE[342] &amp; $LOCALIZE[20343] (TMDb)</label>
             <property name="target">videos</property>
             <property name="guid">guid-discoverall</property>
             <property name="listid">$NUMBER[52]</property>
             <property name="main_guid">$INFO[Container(5099).ListItem.Property(guid)]</property>
             <property name="discover">true</property>
-        </item> -->
+        </item>
         <item>
             <label>$LOCALIZE[342] (TMDb)</label>
             <property name="target">videos</property>
@@ -134,7 +166,7 @@
             <property name="discover">true</property>
         </item>
         <item>
-            <label>$LOCALIZE[342] $LOCALIZE[1397] $LOCALIZE[20343] ($LOCALIZE[14022])</label>
+            <label>$LOCALIZE[342] &amp; $LOCALIZE[20343] ($LOCALIZE[14022])</label>
             <property name="target">videos</property>
             <property name="guid">guid-libraryall</property>
             <property name="listid">$NUMBER[52]</property>
@@ -161,11 +193,31 @@
     </include>
 
     <include name="Search_Filter_Selector">
+
+        <control type="group">
+            <width>40</width>
+            <height>40</height>
+            <centerright>100</centerright>
+            <centertop>100</centertop>
+            <include>Search_Filter_MouseButton</include>
+        </control>
+
+        <control type="button" id="80999">
+            <texturenofocus />
+            <texturefocus />
+            <onleft>68</onleft>
+            <onup>68</onup>
+            <ondown>68</ondown>
+            <onback>68</onback>
+            <onclick>SetFocus(68)</onclick>
+            <visible>[Control.HasFocus(8000) | Control.HasFocus(80999) | Control.HasFocus(80001)]</visible>
+        </control>
+
         <control type="group">
             <include>Dimension_DialogSideMenu</include>
             <include>Animation_Right</include>
             <visible>!$EXP[Exp_InfoDialogs]</visible>
-            <visible>Control.HasFocus(8900) | Control.HasFocus(8000) | Control.HasFocus(80001) | Control.HasFocus(5098) | Control.HasFocus(90001)</visible>
+            <visible>Control.HasFocus(8000) | Control.HasFocus(80999) | Control.HasFocus(80001)</visible>
 
             <include content="Dialog_Dim_Side">
                 <param name="slide_animation">false</param>
@@ -197,14 +249,9 @@
                         <param name="itemlayout_include">Layout_MenuList</param>
                         <param name="detailed">true</param>
                         <onleft>68</onleft>
-                        <onback>64</onback>
+                        <onback>68</onback>
                         <include>Dimension_Dialog_Body_Group</include>
                         <content>
-                            <item>
-                                <label>$LOCALIZE[456]</label>
-                                <label2>$INFO[Container(5099).ListItem.Label]</label2>
-                                <onclick>SetFocus(5098)</onclick>
-                            </item>
                             <item>
                                 <label>$LOCALIZE[192]</label>
                                 <onclick>SetFocus(9099)</onclick>
@@ -234,6 +281,19 @@
                                 <onclick>ClearProperty(SearchDiscover.SortOrder)</onclick>
                                 <onclick>Skin.Reset(SearchDiscover.VoteLow)</onclick>
                                 <onclick>Skin.Reset(SearchDiscover.ItemLimit)</onclick>
+                            </item>
+
+                            <item>
+                                <label>$LOCALIZE[456]</label>
+                                <label2>$INFO[Container(5099).ListItem.Label]</label2>
+                                <onclick>SetFocus(5098)</onclick>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[369]</label>
+                                <label2>$INFO[Control.GetLabel(9099).index(1)]</label2>
+                                <onclick>SetFocus(9099)</onclick>
+                                <onclick>Action(Select)</onclick>
+                                <onclick>SetFocus(8000)</onclick>
                             </item>
                             <item>
                                 <label>$LOCALIZE[515]</label>

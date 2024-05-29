@@ -1319,13 +1319,11 @@
                         </control>
                     </control>
                     <control type="group">
-                        <visible>Pvr.IsPlayingTv</visible>
                         <include content="Object_ProgressLine">
                             <param name="progress">PVR.EpgEventProgress</param>
                         </include>
                     </control>
                     <control type="group">
-                        <visible>Pvr.IsPlayingTv</visible>
                         <include content="Object_ProgressLine">
                             <param name="progress">Player.Progress</param>
                         </include>

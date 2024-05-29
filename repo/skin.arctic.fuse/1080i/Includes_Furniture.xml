@@ -22,7 +22,7 @@
         <param name="textcolor">main_fg_100</param>
         <param name="textcolor_sublabel">main_fg_70</param>
         <param name="shadowcolor_sublabel">main_bg_12</param>
-        <param name="include_topbar_animation">Skin.String(Home.SideMenuCollapse,Topbar)</param>
+        <param name="include_topbar_animation">$EXP[Exp_HomeMenu_IsTopBar]</param>
         <definition>
             <include content="Furniture_Topbar_Group" condition="$PARAM[enabled]">
                 <include condition="$PARAM[include_topbar_animation]">Animation_View_Topbar</include>

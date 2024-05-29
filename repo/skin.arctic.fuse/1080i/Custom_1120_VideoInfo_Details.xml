@@ -5,8 +5,8 @@
     <onload>SetProperty(TMDbHelper.WidgetContainer,513)</onload>
     <include>Action_PreserveTransitionProp_Onload</include>
 
-    <onunload condition="!Skin.String(Home.SideMenuCollapse,Topbar)">SetProperty(SideMenu.HasFocus,True,Home)</onunload>
-    <onunload condition="Skin.String(Home.SideMenuCollapse,Topbar)">ClearProperty(SideMenu.HasFocus,Home)</onunload>
+    <onunload condition="!$EXP[Exp_HomeMenu_IsTopBar]">SetProperty(SideMenu.HasFocus,True,Home)</onunload>
+    <onunload condition="$EXP[Exp_HomeMenu_IsTopBar]">ClearProperty(SideMenu.HasFocus,Home)</onunload>
     <onunload>SetFocus(4001)</onunload>
 
     <controls>
@@ -284,14 +284,14 @@
                         <param name="itemlayout_w">600</param>
                         <param name="itemlayout_include">Layout_InfoDialog_Details</param>
 
-                        <onup condition="Skin.String(Home.SideMenuCollapse,Topbar)">Close</onup>
-                        <ondown condition="Skin.String(Home.SideMenuCollapse,Topbar)">Close</ondown>
+                        <onup condition="$EXP[Exp_HomeMenu_IsTopBar]">Close</onup>
+                        <ondown condition="$EXP[Exp_HomeMenu_IsTopBar]">Close</ondown>
 
-                        <onleft condition="!Skin.String(Home.SideMenuCollapse,Topbar)">Close</onleft>
+                        <onleft condition="!$EXP[Exp_HomeMenu_IsTopBar]">Close</onleft>
                         <onright>SetFocus(5000)</onright>
                         <onback>SetFocus(4001)</onback>
-                        <onback condition="!Skin.String(Home.SideMenuCollapse,Topbar)">SetProperty(SideMenu.HasFocus,True,Home)</onback>
-                        <onback condition="Skin.String(Home.SideMenuCollapse,Topbar)">ClearProperty(SideMenu.HasFocus,Home)</onback>
+                        <onback condition="!$EXP[Exp_HomeMenu_IsTopBar]">SetProperty(SideMenu.HasFocus,True,Home)</onback>
+                        <onback condition="$EXP[Exp_HomeMenu_IsTopBar]">ClearProperty(SideMenu.HasFocus,Home)</onback>
 
                         <left>-80</left>
                         <top>-40</top>

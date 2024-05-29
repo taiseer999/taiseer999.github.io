@@ -94,7 +94,6 @@
         <include content="Object_Hidden_Button">
             <param name="id">64</param>
             <onfocus>$VAR[Action_Var_ToMediaFilter]</onfocus>
-            <onfocus>ClearProperty(FocusFilter)</onfocus>
         </include>
         <include content="Object_Hidden_Button">
             <param name="id">67</param>

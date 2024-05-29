@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Label_Setting_SideMenuInfoPosition">
+        <value condition="$EXP[Exp_HomeMenu_Info_IsHorizontal]">$LOCALIZE[31164]</value>
+        <value>$LOCALIZE[31163]</value>
+    </variable>
+
     <variable name="Label_ColorPicker_Type">
         <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),Highlight)">$LOCALIZE[31250]</value>
         <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),Gradient)">$LOCALIZE[31232]</value>
@@ -90,7 +95,7 @@
     </variable>
 
     <variable name="Label_Settings_SideMenuCollapse">
-        <value condition="Skin.String(Home.SideMenuCollapse,Topbar)">$LOCALIZE[31352]</value>
+        <value condition="$EXP[Exp_HomeMenu_IsTopBar]">$LOCALIZE[31352]</value>
         <value condition="Skin.String(Home.SideMenuCollapse,Always)">$LOCALIZE[34122]</value>
         <value condition="Skin.String(Home.SideMenuCollapse,Library)">$LOCALIZE[14211]</value>
         <value condition="Skin.String(Home.SideMenuCollapse,Hubs)">$LOCALIZE[14022]</value>
@@ -1244,7 +1249,7 @@
 
     <variable name="Label_Header_Main_Home">
         <!-- <value condition="!Skin.HasSetting(Hub.Home.DisableSubmenu) + !String.IsEmpty(Container(300).ListItem.Label) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + !Integer.IsEqual(Window.Property(Slide.WidgetContainer),300)">$INFO[Container(300).ListItem.Label]</value> -->
-        <!-- <value condition="!Skin.HasSetting(Home.SideMenu.DisableIndicator) + Skin.String(Home.SideMenuCollapse,Topbar) + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)">$LOCALIZE[10000]</value> -->
+        <!-- <value condition="!Skin.HasSetting(Home.SideMenu.DisableIndicator) + $EXP[Exp_HomeMenu_IsTopBar] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)">$LOCALIZE[10000]</value> -->
         <value condition="[$EXP[Exp_Hubs_Spotlight_IsDisabled]]">$LOCALIZE[10000]</value>
         <value condition="!String.IsEmpty(Window.Property(SideMenu.CurrentName)) + !Skin.HasSetting(Home.SideMenu.DisableIndicator)">$INFO[Window.Property(SideMenu.CurrentName)]</value>
         <value condition="!String.IsEmpty(Skin.String(Home.Label))">$INFO[Skin.String(Home.Label)]</value>
