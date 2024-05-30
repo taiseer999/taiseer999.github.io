@@ -1,0 +1,52 @@
+{
+<builds>
+<build>
+<name>Lite Cream Build 21"</name>
+<version>2.6</version>
+<url>https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=pqdgTaXIr%2FF45eiFhwqHt2K1t5Vva681djPqcUndI3AI48kn2GVdb5JVVQC1M0hO&expiry=FAOlf1It%2Flsg2%2FDHaZN9dw%3D%3D&mac=2884fcaf5fb572e1d76896773a9d095aad4723df58aeb9ceecb849228d62a06e</url>
+<icon>https://i.postimg.cc/HxqjNSkb/lite-cream.png</icon>
+<fanart>https://i.postimg.cc/HxqjNSkb/lite-cream.png</fanart>
+<description>Kodi Build with Arctic Fuse Arabic for Kodi 21+ ONLY By Taiseer</description>
+</build>
+<build>
+<name>Lite Cream Build full screen top bar 21</name>
+<version>1.4</version>
+<url>https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=yDH5QO6tYckpncVDGPNDV1n0Oq7CMy4EIQVvTduj4TgECqZEB3f2%2B%2F%2F%2FnZTWUu58&expiry=VgeT2iXGmPMXZAbl98P91w%3D%3D&mac=cf39fb898390835842efa8c189ac61a5af5e6a0afeee231ead2cf2e397e359bc</url>
+<icon>https://i.postimg.cc/Hsg6YL0F/Screenshot-2024-05-18-at-8-53-14-PM.png</icon>
+<fanart>https://i.postimg.cc/Hsg6YL0F/Screenshot-2024-05-18-at-8-53-14-PM.png</fanart>
+<description>Kodi Build with Arctic Fuse Arabic for Kodi 21</description>
+</build>
+<build>
+<name>Netflix Build - Arabic</name>
+<version>1.4</version>
+<url>https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=KphWHn7%2F0OSlOOM0fFMZvRnMWsoR9FRF9dev0Bgm2GRXuzpZCW0yeQyqcsGbEcMx&expiry=%2BcZOMfF%2BaqQ0I3T7eH7yXw%3D%3D&mac=40ac9ecb582e7ff87a3a0f958f27af3d4a07e31d86a08bee281bb3ebc69af16d</url>
+<icon>https://i.postimg.cc/nhtJsyCy/nf.png</icon>
+<fanart>https://i.postimg.cc/nhtJsyCy/nf.png</fanart>
+<description>Kodi 21 Arabic Titan BINGIE MOD Arabic skin</description>
+</build>
+<build>
+<name>AZR Build - Arabic</name>
+<version>1.2</version>
+<url>url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=Z7iSg9jmVnU8FSdhBuLXV6TzY553HJ5vF1Hxnh%2F6K7x4u0LaPOyXcAWrZEB4yNHQ&expiry=3HEyXwBhJ1GgYZ2rsPpqfQ%3D%3D&mac=2c11dc64537cf123193d14aecbc825fe82600b05d8420a392ead13d91a133ec9</url>
+<icon>https://i.postimg.cc/SsrsVcvG/Screenshot-2024-05-18-at-2-47-10-PM.png</icon>
+<fanart>https://i.postimg.cc/SsrsVcvG/Screenshot-2024-05-18-at-2-47-10-PM.png</fanart>
+<description>Kodi 21 Arabic AZR skin</description>
+</build>
+<build>
+<name>Touchscreen Build - Arabic </name>
+<version>1.0</version>
+<url>https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=1lwNgsi%2Bi9QerL5SV7%2BPvgRGVhNGOZlcCgKftS0QwGOXjy5xI3hqHx3Gcj9XYpbS&expiry=3EOhjPEDfHBPIK4022PvQQ%3D%3D&mac=4bcf4b42ed63fbcc3ae4e707d2d9974a24533d4a0421f0b1f93d6a8226f62cf4</url>
+<icon>https://i.postimg.cc/DmVPC7mY/Screenshot-2024-05-26-at-3-05-36-PM.png</icon>
+<fanart>https://i.postimg.cc/DmVPC7mY/Screenshot-2024-05-26-at-3-05-36-PM.png</fanart>
+<description>Kodi 21 Arabic touch screen skin</description>
+</build>
+<build>
+<name>Lite skins Build Build</name>
+<version>1.3</version>
+<url>https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=pRW0CXwU0Uz6ysIRwnD3lAuQpFP9v2V8kAg68LEIPv5tv06BlNsZWwAKh6ebP0s3&expiry=tiIJdp7NXtzWHLDoemO3cQ%3D%3D&mac=d62acf2a9d5968a5ee4cb62da619dae5426794a0b6ddc0e71d29a7441d4beb28</url>
+<icon>https://i.postimg.cc/N0mWgmNC/Screenshot-2024-05-26-at-5-57-11-PM.png</icon>
+<fanart>https://i.postimg.cc/N0mWgmNC/Screenshot-2024-05-26-at-5-57-11-PM.png</fanart>
+<description>Kodi 21 Arabic many lite skins</description>
+</build>
+</builds>
+}
