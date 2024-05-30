@@ -1657,7 +1657,7 @@ msgstr "Pressione para baixo para ver a programação dos canais"
 #: /1080i/SkinSettings.xml
 msgctxt "#31349"
 msgid "Replace close button with menu"
-msgstr "Substituir o botão Fechar pelo menu"
+msgstr "Substituir o botão fechar pelo menu"
 
 msgctxt "#31350"
 msgid "Thanks"
@@ -2100,8 +2100,8 @@ msgstr "Expandir rótulos de minimizados"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31445"
-msgid "Substituir a pesquisa pelo descobrir"
-msgstr ""
+msgid "Replace search with discover"
+msgstr "Substituir a pesquisa pelo descobrir"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31446"

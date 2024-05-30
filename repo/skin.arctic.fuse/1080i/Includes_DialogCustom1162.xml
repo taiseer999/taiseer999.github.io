@@ -38,8 +38,10 @@
                     <include>Dialog_Head_CloseButton</include>
 
                     <!-- Content -->
-                    <include content="Dialog_Body">
-                        <include content="Dialog_Body_Group">
+                    <control type="group">
+                        <include>Dimension_Dialog_Body</include>
+                        <control type="group">
+                            <include>Dimension_Dialog_Body_Group</include>
                             <include content="DialogInfo_PlotBox_Artwork" condition="$PARAM[include_artwork]">
                                 <param name="poster_visible">!String.IsEmpty(Container(450).ListItem.Art(poster))</param>
                                 <param name="poster_icon">$INFO[Container(450).ListItem.Art(poster)]</param>
@@ -89,13 +91,13 @@
 
                                 </include>
                             </control>
-                        </include>
+                        </control>
                         <include content="Dialog_Scrollbar">
                             <param name="id">61</param>
                             <onleft>450</onleft>
                             <right>0</right>
                         </include>
-                    </include>
+                    </control>
                 </include>
             </control>
         </definition>

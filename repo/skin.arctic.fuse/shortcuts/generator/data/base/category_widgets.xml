@@ -11,7 +11,7 @@
             <rules name="grouplist_refocus">
                 <rule>
                     <condition>!Skin.HasSetting(Hub.{window_id}.DisableSubmenu)</condition>
-                    <value>SetFocus(300)</value>
+                    <value>$VAR[Action_Hubs_Complex_SetFocus]</value>
                 </rule>
                 <rule>
                     <condition>{window_id}==Home</condition>

@@ -26,10 +26,11 @@
                 <include>Dialog_Head_CloseButton</include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
 
-                    <include content="Dialog_Body_Group">
-                        <param name="id">7000</param>
+                    <control type="group" id="7000">
+                        <include>Dimension_Dialog_Body_Group</include>
 
                         <include content="ButtonMenu_Layout" condition="Skin.String(OptionsTiles.Layout,$NUMBER[2])">
                             <param name="layout_include">ButtonMenu_Layout_Two</param>
@@ -75,26 +76,11 @@
                             <include>ButtonMenu_OptionsTray</include>
                         </control>
 
-                    </include>
-                </include>
+                    </control>
+                </control>
 
             </include>
         </control>
-
-        <!-- <control type="group">
-            <centerbottom>100</centerbottom>
-            <centerleft>100</centerleft>
-            <height>40</height>
-            <width>40</width>
-            <control type="image">
-                <bordersize>-20</bordersize>
-                <include>Texture_Circle_Highlight_V</include>
-            </control>
-            <control type="image">
-                <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/bars.png</texture>
-                <bordersize>icon_home_bordersize</bordersize>
-            </control>
-        </control> -->
 
 
     </controls>

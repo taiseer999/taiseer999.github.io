@@ -206,6 +206,12 @@
         <value>SetFocus($VAR[Action_Hubs_MenuID])</value>
     </variable>
 
+    <variable name="Action_Hubs_Complex_SetFocus">
+        <value condition="Control.IsVisible(300) + !Integer.IsEqual(Container(300).NumItems,0)">SetFocus(300)</value>
+        <!-- <value>SetFocus(311)</value> -->
+        <value>$VAR[Action_Hubs_Menu_SetFocus]</value>
+    </variable>
+
     <variable name="Action_Hubs_Classic_SetFocus">
         <value condition="Control.IsVisible(100601) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),100601) + !Control.HasFocus(100601)">SetFocus(100601)</value>
         <value>Action(PreviousMenu)</value>

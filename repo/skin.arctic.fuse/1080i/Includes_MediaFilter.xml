@@ -45,11 +45,11 @@
                     <param name="onclick">SetFocus(68)</param>
                 </include>
 
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Grouplist">
-                        <param name="id">9000</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
                         <bottom>-40</bottom>
-
+                        <include>Dimension_Dialog_Body_Group</include>
                         <onleft>68</onleft>
                         <onback>68</onback>
                         <onup>SetFocus(6000,2)</onup>
@@ -220,9 +220,10 @@
                         </include>
 
 
-                    </include>
+                    </control>
 
-                    <include content="Dialog_Body_Group">
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <control type="group">
                             <visible>Player.HasMedia</visible>
                             <include>ButtonMenu_PlayerControls</include>
@@ -232,7 +233,7 @@
                             <visible>!Player.HasMedia</visible>
                             <include>ButtonMenu_OptionsTray</include>
                         </control>
-                    </include>
+                    </control>
 
                     <control type="group">
                         <height>40</height>
@@ -272,7 +273,7 @@
 
                     <include>MediaFilter_Alphabet_Scroll</include>
 
-                </include>
+                </control>
 
 
             </include>
@@ -423,9 +424,10 @@
                 <param name="slide_condition">ControlGroup(550).HasFocus()</param>
                 <param name="dialog_size">Dimension_DialogSideMenu</param>
                 <!-- Side Buttons -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Side_Grouplist">
-                        <param name="id">550</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="550">
+                        <include>Dialog_Side_Grouplist_Def</include>
                         <onright>55</onright>
                         <include content="Dialog_Side_Button">
                             <param name="baseid">55</param>
@@ -488,8 +490,8 @@
                             <param name="visible">true</param>
                             <onclick>Container.Update(plugin://plugin.video.themoviedb.helper/?info=user_discover&amp;method=save&amp;tmdb_type=movie)</onclick>
                         </include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
 
             <include content="Dialog_Foreground_Side">
@@ -505,18 +507,20 @@
                 </include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Group">
-                    <include content="List_DialogSelect">
-                        <param name="id">55</param>
-                        <param name="textcolor">dialog_fg</param>
-                        <movement>8</movement>
-                        <onleft>550</onleft>
-                        <visible>$EXP[Exp_View_55]</visible>
-                        <onfocus>SetProperty(TMDbHelper.WidgetContainer,553)</onfocus>
-                    </include>
-                </include>
-                </include>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
+                        <include content="List_DialogSelect">
+                            <param name="id">55</param>
+                            <param name="textcolor">dialog_fg</param>
+                            <movement>8</movement>
+                            <onleft>550</onleft>
+                            <visible>$EXP[Exp_View_55]</visible>
+                            <onfocus>SetProperty(TMDbHelper.WidgetContainer,553)</onfocus>
+                        </include>
+                    </control>
+                </control>
             </include>
 
         </control>

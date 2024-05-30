@@ -29,9 +29,10 @@
                 <param name="dialog_size">Dimension_DialogHugeMenu</param>
 
                 <!-- Side Buttons -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Side_Grouplist">
-                        <param name="id">9000</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
+                        <include>Dialog_Side_Grouplist_Def</include>
                         <onleft>Close</onleft>
                         <include content="Dialog_Side_Button">
                             <param name="id">03</param>
@@ -63,8 +64,8 @@
                             <onclick>Close</onclick>
                             <onclick>ActivateWindow(servicesettings,weather)</onclick>
                         </include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
 
             <include content="Dialog_Foreground_Side">
@@ -80,7 +81,8 @@
                 <include>Dialog_Head_CloseButton</include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
                     <control type="group">
                         <include>Dialog_Group</include>
 
@@ -206,7 +208,7 @@
                             <include>Weather_Detail_Panel</include>
                         </control>
                     </control>
-                </include>
+                </control>
             </include>
 
         </control>

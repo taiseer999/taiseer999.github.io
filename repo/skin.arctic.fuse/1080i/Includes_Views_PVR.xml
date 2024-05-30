@@ -337,17 +337,14 @@
                     <param name="onclick">SetFocus(50)</param>
                 </include>
 
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Grouplist">
-                        <param name="id">9000</param>
-
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
                         <bottom>100</bottom>
-
+                        <include>Dimension_Dialog_Body_Group</include>
                         <onup>SetFocus(6000,2)</onup>
                         <ondown>SetFocus(6000,2)</ondown>
-
                         <onleft>50</onleft>
-                        <!-- <onback>50</onback> -->
 
                         <include content="Settings_Button">
                             <param name="id">9001</param>
@@ -443,9 +440,10 @@
                             <onclick>Container.SetSortDirection</onclick>
                         </include>
 
-                    </include>
+                    </control>
 
-                    <include content="Dialog_Body_Group">
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <control type="group">
                             <visible>Player.HasMedia</visible>
                             <include>ButtonMenu_PlayerControls</include>
@@ -455,8 +453,8 @@
                             <visible>!Player.HasMedia</visible>
                             <include>ButtonMenu_OptionsTray</include>
                         </control>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
         </control>
     </include>

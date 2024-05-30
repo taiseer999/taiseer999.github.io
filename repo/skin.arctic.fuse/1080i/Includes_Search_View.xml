@@ -100,23 +100,19 @@
                     <orientation>horizontal</orientation>
                     <animation effect="slide" start="0" end="0,-15" condition="true">Conditional</animation>
                     <include content="Furniture_MainLabel">
-                        <aligny>center</aligny>
-                        <label>$VAR[Label_Setting_SearchStyle]</label>
-                        <width>auto</width>
+                        <param name="label">$VAR[Label_Setting_SearchStyle]</param>
+                        <param name="width">auto</param>
                     </include>
                     <include content="Furniture_MainLabel">
-                        <aligny>center</aligny>
-                        <textcolor>main_fg_30</textcolor>
-                        <label> › </label>
-                        <width>auto</width>
-                        <visible>!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) | [Control.HaSfocus($PARAM[editid]) + !Window.IsVisible(DialogKeyboard.xml)]</visible>
+                        <param name="label"> › </param>
+                        <param name="width">auto</param>
+                        <param name="textcolor">main_fg_30</param>
+                        <param name="visible">!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) | [Control.HasFocus($PARAM[editid]) + !Window.IsVisible(DialogKeyboard.xml)]</param>
                     </include>
                     <include content="Furniture_MainLabel">
-                        <aligny>center</aligny>
-                        <label>$INFO[Control.GetLabel($PARAM[editid]).index(1)]</label>
-                        <width>auto</width>
-                        <visible>!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1))</visible>
-                        <visible>!Control.HaSfocus($PARAM[editid]) | Window.IsVisible(DialogKeyboard.xml)</visible>
+                        <param name="label">$INFO[Control.GetLabel($PARAM[editid]).index(1)]</param>
+                        <param name="width">auto</param>
+                        <param name="visible">!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) + [!Control.HasFocus($PARAM[editid]) | Window.IsVisible(DialogKeyboard.xml)]</param>
                     </include>
                     <control type="edit" id="$PARAM[editid]">
                         <texturefocus />
@@ -156,8 +152,9 @@
         <include>Texture_Highlight_Underline_H</include>
         <align>center</align>
         <aligny>top</aligny>
-        <textcolor>dialog_fg_70</textcolor>
-        <selectedcolor>dialog_fg_70</selectedcolor>
+        <textcolor>main_fg_70</textcolor>
+        <selectedcolor>main_fg_70</selectedcolor>
+        <focusedcolor>main_fg_100</focusedcolor>
         <width>26</width>
         <hitrect x="0" y="20" w="44" h="44" />
     </include>
@@ -226,7 +223,7 @@
                                 <control type="label">
                                     <font>font_mini_black</font>
                                     <label>$INFO[ListItem.Label]</label>
-                                    <textcolor>$VAR[ColorSelected]</textcolor>
+                                    <textcolor>main_fg_100</textcolor>
                                     <align>center</align>
                                 </control>
                                 <control type="image">

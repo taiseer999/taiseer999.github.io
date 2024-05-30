@@ -1,106 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <include name="Furniture_Topbar_Group">
-        <control type="group">
-            <nested />
-            <include>Dimension_Topbar</include>
-        </control>
-    </include>
-
-    <include name="Furniture_Bottombar_Group">
-        <control type="group">
-            <nested />
-            <include>Dimension_Bottombar</include>
-        </control>
-    </include>
-
     <include name="Furniture_Top">
-        <param name="label">[CAPITALIZE]$VAR[Label_Header_Main][/CAPITALIZE]</param>
         <param name="enabled">true</param>
-        <param name="clock">Skin.HasSetting(Furniture.EnableClock.TopLeft)</param>
+        <param name="id" />
+        <param name="label">[CAPITALIZE]$VAR[Label_Header_Main][/CAPITALIZE]</param>
         <param name="textcolor">main_fg_100</param>
         <param name="textcolor_sublabel">main_fg_70</param>
         <param name="shadowcolor_sublabel">main_bg_12</param>
         <param name="include_topbar_animation">$EXP[Exp_HomeMenu_IsTopBar]</param>
+        <param name="clock">Skin.HasSetting(Furniture.EnableClock.TopLeft)</param>
         <definition>
-            <include content="Furniture_Topbar_Group" condition="$PARAM[enabled]">
-                <include condition="$PARAM[include_topbar_animation]">Animation_View_Topbar</include>
-                <include content="Furniture_Gutters">
-                    <control type="group">
-                        <animation effect="slide" start="0" end="0,-15" condition="!Skin.HasSetting(Furniture.EnableClock) + [Window.IsVisible(MyPVRGuide.xml) | Window.IsVisible(MyPVRChannels.xml) | $PARAM[clock]]">Conditional</animation>
-                        <include content="Furniture_MainLabel">
-                            <param name="id">$PARAM[id]</param>
-                            <param name="textcolor">$PARAM[textcolor]</param>
-                            <aligny>center</aligny>
-                            <label>$PARAM[label]</label>
-                        </include>
-                        <include content="Furniture_DateLabel">
-                            <param name="textcolor">$PARAM[textcolor_sublabel]</param>
-                            <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                            <param name="visible">!Skin.HasSetting(Furniture.EnableClock) + [Window.IsVisible(MyPVRGuide.xml) | Window.IsVisible(MyPVRChannels.xml) | $PARAM[clock]]</param>
-                        </include>
-                    </control>
-                </include>
+            <include content="_Furniture_Top" condition="$PARAM[enabled]">
+                <param name="id">$PARAM[id]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
+                <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
+                <param name="include_topbar_animation">$PARAM[include_topbar_animation]</param>
+                <param name="clock">$PARAM[clock]</param>
             </include>
         </definition>
     </include>
+    <include name="_Furniture_Top">
+        <control type="group">
+            <include>Dimension_Topbar</include>
+            <include condition="$PARAM[include_topbar_animation]">Animation_View_Topbar</include>
+            <control type="group">
+                <include>Dimension_Furniture_Gutters</include>
+                <animation effect="slide" start="0" end="0,-15" condition="!Skin.HasSetting(Furniture.EnableClock) + [Window.IsVisible(MyPVRGuide.xml) | Window.IsVisible(MyPVRChannels.xml) | $PARAM[clock]]">Conditional</animation>
+                <include content="Furniture_MainLabel">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                    <param name="label">$PARAM[label]</param>
+                </include>
+                <include content="Furniture_DateLabel">
+                    <param name="textcolor">$PARAM[textcolor_sublabel]</param>
+                    <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
+                    <param name="visible">!Skin.HasSetting(Furniture.EnableClock) + [Window.IsVisible(MyPVRGuide.xml) | Window.IsVisible(MyPVRChannels.xml) | $PARAM[clock]]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
 
     <include name="Furniture_Bottom_Right">
         <param name="enabled">!Skin.HasSetting(Furniture.BottomRight.Disable)</param>
         <definition>
-            <include content="Furniture_Bottombar_Group" condition="$PARAM[enabled]">
-                <include content="Furniture_Gutters">
-                    <control type="group">
-                        <visible>Skin.HasSetting(Furniture.DisableNowPlaying) | !Player.HasMedia</visible>
-                        <include content="Info_Studio" condition="![Skin.HasSetting(Furniture.EnableClock) | $EXP[Exp_Furniture_PVR]]">
-                            <centertop>50%</centertop>
-                        </include>
-                        <include content="Furniture_Clock" condition="Skin.HasSetting(Furniture.EnableClock)">
-                            <param name="flipx">true</param>
-                            <param name="topshadowcolor">main_bg_50</param>
-                            <param name="bottomshadowcolor">main_bg_50</param>
-                        </include>
-                    </control>
-                    <include condition="!Skin.HasSetting(Furniture.DisableNowPlaying)">Furniture_NowPlaying</include>
-                </include>
+            <include content="_Furniture_Bottom_Right" condition="$PARAM[enabled]">
             </include>
         </definition>
+    </include>
+    <include name="_Furniture_Bottom_Right">
+        <control type="group">
+            <include>Dimension_Bottombar</include>
+            <control type="group">
+                <include>Dimension_Furniture_Gutters</include>
+                <control type="group">
+                    <visible>Skin.HasSetting(Furniture.DisableNowPlaying) | !Player.HasMedia</visible>
+                    <include content="Info_Studio" condition="![Skin.HasSetting(Furniture.EnableClock) | $EXP[Exp_Furniture_PVR]]">
+                        <centertop>50%</centertop>
+                    </include>
+                    <include content="Furniture_Clock" condition="Skin.HasSetting(Furniture.EnableClock)">
+                        <param name="flipx">true</param>
+                        <param name="topshadowcolor">main_bg_50</param>
+                        <param name="bottomshadowcolor">main_bg_50</param>
+                    </include>
+                </control>
+                <include condition="!Skin.HasSetting(Furniture.DisableNowPlaying)">Furniture_NowPlaying</include>
+            </control>
+        </control>
     </include>
 
     <include name="Furniture_Bottom_WidgetGroups">
         <param name="label">$VAR[Label_NextWidget]</param>
         <param name="icon">$VAR[Image_NextWidget]</param>
         <definition>
-            <include content="Furniture_Bottombar_Group" condition="!$EXP[Exp_Footer_BottomLeft_IsVisible]">
-                <include content="Furniture_Gutters">
-                    <control type="group">
-                        <include>Transitions_Lower_Visibility</include>
-                        <!-- <visible>!$EXP[Exp_InfoDialogs]</visible>
-                        <include>Animation_Transition_InfoPanel_Hide</include> -->
-                        <control type="group">
-                            <visible>!Window.IsVisible(1171)</visible>
-                            <include content="Animation_Widget_FadeOut">
-                                <param name="condition">$PARAM[condition]</param>
-                                <param name="dim">$PARAM[dim]</param>
-                            </include>
-                            <control type="group">
-                                <top>10</top>
-                                <height>35</height>
-                                <include content="Info_Viewline">
-                                    <param name="library_condition">false</param>
-                                    <param name="label">$PARAM[label]</param>
-                                    <param name="custom_icon_condition">Skin.HasSetting(Furniture.EnableViewLineIcons)</param>
-                                    <param name="custom_icon">$PARAM[icon]</param>
-                                    <top>0</top>
-                                    <left>0</left>
-                                </include>
-                            </control>
-                        </control>
-                    </control>
-                </include>
+            <include content="_Furniture_Bottom_WidgetGroups" condition="!$EXP[Exp_Footer_BottomLeft_IsVisible]">
+                <param name="icon">$PARAM[icon]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="dim">$PARAM[dim]</param>
+                <param name="condition">$PARAM[condition]</param>
             </include>
         </definition>
+    </include>
+    <include name="_Furniture_Bottom_WidgetGroups">
+        <control type="group">
+            <include>Dimension_Bottombar</include>
+            <control type="group">
+                <include>Dimension_Furniture_Gutters</include>
+                <control type="group">
+                    <include>Transitions_Lower_Visibility</include>
+                    <control type="group">
+                        <visible>!Window.IsVisible(1171)</visible>
+                        <include content="Animation_Widget_FadeOut">
+                            <param name="condition">$PARAM[condition]</param>
+                            <param name="dim">$PARAM[dim]</param>
+                        </include>
+                        <control type="group">
+                            <top>10</top>
+                            <height>35</height>
+                            <include content="Info_Viewline">
+                                <param name="library_condition">false</param>
+                                <param name="label">$PARAM[label]</param>
+                                <param name="custom_icon_condition">Skin.HasSetting(Furniture.EnableViewLineIcons)</param>
+                                <param name="custom_icon">$PARAM[icon]</param>
+                                <top>0</top>
+                                <left>0</left>
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
     </include>
 
     <include name="Furniture_NowPlaying">
@@ -159,10 +171,10 @@
                     <param name="title_w">240</param>
                     <param name="sublabel_music_w">115</param>
                     <param name="sublabel_video_w">62</param>
-                    <visible>$EXP[Exp_ScrollbarVisible_H]</visible>
+                    <param name="visible">$EXP[Exp_ScrollbarVisible_H]</param>
                 </include>
                 <include content="Furniture_NowPlaying_Text">
-                    <visible>!$EXP[Exp_ScrollbarVisible_H]</visible>
+                    <param name="visible">!$EXP[Exp_ScrollbarVisible_H]</param>
                 </include>
             </control>
         </control>
@@ -172,9 +184,10 @@
         <param name="title_w">360</param>
         <param name="sublabel_music_w">235</param>
         <param name="sublabel_video_w">182</param>
+        <param name="visible">true</param>
         <definition>
             <control type="group">
-                <nested />
+                <visible>$PARAM[visible]</visible>
                 <right>100</right>
                 <control type="grouplist">
                     <orientation>horizontal</orientation>
@@ -221,16 +234,22 @@
     <include name="Furniture_Bottom_Left">
         <param name="enabled">true</param>
         <definition>
-            <include content="Furniture_Bottombar_Group" condition="$PARAM[enabled]">
-                <include content="Furniture_Gutters" condition="!$EXP[Exp_Furniture_PVR]">
-                    <include content="Info_Media">
-                        <param name="align">left</param>
-                        <param name="container">$PARAM[container]</param>
-                    </include>
-                </include>
-                <nested />
+            <include content="_Furniture_Bottom_Left" condition="$PARAM[enabled]">
+                <param name="container">$PARAM[container]</param>
             </include>
         </definition>
+    </include>
+    <include name="_Furniture_Bottom_Left">
+        <control type="group">
+            <include>Dimension_Bottombar</include>
+            <control type="group">
+                <include>Dimension_Furniture_Gutters</include>
+                <include content="Info_Media" condition="!$EXP[Exp_Furniture_PVR]">
+                    <param name="align">left</param>
+                    <param name="container">$PARAM[container]</param>
+                </include>
+            </control>
+        </control>
     </include>
 
     <include name="Furniture_DateLabel">
@@ -256,43 +275,18 @@
         <include>Furniture_Bottom_Right</include>
     </include>
 
-    <include name="Furniture_Gutters">
-        <control type="group">
-            <top>view_gutter</top>
-            <bottom>view_gutter</bottom>
-            <nested />
-        </control>
-    </include>
-
     <include name="Furniture_MainLabel">
+        <param name="id" />
         <param name="textcolor">main_fg_100</param>
+        <param name="width">100%</param>
+        <param name="visible">true</param>
         <definition>
             <control type="label" id="$PARAM[id]">
-                <nested />
+                <label>$PARAM[label]</label>
                 <font>font_midi_black</font>
                 <textcolor>$PARAM[textcolor]</textcolor>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_MenuLabel">
-        <param name="textcolor">main_fg_100</param>
-        <definition>
-            <control type="label" id="$PARAM[id]">
-                <nested />
-                <font>font_main_black</font>
-                <textcolor>$PARAM[textcolor]</textcolor>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_MiniLabel">
-        <param name="textcolor">main_fg_70</param>
-        <definition>
-            <control type="label" id="$PARAM[id]">
-                <nested />
-                <font>font_mini</font>
-                <textcolor>$PARAM[textcolor]</textcolor>
+                <width>$PARAM[width]</width>
+                <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
@@ -318,6 +312,8 @@
         <param name="icon">special://skin/extras/icons/kodi.png</param>
         <param name="spinspinner">false</param>
         <param name="spinnervisible">true</param>
+        <param name="include_right">false</param>
+        <param name="right">0</param>
         <definition>
             <control type="group">
                 <description>Busy animation</description>
@@ -330,7 +326,9 @@
                 <width>40</width>
                 <height>40</height>
                 <centertop>50%</centertop>
-                <nested />
+                <include content="Object_Right" condition="$PARAM[include_right]">
+                    <param name="right">$PARAM[right]</param>
+                </include>
 
                 <control type="group">
 
@@ -435,7 +433,6 @@
                     <font>font_mini_black</font>
                     <align>right</align>
                     <label>$PARAM[mainlabel]</label>
-                    <!-- <font>font_main_black</font> -->
                     <textcolor>main_fg_100</textcolor>
                 </control>
                 <control type="label" id="$PARAM[minilabel_id]">
@@ -443,7 +440,6 @@
                     <font>font_tiny</font>
                     <align>right</align>
                     <label>$PARAM[minilabel]</label>
-                    <!-- <font>font_tiny_bold</font> -->
                     <shadowcolor>main_bg_12</shadowcolor>
                     <textcolor>main_fg_70</textcolor>
                 </control>
@@ -473,7 +469,8 @@
                 <param name="progress">$PARAM[progress]</param>
                 <param name="progress_id">$PARAM[progress_id]</param>
                 <param name="spinnervisible">$PARAM[spinnervisible]</param>
-                <right>20</right>
+                <param name="include_right">true</param>
+                <param name="right">20</param>
             </include>
 
         </definition>

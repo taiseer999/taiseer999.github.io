@@ -33,10 +33,12 @@
                                 <param name="top">160</param>
                                 <param name="bottom">160</param>
                             </include>
-                            <include content="Dialog_Textbox">
+                            <control type="textbox" id="9">
                                 <top>-8</top>
                                 <bottom>8</bottom>
-                            </include>
+                                <font>font_main_plot</font>
+                                <textcolor>dialog_fg_70</textcolor>
+                            </control>
                             <control type="group">
                                 <bottom>0</bottom>
                                 <height>12</height>

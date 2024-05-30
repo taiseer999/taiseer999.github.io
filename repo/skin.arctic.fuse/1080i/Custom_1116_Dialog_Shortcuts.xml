@@ -63,9 +63,10 @@
                 <param name="slide_condition">True</param>
                 <param name="dialog_size">Dimension_DialogMainMenu</param>
                 <!-- Side Buttons -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Side_Grouplist">
-                        <param name="id">9000</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
+                        <include>Dialog_Side_Grouplist_Def</include>
                         <onright>22001</onright>
                         <onback>29999</onback>
                         <!-- <onup>9005</onup>
@@ -131,8 +132,8 @@
                             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_list_del]$VAR[Path_Shortcut_UseRawPath])</onclick>
                             <onback>29999</onback>
                         </include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
 
             <include content="Dialog_Foreground_Side">
@@ -209,8 +210,10 @@
 
 
                 <!-- Content -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Group">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <control type="group">
                             <right>640</right>
 
@@ -1024,12 +1027,12 @@
                                 </control>
                             </include>
                         </control>
-                    </include>
+                    </control>
                     <include content="Dialog_Scrollbar">
                         <param name="id">61</param>
                         <onleft>23001</onleft>
                     </include>
-                </include>
+                </control>
             </include>
         </control>
 
@@ -1055,8 +1058,10 @@
                 </include>
                 <include>Dialog_Head_CloseButton</include>
                 <!-- Content -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Group">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <include content="List_DialogSelect">
                             <param name="id">25001</param>
                             <!-- <param name="item_height">100</param> -->
@@ -1096,8 +1101,8 @@
                             <onclick condition="String.IsEqual(Window.Property(SideOptions.List),Filter)">SetFocus(25998)</onclick>
                             <onclick condition="String.IsEmpty(Window.Property(SideOptions.List))">SetFocus(25999)</onclick>
                         </include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
         </control>
 

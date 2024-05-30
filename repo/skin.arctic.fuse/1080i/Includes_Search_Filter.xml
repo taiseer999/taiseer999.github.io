@@ -114,7 +114,8 @@
                 <include>Dialog_Head_CloseButton</include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
                     <include content="List_DialogSelect">
                         <param name="id">5098</param>
                         <param name="textcolor">dialog_fg</param>
@@ -134,7 +135,7 @@
                             <include>Search_Filter_Selector_ContentItems</include>
                         </content>
                     </include>
-                </include>
+                </control>
             </include>
 
         </control>
@@ -241,7 +242,8 @@
                 </include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
 
                     <include content="List_DialogSelect">
                         <param name="id">8000</param>
@@ -377,7 +379,7 @@
                             </item>
                         </content>
                     </include>
-                </include>
+                </control>
             </include>
         </control>
     </include>
@@ -417,7 +419,8 @@
                 </include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
                     <include content="List_DialogSelect">
                         <param name="id">8900</param>
                         <param name="misc">[[String.IsEqual(Window.Property(SearchDiscover.FilterLabel),Genre) + !String.IsEmpty(Window.Property(SearchDiscover.GenreLabel)) + String.Contains(Window.Property(SearchDiscover.GenreLabel),ListItem.Label)] | [String.IsEqual(Window.Property(SearchDiscover.FilterLabel),Studio) + !String.IsEmpty(Window.Property(SearchDiscover.StudioLabel)) + String.Contains(Window.Property(SearchDiscover.StudioLabel),ListItem.Label)] | [String.IsEqual(Window.Property(SearchDiscover.FilterLabel),Director) + !String.IsEmpty(Window.Property(SearchDiscover.DirectorLabel)) + String.Contains(Window.Property(SearchDiscover.DirectorLabel),ListItem.Label)] | [String.IsEqual(Window.Property(SearchDiscover.FilterLabel),Country) + !String.IsEmpty(Window.Property(SearchDiscover.CountryLabel)) + String.Contains(Window.Property(SearchDiscover.CountryLabel),ListItem.Label)]]</param>
@@ -452,7 +455,7 @@
 
                         <content sortby="label">$VAR[Path_SearchFilter_Node]</content>
                     </include>
-                </include>
+                </control>
             </include>
 
         </control>

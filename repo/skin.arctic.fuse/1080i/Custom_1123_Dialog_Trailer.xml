@@ -20,9 +20,10 @@
                 <param name="slide_condition">True</param>
                 <param name="dialog_size">Dimension_DialogFullMenu</param>
                 <!-- Side Buttons -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Side_Grouplist">
-                        <param name="id">9000</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
+                        <include>Dialog_Side_Grouplist_Def</include>
                         <onleft condition="!Player.HasVideo">Close</onleft>
                         <onleft condition="Player.HasVideo">Seek(-10)</onleft>
                         <onright condition="Player.HasVideo">Seek(10)</onright>
@@ -59,8 +60,8 @@
                             <onclick condition="!String.IsEmpty(Window.Property(TrailerFullscreen))">ClearProperty(TrailerFullscreen,1123)</onclick>
                             <onunfocus>ClearProperty(TrailerFullscreen,1123)</onunfocus>
                         </include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
 
             <include content="Dialog_Foreground_Side">
@@ -77,8 +78,10 @@
                 <include>Dialog_Head_CloseButton</include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Group">
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <control type="group">
                             <include content="Dimension_Padding">
                                 <param name="pad">20</param>
@@ -115,8 +118,8 @@
                                 </control>
                             </control>
                         </control>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
 
         </control>

@@ -452,18 +452,18 @@
                 <param name="slide_condition">True</param>
                 <param name="dialog_size">Dimension_DialogMainMenu</param>
                 <!-- Side Buttons -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Side_Grouplist">
-                        <param name="id">30000</param>
-                        <param name="dim_visible">false</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="30000">
+                        <include>Dialog_Side_Grouplist_Def</include>
                         <onright condition="!Window.IsVisible(EventLog.xml) + !Window.IsVisible(addonbrowser) + !Window.IsVisible(filemanager)">3</onright>
                         <onright condition="Window.IsVisible(EventLog.xml)">8000</onright>
                         <onright condition="Window.IsVisible(addonbrowser)">6000</onright>
                         <onright condition="Window.IsVisible(filemanager)">20</onright>
                         <onleft>SetFocus(30040)</onleft>
                         <include>Settings_Standard_Buttons</include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
             <nested />
         </control>
@@ -506,9 +506,10 @@
                 </include>
 
                 <!-- Content -->
-                <include content="Dialog_Body">
-                    <include content="Dialog_Body_Grouplist">
-                        <param name="id">30040</param>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="30040">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <onleft condition="Window.IsVisible(settings)">50</onleft>
                         <onleft condition="Window.IsVisible(addonbrowser)">6000</onleft>
                         <onleft condition="Window.IsVisible(eventlog)">8000</onleft>
@@ -520,8 +521,8 @@
                         <onback condition="Window.IsVisible(filemanager)">20</onback>
                         <onback condition="!Window.IsVisible(addonbrowser) + !Window.IsVisible(eventlog)">3</onback>
                         <include>Items_Settings_SideChanger</include>
-                    </include>
-                </include>
+                    </control>
+                </control>
             </include>
 
         </control>
