@@ -13,11 +13,11 @@ ART = os.path.join(PATH, 'resources', 'media')
 #########################################################
 #        User Edit Variables                            #
 #########################################################
-ADDONTITLE = '[COLOR Orange][B]Open[/B][/COLOR]Wizard / Taiseer'
-BUILDERNAME = 'OpenWizard / Taiseer'
+ADDONTITLE = '[COLOR limegreen][B]Open[/B][/COLOR]Wizard'
+BUILDERNAME = 'OpenWizard'
 EXCLUDES = [ADDON_ID, 'repository.openwizard']
 # Text File with build info in it. Please read https://github.com/a4k-openproject/plugin.program.openwizard/wiki/Installing-Builds
-BUILDFILE = 'https://taiseer999.github.io/Builds.txt'
+BUILDFILE = 'http://psp2111.ddns.net/Builds.txt'
 # How often you would like it to check for build updates in days
 # 0 being every startup of kodi
 UPDATECHECK = 0
@@ -61,7 +61,7 @@ SPACER = '='
 # You can edit these however you want, just make sure that you have a %s in each of the
 # THEME's so it grabs the text from the menu item
 COLOR1 = 'white'
-COLOR2 = 'orange'
+COLOR2 = 'limegreen'
 # Primary menu items   / {0} is the menu item and is required
 THEME1 = u'[COLOR {color1}]{{}}[/COLOR]'.format(color1=COLOR1)
 # Build Names          / {0} is the menu item and is required
@@ -108,13 +108,13 @@ REPOZIPURL = 'https://'
 #########################################################
 # Enable Notification screen Yes or No
 ENABLE = 'No'
-# Url to https://taiseer999.github.io/notify.txt file
-NOTIFICATION = ''
+# Url to notification file
+NOTIFICATION = 'https://archive.org/download/builds_20230221/notify.txt'
 # Use either 'Text' or 'Image'
 HEADERTYPE = 'Text'
 # Font size of header
 FONTHEADER = 'Font14'
-HEADERMESSAGE = '[COLOR orange][B]Open[/B][/COLOR]Wizard'
+HEADERMESSAGE = '[COLOR limegreen][B]Open[/B][/COLOR]Wizard'
 # url to image if using Image 424x180
 HEADERIMAGE = 'http://'
 # Font for Notification Window
