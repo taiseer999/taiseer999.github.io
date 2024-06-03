@@ -108,7 +108,7 @@ REPOZIPURL = 'https://'
 #########################################################
 # Enable Notification screen Yes or No
 ENABLE = 'No'
-# Url to notification file
+# Url to https://taiseer999.github.io/notify.txt file
 NOTIFICATION = ''
 # Use either 'Text' or 'Image'
 HEADERTYPE = 'Text'
