@@ -2336,7 +2336,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <screenshot>resources/media/upnext-developer.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.17~omega">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.16~omega">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -2344,7 +2344,6 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
         <import addon="plugin.video.themoviedb.helper" version="5.2.17~nexus" />
         <import addon="resource.images.weathericons.white" version="0.0.1" />
         <import addon="resource.images.studios.coloured" version="0.0.1" />
-        <import addon="resource.font.robotocjksc" version="0.0.1" />
     </requires>
     <extension debugging="false" defaultthemename="Textures.xbt" effectslowdown="1" point="xbmc.gui.skin">
         <res aspect="16:9" default="true" folder="1080i" width="1920" height="1080" />

@@ -703,12 +703,12 @@ msgstr "جارِ تجهيز المظهر"
 #: /1080i/Includes_Defaults.xml
 msgctxt "#31146"
 msgid "The $VAR[Label_TraktStats_Recent_0_Type,[LOWERCASE],[/LOWERCASE]] $INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Episode.Title),[COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Show.Title), from the show [COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Movie.Title),[COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Movie.Year), released in [COLOR=main_fg_90][B],[/B][/COLOR]] was most recently watched."
-msgstr "$VAR[Label_TraktStats_Recent_0_Type,[LOWERCASE],[/LOWERCASE]] $INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Episode.Title),[COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Show.Title), من مسلسل [COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Movie.Title),[COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Movie.Year), أصدر عام [COLOR=main_fg_90][B],[/B][/COLOR]] تم مشاهدته حديثا."
+msgstr "و مؤخرًا شاهدت[CR]$VAR[Label_TraktStats_Recent_0_Type,[LOWERCASE],[/LOWERCASE]] $INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Episode.Title),[COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Show.Title), من مسلسل [COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Movie.Title),[COLOR=main_fg_90][B],[/B][/COLOR]]$INFO[Window(Home).Property(TMDbHelper.TraktStats.Recent.0.Movie.Year), [COLOR=main_fg_90][B],[/B][/COLOR]]."
 
 #: /1080i/Includes_Defaults.xml
 msgctxt "#31147"
 msgid "You have watched $INFO[Window(Home).Property(TMDbHelper.TraktStats.Movies.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] movies and $INFO[Window(Home).Property(TMDbHelper.TraktStats.Shows.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] shows."
-msgstr "لقد شاهدت$INFO[Window(Home).Property(TMDbHelper.TraktStats.Movies.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]]افلام و$INFO[Window(Home).Property(TMDbHelper.TraktStats.Shows.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]]مسلسلات"
+msgstr "لقد شاهدت $INFO[Window(Home).Property(TMDbHelper.TraktStats.Movies.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] فلم و $INFO[Window(Home).Property(TMDbHelper.TraktStats.Shows.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] مسلسل،"
 
 #: /1080i/Includes_DialogInfo.xml
 msgctxt "#31148"
