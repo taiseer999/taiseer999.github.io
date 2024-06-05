@@ -25,7 +25,7 @@
         <font>
             <name>font_info_black</name>
             <filename>RobotoNotoCondensed-Black1.ttf</filename>
-            <size>110</size>
+            <size>128</size>
         </font>
         <font>
             <name>font_title_black</name>
@@ -229,6 +229,16 @@
             <name>font_main_iconic</name>
             <filename>iconmonstr-iconic-font.ttf</filename>
             <size>30</size>
+        </font>
+<font>
+            <name>font_mini_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>22</size>
         </font>
 
         <!-- Kodi Logo Font -->
