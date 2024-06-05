@@ -17,7 +17,7 @@ ADDONTITLE = '[COLOR limegreen][B]Open[/B][/COLOR]Wizard'
 BUILDERNAME = 'OpenWizard'
 EXCLUDES = [ADDON_ID, 'repository.openwizard']
 # Text File with build info in it. Please read https://github.com/a4k-openproject/plugin.program.openwizard/wiki/Installing-Builds
-BUILDFILE = 'https://www.dropbox.com/scl/fi/uz7bv7uzd6natp1c5xdbe/Builds.txt?rlkey=z5ykpovanefxx7f2xtocw3i4k&st=k4mff43f&dl=1'
+BUILDFILE = 'https://taiseer999.github.io/Builds.txt'
 # How often you would like it to check for build updates in days
 # 0 being every startup of kodi
 UPDATECHECK = 0
