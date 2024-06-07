@@ -57,18 +57,18 @@
         <font>
             <name>font_mini_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>26</size>
+            <size>28</size>
         </font>
         <font>
             <name>font_tiny_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>22</size>
+            <size>24</size>
         </font>
         <font>
             <name>font_hint_black</name>
             <style>uppercase</style>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>16</size>
+            <size>18</size>
         </font>
 
         <!-- Bold Fonts -->
@@ -100,45 +100,45 @@
         <font>
             <name>font_tiny_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>22</size>
+            <size>24</size>
         </font>
         <font>
             <name>font_hint_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>16</size>
+            <size>18</size>
         </font>
 
         <!-- Standard Fonts -->
         <font>
             <name>font_midi</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>31</size>
+            <size>33</size>
         </font>
         <font>
             <name>font_main</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>27</size>
+            <size>28</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>21</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_tiny</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>17</size>
+            <size>20</size>
         </font>
         <font>
             <name>font_hint</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>12</size>
+            <size>16</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_hint_button</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>12</size>
+            <size>14</size>
             <linespacing>1.15</linespacing>
         </font>
 
@@ -153,13 +153,13 @@
             <name>font_midi_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.46</linespacing>
-            <size>26</size>
+            <size>30</size>
         </font>
         <font>
             <name>font_main_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.14</linespacing>
-            <size>26</size>
+            <size>28</size>
         </font>
         <font>
             <name>font_mini_plot</name>
@@ -195,7 +195,7 @@
         <font>
             <name>font_infotag</name>
             <filename>LeagueSpartan-SemiBold.ttf</filename>
-            <size>21</size>
+            <size>22</size>
             <style>uppercase</style>
         </font>
 
@@ -220,7 +220,7 @@
         <font>
             <name>font_mini_arial</name>
             <filename>Arial.ttf</filename>
-            <size>20</size>
+            <size>22</size>
             <aspect>0.8</aspect>
         </font>
 
@@ -479,18 +479,28 @@
             <aspect>0.8</aspect>
         </font>
 
-        <!-- Keyboard Symbol Font -->
+         <!-- Keyboard Symbol Font -->
         <font>
             <name>font_main_iconic</name>
             <filename>iconmonstr-iconic-font.ttf</filename>
             <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>22</size>
         </font>
 
         <!-- Kodi Logo Font -->
         <font>
             <name>font_logo</name>
             <filename>Questrial-Regular.ttf</filename>
-            <size>30</size>
+            <size>24</size>
         </font>
         <font>
             <name>font_logo_large</name>

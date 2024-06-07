@@ -708,7 +708,7 @@ msgstr "$VAR[Label_TraktStats_Recent_0_Type,[LOWERCASE],[/LOWERCASE]] $INFO[Wind
 #: /1080i/Includes_Defaults.xml
 msgctxt "#31147"
 msgid "You have watched $INFO[Window(Home).Property(TMDbHelper.TraktStats.Movies.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] movies and $INFO[Window(Home).Property(TMDbHelper.TraktStats.Shows.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] shows."
-msgstr "لقد شاهدت$INFO[Window(Home).Property(TMDbHelper.TraktStats.Movies.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]]افلام و$INFO[Window(Home).Property(TMDbHelper.TraktStats.Shows.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]]مسلسلات"
+msgstr "لقد شاهدت $INFO[Window(Home).Property(TMDbHelper.TraktStats.Movies.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]] فلم و $INFO[Window(Home).Property(TMDbHelper.TraktStats.Shows.Watched),[COLOR=main_fg_90][B],[/B][/COLOR]]  مسلسل  و"
 
 #: /1080i/Includes_DialogInfo.xml
 msgctxt "#31148"
