@@ -8,7 +8,7 @@
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary>repository.taiseer999</summary>
+        <summary>taiseer999</summary>
         <description>Arabic Kodi</description>
         <disclaimer></disclaimer>
         <platform>all</platform>
