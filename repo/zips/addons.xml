@@ -1363,7 +1363,7 @@
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary>taiseer999</summary>
+        <summary>repository.taiseer999</summary>
         <description>Arabic Kodi</description>
         <disclaimer />
         <platform>all</platform>
