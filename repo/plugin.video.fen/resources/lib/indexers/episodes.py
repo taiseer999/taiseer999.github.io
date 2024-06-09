@@ -42,7 +42,6 @@ def build_episode_list(params):
 				item_get = item.get
 				season, episode, ep_name = item_get('season'), item_get('episode'), item_get('title')
 				episode_date, premiered = adjust_premiered_date_function(item_get('premiered'), adjust_hours)
-				episode_type = item_get('episode_type') or ''
 				playcount, overlay = get_watched_status(watched_info, string(tmdb_id), season, episode)
 				progress = get_progress_percent(bookmarks, tmdb_id, season, episode)
 				tmdb_thumb = item_get('thumb', None)
@@ -120,7 +119,7 @@ def build_episode_list(params):
 								'clearlogo': show_clearlogo, 'landscape': show_landscape, 'season.poster': season_poster, 'tvshow.poster': show_poster,
 								'tvshow.clearart': show_clearart, 'tvshow.clearlogo': show_clearlogo, 'tvshow.landscape': show_landscape, 'tvshow.banner': show_banner})
 				set_properties({'fen.extras_params': extras_params, 'fen.options_params': options_params, 'fen.unwatched_params': unwatched_params,
-								'fen.watched_params': watched_params, 'fen.clearprog_params': clearprog_params, 'episode_type': episode_type})
+								'fen.watched_params': watched_params, 'fen.clearprog_params': clearprog_params})
 				yield (url_params, listitem, False)
 			except: pass
 	handle, is_external, category_name = int(sys.argv[1]), external(), episodes_str
@@ -185,14 +184,14 @@ def build_single_episode(list_type, params={}):
 			unwatched = ep_data_get('unwatched', False)
 			season_data = meta_get('season_data')
 			if list_type_starts_with('next_'):
-				if orig_episode == 0: orig_episode = 1
+				if orig_episode == 0: orig_episode, new_season = 1, False
 				else:
 					try:
 						episode_count = [i for i in season_data if i['season_number'] == orig_season][0]['episode_count']
 						if orig_episode >= episode_count:
-							orig_season, orig_episode = orig_season + 1, 1
+							orig_season, orig_episode, new_season = orig_season + 1, 1, True
 							if orig_season > meta_get('total_seasons'): return
-						else: orig_episode = orig_episode + 1
+						else: orig_episode, new_season = orig_episode + 1, False
 					except: return
 			episodes_data = episodes_meta_function(orig_season, meta, meta_user_info)
 			try: item = [i for i in episodes_data if i['episode'] == orig_episode][0]
@@ -200,12 +199,11 @@ def build_single_episode(list_type, params={}):
 			item_get = item.get
 			season, episode, ep_name = item_get('season'), item_get('episode'), item_get('title')
 			episode_date, premiered = adjust_premiered_date_function(item_get('premiered'), adjust_hours)
-			episode_type = item_get('episode_type') or ''
 			if not episode_date or current_date < episode_date:
 				if list_type_starts_with('next_'):
 					if not episode_date: return
 					if not nextep_include_unaired: return
-					if episode_date and not date_difference_function(current_date, episode_date, 7): return
+					if episode_date and new_season and not date_difference_function(current_date, episode_date, 7): return
 				elif not show_unaired: return
 				unaired = True
 			else: unaired = False
@@ -320,7 +318,7 @@ def build_single_episode(list_type, params={}):
 							'landscape': show_landscape, 'season.poster': season_poster, 'tvshow.poster': show_poster, 'tvshow.clearart': show_clearart,
 							'tvshow.clearlogo': show_clearlogo, 'tvshow.landscape': show_landscape, 'tvshow.banner': show_banner})
 			set_properties({'fen.extras_params': extras_params, 'fen.options_params': options_params, 'fen.unwatched_params': unwatched_params,
-							'fen.watched_params': watched_params, 'fen.clearprog_params': clearprog_params, 'episode_type': episode_type})
+							'fen.watched_params': watched_params, 'fen.clearprog_params': clearprog_params})
 			item_list_append({'list_items': (url_params, listitem, False), 'first_aired': premiered, 'name': '%s - %sx%s' % (title, str_season_zfill2, str_episode_zfill2),
 							'unaired': unaired, 'last_played': ep_data_get('last_played', resinsert), 'sort_order': string(_position)})
 		except: pass
@@ -368,8 +366,7 @@ def build_single_episode(list_type, params={}):
 		recently_aired = params.get('recently_aired', None)
 		data = trakt_get_my_calendar(recently_aired, get_datetime_function())
 		list_type = 'episode.trakt_recently_aired' if recently_aired else 'episode.trakt_calendar'
-		try: data = sorted(data, key=lambda i: (i['sort_title'], i.get('first_aired', '2100-12-31')), reverse=True)
-		except: data = sorted(data, key=lambda i: (i['sort_title']), reverse=True)
+		data = sorted(data, key=lambda i: (i['sort_title'], i.get('first_aired', '2100-12-31')), reverse=True)
 	list_type_compare = list_type.split('episode.')[1]
 	list_type_starts_with = list_type_compare.startswith
 	threads = list(make_thread_list_enumerate(_process, data))
@@ -382,10 +379,9 @@ def build_single_episode(list_type, params={}):
 		sort_key = nextep_settings['sort_key']
 		sort_direction = nextep_settings['sort_direction']
 		if nextep_settings['sort_airing_today_to_top']:
-			try:
-				airing_today = [i for i in item_list
-								if date_difference_function(current_date, jsondate_to_datetime_function(i.get('first_aired', '2100-12-31'), '%Y-%m-%d').date(), 0)]
-			except: pass
+			airing_today = [i for i in item_list
+							if date_difference_function(current_date, jsondate_to_datetime_function(i.get('first_aired', '2100-12-31'), '%Y-%m-%d').date(), 0)]
+			airing_today = sorted(airing_today, key=lambda i: i.get('first_aired', '2100-12-31'))
 			remainder = [i for i in item_list if not i in airing_today]
 			remainder = sorted(remainder, key=lambda i: func(i[sort_key]), reverse=sort_direction)
 			unaired = [i for i in remainder if i['unaired']]
@@ -402,10 +398,7 @@ def build_single_episode(list_type, params={}):
 		if list_type_compare in ('trakt_calendar', 'trakt_recently_aired'):
 			if list_type_compare == 'trakt_calendar': reverse = calendar_sort_order() == 0
 			else: reverse = True
-			try: item_list = sorted(item_list, key=lambda i: i.get('first_aired', '2100-12-31'), reverse=reverse)
-			except:
-				item_list = [i for i in item_list if i.get('first_aired') not in (None, 'None', '')]
-				item_list = sorted(item_list, key=lambda i: i.get('first_aired'), reverse=reverse)
+			item_list = sorted(item_list, key=lambda i: i.get('first_aired', '2100-12-31'), reverse=reverse)
 	add_items(handle, [i['list_items'] for i in item_list])
 	set_content(handle, content_type)
 	set_category(handle, category_name)

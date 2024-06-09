@@ -13,7 +13,6 @@ make_listitem, build_url, remove_keys, dict_removals = kodi_utils.make_listitem,
 metadata_user_info, watched_indicators, jump_to_enabled, paginate = settings.metadata_user_info, settings.watched_indicators, settings.jump_to_enabled, settings.paginate
 extras_open_action, get_art_provider, default_all_episodes, page_limit = settings.extras_open_action, settings.get_art_provider, settings.default_all_episodes, settings.page_limit
 poster_empty, fanart_empty, include_year_in_title, set_property = kodi_utils.empty_poster, kodi_utils.addon_fanart, settings.include_year_in_title, kodi_utils.set_property
-nextpage_landscape = kodi_utils.nextpage_landscape
 max_threads, widget_hide_next_page = settings.max_threads, settings.widget_hide_next_page
 fen_str, trakt_str, watched_str, unwatched_str, exit_str, nextpage_str, browse_str, jump2_str = ls(32036), ls(32037), ls(32642), ls(32643), ls(32650), ls(32799), ls(33137), ls(32964)
 extras_str, options_str, refr_widg_str = ls(32645), ls(32646), '[B]%s[/B]' % ls(32611)
@@ -22,8 +21,8 @@ tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_popular_today', 'tmdb_tv_premieres', 't
 tmdb_special = {'tmdb_tv_languages': 'language', 'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year', 'tmdb_tv_decade': 'decade', 'tmdb_tv_recommendations': 'tmdb_id',
 					'tmdb_tv_genres': 'genre_id', 'tmdb_tv_search': 'query'}
 trakt_main = ('trakt_tv_trending', 'trakt_tv_trending_recent', 'trakt_recommendations', 'trakt_tv_most_watched')
-trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists', 'trakt_favorites')
-imdb_all = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
+trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
+imdb_all = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents', 'imdb_featured', 'imdb_most_voted')
 personal = {'in_progress_tvshows': ('modules.watched_status', 'get_in_progress_tvshows'), 'favorites_tvshows': ('modules.favorites', 'get_favorites'),
 				'watched_tvshows': ('modules.watched_status', 'get_watched_items')}
 view_mode, content_type = 'view.tvshows', 'tvshows'
@@ -81,7 +80,7 @@ class TVShows:
 			elif self.action in trakt_personal:
 				self.id_type = 'trakt_dict'
 				data = function('shows', page_no)
-				if self.action in ('trakt_collection_lists', 'trakt_favorites'): all_pages, total_pages = '', 1
+				if self.action == 'trakt_collection_lists': all_pages, total_pages = '', 1
 				else: data, all_pages, total_pages = self.paginate_list(data, page_no)
 				self.list = [i['media_ids'] for i in data]
 				if total_pages > 2: self.total_pages = total_pages
@@ -115,7 +114,7 @@ class TVShows:
 							'jump_to_enabled': jump_to, 'paginate_start': self.paginate_start, 'url_params': url_params}, jump2_str, handle, 'item_jump', isFolder=False)
 			if self.new_page and not self.widget_hide_next_page:
 						self.new_page.update({'mode': mode, 'action': self.action, 'category_name': self.category_name})
-						add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'nextpage', nextpage_landscape)
+						add_dir(self.new_page, nextpage_str % self.new_page['new_page'], handle, 'item_next')
 		except: pass
 		set_content(handle, content_type)
 		set_category(handle, ls(self.category_name))
@@ -131,10 +130,8 @@ class TVShows:
 			meta_get = meta.get
 			tmdb_id, total_seasons, total_aired_eps = meta_get('tmdb_id'), meta_get('total_seasons'), meta_get('total_aired_eps')
 			playcount, overlay, total_watched, total_unwatched = get_watched_function(self.watched_info, string(tmdb_id), total_aired_eps)
-			if total_watched:
-				try: progress = int((float(total_watched)/total_aired_eps)*100) or 1
-				except: progress = 1
-			else: progress = 0
+			try: progress = int((float(total_watched)/total_aired_eps)*100)
+			except: progress = 0
 			cm = []
 			cm_append = cm.append
 			listitem = make_listitem()

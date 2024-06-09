@@ -13,7 +13,7 @@ add_items, show_text, container_refresh, focus_index, add_item = kodi_utils.add_
 ls, build_url, make_listitem, set_property, set_content = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem, kodi_utils.set_property, kodi_utils.set_content
 end_directory, set_view_mode, maincache_db = kodi_utils.end_directory, kodi_utils.set_view_mode, kodi_utils.maincache_db
 clear_property, confirm_dialog, numeric_input = kodi_utils.clear_property, kodi_utils.confirm_dialog, kodi_utils.numeric_input
-default_icon, fanart, default_poster, default_cast = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', get_icon('genre_family')
+default_icon, fanart, default_poster, default_cast = get_icon('discover'), kodi_utils.addon_fanart, 'box_office', 'genre_family'
 set_category = kodi_utils.set_category
 years_movies, years_tvshows, movie_genres, tvshow_genres = meta_lists.years_movies, meta_lists.years_tvshows, meta_lists.movie_genres, meta_lists.tvshow_genres
 languages, regions, movie_certifications, networks = meta_lists.languages, meta_lists.regions, meta_lists.movie_certifications, meta_lists.networks
@@ -60,7 +60,6 @@ class Discover:
 			self.add({'mode': 'discover.rating_votes', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), self.gv('rating_votes'))})
 			self.add({'mode': 'discover.cast', 'media_type': 'movie', 'list_name': base_str % (inc_str % ls(32664), self.gv('cast'))})
 			self.add({'mode': 'discover.sort_by', 'media_type': 'movie', 'list_name': base_str % (ls(32067), self.gv('sort_by'))})
-			self.add({'mode': 'discover.adult', 'media_type': 'movie', 'list_name': base_str % (inc_str % ls(32665), self.gv('adult'))})
 		self._add_defaults()
 		self._end_directory()
 
@@ -231,7 +230,7 @@ class Discover:
 				known_for_list = [i for i in known_for_list if not i == 'NA']
 				known_for = ', '.join(known_for_list) if known_for_list else ''
 				if item.get('profile_path'): icon = 'https://image.tmdb.org/t/p/h632/%s' % item['profile_path']
-				else: icon = default_cast
+				else: icon = translate_path(default_cast)
 				append({'line1': name, 'line2': known_for, 'icon': icon, 'name': name, 'id': item['id']})
 			heading = heading_base % ls(32664)
 			kwargs = {'items': json.dumps(actor_list), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'true'}
@@ -341,6 +340,7 @@ class Discover:
 					listitem.setLabel(display)
 					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
 					info_tag = listitem.getVideoInfoTag()
+					info_tag.setMediaType('video')
 					info_tag.setPlot(' ')
 					cm_append(('[B]%s[/B]' % remove_str,'RunPlugin(%s)'% build_url(remove_single_params)))
 					cm_append(('[B]%s[/B]' % clear_str,'RunPlugin(%s)'% build_url(remove_all_params)))
@@ -439,6 +439,7 @@ class Discover:
 		listitem.setLabel(list_name)
 		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 		info_tag = listitem.getVideoInfoTag()
+		info_tag.setMediaType('video')
 		info_tag.setPlot(' ')
 		add_item(handle, url, listitem, isFolder)
 
@@ -495,10 +496,10 @@ class Discover:
 			if 'rating_votes' in values: name += '(%s) ' % values['rating_votes']
 		elif 'rating_votes' in values: name += '| %s+ %s ' % (values['rating_votes'], ls(32623).lower())
 		if 'cast' in values: name += '| %s %s ' % (ls(32664).lower(), values['cast'])
-		if 'with_keywords' in values: name += '| %s: %s ' % (inc_str.lower() % ls(32657).lower(), values['with_keywords'])
+		if 'with_keywords' in values: name += '| %s %s: %s ' % (ls(32188).lower(), ls(32657).lower(), values['with_keywords'])
 		if 'without_keywords' in values: name += '| %s %s: %s ' % (ls(32189).lower(), ls(32657).lower(), values['without_keywords'])
 		if 'sort_by' in values: name += '| %s ' % values['sort_by']
-		if 'adult' in values and values['adult'] == ls(32859): name += '| %s ' % (inc_str.lower() % ls(32665).lower())
+		if 'adult' in values and values['adult'] == ls(32859): name += '| %s %s ' % (ls(32188).lower(), ls(32665).lower())
 		self.discover_params['name'] = name
 
 	def _position(self, key):

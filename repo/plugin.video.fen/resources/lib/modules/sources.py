@@ -3,7 +3,6 @@ import time
 from windows.base_window import open_window, create_window
 from scrapers import external, folders
 from modules import debrid, kodi_utils, settings, metadata, watched_status
-from modules.debrid import debrid_enabled
 from modules.player import FenPlayer
 from modules.source_utils import get_cache_expiry, make_alias_dict
 from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime, append_module_to_syspath, manual_function_import, manual_module_import
@@ -20,7 +19,8 @@ metadata_user_info, quality_filter, sort_to_top, monitor_playback = settings.met
 scraping_settings, include_prerelease_results, auto_rescrape_with_all = settings.scraping_settings, settings.include_prerelease_results, settings.auto_rescrape_with_all
 playback_attempt_pause, get_art_provider, external_scraper_info = settings.playback_attempt_pause, settings.get_art_provider, settings.external_scraper_info
 ignore_results_filter, results_sort_order, easynews_max_retries = settings.ignore_results_filter, settings.results_sort_order, settings.easynews_max_retries
-autoplay_next_episode, limit_resolve = settings.autoplay_next_episode, settings.limit_resolve
+autoplay_next_episode, autoscrape_next_episode, limit_resolve = settings.autoplay_next_episode, settings.autoscrape_next_episode, settings.limit_resolve
+debrid_enabled, debrid_type_enabled = debrid.debrid_enabled, debrid.debrid_type_enabled
 erase_bookmark, clear_local_bookmarks = watched_status.erase_bookmark, watched_status.clear_local_bookmarks
 get_progress_percent, get_bookmarks = watched_status.get_progress_percent, watched_status.get_bookmarks
 internal_include_list = ['easynews', 'furk', 'pm_cloud', 'rd_cloud', 'ad_cloud']
@@ -45,7 +45,7 @@ class Sources():
 		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
 		self.prescrape, self.disabled_ext_ignored, self.default_ext_only = 'true', 'false', 'false'
 		self.ext_name, self.ext_folder, self.ext_default_providers, self.ext_sources = '', '', None, None
-		self.progress_dialog, self.progress_thread = None, None
+		self.progress_dialog = None
 		self.playing_filename = ''
 		self.monitor_playback = monitor_playback()
 		self.easynews_max_retries = easynews_max_retries()
@@ -60,10 +60,11 @@ class Sources():
 		self.play_type, self.background, self.prescrape = params_get('play_type', ''), params_get('background', 'false') == 'true', params_get('prescrape', self.prescrape) == 'true'
 		self.random, self.random_continual = params_get('random', 'false') == 'true', params_get('random_continual', 'false') == 'true'
 		if self.play_type:
-			if self.play_type == 'autoplay_nextep': self.autoplay_nextep = True
-			elif self.play_type == 'random_continual': self.autoplay_nextep = False
-			else: self.autoplay_nextep = False
-		else: self.autoplay_nextep = autoplay_next_episode()
+			if self.play_type == 'autoplay_nextep': self.autoplay_nextep, self.autoscrape_nextep = True, False
+			elif self.play_type == 'random_continual': self.autoplay_nextep, self.autoscrape_nextep = False, False
+			else: self.autoplay_nextep, self.autoscrape_nextep = False, True
+		else: self.autoplay_nextep, self.autoscrape_nextep = autoplay_next_episode(), autoscrape_next_episode()
+		self.autoscrape = self.autoscrape_nextep and self.background
 		self.auto_rescrape_with_all = auto_rescrape_with_all()
 		self.nextep_settings, self.disable_autoplay_next_episode = params_get('nextep_settings', {}), params_get('disable_autoplay_next_episode', 'false') == 'true'
 		self.ignore_scrape_filters = params_get('ignore_scrape_filters', 'false') == 'true'
@@ -96,7 +97,8 @@ class Sources():
 		self.include_3D_results = get_setting('fen.include_3d_results', 'true') == 'true'
 		self._update_meta()
 		self._search_info()
-		return self.get_sources()
+		if self.autoscrape: self.autoscrape_nextep_handler()
+		else: return self.get_sources()
 
 	def get_sources(self):
 		if not self.progress_dialog and not self.background: self._make_progress_dialog()
@@ -116,7 +118,8 @@ class Sources():
 			if not self.orig_results and not self.active_external: self._kill_progress_dialog()
 			results = self.process_results(self.orig_results)
 		if not results: return self._process_post_results()
-		return self.play_source(results)
+		if self.autoscrape: return results
+		else: return self.play_source(results)
 
 	def collect_results(self):
 		self.sources.extend(self.prescrape_sources)
@@ -128,7 +131,7 @@ class Sources():
 			[i.start() for i in self.threads]
 		if self.active_external or self.background:
 			if self.active_external:
-				self.external_args = (self.meta, self.external_providers, self.debrid_enabled, self.internal_scraper_names,
+				self.external_args = (self.meta, self.external_providers, self.debrid_torrent_enabled, self.internal_scraper_names,
 										self.prescrape_sources, self.progress_dialog, self.disabled_ext_ignored)
 				self.activate_providers('external', external, False)
 			if self.background: [i.join() for i in self.threads]
@@ -228,14 +231,15 @@ class Sources():
 
 	def activate_debrid_info(self):
 		self.debrid_enabled = debrid_enabled()
+		self.debrid_torrent_enabled = debrid_type_enabled('torrent', self.debrid_enabled)
 
 	def activate_external_providers(self):
-		if not self.debrid_enabled: return self.disable_external(32854)
+		if not self.debrid_torrent_enabled: return self.disable_external(32854)
 		self.ext_folder, self.ext_name = external_scraper_info()
 		if not self.ext_folder or not self.ext_name: return self.disable_external(33007)
 		if not self.import_external_scrapers(): return self.disable_external(33009)
 		exclude_list = []
-		if not self.debrid_enabled: exclude_list.extend(self.external_scraper_names('torrents'))
+		if not self.debrid_torrent_enabled: exclude_list.extend(self.external_scraper_names('torrents'))
 		self.external_providers = self.external_sources()
 		if not self.external_providers: self.disable_external(33008)
 		if exclude_list: self.external_providers = [i for i in self.external_providers if not i[0] in exclude_list]
@@ -482,12 +486,11 @@ class Sources():
 			episodes_data = metadata.episodes_meta(self.season, self.meta, meta_user_info)
 			try:
 				episode_data = [i for i in episodes_data if i['episode'] == self.episode][0]
-				episode_type = episode_data.get('episode_type', '')
 				art_providers = get_art_provider()
 				thumb = episode_data.get('thumb', None) or self.meta.get('custom_fanart') or self.meta.get(art_providers[2]) or self.meta.get(art_providers[3]) or ''
 				self.meta['tvshow_plot'] = self.meta['plot']
 				self.meta.update({'media_type': 'episode', 'season': episode_data['season'], 'episode': episode_data['episode'], 'premiered': episode_data['premiered'],
-								'ep_name': episode_data['title'], 'ep_thumb': episode_data.get('thumb', None), 'plot': episode_data['plot'], 'episode_type': episode_type})
+								'ep_name': episode_data['title'], 'ep_thumb': episode_data.get('thumb', None), 'plot': episode_data['plot']})
 			except: pass
 
 	def _get_module(self, module_type, function):
@@ -503,8 +506,7 @@ class Sources():
 
 	def _make_progress_dialog(self):
 		self.progress_dialog = create_window(('windows.sources', 'SourcesPlayback'), 'sources_playback.xml', meta=self.meta)
-		self.progress_thread = Thread(target=self.progress_dialog.run)
-		self.progress_thread.start()
+		Thread(target=self.progress_dialog.run).start()
 
 	def _make_resolve_dialog(self):
 		self.resolve_dialog_made = True
@@ -516,25 +518,18 @@ class Sources():
 		self.progress_dialog.enable_resume(percent)
 		return self.progress_dialog.resume_choice
 
-	def _make_nextep_dialog(self, default_action='cancel'):
-		try: action = open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml', meta=self.meta, default_action=default_action)
+	def _make_nextep_dialog(self, default_action='cancel', play_type='autoplay_nextep', focus_button=10):
+		try: action = open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml',
+			meta=self.meta, default_action=default_action, play_type=play_type, focus_button=focus_button)
 		except: action = 'cancel'
 		return action
 
 	def _kill_progress_dialog(self):
-		success = 0
-		try:
-			self.progress_dialog.close()
-			success += 1
+		try: self.progress_dialog.close()
+		except: close_all_dialog()
+		try: del self.progress_dialog
 		except: pass
-		try:
-			self.progress_thread.join()
-			success += 1
-		except: pass
-		if not success == 2: close_all_dialog()
-		del self.progress_dialog
-		del self.progress_thread
-		self.progress_dialog, self.progress_thread = None, None
+		self.progress_dialog = None
 
 	def furkPacks(self, name, file_id, download=False):
 		from apis.furk_api import FurkAPI
@@ -680,7 +675,7 @@ class Sources():
 
 	def continue_resolve_check(self):
 		try:
-			if not self.background: return True
+			if not self.background or self.autoscrape_nextep: return True
 			if self.autoplay_nextep: return self.autoplay_nextep_handler()
 			return self.random_continual_handler()
 		except: return False
@@ -726,6 +721,22 @@ class Sources():
 					return True
 			else: return False
 		else: return False
+
+	def autoscrape_nextep_handler(self):
+		default_action = 'cancel'
+		player = xbmc_player()
+		if player.isPlayingVideo():
+			action = self._make_nextep_dialog(play_type=self.play_type, focus_button=12)
+			if action == 'cancel': return
+			else:
+				results = self.get_sources()
+				if not results: return notification(33092, 3000)
+				if action == 'play': player.stop()
+				else:
+					notification(33091, 3000)
+					while player.isPlayingVideo(): sleep(100)
+				self.display_results(results)
+		else: return
 
 	def debrid_importer(self, debrid_provider):
 		return manual_function_import(*debrids[debrid_provider])

@@ -290,7 +290,7 @@
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.2.29">
+</addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.2.12.4">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
@@ -301,7 +301,7 @@
     <extension library="resources/lib/service.py" point="xbmc.service" />
     <extension library="resources/lib/" point="xbmc.python.module" />
     <extension point="xbmc.addon.metadata">
-        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <reuselanguageinvoker>false</reuselanguageinvoker>
         <summary lang="en">Access your content from Furk, Easynews and Debrid Clouds.</summary>
         <description lang="en">This add-on is intended for advanced Kodi users only. You must own the content of any media you play through this addon.</description>
         <platform>all</platform>
@@ -1655,7 +1655,28 @@ v0.5.9 (2022-03-22)
     <fanart>fanart.jpg</fanart>
   </assets>
 </extension>
-</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.15.1" provider-name="Unknown">
+</addon><addon id="service.blackbarsremover" name="Black Bars Remover" version="3.0.0" provider-name="milaq">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+    <extension point="xbmc.service" library="service.py" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_gb">Automatically fit video to screen</summary>
+        <description lang="en_gb">Automatically adjusts the zoomlevel to eliminate black bars in videos. This addon also respects Kodi's "minimise black bars" setting.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <forum />
+        <website>https://milaq.net</website>
+        <email />
+        <source>https://github.com/milaq/kodi_addon_blackbarsremover</source>
+        <news />
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart />
+            <screenshot />
+        </assets>
+    </extension>
+</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.15.0" provider-name="Unknown">
     <requires>
       <import addon="script.module.requests" />
       <import addon="vfs.libarchive" optional="true" />
@@ -1943,7 +1964,7 @@ Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, SubDL, Addic7ed
   * results ordering with preferred language ordered first
         </news>
     </extension>
-</addon><addon id="service.subtitles.localsubtitle" name="LocalSubtitle" version="1.12.1" provider-name="peno">
+</addon><addon id="service.subtitles.localsubtitle" name="LocalSubtitle" version="1.12.4" provider-name="peno">
   <requires>
       <import addon="script.module.pysubs2" version="0.1.0" />
       <import addon="script.module.chardet" />
@@ -1978,11 +1999,26 @@ As extra several extra feastures are added in this case:
 - Auto shift subtitles: to synchronize the two subtitles such that they are displayed at the same time
 - Font, character set, color, ... selection: This overrules the kodi settings</description>
     <disclaimer lang="en" />
+	<news>
+v1.12.4 (2024-04-07)
+- Add possibility to choose the Kodi selected subtitle font
+v1.12.3 (2024-03-24)
+- If the subtitle is located on a special location like samba then the addon could not load the subtitle file
+v1.12.2 (2023-12-02)
+- Some default settings were not applied if not changed first
+v1.12.1 (2021-12-15)
+- More font options (shadow, outline)
+- Possibility to swap bottom - top subtitles
+- Auto shift option. When enabled, the second subtitle will be synced with the first if start/end is within the time difference threshold.
+	</news>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <source />
+    <source>https://github.com/peno64/service.subtitles.localsubtitle</source>
+	<assets>
+        <icon>icon.png</icon>
+    </assets>
   </extension>
-</addon><addon id="service.subtitles.opensubtitles" name="OpenSubtitles.org" version="5.5.3" provider-name="peno64, moham96, amet, opensubtitles">
+</addon><addon id="service.subtitles.opensubtitles" name="OpenSubtitles.org" version="5.5.2" provider-name="peno64, moham96, amet, opensubtitles">
   <requires>
     <import addon="script.module.pysubs2" version="0.1.0" />
     <import addon="script.module.chardet" />
@@ -2064,7 +2100,7 @@ v5.2.14 (2017-01-23)
 	</assets>
     <source>https://github.com/peno64/service.subtitles.opensubtitles_by_opensubtitles_dualsub</source>
   </extension>
-</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.5" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.4" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
@@ -2143,7 +2179,7 @@ v1.0.1 (2023-07-28)
 		</assets>
 		<source>https://github.com/opensubtitlesdev/service.subtitles.opensubtitles-com</source>
 	</extension>
-</addon><addon id="service.subtitles.subdl-com" name="SubDL.com" version="1.0.2" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.subdl-com" name="SubDL.com" version="1.0.1" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
@@ -2219,7 +2255,7 @@ v1.0.1 (2023-07-28)
 		</assets>
 		<source>https://github.com/opensubtitlesdev/service.subtitles.opensubtitles-com</source>
 	</extension>
-</addon><addon id="service.subtitles.subsource-net" name="Subsource.net" version="1.0.1" provider-name="opensubtitles, subsource">
+</addon><addon id="service.subtitles.subsource-net" name="Subsource.net" version="1.0.0" provider-name="opensubtitles, subsource">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />

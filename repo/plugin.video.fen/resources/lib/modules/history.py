@@ -9,17 +9,17 @@ from modules.settings import use_year_in_search
 json, ls, close_all_dialog, external = kodi_utils.json, kodi_utils.local_string, kodi_utils.close_all_dialog, kodi_utils.external
 build_url, dialog, unquote, execute_builtin, select_dialog = kodi_utils.build_url, kodi_utils.dialog, kodi_utils.unquote, kodi_utils.execute_builtin, kodi_utils.select_dialog
 notification, kodi_refresh, numeric_input = kodi_utils.notification, kodi_utils.kodi_refresh, kodi_utils.numeric_input
-insert_string_4, insert_string_5 = '%s %s %s %s', '%s %s %s %s %s'
+insert_string_3, insert_string_4 = '%s %s %s', '%s %s %s %s'
 delete_str, search_str, hist_str, vid_str, mov_str, key_str = ls(32785), ls(32450), ls(32486), ls(32491), ls(32028), ls(32092)
 tv_str, furk_str, easy_str, peop_str, imdb_str, coll_str = ls(32029), ls(32069), ls(32070), ls(32507), ls(32064), ls(33080)
-clear_history_list = [(insert_string_4 % (delete_str, mov_str, search_str, hist_str), 'movie_queries'),
-					(insert_string_4 % (delete_str, tv_str, search_str, hist_str), 'tvshow_queries'), 
-					(insert_string_4 % (delete_str, peop_str, search_str, hist_str), 'people_queries'),
-					(insert_string_5 % (delete_str, imdb_str, key_str, mov_str, hist_str), 'keyword_imdb_movie_queries'),
-					(insert_string_5 % (delete_str, imdb_str, key_str, tv_str, hist_str), 'keyword_imdb_tvshow_queries'),
-					(insert_string_5 % (delete_str, furk_str, vid_str, search_str, hist_str), 'furk_video_queries'), 
-					(insert_string_4 % (delete_str, easy_str, search_str, hist_str), 'easynews_video_queries'), 
-					(insert_string_4 % (delete_str, coll_str, search_str, hist_str), 'tmdb_movie_sets_queries')]
+clear_history_list = [(insert_string_3 % (delete_str, hist_str, mov_str), 'movie_queries'),
+					(insert_string_3 % (delete_str, hist_str, tv_str), 'tvshow_queries'), 
+					(insert_string_3 % (delete_str, hist_str, peop_str), 'people_queries'),
+					(insert_string_4 % (delete_str, hist_str, imdb_str, key_str), 'keyword_imdb_movie_queries'),
+					(insert_string_4 % (delete_str, hist_str, imdb_str, key_str), 'keyword_imdb_tvshow_queries'),
+					(insert_string_4 % (delete_str, hist_str, furk_str, vid_str), 'furk_video_queries'), 
+					(insert_string_3 % (delete_str, hist_str, easy_str), 'easynews_video_queries'), 
+					(insert_string_3 % (delete_str, hist_str, coll_str), 'tmdb_movie_sets_queries')]
 
 def get_search_term(params):
 	close_all_dialog()

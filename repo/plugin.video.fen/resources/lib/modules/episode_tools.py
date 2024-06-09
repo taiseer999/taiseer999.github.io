@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from random import choice
 from datetime import date
 from modules import kodi_utils, settings
 from modules.sources import Sources
@@ -9,7 +10,7 @@ from modules.utils import adjust_premiered_date, get_datetime, make_thread_list,
 
 Thread, get_property, set_property, add_dir, add_items = kodi_utils.Thread, kodi_utils.get_property, kodi_utils.set_property, kodi_utils.add_dir, kodi_utils.add_items
 make_listitem, set_content, end_directory, set_view_mode = kodi_utils.make_listitem, kodi_utils.set_content, kodi_utils.end_directory, kodi_utils.set_view_mode
-get_icon, addon_fanart, random = kodi_utils.get_icon, kodi_utils.addon_fanart, kodi_utils.random
+get_icon, addon_fanart = kodi_utils.get_icon, kodi_utils.addon_fanart
 ls, sys, build_url, json, notification = kodi_utils.local_string, kodi_utils.sys, kodi_utils.build_url, kodi_utils.json, kodi_utils.notification 
 watched_indicators, ignore_articles = settings.watched_indicators, settings.ignore_articles
 hidden_ind_str, hidden_str, heading, window_prop = ' [COLOR=red][B][%s][/B][/COLOR]', ls(32804).upper(), ls(32806), 'fen.random_episode_history'
@@ -40,11 +41,11 @@ class EpisodeTools:
 			custom_title = self.meta_get('custom_title', None)
 			title = custom_title or self.meta_get('title')
 			display_name = '%s - %dx%.2d' % (title, int(season), int(episode))
-			episode_type = ep_data.get('episode_type', '')
 			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_data['title'], 'ep_thumb': ep_data.get('thumb', None),
-							'episode': episode, 'premiered': airdate, 'plot': ep_data['plot'], 'episode_type': episode_type})
+							'episode': episode, 'premiered': airdate, 'plot': ep_data['plot']})
 			url_params = {'media_type': 'episode', 'tmdb_id': self.meta_get('tmdb_id'), 'tvshowtitle': self.meta_get('rootname'), 'season': season,
 						'episode': episode, 'background': 'true', 'nextep_settings': self.nextep_settings, 'play_type': play_type, 'meta': json.dumps(self.meta)}
+			if play_type == 'autoscrape_nextep': url_params['prescrape'] = 'false'
 			if custom_title: url_params['custom_title'] = custom_title
 			if 'custom_year' in self.meta: url_params['custom_year'] = self.meta_get('custom_year')
 		except: url_params = 'error'
@@ -68,7 +69,7 @@ class EpisodeTools:
 				if not episodes_data:
 					set_property(window_prop, '')
 					return self.get_random_episode(continual=True)
-			chosen_episode = random.choice(episodes_data)
+			chosen_episode = choice(episodes_data)
 			if continual:
 				episode_list.append(chosen_episode)
 				episode_history = {str(tmdb_id): episode_list}
@@ -76,13 +77,12 @@ class EpisodeTools:
 			title, season, episode = self.meta['title'], int(chosen_episode['season']), int(chosen_episode['episode'])
 			query = title + ' S%.2dE%.2d' % (season, episode)
 			display_name = '%s - %dx%.2d' % (title, season, episode)
-			episode_type = chosen_episode.get('episode_type', '')
 			ep_name, plot = chosen_episode['title'], chosen_episode['plot']
 			ep_thumb = chosen_episode.get('thumb', None)
 			try: premiered = adjust_premiered_date(chosen_episode['premiered'], adjust_hours)[1]
 			except: premiered = chosen_episode['premiered']
 			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_name, 'ep_thumb': ep_thumb,
-							'episode': episode, 'premiered': premiered, 'plot': plot, 'episode_type': episode_type})
+							'episode': episode, 'premiered': premiered, 'plot': plot})
 			url_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': tmdb_id, 'tvshowtitle': self.meta_get('rootname'), 'season': season, 'episode': episode,
 						'autoplay': 'true', 'meta': json.dumps(self.meta)}
 			if continual: url_params['random_continual'] = 'true'
@@ -121,6 +121,7 @@ def build_next_episode_manager():
 			listitem.setLabel(display)
 			listitem.setArt({'poster': icon, 'fanart': addon_fanart, 'icon': icon})
 			info_tag = listitem.getVideoInfoTag()
+			info_tag.setMediaType('video')
 			info_tag.setPlot(' ')
 			append({'listitem': (url, listitem, False), 'sort_title': title})
 		except: pass

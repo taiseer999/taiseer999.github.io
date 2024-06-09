@@ -5,15 +5,7 @@ from modules.settings import get_art_provider, avoid_episode_spoilers
 # from modules.kodi_utils import logger
 
 pause_time_before_end, hold_pause_time = 10, 900
-episode_flag_base = 'fen_flags/episodes/%s.png'
-button_actions = {10: 'close', 11: 'play', 12: 'cancel'}
-episode_status_dict = {
-'season_premiere': 'b30385b5',
-'mid_season_premiere': 'b385b503',
-'series_finale': 'b38503b5',
-'season_finale': 'b3b50385',
-'mid_season_finale': 'b3b58503',
-'':  ''}
+button_actions = {'autoplay_nextep': {10: 'close', 11: 'play', 12: 'cancel'}, 'autoscrape_nextep': {10: 'play', 11: 'close', 12: 'cancel'}}
 
 class NextEpisode(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -21,11 +13,13 @@ class NextEpisode(BaseDialog):
 		self.closed = False
 		self.meta = kwargs.get('meta')
 		self.selected = kwargs.get('default_action', 'cancel')
+		self.play_type = kwargs.get('play_type', 'autoplay_nextep')
+		self.focus_button = kwargs.get('focus_button', 10)
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup, self.clearlogo_main, self.clearlogo_backup = get_art_provider()
 		self.set_properties()
 
 	def onInit(self):
-		self.setFocusId(11)
+		self.setFocusId(self.focus_button)
 		self.monitor()
 
 	def run(self):
@@ -41,12 +35,12 @@ class NextEpisode(BaseDialog):
 			self.close()
 
 	def onClick(self, controlID):
-		self.selected = button_actions[controlID]
+		self.selected = button_actions[self.play_type][controlID]
 		self.closed = True
 		self.close()
 
 	def set_properties(self):
-		episode_type = self.meta.get('episode_type', '')
+		self.setProperty('play_type', self.play_type)
 		self.setProperty('title', self.meta['title'])
 		self.setProperty('thumb', self.get_thumb())
 		self.setProperty('clearlogo', self.original_clearlogo())
@@ -54,8 +48,6 @@ class NextEpisode(BaseDialog):
 		self.setProperty('next_ep_season', '%02d' % self.meta['season'])
 		self.setProperty('next_ep_episode', '%02d' % self.meta['episode'])
 		self.setProperty('next_ep_ep_name', self.meta['ep_name'])
-		self.setProperty('episode_status.highlight', episode_status_dict[episode_type])
-		self.setProperty('episode_status.flag', episode_flag_base % episode_type)
 
 	def get_thumb(self):
 		if avoid_episode_spoilers(): thumb = self.original_fanart()
@@ -73,7 +65,7 @@ class NextEpisode(BaseDialog):
 		while self.player.isPlaying():
 			remaining_time = round(total_time - self.player.getTime())
 			if self.closed: break
-			elif self.selected == 'pause' and remaining_time <= pause_time_before_end:
+			elif self.play_type == 'autoplay_nextep' and self.selected == 'pause' and remaining_time <= pause_time_before_end:
 				self.player.pause()
 				self.sleep(500)
 				break

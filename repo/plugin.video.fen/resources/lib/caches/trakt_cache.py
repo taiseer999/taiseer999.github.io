@@ -152,19 +152,13 @@ def clear_trakt_calendar():
 		dbcur.execute(DELETE_LIKE % 'trakt_get_my_calendar_%')
 	except: return
 
-def clear_trakt_recommendations():
+def clear_trakt_recommendations(media_type):
+	string = 'trakt_recommendations_%s' % (media_type)
 	try:
 		dbcon = _cache.connect_database()
 		dbcur = _cache.set_PRAGMAS(dbcon)
-		dbcur.execute(DELETE_LIKE % 'trakt_recommendations_%')
-	except: return
-
-def clear_trakt_favorites():
-	try:
-		dbcon = _cache.connect_database()
-		dbcur = _cache.set_PRAGMAS(dbcon)
-		dbcur.execute(DELETE_LIKE % 'trakt_favorites_%')
-	except: return
+		dbcur.execute(DELETE, (string,))
+	except: pass
 
 def clear_trakt_movie_sets():
 	string = 'trakt_movie_sets'
@@ -189,16 +183,14 @@ def clear_all_trakt_cache_data(silent=False, refresh=True):
 	except: return False
 
 def default_activities():
-	'2020-01-01T00:00:01.000Z'
 	return {
-			'all': '2024-01-22T00:22:21.000Z',
+			'all': '2020-01-01T00:00:01.000Z',
 			'movies':
 				{
 				'watched_at': '2020-01-01T00:00:01.000Z',
 				'collected_at': '2020-01-01T00:00:01.000Z',
 				'rated_at': '2020-01-01T00:00:01.000Z',
 				'watchlisted_at': '2020-01-01T00:00:01.000Z',
-				'favorited_at': '2020-01-01T00:00:01.000Z',
 				'recommendations_at': '2020-01-01T00:00:01.000Z',
 				'commented_at': '2020-01-01T00:00:01.000Z',
 				'paused_at': '2020-01-01T00:00:01.000Z',
@@ -217,9 +209,8 @@ def default_activities():
 				{
 				'rated_at': '2020-01-01T00:00:01.000Z',
 				'watchlisted_at': '2020-01-01T00:00:01.000Z',
-				'favorited_at': '2020-01-01T00:00:01.000Z',
 				'recommendations_at': '2020-01-01T00:00:01.000Z',
-				'commented_at': '2020-01-01T00:00:01.000Z',
+				'commented_at': '2020-01-01T00:00:01.000Z', 
 				'hidden_at': '2020-01-01T00:00:01.000Z'
 				},
 			'seasons':
@@ -231,8 +222,7 @@ def default_activities():
 				},
 			'comments':
 				{
-				'liked_at': '2020-01-01T00:00:01.000Z',
-				'blocked_at': '2020-01-01T00:00:01.000Z'
+				'liked_at': '2020-01-01T00:00:01.000Z'
 				},
 			'lists':
 				{
@@ -244,15 +234,7 @@ def default_activities():
 				{
 				'updated_at': '2020-01-01T00:00:01.000Z'
 				},
-			'favorites':
-				{
-				'updated_at': '2020-01-01T00:00:01.000Z'
-				},
 			'recommendations':
-				{
-				'updated_at': '2020-01-01T00:00:01.000Z'
-				},
-			'collaborations':
 				{
 				'updated_at': '2020-01-01T00:00:01.000Z'
 				},
@@ -261,16 +243,7 @@ def default_activities():
 				'settings_at': '2020-01-01T00:00:01.000Z',
 				'followed_at': '2020-01-01T00:00:01.000Z',
 				'following_at': '2020-01-01T00:00:01.000Z',
-				'pending_at': '2020-01-01T00:00:01.000Z',
-				'requested_at': '2020-01-01T00:00:01.000Z'
-				},
-			'saved_filters':
-				{
-				'updated_at': '2020-01-01T00:00:01.000Z'
-				},
-			'notes':
-				{
-				'updated_at': '2020-01-01T00:00:01.000Z'
+				'pending_at': '2020-01-01T00:00:01.000Z'
 				}
 			}
 	

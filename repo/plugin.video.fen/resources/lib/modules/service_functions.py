@@ -7,7 +7,6 @@ from windows.base_window import FontUtils
 from caches.base_cache import check_databases, clean_databases
 from apis.trakt_api import trakt_sync_activities
 from indexers import real_debrid, premiumize, alldebrid, furk, easynews
-from modules.updater import update_check
 from modules import kodi_utils, settings
 from modules.utils import jsondate_to_datetime, datetime_workaround
 
@@ -15,16 +14,17 @@ disable_enable_addon, update_local_addons, get_infolabel, run_plugin = kodi_util
 ls, translate_path, custom_context_main_menu_prop, mdParse = kodi_utils.local_string, kodi_utils.translate_path, kodi_utils.custom_context_main_menu_prop, kodi_utils.mdParse
 custom_context_prop, custom_info_prop, addon_object, user_settings = kodi_utils.custom_context_prop, kodi_utils.custom_info_prop, kodi_utils.addon_object, kodi_utils.user_settings
 pause_services_prop, xbmc_monitor, xbmc_player, userdata_path = kodi_utils.pause_services_prop, kodi_utils.xbmc_monitor, kodi_utils.xbmc_player, kodi_utils.userdata_path
-get_window_id, Thread, kodi_version, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, kodi_utils.kodi_version, settings.check_premium_account_status
-make_directories, path_exists, update_action, update_delay = kodi_utils.make_directories, kodi_utils.path_exists, settings.update_action, settings.update_delay
+get_window_id, Thread, check_premium = kodi_utils.get_window_id, kodi_utils.Thread, settings.check_premium_account_status
+make_directories, path_exists,  = kodi_utils.make_directories, kodi_utils.path_exists, 
 get_setting, set_setting, external, make_settings_props = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.external, kodi_utils.make_settings_props
 logger, run_addon, confirm_dialog, close_dialog = kodi_utils.logger, kodi_utils.run_addon, kodi_utils.confirm_dialog, kodi_utils.close_dialog
 get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
 trakt_sync_interval, trakt_sync_refresh_widgets, auto_start_fen = settings.trakt_sync_interval, settings.trakt_sync_refresh_widgets, settings.auto_start_fen
 kodi_refresh, list_dirs, delete_file = kodi_utils.kodi_refresh, kodi_utils.list_dirs, kodi_utils.delete_file
-current_skin_prop, use_skin_fonts_prop, notification, ok_dialog = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop, kodi_utils.notification, kodi_utils.ok_dialog
+current_skin_prop, use_skin_fonts_prop = kodi_utils.current_skin_prop, kodi_utils.use_skin_fonts_prop
+notification, ok_dialog = kodi_utils.notification, kodi_utils.ok_dialog
 pause_settings_prop, enabled_debrids_check = kodi_utils.pause_settings_prop, settings.enabled_debrids_check
-fen_str, window_top_str, listitem_property_str = ls(32036), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
+fen_str, window_top_str, listitem_property_str = ls(32036).upper(), 'Window.IsTopMost(%s)', 'ListItem.Property(%s)'
 movieinformation_str, contextmenu_str = 'movieinformation', 'contextmenu'
 media_windows = (10000, 10025, 11121)
 
@@ -63,13 +63,10 @@ class DatabaseMaintenance:
 
 class FirstRunActions:
 	def run(self):
-		logger(fen_str, 'FirstRunActions Service Starting')
-		if kodi_version() < 20:
-			ok_dialog(fen_str, 'Kodi 20 or above required[CR]Please update Kodi or uninstall Fen')
-			return logger(fen_str, 'FirstRunActions Service Finished - Running on Incompatible Kodi Version')
+		logger(fen_str, 'CheckUpdateActions Service Starting')
 		addon_version, settings_version =  self.remove_alpha(addon_object.getAddonInfo('version')), self.remove_alpha(addon_object.getSetting('version_number'))
 		if addon_version != settings_version:
-			logger(fen_str, 'FirstRunActions Running Update Actions....')
+			logger(fen_str, 'CheckUpdateActions Running Update Actions....')
 			addon_object.setSetting('version_number', addon_version)
 			self.update_action(addon_version)
 		if get_setting('first_use', 'false') == 'true':
@@ -83,7 +80,7 @@ class FirstRunActions:
 				heading = '%s - %s/5.' % (ls(32522), count)
 				ok_dialog(heading, line, button_label)
 			set_setting('first_use', 'false')
-		return logger(fen_str, 'FirstRunActions Service Finished')
+		return logger(fen_str, 'CheckUpdateActions Service Finished')
 
 	def update_action(self, addon_version):
 		''' Put code that needs to run once on update here'''
@@ -106,7 +103,7 @@ class ReuseLanguageInvokerCheck:
 			invoker_instance.data = current_addon_setting
 			new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
 			with open(addon_xml, 'w') as f: f.write(new_xml)
-			if not get_setting('fen.auto_invoker_fix') == 'true' and not confirm_dialog(text='%s[CR]%s' % (ls(33021), ls(33020))):
+			if not get_setting('fen.auto_invoker_fix') == 'true' and not confirm_dialog(text='%s\n%s' % (ls(33021), ls(33020))):
 				return logger(fen_str, 'ReuseLanguageInvokerCheck Service Finished')
 			execute_builtin('ActivateWindow(Home)', True)
 			update_local_addons()
@@ -264,22 +261,6 @@ class PremiumExpiryCheck:
 class OnSettingsChangedActions:
 	def run(self):
 		if get_property(pause_settings_prop) != 'true': make_settings_props()
-
-class UpdateCheck:
-	def run(self):
-		logger(fen_str, 'UpdateCheck Service Starting')
-		monitor, player = xbmc_monitor(), xbmc_player()
-		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
-		while not monitor.abortRequested():
-			wait_for_abort(update_delay())
-			while get_property(pause_services_prop) == 'true' or is_playing(): wait_for_abort(5)
-			update_check(update_action())
-			break
-		try: del monitor
-		except: pass
-		try: del player
-		except: pass
-		return logger(fen_str, 'UpdateCheck Service Finished')
 
 class OnNotificationActions:
 	def run(self, sender, method, data):

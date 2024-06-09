@@ -4,11 +4,12 @@ import time
 import hashlib
 import _strptime
 import unicodedata
+from random import random
 from html import unescape
 from importlib import import_module, reload as rel_module
 from datetime import datetime, timedelta, date
 from modules.settings import max_threads
-from modules.kodi_utils import random, sys, translate_path, sleep, Thread, activeCount, json, get_setting, local_string as ls
+from modules.kodi_utils import sys, translate_path, sleep, Thread, activeCount, json, get_setting, local_string as ls
 # from modules.kodi_utils import logger
 
 days_translate = {'Monday': 32971, 'Tuesday': 32972, 'Wednesday': 32973, 'Thursday': 32974, 'Friday': 32975, 'Saturday': 32976, 'Sunday': 32977}
@@ -274,7 +275,7 @@ def sort_list(sort_key, sort_direction, list_data, ignore_articles):
 		if sort_key == 'popularity': return sorted(list_data, key=lambda x: x[x['type']].get('votes', 0), reverse=reverse)
 		if sort_key == 'percentage': return sorted(list_data, key=lambda x: x[x['type']].get('rating', 0), reverse=reverse)
 		if sort_key == 'votes': return sorted(list_data, key=lambda x: x[x['type']].get('votes', 0), reverse=reverse)
-		if sort_key == 'random': return sorted(list_data, key=lambda k: random.random())
+		if sort_key == 'random': return sorted(list_data, key=lambda k: random())
 		return list_data
 	except: return list_data
 
@@ -306,23 +307,6 @@ def paginate_list(item_list, page, limit=20, paginate_start=0):
 	all_pages = json.dumps(pages)
 	result = (pages[page - 1], all_pages, len(pages))
 	return result
-
-def download_github_zip(repo, file, destination):
-	from io import BytesIO
-	from zipfile import ZipFile
-	from modules.kodi_utils import requests, path_exists, userdata_path, translate_path
-	try:
-		url = 'https://github.com/Tikipeter/%s/raw/main/%s.zip' % (repo, file)
-		result = requests.get(url, stream=True)
-		zipfile = ZipFile(BytesIO(result.raw.read()))
-		zipfile.extractall(path=userdata_path)
-		if path_exists(destination): status = True
-		else: status = False
-	except Exception as e:
-		from modules.kodi_utils import logger
-		logger('download_github_zip error', str(e))
-		status = False
-	return status
 
 def copy2clip(txt):
 	from sys import platform

@@ -136,15 +136,22 @@ def autoplay_next_episode():
 	if auto_play('episode') and get_setting('fen.autoplay_next_episode', 'false') == 'true': return True
 	else: return False
 
+def autoscrape_next_episode():
+	if not auto_play('episode') and get_setting('fen.autoscrape_next_episode', 'false') == 'true': return True
+	else: return False
+
 def auto_rescrape_with_all():
 	return get_setting('fen.results.autorescrape_with_all', 'false') == 'true'
 
-def auto_nextep_settings():
-	window_percentage = 100 - int(get_setting('fen.autoplay_next_window_percentage', '95'))
-	use_chapters = get_setting('fen.autoplay_use_chapters', 'true') == 'true'
+def auto_nextep_settings(play_type):
+	play_type = 'autoplay' if play_type == 'autoplay_nextep' else 'autoscrape'
+	window_percentage = 100 - int(get_setting('fen.%s_next_window_percentage' % play_type, '95'))
+	use_chapters = get_setting('fen.%s_use_chapters' % play_type, 'true') == 'true'
 	scraper_time = int(get_setting('fen.results.timeout', '60')) + 20
-	alert_method = int(get_setting('fen.autoplay_alert_method', '0'))
-	default_action = default_action_dict[get_setting('fen.autoplay_default_action', '1')] if alert_method == 0 else 'cancel'
+	if play_type == 'autoplay':
+		alert_method = int(get_setting('fen.autoplay_alert_method', '0'))
+		default_action = default_action_dict[get_setting('fen.autoplay_default_action', '1')] if alert_method == 0 else 'cancel'
+	else: alert_method, default_action = '', ''
 	return {'scraper_time': scraper_time, 'window_percentage': window_percentage, 'alert_method': alert_method, 'default_action': default_action, 'use_chapters': use_chapters}
 
 def filter_status(filter_type):
@@ -364,7 +371,7 @@ def get_language():
 	return get_setting('fen.meta_language', 'en')
 
 def get_meta_filter():
-	return get_setting('fen.meta_filter', 'true')
+	return get_setting('fen.meta_filter', 'false')
 
 def get_mpaa_region():
 	return get_setting('fen.meta_mpaa_region', 'US')
@@ -396,9 +403,3 @@ def nextep_content_settings():
 	sort_airing_today_to_top = get_setting('fen.nextep.sort_airing_today_to_top', 'false') == 'true'
 	return {'sort_key': sort_key, 'sort_direction': sort_direction, 'sort_type': sort_type, 'sort_order':sort_order,
 			'include_unaired': include_unaired, 'include_unwatched': include_unwatched, 'sort_airing_today_to_top': sort_airing_today_to_top}
-
-def update_delay():
-	return int(get_setting('fen.update.delay', '45'))
-
-def update_action():
-	return int(get_setting('fen.update.action', '2'))
