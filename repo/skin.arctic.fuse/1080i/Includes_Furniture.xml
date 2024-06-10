@@ -285,7 +285,7 @@
                 <label>$PARAM[label]</label>
                 <font>font_midi_black</font>
                 <textcolor>$PARAM[textcolor]</textcolor>
-                <width>$PARAM[width]</width>
+                <width max="$PARAM[max]">$PARAM[width]</width>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>

@@ -104,31 +104,120 @@
                         <param name="width">auto</param>
                     </include>
                     <include content="Furniture_MainLabel">
-                        <param name="label"> › </param>
+                        <param name="label">  ›  </param>
                         <param name="width">auto</param>
                         <param name="textcolor">main_fg_30</param>
-                        <param name="visible">!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) | [Control.HasFocus($PARAM[editid]) + !Window.IsVisible(DialogKeyboard.xml)]</param>
+                        <param name="visible">[!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) | [Control.HasFocus($PARAM[editid]) + !Window.IsVisible(DialogKeyboard.xml)]] + !Control.HasFocus($PARAM[rowtwo])</param>
                     </include>
                     <include content="Furniture_MainLabel">
                         <param name="label">$INFO[Control.GetLabel($PARAM[editid]).index(1)]</param>
                         <param name="width">auto</param>
-                        <param name="visible">!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) + [!Control.HasFocus($PARAM[editid]) | Window.IsVisible(DialogKeyboard.xml)]</param>
+                        <param name="max">200</param>
+                        <param name="visible">!String.IsEmpty(Control.GetLabel($PARAM[editid]).index(1)) + [!Control.HasFocus($PARAM[editid]) | Window.IsVisible(DialogKeyboard.xml)] + !Control.HasFocus($PARAM[rowtwo])</param>
                     </include>
-                    <control type="edit" id="$PARAM[editid]">
-                        <texturefocus />
-                        <texturenofocus />
-                        <description>Search</description>
-                        <font>font_midi_black</font>
-                        <textcolor>main_fg_100</textcolor>
-                        <focusedcolor>main_fg_100</focusedcolor>
-                        <align>left</align>
-                        <textoffsetx>0</textoffsetx>
-                        <width>400</width>
-                        <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
-                        <include>Search_View_Edit_Actions</include>
-                        <ondown>9090</ondown>
+                    <control type="group">
+                        <width>200</width>
                         <visible allowhiddenfocus="true">Control.HasFocus($PARAM[editid])</visible>
                         <visible allowhiddenfocus="true">!Window.IsVisible(DialogKeyboard.xml)</visible>
+                        <visible allowhiddenfocus="true">!Control.HasFocus($PARAM[rowtwo])</visible>
+                        <control type="edit" id="$PARAM[editid]">
+                            <texturefocus />
+                            <texturenofocus />
+                            <description>Search</description>
+                            <font>font_midi_black</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <focusedcolor>main_fg_100</focusedcolor>
+                            <align>left</align>
+                            <textoffsetx>0</textoffsetx>
+                            <width>200</width>
+                            <onright>SetFocus($PARAM[rowtwo])</onright>
+                            <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
+                            <include>Search_View_Edit_Actions</include>
+                            <ondown>9090</ondown>
+                            <visible allowhiddenfocus="true">Control.HasFocus($PARAM[editid])</visible>
+                            <visible allowhiddenfocus="true">!Window.IsVisible(DialogKeyboard.xml)</visible>
+                            <visible allowhiddenfocus="true">!Control.HasFocus($PARAM[rowtwo])</visible>
+                        </control>
+                    </control>
+                    <control type="label">
+                        <width max="200">auto</width>
+                        <left>-200</left>
+                        <textcolor>00ffffff</textcolor>
+                        <font>font_midi_black</font>
+                        <align>left</align>
+                        <label>$INFO[Control.GetLabel($PARAM[editid]).index(1)]</label>
+                        <visible>Control.HasFocus($PARAM[editid]) + !Window.IsVisible(DialogKeyboard.xml)</visible>
+                        <visible>!Control.HasFocus($PARAM[rowtwo])</visible>
+                    </control>
+                    <control type="label">
+                        <textcolor>00ffffff</textcolor>
+                        <font>font_midi_black</font>
+                        <width>auto</width>
+                        <label>|</label>
+                        <visible>Control.HasFocus($PARAM[editid]) + !Window.IsVisible(DialogKeyboard.xml)</visible>
+                        <visible>!Control.HasFocus($PARAM[rowtwo])</visible>
+                    </control>
+                    <include content="Furniture_MainLabel">
+                        <param name="label">  ›  </param>
+                        <param name="width">auto</param>
+                        <param name="textcolor">main_fg_30</param>
+                        <param name="visible">Control.IsVisible($PARAM[rowtwo])</param>
+                    </include>
+                    <control type="grouplist">
+                        <left>0</left>
+                        <top>17</top>
+                        <height>50</height>
+                        <itemgap>20</itemgap>
+                        <orientation>horizontal</orientation>
+                        <onup>$PARAM[rowone]</onup>
+                        <ondown>$PARAM[ondown]</ondown>
+                        <onleft>$PARAM[rowtwo]</onleft>
+                        <onright>$PARAM[rowtwo]</onright>
+                        <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
+                        <visible>Control.IsVisible($PARAM[rowtwo])</visible>
+                        <animation condition="!Container($PARAM[rowtwo]).OnNext" effect="slide" start="0" end="-32" delay="0" time="400" tween="quadratic" reversible="false">Conditional</animation>
+                        <animation condition="!Container($PARAM[rowtwo]).OnPrevious" effect="slide" start="0" end="32" delay="0" time="400" tween="quadratic" reversible="false">Conditional</animation>
+
+                        <control type="togglebutton">
+                            <include>Texture_Highlight_Underline_H</include>
+                            <font>font_mini_black</font>
+                            <textcolor>main_fg_100</textcolor>
+                            <focusedcolor>main_fg_100</focusedcolor>
+                            <textoffsetx>0</textoffsetx>
+                            <label>$INFO[Container($PARAM[rowtwo]).ListItem.Label]</label>
+                            <altlabel>$INFO[Container($PARAM[rowtwo]).ListItem.Label]</altlabel>
+                            <width>auto</width>
+                            <align>left</align>
+                            <height>50</height>
+                            <usealttexture>True</usealttexture>
+                            <visible>Control.HasFocus($PARAM[rowtwo])</visible>
+                            <animation effect="slide" start="0" end="0,-5" condition="Control.HasFocus($PARAM[rowtwo])">Conditional</animation>
+                        </control>
+                        <control type="label">
+                            <font>font_mini</font>
+                            <textcolor>main_fg_70</textcolor>
+                            <width>auto</width>
+                            <align>left</align>
+                            <height>50</height>
+                            <label>$INFO[Container($PARAM[rowtwo]).ListItem.Label]</label>
+                            <visible>!Control.HasFocus($PARAM[rowtwo])</visible>
+                        </control>
+                        <control type="label">
+                            <font>font_mini</font>
+                            <textcolor>main_fg_70</textcolor>
+                            <width>auto</width>
+                            <align>left</align>
+                            <height>50</height>
+                            <label>$INFO[Container($PARAM[rowtwo]).ListItemNoWrap(1).Label]</label>
+                        </control>
+                        <control type="label">
+                            <font>font_mini</font>
+                            <textcolor>main_fg_70</textcolor>
+                            <width>auto</width>
+                            <align>left</align>
+                            <height>50</height>
+                            <label>$INFO[Container($PARAM[rowtwo]).ListItemNoWrap(2).Label]</label>
+                        </control>
                     </control>
                 </control>
                 <include content="Search_View_Alphabet">
@@ -173,7 +262,7 @@
                 <orientation>horizontal</orientation>
                 <height>80</height>
                 <onup>$PARAM[editid]</onup>
-                <ondown>$PARAM[rowtwo]</ondown>
+                <ondown>$PARAM[ondown]</ondown>
                 <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
                 <include condition="Window.IsVisible(1185)">Search_View_Edit_Actions_1185</include>
                 <include condition="Window.IsVisible(1105)">Search_View_Edit_Actions_1105</include>
@@ -184,7 +273,7 @@
                         <onleft>9092</onleft>
                         <onright>SetFocus($PARAM[rowone],0,absolute)</onright>
                         <onup>$PARAM[editid]</onup>
-                        <ondown>$PARAM[rowtwo]</ondown>
+                        <ondown>$PARAM[ondown]</ondown>
                         <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
                         <description>Filter</description>
                         <label>&#xe064;</label>
@@ -197,13 +286,14 @@
 
                 <control type="group">
                     <width>408</width>
+                    <visible>Control.IsVisible($PARAM[rowtwo])</visible>
                     <control type="fixedlist" id="$PARAM[rowone]">
                         <orientation>horizontal</orientation>
                         <focusposition>2</focusposition>
                         <movement>9</movement>
                         <onleft>9094</onleft>
                         <onup>$PARAM[editid]</onup>
-                        <ondown>$PARAM[rowtwo]</ondown>
+                        <ondown>$PARAM[ondown]</ondown>
                         <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
                         <onright>9093</onright>
 
@@ -418,19 +508,30 @@
 
                 <control type="group">
                     <width>44</width>
+                    <visible>!Control.IsVisible($PARAM[rowtwo])</visible>
+                    <control type="label">
+                        <description>AlphabetStrip</description>
+                        <label>&#xe0FC;</label>
+                        <textoffsety>10</textoffsety>
+                        <include>Search_View_Alphabet_Iconic_Def</include>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <width>44</width>
                     <control type="button" id="9093">
                         <onleft>SetFocus($PARAM[rowone],9999,absolute)</onleft>
                         <onright>9091</onright>
                         <description>Keyboard</description>
-                        <font>font_tiny_iconic</font>
-                        <textoffsety>14.5</textoffsety>
+                        <!-- <font>font_tiny_iconic</font>
+                        <textoffsety>14.5</textoffsety> -->
                         <label>&#xe0d0;</label>
                         <include>Search_View_Alphabet_Iconic_Def</include>
                         <onclick>SetFocus($PARAM[editid])</onclick>
                         <onclick>Action(Select)</onclick>
                         <onclick>SetFocus(9093)</onclick>
                         <onup>$PARAM[editid]</onup>
-                        <ondown>$PARAM[rowtwo]</ondown>
+                        <ondown>$PARAM[ondown]</ondown>
                         <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
                     </control>
                 </control>
@@ -446,7 +547,7 @@
                         <onclick>SetFocus(9091)</onclick>
                         <onleft>9093</onleft>
                         <onup>$PARAM[editid]</onup>
-                        <ondown>$PARAM[rowtwo]</ondown>
+                        <ondown>$PARAM[ondown]</ondown>
                         <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
                         <onright>9092</onright>
                     </control>
@@ -467,7 +568,7 @@
                         </include>
                         <onleft>9091</onleft>
                         <onup>$PARAM[editid]</onup>
-                        <ondown>$PARAM[rowtwo]</ondown>
+                        <ondown>$PARAM[ondown]</ondown>
                         <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
                         <onright>SetFocus($PARAM[rowone],0,absolute)</onright>
                         <onright>9094</onright>
@@ -477,81 +578,27 @@
 
             </control>
 
-            <control type="grouplist">
-                <top>76</top>
-                <height>50</height>
-                <itemgap>20</itemgap>
-                <orientation>horizontal</orientation>
-                <onup>$PARAM[rowone]</onup>
-                <ondown>$PARAM[ondown]</ondown>
-                <onleft>$PARAM[rowtwo]</onleft>
-                <onright>$PARAM[rowtwo]</onright>
-                <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
-                <visible>Control.IsVisible($PARAM[rowtwo])</visible>
-                <animation condition="!Container($PARAM[rowtwo]).OnNext" effect="slide" start="0" end="-32" delay="0" time="400" tween="quadratic" reversible="false">Conditional</animation>
-                <animation condition="!Container($PARAM[rowtwo]).OnPrevious" effect="slide" start="0" end="32" delay="0" time="400" tween="quadratic" reversible="false">Conditional</animation>
-
-                <control type="togglebutton">
-                    <include>Texture_Highlight_Underline_H</include>
-                    <font>font_mini_black</font>
-                    <textcolor>main_fg_100</textcolor>
-                    <focusedcolor>main_fg_100</focusedcolor>
-                    <textoffsetx>0</textoffsetx>
-                    <label>$INFO[Container($PARAM[rowtwo]).ListItem(0).Label]</label>
-                    <altlabel>$INFO[Container($PARAM[rowtwo]).ListItem(0).Label]</altlabel>
-                    <width>auto</width>
-                    <align>left</align>
-                    <height>50</height>
-                    <usealttexture>True</usealttexture>
-                    <visible>Control.HasFocus($PARAM[rowtwo])</visible>
-                </control>
-                <control type="label">
-                    <font>font_mini</font>
-                    <textcolor>main_fg_70</textcolor>
-                    <width>auto</width>
-                    <align>left</align>
-                    <height>50</height>
-                    <label>$INFO[Container($PARAM[rowtwo]).ListItem(0).Label]</label>
-                    <visible>!Control.HasFocus($PARAM[rowtwo])</visible>
-                </control>
-                <control type="label">
-                    <font>font_mini</font>
-                    <textcolor>main_fg_70</textcolor>
-                    <width>auto</width>
-                    <align>left</align>
-                    <height>50</height>
-                    <label>$INFO[Container($PARAM[rowtwo]).ListItem(1).Label]</label>
-                </control>
-                <control type="label">
-                    <font>font_mini</font>
-                    <textcolor>main_fg_70</textcolor>
-                    <width>auto</width>
-                    <align>left</align>
-                    <height>50</height>
-                    <label>$INFO[Container($PARAM[rowtwo]).ListItem(2).Label]</label>
-                </control>
-            </control>
-
-            <control type="wraplist" id="$PARAM[rowtwo]">
+            <control type="fixedlist" id="$PARAM[rowtwo]">
                 <orientation>horizontal</orientation>
                 <top>60</top>
                 <height>80</height>
-                <hitrect x="0" y="90" w="546" h="40" />
+                <hitrect x="80" y="0" w="546" h="40" />
                 <focusposition>0</focusposition>
-                <movement>1</movement>
+                <movement>0</movement>
                 <left>1</left>
                 <width>546</width>
-                <onup>$PARAM[rowone]</onup>
-                <ondown>$PARAM[ondown]</ondown>
-                <onleft>$PARAM[rowtwo]</onleft>
-                <onright>$PARAM[rowtwo]</onright>
+                <onback condition="Window.IsMedia">$PARAM[ondown]</onback>
+                <include>Search_View_Edit_Actions</include>
+                <ondown>$PARAM[rowone]</ondown>
+                <onleft>$PARAM[editid]</onleft>
+                <onright>noop</onright>
                 <visible>!$EXP[Exp_MediaFilter_IsActive]</visible>
                 <visible allowhiddenfocus="true">ControlGroup(9090).HasFocus() | Control.HasFocus($PARAM[rowtwo]) | Control.HasFocus($PARAM[editid])</visible>
                 <onclick>SetFocus($PARAM[editid])</onclick>
                 <onclick>RunScript(script.skinvariables,set_editcontrol=$PARAM[editid],window_id=1105,setfocus=9094,text=$INFO[Container($PARAM[rowtwo]).ListItem.Label])</onclick>
                 <itemlayout width="155" />
                 <focusedlayout width="256" />
-                <content>$VAR[Search_Filter_AutoComplete]</content>
+                <content limit="9">$VAR[Search_Filter_AutoComplete]</content>
             </control>
         </definition>
     </include>
