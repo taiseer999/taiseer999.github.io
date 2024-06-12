@@ -88,7 +88,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic Fentastic+ Nimbus+ Dstv skins."
 
 name="Fentastic Arabic."
-version="1.1"
+version="1.0"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=I6y6Ntnkg07BJpz5T1%2FZQa4h5R%2B2Dk7es6tzcii74zrZ10ckusA3rZ79Wp401Eu5&expiry=%2BzH15Ku8ihesnyXuUs%2FB%2FQ%3D%3D&mac=6ecc4eaaa517b9f5bed6924812986cb2f676ce3e70254144e8d5607c5cc5583d"
 minor="http://"
 gui="http://"
