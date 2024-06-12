@@ -58,7 +58,6 @@ adult="no"
 info="http://your.info.url"
 description="Kodi 21 Arabic AZR2 Resurrection skin."
 
-
 name="Touchscreen Arab."
 version="1.0"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=1lwNgsi%2Bi9QerL5SV7%2BPvgRGVhNGOZlcCgKftS0QwGOXjy5xI3hqHx3Gcj9XYpbS&expiry=3EOhjPEDfHBPIK4022PvQQ%3D%3D&mac=4bcf4b42ed63fbcc3ae4e707d2d9974a24533d4a0421f0b1f93d6a8226f62cf4"
