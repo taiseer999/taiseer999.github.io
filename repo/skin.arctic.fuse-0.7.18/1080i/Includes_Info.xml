@@ -31,12 +31,107 @@
         <param name="visible">true</param>
         <param name="width">info_plot_w</param>
         <param name="height">100%</param>
+        <param name="id_prefix">9996</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
+
+
                 <control type="group">
+                    <right>-40</right>
+                    <control type="textbox" id="$PARAM[id_prefix]1">
+                        <aligny>top</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_black</font>
+                        <top>-20</top>
+                        <bottom>-20</bottom>
+                        <visible>false</visible>
+                        <autoscroll>false</autoscroll>
+                    </control>
+                    <control type="textbox" id="$PARAM[id_prefix]2">
+                        <wrapmultiline>true</wrapmultiline>
+                        <aligny>center</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_double_black</font>
+                        <top>-20</top>
+                        <bottom>-20</bottom>
+                        <width>50%</width>
+                        <visible>false</visible>
+                        <autoscroll>false</autoscroll>
+                    </control>
+                    <control type="textbox" id="$PARAM[id_prefix]3">
+                        <wrapmultiline>true</wrapmultiline>
+                        <aligny>center</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_double_black</font>
+                        <top>-20</top>
+                        <bottom>-20</bottom>
+                        <width>70%</width>
+                        <visible>false</visible>
+                        <autoscroll>false</autoscroll>
+                    </control>
+                    <control type="label">
+                        <wrapmultiline>true</wrapmultiline>
+                        <aligny>center</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_black</font>
+                        <top>10</top>
+                        <bottom>10</bottom>
+                        <scroll>false</scroll>
+                        <visible>!Container($PARAM[id_prefix]1).HasNext</visible>
+                        <visible>!Container($PARAM[id_prefix]2).HasNext</visible>
+                        <visible>!Container($PARAM[id_prefix]3).HasNext</visible>
+                    </control>
+                    <control type="label">
+                        <wrapmultiline>true</wrapmultiline>
+                        <aligny>center</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_double_black</font>
+                        <top>10</top>
+                        <bottom>10</bottom>
+                        <width>50%</width>
+                        <scroll>false</scroll>
+                        <visible>Container($PARAM[id_prefix]1).HasNext</visible>
+                        <visible>!Container($PARAM[id_prefix]2).HasNext</visible>
+                        <visible>!Container($PARAM[id_prefix]3).HasNext</visible>
+                    </control>
+                    <control type="label">
+                        <wrapmultiline>true</wrapmultiline>
+                        <aligny>center</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_double_black</font>
+                        <top>10</top>
+                        <bottom>10</bottom>
+                        <scroll>false</scroll>
+                        <width>70%</width>
+                        <visible>Container($PARAM[id_prefix]1).HasNext</visible>
+                        <visible>Container($PARAM[id_prefix]2).HasNext</visible>
+                        <visible>!Container($PARAM[id_prefix]3).HasNext</visible>
+                    </control>
+                    <control type="label">
+                        <wrapmultiline>true</wrapmultiline>
+                        <aligny>center</aligny>
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                        <font>font_info_double_black</font>
+                        <top>10</top>
+                        <bottom>10</bottom>
+                        <scroll>false</scroll>
+                        <visible>Container($PARAM[id_prefix]1).HasNext</visible>
+                        <visible>Container($PARAM[id_prefix]2).HasNext</visible>
+                        <visible>Container($PARAM[id_prefix]3).HasNext</visible>
+                    </control>
+                </control>
+
+                <!-- <control type="group">
                     <centertop>20</centertop>
                     <height>40</height>
                     <control type="group">
@@ -71,7 +166,7 @@
                     <textcolor>$PARAM[colordiffuse]_100</textcolor>
                     <font>font_title_black</font>
                     <right>-40</right>
-                </control>
+                </control> -->
             </control>
         </definition>
     </include>
@@ -83,6 +178,7 @@
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="height">132</param>
                 <param name="visible">![$PARAM[mainlogo_visible]]</param>
+                <param name="id_prefix">$PARAM[id_prefix]</param>
             </include>
             <control type="image">
                 <height>132</height>

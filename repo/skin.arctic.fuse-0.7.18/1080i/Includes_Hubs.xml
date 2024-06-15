@@ -556,6 +556,7 @@
                 <param name="width">info_plot_w</param>
                 <param name="height">132</param>
                 <param name="colordiffuse">main_fg</param>
+                <param name="id_prefix">9998</param>
             </include>
         </control>
     </include>

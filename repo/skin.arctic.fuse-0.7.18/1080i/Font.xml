@@ -27,6 +27,13 @@
             <filename>RobotoNotoCondensed-Black1.ttf</filename>
             <size>110</size>
         </font>
+<font>
+                    <name>font_info_double_black</name>
+                    <filename>$PARAM[font_black]</filename>
+                    <size>64</size>
+                    <linespacing>0.8</linespacing>
+                    <aspect>$PARAM[aspect_standard]</aspect>
+                </font>
         <font>
             <name>font_title_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
@@ -195,7 +202,7 @@
         <font>
             <name>font_infotag</name>
             <filename>LeagueSpartan-SemiBold.ttf</filename>
-            <size>19</size>
+            <size>18</size>
             <style>uppercase</style>
         </font>
 
