@@ -101,7 +101,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic Fentastic skin."
 
 name="AF full screen Ar."
-version="2.0"
+version="2.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=yDH5QO6tYckpncVDGPNDV1n0Oq7CMy4EIQVvTduj4TgECqZEB3f2%2B%2F%2F%2FnZTWUu58&expiry=VgeT2iXGmPMXZAbl98P91w%3D%3D&mac=cf39fb898390835842efa8c189ac61a5af5e6a0afeee231ead2cf2e397e359bc"
 minor="http://"
 gui="http://"
