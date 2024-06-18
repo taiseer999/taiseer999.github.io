@@ -194,7 +194,7 @@
         </include>
 
         <!-- Artwork -->
-        <include content="List_Landscape_Row" condition="$EXP[Exp_HomeMenu_IsTopBar]">
+        <include content="List_Landscape_Row">
             <param name="id">5009</param>
             <height>divider_bottom</height>
 
@@ -441,7 +441,7 @@
         </include>
 
         <!-- Artwork -->
-        <include content="List_Landscape_Row" condition="$EXP[Exp_HomeMenu_IsTopBar]">
+        <include content="List_Landscape_Row">
             <param name="id">5009</param>
             <height>divider_bottom</height>
 
