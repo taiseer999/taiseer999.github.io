@@ -26,9 +26,22 @@
             <name>font_info_black</name>
             <filename>RobotoNotoCondensed-Black1.ttf</filename>
             <size>110</size>
-        </font>
+     </font> 
 <font>
-                    <name>font_info_double_black</name>
+                <name>RobotoNotoCondensed-Black.ttf</name>
+                <filename>$PARAM[font_black]</filename>
+                <size>98</size>
+                <aspect>$PARAM[aspect_standard]</aspect>
+            </font>
+            <font>
+                <name>RobotoNotoCondensed-Black.ttf</name>
+                <filename>$PARAM[font_black]</filename>
+                <size>64</size>
+                <linespacing>0.8</linespacing>
+                <aspect>$PARAM[aspect_standard]</aspect>
+              </font>
+<font>
+                    <name>RobotoNotoCondensed-Black.ttf</name>
                     <filename>$PARAM[font_black]</filename>
                     <size>64</size>
                     <linespacing>0.8</linespacing>
@@ -258,18 +271,6 @@
             <name>font_logo_large</name>
             <filename>Questrial-Regular.ttf</filename>
             <size>44</size>
-        </font>
-
-        <!-- Required for system -->
-        <font>
-            <name>font13</name>
-            <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>30</size>
-        </font>
-        <font>
-            <name>Clock</name>
-            <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>130</size>
         </font>
 
         <!-- Testing Fonts -->
