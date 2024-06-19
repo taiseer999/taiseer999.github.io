@@ -150,7 +150,7 @@
                             <onup>2054</onup>
                             <ondown>50</ondown>
                             <label>$ADDON[plugin.video.fen 32798]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -167,7 +167,7 @@
                             <onup>2054</onup>
                             <ondown>50</ondown>
                             <label>$ADDON[plugin.video.fen 33045] $ADDON[plugin.video.fen 32798]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -204,7 +204,7 @@
                             <left>15</left>
                             <width>1150</width>
                             <height>340</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFB7B4BB</textcolor>
@@ -217,7 +217,7 @@
                             <left>15</left>
                             <width>1150</width>
                             <height>340</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FF302F2F</textcolor>

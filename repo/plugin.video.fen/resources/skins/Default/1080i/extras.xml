@@ -186,7 +186,7 @@
                         <control type="label" id="4001">
                             <width max="75">auto</width>
                             <height>32</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
@@ -208,7 +208,7 @@
                         <control type="label" id="4002">
                             <width max="75">auto</width>
                             <height>32</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
@@ -230,7 +230,7 @@
                         <control type="label" id="4003">
                             <width max="75">auto</width>
                             <height>32</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
@@ -252,7 +252,7 @@
                         <control type="label" id="4004">
                             <width max="75">auto</width>
                             <height>32</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
@@ -274,7 +274,7 @@
                         <control type="label" id="4005">
                             <width max="75">auto</width>
                             <height>32</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>center</aligny>
@@ -306,7 +306,7 @@
                             <onup>2063</onup>
                             <ondown>14</ondown>
                             <label>$INFO[Window.Property(button10.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -322,7 +322,7 @@
                             <onup>2063</onup>
                             <ondown>15</ondown>
                             <label>$INFO[Window.Property(button11.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -338,7 +338,7 @@
                             <onup>2063</onup>
                             <ondown>16</ondown>
                             <label>$INFO[Window.Property(button12.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -354,7 +354,7 @@
                             <onup>2063</onup>
                             <ondown>17</ondown>
                             <label>$INFO[Window.Property(button13.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -373,7 +373,7 @@
                             <onup>10</onup>
                             <ondown>50</ondown>
                             <label>$INFO[Window.Property(button14.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -389,7 +389,7 @@
                             <onup>11</onup>
                             <ondown>50</ondown>
                             <label>$INFO[Window.Property(button15.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -405,7 +405,7 @@
                             <onup>12</onup>
                             <ondown>50</ondown>
                             <label>$INFO[Window.Property(button16.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -421,7 +421,7 @@
                             <onright>14</onright>
                             <ondown>50</ondown>
                             <label>$INFO[Window.Property(button17.label)]</label>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <textcolor>FFB7B4BB</textcolor>
                             <focusedcolor>FF302F2F</focusedcolor>
                             <texturefocus colordiffuse="FFB7B4BB" border="30">fen_common/circle.png</texturefocus>
@@ -458,7 +458,7 @@
                             <left>15</left>
                             <width>1150</width>
                             <height>340</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FFB7B4BB</textcolor>
@@ -471,7 +471,7 @@
                             <left>15</left>
                             <width>1150</width>
                             <height>340</height>
-                            <font>font13</font> <!-- FEN_30 -->
+                            <font>font_main</font> <!-- FEN_30 -->
                             <align>center</align>
                             <aligny>center</aligny>
                             <textcolor>FF302F2F</textcolor>

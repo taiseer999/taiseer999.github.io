@@ -2,8 +2,8 @@ from tmdbhelper.lib.addon.permissions import __access__
 from tmdbhelper.lib.api.api_keys.tokenhandler import TokenHandler
 
 if __access__.has_access('internal'):
-    CLIENT_ID = 'e6fde6173adf3c6af8fd1b0694b9b84d7c519cefc24482310e1de06c6abe5467'
-    CLIENT_SECRET = '15119384341d9a61c751d8d515acbc0dd801001d4ebe85d3eef9885df80ee4d9'
+    CLIENT_ID = '20fdc5f7364aad2c6d0491652bffc16e2eb7be35b9572478049d54d9824cc4d0'
+    CLIENT_SECRET = '3bd196ae0ce16d553d17cf5e3535ba3e65215cf8b5975a8dd9f2969ff0cd4592'
     USER_TOKEN = TokenHandler('trakt_token', store_as='setting')
 
 elif __access__.has_access('trakt'):

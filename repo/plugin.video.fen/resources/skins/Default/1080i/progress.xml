@@ -74,7 +74,7 @@
                     <left>20</left>
                     <width>600</width>
                     <height>250</height>
-                    <font>font13</font> <!-- FEN_30 -->
+                    <font>font_main</font> <!-- FEN_30 -->
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>FFCCCCCC</textcolor>

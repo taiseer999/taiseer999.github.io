@@ -56,7 +56,7 @@
                 <top>60</top>
                 <width>720</width>
                 <height>280</height>
-                <font>font13</font> <!-- FEN_30 -->
+                <font>font_main</font> <!-- FEN_30 -->
                 <textcolor>FFB7B4BB</textcolor>
                 <align>center</align>
                 <aligny>center</aligny>
