@@ -21,32 +21,12 @@
 
     <fontset id="Default" unicode="false">
 
-   <!-- Title fonts -->
+  <!-- Title fonts -->
         <font>
             <name>font_info_black</name>
             <filename>RobotoNotoCondensed-Black1.ttf</filename>
-            <size>110</size>
-     </font> 
-<font>
-                <name>RobotoNotoCondensed-Black.ttf</name>
-                <filename>$PARAM[font_black]</filename>
-                <size>98</size>
-                <aspect>$PARAM[aspect_standard]</aspect>
-            </font>
-            <font>
-                <name>RobotoNotoCondensed-Black.ttf</name>
-                <filename>$PARAM[font_black]</filename>
-                <size>64</size>
-                <linespacing>0.8</linespacing>
-                <aspect>$PARAM[aspect_standard]</aspect>
-              </font>
-<font>
-                    <name>RobotoNotoCondensed-Black.ttf</name>
-                    <filename>$PARAM[font_black]</filename>
-                    <size>64</size>
-                    <linespacing>0.8</linespacing>
-                    <aspect>$PARAM[aspect_standard]</aspect>
-                </font>
+            <size>128</size>
+        </font>
         <font>
             <name>font_title_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
@@ -57,22 +37,22 @@
         <font>
             <name>font_huge_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>47</size>
+            <size>49</size>
         </font>
         <font>
             <name>font_head_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>40</size>
+            <size>42</size>
         </font>
         <font>
             <name>font_midi_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>35</size>
+            <size>37</size>
         </font>
         <font>
             <name>font_main_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>30</size>
+            <size>32</size>
         </font>
         <font>
             <name>font_mini_black</name>
@@ -95,27 +75,27 @@
         <font>
             <name>font_huge_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>47</size>
+            <size>49</size>
         </font>
         <font>
             <name>font_head_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>40</size>
+            <size>42</size>
         </font>
         <font>
             <name>font_midi_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>35</size>
+            <size>37</size>
         </font>
         <font>
             <name>font_main_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>30</size>
+            <size>32</size>
         </font>
         <font>
             <name>font_mini_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>26</size>
+            <size>28</size>
         </font>
         <font>
             <name>font_tiny_bold</name>
@@ -132,22 +112,22 @@
         <font>
             <name>font_midi</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>33</size>
+            <size>35</size>
         </font>
         <font>
             <name>font_main</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>28</size>
+            <size>30</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>25</size>
+            <size>26</size>
         </font>
         <font>
             <name>font_tiny</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>20</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_hint</name>
@@ -158,7 +138,7 @@
         <font>
             <name>font_hint_button</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
-            <size>14</size>
+            <size>16</size>
             <linespacing>1.15</linespacing>
         </font>
 
@@ -167,31 +147,31 @@
             <name>font_huge_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.46</linespacing>
-            <size>42</size>
+            <size>47</size>
         </font>
         <font>
             <name>font_midi_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.46</linespacing>
-            <size>30</size>
+            <size>35</size>
         </font>
         <font>
             <name>font_main_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.14</linespacing>
-            <size>28</size>
+            <size>30</size>
         </font>
         <font>
             <name>font_mini_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.24</linespacing>
-            <size>24</size>
+            <size>26</size>
         </font>
         <font>
             <name>font_tiny_plot</name>
             <filename>RobotoNotoCondensed-Regular.ttf</filename>
             <linespacing>1.14</linespacing>
-            <size>19</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_mini_cond</name>
@@ -215,7 +195,7 @@
         <font>
             <name>font_infotag</name>
             <filename>LeagueSpartan-SemiBold.ttf</filename>
-            <size>18</size>
+            <size>22</size>
             <style>uppercase</style>
         </font>
 
@@ -240,17 +220,17 @@
         <font>
             <name>font_mini_arial</name>
             <filename>Arial.ttf</filename>
-            <size>22</size>
+            <size>25</size>
             <aspect>0.8</aspect>
         </font>
 
-        <!-- Keyboard Symbol Font -->
+         <!-- Keyboard Symbol Font -->
         <font>
             <name>font_main_iconic</name>
             <filename>iconmonstr-iconic-font.ttf</filename>
             <size>30</size>
         </font>
-		<font>
+        <font>
             <name>font_mini_iconic</name>
             <filename>iconmonstr-iconic-font.ttf</filename>
             <size>26</size>
@@ -273,6 +253,18 @@
             <size>44</size>
         </font>
 
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>130</size>
+        </font>
+
         <!-- Testing Fonts -->
         <font>
             <name>font_debug</name>
@@ -287,13 +279,13 @@
         <!-- Title fonts -->
         <font>
             <name>font_info_black</name>
-            <filename>RobotoNotoCondensed-Black.ttf</filename>
+            <filename>RobotoNotoCondensed-Black1.ttf</filename>
             <size>128</size>
         </font>
         <font>
             <name>font_title_black</name>
             <filename>RobotoNotoCondensed-Black.ttf</filename>
-            <size>74</size>
+            <size>68</size>
         </font>
 
         <!-- Black Fonts -->
