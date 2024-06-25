@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+
+    <fontset id="Default" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">RobotoNotoCondensed-Black.ttf</param>
+            <param name="font_bold">RobotoNotoCondensed-Bold.ttf</param>
+            <param name="font_regular">RobotoNotoCondensed-Regular.ttf</param>
+            <param name="font_light">RobotoNotoCondensed-Light.ttf</param>
+            <param name="aspect_system">0.8</param>
+  </include>
+    </fontset>
+
+<fontset id="Samim" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">Samim-Bold.ttf</param>
+            <param name="font_bold">Samim-Bold.ttf</param>
+            <param name="font_regular">Samim.ttf</param>
+            <param name="font_light">Samim-Medium.ttf</param>
+            <param name="aspect_system">0.8</param>
+        </include>
+    </fontset>
+
+    <fontset id="AmazonEmber" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_bold">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_regular">AmazonEmberV2-Regular.ttf</param>
+            <param name="font_light">AmazonEmberV2-Medium.ttf</param>
+            <param name="aspect_system">0.8</param>
+        </include>
+    </fontset>
+
+ <fontset id="DIN" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">DINArabic-Black.ttf</param>
+            <param name="font_bold">DINArabic-Bold.ttf</param>
+            <param name="font_regular">DINArabic-Bold.ttf</param>
+            <param name="font_light">DINArabic.ttf</param>
+            <param name="aspect_system">0.4</param>
+        </include>
+    </fontset>
+
+<fontset id="PFDin" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">PFDinTextArabic-XBlack.ttf</param>
+            <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
+            <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
+            <param name="font_light">PFDinTextArabic-Regular.ttf</param>
+            <param name="aspect_system">0.8</param>
+        </include>
+    </fontset>
+<fontset id="Al-Jazeera-Arabic" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AljazeeraFull.ttf</param>
+            <param name="font_bold">AljazeeraFull.ttf</param>
+            <param name="font_regular">AljazeeraFull.ttf</param>
+            <param name="font_light">AljazeeraFull.ttf</param>
+            <param name="aspect_system">0.8</param>
+            <param name="aspect_standard">1.1</param>
+
+        </include>
+    </fontset>
+
+<fontset id="Kalligraaf" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">Kalligraaf Arabic Bold.ttf</param>
+            <param name="font_bold">Kalligraaf Arabic Semibold.ttf</param>
+            <param name="font_regular">Kalligraaf Arabic.ttf</param>
+            <param name="font_light">Kalligraaf Arabic Medium.ttf</param>
+            <param name="aspect_system">0.8</param>
+
+        </include>
+    </fontset>
+</fonts>
+
