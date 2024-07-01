@@ -49,7 +49,6 @@
         <value condition="!String.IsEmpty({listitem}.Property(character))">$INFO[{listitem}.Property(character)]</value>
         <value condition="!String.IsEmpty({listitem}.Property(department))">$INFO[{listitem}.Property(department)]</value>
         <value condition="!String.IsEmpty({listitem}.ChannelNumberLabel) + !String.IsEmpty({listitem}.Title)">$INFO[{listitem}.ChannelName]</value>
-        <value condition="!String.IsEmpty({listitem}.TvShowTitle) + !String.IsEmpty({listitem}.Season) + !String.IsEmpty({listitem}.Episode) + String.IsEqual({listitem}.DBType,episode)">$INFO[{listitem}.TvShowTitle]$INFO[{listitem}.Season, • S,]$INFO[{listitem}.Episode,E,]</value>
         <value condition="!String.IsEmpty({listitem}.TvShowTitle) + !String.IsEqual({listitem}.Title,{listitem}.TVShowTitle) + !String.IsEqual({listitem}.DBType,tvshow)">$INFO[{listitem}.TvShowTitle]</value>
         <value condition="!String.IsEmpty({listitem}.AlbumArtist) + !String.IsEqual({listitem}.Title,{listitem}.AlbumArtist) + !String.IsEqual({listitem}.DBType,artist)">$INFO[{listitem}.AlbumArtist]</value>
         <value condition="!String.IsEmpty({listitem}.Artist) + !String.IsEqual({listitem}.Title,{listitem}.Artist) + !String.IsEqual({listitem}.DBType,artist)">$INFO[{listitem}.Artist]</value>

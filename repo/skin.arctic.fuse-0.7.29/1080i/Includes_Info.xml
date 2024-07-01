@@ -159,7 +159,7 @@
         <param name="colordiffuse">main_fg</param>
         <param name="container" />
         <param name="width">info_plot_w</param>
-        <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.CropImage)) | [!String.IsEmpty(Window(Home).Property(CropImage)) + !String.IsEmpty(Window(Home).Property(TMDBHelper.Image.Override))]]</param>
+        <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.CropImage)) | [!String.IsEmpty(Window(Home).Property(CropImage)) + String.IsEmpty(Window(Home).Property(TMDBHelper.Image.Override))]]</param>
         <param name="mainlogo_texture">$VAR[Image_CropLogo]</param>
         <definition>
             <control type="group">

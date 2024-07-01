@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1120">
     <defaultcontrol always="true">7000</defaultcontrol>
-
-    <include>Action_PreserveProcessedImagesProp_Onload</include>
     <onload>AlarmClock(refocus,SetFocus(7000,0,absolute),00:00,silent)</onload>
     <onload>SetProperty(TMDbHelper.WidgetContainer,513)</onload>
-    <!-- <onload>ClearProperty(TMDbHelper.WidgetContainer)</onload> -->
     <include>Action_PreserveTransitionProp_Onload</include>
 
     <onunload condition="!$EXP[Exp_HomeMenu_IsTopBar]">SetProperty(SideMenu.HasFocus,True,Home)</onunload>
@@ -60,7 +57,14 @@
                             <include content="Action_Recommendations_OnClick">
                                 <param name="id">513</param>
                             </include>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -79,7 +83,14 @@
                             <include content="Action_Recommendations_OnClick">
                                 <param name="id">513</param>
                             </include>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -98,7 +109,14 @@
                             <include content="Action_Recommendations_OnClick">
                                 <param name="id">513</param>
                             </include>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -117,7 +135,14 @@
                             <include content="Action_Recommendations_OnClick">
                                 <param name="id">513</param>
                             </include>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -136,7 +161,14 @@
                             <include content="Action_Recommendations_OnClick">
                                 <param name="id">513</param>
                             </include>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -154,7 +186,14 @@
                             <content>$INFO[Window.Property(Version_Query)]</content>
                             <onclick>Dialog.Close(all,true)</onclick>
                             <onclick>PlayMedia($ESCINFO[Container(513).ListItem.FolderPath])</onclick>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -170,7 +209,14 @@
                             <param name="labeltop">0</param>
                             <param name="include_movement">false</param>
                             <content target="videos">plugin://plugin.video.themoviedb.helper/?info=flatseasons&amp;tmdb_type=tv$INFO[Window.Property(Item_Query)]$VAR[Path_Param_Widget]</content>
-                            <include>Action_1120_OnWidget</include>
+                            <onup>SetFocus(513,0,absolute)</onup>
+                            <onup>7000</onup>
+                            <ondown>SetFocus(513,0,absolute)</ondown>
+                            <ondown>7000</ondown>
+                            <onleft>SetFocus(513,0,aboslute)</onleft>
+                            <onleft>7000</onleft>
+                            <onback>SetFocus(513,0,absolute)</onback>
+                            <onback>7000</onback>
                             <include content="Animation_ConditionalFade" condition="!Skin.HasSetting(Views.DisableItemPeek)">
                                 <param name="condition">!Control.HasFocus(513)</param>
                             </include>
@@ -246,9 +292,6 @@
                         <onback>SetFocus(4001)</onback>
                         <onback condition="!$EXP[Exp_HomeMenu_IsTopBar]">SetProperty(SideMenu.HasFocus,True,Home)</onback>
                         <onback condition="$EXP[Exp_HomeMenu_IsTopBar]">ClearProperty(SideMenu.HasFocus,Home)</onback>
-
-                        <!-- <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus> -->
-                        <onfocus>SetProperty(TMDbHelper.Image.Override,True,Home)</onfocus>
 
                         <left>-80</left>
                         <top>-40</top>
@@ -337,6 +380,12 @@
                 <param name="condition">[!Control.HasFocus(513)]</param>
             </include>
             <control type="group">
+                <include>Animation_Home_SlideOver</include>
+                <include content="DialogInfo_ButtonGroup">
+                    <param name="include">Items_DialogVideoInfo_MenuBar</param>
+                </include>
+            </control>
+            <control type="group">
                 <include>Animation_View_SlideOver</include>
                 <include content="Furniture_Top">
                     <param name="label">$LOCALIZE[19033]</param>
@@ -347,9 +396,6 @@
             </control>
             <include>Furniture_Bottom_Right</include>
         </control>
-        <include content="DialogInfo_VideoButtons">
-            <param name="visible">true</param>
-        </include>
 
         <include content="Object_Hidden_List">
             <param name="id">5203</param>

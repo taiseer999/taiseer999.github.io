@@ -14,27 +14,6 @@
         </include>
     </include>
 
-    <include name="DialogInfo_VideoButtons">
-        <param name="visible">!Window.IsVisible(1120)</param>
-        <definition>
-            <control type="group">
-                <visible>$PARAM[visible]</visible>
-                <include condition="$EXP[Exp_HomeMenu_IsTopBar]">Animation_Home_Topbar</include>
-                <include condition="!$EXP[Exp_HomeMenu_IsTopBar]">Animation_Home_SlideOver</include>
-                <include condition="!$EXP[Exp_HomeMenu_IsTopBar] + Skin.HasSetting(SideMenu.EnableSearchAndOptions)">Home_Menu_SearchAndOptions</include>
-                <include content="DialogInfo_ButtonGroup" condition="!$EXP[Exp_HomeMenu_IsTopBar]">
-                    <param name="include">Items_DialogVideoInfo_MenuBar</param>
-                    <param name="vertical">true</param>
-                </include>
-                <include content="DialogInfo_ButtonGroup" condition="$EXP[Exp_HomeMenu_IsTopBar]">
-                    <param name="include">Items_DialogVideoInfo_MenuBar</param>
-                    <param name="vertical">false</param>
-                    <param name="itemgap">0</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
     <include name="DialogInfo_InfoDetails_Group">
         <top>390</top>
         <left>-200</left>
@@ -87,8 +66,15 @@
         <onunload>SetProperty(SideMenu.HasFocus,$INFO[Window(Home).Property(SideMenu.HasFocus.Prev)],Home)</onunload>
         <onunload>ClearProperty(SideMenu.HasFocus.Prev,Home)</onunload>
 
+
         <onload>ClearProperty(TMDbHelper.WidgetContainer)</onload>
+        <onload>SetProperty(TMDbHelper.Blur.SourceImage,$INFO[Window(home).Property(TMDbHelper.Blur.SourceImage)])</onload>
+        <onload>ClearProperty(CropImage,Home)</onload>
+        <onload>ClearProperty(BlurImage,Home)</onload>
+        <onload>ClearProperty(BlurImage.Original,Home)</onload>
+        <onload>ClearProperty(TMDbHelper.Image.Override,Home)</onload>
         <onload>ClearProperty(ReviewsActive)</onload>
+
 
         <onload condition="![String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,director) | String.IsEqual(ListItem.Property(TMDb_Type),person)]">AlarmClock(reclear,ClearProperty(TMDbHelper.WidgetContainer),00:00,silent)</onload>
         <onload condition="![String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,director) | String.IsEqual(ListItem.Property(TMDb_Type),person)]">AlarmClock(refocus,SetFocus(4001),00:00,silent)</onload>
@@ -101,6 +87,10 @@
         <onunload>Dialog.Close(1120)</onunload>
         <onunload>Dialog.Close(1121)</onunload>
         <onunload>ClearProperty(DetailsView,12003)</onunload>
+        <onunload>ClearProperty(CropImage,Home)</onunload>
+        <onunload>ClearProperty(BlurImage,Home)</onunload>
+        <onunload>ClearProperty(BlurImage.Original,Home)</onunload>
+        <onunload>ClearProperty(TMDbHelper.Image.Override,Home)</onunload>
     </include>
 
     <include name="DialogInfo_List_Movement">
@@ -932,7 +922,7 @@
     <include name="DialogInfo_ButtonGroup_Horz">
         <bottom>20</bottom>
         <height>160</height>
-        <left>20</left>
+        <left>45</left>
     </include>
 
     <include name="DialogInfo_ButtonGroup">
