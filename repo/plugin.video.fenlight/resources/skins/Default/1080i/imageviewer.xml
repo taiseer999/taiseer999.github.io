@@ -49,7 +49,7 @@
                         <height>1080</height>
                         <aspectratio>keep</aspectratio>
                         <fadetime>200</fadetime>
-                        <texture>$INFO[ListItem.Property(image)]</texture>
+                        <texture fallback="$INFO[Window.Property(backup_thumbnail)]">$INFO[ListItem.Property(image)]</texture>
                     </control>
                 </focusedlayout>
             </control>
@@ -76,7 +76,7 @@
                     <left>1590</left>
                     <width max="300">auto</width>
                     <height>20</height>
-                    <font>font_midi</font> <!-- FENLIGHT_38 -->
+                    <font>font16</font> <!-- FENLIGHT_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -87,7 +87,7 @@
                     <left>1540</left>
                     <width max="350">auto</width>
                     <height>20</height>
-                    <font>font_tiny</font> <!-- FENLIGHT_21 -->
+                    <font>font10</font> <!-- FENLIGHT_21 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>right</align>
                     <aligny>center</aligny>
@@ -98,7 +98,7 @@
                     <top>32</top>
                     <width>1520</width>
                     <height>20</height>
-                    <font>font_tiny</font> <!-- FENLIGHT_21 -->
+                    <font>font10</font> <!-- FENLIGHT_21 -->
                     <textcolor>FFFFFFFF</textcolor>
                     <align>left</align>
                     <aligny>center</aligny>

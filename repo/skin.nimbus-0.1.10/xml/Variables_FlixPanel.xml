@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <!-- RATINGS INFOPANEL VARIABLES -->
+	<!-- Released -->
+	<variable name="RI_Year">
+		<value condition="!String.IsEmpty(ListItem.Year)">$INFO[ListItem.Year]</value>
+	</variable>
+	<!-- Aired -->
+	<variable name="RI_Aired">
+		<value condition="!String.IsEmpty(ListItem.Premiered)">$INFO[ListItem.Premiered]</value>
+	</variable>
+	<!-- MPAA Rating -->
+	<variable name="RI_Mpaa">
+		<value condition="!String.IsEmpty(ListItem.Mpaa)">$INFO[ListItem.Mpaa, [COLOR accent_color]•[/COLOR] ]</value>
+	</variable>
+	<variable name="Season_Mpaa">
+		<value condition="!String.IsEmpty(ListItem.Mpaa)">$INFO[ListItem.Mpaa]</value>
+	</variable>
+	<!-- Genre -->
+	<variable name="RI_Genre">
+		<value condition="!String.IsEmpty(ListItem.Genre)">$INFO[ListItem.Genre, [COLOR accent_color]•[/COLOR] ]</value>
+	</variable>
+	<!-- Director -->
+	<variable name="RI_Director">
+		<value condition="!String.IsEmpty(ListItem.Director)">$INFO[ListItem.Director, [COLOR accent_color]•[/COLOR] ]</value>
+	</variable>
+	<!-- Network -->
+	<variable name="RI_Network">
+		<value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio, [COLOR accent_color]•[/COLOR] ]</value>
+	</variable>
+	<!-- Total Seasons -->
+	<variable name="RI_TotalSeasons">
+		<value condition="!String.IsEmpty(ListItem.Property(TotalSeasons))">$INFO[ListItem.Property(TotalSeasons), [COLOR accent_color]•[/COLOR] , seasons]</value>
+	</variable>
+	<!-- Status -->
+	<variable name="RI_Status">
+		<value condition="!String.IsEmpty(ListItem.Status)">$INFO[ListItem.Status, [COLOR accent_color]•[/COLOR] ]</value>
+	</variable>
+	<!-- Runtime -->
+	<variable name="RI_Runtime">
+		<value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(h), [COLOR accent_color]•[/COLOR] ,h] $INFO[ListItem.Duration(m),,m]</value>
+	</variable>
+	<!-- Runtime Episodes -->
+	<variable name="RI_RuntimeEpisodes">
+		<value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(mins), [COLOR accent_color]•[/COLOR] ,m]</value>
+	</variable>
+	<!-- Ends at: -->
+	<variable name="RI_Endsat">
+		<value condition="!String.IsEmpty(ListItem.EndTime) + !String.IsEmpty(ListItem.Duration)">$INFO[ListItem.EndTime, [COLOR accent_color]•[/COLOR] $LOCALIZE[31080]: ]</value>
+	</variable>
+	<!-- Plot -->
+	<variable name="RI_Plot">
+		<value condition="!String.IsEmpty(ListItem.Plot)">$INFO[ListItem.Plot]</value>
+		<value></value>
+	</variable>
+
+	<variable name="InfoPanelTop">
+		<!-- MOVIES -->
+		<value condition="!ListItem.IsCollection + $EXP[isMovie]">$VAR[RI_Year]$VAR[RI_Mpaa]$VAR[RI_Runtime]$VAR[RI_Endsat]</value>
+		<!-- SHOWS -->
+		<value condition="!ListItem.IsCollection + $EXP[isTVShow]">$VAR[RI_Year]$VAR[RI_Mpaa]$VAR[RI_Network]$VAR[RI_Status]</value>
+		<!-- SEASONS -->
+		<value condition="!ListItem.IsCollection + $EXP[isSeason]">$VAR[Season_Mpaa]$VAR[RI_Network]$VAR[RI_RuntimeEpisodes]</value>
+		<!-- EPISODES -->
+		<value condition="!ListItem.IsCollection + $EXP[isEpisode]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[RI_Network]$VAR[RI_RuntimeEpisodes]</value>
+	</variable>
+	
+	<variable name="InfoPanelBottom">
+		<!-- MOVIES, TVSHOWS, SEASONS, EPISODES, COLLECTIONS -->
+		<value condition="!ListItem.IsCollection + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]]">$VAR[RI_Plot]</value>
+	</variable>
+
+	<variable name="FlixPanelRuntime">
+		<!-- MOVIES, TVSHOWS, SEASONS, EPISODES, COLLECTIONS -->
+		<value condition="$EXP[isMovie]">$INFO[Container($PARAM[id]).ListItem.Duration(h),,h] $INFO[ListItem.Duration(m),,m]</value>
+		<value condition="$EXP[isTVShow] |  $EXP[isSeason] |  $EXP[isEpisode]">$INFO[Container($PARAM[id]).ListItem.Duration(mins),,m]</value>
+	</variable>
+
+	<variable name="EpisodeType">
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)">Series Premiere</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_premiere)">Season Premiere</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)">Mid-Season Premiere</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_finale)">Series Finale</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_finale)">Season Finale</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)">Mid-Season Finale</value>
+	</variable>
+
+	<variable name="EpisodeTypeTextColor">
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + [String.IsEqual(ListItem.Property(episode_type), series_premiere) | String.IsEqual(ListItem.Property(episode_type), season_premiere) | String.IsEqual(ListItem.Property(episode_type), mid_season_finale) | String.IsEqual(ListItem.Property(episode_type), mid_season_premiere) | String.IsEqual(ListItem.Property(episode_type), season_finale) | String.IsEqual(ListItem.Property(episode_type), series_finale)]">ffffffff</value>
+
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), series_premiere)">ff8fc5d9</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), season_premiere)">ff8fd9c5</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)">ffc5d98f</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), series_finale)">ffc58fd9</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), season_finale)">ffd98fc5</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), mid_season_finale)">ffd9c58f</value>
+	</variable>
+
+	<variable name="EpisodeTypeColor">
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), series_premiere)">ff116483</value>
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), season_premiere)">ff118364</value>
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)">ff4c6017</value>
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), series_finale)">ff641183</value>
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), season_finale)">ff831164</value>
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), mid_season_finale)">ff836411</value>
+
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), series_premiere)">338fc5d9</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), season_premiere)">338fd9c5</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)">33c5d98f</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), series_finale)">33c58fd9</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), season_finale)">33d98fc5</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur) + String.IsEqual(ListItem.Property(episode_type), mid_season_finale)">33d9c58f</value>
+	</variable>
+
+	<variable name="FlixIconColor">
+		<value condition="!Skin.HasSetting(Enable.BackgroundBlur)">FF2E2E2E</value>
+		<value condition="Skin.HasSetting(Enable.BackgroundBlur)">26CCCCCC</value>
+	</variable>
+
+</includes>

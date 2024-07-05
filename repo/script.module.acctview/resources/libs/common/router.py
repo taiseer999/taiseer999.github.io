@@ -179,19 +179,6 @@ class Router:
                     xbmc.log('%s: Traktit.py Revoke API Fen Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
-            if xbmcvfs.exists(var.chk_fenlt):
-                try:
-                    with open(var.path_fenlt,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.fenlt_client).replace(var.secret_am,var.fenlt_secret)
-
-                    with open(var.path_fenlt,'w') as f:
-                        f.write(client)
-                except:
-                    xbmc.log('%s: Traktit.py Revoke API Fen Light Failed!' % var.amgr, xbmc.LOGINFO)
-                    pass
-
             if xbmcvfs.exists(var.chk_coal):
                 try:
                     with open(var.path_coal,'r') as f:
@@ -374,6 +361,19 @@ class Router:
                     xbmc.log('%s: Traktit.py Revoke API Aliunde Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
+            if xbmcvfs.exists(var.chk_night):
+                try:
+                    with open(var.path_night,'r') as f:
+                        data = f.read()
+
+                    client = data.replace(var.client_am,var.night_client).replace(var.secret_am,var.night_secret)
+
+                    with open(var.path_night,'w') as f:
+                        f.write(client)
+                except:
+                    xbmc.log('%s: Traktit.py Revoke API Nightwing Lite Failed!' % var.amgr, xbmc.LOGINFO)
+                    pass
+                
             if xbmcvfs.exists(var.chk_crew):
                 try:
                     with open(var.path_crew,'r') as f:
@@ -398,19 +398,6 @@ class Router:
                         f.write(client)
                 except:
                     xbmc.log('%s: Traktit.py Revoke API Scrubs V2 Failed!' % var.amgr, xbmc.LOGINFO)
-                    pass
-
-            if xbmcvfs.exists(var.chk_labjr):
-                try:
-                    with open(var.path_labjr,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.labjr_client).replace(var.secret_am,var.labjr_secret)
-
-                    with open(var.path_labjr,'w') as f:
-                        f.write(client)
-                except:
-                    xbmc.log('%s: Traktit.py Revoke API TheLabjr Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
             if xbmcvfs.exists(var.chk_tmdbh):
@@ -1385,6 +1372,19 @@ class Router:
                             xbmc.log('%s: Traktit.py Revoke API Aliunde Failed!' % var.amgr, xbmc.LOGINFO)
                             pass
 
+                    if xbmcvfs.exists(var.chk_night):
+                        try:
+                            with open(var.path_night,'r') as f:
+                                data = f.read()
+
+                            client = data.replace(var.client_am,var.night_client).replace(var.secret_am,var.night_secret)
+
+                            with open(var.path_night,'w') as f:
+                                f.write(client)
+                        except:
+                            xbmc.log('%s: Traktit.py Revoke API Nightwing Lite Failed!' % var.amgr, xbmc.LOGINFO)
+                            pass
+                        
                     if xbmcvfs.exists(var.chk_crew):
                         try:
                             with open(var.path_crew,'r') as f:
@@ -1409,19 +1409,6 @@ class Router:
                                 f.write(client)
                         except:
                             xbmc.log('%s: Traktit.py Revoke API Scrubs V2 Failed!' % var.amgr, xbmc.LOGINFO)
-                            pass
-
-                    if xbmcvfs.exists(var.chk_labjr):
-                        try:
-                            with open(var.path_labjr,'r') as f:
-                                data = f.read()
-
-                            client = data.replace(var.client_am,var.labjr_client).replace(var.secret_am,var.labjr_secret)
-
-                            with open(var.path_labjr,'w') as f:
-                                f.write(client)
-                        except:
-                            xbmc.log('%s: Traktit.py Revoke API TheLabjr Failed!' % var.amgr, xbmc.LOGINFO)
                             pass
 
                     if xbmcvfs.exists(var.chk_tmdbh):

@@ -46,7 +46,7 @@
                 <top>12</top>
                 <left>72</left>
                 <height>20</height>
-                <font>font_mini</font> <!-- FENLIGHT_26 -->
+                <font>font12</font> <!-- FENLIGHT_26 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
                 <align>center</align>
@@ -83,7 +83,7 @@
                         <left>15</left>
                         <top>45</top>
                         <height>5</height>
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
@@ -94,7 +94,7 @@
                         <left>440</left>
                         <top>45</top>
                         <height>5</height>
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <textcolor>FFA9A8A8</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -112,7 +112,7 @@
                         <top>45</top>
                         <height>5</height>
                         <width max="360">auto</width>
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <textcolor>FF1F2020</textcolor>
                         <align>left</align>
                         <aligny>center</aligny>
@@ -124,7 +124,7 @@
                         <left>440</left>
                         <top>45</top>
                         <height>5</height>
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <textcolor>FF4a4347</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -167,7 +167,7 @@
                     <left>30</left>
                     <width>1635</width>
                     <height>20</height>
-                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                    <font>font12</font> <!-- FENLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>[UPPERCASE]$INFO[Window.Property(list_label)][/UPPERCASE]</label>
                     <align>center</align>
@@ -179,7 +179,7 @@
                     <width>1530</width>
                     <height>70</height>
                     <control type="textbox">
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFCCCCCC</textcolor>
@@ -188,7 +188,7 @@
                         <visible>Control.HasFocus(2100)</visible>
                     </control>
                     <control type="textbox">
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFCCCCCC</textcolor>
@@ -210,7 +210,7 @@
                     <onleft>2100</onleft>
                     <onright>2100</onright>
                     <label>Save and Exit</label>
-                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                    <font>font12</font> <!-- FENLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <focusedcolor>FF1F2020</focusedcolor>
                     <texturefocus colordiffuse="FFCCCCCC" border="30">fenlight_common/circle.png</texturefocus>
@@ -229,7 +229,7 @@
                     <onleft>2100</onleft>
                     <onright>2100</onright>
                     <label>Exit</label>
-                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                    <font>font12</font> <!-- FENLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <focusedcolor>FF1F2020</focusedcolor>
                     <texturefocus colordiffuse="FFCCCCCC" border="30">fenlight_common/circle.png</texturefocus>

@@ -348,6 +348,42 @@ class Auth:
                 xbmc.log('%s: Umbrella Real-Debrid Failed!' % var.amgr, xbmc.LOGINFO)
                 pass
 
+    #Infinity RD
+        try:
+                if xbmcvfs.exists(var.chk_infinity) and xbmcvfs.exists(var.chkset_infinity):
+                        chk_auth_infinity = xbmcaddon.Addon('plugin.video.infinity').getSetting("realdebridtoken")
+                        chk_auth_infinity_pm = xbmcaddon.Addon('plugin.video.infinity').getSetting("premiumizetoken")
+                        chk_auth_infinity_ad = xbmcaddon.Addon('plugin.video.infinity').getSetting("alldebridtoken")
+                        if not str(var.chk_accountmgr_tk_rd) == str(chk_auth_infinity) or str(chk_auth_infinity) == '':
+                        
+                                addon = xbmcaddon.Addon("plugin.video.infinity")
+                                addon.setSetting("realdebridusername", your_rd_username)
+                                addon.setSetting("realdebridtoken", your_rd_token)
+                                addon.setSetting("realdebrid.clientid", your_rd_client_id)
+                                addon.setSetting("realdebridrefresh", your_rd_refresh)
+                                addon.setSetting("realdebridsecret", your_rd_secret)
+
+                                enabled_rd = ("true")
+                                addon.setSetting("realdebrid.enable", enabled_rd)
+
+                 
+                                if str(chk_auth_infinity_pm) != '':
+                                        enabled_pm = ("true")
+                                        addon.setSetting("premiumize.enable", enabled_pm)
+                                else:
+                                        enabled_pm = ("false")
+                                        addon.setSetting("premiumize.enable", enabled_pm)
+
+                                if str(chk_auth_infinity_ad) != '':
+                                        enabled_ad = ("true")
+                                        addon.setSetting("alldebrid.enable", enabled_ad)
+                                else:
+                                        enabled_ad = ("false")
+                                        addon.setSetting("alldebrid.enable", enabled_ad)
+        except:
+                xbmc.log('%s: Infinity Real-Debrid Failed!' % var.amgr, xbmc.LOGINFO)
+                pass
+            
      #Dradis RD
         try:
                 if xbmcvfs.exists(var.chk_dradis) and xbmcvfs.exists(var.chkset_dradis):
@@ -756,6 +792,47 @@ class Auth:
                 xbmc.log('%s: Aliunde Real-Debrid Failed!' % var.amgr, xbmc.LOGINFO)
                 pass
 
+    #Nightwing Lite RD
+        try:
+                if xbmcvfs.exists(var.chk_night) and not xbmcvfs.exists(var.night_ud):
+                        os.mkdir(var.night_ud)
+                        xbmcvfs.copy(os.path.join(var.night), os.path.join(var.chkset_night))
+                        
+                if xbmcvfs.exists(var.chk_night) and not xbmcvfs.exists(var.chkset_night):
+                        xbmcvfs.copy(os.path.join(var.night), os.path.join(var.chkset_night))
+
+                if xbmcvfs.exists(var.chk_night) and xbmcvfs.exists(var.chkset_night):
+                        chk_auth_night = xbmcaddon.Addon('plugin.video.NightwingLite').getSetting("rd.auth")
+                        chk_auth_night_pm = xbmcaddon.Addon('plugin.video.NightwingLite').getSetting("premiumize.token")
+                        chk_auth_night_ad = xbmcaddon.Addon('plugin.video.NightwingLite').getSetting("alldebrid.token")
+                        if not str(var.chk_accountmgr_tk_rd) == str(chk_auth_night) or str(chk_auth_night) == '':
+
+                                addon = xbmcaddon.Addon("plugin.video.NightwingLite")
+                                addon.setSetting("rd.auth", your_rd_token)
+                                addon.setSetting("rd.client_id", your_rd_client_id)
+                                addon.setSetting("rd.refresh", your_rd_refresh)
+                                addon.setSetting("rd.secret", your_rd_secret)
+
+                                rd_use = ("true")
+                                addon.setSetting("debrid_use_rd", rd_use)
+
+                                if str(chk_auth_night_pm) != '':
+                                        pm_use = ("true")
+                                        addon.setSetting("debrid_use_pm", pm_use)
+                                else:
+                                        pm_use = ("false")
+                                        addon.setSetting("debrid_use_pm", pm_use)
+                                        
+                                if str(chk_auth_night_ad) != '':
+                                        ad_use = ("true")
+                                        addon.setSetting("debrid_use_ad", ad_use)
+                                else:
+                                        ad_use = ("false")
+                                        addon.setSetting("debrid_use_ad", ad_use)
+        except:
+                xbmc.log('%s: Nightwing Lite Real-Debrid Failed!' % var.amgr, xbmc.LOGINFO)
+                pass
+            
      #Otaku RD
         try:
                 if xbmcvfs.exists(var.chk_otaku) and not xbmcvfs.exists(var.otaku_ud):

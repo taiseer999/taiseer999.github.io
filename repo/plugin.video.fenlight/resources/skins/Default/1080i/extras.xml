@@ -35,7 +35,7 @@
                         <left>1590</left>
                         <width max="300">auto</width>
                         <height>20</height>
-                        <font>font_midi</font> <!-- FENLIGHT_38 -->
+                        <font>font16</font> <!-- FENLIGHT_38 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -46,7 +46,7 @@
                         <left>1540</left>
                         <width max="350">auto</width>
                         <height>20</height>
-                        <font>font_tiny</font> <!-- FENLIGHT_21 -->
+                        <font>font10</font> <!-- FENLIGHT_21 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -68,7 +68,7 @@
                     <control type="label">
                         <width max="500">auto</width>
                         <height>20</height>
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>top</aligny>
@@ -78,7 +78,7 @@
                     <control type="label">
                         <width max="500">auto</width>
                         <height>20</height>
-                        <font>font_mini</font> <!-- FENLIGHT_26 -->
+                        <font>font12</font> <!-- FENLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>top</aligny>
@@ -112,7 +112,7 @@
                         <left>70</left>
                         <width max="1130">auto</width>
                         <height>30</height>
-                        <font>font_huge_bold</font> <!-- FENLIGHT_60_BOLD -->
+                        <font>Bold60</font> <!-- FENLIGHT_60_BOLD -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>center</align>
                         <aligny>bottom</aligny>
@@ -130,7 +130,7 @@
                 <control type="label">
                     <width max="1150">auto</width>
                     <height>25</height>
-                    <font>font_midi</font> <!-- FENLIGHT_38 -->
+                    <font>font16</font> <!-- FENLIGHT_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <label>[I]$INFO[Window.Property(genre)][/I]</label>
@@ -140,7 +140,7 @@
                     <top>55</top>
                     <width max="1150">auto</width>
                     <height>25</height>
-                    <font>font_midi</font> <!-- FENLIGHT_38 -->
+                    <font>font16</font> <!-- FENLIGHT_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                 </control>
@@ -149,7 +149,7 @@
                     <top>105</top>
                     <width max="1150">auto</width>
                     <height>25</height>
-                    <font>font_midi</font> <!-- FENLIGHT_38 -->
+                    <font>font16</font> <!-- FENLIGHT_38 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                 </control>
@@ -293,7 +293,7 @@
                             <height>70</height>
                             <onleft>13</onleft>
                             <onright>11</onright>
-                            <onup>2062</onup>
+                            <onup>2061</onup>
                             <ondown>14</ondown>
                             <label>$INFO[Window.Property(button10.label)]</label>
                             <font>font13</font> <!-- FENLIGHT_30 -->
@@ -309,7 +309,7 @@
                             <height>70</height>
                             <onleft>10</onleft>
                             <onright>12</onright>
-                            <onup>2062</onup>
+                            <onup>2061</onup>
                             <ondown>15</ondown>
                             <label>$INFO[Window.Property(button11.label)]</label>
                             <font>font13</font> <!-- FENLIGHT_30 -->
@@ -325,7 +325,7 @@
                             <height>70</height>
                             <onleft>11</onleft>
                             <onright>13</onright>
-                            <onup>2062</onup>
+                            <onup>2061</onup>
                             <ondown>16</ondown>
                             <label>$INFO[Window.Property(button12.label)]</label>
                             <font>font13</font> <!-- FENLIGHT_30 -->
@@ -341,7 +341,7 @@
                             <height>70</height>
                             <onleft>12</onleft>
                             <onright>10</onright>
-                            <onup>2062</onup>
+                            <onup>2061</onup>
                             <ondown>17</ondown>
                             <label>$INFO[Window.Property(button13.label)]</label>
                             <font>font13</font> <!-- FENLIGHT_30 -->
@@ -428,7 +428,7 @@
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -479,7 +479,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]Cast $INFO[Window.Property(cast.number)][/B]</label>
                             <visible>!Control.HasFocus(2050)</visible>
@@ -487,7 +487,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]Cast | [/B]$INFO[Container(2050).ListItem.Property(name)]$INFO[Container(2050).ListItem.Property(role), • ]</label>
                             <visible>Control.HasFocus(2050)</visible>
@@ -581,7 +581,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]Recommended $INFO[Window.Property(recommended.number)][/B]</label>
                             <visible>!Control.HasFocus(2051)</visible>
@@ -589,7 +589,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]Recommended | [/B]$INFO[Container(2051).ListItem.Property(name)]$INFO[Container(2051).ListItem.Property(release_date), • ]$INFO[Container(2051).ListItem.Property(vote_average), • ]</label>
                             <visible>Control.HasFocus(2051)</visible>
@@ -683,7 +683,7 @@
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -709,7 +709,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -728,7 +728,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -776,7 +776,7 @@
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -802,7 +802,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -821,7 +821,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -869,7 +869,7 @@
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -895,7 +895,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -914,7 +914,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -962,7 +962,7 @@
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -988,7 +988,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1007,7 +1007,7 @@
                                     <left>15</left>
                                     <width>540</width>
                                     <height>308</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>top</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1055,7 +1055,7 @@
                         <control type="label">
                             <width max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>left</align>
                             <aligny>bottom</aligny>
@@ -1088,7 +1088,7 @@
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1100,7 +1100,7 @@
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1127,7 +1127,7 @@
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1139,7 +1139,7 @@
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                    <font>font12</font> <!-- FENLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1158,7 +1158,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]Videos $INFO[Window.Property(imdb_videos.number)][/B]</label>
                             <visible>!Control.HasFocus(2057)</visible>
@@ -1166,7 +1166,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]Videos | [/B]$INFO[Container(2057).ListItem.Property(name)]</label>
                             <visible>Control.HasFocus(2057)</visible>
@@ -1259,7 +1259,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]More from Year $INFO[Window.Property(more_from_year.number)][/B]</label>
                             <visible>!Control.HasFocus(2058)</visible>
@@ -1267,7 +1267,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]More from Year | [/B]$INFO[Container(2058).ListItem.Property(name)]$INFO[Container(2058).ListItem.Property(release_date), • ]$INFO[Container(2058).ListItem.Property(vote_average), • ]</label>
                             <visible>Control.HasFocus(2058)</visible>
@@ -1361,7 +1361,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]More from Genres $INFO[Window.Property(more_from_genres.number)][/B]</label>
                             <visible>!Control.HasFocus(2059)</visible>
@@ -1369,7 +1369,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]More from Genres | [/B]$INFO[Container(2059).ListItem.Property(name)]$INFO[Container(2059).ListItem.Property(release_date), • ]$INFO[Container(2059).ListItem.Property(vote_average), • ]</label>
                             <visible>Control.HasFocus(2059)</visible>
@@ -1463,7 +1463,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]More from Networks $INFO[Window.Property(more_from_networks.number)][/B]</label>
                             <visible>!Control.HasFocus(2060)</visible>
@@ -1471,7 +1471,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]More from Networks | [/B]$INFO[Container(2060).ListItem.Property(name)]$INFO[Container(2060).ListItem.Property(release_date), • ]$INFO[Container(2060).ListItem.Property(vote_average), • ]</label>
                             <visible>Control.HasFocus(2060)</visible>
@@ -1565,7 +1565,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]$INFO[Window.Property(more_from_collection.name)] $INFO[Window.Property(more_from_collection.number)][/B]</label>
                             <visible>!Control.HasFocus(2061)</visible>
@@ -1573,7 +1573,7 @@
                         <control type="label">
                             <width min="30" max="1160">auto</width>
                             <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
+                            <font>font14</font> <!-- FENLIGHT_33 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <label>[B]$INFO[Window.Property(more_from_collection.name)] | [/B]$INFO[Container(2061).ListItem.Property(name)]$INFO[Container(2061).ListItem.Property(release_date), • ]$INFO[Container(2061).ListItem.Property(vote_average), • ]</label>
                             <visible>Control.HasFocus(2061)</visible>
@@ -1605,7 +1605,7 @@
                                 <top>6</top>
                                 <width>218</width>
                                 <height>348</height>
-                                <font>font_mini</font> <!-- FENLIGHT_26 -->
+                                <font>font12</font> <!-- FENLIGHT_26 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFCCCCCC</textcolor>
@@ -1667,7 +1667,7 @@
                             <width>1170</width>
                             <height>15</height>
                             <onup>2061</onup>
-                            <ondown>2062</ondown>
+                            <ondown>10</ondown>
                             <texturesliderbackground colordiffuse="FF1F2020">fenlight_common/white.png</texturesliderbackground>
                             <texturesliderbar colordiffuse="FF555556">fenlight_common/white.png</texturesliderbar>
                             <texturesliderbarfocus colordiffuse="FFCCCCCC">fenlight_common/white.png</texturesliderbarfocus>
@@ -1690,75 +1690,6 @@
                             <height>25</height>
                             <texture colordiffuse="FFCCCCCC" background="true" flipx="true">fenlight_common/arrow_left.png</texture>
                             <visible>[Control.HasFocus(2061) | Control.HasFocus(4061)] + Container(2061).HasNext</visible>
-                        </control>
-                    </control>
-                </control>
-                <!-- Media Images 2062 -->
-                <control type="group">
-                    <visible>Integer.IsGreater(Container(2062).NumItems,0)</visible>
-                    <height>760</height>
-                    <control type="group">
-                        <control type="label">
-                            <width min="30" max="1160">auto</width>
-                            <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]Media Images $INFO[Window.Property(media_images.number)][/B]</label>
-                            <visible>!Control.HasFocus(2062)</visible>
-                        </control>
-                        <control type="label">
-                            <width min="30" max="1160">auto</width>
-                            <height>20</height>
-                            <font>font_midi</font> <!-- FENLIGHT_33 -->
-                            <textcolor>FFCCCCCC</textcolor>
-                            <label>[B]Media Images | [/B]$INFO[Container(2062).ListItem.Property(name)]</label>
-                            <visible>Control.HasFocus(2062)</visible>
-                        </control>
-                        <control type="fixedlist" id="2062">
-                            <animation effect="slide" end="-320,0" time="0" condition="Integer.IsEqual(Container(2062).NumItems,1) | Integer.IsEqual(Container(2062).NumItems,2)">Conditional</animation>
-                            <top>60</top>
-                            <width>1180</width>
-                            <height>360</height>
-                            <onup>2061</onup>
-                            <ondown>10</ondown>
-                            <scrolltime tween="sine">500</scrolltime>
-                            <orientation>horizontal</orientation>
-                            <focusposition>1</focusposition>
-                            <movement>1</movement>
-                            <itemlayout height="320" width="320">
-                                <control type="image">
-                                    <left>10</left>
-                                    <top>10</top>
-                                    <width>300</width>
-                                    <height>300</height>
-                                    <aspectratio>keep</aspectratio>
-                                    <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                                </control>
-                            </itemlayout>
-                            <focusedlayout height="320" width="320">
-                                <control type="group">
-                                    <control type="image">
-                                        <animation type="Focus" reversible="false">
-                                            <effect type="zoom" end="105" time="75" tween="sine" easing="out" center="auto" />
-                                            <effect type="zoom" end="95" time="225" tween="sine" delay="100" easing="out" center="auto" />
-                                        </animation>
-                                        <left>0</left>
-                                        <top>0</top>
-                                        <width>320</width>
-                                        <height>320</height>
-                                        <texture colordiffuse="FFCCCCCC" border="12">fenlight_common/panel-256-box.png</texture>
-                                        <visible>Control.HasFocus(2062)</visible>
-                                    </control>
-                                    <control type="image">
-                                        <left>10</left>
-                                        <top>10</top>
-                                        <width>300</width>
-                                        <height>300</height>
-                                        <aspectratio>keep</aspectratio>
-                                        <texture>$INFO[ListItem.Property(thumbnail)]</texture>
-                                    </control>
-                                </control>
-                            </focusedlayout>
                         </control>
                     </control>
                 </control>

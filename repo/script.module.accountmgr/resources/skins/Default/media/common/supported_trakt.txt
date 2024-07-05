@@ -7,32 +7,31 @@
 6.  The Coalition
 7.  POV                  
 8.  Umbrella
-9.  Dradis
-10. Taz19
-11. Shadow
-12. Ghost
-13. Base
-14. Unleashed            
-15. Chain Reaction
-16. Magic Dragon
-17. Asgard
-18. Patriot
-19. Black Lightning
-20. Aliunde K19
-21. Homelander
-22. Quicksilver
-23. Chains Genocide
-24. Absolution       
-25. Shazam
-26. The Crew              
-27. Nightwing 
-28. Alvin
-29. TheLab
+9.  Infinity
+10. Dradis
+11. Taz19
+12. Shadow
+13. Ghost
+14. Base
+15. Unleashed            
+16. Chain Reaction
+17. Magic Dragon
+18. Asgard
+19. Patriot
+20. Black Lightning
+21. Aliunde K19
+22. Nightwing Lite
+23. Homelander
+24. Quicksilver
+25. Chains Genocide
+26. Absolution       
+27. Shazam
+28. The Crew              
+29. Alvin
 30. Moria
 31. Nine Lives
 32. Scrubs V2
-33. TheLabjr
-34. TMDb Helper
-35. Trakt Add-on
-36. All Accounts
-37. My Accounts
+33. TMDb Helper
+34. Trakt Add-on
+35. All Accounts
+36. My Accounts

@@ -14,6 +14,7 @@ from resources.libs.common import tools
 from resources.libs.common import var
 
 ORDER = ['umbrella',
+         'infinity',
          'dradis',
          'allact',
          'myact',
@@ -32,6 +33,18 @@ FILEID = {
         'default'  : 'filepursuit.api',
         'data'     : ['filepursuit.enable', 'filepursuit.api', 'filepursuit.priority'],
         'activate' : 'Addon.OpenSettings(plugin.video.umbrella)'},
+    'infinity': {
+        'name'     : 'Infinity',
+        'plugin'   : 'plugin.video.infinity',
+        'saved'    : 'infinity',
+        'path'     : os.path.join(CONFIG.ADDONS, 'plugin.video.infinity'),
+        'icon'     : os.path.join(CONFIG.ADDONS, 'plugin.video.infinity/resources/media/', 'icon.png'),
+        'fanart'   : os.path.join(CONFIG.ADDONS, 'plugin.video.infinity', 'fanart.jpg'),
+        'file'     : os.path.join(CONFIG.FILEFOLD, 'infinity_file'),
+        'settings' : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.infinity', 'settings.xml'),
+        'default'  : 'filepursuit.api',
+        'data'     : ['filepursuit.enable', 'filepursuit.api', 'filepursuit.priority'],
+        'activate' : 'Addon.OpenSettings(plugin.video.infinity)'},
     'dradis': {
         'name'     : 'Dradis',
         'plugin'   : 'plugin.video.dradis',
