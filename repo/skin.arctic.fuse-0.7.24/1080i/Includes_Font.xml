@@ -20,11 +20,11 @@
 -->
 
     <include name="Font_Default">
-        <param name="font_black">SamimFullBold.ttf</param>
-        <param name="font_bold">SamimFullBold.ttf</param>
-        <param name="font_regular">SamimFullBold.ttf</param>
-        <param name="font_light">SamimFullBold.ttf</param>
-        <param name="aspect_system">0.8</param>
+        <param name="font_black">PFDinTextArabic-XBlack.ttf</param>
+            <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
+            <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
+            <param name="font_light">PFDinTextArabic-Regular.ttf</param>
+            <param name="aspect_system">0.8</param>
         <param name="aspect_standard">1.0</param>
         <definition>
 
