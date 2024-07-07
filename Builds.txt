@@ -2,7 +2,7 @@ id="plugin.program.openwizard"
 version="1.0.0"
 zip="url.to.wizard"
 
-name="AF Arabic."
+name="AF Arabic."Widgets""
 version="2.9"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=pqdgTaXIr%2FF45eiFhwqHt2K1t5Vva681djPqcUndI3AI48kn2GVdb5JVVQC1M0hO&expiry=FAOlf1It%2Flsg2%2FDHaZN9dw%3D%3D&mac=2884fcaf5fb572e1d76896773a9d095aad4723df58aeb9ceecb849228d62a06e"
 minor="http://"
