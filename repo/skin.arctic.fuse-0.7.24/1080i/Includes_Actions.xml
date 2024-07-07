@@ -97,6 +97,20 @@
         <onunload>SetProperty(Transition.WidgetStyle,$INFO[Window(Home).Property(Transition.WidgetStyle.Previous)],Home)</onunload>
     </include>
 
+    <include name="Action_PreserveProcessedImagesProp_Onload">
+        <onload>SetProperty(CropImage,$ESCINFO[Window(Home).Property(TMDBHelper.ListItem.CropImage)],Home)</onload>
+        <onload>SetProperty(BlurImage,$ESCINFO[Window(Home).Property(TMDBHelper.ListItem.BlurImage)],Home)</onload>
+        <onload>SetProperty(BlurImage.Original,$ESCINFO[Window(Home).Property(TMDBHelper.ListItem.BlurImage.Original)],Home)</onload>
+        <onload>SetProperty(TMDbHelper.Image.Override,True,Home)</onload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">SetProperty(TMDbHelper.ListItem.CropImage,$ESCINFO[Window(Home).Property(CropImage)],Home)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">SetProperty(TMDbHelper.ListItem.BlurImage,$ESCINFO[Window(Home).Property(BlurImage)],Home)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">SetProperty(TMDbHelper.ListItem.BlurImage.Original,$ESCINFO[Window(Home).Property(BlurImage.Original)],Home)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">ClearProperty(CropImage,Home)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">ClearProperty(BlurImage,Home)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">ClearProperty(BlurImage.Original,Home)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">ClearProperty(TMDbHelper.Image.Override,Home)</onunload>
+    </include>
+
     <include name="Action_View_SlideOver_OnFocus">
         <onfocus condition="!$EXP[Exp_HomeMenu_IsStatic]">ClearProperty(SideMenu.HasFocus,Home)</onfocus>
         <onfocus condition="$EXP[Exp_HomeMenu_IsStatic]">SetProperty(SideMenu.HasFocus,True,Home)</onfocus>
@@ -297,6 +311,7 @@
 
     <include name="Action_Recommendations_OnClick">
         <oninfo>Action(Select)</oninfo>
+        <onclick>ClearProperty(TMDbHelper.Image.Override,Home)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Container($PARAM[id]).ListItem.FolderPath],call_auto=1190,return)</onclick>
         <onclick>Dialog.Close(1120,true)</onclick>
         <onclick>Dialog.Close(1121,true)</onclick>
@@ -412,31 +427,20 @@
         <onunload>SetProperty(ViewTransition,Visible,$PARAM[window])</onunload>
     </include>
 
-    <include name="Acting_SetImage_Reverse_OnRight">
-        <onright condition="$PARAM[condition]">SetProperty(TMDbHelper.ListItem.BlurImage.Original,$INFO[Window(Home).Property(BlurImage.Original)],Home)</onright>
-        <onright condition="$PARAM[condition]">SetProperty(TMDbHelper.ListItem.BlurImage,$INFO[Window(Home).Property(BlurImage)],Home)</onright>
-        <onright condition="$PARAM[condition]">SetProperty(TMDbHelper.ListItem.CropImage,$INFO[Window(Home).Property(CropImage)],Home)</onright>
-    </include>
-
-    <include name="Acting_SetImage_OnRight">
-        <onright condition="$PARAM[condition]">SetProperty(BlurImage.Original,$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage.Original)],Home)</onright>
-        <onright condition="$PARAM[condition]">SetProperty(BlurImage,$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage)],Home)</onright>
-        <onright condition="$PARAM[condition]">SetProperty(CropImage,$INFO[Window(Home).Property(TMDbHelper.ListItem.CropImage)],Home)</onright>
-    </include>
-
-    <include name="Acting_SetImage_Reverse_OnUp">
-        <onup condition="$PARAM[condition]">SetProperty(TMDbHelper.ListItem.BlurImage.Original,$INFO[Window(Home).Property(BlurImage.Original)],Home)</onup>
-        <onup condition="$PARAM[condition]">SetProperty(TMDbHelper.ListItem.BlurImage,$INFO[Window(Home).Property(BlurImage)],Home)</onup>
-        <onup condition="$PARAM[condition]">SetProperty(TMDbHelper.ListItem.CropImage,$INFO[Window(Home).Property(CropImage)],Home)</onup>
-    </include>
-
-    <include name="Acting_SetImage_OnUp">
-        <onup condition="$PARAM[condition]">SetProperty(BlurImage.Original,$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage.Original)],Home)</onup>
-        <onup condition="$PARAM[condition]">SetProperty(BlurImage,$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage)],Home)</onup>
-        <onup condition="$PARAM[condition]">SetProperty(CropImage,$INFO[Window(Home).Property(TMDbHelper.ListItem.CropImage)],Home)</onup>
+    <include name="Action_1120_OnWidget">
+        <onup>SetFocus(513,0,absolute)</onup>
+        <onup>7000</onup>
+        <ondown>SetFocus(513,0,absolute)</ondown>
+        <ondown>7000</ondown>
+        <onleft>SetFocus(513,0,aboslute)</onleft>
+        <onleft>7000</onleft>
+        <onback>SetFocus(513,0,absolute)</onback>
+        <onback>7000</onback>
+        <onfocus>ClearProperty(TMDbHelper.Image.Override,Home)</onfocus>
     </include>
 
     <include name="Action_VideoInfo_Main_OnRight">
+
         <onright condition="$PARAM[condition]">SetProperty(Director_Label,$VAR[Label_FromDirector],1120)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Director_Image,$VAR[Image_DirectorIcon],1120)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Director_Query,$VAR[Path_FromDirector],1120)</onright>
@@ -464,12 +468,12 @@
         <onright condition="$PARAM[condition]">SetProperty(Item_Title,$VAR[Label_Title],1120)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Item_Query,$VAR[Path_Param_Query],1120)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Item_Type,$VAR[Path_Param_Type],1120)</onright>
-        
-        <include content="Acting_SetImage_OnRight">
-            <param name="condition">$PARAM[condition]</param>
-        </include>
 
         <onright condition="$PARAM[condition]">SetProperty(Episodes_Label,$LOCALIZE[20366],1120)</onright>
+
+        <!-- Fake blur hack to preserve image -->
+        <onright condition="$PARAM[condition]">SetProperty(TMDBHelper.ListItem.BlurImage,$VAR[Image_Background],Home)</onright>
+        <onright condition="$PARAM[condition]">SetProperty(TMDBHelper.ListItem.BlurImage.Original,$VAR[Image_Foreground],Home)</onright>
 
         <onright condition="$PARAM[condition]">SetFocus(7001)</onright>
         <onright condition="$PARAM[condition]">ActivateWindow(1120)</onright>
@@ -504,11 +508,11 @@
         <onup condition="$PARAM[condition]">SetProperty(Item_Query,$VAR[Path_Param_Query],1120)</onup>
         <onup condition="$PARAM[condition]">SetProperty(Item_Type,$VAR[Path_Param_Type],1120)</onup>
 
-        <include content="Acting_SetImage_OnUp">
-            <param name="condition">$PARAM[condition]</param>
-        </include>
-
         <onup condition="$PARAM[condition]">SetProperty(Episodes_Label,$LOCALIZE[20366],1120)</onup>
+
+        <!-- Fake blur hack to preserve image -->
+        <onup condition="$PARAM[condition]">SetProperty(TMDBHelper.ListItem.BlurImage,$VAR[Image_Background],Home)</onup>
+        <onup condition="$PARAM[condition]">SetProperty(TMDBHelper.ListItem.BlurImage.Original,$VAR[Image_Foreground],Home)</onup>
 
         <onup condition="$PARAM[condition]">SetFocus(7001)</onup>
         <onup condition="$PARAM[condition]">ActivateWindow(1120)</onup>
@@ -518,10 +522,6 @@
         <onright condition="$PARAM[condition]">SetProperty(Item_Title,$VAR[Label_Title],1122)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Item_Query,$VAR[Path_Param_Query],1122)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Item_Type,$VAR[Path_Param_Type],1122)</onright>
-
-        <include content="Acting_SetImage_OnRight">
-            <param name="condition">$PARAM[condition]</param>
-        </include>
 
         <onright condition="$PARAM[condition]">SetProperty(Episodes_Label,$INFO[ListItem.Property(watchedepisodes)]$INFO[ListItem.Property(totalepisodes), $LOCALIZE[1443] ,] $LOCALIZE[16102],1122)</onright>
 
@@ -767,10 +767,6 @@
                 <param name="include">Defs_AutoSample_MultiImage</param>
                 <param name="condition">true</param>
             </include>
-            <!-- <include content="Defs_AutoScroll" condition="Skin.HasSetting(Background.ExtraFanart)">
-                <param name="include">Defs_AutoSample_ExtraFanart</param>
-                <param name="condition">true</param>
-            </include> -->
         </definition>
     </include>
     <include name="Action_Blur_Onload">

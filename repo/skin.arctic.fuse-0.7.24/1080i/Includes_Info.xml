@@ -159,7 +159,7 @@
         <param name="colordiffuse">main_fg</param>
         <param name="container" />
         <param name="width">info_plot_w</param>
-        <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.CropImage)) | [!String.IsEmpty(Window(Home).Property(CropImage)) + String.IsEmpty(Window(Home).Property(TMDBHelper.Image.Override))]]</param>
+        <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.CropImage)) | [!String.IsEmpty(Window(Home).Property(CropImage)) + !String.IsEmpty(Window(Home).Property(TMDBHelper.Image.Override))]]</param>
         <param name="mainlogo_texture">$VAR[Image_CropLogo]</param>
         <definition>
             <control type="group">
@@ -1235,7 +1235,7 @@
                 </include>
 
                 <!-- Season / Episode -->
-                <include content="Info_Line_Items">
+                <!-- <include content="Info_Line_Items">
                     <include content="Info_Line_Visible_01">
                         <param name="container">$PARAM[container]</param>
                         <param name="dbtype_01">episode</param>
@@ -1250,7 +1250,7 @@
                     <param name="visible_03">!String.IsEmpty(Container(99950).ListItem.Episode) + Integer.IsLess(Container(99950).ListItem.Episode,10)</param>
                     <param name="visible_04">!String.IsEmpty(Container(99950).ListItem.Episode)</param>
                     <param name="textcolor">$PARAM[colordiffuse]_70</param>
-                </include>
+                </include> -->
 
                 <!-- Year / Premiered -->
                 <include content="Info_Line_Items">

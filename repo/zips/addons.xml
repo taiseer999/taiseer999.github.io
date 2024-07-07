@@ -722,7 +722,7 @@ updated YouTube addon URL
             <screenshot>resources/screenshot-03.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="plugin.program.openwizardTaiseer" name="[COLOR orange]Open[/COLOR]Wizard / Taiseer" version="2.0.14" provider-name="drinfernoo, slamious">
+</addon><addon id="plugin.program.openwizardTaiseer" name="[COLOR orange]Open[/COLOR]Wizard / Taiseer" version="2.0.15" provider-name="drinfernoo, slamious">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
         <import addon="script.module.requests" />

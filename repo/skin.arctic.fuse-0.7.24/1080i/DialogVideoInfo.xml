@@ -27,24 +27,9 @@
             <include condition="!$EXP[Exp_HomeMenu_IsTopBar]">DialogInfo_ArtworkGallery</include>
         </control>
 
-        <control type="group">
-            <include condition="$EXP[Exp_HomeMenu_IsTopBar]">Animation_Home_Topbar</include>
-            <include condition="!$EXP[Exp_HomeMenu_IsTopBar]">Animation_Home_SlideOver</include>
-            <include condition="!$EXP[Exp_HomeMenu_IsTopBar] + Skin.HasSetting(SideMenu.EnableSearchAndOptions)">Home_Menu_SearchAndOptions</include>
-            <include content="DialogInfo_ButtonGroup" condition="!$EXP[Exp_HomeMenu_IsTopBar]">
-                <param name="include">Items_DialogVideoInfo_MenuBar</param>
-                <param name="vertical">true</param>
-            </include>
-            <include content="DialogInfo_ButtonGroup" condition="$EXP[Exp_HomeMenu_IsTopBar]">
-                <param name="include">Items_DialogVideoInfo_MenuBar</param>
-                <param name="vertical">false</param>
-                <param name="itemgap">0</param>
-            </include>
-        </control>
-
+        <include>DialogInfo_VideoButtons</include>
         <include>DialogInfo_Furniture</include>
         <include>TouchMode_Info_Zones</include>
         <include>DialogInfo_PlotBox</include>
-
     </controls>
 </window>

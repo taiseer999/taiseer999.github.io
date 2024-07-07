@@ -1495,7 +1495,7 @@
 
                     <include content="Object_Layout_Image">
                         <param name="diffuse">$PARAM[diffuse]</param>
-                        <param name="icon">$VAR[Image_Foreground_Cheater]</param>
+                        <param name="icon">$VAR[Image_Card_Fanart]</param>
                         <param name="listitem">$PARAM[listitem]</param>
                         <param name="aspectratio">scale</param>
                         <param name="selected">$PARAM[selected]</param>

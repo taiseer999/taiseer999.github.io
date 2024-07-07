@@ -7,7 +7,6 @@
         <control type="group">
             <visible>!$EXP[Exp_InfoDialogs]</visible>
 
-
             <include content="DialogInfo_ButtonGroup">
                 <param name="include">Items_DialogVideoInfo_MenuBar</param>
             </include>

@@ -4,7 +4,6 @@
     <menucontrol>303</menucontrol>
 
     <include>Action_Blur_Onload</include>
-    <onload>ClearProperty(TMDbHelper.Image.Override,Home)</onload>
     <onload>AlarmClock(refocus,SetFocus(9098),00:00,silent)</onload>
     <include>Action_PreserveTransitionProp_Onload</include>
 

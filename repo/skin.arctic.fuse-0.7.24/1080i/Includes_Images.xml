@@ -140,18 +140,6 @@
         <value condition="!String.IsEmpty(ListItem.Art(icon))">$INFO[ListItem.Art(icon)]</value>
     </variable>
 
-    <variable name="Image_Foreground_Cheater_Parent_Divert">
-        <value condition="Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + Integer.IsEqual(Container(301).NumItems,0) + !Container(301).IsUpdating + !String.IsEmpty(Container(99971).ListItem.PicturePath)">$INFO[Container(99971).ListItem.PicturePath]</value>
-        <value condition="!String.IsEmpty(Control.GetLabel(99973))">$INFO[Control.GetLabel(99973)]</value>
-        <value>$VAR[Image_Foreground_Cheater_Parent]</value>
-    </variable>
-
-    <variable name="Image_Background_Cheater_Parent_Divert">
-        <value condition="Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + Integer.IsEqual(Container(301).NumItems,0) + !Container(301).IsUpdating + !String.IsEmpty(Container(99971).ListItem.PicturePath)">$INFO[Container(99971).ListItem.PicturePath]</value>
-        <value condition="!String.IsEmpty(Control.GetLabel(99973))">$INFO[Control.GetLabel(99973)]</value>
-        <value>$VAR[Image_Background_Cheater_Parent]</value>
-    </variable>
-
     <variable name="Image_ButtonMenu_NowPlayingThumb">
         <value condition="!String.IsEmpty(Pvr.EPGEventIcon)">$INFO[Pvr.EPGEventIcon]</value>
         <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
@@ -345,15 +333,8 @@
         <value>special://skin/extras/backgrounds/blur/purple_blur.jpg</value>
     </variable>
 
-    <variable name="Image_WidgetBackground">
-        <value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_fanart))">$INFO[Container(99950).ListItem.Property(base_fanart)]</value>
-        <value condition="!String.IsEmpty(Container(99950).ListItem.Art(fanart))">$INFO[Container(99950).ListItem.Art(fanart)]</value>
-        <value condition="!String.IsEmpty(Container(99950).ListItem.Art(tvshow.fanart))">$INFO[Container(99950).ListItem.Art(tvshow.fanart)]</value>
-        <value condition="!String.IsEmpty(Container(99972).ListItem.PicturePath)">$INFO[Container(99972).ListItem.PicturePath]</value>
-    </variable>
-
     <variable name="Image_CropLogo">
-        <value condition="!String.IsEmpty(Window(Home).Property(CropImage)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">$INFO[Window(Home).Property(CropImage)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(CropImage)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">$INFO[Window(Home).Property(CropImage)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.CropImage))">$INFO[Window(Home).Property(TMDBHelper.ListItem.CropImage)]</value>
     </variable>
 
@@ -364,23 +345,18 @@
         <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
     </variable>
 
-    <variable name="Image_Background_Blur">
-        <value condition="!String.IsEmpty(Window(Home).Property(BlurImage)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">$INFO[Window(Home).Property(BlurImage)]</value>
+    <variable name="Image_Background">
+        <value condition="!String.IsEmpty(Window(Home).Property(BlurImage)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">$INFO[Window(Home).Property(BlurImage)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage)) + $EXP[Exp_SettingsDialogs]">$INFO[Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.FallbackBackground.BlurImage)) + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + Integer.IsEqual(Container(301).NumItems,0)">$INFO[Window(Home).Property(TMDbHelper.FallbackBackground.BlurImage)]</value>
         <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage)]</value>
     </variable>
 
-    <variable name="Image_Foreground_FlixArt">
-        <value condition="!String.IsEmpty(Window(Home).Property(BlurImage.Original)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">$INFO[Window(Home).Property(BlurImage.Original)]</value>
+    <variable name="Image_Foreground">
+        <value condition="!String.IsEmpty(Window(Home).Property(BlurImage.Original)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Image.Override))">$INFO[Window(Home).Property(BlurImage.Original)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage.Original)) + $EXP[Exp_SettingsDialogs]">$INFO[Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage.Original)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.FallbackBackground.BlurImage.Original)) + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + Integer.IsEqual(Container(301).NumItems,0)">$INFO[Window(Home).Property(TMDbHelper.FallbackBackground.BlurImage.Original)]</value>
         <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage.Original)]</value>
-    </variable>
-
-    <variable name="Image_Foreground">
-        <value condition="Skin.HasSetting(TMDbHelper.EnableBlur)">$VAR[Image_Foreground_FlixArt]</value>
-        <value>$VAR[Image_Foreground_Cheater_Parent_Divert]</value>
     </variable>
 
     <variable name="Image_Background_Overlay">
@@ -575,6 +551,12 @@
         <value condition="!String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
         <value condition="!String.IsEmpty(Container(99950).ListItem.Art(fanart))">$INFO[Container(99950).ListItem.Art(fanart)]</value>
         <value condition="!String.IsEmpty(Container(99950).ListItem.Art(tvshow.fanart))">$INFO[Container(99950).ListItem.Art(tvshow.fanart)]</value>
+    </variable>
+
+    <variable name="Image_Card_Fanart">
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
     </variable>
 
     <variable name="Image_PVRGrpMgr_HideGroup">

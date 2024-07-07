@@ -29,7 +29,7 @@
 
     <variable name="Dialog_Background_Blur_Adaptive_Texture">
         <value condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">special://skin/extras/icons/_none.png</value>
-        <value>$VAR[Image_Background_Blur]</value>
+        <value>$VAR[Image_Background]</value>
     </variable>
 
     <include name="Dialog_Background_Blur_Adaptive">

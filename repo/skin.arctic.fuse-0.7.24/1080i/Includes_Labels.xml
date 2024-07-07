@@ -558,7 +558,7 @@
     </variable>
 
     <variable name="Label_Player_Plot">
-        <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Plot)">$INFO[VideoPlayer.Title,, ~ ]$INFO[VideoPlayer.Plot]</value>
+        <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Plot)">$VAR[Label_OSD_SeasonEpisodeNumber,,. ]$INFO[VideoPlayer.Title,, ~ ]$INFO[VideoPlayer.Plot]</value>
         <value>$INFO[VideoPlayer.Plot]</value>
     </variable>
 
@@ -942,7 +942,7 @@
         <value condition="[Player.Seeking | Player.HasPerformedSeek(2)] + !String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekOffset, ,]</value>
         <value condition="Player.Seeking + String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekStepSize, ,]</value>
         <value condition="Player.Caching">$LOCALIZE[439] $INFO[Player.CacheLevel,,%]</value>
-        <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title]</value>
+        <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Title)">$VAR[Label_OSD_SeasonEpisodeNumber,,. ]$INFO[VideoPlayer.Title]</value>
         <value condition="VideoPlayer.Content(movies) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00)">$INFO[Player.Chapter,$LOCALIZE[21396] ,]$INFO[Player.ChapterCount, $LOCALIZE[1443] ,]</value>
         <value condition="VideoPlayer.Content(livetv) + !String.IsEmpty(VideoPlayer.ChannelNumberLabel)">$INFO[VideoPlayer.ChannelNumberLabel,$LOCALIZE[19029] ,]</value>
         <value condition="VideoPlayer.Content(files) + !String.IsEmpty(VideoPlayer.Studio)">$INFO[VideoPlayer.Studio]</value>
@@ -1019,14 +1019,16 @@
 
     <variable name="Label_ButtonMenu_NowPlayingTitle">
         <value condition="!String.IsEmpty(MusicPlayer.Artist)">$INFO[Player.Title]</value>
-        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode,E, • ]$INFO[Player.Title]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.Season) + !String.IsEmpty(VideoPlayer.Episode) + !Integer.IsLess(VideoPlayer.Episode,10)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,. ]$INFO[Player.Title]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.Season) + !String.IsEmpty(VideoPlayer.Episode)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x0,. ]$INFO[Player.Title]</value>
         <value condition="!String.IsEmpty(Player.Title)">$INFO[Player.Title]</value>
         <value>$INFO[System.Time]</value>
     </variable>
 
     <variable name="Label_NowPlayingTitle">
         <value condition="!String.IsEmpty(MusicPlayer.Artist)">$INFO[Player.Title]</value>
-        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode,E, • ]$INFO[Player.Title]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.Season) + !String.IsEmpty(VideoPlayer.Episode) + !Integer.IsLess(VideoPlayer.Episode,10)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,. ]$INFO[Player.Title]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.Season) + !String.IsEmpty(VideoPlayer.Episode)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x0,. ]$INFO[Player.Title]</value>
         <value>$INFO[Player.Title]</value>
     </variable>
 
@@ -1075,8 +1077,10 @@
         <value condition="!String.IsEqual(Player.FinishTime,System.Time) + !VideoPlayer.Content(livetv)">$INFO[Player.FinishTime,$LOCALIZE[31184] ,]</value>
     </variable>
 
-    <variable name="Label_OSD_SeasonEpisodeLabel">
-        <value condition="!String.IsEmpty(VideoPlayer.Episode)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode,E,]</value>
+    <variable name="Label_OSD_SeasonEpisodeNumber">
+        <value condition="String.IsEmpty(VideoPlayer.Season) | String.IsEmpty(VideoPlayer.Episode)" />
+        <value condition="!Integer.IsLess(VideoPlayer.Episode,10)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,]</value>
+        <value>$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x0,]</value>
     </variable>
 
     <variable name="Label_OSD_DirectorName">

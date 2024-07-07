@@ -112,22 +112,12 @@
                                 <visible>!String.ISEmpty($PARAM[tvshowtitle])</visible>
                             </control>
                             <include content="Info_Line_Divider">
-                                <visible>!String.ISEmpty($PARAM[tvshowtitle]) + !String.ISEmpty($PARAM[episode])</visible>
+                                <visible>!String.IsEmpty($PARAM[tvshowtitle]) + !String.IsEmpty($PARAM[title])</visible>
                             </include>
                             <control type="label">
                                 <width>auto</width>
                                 <textcolor>panel_fg_90</textcolor>
-                                <label>$INFO[$PARAM[season],S,]$INFO[$PARAM[episode],E,]</label>
-                                <visible>!String.ISEmpty($PARAM[episode])</visible>
-                            </control>
-
-                            <include content="Info_Line_Divider">
-                                <visible>[!String.ISEmpty($PARAM[tvshowtitle]) | !String.ISEmpty($PARAM[episode])] + !String.ISEmpty($PARAM[title])</visible>
-                            </include>
-                            <control type="label">
-                                <width>auto</width>
-                                <textcolor>panel_fg_90</textcolor>
-                                <label>$INFO[$PARAM[title]]</label>
+                                <label>$INFO[$PARAM[season],,]$INFO[$PARAM[episode],x,. ]$INFO[$PARAM[title]]</label>
                                 <visible>!String.ISEmpty($PARAM[title])</visible>
                             </control>
                         </control>
@@ -672,7 +662,7 @@
                 </include>
 
                 <!-- Season / Episode -->
-                <include content="Info_Line_Item">
+                <!-- <include content="Info_Line_Item">
                     <param name="label">$INFO[VideoPlayer.Season,,x]$INFO[VideoPlayer.Episode,0,]</param>
                     <param name="visible">VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Episode) + Integer.IsLess(VideoPlayer.Episode,10)</param>
                     <param name="textcolor">panel_fg_70</param>
@@ -681,7 +671,7 @@
                     <param name="label">$INFO[VideoPlayer.Season,,x]$INFO[VideoPlayer.Episode,,]</param>
                     <param name="visible">VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Episode) + !Integer.IsLess(VideoPlayer.Episode,10)</param>
                     <param name="textcolor">panel_fg_70</param>
-                </include>
+                </include> -->
 
                 <!-- Year / Premiered -->
                 <include content="Info_Line_Item">
@@ -1411,7 +1401,7 @@
             <animation effect="fade" start="100" end="0" time="300" condition="!$EXP[Exp_OSD_QuickInfo]">Conditional</animation>
             <control type="textbox">
                 <width>1080</width>
-                <label>$VAR[Label_OSD_SeasonEpisodeLabel,,: ]$INFO[VideoPlayer.Plot]</label>
+                <label>$VAR[Label_Player_Plot]</label>
                 <font>font_mini_plot</font>
                 <textcolor>panel_fg_70</textcolor>
                 <height>80</height>
