@@ -722,9 +722,9 @@ updated YouTube addon URL
             <screenshot>resources/screenshot-03.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="plugin.program.openwizardTaiseer" name="[COLOR orange]Open[/COLOR]Wizard / Taiseer" version="2.0.17" provider-name="drinfernoo, slamious">
+</addon><addon id="plugin.program.openwizardTaiseer" name="[COLOR orange]Open[/COLOR]Wizard / Taiseer" version="2.0.18" provider-name="drinfernoo, slamious">
     <requires>
-        <import addon="xbmc.python" version="3.0.1" />
+        <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
         <import addon="script.module.six" />
         <import addon="script.kodi.android.update" optional="true" version="1.1.7" />
