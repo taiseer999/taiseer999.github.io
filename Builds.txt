@@ -14,7 +14,7 @@ fanart="https://i.postimg.cc/HxqjNSkb/lite-cream.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="Kodi Build with Arctic Fuse Arabic ودجات."
+description="Kodi Build with Arctic Fuse Arabic."
 
 name="Netflix Arabic."
 version="1.8"
@@ -112,7 +112,7 @@ fanart="https://i.postimg.cc/Hsg6YL0F/Screenshot-2024-05-18-at-8-53-14-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="Kodi Build with Arctic Fuse Arabic قوائم."
+description="Kodi Build with Arctic Fuse Arabic"
 
 
 name="AH2 Arabic."
