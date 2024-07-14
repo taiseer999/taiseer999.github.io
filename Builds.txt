@@ -112,7 +112,7 @@ fanart="https://i.postimg.cc/Hsg6YL0F/Screenshot-2024-05-18-at-8-53-14-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="Kodi Build with Arctic Fuse Arabic"
+description="Kodi Build with Arctic Fuse Arabic."
 
 
 name="AH2 Arabic."
@@ -127,7 +127,7 @@ fanart="https://i.postimg.cc/tC89f5z6/Screenshot-2024-06-10-at-4-52-48-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="Kodi Build with Arctic Horizon 2 Arabic "
+description="Kodi Build with Arctic Horizon 2 Arabic."
 
 name="All Skins."
 version="1.1"
