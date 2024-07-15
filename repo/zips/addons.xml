@@ -2721,11 +2721,11 @@ v.3.3.7
 		<description lang="sk_SK">Keymap Editor je grafický nástroj na nastavovanie mapovania tlačidiel diaľkových ovládačov, klávesníc a iných vstupných zariadení podporovaných Kodi. Poznámka: k existujúcim používateľom definovaným mapovaniam bude pridaná prípona .bak.</description>
 		<description lang="zh_CN">键映射编辑器是一个用于配置 Kodi 支持的遥控器、键盘和其他输入设备的功能映射的图形界面。注意：现有的用户定义键映射将重命名为.bak。</description>
 	</extension>
-</addon><addon id="script.module.accountmgr" version="2.5.7" name="Account Manager" provider-name="Zaxxon709">
+</addon><addon id="script.module.accountmgr" version="2.5.8" name="Account Manager" provider-name="Zaxxon709">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.19.1" />
-            	<import addon="script.module.acctview" version="2.4.0" />
+            	<import addon="script.module.acctview" version="2.3.6" />
 	</requires>
 	<extension point="xbmc.service" library="lib/startup.py" start="startup" />
 	<extension point="xbmc.python.script" library="lib/default.py">
