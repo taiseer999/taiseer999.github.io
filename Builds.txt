@@ -85,5 +85,3 @@ preview="http://"
 adult="no"
 info="http://your.info.url"
 description="Kodi Build with Arctic Horizon 2 Arabic."
-
-
