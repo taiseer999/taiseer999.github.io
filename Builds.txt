@@ -28,7 +28,7 @@ fanart="https://i.postimg.cc/nhtJsyCy/nf.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="Kodi 21 Arabic Titan BINGIE MOD Arabic skin."
+description="Kodi 21 Arabic Titan BINGIE MOD Arabic."
 
 name="Arctic: Zephyr 2 - Reloaded Arabic."
 version="1.3"
