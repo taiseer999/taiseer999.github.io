@@ -5265,7 +5265,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <disclaimer lang="zh_CN">可放心使用此脚本，更多信息访问 kodi.tv</disclaimer>
     <disclaimer lang="zh_TW">歡迎使用本腳本，相關資訊請參閱kodi.tv</disclaimer>
   </extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.30.2~omega">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.30.3~omega">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -5487,7 +5487,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
 		<description lang="en_NZ">Nimbus Skin</description>
 		<description lang="en_US">Nimbus Skin</description>
 	</extension>
-</addon><addon id="skin.titan.bingie.mod" version="2.2.1.5" name="Titan BINGIE MOD" provider-name="AchillesPunks, Matke">
+</addon><addon id="skin.titan.bingie.mod" version="2.2.1.6" name="Titan BINGIE MOD" provider-name="AchillesPunks, Matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />
