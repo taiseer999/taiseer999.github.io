@@ -1,3 +1,26 @@
+[COLOR red][B]Version 1.0.21[/B][/COLOR]
+- Added setting to bypass title filter for torrentio results.
+- Added setting to bypass title filter for elfhosted results.
+
+[COLOR red][B]Version 1.0.20[/B][/COLOR]
+- Changed ElfHosted file title parsing.
+
+[COLOR red][B]Version 1.0.19[/B][/COLOR]
+- Self-Hosted Torrentio/ Knightcrawler Instances added.
+
+[COLOR red][B]Version 1.0.18[/B][/COLOR]
+- Changes made to Rutor.
+- GLODLS removed.
+- Elfhosted added.
+- Torrentz2 added back.
+
+[COLOR red][B]Version 1.0.15[/B][/COLOR]
+- Added Rutor
+
+[COLOR red][B]Version 1.0.13[/B][/COLOR]
+- Removed Hosters
+- Changed default scrapers enabled.
+
 [COLOR red][B]Version 1.0.12[/B][/COLOR]
 - Removed TorrentAPI
 - Corrected RSLBB address

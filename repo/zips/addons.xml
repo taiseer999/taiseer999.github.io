@@ -2867,7 +2867,7 @@ v.3.3.7
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.12" provider-name="CocoJoe">
+</addon><addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.21.1" provider-name="CocoJoe">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />

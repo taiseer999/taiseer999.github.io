@@ -17,7 +17,7 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://eztv.re"
+		self.base_link = "https://eztvx.to/"
 		# eztv has api but it sucks. Site query returns more results vs. api (eztv db seems to be missing the imdb_id for many so they are dropped)
 		self.search_link = '/search/%s'
 		self.min_seeders = 0
@@ -35,7 +35,8 @@ class source:
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.]+', '', title), hdlr) # eztv has issues with dashes in titles
 			url = self.search_link % quote_plus(query).replace('+', '-')
 			url = '%s%s' % (self.base_link, url)
-			# log_utils.log('url = %s' % url)
+			#from cocoscrapers.modules import log_utils
+			#log_utils.log('url = %s' % url)
 			results = client.request(url, timeout=5)
 			if not results: return sources
 			rows = client.parseDOM(results, 'tr')
