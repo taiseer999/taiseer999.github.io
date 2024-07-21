@@ -92,9 +92,11 @@ class Episodes:
 			cast, mpaa, duration, tvshow_plot = meta_get('cast', []), meta_get('mpaa'), meta_get('duration'), meta_get('plot')
 			trailer, genre, studio = string(meta_get('trailer')), meta_get('genre'), meta_get('studio')
 			orig_season, orig_episode = ep_data_get('season'), ep_data_get('episode')
+			curr_season_data = [i for i in meta_get('season_data') if i['season_number'] == orig_season][0]
+			season_poster = curr_season_data.get('poster_path')
+			if season_poster: season_poster = '%s%s%s' % ('https://image.tmdb.org/t/p/', self.meta_user_info['image_resolution']['poster'], season_poster)
+			else: season_poster = show_poster
 			if self.list_type_starts_with('next_episode'):
-				season_data = meta_get('season_data')
-				curr_season_data = [i for i in season_data if i['season_number'] == orig_season][0]
 				if orig_episode >= curr_season_data['episode_count']: orig_season, orig_episode, new_season = orig_season + 1, 1, True
 				else: orig_episode, new_season = orig_episode + 1, False
 			episodes_data = season_meta_function(orig_season, meta, self.meta_user_info)
@@ -194,8 +196,8 @@ class Episodes:
 			listitem.setProperties(props)
 			listitem.setLabel(display)
 #			listitem.setContentLookup(False)
-			listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo,
-							'landscape': thumb, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
+			listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': thumb,
+							'season.poster': season_poster, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
 			if KODI_VERSION < 20:
 				listitem.setCast(cast + item_get('guest_stars', []))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})

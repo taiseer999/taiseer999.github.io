@@ -15,7 +15,6 @@ show_busy_dialog, hide_busy_dialog, notification = kodi_utils.show_busy_dialog, 
 rd_api, pm_api, ad_api, oc_api = RealDebridAPI(), PremiumizeAPI(), AllDebridAPI(), OffcloudAPI()
 debrid_list = [('Real-Debrid', 'rd', rd_api), ('Premiumize.me', 'pm', pm_api), ('AllDebrid', 'ad', ad_api), ('Offcloud', 'oc', oc_api)]
 plswait_str, checking_debrid_str, remaining_debrid_str = ls(32577), ls(32578), ls(32579)
-MAX_CHUNKS = 10
 
 def debrid_enabled():
 	return [i[0] for i in debrid_list if enabled_debrids_check(i[1])]
@@ -92,7 +91,7 @@ class DebridCheck:
 		if not unchecked_hashes: return
 		rd_cache = {}
 		rd_cache_update = rd_cache.update
-		threads = list(make_thread_list(_process, chunks(unchecked_hashes, MAX_CHUNKS), Thread))
+		threads = list(make_thread_list(_process, chunks(unchecked_hashes, 30), Thread))
 		[i.join() for i in threads]
 #		rd_cache = rd_api.check_cache(unchecked_hashes)
 		if not rd_cache: return
