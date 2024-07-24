@@ -38,7 +38,7 @@
 <font>
                 <name>font_title_huge</name>
                 <filename>RobotoNotoCondensed-Black.ttf</filename>
-                <size>98</size>
+                <size>111</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
