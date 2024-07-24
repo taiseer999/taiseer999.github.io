@@ -1783,7 +1783,7 @@ msgstr "فورمات المظهر"
 
 msgctxt "#31375"
 msgid "Install zip"
-msgstr "تثبيت من ملف مضغوط"
+msgstr "تثبيت من zip"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31376"
@@ -2319,6 +2319,11 @@ msgctxt "#31489"
 msgid "Each category has its own individual submenu and widgets group. Submenus are either filled dynamically from a list or defined with individual static items. Each static submenu item can further define its own additional widget subgroup."
 msgstr "كل فئة لها قائم فرعية فردية ومجموعة أدوات خاصة بها. يتم ملء القوائم الفرعية إما ديناميكيا من قائمة أو يتم تعريفها بعناصر ثابتة فردية. يمكن لكل عنصر من عناصر القائمة الفرعية الثابتة تحديد المجموعة الفرعية الإضافية الخاصة به"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31490"
+msgid "Cancelled"
+msgstr "ملغي"
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31491"
 msgid "Miscellaneous"
@@ -2328,6 +2333,11 @@ msgstr "متنوع"
 msgctxt "#31492"
 msgid "Add-ons hub"
 msgstr "صفحة الإضافات"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31493"
+msgid "Ended"
+msgstr "منتهي"
 
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31494"
@@ -2349,6 +2359,16 @@ msgctxt "#31497"
 msgid "Minimise menu"
 msgstr "تصغير القائمة"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31498"
+msgid "Released"
+msgstr "تم اصداره"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31499"
+msgid "In-Production"
+msgstr "يتم تصويره"
+
 #: /1080i/Includes_Search.xml
 msgctxt "#31500"
 msgid "There were no [LOWERCASE]$VAR[Label_Setting_SearchStyle][/LOWERCASE] results found for"
@@ -2368,6 +2388,11 @@ msgstr "خيارات اضافية"
 msgctxt "#31503"
 msgid "Extras"
 msgstr "إضافات"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31504"
+msgid "Planned"
+msgstr "وضع خطط لانتاجه"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31505"
@@ -2548,3 +2573,18 @@ msgstr "stacking تمكين ظهور Widget فرعي"
 msgctxt "#31540"
 msgid "Submenu lists always allow stacking"
 msgstr "السماح للقوائم بعمل stacking Widget فرعي"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31541"
+msgid "Next episode"
+msgstr "الحلقة القادمة"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31542"
+msgid "Last episode"
+msgstr "الحلقة السابقة"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31543"
+msgid "Anticipated"
+msgstr "منتظرة"
