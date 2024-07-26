@@ -5286,7 +5286,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <disclaimer lang="zh_CN">可放心使用此脚本，更多信息访问 kodi.tv</disclaimer>
     <disclaimer lang="zh_TW">歡迎使用本腳本，相關資訊請參閱kodi.tv</disclaimer>
   </extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.30.19~omega">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.30.20~omega">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -5315,8 +5315,8 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
         <forum />
         <source />
 <news>
-Fixed arabic fonts
-Increased size of fonts
+Update arabic
+Tv shows release 
         </news>
         <assets>
             <icon>icon.png</icon>
