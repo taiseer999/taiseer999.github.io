@@ -435,8 +435,9 @@ class RealDebridAPI:
 		original_url = url
 		url = base_url + url
 		if self.token == '': return None
-		if '?' not in url: url += '?auth_token=%s' % self.token
-		else: url += '&auth_token=%s' % self.token
+#		if '?' not in url: url += '?auth_token=%s' % self.token
+#		else: url += '&auth_token=%s' % self.token
+		session.headers['Authorization'] = f"Bearer {self.token}"
 		response = session.get(url, timeout=timeout)
 		if any(value in response.text for value in ('bad_token', 'Bad Request')):
 			if self.refresh_token(): response = self._get(original_url)
@@ -448,8 +449,9 @@ class RealDebridAPI:
 		original_url = url
 		url = base_url + url
 		if self.token == '': return None
-		if '?' not in url: url += '?auth_token=%s' % self.token
-		else: url += '&auth_token=%s' % self.token
+#		if '?' not in url: url += '?auth_token=%s' % self.token
+#		else: url += '&auth_token=%s' % self.token
+		session.headers['Authorization'] = f"Bearer {self.token}"
 		response = session.post(url, data=post_data, timeout=timeout)
 		if any(value in response.text for value in ('bad_token', 'Bad Request')):
 			if self.refresh_token(): response = self._post(original_url, post_data)

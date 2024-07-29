@@ -11,7 +11,7 @@ set_sort_method, set_category, container_refresh_input, current_window_object = 
 json, close_all_dialog, sleep, home, get_property, set_property, fanart = k.json, k.close_all_dialog, k.sleep, k.home, k.get_property, k.set_property, k.get_addon_fanart()
 download_directory, easynews_authorized, get_icon, unquote, container_refresh = s.download_directory, s.easynews_authorized, k.get_icon, k.unquote, k.container_refresh
 get_shortcut_folders, currently_used_list, get_shortcut_folder_contents = nc.get_shortcut_folders, nc.currently_used_list, nc.get_shortcut_folder_contents
-get_main_lists, authorized_debrid_check = nc.get_main_lists, s.authorized_debrid_check
+get_main_lists, authorized_debrid_check, trakt_user_active = nc.get_main_lists, s.authorized_debrid_check, s.trakt_user_active
 log_loc, old_log_loc = tp('special://logpath/kodi.log'), tp('special://logpath/kodi.old.log')
 folder_icon = get_icon('folder')
 random_test = '[COLOR red][RANDOM][/COLOR]'
@@ -92,11 +92,11 @@ class Navigator:
 		self.end_directory()
 
 	def my_content(self):
-		if get_setting('fenlight.trakt.user', 'empty_setting') not in ('empty_setting', ''):
+		if trakt_user_active():
 			self.add({'mode': 'navigator.trakt_collections'}, 'Trakt Collection', 'trakt')
 			self.add({'mode': 'navigator.trakt_watchlists'}, 'Trakt Watchlist', 'trakt')
-			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'build_list': 'true', 'category_name': 'My Lists'}, 'Trakt My Lists', 'trakt')
-			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'build_list': 'true', 'category_name': 'Liked Lists'}, 'Trakt Liked Lists', 'trakt')
+			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'category_name': 'My Lists'}, 'Trakt My Lists', 'trakt')
+			self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'category_name': 'Liked Lists'}, 'Trakt Liked Lists', 'trakt')
 			self.add({'mode': 'navigator.trakt_favorites', 'category_name': 'Favorites'}, 'Trakt Favorites', 'trakt')
 			self.add({'mode': 'navigator.trakt_recommendations', 'category_name': 'Recommended'}, 'Trakt Recommended', 'trakt')
 			self.add({'mode': 'build_my_calendar'}, 'Trakt Calendar', 'trakt')
@@ -108,8 +108,7 @@ class Navigator:
 	def random_lists(self):
 		self.add({'mode': 'navigator.build_random_lists', 'menu_type': 'movie'}, 'Movie Lists', 'movies')
 		self.add({'mode': 'navigator.build_random_lists', 'menu_type': 'tvshow'}, 'TV Show Lists', 'tv')
-		if get_setting('fenlight.trakt.user', 'empty_setting') not in ('empty_setting', ''):
-			self.add({'mode': 'navigator.build_random_lists', 'menu_type': 'trakt'}, 'Trakt Lists', 'trakt')
+		if trakt_user_active(): self.add({'mode': 'navigator.build_random_lists', 'menu_type': 'trakt'}, 'Trakt Lists', 'trakt')
 		self.end_directory()
 
 	def trakt_collections(self):
@@ -309,9 +308,9 @@ class Navigator:
 		self.end_directory()
 
 	def choose_view(self):
-		content = self.params['content']
-		name = self.params.get('name') or content
 		handle = int(sys.argv[1])
+		content = self.params['content']
+		view_type, name = self.params['view_type'], self.params.get('name') or content
 		self.add({'mode': 'navigator.set_view', 'view_type': view_type, 'name': name, 'isFolder': 'false'}, 'Set view and then click here', 'settings')
 		set_content(handle, content)
 		end_directory(handle)

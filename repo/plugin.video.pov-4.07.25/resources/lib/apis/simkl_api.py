@@ -31,29 +31,26 @@ def simkl_list(url):
 		result = call_simkl(url)
 		if result is None: return
 	except: return
-	collector = {}
-	sort_list = []
+	items = []
 	threads = []
-	for i in result:
-		sort_list.append(i['ids']['simkl_id'])
-		t = Thread(target=summary, args=(i['ids']['simkl_id'], collector))
-		threads.append(t)
-		t.start()
-
+	for item_position, item in enumerate(result):
+		i = Thread(target=summary, args=(item_position, item['ids']['simkl_id'], items))
+		threads.append(i)
+		i.start()
 	[i.join() for i in threads]
-	items = [item for i in sort_list if (item := collector.get(i))]
+	items.sort(key=lambda k: k['sort'])
 	return items
 
-def summary(sid, collector, media='anime'):
+def summary(position, sid, collector, media='anime'):
 	try:
-		string = 'simkl_anime_id_%s' % sid
+		string = 'simkl_%s_id_%s' % (media, sid)
 		url = '%s/%s/%s?extended=full' % (base_url, media, sid)
 		result = cache_function(call_simkl, string, url, EXPIRES_1_WEEK, json=False)
 		if result is None: return
 		imdb = result.get('ids').get('imdb') if result.get('ids').get('imdb') else ''
 		tmdb = result.get('ids').get('tmdb') if result.get('ids').get('tmdb') else ''
 		title = result.get('en_title') if result.get('en_title') else result.get('title')
-		if tmdb or imdb: collector[sid] = {'imdb': str(imdb), 'tmdb': str(tmdb), 'title': title}
+		if tmdb or imdb: collector.append({'imdb': str(imdb), 'tmdb': str(tmdb), 'title': title, 'sort': position})
 	except: pass
 
 def simkl_movies_most_watched(page_no, media='anime'):

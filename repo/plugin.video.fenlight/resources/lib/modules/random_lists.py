@@ -7,11 +7,12 @@ from modules.utils import manual_function_import, make_thread_list
 # logger = kodi_utils.logger
 
 external, home, end_directory, set_property, sys, random = kodi_utils.external, kodi_utils.home, kodi_utils.end_directory, kodi_utils.set_property, kodi_utils.sys, kodi_utils.random
-add_items, set_content, set_category, set_view_mode = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.set_category, kodi_utils.set_view_mode
+add_items, set_content, set_category, add_dir, set_view_mode = kodi_utils.add_items, kodi_utils.set_content, kodi_utils.set_category, kodi_utils.add_dir, kodi_utils.set_view_mode
+nextpage_landscape = kodi_utils.nextpage_landscape
 
 random_valid_type_check = {'build_movie_list': 'movie', 'build_tvshow_list': 'tvshow', 'build_season_list': 'season', 'build_episode_list': 'episode',
 'build_in_progress_episode': 'single_episode', 'build_recently_watched_episode': 'single_episode', 'build_next_episode': 'single_episode',
-'build_my_calendar': 'single_episode', 'build_trakt_lists': 'trakt_list', 'trakt.list.build_trakt_list': 'trakt_list'}
+'build_my_calendar': 'single_episode', 'build_trakt_lists': 'trakt_list', 'trakt.list.build_trakt_list': 'trakt_list', 'build_trakt_my_lists_contents': 'trakt_list'}
 random_episodes_check = {'build_in_progress_episode': 'episode.progress', 'build_recently_watched_episode': 'episode.recently_watched',
 'build_next_episode': 'episode.next', 'build_my_calendar': 'episode.trakt'}
 movie_main = ('tmdb_movies_popular', 'tmdb_movies_popular_today','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases',
@@ -52,8 +53,9 @@ class RandomLists():
 	def get_function(self):
 		return manual_function_import('apis.%s_api' % self.action.split('_')[0], self.action)
 
-	def make_directory(self):
+	def make_directory(self, next_page_params={}):
 		add_items(self.handle, self.list_items)
+		if next_page_params: add_dir(next_page_params, 'Next Page (%s) >>' % next_page_params['new_page'], self.handle, 'nextpage', nextpage_landscape)
 		set_content(self.handle, self.content_type)
 		set_category(self.handle, self.category_name)
 		end_directory(self.handle, cacheToDisc=False if self.is_external else True)
@@ -61,6 +63,7 @@ class RandomLists():
 
 	def run_random(self):
 		if self.mode == 'build_trakt_lists': return self.random_trakt_lists()
+		if self.mode == 'build_trakt_my_lists_contents': return self.trakt_my_lists_contents()
 		if self.action in movie_main: return self.random_main()
 		if self.action in movie_trakt_main: return self.random_trakt_main()
 		if self.action in movie_trakt_personal: return self.random_trakt_personal_lists()
@@ -124,6 +127,24 @@ class RandomLists():
 		self.set_property()
 		self.list_items = build_trakt_list(url_params)
 		self.make_directory()
+
+	def trakt_my_lists_contents(self):
+		from indexers.trakt_lists import build_trakt_list
+		list_name, list_type = self.params.get('list_name'), self.params.get('list_type')
+		user, slug, list_name = self.params_get('user'), self.params_get('slug'), self.params_get('list_name')
+		page_no, paginate_start = int(self.params.get('new_page', '1')), int(self.params.get('paginate_start', '0'))
+		list_type_name = 'Trakt My Lists' if list_type == 'my_lists' else 'Trakt Liked Lists'
+		url_params = {'user': user, 'slug': slug, 'list_type': list_type, 'base_list_name':list_type_name, 'list_name': list_name, 'random': 'true', 'random_full': 'true',
+					'paginate_start': paginate_start, 'new_page': page_no}
+		self.category_name = list_name
+		self.set_property()
+		paginate_start, page_no, total_pages, self.list_items = build_trakt_list(url_params)
+		if total_pages > page_no:
+			new_page = str(page_no + 1)
+			next_page_params = {'mode': 'random.build_trakt_my_lists_contents', 'list_type': list_type, 'list_name': list_name, 'user': user, 'slug': slug,
+								'paginate_start': paginate_start, 'new_page': new_page, 'random': 'true', 'random_full': 'true'}
+		else: next_page_params = {}
+		self.make_directory(next_page_params)
 
 	def random_trakt_personal_lists(self):
 		self.category_name = self.base_list_name

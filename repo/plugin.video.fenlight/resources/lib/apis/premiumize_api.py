@@ -3,8 +3,9 @@ import re
 import time
 from caches.main_cache import cache_object
 from caches.settings_cache import get_setting, set_setting
-from modules import kodi_utils
 from modules.utils import copy2clip
+from modules.source_utils import supported_video_extensions, seas_ep_filter, EXTRAS
+from modules import kodi_utils
 # logger = kodi_utils.logger
 
 notification, requests = kodi_utils.notification, kodi_utils.requests
@@ -90,7 +91,6 @@ class PremiumizeAPI:
 		except: return None
 
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, EXTRAS
 		try:
 			file_url = None
 			correct_files = []

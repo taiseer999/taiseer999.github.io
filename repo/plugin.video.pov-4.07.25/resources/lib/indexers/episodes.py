@@ -26,7 +26,7 @@ clearprog_str, browse_str, browse_seas_str, nextep_manager_str = ls(32651), ls(3
 class Episodes:
 	def __init__(self, params):
 		self.params = params
-		self.list_type = self.params.get('list_type', '')
+		self.list_type = self.params.get('id_type', '')
 		self.list = self.params.get('list', [])
 		self.items = []
 
@@ -55,9 +55,8 @@ class Episodes:
 				else:
 					self.list_type = 'trakt_calendar'
 					self.list = sorted(self.list, key=lambda k: k['sort_title'])
-			self.worker()
+			kodi_utils.add_items(__handle__, self.worker())
 		except: pass
-		if self.items: kodi_utils.add_items(__handle__, self.items)
 		kodi_utils.set_category(__handle__, self.category)
 		kodi_utils.set_sort_method(__handle__, self.sort_type)
 		kodi_utils.set_content(__handle__, self.content_type)

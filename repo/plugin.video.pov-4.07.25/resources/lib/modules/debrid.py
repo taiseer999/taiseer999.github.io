@@ -86,12 +86,12 @@ class DebridCheck:
 
 	def RD_check(self):
 		def _process(hashes):
-			rd_cache_update(rd_api.check_cache(hashes))
+			try: rd_cache.update(rd_api.check_cache(hashes))
+			except: pass
 		self.rd_cached_hashes, unchecked_hashes = self.cached_check('rd')
 		if not unchecked_hashes: return
 		rd_cache = {}
-		rd_cache_update = rd_cache.update
-		threads = list(make_thread_list(_process, chunks(unchecked_hashes, 30), Thread))
+		threads = list(make_thread_list(_process, chunks(unchecked_hashes, 10), Thread))
 		[i.join() for i in threads]
 #		rd_cache = rd_api.check_cache(unchecked_hashes)
 		if not rd_cache: return

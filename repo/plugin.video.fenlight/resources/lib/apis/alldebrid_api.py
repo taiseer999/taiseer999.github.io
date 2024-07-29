@@ -3,8 +3,9 @@ import re
 import time
 from caches.main_cache import cache_object
 from caches.settings_cache import get_setting, set_setting
-from modules import kodi_utils
 from modules.utils import copy2clip
+from modules.source_utils import supported_video_extensions, seas_ep_filter, EXTRAS
+from modules import kodi_utils
 # logger = kodi_utils.logger
 
 path_exists, requests, Thread, get_icon = kodi_utils.path_exists, kodi_utils.requests, kodi_utils.Thread, kodi_utils.get_icon
@@ -115,7 +116,6 @@ class AllDebridAPI:
 		return result.get('success', False) == True
 
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, EXTRAS
 		try:
 			file_url, media_id = None, None
 			extensions = supported_video_extensions()

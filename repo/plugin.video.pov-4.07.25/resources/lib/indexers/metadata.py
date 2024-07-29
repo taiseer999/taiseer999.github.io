@@ -1,6 +1,6 @@
 from apis import tmdb_api as tmdb, fanarttv_api as fanarttv
 from caches.meta_cache import MetaCache
-from modules.utils import jsondate_to_datetime, subtract_dates
+from modules.utils import jsondate_to_datetime, subtract_dates, make_thread_list
 # from modules.kodi_utils import logger
 
 movie_data, tvshow_data, english_translation = tmdb.movie_details, tmdb.tvshow_details, tmdb.english_translation
@@ -144,8 +144,9 @@ def all_episodes_meta(meta, user_info, Thread):
 		except: pass
 	try:
 		data = []
-		threads = [Thread(target=_get_tmdb_episodes, args=(i['season_number'],)) for i in meta['season_data']]
-		[i.start() for i in threads]
+#		threads = [Thread(target=_get_tmdb_episodes, args=(i['season_number'],)) for i in meta['season_data']]
+#		[i.start() for i in threads]
+		threads = list(make_thread_list(_get_tmdb_episodes, (i['season_number'] for i in meta['season_data']), Thread))
 		[i.join() for i in threads]
 	except: pass
 	return data

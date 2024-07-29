@@ -26,6 +26,9 @@ def trakt_client():
 def trakt_secret():
 	return get_setting('fenlight.trakt.secret', '')
 
+def trakt_user_active():
+	return get_setting('fenlight.trakt.user', 'empty_setting') not in ('empty_setting', '')
+
 def results_format():
 	window_format = str(get_setting('fenlight.results.list_format', 'List'))
 	if not window_format in results_window_numbers_dict:
@@ -127,9 +130,6 @@ def trakt_sync_interval():
 def lists_sort_order(setting):
 	return int(get_setting('fenlight.sort.%s' % setting, '0'))
 
-def auto_start():
-	return get_setting('fenlight.auto_start', 'false') == 'true'
-
 def use_minimal_media_info():
 	return get_setting('fenlight.use_minimal_media_info', 'true') == 'true'
 
@@ -155,6 +155,9 @@ def extras_enable_extra_ratings():
 
 def extras_enable_scrollbars():
 	return get_setting('fenlight.extras.enable_scrollbars', 'true')
+
+def extras_videos_default():
+	return int(get_setting('fenlight.extras.videos_default', '0'))
 
 def extras_enabled_menus():
 	setting = get_setting('fenlight.extras.enabled', '2000,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062')
@@ -263,8 +266,12 @@ def date_offset():
 def extras_open_action(media_type):
 	return int(get_setting('fenlight.extras.open_action', '0')) in extras_open_action_dict[media_type]
 
+def extras_open_collection(open_extras):
+	if not open_extras: return False
+	return get_setting('extras.open_collection', '0') == 'true'
+
 def watched_indicators():
-	if get_setting('fenlight.trakt.user') in ('empty_setting', ''): return 0
+	if not trakt_user_active(): return 0
 	return int(get_setting('fenlight.watched_indicators', '0'))
 
 def nextep_method():
@@ -299,9 +306,3 @@ def update_delay():
 
 def update_action():
 	return int(get_setting('fenlight.update.action', '2'))
-
-def update_use_test_repo():
-	return get_setting('fenlight.update.use_test_repo', 'true') == 'true'
-
-def shuffle_trakt_personal():
-	return get_setting('fenlight.shuffle_trakt_personal', 'false') == 'true'

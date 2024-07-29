@@ -135,7 +135,7 @@ def build_trakt_list(params):
 		elif item_type == 'seasons':
 			func(build_season_list({'mode': 'trakt_dict', **items}))
 		elif item_type == 'episodes':
-			func(Episodes({'list_type': 'trakt_dict', 'list': items}).worker())
+			func(Episodes({'id_type': 'trakt_dict', 'list': items}).worker())
 	is_widget = kodi_utils.external_browse()
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')

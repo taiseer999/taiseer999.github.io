@@ -47,11 +47,13 @@ class ThumbImageViewer(BaseDialog):
 			choice = self.make_context_menu(enable_delete=chosen_listitem.getProperty('delete') == 'true')
 			if choice:
 				if choice == 'delete_image': return self.reset_after_delete(chosen_listitem, position)
-				#download
-				name, thumb, path = chosen_listitem.getProperty('name'), chosen_listitem.getProperty('thumb'), chosen_listitem.getProperty('path')
-				if not path: return self.notification('No Image Path to Download')
-				params = {'mode': 'downloader.runner', 'action': 'image', 'name': name, 'thumb_url': thumb, 'image_url': path, 'media_type': 'image', 'image': path}
-				self.execute_code('RunPlugin(%s)' % self.build_url(params))
+				elif choice == 'download_image':
+					name, thumb, path = chosen_listitem.getProperty('name'), chosen_listitem.getProperty('thumb'), chosen_listitem.getProperty('path')
+					if not path: return self.notification('No Image Path to Download')
+					params = {'mode': 'downloader.runner', 'action': 'image', 'name': name, 'thumb_url': thumb, 'image_url': path, 'media_type': 'image', 'image': path}
+					self.execute_code('RunPlugin(%s)' % self.build_url(params))
+				else:#exit_image
+					return self.close()
 
 	def make_page(self):
 		try:
@@ -66,6 +68,7 @@ class ThumbImageViewer(BaseDialog):
 		choices_append = choices.append
 		if enable_delete: choices_append(('Delete', 'delete_image'))
 		else: choices_append(('Download File', 'download_image'))
+		if self.current_page > 1: choices_append(('Exit Images', 'exit_image'))
 		list_items = [{'line1': i[0]} for i in choices]
 		kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
 		choice = select_dialog([i[1] for i in choices], **kwargs)
@@ -98,9 +101,7 @@ class ThumbImageViewer(BaseDialog):
 		except: pass
 
 	def reset_after_delete(self, choice, position):
-		self.set_home_property('delete_image_finished', 'false')
-		self.ImagesInstance.run({'mode': 'delete_image', 'image_url': choice.getProperty('path'), 'thumb_url': choice.getProperty('thumb')})
-		while not self.get_home_property('delete_image_finished') == 'true': self.sleep(10)
+		self.ImagesInstance.delete_image(choice.getProperty('path'), choice.getProperty('thumb'))
 		self.reset_window(self.window_id)
 		self.list_items = self.ImagesInstance.browser_image(download_directory('image'), return_items=True)
 		self.make_page()

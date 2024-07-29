@@ -228,13 +228,9 @@ def build_season_list(params):
 	__handle__ = int(sys.argv[1])
 	mode = params['mode']
 	if 'episode' in mode:
-		content_type = sort_type = 'episodes'
-		view_type = 'view.episodes'
-		func = _process_episode_list
+		content_type, view_type, func = 'episodes', 'view.episodes', _process_episode_list
 	else:
-		content_type = sort_type = 'seasons'
-		view_type = 'view.seasons'
-		func = _process_season_list
+		content_type, view_type, func = 'seasons', 'view.seasons', _process_season_list
 	meta_user_info = settings.metadata_user_info()
 	watched_indicators = settings.watched_indicators()
 	watched_info = get_watched_info_tv(watched_indicators)
@@ -263,7 +259,7 @@ def build_season_list(params):
 	if 'trakt_dict' in mode: return items
 	kodi_utils.add_items(__handle__, items)
 	kodi_utils.set_category(__handle__, show_title)
-	kodi_utils.set_sort_method(__handle__, sort_type)
+	kodi_utils.set_sort_method(__handle__, content_type)
 	kodi_utils.set_content(__handle__, content_type)
 	kodi_utils.end_directory(__handle__, False if is_widget else None)
 	kodi_utils.set_view_mode(view_type, content_type)
