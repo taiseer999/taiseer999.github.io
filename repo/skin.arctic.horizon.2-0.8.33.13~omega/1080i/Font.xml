@@ -1469,13 +1469,13 @@
         <!-- Standard Fonts -->
         <font>
             <name>font_midi</name>
-            <filename>Hacen Dalal light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <size>35</size>
         </font>
         <font>
             <name>font_main</name>
-            <filename>Hacen Dalal light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <size>30</size>
         </font>
@@ -1509,42 +1509,42 @@
         <!-- Textbox Fonts -->
         <font>
             <name>font_huge_plot</name>
-            <filename>Hacen Dalal light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.46</linespacing>
             <size>47</size>
         </font>
         <font>
             <name>font_midi_plot</name>
-            <filename>Hacen Dalal light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.46</linespacing>
             <size>35</size>
         </font>
         <font>
             <name>font_main_plot</name>
-            <filename>Hacen Beirut Light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
             <size>30</size>
         </font>
         <font>
             <name>font_mini_plot</name>
-            <filename>Hacen Beirut Light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.24</linespacing>
             <size>26</size>
         </font>
         <font>
             <name>font_tiny_plot</name>
-            <filename>Hacen Beirut Light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
             <size>22</size>
         </font>
         <font>
             <name>font_mini_cond</name>
-            <filename>Hacen Dalal light.ttf</filename>
+            <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>0.96</linespacing>
             <size>26</size>
