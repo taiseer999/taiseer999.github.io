@@ -5406,7 +5406,7 @@ Added arabic fonts
             <screenshot>resources/screenshot-06.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.zephyr.mod" version="3.0.3.4" name="Arctic: Zephyr - Reloaded" provider-name="jurialmunkey, beatmasterrs">
+</addon><addon id="skin.arctic.zephyr.mod" version="3.0.3.5" name="Arctic: Zephyr - Reloaded" provider-name="jurialmunkey, beatmasterrs">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinshortcuts" version="0.4.0" />
