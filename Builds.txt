@@ -18,7 +18,7 @@ description="Kodi Build with Arctic Fuse Arabic."
 
 name="Netflix Arabic."
 version="2.1"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=p%2FNJqSzPI7rdQH9p1F1ov0sByOsMfZQVWiee%2FVXQTk05rtvcEo04%2F92gnxYn%2Fv2%2F&expiry=QYK3%2FmXhBmKEKC4gIzn7Lg%3D%3D&mac=233501b63128fc47af094d5c8b3eea620c37614b399b497ffe459af68e8d359e"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=eGnaxaGGKoI5uNOWv2ARLrKFEqD0qp5uO2LD8WvOEtm3RcpG3ZqxldwtFLUCAZH8&expiry=6%2BDZ6k%2FDdYCpvlaFYPeU9g%3D%3D&mac=60a79618a66dbcba7fc40f47a6349b9e3677b3f48c9748912cc10f90fca893a5"
 minor="http://"
 gui="http://"
 kodi="21"
