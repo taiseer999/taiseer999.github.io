@@ -60,7 +60,7 @@ description="Kodi 21 Arabic Fentastic skin."
 
 name="Nimbus + Fentastic Arabic."
 version="1.0"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=z6Ndef3oEZj0%2BuiugUDdgJTNdEO7T35WD4AmUVYFNwMFYYVGqxdRuKxFZgKzKa%2FW&expiry=B8zXHrJVMX0EOc0fRVqCLw%3D%3D&mac=35fa1f4157662acaaf71c98d23493244a86d14bbe09cb972675fb890e0d0ed02"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=z6Ndef3oEZj0%2BuiugUDdgJTNdEO7T35WD4AmUVYFNwMFYYVGqxdRuKxFZgKzKa%2FW&expiry=c0%2F7pFWZlqi31fSsAfibyQ%3D%3D&mac=4fffdb6158dde8a60d02e89ad35b1eda4ece7627858fca7c187fee4550dd48b0"
 minor="http://"
 gui="http://"
 kodi="21"
