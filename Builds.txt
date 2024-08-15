@@ -45,7 +45,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic AZR skin."
 
 name="Nimbus / Fentastic."
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=z6Ndef3oEZj0%2BuiugUDdgJTNdEO7T35WD4AmUVYFNwMFYYVGqxdRuKxFZgKzKa%2FW&expiry=TVprFnqy3WiE46KAVvquZw%3D%3D&mac=26c3622b85b8f3989e0682fe53c8c24d9c27a2d90c694e611385e43a23a2ad25"
 minor="http://"
 gui="http://"
