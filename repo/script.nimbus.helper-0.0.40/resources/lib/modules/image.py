@@ -60,11 +60,12 @@ class ImageBlur:
                 OLD_IMAGE = self.image
 
                 self.filepath = self.blur()
-                self.avgcolor = self.color()
+                self.avgcolor, self.textcolor = self.color()
 
                 winprop(prop + "_blurred", self.filepath)
                 winprop(prop + "_color_noalpha", self.avgcolor[2:])
                 winprop(prop + "_color", self.avgcolor)
+                winprop(prop + "_textcolor", self.textcolor)
 
     def __str__(self):
         return self.filepath, self.avgcolor
@@ -147,31 +148,114 @@ class ImageBlur:
     """ get average image color
     """
 
+    # def color(self):
+    #     default_color = "FFF0F0F0"
+    #     min_brightness = 0.7  # Adjust this value to set the minimum brightness
+
+    #     try:
+    #         with Image.open(self.filepath) as img:
+    #             img_resize = img.resize((1, 1), Image.LANCZOS)
+    #             col = img_resize.getpixel((0, 0))
+
+    #         # Convert RGB to HSV
+    #         h, s, v = colorsys.rgb_to_hsv(col[0] / 255, col[1] / 255, col[2] / 255)
+
+    #         # Adjust brightness if it's too low
+    #         if v < min_brightness:
+    #             v = min_brightness
+
+    #         # Convert back to RGB
+    #         r, g, b = [int(x * 255) for x in colorsys.hsv_to_rgb(h, s, v)]
+
+    #         imagecolor = f"FF{r:02x}{g:02x}{b:02x}"
+    #     except Exception as e:
+    #         print(f"Error processing image: {e}")
+    #         imagecolor = default_color
+
+    #     return imagecolor
+
+    """ get dominant image color + best text contrasting color
+    """
+    
     def color(self):
-        default_color = "FFF0F0F0"
-        min_brightness = 0.7  # Adjust this value to set the minimum brightness
+        default_color = "FFCCCCCC"
+        default_text_color = "FF141515"  # Default to dark text
+        min_brightness = 0.65  # Minimum brightness value
+        brightness_boost = 0.45  # Amount to boost brightness for dark colors
+
+        def get_luminance(r, g, b):
+            r = r / 255 if r <= 10 else ((r / 255 + 0.055) / 1.055) ** 2.4
+            g = g / 255 if g <= 10 else ((g / 255 + 0.055) / 1.055) ** 2.4
+            b = b / 255 if b <= 10 else ((b / 255 + 0.055) / 1.055) ** 2.4
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+        def get_contrast_ratio(l1, l2):
+            lighter = max(l1, l2)
+            darker = min(l1, l2)
+            return (lighter + 0.05) / (darker + 0.05)
+
+        def get_best_text_color(bg_color):
+            bg_luminance = get_luminance(bg_color[0], bg_color[1], bg_color[2])
+            
+            white = (255, 255, 255)
+            dark = (20, 21, 21)  # FF141515
+            
+            white_contrast = get_contrast_ratio(get_luminance(*white), bg_luminance)
+            dark_contrast = get_contrast_ratio(get_luminance(*dark), bg_luminance)
+            
+            # Bias towards white text (lower number equals higher bias)
+            if white_contrast >= dark_contrast * 0.42:  # Adjust this factor to fine-tune
+                return "FFFFFFFF"
+            else:
+                return "FF141515"
 
         try:
             with Image.open(self.filepath) as img:
-                img_resize = img.resize((1, 1), Image.LANCZOS)
-                col = img_resize.getpixel((0, 0))
+                # Resize image for faster processing
+                img_resize = img.resize((50, 50))
+                
+                # Convert image to RGB mode if it's not
+                if img_resize.mode != 'RGB':
+                    img_resize = img_resize.convert('RGB')
 
-            # Convert RGB to HSV
-            h, s, v = colorsys.rgb_to_hsv(col[0] / 255, col[1] / 255, col[2] / 255)
+                # Get all pixels
+                pixels = list(img_resize.getdata())
 
-            # Adjust brightness if it's too low
-            if v < min_brightness:
-                v = min_brightness
+                # Create color bins (simplify colors)
+                color_bins = {}
+                for pixel in pixels:
+                    # Simplify RGB values to reduce color space
+                    simple_color = (pixel[0]//10, pixel[1]//10, pixel[2]//10)
+                    if simple_color in color_bins:
+                        color_bins[simple_color] += 1
+                    else:
+                        color_bins[simple_color] = 1
 
-            # Convert back to RGB
-            r, g, b = [int(x * 255) for x in colorsys.hsv_to_rgb(h, s, v)]
+                # Find the most common color
+                dominant_color = max(color_bins, key=color_bins.get)
+                
+                # Scale the color back up
+                r, g, b = [x * 10 for x in dominant_color]
 
-            imagecolor = f"FF{r:02x}{g:02x}{b:02x}"
+                # Convert to HSV for brightness adjustment
+                h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+
+                # Apply brightness boost if below minimum brightness
+                if v < min_brightness:
+                    v = min(v + brightness_boost, 1.0)  # Ensure we don't exceed 1.0
+
+                # Convert back to RGB
+                r, g, b = [int(x * 255) for x in colorsys.hsv_to_rgb(h, s, v)]
+
+                imagecolor = f"FF{r:02x}{g:02x}{b:02x}"
+                textcolor = get_best_text_color((r, g, b))
+
         except Exception as e:
             print(f"Error processing image: {e}")
             imagecolor = default_color
+            textcolor = default_text_color
 
-        return imagecolor
+        return imagecolor, textcolor
 
 
 """ get cached images or copy to temp if file has not been cached yet
