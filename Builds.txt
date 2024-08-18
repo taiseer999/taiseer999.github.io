@@ -31,7 +31,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic Titan BINGIE MOD Arabic."
 
 name="AZR Arabic."
-version="1.0"
+version="3.0"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=Z7iSg9jmVnU8FSdhBuLXV6TzY553HJ5vF1Hxnh%2F6K7x4u0LaPOyXcAWrZEB4yNHQ&expiry=RTF%2F3LxmLtKVUDBbyPJSSA%3D%3D&mac=01453643636f13dc149958e88134b3a429a295506a68efb385f8c9f9b400d1e5"
 minor="http://"
 gui="http://"
