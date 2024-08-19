@@ -45,7 +45,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic AZR."
 
 name="Touchscreen."
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=IDoVDevUKRAW8cx7xLM9b9afq%2FOfjo0tITTOkBNKKNxqUcwHldSl7oeNqgvUR3wL&expiry=EcxY9NFHARtBiWEElYzosA%3D%3D&mac=f1ef95606ee3312700482c73eb630d471b09f99101878a44d574eaa407a0429f"
 minor="http://"
 gui="http://"
