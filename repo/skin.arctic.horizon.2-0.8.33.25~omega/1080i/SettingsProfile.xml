@@ -1,107 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-    <defaultcontrol always="true">30009</defaultcontrol>
+    <include content="Action_SettingsCategories_Onload">
+        <param name="defaultcontrol">3</param>
+    </include>
     <controls>
+
         <include content="Background_Main">
             <param name="plain_background">true</param>
         </include>
-        <include content="Dialog_SettingsCategory_Background">
-            <include content="Dialog_SettingsCategory_ChangerGroup">
-                <param name="changer_onright" value="9000" />
-                <include content="Dialog_SettingsCategory_LeftGroup">
-                    <param name="header_condition" value="false" />
-                    <param name="grouplist_id">9000</param>
-                    <control type="grouplist" id="9000">
-                        <width>settings_category_w</width>
+        <include content="Background_Transition">
+            <param name="windowopen_condition">!$EXP[Exp_SettingsDialogs_Prev]</param>
+            <param name="windowclose_condition">!$EXP[Exp_SettingsDialogs_Next]</param>
+        </include>
+
+        <include content="Settings_Dialog">
+            <include content="Settings_Main_Group">
+                <include content="Settings_Left_Group">
+                    <include content="Settings_Left_Grouplist">
+                        <param name="id">3</param>
                         <onleft>30000</onleft>
-                        <onup>-</onup>
-                        <onright>9001</onright>
-                        <ondown>20</ondown>
-                        <include content="Dialog_Settings_Label">
-                            <param name="control" value="label" />
-                            <param name="id" value="9002" />
-                            <label>$LOCALIZE[13200]</label>
-                        </include>
-                        <include content="Dialog_Settings_Button">
-                            <param name="id" value="4" />
-                            <param name="control" value="radiobutton" />
+                        <!-- <onup>30032</onup> -->
+                        <onright>2</onright>
+                        <!-- <ondown>-</ondown> -->
+                        <include content="Settings_Button">
+                            <param name="id">4</param>
+                            <param name="control">radiobutton</param>
+                            <param name="dialog">true</param>
                             <include>Texture_Highlight_ToggleButton_Settings</include>
+                            <radiowidth>104</radiowidth>
                             <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
                             <width>settings_category_w</width>
                             <description>Default Category Button</description>
                             <label>$LOCALIZE[10029]</label>
                         </include>
-                        <include content="Dialog_Settings_Label">
-                            <param name="control" value="label" />
-                            <param name="id" value="9003" />
+                        <include content="Settings_Label">
+                            <param name="control">label</param>
+                            <param name="id">9003</param>
+                            <param name="dialog">true</param>
                             <label>$LOCALIZE[33084]</label>
                             <enable>!System.HasLoginScreen</enable>
-                            <disabledcolor>dialog_fg_30</disabledcolor>
+                            <disabledcolor>dialog_fg_12</disabledcolor>
                         </include>
-                        <include content="Dialog_Settings_Button">
-                            <param name="id" value="5" />
-                            <param name="control" value="button" />
+                        <include content="Settings_Button">
+                            <param name="id">5</param>
+                            <param name="control">button</param>
+                            <param name="dialog">true</param>
                             <include>Texture_Highlight_ToggleButton_Settings</include>
                             <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
                             <description>Default Category Button</description>
                             <label>$INFO[System.ProfileAutoLogin]</label>
                             <enable>!System.HasLoginScreen</enable>
+                            <disabledcolor>dialog_fg_12</disabledcolor>
+                            <right>40</right>
                         </include>
-                    </control>
+                    </include>
+                </include>
 
-                    <include content="Dialog_SettingsCategory_RightGroup">
-                        <param name="scrollbar_onleft" value="9001" />
-                        <param name="info_condition" value="false" />
-                        <control type="grouplist" id="9001">
-                            <onup>-</onup>
-                            <ondown>-</ondown>
-                            <include content="Dialog_Settings_Label">
-                                <param name="control" value="label" />
-                                <param name="id" value="9002" />
-                                <label>$LOCALIZE[24020]</label>
-                            </include>
-                            <control type="panel" id="2">
-                                <height>640</height>
-                                <onleft>9000</onleft>
-                                <onright>61</onright>
-                                <pagecontrol>61</pagecontrol>
-                                <itemlayout height="grid_x16">
-                                    <control type="group">
-                                        <left>grid_x04</left>
-                                        <control type="group">
-                                            <left>-10</left>
-                                            <include content="Object_ListItem_Iconic">
-                                                <param name="fallback" value="DefaultUser.png" />
-                                            </include>
-                                        </control>
-                                    </control>
-                                </itemlayout>
-                                <focusedlayout height="grid_x16">
-                                    <control type="image">
-                                        <include>Texture_Highlight</include>
-                                    </control>
-                                    <control type="group">
-                                        <left>grid_x04</left>
-                                        <control type="group">
-                                            <left>-10</left>
-                                            <include content="Object_ListItem_Iconic">
-                                                <param name="color" value="$VAR[ColorSelected]" />
-                                                <param name="fallback" value="DefaultUser.png" />
-                                            </include>
-                                        </control>
-                                    </control>
-                                </focusedlayout>
-                            </control>
+                <include content="Settings_Right_Group">
+                    <include content="Settings_Right_Grouplist">
+                        <param name="id">8000</param>
+                        <onleft>3</onleft>
+                        <control type="panel" id="2">
+                            <height>720</height>
+                            <onleft>3</onleft>
+                            <onup>2</onup>
+                            <ondown>2</ondown>
+                            
+                            <itemlayout height="120">
+                                <control type="group">
+                                    <left>40</left>
+                                    <right>40</right>
+                                    <include content="Object_ListItem_Iconic">
+                                        <param name="icon">$VAR[Image_ProfileIcon]</param>
+                                        <param name="color">dialog_fg_70</param>
+                                    </include>
+                                    <include content="Object_IsSelected_Checkmark">
+                                        <param name="color_off">dialog_fg_30</param>
+                                        <param name="color_on">dialog_fg_70</param>
+                                        <param name="selected">String.IsEqual(ListItem.Label,System.ProfileName)</param>
+                                    </include>
+                                </control>
+                            </itemlayout>
+                            <focusedlayout height="120">
+                                <control type="image">
+                                    <include>Texture_Menu_Highlight_H</include>
+                                </control>
+                                <control type="group">
+                                    <left>40</left>
+                                    <right>40</right>
+                                    <include content="Object_ListItem_Iconic">
+                                        <param name="color">$VAR[ColorSelected]</param>
+                                        <param name="icon">$VAR[Image_ProfileIcon]</param>
+                                    </include>
+                                    <include content="Object_IsSelected_Checkmark_Focus">
+                                        <param name="selected">String.IsEqual(ListItem.Label,System.ProfileName)</param>
+                                    </include>
+                                </control>
+                            </focusedlayout>
                         </control>
                     </include>
-
                 </include>
+                <include content="Settings_InfoText">
+                    <param name="id">6</param>
+                    <param name="dialog">true</param>
+                    <param name="left">80</param>
+                    <param name="bottom">60</param>
+                </include>
+            </include>
+            <include content="Settings_Changer">
+                <onup>3</onup>
             </include>
         </include>
 
-        <include content="View_Furniture_Top">
-            <param name="powermenu_button">true</param>
-        </include>
+
     </controls>
 
 </window>

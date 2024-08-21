@@ -1,74 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-    <defaultcontrol>50</defaultcontrol>
+    <include content="Action_SettingsCategories_Onload">
+        <param name="defaultcontrol">8000</param>
+    </include>
+
     <views>50</views>
+
     <controls>
         <include content="Background_Main">
             <param name="plain_background">true</param>
         </include>
-        <include content="Dialog_Background">
-            <include content="Animation_WindowTransition_Settings">
-                <param name="windowopen_right">$EXP[Exp_SettingsDialogs_Prev]</param>
-                <param name="windowclose_right">$EXP[Exp_SettingsDialogs_Next]</param>
-                <param name="windowopen_delay">100</param>
-            </include>
-            <include>Dimension_Info</include>
-            <include>Dialog_Overlay_Buttons</include>
-            <!-- Left Content -->
-            <include content="Dialog_Group">
-                <control type="group">
-                    <right>dialog_button_w</right>
-                    <control type="group">
-                        <right>grid_x04</right>
-                        <include content="List_DialogSelect">
-                            <param name="id" value="50" />
-                            <param name="detailed" value="True" />
-                            <param name="item_height" value="grid_x12" />
-                            <left>-grid_x04</left>
-                            <pagecontrol>61</pagecontrol>
-                            <onright>61</onright>
-                        </include>
-                        <include content="Dialog_Scrollbar">
-                            <onright>9000</onright>
-                            <onleft>50</onleft>
-                        </include>
-                    </control>
-                </control>
-            </include>
 
-            <!-- Right Buttons -->
-            <include content="Dialog_Group">
-                <control type="group">
-                    <right>0</right>
-                    <width>dialog_button_w</width>
-                    <control type="grouplist" id="9000">
-                        <onleft>61</onleft>
-                        <itemgap>20</itemgap>
-                        <control type="button" id="21" description="Level">
-                            <height>grid_x08</height>
-                        </control>
-                        <control type="togglebutton" id="4" description="Direction">
-                            <height>grid_x08</height>
+
+        <include content="Settings_Dialog">
+            <include content="Settings_Main_Group">
+                <include content="Settings_Left_Group">
+                    <include content="Settings_Left_Grouplist">
+                        <param name="id">8000</param>
+                        <onleft>30000</onleft>
+                        <onright>50</onright>
+
+                        <include content="Settings_Button">
+                            <param name="id">21</param>
+                            <param name="control">button</param>
+                            <param name="dialog">true</param>
+                            <width>settings_category_w</width>
+                            <description>Level</description>
+                        </include>
+
+                        <include content="Settings_Button">
+                            <param name="id">4</param>
+                            <param name="control">togglebutton</param>
+                            <param name="dialog">true</param>
+                            <width>settings_category_w</width>
                             <label>$LOCALIZE[31015]: $LOCALIZE[584]</label>
                             <altlabel>$LOCALIZE[31015]: $LOCALIZE[585]</altlabel>
-                        </control>
-                        <control type="radiobutton" id="22" description="Currentlevel">
-                            <height>grid_x08</height>
-                            <align>left</align>
-                        </control>
-                        <control type="button" id="20" description="Clear">
-                            <height>grid_x08</height>
-                            <label>192</label>
-                        </control>
+                            <description>Order</description>
+                        </include>
 
+                        <include content="Settings_Button">
+                            <param name="id">22</param>
+                            <param name="control">radiobutton</param>
+                            <param name="dialog">true</param>
+                            <radiowidth>104</radiowidth>
+                            <width>settings_category_w</width>
+                            <description>Higher Levels</description>
+                        </include>
 
+                        <include content="Settings_Button">
+                            <param name="id">20</param>
+                            <param name="control">togglebutton</param>
+                            <param name="dialog">true</param>
+                            <width>settings_category_w</width>
+                            <label>$LOCALIZE[192]</label>
+                            <description>Clear</description>
+                        </include>
+                    </include>
+                </include>
+                <include content="Settings_Right_Group">
+                    <control type="scrollbar" id="60">
+                        <centerright>-60</centerright>
+                        <width>scrollbar_w</width>
+                        <orientation>vertical</orientation>
+                        <texturesliderbackground colordiffuse="main_fg_12" border="4">scrollbar/scrollv_line.png</texturesliderbackground>
+                        <texturesliderbar colordiffuse="main_logo" border="4">scrollbar/scrollv.png</texturesliderbar>
+                        <showonepage>false</showonepage>
+                        <include>Texture_Scrollbar_V</include>
+                        <onleft>50</onleft>
                     </control>
-                </control>
+                    <include content="List_DialogSelect">
+                        <param name="id">50</param>
+                        <param name="detailed">True</param>
+                        <param name="item_height">120</param>
+                        <top>20</top>
+                        <left>20</left>
+                        <right>20</right>
+                        <bottom>20</bottom>
+                        <pagecontrol>60</pagecontrol>
+                        <onleft>8000</onleft>
+                        <onright>60</onright>
+                        <height>720</height>
+                    </include>
+                </include>
+                <include content="Settings_InfoText">
+                    <param name="dialog">true</param>
+                    <param name="left">80</param>
+                    <param name="bottom">60</param>
+                </include>
+            </include>
+            <include content="Settings_Changer">
+                <onup>8000</onup>
             </include>
         </include>
-        <include content="Furniture_Top_Left">
-            <param name="label" value="[CAPITALIZE]$LOCALIZE[10050][/CAPITALIZE]" />
-        </include>
-        <include>Furniture_Top_Right</include>
     </controls>
 </window>

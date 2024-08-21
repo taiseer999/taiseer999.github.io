@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1142">
     <defaultcontrol always="true">9801</defaultcontrol>
-    <include>Animation_WindowTransition_FadeInOut</include>
+    <include>Animation_OSD_Dialog_WindowChange</include>
     <controls>
 
         <control type="group">
-            <left>view_pad</left>
-            <height>480</height>
-            <bottom>view_pad</bottom>
-            <include content="List_PlayList">
+            <height>divider_bottom</height>
+            <bottom>40</bottom>
+            <include content="List_Square_Row">
                 <param name="id">9801</param>
-                <param name="controltype">fixedlist</param>
-                <param name="orientation">vertical</param>
-                <param name="offset_y">40</param>
-                <param name="detailed">true</param>
+                <param name="item_w">147</param>
+                <param name="item_h">147</param>
+                <param name="itemlayout_w">187</param>
+                <param name="itemlayout_h">304</param>
+                <param name="offset_x">40</param>
+                <param name="use_movement">false</param>
+                <param name="variation">true</param>
                 <content>
                     <item>
                         <label>$LOCALIZE[559]</label>
@@ -25,41 +27,39 @@
                 </content>
                 <content>musicdb://albums/?xsp={"rules":{"and":[{"field":"artist","operator":"is","value":["$INFO[MusicPlayer.Artist]"]}]},"type":"albums"}</content>
                 <onclick condition="String.IsEmpty(Window(Home).Property(OSDRelaunchFullscreen))">SetProperty(OSDRelaunchFullscreen,1,Home)</onclick>
-                <onclick condition="String.IsEmpty(Container(9801).ListItem.Property(folderpath))">PlayMedia($ESCINFO[Container(9801).ListItem.FolderPath],isdir,playoffset=$INFO[Window(Home).Property(OSDRelaunchFullscreen)])</onclick>
-                <onclick condition="!String.IsEmpty(Container(9801).ListItem.Property(folderpath))">PlayMedia($ESCINFO[Container(9801).ListItem.Property(folderpath)],isdir,playoffset=$INFO[Window(Home).Property(OSDRelaunchFullscreen)])</onclick>
+                <onclick condition="String.IsEmpty(Container(9801).ListItem.Property(folderpath))">PlayMedia($ESCINFO[Container(9801).ListItem.FolderPath],isdir,1,playoffset=$INFO[Window(Home).Property(OSDRelaunchFullscreen)])</onclick>
+                <onclick condition="!String.IsEmpty(Container(9801).ListItem.Property(folderpath))">PlayMedia($ESCINFO[Container(9801).ListItem.Property(folderpath)],isdir,1,playoffset=$INFO[Window(Home).Property(OSDRelaunchFullscreen)])</onclick>
                 <onup>Close</onup>
-                <onleft>Close</onleft>
-                <ondown>-</ondown>
-                <onright>9802</onright>
-                <left>-60</left>
-                <bottom>-20</bottom>
-                <width>1000</width>
+                <ondown>9802</ondown>
+                <movement>8</movement>
                 <preloaditems>0</preloaditems>
-                <focusposition>1</focusposition>
-                <movement>2</movement>
+                <focusposition>0</focusposition>
+                <left>160</left>
+                <right>40</right>
             </include>
             <control type="group">
-                <left>880</left>
-                <width>920</width>
-                <include content="List_PlayList">
-                    <param name="id" value="9802" />
-                    <param name="controltype">fixedlist</param>
-                    <param name="orientation">vertical</param>
-                    <param name="offset_y">40</param>
+                <left>view_side</left>
+                <include content="List_Button_Row">
+                    <param name="id">9802</param>
+                    <param name="orientation">horizontal</param>
+                    <param name="offset_x">60</param>
+                    <param name="offset_y">0</param>
+                    <param name="item_h">80</param>
+                    <param name="itemlayout_h">80</param>
+                    <param name="item_w">view_listwall_itemlayout_w</param>
+                    <param name="itemlayout_w">view_listwall_itemlayout_w</param>
+                    <param name="itemlayout_include">Layout_MediaList</param>
+                    <param name="control">panel</param>
                     <param name="detailed">true</param>
                     <content>$VAR[Path_MusicOSD_TrackList]</content>
                     <onclick>SetProperty(OSDRelaunchFullscreen,$INFO[Container(9802).CurrentItem],Home)</onclick>
                     <onclick>SetFocus(9801)</onclick>
                     <onclick>Action(Select)</onclick>
-                    <onup>Close</onup>
-                    <onright>Close</onright>
-                    <ondown>-</ondown>
-                    <onleft>9801</onleft>
-                    <left>-40</left>
-                    <right>-40</right>
-                    <focusposition>1</focusposition>
-                    <movement>2</movement>
-                    <bottom>-20</bottom>
+                    <onup>9801</onup>
+                    <height>240</height>
+                    <left>-80</left>
+                    <bottom>25</bottom>
+                    <preloaditems>0</preloaditems>
                 </include>
             </control>
         </control>
