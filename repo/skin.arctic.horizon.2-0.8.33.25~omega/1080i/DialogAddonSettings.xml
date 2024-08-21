@@ -1,34 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-
     <controls>
+        <include condition="!$EXP[Exp_SettingsDialogs]">Object_Overlay</include>
+        <include content="Dialog_Background">
+            <include content="Animation_SlideIn_Dialog">
+                <param name="windowopen_condition">!$EXP[Exp_SettingsDialogs_Prev]</param>
+            </include>
+            <include content="Animation_WindowTransition_Settings">
+                <param name="windowopen">false</param>
+                <param name="windowclose">false</param>
+                <param name="windowopen_right">$EXP[Exp_SettingsDialogs]</param>
+                <param name="windowclose_right">$EXP[Exp_SettingsDialogs]</param>
+                <param name="windowopen_delay">400</param>
+            </include>
+            <include>Dimension_Info</include>
+            <include>Dialog_Overlay_Buttons</include>
+            <control type="group">
+                <right>0</right>
+                <left>settings_category_w</left>
+                <include>Dialog_Overlay</include>
+                <include>Object_Separator</include>
+            </control>
+            <include content="Dialog_Group">
+                <control type="group">
+                    <right>0</right>
+                    <width>dialog_button_w</width>
 
-        <include content="Settings_Button">
-            <param name="id">7</param>
-            <param name="control">button</param>
-            <param name="dialog">true</param>
+                    <control type="grouplist" id="9000">
+                        <onleft>61</onleft>
+                        <itemgap>20</itemgap>
+                        <control type="button" id="28" description="OK">
+                            <height>grid_x08</height>
+                        </control>
+                        <control type="button" id="29" description="Cancel">
+                            <height>grid_x08</height>
+                        </control>
+                        <control type="button" id="30" description="Clear">
+                            <height>grid_x08</height>
+                        </control>
+                    </control>
+
+                    <control type="image">
+                        <height>dialog_button_w</height>
+                        <bottom>0</bottom>
+                        <texture background="true">$INFO[ListITem.Icon]</texture>
+                        <aspectratio>keep</aspectratio>
+                        <visible>!String.IsEmpty(ListItem.AddonName)</visible>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <right>dialog_button_w</right>
+                    <control type="group">
+                        <left>-grid_x04</left>
+                        <right>grid_x04</right>
+                        <control type="grouplist" id="3">
+                            <onright>5</onright>
+                            <ondown>20</ondown>
+                            <width>settings_category_w</width>
+                            <bottom>grid_x08</bottom>
+                        </control>
+
+                        <include>Dialog_Settings_Level</include>
+
+                        <control type="group">
+                            <left>settings_category_w</left>
+                            <control type="grouplist" id="5">
+                                <onleft>3</onleft>
+                                <pagecontrol>61</pagecontrol>
+                                <onright>61</onright>
+                                <bottom>grid_x08</bottom>
+                            </control>
+
+                            <include content="Dialog_Settings_InfoText">
+                                <param name="id" value="6" />
+                                <param name="visible" value="true" />
+                            </include>
+                        </control>
+
+                        <include content="Dialog_Scrollbar">
+                            <onright>9000</onright>
+                            <onleft>5</onleft>
+                        </include>
+                    </control>
+                </control>
+
+
+            </include>
+        </include>
+
+        <include content="Furniture_Top_Left">
+            <param name="id" value="2" />
+            <param name="label" value="" />
+        </include>
+        <include>Furniture_Top_Right</include>
+
+
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="7" />
+            <param name="control" value="button" />
             <description>Default Setting Button</description>
         </include>
 
-        <include content="Settings_Button">
-            <param name="id">8</param>
-            <param name="control">radiobutton</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="8" />
+            <param name="control" value="radiobutton" />
             <description>Default Setting Button</description>
             <textwidth>settings_radiobutton_text_w</textwidth>
         </include>
 
-        <include content="Settings_Button">
-            <param name="id">9</param>
-            <param name="control">spincontrolex</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="9" />
+            <param name="control" value="spincontrolex" />
             <description>Default Setting Button</description>
         </include>
 
-        <include content="Settings_Button">
-            <param name="id">10</param>
-            <param name="control">togglebutton</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="10" />
+            <param name="control" value="togglebutton" />
             <include>Texture_Highlight_ToggleButton_Settings</include>
             <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
             <altfocusedcolor>$VAR[ColorSettingsToggleButtonText]</altfocusedcolor>
@@ -40,144 +129,29 @@
             <visible>false</visible>
         </control>
 
-        <include content="Settings_Button">
-            <param name="id">12</param>
-            <param name="control">edit</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="12" />
+            <param name="control" value="edit" />
             <description>Default Setting Button</description>
         </include>
 
-        <include content="Settings_Button">
-            <param name="id">13</param>
-            <param name="control">sliderex</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="13" />
+            <param name="control" value="sliderex" />
             <description>Default Setting Button</description>
             <textwidth>settings_slider_text_w</textwidth>
         </include>
 
-        <include content="Settings_Label">
-            <param name="id">14</param>
-            <param name="control">label</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Label">
+            <param name="id" value="14" />
+            <param name="control" value="label" />
             <description>Default Setting Label</description>
         </include>
 
-        <include content="Settings_Button">
-            <param name="id">15</param>
-            <param name="control">colorbutton</param>
-            <param name="dialog">true</param>
+        <include content="Dialog_Settings_Button">
+            <param name="id" value="15" />
+            <param name="control" value="colorbutton" />
             <description>Default Setting Button</description>
         </include>
-
-        <include content="Object_Hidden_Button">
-            <param name="id">28</param>
-        </include>
-        <include content="Object_Hidden_Button">
-            <param name="id">29</param>
-        </include>
-        <include content="Object_Hidden_Button">
-            <param name="id">30</param>
-        </include>
-        <include content="Object_Hidden_Button">
-            <param name="id">20</param>
-        </include>
-
-        <control type="group">
-            <include>Dimension_DialogFullMenu</include>
-            <include>Animation_Right_Delay</include>
-            <include content="Dialog_Dim_Side">
-                <param name="slide_condition">True</param>
-            </include>
-
-            <!-- Bottom Layer -->
-            <include content="Dialog_Background_Side">
-                <param name="slide_condition">True</param>
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-                <!-- Side Buttons -->
-                <control type="group">
-                    <include>Dimension_Dialog_Body</include>
-                    <control type="grouplist" id="9000">
-                        <include>Dialog_Side_Grouplist_Def</include>
-                        <onleft>Close</onleft>
-                        <onright>3</onright>
-                        <include>Items_DialogAddonSettings_MenuBar</include>
-                    </control>
-                </control>
-            </include>
-
-            <include content="Dialog_Foreground_Side">
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-                <param name="slide_condition">True</param>
-                <param name="lines_right">0</param>
-                <param name="topline">false</param>
-                <param name="subline">false</param>
-
-                <!-- Header -->
-                <include content="Dialog_Head">
-                    <param name="id">2</param>
-                </include>
-                <include>Dialog_Head_CloseButton</include>
-
-                <!-- Content -->
-                <control type="group">
-                    <include>Dimension_Dialog_Body</include>
-                    <control type="group">
-                        <right>-80</right>
-
-                        <include>Dialog_Group</include>
-
-                        <control type="group">
-                            <left>-20</left>
-                            <top>-20</top>
-                            <bottom>60</bottom>
-                            <width>settings_category_w</width>
-
-                            <control type="image">
-                                <texture colordiffuse="dialog_fg_12">common/white.png</texture>
-                                <height>1</height>
-                                <top>-20</top>
-                                <left>20</left>
-                                <right>20</right>
-                            </control>
-
-                            <control type="image">
-                                <texture colordiffuse="dialog_fg_12">common/white.png</texture>
-                                <height>1</height>
-                                <bottom>-20</bottom>
-                                <left>20</left>
-                                <right>20</right>
-                            </control>
-
-                            <control type="grouplist" id="3">
-                                <onright>5</onright>
-                                <onleft>9000</onleft>
-                            </control>
-                        </control>
-
-                        <include content="Dialog_Outline_InnerBox">
-                            <left>settings_category_w</left>
-                            <right>120</right>
-                            <top>-40</top>
-                            <bottom>40</bottom>
-                            <control type="grouplist" id="5">
-                                <left>20</left>
-                                <right>20</right>
-                                <top>20</top>
-                                <bottom>20</bottom>
-                                <onleft>3</onleft>
-                            </control>
-                        </include>
-                    </control>
-
-                    <include content="Settings_InfoText">
-                        <param name="id">6</param>
-                        <param name="dialog">true</param>
-                        <param name="override">true</param>
-                        <param name="left">40</param>
-                    </include>
-                </control>
-            </include>
-
-        </control>
     </controls>
 </window>

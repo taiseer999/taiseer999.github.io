@@ -54,37 +54,12 @@
             <control type="group">
                 <bottom>view_pad</bottom>
                 <height>480</height>
-                <control type="group">
-                    <height>280</height>
-                    <control type="grouplist">
-                        <orientation>vertical</orientation>
-                        <align>bottom</align>
-                        <height>280</height>
-                        <control type="textbox">
-                            <font>font_title_midi</font>
-                            <textcolor>main_fg_100</textcolor>
-                            <label>$INFO[Container(1297).ListItem.Title]</label>
-                            <height max="270">auto</height>
-                            <aligny>center</aligny>
-                            <align>center</align>
-                            <visible>String.ISEmpty(Container(1297).ListItem.Art(clearlogo))</visible>
-                        </control>
-                    </control>
-                    <control type="image">
-                        <texture background="true">$INFO[Container(1297).ListItem.Art(clearlogo)]</texture>
-                        <aspectratio aligny="bottom">keep</aspectratio>
-                        <visible>!String.ISEmpty(Container(1297).ListItem.Art(clearlogo))</visible>
-                    </control>
-                </control>
-                <include content="Info_StarRating">
-                    <param name="textcolor">yellow_star</param>
-                    <param name="rating">Container(1297).ListItem.Rating</param>
-                    <param name="size">64</param>
-                    <height>80</height>
-                    <align>center</align>
-                    <centertop>320</centertop>
-                    <itemgap>-16</itemgap>
-                    <visible>!String.IsEmpty(Container(1297).ListItem.Plot)</visible>
+                <include content="Widget_Lovefilm_RatingTitle">
+                    <param name="id">1297</param>
+                </include>
+                <include content="Widget_Lovefilm_RatingStars">
+                    <param name="id">1297</param>
+                    <top>245</top>
                 </include>
             </control>
             <control type="textbox">
@@ -92,7 +67,7 @@
                 <textcolor>main_fg_70</textcolor>
                 <label>$INFO[Container(1297).ListItem.Plot]</label>
                 <bottom>view_pad</bottom>
-                <height>120</height>
+                <height>grid_x12</height>
                 <align>center</align>
             </control>
         </control>
@@ -105,37 +80,12 @@
             <control type="group">
                 <bottom>view_pad</bottom>
                 <height>480</height>
-                <control type="group">
-                    <height>280</height>
-                    <control type="grouplist">
-                        <orientation>vertical</orientation>
-                        <align>bottom</align>
-                        <height>280</height>
-                        <control type="textbox">
-                            <font>font_title_midi</font>
-                            <textcolor>main_fg_100</textcolor>
-                            <label>$INFO[Container(1297).ListItem.Title]</label>
-                            <height max="270">auto</height>
-                            <aligny>center</aligny>
-                            <align>center</align>
-                            <visible>String.ISEmpty(Container(1297).ListItem.Art(clearlogo))</visible>
-                        </control>
-                    </control>
-                    <control type="image">
-                        <texture background="true">$INFO[Container(1297).ListItem.Art(clearlogo)]</texture>
-                        <aspectratio aligny="bottom">keep</aspectratio>
-                        <visible>!String.ISEmpty(Container(1297).ListItem.Art(clearlogo))</visible>
-                    </control>
-                </control>
-                <include content="Info_StarRating">
-                    <param name="textcolor">yellow_star</param>
-                    <param name="rating">Container(1297).ListItem.Rating</param>
-                    <param name="size">64</param>
-                    <height>80</height>
-                    <align>center</align>
-                    <centertop>320</centertop>
-                    <itemgap>-16</itemgap>
-                    <visible>!String.IsEmpty(Container(1297).ListItem.Plot)</visible>
+                <include content="Widget_Lovefilm_RatingTitle">
+                    <param name="id">1297</param>
+                </include>
+                <include content="Widget_Lovefilm_RatingStars">
+                    <param name="id">1297</param>
+                    <top>245</top>
                 </include>
             </control>
             <control type="textbox">
@@ -143,7 +93,7 @@
                 <textcolor>main_fg_70</textcolor>
                 <label>$INFO[Container(1297).ListItem.Plot]</label>
                 <bottom>view_pad</bottom>
-                <height>120</height>
+                <height>grid_x12</height>
                 <align>center</align>
             </control>
         </control>

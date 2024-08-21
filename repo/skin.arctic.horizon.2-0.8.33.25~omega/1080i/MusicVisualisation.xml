@@ -2,7 +2,7 @@
 <window>
     <onload condition="System.HasAddon(script.artistslideshow) + !Skin.HasSetting(ArtistSlideShow.Disabled)">RunScript(script.artistslideshow)</onload>
     <onload>ClearProperty(OSDRelaunchFullscreen,Home)</onload>
-    <include>Animation_OSD_Fullscreen_Change</include>
+    <include>Animation_Fullscreen_Media</include>
     <controls>
         <control type="visualisation" id="2">
             <description>visualisation</description>
@@ -31,10 +31,6 @@
             <colordiffuse>9fffffff</colordiffuse>
             <visible>Skin.HasSetting(Visualisation.EnableColours)</visible>
         </control>
-
-        <include content="Background_Notification_Overlay" condition="!Skin.HasSetting(ToastNotifications.Tabbed)">
-            <param name="colordiffuse">panel_bg_70</param>
-        </include>
 
         <control type="group" id="3334">
             <top>-70</top>

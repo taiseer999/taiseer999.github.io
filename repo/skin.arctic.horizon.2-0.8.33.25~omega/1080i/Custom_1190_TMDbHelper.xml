@@ -1,48 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="window" id="1190">
+    <defaultcontrol always="true">9999</defaultcontrol>
+    <onload>SetProperty(TMDbHelper.WidgetContainer,9999)</onload>
+    <onload>SetProperty(TMDbHelper.HideView,1,Home)</onload>
+    <onunload>AlarmClock(ShowView,ClearProperty(TMDbHelper.HideView,Home),00:02,silent)</onunload>
     <controls>
-
         <include>Background_Main</include>
-
+        <control type="list" id="9999">
+            <top>-1000</top>
+            <left>-1000</left>
+            <width>1</width>
+            <height>1</height>
+            <itemlayout />
+            <focusedlayout />
+            <content target="videos">$INFO[Window(Home).Property(TMDbHelper.Path.Current)]</content>
+        </control>
         <control type="group">
             <visible>!$EXP[Exp_InfoDialogs]</visible>
-
-            <include content="DialogInfo_ButtonGroup">
-                <param name="include">Items_DialogVideoInfo_MenuBar</param>
-            </include>
-
-            <include content="Furniture_Busy">
-                <param name="hasspinner">true</param>
-                <param name="spinspinner">true</param>
-                <param name="icon">special://skin/extras/icons/kodi.png</param>
-                <param name="hasbackground">Skin.HasSetting(ToastNotifications.Tabbed)</param>
-                <param name="haslabel">Skin.HasSetting(ToastNotifications.Tabbed)</param>
-                <param name="spinnervisible">Skin.HasSetting(ToastNotifications.Tabbed) | [!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-                <param name="visible">[!Skin.HasSetting(ToastNotifications.Tabbed) | [!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]] + !Window.IsVisible(DialogBusy.xml)</param>
-            </include>
-
-            <include>Furniture_Top</include>
-            <include>Furniture_Bottom</include>
+            <include>Furniture_Busy</include>
+            <include>Furniture_Top_Left</include>
         </control>
-
-        <control type="group">
-            <visible>!$EXP[Exp_InfoDialogs]</visible>
-            <include>Animation_Transition_InfoPanel_Hide</include>
-            <include content="Widget_Busy">
-                <param name="label">$LOCALIZE[19033]</param>
-                <param name="visible">True</param>
-                <left>view_side</left>
-                <top>hub_recommendations_widgets_grouplist_t</top>
-            </include>
-            <include content="Info_Viewline">
-                <param name="label">$LOCALIZE[31324]</param>
-            </include>
-            <include content="Info_Panel">
-                <top>view_top</top>
-                <width>info_panel_w</width>
-                <left>view_side</left>
-            </include>
-        </control>
-
     </controls>
 </window>

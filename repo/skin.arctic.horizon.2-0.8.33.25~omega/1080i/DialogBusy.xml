@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-    <zorder>998</zorder>
+    <zorder>99</zorder>
     <controls>
-
         <include content="Furniture_Busy">
-            <param name="hasspinner">true</param>
-            <param name="spinspinner">true</param>
-            <param name="spinnervisible">Skin.HasSetting(ToastNotifications.Tabbed) | [!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-            <param name="icon">special://skin/extras/icons/kodi.png</param>
-            <param name="haslabel">Skin.HasSetting(ToastNotifications.Tabbed)</param>
-            <param name="hasbackground">Skin.HasSetting(ToastNotifications.Tabbed)</param>
-            <param name="visible">[!Skin.HasSetting(ToastNotifications.Tabbed) | [!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]]</param>
+            <visible>!Window.IsVisible(DialogVolumeBar.xml) | Player.Muted</visible>
+            <visible>!Window.IsVisible(DialogNotification.xml)</visible>
+            <visible>!Window.IsVisible(DialogExtendedProgressBar.xml)</visible>
         </include>
 
-        <control type="progress" id="10">
-            <include>Object_Hidden_Button_Definition</include>
-        </control>
+        <include content="Furniture_Busy">
+            <param name="backing" value="false" />
+            <param name="haslabel" value="false" />
+            <param name="icon" value="special://skin/extras/icons/_none.png" />
+            <visible>!Window.IsVisible(DialogVolumeBar.xml) | Player.Muted</visible>
+            <visible>Window.IsVisible(DialogNotification.xml)</visible>
+        </include>
 
+        <include content="Object_Hidden_Button">
+            <param name="control" value="progress" />
+            <param name="id" value="10" />
+        </include>
     </controls>
 </window>

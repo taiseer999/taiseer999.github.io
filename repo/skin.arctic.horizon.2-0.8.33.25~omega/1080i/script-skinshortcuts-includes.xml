@@ -323,21 +323,34 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">6</property>
-			<label>$LOCALIZE[20077]</label>
-			<label2>إعدادات</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/skinsettings.png</thumb>
-			<property name="labelID">20077</property>
-			<property name="defaultID">20077</property>
-			<onclick>ActivateWindow(SkinSettings)</onclick>
-			<property name="path">ActivateWindow(SkinSettings)</property>
-			<property name="list">SkinSettings</property>
+			<label>$LOCALIZE[7]</label>
+			<label2>Power Shortcut</label2>
+			<icon>special://skin/extras/icons/filebox.png</icon>
+			<thumb />
+			<property name="labelID">7</property>
+			<property name="defaultID">7</property>
+			<onclick>ActivateWindow(filemanager)</onclick>
+			<property name="path">ActivateWindow(filemanager)</property>
+			<property name="list">filemanager</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
+			<property name="mainmenuid">6</property>
+			<label>$LOCALIZE[20077]</label>
+			<label2>إعدادات</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/skinsettings.png</thumb>
+			<property name="labelID">20077</property>
+			<property name="defaultID">20077</property>
+			<visible>[False] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
+			<onclick>noop</onclick>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">6</property>
 			<label>$LOCALIZE[1036]</label>
 			<label2>Power Shortcut</label2>
@@ -348,22 +361,6 @@
 			<onclick>ActivateWindow(favourites)</onclick>
 			<property name="path">ActivateWindow(favourites)</property>
 			<property name="list">favourites</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
-			<property name="mainmenuid">6</property>
-			<label>$LOCALIZE[7]</label>
-			<label2>Power Shortcut</label2>
-			<icon>special://skin/extras/icons/filebox.png</icon>
-			<thumb />
-			<property name="labelID">7</property>
-			<property name="defaultID">7</property>
-			<onclick>ActivateWindow(filemanager)</onclick>
-			<property name="path">ActivateWindow(filemanager)</property>
-			<property name="list">filemanager</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
@@ -390,38 +387,18 @@
 			<thumb>special://skin/extras/icons/android.png</thumb>
 			<property name="labelID">lthwllndrwyd</property>
 			<property name="defaultID">rebootfromnand</property>
-			<visible>[False] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
+			<property name="translatedPath">RebootToAndroid</property>
+			<visible>[System.Platform.Linux] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
+			<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
+			<property name="path">System.ExecWait("/usr/sbin/rebootfromnand")</property>
+			<property name="list">System.ExecWait(/usr/sbin/rebootfromnand)</property>
+			<onclick>Reboot()</onclick>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="10">
 			<property name="id">$NUMBER[10]</property>
-			<property name="mainmenuid">6</property>
-			<label>إعادة تشغيل CoreELEC</label>
-			<label2>أوامر كودي</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">d-tshgylcoreelec</property>
-			<property name="defaultID">13013</property>
-			<visible>[False] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="11">
-			<property name="id">$NUMBER[11]</property>
-			<property name="mainmenuid">6</property>
-			<label>إيقاف تشغيل CoreELEC</label>
-			<label2>Kodi Command</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">yqftshgylcoreelec</property>
-			<property name="defaultID">13005</property>
-			<visible>[False] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="12">
-			<property name="id">$NUMBER[12]</property>
 			<property name="mainmenuid">6</property>
 			<label>ايقاف تشغيل كودي</label>
 			<label2>Custom item</label2>
@@ -433,6 +410,56 @@
 			<property name="path">ActivateWindow(Programs,"plugin://plugin.program.openwizardTaiseer/?mode=forceclose",return)</property>
 			<property name="list">plugin://plugin.program.openwizardTaiseer/?mode=forceclose</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="11">
+			<property name="id">$NUMBER[11]</property>
+			<property name="mainmenuid">6</property>
+			<label>إعادة تشغيل CoreELEC</label>
+			<label2>أوامر كودي</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/coreelec.png</thumb>
+			<property name="labelID">d-tshgylcoreelec</property>
+			<property name="defaultID">13013</property>
+			<onclick>Reboot</onclick>
+			<property name="path">Reboot</property>
+			<property name="list">Reboot</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="12">
+			<property name="id">$NUMBER[12]</property>
+			<property name="mainmenuid">6</property>
+			<label>إيقاف تشغيل CoreELEC</label>
+			<label2>Kodi Command</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/coreelec.png</thumb>
+			<property name="labelID">yqftshgylcoreelec</property>
+			<property name="defaultID">13005</property>
+			<onclick>ShutDown</onclick>
+			<property name="path">ShutDown</property>
+			<property name="list">ShutDown</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="13">
+			<property name="id">$NUMBER[13]</property>
+			<property name="mainmenuid">6</property>
+			<label>$LOCALIZE[13016]</label>
+			<label2>Kodi Command</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/power.png</thumb>
+			<property name="labelID">13016</property>
+			<property name="defaultID">13016</property>
+			<property name="translatedPath">PowerDown</property>
+			<visible>[System.CanPowerDown] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
+			<onclick>PowerDown</onclick>
+			<property name="path">PowerDown</property>
+			<property name="list">PowerDown</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
@@ -974,42 +1001,6 @@
 			<property name="labelID">tkml--0</property>
 			<property name="defaultID" />
 			<property name="widgetAspect">Landscape</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">3</property>
-			<label>قوائمك</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">qwymk</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31371]</label>
-			<label2 />
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">31371</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
 			<onclick>Stacked</onclick>
 			<property name="path">Stacked</property>
 			<property name="list">Stacked</property>
@@ -4082,140 +4073,6 @@
 						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
 						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
-					<include content="Widget_Submenu">
-						<param name="groupid" value="3703" />
-						<param name="id" value="3603" />
-						<param name="spacerid" value="3803" />
-						<param name="buttonid" value="300300" />
-						<param name="label" value="قوائمك" />
-						<param name="usealtlabel" value="False" />
-						<param name="altlabel">$INFO[Container(3602).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![False] | [!Integer.IsEqual(Container(3602).NumItems,0) + Container(3602).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(3603).NumItems,0) | [False + Container(3603).IsUpdating]" />
-						<param name="detailed">true</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !False">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + False">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(3602).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(3603) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
-							<param name="visible">Integer.IsEqual(Container(3603).NumItems,) | Integer.IsEqual(Container(3603).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="False + !False">
-							<param name="visible">Integer.IsEqual(Container(3602).NumItems,0) | String.IsEmpty(Container(3602).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tkml</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3603,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,قوائمك,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3603,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(3603,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
-						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
-						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="3704" />
-						<param name="id" value="3604" />
-						<param name="spacerid" value="3804" />
-						<param name="buttonid" value="300400" />
-						<param name="label" value="$LOCALIZE[31371]" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(3603).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Poster_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![True] | [!Integer.IsEqual(Container(3603).NumItems,0) + Container(3603).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(3604).NumItems,0) | [True + Container(3604).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(3603).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(3604) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
-							<param name="visible">Integer.IsEqual(Container(3604).NumItems,) | Integer.IsEqual(Container(3604).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="True + !False">
-							<param name="visible">Integer.IsEqual(Container(3603).NumItems,0) | String.IsEmpty(Container(3603).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tkml</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3604,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,$LOCALIZE[31371],Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3604,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(3604,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
-						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
-						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="3798" />
 						<param name="id" value="3698" />
@@ -5907,42 +5764,6 @@
 			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">3</property>
-			<label>قوائمك</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">qwymk</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31371]</label>
-			<label2 />
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">31371</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
 	</include>
 	<include name="skinshortcuts-group-alt-tkml-1">
 		<item id="1">
@@ -5974,42 +5795,6 @@
 			<property name="labelID">tkml--0</property>
 			<property name="defaultID" />
 			<property name="widgetAspect">Landscape</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">3</property>
-			<label>قوائمك</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">qwymk</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_mylists&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31371]</label>
-			<label2 />
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">31371</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
 			<onclick>Stacked</onclick>
 			<property name="path">Stacked</property>
 			<property name="list">Stacked</property>
@@ -6748,21 +6533,34 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">6</property>
-			<label>$LOCALIZE[20077]</label>
-			<label2>إعدادات</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/skinsettings.png</thumb>
-			<property name="labelID">20077</property>
-			<property name="defaultID">20077</property>
-			<onclick>ActivateWindow(SkinSettings)</onclick>
-			<property name="path">ActivateWindow(SkinSettings)</property>
-			<property name="list">SkinSettings</property>
+			<label>$LOCALIZE[7]</label>
+			<label2>Power Shortcut</label2>
+			<icon>special://skin/extras/icons/filebox.png</icon>
+			<thumb />
+			<property name="labelID">7</property>
+			<property name="defaultID">7</property>
+			<onclick>ActivateWindow(filemanager)</onclick>
+			<property name="path">ActivateWindow(filemanager)</property>
+			<property name="list">filemanager</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
+			<property name="mainmenuid">6</property>
+			<label>$LOCALIZE[20077]</label>
+			<label2>إعدادات</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/skinsettings.png</thumb>
+			<property name="labelID">20077</property>
+			<property name="defaultID">20077</property>
+			<visible>False</visible>
+			<onclick>noop</onclick>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">6</property>
 			<label>$LOCALIZE[1036]</label>
 			<label2>Power Shortcut</label2>
@@ -6773,22 +6571,6 @@
 			<onclick>ActivateWindow(favourites)</onclick>
 			<property name="path">ActivateWindow(favourites)</property>
 			<property name="list">favourites</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
-			<property name="mainmenuid">6</property>
-			<label>$LOCALIZE[7]</label>
-			<label2>Power Shortcut</label2>
-			<icon>special://skin/extras/icons/filebox.png</icon>
-			<thumb />
-			<property name="labelID">7</property>
-			<property name="defaultID">7</property>
-			<onclick>ActivateWindow(filemanager)</onclick>
-			<property name="path">ActivateWindow(filemanager)</property>
-			<property name="list">filemanager</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
@@ -6815,38 +6597,18 @@
 			<thumb>special://skin/extras/icons/android.png</thumb>
 			<property name="labelID">lthwllndrwyd</property>
 			<property name="defaultID">rebootfromnand</property>
-			<visible>False</visible>
-			<onclick>noop</onclick>
+			<property name="translatedPath">RebootToAndroid</property>
+			<visible>System.Platform.Linux</visible>
+			<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
+			<property name="path">System.ExecWait("/usr/sbin/rebootfromnand")</property>
+			<property name="list">System.ExecWait(/usr/sbin/rebootfromnand)</property>
+			<onclick>Reboot()</onclick>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="10">
 			<property name="id">$NUMBER[10]</property>
-			<property name="mainmenuid">6</property>
-			<label>إعادة تشغيل CoreELEC</label>
-			<label2>أوامر كودي</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">d-tshgylcoreelec</property>
-			<property name="defaultID">13013</property>
-			<visible>False</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="11">
-			<property name="id">$NUMBER[11]</property>
-			<property name="mainmenuid">6</property>
-			<label>إيقاف تشغيل CoreELEC</label>
-			<label2>Kodi Command</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">yqftshgylcoreelec</property>
-			<property name="defaultID">13005</property>
-			<visible>False</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="12">
-			<property name="id">$NUMBER[12]</property>
 			<property name="mainmenuid">6</property>
 			<label>ايقاف تشغيل كودي</label>
 			<label2>Custom item</label2>
@@ -6857,6 +6619,56 @@
 			<onclick>ActivateWindow(Programs,"plugin://plugin.program.openwizardTaiseer/?mode=forceclose",return)</onclick>
 			<property name="path">ActivateWindow(Programs,"plugin://plugin.program.openwizardTaiseer/?mode=forceclose",return)</property>
 			<property name="list">plugin://plugin.program.openwizardTaiseer/?mode=forceclose</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="11">
+			<property name="id">$NUMBER[11]</property>
+			<property name="mainmenuid">6</property>
+			<label>إعادة تشغيل CoreELEC</label>
+			<label2>أوامر كودي</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/coreelec.png</thumb>
+			<property name="labelID">d-tshgylcoreelec</property>
+			<property name="defaultID">13013</property>
+			<onclick>Reboot</onclick>
+			<property name="path">Reboot</property>
+			<property name="list">Reboot</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="12">
+			<property name="id">$NUMBER[12]</property>
+			<property name="mainmenuid">6</property>
+			<label>إيقاف تشغيل CoreELEC</label>
+			<label2>Kodi Command</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/coreelec.png</thumb>
+			<property name="labelID">yqftshgylcoreelec</property>
+			<property name="defaultID">13005</property>
+			<onclick>ShutDown</onclick>
+			<property name="path">ShutDown</property>
+			<property name="list">ShutDown</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="13">
+			<property name="id">$NUMBER[13]</property>
+			<property name="mainmenuid">6</property>
+			<label>$LOCALIZE[13016]</label>
+			<label2>Kodi Command</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/power.png</thumb>
+			<property name="labelID">13016</property>
+			<property name="defaultID">13016</property>
+			<property name="translatedPath">PowerDown</property>
+			<visible>System.CanPowerDown</visible>
+			<onclick>PowerDown</onclick>
+			<property name="path">PowerDown</property>
+			<property name="list">PowerDown</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
@@ -6932,21 +6744,34 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">6</property>
-			<label>$LOCALIZE[20077]</label>
-			<label2>إعدادات</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/skinsettings.png</thumb>
-			<property name="labelID">20077</property>
-			<property name="defaultID">20077</property>
-			<onclick>ActivateWindow(SkinSettings)</onclick>
-			<property name="path">ActivateWindow(SkinSettings)</property>
-			<property name="list">SkinSettings</property>
+			<label>$LOCALIZE[7]</label>
+			<label2>Power Shortcut</label2>
+			<icon>special://skin/extras/icons/filebox.png</icon>
+			<thumb />
+			<property name="labelID">7</property>
+			<property name="defaultID">7</property>
+			<onclick>ActivateWindow(filemanager)</onclick>
+			<property name="path">ActivateWindow(filemanager)</property>
+			<property name="list">filemanager</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
+			<property name="mainmenuid">6</property>
+			<label>$LOCALIZE[20077]</label>
+			<label2>إعدادات</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/skinsettings.png</thumb>
+			<property name="labelID">20077</property>
+			<property name="defaultID">20077</property>
+			<visible>[False] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
+			<onclick>noop</onclick>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">6</property>
 			<label>$LOCALIZE[1036]</label>
 			<label2>Power Shortcut</label2>
@@ -6957,22 +6782,6 @@
 			<onclick>ActivateWindow(favourites)</onclick>
 			<property name="path">ActivateWindow(favourites)</property>
 			<property name="list">favourites</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
-			<property name="mainmenuid">6</property>
-			<label>$LOCALIZE[7]</label>
-			<label2>Power Shortcut</label2>
-			<icon>special://skin/extras/icons/filebox.png</icon>
-			<thumb />
-			<property name="labelID">7</property>
-			<property name="defaultID">7</property>
-			<onclick>ActivateWindow(filemanager)</onclick>
-			<property name="path">ActivateWindow(filemanager)</property>
-			<property name="list">filemanager</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
@@ -6999,38 +6808,18 @@
 			<thumb>special://skin/extras/icons/android.png</thumb>
 			<property name="labelID">lthwllndrwyd</property>
 			<property name="defaultID">rebootfromnand</property>
-			<visible>[False] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
+			<property name="translatedPath">RebootToAndroid</property>
+			<visible>[System.Platform.Linux] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
+			<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
+			<property name="path">System.ExecWait("/usr/sbin/rebootfromnand")</property>
+			<property name="list">System.ExecWait(/usr/sbin/rebootfromnand)</property>
+			<onclick>Reboot()</onclick>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="10">
 			<property name="id">$NUMBER[10]</property>
-			<property name="mainmenuid">6</property>
-			<label>إعادة تشغيل CoreELEC</label>
-			<label2>أوامر كودي</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">d-tshgylcoreelec</property>
-			<property name="defaultID">13013</property>
-			<visible>[False] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="11">
-			<property name="id">$NUMBER[11]</property>
-			<property name="mainmenuid">6</property>
-			<label>إيقاف تشغيل CoreELEC</label>
-			<label2>Kodi Command</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">yqftshgylcoreelec</property>
-			<property name="defaultID">13005</property>
-			<visible>[False] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="12">
-			<property name="id">$NUMBER[12]</property>
 			<property name="mainmenuid">6</property>
 			<label>ايقاف تشغيل كودي</label>
 			<label2>Custom item</label2>
@@ -7042,6 +6831,56 @@
 			<property name="path">ActivateWindow(Programs,"plugin://plugin.program.openwizardTaiseer/?mode=forceclose",return)</property>
 			<property name="list">plugin://plugin.program.openwizardTaiseer/?mode=forceclose</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="11">
+			<property name="id">$NUMBER[11]</property>
+			<property name="mainmenuid">6</property>
+			<label>إعادة تشغيل CoreELEC</label>
+			<label2>أوامر كودي</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/coreelec.png</thumb>
+			<property name="labelID">d-tshgylcoreelec</property>
+			<property name="defaultID">13013</property>
+			<onclick>Reboot</onclick>
+			<property name="path">Reboot</property>
+			<property name="list">Reboot</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="12">
+			<property name="id">$NUMBER[12]</property>
+			<property name="mainmenuid">6</property>
+			<label>إيقاف تشغيل CoreELEC</label>
+			<label2>Kodi Command</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/coreelec.png</thumb>
+			<property name="labelID">yqftshgylcoreelec</property>
+			<property name="defaultID">13005</property>
+			<onclick>ShutDown</onclick>
+			<property name="path">ShutDown</property>
+			<property name="list">ShutDown</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
+			<property name="group">powermenu</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="13">
+			<property name="id">$NUMBER[13]</property>
+			<property name="mainmenuid">6</property>
+			<label>$LOCALIZE[13016]</label>
+			<label2>Kodi Command</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/power.png</thumb>
+			<property name="labelID">13016</property>
+			<property name="defaultID">13016</property>
+			<property name="translatedPath">PowerDown</property>
+			<visible>[System.CanPowerDown] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
+			<onclick>PowerDown</onclick>
+			<property name="path">PowerDown</property>
+			<property name="list">PowerDown</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
@@ -7102,11 +6941,11 @@
 			<param name="id" value="9005" />
 			<param name="groupid" value="9105" />
 			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/skinsettings.png" />
+			<param name="icon" value="special://skin/extras/icons/filebox.png" />
 			<param name="bordersize" value="10" />
-			<label>$LOCALIZE[20077]</label>
+			<label>$LOCALIZE[7]</label>
 			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick>ActivateWindow(SkinSettings)</onclick>
+			<onclick>ActivateWindow(filemanager)</onclick>
 			<onclick />
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 		</include>
@@ -7114,23 +6953,23 @@
 			<param name="id" value="9006" />
 			<param name="groupid" value="9106" />
 			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/favourites2.png" />
+			<param name="icon" value="special://skin/extras/icons/skinsettings.png" />
 			<param name="bordersize" value="10" />
-			<label>$LOCALIZE[1036]</label>
+			<label>$LOCALIZE[20077]</label>
 			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick>ActivateWindow(favourites)</onclick>
 			<onclick />
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<onclick />
+			<visible>False</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
 			<param name="id" value="9007" />
 			<param name="groupid" value="9107" />
 			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/filebox.png" />
+			<param name="icon" value="special://skin/extras/icons/favourites2.png" />
 			<param name="bordersize" value="10" />
-			<label>$LOCALIZE[7]</label>
+			<label>$LOCALIZE[1036]</label>
 			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick>ActivateWindow(filemanager)</onclick>
+			<onclick>ActivateWindow(favourites)</onclick>
 			<onclick />
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 		</include>
@@ -7154,37 +6993,13 @@
 			<param name="bordersize" value="10" />
 			<label>التحول لاندرويد</label>
 			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick />
-			<onclick />
-			<visible>False</visible>
+			<onclick>System.ExecWait("/usr/sbin/rebootfromnand")</onclick>
+			<onclick>Reboot()</onclick>
+			<visible>System.Platform.Linux</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
 			<param name="id" value="9010" />
 			<param name="groupid" value="9110" />
-			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/coreelec.png" />
-			<param name="bordersize" value="10" />
-			<label>إعادة تشغيل CoreELEC</label>
-			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick />
-			<onclick />
-			<visible>False</visible>
-		</include>
-		<include content="Dialog_Menu_Button">
-			<param name="id" value="9011" />
-			<param name="groupid" value="9111" />
-			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/coreelec.png" />
-			<param name="bordersize" value="10" />
-			<label>إيقاف تشغيل CoreELEC</label>
-			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick />
-			<onclick />
-			<visible>False</visible>
-		</include>
-		<include content="Dialog_Menu_Button">
-			<param name="id" value="9012" />
-			<param name="groupid" value="9112" />
 			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/kodi.png" />
 			<param name="bordersize" value="10" />
@@ -7193,6 +7008,42 @@
 			<onclick>ActivateWindow(Programs,"plugin://plugin.program.openwizardTaiseer/?mode=forceclose",return)</onclick>
 			<onclick />
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+		</include>
+		<include content="Dialog_Menu_Button">
+			<param name="id" value="9011" />
+			<param name="groupid" value="9111" />
+			<param name="control" value="button" />
+			<param name="icon" value="special://skin/extras/icons/coreelec.png" />
+			<param name="bordersize" value="10" />
+			<label>إعادة تشغيل CoreELEC</label>
+			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
+			<onclick>Reboot</onclick>
+			<onclick />
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+		</include>
+		<include content="Dialog_Menu_Button">
+			<param name="id" value="9012" />
+			<param name="groupid" value="9112" />
+			<param name="control" value="button" />
+			<param name="icon" value="special://skin/extras/icons/coreelec.png" />
+			<param name="bordersize" value="10" />
+			<label>إيقاف تشغيل CoreELEC</label>
+			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
+			<onclick>ShutDown</onclick>
+			<onclick />
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+		</include>
+		<include content="Dialog_Menu_Button">
+			<param name="id" value="9013" />
+			<param name="groupid" value="9113" />
+			<param name="control" value="button" />
+			<param name="icon" value="special://skin/extras/icons/power.png" />
+			<param name="bordersize" value="10" />
+			<label>$LOCALIZE[13016]</label>
+			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
+			<onclick>PowerDown</onclick>
+			<onclick />
+			<visible>System.CanPowerDown</visible>
 		</include>
 	</include>
 	<include name="skinshortcuts-group-powermenu-1">

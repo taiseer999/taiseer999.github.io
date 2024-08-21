@@ -2,14 +2,21 @@
 <window>
     <include>View_MediaWindows_ID</include>
     <defaultcontrol always="true">50</defaultcontrol>
-    <menucontrol>303</menucontrol>
-    <include content="_Action_Blur_Onload">
-        <param name="sourceimage">Art(fanart)|Property(fanart)|PicturePath|Art(thumb)</param>
-    </include>
-    <include>Action_Media_Onload</include>
-    <controls>
+    <menucontrol>9000</menucontrol>
+    <include>Action_Blur_Onload</include>
+    <onload>RunScript(script.skinvariables,action=buildviews)</onload>
 
+    <controls>
         <include>Defs_TMDbHelper_Loader</include>
         <include>View_Main</include>
+
+        <include content="Object_Options_Menu">
+            <param name="grouplist_items" value="Items_MyVideoNav" />
+            <param name="visible" value="!Window.IsVisible(DialogSelect.xml)" />
+            <param name="use_mouse_focus">true</param>
+        </include>
+
+
     </controls>
+
 </window>
