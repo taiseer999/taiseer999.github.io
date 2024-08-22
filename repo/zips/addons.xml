@@ -1739,6 +1739,33 @@ updated YouTube addon URL
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
 </extension>
+</addon><addon id="plugin.video.tubitv" name="TubiTV" version="5.0.2" provider-name="Lunatixz,WonkoDerp,Liqianyu">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.t1mlib" version="4.0.2" />
+    <import addon="script.module.requests" version="2.22.0" />
+    <import addon="inputstream.adaptive" version="2.6.0" />
+    <import addon="script.module.kodi-six" version="0.1.3.1" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.service" library="pseudotv_recommended.py" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">tubitv</summary>
+    <description lang="en_GB">Tubi TV has the largest library of FREE videos of hit and cult TV shows and films</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GPL-2.0-or-later</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=</forum>
+    <website>http://www.tubitv.com/</website>
+    <news>v.5.0.2[CR]Workaround Fix Login</news>
+    <assets>
+        <icon>resources/images/icon.png</icon>
+        <fanart>resources/images/fanart.jpg</fanart>
+    </assets>
+  </extension>
 </addon><addon id="plugin.video.umbrella" name="Umbrella" provider-name="Umbrella" version="6.6.57">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -3570,6 +3597,27 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.t1mlib" name="t1m Library Routines" provider-name="t1m" version="4.0.9">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.requests" version="2.22.0" />
+    <import addon="inputstream.adaptive" version="2.6.0" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">t1m Library Routines</description>
+        <summary lang="en_GB">t1m Library Routines</summary>
+        <disclaimer lang="en_GB">Feel free to use this script.</disclaimer>
+        <license>GPL-2.0-or-later</license>
+        <platform>all</platform>
+        <forum>https://forum.kodi.tv/showthread.php?tid=247163</forum>
+        <source>https://github.com/learningit/repo-scripts&gt;</source>
+        <language>en</language>
+        <news>v4.0.8 - fixes for Nexus</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+   </extension>
 </addon><addon id="script.module.thetvdb" name="The TVDB API v2" version="1.0.34" provider-name="marcelveldt and others">
     <requires>
 		<import addon="xbmc.python" version="3.0.0" />
