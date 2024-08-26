@@ -2612,6 +2612,31 @@ updated YouTube addon URL
             <screenshot>resources/images/screenshot04.jpg</screenshot>
         </assets>
     </extension>
+</addon><addon id="script.amlogic.framecapture" name="Amlogic frame capture" version="0.1" provider-name="roidy">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0" />
+
+  </requires>
+  <extension point="xbmc.python.script" library="default.py">
+    <provides />
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary />
+    <description />
+    <disclaimer>
+
+    </disclaimer>
+    <platform>linux</platform>
+    <news>
+100
+- Initial Release
+    </news>
+    <assets>
+      <icon />
+      <fanart />
+
+    </assets>
+  </extension>
 </addon><addon id="script.artistslideshow" name="Artist Slideshow" provider-name="pkscout,ronie" version="3.3.7">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
