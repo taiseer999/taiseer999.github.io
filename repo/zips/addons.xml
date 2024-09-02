@@ -704,7 +704,7 @@ updated YouTube addon URL
             <screenshot>resources/screenshot-03.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.4" provider-name="drinfernoo, slamious">
+</addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.5" provider-name="drinfernoo, slamious">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -3865,27 +3865,6 @@ v1.0.0 - schumi2004,CaTz, Mafarricos
       <fanart>resources/media/srt_fanart.jpg</fanart>
     </assets>
   </extension>
-</addon><addon id="service.blackbarsremover" name="Black Bars Remover" version="3.0.0" provider-name="milaq">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-    </requires>
-    <extension point="xbmc.service" library="service.py" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en_gb">Automatically fit video to screen</summary>
-        <description lang="en_gb">Automatically adjusts the zoomlevel to eliminate black bars in videos. This addon also respects Kodi's "minimise black bars" setting.</description>
-        <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-        <forum />
-        <website>https://milaq.net</website>
-        <email />
-        <source>https://github.com/milaq/kodi_addon_blackbarsremover</source>
-        <news />
-        <assets>
-            <icon>resources/icon.png</icon>
-            <fanart />
-            <screenshot />
-        </assets>
-    </extension>
 </addon><addon id="service.cinema.helper" name="Cinema Helper (Kodi 19-21)" version="2.1.5" provider-name="axbmcuser">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
