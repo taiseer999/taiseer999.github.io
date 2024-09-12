@@ -129,7 +129,7 @@ info="http://your.info.url"
 description="Build with AF/AH2 Arabic."
 
 name="AF/AH2 Arabic Apple TV"
-version="1.7"
+version="1.0"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=U0eiJ9n0WMPfXWwq5clc09KV90odSEoChGH67Ke114p7ak6E663OUjIPSvLGz8jY&expiry=jXQ%2F9VfuW9J0yNSpW%2BzwuQ%3D%3D&mac=6ca358490cd3495423e7f339955421fca402cc77b9ab74ca79893f1bc18f2fc8"
 minor="http://"
 gui="http://"
