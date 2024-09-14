@@ -15,7 +15,7 @@
 				<top>-220</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="dialog_fg_12">common/white.png</texture>
+				<texture colordiffuse="panel_bg_70">background/vignetted.png</texture>
 			</control>
 			<control type="grouplist">
 				<left>50</left>
