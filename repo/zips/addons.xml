@@ -3529,7 +3529,7 @@ v1.30.0
     <news>- 1.6.2: Various internal changes.
 - 1.6.0: Dropped Python 2 compatibility.</news>
   </extension>
-</addon><addon id="script.nimbus.helper" name="Nimbus Helper" version="0.0.43" provider-name="Ivar Brandt">
+</addon><addon id="script.nimbus.helper" name="Nimbus Helper" version="0.0.44" provider-name="Ivar Brandt">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
@@ -5839,7 +5839,7 @@ Added arabic fonts
 		<description lang="en_NZ">FENtastic is a modified version of the default Estuary skin for Kodi Nexus. It is intended for use only with FEN.[CR][CR]See [B]CHANGELOG[/B] located in Skin settings » Extra info for latest changes.</description>
 		<description lang="en_US">FENtastic is a modified version of the default Estuary skin for Kodi Nexus. It is intended for use only with FEN.[CR][CR]See [B]CHANGELOG[/B] located in Skin settings » Extra info for latest changes.</description>
 	</extension>
-</addon><addon id="skin.nimbus" version="0.1.26" name="Nimbus" provider-name="Ivar Brandt">
+</addon><addon id="skin.nimbus" version="0.1.27" name="Nimbus" provider-name="Ivar Brandt">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 		<import addon="script.nimbus.helper" />
