@@ -5926,7 +5926,7 @@ Added arabic fonts
 		<description lang="en_NZ">Nimbus Skin</description>
 		<description lang="en_US">Nimbus Skin</description>
 	</extension>
-</addon><addon id="skin.titan.bingie.mod" version="2.2.1.91" name="Titan BINGIE MOD" provider-name="AchillesPunks, Matke">
+</addon><addon id="skin.titan.bingie.mod" version="2.2.1.92" name="Titan BINGIE MOD" provider-name="AchillesPunks, Matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />
