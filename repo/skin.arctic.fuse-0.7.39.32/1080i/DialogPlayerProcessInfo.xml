@@ -339,11 +339,11 @@
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
-				<right>15</right>
-				<top>-310</top>
+				<left>5</left>
+				<top>-320</top>
 				<width>1000</width>
 				<height>100</height>
-				<align>right</align>
+				<align>left</align>
 				<orientation>horizontal</orientation>
 				<itemgap>-10</itemgap>
 				<onup>Close</onup>
@@ -359,11 +359,11 @@
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
-				<right>150</right>
-				<top>-300</top>
+				<left>50</left>
+				<top>-304</top>
 				<width>1000</width>
 				<height>100</height>
-				<align>right</align>
+				<align>left</align>
 				<orientation>horizontal</orientation>
 				<itemgap>-10</itemgap>
 				<onup>Close</onup>
