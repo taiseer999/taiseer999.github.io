@@ -20,6 +20,7 @@
 -->
 
     <fontset id="Default" unicode="false">
+
    <!-- Title fonts -->
         <font>
             <name>font_info_black</name>
@@ -102,7 +103,7 @@
         <font>
             <name>font_main_bold</name>
             <filename>Geeza-Pro-Regular.ttf</filename>
-            <size>32</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini_bold</name>
@@ -129,12 +130,12 @@
         <font>
             <name>font_main</name>
             <filename>Geeza-Pro-Regular.ttf</filename>
-            <size>30</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>Geeza-Pro-Regular.ttf</filename>
-            <size>26</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_tiny</name>
@@ -171,7 +172,7 @@
             <name>font_main_plot</name>
             <filename>Geeza-Pro-Regular.ttf</filename>
             <linespacing>1.14</linespacing>
-            <size>30</size>
+            <size>23</size>
         </font>
         <font>
             <name>font_mini_plot</name>
@@ -326,7 +327,7 @@
         <font>
             <name>font_main_bold</name>
             <filename>RobotoNotoCondensed-Bold.ttf</filename>
-            <size>32</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini_bold</name>
@@ -358,7 +359,7 @@
         <font>
             <name>font_mini</name>
             <filename>PFDinTextArabic-Regular.ttf</filename>
-            <size>26</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_tiny</name>
@@ -395,7 +396,7 @@
             <name>font_main_plot</name>
             <filename>PFDinTextArabic-Regular.ttf</filename>
             <linespacing>1.14</linespacing>
-            <size>30</size>
+            <size>23</size>
         </font>
         <font>
             <name>font_mini_plot</name>
@@ -552,7 +553,7 @@
             <name>font_main_bold</name>
             <filename>Samim-Bold.ttf</filename>
             <aspect>0.89</aspect>
-            <size>32</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini_bold</name>
@@ -584,13 +585,13 @@
             <name>font_main</name>
             <filename>Samim-Medium</filename>
             <aspect>0.89</aspect>
-            <size>30</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>Samim-Medium</filename>
             <aspect>0.89</aspect>
-            <size>26</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_tiny</name>
@@ -633,7 +634,7 @@
             <filename>Samim.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
-            <size>30</size>
+            <size>23</size>
         </font>
         <font>
             <name>font_mini_plot</name>
@@ -840,7 +841,7 @@
             <name>font_main_bold</name>
             <filename>Hacen Beirut Hd.ttf</filename>
             <aspect>0.89</aspect>
-            <size>32</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini_bold</name>
@@ -872,13 +873,13 @@
             <name>font_main</name>
             <filename>Hacen Beirut.ttf</filename>
             <aspect>0.89</aspect>
-            <size>30</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>Hacen Beirut.ttf</filename>
             <aspect>0.89</aspect>
-            <size>26</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_tiny</name>
@@ -921,7 +922,7 @@
             <filename>Hacen Beirut Light.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
-            <size>30</size>
+            <size>23</size>
         </font>
         <font>
             <name>font_mini_plot</name>
@@ -1128,7 +1129,7 @@
             <name>font_main_bold</name>
             <filename>Hacen Casablanca Heavy.ttf</filename>
             <aspect>0.89</aspect>
-            <size>32</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini_bold</name>
@@ -1160,13 +1161,13 @@
             <name>font_main</name>
             <filename>Hacen Casablanca.ttf</filename>
             <aspect>0.89</aspect>
-            <size>30</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>Hacen Casablanca.ttf</filename>
             <aspect>0.89</aspect>
-            <size>26</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_tiny</name>
@@ -1209,7 +1210,7 @@
             <filename>Hacen Casablanca Light.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
-            <size>30</size>
+            <size>23</size>
         </font>
         <font>
             <name>font_mini_plot</name>
@@ -1416,7 +1417,7 @@
             <name>font_main_bold</name>
             <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
-            <size>32</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini_bold</name>
@@ -1448,13 +1449,13 @@
             <name>font_main</name>
             <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
-            <size>30</size>
+            <size>25</size>
         </font>
         <font>
             <name>font_mini</name>
             <filename>Hacen Dalal light.ttf</filename>
             <aspect>0.89</aspect>
-            <size>26</size>
+            <size>22</size>
         </font>
         <font>
             <name>font_tiny</name>
@@ -1497,7 +1498,7 @@
             <filename>Hacen Dalal St.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
-            <size>30</size>
+            <size>23</size>
         </font>
         <font>
             <name>font_mini_plot</name>
