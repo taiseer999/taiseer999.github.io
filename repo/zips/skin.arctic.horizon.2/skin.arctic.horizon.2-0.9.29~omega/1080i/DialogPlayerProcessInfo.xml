@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<depth>DepthOSD</depth>
+	<defaultcontrol always="true">5553</defaultcontrol>
+	<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+	<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+	<onunload>ClearProperty(PlayerInfoDialogFocus,Home)</onunload>
+	<controls>
+		<control type="group">
+			<bottom>0</bottom>
+			<height>300</height>
+			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
+			<control type="image">
+				<left>30</left>
+				<top>-220</top>
+				<right>30</right>
+				<height>600</height>
+				<texture border="40">background/dialog-bg-nobo.png</texture>
+			</control>
+			<control type="grouplist">
+				<left>50</left>
+				<top>-204</top>
+				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5551)</visible>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamServiceName,[COLOR green]$LOCALIZE[19099]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamProviderName,[COLOR green]$LOCALIZE[19101]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamClient,[COLOR green]$LOCALIZE[19012]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamDevice,[COLOR green]$LOCALIZE[19006]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamStatus,[COLOR green]$LOCALIZE[19007]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR green]$LOCALIZE[19015]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+			</control>
+			<control type="grouplist">
+				<left>1250</left>
+				<top>-204</top>
+				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5551)</visible>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="label">
+					<width>600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamBer,[COLOR green]$LOCALIZE[19010]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamUnc,[COLOR green]$LOCALIZE[19011]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamMux,[COLOR green]$LOCALIZE[19100]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamSignal,[COLOR green]$LOCALIZE[19008]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="progress">
+					<top>5</top>
+					<width>600</width>
+					<height>18</height>
+					<info>PVR.ActStreamProgrSignal</info>
+				</control>
+				<control type="label">
+					<top>5</top>
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[PVR.ActStreamSNR,[COLOR green]$LOCALIZE[19009]:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="progress">
+					<top>0</top>
+					<width>600</width>
+					<height>18</height>
+					<info>PVR.ActStreamProgrSNR</info>
+				</control>
+			</control>
+			<control type="grouplist">
+				<left>50</left>
+				<top>-204</top>
+				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5552)</visible>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.VideoCodec,[COLOR green]Video codec:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.VideoResolution,[COLOR green]Video resolution:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.VideoAspect,[COLOR green]Video aspect:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.VideoBitrate,[COLOR green]Video bitrate:[/COLOR] , kb/s]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+			</control>
+			<control type="grouplist">
+				<left>1010</left>
+				<top>-204</top>
+				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5552)</visible>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.AudioCodec,[COLOR green]Audio codec:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.AudioChannels,[COLOR green]Audio channels:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>830</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[VideoPlayer.AudioBitrate,[COLOR green]Audio bitrate:[/COLOR] , kb/s]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+			</control>
+			<control type="grouplist">
+				<left>50</left>
+				<top>-204</top>
+				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5553)</visible>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(videodecoder),[COLOR green]Video decoder:[/COLOR] ]$VAR[Label_VideoHWDecoder, (,)]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(amlogic.pixformat),[COLOR green]Pixel format:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(deintmethod),[COLOR green]Deinterlace method:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>[COLOR green]Video stream:[/COLOR] $INFO[Player.Process(videowidth)]x$INFO[Player.Process(videoheight)]$INFO[Player.Process(videoscantype)] [COLOR green]AR:[/COLOR] $INFO[Player.Process(videodar)] [COLOR green]FPS:[/COLOR] $INFO[Player.Process(videofps)] [COLOR green]Bit depth:[/COLOR] $INFO[Player.Process(video.bit.depth)]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>[COLOR green]Video colour space:[/COLOR] $INFO[Player.Process(video.color.space)] [COLOR green]primaries:[/COLOR] $INFO[Player.Process(video.color.primaries)] [COLOR green]transfer:[/COLOR] $INFO[Player.Process(video.color.transfer.characteristic)] [COLOR green]range:[/COLOR] $INFO[Player.Process(video.color.range)]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>[COLOR green]Video dynamic range source:[/COLOR] $INFO[Player.Process(video.source.hdr.type)] [COLOR green]process:[/COLOR] $INFO[Player.Process(video.hdr.type)] [COLOR green]vs10:[/COLOR] $INFO[Player.Process(amlogic.vs10.mode)]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>[COLOR green]Video Dolby Vision codec:[/COLOR] $INFO[Player.Process(video.dovi.codec.string)] [COLOR green]enhancement layer:[/COLOR] $INFO[Player.Process(video.dovi.el.type)] [COLOR green]version:[/COLOR] $INFO[Player.Process(video.dovi.version.major)].$INFO[Player.Process(video.dovi.version.minor)] [COLOR green]level:[/COLOR] $INFO[Player.Process(video.dovi.level)]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+					<visible>String.Contains(Player.Process(video.hdr.type),"dolby vision")</visible>
+				</control>
+
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>[COLOR green]Audio stream:[/COLOR] $INFO[Player.Process(audiochannels),,$COMMA ]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , bits]$INFO[Player.Process(audiosamplerate),$COMMA , Hz]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+			</control>
+			<control type="grouplist">
+				<left>50</left>
+				<top>-204</top>
+				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5554)</visible>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[System.ScreenResolution,[COLOR green]Screen resolution:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1200</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[System.FPS,[COLOR green]System Rendering Speed:[/COLOR] , fps]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>[COLOR green]System memory usage:[/COLOR] $INFO[system.memory(used)] / $INFO[system.memory(total)] - $INFO[system.memory(used.percent)]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>System.SupportsCPUUsage</visible>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[System.CpuUsage,[COLOR green]System CPU usage:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="label">
+					<width>1600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[System.CPUTemperature,[COLOR green]SoC Temp:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+			</control>
+			<control type="grouplist">
+				<left>1250</left>
+				<top>-204</top>
+				<visible>Control.HasFocus(5553)</visible>
+				<control type="label">
+					<width>600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(amlogic.displaymode),[COLOR green]Display mode:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+				<control type="label">
+					<width>600</width>
+					<height>50</height>
+					<aligny>bottom</aligny>
+					<label>$INFO[Player.Process(amlogic.eoft_gamut),[COLOR green]EOTF & Gamut:[/COLOR] ]</label>
+					<font>font_mini_bold</font>
+					<shadowcolor>black</shadowcolor>
+					<visible>Player.HasVideo</visible>
+				</control>
+			</control>
+			<control type="grouplist" id="5550">
+				<right>15</right>
+				<top>-330</top>
+				<width>1000</width>
+				<height>100</height>
+				<align>right</align>
+				<orientation>horizontal</orientation>
+				<itemgap>-10</itemgap>
+				<onup>Close</onup>
+				<ondown>Close</ondown>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="button" id="5551">
+					<width>auto</width>
+					<height>100</height>
+					<textoffsetx>40</textoffsetx>
+					<label>PVR</label>
+					<visible>VideoPlayer.Content(livetv)</visible>
+					<onfocus>SetProperty(PlayerInfoDialogFocus,5551,Home)</onfocus>
+				</control>
+				<control type="button" id="5552">
+					<width>auto</width>
+					<height>100</height>
+					<textoffsetx>40</textoffsetx>
+					<label>Media</label>
+					<onfocus>SetProperty(PlayerInfoDialogFocus,5552,Home)</onfocus>
+				</control>
+				<control type="button" id="5553">
+					<width>auto</width>
+					<height>100</height>
+					<textoffsetx>40</textoffsetx>
+					<label>Player</label>
+					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
+				</control>
+				<control type="button" id="5554">
+					<width>auto</width>
+					<height>100</height>
+					<textoffsetx>40</textoffsetx>
+					<label>System</label>
+					<onfocus>SetProperty(PlayerInfoDialogFocus,5554,Home)</onfocus>
+				</control>
+			</control>
+<control type="group">
+                <centerbottom>60</centerbottom>
+                <left>40</left>
+				<right>10</right>
+                <height>80</height>
+                <include>OSD_Codecs</include>
+            </control>
+		</control>
+	</controls>
+</window>
