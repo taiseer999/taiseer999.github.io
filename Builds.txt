@@ -88,7 +88,7 @@ description="Kodi Build with Arctic Fuse Arabic."
 
 name="AF full screen"
 version="3.3"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=yDH5QO6tYckpncVDGPNDV1n0Oq7CMy4EIQVvTduj4TgECqZEB3f2%2B%2F%2F%2FnZTWUu58&expiry=VgeT2iXGmPMXZAbl98P91w%3D%3D&mac=cf39fb898390835842efa8c189ac61a5af5e6a0afeee231ead2cf2e397e359bc"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=eZ0P0h%2FEkI5gYNxwVd1PBlXwkfEUqCU9NnIfvi%2FCwARnqBBTpX%2BUgOvUWhWt0I9R&expiry=iN0heUEuqPW9DK%2Bv5lngWw%3D%3D&mac=dcc5f294c966a324fe0cd8be0b91c2438c47ba480350e4fa346ecc958a615b27"
 minor="http://"
 gui="http://"
 kodi="21"
