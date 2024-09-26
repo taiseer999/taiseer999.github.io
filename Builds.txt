@@ -116,7 +116,7 @@ description="Kodi Build with Arctic Horizon 2 Arabic."
 
 name="AH2 Arabic Ver2"
 version="1.0"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=aqD0g4QmBTFvbfbEyv803ZFXgMkOXBy15SZZSiwbhyTCufH5OUZ6iIn1dJnNJr0t&expiry=Yw42mjrsW7lkfK7gFAPkBg%3D%3D&mac=f13cbe14d2b5c4b43cfc4a7ef117b65d1e56382e13e551a02fc299ef7becd649"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=aqD0g4QmBTFvbfbEyv803ZFXgMkOXBy15SZZSiwbhyTCufH5OUZ6iIn1dJnNJr0t&expiry=igm2qomtXzwCo%2FufsJ6DLg%3D%3D&mac=619ed964bede33c70a85c2f4c391832e2eed52b5d63b269b7140372b4ad05911"
 minor="http://"
 gui="http://"
 kodi="21"
@@ -144,7 +144,7 @@ description="Build with AF/AH2 Arabic."
 
 name="AF/AH2 Ver2 Arabic"
 version="1.0"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=8iweRKDp3WfOWh1R%2BjGsBkYOvYxpsK0AJw71zqDDN0pw3uwLe732pBV57KrQIp5U&expiry=U%2BzXf0j7siTpuHCl2tj%2BJw%3D%3D&mac=fad92808b9678c27b1f6de65f22a98eda66d933cc48d6de93eb0c9729c591ee1
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=8iweRKDp3WfOWh1R%2BjGsBkYOvYxpsK0AJw71zqDDN0pw3uwLe732pBV57KrQIp5U&expiry=47C%2FVUIBDc5sPuLfdji51Q%3D%3D&mac=44efdf47c8580ccaade2ae085c88af07ced48c4de36044b91b9b691d12ba5605"
 minor="http://"
 gui="http://"
 kodi="21"
