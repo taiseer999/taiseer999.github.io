@@ -115,7 +115,7 @@ info="http://your.info.url"
 description="Kodi Build with Arctic Horizon 2 Arabic."
 
 name="AH2 Arabic Ver2"
-version="2.0"
+version="1.0"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=aqD0g4QmBTFvbfbEyv803ZFXgMkOXBy15SZZSiwbhyTCufH5OUZ6iIn1dJnNJr0t&expiry=4DmlU%2BlmpcK9%2BVCX0CeJEQ%3D%3D&mac=9170de0f9c4ae1675f97bbbd62a05c45577ad2e12737739d3be396e76d635b0e"
 minor="http://"
 gui="http://"
@@ -143,7 +143,7 @@ info="http://your.info.url"
 description="Build with AF/AH2 Arabic."
 
 name="AF/AH2 Ver2 Arabic"
-version="1.9"
+version="1.0"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=8iweRKDp3WfOWh1R%2BjGsBkYOvYxpsK0AJw71zqDDN0pw3uwLe732pBV57KrQIp5U&expiry=U%2BzXf0j7siTpuHCl2tj%2BJw%3D%3D&mac=fad92808b9678c27b1f6de65f22a98eda66d933cc48d6de93eb0c9729c591ee1
 minor="http://"
 gui="http://"
