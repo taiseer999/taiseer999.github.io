@@ -3327,36 +3327,6 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.slyguy" name="SlyGuy Common" provider-name="SlyGuy" version="0.85.26">
-  <requires>
-    <import addon="slyguy.dependencies" version="0.0.20" />
-    <import addon="repository.slyguy" version="0.0.9" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>executable</provides>
-  </extension>
-  <extension point="xbmc.service" library="service.py" start="login" />
-  <extension point="kodi.context.item">
-    <menu id="kodi.core.main">
-      <item library="default.py">
-        <label>$LOCALIZE[20410]</label>
-        <visible>!String.IsEmpty(ListItem.Trailer) + ![String.StartsWith(Container.FolderPath,plugin://) + String.Contains(Container.FolderPath,trailer)] + Integer.IsEqual(Window(10000).Property(_slyguy_trailer_context_menu),1)</visible>
-      </item>
-    </menu>
-  </extension>
-  <extension point="xbmc.python.module" library="resources/modules" />
-  <extension point="xbmc.addon.metadata">
-    <description lang="en">Common code, proxy and settings required by all Slyguy add-ons</description>
-    <reuselanguageinvoker>true</reuselanguageinvoker>
-    <license />
-    <language />
-    <website />
-    <news>Move userdata and bookmarks into settings!</news>
-    <assets>
-      <icon>icon.png</icon>
-      <fanart>fanart.jpg</fanart>
-    </assets>
-  </extension>
 </addon><addon id="script.module.soupsieve" name="soupsieve" version="2.4.1" provider-name="Isaac Muse">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -6070,23 +6040,6 @@ Added arabic fonts
 			[B]Titan BINGIE MOD v2[/B][CR]Follow the forum thread about the latest news for the skin.[CR]https://forum.kodi.tv/showthread.php?tid=355993
 		</news>
 	</extension>
-</addon><addon id="slyguy.dependencies" name="SlyGuy Dependencies" provider-name="SlyGuy" version="0.0.22">
-  <requires>
-    <import addon="repository.slyguy" />
-  </requires>
-  <extension point="xbmc.python.module" library="resources/modules" />
-  <extension point="xbmc.addon.metadata">
-    <description lang="en">Dependencies required by all Slyguy add-ons</description>
-    <reuselanguageinvoker>true</reuselanguageinvoker>
-    <license />
-    <language />
-    <website />
-    <news>remove pymysql</news>
-    <assets>
-      <icon>icon.png</icon>
-      <fanart>fanart.jpg</fanart>
-    </assets>
-  </extension>
 </addon><addon id="weather.gismeteo" version="0.6.4+matrix.1" name="Gismeteo" provider-name="vl.maksime">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
