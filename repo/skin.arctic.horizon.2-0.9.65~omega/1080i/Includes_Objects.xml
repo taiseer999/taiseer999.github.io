@@ -1793,6 +1793,45 @@
             </control>
         </definition>
     </include>
+ <include name="Object_MenuHeader2">
+        <param name="icon" default="special://skin/extras/icons/kodi.png" />
+        <param name="label" default="$LOCALIZE[33063]" />
+        <param name="has_icon" default="true" />
+        <param name="colordiffuse" default="$VAR[ColorHighlight]" />
+        <param name="textcolor" default="dialog_fg" />
+        <param name="font" default="font_main_bold" />
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <nested />
+                <height>120</height>
+                <control type="label">
+                    <label>$PARAM[label]</label>
+                    <textoffsetx>grid_x04</textoffsetx>
+                    <font>$PARAM[font]</font>
+                    <aligny>center</aligny>
+                    <textcolor>$PARAM[textcolor]_70</textcolor>
+                </control>
+                <include content="Object_Control" condition="$PARAM[has_icon]">
+                    <param name="control" value="group" />
+                    <left>grid_x02</left>
+                    <centertop>60%</centertop>
+                    <height>grid_x08</height>
+                    <width>grid_x08</width>
+                    <control type="image">
+                        <bordersize>$PARAM[bordersize]</bordersize>
+                        <texture colordiffuse="$PARAM[colordiffuse]">$PARAM[icon]</texture>
+                    </control>
+                </include>
+                <control type="image">
+                    <bottom>20</bottom>
+                    <height>1</height>
+                    <left>grid_x04</left>
+                    <right>grid_x04</right>
+                    <texture colordiffuse="$PARAM[textcolor]_12">common/white.png</texture>
+                </control>
+            </control>
+        </definition>
+    </include>
 
     <include name="Object_Keyboard_Button">
         <param name="control" default="button" />

@@ -125,7 +125,7 @@
                      <include content="Animation_SlideIn_Dialog">
                     <param name="windowopen_delay">200</param>
                 </include>
-                     <include content="Object_MenuHeader">
+                     <include content="Object_MenuHeader2">
                     <param name="label"></param>
                  <top>-20</top>		
 
@@ -137,9 +137,9 @@
                     <itemgap>-25</itemgap>
                       <control type="label">
                         <label>Video</label>
-                        <left>0</left>
+                        <left>45</left>
                          <font>font_midi_black</font>
-                         <textcolor>red</textcolor>
+                         <textcolor>ff00695c</textcolor>
                              </control>
 					<control type="label">
 						<top>145</top>
@@ -259,7 +259,7 @@
  		<include content="Animation_SlideIn_Dialog">
                     <param name="windowopen_delay">200</param>
                 </include>
-                <include content="Object_MenuHeader">
+                <include content="Object_MenuHeader2">
                     <param name="label"></param>
                  <top>-20</top>		
 
@@ -271,9 +271,9 @@
                     <itemgap>-21</itemgap>
                     <control type="label">
                         <label>More</label>
-                        <left>0</left>
+                        <left>45</left>
                         <font>font_midi_black</font>
-                        <textcolor>red</textcolor>
+                        <textcolor>ff00695c</textcolor>
                     </control>
 					<control type="label">
 						<top>145</top>
@@ -351,7 +351,7 @@
  		<include content="Animation_SlideIn_Dialog">
                     <param name="windowopen_delay">200</param>
                 </include>
-                <include content="Object_MenuHeader">
+                <include content="Object_MenuHeader2">
                     <param name="label"></param>
                  <top>-20</top>		
                 </include>
@@ -362,8 +362,9 @@
                     <itemgap>-21</itemgap>
                     <control type="label">
                         <label>Audio</label>
+                        <left>45</left>
                         <font>font_midi_black</font>
-                        <textcolor>red</textcolor>
+                        <textcolor>ff00695c</textcolor>
                     </control>
 					<control type="label">
 						<top>145</top>
@@ -448,10 +449,12 @@
  <include content="Animation_SlideIn_Dialog">
                     <param name="windowopen_delay">200</param>
                 </include>
-                <include content="Object_MenuHeader">
+                <include content="Object_MenuHeader2">
                     <param name="label"></param>
                  <top>-20</top>		
+
                 </include>
+                   
                 <control type="group">
                     <left>45</left>
                     <top>-420</top>
@@ -459,8 +462,9 @@
                     <itemgap>-21</itemgap>
                     <control type="label">
                         <label>System</label>
+                        <left>45</left>
                         <font>font_midi_black</font>
-                        <textcolor>red</textcolor>
+                        <textcolor>ff00695c</textcolor>
                     </control>
                     <control type="label">
 						<top>145</top>
