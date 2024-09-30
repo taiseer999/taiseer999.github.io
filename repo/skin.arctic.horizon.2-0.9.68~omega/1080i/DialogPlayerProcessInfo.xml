@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <controls>
+        <control type="group">
+            <include>Animation.FadeIn</include>
+            <include>Animation.FadeOut</include>
+            <left>SidePad</left>
+            <top>75</top>
+            <width>1600</width>
+            <height>360</height>
+
+            <!-- PVR -->
+            <control type="group">
+                <visible>VideoPlayer.Content(livetv)</visible>
+                <width>870</width>
+                <height>650</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/panel-256-box.png</texture>
+                </control>
+                <include content="flags/color/ratings/Kodi.png">
+                    <param name="dimensions" value="30"/>.   
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                <control type="grouplist">
+                    <left>45</left>
+                    <top>23</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>      $LOCALIZE[19005]</label>
+                        <left>30</left>
+                        <font>font_midi_black</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamServiceName,$LOCALIZE[19099]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamProviderName,$LOCALIZE[19101]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamClient,$LOCALIZE[19012]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamDevice,$LOCALIZE[19006]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamStatus,$LOCALIZE[19007]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamEncryptionName,$LOCALIZE[19015]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamBer,$LOCALIZE[19010]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamUnc,$LOCALIZE[19011]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamMux,$LOCALIZE[19100]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamSignal,$LOCALIZE[19008]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>PVR.ActStreamProgrSignal</info>
+                        </control>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamSNR,$LOCALIZE[19009]: ]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>PVR.ActStreamProgrSNR</info>
+                        </control>
+                    </control>
+                </control>
+            </control>
+
+            <!-- Video -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="890,0" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                    <top>-30</top>		
+<width>870</width>
+                <height>525</height>
+<left>75</left>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/panel-256-box.png</texture>
+                </control>
+                    <include content="flags/color/ratings/Kodi.png">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                     <include content="Animation_SlideIn_Dialog2">
+                    <param name="windowopen_delay">200</param>
+                </include>
+                     <include content="Object_MenuHeader2">
+                    <param name="label"></param>
+                 <top>-20</top>		
+
+                 </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>-420</top>
+                    <width>780</width>
+                    <itemgap>-25</itemgap>
+                      <control type="label">
+                        <label>Video</label>
+                        <left>45</left>
+                         <font>font_midi_black</font>
+                         <textcolor>ffdddddd</textcolor>
+                             </control>
+					<control type="label">
+						<top>145</top>
+						<label>Display Mode:</label>
+                                                <font>font_mini_bold</font>
+                                                </control>
+					<control type="label">
+						<left>350</left>
+						<top>145</top>
+                                                <label>$INFO[Player.Process(amlogic.displaymode)]</label>
+                                                <font>font_mini</font>
+                                                <textcolor>$VAR[ColorHighlight]</textcolor>
+                                                </control>
+					<control type="label">
+						<top>245</top>
+						<label>Video Resolution:</label>
+                                                <font>font_mini_bold</font>
+                                                </control>
+					<control type="label">
+						<left>350</left>
+						<top>245</top>
+                                                <label>$INFO[VideoPlayer.VideoCodec]-$INFO[VideoPlayer.VideoResolution]</label>
+                                                <font>font_mini</font>
+                                                <textcolor>$VAR[ColorHighlight]</textcolor>
+                                                </control>
+				       	<control type="label">
+						<top>345</top>
+                                                <label>Pixel Format:</label>
+                                                <font>font_mini_bold</font>
+                                                </control>
+					<control type="label">
+						<left>350</left>
+						<top>345</top>
+                                                <label>$INFO[Player.Process(amlogic.pixformat)]</label>
+                                                <font>font_mini</font>
+                                                <textcolor>$VAR[ColorHighlight]</textcolor>
+                                                </control>
+				       	<control type="label">
+						<top>445</top>
+						<label>Video Bit Depth:</label>
+                                                <font>font_mini_bold</font>
+                                                </control>
+					<control type="label">
+						<left>350</left>
+						<top>445</top>
+                                                <label>$INFO[Player.Process(video.bit.depth)]-bit</label>
+                                                <font>font_mini</font>
+                                               <textcolor>$VAR[ColorHighlight]</textcolor>
+                                               </control>
+					<control type="label">
+				        	<top>545</top>
+                                               <label>Video Aspect:</label>
+                                               <font>font_mini_bold</font>
+                                               </control>
+						<control type="label">
+						<left>350</left>
+						<top>545</top>
+        			                <label>$INFO[Player.Process(videodar)]</label>
+                                                <font>font_mini</font>
+             			               <textcolor>$VAR[ColorHighlight]</textcolor>
+           		                       </control>
+					<control type="label">
+						<top>645</top>
+       			                       <label>Video Decoder:</label>
+                    			       <font>font_mini_bold</font>
+			                       </control>
+					<control type="label">
+						<left>350</left>
+						<top>645</top>
+      				                  <label>$INFO[Player.Process(videodecoder)] $VAR[Label_VideoHWDecoder, (,)]</label>
+            			                <font>font_mini</font>
+       				                 <textcolor>$VAR[ColorHighlight]</textcolor>
+               				        </control>
+					<control type="label">
+						<top>745</top>
+						<label>Video Codec:</label>
+               				         <font>font_mini_bold</font>
+			                       </control>
+					<control type="label">
+						<left>350</left>
+						<top>745</top>
+ 			                       <label>[UPPERCASE]$INFO[VideoPlayer.VideoCodec][/UPPERCASE]</label>
+      			                     <font>font_mini</font>
+ 			                       <textcolor>$VAR[ColorHighlight]</textcolor>
+   			                    </control>
+   			                  <control type="label">
+						<top>845</top>
+						<label>Deinterlace Method:</label>
+     			                   <font>font_mini_bold</font>
+                                              </control>
+					<control type="label">
+						<left>350</left>
+						<top>845</top>
+						<label>[CAPITALIZE]$INFO[Player.Process(deintmethod)][/CAPITALIZE]</label>
+			                        <font>font_mini</font>
+ 			                       <textcolor>$VAR[ColorHighlight]</textcolor>
+			                     </control>
+    		            </control>
+            </control>
+			
+			<!-- More -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="890,0" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                <top>513</top>
+		<width>870</width>
+                <height>450</height>
+                 <top>-30</top>		
+               <left>75</left>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/panel-256-box.png</texture>
+               </control>
+                    <include content="flags/color/ratings/Kodi.png">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+ 		<include content="Animation_SlideIn_Dialog2">
+                    <param name="windowopen_delay">200</param>
+                </include>
+                <include content="Object_MenuHeader2">
+                    <param name="label"></param>
+                 <top>-20</top>		
+
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>-345</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>More</label>
+                        <left>45</left>
+                        <font>font_midi_black</font>
+                        <textcolor>ffdddddd</textcolor>
+                    </control>
+					<control type="label">
+						<top>145</top>
+						<label>Dolby Vision Codec:</label>
+						<font>font_mini_bold</font>
+						</control>
+					<control type="label">
+						<left>350</left>
+						<top>145</top>
+						<label>$VAR[DVProfileVar] [B]$VAR[DVELVar][/B]</label>
+						<font>font_mini</font>
+                			        <textcolor>$VAR[ColorHighlight]</textcolor>
+					</control>
+					<control type="label">
+						<top>245</top>
+						<label>EOTF & Gamut:</label>
+						<font>font_mini_bold</font>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>245</top>
+						<label>$INFO[Player.Process(amlogic.eoft_gamut)]</label>
+						<font>font_mini</font>
+                    			       <textcolor>$VAR[ColorHighlight]</textcolor>
+					</control>
+					<control type="label">
+						<top>345</top>
+						<label>VS10:</label>
+						<font>font_mini_bold</font>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>345</top>
+						<label>$VAR[DVNameVar]</label>
+						<font>font_mini</font>
+                      			       <textcolor>$VAR[ColorHighlight]</textcolor>
+					</control>
+					<control type="label">
+						<top>445</top>
+						<label>Video Source:</label>
+						<font>font_mini_bold</font>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>445</top>
+						<label>[CAPITALIZE]$INFO[Player.Process(video.source.hdr.type)][/CAPITALIZE]</label>
+						<font>font_mini</font>
+                                                <textcolor>$VAR[ColorHighlight]</textcolor>
+					</control>
+                </control>
+<control type="group">
+                <centerbottom>60</centerbottom>
+                <left>40</left>
+		<right>10</right>
+                <height>80</height>
+                <include>OSD_Codecs</include>
+		</control>
+            </control>
+
+            <!-- Audio -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="0,350" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                <left>965</left>
+		<top>513</top>
+                <width>870</width>
+                <height>450</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/panel-256-box.png</texture>
+                </control>
+                    <include content="flags/color/ratings/Kodi.png">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+ 		<include content="Animation_SlideIn_Dialog2">
+                    <param name="windowopen_delay">200</param>
+                </include>
+                <include content="Object_MenuHeader2">
+                    <param name="label"></param>
+                 <top>-20</top>		
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>-345</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>Audio</label>
+                        <left>45</left>
+                        <font>font_midi_black</font>
+                        <textcolor>ffdddddd</textcolor>
+                    </control>
+					<control type="label">
+						<top>145</top>
+						<label>Audio Codec:</label>
+						<font>font_mini_bold</font>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>145</top>
+						<label>$INFO[VideoPlayer.AudioCodec]</label>
+						<font>font_mini</font>
+         			               <textcolor>$VAR[ColorHighlight]</textcolor>
+					</control>
+             			       <control type="label">
+						<top>245</top>
+						<label>Audio Channels:</label>
+						<font>font_mini_bold</font>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>245</top>
+						<label>$VAR[Label_VideoPlayer_AudioChannels]</label>
+						<font>font_mini</font>
+              			               <textcolor>$VAR[ColorHighlight]</textcolor>
+					</control>
+       	                <control type="label">
+			<top>345</top>
+                        <label>BIT / Samples:</label>
+                        <font>font_mini_bold</font>
+                        </control>
+					<control type="label">
+						<left>350</left>
+						<top>345</top>
+                        <label>$INFO[Player.Process(audiobitspersample),, bits]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+						<top>445</top>
+                        <label>Sample Rate:</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>445</top>
+                        <label>$INFO[Player.Process(audiosamplerate),, Hz]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+					<control type="label">
+						<top>545</top>
+						<label>Audio Language:</label>
+						<font>font_mini_bold</font>
+						<visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>545</top>
+						<label>[UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE]</label>
+						<font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+						<visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+					</control>
+                                        <control type="label">
+						<top>645</top>
+						<label>Subtitle Language:</label>
+						<font>font_mini_bold</font>
+						<visible>!String.IsEmpty(VideoPlayer.SubtitlesLanguage)</visible>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>645</top>
+						<label>[UPPERCASE]$INFO[VideoPlayer.SubtitlesLanguage][/UPPERCASE]</label>
+						<font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+						<visible>!String.IsEmpty(VideoPlayer.SubtitlesLanguage)</visible>
+					</control>
+
+                </control>
+            </control>
+
+            <!-- System -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="0,320" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                <left>965</left>
+                <width>870</width>
+                <height>525</height>
+                 <top>-30</top>		
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/panel-256-box.png</texture>
+                </control>
+                    <include content="flags/color/ratings/Kodi.png">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+ <include content="Animation_SlideIn_Dialog2">
+                    <param name="windowopen_delay">200</param>
+                </include>
+                <include content="Object_MenuHeader2">
+                    <param name="label"></param>
+                 <top>-20</top>		
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>-420</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>System</label>
+                        <left>45</left>
+                        <font>font_midi_black</font>
+                        <textcolor>ffdddddd</textcolor>
+                    </control>
+                    <control type="label">
+						<top>145</top>
+                        <label>Build</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>145</top>
+                        <label>$INFO[System.BuildVersion]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+						<top>245</top>
+                        <label>System Uptime:</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>245</top>
+                        <label>$INFO[System.Uptime]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+						<top>345</top>
+                        <label>Display:</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>345</top>
+                        <label>$INFO[System.FPS] FPS</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+						<top>445</top>
+                        <label>CPU Speed</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>445</top>
+                        <label>$INFO[System.CpuFrequency]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+					
+					<control type="label">
+						<top>545</top>
+						<label>CPU Temperature</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>545</top>
+                        <label>$INFO[System.CPUTemperature]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="label">
+						<top>645</top>
+                        <label>CPU Usage</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>645</top>
+                        <label>$INFO[System.CpuUsage]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+						<top>810</top>
+                            <description>CPU BAR</description>
+                            <centertop>50%</centertop>
+                            <height>5</height>
+                            <info>System.CPUUsage</info>
+                            <include>DefSettingsfont_midi_black</include>
+                        </control>
+                    </control>
+                    <control type="label">
+						<top>745</top>
+                        <label>Used Memory:</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>745</top>
+                        <label>$INFO[system.memory(used.percent)]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+						<top>860</top>
+                            <description>Memory BAR</description>
+                            <centertop>50%</centertop>
+                            <height>5</height>
+                            <info>system.memory(used)</info>
+                            <include>DefSettingsfont_midi_black</include>
+                        </control>
+                    </control>
+                    <control type="label">
+						<top>845</top>
+                        <label>Player-Cashe:</label>
+                        <font>font_mini_bold</font>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>845</top>
+                        <label>$INFO[Player.CacheLevel,,%]</label>
+                        <font>font_mini</font>
+                        <textcolor>$VAR[ColorHighlight]</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+						<top>910</top>
+                            <description>Cache BAR</description>
+                            <centertop>50%</centertop>
+                            <height>5</height>
+                            <info>Player.CacheLevel</info>
+                            <include>DefSettingsfont_midi_black</include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>
