@@ -74,8 +74,8 @@ description="Kodi 21 Arabic Titan BINGIE MOD Arabic."
 
 
 name="AF Arabic"
-version="3.3"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=eZ0P0h%2FEkI5gYNxwVd1PBlXwkfEUqCU9NnIfvi%2FCwARnqBBTpX%2BUgOvUWhWt0I9R&expiry=iN0heUEuqPW9DK%2Bv5lngWw%3D%3D&mac=dcc5f294c966a324fe0cd8be0b91c2438c47ba480350e4fa346ecc958a615b27"
+version="1.0"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=ExozbObZU8bK2ibJnzCv4udXi4ICYDZj8QyaX67wHwmP5aRTY8JnpVJfnp9V4E%2BJ&expiry=QyOWNnKpkyMvRFYgRJ9Q8A%3D%3D&mac=b99be59ef3105fc7d0bfe8a6df15a805d288ed8d811329fc2508e1060d9825bb"
 minor="http://"
 gui="http://"
 kodi="21"
@@ -103,7 +103,7 @@ description="Kodi Build with Arctic Horizon 2 Arabic/Ver2."
 
 
 name="AF/AH2 Arabic"
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=skZASuRhg785hZRxKthC%2BNwFa4pPMcqLbH6%2BJwGr3K7v3LnQYd6A2Hxu2iJzz5A1&expiry=%2BpuohiiNeo3ZiMijVccK5Q%3D%3D&mac=3411bc50eb293b2cb804799c8978a6114970c2e2e1cc76c1117c33878f49f2de"
 minor="http://"
 gui="http://"
