@@ -89,7 +89,7 @@ description="Kodi Build with Arctic Fuse Arabic."
 
 name="AH2 Arabic"
 version="1.1"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=aqD0g4QmBTFvbfbEyv803ZFXgMkOXBy15SZZSiwbhyTCufH5OUZ6iIn1dJnNJr0t&expiry=igm2qomtXzwCo%2FufsJ6DLg%3D%3D&mac=619ed964bede33c70a85c2f4c391832e2eed52b5d63b269b7140372b4ad05911"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=aqD0g4QmBTFvbfbEyv803ZFXgMkOXBy15SZZSiwbhyTCufH5OUZ6iIn1dJnNJr0t&expiry=yXxyHptsoJ3NRuK8HczavA%3D%3D&mac=1660cdd20e8248a5712a760611f19248bee82c20f5107057c3f3e06c7cb27979"
 minor="http://"
 gui="http://"
 kodi="21"
