@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <controls>
+        <control type="group">
+            <include>Animation.FadeIn</include>
+            <include>Animation.FadeOut</include>
+            <left>SidePad</left>
+            <top>75</top>
+            <width>1600</width>
+            <height>360</height>
+
+            <!-- PVR -->
+            <control type="group">
+                <visible>VideoPlayer.Content(livetv)</visible>
+                <width>870</width>
+                <height>650</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/rounded-shadow8.png</texture>
+                </control>
+                <include content="Kodi_Logo">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                <control type="grouplist">
+                    <left>45</left>
+                    <top>23</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>      $LOCALIZE[19005]</label>
+                        <left>30</left>
+                        <font>Button</font>
+                        <textcolor>PanelWhite100</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamServiceName,[COLOR Selected]$LOCALIZE[19099]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamProviderName,[COLOR Selected]$LOCALIZE[19101]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamClient,[COLOR Selected]$LOCALIZE[19012]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamDevice,[COLOR Selected]$LOCALIZE[19006]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamStatus,[COLOR Selected]$LOCALIZE[19007]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamEncryptionName,[COLOR Selected]$LOCALIZE[19015]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamBer,[COLOR Selected]$LOCALIZE[19010]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamUnc,[COLOR Selected]$LOCALIZE[19011]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamMux,[COLOR Selected]$LOCALIZE[19100]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamSignal,[COLOR Selected]$LOCALIZE[19008]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>PVR.ActStreamProgrSignal</info>
+                        </control>
+                    </control>
+                    <control type="label">
+                        <label>$INFO[PVR.ActStreamSNR,[COLOR Selected]$LOCALIZE[19009]:[/COLOR] ]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>PVR.ActStreamProgrSNR</info>
+                        </control>
+                    </control>
+                </control>
+            </control>
+
+            <!-- Video -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="890,0" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+				<width>870</width>
+                <height>525</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/rounded-shadow8.png</texture>
+                </control>
+                <include content="Kodi_Logo">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>23</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>  $LOCALIZE[291]</label>
+                        <left>30</left>
+                        <font>Button</font>
+                        <textcolor>PanelWhite100</textcolor>
+                    </control>
+					<control type="label">
+						<top>45</top>
+						<label>[COLOR Selected]$LOCALIZE[32000]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>45</top>
+                        <label>$INFO[Player.Process(amlogic.displaymode)]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>90</top>
+						<label>[COLOR Selected]$LOCALIZE[32001]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>90</top>
+                        <label>$INFO[Player.Process(videowidth)]x$INFO[Player.Process(videoheight)]$INFO[Player.Process(videoscantype)] $INFO[Player.Process(VideoFPS)]FPS</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>135</top>
+                        <label>[COLOR Selected]$LOCALIZE[31280]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>135</top>
+                        <label>$INFO[Player.Process(amlogic.pixformat)]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>180</top>
+						<label>[COLOR Selected]$LOCALIZE[32004]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>180</top>
+                        <label>$INFO[Player.Process(video.bit.depth)]-bit</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>225</top>
+                        <label>[COLOR Selected]$LOCALIZE[21374]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>225</top>
+                        <label>$INFO[Player.Process(videodar)]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>270</top>
+                        <label>[COLOR Selected]$LOCALIZE[31279]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>270</top>
+                        <label>$INFO[Player.Process(videodecoder)] $VAR[VideoDecoder, (,)]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>315</top>
+						<label>[COLOR Selected]$LOCALIZE[21445]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>315</top>
+                        <label>[UPPERCASE]$INFO[VideoPlayer.VideoCodec][/UPPERCASE]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+						<top>360</top>
+						<label>[COLOR Selected]$LOCALIZE[16038]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>360</top>
+						<label>[CAPITALIZE]$INFO[Player.Process(deintmethod)][/CAPITALIZE]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                </control>
+            </control>
+			
+			<!-- More -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="890,0" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                <top>543</top>
+				<width>870</width>
+                <height>333</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/rounded-shadow8.png</texture>
+                </control>
+                <include content="Kodi_Logo">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>23</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>  $LOCALIZE[32007]</label>
+                        <left>30</left>
+                        <font>Button</font>
+                        <textcolor>PanelWhite100</textcolor>
+                    </control>
+					<control type="label">
+						<top>45</top>
+						<label>[COLOR Selected]$LOCALIZE[32005]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>45</top>
+						<label>$VAR[DVProfileVar] [COLOR green][B]$VAR[DVELVar][/B][/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<top>90</top>
+						<label>[COLOR Selected]$LOCALIZE[32002]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>90</top>
+						<label>$INFO[Player.Process(amlogic.eoft_gamut)]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<top>135</top>
+						<label>[COLOR Selected]$LOCALIZE[32006]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>135</top>
+						<label>$VAR[DVNameVar]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<top>180</top>
+						<label>[COLOR Selected]$LOCALIZE[32003]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>180</top>
+						<label>$VAR[HDRSourceVar]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+                </control>
+            </control>
+
+            <!-- Audio -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="0,350" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                <left>890</left>
+				<top>543</top>
+                <width>870</width>
+                <height>333</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/rounded-shadow8.png</texture>
+                </control>
+                <include content="Kodi_Logo">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>23</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>      $LOCALIZE[292]</label>
+                        <font>Button</font>
+                        <textcolor>PanelWhite100</textcolor>
+                    </control>
+					<control type="label">
+						<top>45</top>
+						<label>[COLOR Selected]$LOCALIZE[21446]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>45</top>
+						<label>$VAR[AudioCodecVar]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+                    <control type="label">
+						<top>90</top>
+						<label>[COLOR Selected]$LOCALIZE[21444]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>90</top>
+						<label>$VAR[AudioChannelsVar]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+					</control>
+                    <control type="label">
+						<top>135</top>
+                        <label>[COLOR Selected]$LOCALIZE[612]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>135</top>
+                        <label>$INFO[Player.Process(audiobitspersample),, bits]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+						<top>180</top>
+                        <label>[COLOR Selected]$LOCALIZE[613]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>180</top>
+                        <label>$INFO[Player.Process(audiosamplerate),, Hz]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<top>225</top>
+						<label>[COLOR Selected]$LOCALIZE[21447]:[/COLOR]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+						<visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<top>225</top>
+						<label>[UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE]</label>
+						<font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+						<visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+					</control>
+                </control>
+            </control>
+
+            <!-- System -->
+            <control type="group">
+                <animation effect="slide" start="0,0" end="0,320" time="0" condition="VideoPlayer.Content(livetv)">Conditional</animation>
+                <left>890</left>
+                <width>870</width>
+                <height>525</height>
+                <control type="image">
+                    <texture border="15" diffuse="diffuse/wall-fanart.png" colordiffuse="A6000000">common/rounded-shadow8.png</texture>
+                </control>
+                <include content="Kodi_Logo">
+                    <param name="dimensions" value="30"/>
+                    <param name="top" value="44"/>
+                    <param name="left" value="45"/>
+                </include>
+                <control type="group">
+                    <left>45</left>
+                    <top>23</top>
+                    <width>780</width>
+                    <itemgap>-21</itemgap>
+                    <control type="label">
+                        <label>      $LOCALIZE[13000]</label>
+                        <font>Button</font>
+                        <textcolor>PanelWhite100</textcolor>
+                    </control>
+                    <control type="label">
+						<top>45</top>
+                        <label>[COLOR Selected]$LOCALIZE[144][/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>45</top>
+                        <label>$INFO[System.BuildVersion]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+						<top>90</top>
+                        <label>[COLOR Selected]$LOCALIZE[12390]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>90</top>
+                        <label>$INFO[System.Uptime]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+						<top>135</top>
+                        <label>[COLOR Selected]$LOCALIZE[14220]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>135</top>
+                        <label>$INFO[System.FPS] FPS</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+						<top>180</top>					
+                        <label>[COLOR Selected]$LOCALIZE[13284][/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>180</top>					
+                        <label>$INFO[System.CpuFrequency]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					
+					<control type="label">
+						<top>225</top>						
+						<label>[COLOR Selected]$LOCALIZE[22011][/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>225</top>						
+                        <label>$INFO[System.CPUTemperature]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="label">
+						<top>270</top>					
+                        <label>[COLOR Selected]$LOCALIZE[13271][/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>270</top>					
+                        <label>$INFO[System.CpuUsage]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+							<top>327</top>			
+                            <description>CPU BAR</description>
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>System.CPUUsage</info>
+                            <include>DefSettingsButton</include>
+                        </control>
+                    </control>
+                    <control type="label">
+						<top>330</top>	
+                        <label>[COLOR Selected]$LOCALIZE[31104]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>330</top>	
+                        <label>$INFO[system.memory(used.percent)]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+							<top>387</top>	
+                            <description>Memory BAR</description>
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>system.memory(used)</info>
+                            <include>DefSettingsButton</include>
+                        </control>
+                    </control>
+                    <control type="label">
+						<top>390</top>	
+                        <label>[COLOR Selected]$LOCALIZE[31291]:[/COLOR]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+					<control type="label">
+						<left>350</left>
+						<top>390</top>	
+                        <label>$INFO[Player.CacheLevel,,%]</label>
+                        <font>Small333</font>
+                        <textcolor>PanelWhite70</textcolor>
+                    </control>
+                    <control type="group">
+                        <height>40</height>
+                        <control type="progress">
+							<top>447</top>	
+                            <description>Cache BAR</description>
+                            <centertop>50%</centertop>
+                            <height>10</height>
+                            <info>Player.CacheLevel</info>
+                            <include>DefSettingsButton</include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>
