@@ -535,7 +535,7 @@
         <value condition="!String.IsEmpty(Container(99950).ListItem.Title)">$INFO[Container(99950).ListItem.Title]</value>
         <value condition="!String.IsEmpty(Container(99950).ListItem.Label)">$INFO[Container(99950).ListItem.Label]</value>
     </variable>
-   <variable name="DVProfileVar">
+  <variable name="DVProfileVar">
 	    <value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),8)">-> Dolby Vision Profile 8</value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),7)">-> Dolby Vision Profile 7</value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),5)">-> Dolby Vision Profile 5</value>
@@ -544,10 +544,9 @@
         <value condition="String.Contains(Player.Process(video.dovi.codec.string),5)">Profile 5 </value>
         <value condition="String.Contains(Player.Process(video.dovi.codec.string),4)">Profile 4 </value>
         <value condition="String.Contains(Player.Process(video.dovi.codec.string),8)">Profile 8 </value>
-        <value></value>
-        <value condition="String.Contains(Player.Process(video.dovi.codec.string),)">$LOCALIZE[10005]</value>
-    </variable>
-        <variable name="HDRSourceVar">
+		</variable>
+	
+	<variable name="HDRSourceVar">
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),8)">HDR10+ </value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),7)">HDR10+ </value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),5)">HDR10+ </value>
@@ -557,12 +556,14 @@
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Sdr)">SDR </value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),)">$LOCALIZE[13205]</value>
     </variable>
-        <variable name="DVELVar">
-        <value condition="String.Contains(Player.Process(video.dovi.el.type),minimum)"> MEL </value>
-        <value condition="String.Contains(Player.Process(video.dovi.el.type),full)"> FEL </value>
-        <value condition="String.Contains(Player.Process(video.dovi.el.type),none)"/>
+	
+	<variable name="DVELVar">
+        <value condition="String.Contains(Player.Process(video.dovi.el.type),minimum)"> [MEL] </value>
+        <value condition="String.Contains(Player.Process(video.dovi.el.type),full)"> [FEL] </value>
+        <value condition="String.Contains(Player.Process(video.dovi.el.type),none)"></value>
     </variable>
-        <variable name="VideoConvVar">
+	
+	<variable name="VideoConvVar">
 		<value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),8)"></value>
 		<value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),7)"></value>
 		<value condition="String.Contains(Player.Process(video.source.hdr.type),Hdr10) + String.Contains(Player.Process(video.dovi.codec.string),5)"></value>
@@ -576,55 +577,47 @@
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Sdr) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10">-> HDR10</value>
 		<value condition="String.Contains(Player.Process(video.source.hdr.type),Sdr) + String.Contains(Player.Process(amlogic.vs10.mode),dolby vision">-> Dolby Vision</value>
 		<value condition="String.Contains(Player.Process(video.source.hdr.type),dolby vision) + String.Contains(Player.Process(amlogic.vs10.mode),sdr">-> SDR</value>
-        <value></value>
     </variable>
-        <variable name="DVNameVar">
-        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),dolby vision)">Dolby Vision</value>
-        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),hdr10)">HDR10</value>
-        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),bypass)">Bypass</value>
-        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),sdr)">SDR</value>
-        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),)">$LOCALIZE[10005]</value>
+	
+	<variable name="DVNameVar">
+        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),dolby vision)">$LOCALIZE[19074]</value>
+        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),hdr10)">$LOCALIZE[19074]</value>
+        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),bypass)">$LOCALIZE[16039]</value>
+        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),sdr)">$LOCALIZE[19074]</value>
+        <value condition="String.Contains(Player.Process(amlogic.vs10.mode),)">$LOCALIZE[13205]</value>
     </variable>
-        <variable name="AudioChannelsVar">
-		<value condition="String.Contains(VideoPlayer.AudioCodec,truehd) + Integer.IsEqual(VideoPlayer.AudioChannels,8)"></value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)"></value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dts.x.)"></value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dtsx)"></value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dts:x)"></value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dts-x)"></value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">Mono</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">2.0</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4)">4.0</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">5.0</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">5.1</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">6.1</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
-        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,)">$LOCALIZE[13205]</value>
-    </variable>
-        <variable name="AudioCodecVar">
-		<value condition="String.Contains(VideoPlayer.AudioCodec,truehd) + Integer.IsEqual(VideoPlayer.AudioChannels,8)">Dolby Atmos</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)">Dolby Atmos</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dts.x.)">DTS:X</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dtsx)">DTS:X</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dts:x)">DTS:X</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma) + Integer.IsEqual(VideoPlayer.AudioChannels,8 + String.Contains(Player.Filename,dts-x)">DTS:X</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD High Resolution</value>
+
+	<variable name="AudioChannelsVar">
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">Mono</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">2.0</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4)">4.0</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">5.0</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">5.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">6.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
+		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,)">$LOCALIZE[13205]</value>
+	</variable>
+	
+	<variable name="AudioCodecVar">
+		<value condition="String.Contains(Player.Filename,dtsx) | String.Contains(Player.Filename,dts:x) | String.Contains(Player.Filename,dts-x)">DTS:X</value>
+		<value condition="String.Contains(Player.Filename,.atmos.) | String.Contains(Player.Filename, atmos ) | String.Contains(Player.Filename,-atmos-) | String.Contains(Player.Filename,- atmos -) | String.Contains(Player.Filename,(atmos))">Dolby Atmos</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,dca) | String.Contains(VideoPlayer.AudioCodec,dts)">DTS</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,eac3)">Dolby Digital+</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,mp3)">MP3</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,mp2)">MP2</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,mp1)">MP1</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,aac)">AAC</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,wmav2)">WMA</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,cook)">Cook</value>
-        <value condition="String.Contains(VideoPlayer.AudioCodec,)">$LOCALIZE[13205]</value>
-   </variable>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,dca) | String.Contains(VideoPlayer.AudioCodec,dts)">DTS</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,eac3)">Dolby Digital+ (EAC3)</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,ac3)">Dolby Digital (AC3)</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,mp3)">MP3</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,mp2)">MP2</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,mp1)">MP1</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,aac)">AAC</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,wmav2)">WMA</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,cook)">Cook</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,)">$LOCALIZE[13205]</value>
+	</variable>
 </includes>
