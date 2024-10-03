@@ -2229,7 +2229,7 @@ updated YouTube addon URL
 		<description lang="en">White Weather Icons</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="resource.language.ar_sa" version="11.0.90.1" name="Arabic" provider-name="Team Kodi">
+</addon><addon id="resource.language.ar_sa" version="11.0.90.2" name="Arabic" provider-name="Team Kodi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
   </requires>
@@ -5343,7 +5343,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <disclaimer lang="zh_CN">可放心使用此脚本，更多信息访问 kodi.tv</disclaimer>
     <disclaimer lang="zh_TW">歡迎使用本腳本，相關資訊請參閱kodi.tv</disclaimer>
   </extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.39.85~omega">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="0.7.39.86~omega">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
