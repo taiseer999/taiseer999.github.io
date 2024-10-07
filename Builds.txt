@@ -104,7 +104,7 @@ description="Kodi Build with Arctic Horizon 2 Arabic/Ver2."
 
 name="AF/AH2/AF2 Arabic"
 version="1.2"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=TS1S91jpr1D%2Bzt%2BdXEqLxTK6hUyp%2FmrXi4tajEcSNRQi0HqyjYiKcxrBAKQm3nG4&expiry=1lPhA9nr%2BAWqL3nUEBXW8w%3D%3D&mac=f300638d621cc102948dca7f681d7f9d4c887601b7c7b7029b97547cc1732937"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=TS1S91jpr1D%2Bzt%2BdXEqLxTK6hUyp%2FmrXi4tajEcSNRQi0HqyjYiKcxrBAKQm3nG4&expiry=TN5tvWIfkb%2FES6vK4zfmog%3D%3D&mac=a41a54b4c110d147e1603c1ad492771cc104914797e276760c442928936ba957"
 minor="http://"
 gui="http://"
 kodi="21"
