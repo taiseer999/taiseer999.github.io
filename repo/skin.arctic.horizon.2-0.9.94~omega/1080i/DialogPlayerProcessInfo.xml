@@ -538,7 +538,7 @@
                         <textcolor>white</textcolor>
                     </control>
                     <control type="label">
-						<top>645</top>
+						<top>640</top>
                         <label>[B]$LOCALIZE[90027][/B][CR]</label>
                         <font>font_mini</font>
                                                  <textcolor>white</textcolor>
