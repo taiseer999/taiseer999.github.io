@@ -4441,7 +4441,7 @@ Second Test Release:
 			<icon>resources/icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.16.1" provider-name="Unknown">
+</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.16.3" provider-name="Unknown">
     <requires>
       <import addon="script.module.requests" />
       <import addon="vfs.libarchive" optional="true" />
@@ -4790,7 +4790,7 @@ v1.12.1 (2021-12-15)
         <icon>icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="service.subtitles.opensubtitles" name="OpenSubtitles.org" version="5.5.2" provider-name="peno64, moham96, amet, opensubtitles">
+</addon><addon id="service.subtitles.opensubtitles" name="OpenSubtitles.org" version="5.5.3" provider-name="peno64, moham96, amet, opensubtitles">
   <requires>
     <import addon="script.module.pysubs2" version="0.1.0" />
     <import addon="script.module.chardet" />
@@ -4872,7 +4872,7 @@ v5.2.14 (2017-01-23)
 	</assets>
     <source>https://github.com/peno64/service.subtitles.opensubtitles_by_opensubtitles_dualsub</source>
   </extension>
-</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.6" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.5" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
@@ -4880,7 +4880,7 @@ v5.2.14 (2017-01-23)
 	<extension point="xbmc.subtitle.module" library="service.py" />
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en_GB">OpenSubtitles.com</summary>
-		<description lang="en_GB">Search and download subtitles for movies and TV-Series from OpenSubtitles.com. Search in 75 languages, 8.000.000+ subtitles, daily updates. Register/Import your account on OpenSubtitles.com before use.</description>
+		<description lang="en_GB">Search and download subtitles for movies and TV-Series from OpenSubtitles.com. Search in 75 languages, 6.000.000+ subtitles, daily updates. Register/Import your account on OpenSubtitles.com before use.</description>
 		<description lang="ast_ES">Pelis and Subtítulos TV en munches llingües, milenta de subtítulos traducíos y xubíos caldía. Descarga llibre dende la fonte, sofitu API, millones d'usuarios.</description>
 		<description lang="br_FR">Istitloù Filmoù ha TV e meur a yezh, miliadoù a istitloù troet hag uskarget bemdez. Pellgargadenn digoust diouzh ar vammenn, skoazell an API, millionoù a implijerien.</description>
 		<description lang="ca_ES">Subtítols de films i televisió en múltiples idiomes, milers de subtítols traduïts carregats diàriament. Descàrrega gratuïta des de la font, suport de l'API, amb milions d'usuaris.</description>
@@ -4921,10 +4921,6 @@ v5.2.14 (2017-01-23)
 		<description lang="zh_CN">多语种的电影及剧集字幕，每日更新千余条翻译好的字幕。免费下载，提供API接口，已拥有上百万的用户。</description>
 		<disclaimer lang="en_GB">Users need to provide OpenSubtitles.com username and password in add-on configuration. This is our new extension, old opensubtitles.org will not work on this, but the account can be easily imported on opensubtitles.com.</disclaimer>
 		<news>
-v1.0.5 (2024-07-30)
-- fixed issue with portuguese file names
-- added AI translated filter (thanks Kate6)
-
 v1.0.4 (2024-01-15)
 - Sanitize language query
 - Improved sorting
@@ -4955,7 +4951,7 @@ v1.0.1 (2023-07-28)
 		</assets>
 		<source>https://github.com/opensubtitlesdev/service.subtitles.opensubtitles-com</source>
 	</extension>
-</addon><addon id="service.subtitles.subdl-com" name="SubDL.com" version="1.0.1" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.subdl-com" name="SubDL.com" version="1.0.2" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
@@ -5052,7 +5048,7 @@ Other languages with a great number of subtitles are: Danish, French, Swedish, D
         <email />
         <source>https://github.com/manacker/service.subtitles.subscene</source>
     </extension>
-</addon><addon id="service.subtitles.subsceneplus" name="Subscene Plus" version="2.1.5" provider-name="gujal">
+</addon><addon id="service.subtitles.subsceneplus" name="Subscene Plus" version="2.1.6" provider-name="gujal">
     <requires>
         
         <import addon="script.module.six" />
@@ -5076,7 +5072,7 @@ Other languages with a great number of subtitles are: Danish, French, Swedish, D
             <icon>icon.jpg</icon>
         </assets>
     </extension>
-</addon><addon id="service.subtitles.subsource-net" name="Subsource.net" version="1.0.0" provider-name="opensubtitles, subsource">
+</addon><addon id="service.subtitles.subsource-net" name="Subsource.net" version="1.0.1" provider-name="opensubtitles, subsource">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
