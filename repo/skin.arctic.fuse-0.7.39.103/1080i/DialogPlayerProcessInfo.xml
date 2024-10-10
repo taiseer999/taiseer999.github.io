@@ -538,7 +538,7 @@
                         <textcolor>white</textcolor>
                     </control>
                     <control type="label">
-						<top>640</top>
+						<top>645</top>
                         <label>[B]$LOCALIZE[90027][/B][CR]</label>
                         <font>font_mini</font>
                                                  <textcolor>white</textcolor>
@@ -553,7 +553,7 @@
                     <control type="group">
                         <height>40</height>
                         <control type="progress">
-						<top>815</top>
+						<top>805</top>
                             <description>Cache BAR</description>
                             <centertop>50%</centertop>
                             <height>3</height>							<info>Player.CacheLevel</info>
@@ -567,7 +567,7 @@
                     </control>
 					<control type="label">
 						<left>350</left>
-						<top>740</top>
+						<top>745</top>
                         <label>$INFO[system.memory(used.percent)] ($INFO[system.memory(used)] / $INFO[system.memory(total)])</label>
                         <font>font_mini</font>
                         <textcolor>white</textcolor>
