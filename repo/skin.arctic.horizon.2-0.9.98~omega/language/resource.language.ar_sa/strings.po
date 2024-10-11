@@ -1516,7 +1516,7 @@ msgstr "عرض الساعة"
 #: 1080i/SkinSettings.xml
 msgctxt "#31279"
 msgid "Studio icons"
-msgstr "عرض أيقونة الاستوديو"
+msgstr "ايقونات الاستوديو"
 
 #: 1080i/SkinSettings.xml
 msgctxt "#31280"
