@@ -2432,7 +2432,7 @@ v.3.3.7
 		<description lang="sv_SE">Tillägg för att ladda ner bilder och tilläggsinformation från fanart.tv och theaudiodb.com om artisten som spelas för tillfället. Bilderna, tillsammans med lokala artistbilder och information, kan användas av skinnet för att skapa ett bildspel av artisten man lyssnar på.</description>
 		<description lang="zh_CN">从fanart.tv和theaudiodb.com下载当前播放艺人的图片和附加信息的插件。这此图片可以和本地艺人图片及信息一起，被皮肤用来创建正收听的艺人的幻灯片。</description>
 	</extension>
-</addon><addon id="script.autoruns" name="Autoruns" version="11.1" provider-name="fight night, Jon Bovi">
+</addon><addon id="script.autoruns" name="Autoruns" version="11.2" provider-name="fight night, Jon Bovi">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.six" />
