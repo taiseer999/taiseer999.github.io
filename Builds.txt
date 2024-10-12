@@ -131,7 +131,7 @@ description="Kodi Build with Arctic Horizon 2 Arabic/Ver2."
 
 
 name="AF/AH2/AF2 Arabic"
-version="1.3"
+version="1.4"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=WJ5dGsH1VMDccdhb2vFpGs5Tyd3cs%2BGvgiLuDCISEB63qu9Z1eh3kb3YkZm2bhmS&expiry=VTJw3%2B0KIsIrNt8CZ6hH4Q%3D%3D&mac=6b190132b9cc8c38210450d815e0e1d2af738a239502e208e35dc27a0058bf47"
 minor="http://"
 gui="http://"
