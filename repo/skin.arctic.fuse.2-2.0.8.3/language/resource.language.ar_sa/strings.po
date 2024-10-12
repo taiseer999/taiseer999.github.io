@@ -1283,7 +1283,7 @@ msgstr "جاري تجهيز المعلومات"
 #: /1080i/SkinSettings.xml
 msgctxt "#31300"
 msgid "Customise window background"
-msgstr "تخصيص خلفية نافذة الحوار"
+msgstr "لون خلفية نافذة الحوار"
 
 msgctxt "#31302"
 msgid "Management options"
@@ -1871,7 +1871,7 @@ msgstr "غير ملون"
 #: /1080i/SkinSettings.xml /1080i/MusicOSD.xml
 msgctxt "#31460"
 msgid "Customise visualisation"
-msgstr "تخصيص المؤثرات"
+msgstr "إختيار المؤثرات"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31461"
@@ -2027,7 +2027,7 @@ msgstr "مفتوح"
 #: /1080i/Includes_Items.xml
 msgctxt "#31496"
 msgid "Customise widgets"
-msgstr "Widgets تخصيص"
+msgstr "Widgets إعداد"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31497"
