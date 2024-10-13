@@ -20,32 +20,32 @@
 -->
 
     <include name="Font_Default">
-       <param name="font_black">PFDinTextArabic-XBlack.ttf</param>
-            <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
-            <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
-            <param name="font_light">PFDinTextArabic-Regular.ttf</param>
+        <param name="font_black">RobotoCondensed-Black.ttf</param>
+        <param name="font_bold">RobotoCondensed-Bold.ttf</param>
+        <param name="font_regular">RobotoCondensed-Regular.ttf</param>
+        <param name="font_light">RobotoCondensed-Light.ttf</param>
         <param name="aspect_system">0.8</param>
         <param name="aspect_standard">1.0</param>
         <definition>
 
-           <!-- Title fonts -->
-             <font>
+            <!-- Title fonts -->
+            <font>
                 <name>font_title_huge</name>
                 <filename>RobotoCondensed-Black.ttf</filename>
-                <size>110</size>
+                <size>98</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
                 <name>font_title_midi</name>
-                <filename>RobotoCondensed-Black.ttf</filename>
+                <filename>RobotoNotoCondensed-Black.ttf</filename>
                 <size>74</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
                 <name>font_title_main</name>
-                <filename>RobotoCondensed-Black.ttf</filename>
-                <size>90</size>
-                <aspect>$PARAM[aspect_standard]</aspect>
+                <filename>RobotoNotoCondensed-Black.ttf</filename>
+                <size>64</size>
+                <aspect>$PARAM[aspect_standard]</aspect>				<linespacing>1.07</linespacing>
             </font>
 
 
@@ -71,13 +71,13 @@
             <font>
                 <name>font_main_black</name>
                 <filename>$PARAM[font_black]</filename>
-                <size>31</size>
+                <size>32</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
                 <name>font_mini_black</name>
                 <filename>$PARAM[font_black]</filename>
-                <size>23</size>
+                <size>28</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
@@ -116,13 +116,13 @@
             <font>
                 <name>font_main_bold</name>
                 <filename>$PARAM[font_bold]</filename>
-                <size>26</size>
+                <size>30</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
                 <name>font_mini_bold</name>
                 <filename>$PARAM[font_bold]</filename>
-                <size>23</size>
+                <size>28</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
@@ -148,7 +148,7 @@
             <font>
                 <name>font_main</name>
                 <filename>$PARAM[font_regular]</filename>
-                <size>29</size>
+                <size>28</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
             <font>
@@ -221,13 +221,6 @@
                 <size>26</size>
                 <aspect>$PARAM[aspect_standard]</aspect>
             </font>
-            <font>
-                <name>font_mini_cond</name>
-                <filename>$PARAM[font_regular]</filename>
-                <linespacing>0.90</linespacing>
-                <size>26</size>
-                <aspect>$PARAM[aspect_standard]</aspect>
-            </font>
 
             <!-- Font for codec flag -->
             <font>
@@ -238,13 +231,13 @@
             <font>
                 <name>font_infotag_bold</name>
                 <filename>LeagueSpartan-ExtraBold.ttf</filename>
-                <size>23</size>
+                <size>22</size>
                 <style>uppercase</style>
             </font>
             <font>
                 <name>font_infotag</name>
                 <filename>LeagueSpartan-SemiBold.ttf</filename>
-                <size>25</size>
+                <size>26</size>
                 <style>uppercase</style>
             </font>
 
