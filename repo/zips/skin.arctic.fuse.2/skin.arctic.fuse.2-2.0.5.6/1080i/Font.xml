@@ -55,7 +55,6 @@
             <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
             <param name="font_regular">PFDinTextArabic-Bold.ttf</param>
             <param name="font_light">PFDinTextArabic-Bold.ttf</param>
-            <param name="aspect_standard">1.2</param>
 
          </include>
 
@@ -69,7 +68,6 @@
             <param name="font_bold">Hacen Beirut Light.ttf</param>
             <param name="font_regular">Hacen Beirut Light.ttf</param>
             <param name="font_light">Hacen Beirut Light.ttf</param>
-            <param name="aspect_standard">1.4</param>
 
             
         </include>
