@@ -80,7 +80,7 @@
             <param name="font_bold">Nagish.ttf</param>
             <param name="font_regular">Nagish.ttf</param>
             <param name="font_light">Nagish.ttf</param>
-            <param name="aspect_system">0.8</param>
+            <param name="aspect_system">1.2</param>
 
         </include>
     </fontset>
