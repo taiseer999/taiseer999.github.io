@@ -213,7 +213,7 @@ msgstr "Clasificar"
 #: /resources/lib/lists/filterdir.py
 msgctxt "#32034"
 msgid "Enter custom [LOWERCASE]{}[/LOWERCASE] infolabel or property name"
-msgstr "Personalice [LOWERCASE]{}[/LOWERCASE] la información o nombre apropiado""
+msgstr "Personalice [LOWERCASE]{}[/LOWERCASE] la información o nombre apropiado"
 
 #: /resources/lib/lists/filterdir.py
 msgctxt "#32035"
@@ -413,7 +413,7 @@ msgstr "sus {skin} archivos de menus"
 #: /resources/lib/shortcuts/method.py
 msgctxt "#32074"
 msgid "the menu files from the [B]{folder}[/B] folder"
-msgstr "los archivos de menú de [B]{folder}[/B] la carpeta""
+msgstr "los archivos de menú de [B]{folder}[/B] la carpeta"
 
 #: /resources/lib/shortcuts/method.py
 msgctxt "#32075"
@@ -519,3 +519,18 @@ msgstr "Editar filtros"
 msgctxt "#32095"
 msgid "Add new"
 msgstr "Añadir nuevo"
+
+#: /resources/lib/lists/skinusers.py
+msgctxt "#32096"
+msgid "Add new user"
+msgstr "Añadir nuevo usuário"
+
+#: /resources/lib/lists/skinusers.py
+msgctxt "#32097"
+msgid "Enable default user"
+msgstr "Habilitar usuario por defecto"
+
+#: /resources/lib/lists/skinusers.py
+msgctxt "#32098"
+msgid "Disable default user"
+msgstr "Deshabilitar usuario por defecto"

@@ -494,3 +494,18 @@ msgstr "تحرير الفلاتر"
 msgctxt "#32095"
 msgid "Add new"
 msgstr "اضافة جديدة"
+
+#: /resources/lib/lists/skinusers.py
+msgctxt "#32096"
+msgid "Add new user"
+msgstr "اضافة مستخدم جديد"
+
+#: /resources/lib/lists/skinusers.py
+msgctxt "#32097"
+msgid "Enable default user"
+msgstr "تفعيل المستخدم الاساسي"
+
+#: /resources/lib/lists/skinusers.py
+msgctxt "#32098"
+msgid "Disable default user"
+msgstr "تعطيل المستخدم الاساسي"
