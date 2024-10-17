@@ -5195,27 +5195,6 @@ v1.0.1 (2023-07-28)
 		</assets>
 		<source>https://github.com/opensubtitlesdev/service.subtitles.opensubtitles-com</source>
 	</extension>
-</addon><addon id="service.subtitles.subscene" name="Subscene.com" version="2.1.5" provider-name="gujal">
-    <requires>
-        
-        <import addon="script.module.six" />
-        <import addon="script.module.kodi-six" />
-        <import addon="script.module.requests" version="2.4.3" />
-    </requires>
-    <extension point="xbmc.subtitle.module" library="service.py" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Get subtitles from Subscene.com</summary>
-        <description lang="en">Subscene.com provides subtitles in more than 50 languages, mainly in English, Arabic, Brazilian Portuguese, Farsi, Indonesian and Vietnamese.
-Other languages with a great number of subtitles are: Danish, French, Swedish, Dutch, Italian, Norwegian and Spanish.</description>
-        <disclaimer lang="en" />
-        <platform>all</platform>
-        <language />
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <forum>http://forum.xbmc.org/showthread.php?tid=184854</forum>
-        <website />
-        <email />
-        <source>https://github.com/manacker/service.subtitles.subscene</source>
-    </extension>
 </addon><addon id="service.subtitles.subsceneplus" name="Subscene Plus" version="2.1.6" provider-name="gujal">
     <requires>
         
@@ -5263,43 +5242,6 @@ Support subsource.com
 			<fanart>fanart.png</fanart>
 		</assets>
 		<source>https://github.com/opensubtitlesdev/service.subtitles.opensubtitles-com</source>
-	</extension>
-</addon><addon id="service.subtitles.universalsubs" name="Universal Subs" version="1.0.1" provider-name="4773nd4n7">
-	<requires>
-		
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.beautifulsoup4" />
-		<import addon="script.module.cachetools" />
-		<import addon="script.module.chardet" />
-		<import addon="script.module.html5lib" />
-		<import addon="script.module.typing_extensions" />
-		<import addon="script.module.yaml" />
-		<import addon="script.module.unidecode" />
-		<import addon="vfs.libarchive" />
-		<import addon="vfs.rar" />
-	</requires>
-	<extension point="xbmc.subtitle.module" library="main.py" />
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en_US">Universal Subs plugin</summary>
-		<description lang="es_AR">Busca y descarga subtítulos desde distintos backends</description>
-		<description lang="en_GB">Search and download subtitles from various backends</description>
-		<language>es en</language>
-		<platform>all</platform>
-		<license>MIT</license>
-		<forum>https://forum.kodi.tv/showthread.php?tid=xxxx</forum>
-		<email>attendant51@gmail.com</email>
-		<source>https://github.com/4773nd4n7/kodi-universal-subs</source>
-		<news>v1.0.2 (05/05/2024)
-		- Added Local source provider.
-		- Improved code cleanup decorator provider.
-		- Fixed downloading in SubDivX source provider.
-		- Added support for configuring additional languages to be included as translations source.
-		- Fixed additional bugs.
-		</news>
-		<assets>
-			<icon>icon.png</icon>
-			
-		</assets>
 	</extension>
 </addon><addon id="service.upnext" name="UpNext" version="2.0.25+dev.0" provider-name="im85288">
     <requires>
