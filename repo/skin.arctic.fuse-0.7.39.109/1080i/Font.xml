@@ -35,7 +35,7 @@
 
 <fontset id="PFDinTextArabic" unicode="true">
 <include content="Font_Default">
-            <param name="font_black">PFDinTextArabic-XBlack.ttf</param>
+            <param name="font_black">PFDinTextArabic-Bold.ttf</param>
             <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
             <param name="font_regular">PFDinTextArabic-Bold.ttf</param>
             <param name="font_light">PFDinTextArabic-Bold.ttf</param>
