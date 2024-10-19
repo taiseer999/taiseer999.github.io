@@ -298,9 +298,24 @@
 					<height>10</height>
                             <info>Player.Process(audio.queue.level)</info>
                             <include>DefSettingsButton</include>
+				</control>
+                    <control type="label"> 
+					<width>800</width>
+					<height>40</height>
+					<aligny>bottom</aligny>
+                    <label>Audio Queue Data:[COLOR white] $INFO[Player.Process(audio.queue.data.level)]%[/COLOR]</label>
+					<font>font_tiny_bold</font>
+					<textcolor>$VAR[ColorHighlight]</textcolor>	
+					<visible>Player.HasVideo</visible>
+				</control>				<control type="progress">
+					<description>BAR</description>
+					<width>400</width>
+					<height>10</height>
+                            <info>Player.Process(audio.queue.data.level)</info>
+                            <include>DefSettingsButton</include>
 					
 				</control>
-			</control>
+			</control>
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1430</left>
@@ -407,23 +422,7 @@
 					<height>10</height>
                             <info>Player.Process(video.queue.data.level)</info>
                             <include>DefSettingsButton</include>
-				</control>                    <control type="label"> 
-					<width>600</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-                    <label>Audio Queue Data:[COLOR white] $INFO[Player.Process(audio.queue.data.level)]%[/COLOR]</label>
-					<font>font_tiny_bold</font>
-					<textcolor>$VAR[ColorHighlight]</textcolor>	
-					<visible>Player.HasVideo</visible>
-				</control>				<control type="progress">
-					<description>BAR</description>
-					<width>400</width>
-					<height>10</height>
-                            <info>Player.Process(audio.queue.data.level)</info>
-                            <include>DefSettingsButton</include>
-					
-				</control>
-
+				               </control>
 			</control>
 			<control type="grouplist" id="5550">
 				<left>30</left>
