@@ -12,15 +12,15 @@
 			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
 			<control type="image">
 				<left>30</left>
-				<top>-220</top>
+				<top>-300</top>
 				<right>30</right>
-				<height>498</height>
+				<height>450</height>
 				<texture border="40">background/dialog-bg-nobo.png</texture>
 			</control>
 			<!-- PVR Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-204</top>
+				<top>-295</top>
 				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5551)</visible>
 				<control type="label">
 					<width>1200</width>
@@ -211,6 +211,14 @@
 					<height>20</height>
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>					
+				</control>				  <control type="label"> 
+					<width>800</width>
+					<height>40</height>
+					<aligny>bottom</aligny>
+                    <label>Audio Queue Data:[COLOR white] $INFO[Player.Process(audio.queue.data.level)]%[/COLOR]</label>
+					<font>font_tiny_bold</font>
+					<textcolor>$VAR[ColorHighlight]</textcolor>	
+					<visible>Player.HasVideo</visible>
 				</control>
 			</control>
 			<!-- Player Middle -->
@@ -326,15 +334,7 @@
 					<textcolor>$VAR[ColorHighlight]</textcolor>	
 					<visible>Player.HasVideo</visible>
 				</control>					
-                    <control type="label"> 
-					<width>800</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-                    <label>Audio Queue Data:[COLOR white] $INFO[Player.Process(audio.queue.data.level)]%[/COLOR]</label>
-					<font>font_tiny_bold</font>
-					<textcolor>$VAR[ColorHighlight]</textcolor>	
-					<visible>Player.HasVideo</visible>
-				</control>				
+                  				
 			</control>
 			<!-- Player Right -->
 			<control type="grouplist">
@@ -438,8 +438,8 @@
 				               </control>
 			</control>
 			<control type="grouplist" id="5550">
-				<left>30</left>
-				<top>-270</top>
+				<left>32</left>
+				<top>-348</top>
 				<width>1000</width>
 				<height>50</height>
 				<align>left</align>
