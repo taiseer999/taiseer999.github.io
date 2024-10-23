@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+  <include name="MovieWidgets">
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32458&amp;iconImage=trending&amp;mode=build_movie_list&amp;action=trakt_movies_trending"/>
+      <param name="widget_header" value="الشائعة"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19011"/>
+    </include>
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?list_name=Latest+4K+Releases&amp;list_type=user_lists&amp;mode=trakt.list.build_trakt_list&amp;slug=latest-4k-releases&amp;user=giladg&amp;name=%D8%A7%D8%AE%D8%B1+%D8%A5%D8%B5%D8%AF%D8%A7%D8%B1%D8%A7%D8%AA+%D8%A7%D9%84%D9%804K&amp;iconImage=flag_4k"/>
+      <param name="widget_header" value="اخر إصدارات الـ4K"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19012"/>
+    </include>
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32459&amp;iconImage=popular&amp;mode=build_movie_list&amp;action=tmdb_movies_popular"/>
+      <param name="widget_header" value="المشهورة"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19013"/>
+    </include>
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?mode=build_movie_list&amp;action=trakt_watchlist&amp;category_name=%D8%A7%D9%84%D8%A3%D9%81%D9%84%D8%A7%D9%85+%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxihFNwP.png"/>
+      <param name="widget_header" value="TRAKT قائمة المشاهدة: الأفلام"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19014"/>
+    </include>
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?mode=build_movie_list&amp;action=trakt_collection&amp;category_name=%D8%A7%D9%84%D8%A3%D9%81%D9%84%D8%A7%D9%85+%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FxihFNwP.png"/>
+      <param name="widget_header" value="TRAKT قائمة التجميعات: الأفلام"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19015"/>
+    </include>
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32476&amp;iconImage=player&amp;mode=build_movie_list&amp;action=in_progress_movies"/>
+      <param name="widget_header" value="تكملة المشاهدة"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19016"/>
+    </include>
+    <include content="WidgetListPoster">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32226&amp;iconImage=watched_recent&amp;mode=build_movie_list&amp;action=recent_watched_movies"/>
+      <param name="widget_header" value="تم مشاهدتُها مؤخراً"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19017"/>
+    </include>
+    <include content="WidgetListCategory">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32470&amp;iconImage=genres&amp;mode=navigator.genres&amp;menu_type=movie"/>
+      <param name="widget_header" value="الأصناف"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19018"/>
+    </include>
+    <include content="WidgetListCategory">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32472&amp;iconImage=calender&amp;mode=navigator.years&amp;menu_type=movie"/>
+      <param name="widget_header" value="السنوات"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19019"/>
+    </include>
+    <include content="WidgetListCategory">
+      <param name="content_path" value="plugin://plugin.video.fen/?name=32480&amp;iconImage=networks&amp;mode=navigator.networks&amp;menu_type=movie"/>
+      <param name="widget_header" value="الشبكات"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19020"/>
+    </include>
+    <include content="WidgetListCategory">
+      <param name="content_path" value="plugin://plugin.video.fen/?mode=navigator.build_shortcut_folder_list&amp;name=%D9%83%D9%88%D8%B1%D9%8A+%D8%A7%D9%81%D9%84%D8%A7%D9%85&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
+      <param name="widget_header" value="كوري افلام"/>
+      <param name="widget_target" value="videos"/>
+      <param name="list_id" value="19021"/>
+    </include>
+  </include>
+</includes>
