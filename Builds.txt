@@ -74,7 +74,7 @@ description="Build with AF/AH2/AF2 Arabic."
 
 name="AF+AH2+AF2 Plexy Arabic"
 version="1.2"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=sb00lWY9VI5IzczGpafP5iQfcJC7JQqDXCYAX0zVEtdYi1chOx0ecM6DoE7O%2FXH8&expiry=fGCL%2F87eQEmfpr9%2BAesdVw%3D%3D&mac=0bcd06e933010734b867a6f30cfaeee96d47d5254ca2362ec50d6ddbf3668b9c"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=sb00lWY9VI5IzczGpafP5iQfcJC7JQqDXCYAX0zVEtdYi1chOx0ecM6DoE7O%2FXH8&expiry=U42nTtOApYpIBkhO6%2FRqlQ%3D%3D&mac=275956c24a5da1f5a1dd4fed8a013d52cb52e809997d11f866479e47c0b0f150"
 minor="http://"
 gui="http://"
 kodi="21"
