@@ -12,7 +12,7 @@
 			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
 			<control type="image">
 				<left>30</left>
-				<top>-220</top>
+				<top>-235</top>
 				<right>30</right>
 				<height>400</height>
 				<texture border="40">background/dialog-bg-nobo.png</texture>
@@ -20,7 +20,7 @@
 			<!-- PVR Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-204</top>
+				<top>-232</top>
 				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5551)</visible>
 				<control type="label">
 					<width>1200</width>
@@ -72,7 +72,7 @@
 			<!-- PVR Right -->
 			<control type="grouplist">
 				<left>1250</left>
-				<top>-204</top>
+				<top>-232</top>
 				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5551)</visible>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="label">
@@ -132,7 +132,7 @@
 			<!-- Player Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-204</top>
+				<top>-232</top>
 				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5553)</visible>
 				<control type="label"> <!-- Screen resolution -->
 					<width>800</width>
@@ -200,7 +200,7 @@
 					<width>800</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>CPU:[COLOR white]$INFO[System.CpuFrequency][/COLOR] $VAR[|][COLOR limegreen] $INFO[System.CpuUsage][/COLOR] $VAR[|] [COLOR green]$INFO[System.CPUTemperature][/COLOR]</label>
+					<label>CPU: [COLOR white]$INFO[System.CpuFrequency][/COLOR] $VAR[|] [COLOR orange]$INFO[System.CPUTemperature][/COLOR] $VAR[|] [COLOR limegreen] $INFO[System.CpuUsage][/COLOR]</label>
 					<font>font_tiny_bold</font>
 					<textcolor>$VAR[ColorHighlight]</textcolor>	
 					<visible>System.SupportsCPUUsage</visible>
@@ -224,7 +224,7 @@
 			<!-- Player Middle -->
 			<control type="grouplist">
 				<left>800</left>
-				<top>-204</top>
+				<top>-232</top>
 				<visible>String.IsEqual(Window(Home).Property(PlayerInfoDialogFocus),5553)</visible>
 				<control type="label"> <!-- Video source type -->
 					<width>800</width>
@@ -318,7 +318,7 @@
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1430</left>
-				<top>-204</top>
+				<top>-232</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Display mode -->
 					<width>600</width>
@@ -411,7 +411,7 @@
 			</control>
 			<control type="grouplist" id="5550">
 				<left>32</left>
-				<top>-270</top>
+				<top>-284</top>
 				<width>1000</width>
 				<height>50</height>
 				<align>left</align>
