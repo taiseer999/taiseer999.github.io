@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog" id="1163">
+    <defaultcontrol always="true">450</defaultcontrol>
+    <onunload>ClearProperty(Path,1163)</onunload>
+    <onunload>ClearProperty(Target,1163)</onunload>
+    <onunload>ClearProperty(Header,1163)</onunload>
+    <onload>SetProperty(TMDbHelper.ContextMenu,True)</onload>
+    <controls>
+
+        <include>DialogCustom1163_Hubs</include>
+
+    </controls>
+</window>
