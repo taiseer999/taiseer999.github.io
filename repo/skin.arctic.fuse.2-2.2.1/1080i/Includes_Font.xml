@@ -121,7 +121,7 @@
         <!-- Main -->
         <param name="size_heavy_main">28</param>
         <param name="size_light_main">26</param>
-        <param name="size_heavy_main_x2">60</param>
+        <param name="size_heavy_main_x2">50</param>
         <param name="size_light_main_x2">60</param>
 
         <!-- Midi -->
@@ -144,7 +144,7 @@
         <param name="plot_linespacing_head">1.14</param>
         <param name="plot_linespacing_midi">1.46</param>
         <param name="plot_linespacing_main">1.135</param>
-        <param name="plot_linespacing_mini">1.24</param>
+        <param name="plot_linespacing_mini">1.13</param>
         <param name="plot_linespacing_tiny">1.1</param>
 
         <definition>
