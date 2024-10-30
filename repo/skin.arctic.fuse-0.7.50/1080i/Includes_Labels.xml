@@ -1685,4 +1685,4 @@
 		<value condition="String.Contains(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,cook)">Cook</value>
-	</variable></includes>
+	</variable>	</includes>
