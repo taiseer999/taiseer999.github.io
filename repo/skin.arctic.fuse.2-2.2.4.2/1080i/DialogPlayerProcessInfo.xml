@@ -27,7 +27,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamServiceName,[COLOR ff006064]$LOCALIZE[19099]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -35,7 +35,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamProviderName,[COLOR ff006064]$LOCALIZE[19101]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -43,7 +43,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamClient,[COLOR ff006064]$LOCALIZE[19012]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -51,7 +51,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamDevice,[COLOR ff006064]$LOCALIZE[19006]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -59,7 +59,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamStatus,[COLOR ff006064]$LOCALIZE[19007]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -67,7 +67,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR ff006064]$LOCALIZE[19015]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 			</control>
@@ -82,7 +82,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamBer,[COLOR ff006064]$LOCALIZE[19010]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -90,7 +90,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamUnc,[COLOR ff006064]$LOCALIZE[19011]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -98,7 +98,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamMux,[COLOR ff006064]$LOCALIZE[19100]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label">
@@ -106,7 +106,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamSignal,[COLOR ff006064]$LOCALIZE[19008]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="progress">
@@ -121,7 +121,7 @@
 					<height>50</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamSNR,[COLOR ff006064]$LOCALIZE[19009]:[/COLOR] ]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="progress">
@@ -142,7 +142,7 @@
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label>[COLOR blue]Dolby Vision Configuration[/COLOR]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="group"> <!-- DV Version -->
@@ -154,7 +154,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Version:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -164,7 +164,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.version.major)].$INFO[Player.Process(video.dovi.version.minor)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -177,7 +177,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Profile:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -187,7 +187,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVProfileExtVar]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -197,7 +197,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]$VAR[DVSourceProfileExtVar][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),Player.Process(video.dovi.profile))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
@@ -212,7 +212,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Level:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -222,7 +222,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.level)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -235,7 +235,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]RPU:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -258,7 +258,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Base Layer:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -281,7 +281,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Enhancement Layer:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -316,7 +316,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Enhancement Layer Type:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -326,7 +326,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVELVar]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -336,7 +336,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVSourceELVar]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.el.type),Player.Process(video.dovi.el.type))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
@@ -351,7 +351,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Metadata:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -361,7 +361,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.meta.version)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -377,7 +377,7 @@
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label>[COLOR blue]Dolby Vision Levels Metadata[/COLOR]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="group"> <!-- DV L6 MaxCLL/MaxFALL -->
@@ -389,7 +389,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]L6 Max CLL/FALL:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -399,7 +399,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.max.cll)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -409,7 +409,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.max.fall)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -419,7 +419,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -432,7 +432,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]L6 Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -442,7 +442,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.min.lum)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>	
 					</control>
 					<control type="label">
@@ -452,7 +452,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.l6.max.lum)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -462,7 +462,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -475,7 +475,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Source Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -485,7 +485,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.min.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -495,7 +495,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.max.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -505,7 +505,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -518,7 +518,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]L1 Min/Max/Avg:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -528,7 +528,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.min.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -538,7 +538,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -548,7 +548,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.avg.nits)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -558,7 +558,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -568,7 +568,7 @@
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label></label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="group"> <!-- DV Source Min/Max PQ -->
@@ -580,7 +580,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Source Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -590,7 +590,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.min.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -600,7 +600,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.source.max.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -610,7 +610,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]12-bit PQ[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -623,7 +623,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]L1 Min/Max/Avg:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -633,7 +633,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.min.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -643,7 +643,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -653,7 +653,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.avg.pq)][/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -663,7 +663,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]12-bit PQ[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -679,7 +679,7 @@
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label>[COLOR blue]HDR Static Metadata[/COLOR]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="group"> <!-- HDR MaxCLL/MaxFALL -->
@@ -691,7 +691,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Max CLL/FALL:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -701,7 +701,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.max.cll)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -711,7 +711,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.max.fall)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -721,7 +721,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -734,7 +734,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR ff006064]Min/Max:[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -744,7 +744,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.min.lum)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -754,7 +754,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.hdr.max.lum)]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -764,7 +764,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]cd/m²[/COLOR]</label>
-						<font>font12</font>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -779,7 +779,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31607]:[/COLOR] $INFO[System.ScreenResolution]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label"> <!-- Kodi fps -->
@@ -787,7 +787,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31641]:[/COLOR] $INFO[System.FPS]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label"> <!-- Video decoder|deinterlace -->
@@ -795,7 +795,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31642]:[/COLOR] $INFO[Player.Process(videodecoder), ]$VAR[Label_VideoHWDecoder, (,)] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -804,7 +804,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31643]:[/COLOR] $INFO[Player.Process(audio.live.mibit.rate),,] $VAR[|] $INFO[Player.Process(video.live.mibit.rate),,]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label"> <!-- Cache -->
@@ -812,7 +812,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31644]:[/COLOR] $INFO[Player.CacheLevel,,%]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -828,7 +828,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31645]:[/COLOR] $INFO[system.memory(used.percent)] [COLOR dimgrey]([/COLOR]$INFO[system.memory(used)] [COLOR dimgrey]/[/COLOR] $INFO[system.memory(total)][COLOR dimgrey])[/COLOR]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="progress">
@@ -843,7 +843,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31646] %:[/COLOR] $INFO[System.CpuAltUsage]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>System.SupportsCPUUsage</visible>
 				</control>
@@ -860,7 +860,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31646]:[/COLOR] $INFO[System.CpuFrequency] $VAR[|] $INFO[System.CPUTemperature]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 			</control>
@@ -874,7 +874,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31647]:[/COLOR] $INFO[Player.Process(video.source.hdr.type)]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -883,7 +883,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31648]:[/COLOR] $INFO[VideoPlayer.VideoCodec] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[VideoPlayer.VideoAspect]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -892,7 +892,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31648]:[/COLOR] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -901,7 +901,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31649]:[/COLOR] $VAR[ColourVar]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -909,8 +909,8 @@
 					<width>600</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR ff006064]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var]$INFO[Player.Process(audio.is.dolby.atmos), [COLOR lightgreen],[/COLOR]]$INFO[Player.Process(audio.dts.x.type), [COLOR lightgreen],[/COLOR]]</label>
-					<font>font12</font>
+					<label>[COLOR ff006064]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var]$INFO[Player.Process(audio.is.dolby.atmos), ,]$INFO[Player.Process(audio.dts.x.type), ,]</label>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label"> <!-- Audio sampling -->
@@ -918,7 +918,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31651]:[/COLOR] $INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
 				<control type="label"> <!-- Audio language -->
@@ -926,7 +926,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31652]:[/COLOR] $INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
 				</control>
@@ -935,7 +935,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31659]:[/COLOR] $INFO[VideoPlayer.SubtitlesLanguage] $VAR[|] $INFO[VideoPlayer.SubtitlesLangEx]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>VideoPlayer.SubtitlesEnabled</visible>
 					<visible>VideoPlayer.HasSubtitles</visible>
@@ -944,8 +944,8 @@
 					<width>600</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR ff006064]$LOCALIZE[21448]:[/COLOR] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLanguage][/COLOR] $VAR[|] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLangEx][/COLOR]</label>
-					<font>font12</font>
+					<label>[COLOR ff006064]$LOCALIZE[31659]:[/COLOR] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLanguage][/COLOR] $VAR[|] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLangEx][/COLOR]</label>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>!VideoPlayer.SubtitlesEnabled</visible>
 					<visible>VideoPlayer.HasSubtitles</visible>
@@ -955,7 +955,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31657]:[/COLOR] $INFO[VideoPlayer.SubtitlesName]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>VideoPlayer.SubtitlesEnabled</visible>
 					<visible>VideoPlayer.HasSubtitles</visible>
@@ -966,7 +966,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31657]:[/COLOR] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesName][/COLOR]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>!VideoPlayer.SubtitlesEnabled</visible>
 					<visible>VideoPlayer.HasSubtitles</visible>
@@ -983,7 +983,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[32100]:[/COLOR] $INFO[Player.Process(amlogic.displaymode)]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -992,7 +992,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[32101]:[/COLOR] $INFO[Player.Process(amlogic.eoft_gamut)]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -1001,7 +1001,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31653]:[/COLOR] $VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR dimgrey][,][/COLOR]]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -1011,7 +1011,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31656]:[/COLOR] $INFO[Player.Process(video.dovi.meta.version)]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -1021,7 +1021,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31654]:[/COLOR] $VAR[DVVS10Var]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>!String.Contains(Player.Process(amlogic.vs10.mode),bypass)</visible>
@@ -1031,7 +1031,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31658]:[/COLOR] $INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey][,][/COLOR]]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
@@ -1040,7 +1040,7 @@
 					<height>40</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff006064]$LOCALIZE[31655]:[/COLOR] $INFO[Player.Process(amlogic.video.fps.info)][COLOR orange]$INFO[Player.Process(amlogic.video.fps.drop),	-&gt; ][/COLOR]</label>
-					<font>font12</font>
+					<font>font_mini</font>
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>Player.Process(videohwdecoder)</visible>
