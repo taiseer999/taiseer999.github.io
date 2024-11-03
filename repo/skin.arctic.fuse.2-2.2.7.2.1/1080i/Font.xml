@@ -4,7 +4,7 @@
 <include content="Font_Default">
             <param name="font_black">PFDinTextArabic-Bold.ttf</param>
             <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
-            <param name="font_regular">PFDinTextArabic-Bold.ttf</param>
+            <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
             <param name="font_light">PFDinTextArabic-Regular.ttf</param>
          </include>
 
@@ -30,17 +30,17 @@
             <param name="plot_linespacing_main">1.107</param>
             <param name="plot_linespacing_mini">0.9</param>
             <param name="plot_linespacing_tiny">1.07</param>
-       </include>    </fontset>	 <fontset id="Inter (Experimental)" unicode="false">
+       </include>    </fontset>	 <fontset id="Outfit (Experimental)" unicode="false">
         <include content="Font_Default">
-            <param name="font_black">Inter-Bold.ttf</param>
-            <param name="font_bold">Inter-Bold.ttf</param>
-            <param name="font_regular">Inter-Regular.ttf</param>
-            <param name="font_light">Inter-Light.ttf</param>
-            <param name="plot_linespacing_head">1.1</param>
-            <param name="plot_linespacing_midi">1.43</param>
-            <param name="plot_linespacing_main">1.107</param>
-            <param name="plot_linespacing_mini">1.205</param>
-            <param name="plot_linespacing_tiny">1.07</param>
+            <param name="font_black">Outfit-Bold.ttf</param>
+            <param name="font_bold">Outfit-Bold.ttf</param>
+            <param name="font_regular">Outfit-Regular.ttf</param>
+            <param name="font_light">Outfit-Light.ttf</param>
+            <param name="plot_linespacing_head">1.065</param>
+            <param name="plot_linespacing_midi">1.35</param>
+            <param name="plot_linespacing_main">1.062</param>
+            <param name="plot_linespacing_mini">1.148</param>
+            <param name="plot_linespacing_tiny">1.04</param>
         </include>
     </fontset>
 
@@ -57,6 +57,21 @@
             <param name="plot_linespacing_tiny">0.96</param>
         </include>
     </fontset>
+
+    <fontset id="Inter (Experimental)" unicode="false">
+        <include content="Font_Default">
+            <param name="font_black">Inter-Bold.ttf</param>
+            <param name="font_bold">Inter-Bold.ttf</param>
+            <param name="font_regular">Inter-Regular.ttf</param>
+            <param name="font_light">Inter-Light.ttf</param>
+            <param name="plot_linespacing_head">1.1</param>
+            <param name="plot_linespacing_midi">1.35</param>
+            <param name="plot_linespacing_main">1.107</param>
+            <param name="plot_linespacing_mini">1.205</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        </include>
+    </fontset>
+
 	<fontset id="NotoRoboto - Arabic" unicode="true">
         <include content="Font_Default">
             <param name="font_black">RobotoNotoCondensed-Bold.ttf</param>
