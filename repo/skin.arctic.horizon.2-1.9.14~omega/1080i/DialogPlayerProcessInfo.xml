@@ -1154,8 +1154,8 @@
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
 				</control>
 			</control><control type="group">
+                <centerbottom>60</centerbottom>
                 <left>view_pad</left>
-                <center>view_pad</center>
                 <height>110</height>
                 <include>OSD_Codecs</include>				<include content="Object_MenuHeader">
                 <param name="label"></param>
