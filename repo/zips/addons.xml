@@ -6040,7 +6040,7 @@ Added arabic fonts
             -Various changes so skin would install on Matrix
         </news>
     </extension>
-</addon><addon id="skin.confluence.cpm" version="5.1.9" name="Confluence cpm" provider-name="Jezz_X, Team Kodi">
+</addon><addon id="skin.confluence.cpm" version="5.10.9.1" name="Confluence cpm" provider-name="Jezz_X, Team Kodi">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 	</requires>
