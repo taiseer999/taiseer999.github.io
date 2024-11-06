@@ -1825,7 +1825,7 @@
 		<value>[COLOR FF404040]|[/COLOR]</value>
 	</variable>
 	<variable name="ColourVar">
-		<value>$VAR[ColourRangeVar] $VAR[|] $VAR[ColourSpaceVar] $VAR[|] $VAR[ColourPrimariesVar] $VAR[|] $VAR[ColourTransferCharacteristicVar]</value>
+		<value>$VAR[ColourRangeVar] | $VAR[ColourSpaceVar] | $VAR[ColourPrimariesVar] | $VAR[ColourTransferCharacteristicVar]</value>
 	</variable>
 	<variable name="AudioChannels1Var">
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">Mono</value>
