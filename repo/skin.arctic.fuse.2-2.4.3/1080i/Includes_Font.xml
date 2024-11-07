@@ -150,7 +150,7 @@
         <!-- Linespacing -->
         <param name="plot_linespacing_head">1.146</param>
         <param name="plot_linespacing_midi">1.46</param>
-        <param name="plot_linespacing_main">1.0</param>
+        <param name="plot_linespacing_main">1.05</param>
         <param name="plot_linespacing_mini">1.1</param>
         <param name="plot_linespacing_tiny">1.1</param>
 

@@ -140,11 +140,23 @@
 				<control type="group"> <!-- DV Config -->
 					<width>500</width>
 					<height>40</height>
-					<control type="image">
+            <control type="image">
 						<left>0</left>
 						<top>8</top>
-						<width>78</width>
-						<height>28</height>
+						<width>174</width>
+						<height>26</height>
+						 <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
+					</control>
+					<control type="label">
+						<left>185</left>
+						<width>300</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR blue]Configuration[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
                         <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
@@ -1143,23 +1155,29 @@
 					<width>auto</width>
 					<height>50</height>
 					<textoffsetx>40</textoffsetx>
-					<label>Dolby Vision - HDR</label>					<font>font_main_bold</font>
+					<label>Dolby Vision - HDR</label>
+					<font>font_main_bold</font>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5552,Home)</onfocus>
 				</control>
 				<control type="button" id="5553">
 					<width>auto</width>
 					<height>50</height>
 					<textoffsetx>40</textoffsetx>
-					<label>$LOCALIZE[31634]</label>					<font>font_main_bold</font>
+					<label>$LOCALIZE[31634]</label>
+					<font>font_main_bold</font>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
 				</control>
-			</control><control type="group">
+			</control>
+<control type="group">
                 <centerbottom>60</centerbottom>
                 <center>view_pad</center>
                 <height>110</height>
-                <include>OSD_Codecs</include>				<textcolor>white</textcolor>
+                <include>OSD_Codecs</include>
+				<textcolor>white</textcolor>
 				<include content="Object_MenuHeader">
                 <param name="label"></param>
-            </include>            </control>		</control>
+            </include>
+            </control>
+		</control>
 	</controls>
 </window>

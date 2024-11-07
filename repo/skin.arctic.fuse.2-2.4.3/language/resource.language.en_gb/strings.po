@@ -2518,7 +2518,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31634"
-msgid "Player"
+msgid "Player Process"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
