@@ -5549,7 +5549,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.4.5">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.4.6">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -6040,7 +6040,7 @@ Added arabic fonts
             -Various changes so skin would install on Matrix
         </news>
     </extension>
-</addon><addon id="skin.confluence.cpm" version="5.10.9.3" name="Confluence cpm" provider-name="Jezz_X, Team Kodi">
+</addon><addon id="skin.confluence.cpm" version="5.10.9.6" name="Confluence cpm" provider-name="Jezz_X, Team Kodi">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 	</requires>
