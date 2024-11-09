@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="window" id="1121">
+	<defaultcontrol>9000</defaultcontrol>
+	<backgroundcolor>background</backgroundcolor>
+	<controls>
+		<include>DefaultBackground</include>
+		<control type="group">
+			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
+			<!-- WIDGETS GROUP -->
+			<control type="group" id="2000">
+				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + !ControlGroup(2000).HasFocus" reversible="true">
+					<effect type="fade" start="100" end="80" time="500" tween="sine" easing="inout" />
+					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="500" />
+				</animation>
+				<include>SearchMenuAnimations</include>
+				<include>OpenClose_Right</include>
+				<!-- SEARCH RESULTS -->
+				<control type="group" id="27000">
+					<include content="Visible_Right_Delayed">
+						<param name="id" value="movies"/>
+					</include>
+					<control type="grouplist" id="27001">
+					<visible allowhiddenfocus="true">!String.IsEmpty(Skin.String(SearchInput)) + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
+						<include>WidgetGroupListCommon</include>
+						<pagecontrol>27099</pagecontrol>
+						<include content="WidgetListPoster" condition="!Skin.HasSetting(HideMovieResults)">
+              <param name="content_path" value="$VAR[SearchProviderMoviesVar]"/>
+              <param name="widget_header" value="$LOCALIZE[342]"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27011"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideTVShowResults)">
+              <param name="content_path" value="$VAR[SearchProviderTVShowsVar]"/>
+              <param name="widget_header" value="TV Shows"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27012"/>
+            </include>
+						<include content="WidgetListPoster" condition="!Skin.HasSetting(HideAnimeResults) + String.IsEqual(Skin.String(current_search_provider),1)">
+              <param name="content_path" value="plugin://plugin.video.fenlight/?mode=build_tvshow_list&amp;action=tmdb_anime_search&amp;query=$INFO[Skin.String(SearchInputEncoded)]"/>
+              <param name="widget_header" value="Anime"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27013"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideCollectionsResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),3)]">
+              <param name="content_path" value="$VAR[SearchProviderCollectionsVar]"/>
+              <param name="widget_header" value="Collections"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27014"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+              <param name="content_path" value="$VAR[SearchProviderPeopleVar]"/>
+              <param name="widget_header" value="Actors/Actresses"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27015"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+              <param name="content_path" value="plugin://plugin.video.umbrella/?action=actorSearchMovies&amp;name=$INFO[Skin.String(SearchInputEncoded)]"/>
+              <param name="widget_header" value="Actors/Actresses (Movies)"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27016"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+              <param name="content_path" value="plugin://plugin.video.umbrella/?action=actorSearchTV&amp;name=$INFO[Skin.String(SearchInputEncoded)]"/>
+              <param name="widget_header" value="Actors/Actresses (TV Shows)"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27017"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideMovieKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+							<param name="content_path" value="$VAR[SearchProviderKeywordMoviesVar]"/>
+              <param name="widget_header" value="$VAR[KeywordMoviesLabelVar]"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27018"/>
+            </include>
+            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideTVShowKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+							<param name="content_path" value="$VAR[SearchProviderKeywordTVShowsVar]"/>
+              <param name="widget_header" value="$VAR[KeywordTVShowsLabelVar]"/>
+              <param name="widget_target" value="videos"/>
+              <param name="list_id" value="27019"/>
+            </include>
+            <include content="WidgetListCategoryStacked" condition="!Skin.HasSetting(HideTraktResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+							<param name="content_path" value="$VAR[SearchProviderTRAKTListsVar]"/>
+							<param name="widget_header" value="TRAKT Lists"/>
+							<param name="widget_target" value="videos"/>
+							<param name="list_id" value="27020"/>
+						</include>
+						<include content="WidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+							<param name="content_path" value="$INFO[Window(1121).Property(altus.27020.path)]"/>
+							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27020.label)]"/>
+							<param name="widget_target" value="videos"/>
+							<param name="list_id" value="270201"/>
+						</include>
+						<include content="WidgetListCategoryStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+							<param name="content_path" value="plugin://plugin.video.umbrella/?action=trakt_search_lists&amp;media_type=movies&amp;name=$INFO[Skin.String(SearchInputTraktEncoded)]"/>
+							<param name="widget_header" value="TRAKT Lists (Movies)"/>
+							<param name="widget_target" value="videos"/>
+							<param name="list_id" value="27021"/>
+						</include>
+						<include content="WidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+							<param name="content_path" value="$INFO[Window(1121).Property(altus.27021.path)]"/>
+							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27021.label)]"/>
+							<param name="widget_target" value="videos"/>
+							<param name="list_id" value="270211"/>
+						</include>
+						<include content="WidgetListCategoryStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+							<param name="content_path" value="plugin://plugin.video.umbrella/?action=trakt_search_lists&amp;media_type=tvshows&amp;name=$INFO[Skin.String(SearchInputTraktEncoded)]"/>
+							<param name="widget_header" value="TRAKT Lists (TV Shows)"/>
+							<param name="widget_target" value="videos"/>
+							<param name="list_id" value="27022"/>
+						</include>
+						<include content="WidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+							<param name="content_path" value="$INFO[Window(1121).Property(altus.27022.path)]"/>
+							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27022.label)]"/>
+							<param name="widget_target" value="videos"/>
+							<param name="list_id" value="270221"/>
+						</include>
+					</control>
+					<include content="WidgetScrollbar" condition="Skin.HasSetting(touchmode)">
+						<param name="scrollbar_id" value="27099"/>
+					</include>
+				</control>
+			</control>
+			<include content="TopBar">
+				<param name="breadcrumbs_label" value="" />
+			</include>
+			<include>BottomBar</include>
+			<control type="label">
+				<include>SearchMenuAnimations</include>
+				<visible>!String.IsEmpty(Skin.String(SearchInput)) + Control.HasFocus(27011) + String.IsEmpty(Skin.String(DatabaseStatus)) + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]]</visible>
+				<top>35</top>
+				<left>57</left>
+				<width>1400</width>
+				<aligny>center</aligny>
+				<height>40</height>
+				<font>font37</font>
+				<textcolor>unfocused_text</textcolor>
+				<label>Search results for: [B]$INFO[Skin.String(SearchInput)][/B]</label>
+				<scroll>true</scroll>
+				<scrollspeed>160</scrollspeed>
+				<animation effect="fade" time="300">VisibleChange</animation>
+			</control>
+			<control type="group">
+				<depth>DepthContentPanel</depth>
+				<include>OpenClose_Left</include>
+				<!-- <include>osd_darkenBG</include> -->
+				<include content="ImageWidget" condition="!String.IsEmpty(Skin.String(DatabaseStatus))">
+					<param name="left">50</param>
+					<param name="text_label" value="Your search history is currently empty. Would you like to perform a new search or return to the home screen?" />
+					<param name="button_label" value="New search" />
+					<param name="button_onclick" value="RunScript(script.altus.helper,mode=re_search)"/>
+					<param name="button3_onclick" value="ActivateWindow(home)"/>
+					<param name="button_id" value="27400"/>
+				</include>
+				<control type="group">
+					<left>-610</left>
+					<animation type="Conditional" condition="!ControlGroup(2000).HasFocus" reversible="true">
+						<effect type="slide" start="0" end="610" time="500" tween="cubic" easing="inout" />
+					</animation>
+					<include content="MenuContentPanel">
+						<param name="width" value="611"/>
+						<!-- <param name="width" value="600"/> -->
+					</include>
+					<!-- <visible allowhiddenfocus="true">true</visible> -->
+					<control type="group">
+						<visible>![$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]] + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
+						<top>200</top>
+						<width>820</width>
+						<control type="label">
+							<left>110</left>
+							<aligny>center</aligny>
+							<height>98</height>
+							<font>font36_title</font>
+							<label>Recent searches</label>
+							<textcolor>$VAR[FocusColorTheme]</textcolor>
+							<visible>String.IsEqual(Skin.String(MenuCaseSetting),0)</visible>
+						</control>
+						<control type="label">
+							<left>80</left>
+							<aligny>center</aligny>
+							<height>98</height>
+							<font>font36_title</font>
+							<label>[UPPERCASE]Recent searches[/UPPERCASE]</label>
+							<textcolor>$VAR[FocusColorTheme]</textcolor>
+							<visible>String.IsEqual(Skin.String(MenuCaseSetting),1)</visible>
+						</control>
+						<control type="label">
+							<left>115</left>
+							<aligny>center</aligny>
+							<height>98</height>
+							<font>font36_title</font>
+							<label>[LOWERCASE]Recent searches[/LOWERCASE]</label>
+							<textcolor>$VAR[FocusColorTheme]</textcolor>
+							<visible>String.IsEqual(Skin.String(MenuCaseSetting),2)</visible>
+						</control>
+						<control type="label">
+							<left>105</left>
+							<aligny>center</aligny>
+							<height>98</height>
+							<font>font36_title</font>
+							<label>[CAPITALIZE]Recent searches[/CAPITALIZE]</label>
+							<textcolor>$VAR[FocusColorTheme]</textcolor>
+							<visible>String.IsEqual(Skin.String(MenuCaseSetting),3)</visible>
+						</control>
+					</control>
+					<control type="fixedlist" id="9000">
+						<left>10</left>
+						<top>300</top>
+						<width>825</width>
+						<height>677</height>
+						<movement>8</movement>
+						<focusposition>0</focusposition>
+						<onfocus>ClearProperty(listposition,home)</onfocus>
+						<onleft>9000</onleft>
+						<onright condition="!String.IsEmpty(Skin.String(SearchInput))">SetFocus(2000)</onright>
+						<onup>700</onup>
+						<ondown>9000</ondown>
+						<scrolltime tween="cubic" easing="out">500</scrolltime>
+						<include content="List">
+              <param name="id" value="9000" />
+              <param name="list_width" value="380" />
+              <param name="img_width" value="422" />
+              <param name="img_texture" value="masks/focus_searchmenu.png" />
+            </include>
+						<content>
+							<!-- SEARCH HISTORY -->
+							<include content="SearchHistory" />
+						</content>
+					</control>
+					<control type="group">
+						<left>95</left>
+						<top>70</top>
+						<width>343</width>
+						<height>140</height>
+						<control type="grouplist" id="700">
+							<orientation>horizontal</orientation>
+							<itemgap>-19</itemgap>
+							<width>343</width>
+							<height>100</height>
+							<onup>SetFocus(9000,99,absolute)</onup>
+							<ondown>SetFocus(9000,0,absolute)</ondown>
+							<onright condition="!String.IsEmpty(Skin.String(SearchInput))">2000</onright>
+							<onback>9000</onback>
+							<align>center</align>
+							<include content="IconButton">
+								<param name="control_id" value="801" />
+								<param name="onclick" value="$VAR[CurrentSearchProviderToggleVar]" />
+								<param name="icon" value="icons/submenu/cycleproviders.png" />
+							</include>
+							<include content="IconButton">
+								<param name="control_id" value="802" />
+								<param name="onclick" value="RunScript(script.altus.helper,mode=search_input)" />
+								<param name="icon" value="icons/submenu/search.png" />
+							</include>
+							<include content="IconButton">
+								<param name="control_id" value="803" />
+								<param name="onclick" value="$VAR[TRAKTButtonActionsVar]" />
+								<param name="icon" value="icons/submenu/trakt.png" />
+							</include>
+							<include content="IconButton">
+								<param name="control_id" value="804" />
+								<param name="onclick" value="RunScript(script.altus.helper,mode=remove_all_spaths)" />
+								<param name="icon" value="icons/submenu/trash.png" />
+							</include>
+							<include content="IconButton">
+								<param name="control_id" value="805" />
+								<param name="onclick" value="Fullscreen" />
+								<param name="icon" value="icons/submenu/fullscreen.png" />
+								<param name="visible" value="Player.HasMedia" />
+							</include>
+						</control>
+						<control type="label">
+							<left>0</left>
+							<top>-30</top>
+							<width>340</width>
+							<height>30</height>
+							<font>font12</font>
+							<align>center</align>
+							<aligny>center</aligny>
+							<textcolor>grey</textcolor>
+							<label>$VAR[SearchSubmenuButtonLabelsVar]</label>
+						</control>
+						<control type="label">
+							<left>0</left>
+							<top>100</top>
+							<width>340</width>
+							<height>30</height>
+							<font>font12</font>
+							<align>center</align>
+							<aligny>center</aligny>
+							<textcolor>grey</textcolor>
+							<label>Click to cycle providers</label>
+							<visible>Control.HasFocus(801)</visible>
+						</control>
+					</control>
+				</control>
+			</control>
+			<control type="group">
+				<depth>DepthBars</depth>
+				<bottom>0</bottom>
+				<height>70</height>
+				<animation effect="fade" start="0" end="100" time="300" delay="300">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+				<include condition="!Skin.HasSetting(hide_mediaflags)" content="MediaFlags">
+					<param name="infolabel_prefix" value="Container." />
+					<param name="resolution_var" value="$VAR[ContainerResolutionFlagVar]" />
+				</include>
+			</control>
+			<!-- <control type="group">
+				<include>OpenClose_Right</include>
+				<animation effect="slide" time="300" start="-492,0" end="0,0" tween="sine" easing="inout">VisibleChange</animation>
+				<animation effect="slide" end="0,-90" time="300" tween="sine" easing="inout" condition="$EXP[infodialog_active]">conditional</animation>
+				<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+				<control type="label">
+				<visible>String.IsEmpty(Skin.String(SearchInput)) + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
+					<top>500</top>
+					<left>650</left>
+					<width>1085</width>
+					<aligny>center</aligny>
+					<align>center</align>
+					<height>98</height>
+					<font>font14</font>
+					<textcolor>unfocused_text</textcolor>
+					<wrapmultiline>true</wrapmultiline>
+					<label>Explore your past searches on the left, delve into TRAKT lists using the TRAKT button, or click the search icon to initiate a new search.</label>
+				</control>
+			</control> -->
+		</control>
+	</controls>
+</window>
