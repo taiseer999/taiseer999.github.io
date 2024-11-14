@@ -252,8 +252,8 @@
         </font>
         <font>
             <name>font_info_light</name>
-            <filename>RobotoCondensed-Light.ttf</filename>
-            <size>112</size>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
         </font>
         <font>
             <name>font_info_black_doublerow</name>
