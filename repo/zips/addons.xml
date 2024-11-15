@@ -981,7 +981,7 @@ updated YouTube addon URL
             <fanart>resources/mediafusion_logo.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.seren" version="3.0.0.5.2~omega" name="Seren" provider-name="Nixgates">
+</addon><addon id="plugin.video.seren" version="3.0.1" name="Seren" provider-name="Nixgates">
     <requires>
         <import addon="xbmc.addon" version="17.9.910" />
         <import addon="xbmc.python" version="3.0.0" />
@@ -997,7 +997,7 @@ updated YouTube addon URL
     </extension>
     <extension point="xbmc.service" library="service.py" />
     <extension point="xbmc.addon.metadata">
-        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <reuselanguageinvoker>false</reuselanguageinvoker>
         <summary lang="en">Seren - Modular Multi-source Addon</summary>
         <description lang="en">Seren is a modular provider based, cloud service streaming software that is tightly
             interwoven with Trakt. Seren provides the freedom to view media from a single menu system from service
@@ -1009,7 +1009,7 @@ updated YouTube addon URL
         <website>https://github.com/nixgates/plugin.video.seren</website>
         <source>https://github.com/nixgates/plugin.video.seren</source>
         <disclaimer lang="en">
-            Last updated: September 09, 2019.
+            Last updated: November 14, 2024.
             The information contained within the Seren software (the "Service") is for general information purposes
             only.
             The author assumes no responsibility for errors, omissions in the contents on the Service, nor does it
@@ -1047,6 +1047,9 @@ updated YouTube addon URL
             <screenshot>resources/screenshots/screenshot-04.jpg</screenshot>
         </assets>
         <news>
+            Changelog 3.0.1
+            [FEATURE] Handle Kodi database version for Omega 21
+
             Changelog 3.0.0
             [PERFORMANCE] Drop support for Python 2.x (Kodi Leia and below)
             [PERFORMANCE] Optimize codebase for Python 3.x (Kodi Matrix and above)
