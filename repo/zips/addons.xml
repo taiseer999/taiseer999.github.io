@@ -4688,7 +4688,7 @@ Second Test Release:
 			<icon>resources/icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.18.3" provider-name="Unknown">
+</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.19.0" provider-name="Unknown">
     <requires>
       <import addon="script.module.requests" />
       <import addon="vfs.libarchive" optional="true" />
