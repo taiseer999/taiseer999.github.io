@@ -7023,7 +7023,7 @@ msgstr "الأيقونات"
 #. pvr "epg updates" settings group label
 msgctxt "#14303"
 msgid "Updates"
-msgstr "تحديثات"
+msgstr "تحديث الاضافات"
 
 #. pvr "RDS" settings group label
 msgctxt "#14304"
