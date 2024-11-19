@@ -471,28 +471,29 @@
 <fontset id="Hacan prometer" unicode="true">
 
         <!-- Title fonts -->
-         <font>
+          <font>
             <name>font_info_black</name>
+            <filename>Hacan prometer.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
             <filename>RobotoCondensed-Black.ttf</filename>
             <size>98</size>
         </font>
         <font>
-            <name>font_info_light</name>
-            <filename>RobotoCondensed-Light.ttf</filename>
-            <size>112</size>
-        </font>
-        <font>
             <name>font_info_black_doublerow</name>
-            <filename>RobotoCondensed-Black.ttf</filename>
+            <filename>Hacan prometer.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_info_light_doublerow</name>
-            <filename>RobotoCondensed-Light.ttf</filename>
+            <filename>Hacan prometer.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
+
 
         <!-- Black Fonts -->
         <font>
@@ -586,38 +587,38 @@
         <!-- Standard Fonts -->
         <font>
             <name>font_midi</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacan prometer -lt.ttf</filename>
             <aspect>0.89</aspect>
             <size>35</size>
         </font>
         <font>
             <name>font_main</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <size>30</size>
         </font>
         <font>
             <name>font_mini</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <size>26</size>
         </font>
         <font>
             <name>font_tiny</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <size>22</size>
         </font>
         <font>
             <name>font_hint</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <size>16</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_hint_button</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <size>16</size>
             <linespacing>1.15</linespacing>
@@ -626,42 +627,42 @@
         <!-- Textbox Fonts -->
         <font>
             <name>font_huge_plot</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.46</linespacing>
             <size>47</size>
         </font>
         <font>
             <name>font_midi_plot</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.46</linespacing>
             <size>35</size>
         </font>
         <font>
             <name>font_main_plot</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
             <size>30</size>
         </font>
         <font>
             <name>font_mini_plot</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.24</linespacing>
             <size>22</size>
         </font>
         <font>
             <name>font_tiny_plot</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>1.14</linespacing>
             <size>22</size>
         </font>
         <font>
             <name>font_mini_cond</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -lt.ttf</filename>
             <aspect>0.89</aspect>
             <linespacing>0.96</linespacing>
             <size>26</size>
@@ -757,5 +758,6 @@
     </fontset>
 
 </fonts>
+
 
 
