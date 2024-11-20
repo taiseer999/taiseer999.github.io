@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -131,6 +132,14 @@
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableYear)</onclick>
             <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableYear)</selected>
             <label>$LOCALIZE[345]</label>
+        </include>
+        <include content="Settings_Button">
+            <param name="id">8011</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
+            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableCrew)</onclick>
+            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)</selected>
+            <label>$LOCALIZE[31050]</label>
         </include>
         <include content="Settings_Button">
             <param name="id">8007</param>

@@ -301,13 +301,13 @@
             <left>1675</left>
             <control type="group">
                 <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
-                <top>160</top>
+                <top>52</top>
                 <width>210</width>
                 <height>90</height>    
 			 </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),dolby vision)</visible>
-                <top>160</top>
+                <top>52</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -317,7 +317,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</visible>
-                <top>160</top>
+                <top>52</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -327,7 +327,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),sdr)</visible>
-                <top>160</top>
+                <top>52</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
