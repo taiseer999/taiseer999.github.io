@@ -106,8 +106,8 @@
         <include content="Font_Default">
             <param name="font_black">Hacen-Promoter.ttf</param>
             <param name="font_bold">Hacen-Promoter.ttf</param>
-            <param name="font_regular">Hacen-Promoter -lt.ttf</param>
-            <param name="font_light">Hacen Freehand.ttf</param>
+            <param name="font_regular">Hacen-Promoter -reg.ttf</param>
+            <param name="font_light">Hacen-Promoter -reg.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
             <param name="plot_linespacing_main">1.15</param>
