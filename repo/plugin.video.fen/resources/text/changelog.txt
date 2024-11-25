@@ -1,6 +1,9 @@
-[B]Please utilize Fen Tips (Tools->Tips for Fen Use) to catch up on any important new features. New features will be highlighted with a [COLOR chartreuse]NEW!!![/COLOR] label.[/B]
+[COLOR darkgoldenrod]GOD BLESS HIM AND KEEP HIM SAFE.[/COLOR]
 
-
+[COLOR dodgerblue][B]Version 3.5.01[/B][/COLOR]
+- Fixed RD compatibility.
+- Removed uupdate service.
+- Final release of this ancient addon. So long all.
 
 [COLOR dodgerblue][B]Version 3.2.30[/B][/COLOR]
 - Fixed compatibility with External Scrapers.
