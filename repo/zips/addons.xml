@@ -905,10 +905,13 @@ updated YouTube addon URL
 		<news>INFO: For latest changes see Changelog within add-on.</news>
 		<assets><icon>icon.png</icon><fanart>fanart.jpg</fanart></assets>
 	</extension>
-</addon><addon id="plugin.video.dramacool" name="DramaCool" version="3.2.11.2" provider-name="groggyegg">
+</addon><addon id="plugin.video.dramacool" name="DramaCool" version="3.2.11.3" provider-name="groggyegg">
     <requires>
         <import addon="script.module.beautifulsoup4" />
-        
+        <import addon="script.module.peewee" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.resolveurl" />
+        <import addon="script.module.xbmcext" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="dramacool/addon.py">
         <provides>video</provides>
