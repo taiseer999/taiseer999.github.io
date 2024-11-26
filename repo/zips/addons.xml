@@ -905,6 +905,30 @@ updated YouTube addon URL
 		<news>INFO: For latest changes see Changelog within add-on.</news>
 		<assets><icon>icon.png</icon><fanart>fanart.jpg</fanart></assets>
 	</extension>
+</addon><addon id="plugin.video.dramacool" name="DramaCool" version="3.2.11" provider-name="groggyegg">
+    <requires>
+        <import addon="script.module.beautifulsoup4" />
+        <import addon="script.module.peewee" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.resolveurl" />
+        <import addon="script.module.xbmcext" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="dramacool/addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">Watch Asian Drama and Korean Show with English subtitles on DramaCool.</description>
+        <platform>all</platform>
+        <license>MIT License</license>
+        <source>https://github.com/groggyegg/plugin.video.dramacool</source>
+        <news>v3.2.11 (2024-06-06)
+            - new route for tmdb helper
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.5.01">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
