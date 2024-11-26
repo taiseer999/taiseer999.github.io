@@ -905,7 +905,7 @@ updated YouTube addon URL
 		<news>INFO: For latest changes see Changelog within add-on.</news>
 		<assets><icon>icon.png</icon><fanart>fanart.jpg</fanart></assets>
 	</extension>
-</addon><addon id="plugin.video.dramacool" name="DramaCool" version="3.2.11.1" provider-name="groggyegg">
+</addon><addon id="plugin.video.dramacool" name="DramaCool" version="3.2.11.2" provider-name="groggyegg">
     <requires>
         <import addon="script.module.beautifulsoup4" />
         
