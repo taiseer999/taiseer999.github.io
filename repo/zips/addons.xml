@@ -3227,6 +3227,44 @@ v.3.3.7
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.clouddrive.common" name="Cloud Drive Common Module" version="1.4.0" provider-name="Carlos Guzman (cguZZman)">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.dateutil" />
+		<import addon="script.module.pyqrcode" />
+	</requires>
+	<extension point="xbmc.python.module" library="/" />
+	<extension point="xbmc.service" library="service.py" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Cloud Drive Common Module</summary>
+		<description lang="en_GB">Common Services and Classes for all the cloud drive addons.</description>
+		<summary lang="he_IL">מודול משותף לכונן בענן</summary>
+		<description lang="he_IL">שירותים ושירותים משותפים לכל התוספים של כונן הענן.</description>		
+		<license>GPL-3.0-or-later</license>
+		<source>https://github.com/cguZZman/script.module.clouddrive.common</source>
+		<forum>https://github.com/cguZZman/script.module.clouddrive.common/issues</forum>
+		<assets>
+			<icon>icon.png</icon>
+		</assets>
+		<news>
+v1.4.0 released Jan 20, 2023:
+- Kodi 20 fix
+		</news>
+		<disclaimer lang="en_GB">
+This cloud drive addon uses a third-party authentication mechanism commonly known as OAuth 2.0.
+If you want to know more about OAuth 2.0 you can visit the following pages:
+- https://oauth.net/2/
+- https://developers.google.com/identity/protocols/OAuth2
+- https://docs.microsoft.com/en-us/onedrive/developer/rest-api/getting-started/msa-oauth
+
+Kodi and myself take no responsibility or liability whatsoever.
+
+The authentication server URL is specified in Settings / Advanced / Sign-in Server. The Sign-in Server implements the OAuth 2.0 protocol.
+The complete source code of the Sign-in Server can be download here: https://github.com/cguZZman/drive-login
+You can clone the project and host it in your own server. 
+		</disclaimer>
+	</extension>
 </addon><addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.24" provider-name="CocoJoe">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -3559,6 +3597,17 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.peewee" name="Peewee" version="3.15.4" provider-name="groggyegg">
+    <extension point="xbmc.python.module" library="." />
+    <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">Peewee is a simple and small ORM. It has few (but expressive) concepts, making it easy to learn and intuitive to use.</description>
+        <platform>all</platform>
+        <license>MIT License</license>
+        <source>https://github.com/groggyegg/script.module.peewee</source>
+        <assets>
+            <icon>docs/peewee3-logo.png</icon>
+        </assets>
+    </extension>
 </addon><addon id="script.module.pyqrcode" version="1.2.1+matrix.4" name="pyQRcode" provider-name="Michael Nooner">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -3611,6 +3660,33 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.resolveurl" name="ResolveURL" version="5.1.153" provider-name="gujal">
+    <requires>
+        
+        <import addon="script.module.six" />
+        <import addon="script.module.kodi-six" />
+        <import addon="plugin.video.youtube" optional="true" />
+        <import addon="script.module.python.twitch" optional="true" />
+        <import addon="plugin.googledrive" optional="true" />
+    </requires>
+    <extension point="xbmc.python.module" library="lib" />
+    <extension point="xbmc.python.pluginsource" library="lib/default.py" />
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
+        <summary lang="es_ES">Resolver enlaces a videos de sitios populares para poder reproducirlos en XBMC/Kodi.</summary>
+        <summary lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju.</summary>
+        <summary lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi.</summary>
+        <description lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
+        <description lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi, απλοποίηση της ανάπτυξης των προσθέτων που χρησιμοποιούν πολλαπλούς εξυπηρετητές για υλικό βίντεο</description>
+        <description lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
+        <disclaimer lang="en_GB">This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not here. This script in no way searches for any content whatsoever.</disclaimer>
+        <disclaimer lang="el_GR">Το ανωτέρο σενάριο το μόνο που κάνει είναι να επιλύει οπτικοακουστικό περιεχόμενο από νόμιμες πηγές χωρίς προκατάληψη. Εάν το ανωτέρο σενάριο χρησιμοποιηθεί από τρίτους ώστε να επιλύσει περιεχόμενο το οποίο σας προκαλεί αντίδραση ότι παραβιάζει την πνευματική σας ιδιοκτησία παρακαλώ μεταφέρετε τα παραπονά σας στον ιστότοπο τον οποίο βρίσκεται το εν λόγω περιεχόμενο η τον δημιουργό ο οποίος πραγματοποιεί την σύνδεση και όχι εδω. Το σενάριο αυτό ουδεμία περίπτωση πραγματοποιεί αναζήτηση περιεχομένου.</disclaimer>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon><addon id="script.module.routing" name="Plugin routing" version="0.2.3+matrix.1" provider-name="takoi,Team Kodi">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -3833,6 +3909,20 @@ v1.30.0
     <news>- 1.6.2: Various internal changes.
 - 1.6.0: Dropped Python 2 compatibility.</news>
   </extension>
+</addon><addon id="script.module.xbmcext" name="XBMCExt" version="1.5.2" provider-name="groggyegg">
+    <requires>
+        <import addon="script.module.six" />
+    </requires>
+    <extension point="xbmc.python.module" library="." />
+    <extension point="xbmc.addon.metadata">
+        <description lang="en_GB">XBMCExt extends utilities, dialogs, and various control widgets.</description>
+        <platform>all</platform>
+        <license>MIT License</license>
+        <source>https://github.com/groggyegg/script.module.xbmcext</source>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+    </extension>
 </addon><addon id="script.nimbus.helper" name="Nimbus Helper" version="0.0.47" provider-name="Ivar Brandt">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
