@@ -34,7 +34,7 @@ from xbmcext.pymaybe import maybe
 
 
 class Request(object):
-    domains = getSetting('domain1') or 'watchasia.to', getSetting('domain2')
+    domains = getSetting('domain1') or 'asianc.co', getSetting('domain2')
     session = Session()
 
     @classmethod
