@@ -1,293 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Foundation -->
 <window>
     <defaultcontrol always="true">50</defaultcontrol>
+    <include>Action_Blur_Onload</include>
     <views>50</views>
     <controls>
-        <include>GlobalBackground</include>
-        <include>Furniture_Header</include>
-        <include>Furniture_Clock</include>
-        <include>Furniture_NowPlaying</include>
-        <include>Furniture_Weather</include>
-        <control type="label" id="12">
-            <visible>false</visible>
-        </control>
-        <control type="label" id="101">
-            <visible>false</visible>
-        </control>
-        <control type="group">
-            <include>Animation.Common</include>
-            <control type="group">
-                <description>Left panel</description>
-                <left>SidePad</left>
-                <top>PosterPad</top>
-                <height>598</height>
-                <width>865</width>
-                <control type="image">
-                    <width>100%</width>
-                    <height>100%</height>
-                    <texture border="5" colordiffuse="Panel">common/box.png</texture>
-                </control>
-                <control type="label">
-                    <description>Header Label</description>
-                    <top>15</top>
-                    <left>30</left>
-                    <right>30</right>
-                    <align>left</align>
-                    <include>FontTop</include>
-                    <textcolor>Dark2</textcolor>
-                    <label>$LOCALIZE[2]$INFO[Control.GetLabel(12), - ,]</label>
-                </control>
-                <control type="image">
-                    <top>85</top>
-                    <left>30</left>
-                    <right>30</right>
-                    <height>1</height>
-                    <bottom>10</bottom>
-                    <colordiffuse>Black12</colordiffuse>
-                    <texture>common/white.png</texture>
-                </control>
-                <include content="scrollbar_filemanager">
-                    <param name="scrollid" value="1824"/>
-                    <param name="onleft" value="50"/>
-                    <param name="onright" value="100"/>
-                </include>
-                <include content="scrollbar_filemanager">
-                    <param name="scrollid" value="1825"/>
-                    <param name="onleft" value="100"/>
-                    <param name="onright" value="9000"/>
-                    <param name="left" value="1770"/>
-                </include>
-                <control type="list" id="50">
-                    <description>Left File List</description>
-                    <left>0</left>
-                    <top>105</top>
-                    <right>0</right>
-                    <height>483</height>
-                    <onleft>9000</onleft>
-                    <onup>50</onup>
-                    <ondown>50</ondown>
-                    <onright>1824</onright>
-                    <pagecontrol>1824</pagecontrol>
-                    <itemlayout height="69" width="865">
-                        <control type="label">
-                            <posx>30</posx>
-                            <width>715</width>
-                            <align>left</align>
-                            <textcolor>PanelWhite70</textcolor>
-                            <info>ListItem.Label</info>
-                        </control>
-                        <control type="label">
-                            <right>30</right>
-                            <width>150</width>
-                            <align>right</align>
-                            <font>Tiny</font>
-                            <textcolor>PanelWhite70</textcolor>
-                            <info>ListItem.Label2</info>
-                        </control>
-                    </itemlayout>
-                    <focusedlayout height="69" width="865">
-                        <control type="image">
-                            <width>100%</width>
-                            <height>66</height>
-                            <texture border="5" colordiffuse="$VAR[ColorSelectOtherBar]">common/white.png</texture>
-                            <animation effect="fade" start="100" end="33" condition="!Control.HasFocus(50) + !Control.HasFocus(1824)">Conditional</animation>
-                        </control>
-                        <control type="image">
-                            <width>100%</width>
-                            <height>66</height>
-                            <texture border="8" colordiffuse="$VAR[ColorHighlightOtherBar]">common/gradient-box-wide-cut.png</texture>
-                            <animation effect="fade" start="100" end="33" condition="!Control.HasFocus(50) + !Control.HasFocus(1824)">Conditional</animation>
-                        </control>
-                        <control type="label">
-                            <posx>30</posx>
-                            <width>720</width>
-                            <align>left</align>
-                            <textcolor>Selected</textcolor>
-                            <info>ListItem.Label</info>
-                        </control>
-                        <control type="label">
-                            <right>30</right>
-                            <width>720</width>
-                            <align>right</align>
-                            <textcolor>Selected</textcolor>
-                            <font>Tiny</font>
-                            <info>ListItem.Label2</info>
-                        </control>
-                    </focusedlayout>
-                </control>
-            </control>
-            <control type="group">
-                <description>Right panel</description>
-                <right>SidePad</right>
-                <top>PosterPad</top>
-                <height>598</height>
-                <width>870</width>
-                <control type="image">
-                    <width>100%</width>
-                    <height>100%</height>
-                    <texture border="5" colordiffuse="Panel">common/box.png</texture>
-                </control>
-                <control type="label" id="102">
-                    <description>Header Label</description>
-                    <top>15</top>
-                    <left>30</left>
-                    <right>30</right>
-                    <align>left</align>
-                    <include>FontTop</include>
-                    <textcolor>Dark2</textcolor>
-                    <label>$LOCALIZE[559]$INFO[Control.GetLabel(101), - ,]</label>
-                </control>                
-                <control type="image">
-                    <top>85</top>
-                    <left>30</left>
-                    <right>30</right>
-                    <height>1</height>
-                    <bottom>10</bottom>
-                    <colordiffuse>Black12</colordiffuse>
-                    <texture>common/white.png</texture>
-                </control>
-                <control type="list" id="100">
-                    <description>Left File List</description>
-                    <left>0</left>
-                    <top>105</top>
-                    <right>0</right>
-                    <height>483</height>
-                    <onleft>50</onleft>
-                    <onright>1825</onright>
-                    <onup>100</onup>
-                    <ondown>100</ondown>
-                    <pagecontrol>1825</pagecontrol>
-                    <itemlayout height="69" width="870">
-                        <control type="label">
-                            <posx>30</posx>
-                            <width>720</width>
-                            <align>left</align>
-                            <textcolor>PanelWhite70</textcolor>
-                            <info>ListItem.Label</info>
-                        </control>
-                        <control type="label">
-                            <right>30</right>
-                            <width>150</width>
-                            <align>right</align>
-                            <font>Tiny</font>
-                            <textcolor>PanelWhite70</textcolor>
-                            <info>ListItem.Label2</info>
-                        </control>
-                    </itemlayout>
-                    <focusedlayout height="69" width="870">
-                        <control type="image">
-                            <width>100%</width>
-                            <height>66</height>
-                            <texture border="5" colordiffuse="$VAR[ColorSelectOtherBar]">common/white.png</texture>
-                            <animation effect="fade" start="100" end="33" condition="!Control.HasFocus(100) + !Control.HasFocus(1825)">Conditional</animation>
-                        </control>
-                        <control type="image">
-                            <width>100%</width>
-                            <height>66</height>
-                            <texture border="8" colordiffuse="$VAR[ColorHighlightOtherBar]">common/gradient-box-wide-cut.png</texture>
-                            <animation effect="fade" start="100" end="33" condition="!Control.HasFocus(100) + !Control.HasFocus(1825)">Conditional</animation>
-                        </control>
-                        <control type="label">
-                            <posx>30</posx>
-                            <width>720</width>
-                            <align>left</align>
-                            <textcolor>Selected</textcolor>
-                            <info>ListItem.Label</info>
-                        </control>
-                        <control type="label">
-                            <right>30</right>
-                            <width>720</width>
-                            <align>right</align>
-                            <textcolor>Selected</textcolor>
-                            <font>Tiny</font>
-                            <info>ListItem.Label2</info>
-                        </control>
-                    </focusedlayout>
-                </control>
-            </control>
-        </control>
-        <control type="group">
-            <include>Animation.FadeIn</include>
-            <include>Animation.FadeOut</include>
-            <visible>ControlGroup(9000).HasFocus()</visible>
-            <include>GlobalOverlay</include>
-        </control>
-        
-        
-        <control type="group">
-            <height>340</height>
-            <include>Def9000Background</include>
-            <control type="group">
-                <control type="image">
-                    <description>arrow image</description>
-                    <centerleft>50%</centerleft>
-                    <posy>-16</posy>
-                    <include>arrowdimensions</include>
-                    <texture colordiffuse="White70" flipy="true">common/arrow-small.png</texture>
-                </control>
-                <control type="image">
-                    <description>arrow image</description>
-                    <centerleft>50%</centerleft>
-                    <posy>340</posy>
-                    <include>arrowdimensions</include>
-                    <texture colordiffuse="White70" flipy="false">common/arrow-small.png</texture>
-                </control>
-            </control>
-            <control type="group">
-                <left>22</left>
-                <top>22</top>
-                <control type="label">
-                    <description>Header Label</description>
-                    <left>70</left>
-                    <width>950</width>
-                    <posy>0</posy>
-                    <include>FontTop</include>
-                    <textcolor>Dark2</textcolor>
-                    <label>33063</label>
-                </control>
-                <include>Kodi_Logo</include>
+        <include>Background</include> <!-- TODO: Plain background ? -->
 
-                <!-- Lines -->
-                <control type="image">
-                    <top>70</top>
-                    <left>17</left>
-                    <width>385</width>
-                    <height>1</height>
-                    <bottom>10</bottom>
-                    <colordiffuse>Black12</colordiffuse>
-                    <texture>common/white.png</texture>
-                </control>
-            </control>
-            <include content="Def_Gradient_Settings_Image">
-                <param name="controlid" value="9000"/>
-                <param name="left" value="8"/>
-                <param name="top" value="110"/>
-                <param name="width" value="450"/>
+        <include content="Settings_Dialog">
+            <include content="DialogInfo_ButtonGroup_Basic">
+                <param name="id">9000</param>
+                <param name="dim_visible">false</param>
+                <param name="include">Items_MusicPlaylistEditor_MenuBar</param>
+                <param name="include_def">DialogInfo_ButtonGroup_Basic__Def_MyMusicPlaylistEdit</param>
             </include>
-            <control type="grouplist" id="9000">
-                <include>Def9000GroupList</include>
-                <top>110</top>
-                <control type="button" id="6">
+            <include content="Settings_Main_Group">
+                <include content="Settings_Left_Group">
+                    <width>780</width>
+                    <include content="Settings_Left_Content">
+                        <include content="List_AddonCategories">
+                            <param name="id">50</param>
+                            <param name="detailed">true</param>
+                            <param name="width" />
+                            <onright>60</onright>
+                            <onleft>9000</onleft>
+                            <pagecontrol>60</pagecontrol>
+                            <right>60</right>
+                        </include>
+                        <control type="scrollbar" id="60">
+                            <centerright>40</centerright>
+                            <bottom>0</bottom>
+                            <top>0</top>
+                            <width>scrollbar_w</width>
+                            <orientation>vertical</orientation>
+                            <texturesliderbackground />
+                            <texturesliderbar colordiffuse="00ffffff" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+                            <include>Texture_Scrollbar_V</include>
+                            <onleft>50</onleft>
+                            <onright>100</onright>
+                        </control>
+                    </include>
+                    <include content="Settings_InfoText">
+                        <param name="id">9930</param>
+                        <param name="label">$INFO[Container.FolderName,,[CR]]$INFO[Control.GetLabel(12)]</param>
+                    </include>
+                </include>
+                <include content="Settings_Right_Group">
+                    <left>780</left>
+                    <include content="List_AddonCategories">
+                        <param name="id">100</param>
+                        <param name="detailed">true</param>
+                        <param name="width" />
+                        <onleft>50</onleft>
+                        <pagecontrol>61</pagecontrol>
+                        <onright>61</onright>
+                        <right>20</right>
+                        <top>-20</top>
+                        <bottom>100</bottom>
+                    </include>
+                    <control type="scrollbar" id="61">
+                        <centerright>0</centerright>
+                        <bottom>100</bottom>
+                        <top>-20</top>
+                        <width>scrollbar_w</width>
+                        <orientation>vertical</orientation>
+                        <texturesliderbackground />
+                        <texturesliderbar colordiffuse="00ffffff" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+                        <include>Texture_Scrollbar_V</include>
+                        <onleft>100</onleft>
+                        <onright>-</onright>
+                    </control>
+                    <include content="Settings_InfoText">
+                        <param name="id">9931</param>
+                        <param name="label">$LOCALIZE[559]$INFO[Control.GetLabel(101),[CR],]</param>
+                    </include>
+                </include>
+            </include>
+            <control type="group">
+                <height>80</height>
+                <left>160</left>
+                <centertop>100</centertop>
+                <width>settings_category_w</width>
+                <control type="label">
                     <align>left</align>
-                    <label>21478</label>
-                    <description>Open</description>
-                    <include>DefContextButtonGradient</include>
-                </control>
-                <control type="button" id="7">
-                    <align>left</align>
-                    <label>190</label>
-                    <description>Save</description>
-                    <include>DefContextButtonGradient</include>
-                </control>
-                <control type="button" id="8">
-                    <align>left</align>
-                    <label>192</label>
-                    <description>Clear</description>
-                    <include>DefContextButtonGradient</include>
+                    <height>20</height>
+                    <centertop>50%</centertop>
+                    <textoffsetx>40</textoffsetx>
+                    <font>font_midi_black</font>
+                    <textcolor>main_fg_100</textcolor>
+                    <label>$VAR[Label_Header_Main]</label>
                 </control>
             </control>
-        </control>
+        </include>
 
+        <include content="Object_Hidden_Button">
+            <param name="id">12</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">101</param>
+        </include>
     </controls>
+
 </window>

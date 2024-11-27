@@ -1,134 +1,79 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Foundation -->
+<?xml version="1.0" encoding="utf-8"?>
 <window>
-    <defaultcontrol always="true">101</defaultcontrol>
+    <defaultcontrol always="true">8000</defaultcontrol>
     <controls>
+
+        <include>Dialog_Dim_Overlay</include>
+
         <control type="group">
-            <include>Animation.FadeIn</include>
-            <include>Animation.FadeOut</include>
-            <visible>ControlGroup(9000).HasFocus()</visible>
-            <include>GlobalOverlay</include>
-        </control>
-        <control type="group">
-            <centerleft>50%</centerleft>
-            <centertop>50%</centertop>
-            <width>468</width>
-            <height>755</height>
-            <top>140</top>
-            <visible allowhiddenfocus="true">ControlGroup(9000).HasFocus()</visible>
-            <include>Animation.ZoomIn</include>
-            <include>Animation.FadeOut</include>
-            <visible>!Window.IsActive(GameVideoFilter) + !Window.IsActive(GameStretchMode) + !Window.IsActive(GameControllers) + !Window.IsActive(GameVideoRotation) + !Window.IsActive(DialogSlider.xml)</visible>
-            <control type="image">
-                <left>-8</left>
-                <top>-20</top>
-                <right>10</right>
-                <bottom>15</bottom>
-                <colordiffuse>White100</colordiffuse>
-                <texture border="16">common/rounded-shadow8.png</texture>
-            </control>
-            <control type="group">
-                <left>17</left>
-                <top>0</top>
-                <control type="label">
-                    <description>Header Label</description>
-                    <left>70</left>
-                    <width>950</width>
-                    <posy>0</posy>
-                    <include>FontTop</include>
-                    <textcolor>Dark2</textcolor>
-                    <label>35221</label>
-                </control>
-                <include>Kodi_Logo</include>
-                <!-- Lines -->
-                <control type="image">
-                    <top>70</top>
-                    <left>17</left>
-                    <width>385</width>
-                    <height>1</height>
-                    <bottom>10</bottom>
-                    <colordiffuse>Black12</colordiffuse>
-                    <texture>common/white.png</texture>
-                </control>
-            </control>
-            <control type="group">
-                <height>490</height>
-                <left>-20</left>
-                <top>-18</top>
-                <include content="Def9000Arrows"><param name="arrow_bottom" value="755" /></include>
-            </control>
-            <include content="Def_Gradient_Settings_Image">
-                <param name="controlid" value="9000"/>
-                <param name="left" value="0"/>
-                <param name="top" value="90"/>
-                <param name="width" value="450"/>
+            <include>Dimension_DialogMiniMenu</include>
+            <include>Animation_Right_Delay</include>
+
+            <include content="Dialog_Foreground_Side">
+                <param name="dialog_size">Dimension_DialogMiniMenu</param>
+                <param name="lines_right">0</param>
+                <param name="topline">true</param>
+                <param name="subline">true</param>
             </include>
-            <control type="grouplist" id="9000">
-                <top>90</top>
-                <height>630</height>
-                <scrolltime>0</scrolltime>
-                <onleft>Close</onleft>
-                <onright>Close</onright>
-                <itemgap>0</itemgap>
-                <usecontrolcoords>true</usecontrolcoords>
-                <control type="button" id="101">
-                    <description>Pause / Resume button</description>
-                    <align>left</align>
-                    <label>$LOCALIZE[35224]</label>
-                    <include>DefContextButtonGradient</include>
-                    <onclick>Play</onclick>
-                </control>
-                <control type="button" id="102">
-                    <description>Reset button</description>
-                    <align>left</align>
-                    <label>$LOCALIZE[13007]</label>
-                    <include>DefContextButtonGradient</include>
-                    <onclick>PlayerControl(Reset)</onclick>
-                </control>
-                <control type="button" id="103">
-                    <description>Stop button</description>
-                    <align>left</align>
-                    <label>$LOCALIZE[35222]</label>
-                    <include>DefContextButtonGradient</include>
-                    <onclick>Stop</onclick>
-                </control>
-                <control type="button" id="104">
-                    <include>DefContextButtonGradient</include>
-                    <align>left</align>
-                    <label>$LOCALIZE[35225]</label>
-                    <onclick>ActivateWindow(GameVideoFilter)</onclick>
-                </control>
-                <control type="button" id="105">
-                    <include>DefContextButtonGradient</include>
-                    <align>left</align>
-                    <label>$LOCALIZE[35233]</label>
-                    <onclick>ActivateWindow(GameStretchMode)</onclick>
-                </control>
-                <control type="button" id="106">
-                    <include>DefContextButtonGradient</include>
-                    <align>left</align>
-                    <label>$LOCALIZE[35227]</label>
-                    <onclick>ActivateWindow(GameVideoRotation)</onclick>
-                </control>
-                <control type="button" id="107">
-                    <label>$LOCALIZE[13376]</label>
-                    <align>left</align>
-                    <include>DefContextButtonGradient</include>
-                    <onclick>ActivateWindow(GameVolume)</onclick>
-                </control>
-                <control type="button" id="109">
-                    <include>DefContextButtonGradient</include>
-                    <align>left</align>
-                    <label>$LOCALIZE[35234]</label>
-                    <onclick>ActivateWindow(GameControllers)</onclick>
-                </control>
-                <control type="button" id="110">
-                    <include>DefContextButtonGradient</include>
-                    <align>left</align>
-                    <label>$LOCALIZE[10140]</label>
-                    <onclick>ActivateWindow(GameAdvancedSettings)</onclick>
+
+            <!-- Header -->
+            <include content="Dialog_Head">
+                <param name="id">2</param>
+                <param name="label">$LOCALIZE[31335]</param>
+            </include>
+            <include>Dialog_Head_CloseButton</include>
+
+            <!-- Content -->
+            <control type="group">
+                <include>Dimension_Dialog_Body</include>
+                <control type="group">
+                    <include>Dimension_Dialog_Body_Group</include>
+                    <include content="List_DialogSelect">
+                        <param name="id">8000</param>
+                        <param name="textcolor">dialog_fg</param>
+                        <param name="detailed">True</param>
+                        <param name="item_height">100</param>
+                        <content>
+                            <item>
+                                <description>Pause / Resume button</description>
+                                <label>$LOCALIZE[35224]</label>
+                                <label2>$LOCALIZE[31336]</label2>
+                                <icon>special://skin/extras/icons/play2.png</icon>
+                                <onclick>Play</onclick>
+                            </item>
+                            <item>
+                                <description>Save / Load button</description>
+                                <label>$LOCALIZE[35249]</label>
+                                <icon>special://skin/extras/icons/floppy-disk.png</icon>
+                                <onclick>ActivateWindow(InGameSaves)</onclick>
+                            </item>
+                            <item>
+                                <description>Reset button</description>
+                                <label>$LOCALIZE[13007]</label>
+                                <icon>special://skin/extras/icons/rotate.png</icon>
+                                <onclick>PlayerControl(Reset)</onclick>
+                            </item>
+                            <item>
+                                <description>Stop button</description>
+                                <label>$LOCALIZE[35222]</label>
+                                <label2>$LOCALIZE[31337]</label2>
+                                <icon>special://skin/extras/icons/stop.png</icon>
+                                <onclick>Stop</onclick>
+                            </item>
+                            <item>
+                                <description>Settings button</description>
+                                <label>$LOCALIZE[5]</label>
+                                <icon>special://skin/extras/icons/settings.png</icon>
+                                <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[5][/CAPITALIZE],Home)</onclick>
+                                <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_GameOptions,Home)</onclick>
+                                <onclick>ActivateWindow(1118)</onclick>
+                            </item>
+                        </content>
+                    </include>
                 </control>
             </control>
+
         </control>
+
     </controls>
 </window>

@@ -1,902 +1,369 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Foundation -->
-<window id="2005">
-    <onunload condition="Skin.HasSetting(home.netflix.autoplay.trailer) + $EXP[TrailerIsPlaying] + String.IsEmpty(Window(home).Property(TrailerPath))">SetProperty(TrailerPath,$INFO[Window(home).Property(TrailerPath2)],home)</onunload>
-    <onunload condition="Skin.HasSetting(home.netflix.autoplay.trailer) + $EXP[TrailerIsPlaying]">SetProperty(TrailerIsPlayingFullscreen,1,home)</onunload>
-    <onload condition="Skin.HasSetting(osd.info.fullscreen)">SetProperty(osdinfo,1,home)</onload>
-    <onunload condition="Skin.HasSetting(osd.info.fullscreen)">ClearProperty(osdinfo,home)</onunload>
+<window>
+    <include>Animation_OSD_Fullscreen_Change</include>
+    <onload>ClearProperty(OSDRelaunchFullscreen,Home)</onload>
     <controls>
-        <control type="group" id="0">
-            <left>0</left>
-            <include>Animation.FadeIn</include>
-            <visible>Control.IsVisible(10) | Control.IsVisible(11) | Control.IsVisible(12)</visible>
-            <control type="image">
-                <width>1920</width>
-                <height>325</height>
-                <texture colordiffuse="OSDBack" flipy="false">common/white.png</texture>
-            </control>
-            <control type="grouplist">
-                <posx>20</posx>
-                <posy>20</posy>
-                <orientation>vertical</orientation>
-                <control type="label" id="10">
-                    <description>row 1 label</description>
-                    <width>auto</width>
-                    <height>75</height>
-                    <align>left</align>
-                    <aligny>top</aligny>
-                    <textcolor>PanelWhite100</textcolor>
-                </control>
-                <control type="label" id="11">
-                    <description>row 2 label</description>
-                    <height>75</height>
-                    <width>auto</width>
-                    <align>left</align>
-                    <aligny>top</aligny>
-                    <textcolor>PanelWhite100</textcolor>
-                </control>
-                <control type="label" id="12">
-                    <description>row 3 label</description>
-                    <width>auto</width>
-                    <height>75</height>
-                    <align>left</align>
-                    <aligny>top</aligny>
-                    <textcolor>PanelWhite100</textcolor>
-                </control>
-            </control>
-        </control>
+    
 
-        <control type="group" id="2">
-            <depth>DepthOSD+</depth>
-            <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
-            <visible>String.IsEqual(Player.Process(av.change),1)</visible>
-            <left>35</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
-			
-            <include content="Video_Audio_Background_Flag">
-                <param name="groupId">46</param>
-                <param name="imageId">47</param>
-                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="Video_Background_Flag">
-                <param name="groupId">48</param>
-                <param name="imageId">49</param>
-                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="Audio_Background_Flag">
-                <param name="groupId">50</param>
-                <param name="imageId">51</param>
-                <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="SDR_Bypass_Flag">
-                <param name="groupId">52</param>
-                <param name="imageId">53</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/SDR.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HDR10_Bypass_Flag">
-                <param name="groupId">54</param>
-                <param name="imageId">55</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HDR10.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HDR10Plus_Bypass_Flag">
-                <param name="groupId">56</param>
-                <param name="imageId">57</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HDR10Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DV_Bypass_Flag">
-                <param name="groupId">58</param>
-                <param name="imageId">59</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HLG_Bypass_Flag">
-                <param name="groupId">60</param>
-                <param name="imageId">61</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HLG.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_SDR_Flag">
-                <param name="groupId">62</param>
-                <param name="imageId">63</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR)</param>
-                <param name="texture">codecs/SDR.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HDR10_Flag">
-                <param name="groupId">64</param>
-                <param name="imageId">65</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</param>
-                <param name="texture">codecs/HDR10.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HDR10Plus_Flag">
-                <param name="groupId">66</param>
-                <param name="imageId">67</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision) + !String.Contains(Player.Process(amlogic.vs10.mode),SDR) + !String.Contains(Player.Process(amlogic.vs10.mode),HLG)</param>
-                <param name="texture">codecs/HDR10Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_DV_Flag">
-                <param name="groupId">68</param>
-                <param name="imageId">69</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HLG_Flag">
-                <param name="groupId">70</param>
-                <param name="imageId">71</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),HLG)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Separation_Line_Flag">
-                <param name="groupId">72</param>
-                <param name="imageId">73</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="PCM_Flag">
-                <param name="groupId">74</param>
-                <param name="imageId">75</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</param>
-                <param name="texture">codecs/PCM.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="AAC_Flag">
-                <param name="groupId">76</param>
-                <param name="imageId">77</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</param>
-                <param name="texture">codecs/AAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Flag">
-                <param name="groupId">78</param>
-                <param name="imageId">79</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</param>
-                <param name="texture">codecs/Dolby_Digital.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Plus_Flag">
-                <param name="groupId">80</param>
-                <param name="imageId">81</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos_Flag">
-                <param name="groupId">82</param>
-                <param name="imageId">83</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_TrueHD_Flag">
-                <param name="groupId">84</param>
-                <param name="imageId">85</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_TrueHD.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos1_Flag">
-                <param name="groupId">86</param>
-                <param name="imageId">87</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="MP3_Flag">
-                <param name="groupId">88</param>
-                <param name="imageId">89</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</param>
-                <param name="texture">codecs/MP3.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_Flag">
-                <param name="groupId">90</param>
-                <param name="imageId">91</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dca)</param>
-                <param name="texture">codecs/DTS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_MA_Flag">
-                <param name="groupId">92</param>
-                <param name="imageId">93</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/DTS-HD-MA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_HRA_Flag">
-                <param name="groupId">94</param>
-                <param name="imageId">95</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</param>
-                <param name="texture">codecs/DTS-HD-HRA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_X_Flag">
-                <param name="groupId">96</param>
-                <param name="imageId">97</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</param>
-                <param name="texture">codecs/DTSX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="IMAX_Flag">
-                <param name="groupId">98</param>
-                <param name="imageId">99</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/IMAX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="FLAC_Flag">
-                <param name="groupId">100</param>
-                <param name="imageId">101</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,flac)</param>
-                <param name="texture">codecs/FLAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="OPUS_Flag">
-                <param name="groupId">102</param>
-                <param name="imageId">103</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,opus)</param>
-                <param name="texture">codecs/OPUS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-        </control>
-
-        <control type="group" id="3">
-            <depth>DepthOSD+</depth>
-            <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
-            <visible>String.IsEqual(Player.Process(av.change),1)</visible>
-            <left>855</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
-			
-            <include content="Video_Audio_Background_Flag">
-                <param name="groupId">46</param>
-                <param name="imageId">47</param>
-                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="Video_Background_Flag">
-                <param name="groupId">48</param>
-                <param name="imageId">49</param>
-                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="Audio_Background_Flag">
-                <param name="groupId">50</param>
-                <param name="imageId">51</param>
-                <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="SDR_Bypass_Flag">
-                <param name="groupId">52</param>
-                <param name="imageId">53</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/SDR.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HDR10_Bypass_Flag">
-                <param name="groupId">54</param>
-                <param name="imageId">55</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HDR10.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HDR10Plus_Bypass_Flag">
-                <param name="groupId">56</param>
-                <param name="imageId">57</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HDR10Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DV_Bypass_Flag">
-                <param name="groupId">58</param>
-                <param name="imageId">59</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HLG_Bypass_Flag">
-                <param name="groupId">60</param>
-                <param name="imageId">61</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HLG.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_SDR_Flag">
-                <param name="groupId">62</param>
-                <param name="imageId">63</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR)</param>
-                <param name="texture">codecs/SDR.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HDR10_Flag">
-                <param name="groupId">64</param>
-                <param name="imageId">65</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</param>
-                <param name="texture">codecs/HDR10.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HDR10Plus_Flag">
-                <param name="groupId">66</param>
-                <param name="imageId">67</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision) + !String.Contains(Player.Process(amlogic.vs10.mode),SDR) + !String.Contains(Player.Process(amlogic.vs10.mode),HLG)</param>
-                <param name="texture">codecs/HDR10Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_DV_Flag">
-                <param name="groupId">68</param>
-                <param name="imageId">69</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HLG_Flag">
-                <param name="groupId">70</param>
-                <param name="imageId">71</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),HLG)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Separation_Line_Flag">
-                <param name="groupId">72</param>
-                <param name="imageId">73</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="PCM_Flag">
-                <param name="groupId">74</param>
-                <param name="imageId">75</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</param>
-                <param name="texture">codecs/PCM.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="AAC_Flag">
-                <param name="groupId">76</param>
-                <param name="imageId">77</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</param>
-                <param name="texture">codecs/AAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Flag">
-                <param name="groupId">78</param>
-                <param name="imageId">79</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</param>
-                <param name="texture">codecs/Dolby_Digital.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Plus_Flag">
-                <param name="groupId">80</param>
-                <param name="imageId">81</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos_Flag">
-                <param name="groupId">82</param>
-                <param name="imageId">83</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_TrueHD_Flag">
-                <param name="groupId">84</param>
-                <param name="imageId">85</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_TrueHD.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos1_Flag">
-                <param name="groupId">86</param>
-                <param name="imageId">87</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="MP3_Flag">
-                <param name="groupId">88</param>
-                <param name="imageId">89</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</param>
-                <param name="texture">codecs/MP3.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_Flag">
-                <param name="groupId">90</param>
-                <param name="imageId">91</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dca)</param>
-                <param name="texture">codecs/DTS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_MA_Flag">
-                <param name="groupId">92</param>
-                <param name="imageId">93</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/DTS-HD-MA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_HRA_Flag">
-                <param name="groupId">94</param>
-                <param name="imageId">95</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</param>
-                <param name="texture">codecs/DTS-HD-HRA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_X_Flag">
-                <param name="groupId">96</param>
-                <param name="imageId">97</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</param>
-                <param name="texture">codecs/DTSX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="IMAX_Flag">
-                <param name="groupId">98</param>
-                <param name="imageId">99</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/IMAX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="FLAC_Flag">
-                <param name="groupId">100</param>
-                <param name="imageId">101</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,flac)</param>
-                <param name="texture">codecs/FLAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="OPUS_Flag">
-                <param name="groupId">102</param>
-                <param name="imageId">103</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,opus)</param>
-                <param name="texture">codecs/OPUS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-        </control>
-
-        <control type="group" id="4">
-            <depth>DepthOSD+</depth>
-            <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
-            <visible>String.IsEqual(Player.Process(av.change),1)</visible>
+        <!-- Codec logos  -->
+        <control type="group">
             <left>1675</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
-			
-            <include content="Video_Audio_Background_Flag">
-                <param name="groupId">46</param>
-                <param name="imageId">47</param>
-                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+            <control type="group">
+                <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <top>35</top>
+                <width>210</width>
+                <height>170</height>
+                <control type="image">
+                      <texture>common/corner.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <top>35</top>
+                <width>210</width>
+                <height>90</height>
+                <control type="image">
+                    <texture>common/corner_small.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <top>120</top>
+                <width>210</width>
+                <height>90</height>
+                <control type="image">
+                    <texture>common/corner_small.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <top>52</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture colordiffuse="ffffffff">codecs/SDR.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <top>52</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture colordiffuse="ffffffff">codecs/HDR10.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <top>65</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>33</height>
+                    <texture colordiffuse="ffffffff">codecs/HDR10Plus.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <top>50</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Vision.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <top>57</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>42</height>
+                    <texture colordiffuse="ffffffff">codecs/HLG.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),SDR)</visible>
+                <top>52</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture colordiffuse="ffffffff">codecs/SDR.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
+                <top>52</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture colordiffuse="ffffffff">codecs/HDR10.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <top>65</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>33</height>
+                    <texture colordiffuse="ffffffff">codecs/HDR10Plus.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <top>50</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Vision.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <top>50</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Vision.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+                <top>120</top>
+                <left>15</left>
+                <control type="image">
+                    <width>180</width>
+                    <height>1.5</height>
+                    <texture colordiffuse="80FFFFFF">common/selectedwhite.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>49</height>
+                    <texture colordiffuse="ffffffff">codecs/PCM.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
+                <top>145</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>40</height>
+                    <texture colordiffuse="ffffffff">codecs/AAC.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</visible>
+                <top>135</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Digital.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <top>135</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Digital_Plus.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <top>135</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Atmos.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <top>135</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_TrueHD.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <top>135</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>56</height>
+                    <texture colordiffuse="ffffffff">codecs/Dolby_Atmos.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>49</height>
+                    <texture colordiffuse="ffffffff">codecs/MP3.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dca)</visible>
+                <top>150</top>
+                <left>55</left>
+                <control type="image">
+                    <width>100</width>
+                    <height>25</height>
+                    <texture colordiffuse="ffffffff">codecs/DTS.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>46</height>
+                    <texture colordiffuse="ffffffff">codecs/DTS-HD-MA.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>49</height>
+                    <texture colordiffuse="ffffffff">codecs/DTS-HD-HRA.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
+                <top>147</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>31</height>
+                    <texture colordiffuse="ffffffff">codecs/DTSX.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture colordiffuse="ffffffff">codecs/IMAX.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,flac)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="ffffffff">codecs/FLAC.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,opus)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="ffffffff">codecs/OPUS.png</texture>
+                </control>
+            </control>
+        </control>
+
+<!-- VS10 Logo -->
+
+        <control type="group">
+            <left>35</left>
+            <control type="group">
+                <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <top>20</top>
+                <width>210</width>
+                <height>90</height>    
+			 </control>
+            <control type="group">
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),dolby vision)</visible>
+                <top>20</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture>codecs/vs10.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</visible>
+                <top>20</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture>codecs/vs10.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),sdr)</visible>
+                <top>20</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>52</height>
+                    <texture>codecs/vs10.png</texture>
+                </control>
+            </control>
+           
+            </control>
+
+           
+            </control>
+        <control type="grouplist" id="0">
+            <orientation>vertical</orientation>
+            <centertop>100</centertop>
+            <height>120</height>
+            <left>80</left>
+            <include content="Overlay_InfoLabel">
+                <param name="id">10</param>
+                <textcolor>panel_fg_100</textcolor>
+                <textoffsetx>10</textoffsetx>
+                <font>font_mini</font>
             </include>
-			
-            <include content="Video_Background_Flag">
-                <param name="groupId">48</param>
-                <param name="imageId">49</param>
-                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+            <include content="Overlay_InfoLabel">
+                <param name="id">11</param>
+                <textcolor>panel_fg_100</textcolor>
+                <textoffsetx>10</textoffsetx>
+                <font>font_mini</font>
             </include>
-			
-            <include content="Audio_Background_Flag">
-                <param name="groupId">50</param>
-                <param name="imageId">51</param>
-                <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
-                <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="SDR_Bypass_Flag">
-                <param name="groupId">52</param>
-                <param name="imageId">53</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/SDR.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HDR10_Bypass_Flag">
-                <param name="groupId">54</param>
-                <param name="imageId">55</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HDR10.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HDR10Plus_Bypass_Flag">
-                <param name="groupId">56</param>
-                <param name="imageId">57</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HDR10Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DV_Bypass_Flag">
-                <param name="groupId">58</param>
-                <param name="imageId">59</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="HLG_Bypass_Flag">
-                <param name="groupId">60</param>
-                <param name="imageId">61</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-                <param name="texture">codecs/HLG.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_SDR_Flag">
-                <param name="groupId">62</param>
-                <param name="imageId">63</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR)</param>
-                <param name="texture">codecs/SDR.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HDR10_Flag">
-                <param name="groupId">64</param>
-                <param name="imageId">65</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</param>
-                <param name="texture">codecs/HDR10.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HDR10Plus_Flag">
-                <param name="groupId">66</param>
-                <param name="imageId">67</param>
-                <param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision) + !String.Contains(Player.Process(amlogic.vs10.mode),SDR) + !String.Contains(Player.Process(amlogic.vs10.mode),HLG)</param>
-                <param name="texture">codecs/HDR10Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_DV_Flag">
-                <param name="groupId">68</param>
-                <param name="imageId">69</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="VS10_HLG_Flag">
-                <param name="groupId">70</param>
-                <param name="imageId">71</param>
-                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),HLG)</param>
-                <param name="texture">codecs/Dolby_Vision.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Separation_Line_Flag">
-                <param name="groupId">72</param>
-                <param name="imageId">73</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="PCM_Flag">
-                <param name="groupId">74</param>
-                <param name="imageId">75</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</param>
-                <param name="texture">codecs/PCM.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="AAC_Flag">
-                <param name="groupId">76</param>
-                <param name="imageId">77</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</param>
-                <param name="texture">codecs/AAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Flag">
-                <param name="groupId">78</param>
-                <param name="imageId">79</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</param>
-                <param name="texture">codecs/Dolby_Digital.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Plus_Flag">
-                <param name="groupId">80</param>
-                <param name="imageId">81</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos_Flag">
-                <param name="groupId">82</param>
-                <param name="imageId">83</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_TrueHD_Flag">
-                <param name="groupId">84</param>
-                <param name="imageId">85</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_TrueHD.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos1_Flag">
-                <param name="groupId">86</param>
-                <param name="imageId">87</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="MP3_Flag">
-                <param name="groupId">88</param>
-                <param name="imageId">89</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</param>
-                <param name="texture">codecs/MP3.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_Flag">
-                <param name="groupId">90</param>
-                <param name="imageId">91</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dca)</param>
-                <param name="texture">codecs/DTS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_MA_Flag">
-                <param name="groupId">92</param>
-                <param name="imageId">93</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/DTS-HD-MA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_HRA_Flag">
-                <param name="groupId">94</param>
-                <param name="imageId">95</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</param>
-                <param name="texture">codecs/DTS-HD-HRA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_X_Flag">
-                <param name="groupId">96</param>
-                <param name="imageId">97</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</param>
-                <param name="texture">codecs/DTSX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="IMAX_Flag">
-                <param name="groupId">98</param>
-                <param name="imageId">99</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/IMAX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="FLAC_Flag">
-                <param name="groupId">100</param>
-                <param name="imageId">101</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,flac)</param>
-                <param name="texture">codecs/FLAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="OPUS_Flag">
-                <param name="groupId">102</param>
-                <param name="imageId">103</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,opus)</param>
-                <param name="texture">codecs/OPUS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Separation_Line_Flag">
-                <param name="groupId">72</param>
-                <param name="imageId">73</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
-            </include>
-			
-            <include content="PCM_Flag">
-                <param name="groupId">74</param>
-                <param name="imageId">75</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</param>
-                <param name="texture">codecs/PCM.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="AAC_Flag">
-                <param name="groupId">76</param>
-                <param name="imageId">77</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</param>
-                <param name="texture">codecs/AAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Flag">
-                <param name="groupId">78</param>
-                <param name="imageId">79</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</param>
-                <param name="texture">codecs/Dolby_Digital.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Digital_Plus_Flag">
-                <param name="groupId">80</param>
-                <param name="imageId">81</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos_Flag">
-                <param name="groupId">82</param>
-                <param name="imageId">83</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_TrueHD_Flag">
-                <param name="groupId">84</param>
-                <param name="imageId">85</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_TrueHD.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="Dolby_Atmos1_Flag">
-                <param name="groupId">86</param>
-                <param name="imageId">87</param>
-                <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Atmos.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="MP3_Flag">
-                <param name="groupId">88</param>
-                <param name="imageId">89</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</param>
-                <param name="texture">codecs/MP3.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_Flag">
-                <param name="groupId">90</param>
-                <param name="imageId">91</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dca)</param>
-                <param name="texture">codecs/DTS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_MA_Flag">
-                <param name="groupId">92</param>
-                <param name="imageId">93</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/DTS-HD-MA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_HD_HRA_Flag">
-                <param name="groupId">94</param>
-                <param name="imageId">95</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</param>
-                <param name="texture">codecs/DTS-HD-HRA.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="DTS_X_Flag">
-                <param name="groupId">96</param>
-                <param name="imageId">97</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</param>
-                <param name="texture">codecs/DTSX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="IMAX_Flag">
-                <param name="groupId">98</param>
-                <param name="imageId">99</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</param>
-                <param name="texture">codecs/IMAX.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="FLAC_Flag">
-                <param name="groupId">100</param>
-                <param name="imageId">101</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,flac)</param>
-                <param name="texture">codecs/FLAC.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
-            </include>
-			
-            <include content="OPUS_Flag">
-                <param name="groupId">102</param>
-                <param name="imageId">103</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,opus)</param>
-                <param name="texture">codecs/OPUS.png</param>
-                <param name="colordiffuse">FFD3E3EF</param>
+            <include content="Overlay_InfoLabel">
+                <param name="id">12</param>
+                <textcolor>panel_fg_100</textcolor>
+                <textoffsetx>10</textoffsetx>
+                <font>font_mini</font>
             </include>
         </control>
     </controls>

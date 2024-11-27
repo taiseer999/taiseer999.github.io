@@ -1,96 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Foundation -->
-<window id="139">
-    <defaultcontrol always="true">5</defaultcontrol>
-    <controls>
-        <include>GlobalOverlay</include>
-        <control type="group">
-            <centerleft>50%</centerleft>
-            <posy>210</posy>
-            <width>900</width>
-            <height>664</height>
-            <include>DefDialogInfoPanel</include>
-            <control type="group">
-                <left>27</left>
-                <top>15</top>
-                <control type="label">
-                    <description>Header Label</description>
-                    <left>70</left>
-                    <width>950</width>
-                    <posy>0</posy>
-                    <include>FontTop</include>
-                    <textcolor>Dark2</textcolor>
-                    <label>13406</label>
-                </control>
-                <include>Kodi_Logo</include>
+<window type="dialog">
+    <defaultcontrol always="true">61</defaultcontrol>
 
-                <!-- Lines -->
-                <control type="image">
-                    <top>70</top>
-                    <left>17</left>
-                    <width>810</width>
-                    <height>1</height>
-                    <bottom>10</bottom>
-                    <colordiffuse>Black12</colordiffuse>
-                    <texture>common/white.png</texture>
+    <controls>
+        <include>Dialog_Dim_Overlay</include>
+
+        <control type="group">
+            <include>Dimension_DialogFullMenu</include>
+            <include>Animation_Right_Delay</include>
+
+            <include content="Dialog_Foreground_Side">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+                <param name="topline">false</param>
+                <param name="subline">false</param>
+            </include>
+
+            <!-- Header -->
+            <include content="Dialog_Head">
+                <param name="label">$INFO[ListItem.Label]</param>
+            </include>
+            <include>Dialog_Head_CloseButton</include>
+
+            <!-- Content -->
+            <control type="group">
+                <include>Dimension_Dialog_Body</include>
+                <control type="group">
+                    <width>800</width>
+                    <left>40</left>
+                    <include content="Dialog_Outline_InnerBox">
+                        <control type="image">
+                            <aspectratio scalediffuse="false">keep</aspectratio>
+                            <texture background="true" diffuse="diffuse/square_w600_h600.png">$INFO[ListItem.Icon]</texture>
+                        </control>
+                    </include>
                 </control>
+                <control type="group">
+                    <left>800</left>
+                    <control type="panel" id="5">
+                        <left>80</left>
+                        <right>40</right>
+                        <top>30</top>
+                        <pagecontrol>61</pagecontrol>
+                        <onright>61</onright>
+                        <onleft>Close</onleft>
+                        <orientation>vertical</orientation>
+                        <itemlayout height="100">
+                            <include>Layout_BasicMeta</include>
+                        </itemlayout>
+                        <focusedlayout height="100">
+                            <include>Layout_BasicMeta</include>
+                        </focusedlayout>
+                    </control>
+                </control>
+
             </control>
-            <control type="list" id="5">
-                <posx>15</posx>
-                <posy>111</posy>
-                <bottom>7</bottom>
-                <width>870</width>
-                <height>552</height>
-                <onleft>Close</onleft>
-                <onright>Close</onright>
-                <onup>5</onup>
-                <ondown>5</ondown>
-                <itemlayout height="69" width="870">
-                    <control type="image">
-                        <width>870</width>
-                        <height>66</height>
-                        <texture border="5" colordiffuse="Black12">common/white.png</texture>
-                    </control>
-                    <control type="label">
-                        <posx>30</posx>
-                        <width>405</width>
-                        <info>ListItem.Label</info>
-                    </control>
-                    <control type="label">
-                        <right>30</right>
-                        <width>405</width>
-                        <align>right</align>
-                        <font>Tiny</font>
-                        <info>ListItem.Label2</info>
-                    </control>
-                </itemlayout>
-                <focusedlayout height="69" width="870">
-                    <control type="image">
-                        <width>870</width>
-                        <height>66</height>
-                        <texture border="5" colordiffuse="$VAR[ColorSelectOtherBar]">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>870</width>
-                        <height>66</height>
-                        <texture border="8" colordiffuse="$VAR[ColorHighlightOtherBar]">common/gradient-box-wide-cut.png</texture>
-                    </control>
-                    <control type="label">
-                        <posx>30</posx>
-                        <width>405</width>
-                        <textcolor>Selected</textcolor>
-                        <info>ListItem.Label</info>
-                    </control>
-                    <control type="label">
-                        <right>30</right>
-                        <width>405</width>
-                        <align>right</align>
-                        <font>Tiny</font>
-                        <textcolor>Selected</textcolor>
-                        <info>ListItem.Label2</info>
-                    </control>
-                </focusedlayout>
+
+
+            <control type="group">
+                <include>Dimension_Dialog_Body</include>
+                <include content="Dialog_Scrollbar">
+                    <param name="inset">true</param>
+                    <onleft>5</onleft>
+                </include>
             </control>
+
         </control>
     </controls>
 </window>

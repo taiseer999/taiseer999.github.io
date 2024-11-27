@@ -1,148 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Foundation -->
-<window id="34">
-    <defaultcontrol always="true">4</defaultcontrol>
+<window>
+    <include content="Action_SettingsCategories_Onload">
+        <param name="defaultcontrol">3</param>
+    </include>
     <controls>
-        <include>GlobalBackground</include>
-        <include>Furniture_Header</include>
-        <include>Furniture_Clock</include>
-        <include>Furniture_NowPlaying</include>
-        <include>Furniture_Weather</include>
-        <include>GlobalOverlay</include>
-        <control type="group">
-            <width>700</width>
-            <include>DefDialogInfoPanel</include>
-            <control type="label">
-                <description>Header Label</description>
-                <left>100</left>
-                <width>1000</width>
-                <posy>20</posy>
-                <include>FontTop</include>
-                <textcolor>Dark2</textcolor>
-                <label>10130</label>
-            </control>
-            <include content="Kodi_Logo">
-                <param name="dimensions" value="40"/>
-                <param name="top" value="35"/>
-                <param name="left" value="45"/>
-            </include>
 
-            <!-- Lines -->
-            <control type="image">
-                <top>90</top>
-                <left>45</left>
-                <width>610</width>
-                <height>1</height>
-                <bottom>10</bottom>
-                <colordiffuse>Black12</colordiffuse>
-                <texture>common/white.png</texture>
-            </control>
-            <control type="image">
-                <top>110</top>
-                <left>15</left>
-                <height>66</height>
-                <width>670</width>
-                <texture colordiffuse="$VAR[ColorSelectOtherBar]">common/white.png</texture>
-                <visible>Control.HasFocus(4)</visible>
-            </control>
-            <control type="image">
-                <top>180</top>
-                <left>15</left>
-                <height>66</height>
-                <width>670</width>
-                <texture colordiffuse="$VAR[ColorSelectOtherBar]">common/white.png</texture>
-                <visible>Control.HasFocus(5)</visible>
-            </control>
-            <control type="radiobutton" id="4">
-                <label>20096</label>
-                <width>670</width>
-                <radioposx>620</radioposx>
-                <align>left</align>
-                <left>15</left>
-                <right>15</right>
-                <textoffsetx>30</textoffsetx>
-                <posy>110</posy>
-                <ondown>5</ondown>
-                <texturefocus colordiffuse="$VAR[ColorHighlightOtherBar]" border="5">common/gradient-box-wide-cut.png</texturefocus>
-            </control>
-            <control type="button" id="5">
-                <left>15</left>
-                <right>15</right>
-                <textoffsetx>30</textoffsetx>
-                <posy>179</posy>
-                <width>670</width>
-                <align>left</align>
-                <onup>4</onup>
-                <ondown>2</ondown>
-                <texturefocus colordiffuse="$VAR[ColorHighlightOtherBar]" border="5">common/gradient-box-wide-cut.png</texturefocus>
-                <label>$LOCALIZE[33084]$INFO[System.ProfileAutoLogin,: ,]</label>
-                <enable>!System.HasLoginScreen</enable>
-            </control>
-            <control type="list" id="2">
-                <posx>15</posx>
-                <posy>248</posy>
-                <width>670</width>
-                <height>483</height>
-                <onup>5</onup>
-                <itemlayout height="69" width="670">
-                    <control type="label">
-                        <posx>30</posx>
-                        <width>810</width>
-                        <info>ListItem.Label</info>
-                    </control>
-                    <control type="label">
-                        <right>20</right>
-                        <width>810</width>
-                        <align>right</align>
-                        <font>Tiny</font>
-                        <info>ListItem.Label2</info>
-                    </control>
-                </itemlayout>
-                <focusedlayout height="69" width="670">
-                    <control type="group">
-                        <visible>Control.HasFocus(2)</visible>
-                        <control type="image">
-                            <width>100%</width>
-                            <height>66</height>
-                            <texture border="5" colordiffuse="$VAR[ColorSelectOtherBar]">common/white.png</texture>
+        <include>Background</include>
+
+        <include content="Settings_Dialog">
+            <include content="Settings_Main_Group">
+                <include content="Settings_Left_Group">
+                    <include content="Settings_Left_Grouplist">
+                        <param name="id">3</param>
+                        <onright>2</onright>
+                        <onleft>SetFocus($VAR[Action_SettingsSwitcher_FocusID])</onleft>
+                        <include content="Settings_Button">
+                            <param name="id">4</param>
+                            <param name="control">radiobutton</param>
+                            <param name="dialog">false</param>
+                            <include>Texture_Highlight_ToggleButton_Settings</include>
+                            <radiowidth>104</radiowidth>
+                            <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
+                            <width>settings_category_w</width>
+                            <description>Default Category Button</description>
+                            <label>$LOCALIZE[10029]</label>
+                        </include>
+                        <include content="Settings_Label">
+                            <param name="control">label</param>
+                            <param name="id">9003</param>
+                            <param name="dialog">false</param>
+                            <label>$LOCALIZE[33084]</label>
+                            <enable>!System.HasLoginScreen</enable>
+                            <disabledcolor>main_fg_12</disabledcolor>
+                        </include>
+                        <include content="Settings_Button">
+                            <param name="id">5</param>
+                            <param name="control">button</param>
+                            <param name="dialog">false</param>
+                            <include>Texture_Highlight_ToggleButton_Settings</include>
+                            <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
+                            <description>Default Category Button</description>
+                            <label>$INFO[System.ProfileAutoLogin]</label>
+                            <enable>!System.HasLoginScreen</enable>
+                            <disabledcolor>main_fg_12</disabledcolor>
+                            <right>40</right>
+                        </include>
+                    </include>
+                </include>
+
+                <include content="Settings_Right_Group">
+                    <include content="Settings_Right_Grouplist">
+                        <param name="id">8000</param>
+                        <onleft>3</onleft>
+                        <control type="panel" id="2">
+                            <height>720</height>
+                            <onleft>3</onleft>
+                            <onup>2</onup>
+                            <ondown>2</ondown>
+                            
+                            <itemlayout height="120">
+                                <control type="group">
+                                    <left>40</left>
+                                    <right>40</right>
+                                    <include content="Object_ListItem_Iconic">
+                                        <param name="icon">$VAR[Image_ProfileIcon]</param>
+                                        <param name="color">main_fg_70</param>
+                                        <param name="icon_check">[[!String.IsEqual(ListItem.Icon,DefaultUser.png) + !String.IsEmpty(ListItem.Icon)] + [String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/)]]</param>
+                                    </include>
+                                    <include content="Object_IsSelected_Checkmark">
+                                        <param name="color_off">main_fg_30</param>
+                                        <param name="color_on">main_fg_70</param>
+                                        <param name="selected">String.IsEqual(ListItem.Label,System.ProfileName)</param>
+                                    </include>
+                                </control>
+                            </itemlayout>
+                            <focusedlayout height="120">
+                                <control type="image">
+                                    <include>Texture_Menu_Highlight_H</include>
+                                </control>
+                                <control type="group">
+                                    <left>40</left>
+                                    <right>40</right>
+                                    <include content="Object_ListItem_Iconic">
+                                        <param name="color">$VAR[ColorSelected]</param>
+                                        <param name="icon">$VAR[Image_ProfileIcon]</param>
+                                        <param name="icon_check">[[!String.IsEqual(ListItem.Icon,DefaultUser.png) + !String.IsEmpty(ListItem.Icon)] + [String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/)]]</param>
+                                    </include>
+                                    <include content="Object_IsSelected_Checkmark_Focus">
+                                        <param name="selected">String.IsEqual(ListItem.Label,System.ProfileName)</param>
+                                    </include>
+                                </control>
+                            </focusedlayout>
                         </control>
-                        <control type="image">
-                            <width>100%</width>
-                            <height>66</height>
-                            <texture border="8" colordiffuse="$VAR[ColorHighlightOtherBar]">common/gradient-box-wide-cut.png</texture>
-                        </control>
-                        <control type="label">
-                            <posx>30</posx>
-                            <width>810</width>
-                            <textcolor>Selected</textcolor>
-                            <info>ListItem.Label</info>
-                        </control>
-                        <control type="label">
-                            <right>20</right>
-                            <width>810</width>
-                            <align>right</align>
-                            <font>Tiny</font>
-                            <textcolor>Selected</textcolor>
-                            <info>ListItem.Label2</info>
-                        </control>
-                    </control>
-                    <control type="group">
-                        <visible>!Control.HasFocus(2)</visible>
-                        <control type="label">
-                            <posx>30</posx>
-                            <width>810</width>
-                            <info>ListItem.Label</info>
-                        </control>
-                        <control type="label">
-                            <right>20</right>
-                            <width>810</width>
-                            <align>right</align>
-                            <font>Tiny</font>
-                            <info>ListItem.Label2</info>
-                        </control>
-                    </control>
-                </focusedlayout>
-            </control>
-        </control>
+                    </include>
+                </include>
+                <include content="Settings_InfoText">
+                    <param name="id">6</param>
+                    <param name="dialog">false</param>
+                    <param name="left">500</param>
+                    <param name="bottom">80</param>
+                </include>
+            </include>
+        </include>
+
+
     </controls>
+
 </window>

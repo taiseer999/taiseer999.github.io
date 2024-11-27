@@ -1,160 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Foundation -->
-<window id="10140">
-    <defaultcontrol always="true">5</defaultcontrol>
-    <controls>
-        <include>GlobalOverlay</include>
-        <control type="group">
-            <posx>240</posx>
-            <posy>83</posy>
-            <include>Animation.FadeIn.Slide</include>
-            <include>Animation.FadeOut</include>
-            <control type="image">
-                <posx>-30</posx>
-                <posy>-30</posy>
-                <width>1500</width>
-                <height>975</height>
-                <texture border="16" colordiffuse="White100">common/rounded-shadow8.png</texture>
-            </control>
-            <control type="label" id="2">
-                <description>Header Label</description>
-                <left>70</left>
-                <width>1000</width>
-                <posy>0</posy>
-                <include>FontTop</include>
-                <textcolor>Dark2</textcolor>
-                <label />
-            </control>
-            <include>Kodi_Logo</include>
+<window>
 
-            <!-- Lines -->
-            <control type="image">
-                <top>70</top>
-                <left>15</left>
-                <width>1410</width>
-                <height>1</height>
-                <bottom>10</bottom>
-                <colordiffuse>Black12</colordiffuse>
-                <texture>common/white.png</texture>
-            </control>
-            <control type="grouplist" id="3">
-                <description>button area</description>
-                <posx>15</posx>
-                <posy>114</posy>
-                <width>387</width>
-                <height>342</height>
-                <itemgap>3</itemgap>
-                <onright>5</onright>
-                <onup>9</onup>
-                <ondown>9</ondown>
-                <scrolltime>0</scrolltime>
-            </control>
-            <control type="grouplist" id="5">
-                <description>control area</description>
-                <posx>458</posx>
-                <posy>114</posy>
-                <width>969</width>
-                <height>687</height>
-                <itemgap>3</itemgap>
-                <onup>5</onup>
-                <ondown>9001</ondown>
-                <onleft>3</onleft>
-                <onright>9001</onright>
-            </control>
-            <control type="togglebutton" id="10">
-                <description>Default Category Button</description>
-                <width>387</width>
-                <align>left</align>
-                <texturefocus colordiffuse="$VAR[ColorHighlight]" border="8">common/box.png</texturefocus>
-                <alttexturefocus colordiffuse="$VAR[ColorHighlight]" border="8">common/box.png</alttexturefocus>
-            </control>
-            <control type="button" id="7">
-                <description>Default Button</description>
-                <align>left</align>
-                <texturefocus colordiffuse="$VAR[ColorHighlight]" border="8">common/box.png</texturefocus>
-            </control>
-            <control type="radiobutton" id="8">
-                <description>Default RadioButton</description>
-                <align>left</align>
-                <radioposx>910</radioposx>
-                <texturefocus colordiffuse="$VAR[ColorHighlight]" border="8">common/box.png</texturefocus>
-            </control>
-            <control type="spincontrolex" id="9">
-                <description>Default spincontrolex</description>
-                <reverse>yes</reverse>
-                <align>left</align>
-                <texturefocus colordiffuse="$VAR[ColorHighlight]" border="8">common/box.png</texturefocus>
-            </control>
-            <control type="label" id="14">
-                <label />
-                <textcolor>$VAR[ColorHighlight]</textcolor>
-            </control>
-            <control type="image" id="11">
-                <description>Default Seperator</description>
-                <height>-3</height>
-                <texture />
-            </control>
-            <control type="sliderex" id="13">
-                <description>Default Slider</description>
-                <width>969</width>
-                <align>left</align>
-                <texturefocus colordiffuse="$VAR[ColorHighlight]" border="8">common/box.png</texturefocus>
-                <textwidth>600</textwidth>
-            </control>
-            <control type="image">
-                <posx>15</posx>
-                <posy>513</posy>
-                <width>383</width>
-                <height>383</height>
-                <texture fallback="DefaultAddon.png">$INFO[ListItem.Icon]</texture>
-                <aspectratio align="center" aligny="bottom">keep</aspectratio>
-            </control>
-            <control type="group" id="9001">
-                <posx>458</posx>
-                <posy>828</posy>
-                <control type="button" id="28">
-                    <description>OK Button</description>
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    <width>300</width>
-                    <label>186</label>
-                    <onleft>5</onleft>
-                    <onright>29</onright>
-                    <onup>5</onup>
-                    <ondown>5</ondown>
-                    <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                    <texturenofocus colordiffuse="Black12" border="5">common/box.png</texturenofocus>
-                    <include>DefDialogButtons</include>
+    <controls>
+
+        <include content="Settings_Button">
+            <param name="id">7</param>
+            <param name="control">button</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">8</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+            <textwidth>settings_radiobutton_text_w</textwidth>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">9</param>
+            <param name="control">spincontrolex</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">10</param>
+            <param name="control">togglebutton</param>
+            <param name="dialog">true</param>
+            <include>Texture_Highlight_ToggleButton_Settings</include>
+            <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
+            <altfocusedcolor>$VAR[ColorSettingsToggleButtonText]</altfocusedcolor>
+            <width>settings_category_w</width>
+            <description>Default Category Button</description>
+        </include>
+
+        <control type="image" id="11">
+            <visible>false</visible>
+        </control>
+
+        <include content="Settings_Button">
+            <param name="id">12</param>
+            <param name="control">edit</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">13</param>
+            <param name="control">sliderex</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+            <textwidth>settings_slider_text_w</textwidth>
+        </include>
+
+        <include content="Settings_Label">
+            <param name="id">14</param>
+            <param name="control">label</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Label</description>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">15</param>
+            <param name="control">colorbutton</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+        </include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">28</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">29</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">30</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">20</param>
+        </include>
+
+        <include>Dialog_Dim_Overlay</include>
+
+        <control type="group">
+            <include>Dimension_DialogMainMenu</include>
+            <include>Animation_Right_Delay</include>
+
+            <include content="Dialog_Foreground_Side">
+                <param name="dialog_size">Dimension_DialogMainMenu</param>
+                <param name="topline">false</param>
+                <param name="subline">false</param>
+            </include>
+
+            <control type="group">
+                <right>dialog_panelgroup_w</right>
+                <!-- Header -->
+                <include content="Dialog_Head">
+                    <param name="id">2</param>
+                </include>
+                <include>Dialog_Head_CloseButton</include>
+
+                <!-- Content -->
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <right>-80</right>
+
+                        <include>Dialog_Group</include>
+
+                        <control type="group">
+                            <left>-20</left>
+                            <top>-20</top>
+                            <bottom>60</bottom>
+                            <width>settings_category_w</width>
+
+                            <control type="image">
+                                <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                                <height>1</height>
+                                <top>-20</top>
+                                <left>20</left>
+                                <right>20</right>
+                            </control>
+
+                            <control type="image">
+                                <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                                <height>1</height>
+                                <bottom>-20</bottom>
+                                <left>20</left>
+                                <right>20</right>
+                            </control>
+
+                            <control type="grouplist" id="3">
+                                <onright>5</onright>
+                            </control>
+                        </control>
+
+                        <include content="Dialog_Outline_InnerBox">
+                            <left>settings_category_w</left>
+                            <right>120</right>
+                            <top>-40</top>
+                            <bottom>40</bottom>
+                            <control type="grouplist" id="5">
+                                <left>20</left>
+                                <right>20</right>
+                                <top>20</top>
+                                <bottom>20</bottom>
+                                <onleft>3</onleft>
+                                <onright>9000</onright>
+                            </control>
+                        </include>
+                    </control>
+
+                    <include content="Settings_InfoText">
+                        <param name="id">6</param>
+                        <param name="dialog">true</param>
+                        <param name="override">true</param>
+                        <param name="left">480</param>
+                        <param name="bottom">0</param>
+                    </include>
                 </control>
-                <control type="button" id="29">
-                    <description>Cancel Button</description>
-                    <posx>335</posx>
-                    <posy>0</posy>
-                    <width>300</width>
-                    <label>222</label>
-                    <onleft>28</onleft>
-                    <onright>30</onright>
-                    <onup>5</onup>
-                    <ondown>5</ondown>
-                    <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                    <texturenofocus colordiffuse="Black12" border="5">common/box.png</texturenofocus>
-                    <include>DefDialogButtons</include>
-                </control>
-                <control type="button" id="30">
-                    <description>Defaults Button</description>
-                    <posx>669</posx>
-                    <posy>0</posy>
-                    <width>300</width>
-                    <label>409</label>
-                    <onleft>29</onleft>
-                    <onright>28</onright>
-                    <onup>5</onup>
-                    <ondown>5</ondown>
-                    <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                    <texturenofocus colordiffuse="Black12" border="5">common/box.png</texturenofocus>
-                    <include>DefDialogButtons</include>
+            </control>
+
+            <control type="group">
+                <include>Dialog_Side_Panel_Group_Def</include>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
+                        <include>Dialog_Side_Expanded_Grouplist_Def</include>
+                        <onright>61</onright>
+                        <onleft>5</onleft>
+                        <include>Items_DialogAddonSettings_MenuBar</include>
+                    </control>
                 </control>
             </control>
+
         </control>
     </controls>
 </window>

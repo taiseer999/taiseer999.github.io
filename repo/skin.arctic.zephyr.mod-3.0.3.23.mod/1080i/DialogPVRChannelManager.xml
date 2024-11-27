@@ -1,252 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<window id="605">
-    <defaultcontrol always="true">20</defaultcontrol>
-    <onunload>ClearProperty(Focus)</onunload>
+<window>
+    <defaultcontrol always="true">4</defaultcontrol>
+
     <controls>
-        <include>GlobalOverlay</include>
+        <include>Dialog_Dim_Overlay</include>
+
         <control type="group">
-            <centertop>50%</centertop>
-            <width>1290</width>
-            <height>1006</height>
-            <include>DefDialogInfoPanel</include>
-            <control type="label">
-                <description>Header Label</description>
-                <left>105</left>
-                <width>1000</width>
-                <posy>22</posy>
-                <include>FontTop</include>
-                <textcolor>Dark2</textcolor>
-                <label>$LOCALIZE[19199] • $LOCALIZE[19023]</label>
-            </control>
-            <include content="Kodi_Logo">
-                <param name="dimensions" value="40"/>
-                <param name="top" value="38"/>
-                <param name="left" value="48"/>
+            <include>Dimension_DialogMainMenu</include>
+            <include>Animation_Right_Delay</include>
+            <include content="Dialog_Foreground_Side">
+                <param name="dialog_size">Dimension_DialogMainMenu</param>
+                <param name="topline">false</param>
+                <param name="subline">false</param>
             </include>
 
-            <!-- Lines -->
-            <control type="image">
-                <top>95</top>
-                <left>45</left>
-                <width>1200</width>
-                <height>1</height>
-                <bottom>10</bottom>
-                <colordiffuse>Black12</colordiffuse>
-                <texture>common/white.png</texture>
-            </control>
-            <control type="group" id="8000">
-                <posx>30</posx>
-                <posy>90</posy>
-                <width>1230</width>
-                <control type="list" id="20">
-                    <posx>15</posx>
-                    <posy>30</posy>
-                    <width>580</width>
-                    <height>720</height>
-                    <onup>20</onup>
-                    <ondown>20</ondown>
-                    <onleft>8003</onleft>
-                    <onright>8002</onright>
-                    <pagecontrol>60</pagecontrol>
-                    <scrolltime>0</scrolltime>
-                    <visible>!Window.IsActive(contextmenu)</visible>
-                    <itemlayout height="69" width="580">
+            <control type="group">
+                <right>dialog_panelgroup_w</right>
+                <!-- Header -->
+                <include content="Dialog_Head">
+                    <param name="id">2</param>
+                    <param name="label">$LOCALIZE[19199] - $VAR[Label_PVRChannelMgrHeader]$INFO[Container(20).NumItems, (,)]</param>
+                </include>
+                <include>Dialog_Head_CloseButton</include>
+
+                <!-- Content -->
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
                         <control type="group">
-                            <control type="image">
-                                <posx>10</posx>
-                                <posy>10</posy>
-                                <width>56</width>
-                                <height>56</height>
-                                <aspectratio align="left">keep</aspectratio>
-                                <texture background="true">$INFO[ListItem.Icon]</texture>
+                            <!-- Left Group -->
+                            <control type="group">
+                                <width>50%</width>
+
+                                <control type="image">
+                                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                                    <height>1</height>
+                                    <top>-20</top>
+                                    <left>20</left>
+                                    <right>60</right>
+                                </control>
+
+                                <control type="image">
+                                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                                    <height>1</height>
+                                    <bottom>-20</bottom>
+                                    <left>20</left>
+                                    <right>60</right>
+                                </control>
+
+                                <include content="List_DialogSelect">
+                                    <param name="id">20</param>
+                                    <param name="itemlayout_include">Layout_ChannelManager</param>
+                                    <param name="item_height">100</param>
+                                    <param name="detailed">true</param>
+                                    <!-- <param name="altfocus">ControlGroup(8000).HasFocus()</param> -->
+                                    <param name="misc">String.IsEqual(Container(20).CurrentItem,ListItem.CurrentItem)</param>
+                                    <onright>8000</onright>
+                                    <right>60</right>
+                                </include>
                             </control>
-                            <control type="label">
-                                <left>SidePad</left>
-                                <right>30</right>
-                                <label>$INFO[ListItem.Property(Number),(,) ]$INFO[ListItem.Property(Name)]</label>
+                            <control type="group">
+                                <left>50%</left>
+                                <right>20</right>
+                                <include content="Dialog_Outline_InnerBox">
+                                    <left>-40</left>
+                                    <top>-20</top>
+                                    <bottom>-20</bottom>
+                                </include>
+                                <control type="grouplist" id="8000">
+                                    <orientation>vertical</orientation>
+                                    <left>-20</left>
+                                    <right>20</right>
+                                    <onleft>20</onleft>
+                                    <onright>9000</onright>
+                                    <include content="Settings_Button">
+                                        <param name="id">7</param>
+                                        <param name="control">radiobutton</param>
+                                        <label>$LOCALIZE[19074]</label>
+                                        <description>Channel Active</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">8</param>
+                                        <param name="control">edit</param>
+                                        <label>$LOCALIZE[19201]</label>
+                                        <description>Channel Name</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">9</param>
+                                        <param name="control">button</param>
+                                        <label>$LOCALIZE[19202]</label>
+                                        <description>Channel logo</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">12</param>
+                                        <param name="control">radiobutton</param>
+                                        <label>$LOCALIZE[19206]</label>
+                                        <description>EPG Active</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">13</param>
+                                        <param name="control">spincontrolex</param>
+                                        <label>$LOCALIZE[19200]</label>
+                                        <description>EPG Source</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">14</param>
+                                        <param name="control">radiobutton</param>
+                                        <label>$LOCALIZE[19267]</label>
+                                        <description>Parental Lock</description>
+                                    </include>
+
+
+                                    <include content="Settings_Label">
+                                        <param name="id">8002</param>
+                                        <param name="control">label</param>
+                                        <label>$LOCALIZE[31154]</label>
+                                        <description>channel options Header</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">31</param>
+                                        <param name="control">button</param>
+                                        <label>$LOCALIZE[19204]</label>
+                                        <description>New Channel</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">30</param>
+                                        <param name="control">button</param>
+                                        <label>$LOCALIZE[19205]</label>
+                                        <description>Group Manager</description>
+                                    </include>
+                                    <include content="Settings_Button">
+                                        <param name="id">34</param>
+                                        <param name="control">togglebutton</param>
+                                        <label>$LOCALIZE[19024]</label>
+                                        <altlabel>$LOCALIZE[19023]</altlabel>
+                                        <usealttexture>!String.IsEmpty(Window.Property(IsRadio))</usealttexture>
+                                        <description>Radio / TV Toggle</description>
+                                    </include>
+                                </control>
                             </control>
                         </control>
-                    </itemlayout>
-                    <focusedlayout height="99" width="580">
-                        <control type="group">
-                            <visible>!Control.HasFocus(20)</visible>
-                            <control type="image">
-                                <posx>10</posx>
-                                <posy>10</posy>
-                                <width>56</width>
-                                <height>56</height>
-                                <aspectratio align="left">keep</aspectratio>
-                                <texture background="true">$INFO[ListItem.Icon]</texture>
-                            </control>
-                            <control type="label">
-                                <left>SidePad</left>
-                                <right>30</right>
-                                <label>$INFO[ListItem.Property(Number),(,) ]$INFO[ListItem.Property(Name)]</label>
-                            </control>
-                            <control type="label">
-                                <bottom>3</bottom>
-                                <height>50</height>
-                                <left>SidePad</left>
-                                <font>Mini</font>
-                                <right>30</right>
-                                <label>$INFO[ListItem.Property(ClientName),$LOCALIZE[19210]: ,]</label>
-                            </control>
-                        </control>
-                        <control type="group">
-                            <visible>Control.HasFocus(20)</visible>
-                            <control type="image">
-                                <width>100%</width>
-                                <height>96</height>
-                                <texture border="5" colordiffuse="$VAR[ColorHighlight]">common/box.png</texture>
-                            </control>
-                            <control type="image">
-                                <posx>10</posx>
-                                <posy>10</posy>
-                                <width>56</width>
-                                <height>56</height>
-                                <aspectratio align="left">keep</aspectratio>
-                                <texture background="true">$INFO[ListItem.Icon]</texture>
-                            </control>
-                            <control type="label">
-                                <left>SidePad</left>
-                                <right>30</right>
-                                <textcolor>Selected</textcolor>
-                                <label>$INFO[ListItem.Property(Number),(,) ]$INFO[ListItem.Property(Name)]</label>
-                            </control>
-                            <control type="label">
-                                <bottom>3</bottom>
-                                <left>SidePad</left>
-                                <font>Mini</font>
-                                <right>30</right>
-                                <height>50</height>
-                                <textcolor>Selected</textcolor>
-                                <label>$INFO[ListItem.Property(ClientName),$LOCALIZE[19210]: ,]</label>
-                            </control>
-                        </control>
-                    </focusedlayout>
+                    </control>
+
                 </control>
-                <control type="grouplist" id="8002">
-                    <right>15</right>
-                    <posy>30</posy>
-                    <width>600</width>
-                    <height>720</height>
-                    <onleft>20</onleft>
-                    <onright>8003</onright>
-                    <orientation>vertical</orientation>
-                    <itemgap>3</itemgap>
-                    <usecontrolcoords>true</usecontrolcoords>
-                    <control type="radiobutton" id="7">
-                        <description>Channel activated</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19074</label>
-                        <radioposx>550</radioposx>
-                    </control>
-                    <control type="edit" id="8">
-                        <description>Channel name</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19201</label>
-                        <textcolor>Black70</textcolor>
-                    </control>
-                    <control type="button" id="9">
-                        <description>Channel logo Button</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19202</label>
-                    </control>
-                    <control type="radiobutton" id="12">
-                        <description>EPG activated</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19206</label>
-                        <radioposx>550</radioposx>
-                    </control>
-                    <control type="spincontrolex" id="13">
-                        <description>EPG source</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19200</label>
-                    </control>
-                    <control type="radiobutton" id="14">
-                        <description>Parental locked</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <radioposx>550</radioposx>
-                        <label>19267</label>
-                    </control>
-                    <control type="button" id="30">
-                        <posy>30</posy>
-                        <description>Group Manager Button</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19205</label>
-                    </control>
-                    <control type="button" id="34">
-                        <description>TV/Radio Button</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>$LOCALIZE[19021] / $LOCALIZE[19020]</label>
-                    </control>
-                    <control type="button" id="31">
-                        <description>Create channel Button</description>
-                        <width>600</width>
-                        <height>66</height>
-                        <align>left</align>
-                        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                        <label>19204</label>
+            </control>
+
+            <!-- Side Buttons -->
+            <control type="group">
+                <include>Dialog_Side_Panel_Group_Def</include>
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="grouplist" id="9000">
+                        <include>Dialog_Side_Expanded_Grouplist_Def</include>
+                        <onleft>8000</onleft>
+                        <include content="DialogInfo_ExpandedButton">
+                            <param name="builtin">true</param>
+                            <param name="id">4</param>
+                            <param name="groupid">9101</param>
+                            <param name="label">$LOCALIZE[186]</param>
+                            <param name="icon">special://skin/extras/icons/circle-check.png</param>
+                            <param name="include_hintlabel">true</param>
+                        </include>
+                        <include content="DialogInfo_ExpandedButton">
+                            <param name="builtin">true</param>
+                            <param name="id">6</param>
+                            <param name="groupid">9103</param>
+                            <param name="label">$LOCALIZE[222]</param>
+                            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+                            <param name="include_hintlabel">true</param>
+                        </include>
+                        <include content="DialogInfo_ExpandedButton">
+                            <param name="builtin">true</param>
+                            <param name="id">5</param>
+                            <param name="groupid">9102</param>
+                            <param name="visible">Control.IsEnabled(5)</param>
+                            <param name="label">$LOCALIZE[31032]</param>
+                            <param name="icon">special://skin/extras/icons/circle-plus.png</param>
+                            <param name="include_hintlabel">true</param>
+                        </include>
                     </control>
                 </control>
             </control>
-            <control type="grouplist" id="8003">
-                <centerleft>50%</centerleft>
-                <bottom>30</bottom>
-                <width>100%</width>
-                <height>70</height>
-                <align>center</align>
-                <itemgap>30</itemgap>
-                <orientation>horizontal</orientation>
-                <onleft>20</onleft>
-                <onright>13</onright>
-                <onup>13</onup>
-                <control type="button" id="4">
-                    <description>OK</description>
-                    <label>186</label>
-                    <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                    <texturenofocus colordiffuse="Black12" border="5">common/box.png</texturenofocus>
-                    <include>DefDialogButtons</include>
-                </control>
-                <control type="button" id="5">
-                    <description>Apply</description>
-                    <label>$LOCALIZE[118]</label>
-                    <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                    <texturenofocus colordiffuse="Black12" border="5">common/box.png</texturenofocus>
-                    <include>DefDialogButtons</include>
-                </control>
-                <control type="button" id="6">
-                    <description>Cancel</description>
-                    <label>$LOCALIZE[117]</label>
-                    <texturefocus colordiffuse="$VAR[ColorHighlight]" border="5">common/box.png</texturefocus>
-                    <texturenofocus colordiffuse="Black12" border="5">common/box.png</texturenofocus>
-                    <include>DefDialogButtons</include>
-                </control>
-            </control>
+
         </control>
+
     </controls>
 </window>
