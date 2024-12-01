@@ -12,6 +12,7 @@ info_icons_dict = {
 					'premiumize': translate_path(media_folder % 'providers/premiumize.png'),
 					'offcloud': translate_path(media_folder % 'providers/offcloud.png'),
 					'torbox': translate_path(media_folder % 'providers/torbox.png'),
+					'easydebrid': translate_path(media_folder % 'providers/easydebrid.png'),
 					'ad_cloud': translate_path(media_folder % 'providers/alldebrid.png'),
 					'rd_cloud': translate_path(media_folder % 'providers/realdebrid.png'),
 					'pm_cloud': translate_path(media_folder % 'providers/premiumize.png'),
@@ -51,7 +52,9 @@ class SourceResults(BaseDialog):
 		self.meta = kwargs.get('meta')
 		self.info_highlights_dict = kwargs.get('scraper_settings')
 		self.prescrape = kwargs.get('prescrape')
-		self.filters_ignored = '[B][COLOR dodgerblue](%s)[/COLOR][/B]' % filters_ignored if kwargs.get('filters_ignored', False) else ''
+		if kwargs.get('filters_ignored'):
+			self.filters_ignored = '[B][COLOR dodgerblue](%s)[/COLOR][/B]' % filters_ignored
+		else: self.filters_ignored = ''
 		self.make_items()
 		self.set_properties()
 
@@ -121,23 +124,25 @@ class SourceResults(BaseDialog):
 					if not extra_info: extra_info = 'N/A'
 					extra_info = extra_info.rstrip('| ')
 					if scrape_provider == 'external':
-						source_site = upper(get('provider'))
+						source_site = upper(get('cache') if 'cache' in item else get('provider'))
 						provider = upper(get('debrid', source_site).replace('.me', ''))
 						provider_lower = lower(provider)
 						provider_icon = self.get_provider_and_path(provider_lower)[1]
 						if 'cache_provider' in item:
 							if 'Uncached' in item['cache_provider']:
-								if 'seeders' in item: set_property('tikiskins.source_type', 'UNCACHED (%d SEEDERS)' % get('seeders', 0))
-								else: set_property('tikiskins.source_type', 'UNCACHED')
-								set_property('tikiskins.highlight', 'dimgray')
+								set_property('tikiskins.source_type',
+									'UNCACHED (%d SEEDERS)' % get('seeders', 0)
+									if 'seeders' in item else
+									'UNCACHED')
+								set_property('tikiskins.highlight', self.info_highlights_dict['uncached'])
 							else:
 								if highlight_type == 0: key = 'torrent_highlight'
 								elif highlight_type == 1: key = provider_lower
 								else: key = basic_quality
-								if pack:
-									set_property('tikiskins.source_type', 'CACHED [B]PACK[/B]')
-								else:
-									set_property('tikiskins.source_type', 'CACHED')
+								set_property('tikiskins.source_type',
+									'CACHED [B]PACK[/B]'
+									if pack else
+									'CACHED')
 								set_property('tikiskins.highlight', self.info_highlights_dict[key])
 						else:
 							if highlight_type == 0: key = 'hoster_highlight'

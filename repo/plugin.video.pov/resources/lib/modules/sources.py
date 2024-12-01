@@ -464,8 +464,8 @@ class Sources():
 		for item in default_internal_scrapers: clear_property('%s.internal_results' % item)
 		for item in self.get_folderscraper_info(): clear_property('%s.internal_results' % item[0])
 
-	def _make_progress_dialog(self):
-		self.progress_dialog = create_window(('windows.yes_no_progress_media', 'YesNoProgressMedia'), 'yes_no_progress_media.xml', meta=self.meta)
+	def _make_progress_dialog(self, monitor='off'):
+		self.progress_dialog = create_window(('windows.yes_no_progress_media', 'YesNoProgressMedia'), 'yes_no_progress_media.xml', meta=self.meta, monitor=monitor)
 		Thread(target=self.progress_dialog.run).start()
 
 	def _kill_progress_dialog(self):
@@ -491,6 +491,9 @@ class Sources():
 		elif debrid_provider == 'TorBox':
 			from apis.torbox_api import TorBoxAPI as debrid_function
 			icon = 'torbox.png'
+		elif debrid_provider == 'EasyDebrid':
+			from apis.easydebrid_api import EasyDebridAPI as debrid_function
+			icon = 'easydebrid.png'
 		show_busy_dialog()
 		try: debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
 		except: debrid_files = None
@@ -511,7 +514,7 @@ class Sources():
 			link = debrid_function().unrestrict_link(url_dl)
 		elif debrid_provider == 'Premiumize.me':
 			link = debrid_function().add_headers_to_url(url_dl)
-		elif debrid_provider == 'Offcloud':
+		elif debrid_provider in ('Offcloud', 'EasyDebrid'):
 			link = url_dl
 		name = chosen_result['filename']
 		return POVPlayer().run(link, 'video')
@@ -539,7 +542,7 @@ class Sources():
 				if not self.load_action:
 					progressBG = kodi_utils.progressDialogBG
 					progressBG.create('POV', 'POV loading...')
-				else: self._make_progress_dialog()
+				else: self._make_progress_dialog(monitor='on')
 			self.url = None
 			total_items = len(items)
 			for count, item in enumerate(items, 1):
@@ -568,11 +571,12 @@ class Sources():
 				except: pass
 #			self._kill_progress_dialog()
 			if not background:
-				if self.progress_dialog: self._kill_progress_dialog()
+				if self.progress_dialog: pass # self._kill_progress_dialog()
 				else: progressBG.close()
 			if background: return self.url
 			if self.caching_confirmed: return self.resolve_sources(self.url, self.meta, cache_item=True)
-			return POVPlayer().run(self.url)
+			try: return POVPlayer().run(self.url)
+			finally: kodi_utils.clear_property('pov.progress_is_alive')
 		except: pass
 
 	def resolve_sources(self, item, meta, cache_item=False):
@@ -581,7 +585,7 @@ class Sources():
 				cache_provider = item['cache_provider']
 				if meta['media_type'] == 'movie': title, season, episode = self._get_search_title(meta), None, None
 				else: title, season, episode = meta['ep_name'], meta.get('custom_season') or meta.get('season'), meta.get('custom_episode') or meta.get('episode')
-				if cache_provider in ('Real-Debrid', 'Premiumize.me', 'AllDebrid', 'Offcloud', 'TorBox'):
+				if cache_provider in ('Real-Debrid', 'Premiumize.me', 'AllDebrid', 'Offcloud', 'TorBox', 'EasyDebrid'):
 					url = self.resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
 					return url
 				if 'Uncached' in cache_provider:
@@ -608,11 +612,12 @@ class Sources():
 		except: return
 
 	def import_debrid(self, debrid_provider):
-		if debrid_provider == 'Real-Debrid': from apis.real_debrid_api import RealDebridAPI as debrid_function
+		if   debrid_provider == 'Real-Debrid': from apis.real_debrid_api import RealDebridAPI as debrid_function
 		elif debrid_provider == 'Premiumize.me': from apis.premiumize_api import PremiumizeAPI as debrid_function
 		elif debrid_provider == 'AllDebrid': from apis.alldebrid_api import AllDebridAPI as debrid_function
 		elif debrid_provider == 'Offcloud': from apis.offcloud_api import OffcloudAPI as debrid_function
 		elif debrid_provider == 'TorBox': from apis.torbox_api import TorBoxAPI as debrid_function
+		elif debrid_provider == 'EasyDebrid': from apis.easydebrid_api import EasyDebridAPI as debrid_function
 		return debrid_function
 
 	def resolve_cached_torrents(self, debrid_provider, item_url, _hash, title, season, episode):
