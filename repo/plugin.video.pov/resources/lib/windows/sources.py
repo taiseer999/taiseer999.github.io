@@ -130,11 +130,12 @@ class SourceResults(BaseDialog):
 						provider_icon = self.get_provider_and_path(provider_lower)[1]
 						if 'cache_provider' in item:
 							if 'Uncached' in item['cache_provider']:
+								key = 'uncached'
 								set_property('tikiskins.source_type',
 									'UNCACHED (%d SEEDERS)' % get('seeders', 0)
 									if 'seeders' in item else
 									'UNCACHED')
-								set_property('tikiskins.highlight', self.info_highlights_dict['uncached'])
+								set_property('tikiskins.highlight', self.info_highlights_dict[key])
 							else:
 								if highlight_type == 0: key = 'torrent_highlight'
 								elif highlight_type == 1: key = provider_lower

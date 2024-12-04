@@ -571,7 +571,8 @@ class Sources():
 				except: pass
 #			self._kill_progress_dialog()
 			if not background:
-				if self.progress_dialog: pass # self._kill_progress_dialog()
+#				if self.progress_dialog: self._kill_progress_dialog()
+				if self.progress_dialog: pass
 				else: progressBG.close()
 			if background: return self.url
 			if self.caching_confirmed: return self.resolve_sources(self.url, self.meta, cache_item=True)
@@ -589,6 +590,7 @@ class Sources():
 					url = self.resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
 					return url
 				if 'Uncached' in cache_provider:
+					kodi_utils.clear_property('pov.progress_is_alive')
 					if cache_item:
 						if not 'package' in item: title, season, episode  = None, None, None
 						url = self.resolve_uncached_torrents(item['debrid'], item['url'], item['hash'], title, season, episode)
