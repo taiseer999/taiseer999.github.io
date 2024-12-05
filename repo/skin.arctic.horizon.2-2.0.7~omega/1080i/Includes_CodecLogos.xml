@@ -1764,6 +1764,7 @@
                     <texture colordiffuse="FFD3E3EF">codecs/OPUS.png</texture>
                 </control>
             </control>
+            
         <control type="group">
                 <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
                 <top>200</top>
