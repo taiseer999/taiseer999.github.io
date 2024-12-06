@@ -10,6 +10,10 @@ from fenom import source_utils
 from fenom.control import setting as getSetting
 
 
+#SERVER_ERROR = ('521 Origin Down', 'No results returned', 'Connection Time-out', 'Database maintenance')
+headers = {'User-Agent': 'Mozilla/5.0'}
+
+
 class source:
 	priority = 1
 	pack_capable = True
@@ -17,18 +21,23 @@ class source:
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
-		self.cache = 'MF+'
-		self.params = getSetting('mfdebrid.token', '')
+		services = {
+			'0': ('realdebrid', 'rd.token', 'RD+'), '1': ('alldebrid', 'ad.token', 'AD'), '2': ('', '', '')
+		}
+		debrid = getSetting('tidebrid.debrid', '0')
+		debrid, token, self.cache = services[debrid]
+		token = getSetting(token, '') if debrid else ''
+		params = f"/{debrid}={token}" if token else ''
 		self.language = ['en']
-		self.base_link = "https://mediafusion.elfhosted.com"
-		self.movieSearch_link = f"/{self.params}/stream/movie/%s.json"
-		self.tvSearch_link = f"/{self.params}/stream/series/%s:%s:%s.json"
+		self.base_link = "https://torrentio.strem.fun"
+		self.movieSearch_link = f"{params}/stream/movie/%s.json"
+		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0
+# Currently supports YTS(+), EZTV(+), RARBG(+), 1337x(+), ThePirateBay(+), KickassTorrents(+), TorrentGalaxy(+), HorribleSubs(+), NyaaSi(+), NyaaPantsu(+), Rutor(+), Comando(+), ComoEuBaixo(+), Lapumia(+), OndeBaixa(+), Torrent9(+).
 
 	def sources(self, data, hostDict):
 		sources = []
 		if not data: return sources
-		if not self.params: return sources
 		append = sources.append
 		try:
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
@@ -47,27 +56,26 @@ class source:
 				hdlr = year
 			# log_utils.log('url = %s' % url)
 			try:
-				results = requests.get(url, timeout=7) # client.request(url, timeout=7)
+				results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
+#				if not results or any(value in results for value in SERVER_ERROR): return sources
 				files = results.json()['streams'] # jsloads(results)['streams']
 			except: files = []
 			self._queue.put_nowait(files) # if seasons
 			self._queue.put_nowait(files) # if shows
-			_INFO = re.compile(r'💾.*') # _INFO = re.compile(r'👤.*')
+			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('MFDEBRID')
+			source_utils.scraper_error('TIDEBRID')
 			return sources
 
 		for file in files:
 			try:
-				if 'url' in file:
-					query = requests.utils.urlparse(file['url']).query
-					params = dict(i.split('=') for i in query.split('&'))
-					hash = params['info_hash']
+				if self.cache and not self.cache in file['name']: continue
+				if 'url' in file: hash = requests.utils.urlparse(file['url']).path.split('/')[3]
 				else: hash = file['infoHash']
-				file_title = file['behaviorHints']['filename'].split('\n')
-				file_info = [x for x in file['description'].split('\n') if _INFO.match(x)][0]
+				file_title = file['title'].split('\n')
+				file_info = [x for x in file_title if _INFO.match(x)][0]
 				# try:
 					# index = file_title.index(file_info)
 					# if index == 1: combo = file_title[0].replace(' ', '.')
@@ -101,17 +109,15 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': 'mfdebrid', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'cache': self.cache})
+				append({'provider': 'tidebrid', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'cache': self.cache or 'TI'})
 			except:
-				source_utils.scraper_error('MFDEBRID')
+				source_utils.scraper_error('TIDEBRID')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
 		sources = []
 		if not data: return sources
-		if not self.params: return sources
-		if not getSetting('mfdebrid.packs') == 'true': return sources
 		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -120,23 +126,22 @@ class source:
 			year = data['year']
 			season = data['season']
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
-#			results = requests.get(url, timeout=7) # client.request(url, timeout=7)
-			files = self._queue.get(timeout=8) # jsloads(results)['streams']
-			_INFO = re.compile(r'💾.*') # _INFO = re.compile(r'👤.*')
+#			results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
+#			if not results or any(value in results for value in SERVER_ERROR): return sources
+			files = self._queue.get(timeout=6) # jsloads(results)['streams']
+			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('MFDEBRID')
+			source_utils.scraper_error('TIDEBRID')
 			return sources
 
 		for file in files:
 			try:
-				if 'url' in file:
-					query = requests.utils.urlparse(file['url']).query
-					params = dict(i.split('=') for i in query.split('&'))
-					hash = params['info_hash']
+				if self.cache and not self.cache in file['name']: continue
+				if 'url' in file: hash = requests.utils.urlparse(file['url']).path.split('/')[3]
 				else: hash = file['infoHash']
-				file_title = file['description'].split('\n')
+				file_title = file['title'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
 				# try:
 					# index = file_title.index(file_info)
@@ -145,7 +150,7 @@ class source:
 					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
 				# except: pass
 
-				name = source_utils.clean_name(file_title[0].split('/')[0])
+				name = source_utils.clean_name(file_title[0])
 
 				episode_start, episode_end = 0, 0
 				if not search_series:
@@ -179,12 +184,12 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'mfdebrid', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package, 'cache': self.cache}
+				item = {'provider': 'tidebrid', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package, 'cache': self.cache or 'TI'}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
 			except:
-				source_utils.scraper_error('MFDEBRID')
+				source_utils.scraper_error('TIDEBRID')
 		return sources
 
