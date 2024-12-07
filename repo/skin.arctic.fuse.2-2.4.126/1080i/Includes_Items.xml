@@ -109,6 +109,14 @@
             <label>$LOCALIZE[31065]</label>
         </include>
         <include content="Settings_Button">
+            <param name="id">8012</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
+            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableStarring)</onclick>
+            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableStarring)</selected>
+            <label>$LOCALIZE[31076]</label>
+        </include>
+        <include content="Settings_Button">
             <param name="id">8006</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
@@ -736,7 +744,7 @@
         </include>
 
         <include content="DialogInfo_ExpandedButton" description="Record">
-            <param name="id">4006</param>
+            <param name="id">6</param>
             <param name="groupid">4106</param>
             <param name="icon">special://skin/extras/icons/record-vinyl.png</param>
             <param name="label">$LOCALIZE[264]</param>
@@ -827,39 +835,25 @@
     </include>
 
     <include name="Items_DialogVideoInfo_MenuBar">
-        <param name="zoom_in_include">false</param>
-        <param name="itemgap">0</param>
+        <param name="include_customwidth">true</param>
+        <param name="include_hintlabel">true</param>
+        <param name="itemgap">-40</param>
+        <param name="textcolor">main_fg</param>
+        <param name="nf_opacity">90</param>
         <definition>
-            <!-- <include content="DialogInfo_ExpandedButton" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-                <param name="id">4001</param>
-                <param name="groupid">4101</param>
-                <param name="sliceid">4201</param>
-                <param name="label">$VAR[Label_DialogInfo_PlayButton]</param>
-                <param name="icon">$VAR[Image_DialogInfo_PlayButton]</param>
-                <param name="zoom_in_delay">0</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
-                <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
-                <onclick condition="ListItem.HasVideoVersions">SetFocus(8908)</onclick>
-                <onclick condition="!ListItem.HasVideoVersions">SendClick(8)</onclick>
-                <onclick condition="!ListItem.HasVideoVersions">RunScript(plugin.video.themoviedb.helper,close_dialog=1190)</onclick>
-                <onfocus>ClearProperty(DetailsView)</onfocus>
-            </include> -->
 
             <!-- Trailer -->
             <include content="DialogInfo_Button" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
                 <param name="id">4002</param>
                 <param name="groupid">4102</param>
-                <param name="sliceid">4202</param>
                 <param name="vertical">false</param>
-                <param name="label">$LOCALIZE[20410]</param>
+                <param name="label">$LOCALIZE[31393]</param>
                 <param name="icon">special://skin/extras/icons/videoplay.png</param>
-                <param name="zoom_in_delay">60</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
                 <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
+                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="nf_opacity">$PARAM[nf_opacity]</param>
+                <param name="include_customwidth">$PARAM[include_customwidth]</param>
                 <param name="visible">!String.IsEmpty(ListItem.Trailer) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))</param>
                 <include content="Action_PlayTrailer_OnClick">
                     <param name="trailer">ListItem.Trailer</param>
@@ -870,38 +864,30 @@
 
             <!-- Versions -->
             <include content="DialogInfo_Button" condition="String.IsEqual(ListItem.DBType,movie) + ListItem.HasVideoVersions">
-                <param name="id">4021</param>
+                <param name="id">14</param>
                 <param name="groupid">4121</param>
-                <param name="sliceid">4221</param>
                 <param name="vertical">false</param>
                 <param name="label">$LOCALIZE[40000]</param>
                 <param name="icon">special://skin/extras/icons/bookmarks.png</param>
-                <param name="zoom_in_delay">240</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
                 <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
-
-                <onclick condition="Window.IsVisible(DialogVideoInfo.xml) | Window.IsVisible(DialogMusicInfo.xml)">SendClick(14)</onclick>
-
+                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="nf_opacity">$PARAM[nf_opacity]</param>
+                <param name="include_customwidth">$PARAM[include_customwidth]</param>
             </include>
 
             <!-- Extras -->
             <include content="DialogInfo_Button" condition="String.IsEqual(ListItem.DBType,movie) + ListItem.HasVideoExtras">
-                <param name="id">4022</param>
+                <param name="id">15</param>
                 <param name="groupid">4122</param>
-                <param name="sliceid">4222</param>
                 <param name="vertical">false</param>
                 <param name="label">$LOCALIZE[40211]</param>
                 <param name="icon">special://skin/extras/icons/director.png</param>
-                <param name="zoom_in_delay">240</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
                 <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
-
-                <onclick condition="Window.IsVisible(DialogVideoInfo.xml) | Window.IsVisible(DialogMusicInfo.xml)">SendClick(15)</onclick>
-
+                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="nf_opacity">$PARAM[nf_opacity]</param>
+                <param name="include_customwidth">$PARAM[include_customwidth]</param>
             </include>
 
             <!-- Trakt -->
@@ -949,55 +935,48 @@
 
             <!-- Rating -->
             <include content="DialogInfo_Button" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-                <param name="id">4007</param>
+                <param name="id">7</param>
                 <param name="groupid">4107</param>
-                <param name="sliceid">4207</param>
                 <param name="vertical">false</param>
                 <param name="label">$LOCALIZE[563]</param>
                 <param name="icon">special://skin/extras/icons/star.png</param>
-                <param name="zoom_in_delay">240</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
                 <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
-
-                <onclick condition="Window.IsVisible(DialogVideoInfo.xml) | Window.IsVisible(DialogMusicInfo.xml)">SendClick(7)</onclick>
-
+                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="nf_opacity">$PARAM[nf_opacity]</param>
+                <param name="include_customwidth">$PARAM[include_customwidth]</param>
+                <param name="visible">Control.IsEnabled(7)</param>
             </include>
 
-            <!-- Artwork -->
+           <!-- Artwork -->
             <include content="DialogInfo_Button" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-                <param name="id">4009</param>
+                <param name="id">10</param>
                 <param name="groupid">4109</param>
-                <param name="sliceid">4209</param>
                 <param name="vertical">false</param>
                 <param name="label">$LOCALIZE[39123]</param>
                 <param name="icon">special://skin/extras/icons/image.png</param>
-                <param name="zoom_in_delay">240</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
                 <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
-                <onclick condition="Window.IsVisible(DialogVideoInfo.xml) | Window.IsVisible(DialogMusicInfo.xml)">SendClick(10)</onclick>
+                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="nf_opacity">$PARAM[nf_opacity]</param>
+                <param name="include_customwidth">$PARAM[include_customwidth]</param>
+                <param name="visible">Control.IsEnabled(10)</param>
                 <onfocus>SetProperty(DetailsView,Artwork)</onfocus>
             </include>
 
-            <!-- Refresh -->
+           <!-- Refresh -->
             <include content="DialogInfo_Button" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-                <param name="id">4008</param>
+                <param name="id">6</param>
                 <param name="groupid">4108</param>
-                <param name="sliceid">4208</param>
                 <param name="vertical">false</param>
                 <param name="label">$LOCALIZE[184]</param>
                 <param name="icon">special://skin/extras/icons/update.png</param>
-                <param name="zoom_in_delay">240</param>
-                <param name="zoom_in_include">$PARAM[zoom_in_include]</param>
-                <param name="include_slide">true</param>
                 <param name="itemgap">$PARAM[itemgap]</param>
-                <param name="include_hintlabel">true</param>
-
-                <onclick condition="Window.IsVisible(DialogVideoInfo.xml) | Window.IsVisible(DialogMusicInfo.xml)">SendClick(6)</onclick>
-
+                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                <param name="textcolor">$PARAM[textcolor]</param>
+                <param name="nf_opacity">$PARAM[nf_opacity]</param>
+                <param name="include_customwidth">$PARAM[include_customwidth]</param>
+                <param name="visible">Control.IsEnabled(6)</param>
             </include>
 
         </definition>

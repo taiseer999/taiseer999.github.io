@@ -1767,13 +1767,13 @@
        
             <control type="group">
                 <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
-                <top>201</top>
+                <top>203</top>
                 <width>200</width>
                 <height>90</height>    
 			 </control>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
-                <top>201</top>
+                <top>203</top>
                 <left>5</left>
                 <control type="image">
                     <width>200</width>
@@ -1784,7 +1784,7 @@
 
 			 <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + !String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
-                <top>201</top>
+                <top>203</top>
                 <left>5</left>
                 <control type="image">
                     <width>200</width>
@@ -1795,7 +1795,7 @@
 
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</visible>
-                <top>201</top>
+                <top>203</top>
                 <left>5</left>
                 <control type="image">
                     <width>200</width>
@@ -1805,7 +1805,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),sdr)</visible>
-                <top>201</top>
+                <top>203</top>
                 <left>5</left>
                 <control type="image">
                     <width>200</width>
@@ -2431,7 +2431,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>201</top>
+                    <top>203</top>
                     <left>5</left>
                     <width>200</width>
                     <height>60</height>
@@ -2452,7 +2452,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>201</top>
+                    <top>203</top>
                     <left>5</left>
                     <width>200</width>
                     <height>60</height>
