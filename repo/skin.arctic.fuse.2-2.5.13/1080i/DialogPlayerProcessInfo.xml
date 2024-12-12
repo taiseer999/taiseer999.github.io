@@ -1067,7 +1067,7 @@
 					<width>480</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32101]:[/COLOR] $INFO[Player.Process(amlogic.eoft_gamut)]</label>
+					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32101]:[/COLOR] $INFO[Player.Process(pixformat)]$INFO[Player.Process(amlogic.eoft_gamut),[CR],]</label>
 					<font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
 					<visible>Player.HasVideo</visible>
@@ -1106,7 +1106,7 @@
 					<width>480</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31658]:[/COLOR] $INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR FFffffff][,][/COLOR]]</label>
+					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31658]:[/COLOR] $INFO[Player.Process(pixformat)]$VAR[DVTunnelVar, [COLOR FFffffff][,][/COLOR]]</label>
 					<font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
 					<visible>Player.HasVideo</visible>
