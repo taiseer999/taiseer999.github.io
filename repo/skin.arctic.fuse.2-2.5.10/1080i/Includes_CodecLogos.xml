@@ -9,7 +9,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_30">common/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
                 </control>
             </control>
         
@@ -254,7 +254,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
                 </control>
             </control>
            
@@ -496,7 +496,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
                 </control>
             </control>
            
@@ -741,7 +741,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
                 </control>
             </control>
             
@@ -983,7 +983,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
                 </control>
             </control>
             
@@ -1228,7 +1228,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
                 </control>
             </control>
            
