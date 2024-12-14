@@ -1691,7 +1691,7 @@
                 <control type="image">
                     <width>180</width>
                     <height>1.5</height>
-                    <texture colordiffuse="80FFFFFFF">common/selectedwhite.png</texture>
+                    <texture colordiffuse="FF3e3e3e">common/selectedwhite.png</texture>
                 </control>
             </control>
             <control type="group">

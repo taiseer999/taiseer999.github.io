@@ -3308,7 +3308,7 @@ v.3.3.7
 			<fanart>fanart.png</fanart>
 		</assets>
 	</extension>
-</addon><addon id="script.module.acctview" name="acctviewer" version="2.4.0" provider-name="Zaxxon709">
+</addon><addon id="script.module.acctview" name="acctviewer" version="2.4.5" provider-name="Zaxxon709">
     <extension point="xbmc.python.pluginsource" library="default.py">
     </extension>
     <extension point="xbmc.python.module" library="resources" />

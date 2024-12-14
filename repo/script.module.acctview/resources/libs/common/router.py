@@ -127,6 +127,8 @@ class Router:
                         databit.restore_affen_trakt()
                         if xbmcvfs.exists(var.chk_dradis) and xbmcvfs.exists(var.chkset_dradis):
                             accountmgr.setSetting("dradis_traktsync", 'true')
+                        if xbmcvfs.exists(var.chk_genocide) and xbmcvfs.exists(var.chkset_genocide):
+                            accountmgr.setSetting("genocide_traktsync", 'true')
                         accountmgr.setSetting("dradis_traktsync", 'true')
                         accountmgr.setSetting("api_restore", 'true')                            
                         accountmgr.setSetting("api.service", "true") #Enable API Check Service
@@ -194,41 +196,20 @@ class Router:
 
             if xbmcvfs.exists(var.chk_pov):
                 try:
-                    with open(var.path_pov,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.pov_client).replace(var.secret_am,var.pov_secret)
-
-                    with open(var.path_pov,'w') as f:
-                        f.write(client)
+                    addon = xbmcaddon.Addon("plugin.video.pov")
+                    addon.setSetting("trakt.client_id", var.pov_client)
+                    addon.setSetting("trakt.client_secret", var.pov_secret)
                 except:
                     xbmc.log('%s: Traktit.py Revoke API POV Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
             if xbmcvfs.exists(var.chk_dradis):
                 try:
-                    with open(var.path_dradis,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.dradis_client).replace(var.secret_am,var.dradis_secret)
-
-                    with open(var.path_dradis,'w') as f:
-                        f.write(client)
+                    addon = xbmcaddon.Addon("plugin.video.dradis")
+                    addon.setSetting("trakt.client_id", var.client_am)
+                    addon.setSetting("trakt.client_secret", var.secret_am)
                 except:
                     xbmc.log('%s: Traktit.py Revoke API Dradis Failed!' % var.amgr, xbmc.LOGINFO)
-                    pass
-
-            if xbmcvfs.exists(var.chk_taz):
-                try:
-                    with open(var.path_taz,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.taz_client)
-
-                    with open(var.path_taz,'w') as f:
-                        f.write(client)
-                except:
-                    xbmc.log('%s: Traktit.py Revoke API Taz Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
             if xbmcvfs.exists(var.chk_shadow):
@@ -270,19 +251,6 @@ class Router:
                     xbmc.log('%s: Traktit.py Revoke API Base Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
-            if xbmcvfs.exists(var.chk_unleashed):
-                try:
-                    with open(var.path_unleashed,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.unleashed_client).replace(var.secret_am,var.unleashed_secret)
-
-                    with open(var.path_unleashed,'w') as f:
-                        f.write(client)
-                except:
-                    xbmc.log('%s: Traktit.py Revoke API Unleashed Failed!' % var.amgr, xbmc.LOGINFO)
-                    pass
-
             if xbmcvfs.exists(var.chk_chains):
                 try:
                     with open(var.path_chains,'r') as f:
@@ -294,19 +262,6 @@ class Router:
                         f.write(client)
                 except:
                     xbmc.log('%s: Traktit.py Revoke API Chain Reaction Failed!' % var.amgr, xbmc.LOGINFO)
-                    pass
-
-            if xbmcvfs.exists(var.chk_md):
-                try:
-                    with open(var.path_md,'r') as f:
-                        data = f.read()
-
-                    client = data.replace(var.client_am,var.md_client).replace(var.secret_am,var.md_secret)
-
-                    with open(var.path_md,'w') as f:
-                        f.write(client)
-                except:
-                    xbmc.log('%s: Traktit.py Revoke API Magic Dragon Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
 
             if xbmcvfs.exists(var.chk_asgard):
@@ -372,6 +327,19 @@ class Router:
                         f.write(client)
                 except:
                     xbmc.log('%s: Traktit.py Revoke API Nightwing Lite Failed!' % var.amgr, xbmc.LOGINFO)
+                    pass
+
+            if xbmcvfs.exists(var.chk_genocide):
+                try:
+                    with open(var.path_genocide,'r') as f:
+                        data = f.read()
+
+                    client = data.replace(var.client_am,var.genocide_client).replace(var.secret_am,var.genocide_secret)
+
+                    with open(var.path_genocide,'w') as f:
+                        f.write(client)
+                except:
+                    xbmc.log('%s: Traktit.py Revoke API Chains Genocide Failed!' % var.amgr, xbmc.LOGINFO)
                     pass
                 
             if xbmcvfs.exists(var.chk_crew):
@@ -530,8 +498,6 @@ class Router:
             databit.revoke_affen_rd()
             jsonit.realizer_rvk()
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', rd_icon, 3000)
-            xbmc.sleep(1000)
-            xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
         elif mode == 'cleardebrid_rd':  # Clear All Saved Debrid Data
             try:
                 if xbmcvfs.exists(var.rd_backup): # Skip clearing data if no debrid folder present in backup folder
@@ -601,8 +567,6 @@ class Router:
             databit.revoke_fenlt_pm()
             databit.revoke_affen_pm()
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', pm_icon, 3000)
-            xbmc.sleep(1000)
-            xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
         elif mode == 'cleardebrid_pm':  # Clear All Saved Debrid Data
             try:
                 if xbmcvfs.exists(var.pm_backup): # Skip clearing data if no debrid folder present in backup folder
@@ -668,14 +632,10 @@ class Router:
                 xbmc.log('%s: Router.py Restore AD Failed!' % var.amgr, xbmc.LOGINFO)
                 pass
         elif mode == 'addondebrid_ad':  # Clear All Addon Debrid Data
-            data = os.listdir(var.ad_backup)
-            for file in data:
-                    files = os.path.join(var.ad_backup, file)
-                    if os.path.isfile(files):
-                            os.remove(files)
+            debridit_ad.debrid_it('wipeaddon', name)
+            databit.revoke_fenlt_ad()
+            databit.revoke_affen_ad()
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', ad_icon, 3000)
-            xbmc.sleep(1000)
-            xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
         elif mode == 'cleardebrid_ad':  # Clear All Saved Debrid Data
             try:
                 if xbmcvfs.exists(var.ad_backup): # Skip clearing data if no debrid folder present in backup folder
@@ -742,8 +702,6 @@ class Router:
         elif mode == 'addonoffc':  # Clear All Addon OffCloud Data
             offit.offc_it('clearaddon', name)
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', offcloud_icon, 3000)
-            xbmc.sleep(1000)
-            xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
         elif mode == 'clearoffc':  # Clear All Saved Data
             try:
                 if xbmcvfs.exists(var.offc_backup): # Skip clearing data if no nondebrid folder present in backup folder
@@ -815,8 +773,6 @@ class Router:
             databit.revoke_fenlt_easy()
             databit.revoke_affen_easy()
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', easy_icon, 3000)
-            xbmc.sleep(1000)
-            xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
         elif mode == 'cleareasy':  # Clear All Saved Data
             try:
                 if xbmcvfs.exists(var.easy_backup): # Skip clearing data if no nondebrid folder present in backup folder
@@ -880,8 +836,6 @@ class Router:
         elif mode == 'addonfile':  # Clear All Addon Filepursuit Data
             fileit.filep_it('clearaddon', name)
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', file_icon, 3000)
-            xbmc.sleep(1000)
-            xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
         elif mode == 'clearfile':  # Clear All Saved Data
             try:
                 if xbmcvfs.exists(var.file_backup): # Skip clearing data if no nondebrid folder present in backup folder
@@ -1006,8 +960,6 @@ class Router:
                     databit.revoke_affen_ad()
                     
                 xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', amgr_icon, 3000)
-                xbmc.sleep(1000)
-                xbmc.executebuiltin('Addon.OpenSettings(script.module.accountmgr)')
                 
         #BACKUP ALL DEBRID ACCOUNTS
         elif mode == 'backupall':  # Save Debrid Data for all Debrid services
@@ -1205,41 +1157,19 @@ class Router:
 
                     if xbmcvfs.exists(var.chk_pov):
                         try:
-                            with open(var.path_pov,'r') as f:
-                                data = f.read()
-
-                            client = data.replace(var.client_am,var.pov_client).replace(var.secret_am,var.pov_secret)
-
-                            with open(var.path_pov,'w') as f:
-                                f.write(client)
+                            addon = xbmcaddon.Addon("plugin.video.pov")
+                            addon.setSetting("trakt.client_id", var.pov_client)
+                            addon.setSetting("trakt.client_secret", var.pov_secret)
                         except:
                             xbmc.log('%s: Traktit.py Revoke API POV Failed!' % var.amgr, xbmc.LOGINFO)
                             pass
 
                     if xbmcvfs.exists(var.chk_dradis):
                         try:
-                            with open(var.path_dradis,'r') as f:
-                                data = f.read()
-
-                            client = data.replace(var.client_am,var.dradis_client).replace(var.secret_am,var.dradis_secret)
-
-                            with open(var.path_dradis,'w') as f:
-                                f.write(client)
+                            addon.setSetting("trakt.client_id", var.dradis_client)
+                            addon.setSetting("trakt.client_secret", var.dradis_secret)
                         except:
                             xbmc.log('%s: Traktit.py Revoke API Dradis Failed!' % var.amgr, xbmc.LOGINFO)
-                            pass
-
-                    if xbmcvfs.exists(var.chk_taz):
-                        try:
-                            with open(var.path_taz,'r') as f:
-                                data = f.read()
-
-                            client = data.replace(var.client_am,var.taz_client)
-
-                            with open(var.path_taz,'w') as f:
-                                f.write(client)
-                        except:
-                            xbmc.log('%s: Traktit.py Revoke API Taz Failed!' % var.amgr, xbmc.LOGINFO)
                             pass
 
                     if xbmcvfs.exists(var.chk_shadow):
@@ -1281,19 +1211,6 @@ class Router:
                             xbmc.log('%s: Traktit.py Revoke API Base Failed!' % var.amgr, xbmc.LOGINFO)
                             pass
 
-                    if xbmcvfs.exists(var.chk_unleashed):
-                        try:
-                            with open(var.path_unleashed,'r') as f:
-                                data = f.read()
-
-                            client = data.replace(var.client_am,var.unleashed_client).replace(var.secret_am,var.unleashed_secret)
-
-                            with open(var.path_unleashed,'w') as f:
-                                f.write(client)
-                        except:
-                            xbmc.log('%s: Traktit.py Revoke API Unleashed Failed!' % var.amgr, xbmc.LOGINFO)
-                            pass
-
                     if xbmcvfs.exists(var.chk_chains):
                         try:
                             with open(var.path_chains,'r') as f:
@@ -1305,19 +1222,6 @@ class Router:
                                 f.write(client)
                         except:
                             xbmc.log('%s: Traktit.py Revoke API Chain Reaction Failed!' % var.amgr, xbmc.LOGINFO)
-                            pass
-
-                    if xbmcvfs.exists(var.chk_md):
-                        try:
-                            with open(var.path_md,'r') as f:
-                                data = f.read()
-
-                            client = data.replace(var.client_am,var.md_client).replace(var.secret_am,var.md_secret)
-
-                            with open(var.path_md,'w') as f:
-                                f.write(client)
-                        except:
-                            xbmc.log('%s: Traktit.py Revoke API Magic Dragon Failed!' % var.amgr, xbmc.LOGINFO)
                             pass
 
                     if xbmcvfs.exists(var.chk_asgard):

@@ -1,6 +1,4 @@
-import xbmc
-import xbmcaddon
-import xbmcgui
+import xbmc, xbmcaddon, xbmcgui
 import xbmcvfs
 import os
 
@@ -48,7 +46,7 @@ def rm_traktcache():
                         except OSError:
                                 pass
                 addon.setSetting("rm_traktcache", 'false')
-                
+
 #Account Mananger Trakt API Keys
 client_am = traktID()
 secret_am = traktSecret()
@@ -127,20 +125,15 @@ backup_youtube = os.path.join(meta_backup,'youtube.json')
 #Account Manager Add-on XML's
 seren = xmls + translatePath('plugin.video.seren/settings.xml')
 fen = xmls + translatePath('plugin.video.fen/settings.xml')
-ezra = xmls + translatePath('plugin.video.ezra/settings.xml')
 coal = xmls + translatePath('plugin.video.coalition/settings.xml')
 pov = xmls + translatePath('plugin.video.pov/settings.xml')
 umb = xmls + translatePath('plugin.video.umbrella/settings.xml')
 infinity = xmls + translatePath('plugin.video.infinity/settings.xml')
 dradis = xmls + translatePath('plugin.video.dradis/settings.xml')
-taz = xmls + translatePath('plugin.video.taz19/settings.xml')
 shadow = xmls + translatePath('plugin.video.shadow/settings.xml')
 ghost = xmls + translatePath('plugin.video.ghost/settings.xml')
 base = xmls + translatePath('plugin.video.base/settings.xml')
-unleashed = xmls + translatePath('plugin.video.unleashed/settings.xml')
 chains = xmls + translatePath('plugin.video.thechains/settings.xml')
-twisted = xmls + translatePath('plugin.video.twisted/settings.xml')
-md = xmls + translatePath('plugin.video.magicdragon/settings.xml')
 asgard = xmls + translatePath('plugin.video.asgard/settings.xml')
 patriot = xmls + translatePath('plugin.video.patriot/settings.xml')
 blackl = xmls + translatePath('plugin.video.blacklightning/settings.xml')
@@ -176,20 +169,15 @@ chk_seren = addons + translatePath('plugin.video.seren/')
 chk_fen = addons + translatePath('plugin.video.fen/')
 chk_fenlt = addons + translatePath('plugin.video.fenlight/')
 chk_affen = addons + translatePath('plugin.video.affenity/')
-chk_ezra = addons + translatePath('plugin.video.ezra/')
 chk_coal = addons + translatePath('plugin.video.coalition/')
 chk_pov = addons + translatePath('plugin.video.pov/')
 chk_umb = addons + translatePath('plugin.video.umbrella/')
 chk_infinity = addons + translatePath('plugin.video.infinity/')
 chk_dradis = addons + translatePath('plugin.video.dradis/')
-chk_taz = addons + translatePath('plugin.video.taz19/')
 chk_shadow = addons + translatePath('plugin.video.shadow/')
 chk_ghost = addons + translatePath('plugin.video.ghost/')
 chk_base = addons + translatePath('plugin.video.base/')
-chk_unleashed = addons + translatePath('plugin.video.unleashed/')
 chk_chains = addons + translatePath('plugin.video.thechains/')
-chk_twisted = addons + translatePath('plugin.video.twisted/')
-chk_md = addons + translatePath('plugin.video.magicdragon/')
 chk_asgard = addons + translatePath('plugin.video.asgard/')
 chk_patriot = addons + translatePath('plugin.video.patriot/')
 chk_blackl = addons + translatePath('plugin.video.blacklightning/')
@@ -211,6 +199,7 @@ chk_realx = addons + translatePath('plugin.video.realizerx/')
 chk_premx = addons + translatePath('plugin.video.premiumizerx/')
 chk_allaccounts = addons + translatePath('script.module.allaccounts/')
 chk_myaccounts = addons + translatePath('script.module.myaccounts/')
+chk_amgr = addons + translatePath('script.module.accountmgr/')
 chk_rurl= addons + translatePath('script.module.resolveurl/')
 chk_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/')
 chk_trakt = addons + translatePath('script.trakt/')
@@ -218,24 +207,21 @@ chk_simkl = addons + translatePath('script.simkl/')
 chk_embuary = addons + translatePath('script.embuary.info/')
 chk_meta = addons + translatePath('script.module.metahandler/')
 chk_pvr = addons + translatePath('script.module.pvr.artwork/')
+chk_fentastic = addons + translatePath('skin.fentastic/')
+chk_nimbus = addons + translatePath('skin.nimbus/')
 
 #Add-on Userdata Paths
 seren_ud = addon_data + translatePath('plugin.video.seren/')
 fen_ud = addon_data + translatePath('plugin.video.fen/')
-ezra_ud = addon_data + translatePath('plugin.video.ezra/')
 coal_ud = addon_data + translatePath('plugin.video.coalition/')
 pov_ud = addon_data + translatePath('plugin.video.pov/')
 umb_ud = addon_data + translatePath('plugin.video.umbrella/')
 infinity_ud = addon_data + translatePath('plugin.video.infinity/')
 dradis_ud = addon_data + translatePath('plugin.video.dradis/')
-taz_ud = addon_data + translatePath('plugin.video.taz19/')
 shadow_ud = addon_data + translatePath('plugin.video.shadow/')
 ghost_ud = addon_data + translatePath('plugin.video.ghost/')
 base_ud = addon_data + translatePath('plugin.video.base/')
-unleashed_ud = addon_data + translatePath('plugin.video.unleashed/')
 chains_ud = addon_data + translatePath('plugin.video.thechains/')
-twisted_ud = addon_data + translatePath('plugin.video.twisted/')
-md_ud = addon_data + translatePath('plugin.video.magicdragon/')
 asgard_ud = addon_data + translatePath('plugin.video.asgard/')
 patriot_ud = addon_data + translatePath('plugin.video.patriot/')
 blackl_ud = addon_data + translatePath('plugin.video.blacklightning/')
@@ -257,6 +243,7 @@ realx_ud = addon_data + translatePath('plugin.video.realizerx/')
 premx_ud = addon_data + translatePath('plugin.video.premiumizerx/')
 allaccounts_ud = addon_data + translatePath('script.module.allaccounts/')
 myaccounts_ud = addon_data + translatePath('script.module.myaccounts/')
+amgr_ud = addon_data + translatePath('script.module.accountmgr/')
 rurl_ud = addon_data + translatePath('script.module.resolveurl/')
 tmdbh_ud = addon_data + translatePath('plugin.video.themoviedb.helper/')
 trakt_ud = addon_data + translatePath('script.trakt/')
@@ -270,20 +257,15 @@ chkset_seren = addon_data + translatePath('plugin.video.seren/settings.xml')
 chkset_fen = addon_data + translatePath('plugin.video.fen/settings.xml')
 chkset_fenlt = addon_data + translatePath('plugin.video.fenlight/databases/settings.db')
 chkset_affen = addon_data + translatePath('plugin.video.affenity/databases/settings.db')
-chkset_ezra = addon_data + translatePath('plugin.video.ezra/settings.xml')
 chkset_coal = addon_data + translatePath('plugin.video.coalition/settings.xml')
 chkset_pov = addon_data + translatePath('plugin.video.pov/settings.xml')
 chkset_umb = addon_data + translatePath('plugin.video.umbrella/settings.xml')
 chkset_infinity = addon_data + translatePath('plugin.video.infinity/settings.xml')
 chkset_dradis = addon_data + translatePath('plugin.video.dradis/settings.xml')
-chkset_taz = addon_data + translatePath('plugin.video.taz19/settings.xml')
 chkset_shadow = addon_data + translatePath('plugin.video.shadow/settings.xml')
 chkset_ghost = addon_data + translatePath('plugin.video.ghost/settings.xml')
 chkset_base = addon_data + translatePath('plugin.video.base/settings.xml')
-chkset_unleashed = addon_data + translatePath('plugin.video.unleashed/settings.xml')
 chkset_chains = addon_data + translatePath('plugin.video.thechains/settings.xml')
-chkset_twisted = addon_data + translatePath('plugin.video.twisted/settings.xml')
-chkset_md = addon_data + translatePath('plugin.video.magicdragon/settings.xml')
 chkset_asgard = addon_data + translatePath('plugin.video.asgard/settings.xml')
 chkset_patriot = addon_data + translatePath('plugin.video.patriot/settings.xml')
 chkset_blackl = addon_data + translatePath('plugin.video.blacklightning/settings.xml')
@@ -306,6 +288,7 @@ chkset_realx_json = addon_data + translatePath('plugin.video.realizerx/rdauth.js
 chkset_premx = addon_data + translatePath('plugin.video.premiumizerx/settings.xml')
 chkset_allaccounts = addon_data + translatePath('script.module.allaccounts/settings.xml')
 chkset_myaccounts = addon_data + translatePath('script.module.myaccounts/settings.xml')
+chkset_amgr = addon_data + translatePath('script.module.accountmgr/settings.xml')
 chkset_rurl = addon_data + translatePath('script.module.resolveurl/settings.xml')
 chkset_tmdbh = addon_data + translatePath('plugin.video.themoviedb.helper/settings.xml')
 chkset_trakt = addon_data + translatePath('script.trakt/settings.xml')
@@ -313,26 +296,28 @@ chkset_simkl = addon_data + translatePath('script.simkl/settings.xml')
 chkset_embuary = addon_data + translatePath('script.embuary.info/settings.xml')
 chkset_meta = addon_data + translatePath('script.module.metahandler/settings.xml')
 chkset_pvr = addon_data + translatePath('script.module.pvr.artwork/settings.xml')
+chkset_fentastic = addon_data + translatePath('skin.fentastic/settings.xml')
+chkset_nimbus = addon_data + translatePath('skin.nimbus/settings.xml')
+
+#Skin Setting Paths
+path_fentastic = addon_data + translatePath('skin.fentastic/settings.xml')
+path_nimbus = addon_data + translatePath('skin.nimbus/settings.xml')
 
 #Trakt API Key Paths
 path_seren = addons + translatePath('plugin.video.seren/resources/lib/indexers/trakt.py')
 path_fen = addons + translatePath('plugin.video.fen/resources/lib/apis/trakt_api.py')
 path_affen = addons + translatePath('plugin.video.affenity/resources/lib/apis/trakt_api.py')
 path_coal = addons + translatePath('plugin.video.coalition/resources/lib/apis/trakt_api.py')
-path_pov = addons + translatePath('plugin.video.pov/resources/lib/modules/settings.py')
-path_dradis = addons + translatePath('plugin.video.dradis/resources/lib/modules/control.py')
-path_taz = addons + translatePath('plugin.video.taz19/resources/lib/apis/trakt_api.py')
 path_shadow = addons + translatePath('plugin.video.shadow/resources/modules/general.py')
 path_ghost = addons + translatePath('plugin.video.ghost/resources/modules/general.py')
 path_base = addons + translatePath('plugin.video.base/resources/modules/general.py')
-path_unleashed = addons + translatePath('plugin.video.unleashed/resources/modules/general.py')
 path_chains = addons + translatePath('plugin.video.thechains/resources/modules/general.py')
-path_md = addons + translatePath('plugin.video.magicdragon/resources/modules/general.py')
 path_asgard = addons + translatePath('plugin.video.asgard/resources/modules/general.py')
 path_patriot = addons + translatePath('plugin.video.patriot/resources/modules/general.py')
 path_blackl = addons + translatePath('plugin.video.blacklightning/resources/modules/general.py')
 path_aliunde = addons + translatePath('plugin.video.aliundek19/resources/modules/general.py')
 path_night = addons + translatePath('plugin.video.NightwingLite/resources/modules/general.py')
+path_genocide = addons + translatePath('plugin.video.chainsgenocide/resources/lib/modules/trakt.py')
 path_crew = addons + translatePath('script.module.thecrew/lib/resources/lib/modules/trakt.py')
 path_scrubs = addons + translatePath('plugin.video.scrubsv2/resources/lib/modules/trakt.py')
 path_allaccounts = addons + translatePath('script.module.allaccounts/lib/allaccounts/modules/trakt.py')
@@ -355,19 +340,14 @@ pov_client = '6bc29124c3d9466e06a3ed19a7b5976fcb28311008401e1ce04cf08196f8b16a'
 pov_secret = '99478842b17d44d7accafef45c6c1bbba235792753c195069ae149595cd3a919'
 dradis_client = '19d4a08f6601d2c5d791d041a9ffadd3ce26c038500070397eb315b74b5a7550'
 dradis_secret = '3ee868bacbf9edba9dd11a1b26b1abe4f5b81d0f0d90bd30ac53e127af08be39'
-taz_client = '4f2f0e3cf53e5c3b9ed1e2a203ebff1cd9c91205772f48a9bd2e1ba560e5e1f7'
 shadow_client = '8ed545c0b7f92cc26d1ecd6326995c6cf0053bd7596a98e962a472bee63274e6'
 shadow_secret = '1ec4f37e5743e3086abace0c83444c25d9b655d1d77b793806b2c8205a510426'
 ghost_client = 'a4e716b4b22b62e59b9e09454435c8710b650b3143dcce553d252b6a66ba60c8'
 ghost_secret = 'c6d9aba72214a1ca3c6d45d0351e59f21bbe43df9bbac7c5b740089379f8c5cd'
 base_client = '76578d23add0005f9b723fd66f97f1eb0e226f3fac55a3127baaa78e6ed5b303'
 base_secret = '7110290e5ecf935c1a3ffb3e6410e34cef5d732ef59dbdb141cef2846c8bd227'
-unleashed_client = '19849909a0f8c9dc632bc5f5c7ccafd19f3e452e2e44fee05b83fd5dc1e77675'
-unleashed_secret = '122b7a79437dcf4b657d3af9e92f2d9ff8939ade532e03bc81bfb5ce798b04b'
 chains_client = '19849909a0f8c9dc632bc5f5c7ccafd19f3e452e2e44fee05b83fd5dc1e77675'
 chains_secret = '122b7a79437dcf4b657d3af9e92f2d9ff8939ade532e03bc81bfb5ce798b04b'
-md_client = '8ed545c0b7f92cc26d1ecd6326995c6cf0053bd7596a98e962a472bee63274e6'
-md_secret = '1ec4f37e5743e3086abace0c83444c25d9b655d1d77b793806b2c8205a510426'
 asgard_client = '54de56f7b90a4cf7227fd70ecf703c6c043ec135c56ad10c9bb90c539bf2749f'
 asgard_secret = 'a43aa6bd62eb5afd37ede4a625457fc903f1961b8384178986bf76eebfcd5999'
 patriot_client = '5085635871955f48506576375bf736293c4833d491beca8d962c9da45125b63c'
@@ -378,6 +358,8 @@ aliunde_client = '4d6fbe175e32115ca9117c3b7c55bf46b53f69f90c232d79869ec32f0dd470
 aliunde_secret = '6c27014354629b345dbe4b4028ff5956489ee5cb7e7e5857454bcd24430c91ac'
 night_client = '21b88d4dcd58f5eca39128a736d2216da56b52114805258c4e9f9a63d9800722'
 night_secret = '1ec4f37e5743e3086abace0c83444c25d9b655d1d77b793806b2c8205a510426'
+genocide_client = '19849909a0f8c9dc632bc5f5c7ccafd19f3e452e2e44fee05b83fd5dc1e77675'
+genocide_secret = 'b5fcd7cb5d9bb963784d11bbf8535bc0d25d46225016191eb48e50792d2155c0'
 crew_client = '482f9db52ee2611099ce3aa1abf9b0f7ed893c6d3c6b5face95164eac7b01f71'
 crew_secret = '80a2729728b53ba1cc38137b22f21f34d590edd35454466c4b8920956513d967'
 scrubs_client = '63c53edc299b7a05cc6ea2272e8a84e13aade067c18a794362ab9a4a84eafb16'
@@ -392,8 +374,6 @@ trakt_client = 'd4161a7a106424551add171e5470112e4afdaf2438e6ef2fe0548edc75924868
 trakt_secret = 'b5fcd7cb5d9bb963784d11bbf8535bc0d25d46225016191eb48e50792d2155c0'
 
 #Metadata API Keys
-ezra_fan = 'fe073550acf157bdb8a4217f215c0882'
-ezra_tmdb = '05a454b451f2f9003fbca293744e4a85'
 fen_fan = 'fa836e1c874ba95ab08a14ee88e05565'
 fen_tmdb = 'b370b60447737762ca38457bd77579b3'
 fenlt_tmdb = 'b370b60447737762ca38457bd77579b3'
@@ -401,8 +381,6 @@ coal_fan = '598515b970d81280063107d49d0e2558"'
 coal_tmdb = '74f3ce931d65ebda1f77ef24eac2625f'
 pov_fan = 'fe073550acf157bdb8a4217f215c0882'
 pov_tmdb = 'a07324c669cac4d96789197134ce272b'
-taz_fan = 'fe073550acf157bdb8a4217f215c0882'
-taz_tmdb = '05a454b451f2f9003fbca293744e4a85'
 home_fan = 'c3469c1cc9465b9f1a1a862feea8b76b'
 home_tmdb = 'fb981e5ab89415bba616409d5eb5f05e'
 crew_fan = '27bef29779bbffe947232dc310a91f0c'
