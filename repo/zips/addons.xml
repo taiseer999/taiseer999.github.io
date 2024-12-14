@@ -975,6 +975,181 @@ updated YouTube addon URL
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
+</addon><addon id="plugin.video.infinity" name="Infinity" provider-name="kodifitzwell" version="4.12.10">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.requests" />
+		<import addon="plugin.video.youtube" optional="true" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.service" library="service.py" />
+	<extension point="xbmc.addon.metadata">
+		<reuselanguageinvoker>true</reuselanguageinvoker>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<disclaimer lang="en">The author of this addon does not host any of the content which is found and have no affiliation with any of the content providers. This addon simply searches websites for content. Use at your own risk!</disclaimer>
+		<summary lang="en">[COLOR FFE68B00]Infinity[/COLOR][CR]</summary>
+		<description lang="en">[B]Infinity[/B][CR]We do not host any of the contents streamed. This addon does not form part of the Kodi Media Centre. Please do not seek assistance with this addon from any of the Official Kodi Support Channels.[CR]The author does not host any of the content in this addon and takes no responsibility for content found.</description>
+		<news>INFO: For latest changes see Changelog within add-on.</news>
+		<assets>
+			<icon>resources/media/icon.png</icon>
+			<fanart>resources/media/fanart.png</fanart>
+		</assets>
+	</extension>
+	<extension point="kodi.context.item">
+		<menu id="kodi.core.main">
+			<item library="resources\lib\context\addtoLibrary.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Add to Library</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.addtoLibrary),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,season) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\addLibtoFavourite.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Add/Remove Favourite</label>
+				<visible>
+					[String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.ListItem.FolderPath,videodb://)] +
+					[String.Contains(Container.ListItem.Path,Window(home).Property(infinity.movieLib.path)) | String.Contains(Container.ListItem.Path,Window(home).Property(infinity.tvLib.path))] +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\addtoFavourite.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Add/Remove Favourite</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.addtoFavourite),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\playTrailer.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Play Trailer</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.playTrailer),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\playTrailerSelect.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Play Trailer (Select)</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.playTrailerSelect),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\traktManager.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Trakt Manager</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.traktManager),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,season) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\clearProviders.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Clear Providers</label>
+				<visible>
+					[String.IsEqual(Window(home).Property(context.infinity.clearProviders),true) +
+					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]] |
+					[String.Contains(Container.FolderPath,videodb://) +
+					[String.Contains(Container.ListItem.Path,Window(home).Property(infinity.movieLib.path)) | String.Contains(Container.ListItem.Path,Window(home).Property(infinity.tvLib.path))] +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]]
+				</visible>
+			</item>
+			<item library="resources\lib\context\clearBookmark.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Clear Item Bookmark</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.clearBookmark),true) +
+					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					ListItem.IsResumable +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\rescrape.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Rescrape Item</label>
+				<visible>
+					[String.IsEqual(Window(home).Property(context.infinity.rescrape),true) +
+					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]]
+				</visible>
+			</item>
+			<item library="resources\lib\context\libRescrape.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Rescrape Lib Item</label>
+				<visible>
+					[String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.ListItem.FolderPath,videodb://)] +
+					[String.Contains(Container.ListItem.Path,Window(home).Property(infinity.movieLib.path)) | String.Contains(Container.ListItem.Path,Window(home).Property(infinity.tvLib.path))] +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\playFromHere.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Play from here</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.playFromHere),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					String.IsEqual(ListItem.dbtype,episode)
+				</visible>
+			</item>
+			<item library="resources\lib\context\autoPlay.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Auto Play</label>
+				<visible>
+					[[String.IsEqual(Window(home).Property(infinity.autoPlayEpisode),false) + String.IsEqual(ListItem.dbtype,episode)] |
+					[String.IsEqual(Window(home).Property(infinity.autoPlayMovie),false) + String.IsEqual(ListItem.dbtype,movie)]] +
+					[String.IsEqual(Window(home).Property(context.infinity.autoPlay),true) +
+					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\sourceSelect.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Source Select</label>
+				<visible>
+					[[String.IsEqual(Window(home).Property(infinity.autoPlayEpisode),true) + String.IsEqual(ListItem.dbtype,episode)] |
+					[String.IsEqual(Window(home).Property(infinity.autoPlayMovie),true) + String.IsEqual(ListItem.dbtype,movie)]] +
+					[String.IsEqual(Window(home).Property(context.infinity.sourceSelect),true) +
+					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\findSimilar.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Find Similar</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.findSimilar),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\browseSeries.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Browse Series</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.browseSeries),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow)]
+				</visible>
+			</item>
+			<item library="resources\lib\context\browseEpisodes.py">
+				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Browse Episodes</label>
+				<visible>
+					String.IsEqual(Window(home).Property(context.infinity.browseEpisodes),true) +
+					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
+					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
+					String.IsEqual(ListItem.dbtype,episode)
+				</visible>
+			</item>
+		</menu>
+	</extension>
+
 </addon><addon id="plugin.video.last_played" name="Last Played" version="6.4.0" provider-name="Luis Rodrigues">
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>video</provides>
