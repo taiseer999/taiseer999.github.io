@@ -1,0 +1,2030 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="DialogInfo_Main_Group">
+        <visible>!ControlGroup(5000).HasFocus()</visible>
+        <include content="Animation_Zoom_Out">
+            <param name="type">Hidden</param>
+        </include>
+        <include content="Animation_Zoom_In">
+            <param name="type">Visible</param>
+            <param name="delay">200</param>
+        </include>
+    </include>
+
+    <include name="DialogInfo_Body_Group">
+        <param name="icon">$VAR[Image_Poster]</param>
+        <definition>
+            <top>view_pad</top>
+            <include>Dimension_Info</include>
+            <control type="group">
+                <width>infodialog_poster_w</width>
+                <height>infodialog_poster_h</height>
+
+                <include content="Animation_Slide_In">
+                    <param name="type">WindowOpen</param>
+                    <param name="posx">-320</param>
+                    <param name="delay">400</param>
+                </include>
+                <include content="Animation_Slide_Out">
+                    <param name="type">WindowClose</param>
+                    <param name="posx">-320</param>
+                </include>
+
+                <include content="Object_BigPoster" condition="Window.IsVisible(movieinformation) | Window.IsActive(fullscreenvideo)">
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="diffuse">diffuse/poster_w560_h820.png</param>
+                </include>
+
+                <include content="Object_Control" condition="![Window.IsVisible(movieinformation) | Window.IsActive(fullscreenvideo)]">
+                    <param name="control">image</param>
+                    <width>infodialog_poster_w</width>
+                    <height>infodialog_poster_w</height>
+                    <centertop>infodialog_poster_w</centertop>
+                    <texture background="true">$VAR[Image_DiscArt]</texture>
+                    <bordersize>20</bordersize>
+                    <animation effect="rotate" condition="true" start="0" end="-360" loop="true" time="30000" center="auto" reversible="false">Conditional</animation>
+                </include>
+                <include content="Object_BigPoster" condition="![Window.IsVisible(movieinformation) | Window.IsActive(fullscreenvideo)]">
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="diffuse">diffuse/square_w560_h560.png</param>
+                    <height>infodialog_poster_w</height>
+                </include>
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_Info_Group">
+        <param name="titlelabel">$VAR[Label_Title]</param>
+        <param name="plotlabel">$VAR[Label_Plot]</param>
+        <definition>
+            <left>infodialog_left_w</left>
+            <bottom>-40</bottom>
+            <include content="Animation_Slide_In">
+                <param name="type">WindowOpen</param>
+                <param name="posx">320</param>
+                <param name="delay">400</param>
+            </include>
+            <include content="Animation_Slide_Out">
+                <param name="type">WindowClose</param>
+                <param name="posx">320</param>
+            </include>
+            <include content="Info_Panel" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
+                <param name="titlelabel">$PARAM[titlelabel]</param>
+                <param name="plotlabel">$PARAM[plotlabel]</param>
+                <param name="plotheight">160</param>
+                <param name="plotwidth">90%</param>
+                <param name="mainlogo_visible">$PARAM[mainlogo_visible]</param>
+                <param name="mainlogo_texture">$PARAM[mainlogo_texture]</param>
+                <param name="is_player">$PARAM[is_player]</param>
+                <param name="extended_include">$PARAM[extended_include]</param>
+            </include>
+            <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
+                <param name="titlelabel">$PARAM[titlelabel]</param>
+                <param name="plotlabel">$VAR[Label_DialogInfo_Biography]</param>
+                <param name="plotheight">560</param>
+                <param name="plotwidth">90%</param>
+                <param name="mainlogo_visible">$PARAM[mainlogo_visible]</param>
+                <param name="mainlogo_texture">$PARAM[mainlogo_texture]</param>
+                <param name="is_player">$PARAM[is_player]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_Widget_Group">
+        <top>880</top>
+        <bottom>-880</bottom>
+        <animation effect="slide" tween="quadratic" reversible="false" time="400" condition="ControlGroup(5000).HasFocus()" start="0" end="0,-880">Conditional</animation>
+        <animation effect="slide" tween="quadratic" reversible="false" time="400" condition="!ControlGroup(5000).HasFocus()" end="0" start="0,-880">Conditional</animation>
+    </include>
+
+    <include name="DialogInfo_Widget_Grouplist">
+        <orientation>vertical</orientation>
+        <control type="group" id="5999">
+            <height>widget_tbump_h</height>
+        </control>
+        <top>widget_grouplist_t_recommendations</top>
+        <bottom>widget_grouplist_b_recommendations</bottom>
+    </include>
+
+    <include name="DialogInfo_Furniture">
+        <control type="group">
+            <visible>!ControlGroup(5000).HasFocus()</visible>
+            <include content="Animation_Fade_In">
+                <param name="type">Visible</param>
+            </include>
+            <include content="Animation_Fade_Out">
+                <param name="type">Hidden</param>
+            </include>
+
+            <control type="group">
+                <include content="Animation_Slide_In">
+                    <param name="type">WindowOpen</param>
+                    <param name="posx">-320</param>
+                    <param name="delay">400</param>
+                </include>
+                <include content="Animation_Slide_Out">
+                    <param name="type">WindowClose</param>
+                    <param name="posx">-320</param>
+                </include>
+            </control>
+
+            <include>Furniture_Top_Right</include>
+            <include>Furniture_Bottom_Right</include>
+        </control>
+    </include>
+
+    <include name="DialogInfo_CrewItem">
+        <item>
+            <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].$PARAM[item].Name)]</label>
+            <label2>$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].$PARAM[item].Role)]</label2>
+            <icon>$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].$PARAM[item].Thumb)]</icon>
+            <property name="is_static">true</property>
+            <property name="fallback.icon">fallback/no-image-actor.png</property>
+            <property name="tmdb_type">person</property>
+            <property name="tmdb_id">$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].$PARAM[item].TMDb_ID)]</property>
+            <property name="folderpath">$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].$PARAM[item].TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=,]</property>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].$PARAM[item].TMDb_ID))</visible>
+        </item>
+    </include>
+
+    <include name="DialogInfo_CrewItems">
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">1</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">2</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">3</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">4</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">5</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">6</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">7</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">8</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">9</param>
+        </include>
+        <include content="DialogInfo_CrewItem">
+            <param name="type">$PARAM[type]</param>
+            <param name="item">10</param>
+        </include>
+    </include>
+
+    <include name="DialogInfo_CrewWidget">
+        <include content="Widget_Info_Row">
+            <param name="id">2$PARAM[id]</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$PARAM[label]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.$PARAM[type].1.Name))</param>
+            <!-- <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param> -->
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <include content="DialogInfo_CrewItems">
+                    <param name="type">$PARAM[type]</param>
+                </include>
+            </content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+        <!-- <include content="Widget_Info_Row">
+            <param name="id">0$PARAM[id]</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$INFO[Container(502$PARAM[id]).ListItem.Label]$INFO[Container(502$PARAM[id]).ListItem.Label2, (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">[$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus] + !Integer.IsEqual(Container(502$PARAM[id]).NumItems,0)]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID)) | Control.HasFocus(502$PARAM[id])</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$LOCALIZE[31046]</label>
+                    <icon>fallback/no-results.png</icon>
+                    <visible>Integer.IsEqual(Container(500$PARAM[id]).NumItems,0) | [Integer.IsEqual(Container(500$PARAM[id]).NumItems,1) + String.IsEqual(Container(500$PARAM[id]).ListItemAbsolute(0).Label,$LOCALIZE[31046])]</visible>
+                </item>
+            </content>
+            <content>$INFO[Container(502$PARAM[id]).ListItem.Property(tmdb_id),plugin://plugin.video.themoviedb.helper/?$PARAM[info]&amp;tmdb_id=,]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include> -->
+    </include>
+
+    <include name="DialogInfo_PersonWidgets">
+
+
+        <include content="Widget_Info_Row">
+            <param name="id">01</param>
+            <param name="baseid">50</param>
+            <param name="groupid">5101</param>
+            <param name="label">$LOCALIZE[20342]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">true</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$INFO[Window(Home).Property(TMDbHelper.ListItem.TMDB_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_movies&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_key=release_date]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+        <include content="Widget_Info_Row">
+            <param name="id">02</param>
+            <param name="baseid">50</param>
+            <param name="groupid">5102</param>
+            <param name="label">$LOCALIZE[20343]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$INFO[Window(Home).Property(TMDbHelper.ListItem.TMDB_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_tvshows&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_key=first_air_date]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+        <include content="Widget_Info_Row">
+            <param name="id">03</param>
+            <param name="baseid">50</param>
+            <param name="groupid">5103</param>
+            <param name="label">$LOCALIZE[31050]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$INFO[Window(Home).Property(TMDbHelper.ListItem.TMDB_ID),plugin://plugin.video.themoviedb.helper/?info=crew_in_both&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_key=year]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+    </include>
+
+    <include name="DialogInfo_VideoWidgets">
+
+        <include content="Widget_Info_Row" condition="Skin.HasSetting(Info.UseLocalCast)">
+            <param name="id">50</param>
+            <param name="baseid" />
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[206]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">true</param>
+
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+        </include>
+
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast)">
+            <param name="id">50</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[206]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">true</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content target="videos">$VAR[Path_VideoInfo_Generic,,&amp;info=cast&amp;aggregate=true]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <!-- Collection -->
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + !Skin.HasSetting(Info.UseLocalCast)">
+            <param name="id">11</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$INFO[Window(Home).Property(TMDbHelper.ListItem.Set.Name)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$INFO[Window(Home).Property(TMDbHelper.ListItem.Set.TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=collection&amp;tmdb_type=collection&amp;tmdb_id=,]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + Skin.HasSetting(Info.UseLocalCast)">
+            <param name="id">11</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$INFO[ListItem.Set]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$VAR[Path_VideoInfo_LocalSets]</content>
+            <include content="DialogInfo_Widgets_Action">
+                <param name="set_path">false</param>
+            </include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableStudio)">
+            <param name="id">12</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[572]$VAR[Label_FromStudio, (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$VAR[Path_FromStudio,plugin://plugin.video.themoviedb.helper/?info=discover]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableYear)">
+            <param name="id">13</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[345]$INFO[ListItem.Year, (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$INFO[Window(Home).Property(TMDbHelper.ListItem.Year),plugin://plugin.video.themoviedb.helper/?info=discover&amp;first_air_date_year=,&amp;vote_count.gte=10]$INFO[Window(Home).Property(TMDbHelper.ListItem.Year),&amp;primary_release_year=,]$VAR[Path_Param_Type,&amp;,]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableDirector)">
+            <param name="id">01</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[20339]$VAR[Label_FromDirector, (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$VAR[Label_FromDirector]</label>
+                    <label2>$LOCALIZE[20339]</label2>
+                    <icon>$VAR[Image_FromDirector]</icon>
+                    <property name="tmdb_type">person</property>
+                    <property name="tmdb_id">$VAR[Path_FromDirector]</property>
+                    <property name="folderpath">$VAR[Path_FromDirector,plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=,]</property>
+                    <property name="is_static">true</property>
+                    <visible>Integer.IsGreater(Container(5001).NumItems,1) | [Integer.IsEqual(Container(5001).NumItems,1) + String.IsEmpty(Container(5001).ListItemAbsolute(0).Property(is_static))]</visible>
+                </item>
+            </content>
+            <content>$VAR[Path_FromDirector,plugin://plugin.video.themoviedb.helper/?info=crew_in_both&amp;type=person&amp;filter_key=job&amp;filter_value=Director&amp;sort_key=year&amp;tmdb_id=,]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableWriter)">
+            <param name="id">02</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[20417]$VAR[Label_FromWriter, (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$VAR[Label_FromWriter]</label>
+                    <label2>$LOCALIZE[20417]</label2>
+                    <icon>$VAR[Image_FromWriter]</icon>
+                    <property name="tmdb_type">person</property>
+                    <property name="tmdb_id">$VAR[Path_FromWriter]</property>
+                    <property name="folderpath">$VAR[Path_FromWriter,plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=,]</property>
+                    <property name="is_static">true</property>
+                    <visible>Integer.IsGreater(Container(5002).NumItems,1) | [Integer.IsEqual(Container(5002).NumItems,1) + String.IsEmpty(Container(5002).ListItemAbsolute(0).Property(is_static))]</visible>
+                </item>
+            </content>
+            <content>$VAR[Path_FromWriter,plugin://plugin.video.themoviedb.helper/?info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Writing&amp;sort_key=year&amp;tmdb_id=,]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCreator)">
+            <param name="id">03</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[31065]$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.Name), (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.Name)]</label>
+                    <label2>$LOCALIZE[31065]</label2>
+                    <icon>$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.Thumb)]</icon>
+                    <property name="tmdb_type">person</property>
+                    <property name="tmdb_id">$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.TMDb_ID)]</property>
+                    <property name="folderpath">$INFO[$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.TMDb_ID)],plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=,]</property>
+                    <property name="is_static">true</property>
+                    <visible>Integer.IsGreater(Container(5003).NumItems,1) | [Integer.IsEqual(Container(5003).NumItems,1) + String.IsEmpty(Container(5003).ListItemAbsolute(0).Property(is_static))]</visible>
+                </item>
+            </content>
+            <content>$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Creator&amp;sort_key=year&amp;tmdb_id=]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + !Skin.HasSetting(VideoInfo.Widgets.DisableStarring)">
+            <param name="id">51</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$INFO[Container(5050).ListItemAbsolute(0).Label,$LOCALIZE[31076] (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$INFO[Container(5050).ListItemAbsolute(0).Label]</label>
+                    <label2>$INFO[Container(5050).ListItemAbsolute(0).Label2]</label2>
+                    <icon>$INFO[Container(5050).ListItemAbsolute(0).Icon]</icon>
+                    <property name="tmdb_type">person</property>
+                    <property name="tmdb_id">$INFO[Container(5050).ListItemAbsolute(0).Property(TMDb_ID)]</property>
+                    <property name="folderpath">$INFO[$INFO[Container(5050).ListItemAbsolute(0).Property(TMDb_ID)],plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=,]</property>
+                    <property name="is_static">true</property>
+                    <visible>Integer.IsGreater(Container(5051).NumItems,1) | [Integer.IsEqual(Container(5051).NumItems,1) + String.IsEmpty(Container(5051).ListItemAbsolute(0).Property(is_static))]</visible>
+                </item>
+            </content>
+            <content>$INFO[Container(5050).ListItemAbsolute(0).Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_both&amp;type=person&amp;sort_key=year&amp;tmdb_id=]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + !Skin.HasSetting(VideoInfo.Widgets.DisableStarring)">
+            <param name="id">52</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$INFO[Container(5050).ListItemAbsolute(1).Label,$LOCALIZE[31076] (,)]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="detailed">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$INFO[Container(5050).ListItemAbsolute(1).Label]</label>
+                    <label2>$INFO[Container(5050).ListItemAbsolute(1).Label2]</label2>
+                    <icon>$INFO[Container(5050).ListItemAbsolute(1).Icon]</icon>
+                    <property name="tmdb_type">person</property>
+                    <property name="tmdb_id">$INFO[Container(5050).ListItemAbsolute(1).Property(TMDb_ID)]</property>
+                    <property name="folderpath">$INFO[$INFO[Container(5050).ListItemAbsolute(1).Property(TMDb_ID)],plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=,]</property>
+                    <property name="is_static">true</property>
+                    <visible>Integer.IsGreater(Container(5052).NumItems,1) | [Integer.IsEqual(Container(5052).NumItems,1) + String.IsEmpty(Container(5052).ListItemAbsolute(1).Property(is_static))]</visible>
+                </item>
+            </content>
+            <content>$INFO[Container(5050).ListItemAbsolute(1).Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_both&amp;type=person&amp;sort_key=year&amp;tmdb_id=]$VAR[Path_Param_Widget]</content>
+            <include>DialogInfo_Widgets_Action</include>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">1</param>
+            <param name="type">Director</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=job&amp;filter_value=Director&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31038])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">2</param>
+            <param name="type">Writer</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Writing&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31039])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">3</param>
+            <param name="type">Creator</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Creator&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31065])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">4</param>
+            <param name="type">Producer</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Production&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[38039])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">5</param>
+            <param name="type">Sound_Department</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Sound&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31052])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">6</param>
+            <param name="type">Art_Department</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Art&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31072])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">7</param>
+            <param name="type">Photography</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Camera&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31347])</param>
+        </include>
+
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+            <param name="id">8</param>
+            <param name="type">Editor</param>
+            <param name="info">info=crew_in_both&amp;type=person&amp;filter_key=department&amp;filter_value=Editing&amp;sort_key=year</param>
+            <param name="label">$LOCALIZE[31050] ($LOCALIZE[31075])</param>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableVideos)">
+            <param name="id">14</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[10025] / $LOCALIZE[31482]</param>
+            <param name="include">List_Landscape_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$VAR[Path_VideoInfo_Trailers]</content>
+            <include content="Action_PlayTrailer_OnClick">
+                <param name="trailer">Container(5014).ListItem.FileNameAndPath</param>
+                <param name="trailer_fallback" />
+            </include>
+        </include>
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableComments)">
+            <param name="id">15</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[31030] / $LOCALIZE[31334]</param>
+            <param name="include">List_Reviews_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>
+                <item>
+                    <label>$LOCALIZE[31024]</label>
+                    <property name="special_icon">special://skin/extras/icons/trophy.png</property>
+                    <property name="sublabel">$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards)]</property>
+                    <property name="plotlabel">$INFO[Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_consensus),, ]$INFO[Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_reviewsfresh),$LOCALIZE[31054] , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_reviewstotal),$LOCALIZE[31055] , $LOCALIZE[31056] ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards),, ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Total_Awards_Won),[CR][CR][B]$LOCALIZE[31286] , $LOCALIZE[31064][/B][CR]]$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards_Won_CR)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Total_Awards_Nominated),[CR][CR][B]$LOCALIZE[31287] , $LOCALIZE[31064][/B][CR]]$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards_Nominated_CR)]</property>
+                    <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Awards)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_consensus))</visible>
+                </item>
+            </content>
+
+            <content>$VAR[Path_VideoInfo_Generic,,&amp;info=trakt_comments]</content>
+
+
+            <onclick>SetProperty(header,$INFO[ListItem.Label]$INFO[ListItem.Label2, - ,],1114)</onclick>
+            <onclick>SetProperty(textbox,$ESCINFO[Container(5015).ListItem.Plot]$ESCINFO[Container(5015).ListItem.Property(plotlabel)],1114)</onclick>
+            <onclick>ActivateWindow(1114)</onclick>
+        </include>
+
+
+
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableRecommendations)">
+            <param name="id">16</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[31018]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$VAR[Path_VideoInfo_Generic,,&amp;info=recommendations]</content>
+
+            <include>DialogInfo_Widgets_Action</include>
+
+        </include>
+
+    </include>
+
+    <include name="DialogInfo_GalleryWidget">
+        <include content="_Widget_Row">
+            <param name="id">5020</param>
+            <param name="groupid">5120</param>
+            <param name="label">$LOCALIZE[31098]</param>
+            <param name="include">List_Gallery_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="include_movement">false</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="widget_hideartwork">true</param>
+            <param name="widgetheight">widget_items_h_gallery</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+
+            <content>
+                <item>
+                    <icon>$INFO[ListItem.Art(thumb)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
+                    <visible>Window.IsVisible(DialogVideoInfo.xml)</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(fanart)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[Window(Home).Property(TMDbHelper.ListItem.Fanart)]</icon>
+                    <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Fanart))</visible>
+                    <visible>!String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Fanart),ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(fanart1)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(fanart1))</visible>
+                    <visible>!String.IsEqual(ListItem.Art(fanart1),ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(fanart2)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(fanart2))</visible>
+                    <visible>!String.IsEqual(ListItem.Art(fanart2),ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(fanart3)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(fanart3))</visible>
+                    <visible>!String.IsEqual(ListItem.Art(fanart3),ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(fanart4)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(fanart4))</visible>
+                    <visible>!String.IsEqual(ListItem.Art(fanart4),ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(fanart5)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(fanart5))</visible>
+                    <visible>!String.IsEqual(ListItem.Art(fanart5),ListItem.Art(fanart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(discart)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(discart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(clearart)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(clearart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(clearlogo)]</icon>
+                    <visible>!String.IsEmpty(ListItem.Art(clearlogo))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(album.discart)]</icon>
+                    <visible>String.IsEmpty(ListItem.Art(discart))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(album.discart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(artist.clearlogo)]</icon>
+                    <visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(artist.clearlogo))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(artist.clearart)]</icon>
+                    <visible>String.IsEmpty(ListItem.Art(clearart))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(artist.clearart))</visible>
+                </item>
+                <item>
+                    <icon>$INFO[ListItem.Art(artist.landscape)]</icon>
+                    <visible>String.IsEmpty(ListItem.Art(landscape))</visible>
+                    <visible>!String.IsEmpty(ListItem.Art(artist.landscape))</visible>
+                </item>
+            </content>
+            <include condition="Window.IsVisible(DialogVideoInfo.xml) + !String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoFanartContent</include>
+            <include condition="Window.IsVisible(DialogVideoInfo.xml) + String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_PersonImageContent</include>
+
+
+        </include>
+    </include>
+
+    <include name="DialogInfo_Widgets_Action">
+        <param name="set_path">true</param>
+        <definition>
+            <onclick>SetProperty(trailer,$INFO[Container.ListItem.Trailer],1114)</onclick>
+
+            <onclick condition="$PARAM[set_path] + !String.IsEmpty(Container.ListItem.FolderPath)">SetProperty(path,$INFO[Container.ListItem.FolderPath],1114)</onclick>
+            <onclick condition="$PARAM[set_path] + String.IsEmpty(Container.ListItem.FolderPath)">SetProperty(path,$INFO[Container.ListItem.Property(folderpath)],1114)</onclick>
+            <onclick condition="![$PARAM[set_path]]">ClearProperty(path,1114)</onclick>
+
+            <onclick>SetProperty(header,$INFO[Container.ListItem.Label]$INFO[Container.ListItem.Year, (,)],1114)</onclick>
+            <onclick>SetProperty(textbox,$ESCINFO[Container.ListItem.Plot,[B][COLOR=dialog_fg_90]$LOCALIZE[31028][/COLOR][/B][CR],],1114)</onclick>
+            <onclick>SetProperty(poster,$VAR[Image_Poster_Container],1114)</onclick>
+            <onclick>SetProperty(landscape,$VAR[Image_LandscapeOnly_Container],1114)</onclick>
+            <onclick>SetProperty(clearlogo,$VAR[Image_Clearlogo_Container],1114)</onclick>
+            <onclick>SetProperty(tmdb_id,$INFO[Container.ListItem.Property(tmdb_id)],1114)</onclick>
+            <onclick>SetProperty(tmdb_type,$INFO[Container.ListItem.Property(tmdb_type)],1114)</onclick>
+            <onclick>ActivateWindow(1114)</onclick>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_MusicWidgets">
+        <include content="Widget_Info_Row">
+            <param name="id">08</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[132]</param>
+            <param name="include">List_Square_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">true</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <onclick condition="!System.AddonIsEnabled(script.playalbum) + System.HasAddon(script.playalbum)">EnableAddon(script.playalbum)</onclick>
+            <onclick condition="!System.HasAddon(script.playalbum)">InstallAddon(script.playalbum)</onclick>
+
+            <!-- Album / Song Play -->
+            <onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEmpty(Container(5008).ListItem.DBID) + !String.IsEqual(Container(5008).ListItem.DBType,artist)">PlayMedia($ESCINFO[Container(5008).ListItem.FilenameAndPath])</onclick>
+            <onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(Container(5008).ListItem.DBType,album)">RunScript(script.playalbum,albumid=$INFO[Container(5008).ListItem.DBID])</onclick>
+            <onclick condition="System.AddonIsEnabled(script.playalbum) + String.IsEqual(Container(5008).ListItem.DBType,song)">RunScript(script.playalbum,songid=$INFO[Container(5008).ListItem.DBID])</onclick>
+
+            <content target="music">musicdb://albums/?xsp={"rules":{"and":[{"field":"artist","operator":"contains","value":["$INFO[Window.Property(Encoded.ListItem.Artist)]"]}]},"type":"albums"}</content>
+        </include>
+
+        <include content="Widget_Info_Row" condition="String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,song)">
+            <param name="id">50</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[134]</param>
+            <param name="include">List_Square_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <include content="Object_ContentDynamic" condition="String.IsEqual(ListItem.DBType,artist)">
+                <param name="target">music</param>
+                <param name="sortby">playcount</param>
+                <param name="sortorder">descending</param>
+                <param name="content">$INFO[Window.Property(Encoded.ListItem.Artist),musicdb://songs/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22artist%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22songs%22%7D]</param>
+            </include>
+            <include content="Object_ContentDynamic" condition="String.IsEqual(ListItem.DBType,song)">
+                <param name="target">music</param>
+                <param name="sortby">track</param>
+                <param name="sortorder">ascending</param>
+                <param name="content">$INFO[Window.Property(Encoded.ListItem.Album),musicdb://songs/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22album%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22songs%22%7D]</param>
+            </include>
+        </include>
+        <include content="Widget_Info_Row" condition="String.IsEqual(ListItem.DBType,album)">
+            <param name="id">50</param>
+            <param name="baseid" />
+            <param name="basegroupid">51</param>
+            <param name="label">$LOCALIZE[134]</param>
+            <param name="include">List_Square_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+        </include>
+
+
+        <include content="Widget_Info_Row">
+            <param name="id">02</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">YouTube</param>
+            <param name="include">List_Landscape_Row</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="detailed">true</param>
+            <param name="widget_hideartwork">!Skin.HasSetting(Widgets.DontHideArtworkOnClassic)</param>
+            <param name="widget_showoverlay">true</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <include content="Action_PlayTrailer_OnClick">
+                <param name="trailer">Container(5002).ListItem.FileNameAndPath</param>
+                <param name="trailer_fallback" />
+            </include>
+
+            <content target="videos">$VAR[Path_Youtube_Query,plugin://plugin.video.youtube/kodion/search/query/?q=,&amp;search_type=notvalid]</content>
+        </include>
+    </include>
+
+    <include name="DialogInfo_Onload">
+        <onload>ClearProperty(TMDbHelper.WidgetContainer)</onload>
+    </include>
+
+    <include name="DialogInfo_VideoVersions_Content">
+        <onback>8000</onback>
+        <onclick>Dialog.Close(movieinformation,true)</onclick>
+        <onclick>PlayMedia($ESCINFO[Container(8908).ListItem.FileNameAndPath])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,close_dialog=1190)</onclick>
+        <content>$INFO[ListItem.DBID,videodb://movies/videoversions/0?mediaid=,]</content>
+    </include>
+
+    <include name="DialogInfo_Button_GroupBuiltin">
+        <visible>Control.IsVisible($PARAM[id])</visible>
+        <animation effect="fade" start="100" end="43" condition="!Control.IsEnabled($PARAM[id])">Conditional</animation>
+    </include>
+
+    <include name="DialogInfo_Button_RadioCross">
+        <textureradiooffdisabled colordiffuse="$PARAM[color_disabled]">buttons/cross.png</textureradiooffdisabled>
+        <textureradioofffocus colordiffuse="$VAR[ColorSelected]">buttons/cross.png</textureradioofffocus>
+        <textureradiooffnofocus colordiffuse="$PARAM[color_nofocus]">buttons/cross.png</textureradiooffnofocus>
+    </include>
+
+    <include name="DialogInfo_Button_RadioRound">
+        <textureradiooffdisabled colordiffuse="$PARAM[color_disabled]">buttons/check-off.png</textureradiooffdisabled>
+        <textureradioofffocus colordiffuse="$VAR[ColorSelected]">buttons/check-off.png</textureradioofffocus>
+        <textureradiooffnofocus colordiffuse="$PARAM[color_nofocus]">buttons/check-off.png</textureradiooffnofocus>
+        <textureradioondisabled colordiffuse="$PARAM[color_disabled]">buttons/check-off.png</textureradioondisabled>
+        <textureradioonfocus colordiffuse="$VAR[ColorSelected]">buttons/check-off.png</textureradioonfocus>
+        <textureradioonnofocus colordiffuse="$PARAM[color_nofocus]">buttons/check-off.png</textureradioonnofocus>
+    </include>
+
+    <include name="DialogInfo_Button_RadioCheck">
+        <textureradioondisabled colordiffuse="$PARAM[color_disabled]">buttons/check-on.png</textureradioondisabled>
+        <textureradioonfocus colordiffuse="$VAR[ColorSelected]">buttons/check-on.png</textureradioonfocus>
+        <textureradioonnofocus colordiffuse="$PARAM[color_nofocus]">buttons/check-on.png</textureradioonnofocus>
+    </include>
+
+    <include name="DialogInfo_ExpandedButton">
+        <param name="icon_size">40</param>
+        <param name="bordersize">-4</param>
+        <param name="visible">true</param>
+        <param name="vertical">true</param>
+        <param name="textcolor">main_fg</param>
+        <param name="nf_opacity">70</param>
+        <param name="db_opacity">30</param>
+        <param name="control">button</param>
+        <param name="builtin">false</param>
+        <param name="radiocross">false</param>
+        <param name="radiocheck">false</param>
+        <param name="radioround">false</param>
+        <definition>
+            <control type="$PARAM[control]" id="$PARAM[id]">
+                <height>80</height>
+                <visible>$PARAM[visible]</visible>
+
+                <font />
+                <label />
+
+                <radiowidth>64</radiowidth>
+
+                <!-- <textcolor>$PARAM[textcolor]_$PARAM[nf_opacity]</textcolor>
+                <selectedcolor>$PARAM[textcolor]_$PARAM[nf_opacity]</selectedcolor>
+                <label>$PARAM[label]</label>
+                <align>left</align>
+                <font>font_mini</font> -->
+
+                <!-- <radiowidth>36</radiowidth>
+                <radioheight>16</radioheight>
+                <radioposy>50</radioposy> -->
+
+                <!-- <include content="DialogInfo_Button_RadioCheck" condition="$PARAM[radiocheck]">
+                    <param name="color_nofocus">$PARAM[textcolor]_$PARAM[nf_opacity]</param>
+                    <param name="color_disabled">$PARAM[textcolor]_$PARAM[db_opacity]</param>
+                </include>
+
+                <include content="DialogInfo_Button_RadioCross" condition="$PARAM[radiocross]">
+                    <param name="color_nofocus">$PARAM[textcolor]_$PARAM[nf_opacity]</param>
+                    <param name="color_disabled">$PARAM[textcolor]_$PARAM[db_opacity]</param>
+                </include>
+
+                <include content="DialogInfo_Button_RadioRound" condition="$PARAM[radioround]">
+                    <param name="color_nofocus">$PARAM[textcolor]_$PARAM[nf_opacity]</param>
+                    <param name="color_disabled">$PARAM[textcolor]_$PARAM[db_opacity]</param>
+                </include> -->
+
+                <texturenofocus />
+                <nested />
+            </control>
+            <control type="group" id="$PARAM[groupid]">
+                <top>-80</top>
+                <height>80</height>
+                <visible>$PARAM[visible]</visible>
+                <visible>Control.IsVisible($PARAM[id])</visible>
+                <control type="group">
+                    <centertop>50%</centertop>
+                    <centerleft>40</centerleft>
+                    <width>$PARAM[icon_size]</width>
+                    <height>$PARAM[icon_size]</height>
+                    <control type="image">
+                        <texture colordiffuse="$PARAM[textcolor]_$PARAM[db_opacity]">$PARAM[icon]</texture>
+                        <aspectratio>keep</aspectratio>
+                        <bordersize>icon_menu_bordersize</bordersize>
+                        <bordersize>$PARAM[bordersize]</bordersize>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                        <visible>!Control.IsEnabled($PARAM[id])</visible>
+                    </control>
+                    <control type="image">
+                        <texture colordiffuse="$PARAM[textcolor]_$PARAM[nf_opacity]">$PARAM[icon]</texture>
+                        <aspectratio>keep</aspectratio>
+                        <bordersize>icon_menu_bordersize</bordersize>
+                        <bordersize>$PARAM[bordersize]</bordersize>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                        <visible>Control.IsEnabled($PARAM[id])</visible>
+                    </control>
+                    <control type="image">
+                        <texture colordiffuse="$VAR[ColorSelected]">$PARAM[icon]</texture>
+                        <aspectratio>keep</aspectratio>
+                        <bordersize>icon_menu_bordersize</bordersize>
+                        <bordersize>$PARAM[bordersize]</bordersize>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                </control>
+                <control type="group">
+                    <centertop>50%</centertop>
+                    <left>80</left>
+                    <control type="label">
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[textcolor]_$PARAM[db_opacity]</textcolor>
+                        <font>font_mini</font>
+                        <align>left</align>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                        <visible>!Control.IsEnabled($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <label>$PARAM[label]</label>
+                        <textcolor>$PARAM[textcolor]_$PARAM[nf_opacity]</textcolor>
+                        <font>font_mini</font>
+                        <align>left</align>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                        <visible>Control.IsEnabled($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <label>$PARAM[label]</label>
+                        <textcolor>$VAR[ColorSelected]</textcolor>
+                        <font>font_mini</font>
+                        <align>left</align>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_Button">
+        <param name="back_size">160</param>
+        <param name="icon_size">40</param>
+        <param name="bordersize">-4</param>
+        <param name="itemgap">0</param>
+        <param name="visible">true</param>
+        <param name="vertical">true</param>
+        <param name="textcolor">main_fg</param>
+        <param name="nf_opacity">70</param>
+        <param name="db_opacity">30</param>
+        <param name="control">button</param>
+        <param name="builtin">false</param>
+        <param name="radioround">false</param>
+        <param name="radiocross">false</param>
+        <param name="radiocheck">true</param>
+        <param name="zoom_in_delay">0</param>
+        <param name="zoom_in_include">false</param>
+        <param name="include_tooltip">false</param>
+        <param name="include_hintlabel">false</param>
+        <param name="include_customwidth">false</param>
+        <param name="back_width">200</param>
+        <param name="icon_offset_x">-20</param>
+        <definition>
+            <control type="$PARAM[control]" id="$PARAM[id]">
+                <include content="Object_Top" condition="$PARAM[vertical]">
+                    <param name="top">$PARAM[itemgap]</param>
+                </include>
+                <include content="Object_Left" condition="!$PARAM[vertical]">
+                    <param name="left">$PARAM[itemgap]</param>
+                </include>
+
+                <include content="Animation_DialogInfoButton_ZoomIn" condition="$PARAM[zoom_in_include]">
+                    <param name="delay">$PARAM[zoom_in_delay]</param>
+                </include>
+                <height>$PARAM[back_size]</height>
+
+                <include content="Object_Width" condition="$PARAM[include_customwidth]">
+                    <param name="width">$PARAM[back_width]</param>
+                </include>
+
+                <width>$PARAM[back_size]</width>
+                <include>Texture_CircleButtonDialog_Highlight_Focus_V</include>
+                <texturenofocus />
+                <visible>$PARAM[visible]</visible>
+                <textcolor>00ffffff</textcolor>
+                <selectedcolor>00ffffff</selectedcolor>
+                <!-- <textcolor>$PARAM[textcolor]_$PARAM[nf_opacity]</textcolor>
+                <selectedcolor>$PARAM[textcolor]_$PARAM[nf_opacity]</selectedcolor> -->
+                <radiowidth>100</radiowidth>
+                <radioheight>14</radioheight>
+                <radioposy>56</radioposy>
+
+                <include content="DialogInfo_Button_RadioCheck" condition="$PARAM[radiocheck]">
+                    <param name="color_nofocus">$PARAM[textcolor]_$PARAM[nf_opacity]</param>
+                    <param name="color_disabled">$PARAM[textcolor]_$PARAM[db_opacity]</param>
+                </include>
+
+                <include content="DialogInfo_Button_RadioCross" condition="$PARAM[radiocross]">
+                    <param name="color_nofocus">$PARAM[textcolor]_$PARAM[nf_opacity]</param>
+                    <param name="color_disabled">$PARAM[textcolor]_$PARAM[db_opacity]</param>
+                </include>
+
+                <include content="DialogInfo_Button_RadioRound" condition="$PARAM[radioround]">
+                    <param name="color_nofocus">$PARAM[textcolor]_$PARAM[nf_opacity]</param>
+                    <param name="color_disabled">$PARAM[textcolor]_$PARAM[db_opacity]</param>
+                </include>
+
+                <textureradioondisabled colordiffuse="00ffffff">buttons/check-on.png</textureradioondisabled>
+                <textureradioonfocus colordiffuse="00ffffff">buttons/check-on.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="00ffffff">buttons/check-on.png</textureradioonnofocus>
+
+                <textureradiooffdisabled colordiffuse="00ffffff">buttons/check-off.png</textureradiooffdisabled>
+                <textureradioofffocus colordiffuse="00ffffff">buttons/check-off.png</textureradioofffocus>
+                <textureradiooffnofocus colordiffuse="00ffffff">buttons/check-off.png</textureradiooffnofocus>
+
+                <nested />
+
+                <include content="DialogInfo_Button_HintLabel" condition="$PARAM[include_hintlabel]">
+                    <param name="label">$PARAM[label]</param>
+                </include>
+            </control>
+            <control type="group" id="$PARAM[groupid]">
+
+                <include content="Animation_DialogInfoButton_ZoomIn" condition="$PARAM[zoom_in_include]">
+                    <param name="delay">$PARAM[zoom_in_delay]</param>
+                </include>
+
+                <include content="Object_Top" condition="$PARAM[vertical]">
+                    <param name="top">-110</param>
+                </include>
+                <include content="Object_Left" condition="$PARAM[vertical]">
+                    <param name="left">60</param>
+                </include>
+
+                <include content="Object_Top" condition="!$PARAM[vertical]">
+                    <param name="top">50</param>
+                </include>
+                <include content="Object_Left" condition="!$PARAM[vertical]">
+                    <param name="left">-100</param>
+                </include>
+
+
+                <width>$PARAM[icon_size]</width>
+                <height>$PARAM[icon_size]</height>
+                <visible>$PARAM[visible]</visible>
+
+                <include content="DialogInfo_Button_GroupBuiltin" condition="$PARAM[builtin]">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+
+
+
+
+
+                <control type="group">
+
+                    <top>10</top>
+                    <animation effect="slide" start="0" end="0,-10" condition="$PARAM[include_hintlabel] + Control.HasFocus($PARAM[id])">Conditional</animation>
+
+                    <include content="Object_Left" condition="$PARAM[include_customwidth]">
+                        <param name="left">$PARAM[icon_offset_x]</param>
+                    </include>
+
+                    <height>$PARAM[icon_size]</height>
+
+                    <control type="image">
+                        <texture colordiffuse="$PARAM[textcolor]_$PARAM[nf_opacity]">$PARAM[icon]</texture>
+                        <aspectratio>keep</aspectratio>
+                        <bordersize>icon_menu_bordersize</bordersize>
+                        <bordersize>$PARAM[bordersize]</bordersize>
+                        <width>$PARAM[icon_size]</width>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="image">
+                        <texture colordiffuse="$VAR[ColorSelected]">$PARAM[icon]</texture>
+                        <aspectratio>keep</aspectratio>
+                        <bordersize>icon_menu_bordersize</bordersize>
+                        <bordersize>$PARAM[bordersize]</bordersize>
+                        <width>$PARAM[icon_size]</width>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_Button_HintLabel">
+        <param name="textcolor">dialog_fg</param>
+        <definition>
+            <label>$PARAM[label]</label>
+            <textcolor>$PARAM[textcolor]_90</textcolor>
+            <focusedcolor>$VAR[ColorSelected]</focusedcolor>
+            <font>font_hint</font>
+            <align>center</align>
+            <aligny>top</aligny>
+            <textoffsetx>48</textoffsetx>
+            <textoffsety>84</textoffsety>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_Button_PlayBrowse">
+        <param name="width">265</param>
+        <param name="id">4001</param>
+        <param name="groupid">4101</param>
+        <param name="name">$VAR[Label_DialogInfo_Title]</param>
+        <param name="role">$VAR[Label_DialogInfo_PlayButton]</param>
+        <param name="icon">$VAR[Image_DialogInfo_PlayButton]</param>
+        <param name="include_detailed_labels">false</param>
+        <definition>
+            <control type="button" id="$PARAM[id]">
+                <width>$PARAM[width]</width>
+                <height>80</height>
+                <centertop>50%</centertop>
+                <texturenofocus />
+                <nested />
+            </control>
+
+            <control type="group" id="$PARAM[groupid]">
+                <left>-$PARAM[width]</left>
+                <height>80</height>
+                <width>$PARAM[width]</width>
+                <centertop>50%</centertop>
+                <control type="group">
+                    <left>-20</left>
+                    <control type="group">
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                        <include content="Object_InfoCircle">
+                            <param name="name">$PARAM[name]</param>
+                            <param name="role">$PARAM[role]</param>
+                            <param name="icon">$PARAM[icon]</param>
+                            <param name="shadow_colordiffuse">shadow_hard</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <control type="label">
+                                <font>font_mini_bold</font>
+                                <label>$PARAM[role]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <textcolor>main_fg_90</textcolor>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <right>40</right>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                        <include content="Object_InfoCircle">
+                            <param name="name">$PARAM[name]</param>
+                            <param name="role">$PARAM[role]</param>
+                            <param name="icon">$PARAM[icon]</param>
+                            <param name="textcolor_top">$VAR[ColorSelected]</param>
+                            <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                            <param name="colorbacking">$VAR[ColorSelected]</param>
+                            <param name="colordiffuse">$VAR[ColorSelectedInverted]</param>
+                            <param name="shadow_colordiffuse">00ffffff</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <control type="label">
+                                <font>font_mini_bold</font>
+                                <label>$PARAM[role]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <textcolor>$VAR[ColorSelected]</textcolor>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Additional Video Info Details not included in info line such as Director and Genres -->
+    <include name="DialogInfo_VideoDetails">
+        <definition>
+
+            <control type="group">
+                <top>15</top>
+            </control>
+
+            <control type="group">
+                <left>20</left>
+                <height>80</height>
+                <control type="grouplist" id="9000">
+                    <orientation>horizontal</orientation>
+                    <top>-40</top>
+                    <height>160</height>
+                    <ondown>5000</ondown>
+                    <onup>61</onup>
+
+                    <include content="DialogInfo_Button_PlayBrowse">
+                        <onfocus>ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
+                        <onclick condition="ListItem.HasVideoVersions">SetFocus(8908)</onclick>
+                        <onclick condition="!ListItem.HasVideoVersions">SendClick(8)</onclick>
+                        <onclick condition="!ListItem.HasVideoVersions">RunScript(plugin.video.themoviedb.helper,close_dialog=1190)</onclick>
+                        <onfocus>ClearProperty(DetailsView)</onfocus>
+                    </include>
+
+                    <include>Items_DialogVideoInfo_MenuBar</include>
+                </control>
+            </control>
+
+            <control type="group">
+                <left>0</left>
+                <right>80</right>
+                <height>320</height>
+
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <width>480</width>
+                    <height>320</height>
+
+                    <!-- Director -->
+                    <include content="Object_InfoCircle">
+                        <param name="name">$VAR[Label_FromDirector]</param>
+                        <param name="role">$LOCALIZE[20339]</param>
+                        <param name="icon">special://skin/extras/icons/video-addons.png</param>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$VAR[Image_DirectorIcon]</param>
+                        </include>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director)) | !String.IsEmpty(ListItem.Director)</visible>
+                    </include>
+
+                    <!-- Writer -->
+                    <include content="Object_InfoCircle">
+                        <param name="name">$VAR[Label_FromWriter]</param>
+                        <param name="role">$LOCALIZE[20417]</param>
+                        <param name="icon">special://skin/extras/icons/write.png</param>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$VAR[Image_WriterIcon]</param>
+                        </include>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer)) | !String.IsEmpty(ListItem.Writer)</visible>
+                    </include>
+
+                    <!-- Creator -->
+                    <!-- <include content="Object_InfoCircle">
+                        <param name="name">$VAR[Label_Creator]</param>
+                        <param name="role">$LOCALIZE[31065]</param>
+                        <param name="icon">special://skin/extras/icons/person.png</param>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$VAR[Image_CreatorIcon]</param>
+                        </include>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Creator)) | !String.IsEmpty(ListItem.Property(Creator))</visible>
+                    </include> -->
+
+                    <!-- Studio -->
+                    <include content="Object_InfoCircle">
+                        <param name="name">$VAR[Label_FromStudio]</param>
+                        <param name="role">$LOCALIZE[572]</param>
+                        <!-- <param name="icon">special://skin/extras/icons/director.png</param> -->
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">main_bg_100</param>
+                            <param name="icon">common/white.png</param>
+                        </include>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$VAR[Image_CombinedStudio]</param>
+                            <param name="aspectratio">keep</param>
+                            <param name="fallback">special://skin/extras/icons/director.png</param>
+                        </include>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio)) | !String.IsEmpty(ListItem.Studio)</visible>
+                    </include>
+
+                    <!-- Episodes -->
+                    <include content="Object_InfoCircle">
+                        <param name="name">$INFO[ListItem.Property(watchedepisodes),$LOCALIZE[16102] , $LOCALIZE[1443] ]$INFO[ListItem.Property(totalepisodes)] $LOCALIZE[20453]</param>
+                        <param name="role">$LOCALIZE[20360]</param>
+                        <param name="icon">special://skin/extras/icons/photo-film.png</param>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$INFO[ListItem.Art(poster)]</param>
+                        </include>
+                        <visible>!String.IsEmpty(ListItem.Property(totalepisodes))</visible>
+                    </include>
+
+                    <!-- Codecs -->
+                    <include content="Object_InfoCircle">
+                        <param name="name">[UPPERCASE]$INFO[ListItem.VideoResolution,, • ]$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
+                        <param name="role">$INFO[ListItem.VideoVersionName]</param>
+                        <param name="icon">special://skin/extras/icons/photo-film.png</param>
+                        <param name="fallback_role">$LOCALIZE[31207]</param>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$INFO[ListItem.Art(poster)]</param>
+                        </include>
+                        <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
+                    </include>
+
+                    <!-- Providers -->
+                    <include content="Object_InfoCircle">
+                        <param name="name">$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.1.Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.2.Name), • ,]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.3.Name), • ,]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.4.Name), • ,]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.5.Name), • ,]</param>
+                        <param name="role">JustWatch</param>
+                        <param name="icon">special://skin/extras/icons/photo-film.png</param>
+                        <include content="Object_InfoCircle_Image">
+                            <param name="colordiffuse">white</param>
+                            <param name="icon">$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.1.Icon)]</param>
+                        </include>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Provider.1.Icon))</visible>
+                        <visible>String.IsEmpty(ListItem.VideoCodec)</visible>
+                        <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,tvshow)</visible>
+                    </include>
+                </control>
+
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <height>320</height>
+                    <left>480</left>
+
+                    <!-- Genre -->
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/genre.png</param>
+                        <param name="role">$LOCALIZE[515]</param>
+                        <param name="name">$VAR[Label_Genre]</param>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Genre)) | !String.IsEmpty(ListItem.Genre)</visible>
+                    </include>
+
+                    <!-- Country -->
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/earth-americas.png</param>
+                        <param name="role">$LOCALIZE[574]</param>
+                        <param name="name">$VAR[Label_Country]</param>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Country)) | !String.IsEmpty(ListItem.Country)</visible>
+                    </include>
+
+                    <!-- Budget / Revenue -->
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/coins.png</param>
+                        <param name="role">$LOCALIZE[31264] / $LOCALIZE[31265]</param>
+                        <param name="name">$INFO[Window(Home).Property(TMDbHelper.ListItem.Revenue),, $LOCALIZE[31373] ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Budget)]</param>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Revenue)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Budget))</visible>
+                        <visible>!String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Budget),$0)</visible>
+                    </include>
+
+                    <!-- Awards -->
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/trophy.png</param>
+                        <param name="role">$LOCALIZE[31064]</param>
+                        <param name="name">$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards)]</param>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Awards))</visible>
+                    </include>
+
+                    <!-- Tagline -->
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/tag.png</param>
+                        <param name="role">$LOCALIZE[202]</param>
+                        <param name="name">$INFO[Window(Home).Property(TMDbHelper.ListItem.Tagline)]</param>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Tagline))</visible>
+                    </include>
+                </control>
+
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_MusicDetails">
+        <definition>
+            <control type="group">
+                <top>15</top>
+            </control>
+
+            <control type="group">
+                <left>20</left>
+                <height>80</height>
+                <control type="grouplist" id="9000">
+                    <orientation>horizontal</orientation>
+                    <top>-40</top>
+                    <height>160</height>
+                    <ondown>5000</ondown>
+                    <onup>61</onup>
+
+                    <include content="DialogInfo_Button_PlayBrowse">
+                        <onfocus>ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
+                        <!-- Addon Not Installed -->
+                        <onclick condition="!String.IsEqual(ListItem.DBType,artist) + !System.AddonIsEnabled(script.playalbum) + System.HasAddon(script.playalbum)">EnableAddon(script.playalbum)</onclick>
+                        <onclick condition="!String.IsEqual(ListItem.DBType,artist) + !System.HasAddon(script.playalbum)">InstallAddon(script.playalbum)</onclick>
+
+                        <!-- Addon Installed -->
+                        <onclick condition="String.IsEqual(ListItem.DBType,artist)">Dialog.Close(musicinformation)</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,artist)">Dialog.Close(songinformation)</onclick>
+
+                        <!-- Artist Browse -->
+                        <onclick condition="String.IsEqual(ListItem.DBType,artist) + Window.IsVisible(music)">Container.Update($VAR[Path_MusicInfo_ArtistFolder])</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,artist) + !Window.IsVisible(music)">ActivateWindow(music,$VAR[Path_MusicInfo_ArtistFolder],return)</onclick>
+
+                        <!-- Album / Song Play -->
+                        <onclick condition="!String.IsEqual(ListItem.DBType,artist) + System.AddonIsEnabled(script.playalbum) + String.IsEmpty(ListItem.DBID) + !String.IsEqual(ListItem.DBType,artist)">PlayMedia($ESCINFO[ListItem.FilenameAndPath])</onclick>
+                        <onclick condition="!String.IsEqual(ListItem.DBType,artist) + System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,album)">RunScript(script.playalbum,albumid=$INFO[ListItem.DBID])</onclick>
+                        <onclick condition="!String.IsEqual(ListItem.DBType,artist) + System.AddonIsEnabled(script.playalbum) + String.IsEqual(ListItem.DBType,song)">RunScript(script.playalbum,songid=$INFO[ListItem.DBID])</onclick>
+                        <onfocus>ClearProperty(DetailsView)</onfocus>
+                    </include>
+
+                    <include>Items_DialogMusicInfo_MenuBar</include>
+                </control>
+            </control>
+
+            <control type="group">
+                <left>0</left>
+                <right>80</right>
+                <height>320</height>
+
+                <!-- Left Details -->
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <width>480</width>
+                    <height>320</height>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/genre.png</param>
+                        <param name="role">$LOCALIZE[515]</param>
+                        <param name="name">$INFO[ListItem.Genre]</param>
+                        <visible>!String.IsEmpty(ListItem.Genre)</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/headphones-simple.png</param>
+                        <param name="role">$LOCALIZE[31308]</param>
+                        <param name="name">$VAR[Label_MusicMood]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Mood)) | !String.IsEmpty(ListItem.Property(Album_Mood))</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/drum.png</param>
+                        <param name="role">$LOCALIZE[736]</param>
+                        <param name="name">$VAR[Label_MusicStyle]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Style)) | !String.IsEmpty(ListItem.Property(Album_Style))</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/radio.png</param>
+                        <param name="role">$LOCALIZE[467]</param>
+                        <param name="name">$VAR[Label_MusicType]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Type)) | !String.IsEmpty(ListItem.Property(Album_Type))</visible>
+                    </include>
+
+
+                </control>
+
+
+                <!-- Right Details -->
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <height>320</height>
+                    <left>480</left>
+                    <!-- <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/cake-candles.png</param>
+                        <param name="role">$LOCALIZE[21893]</param>
+                        <param name="name">$INFO[ListItem.Property(Artist_Born)]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Born))</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/cross.png</param>
+                        <param name="role">$LOCALIZE[21897]</param>
+                        <param name="name">$INFO[ListItem.Property(Artist_Died)]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Died))</visible>
+                    </include> -->
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/people-group.png</param>
+                        <param name="role">$LOCALIZE[21894]</param>
+                        <param name="name">$INFO[ListItem.Property(Artist_Formed)]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Formed))</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/explosion.png</param>
+                        <param name="role">$LOCALIZE[21896]</param>
+                        <param name="name">$INFO[ListItem.Property(Artist_Disbanded)]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Disbanded))</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/guitar.png</param>
+                        <param name="role">$LOCALIZE[31307]</param>
+                        <param name="name">$INFO[ListItem.Property(Artist_Instrument)]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Artist_Instrument))</visible>
+                    </include>
+                    <include content="Object_InfoCircle">
+                        <param name="icon">special://skin/extras/icons/compact-disc.png</param>
+                        <param name="role">$LOCALIZE[21899]</param>
+                        <param name="name">$INFO[ListItem.Property(Album_Label)]</param>
+                        <visible>!String.IsEmpty(ListItem.Property(Album_Label))</visible>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_PlotBox_Artwork">
+        <param name="poster_icon">$VAR[Image_PlotBoxPoster]</param>
+        <param name="square_icon">$INFO[ListItem.Icon]</param>
+        <param name="landscape_icon">$VAR[Image_Landscape]</param>
+        <param name="clearlogo_icon">$VAR[Image_Clearlogo]</param>
+        <param name="topline">true</param>
+        <param name="subline">true</param>
+        <definition>
+            <control type="group">
+                <width>360</width>
+                <left>20</left>
+                <top>20</top>
+                <bottom>20</bottom>
+
+                <include content="Object_Control" condition="$PARAM[topline]">
+                    <param name="control">image</param>
+                    <top>-40</top>
+                    <height>1</height>
+                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                </include>
+                <include content="Object_Control" condition="$PARAM[subline]">
+                    <param name="control">image</param>
+                    <bottom>-40</bottom>
+                    <height>1</height>
+                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                </include>
+
+                <!-- Hidden Images to Test Availability -->
+                <control type="image" id="99981">
+                    <texture background="true" colordiffuse="00ffffff">$PARAM[poster_icon]</texture>
+                </control>
+                <control type="image" id="99982">
+                    <texture background="true" colordiffuse="00ffffff">$PARAM[square_icon]</texture>
+                </control>
+                <control type="image" id="99983">
+                    <texture background="true" colordiffuse="00ffffff">$PARAM[landscape_icon]</texture>
+                </control>
+
+                <!-- Visible Images Based On Availability -->
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <itemgap>40</itemgap>
+                    <control type="group">
+                        <height>517.50</height>
+                        <visible>!String.IsEmpty(Control.GetLabel(99981))</visible>
+                        <include content="Dialog_Outline_InnerBox">
+                            <control type="image">
+                                <aspectratio scalediffuse="false">scale</aspectratio>
+                                <texture background="true" diffuse="diffuse/poster_w360_h518.png">$PARAM[poster_icon]</texture>
+                            </control>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <height>360</height>
+                        <visible>String.IsEmpty(Control.GetLabel(99981))</visible>
+                        <visible>!String.IsEmpty(Control.GetLabel(99982))</visible>
+                        <include content="Dialog_Outline_InnerBox">
+                            <control type="image">
+                                <aspectratio scalediffuse="false">keep</aspectratio>
+                                <texture background="true" diffuse="diffuse/square_w360_h360.png">$PARAM[square_icon]</texture>
+                            </control>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <height>202.50</height>
+                        <visible>!String.IsEmpty(Control.GetLabel(99983))</visible>
+                        <include content="Dialog_Outline_InnerBox">
+                            <control type="image">
+                                <aspectratio scalediffuse="false">scale</aspectratio>
+                                <texture background="true" diffuse="diffuse/landscape_w360_h203.png">$PARAM[landscape_icon]</texture>
+                            </control>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <height>117.5</height>
+                        <visible>String.IsEmpty(Control.GetLabel(99981))</visible>
+                        <control type="image">
+                            <aspectratio scalediffuse="false" aligny="center">keep</aspectratio>
+                            <texture background="true">$PARAM[clearlogo_icon]</texture>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_PlotBox_OnMove">
+        <onright>8000</onright>
+        <onleft>8000</onleft>
+        <onback>8000</onback>
+        <showonepage>true</showonepage>
+    </include>
+
+    <include name="DialogInfo_PlotBox_Foreground">
+        <param name="header">$VAR[Label_Title]</param>
+        <param name="textbox">$VAR[Label_Overlay_PlotBox]</param>
+        <param name="include_movement">DialogInfo_PlotBox_OnMove</param>
+        <param name="include_buttons_condition">false</param>
+        <param name="scrollbar_fakefocus">false</param>
+        <definition>
+            <include content="Dialog_Foreground_Side">
+                <param name="slide_condition">true</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="topline">false</param>
+                <param name="subline">false</param>
+            </include>
+
+            <control type="group">
+                <include content="Object_Right" condition="$PARAM[include_buttons_condition]">
+                    <param name="right">dialog_panelgroup_w</param>
+                </include>
+                <!-- Header -->
+                <include content="Dialog_Head">
+                    <param name="label">$PARAM[header]</param>
+                </include>
+
+                <!-- Content -->
+                <control type="group">
+                    <include>Dimension_Dialog_Body</include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body_Group</include>
+                        <include content="DialogInfo_PlotBox_Artwork">
+                            <param name="poster_icon">$PARAM[poster_icon]</param>
+                            <param name="square_icon">$PARAM[square_icon]</param>
+                            <param name="landscape_icon">$PARAM[landscape_icon]</param>
+                            <param name="clearlogo_icon">$PARAM[clearlogo_icon]</param>
+                        </include>
+                        <include content="Dialog_Outline_InnerBox">
+                            <left>420</left>
+                            <top>-20</top>
+                            <bottom>-20</bottom>
+                            <right>20</right>
+                        </include>
+                        <control type="textbox">
+                            <font>font_midi_plot</font>
+                            <textcolor>dialog_fg_70</textcolor>
+                            <pagecontrol>61</pagecontrol>
+                            <label>$PARAM[textbox]</label>
+                            <autoscroll>false</autoscroll>
+                            <left>460</left>
+                            <right>60</right>
+                            <include content="Dimension_Padding">
+                                <param name="pad">20</param>
+                            </include>
+                        </control>
+                    </control>
+                    <include content="Dialog_Scrollbar">
+                        <param name="id">61</param>
+                        <param name="inset">true</param>
+                        <include>$PARAM[include_movement]</include>
+                        <include condition="$PARAM[scrollbar_fakefocus]">Texture_Scrollbar_SliderBar_V</include>
+                    </include>
+                </control>
+            </control>
+            <include condition="$PARAM[include_buttons_condition]">$PARAM[include_buttons]</include>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_CustomPlot">
+        <param name="size">Dimension_DialogFullMenu</param>
+        <param name="include_artwork">false</param>
+        <param name="include_hintlabel">true</param>
+        <definition>
+            <include>Dialog_Dim_Overlay</include>
+            <control type="group">
+                <include>$PARAM[size]</include>
+                <include>Animation_Right_Delay</include>
+
+                <include content="Dialog_Foreground_Side">
+                    <param name="slide_condition">true</param>
+                    <param name="dialog_size">$PARAM[size]</param>
+                    <param name="topline">false</param>
+                    <param name="subline">false</param>
+                </include>
+
+                <control type="group">
+                    <include content="Object_Right" condition="!String.IsEmpty(Window.Property(path))">
+                        <param name="right">dialog_buttongroup_w</param>
+                    </include>
+                    <!-- Header -->
+                    <include content="Dialog_Head">
+                        <param name="label">$INFO[Window.Property(header)]</param>
+                    </include>
+                    <include>Dialog_Head_CloseButton</include>
+
+                    <!-- Content -->
+                    <control type="group">
+                        <include>Dimension_Dialog_Body</include>
+                        <control type="group">
+                            <include>Dimension_Dialog_Body_Group</include>
+                            <include content="DialogInfo_PlotBox_Artwork" condition="$PARAM[include_artwork]">
+                                <param name="poster_icon">$INFO[Window.Property(poster)]</param>
+                                <param name="square_icon">$INFO[Window.Property(icon)]</param>
+                                <param name="landscape_icon">$INFO[Window.Property(landscape)]</param>
+                                <param name="clearlogo_icon">$INFO[Window.Property(clearlogo)]</param>
+                            </include>
+                            <include content="Dialog_Outline_InnerBox">
+                                <include content="Object_Left" condition="![$PARAM[include_artwork]]">
+                                    <param name="left">20</param>
+                                </include>
+                                <left>420</left>
+                                <top>-20</top>
+                                <bottom>-20</bottom>
+                                <right>20</right>
+                                <control type="textbox">
+                                    <font>font_midi_plot</font>
+                                    <textcolor>dialog_fg_70</textcolor>
+                                    <pagecontrol>61</pagecontrol>
+                                    <label>$VAR[Label_Overlay_1114_PlotBox]</label>
+                                    <autoscroll>false</autoscroll>
+                                    <include content="Dimension_Padding">
+                                        <param name="pad">40</param>
+                                    </include>
+                                </control>
+                            </include>
+                        </control>
+                        <include content="Dialog_Scrollbar">
+                            <param name="id">61</param>
+                            <param name="inset">true</param>
+                            <onright>9000</onright>
+                            <include condition="String.IsEmpty(Window.Property(path))">Texture_Scrollbar_SliderBar_V</include>
+                        </include>
+
+                    </control>
+                </control>
+
+                <!-- Side Buttons -->
+                <include content="Object_Control" condition="!String.IsEmpty(Window.Property(path))">
+                    <param name="control">group</param>
+                    <include content="Dialog_Side_Panel_Group_Def">
+                        <param name="width">dialog_buttongroup_w</param>
+                    </include>
+                    <control type="group">
+                        <include>Dimension_Dialog_Body</include>
+                        <control type="grouplist" id="9000">
+                            <include>Dialog_Side_Grouplist_Def</include>
+                            <onleft>61</onleft>
+                            <!-- Info -->
+                            <include content="DialogInfo_Button">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="vertical">true</param>
+                                <param name="id">8001</param>
+                                <param name="groupid">8101</param>
+                                <param name="label">$LOCALIZE[29915]</param>
+                                <param name="icon">special://skin/extras/icons/info2.png</param>
+                                <param name="visible">!String.IsEmpty(Window.Property(path))</param>
+                                <onclick>Dialog.Close(1114)</onclick>
+                                <onclick>Dialog.Close(movieinformation)</onclick>
+                                <onclick>Dialog.Close(musicinformation)</onclick>
+                                <onclick>Dialog.Close(videoosd,true)</onclick>
+                                <onclick>Dialog.Close(1140,true)</onclick>
+                                <onclick>Dialog.Close(1141,true)</onclick>
+                                <onclick>Dialog.Close(videobookmarks,true)</onclick>
+                                <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Window.Property(path)],call_auto=1190,return)</onclick>
+                            </include>
+                            <!-- Movies -->
+                            <include content="DialogInfo_Button" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9011</param>
+                                <param name="groupid">9111</param>
+                                <param name="label">$LOCALIZE[342]</param>
+                                <param name="icon">special://skin/extras/icons/film.png</param>
+                                <onclick>SetProperty(CustomDialog1162.Expanded,artwork,Home)</onclick>
+                                <onclick>SetProperty(Target,$INFO[ListItem.Property(target)],1162)</onclick>
+                                <onclick>SetProperty(Path,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_movies&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_key=release_date]$VAR[Path_Param_Widget],1162)</onclick>
+                                <onclick>SetProperty(Header,$INFO[Window(1114).Property(header)],1162)</onclick>
+                                <onclick>ActivateWindow(1162)</onclick>
+                            </include>
+                            <!-- TV Shows -->
+                            <include content="DialogInfo_Button" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9012</param>
+                                <param name="groupid">9112</param>
+                                <param name="label">$LOCALIZE[20343]</param>
+                                <param name="icon">special://skin/extras/icons/tv.png</param>
+                                <onclick>SetProperty(CustomDialog1162.Expanded,artwork,Home)</onclick>
+                                <onclick>SetProperty(Target,$INFO[ListItem.Property(target)],1162)</onclick>
+                                <onclick>SetProperty(Path,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_tvshows&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_key=first_air_date]$VAR[Path_Param_Widget],1162)</onclick>
+                                <onclick>SetProperty(Header,$INFO[Window(1114).Property(header)],1162)</onclick>
+                                <onclick>ActivateWindow(1162)</onclick>
+                            </include>
+                            <!-- Crew -->
+                            <include content="DialogInfo_Button" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9013</param>
+                                <param name="groupid">9113</param>
+                                <param name="label">$LOCALIZE[31050]</param>
+                                <param name="icon">special://skin/extras/icons/director.png</param>
+                                <onclick>SetProperty(CustomDialog1162.Expanded,artwork,Home)</onclick>
+                                <onclick>SetProperty(Target,$INFO[ListItem.Property(target)],1162)</onclick>
+                                <onclick>SetProperty(Path,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=crew_in_both&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_key=year]$VAR[Path_Param_Widget],1162)</onclick>
+                                <onclick>SetProperty(Header,$INFO[Window(1114).Property(header)],1162)</onclick>
+                                <onclick>ActivateWindow(1162)</onclick>
+                            </include>
+                            <!-- Cast -->
+                            <include content="DialogInfo_Button" condition="!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9014</param>
+                                <param name="groupid">9114</param>
+                                <param name="label">$LOCALIZE[206]</param>
+                                <param name="icon">special://skin/extras/icons/person.png</param>
+                                <onclick>SetProperty(CustomDialog1162.Expanded,artwork,Home)</onclick>
+                                <onclick>SetProperty(Target,$INFO[ListItem.Property(target)],1162)</onclick>
+                                <onclick>SetProperty(Path,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=cast&amp;tmdb_id=,&amp;limit=250]$INFO[Window.Property(tmdb_type),&amp;tmdb_type=,]$VAR[Path_Param_Widget],1162)</onclick>
+                                <onclick>SetProperty(Header,$INFO[Window(1114).Property(header)],1162)</onclick>
+                                <onclick>ActivateWindow(1162)</onclick>
+                            </include>
+                            <!-- Crew -->
+                            <include content="DialogInfo_Button" condition="!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9015</param>
+                                <param name="groupid">9115</param>
+                                <param name="label">$LOCALIZE[31050]</param>
+                                <param name="icon">special://skin/extras/icons/director.png</param>
+                                <onclick>SetProperty(CustomDialog1162.Expanded,artwork,Home)</onclick>
+                                <onclick>SetProperty(Target,$INFO[ListItem.Property(target)],1162)</onclick>
+                                <onclick>SetProperty(Path,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=crew&amp;tmdb_id=,&amp;limit=250]$INFO[Window.Property(tmdb_type),&amp;tmdb_type=,]$VAR[Path_Param_Widget],1162)</onclick>
+                                <onclick>SetProperty(Header,$INFO[Window(1114).Property(header)],1162)</onclick>
+                                <onclick>ActivateWindow(1162)</onclick>
+                            </include>
+                            <!-- Wiki -->
+                            <include content="DialogInfo_Button">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9005</param>
+                                <param name="groupid">9105</param>
+                                <param name="label">Wiki</param>
+                                <param name="icon">special://skin/extras/icons/globe.png</param>
+                                <onclick>runscript(script.wikipedia,wikipedia=$INFO[Window.Property(header)])</onclick>
+                            </include>
+                            <!-- Trailer -->
+                            <include content="DialogInfo_Button">
+                                <param name="include_hintlabel">$PARAM[include_hintlabel]</param>
+                                <param name="id">9002</param>
+                                <param name="groupid">9102</param>
+                                <param name="label">$LOCALIZE[20410]</param>
+                                <param name="icon">special://skin/extras/icons/videoplay.png</param>
+                                <param name="visible">[!String.IsEmpty(Window.Property(trailer)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))]</param>
+                                <include content="Action_PlayTrailer_OnClick">
+                                    <param name="trailer">Window.Property(trailer)</param>
+                                    <param name="trailer_fallback">Window(Home).Property(TMDbHelper.ListItem.Trailer)</param>
+                                </include>
+                            </include>
+
+                        </control>
+                    </control>
+                </include>
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_PlotBox">
+        <param name="visible">[Control.HasFocus(61)]</param>
+        <param name="header">$VAR[Label_Title]</param>
+        <param name="textbox">$VAR[Label_Overlay_PlotBox]</param>
+        <param name="include_movement">DialogInfo_PlotBox_OnMove</param>
+        <param name="dialog_size">Dimension_DialogFullMenu</param>
+        <definition>
+            <include content="Dialog_Dim_Overlay">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
+
+            <control type="group">
+                <include>$PARAM[dialog_size]</include>
+                <visible allowhiddenfocus="true">$PARAM[visible]</visible>
+                <include content="Animation_Slide_Out">
+                    <param name="type">Hidden</param>
+                    <param name="posx">320</param>
+                    <param name="reversible">true</param>
+                </include>
+                <include content="Animation_Slide_In">
+                    <param name="type">Visible</param>
+                    <param name="posx">320</param>
+                    <param name="delay">400</param>
+                    <param name="reversible">true</param>
+                </include>
+                <include content="Animation_Slide_Out">
+                    <param name="type">WindowClose</param>
+                    <param name="posx">320</param>
+                    <param name="reversible">true</param>
+                </include>
+                <include content="Animation_Slide_In">
+                    <param name="type">WindowOpen</param>
+                    <param name="posx">320</param>
+                    <param name="delay">400</param>
+                    <param name="reversible">true</param>
+                </include>
+
+                <include content="DialogInfo_PlotBox_Foreground">
+                    <param name="header">$PARAM[header]</param>
+                    <param name="textbox">$PARAM[textbox]</param>
+                    <param name="include_movement">$PARAM[include_movement]</param>
+                    <param name="poster_icon">$PARAM[poster_icon]</param>
+                    <param name="square_icon">$PARAM[square_icon]</param>
+                    <param name="landscape_icon">$PARAM[landscape_icon]</param>
+                    <param name="clearlogo_icon">$PARAM[clearlogo_icon]</param>
+                    <param name="scrollbar_fakefocus">$PARAM[scrollbar_fakefocus]</param>
+                    <param name="dialog_size">$PARAM[dialog_size]</param>
+                    <param name="include_buttons">$PARAM[include_buttons]</param>
+                    <param name="include_buttons_condition">$PARAM[include_buttons_condition]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_VideoFanartContent">
+        <content target="images" limit="20" browse="never">$VAR[Path_VideoInfo_Generic,,&amp;info=fanart]</content>
+    </include>
+
+    <include name="DialogInfo_PersonImageContent">
+        <content target="images" limit="20" browse="never">$INFO[Window(Home).Property(TMDbHelper.ListItem.TMDB_ID),plugin://plugin.video.themoviedb.helper/?info=images&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=100]$VAR[Path_Param_Widget]</content>
+    </include>
+
+
+
+
+</includes>
