@@ -31,7 +31,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic AZR."
 
 name="auramod Arabic"
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=bYr8o1bDiy4Aq5L%2BRcg%2FC1IoAVF1Kvotf%2BrnM24Jer88FGup8E1feDfWLLT%2BVvUd&expiry=rOPI%2FkWJwa7%2BS7Tb4Lkxdg%3D%3D&mac=46cfef91174308eebd0d17e97529ed7b6ca5a048d31af8ee6b2e1d09b7c04b07"
 minor="http://"
 gui="http://"
