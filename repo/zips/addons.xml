@@ -1199,7 +1199,7 @@ updated YouTube addon URL
             <fanart>resources/mediafusion_logo.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.pov" version="4.12.11" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="4.12.12" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
