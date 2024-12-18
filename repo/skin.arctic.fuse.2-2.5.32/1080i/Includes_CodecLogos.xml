@@ -1942,27 +1942,6 @@
                     <texture colordiffuse="FFffffff">codecs/Dolby_Visionfel.png</texture>
                 </control>
             </control>
-
-        </control>
-    </include>
-
-    <include name="Video_Audio_Background_Flag">
-        <param name="groupId" />
-        <param name="imageId" />
-        <param name="visible" />
-        <param name="texture" />
-        <param name="colordiffuse" />
-        <definition>
-            <control type="group" id="$PARAM[groupId]">
-                <control type="image" id="$PARAM[imageId]">
-                    <top>135</top>
-                    <width>210</width>
-                    <height>170</height>
-                    <visible>$PARAM[visible]</visible>
-                    <texture>$PARAM[texture]</texture>
-                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
-                </control>
-            </control>
             <include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
@@ -2043,9 +2022,29 @@
 				<param name="texture">flags/fullscreen/301.png</param>
                 
 			</include>
+        </control>
+    </include>
+
+    <include name="Video_Audio_Background_Flag">
+        <param name="groupId" />
+        <param name="imageId" />
+        <param name="visible" />
+        <param name="texture" />
+        <param name="colordiffuse" />
+        <definition>
+            <control type="group" id="$PARAM[groupId]">
+                <control type="image" id="$PARAM[imageId]">
+                    <top>135</top>
+                    <width>210</width>
+                    <height>170</height>
+                    <visible>$PARAM[visible]</visible>
+                    <texture>$PARAM[texture]</texture>
+                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                </control>
+            </control>
         </definition>
     </include>
-	
+    
     <include name="Video_Background_Flag">
         <param name="groupId" />
         <param name="imageId" />
