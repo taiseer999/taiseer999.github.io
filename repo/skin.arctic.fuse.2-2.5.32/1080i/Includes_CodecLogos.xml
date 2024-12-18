@@ -1707,7 +1707,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>57</top>
+                <top>150</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
