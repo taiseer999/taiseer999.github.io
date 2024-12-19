@@ -7,7 +7,10 @@
 	<onunload>ClearProperty(PlayerInfoDialogFocus,Home)</onunload>
 	<controls>
 
-	 
+	 <include content="Object_Control">
+            <param name="control">image</param>
+            <texture colordiffuse="panel_bg_70">background/floor.png</texture>
+        </include>
 
         <!-- Codec logos -->
         <include condition="Skin.HasSetting(ppi.useleftCodecLogos)">CodecLogosLeftPPI</include>
