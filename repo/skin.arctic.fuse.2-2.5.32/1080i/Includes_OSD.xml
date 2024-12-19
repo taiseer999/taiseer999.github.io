@@ -43,7 +43,7 @@
 			<control type="group" id="$PARAM[groupId]">
 				<control type="image" id="$PARAM[imageId]">
 					<left>20</left>
-					<top>10</top>
+					<bottom>10</bottom>
 					<height>45</height>
 					<width>162</width>
 					<visible>$PARAM[visible]</visible>
