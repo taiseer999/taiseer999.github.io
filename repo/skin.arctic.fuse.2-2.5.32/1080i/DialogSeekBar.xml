@@ -14,7 +14,7 @@
             <visible>Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)</visible>
 
             <control type="image">
-                <texture colordiffuse="panel_bg_70">background/combined_flixart.png</texture>
+                <texture colordiffuse="panel_bg_70">background/coal_blurfs.png</texture>
                 <include>Animation_OSD_Fullscreen_Change</include>
                 <visible>Window.IsActive(MusicVisualisation.xml) | Window.IsVisible(videoosd) | $EXP[Exp_OSD_QuickInfo]</visible>
             </control>
