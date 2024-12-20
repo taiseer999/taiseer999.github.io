@@ -73,7 +73,7 @@ info="http://your.info.url"
 description="Fast Build."
 
 name="AF2 CoreELEC Arabic"
-version="1.1"
+version="1.2"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=M2K6u6l6rpAnXkGj%2FdOukm%2Bk6ljT%2Fr%2F68vyMcqwiyjY2g0TphYcXV%2BFPWZT2Zw2F&expiry=SbfvoGioFYvwDJzbn%2FoVpw%3D%3D&mac=4525c65b8c5c20013c3c63cbe7ea3501dd3e8146c7e9f849a4434e89a6eb48d8"
 minor="http://"
 gui="http://"
