@@ -59,7 +59,7 @@ info="http://your.info.url"
 description="Kodi 21 Arabic Titan BINGIE MOD Arabic."
 
 name="AF2 Arabic"
-version="1.1"
+version="1.2"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=mx9QsgjfJSRt1q%2BbUBPjmVE7jX1oUXKhlYdEUxfhgP9W4DYuv1oKHZwHoz%2FpgbRK&expiry=mvsCyYB2y9Yn7dDBRKY9Ig%3D%3D&mac=4ab96af92cb552f73b68ac16d86c4cdd90ac22730acd2b37f306da523cf7a64b"
 minor="http://"
 gui="http://"
