@@ -9,9 +9,9 @@
             <param name="font_regular">URWGeometricArabic-SemiBold.ttf</param>
             <param name="font_light">URWGeometricArabic-Medium.ttf</param>
             <param name="plot_linespacing_head">0.8</param>
-            <param name="plot_linespacing_midi">0.7</param>
+            <param name="plot_linespacing_midi">0.8</param>
             <param name="plot_linespacing_main">0.80</param>
-            <param name="plot_linespacing_mini">0.77</param>
+            <param name="plot_linespacing_mini">0.79</param>
             <param name="plot_linespacing_tiny">0.8</param>
         <param name="size_heavy_main">30</param>
         <param name="size_light_main">30</param>

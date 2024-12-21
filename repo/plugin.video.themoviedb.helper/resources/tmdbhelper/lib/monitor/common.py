@@ -12,8 +12,10 @@ import json
 
 SETMAIN = {
     'label', 'tmdb_id', 'imdb_id', 'folderpath', 'filenameandpath'}
+SETMAIN_ALTERED = {
+    'cropimage', 'cropimage.original', 'blurimage', 'blurimage.original',
+    'desaturateimage', 'desaturateimage.original', 'colorsimage', 'colorsimage.original'}
 SETMAIN_ARTWORK = {
-    'cropimage', 'cropimage.original', 'blurimage', 'blurimage.original', 'desaturateimage', 'desaturateimage.original', 'colorsimage', 'colorsimage.original',
     'icon', 'poster', 'thumb', 'fanart', 'discart', 'clearart', 'clearlogo', 'landscape', 'banner', 'keyart',
     'season.poster', 'season.thumb', 'season.fanart', 'season.discart', 'season.clearart', 'season.clearlogo', 'season.landscape', 'season.banner', 'season.keyart',
     'tvshow.poster', 'tvshow.thumb', 'tvshow.fanart', 'tvshow.discart', 'tvshow.clearart', 'tvshow.clearlogo', 'tvshow.landscape', 'tvshow.banner', 'tvshow.keyart'}
@@ -65,9 +67,9 @@ class CommonMonitorDetails(CommonContainerAPIs):
         try:
             return self._ib
         except AttributeError:
-            from tmdbhelper.lib.items.builder import ItemBuilder
             from tmdbhelper.lib.addon.plugin import get_setting
-            self._ib = ItemBuilder(tmdb_api=self.tmdb_api, ftv_api=self.ftv_api, trakt_api=self.trakt_api)
+            from tmdbhelper.lib.items.builder import ItemBuilderService
+            self._ib = ItemBuilderService(tmdb_api=self.tmdb_api, ftv_api=self.ftv_api, trakt_api=self.trakt_api)
             self._ib.ftv_api = self.ftv_api if get_setting('service_fanarttv_lookup') else None
             return self._ib
 
@@ -283,7 +285,8 @@ class CommonMonitorFunctions(PropertySetter, CommonMonitorDetails):
                 k for k in list(dictionary)
                 if k not in self.properties
                 and k not in SETPROP_RATINGS
-                and k not in SETMAIN_ARTWORK)
+                and k not in SETMAIN_ARTWORK
+                and k not in SETMAIN_ALTERED)
 
             for k in keys:
                 if k not in dictionary:
