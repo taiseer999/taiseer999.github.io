@@ -84,7 +84,7 @@ fanart="https://i.postimg.cc/44KrGjSC/Screenshot-2024-12-12-at-3-18-08-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="بيلد خفيف سريع للاجهزة المتوسطة يدعم CoreELEC CPM -نصب الملف لاظهار خصائص كورلك"
+description="بيلد خفيف سريع للاجهزة المتوسطة يدعم CoreELEC CPM"
 
 name="AF/AH2/AF2 Arabic"
 version="2.2"
