@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -336,22 +337,6 @@
         </definition>
     </include>
 
-    <include name="Object_ViewFilterButton">
-        <definition>
-            <include content="Object_Info_Button">
-                <param name="id">$PARAM[id]</param>
-                <param name="groupid">$PARAM[groupid]</param>
-                <param name="sliceid">$PARAM[sliceid]</param>
-                <param name="control">$PARAM[control]</param>
-                <param name="icon">$PARAM[icon]</param>
-                <param name="itempad">$PARAM[itempad]</param>
-                <param name="font">font_mini</param>
-                <param name="visible">$PARAM[visible]</param>
-                <nested />
-            </include>
-        </definition>
-    </include>
-
     <include name="Object_AlphabetLetter">
         <definition>
             <include content="Object_AlphabetLetter_Label">
@@ -458,11 +443,11 @@
                     <description>Busy animation</description>
                     <animation effect="rotate" condition="$PARAM[spinprogress]" start="0" end="360" loop="true" time="2000" center="auto">Conditional</animation>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorHighlight]">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                        <texture colordiffuse="$VAR[ColorHighlight]" flipx="true" flipy="true">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                     </control>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorGradient]">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                        <texture colordiffuse="$VAR[ColorGradient]" flipx="true" flipy="true">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
                         <animation effect="fade" end="66" condition="true">Conditional</animation>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                         <include content="Defs_Progress_Colorfade">
@@ -682,6 +667,7 @@
         <param name="font_sub">font_mini</param>
         <param name="include_labels">true</param>
         <param name="backing_visible">true</param>
+        <param name="shadow_colordiffuse">shadow_soft</param>
         <definition>
             <control type="group">
                 <height>80</height>
@@ -692,7 +678,7 @@
                     <control type="image">
                         <include content="Dimension_Padding"><param name="pad">-40</param></include>
                         <bordersize>40</bordersize>
-                        <bordertexture colordiffuse="shadow_soft">shadows/circle_50-shadow-40.png</bordertexture>
+                        <bordertexture colordiffuse="$PARAM[shadow_colordiffuse]">shadows/circle_50-shadow-40.png</bordertexture>
                         <texture colordiffuse="$PARAM[colorbacking]">diffuse/circle/circle_50.png</texture>
                         <visible>$PARAM[backing_visible]</visible>
                     </control>
@@ -739,7 +725,7 @@
             <control type="label">
                 <height>32</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>KODI</label>
+                <label>CoreELEC</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
@@ -1057,7 +1043,7 @@
                 <!-- Percentage -->
                 <include content="Object_Control">
                     <param name="control">image</param>
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true">$VAR[Defs_PercentPlayed$PARAM[affix],progress/circle/p,.png]</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">$VAR[Defs_PercentPlayed$PARAM[affix],progress/circle/p,.png]</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <include content="Object_Indicator_Visible">
                         <param name="include_type">Percentage</param>
@@ -1113,7 +1099,7 @@
                 <include content="Object_Control" condition="!Skin.HasSetting(Indicator.DisableWatched)">
                     <param name="control">group</param>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true">progress/circle/p100.png</texture>
+                        <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">progress/circle/p100.png</texture>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                     </control>
                     <control type="image">
@@ -1178,7 +1164,7 @@
                     <include content="Dimension_Padding"><param name="pad">10</param></include>
                     <include content="Object_ColorDiffuse" condition="$PARAM[selected]"><param name="colordiffuse">$VAR[ColorSelected_30]</param></include>
                     <colordiffuse>main_fg_30</colordiffuse>
-                    <texture>progress/circle/p100.png</texture>
+                    <texture flipx="true" flipy="true">progress/circle/p100.png</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$EXP[Exp_HasWatchedProgress]</visible>
                 </control>
@@ -1186,7 +1172,7 @@
                     <include content="Dimension_Padding"><param name="pad">10</param></include>
                     <include content="Object_ColorDiffuse" condition="$PARAM[selected]"><param name="colordiffuse">$VAR[ColorSelected]</param></include>
                     <colordiffuse>main_fg_90</colordiffuse>
-                    <texture>$VAR[Defs_PercentPlayed,progress/circle/p,.png]</texture>
+                    <texture flipx="true" flipy="true">$VAR[Defs_PercentPlayed,progress/circle/p,.png]</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$EXP[Exp_HasWatchedProgress]</visible>
                 </control>
@@ -1281,13 +1267,13 @@
                 </control>
                 <control type="image">
                     <include content="Dimension_Padding"><param name="pad">0</param></include>
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]">progress/circle/p$PARAM[progress].png</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]" flipx="true" flipy="true">progress/circle/p$PARAM[progress].png</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>!String.IsEqual(Window(Home).Property(ColorPicker_Type),Indicator) | !Control.HasFocus(3000)</visible>
                 </control>
                 <control type="image">
                     <include content="Dimension_Padding"><param name="pad">0</param></include>
-                    <texture colordiffuse="$INFO[Container(3000).ListItem.Label]">progress/circle/p$PARAM[progress].png</texture>
+                    <texture colordiffuse="$INFO[Container(3000).ListItem.Label]" flipx="true" flipy="true">progress/circle/p$PARAM[progress].png</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>String.IsEqual(Window(Home).Property(ColorPicker_Type),Indicator) + Control.HasFocus(3000)</visible>
                 </control>
@@ -1310,103 +1296,6 @@
                     <include content="Dimension_Padding"><param name="pad">20</param></include>
                     <texture>indicator/timer.png</texture>
                     <visible>!$PARAM[checkmark]</visible>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Object_Info_Button_Icon">
-        <param name="back_colordiffuse">main_fg_100</param>
-        <param name="shadow_colordiffuse">shadow_hard</param>
-        <definition>
-            <control type="group">
-                <nested />
-                <height>50</height>
-                <width>50</width>
-                <control type="image">
-                    <include content="Dimension_Padding"><param name="pad">-30</param></include>
-                    <bordersize>30</bordersize>
-                    <bordertexture colordiffuse="$PARAM[shadow_colordiffuse]">shadows/circle_50-shadow-30.png</bordertexture>
-                    <texture colordiffuse="$PARAM[back_colordiffuse]">diffuse/circle/circle_50.png</texture>
-                </control>
-                <include content="Object_InfoCircle_Image">
-                    <param name="bordersize">1</param>
-                    <param name="aspectratio">keep</param>
-                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                    <param name="icon">$PARAM[icon]</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Object_Info_Button_Left">
-        <control type="group">
-            <visible>$PARAM[visible]</visible>
-            <nested />
-            <include content="Object_Info_Button_Icon">
-                <param name="back_colordiffuse">$PARAM[back_colordiffuse]</param>
-                <param name="colordiffuse">$PARAM[icon_colordiffuse]</param>
-                <param name="icon">$PARAM[icon]</param>
-                <param name="shadow_colordiffuse">shadow_soft</param>
-                <left>60</left>
-                <centertop>50%</centertop>
-            </include>
-        </control>
-    </include>
-    <include name="Object_Info_Button">
-        <param name="visible">true</param>
-        <param name="control">button</param>
-        <param name="width">auto</param>
-        <param name="itemgap">60</param>
-        <param name="itempad">0</param>
-        <param name="textcolor">main_fg_70</param>
-        <param name="font">font_mini_bold</param>
-        <definition>
-            <control type="group" id="$PARAM[groupid]">
-                <left>$PARAM[itempad]</left>
-                <width>130</width>
-                <height>256</height>
-                <visible>$PARAM[visible]</visible>
-                <include content="Object_Info_Button_Left">
-                    <param name="visible">Control.HasFocus($PARAM[id])</param>
-                    <param name="icon">$PARAM[icon]</param>
-                    <param name="back_colordiffuse">$PARAM[flip_colordiffuse]</param>
-                    <param name="icon_colordiffuse">$PARAM[icon_colordiffuse]</param>
-                    <control type="image">
-                        <include>Texture_MainMenu_Highlight_H_X</include>
-                    </control>
-                </include>
-                <include content="Object_Info_Button_Left">
-                    <param name="visible">![Control.HasFocus($PARAM[id])]</param>
-                    <param name="icon">$PARAM[icon]</param>
-                    <param name="back_colordiffuse">$PARAM[back_colordiffuse]</param>
-                    <param name="icon_colordiffuse">$PARAM[icon_colordiffuse]</param>
-                </include>
-            </control>
-            <control type="$PARAM[control]" id="$PARAM[id]">
-                <left>$PARAM[itemgap]</left>
-                <width>$PARAM[width]</width>
-                <visible>$PARAM[visible]</visible>
-                <height>256</height>
-                <texturenofocus />
-                <alttexturenofocus />
-                <include>Texture_MainMenu_Highlight_Focus_H_Y</include>
-                <font>$PARAM[font]</font>
-                <align>left</align>
-                <textoffsetx>0</textoffsetx>
-                <textcolor>$PARAM[textcolor]</textcolor>
-                <focusedcolor>$VAR[ColorSelected]</focusedcolor>
-                <nested />
-                <label>$PARAM[label]</label>
-            </control>
-            <control type="group" id="$PARAM[sliceid]">
-                <left>$PARAM[itemgap]</left>
-                <visible>$PARAM[visible]</visible>
-                <width>80</width>
-                <height>256</height>
-                <control type="image">
-                    <visible>Control.HasFocus($PARAM[id])</visible>
-                    <include>Texture_MainMenu_Highlight_H_Z</include>
                 </control>
             </control>
         </definition>
