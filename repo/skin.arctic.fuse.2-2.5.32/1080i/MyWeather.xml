@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <window id="2600">
     <defaultcontrol always="true">8000</defaultcontrol>
@@ -27,7 +28,6 @@
 
             <control type="group">
                 <include>Dimension_Info</include>
-
                 <control type="group">
                     <right>-40</right>
                     <control type="group">
