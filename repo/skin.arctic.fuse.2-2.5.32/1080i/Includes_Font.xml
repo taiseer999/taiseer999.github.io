@@ -23,8 +23,8 @@
             <!-- Font for codec flag -->
             <font>
                 <name>font_infotag_bold</name>
-                <filename>LeagueSpartan-ExtraBold.ttf</filename>
-                <size>26</size>
+                <filename>hacen t.ttf</filename>
+                <size>30</size>
                 <style>uppercase</style>
             </font>
 
