@@ -117,7 +117,7 @@
 
         <!-- Mini -->
         <param name="size_heavy_mini">26</param>
-        <param name="size_light_mini">26</param>
+        <param name="size_light_mini">21</param>
 
         <!-- Main -->
         <param name="size_heavy_main">30</param>

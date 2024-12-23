@@ -11,7 +11,7 @@
             <param name="plot_linespacing_head">0.9</param>
             <param name="plot_linespacing_midi">0.8</param>
             <param name="plot_linespacing_main">0.8</param>
-            <param name="plot_linespacing_mini">0.9</param>
+            <param name="plot_linespacing_mini">1.0</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">30</param>
         <param name="size_light_main">30</param>
@@ -31,7 +31,7 @@
             <param name="plot_linespacing_head">1.1</param>
             <param name="plot_linespacing_midi">1.3</param>
             <param name="plot_linespacing_main">0.9</param>
-            <param name="plot_linespacing_mini">0.99</param>
+            <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">31</param>
         <param name="size_light_main">30</param>
@@ -44,14 +44,14 @@
 
     <fontset id="Geeza-Pro" unicode="true">
         <include content="Font_Default">
-            <param name="font_black">GeezaPro-SemiBold.ttf</param>
-            <param name="font_bold">GeezaPro-SemiBold.ttf</param>
-            <param name="font_regular">GeezaPro-Regular.ttf</param>
+            <param name="font_black">GeezaPro-Bold.ttf</param>
+            <param name="font_bold">GeezaPro-Bold.ttf</param>
+            <param name="font_regular">GeezaPro.ttf</param>
             <param name="font_light">GeezaPro-Regular.</param>
             <param name="plot_linespacing_head">1.1</param>
             <param name="plot_linespacing_midi">1.3</param>
             <param name="plot_linespacing_main">1.1</param>
-            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">27</param>
         <param name="size_light_main">29</param>
