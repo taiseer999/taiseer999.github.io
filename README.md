@@ -1,4 +1,4 @@
-![Kodi Logo](docs/resources/banner.png)
+![Uploading image.png…]()
 
 <p align="center">
   <strong>
