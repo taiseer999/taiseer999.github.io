@@ -1675,6 +1675,13 @@
         <value condition="String.IsEqual(ListItem.Property(widget_style),Banner)">$LOCALIZE[20020]</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Card)">$LOCALIZE[31423]</value>
 
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Apps)">$LOCALIZE[31045] (S)</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Icon)">$LOCALIZE[31320] (S)</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Halo)">$LOCALIZE[31431] (S)</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Post)">$LOCALIZE[31558] (S)</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),View)">$LOCALIZE[31419] (S)</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Text)">$LOCALIZE[31329] (S)</value>
+
         <value>$LOCALIZE[571]</value>
     </variable>
 
@@ -1695,6 +1702,13 @@
         <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Poster)">$LOCALIZE[20021]</value>
         <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Banner)">$LOCALIZE[20020]</value>
         <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Card)">$LOCALIZE[31423]</value>
+
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Apps)">$LOCALIZE[31045] (S)</value>
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Icon)">$LOCALIZE[31320] (S)</value>
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Halo)">$LOCALIZE[31431] (S)</value>
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Post)">$LOCALIZE[31558] (S)</value>
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),View)">$LOCALIZE[31419] (S)</value>
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_style),Text)">$LOCALIZE[31329] (S)</value>
 
         <value>$LOCALIZE[571]</value>
     </variable>
@@ -1722,7 +1736,6 @@
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Plot))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Plot)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.biography))">$INFO[Window(Home).Property(TMDBHelper.ListItem.biography)]</value>
     </variable>
-
 <variable name="OSDCodecLogosStartupLabel">
         <value condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">$LOCALIZE[32057]</value>
         <value condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">$LOCALIZE[32058]</value>
@@ -1962,5 +1975,4 @@
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Dolby Vision) + String.Contains(Player.Process(amlogic.vs10.mode),SDR)"> -&gt; SDR</value>
     </variable>
 </includes>
-
 
