@@ -84,14 +84,6 @@
         <left>view_pad</left>
     </include>
 
-    <include name="Dimension_DialogVS10">
-        <bottom>40</bottom>
-        <width>520</width>
-        <centertop>50%</centertop>
-        <centerleft>50%</centerleft>
-        <height>600</height>
-    </include>
-
     <include name="Dimension_Info">
         <left>view_pad</left>
         <right>view_pad</right>

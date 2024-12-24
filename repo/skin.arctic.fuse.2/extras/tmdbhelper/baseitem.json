@@ -1,4 +1,3 @@
-
 {
     "tvshowtitle": {"infolabels": ["tvshowtitle"]},
     "plot": {"infolabels": ["plot", "Property(artist_description)", "Property(album_description)", "addondescription", "Property(biography)"]},
@@ -36,3 +35,5 @@
     "custominfo01": {"infolabels": ["property(custominfo01)"]},
     "custominfo02": {"infolabels": ["property(custominfo02)"]}
 }
+
+
