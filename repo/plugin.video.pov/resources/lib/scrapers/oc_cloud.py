@@ -52,7 +52,7 @@ class source:
 			threads = []
 			append = threads.append
 			results_append = self.scrape_results.append
-			try: my_cloud_files = Offcloud.user_cloud()
+			try: my_cloud_files = Offcloud.user_cloud(check_cache=False)
 			except: return self.sources
 			for item in my_cloud_files:
 				if item['status'] != 'downloaded': continue
@@ -74,7 +74,7 @@ class source:
 	def _scrape_folders(self, folder_info):
 		try:
 			results_append = self.scrape_results.append
-			torrent_info = Offcloud.torrent_info(folder_info)
+			torrent_info = Offcloud.user_cloud(folder_info, check_cache=False)
 			for item in torrent_info:
 				if not item.endswith(tuple(extensions)): continue
 				match = False

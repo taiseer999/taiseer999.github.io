@@ -62,8 +62,8 @@ def browse_tb_cloud(folder_id, media_type):
 				listitem.setInfo('video', {})
 				yield (url, listitem, False)
 			except: pass
-	if media_type == 'usenet': files = TorBox.user_cloud_info_usenet(folder_id)
-	else: files = TorBox.user_cloud_info(folder_id)
+	if media_type == 'usenet': files = TorBox.user_cloud_usenet(folder_id)
+	else: files = TorBox.user_cloud(folder_id)
 	video_files = [
 		{**i, 'url': '%d,%d' % (int(folder_id), i['id']), 'mediatype': media_type}
 		for i in files['files'] if i['short_name'].lower().endswith(tuple(extensions))
