@@ -1,4 +1,3 @@
-![Kodi Logo](docs/resources/banner.png)
 
 <p align="center">
   <strong>
