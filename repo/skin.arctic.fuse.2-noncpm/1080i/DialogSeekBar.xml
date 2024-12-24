@@ -14,7 +14,7 @@
             <visible>Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)</visible>
 
             <control type="image">
-                <texture colordiffuse="panel_bg_70">background/coal_blurfs.png</texture>
+                <texture colordiffuse="panel_bg_70">background/combined_flixart.png</texture>
                 <include>Animation_OSD_Fullscreen_Change</include>
                 <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Player.Caching | Player.ShowInfo | Player.Seeking | Player.HasPerformedSeek(2) | [Player.Paused + [!System.IdleTime(3) | !Skin.HasSetting(OSD.AutoHideOnPause)]] | Player.Forwarding | Player.Rewinding | Window.IsActive(DialogFullScreenInfo.xml) | !String.IsEmpty(Player.SeekNumeric) | !String.IsEmpty(PVR.ChannelNumberInput) | Window.IsVisible(script-upnext-stillwatching.xml) | Window.IsVisible(script-upnext-upnext.xml)</visible>
             </control>

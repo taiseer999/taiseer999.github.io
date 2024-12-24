@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -59,6 +58,7 @@
         <param name="widget_positioning">false</param>
         <param name="positioningid" />
         <param name="positioningtop" />
+        <param name="positioningcheck">true</param>
         <definition>
             <include content="Widget_Label">
                 <param name="groupid">$PARAM[groupid]</param>
@@ -122,7 +122,7 @@
             <include content="Widget_Positioning" condition="$PARAM[widget_positioning]">
                 <param name="id">$PARAM[positioningid]</param>
                 <param name="top">$PARAM[positioningtop]</param>
-                <param name="visible">$PARAM[visible] + [Container($PARAM[id]).IsUpdating | !Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]]</param>
+                <param name="visible">[$PARAM[visible] + [Container($PARAM[id]).IsUpdating | !Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]]] + $PARAM[positioningcheck]</param>
             </include>
         </definition>
     </include>
@@ -140,23 +140,6 @@
         <param name="widgets_only">true</param>
         <param name="visible">true</param>
         <definition>
-
-            <!-- Positioning end bumper for Detailed widget grouplists -->
-            <include content="Object_Control" condition="![$PARAM[widgets_only]]">
-                <param name="id">$PARAM[id]</param>  <!-- No ID blocks moving through -->
-                <param name="control">button</param>
-                <top>widget_items_t</top>
-                <height>160</height>  <!-- Max height of reverse position -->
-                <texturefocus />
-                <texturenofocus />
-                <font />
-                <label />
-                <onfocus>Action(Up)</onfocus>
-                <onfocus>SetProperty(List.ViewContainer,$INFO[Window.Property(TMDBHelper.WidgetContainer)])</onfocus>
-                <onfocus>SetFocus(330)</onfocus>
-                <visible>$PARAM[visible]</visible>
-            </include>
-
             <!-- Positioning end bumper for Basic widget grouplists -->
             <include content="Object_Control" condition="$PARAM[widgets_only]">
                 <param name="id">$PARAM[id]</param>
@@ -762,6 +745,7 @@
                 <param name="widget_positioning">$PARAM[widget_positioning]</param>
                 <param name="positioningid">$PARAM[positioningid]</param>
                 <param name="positioningtop">$PARAM[positioningtop]</param>
+                <param name="positioningcheck">$PARAM[positioningcheck]</param>
                 <nested />
             </include>
         </definition>
@@ -789,6 +773,7 @@
                 <param name="widget_positioning">$PARAM[widget_positioning]</param>
                 <param name="positioningid">$PARAM[positioningid]</param>
                 <param name="positioningtop">$PARAM[positioningtop]</param>
+                <param name="positioningcheck">$PARAM[positioningcheck]</param>
 
                 <param name="widgettop">widget_items_t$PARAM[widgetconstants_affix]</param>
                 <param name="labelheight">widget_label_h$PARAM[widgetconstants_affix]</param>
