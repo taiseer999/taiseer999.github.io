@@ -70,8 +70,8 @@
             <!-- Testing Fonts -->
             <font>
                 <name>font_debug</name>
-                <filename>URWGeometricArabic-Medium.ttf</filename>
-                <size>29</size>
+                <filename>GeezaPro.ttf</filename>
+                <size>23</size>
                 <aspect>$PARAM[aspect_system]</aspect>
             </font>
 
@@ -167,7 +167,7 @@
         <!-- Huge -->
         <param name="size_heavy_huge">45</param>
         <param name="size_light_huge">45</param>
-        <param name="size_heavy_huge_x2">90</param>
+        <param name="size_heavy_huge_x2">88</param>
         <param name="size_light_huge_x2">90</param>
 
         <!-- Linespacing -->

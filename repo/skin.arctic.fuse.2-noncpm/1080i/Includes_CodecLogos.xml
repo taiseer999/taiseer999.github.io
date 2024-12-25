@@ -184,7 +184,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)+ String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -429,7 +429,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)+ String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -671,7 +671,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)+ String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -916,7 +916,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)+ String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -1158,7 +1158,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)+ String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -1403,7 +1403,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)+ String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>247</top>
                 <left>30</left>
                 <control type="image">
