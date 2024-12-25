@@ -10,7 +10,7 @@
             <param name="font_light">URWGeometricArabic-Medium.ttf</param>
             <param name="plot_linespacing_head">0.9</param>
             <param name="plot_linespacing_midi">0.8</param>
-            <param name="plot_linespacing_main">0.85</param>
+            <param name="plot_linespacing_main">0.84</param>
             <param name="plot_linespacing_mini">0.85</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">30</param>
