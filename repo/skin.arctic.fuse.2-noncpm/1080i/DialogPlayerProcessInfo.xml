@@ -27,7 +27,7 @@
                     <param name="height">740</param>
                 </include>
                  <include>OSD_Stream_Selector_Divider</include>
-                <height>620</height>
+                <height>630</height>
                 <width>1600</width>
                 <left>70</left>
                 <bottom>160</bottom>
@@ -113,7 +113,7 @@
                             <align>right</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]$LOCALIZE[31216][/B][CR]$INFO[Player.Process(videodecoder),]$VAR[Label_VideoHWDecoder, (,)]$INFO[Player.Process(amlogic.displaymode),[CR],]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31216][/B][/COLOR][CR]$INFO[Player.Process(videodecoder),]$VAR[Label_VideoHWDecoder, (,)]$INFO[Player.Process(amlogic.displaymode),[CR],]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -123,7 +123,7 @@
                             <align>right</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]$LOCALIZE[31119] | $LOCALIZE[31217][/B][CR]$INFO[Player.Process(amlogic.pixformat),,  ]$INFO[Player.Process(pixformat)]$INFO[Player.Process(amlogic.eoft_gamut),[CR],]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31119][/COLOR] | [COLOR $VAR[ColorHighlight]]$LOCALIZE[31217][/B][/COLOR][CR]$INFO[Player.Process(amlogic.pixformat),,  ]$INFO[Player.Process(pixformat)]$INFO[Player.Process(amlogic.eoft_gamut),[CR],]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -133,7 +133,7 @@
                             <align>right</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]HDR Type | Deinterlace method][/B][CR]$VAR[Label_VideoHDRCodec]$INFO[Player.Process(deintmethod),  |  ,]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]HDR Type | Deinterlace method][/B][/COLOR][CR]$VAR[Label_VideoHDRCodec]$INFO[Player.Process(deintmethod),  |  ,]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         		
@@ -144,7 +144,7 @@
                         <align>right</align>
                         <font>font_debug</font>
                         <textcolor>dialog_fg_90</textcolor>
-                        <label>[B]Audio Language : [/B][UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE][CR][B]Subtitles Language : [/B][UPPERCASE]$INFO[VideoPlayer.SubtitlesLanguage][/UPPERCASE]</label>
+                        <label>[COLOR $VAR[ColorHighlight]][B]Audio Language : [/COLOR][/B][UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE][CR][COLOR $VAR[ColorHighlight]][B]Subtitles Language : [/COLOR][/B][UPPERCASE]$INFO[VideoPlayer.SubtitlesLanguage][/UPPERCASE]</label>
                         <visible>!VideoPlayer.Content(livetv)</visible>
                     </control>
                     </control>
@@ -232,7 +232,7 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]Video stream[/B][CR]$INFO[Player.Process(videowidth),,x]$INFO[Player.Process(videoheight),, $LOCALIZE[31261]]$INFO[Player.Process(videodar),$COMMA , $LOCALIZE[31260]]$INFO[Player.Process(videofps),$COMMA , $LOCALIZE[31259]]$INFO[VideoPlayer.VideoBitrate,$COMMA , kb/s]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]Video stream[/B][/COLOR][CR]$INFO[Player.Process(videowidth),,x]$INFO[Player.Process(videoheight),, $LOCALIZE[31261]]$INFO[Player.Process(videodar),$COMMA , $LOCALIZE[31260]]$INFO[Player.Process(videofps),$COMMA , $LOCALIZE[31259]]$INFO[VideoPlayer.VideoBitrate,$COMMA , kb/s]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -242,7 +242,7 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]Audio Stream[/B][CR]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , $LOCALIZE[31263]]$INFO[Player.Process(audiosamplerate),$COMMA , $LOCALIZE[31262]]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]$INFO[Player.Process(audiochannels),[CR],]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]Audio Stream[/B][/COLOR][CR]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , $LOCALIZE[31263]]$INFO[Player.Process(audiosamplerate),$COMMA , $LOCALIZE[31262]]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]$INFO[Player.Process(audiochannels),[CR],]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -252,7 +252,7 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]$LOCALIZE[31256][/B][CR]$LOCALIZE[31117]: $INFO[system.memory(used)] / $INFO[system.memory(total)] - $INFO[System.Memory(used.percent)][CR]$LOCALIZE[31258]:$INFO[System.CpuFrequency, , ]$VAR[Label_System_Temp, , ]$INFO[System.CpuUsage, ,]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31256][/B][/COLOR][COLOR $VAR[ColorHighlight]][CR]$LOCALIZE[31117][/COLOR]: $INFO[system.memory(used)] / $INFO[system.memory(total)] - $INFO[System.Memory(used.percent)][COLOR $VAR[ColorHighlight]][CR]$LOCALIZE[31258]:[/COLOR]$INFO[System.CpuFrequency, , ]$VAR[Label_System_Temp, , ]$INFO[System.CpuUsage, ,]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -262,7 +262,7 @@
                         <align>left</align>
                         <font>font_debug</font>
                         <textcolor>dialog_fg_90</textcolor>
-						<label>[B]Player cache : [/B]$INFO[Player.CacheLevel,,%]</label>
+						<label>[COLOR $VAR[ColorHighlight]][B]Player cache : [/B][/COLOR]$INFO[Player.CacheLevel,,%]</label>
                         <visible>!VideoPlayer.Content(livetv)</visible>
                     </control>
 					<control type="progress">
@@ -279,7 +279,7 @@
             </control>
             <control type="group">
                 <centerbottom>100</centerbottom>
-                <left>-40</left>
+                <left>70</left>
                 <right>view_pad</right>
                 <height>80</height>
                 <include>OSD_Codecs</include>

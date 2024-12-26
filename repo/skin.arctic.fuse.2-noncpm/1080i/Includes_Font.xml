@@ -71,7 +71,7 @@
             <font>
                 <name>font_debug</name>
                 <filename>GeezaPro.ttf</filename>
-                <size>23</size>
+                <size>25</size>
                 <aspect>$PARAM[aspect_system]</aspect>
             </font>
 
