@@ -26,10 +26,10 @@
                 <include content="Object_Height" condition="VideoPlayer.Content(livetv)">
                     <param name="height">740</param>
                 </include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>510</height>
-                <width>1280</width>
-                <left>-40</left>
+                 <include>OSD_Stream_Selector_Divider</include>
+                <height>620</height>
+                <width>1600</width>
+                <left>70</left>
                 <bottom>160</bottom>
                 <include content="Object_MenuHeader">
                     <param name="label">[CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE]</param>
@@ -133,9 +133,20 @@
                             <align>right</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]$LOCALIZE[20474] | $LOCALIZE[16038][/B][CR]$VAR[Label_VideoHDRCodec]$INFO[Player.Process(deintmethod),  |  ,]</label>
+                            <label>[B]HDR Type | Deinterlace method][/B][CR]$VAR[Label_VideoHDRCodec]$INFO[Player.Process(deintmethod),  |  ,]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
+                        		
+					<control type="textbox">
+                        <height>auto</height>
+                        <aligny>center</aligny>
+                        <autoscroll>false</autoscroll>
+                        <align>right</align>
+                        <font>font_debug</font>
+                        <textcolor>dialog_fg_90</textcolor>
+                        <label>[B]Audio Language : [/B][UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE][CR][B]Subtitles Language : [/B][UPPERCASE]$INFO[VideoPlayer.SubtitlesLanguage][/UPPERCASE]</label>
+                        <visible>!VideoPlayer.Content(livetv)</visible>
+                    </control>
                     </control>
                     <control type="grouplist">
                         <top>140</top>
@@ -194,7 +205,7 @@
                             <visible>VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="group">
-                            <height>30</height>
+                            <height>auto</height>
                             <control type="progress">
                                 <top>0</top>
                                 <width>400</width>
@@ -221,7 +232,7 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]$LOCALIZE[38031][/B][CR]$INFO[Player.Process(videowidth),,x]$INFO[Player.Process(videoheight),, $LOCALIZE[31261]]$INFO[Player.Process(videodar),$COMMA , $LOCALIZE[31260]]$INFO[Player.Process(videofps),$COMMA , $LOCALIZE[31259]]$INFO[VideoPlayer.VideoBitrate,$COMMA , kb/s]</label>
+                            <label>[B]Video stream[/B][CR]$INFO[Player.Process(videowidth),,x]$INFO[Player.Process(videoheight),, $LOCALIZE[31261]]$INFO[Player.Process(videodar),$COMMA , $LOCALIZE[31260]]$INFO[Player.Process(videofps),$COMMA , $LOCALIZE[31259]]$INFO[VideoPlayer.VideoBitrate,$COMMA , kb/s]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -231,7 +242,7 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[B]$LOCALIZE[460][/B][CR]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , $LOCALIZE[31263]]$INFO[Player.Process(audiosamplerate),$COMMA , $LOCALIZE[31262]]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]$INFO[Player.Process(audiochannels),[CR],]</label>
+                            <label>[B]Audio Stream[/B][CR]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , $LOCALIZE[31263]]$INFO[Player.Process(audiosamplerate),$COMMA , $LOCALIZE[31262]]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]$INFO[Player.Process(audiochannels),[CR],]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
@@ -244,6 +255,25 @@
                             <label>[B]$LOCALIZE[31256][/B][CR]$LOCALIZE[31117]: $INFO[system.memory(used)] / $INFO[system.memory(total)] - $INFO[System.Memory(used.percent)][CR]$LOCALIZE[31258]:$INFO[System.CpuFrequency, , ]$VAR[Label_System_Temp, , ]$INFO[System.CpuUsage, ,]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
+                        <control type="textbox">
+                            <height>auto</height>
+                        <aligny>center</aligny>
+                        <autoscroll>false</autoscroll>
+                        <align>left</align>
+                        <font>font_debug</font>
+                        <textcolor>dialog_fg_90</textcolor>
+						<label>[B]Player cache : [/B]$INFO[Player.CacheLevel,,%]</label>
+                        <visible>!VideoPlayer.Content(livetv)</visible>
+                    </control>
+					<control type="progress">
+					        <width>210</width>
+                            <description>BAR</description>
+                            <centertop>50%</centertop>
+                            <height>20</height>
+                            <info>Player.CacheLevel</info>
+                            <include>DefSettingsButton</include>
+                    </control>
+                    
                     </control>
                 </control>
             </control>

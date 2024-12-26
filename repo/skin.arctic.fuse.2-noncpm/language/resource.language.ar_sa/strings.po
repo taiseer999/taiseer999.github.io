@@ -582,7 +582,7 @@ msgstr "صقيع الشتاء"
 #: /1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31117"
 msgid "RAM"
-msgstr "الذاكرة"
+msgstr ""
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31118"
@@ -1031,11 +1031,11 @@ msgstr "نهاية الجزء"
 
 msgctxt "#31216"
 msgid "Video decoder"
-msgstr "ترميز الفيديو"
+msgstr ""
 
 msgctxt "#31217"
 msgid "Pixel format"
-msgstr "تنسيق البكسل"
+msgstr ""
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31218"
@@ -1215,19 +1215,19 @@ msgstr "تخصيص صورة البدء"
 
 msgctxt "#31256"
 msgid "Resource Usage"
-msgstr "إستخدام الذاكرة"
+msgstr ""
 
 msgctxt "#31257"
 msgid "Memory"
-msgstr "الذاكرة"
+msgstr ""
 
 msgctxt "#31258"
 msgid "CPU"
-msgstr "المعالج"
+msgstr ""
 
 msgctxt "#31259"
 msgid "FPS"
-msgstr "اطار/ ثانية"
+msgstr ""
 
 msgctxt "#31260"
 msgid "AR"
