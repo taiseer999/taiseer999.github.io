@@ -18,6 +18,15 @@
     <variable name="Exp_Var_DialogTheme_IsCoal">
         <value condition="!$EXP[Exp_DialogTheme_IsAdaptive] + Skin.String(Background.DialogImage,Coal)">True</value>
     </variable>
+    <variable name="Exp_Var_HomeLayout_IsBasic">
+        <value condition="Skin.HasSetting(Hub.Home.DisableSubmenu) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)">True</value>
+    </variable>
+    <variable name="Exp_Var_HomeLayout_IsDetailed">
+        <value condition="Skin.HasSetting(Hub.Home.DisableSubmenu) + Skin.HasSetting(Hub.Home.EnableDetailedInformation)">True</value>
+    </variable>
+    <variable name="Exp_Var_HomeLayout_IsAdvanced">
+        <value condition="!Skin.HasSetting(Hub.Home.DisableSubmenu)">True</value>
+    </variable>
 
     <expression name="Exp_ColourTheme_IsGrey">[String.IsEqual(Skin.CurrentColourTheme,Dark Grey) | String.IsEqual(Skin.CurrentColourTheme,Dark Grey - Light dialogs)]</expression>
     <expression name="Exp_ColourTheme_IsBlack">[String.IsEqual(Skin.CurrentColourTheme,SKINDEFAULT) | String.IsEqual(Skin.CurrentColourTheme,Skin default - Light dialogs)]</expression>
@@ -109,6 +118,7 @@
     <expression name="Exp_Hubs_Spotlight_HasItems">[!Integer.IsEqual(Container(301).NumItems,0) | Container(301).IsUpdating]</expression>
 
     <expression name="Exp_Hubs_Spotlight_SlideDown">[Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)]</expression>
+    <expression name="Exp_Hubs_Spotlight_ShowButtons">[ControlGroup(310).HasFocus()]</expression>
 
     <expression name="Exp_Hubs_Categories_SlideDown">[String.IsEmpty(Window.Property(Slide.WidgetContainer))]</expression>
 
