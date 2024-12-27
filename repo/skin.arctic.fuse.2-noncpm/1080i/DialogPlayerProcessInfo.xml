@@ -242,7 +242,8 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[COLOR $VAR[ColorHighlight]][B]Audio Stream[/B][/COLOR][CR]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , $LOCALIZE[31263]]$INFO[Player.Process(audiosamplerate),$COMMA , $LOCALIZE[31262]]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]$INFO[Player.Process(audiochannels),[CR],]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31650][/B]:[/COLOR][CR]$VAR[AudioCodec1Var] $VAR[AudioChannels1Var]$INFO[Player.Process(audio.is.dolby.atmos), ,]$INFO[Player.Process(audio.dts.x.type), ,]</label>
+					<font>font_debug</font>                       
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
                         <control type="textbox">
