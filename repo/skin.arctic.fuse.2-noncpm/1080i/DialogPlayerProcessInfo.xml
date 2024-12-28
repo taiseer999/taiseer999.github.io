@@ -32,7 +32,7 @@
                 <left>70</left>
                 <bottom>160</bottom>
                 <include content="Object_MenuHeader">
-                    <param name="label">[CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE]</param>
+                    <param name="label">[CAPITALIZE]Player process info[/CAPITALIZE]</param>
                     <param name="icon">special://skin/extras/icons/bars-progress.png</param>
                 </include>
                 <control type="group">
@@ -242,7 +242,7 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31650][/B]:[/COLOR][CR]$VAR[AudioCodec1Var] $VAR[AudioChannels1Var]$INFO[Player.Process(audio.is.dolby.atmos), ,]$INFO[Player.Process(audio.dts.x.type), ,]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31650][/B][/COLOR][CR]$VAR[AudioCodec1Var] $VAR[AudioChannels1Var]$INFO[Player.Process(audio.is.dolby.atmos), ,]$INFO[Player.Process(audio.dts.x.type), ,]</label>
 					<font>font_debug</font>                       
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
@@ -253,9 +253,18 @@
                             <align>left</align>
                             <font>font_debug</font>
                             <textcolor>dialog_fg_90</textcolor>
-                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31256][/B][/COLOR][COLOR $VAR[ColorHighlight]][CR]$LOCALIZE[31117][/COLOR]: $INFO[system.memory(used)] / $INFO[system.memory(total)] - $INFO[System.Memory(used.percent)][COLOR $VAR[ColorHighlight]][CR]$LOCALIZE[31258]:[/COLOR]$INFO[System.CpuFrequency, , ]$VAR[Label_System_Temp, , ]$INFO[System.CpuUsage, ,]</label>
+                            <label>[COLOR $VAR[ColorHighlight]][B]$LOCALIZE[31256][/B][/COLOR][COLOR $VAR[ColorHighlight]][CR]$LOCALIZE[31117]:[/COLOR] $INFO[system.memory(used)] / $INFO[system.memory(total)] - $INFO[System.Memory(used.percent)][COLOR $VAR[ColorHighlight]][CR]$LOCALIZE[31258]:[/COLOR]$INFO[System.CpuFrequency, , ][COLOR green]$VAR[Label_System_Temp, , ][/COLOR]$INFO[System.CpuUsage, ,]</label>
                             <visible>!VideoPlayer.Content(livetv)</visible>
                         </control>
+                        <control type="progress">
+
+					        <width>210</width>
+                            <description>BAR</description>
+                            <centertop>50%</centertop>
+                            <height>15</height>
+                            <info>system.memory(used)</info>
+                            <include>DefSettingsButton</include>
+                    </control>
                         <control type="textbox">
                             <height>auto</height>
                         <aligny>center</aligny>

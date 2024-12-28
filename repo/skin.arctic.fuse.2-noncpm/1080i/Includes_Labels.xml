@@ -1940,6 +1940,8 @@
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
 	</variable>
 	<variable name="AudioCodec1Var">
+        <value condition="String.IsEqual(Player.Process(audio.is.dolby.atmos),Atmos)"></value>
+		<value condition="String.IsEqual(Player.Process(audio.dts.x.type),DTS:X)"></value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtsma)">DTS-HD Master Audio</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD Hi-Res Audio</value>
