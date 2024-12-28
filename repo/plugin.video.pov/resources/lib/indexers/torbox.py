@@ -31,10 +31,11 @@ def tb_torrent_cloud():
 				listitem.setArt({'icon': default_tb_icon, 'poster': default_tb_icon, 'thumb': default_tb_icon, 'fanart': fanart, 'banner': default_tb_icon})
 				yield (url, listitem, True)
 			except: pass
-	torents_folders, usenets_folders = TorBox.user_cloud(), TorBox.user_cloud_usenet()
-	folders_torents = [{**i, 'mediatype': 'torent'} for i in torents_folders if i['download_finished']]
-	folders_usenets = [{**i, 'mediatype': 'usenet'} for i in usenets_folders if i['download_finished']]
-	folders = folders_torents + folders_usenets
+	folders = []
+	try: folders += [{**i, 'mediatype': 'torent'} for i in TorBox.user_cloud() if i['download_finished']]
+	except: pass
+	try: folders += [{**i, 'mediatype': 'usenet'} for i in TorBox.user_cloud_usenet() if i['download_finished']]
+	except: pass
 	folders.sort(key=lambda k: k['updated_at'], reverse=True)
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_builder()))

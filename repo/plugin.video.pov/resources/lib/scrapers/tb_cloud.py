@@ -47,17 +47,10 @@ class source:
 		internal_results(self.scrape_provider, self.sources)
 		return self.sources
 
-	def _scrape_torents(self, results):
+	def _scraper(self, function, results, mediatype):
 		try: results += [
-			{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': 'torent'}
-			for i in TorBox.user_cloud(check_cache=False) for file in i['files'] if i['download_finished']
-		]
-		except: pass
-
-	def _scrape_usenets(self, results):
-		try: results += [
-			{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': 'usenet'}
-			for i in TorBox.user_cloud_usenet(check_cache=False) for file in i['files'] if i['download_finished']
+			{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': mediatype}
+			for i in function(check_cache=False) for file in i['files'] if i['download_finished']
 		]
 		except: pass
 
@@ -65,33 +58,36 @@ class source:
 		try:
 			results_append = self.scrape_results.append
 			threads = (
-				Thread(target=self._scrape_torents, args=(self.folder_results,)),
-				Thread(target=self._scrape_usenets, args=(self.folder_results,))
+				Thread(target=self._scraper, args=(TorBox.user_cloud, self.folder_results, 'torent')),
+				Thread(target=self._scraper, args=(TorBox.user_cloud_usenet, self.folder_results, 'usenet')),
 			)
 			[i.start() for i in threads]
 			[i.join() for i in threads]
-			if not self.folder_results: return
+			if not self.folder_results: return self.sources
 			for file in self.folder_results:
-				if not file['short_name'].lower().endswith(tuple(extensions)): continue
-				formalized = normalize(file['folder_name'])
-				foldername = clean_title(formalized)
-				normalized = normalize(file['short_name'])
-				filename = clean_title(normalized)
-				if self.media_type == 'movie' and not (
-					any(x in filename for x in self.year_query_list)
-					or # because usenet obfuscation
-					any(x in foldername for x in self.year_query_list)
-				): continue
-				elif not (
-					seas_ep_filter(self.season, self.episode, normalized)
-					or # because usenet obfuscation
-					seas_ep_filter(self.season, self.episode, formalized)
-				): continue
-				if not (
-					self.folder_query in filename
-					or # because usenet obfuscation
-					self.folder_query in foldername
-				): continue
-				results_append(file)
-		except: return
+				try:
+					if not file['short_name'].lower().endswith(tuple(extensions)): continue
+					formalized = normalize(file['folder_name'])
+					foldername = clean_title(formalized)
+					normalized = normalize(file['short_name'])
+					filename = clean_title(normalized)
+					if self.media_type == 'movie':
+						if not (
+							any(x in filename for x in self.year_query_list)
+							or # because usenet obfuscation
+							any(x in foldername for x in self.year_query_list)
+						): continue
+					elif not (
+						seas_ep_filter(self.season, self.episode, normalized)
+						or # because usenet obfuscation
+						seas_ep_filter(self.season, self.episode, formalized)
+					): continue
+					if not (
+						self.folder_query in filename
+						or # because usenet obfuscation
+						self.folder_query in foldername
+					): continue
+					results_append(file)
+				except: pass
+		except: pass
 
