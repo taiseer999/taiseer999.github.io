@@ -1188,7 +1188,7 @@ msgstr ""
 #: /1080i/SkinSettings.xml
 msgctxt "#31250"
 msgid "Highlight"
-msgstr "التركير"
+msgstr "التركيز"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31251"

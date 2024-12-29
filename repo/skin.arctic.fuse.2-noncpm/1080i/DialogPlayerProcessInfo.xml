@@ -28,7 +28,7 @@
                 </include>
                  <include>OSD_Stream_Selector_Divider</include>
                 <height>630</height>
-                <width>1600</width>
+                <width>1280</width>
                 <left>70</left>
                 <bottom>160</bottom>
                 <include content="Object_MenuHeader">
