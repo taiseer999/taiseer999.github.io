@@ -1929,6 +1929,9 @@
 		<value>$VAR[ColourRangeVar] | $VAR[ColourSpaceVar] | $VAR[ColourPrimariesVar] | $VAR[ColourTransferCharacteristicVar]</value>
 	</variable>
 	<variable name="AudioChannels1Var">
+        <value condition="String.Contains(Player.Process(audio.is.dolby.atmos),Atmos) + Integer.IsEqual(VideoPlayer.AudioChannels,8)"></value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)"></value>
+		<value condition="String.IsEqual(Player.Process(audio.dts.x.type),DTS:X) + Integer.IsEqual(VideoPlayer.AudioChannels,8)"></value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">Mono</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">2.0</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,3)">2.1</value>
@@ -1940,6 +1943,10 @@
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
 	</variable>
 	<variable name="AudioCodec1Var">
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)">Dolby Atmos (TrueHD)</value>
+		<value condition="String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)">Dolby Atmos (EAC3)</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(Player.Process(audio.dts.x.type),DTS:X)">DTS:X</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd) + String.IsEqual(Player.Process(audio.dts.x.type),DTS:X)">DTS:X</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtsma)">DTS-HD Master Audio</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD Hi-Res Audio</value>
