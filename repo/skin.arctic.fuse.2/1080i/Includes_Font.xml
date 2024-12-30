@@ -172,7 +172,7 @@
 
         <!-- Linespacing -->
         <param name="plot_linespacing_head">1.146</param>
-        <param name="plot_linespacing_midi">1.46</param>
+        <param name="plot_linespacing_midi">1.5</param>
         <param name="plot_linespacing_main">1.135</param>
         <param name="plot_linespacing_mini">1.1</param>
         <param name="plot_linespacing_tiny">1.1</param>
@@ -190,7 +190,7 @@
             <!-- Title fonts -->
             <font>
                 <name>font_title_huge</name>
-                <filename>$PARAM[font_bold]</filename>
+                <filename>majallab.ttf</filename>
                 <style>$PARAM[style_bold]</style>
                 <size>$PARAM[size_heavy_huge_x2]</size>
             </font>
