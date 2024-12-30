@@ -120,7 +120,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -140,7 +140,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -365,7 +365,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -385,7 +385,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -607,7 +607,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -627,7 +627,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -852,7 +852,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -872,7 +872,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1094,7 +1094,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1114,7 +1114,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1339,7 +1339,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_TrueHD_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1359,7 +1359,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>56</height>
-                    <texture colordiffuse="FFffffff">codecs/Dolby_Digital_Plus_Atmos.png</texture>
+                    <texture colordiffuse="FFffffff">codecs/Dolby_Atmos.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1828,7 +1828,7 @@
         </definition>
     </include>
 	
-    <include name="Dolby_TrueHD_Atmos_Flag">
+    <include name="Dolby_Atmos_Flag">
         <param name="groupId" />
         <param name="imageId" />
         <param name="visible" />
@@ -1870,7 +1870,7 @@
         </definition>
     </include>
 	
-    <include name="Dolby_Digital_Plus_Atmos1_Flag">
+    <include name="Dolby_Atmos1_Flag">
         <param name="groupId" />
         <param name="imageId" />
         <param name="visible" />
