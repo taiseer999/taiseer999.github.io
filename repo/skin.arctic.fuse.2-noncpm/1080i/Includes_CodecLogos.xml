@@ -64,7 +64,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+                <visible></visible>
                 <top>120</top>
                 <left>15</left>
                 <control type="image">
@@ -124,7 +124,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -134,7 +134,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>!String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -309,7 +309,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+               <visible></visible>
                 <top>120</top>
                 <left>15</left>
                 <control type="image">
@@ -369,7 +369,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -379,7 +379,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+               <visible>!String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -551,7 +551,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+               <visible></visible>
                 <top>120</top>
                 <left>15</left>
                 <control type="image">
@@ -611,7 +611,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -621,7 +621,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+               <visible>!String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -796,7 +796,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+               <visible></visible>
                 <top>120</top>
                 <left>15</left>
                 <control type="image">
@@ -856,7 +856,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -866,7 +866,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+               <visible>!String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -1038,7 +1038,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+               <visible></visible>
                 <top>120</top>
                 <left>15</left>
                 <control type="image">
@@ -1098,7 +1098,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -1108,7 +1108,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+               <visible>!String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -1283,7 +1283,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtsma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.Contains(Player.Process(audio.is.dolby.atmos), Atmos) | String.Contains(Player.Process(audio.dts.x.type), DTS) | String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
+               <visible></visible>
                 <top>220</top>
                 <left>15</left>
                 <control type="image">
@@ -1343,7 +1343,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</visible>
                 <top>235</top>
                 <left>30</left>
                 <control type="image">
@@ -1353,7 +1353,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
+               <visible>!String.Contains(VideoPlayer.AudioCodec,eac3) + Integer.IsEqual(VideoPlayer.AudioChannels,8)</visible>
                 <top>235</top>
                 <left>30</left>
                 <control type="image">
