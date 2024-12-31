@@ -23,7 +23,7 @@ nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
 class TVShows:
 	tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today', 'tmdb_tv_on_the_air', 'tmdb_tv_upcoming')
 	tmdb_special_key_dict = {'tmdb_tv_languages': 'language', 'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year'}
-	trakt_main = ('trakt_tv_trending', 'trakt_tv_trending_recent', 'trakt_tv_most_watched')
+	trakt_main = ('trakt_tv_trending', 'trakt_tv_trending_recent', 'trakt_tv_most_watched', 'trakt_tv_most_favorited')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
 	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
 	simkl_main = ('simkl_tv_popular', 'simkl_tv_most_watched', 'simkl_tv_recent_release', 'simkl_onas_popular', 'simkl_onas_most_watched', 'simkl_onas_recent_release')

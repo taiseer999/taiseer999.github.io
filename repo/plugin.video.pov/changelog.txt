@@ -9,6 +9,9 @@
 - nyaa in Sources/Torrents sourced from website results.
 
   [COLOR dodgerblue][B]Version 4.12[/B][/COLOR]
+- Added "Most Favorited This Week" for Movies/TVShows.
+  From the context menu restore to default or check for new items.
+- Added episode_type property.
 - Refactored Offcloud/TorBox cloud scrapers.
 - Completed clear cache for Offcloud/TorBox.
 - Added "Premium Expires Notification (days)" for each debrid (0 disables check).

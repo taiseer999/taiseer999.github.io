@@ -53,8 +53,7 @@ class Comet(Hosted):
 
 	def parse_html(self, html):
 		values = re.findall(self.pattern, html, re.DOTALL | re.MULTILINE)
-		values = iter(values)
-		config_dict = json.loads(next(values, []))
+		config_dict = json.loads(next(iter(values), []))
 		return config_dict
 
 

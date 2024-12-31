@@ -153,14 +153,20 @@ def all_episodes_meta(meta, user_info, Thread):
 
 def build_episodes_meta(data, image_resolution):
 	def _process():
-		for ep_data in data:
+		mid_season_premiere = None
+		ep_details = {1: 'season_premiere', 'mid_season': 'mid_season_finale', 'finale': 'season_finale'}
+		for idx, ep_data in enumerate(data, 1):
 			writer, director, guest_stars = '', '', []
 			ep_data_get = ep_data.get
 			title, plot, premiered = ep_data_get('name'), ep_data_get('overview'), ep_data_get('air_date')
-			season, episode = ep_data_get('season_number'), ep_data_get('episode_number')
+			season, episode, ep_type = ep_data_get('season_number'), ep_data_get('episode_number'), ep_data_get('episode_type')
 			rating, votes, still_path = ep_data_get('vote_average'), ep_data_get('vote_count'), ep_data_get('still_path', None)
 			if still_path: thumb = tmdb_image_base % (still_resolution, still_path)
 			else: thumb = None
+			if   ep_type == 'mid_season': mid_season_premiere = idx + 1
+			if   ep_type in ep_details: ep_type = ep_details[ep_type]
+			elif episode in ep_details: ep_type = ep_details[episode]
+			elif episode == mid_season_premiere: ep_type = 'mid_season_premiere'
 			guest_stars_list = ep_data_get('guest_stars', None)
 			if guest_stars_list:
 				try: guest_stars = [
@@ -175,7 +181,7 @@ def build_episodes_meta(data, image_resolution):
 				try: director = [i['name'] for i in crew if i['job'] == 'Director'][0]
 				except: pass
 			yield {'writer': writer, 'director': director, 'guest_stars': guest_stars, 'mediatype': 'episode', 'title': title, 'plot': plot,
-					'premiered': premiered, 'season': season, 'episode': episode, 'rating': rating, 'votes': votes, 'thumb': thumb}
+					'premiered': premiered, 'season': season, 'episode': episode, 'episode_type': ep_type, 'rating': rating, 'votes': votes, 'thumb': thumb}
 	still_resolution, profile_resolution = image_resolution['still'], image_resolution['profile']
 	return list(_process())
 

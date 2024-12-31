@@ -164,7 +164,9 @@ def tmdb_tv_title_year(title, year=None):
 def tmdb_tv_popular(page_no):
 	string = 'tmdb_tv_popular_%s' % page_no
 #	url = '%s/tv/popular?api_key=%s&language=en-US&region=US&page=%s' % (base_url, tmdb_api_key(), page_no)
-	url = '%s/tv/popular?api_key=%s&with_original_language=en&language=en-US&region=US&page=%s' % (base_url, tmdb_api_key(), page_no)
+#	url = '%s/tv/popular?api_key=%s&with_original_language=en&language=en-US&region=US&page=%s' % (base_url, tmdb_api_key(), page_no)
+	url = '%s/discover/tv?api_key=%s&with_original_language=en&language=en-US&region=US&page=%s' % (base_url, tmdb_api_key(), page_no)
+	url += '&sort_by=popularity.desc&without_genres=10763,10767'
 	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
 
 def tmdb_tv_premieres(page_no):
@@ -179,7 +181,7 @@ def tmdb_tv_airing_today(page_no):
 	string = 'tmdb_tv_airing_today_%s' % page_no
 #	url = '%s/tv/airing_today?api_key=%s&language=en-US&region=US&page=%s' % (base_url, tmdb_api_key(), page_no)
 	url = '%s/tv/airing_today?api_key=%s&with_original_language=en&language=en-US&region=US&page=%s' % (base_url, tmdb_api_key(), page_no)
-	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_4_HOURS)
 
 def tmdb_tv_on_the_air(page_no):
 	string = 'tmdb_tv_on_the_air_%s' % page_no

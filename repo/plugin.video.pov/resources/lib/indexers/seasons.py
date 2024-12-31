@@ -155,9 +155,13 @@ class Seasons:
 					cm = []
 					cm_append = cm.append
 					item_get = item.get
-					season, episode, ep_name = item_get('season'), item_get('episode'), item_get('title')
+					season, episode = item_get('season'), item_get('episode')
+					ep_name, ep_type = item_get('title'), item_get('episode_type')
 					premiered, cast = item_get('premiered'), show_cast + item_get('guest_stars', [])
 					episode_date, premiered = adjust_premiered_date_function(premiered, adjust_hours)
+					if int(season) == total_seasons and show_status in ('Ended', 'Cancelled') and ep_type == 'season_finale':
+						ep_type = 'series_finale'
+					props['episode_type'] = ep_type
 					playcount, overlay = get_watched_status_episode(watched_info, string(tmdb_id), season, episode)
 					resumetime, progress = get_resumetime(bookmarks, tmdb_id, season, episode)
 					thumb = item_get('thumb', None) or fanart

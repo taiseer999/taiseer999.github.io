@@ -47,7 +47,7 @@ class source:
 		internal_results(self.scrape_provider, self.sources)
 		return self.sources
 
-	def _scraper(self, function, results, mediatype):
+	def _scraper(self, results, function, mediatype):
 		try: results += [
 			{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': mediatype}
 			for i in function(check_cache=False) for file in i['files'] if i['download_finished']
@@ -58,8 +58,8 @@ class source:
 		try:
 			results_append = self.scrape_results.append
 			threads = (
-				Thread(target=self._scraper, args=(TorBox.user_cloud, self.folder_results, 'torent')),
-				Thread(target=self._scraper, args=(TorBox.user_cloud_usenet, self.folder_results, 'usenet')),
+				Thread(target=self._scraper, args=(self.folder_results, TorBox.user_cloud, 'torent')),
+				Thread(target=self._scraper, args=(self.folder_results, TorBox.user_cloud_usenet, 'usenet')),
 			)
 			[i.start() for i in threads]
 			[i.join() for i in threads]

@@ -112,10 +112,13 @@ class Episodes:
 			try: item = [i for i in episodes_data if i['episode'] == orig_episode][0]
 			except: return
 			item_get = item.get
-			season, episode, ep_name = item_get('season'), item_get('episode'), item_get('title')
+			season, episode, total_seasons = item_get('season'), item_get('episode'), meta_get('total_seasons')
+			orig_premiered, ep_name, ep_type = item_get('premiered'), item_get('title'), item_get('episode_type')
 			str_season_zfill2, str_episode_zfill2 = string(season).zfill(1), string(episode).zfill(2)
-			orig_premiered = item_get('premiered')
 			episode_date, premiered = adjust_premiered_date_function(orig_premiered, self.adjust_hours)
+			if int(season) == total_seasons and show_status in ('Ended', 'Cancelled') and ep_type == 'season_finale':
+				ep_type = 'series_finale'
+			props['episode_type'] = ep_type
 			if not episode_date or self.current_date < episode_date:
 				if self.list_type.startswith('next_episode'):
 					if not self.nextep_include_unaired: return

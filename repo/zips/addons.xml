@@ -1308,7 +1308,7 @@ updated YouTube addon URL
             <fanart>resources/mediafusion_logo.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.pov" version="4.12.19" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="4.12.31" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -1316,7 +1316,7 @@ updated YouTube addon URL
     <extension point="xbmc.python.pluginsource" library="resources/lib/pov.py">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="resources/lib/service.py" />
+    
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>

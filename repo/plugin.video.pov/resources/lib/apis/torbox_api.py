@@ -98,7 +98,7 @@ class TorBoxAPI:
 		return self._POST(self.cache, params={'format': 'list'}, json=data)
 
 	def add_magnet(self, magnet):
-		data = {'magnet': magnet, 'seed': 3, 'allow_zip': False}
+		data = {'magnet': magnet, 'seed': 3, 'allow_zip': 'false'}
 		return self._POST(self.cloud, data=data)
 
 	def create_transfer(self, magnet_url):
