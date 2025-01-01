@@ -156,14 +156,14 @@
 					<width>500</width>
 					<height>40</height>
 					<control type="image">
-						<left>0</left>
+						<left>130</left>
 						<top>7</top>
 						<width>80</width>
 						<height>30</height>
                         <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
-						<left>75</left>
+						<left>205</left>
 						<width>300</width>
 						<height>40</height>
 						<aligny>bottom</aligny>
@@ -402,14 +402,14 @@
 					<width>500</width>
 					<height>40</height>
 					<control type="image">
-						<left>0</left>
+						<left>220</left>
 						<top>7</top>
 						<width>80</width>
 						<height>30</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
-						<left>75</left>
+						<left>295</left>
 						<width>300</width>
 						<height>40</height>
 						<aligny>bottom</aligny>
@@ -718,14 +718,14 @@
 					<width>700</width>
 					<height>40</height>
 					<control type="image">
-						<left>0</left>
+						<left>170</left>
 						<top>5</top>
 						<width>80</width>
 						<height>30</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/hdr10.png</texture>
 					</control>
 					<control type="label">
-						<left>80</left>
+						<left>250</left>
 						<width>500</width>
 						<height>40</height>
 						<aligny>bottom</aligny>
