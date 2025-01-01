@@ -867,13 +867,28 @@
 					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 				</control>
-				<control type="label"> <!-- A|V bit rate -->
+				<control type="group"> <!-- A|V bit rate -->
 					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31643]:[/COLOR] $INFO[Player.Process(audio.live.mibit.rate),,] $VAR[|] $INFO[Player.Process(video.live.mibit.rate),,]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
+					<control type="label">
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31643]:[/COLOR] $INFO[Player.Process(audio.live.mibit.rate),,] $VAR[|] $INFO[Player.Process(video.live.mibit.rate),,]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>400</left>
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
 				<control type="label"> <!-- Cache -->
 					<width>620</width>
