@@ -180,11 +180,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos_Flag">
+            <include content="Dolby_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -196,11 +196,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -511,11 +511,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos_Flag">
+            <include content="Dolby_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -527,11 +527,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -842,11 +842,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos_Flag">
+            <include content="Dolby_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -858,11 +858,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -970,11 +970,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos_Flag">
+            <include content="Dolby_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -986,11 +986,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">!String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
