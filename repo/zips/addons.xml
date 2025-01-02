@@ -6618,7 +6618,7 @@ Added arabic fonts
         <description lang="en_US">Arctic: Zephyr - Reloaded is based on original Arctic: Zephyr skin, created by jurialmunkey. Arctic focuses on being simple, clean and minimalistic with a light spin.</description>
         <description lang="fr">Arctic: Zephyr - Reloaded est basé sur le skin original Arctic: Zephyr, créé par jurialmunkey. Arctic se focalise sur le fait d'être simple, claire et minimaliste.</description>
     </extension>
-</addon><addon id="skin.cpm.estuary" version="4.0.9.16" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
+</addon><addon id="skin.cpm.estuary" version="4.0.9.17" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 	</requires>

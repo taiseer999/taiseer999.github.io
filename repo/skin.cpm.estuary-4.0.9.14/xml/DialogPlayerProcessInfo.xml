@@ -885,7 +885,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
+						<label>$INFO[VideoPlayer.AudioMibitRate,,] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,,]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
