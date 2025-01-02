@@ -276,86 +276,56 @@
             </include>
 
 
-         <include content="VideoCodecFlag">
-				<param name="groupId">44</param><param name="imageId">45</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-				<param name="texture">flags/fullscreen/201.png</param>
-                
-			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">44</param><param name="imageId">45</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + ![String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)]</param>
-				<param name="texture">flags/fullscreen/201.png</param>
-                
-			</include>
+        
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">46</param><param name="imageId">47</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/101.png</param>
-			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">46</param><param name="imageId">47</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)</param>
-				<param name="texture">flags/fullscreen/101.png</param>
-			</include>
+			
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),sdr)</param>
-				<param name="texture">flags/fullscreen/0vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">48</param><param name="imageId">49</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/401.png</param>
-                
-			</include>
+			
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="visible"></param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">50</param><param name="imageId">51</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-				<param name="texture">flags/fullscreen/301.png</param>
-                
-			</include>
+			
         </control>
 
         <control type="group" id="3">
@@ -607,86 +577,56 @@
             </include>
 
 
-         <include content="VideoCodecFlag">
-				<param name="groupId">44</param><param name="imageId">45</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-				<param name="texture">flags/fullscreen/201.png</param>
-                
-			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">44</param><param name="imageId">45</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + ![String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)]</param>
-				<param name="texture">flags/fullscreen/201.png</param>
-                
-			</include>
+        
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">46</param><param name="imageId">47</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/101.png</param>
-			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">46</param><param name="imageId">47</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)</param>
-				<param name="texture">flags/fullscreen/101.png</param>
-			</include>
+			
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),sdr)</param>
-				<param name="texture">flags/fullscreen/0vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">48</param><param name="imageId">49</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/401.png</param>
-                
-			</include>
+			
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">50</param><param name="imageId">51</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-				<param name="texture">flags/fullscreen/301.png</param>
-                
-			</include>
+			
         </control>
 
          <control type="group" id="4">
@@ -1067,86 +1007,56 @@
             </include>
 
 
-         <include content="VideoCodecFlag">
-				<param name="groupId">44</param><param name="imageId">45</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-				<param name="texture">flags/fullscreen/201.png</param>
-                
-			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">44</param><param name="imageId">45</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + ![String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)]</param>
-				<param name="texture">flags/fullscreen/201.png</param>
-                
-			</include>
+        
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),hdr10)</param>
-				<param name="texture">flags/fullscreen/200vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">46</param><param name="imageId">47</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/101.png</param>
-			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">46</param><param name="imageId">47</param>
-				<param name="visible">String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)</param>
-				<param name="texture">flags/fullscreen/101.png</param>
-			</include>
+			
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),sdr)</param>
-				<param name="texture">flags/fullscreen/0vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">48</param><param name="imageId">49</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/401.png</param>
-                
-			</include>
+			
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
 				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
-				<param name="texture">flags/fullscreen/400vs.png</param>
+				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>
-			<include content="VideoCodecFlag">
-				<param name="groupId">50</param><param name="imageId">51</param>
-				<param name="visible">Integer.IsEqual(Player.Process(video.source.hdr.type.raw),4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</param>
-				<param name="texture">flags/fullscreen/301.png</param>
-                
-			</include>
+			
           </control>   
     </controls>
 </window>
