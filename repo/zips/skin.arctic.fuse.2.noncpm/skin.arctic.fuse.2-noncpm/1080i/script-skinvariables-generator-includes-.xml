@@ -58,7 +58,7 @@
                     <param name="groupid">101702</param>
                     <param name="label">متابعة المشاهدة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -94,7 +94,7 @@
                     <param name="groupid">101703</param>
                     <param name="label">قائمة المشاهدة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -130,7 +130,7 @@
                     <param name="groupid">101704</param>
                     <param name="label">المفضلة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -166,7 +166,7 @@
                     <param name="groupid">101705</param>
                     <param name="label">التجميعات</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -455,7 +455,7 @@
                     <param name="groupid">102705</param>
                     <param name="label">قائمة المشاهدة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Landscape_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -527,7 +527,7 @@
                     <param name="groupid">102707</param>
                     <param name="label">التجميعات</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Landscape_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -884,6 +884,7 @@
                     <onfocus>SetProperty(SideMenu.CurrentName,الإضافات,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentItem,3,Home)</onfocus>
                 </include>
+                <!-- Sidemenu Widgets for sidemenu 6 Weather Window -->
             </include>
         </include>
     </include>
@@ -906,53 +907,53 @@
         <item>
             <label>متابعة المشاهدة</label>
             <property name="id">101602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101602)</visible>
         </item>
         <item>
             <label>متابعة المشاهدة</label>
             <property name="id">101602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(101602)</visible>
         </item>
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">101603</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101603)</visible>
         </item>
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">101603</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(101603)</visible>
         </item>
         <item>
             <label>المفضلة</label>
             <property name="id">101604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101604)</visible>
         </item>
         <item>
             <label>المفضلة</label>
             <property name="id">101604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(101604)</visible>
         </item>
         <item>
             <label>التجميعات</label>
             <property name="id">101605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101605)</visible>
         </item>
         <item>
             <label>التجميعات</label>
             <property name="id">101605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(101605)</visible>
         </item>
         <item>
@@ -1050,14 +1051,14 @@
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">102605</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(102605)</visible>
         </item>
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">102605</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(102605)</visible>
         </item>
         <item>
@@ -1076,14 +1077,14 @@
         <item>
             <label>التجميعات</label>
             <property name="id">102607</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(102607)</visible>
         </item>
         <item>
             <label>التجميعات</label>
             <property name="id">102607</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(102607)</visible>
         </item>
         <item>
@@ -1205,6 +1206,7 @@
             <property name="include">List_Circle_Row</property>
             <visible>!Control.IsVisible(105604)</visible>
         </item>
+        <!-- Sidemenu Widgets for sidemenu 6 Weather Window -->
     </include>
     <!-- Static Mainmenu -->
     <include name="skinvariables-sidemenu-staticitems">
@@ -1311,6 +1313,31 @@
             <onclick>ActivateWindow(addonbrowser)</onclick>
             <visible>True</visible>
         </item>
+        <item>
+            <label>Weather Window</label>
+            <icon>special://skin/extras/icons/sun2.png</icon>
+            <property name="path">ActivateWindow(weather)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[6]</property>
+            <property name="guid">guid-fc575c46</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style"/>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget"/>
+            <label2/>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>ActivateWindow(weather)</onclick>
+            <visible>True</visible>
+        </item>
     </include>
     <!-- Dynamic Submenus -->
     <include name="skinvariables-sidemenu-submenu">
@@ -1359,7 +1386,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[1602]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1381,7 +1408,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[1603]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style">Overview</property>
                     <property name="widget_sortby">lastused</property>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1403,7 +1430,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[1604]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1425,7 +1452,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[1605]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style">Overview</property>
                     <property name="widget_sortby">lastused</property>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1616,7 +1643,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[2605]</property>
-                    <property name="widget_style">Landscape</property>
+                    <property name="widget_style">Overview</property>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1660,7 +1687,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[2607]</property>
-                    <property name="widget_style">Landscape</property>
+                    <property name="widget_style">Overview</property>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1902,6 +1929,20 @@
             <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)</visible>
             <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
         </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">6302</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
+            <param name="hidden_button_prefix">6302</param>
+            <param name="window_id">Home</param>
+            <param name="property_window_id">Home</param>
+            <param name="submenu_widget_id">6601</param>
+            <include content="Action_SkinVariables_ShortcutList_Onclick">
+                <param name="id">6302</param>
+            </include>
+            <content/>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-fc575c46)</visible>
+            <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
+        </include>
     </include>
     <!-- Category Spotlights -->
     <include name="skinvariables-sidemenu-spotlight">
@@ -1991,7 +2032,7 @@
                     <param name="groupid">1702</param>
                     <param name="label">متابعة المشاهدة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -2024,7 +2065,7 @@
                     <param name="groupid">1703</param>
                     <param name="label">قائمة المشاهدة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -2057,7 +2098,7 @@
                     <param name="groupid">1704</param>
                     <param name="label">المفضلة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -2090,7 +2131,7 @@
                     <param name="groupid">1705</param>
                     <param name="label">التجميعات</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -2355,7 +2396,7 @@
                     <param name="groupid">2705</param>
                     <param name="label">قائمة المشاهدة</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Landscape_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -2421,7 +2462,7 @@
                     <param name="groupid">2707</param>
                     <param name="label">التجميعات</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Landscape_Row</param>
+                    <param name="include">List_Overview_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -2748,6 +2789,7 @@
                         <param name="id">5604</param>
                     </include>
                 </include>
+                <!-- Standard Widgets for Category sidemenu 6 Weather Window -->
                 <!-- Global Widgets for sidemenu -->
             </include>
         </include>
@@ -2999,53 +3041,53 @@
         <item>
             <label>متابعة المشاهدة</label>
             <property name="id">1602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(1602)</visible>
         </item>
         <item>
             <label>متابعة المشاهدة</label>
             <property name="id">1602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(1602)</visible>
         </item>
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">1603</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(1603)</visible>
         </item>
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">1603</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(1603)</visible>
         </item>
         <item>
             <label>المفضلة</label>
             <property name="id">1604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(1604)</visible>
         </item>
         <item>
             <label>المفضلة</label>
             <property name="id">1604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(1604)</visible>
         </item>
         <item>
             <label>التجميعات</label>
             <property name="id">1605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(1605)</visible>
         </item>
         <item>
             <label>التجميعات</label>
             <property name="id">1605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(1605)</visible>
         </item>
         <item>
@@ -3143,14 +3185,14 @@
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">2605</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(2605)</visible>
         </item>
         <item>
             <label>قائمة المشاهدة</label>
             <property name="id">2605</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(2605)</visible>
         </item>
         <item>
@@ -3169,14 +3211,14 @@
         <item>
             <label>التجميعات</label>
             <property name="id">2607</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(2607)</visible>
         </item>
         <item>
             <label>التجميعات</label>
             <property name="id">2607</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Overview_Row</property>
             <visible>!Control.IsVisible(2607)</visible>
         </item>
         <item>
@@ -3298,6 +3340,7 @@
             <property name="include">List_Circle_Row</property>
             <visible>!Control.IsVisible(5604)</visible>
         </item>
+        <!-- Standard Widgets for Category sidemenu 6 Weather Window -->
         <!-- Global Widgets for sidemenu -->
     </include>
     <!-- Static Mainmenu -->
@@ -4882,6 +4925,28 @@
             <onclick>ActivateWindow(addonbrowser)</onclick>
             <visible>True</visible>
         </item>
+        <item>
+            <label>Weather Window</label>
+            <icon>special://skin/extras/icons/sun2.png</icon>
+            <property name="path">ActivateWindow(weather)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[6]</property>
+            <property name="guid">guid-fc575c46</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="sidemenu_path">plugin://script.skinvariables/?info=get_shortcuts_node&amp;menu=sidemenu-customnode-guid-fc575c46$VAR[Path_SkinVariables_SkinFolder,&amp;skin=,]</property>
+            <property name="sidemenu_target"/>
+            <property name="widgets_first_id">$VAR[skinvariables-sidemenu-itemfocus-106]</property>
+            <!-- <property name="widgets_first_id">$NUMBER[106601]</property> -->
+            <onclick>ActivateWindow(weather)</onclick>
+            <visible>True</visible>
+        </item>
     </include>
     <!-- Variables for Side Menu الافلام focus -->
     <variable name="skinvariables-sidemenu-itemfocus-101">
@@ -4921,6 +4986,10 @@
         <value condition="Control.IsVisible(105602)">105602</value>
         <value condition="Control.IsVisible(105603)">105603</value>
         <value condition="Control.IsVisible(105604)">105604</value>
+        <value>400</value>
+    </variable>
+    <!-- Variables for Side Menu Weather Window focus -->
+    <variable name="skinvariables-sidemenu-itemfocus-106">
         <value>400</value>
     </variable>
     <!-- Search Extended -->
