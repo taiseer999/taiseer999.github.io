@@ -33,7 +33,7 @@ class source:
 						file_name = item['short_name']
 						if title_filter and not check_title(title, file_name, self.aliases, self.year, self.season, self.episode): continue
 						file_dl, size = item['url'], round(float(int(item['size']))/1073741824, 2)
-						direct_debrid_link, URLName = item['mediatype'] == 'usenet', clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
+						direct_debrid_link, URLName = item['mediatype'], clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
 						video_quality, details = get_file_info(name_info=release_info_format(file_name))
 						source_item = {'name': file_name, 'title': file_name, 'URLName': URLName, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size,
 									'extraInfo': details, 'url_dl': file_dl, 'id': file_dl, 'downloads': False, 'direct': True, 'source': self.scrape_provider,
@@ -60,6 +60,7 @@ class source:
 			threads = (
 				Thread(target=self._scraper, args=(self.folder_results, TorBox.user_cloud, 'torent')),
 				Thread(target=self._scraper, args=(self.folder_results, TorBox.user_cloud_usenet, 'usenet')),
+				Thread(target=self._scraper, args=(self.folder_results, TorBox.user_cloud_webdl, 'webdl'))
 			)
 			[i.start() for i in threads]
 			[i.join() for i in threads]

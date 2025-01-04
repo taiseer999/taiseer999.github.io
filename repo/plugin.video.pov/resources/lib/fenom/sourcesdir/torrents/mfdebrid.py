@@ -63,9 +63,8 @@ class source:
 		for file in files:
 			try:
 				if 'url' in file:
-					query = requests.utils.urlparse(file['url']).query
-					params = dict(i.split('=') for i in query.split('&'))
-					hash = params['info_hash']
+					path = requests.utils.urlparse(file['url']).path.split('/')
+					hash = path[path.index('stream') + 1]
 				else: hash = file['infoHash']
 				file_title = file['behaviorHints']['filename'].split('\n')
 				file_info = [x for x in file['description'].split('\n') if _INFO.match(x)][0]
@@ -133,9 +132,8 @@ class source:
 		for file in files:
 			try:
 				if 'url' in file:
-					query = requests.utils.urlparse(file['url']).query
-					params = dict(i.split('=') for i in query.split('&'))
-					hash = params['info_hash']
+					path = requests.utils.urlparse(file['url']).path.split('/')
+					hash = path[path.index('stream') + 1]
 				else: hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]

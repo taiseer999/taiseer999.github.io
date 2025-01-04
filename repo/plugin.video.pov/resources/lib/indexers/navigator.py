@@ -112,12 +112,14 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud', 'name': clca_str }, 'offcloud.png', n_ins, False)
 
 	def torbox(self):
-		tb_str, clc_str = 'TorBox', 'Clear Cloud Storage',
-		cloud_str, ai_str = ls(32496), ls(32494)
+		tor_str, usenet_str, web_str = 'Torrent', 'Usenet', 'Web Download'
+		tb_str, cloud_str, ai_str = 'TorBox', ls(32496), ls(32494)
 		clca_str, n_ins = ls(32497) % tb_str, _in_str % (tb_str.upper(), '')
-		self._add_item({'mode': 'torbox.tb_torrent_cloud',          'name': cloud_str}, 'torbox.png', n_ins)
-		self._add_item({'mode': 'torbox.tb_account_info',           'name': ai_str   }, 'torbox.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud', 'name': clca_str }, 'torbox.png', n_ins, False)
+		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'torent', 'name': tor_str   }, 'torbox.png', n_ins)
+		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'usenet', 'name': usenet_str}, 'torbox.png', n_ins)
+		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'webdl',  'name': web_str   }, 'torbox.png', n_ins)
+		self._add_item({'mode': 'torbox.tb_account_info',                          'name': ai_str    }, 'torbox.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',                'name': clca_str  }, 'torbox.png', n_ins, False)
 
 	def favourites(self):
 		fav_str = ls(32453)

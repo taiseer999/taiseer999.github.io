@@ -9,6 +9,7 @@
 - nyaa in Sources/Torrents sourced from website results.
 
   [COLOR dodgerblue][B]Version 4.12[/B][/COLOR]
+- Fix for format change in mediafusion results.
 - Added "Most Favorited This Week" for Movies/TVShows.
   From the context menu restore to default or check for new items.
 - Added episode_type property.

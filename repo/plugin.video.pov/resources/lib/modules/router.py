@@ -266,7 +266,7 @@ def routing(params):
 	elif 'torbox' in mode:
 		if mode == 'torbox.tb_torrent_cloud':
 			from indexers.torbox import tb_torrent_cloud
-			tb_torrent_cloud()
+			tb_torrent_cloud(params_get('media_type'))
 		elif mode == 'torbox.browse_tb_cloud':
 			from indexers.torbox import browse_tb_cloud
 			browse_tb_cloud(params_get('folder_id'), params_get('media_type'))

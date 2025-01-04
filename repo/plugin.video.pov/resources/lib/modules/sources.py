@@ -670,7 +670,8 @@ class Sources():
 				url = url_dl
 			elif scrape_provider == 'tb_cloud':
 				from apis.torbox_api import TorBoxAPI
-				if direct_debrid_link: url = TorBoxAPI().unrestrict_usenet(url_dl)
+				if   direct_debrid_link == 'usenet': url = TorBoxAPI().unrestrict_usenet(url_dl)
+				elif direct_debrid_link == 'webdl': url = TorBoxAPI().unrestrict_webdl(url_dl)
 				else: url = TorBoxAPI().unrestrict_link(item_id)
 			elif scrape_provider == 'folders':
 				if url_dl.endswith('.strm'):

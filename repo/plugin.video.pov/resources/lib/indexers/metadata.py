@@ -122,6 +122,32 @@ def tvshow_meta(id_type, media_id, user_info, current_date):
 	return meta
 
 def season_episodes_meta(season, meta, user_info):
+	def _process():
+		for ep_data in data:
+			writer, director, guest_stars = '', '', []
+			ep_data_get = ep_data.get
+			title, plot, premiered = ep_data_get('name'), ep_data_get('overview'), ep_data_get('air_date')
+			season, episode, ep_type = ep_data_get('season_number'), ep_data_get('episode_number'), ep_data_get('episode_type')
+			rating, votes, still_path = ep_data_get('vote_average'), ep_data_get('vote_count'), ep_data_get('still_path', None)
+			ep_type = ep_details.get(ep_type) or ep_details.get(episode) or ep_type or ''
+			if ep_type == 'mid_season_finale': ep_details[episode + 1] = 'mid_season_premiere'
+			if still_path: thumb = tmdb_image_base % (still_resolution, still_path)
+			else: thumb = None
+			guest_stars_list = ep_data_get('guest_stars', None)
+			if guest_stars_list:
+				try: guest_stars = [
+					{'name': i['name'], 'role': i['character'], 'thumbnail': tmdb_image_base % (profile_resolution, i['profile_path']) if i['profile_path'] else ''}
+					for i in guest_stars_list
+				]
+				except: pass
+			crew = ep_data_get('crew', None)
+			if crew:
+				try: writer = ', '.join([i['name'] for i in crew if i['job'] in writer_credits])
+				except: pass
+				try: director = [i['name'] for i in crew if i['job'] == 'Director'][0]
+				except: pass
+			yield {'writer': writer, 'director': director, 'guest_stars': guest_stars, 'mediatype': 'episode', 'title': title, 'plot': plot,
+					'premiered': premiered, 'season': season, 'episode': episode, 'episode_type': ep_type, 'rating': rating, 'votes': votes, 'thumb': thumb}
 	metacache = MetaCache()
 	metacache_get, metacache_set = metacache.get, metacache.set
 	media_id, data = meta['tmdb_id'], None
@@ -129,11 +155,15 @@ def season_episodes_meta(season, meta, user_info):
 	data = metacache_get('season', 'tmdb_id', string)
 	if data: return data
 	try:
-		if meta['status'] in finished_show_check or meta['total_seasons'] > int(season): expiration = EXPIRES_182_DAYS
-		else: expiration = EXPIRES_4_DAYS
+		show_ended, total_seasons = meta['status'] in finished_show_check, meta['total_seasons']
+		expiration = EXPIRES_182_DAYS if show_ended or total_seasons > int(season) else EXPIRES_4_DAYS
+		premiere = 'series_premiere' if int(season) == 1 else 'season_premiere'
+		finale = 'series_finale' if show_ended and int(season) == total_seasons else 'season_finale'
+		ep_details = {1: premiere, 'mid_season': 'mid_season_finale', 'finale': finale}
 		image_resolution = user_info.get('image_resolution', backup_resolutions)
+		still_resolution, profile_resolution = image_resolution['still'], image_resolution['profile']
 		data = season_episodes_details(media_id, season, user_info['language'], user_info['tmdb_api'])['episodes']
-		data = build_episodes_meta(data, image_resolution)
+		data = list(_process())
 		metacache_set('season', 'tmdb_id', data, expiration, string)
 	except: pass
 	return data
@@ -150,40 +180,6 @@ def all_episodes_meta(meta, user_info, Thread):
 		[i.join() for i in threads]
 	except: pass
 	return data
-
-def build_episodes_meta(data, image_resolution):
-	def _process():
-		mid_season_premiere = None
-		ep_details = {1: 'season_premiere', 'mid_season': 'mid_season_finale', 'finale': 'season_finale'}
-		for idx, ep_data in enumerate(data, 1):
-			writer, director, guest_stars = '', '', []
-			ep_data_get = ep_data.get
-			title, plot, premiered = ep_data_get('name'), ep_data_get('overview'), ep_data_get('air_date')
-			season, episode, ep_type = ep_data_get('season_number'), ep_data_get('episode_number'), ep_data_get('episode_type')
-			rating, votes, still_path = ep_data_get('vote_average'), ep_data_get('vote_count'), ep_data_get('still_path', None)
-			if still_path: thumb = tmdb_image_base % (still_resolution, still_path)
-			else: thumb = None
-			if   ep_type == 'mid_season': mid_season_premiere = idx + 1
-			if   ep_type in ep_details: ep_type = ep_details[ep_type]
-			elif episode in ep_details: ep_type = ep_details[episode]
-			elif episode == mid_season_premiere: ep_type = 'mid_season_premiere'
-			guest_stars_list = ep_data_get('guest_stars', None)
-			if guest_stars_list:
-				try: guest_stars = [
-					{'name': i['name'], 'role': i['character'], 'thumbnail': tmdb_image_base % (profile_resolution, i['profile_path']) if i['profile_path'] else ''}
-					for i in guest_stars_list
-				]
-				except: pass
-			crew = ep_data_get('crew', None)
-			if crew:
-				try: writer = ', '.join([i['name'] for i in crew if i['job'] in writer_credits])
-				except: pass
-				try: director = [i['name'] for i in crew if i['job'] == 'Director'][0]
-				except: pass
-			yield {'writer': writer, 'director': director, 'guest_stars': guest_stars, 'mediatype': 'episode', 'title': title, 'plot': plot,
-					'premiered': premiered, 'season': season, 'episode': episode, 'episode_type': ep_type, 'rating': rating, 'votes': votes, 'thumb': thumb}
-	still_resolution, profile_resolution = image_resolution['still'], image_resolution['profile']
-	return list(_process())
 
 def movie_meta_external_id(external_source, external_id):
 	return movie_external(external_source, external_id)
