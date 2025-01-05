@@ -326,12 +326,12 @@
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
             <left>740</left>
             <control type="group">
-			 <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+			 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
                 </control>
 				 </control>
 				<control type="group">
@@ -451,12 +451,12 @@
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
             <left>950</left>
             <control type="group">
-                <visible>String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
                 </control>
             </control>        
             <control type="group">
@@ -938,12 +938,12 @@
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
             <left>740</left>
             <control type="group">
-			 <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+			 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
                 </control>
 				 </control>
 				<control type="group">
@@ -1063,12 +1063,12 @@
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
             <left>950</left>
             <control type="group">
-                <visible>String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
                 </control>
             </control>        
             <control type="group">
@@ -1550,12 +1550,12 @@
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
             <left>740</left>
             <control type="group">
-			 <visible>!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+			 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
                 </control>
 				 </control>
 				<control type="group">
@@ -1675,12 +1675,12 @@
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
             <left>950</left>
             <control type="group">
-                <visible>String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</visible>
+                <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
                 </control>
             </control>        
             <control type="group">
