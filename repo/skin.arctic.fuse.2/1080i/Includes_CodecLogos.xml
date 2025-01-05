@@ -365,7 +365,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1037,7 +1037,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1649,7 +1649,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
