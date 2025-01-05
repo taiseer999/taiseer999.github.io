@@ -1221,7 +1221,7 @@
             <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>1675</left>
+            <left>1580</left>
             <control type="group">
                 <visible></visible>
                 <top>135</top>
