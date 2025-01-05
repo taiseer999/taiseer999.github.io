@@ -435,7 +435,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1047,7 +1047,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1659,7 +1659,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
