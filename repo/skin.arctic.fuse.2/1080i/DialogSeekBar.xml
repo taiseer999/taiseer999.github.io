@@ -22,6 +22,9 @@
                 <include>Animation_OSD_Seekbar_Slide</include>
                 <include>OSD_Progress_Labels</include>
                 <include>OSD_Progress_Bar</include>
+                 <include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
+                 <include condition="Skin.HasSetting(osd.usecenterCodecLogos)">CodecLogosCenterOSD</include>
+                <include condition="Skin.HasSetting(osd.userightCodecLogos)">CodecLogosRightOSD</include>
             </control>
 
             <control type="group">
