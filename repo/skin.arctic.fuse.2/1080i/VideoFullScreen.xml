@@ -3,6 +3,8 @@
     <include>Animation_Fullscreen_Media</include>
     <onload>ClearProperty(OSDRelaunchFullscreen,Home)</onload>
     <controls>
+        <include>OSD_Background_Dim</include>
+
         <control type="grouplist" id="0">
             <orientation>vertical</orientation>
             <centertop>100</centertop>
@@ -275,7 +277,13 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 
-
+           <include content="VS10_Indicator_Flag">
+                <param name="groupId">104</param>
+                <param name="imageId">105</param>
+                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
+                <param name="texture">codecs/VS10.png</param>
+                <param name="colordiffuse">AB16A34A</param>
+            </include>
         
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
@@ -575,7 +583,13 @@
                 <param name="texture">codecs/Dolby_Visionfel.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
-
+            <include content="VS10_Indicator_Flag">
+                <param name="groupId">104</param>
+                <param name="imageId">105</param>
+                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
+                <param name="texture">codecs/VS10.png</param>
+                <param name="colordiffuse">AB16A34A</param>
+            </include>
 
         
 			<include content="VideoCodecFlag">
@@ -1006,7 +1020,13 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 
-
+           <include content="VS10_Indicator_Flag">
+                <param name="groupId">104</param>
+                <param name="imageId">105</param>
+                <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
+                <param name="texture">codecs/VS10.png</param>
+                <param name="colordiffuse">AB16A34A</param>
+            </include>
         
 			<include content="VideoCodecFlag">
 				<param name="groupId">44</param><param name="imageId">45</param>
