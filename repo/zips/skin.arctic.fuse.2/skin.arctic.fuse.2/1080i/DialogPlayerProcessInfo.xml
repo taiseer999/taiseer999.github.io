@@ -29,7 +29,7 @@
 				<top>-210</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="99FFFFFF">background/coal_blur.png</texture>
+				<texture colordiffuse="dialog_fg_90">background/coal_blur.png</texture>
 			</control>
 						
 			<!-- PVR Left -->
