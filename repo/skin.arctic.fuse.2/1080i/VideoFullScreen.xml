@@ -43,7 +43,7 @@
                 <param name="imageId">49</param>
                 <param name="visible"></param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">main_fg_100</param>
+                <param name="colordiffuse">80FFFFFF</param>
             </include>
 			
             <include content="Audio_Background_Flag">
@@ -51,7 +51,7 @@
                 <param name="imageId">51</param>
                 <param name="visible"></param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">main_fg_100</param>
+                <param name="colordiffuse">80FFFFFF</param>
             </include>
 			
             <include content="SDR_Bypass_Flag">
@@ -334,7 +334,7 @@
                 <param name="imageId">49</param>
                 <param name="visible"></param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">main_fg_100</param>
+                <param name="colordiffuse">80FFFFFF</param>
             </include>
 			
             <include content="Audio_Background_Flag">
@@ -342,7 +342,7 @@
                 <param name="imageId">51</param>
                 <param name="visible"></param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">main_fg_100</param>
+                <param name="colordiffuse">80FFFFFF</param>
             </include>
 			
             <include content="SDR_Bypass_Flag">

@@ -41,8 +41,8 @@
 		<definition>
 			<control type="group" id="$PARAM[groupId]">
 				<control type="image" id="$PARAM[imageId]">
-					<left>20</left>
-					<bottom>10</bottom>
+					<left>1128</left>
+					<top>60</top>
 					<height>45</height>
 					<width>100</width>
 					<visible>$PARAM[visible]</visible>
