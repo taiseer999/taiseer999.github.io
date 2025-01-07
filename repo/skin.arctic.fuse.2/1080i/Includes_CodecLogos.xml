@@ -9,7 +9,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -18,7 +18,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -27,7 +27,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -324,14 +324,14 @@
 	        <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>740</left>
+            <left>710</left>
             <control type="group">
 			 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
 				 </control>
 				<control type="group">
@@ -449,14 +449,14 @@
            <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>950</left>
+            <left>920</left>
             <control type="group">
                 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>        
             <control type="group">
@@ -621,7 +621,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -630,7 +630,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -639,7 +639,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -936,14 +936,14 @@
 	        <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>740</left>
+            <left>710</left>
             <control type="group">
 			 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
 				 </control>
 				<control type="group">
@@ -1061,14 +1061,14 @@
            <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>950</left>
+            <left>920</left>
             <control type="group">
                 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>        
             <control type="group">
@@ -1233,7 +1233,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1242,7 +1242,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1251,7 +1251,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1548,14 +1548,14 @@
 	        <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>740</left>
+            <left>710</left>
             <control type="group">
 			 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
 				 </control>
 				<control type="group">
@@ -1673,14 +1673,14 @@
            <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>950</left>
+            <left>920</left>
             <control type="group">
                 <visible></visible>
                 <top>35</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="main_fg_100">common/corner_small.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
             </control>        
             <control type="group">
@@ -2014,7 +2014,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>43</top>
-                    <left>800</left>
+                    <left>895</left>
                     <width>8</width>
                     <height>8</height>
                     <visible>$PARAM[visible]</visible>
