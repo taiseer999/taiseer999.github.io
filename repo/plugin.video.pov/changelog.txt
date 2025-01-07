@@ -9,6 +9,8 @@
 - nyaa in Sources/Torrents sourced from website results.
 
   [COLOR dodgerblue][B]Version 4.12[/B][/COLOR]
+- Removed comet.
+- Rewrite tb_cloud scaper to include completed TorBox usenet and web download.
 - Fix for format change in mediafusion results.
 - Added "Most Favorited This Week" for Movies/TVShows.
   From the context menu restore to default or check for new items.
@@ -16,9 +18,6 @@
 - Refactored Offcloud/TorBox cloud scrapers.
 - Completed clear cache for Offcloud/TorBox.
 - Added "Premium Expires Notification (days)" for each debrid (0 disables check).
-- Rewrite tb_cloud scaper to include completed TorBox usenet.
-  If reporting an issue, include screenshot of TorBox website from the "download" option
-  for the item (which should include the item name and file list).
 - Minor refactoring for each debrid, report anything that I might have broke.
 - Changed Mediafusion Debrid+ Configure for easier set up.
   Authorize your debrid service first, 3 modes are offered.

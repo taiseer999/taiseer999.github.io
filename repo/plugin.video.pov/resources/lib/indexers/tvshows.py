@@ -244,7 +244,7 @@ class TVShows:
 				videoinfo.setTvShowTitle(title)
 				videoinfo.setVotes(meta_get('votes'))
 				videoinfo.setWriters(meta_get('writer').split(', '))
-				videoinfo.setYear(int(year or 0))
+				videoinfo.setYear(int(year))
 			self.append((url_params, listitem, self.is_folder))
 		except: pass
 

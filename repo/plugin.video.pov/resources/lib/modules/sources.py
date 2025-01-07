@@ -355,7 +355,7 @@ class Sources():
 			year = meta.get('year')
 			if self.active_external and get_setting('search.enable.yearcheck', 'false') == 'true':
 				from apis.imdb_api import imdb_movie_year
-				try: year = str(imdb_movie_year(meta.get('imdb_id')))
+				try: year = str(imdb_movie_year(meta.get('imdb_id')) or year)
 				except: pass
 		return year
 

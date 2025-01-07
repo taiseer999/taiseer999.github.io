@@ -20,6 +20,7 @@ def get_tmdb(url):
 	except requests.exceptions.RequestException as e:
 		from modules.kodi_utils import logger
 		logger('tmdb error', f"{e}\n{e.request.headers}\n{e.response.text}")
+	response.encoding = 'utf-8'
 	return response
 
 def tmdb_keyword_id(query):

@@ -127,6 +127,8 @@
 		<setting label="32140" type="lsep" />
 		<setting id="results.xml_style" label="$ADDON[plugin.video.pov 32139] $ADDON[plugin.video.pov 32140]" type="action" default="List Default" action="RunPlugin(plugin://plugin.video.pov/?mode=results_layout_choice)" />
 		<setting id="torrent.display.uncached" label="32160" type="bool" default="false" />
+		<setting id="search.enable.yearcheck" label="33006" type="bool" default="false" />
+		<setting id="ignore_results_filter" label="32050" type="bool" default="true" />
 		<setting id="search.finish.early" label="32120" type="bool" default="false" />
 		<setting id="scrapers.timeout.1" label="32141" type="number" default="10" />
 		<!-- Sorting and Filtering -->
@@ -143,8 +145,6 @@
 		<setting id="filter_hdr" label="32158" type="enum" default="0" lvalues="32188|32189|32190" />
 		<setting id="filter_dv" label="32159" type="enum" default="0" lvalues="32188|32189|32190" />
 		<setting id="filter_av1" label="AV1 Files Filter" type="enum" default="0" lvalues="32188|32189|32190" />
-		<setting id="ignore_results_filter" label="32050" type="bool" default="true" />
-		<setting id="search.enable.yearcheck" label="33006" type="bool" default="false" />
 		<!-- Results Color Highlights -->
 		<setting label="32138" type="lsep" />
 		<setting id="highlight.type" label="32204" type="enum" default="2" lvalues="32240|32583|32241" />
@@ -179,12 +179,6 @@
 		<setting id="debug.enabled" label="Enable Debug" type="bool" default="false" />
 		<setting id="debug.location" label="Logging Location" type="enum" default="1" enable="eq(-1,true)" values="Kodi Log|Addon Log" visible="eq(-1,true)" />
 		<setting label="32830" type="lsep" />
-		<setting id="provider.comet" label="comet" type="bool" default="false" />
-			<setting id="comet.url" label="Comet url" type="text" default="" subsetting="true" enable="false" visible="eq(-1,true)" />
-			<setting id="comet.indexers" label="Comet indexers" type="text" default="" subsetting="true" enable="false" visible="eq(-2,true)" />
-			<setting id="comet.langs" label="Comet languages" type="text" default="All" subsetting="true" enable="false" visible="eq(-3,true)" />
-			<setting id="comet.debrid" label="Debrid Provider" type="enum" default="0" subsetting="true" lvalues="32054|32061|32063|32078|32079" visible="eq(-4,true)" />
-			<setting label="Configure" type="action" subsetting="true" visible="eq(-5,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=comet_configure)" />
 		<setting id="provider.knightcrawler" label="knightcrawler (torrentio/dmm)" type="bool" default="false" />
 		<setting id="provider.mediafusion" label="mediafusion" type="bool" default="false" />
 			<setting id="mediafusion.packs" label="Include Show Packs" type="bool" default="false" subsetting="true" visible="eq(-1,true)" />

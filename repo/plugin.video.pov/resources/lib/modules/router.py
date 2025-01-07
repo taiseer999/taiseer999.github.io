@@ -359,9 +359,6 @@ def routing(params):
 	elif mode == 'undesirablesUserRemove':
 		from caches.undesirables_cache import undesirablesUserRemove
 		undesirablesUserRemove()
-	elif mode == 'comet_configure':
-		from fenom.hosted import Comet
-		Comet().configure()
 	elif mode == 'mfdebrid_configure':
 		from fenom.hosted import MFDebrid
 		MFDebrid().configure()

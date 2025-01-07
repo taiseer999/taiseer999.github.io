@@ -145,7 +145,7 @@ class EasyDebridAPI:
 			dbcur = dbcon.cursor()
 			# USER CLOUD
 			try:
-#				dbcur.execute("""DELETE FROM maincache WHERE id=?""", ('pov_ed_user_cloud',))
+#				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_ed_user_cloud',))
 				kodi_utils.clear_property('pov_ed_user_cloud')
 #				dbcon.commit()
 				user_cloud_success = True

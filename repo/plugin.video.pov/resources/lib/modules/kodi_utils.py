@@ -34,7 +34,7 @@ tvshow_dict_removals = ('tmdblogo', 'fanart_added', 'cast', 'poster', 'rootname'
 						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title',
 						'extra_info', 'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2',
 						'total_episodes', 'total_seasons', 'total_aired_eps', 'season_summary', 'season_data')
-episode_dict_removals = ('thumb', 'guest_stars')
+episode_dict_removals = ('thumb', 'guest_stars', 'episode_type')
 
 def logger(heading, function):
 	xbmc.log('>> %s <<: %s' % (heading, function), 1)
@@ -230,9 +230,9 @@ def set_view(view_type):
 	view_id = str(current_window_id().getFocusId())
 	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
 	dbcur = dbcon.cursor()
-	dbcur.execute('''PRAGMA synchronous = OFF''')
-	dbcur.execute('''PRAGMA journal_mode = OFF''')
-	dbcur.execute("INSERT OR REPLACE INTO views VALUES (?, ?)", (view_type, view_id))
+	dbcur.execute("""PRAGMA synchronous = OFF""")
+	dbcur.execute("""PRAGMA journal_mode = OFF""")
+	dbcur.execute("""INSERT OR REPLACE INTO views VALUES (?, ?)""", (view_type, view_id))
 	set_view_property(view_type, view_id)
 	notification(get_infolabel('Container.Viewmode').upper(), 1500)
 
@@ -242,9 +242,9 @@ def set_view_property(view_type, view_id):
 def set_view_properties():
 	dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
 	dbcur = dbcon.cursor()
-	dbcur.execute('''PRAGMA synchronous = OFF''')
-	dbcur.execute('''PRAGMA journal_mode = OFF''')
-	dbcur.execute("SELECT * FROM views")
+	dbcur.execute("""PRAGMA synchronous = OFF""")
+	dbcur.execute("""PRAGMA journal_mode = OFF""")
+	dbcur.execute("""SELECT * FROM views""")
 	view_ids = dbcur.fetchall()
 	for item in view_ids: set_property('pov_%s' % item[0], item[1])
 
@@ -256,7 +256,7 @@ def set_view_mode(view_type, content='files'):
 		try:
 			dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
 			dbcur = dbcon.cursor()
-			dbcur.execute("SELECT view_id FROM views WHERE view_type = ?", (str(view_type),))
+			dbcur.execute("""SELECT view_id FROM views WHERE view_type = ?""", (str(view_type),))
 			view_id = dbcur.fetchone()[0]
 		except: return
 	try:
@@ -323,7 +323,7 @@ def fetch_kodi_imagecache(image):
 	try:
 		dbcon = database.connect(translate_path('special://database/Textures13.db'), timeout=40.0)
 		dbcur = dbcon.cursor()
-		dbcur.execute("SELECT cachedurl FROM texture WHERE url = ?", (image,))
+		dbcur.execute("""SELECT cachedurl FROM texture WHERE url = ?""", (image,))
 		result = dbcur.fetchone()[0]
 	except: pass
 	return result

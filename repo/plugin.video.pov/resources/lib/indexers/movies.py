@@ -254,7 +254,7 @@ class Movies:
 				videoinfo.setTrailer(meta_get('trailer'))
 				videoinfo.setVotes(meta_get('votes'))
 				videoinfo.setWriters(meta_get('writer').split(', '))
-				videoinfo.setYear(int(year or 0))
+				videoinfo.setYear(int(year))
 			self.append((url_params, listitem, False))
 		except: pass
 

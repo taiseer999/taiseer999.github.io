@@ -101,11 +101,11 @@ def clean_databases(current_time=None, database_check=True, silent=False):
 		try:
 			dbcon = database.connect(db)
 			dbcur = dbcon.cursor()
-			dbcur.execute('''PRAGMA synchronous = OFF''')
-			dbcur.execute('''PRAGMA journal_mode = OFF''')
+			dbcur.execute("""PRAGMA synchronous = OFF""")
+			dbcur.execute("""PRAGMA journal_mode = OFF""")
 			dbcur.execute(sql, (current_time,))
 			dbcon.commit()
-			dbcur.execute('VACUUM')
+			dbcur.execute("""VACUUM""")
 		except: pass
 	limit_metacache_database()
 	remove_old_packages()
@@ -117,13 +117,13 @@ def limit_metacache_database(max_size=50):
 	if size < max_size: return
 	dbcon = database.connect(metacache_db)
 	dbcur = dbcon.cursor()
-	dbcur.execute('''PRAGMA synchronous = OFF''')
-	dbcur.execute('''PRAGMA journal_mode = OFF''')
-	dbcur.execute('DELETE FROM metadata WHERE ROWID IN (SELECT ROWID FROM metadata ORDER BY ROWID DESC LIMIT -1 OFFSET 4000)')
-	dbcur.execute('DELETE FROM function_cache WHERE ROWID IN (SELECT ROWID FROM function_cache ORDER BY ROWID DESC LIMIT -1 OFFSET 100)')
-	dbcur.execute('DELETE FROM season_metadata WHERE ROWID IN (SELECT ROWID FROM season_metadata ORDER BY ROWID DESC LIMIT -1 OFFSET 100)')
+	dbcur.execute("""PRAGMA synchronous = OFF""")
+	dbcur.execute("""PRAGMA journal_mode = OFF""")
+	dbcur.execute("""DELETE FROM metadata WHERE ROWID IN (SELECT ROWID FROM metadata ORDER BY ROWID DESC LIMIT -1 OFFSET 4000)""")
+	dbcur.execute("""DELETE FROM function_cache WHERE ROWID IN (SELECT ROWID FROM function_cache ORDER BY ROWID DESC LIMIT -1 OFFSET 100)""")
+	dbcur.execute("""DELETE FROM season_metadata WHERE ROWID IN (SELECT ROWID FROM season_metadata ORDER BY ROWID DESC LIMIT -1 OFFSET 100)""")
 	dbcon.commit()
-	dbcon.execute('VACUUM')
+	dbcon.execute("""VACUUM""")
 
 def get_current_time():
 	import time, datetime

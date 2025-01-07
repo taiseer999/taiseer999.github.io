@@ -233,7 +233,7 @@ def build_movie_meta(data, user_info, fanarttv_data=None):
 	title, original_title = data_get('title'), data_get('original_title')
 	try: english_title = [i['data']['title'] for i in data_get('translations')['translations'] if i['iso_639_1'] == 'en'][0]
 	except: english_title = None
-	try: year = str(data_get('release_date').split('-')[0])
+	try: year = str(data_get('release_date').split('-')[0] or 0)
 	except: year = ''
 	try: duration = int(data_get('runtime', '90') * 60)
 	except: duration = 0
@@ -323,7 +323,7 @@ def build_tvshow_meta(data, user_info, fanarttv_data=None):
 	title, original_title = data_get('name'), data_get('original_name')
 	try: english_title = [i['data']['name'] for i in data_get('translations')['translations'] if i['iso_639_1'] == 'en'][0]
 	except: english_title = None
-	try: year = str(data_get('first_air_date').split('-')[0]) or ''
+	try: year = str(data_get('first_air_date').split('-')[0] or 0)
 	except: year = ''
 	try: duration = min(data_get('episode_run_time')) * 60
 	except: duration = 0
