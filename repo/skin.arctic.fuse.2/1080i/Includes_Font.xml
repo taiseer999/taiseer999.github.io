@@ -70,8 +70,8 @@
             <!-- Testing Fonts -->
             <font>
                 <name>font_debug</name>
-                <filename>GeezaPro.ttf</filename>
-                <size>25</size>
+                <filename>Figtree-Bold.ttf</filename>
+                <size>23</size>
                 <aspect>$PARAM[aspect_system]</aspect>
             </font>
 
