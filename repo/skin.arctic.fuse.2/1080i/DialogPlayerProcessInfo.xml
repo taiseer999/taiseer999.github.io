@@ -9,7 +9,7 @@
 
 	 <include content="Object_Control">
             <param name="control">image</param>
-            <texture colordiffuse="panel_bg_70">background/floor.png</texture>
+            <texture colordiffuse="panel_bg_50">background/combined_fanart.png</texture>
         </include>
 
         <!-- Codec logos -->
@@ -29,7 +29,7 @@
 				<top>-210</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="dialog_fg_90">background/coal_blur.png</texture>
+				<texture colordiffuse="dialog_fg_70">background/coal_blur.png</texture>
 			</control>
 						
 			<!-- PVR Left -->
