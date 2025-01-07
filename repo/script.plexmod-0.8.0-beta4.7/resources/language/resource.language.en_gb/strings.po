@@ -1243,7 +1243,7 @@ msgid "Disabled"
 msgstr ""
 
 msgctxt "#33509"
-msgid "Early intro skip threshold (default: < 60s/1m)"
+msgid "Early intro skip threshold (default: < 120s/2m)"
 msgstr ""
 
 msgctxt "#33510"
@@ -1843,7 +1843,7 @@ msgid "No TV spoilers"
 msgstr ""
 
 msgctxt "#33007"
-msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles etc."
 msgstr ""
 
 msgctxt "#33008"
@@ -2427,4 +2427,111 @@ msgstr ""
 
 msgctxt "#33688"
 msgid "The currently in-use translation has been updated. In order to load the new translation, a Kodi restart is necessary. The addon will still run properly, but you might see badly or untranslated strings. Do you still want to run the addon?"
+msgstr ""
+
+msgctxt "#33689"
+msgid "Service running"
+msgstr ""
+
+msgctxt "#33690"
+msgid "Last update check"
+msgstr ""
+
+msgctxt "#33691"
+msgid "Native languages"
+msgstr ""
+
+msgctxt "#33692"
+msgid "When you usually watch things in a different language with subtitles, but are a native speaker of other languages, which you don't need subtitles for, prevent Plex from auto-selecting subtitles for those languages."
+msgstr ""
+
+msgctxt "#33693"
+msgid "Download subtitles using"
+msgstr ""
+
+msgctxt "#33694"
+msgid "Ask"
+msgstr ""
+
+msgctxt "#33695"
+msgid "Where do you want to download subtitles from? Note: Currently this only applies to the subtitle quick actions in the player. The subtitle download in stream settings always uses Plex as a source."
+msgstr ""
+
+msgctxt "#33696"
+msgid "No subtitles found."
+msgstr ""
+
+#: things in curly brackets are variables, don't translate them!
+msgctxt "#33697"
+msgid "{provider_title}, Score: {subtitle_score}{subtitle_info}"
+msgstr ""
+
+#: hearing impaired subtitle flag
+msgctxt "#33698"
+msgid "HI"
+msgstr ""
+
+#: forced subtitle flag
+msgctxt "#33699"
+msgid "forced"
+msgstr ""
+
+msgctxt "#33700"
+msgid "Download subtitles: {}"
+msgstr ""
+
+msgctxt "#33701"
+msgid "Fallback to Kodi"
+msgstr ""
+
+msgctxt "#33702"
+msgid "When no subtitles are found via the Plex subtitle search, fall back to Kodi subtitle search. Note: Currently this only applies to the subtitle quick actions in the player. The subtitle download in stream settings always uses Plex as a source."
+msgstr ""
+
+msgctxt "#33703"
+msgid "Download subtitles"
+msgstr ""
+
+msgctxt "#33704"
+msgid "Using which service?"
+msgstr ""
+
+msgctxt "#33705"
+msgid "Hide ratings"
+msgstr ""
+
+msgctxt "#33706"
+msgid "Blur images"
+msgstr ""
+
+msgctxt "#33707"
+msgid "Blur images on home (in progress)"
+msgstr ""
+
+msgctxt "#33708"
+msgid "Hide summaries"
+msgstr ""
+
+msgctxt "#33709"
+msgid "Show ratings for"
+msgstr ""
+
+msgctxt "#33710"
+msgid "Show reviews"
+msgstr ""
+
+msgctxt "#33711"
+msgid "Always resume media"
+msgstr ""
+
+msgctxt "#33712"
+msgid "When playback of an in-progress media is requested, resume it by default instead of asking whether to resume or start from the beginning."
+msgstr ""
+
+msgctxt "#33713"
+msgid "Home: Resume in-progress items"
+msgstr ""
+
+msgctxt "#33714"
+msgid "Resume in-progress items directly instead of visiting the media."
 msgstr ""

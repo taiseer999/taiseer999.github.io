@@ -1286,6 +1286,11 @@ msgctxt "#32492"
 msgid "Kodi Subtitle Settings"
 msgstr "Kodi-Untertiteleinstellungen"
 
+#:
+msgctxt "#32493"
+msgid "When a media file has a forced/foreign subtitle for a subtitle-enabled language, the Plex Media Server preselects it. This behaviour is usually not necessary and not configurable. This setting fixes that by ignoring the PMSs decision and selecting the same language without a forced flag if possible."
+msgstr "Hat eine Mediendatei erzwungenge Untertitel für eine Sprache, bei der Untertitel erwünscht sind, wählt der Plex Media Server diesen standardmäßig aus. Das Verhalten ist normalerweise unerwünscht und nicht konfigurierbar. Diese Einstellung behebt das Problem, indem versucht wird, einen Untertitel der selben Sprache ohne Erzwungen-Markierung zu wählen."
+
 #: 
 msgctxt "#32495"
 msgid "Skip intro"
@@ -1467,11 +1472,6 @@ msgid "Only force multichannel audio to AC3"
 msgstr "Nur Mehrkanal-Audio als AC3 erzwingen"
 
 #: 
-msgctxt "#32493"
-msgid "When a media file has a forced/foreign subtitle for a subtitle-enabled language, the Plex Media Server preselects it. This behaviour is usually not necessary and not configurable. This setting fixes that by ignoring the PMSs decision and selecting the same language without a forced flag if possible."
-msgstr "Hat eine Mediendatei erzwungenge Untertitel für eine Sprache, bei der Untertitel erwünscht sind, wählt der Plex Media Server diesen standardmäßig aus. Das Verhalten ist normalerweise unerwünscht und nicht konfigurierbar. Diese Einstellung behebt das Problem, indem versucht wird, einen Untertitel der selben Sprache ohne Erzwungen-Markierung zu wählen."
-
-#: 
 msgctxt "#32523"
 msgid "Automatically skip intros if available. Doesn't override enabled binge mode.\n"
 "Can be disabled/enabled per TV show."
@@ -1529,8 +1529,8 @@ msgstr "Deaktiviert"
 
 #: 
 msgctxt "#33509"
-msgid "Early intro skip threshold (default: < 60s/1m)"
-msgstr "Grenzwert für 'Früher Intro überspringen' (Standardwert < 60s)"
+msgid "Early intro skip threshold (default: < 120s/2m)"
+msgstr "Grenzwert für 'Früher Intro überspringen' (Standardwert < 120s)"
 
 #: 
 msgctxt "#33510"
@@ -1959,7 +1959,7 @@ msgctxt "#32940"
 msgid "Video Player"
 msgstr "Video-Player"
 
-#: 
+#:
 msgctxt "#32941"
 msgid "Forced subtitles fix"
 msgstr "Erzwungene Untertitel beheben"
@@ -2294,8 +2294,8 @@ msgstr "Keine TV-Spoiler"
 
 #: 
 msgctxt "#33007"
-msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles and whether to blur chapter images. When the Addon Setting \"Use episode thumbnails in continue hub\" is enabled, blur them as well."
-msgstr "Wähle aus, in welchen Fällen Vorschaubilder von TV-Episoden verschleiert, Zusammenfassungen zensiert, Episodentitel versteckt und Kapitelbilder verschleiert werden sollen. Wenn die Addon-Einstellung \"Vorschaubild für Episoden im Fortsetzen-Hub verwenden\" aktiviert ist, diese ebenfalls verschleiern."
+msgid "Select in which cases to blur TV episode thumbnails, previews, redact summaries, hide episode titles etc."
+msgstr "Wähle aus, in welchen Fällen Vorschaubilder von TV-Episoden verschleiert, Zusammenfassungen zensiert, Episodentitel versteckt usw. werden sollen."
 
 #: 
 msgctxt "#33008"
@@ -3019,3 +3019,110 @@ msgstr "Übersetzung aktualisiert"
 msgctxt "#33688"
 msgid "The currently in-use translation has been updated. In order to load the new translation, a Kodi restart is necessary. The addon will still run properly, but you might see badly or untranslated strings. Do you still want to run the addon?"
 msgstr "Die aktuell verwendete Übersetzung wurde aktualisiert. Damit die neue Übersetzung geladen wird, ist ein Kodi-Neustart nötig. Das Addon wird trotzdem funktionieren, aber Du könntest schlechte oder nicht übersetzte Texte sehen. Möchtest Du das Addon trotzdem starten?"
+
+msgctxt "#33689"
+msgid "Service running"
+msgstr "Service läuft"
+
+msgctxt "#33690"
+msgid "Last update check"
+msgstr "Letzte Update-Überprüfung"
+
+msgctxt "#33691"
+msgid "Native languages"
+msgstr "Muttersprachen"
+
+msgctxt "#33692"
+msgid "When you usually watch things in a different language with subtitles, but are a native speaker of other languages, which you don't need subtitles for, prevent Plex from auto-selecting subtitles for those languages."
+msgstr "Schaust Du normalerweise in einer anderen Sprache mit Untertiteln, bist aber Muttersprachler anderer Sprachen, für die Du keine Untertitel benötigst, halte Plex davon ab, Untertitel für diese Sprachen automatisch auszuwählen."
+
+msgctxt "#33693"
+msgid "Download subtitles using"
+msgstr "Untertitel herunterladen mit"
+
+msgctxt "#33694"
+msgid "Ask"
+msgstr "Fragen"
+
+msgctxt "#33695"
+msgid "Where do you want to download subtitles from? Note: Currently this only applies to the subtitle quick actions in the player. The subtitle download in stream settings always uses Plex as a source."
+msgstr "Woher möchtest du Untertitel herunterladen? Achtung: Das gilt aktuell nur für die Untertitel-Schnellaktionen im Player. Die Untertitel-Download Funktion in den Stream-Einstellungen benutzt immer Plex als Quelle."
+
+msgctxt "#33696"
+msgid "No subtitles found."
+msgstr "Keine Untertitel gefunden."
+
+#: things in curly brackets are variables, don't translate them!
+msgctxt "#33697"
+msgid "{provider_title}, Score: {subtitle_score}{subtitle_info}"
+msgstr "{provider_title}, Punktzahl: {subtitle_score}{subtitle_info}"
+
+#: hearing impaired subtitle flag
+msgctxt "#33698"
+msgid "HI"
+msgstr "HI"
+
+#: forced subtitle flag
+msgctxt "#33699"
+msgid "forced"
+msgstr "erzwungen"
+
+msgctxt "#33700"
+msgid "Download subtitles: {}"
+msgstr "Untertitel herunterladen: {}"
+
+msgctxt "#33701"
+msgid "Fallback to Kodi"
+msgstr "Falle auf Kodi zurück"
+
+msgctxt "#33702"
+msgid "When no subtitles are found via the Plex subtitle search, fall back to Kodi subtitle search. Note: Currently this only applies to the subtitle quick actions in the player. The subtitle download in stream settings always uses Plex as a source."
+msgstr "Werden keine Untertitel über die Plex-Untertitel-Suche gefunden, auf Kodi zurück fallen. Achtung: Das gilt aktuell nur für die Untertitel-Schnellaktionen im Player. Die Untertitel-Download Funktion in den Stream-Einstellungen benutzt immer Plex als Quelle."
+
+msgctxt "#33703"
+msgid "Download subtitles"
+msgstr "Untertitel herunterladen"
+
+msgctxt "#33704"
+msgid "Using which service?"
+msgstr "Mit welchem Service?"
+
+msgctxt "#33705"
+msgid "Hide ratings"
+msgstr "Bewertungen verstecken"
+
+msgctxt "#33706"
+msgid "Blur images"
+msgstr "Bilder verschleiern"
+
+msgctxt "#33707"
+msgid "Blur images on home (in progress)"
+msgstr "Bilder auf Home verschleiern (fortsetzen)"
+
+msgctxt "#33708"
+msgid "Hide summaries"
+msgstr "Zusammenfassungen verstecken"
+
+msgctxt "#33709"
+msgid "Show ratings for"
+msgstr "Bewertungen anzeigen für"
+
+msgctxt "#33710"
+msgid "Show reviews"
+msgstr "Kritiken anzeigen"
+
+msgctxt "#33711"
+msgid "Always resume media"
+msgstr "Medien immer fortsetzen"
+
+msgctxt "#33712"
+msgid "When playback of an in-progress media is requested, resume it by default instead of asking whether to resume or start from the beginning."
+msgstr "Bei einem bereits begonnenen Medium nicht fragen, ob es fortgesetzt oder vom Start abgespielt werden soll."
+
+msgctxt "#33713"
+msgid "Home: Resume in-progress items"
+msgstr "Start: Angef. Items fortsetzen"
+
+msgctxt "#33714"
+msgid "Resume in-progress items directly instead of visiting the media."
+msgstr "Setze angefangene Items direkt fort, anstatt die Mediendetails aufzurufen."

@@ -7,6 +7,7 @@ from collections import OrderedDict
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
+
 from plexnet import plexapp
 from plexnet.util import AttributeDict
 from plexnet.exceptions import ServerNotOwned, NotFound
@@ -21,7 +22,8 @@ from . import busy
 from . import dropdown
 from . import kodigui
 from . import playersettings
-from .mixins import SpoilersMixin
+from . import optionsdialog
+from .mixins import SpoilersMixin, PlexSubtitleDownloadMixin
 
 KEY_MOVE_SET = frozenset(
     (
@@ -87,7 +89,7 @@ MARKER_CHAPTER_OVERLAP_THRES = 30000  # 30 seconds
 MARKER_END_JUMP_OFF = 1000
 
 
-class SeekDialog(kodigui.BaseDialog):
+class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
     """
     fixme: This is a convoluted mess.
     """
@@ -143,6 +145,7 @@ class SeekDialog(kodigui.BaseDialog):
 
     def __init__(self, *args, **kwargs):
         super(SeekDialog, self).__init__(*args, **kwargs)
+        PlexSubtitleDownloadMixin.__init__(self, *args, **kwargs)
 
         # fixme: heyo, there's a lot of disorder in here.
         self.handler = kwargs.get('handler')
@@ -188,7 +191,7 @@ class SeekDialog(kodigui.BaseDialog):
         self._ignoreInput = False
         self._ignoreTick = False
         self._abortBufferWait = False
-        self.no_spoilers = util.getSetting('no_episode_spoilers3', ["unwatched"])
+        self.no_spoilers = util.getSetting('no_episode_spoilers4', ['unwatched', 'blur_images', 'hide_summary'])
         self.no_time_no_osd_spoilers = util.getSetting('no_osd_time_spoilers', False)
         self.clientLikePlex = util.getSetting('player_official', True)
 
@@ -375,7 +378,7 @@ class SeekDialog(kodigui.BaseDialog):
 
                 # show intro skip early? (only if intro is during the first X minutes)
                 if self.showIntroSkipEarly and markerDef["marker_type"] == "intro" and \
-                        startTimeOffset <= util.addonSettings.skipIntroButtonShowEarlyThreshold1 * 1000:
+                        startTimeOffset <= util.addonSettings.skipIntroButtonShowEarlyThreshold2 * 1000:
                     startTimeOffset = 0
                     markerDef["overrideStartOff"] = 0
 
@@ -828,7 +831,15 @@ class SeekDialog(kodigui.BaseDialog):
                                 if not self.playlistDialogVisible:
                                     self.hideOSD()
                             else:
-                                self.sendTimeline(state=self.player.STATE_STOPPED, ensureFinalTimelineEvent=True)
+                                # were we in a credits marker that has been canceled? use its endTime for our timeline
+                                # event
+                                t = None
+                                if (self._currentMarker and self._currentMarker["marker_type"] == "credits" and
+                                        self._currentMarker["hidden"]):
+                                    util.DEBUG_LOG("Using credits marker's endtime for timeline event as it's been "
+                                                   "skipped and we're stopping playback")
+                                    t = self._currentMarker["marker"].endTimeOffset
+                                self.sendTimeline(state=self.player.STATE_STOPPED, t=t, ensureFinalTimelineEvent=True)
                                 self.stop()
                             return
         except:
@@ -1210,8 +1221,10 @@ class SeekDialog(kodigui.BaseDialog):
             self.initialVideoSettings = dict(self.player.video.settings.prefOverrides)
             self.initialAudioStream = self.player.video.selectedAudioStream()
 
-        sss = self.player.video.selectedSubtitleStream()
+        sss = self.player.video.selectedSubtitleStream(deselect_subtitles=util.getSetting("disable_subtitle_languages", []))
         if sss != self.initialSubtitleStream:
+            util.DEBUG_LOG("Subtitle changed from {} to {} (deselect: {})", self.initialSubtitleStream, sss,
+                           util.getSetting("disable_subtitle_languages", []))
             self.initialSubtitleStream = sss
             changed.subtitle = True
             if self.isTranscoded:
@@ -1324,53 +1337,81 @@ class SeekDialog(kodigui.BaseDialog):
 
         if choice['key'] == 'download':
             self.hideOSD()
-            if self.handler and self.handler.player and self.handler.player.playerObject \
-                    and util.getSetting('calculate_oshash', False):
-                meta = self.handler.player.playerObject.metadata
-                if not meta.size:
-                    util.LOG("Can't calculate OpenSubtitles hash because we're transcoding")
+            subs_dl_source = util.getSetting('subtitle_download_from', 'plex')
+            if subs_dl_source == 'ask':
+                button = optionsdialog.show(
+                    T(33693, 'Download subtitles using'),
+                    T(33704, 'Using which service?'),
+                    'Plex',
+                    'Kodi'
+                )
 
+                subs_dl_source = button == 0 and 'plex' or 'kodi'
+
+
+            if subs_dl_source == 'plex':
+                was_playing = False
+                if self.player.playState == self.player.STATE_PLAYING:
+                    was_playing = True
+                    self.player.pause()
+                downloaded = self.downloadPlexSubtitles(self.player.video)
+                if downloaded:
+                    self.setSubtitles(honor_forced_subtitles_override=False,
+                                      honor_deselect_subtitles=False, ref=None)
+                elif downloaded is None:
+                    if util.getSetting('subtitle_download_fallback', True):
+                        subs_dl_source = 'kodi'
+                if was_playing and self.player.playState == self.player.STATE_PAUSED:
+                    self.player.pause()
+
+            if subs_dl_source == 'kodi':
+                if self.handler and self.handler.player and self.handler.player.playerObject \
+                        and util.getSetting('calculate_oshash', False):
+                    meta = self.handler.player.playerObject.metadata
+                    if not meta.size:
+                        util.LOG("Can't calculate OpenSubtitles hash because we're transcoding")
+
+                    else:
+                        oss_hash = util.getOpenSubtitlesHash(meta.size, meta.streamUrls[0])
+                        if oss_hash:
+                            util.DEBUG_LOG("OpenSubtitles hash: {}", oss_hash)
+                            util.setGlobalProperty("current_oshash", oss_hash, base='videoinfo.{0}')
                 else:
-                    oss_hash = util.getOpenSubtitlesHash(meta.size, meta.streamUrls[0])
-                    if oss_hash:
-                        util.DEBUG_LOG("OpenSubtitles hash: {}", oss_hash)
-                        util.setGlobalProperty("current_oshash", oss_hash, base='videoinfo.{0}')
-            else:
-                util.setGlobalProperty("current_oshash", '', base='videoinfo.{0}')
-            self.lastSubtitleNavAction = "download"
+                    util.setGlobalProperty("current_oshash", '', base='videoinfo.{0}')
+                self.lastSubtitleNavAction = "download"
 
-            # remove the Year info from the current video info tag for better OSS search results
-            t = self.player.getVideoInfoTag()
-            changed_info_tag = False
-            item = xbmcgui.ListItem()
-            item.setPath(self.player.getPlayingFile())
-            if t:
-                year = t.getYear()
-                if year:
+                # remove the Year info from the current video info tag for better OSS search results
+                t = self.player.getVideoInfoTag()
+                changed_info_tag = False
+                item = xbmcgui.ListItem()
+                item.setPath(self.player.getPlayingFile())
+                if t:
+                    year = t.getYear()
+                    if year:
+                        if util.KODI_VERSION_MAJOR >= 20:
+                            vi = item.getVideoInfoTag()
+                            vi.setYear(0)
+                        else:
+                            item.setInfo("video", {"year": 0})
+                        util.DEBUG_LOG("Removing videoInfo year for subtitle search")
+                        self.player.updateInfoTag(item)
+                        changed_info_tag = year
+
+                builtin.ActivateWindow('SubtitleSearch')
+                # wait for the window to activate
+                while not xbmc.getCondVisibility('Window.IsActive(SubtitleSearch)'):
+                    util.MONITOR.waitForAbort(0.1)
+                # wait for the window to close
+                while xbmc.getCondVisibility('Window.IsActive(SubtitleSearch)'):
+                    util.MONITOR.waitForAbort(0.1)
+
+                if changed_info_tag:
                     if util.KODI_VERSION_MAJOR >= 20:
                         vi = item.getVideoInfoTag()
-                        vi.setYear(0)
+                        vi.setYear(changed_info_tag)
                     else:
-                        item.setInfo("video", {"year": 0})
-                    util.DEBUG_LOG("Removing videoInfo year for subtitle search")
+                        item.setInfo("video", {"year": changed_info_tag})
                     self.player.updateInfoTag(item)
-                    changed_info_tag = year
-
-            builtin.ActivateWindow('SubtitleSearch')
-            # wait for the window to activate
-            while not xbmc.getCondVisibility('Window.IsActive(SubtitleSearch)'):
-                util.MONITOR.waitForAbort(0.1)
-            # wait for the window to close
-            while xbmc.getCondVisibility('Window.IsActive(SubtitleSearch)'):
-                util.MONITOR.waitForAbort(0.1)
-
-            if changed_info_tag:
-                if util.KODI_VERSION_MAJOR >= 20:
-                    vi = item.getVideoInfoTag()
-                    vi.setYear(changed_info_tag)
-                else:
-                    item.setInfo("video", {"year": changed_info_tag})
-                self.player.updateInfoTag(item)
 
         elif choice['key'] == 'delay':
             self.hideOSD()
@@ -1383,14 +1424,18 @@ class SeekDialog(kodigui.BaseDialog):
             self.cycleSubtitles(forward=False)
             self.lastSubtitleNavAction = "backward"
         elif choice['key'] == 'enable':
+            if self.player.playState == self.player.STATE_PLAYING:
+                self.hideOSD()
             enabled = self.toggleSubtitles()
             self.lastSubtitleNavAction = "forward"
         elif choice['key'] == 'auto_sync':
             sss.should_auto_sync = not sss.should_auto_sync
             # self.player.video isn't the same as the mediachoice representation
             self.player.playerObject.choice.subtitleStream.should_auto_sync = sss.should_auto_sync
+            if self.player.playState == self.player.STATE_PLAYING:
+                self.hideOSD()
             if self.isDirectPlay:
-                self.setSubtitles(honor_forced_subtitles_override=False)
+                self.setSubtitles(honor_forced_subtitles_override=False, honor_deselect_subtitles=False)
             else:
                 self.doSeek(self.trueOffset(), settings_changed=True)
             self.lastSubtitleNavAction = "auto_sync"
@@ -1403,12 +1448,19 @@ class SeekDialog(kodigui.BaseDialog):
             self.disableSubtitles()
             return False
         else:
-            self.cycleSubtitles()
+            self.enableSubtitles()
             return True
 
     def disableSubtitles(self):
-        self.player.video.disableSubtitles()
+        self.player.video.disableSubtitles(sync_to_server=False)
         self.setSubtitles()
+        if self.isTranscoded:
+            self.doSeek(self.trueOffset(), settings_changed=True)
+
+    def enableSubtitles(self):
+        stream = self.player.video.enableSubtitles(sync_to_server=False)
+        self.setSubtitles()
+        util.showNotification(str(stream), time_ms=1500, header=util.T(32396, "Subtitles"))
         if self.isTranscoded:
             self.doSeek(self.trueOffset(), settings_changed=True)
 
@@ -1416,14 +1468,16 @@ class SeekDialog(kodigui.BaseDialog):
         """
         Selects the first subtitle or the next one
         """
-        stream = self.player.video.cycleSubtitles(forward=forward)
-        self.setSubtitles(honor_forced_subtitles_override=False)
+        stream = self.player.video.cycleSubtitles(forward=forward, sync_to_server=False)
+        self.setSubtitles(honor_forced_subtitles_override=False, honor_deselect_subtitles=False)
         util.showNotification(str(stream), time_ms=1500, header=util.T(32396, "Subtitles"))
         if self.isTranscoded:
             self.doSeek(self.trueOffset(), settings_changed=True)
 
-    def setSubtitles(self, do_sleep=False, honor_forced_subtitles_override=False):
-        self.handler.setSubtitles(do_sleep=do_sleep, honor_forced_subtitles_override=honor_forced_subtitles_override)
+    def setSubtitles(self, do_sleep=False, honor_forced_subtitles_override=False, honor_deselect_subtitles=False,
+                     ref="_current_subtitle_idx"):
+        self.handler.setSubtitles(do_sleep=do_sleep, honor_forced_subtitles_override=honor_forced_subtitles_override,
+                                  honor_deselect_subtitles=honor_deselect_subtitles, ref=ref)
         if self.player.video.current_subtitle_is_embedded:
             # this is an embedded stream, seek back a second after setting the subtitle due to long standing kodi
             # issue: https://github.com/xbmc/xbmc/issues/21086
@@ -1629,7 +1683,7 @@ class SeekDialog(kodigui.BaseDialog):
                     chaps.append((st, thumb, chapter.tag or T(33607, 'Chapter {}').format(index + 1)))
 
             # fake chapters by using markers
-            if util.getSetting('virtual_chapters', True) and self.markers:
+            if util.getUserSetting('virtual_chapters', True) and self.markers:
                 if not self.chapters:
                     self.setProperty('chapters.label', T(33606, 'Virtual Chapters').upper())
                 else:

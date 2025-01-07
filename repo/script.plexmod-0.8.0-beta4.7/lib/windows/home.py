@@ -687,7 +687,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         plexapp.util.APP.on('account:response', self.displayServerAndUser)
         plexapp.util.APP.on('sli:reachability:received', self.displayServerAndUser)
         plexapp.util.APP.on('change:hubs_bifurcation_lines', self.updateProperties)
-        plexapp.util.APP.on('change:no_episode_spoilers3', self.setDirty)
+        plexapp.util.APP.on('change:no_episode_spoilers4', self.setDirty)
         plexapp.util.APP.on('change:spoilers_allowed_genres2', self.setDirty)
         plexapp.util.APP.on('change:hubs_use_new_continue_watching', self.setDirty)
         plexapp.util.APP.on('change:path_mapping_indicators', self.setDirty)
@@ -715,7 +715,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         plexapp.util.APP.off('account:response', self.displayServerAndUser)
         plexapp.util.APP.off('sli:reachability:received', self.displayServerAndUser)
         plexapp.util.APP.off('change:hubs_bifurcation_lines', self.updateProperties)
-        plexapp.util.APP.off('change:no_episode_spoilers3', self.setDirty)
+        plexapp.util.APP.off('change:no_episode_spoilers4', self.setDirty)
         plexapp.util.APP.off('change:spoilers_allowed_genres2', self.setDirty)
         plexapp.util.APP.off('change:hubs_use_new_continue_watching', self.setDirty)
         plexapp.util.APP.off('change:path_mapping_indicators', self.setDirty)
@@ -864,6 +864,12 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 if action == xbmcgui.ACTION_SELECT_ITEM:
                     self.showServers()
                     return
+                elif action == xbmcgui.ACTION_CONTEXT_MENU and util.getUserSetting('previous_server', None):
+                    uuid = util.getUserSetting('previous_server', None)
+                    if uuid != plexapp.SERVERMANAGER.selectedServer.uuid:
+                        self.selectServer(uuid)
+                    return
+
                 elif action == xbmcgui.ACTION_MOUSE_LEFT_CLICK:
                     self.showServers(mouse=True)
                     self.setBoolProperty('show.servers', True)
@@ -871,6 +877,20 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             elif controlID == self.USER_BUTTON_ID:
                 if action == xbmcgui.ACTION_SELECT_ITEM:
                     self.showUserMenu()
+                    return
+                elif action == xbmcgui.ACTION_CONTEXT_MENU and util.getSetting('previous_user', None):
+                    # check whether we can fast swap (account is not protected)
+                    # get user
+                    uid = util.getSetting('previous_user', None)
+                    if uid == plexapp.ACCOUNT.ID:
+                        return
+
+                    user = plexapp.ACCOUNT.getHomeUser(uid)
+                    if not user or user.isProtected:
+                        self.doUserOption(force_option="switch")
+                        return
+
+                    self.doUserOption(force_option={"fast_switch": user.id})
                     return
                 elif action == xbmcgui.ACTION_MOUSE_LEFT_CLICK:
                     self.showUserMenu(mouse=True)
@@ -1180,6 +1200,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         if mli.dataSource is None:
             return
 
+        # auto resume for in-progress items
+        if util.getSetting('home_inprogress_resume', True):
+            if mli.dataSource.TYPE in ('episode', 'movie') and mli.dataSource.in_progress:
+                auto_play = True
+
         carryProps = None
         if auto_play:
             carryProps = self.carriedProps
@@ -1470,6 +1495,12 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     options.append({'key': 'remove_cw', 'display': T(33662, "Remove from Continue Watching")})
                     if not has_mp:
                         select_base = 1
+                if util.getSetting('home_inprogress_resume', True) and mli.dataSource.in_progress:
+                    # this is an in progress item that would be auto resumed; add specific entry to visit media instead
+                    options.insert(0, dropdown.SEPARATOR)
+                    options.insert(0, {'key': 'to_item', 'display': T(33019, "Visit media item")})
+                    select_base = 0
+
 
             if mli.dataSource.TYPE in ('episode', 'season'):
                 options.append(dropdown.SEPARATOR)
@@ -1539,6 +1570,15 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             target = mli.dataSource.show() if choice["key"] == "to_show" else mli.dataSource.season()
             try:
                 command = opener.open(target, dialog_props=self.carriedProps)
+                if command == "NODATA":
+                    raise util.NoDataException
+            except util.NoDataException:
+                util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
+                return
+
+        elif choice["key"] == "to_item":
+            try:
+                command = opener.open(mli.dataSource, dialog_props=self.carriedProps)
                 if command == "NODATA":
                     raise util.NoDataException
             except util.NoDataException:
@@ -2214,7 +2254,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 # use episode thumbnail for in progress episodes
                 if mli.dataSource.type == 'episode' and util.addonSettings.continueUseThumb and check_spoilers:
                     # blur them if we don't want any spoilers and the episode hasn't been fully watched
-                    if mli.dataSource._noSpoilers:
+                    if self.noResumeImages and mli.dataSource._noSpoilers:
                         extra_opts = {"blur": util.addonSettings.episodeNoSpoilerBlur}
                     thumb = mli.dataSource.thumb
 
@@ -2402,21 +2442,28 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             if not from_refresh:
                 plexapp.refreshResources()
 
-    def selectServer(self):
+    def selectServer(self, uuid=None):
         if self._shuttingDown:
             return
 
-        mli = self.serverList.getSelectedItem()
-        if not mli:
-            return
+        if not uuid:
+            mli = self.serverList.getSelectedItem()
+            if not mli:
+                return
+            server = mli.dataSource
+        else:
+            server = plexapp.SERVERMANAGER.getServer(uuid)
+            if not server:
+                return
+
+        # store last used server
+        util.setSetting('previous_server.{}'.format(plexapp.ACCOUNT.ID), plexapp.SERVERMANAGER.selectedServer.uuid)
 
         self.changingServer = True
 
         # this is broken
         with busy.BusySignalContext(plexapp.util.APP, "change:selectedServer") as bc:
             self.setFocusId(self.SECTION_LIST_ID)
-
-            server = mli.dataSource
 
             # fixme: this might still trigger a dialog, re-triggering the previously opened windows
             if not self._shuttingDown and not server.isReachable():
@@ -2469,12 +2516,15 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         if not mouse:
             self.setFocusId(self.USER_LIST_ID)
 
-    def doUserOption(self):
-        mli = self.userList.getSelectedItem()
-        if not mli:
-            return
+    def doUserOption(self, force_option=None):
+        if not force_option:
+            mli = self.userList.getSelectedItem()
+            if not mli:
+                return
 
-        option = mli.dataSource
+            option = mli.dataSource
+        else:
+            option = force_option
 
         self.setFocusId(self.USER_BUTTON_ID)
 

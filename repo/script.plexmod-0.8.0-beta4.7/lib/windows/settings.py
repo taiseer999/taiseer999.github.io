@@ -4,12 +4,15 @@ from __future__ import unicode_literals
 
 import json
 import sys
+import datetime
+import types
 
 import plexnet
 from kodi_six import xbmc
 from kodi_six import xbmcgui
 from kodi_six import xbmcaddon
 from threading import Timer
+from iso639 import languages
 
 import lib.cache
 from lib import util
@@ -22,6 +25,8 @@ from . import windowutils
 
 UNDEF = "__UNDEF__"
 
+#MAIN_LANGUAGES = [l for l in languages if l.part1]
+#SEP_LANGUAGES= [l for l in languages if l.part2t and l not in MAIN_LANGUAGES]
 
 class Setting(object):
     type = None
@@ -325,6 +330,8 @@ class InfoSetting(BasicSetting):
         self.info = info
 
     def valueLabel(self):
+        if isinstance(self.info, types.FunctionType):
+            return self.info()
         return self.info
 
 
@@ -438,7 +445,18 @@ class Settings(object):
                         "Set this to the same value as your Plex server (Settings>Library>Video played threshold) to av"
                         "oid certain pitfalls, Default: 90 %"
                     )
-                )
+                ),
+                BoolSetting(
+                    'assume_resume', T(33711, 'Always resume media'), True
+                ).description(
+                    T(33712, 'When playback of an in-progress media is requested, resume it by default instead'
+                             ' of asking whether to resume or start from the beginning.')
+                ),
+                BoolSetting(
+                    'home_inprogress_resume', T(33713, 'Home: Resume in-progress items'), True
+                ).description(
+                    T(33714, 'Resume in-progress items directly instead of visiting the media.')
+                ),
             )
         ),
         'video': (
@@ -520,6 +538,34 @@ class Settings(object):
                             True).description(
                     T(33080, '')
                 ),
+                MultiOptionsSetting(
+                    'disable_subtitle_languages', T(33691, "Native languages"),
+                    [],
+                    [(b, a) for a, b in sorted([(l.name, l.part2t) for l in languages if l.part1])]  # +
+                    # [(b, a) for a, b in sorted([(l.name, l.part2t) for l in SEP_LANGUAGES])]
+                ).description(
+                    T(33692, "When you usually watch things in a different language with subtitles, but are a"
+                             " native speaker of other languages, which you don't need subtitles for, prevent Plex "
+                             "from auto-selecting subtitles for those languages.")
+                ),
+                OptionsSetting(
+                    'subtitle_download_from',
+                    T(33693, 'Download subtitles using'),
+                    'plex',
+                    (
+                        ('ask', T(33694, 'Ask')),
+                        ('plex', 'Plex'),
+                        ('kodi', 'Kodi'),
+                    )
+                ).description(T(33695, "Where do you want to download subtitles from? Note: Currently this "
+                                       "only applies to the subtitle quick actions in the player. The subtitle download"
+                                       " in stream settings always uses Plex as a source.")),
+                BoolSetting('subtitle_download_fallback', T(33701, 'Fallback to Kodi'),
+                            True).description(
+                    T(33702, "When no subtitles are found via the Plex subtitle search, fall back to Kodi "
+                             "subtitle search. Note: Currently this only applies to the subtitle quick actions in the "
+                             "player. The subtitle download in stream settings always uses Plex as a source.")
+                ),
                 OptionsSetting(
                     'burn_subtitles',
                     T(32031, 'Burn-in Subtitles'),
@@ -590,13 +636,28 @@ class Settings(object):
                     T(33078, "")
                 ),
                 MultiOptionsSetting(
-                    'no_episode_spoilers3', T(33006, ''),
-                    ['unwatched'],
+                    'show_ratings', T(33709, 'Show ratings for'),
+                    ["series", "movies"],
+                    [
+                        ('series', T(32393, 'TV Shows')),
+                        ('movies', T(32348, 'Movies')),
+                    ]
+                ),
+                BoolSetting(
+                    'show_reviews', T(33710, ''), True
+                ),
+                MultiOptionsSetting(
+                    'no_episode_spoilers4', T(33006, ''),
+                    ['unwatched', 'blur_images', 'hide_summary'],
                     (
                         ('unwatched', T(33010, '')),
                         ('in_progress', T(33011, '')),
                         ('no_unwatched_episode_titles', T(33012, '')),
+                        ('blur_images', T(33706, '')),
+                        ('blur_resume_images', T(33707, '')),
                         ('blur_chapters', T(33081, '')),
+                        ('hide_summary', T(33708, '')),
+                        ('hide_ratings', T(33705, '')),
                     )
                 ).description(T(33007, "")),
                 MultiOptionsSetting(
@@ -885,6 +946,12 @@ class Settings(object):
                 InfoSetting('addon_path', T(33616, 'Addon Path'), util.ADDON.getAddonInfo("path")),
                 InfoSetting('userdata_path', T(33617, 'Userdata/Profile Path'),
                             util.translatePath("special://profile")),
+                InfoSetting('service_status', T(33689, 'Service running'),
+                            lambda: "{} ({})".format(
+                                util.getGlobalProperty("service.started") and T(32328, "Yes") or T(32329, "No"),
+                                util.getGlobalProperty("service.version"))),
+                InfoSetting('i_last_update_check', T(33690, "Last update check"),
+                            lambda: util.getGlobalProperty('last_update_check', datetime.datetime.fromtimestamp(0).strftime('%Y-%m-%dT%H:%M:%S.%f'))),
             )
         ),
     }
@@ -921,6 +988,7 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
         self.showSections()
         self.setFocusId(75)
         self.lastSection = None
+        self.lastFocusID = None
         self.checkSection()
 
     def onAction(self, action):
@@ -940,8 +1008,13 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
                 # elif not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.TOP_GROUP_ID)):
                 #     self.setFocusId(self.TOP_GROUP_ID)
                 #     return
-            elif action == xbmcgui.ACTION_MOVE_RIGHT and controlID == 150:
-                self.editSetting(from_right=True)
+            elif action == xbmcgui.ACTION_MOVE_RIGHT:
+                if self.lastFocusID == self.SECTION_LIST_ID:
+                    self.setFocusId(self.SETTINGS_LIST_ID)
+                    return
+                elif self.lastFocusID == self.SETTINGS_LIST_ID:
+                    self.editSetting(from_right=True)
+                    return
         except:
             util.ERROR()
 
@@ -958,6 +1031,9 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
             self.doClose()
         elif controlID == self.PLAYER_STATUS_BUTTON_ID:
             self.showAudioPlayer()
+
+    def onFocus(self, controlID):
+        self.lastFocusID = controlID
 
     def checkSection(self):
         mli = self.sectionList.getSelectedItem()

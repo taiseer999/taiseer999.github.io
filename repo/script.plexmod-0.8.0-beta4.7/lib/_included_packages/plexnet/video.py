@@ -66,6 +66,7 @@ class Video(media.MediaItem, AudioCodecMixin):
     manually_selected_sub_stream = False
     current_subtitle_is_embedded = False
     _current_subtitle_idx = None
+    _prev_subtitle_idx = None
     _noSpoilers = False
 
     def __init__(self, *args, **kwargs):
@@ -129,18 +130,29 @@ class Video(media.MediaItem, AudioCodecMixin):
                 return self.audioStreams[0]
         return None
 
-    def selectedSubtitleStream(self, forced_subtitles_override=False, fallback=False):
-        if self._current_subtitle_idx:
-            try:
-                return self.subtitleStreams[self._current_subtitle_idx]
-            except IndexError:
-                pass
+    def selectedSubtitleStream(self, forced_subtitles_override=False, deselect_subtitles=None,
+                               fallback=False, ref="_current_subtitle_idx", force_from_plex=False):
+        if ref:
+            sidx = getattr(self, ref)
+            if sidx:
+                try:
+                    return self.subtitleStreams[sidx]
+                except IndexError:
+                    pass
+
+        selas = self.selectedAudioStream()
 
         if self.subtitleStreams:
             for stream in self.subtitleStreams:
                 if stream.isSelected():
+                    if force_from_plex:
+                        util.DEBUG_LOG("Subtitle stream requested to be the Plex decision, returning: {}", stream)
+                        return stream
+
+                    sel_stream = stream
+                    stream_forced = sel_stream.forced.asBool()
                     if forced_subtitles_override and \
-                            stream.forced.asBool() and self.manually_selected_sub_stream != stream.id:
+                            stream_forced and self.manually_selected_sub_stream != sel_stream.id:
                         # try finding a non-forced variant of this stream
                         possible_alt = None
                         for alt_stream in self.subtitleStreams:
@@ -155,17 +167,25 @@ class Video(media.MediaItem, AudioCodecMixin):
                             util.DEBUG_LOG("Selecting stream {} instead of {}", possible_alt, stream)
                             stream.setSelected(False)
                             possible_alt.setSelected(True)
-                            self.current_subtitle_is_embedded = possible_alt.embedded
-                            if self._current_subtitle_idx != possible_alt.typeIndex:
-                                self._current_subtitle_idx = possible_alt.typeIndex
-                            return possible_alt
+                            stream_forced = False
 
-                    if self._current_subtitle_idx != stream.typeIndex:
-                        self._current_subtitle_idx = stream.typeIndex
-                    self.current_subtitle_is_embedded = stream.embedded
-                    return stream
+                            sel_stream = possible_alt
+                    if (not self.manually_selected_sub_stream or self.manually_selected_sub_stream != sel_stream.id) and \
+                        deselect_subtitles and str(selas.languageCode) in deselect_subtitles and \
+                          not stream_forced:
+                        util.DEBUG_LOG("Not selecting {} subtitle stream because audio is {}",
+                                       sel_stream.languageCode, selas.languageCode)
+                        self._current_subtitle_idx = None
+                        return
+
+                    if self._current_subtitle_idx != sel_stream.typeIndex:
+                        self._current_subtitle_idx = sel_stream.typeIndex
+                    self.current_subtitle_is_embedded = sel_stream.embedded
+                    return sel_stream
             if fallback:
                 stream = self.subtitleStreams[0]
+                if deselect_subtitles and str(selas.languageCode) in deselect_subtitles and not stream.forced.asBool():
+                    return
                 if self._current_subtitle_idx != stream.typeIndex:
                     self._current_subtitle_idx = stream.typeIndex
                 return stream
@@ -176,9 +196,10 @@ class Video(media.MediaItem, AudioCodecMixin):
         self.mediaChoice = mediachoice.MediaChoice(media, partIndex=partIndex)
 
     @forceMediaChoice
-    def selectStream(self, stream, _async=True, from_session=False):
-        self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async, from_session=from_session,
-                                                video=self)
+    def selectStream(self, stream, _async=True, from_session=False, sync_to_server=True):
+        if sync_to_server:
+            self.mediaChoice.part.setSelectedStream(stream.streamType.asInt(), stream.id, _async, from_session=from_session,
+                                                    video=self)
         # Update any affected streams
         if stream.streamType.asInt() == plexstream.PlexStream.TYPE_AUDIO:
             for audioStream in self.audioStreams:
@@ -198,7 +219,12 @@ class Video(media.MediaItem, AudioCodecMixin):
                     subtitleStream.setSelected(False)
 
     @forceMediaChoice
-    def cycleSubtitles(self, forward=True):
+    def cycleSubtitles(self, forward=True, sync_to_server=False):
+        """
+        Only used by SeekDialog Subtitle Quick Settings to toggle subs
+        @param sync_to_server: Don't persist changes to the PMS
+        @return: selected stream
+        """
         amount = len(self.subtitleStreams)
         if not amount:
             return False
@@ -220,12 +246,43 @@ class Video(media.MediaItem, AudioCodecMixin):
                     stream = self.subtitleStreams[-1]
 
         util.DEBUG_LOG("Selecting subtitle stream: {} (was: {})", stream, cur)
-        self.selectStream(stream)
+        self.selectStream(stream, sync_to_server=sync_to_server)
         return stream
 
     @forceMediaChoice
-    def disableSubtitles(self):
-        self.selectStream(plexstream.NONE_STREAM)
+    def disableSubtitles(self, sync_to_server=False):
+        """
+        Only used by SeekDialog Subtitle Quick Settings to toggle subs
+        @param sync_to_server: Don't persist changes to the PMS
+        @return:
+        """
+        # store previously selected subtitle on disable, to be able to re-enable it from seekdialog
+        self._prev_subtitle_idx = self._current_subtitle_idx
+        self.selectStream(plexstream.NONE_STREAM, sync_to_server=sync_to_server)
+
+    @forceMediaChoice
+    def enableSubtitles(self, sync_to_server=False):
+        """
+        Only used by SeekDialog Subtitle Quick Settings to toggle subs
+        @param sync_to_server: Don't persist changes to the PMS
+        @return: selected stream
+        """
+        stream = self.selectedSubtitleStream(ref="_prev_subtitle_idx")
+        if not stream:
+            # use fallback
+            stream = self.selectedSubtitleStream(fallback=True)
+        self.selectStream(stream, sync_to_server=sync_to_server)
+        return stream
+
+    def findSubtitles(self, language="en", hearing_impaired=0, forced=0):
+        data = self.server.query('%s/subtitles' % self.key, language=language, hearingImpaired=hearing_impaired,
+                                 forced=forced)
+        if data:
+            return [media.SubtitleStream(elem, initpath=self.initpath, server=self.server) for elem in data]
+        return []
+
+    def downloadSubtitles(self, key):
+        self.server.query('%s/subtitles' % self.key, key=key, codec="srt", method=self.server.session.put)
 
     @property
     def hasSubtitle(self):
@@ -445,7 +502,8 @@ class PlayableVideo(Video, media.RelatedMixin):
             if self.get('viewOffset'):
                 del self.viewOffset
 
-        fromMediaChoice = kwargs.get("fromMediaChoice", False)
+        fromMediaChoice = kwargs.pop("fromMediaChoice", False)
+        forceSubtitlesFromPlex = kwargs.pop("forceSubtitlesFromPlex", False)
 
         kwargs["includeMarkers"] = 1
 
@@ -460,7 +518,12 @@ class PlayableVideo(Video, media.RelatedMixin):
             partID = self.mediaChoice.part.id
             streamIDs = []
             if self.mediaChoice.media.hasStreams():
-                subtitleStream = self.selectedSubtitleStream(fallback=False)
+                if forceSubtitlesFromPlex:
+                    subtitleStream = self.selectedSubtitleStream(ref=None, force_from_plex=forceSubtitlesFromPlex)
+                else:
+                    subtitleStream = self.selectedSubtitleStream(fallback=False,
+                                                                 forced_subtitles_override=self.settings.getPreference("forced_subtitles_override", False) and util.ACCOUNT.subtitlesForced == 0,
+                                                                 deselect_subtitles=self.settings.getPreference("disable_subtitle_languages", []))
                 videoStream = self.selectedVideoStream(fallback=True)
                 audioStream = self.selectedAudioStream(fallback=True)
                 streamIDs = []
@@ -502,6 +565,10 @@ class PlayableVideo(Video, media.RelatedMixin):
             hub = plexlibrary.Hub(elem, server=self.server, container=container)
             hubs[hub.hubIdentifier] = hub
         return hubs
+
+    @property
+    def in_progress(self):
+        return bool(self.get('viewOffset').asInt())
 
 
 @plexobjects.registerLibType
@@ -772,10 +839,6 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
     @property
     def isFullyWatched(self):
         return self.get('viewCount').asInt() > 0 and not self.get('viewOffset').asInt()
-
-    @property
-    def inProgress(self):
-        return bool(self.get('viewOffset').asInt())
 
     @property
     def playbackSettings(self):

@@ -8,9 +8,10 @@ from lib import metadata
 from lib import util
 from lib.util import T
 from . import kodigui
+from . import mixins
 
 
-class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver):
+class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver, mixins.PlexSubtitleDownloadMixin):
     xmlFile = 'script-plex-video_settings_dialog.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -22,6 +23,7 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver):
 
     def __init__(self, *args, **kwargs):
         kodigui.BaseDialog.__init__(self, *args, **kwargs)
+        mixins.PlexSubtitleDownloadMixin.__init__(self, *args, **kwargs)
         self.video = kwargs.get('video')
         self.viaOSD = kwargs.get('via_osd')
         self.nonPlayback = kwargs.get('non_playback')
@@ -107,7 +109,8 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver):
         options = [
             ('audio', T(32395, 'Audio'), audio),
             ('subs', T(32396, 'Subtitles'), subtitle),
-            ('quality', T(32397, 'Quality'), u'{0}'.format(current))
+            ('quality', T(32397, 'Quality'), u'{0}'.format(current)),
+            ('download_subs', T(33703, "Download subtitles"), ''),
         ]
 
         if not self.nonPlayback:
@@ -161,7 +164,10 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver):
             audio = T(32309, 'None')
 
         sss = self.video.selectedSubtitleStream(
-            forced_subtitles_override=util.getSetting("forced_subtitles_override", False))
+            forced_subtitles_override=util.getSetting("forced_subtitles_override", False) and plexnet.util.ACCOUNT.subtitlesForced == 0,
+            deselect_subtitles=util.getSetting("disable_subtitle_languages", [])
+        )
+
         if sss:
             if len(self.video.subtitleStreams) > 1:
                 subtitle = u'{0} \u2022 {1} {2}'.format(sss.getTitle(metadata.apiTranslate), len(self.video.subtitleStreams) - 1, T(32307, 'More'))
@@ -186,6 +192,11 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver):
             showAudioDialog(self.video, non_playback=self.nonPlayback)
         elif result == 'subs':
             showSubtitlesDialog(self.video, non_playback=self.nonPlayback)
+        elif result == 'download_subs':
+            downloaded = self.downloadPlexSubtitles(self.video, non_playback=self.nonPlayback)
+            if downloaded:
+                self.video.selectStream(downloaded, from_session=not self.nonPlayback, sync_to_server=False)
+                self.video.manually_selected_sub_stream = downloaded.id
         elif result == 'quality':
             idx = None
             override = self.qualityOverride
@@ -234,6 +245,7 @@ class SelectDialog(kodigui.BaseDialog, util.CronReceiver):
         self.nonPlayback = kwargs.get('non_playback')
         self.lastSelectedItem = self.selectedIdx if self.selectedIdx is not None else 0
         self.roundRobin = kwargs.get('round_robin', True)
+        self.trim = kwargs.get('trim', True)
 
     def onFirstInit(self):
         self.optionsList = kodigui.ManagedControlList(self, self.OPTIONS_LIST_ID, 8)
@@ -300,7 +312,8 @@ class SelectDialog(kodigui.BaseDialog, util.CronReceiver):
             title2 = ''
             if isinstance(title1, (list, set, tuple)):
                 title1, title2 = title1
-            item = kodigui.ManagedListItem(title1, plexnet.util.trimString(title2, limit=40), data_source=ds)
+            item = kodigui.ManagedListItem(title1, self.trim and plexnet.util.trimString(title2, limit=40) or title2,
+                                           data_source=ds)
             items.append(item)
 
         self.optionsList.reset()
@@ -312,8 +325,9 @@ class SelectDialog(kodigui.BaseDialog, util.CronReceiver):
         self.setFocusId(self.OPTIONS_LIST_ID)
 
 
-def showOptionsDialog(heading, options, non_playback=False, selected_idx=None):
-    w = SelectDialog.open(heading=heading, options=options, non_playback=non_playback, selected_idx=selected_idx)
+def showOptionsDialog(heading, options, non_playback=False, selected_idx=None, trim=True):
+    w = SelectDialog.open(heading=heading, options=options, non_playback=non_playback, selected_idx=selected_idx,
+                          trim=trim)
     choice = w.choice
     del w
     util.garbageCollect()
@@ -337,8 +351,14 @@ def showAudioDialog(video, non_playback=False):
 def showSubtitlesDialog(video, non_playback=False):
     options = [(plexnet.plexstream.NoneStream(), 'None')]
     idx = None
+    sss = video.selectedSubtitleStream(
+        forced_subtitles_override=util.getSetting("forced_subtitles_override", False) and plexnet.util.ACCOUNT.subtitlesForced == 0,
+        deselect_subtitles=util.getSetting("disable_subtitle_languages", [])
+    )
     for i, s in enumerate(video.subtitleStreams):
-        if s.isSelected():
+        if s == sss:
+    #for i, s in enumerate(video.subtitleStreams):
+    #    if s.isSelected():
             idx = i + 1
         options.append((s, s.getTitle(metadata.apiTranslate)))
 

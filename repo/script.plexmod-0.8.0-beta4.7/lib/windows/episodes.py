@@ -335,7 +335,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         vp = VIDEO_PROGRESS.get(self.show_.ratingKey, {}).get(self.season.ratingKey, {})
 
-        if self.manuallySelected and not VIDEO_PROGRESS:
+        if (self.manuallySelected and not VIDEO_PROGRESS) or self.cameFrom == "info":
+            if self.cameFrom == "info":
+                self.cameFrom = None
+                return
             util.DEBUG_LOG("Episodes: ReInit: Not doing anything, as we've previously manually selected "
                            "this item and don't have progress")
             return
@@ -489,32 +492,36 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
                     # progress can be False (no entry), a number (progress), or True (fully watched just now)
                     # select it if it's not watched or in progress
-                    if progress is True:
-                        # ep was just watched
-                        just_fully_watched = True
-                        mli.setProperty('unwatched', '')
-                        mli.setProperty('watched', '1')
-                        mli.setProperty('progress', '')
-                        mli.setProperty('unwatched.count', '')
-                        mli.setProperty('unwatched.count.large', '')
-                        mli.dataSource.set('viewCount', mli.dataSource.get('viewCount', 0).asInt() + 1)
-                        mli.dataSource.set('viewOffset', 0)
-                        self.setUserItemInfo(mli, fully_watched=True)
+                    if progress:
+                        if progress is True:
+                            # ep was just watched
+                            just_fully_watched = True
+                            mli.setProperty('unwatched', '')
+                            mli.setProperty('watched', '1')
+                            mli.setProperty('progress', '')
+                            mli.setProperty('unwatched.count', '')
+                            mli.setProperty('unwatched.count.large', '')
+                            mli.dataSource.set('viewCount', mli.dataSource.get('viewCount', 0).asInt() + 1)
+                            mli.dataSource.set('viewOffset', 0)
+                            self.setUserItemInfo(mli, fully_watched=True)
 
-                    elif progress and progress > 60000:
-                        # ep has progress
-                        mli.setProperty('watched', '')
-                        mli.setProperty('progress', util.getProgressImage(mli.dataSource, view_offset=progress))
-                        mli.dataSource.set('viewOffset', progress)
-                        self.setUserItemInfo(mli, watched=True)
-                        set_main_progress_to = progress
+                        elif progress > 60000:
+                            # ep has progress
+                            mli.setProperty('watched', '')
+                            mli.setProperty('progress', util.getProgressImage(mli.dataSource, view_offset=progress))
+                            mli.dataSource.set('viewOffset', progress)
+                            self.setUserItemInfo(mli, watched=True)
+                            set_main_progress_to = progress
 
-                    elif progress and progress <= 60000:
-                        # reset progress as we might've had progress before
-                        mli.setProperty('progress', '')
-                        mli.dataSource.set('viewOffset', '')
-                        self.setUserItemInfo(mli)
-                        set_main_progress_to = 0
+                        elif progress <= 60000:
+                            # reset progress as we might've had progress before
+                            mli.setProperty('progress', '')
+                            mli.dataSource.set('viewOffset', '')
+                            self.setUserItemInfo(mli)
+                            set_main_progress_to = 0
+
+                        if self.noRatings:
+                            self.populateRatings(mli.dataSource, mli, hide_ratings=self.hideSpoilers(mli.dataSource))
 
                     # after immediately updating the watched state, if we still have data left, continue
                     if progress is True and progress_data_left:
@@ -950,7 +957,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             thumb=episode.thumb,
             thumb_opts=self.getThumbnailOpts(episode, hide_spoilers=hide_spoilers),
             thumb_fallback='script.plex/thumb_fallbacks/show.png',
-            info=hide_spoilers and T(33008, '') or episode.summary,
+            info=(hide_spoilers and self.noSummaries and T(33008, '')) or episode.summary,
             background=self.getProperty('background'),
             is_16x9=True,
             video=episode
@@ -979,22 +986,25 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         resume = False
         if episode.viewOffset.asInt():
-            choice = dropdown.showDropdown(
-                options=[
-                    {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(episode.viewOffset.asInt()).lstrip('0').lstrip(':'))},
-                    {'key': 'play', 'display': T(32317, 'Play from beginning')}
-                ],
-                pos=(660, "middle"),
-                close_direction='none',
-                set_dropdown_prop=False,
-                header=T(32314, 'In Progress'),
-                dialog_props=from_auto_play and self.dialogProps or None
-            )
+            if not util.getSetting('assume_resume', True):
+                choice = dropdown.showDropdown(
+                    options=[
+                        {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(episode.viewOffset.asInt()).lstrip('0').lstrip(':'))},
+                        {'key': 'play', 'display': T(32317, 'Play from beginning')}
+                    ],
+                    pos=(660, "middle"),
+                    close_direction='none',
+                    set_dropdown_prop=False,
+                    header=T(32314, 'In Progress'),
+                    dialog_props=from_auto_play and self.dialogProps or None
+                )
 
-            if not choice:
-                return
+                if not choice:
+                    return
 
-            if choice['key'] == 'resume':
+                if choice['key'] == 'resume':
+                    resume = True
+            else:
                 resume = True
 
         if not from_auto_play:
@@ -1232,6 +1242,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             item.setProperty('progress', util.getProgressImage(item.dataSource))
             (self.season or self.show_).reload()
 
+            if self.noRatings:
+                self.populateRatings(item.dataSource, item, hide_ratings=self.hideSpoilers(item.dataSource))
             self.setUserItemInfo(item)
         else:
             self.fillEpisodes(update=True)
@@ -1268,7 +1280,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                 methods.append(("setLabel", tit))
 
             if "summary" in types:
-                properties["summary"] = hide_spoilers and T(33008, '') or video.summary.strip().replace('\t', ' ')
+                properties["summary"] = ((hide_spoilers and self.noSummaries and T(33008, '')) or
+                                         video.summary.strip().replace('\t', ' '))
 
             if "thumbnail" in types:
                 methods.append(("setThumbnailImage",
@@ -1306,8 +1319,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         mli.setProperty('year', video.year)
         mli.setProperty('content.rating', video.contentRating.split('/', 1)[-1])
         mli.setProperty('genre', self.genre)
-
-        self.populateRatings(video, mli)
+        self.populateRatings(video, mli, hide_ratings=self.hideSpoilers(video) and self.noRatings)
 
     def setPostReloadItemInfo(self, video, mli):
         self.setItemAudioAndSubtitleInfo(video, mli)
@@ -1344,7 +1356,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                 mli.setProperty('audio', sas and sas.getTitle(metadata.apiTranslate) or T(32309, 'None'))
 
         sss = video.selectedSubtitleStream(forced_subtitles_override=
-                                           util.getSetting("forced_subtitles_override", False))
+                                           util.getSetting("forced_subtitles_override", False) and pnUtil.ACCOUNT.subtitlesForced == 0,
+                                           deselect_subtitles=util.getSetting("disable_subtitle_languages", []))
         if sss:
             if len(video.subtitleStreams) > 1:
                 mli.setProperty(

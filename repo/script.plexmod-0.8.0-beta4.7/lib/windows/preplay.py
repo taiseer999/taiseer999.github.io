@@ -468,22 +468,25 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
 
         resume = False
         if self.video.viewOffset.asInt():
-            choice = dropdown.showDropdown(
-                options=[
-                    {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(self.video.viewOffset.asInt()).lstrip('0').lstrip(':'))},
-                    {'key': 'play', 'display': T(32317, 'Play from beginning')}
-                ],
-                pos=(660, 441),
-                close_direction='none',
-                set_dropdown_prop=False,
-                header=T(32314, 'In Progress'),
-                dialog_props=from_auto_play and self.dialogProps or None
-            )
+            if not util.getSetting('assume_resume', True):
+                choice = dropdown.showDropdown(
+                    options=[
+                        {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(self.video.viewOffset.asInt()).lstrip('0').lstrip(':'))},
+                        {'key': 'play', 'display': T(32317, 'Play from beginning')}
+                    ],
+                    pos=(660, 441),
+                    close_direction='none',
+                    set_dropdown_prop=False,
+                    header=T(32314, 'In Progress'),
+                    dialog_props=from_auto_play and self.dialogProps or None
+                )
 
-            if not choice:
-                return
+                if not choice:
+                    return
 
-            if choice['key'] == 'resume':
+                if choice['key'] == 'resume':
+                    resume = True
+            else:
                 resume = True
 
         if not from_auto_play:
@@ -609,7 +612,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
                 self.setProperty('audio', sas and sas.getTitle(metadata.apiTranslate) or T(32309, 'None'))
 
         sss = self.video.selectedSubtitleStream(
-            forced_subtitles_override=util.getSetting("forced_subtitles_override", False))
+            forced_subtitles_override=util.getSetting("forced_subtitles_override", False) and pnUtil.ACCOUNT.subtitlesForced == 0,
+            deselect_subtitles=util.getSetting("disable_subtitle_languages", []))
         if sss:
             if len(self.video.subtitleStreams) > 1:
                 self.setProperty(
@@ -699,7 +703,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         items = []
         idx = 0
 
-        if not self.video.reviews:
+        if not util.getSetting('show_reviews', True) or not self.video.reviews:
             self.reviewsListControl.reset()
             return False
 

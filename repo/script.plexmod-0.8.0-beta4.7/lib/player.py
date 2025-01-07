@@ -433,7 +433,10 @@ class SeekPlayerHandler(BasePlayerHandler):
             # Some devices seem to have an issue with the self.player.seekTime function where after the seek the video
             # will be playing, but the audio won't for a few seconds(I've seen up to 15 seconds).  Using this alternate
             # way to seek avoids that issue.
-            if self.useAlternateSeek:
+
+            # we only apply the fix for a significant seek, otherwise the event might not fire, and we end up with
+            # an unconsumed self.seekOnStart, which leads to never sending timeline events
+            if self.useAlternateSeek and seekSeconds > 0.5:
                 currentTime = self.player.getTime()
                 relativeSeekSeconds = seekSeconds - currentTime
                 util.DEBUG_LOG("SeekAbsolute: Seeking to offset: {0}, current time: {1}, relative seek: {2}".format(
@@ -502,13 +505,19 @@ class SeekPlayerHandler(BasePlayerHandler):
             util.CRON.forceTick()
         # self.hideOSD()
 
+    def getVideoPlayedFac(self, ref=None):
+        return (ref if ref is not None else self.trueTime * 1000) / float(self.duration)
+
     @property
     def videoPlayedFac(self):
-        return self.trueTime * 1000 / float(self.duration)
+        return self.getVideoPlayedFac()
+
+    def getVideoWatched(self, ref=None):
+        return self.getVideoPlayedFac(ref=ref) >= self.playedThreshold or self.player.isExternal
 
     @property
     def videoWatched(self):
-        return self.videoPlayedFac >= self.playedThreshold or self.player.isExternal
+        return self.getVideoWatched()
 
     def triggerProgressEvent(self):
         if not self.player.video:
@@ -525,7 +534,8 @@ class SeekPlayerHandler(BasePlayerHandler):
             prk = self.player.video.parentRatingKey
             gprk = self.player.video.grandparentRatingKey
 
-        self.player.trigger('video.progress', data=(gprk, prk, rk, self._progressHld[rk] if not self.videoWatched else True))
+        self.player.trigger('video.progress', data=(gprk, prk, rk, self._progressHld[rk] if not self.getVideoWatched(
+            ref=self._progressHld[rk] if self._progressHld[rk] > self.trueTime * 1000 else None) else True))
         self._progressHld = {}
 
     def onPlayBackStopped(self):
@@ -617,14 +627,14 @@ class SeekPlayerHandler(BasePlayerHandler):
                 tries += 1
 
             if self.player.getTime() * 1000 < withinSOS:
-                if self.useResumeFix:
+                if self.useResumeFix and self.seekOnStart > 500:
                     self.waitingForSOS = True
                     # checking infoLabel Player.Seeking would be the better solution here, but we're dealing with stuff like
                     # CoreELEC, which doesn't necessarily properly honor this
                     util.MONITOR.waitForAbort(0.25)
                 self.seek(self.seekOnStart)
 
-                if self.useResumeFix:
+                if self.useResumeFix and self.seekOnStart > 500:
                     util.MONITOR.waitForAbort(util.addonSettings.coreelecResumeSeekWait / 1000.0)
 
                     util.DEBUG_LOG("OnPlayBackSeek: SeekOnStart: "
@@ -660,25 +670,43 @@ class SeekPlayerHandler(BasePlayerHandler):
 
             # when mapped, Kodi finds external subs on its own and places them at the top of the list, before
             # embedded subs.
-            try:
-                playerID = kodijsonrpc.rpc.Player.GetActivePlayers()[0]["playerid"]
-                kodisubs = kodijsonrpc.rpc.Player.GetProperties(playerid=playerID, properties=['subtitles'])["subtitles"]
-            except IndexError:
+            kodisubs = None
+            tries = 0
+            while not kodisubs and tries < 50:
+                try:
+                    playerID = kodijsonrpc.rpc.Player.GetActivePlayers()[0]["playerid"]
+                    kodisubs = kodijsonrpc.rpc.Player.GetProperties(playerid=playerID, properties=['subtitles'])["subtitles"]
+                    break
+                except IndexError:
+                    pass
+                tries += 1
+                util.MONITOR.waitForAbort(0.1)
+            if not kodisubs:
                 # this can happen occasionally, if the player isn't ready, yet, but we account for that
+                util.DEBUG_LOG("SeekHandler: subtitleStreamOffset: Returning zero as player not available or no "
+                               "subtitles found")
                 return 0
-            else:
+            if kodisubs:
                 # find embedded subtitle stream in Plex
                 ess = None
                 ext_subs_amount = 0
                 for ss in self.player.video.subtitleStreams:
+                    if not ss.languageCode:
+                        util.DEBUG_LOG("Skipping subtitle: {}, no language code found".format(ss))
+                        continue
                     if not ess and ss.embedded:
                         ess = ss
-                    elif not ss.embedded:
+                    # ss.score: only downloaded external subtitles have a score; skip them, as they're not visible to
+                    # Kodi
+                    elif not ss.embedded and not ss.score:
                         ext_subs_amount += 1
 
                 if not ess:
                     self._subtitleStreamOffset = 0
+                    util.DEBUG_LOG("SeekHandler: subtitleStreamOffset: Returning zero as we didn't find an embedded subtitle")
                     return 0
+
+                util.DEBUG_LOG("SeekHandler: subtitleStreamOffset: Found embedded subtitle at: {}", ext_subs_amount)
 
                 # find embedded subtitle stream in Kodi stream list
                 # we know Kodi puts external subtitles first, start there (Kodi might see more external subs or the PMS
@@ -692,9 +720,11 @@ class SeekPlayerHandler(BasePlayerHandler):
                             sub['name'] == six.ensure_str(ess.title) and languages.get(
                                 part2b=sub['language']) == ess_lang):
                         self._subtitleStreamOffset = sub['index'] - ess.typeIndex
+                        util.DEBUG_LOG("SeekHandler: subtitleStreamOffset: Returning offset: {} ({})",
+                                       self._subtitleStreamOffset, sub)
                         return self._subtitleStreamOffset
 
-                util.LOG("Couldn't find embedded subtitle in Kodi subtitle list: {}, assuming no difference", ess)
+                util.LOG("SeekHandler: Couldn't find embedded subtitle in Kodi subtitle list: {}, assuming no difference", ess)
                 self._subtitleStreamOffset = 0
 
                 # old implementation
@@ -709,14 +739,19 @@ class SeekPlayerHandler(BasePlayerHandler):
                 # return self._subtitleStreamOffset
         return 0
 
-    def setSubtitles(self, do_sleep=True, honor_forced_subtitles_override=True):
+    def setSubtitles(self, do_sleep=True, honor_forced_subtitles_override=True, honor_deselect_subtitles=True,
+                     ref="_current_subtitle_idx"):
+        util.DEBUG_LOG("SeekHandler: setSubtitles")
         if not self.player.video:
             util.LOG("Warning: SetSubtitles: no player.video object available")
             return
 
         subs = self.player.video.selectedSubtitleStream(
             forced_subtitles_override=honor_forced_subtitles_override and util.getSetting("forced_subtitles_override",
-                                                                                          False))
+                                                                                          False) and plexnetUtil.ACCOUNT.subtitlesForced == 0,
+            deselect_subtitles=honor_deselect_subtitles and util.getSetting("disable_subtitle_languages", []) or [],
+            ref=ref
+        )
 
         # we want to get the subtitle stream offset regardless of whether we have subtitles selected or not,
         # as the subtitle amount might change during playback (e.g. kodi subtitle download adds one to the list)
@@ -833,6 +868,10 @@ class SeekPlayerHandler(BasePlayerHandler):
                 and not self.queuingNext and not self.stoppedManually and self.player.isPlayingVideo() and
                 self.player.playState != self.player.STATE_STOPPED):
             self.updateNowPlaying()
+        else:
+            util.DEBUG_LOG("Not ticking UpdateNowPlaying: {}, {}, {}, {}, {}, {}, {}, {}", self.seeking,
+                           self.ended, self.player.started, self.seekOnStart, self.queuingNext, self.stoppedManually,
+                           self.player.isPlayingVideo(), self.player.playState)
 
         if self.dialog and getattr(self.dialog, "_ignoreTick", None) is not True:
             self.dialog.tick()
