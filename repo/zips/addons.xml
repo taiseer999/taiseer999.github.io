@@ -956,7 +956,7 @@ updated YouTube addon URL
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.5.03">
+</addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.5.02">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
@@ -964,7 +964,7 @@ updated YouTube addon URL
     <extension library="resources/lib/fen.py" point="xbmc.python.pluginsource">
         <provides>video</provides>
     </extension>
-    
+    <extension library="resources/lib/service.py" point="xbmc.service" />
     <extension library="resources/lib/" point="xbmc.python.module" />
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
