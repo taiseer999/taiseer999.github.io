@@ -1169,10 +1169,10 @@
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
-				<left>38</left>
-				<top>-260</top>
+				<left>31</left>
+				<top>-250</top>
 				<width>1000</width>
-				<height>50</height>
+				<height>40</height>
 				<align>left</align>
 				<orientation>horizontal</orientation>
 				<itemgap>-10</itemgap>
@@ -1203,7 +1203,7 @@
 					<width>auto</width>
 					<height>50</height>
 					<textoffsetx>40</textoffsetx>
-					<label>$LOCALIZE[31634]</label>
+					<label>Player Process Information</label>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
 				</control>
 			</control>
