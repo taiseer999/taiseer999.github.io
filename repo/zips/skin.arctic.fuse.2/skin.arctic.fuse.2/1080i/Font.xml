@@ -99,10 +99,6 @@
             <param name="font_bold">majallab.ttf</param>
             <param name="font_regular">majallab.ttf</param>
             <param name="font_light">majallab.ttf</param>
-            <param name="size_heavy_main">30</param>
-        <param name="size_light_main">28</param>
-        <param name="size_heavy_main_x2">60</param>
-        <param name="size_light_main_x2">60</param> 
             <param name="plot_linespacing_head">1.0</param>
             <param name="plot_linespacing_midi">1.30</param>
             <param name="plot_linespacing_main">1.0</param>

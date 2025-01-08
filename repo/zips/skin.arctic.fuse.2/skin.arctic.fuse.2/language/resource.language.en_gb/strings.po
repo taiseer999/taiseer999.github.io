@@ -1,4 +1,3 @@
-
 # Kodi Media Center language file
 # Addon Name: Arctic Fuse
 # Addon Name: skin.arctic.fuse
@@ -443,12 +442,12 @@ msgctxt "#31090"
 msgid "In-Progress"
 msgstr ""
 
-#: /1080i/Includes_SkinSettings.xml
+#: /1080i/SkinSettings.xml
 msgctxt "#31091"
-msgid "Add a \"more items\" folder to widgets with item limits"
+msgid "Blur background for classic widgets"
 msgstr ""
 
-#: /1080i/SkinSettings.xml /1080i/Includes_Shortcuts_Window.xml
+#: /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31092"
 msgid "Detailed information"
 msgstr ""
@@ -1868,14 +1867,10 @@ msgctxt "#31392"
 msgid "Explore Widgets"
 msgstr ""
 
-#: /1080i/Includes_Items.xml Shorter label for use in info dialog buttons
+#: /1080i/Includes_Items.xml
+#: Shorter label for use in info dialog buttons
 msgctxt "#31393"
 msgid "Trailer"
-msgstr ""
-
-#: /1080i/SkinSettings.xml
-msgctxt "#31394"
-msgid "Picture-in-picture video"
 msgstr ""
 
 #: /1080i/Custom_1180_Wizard.xml
@@ -1963,11 +1958,6 @@ msgctxt "#31415"
 msgid "Movies and TV Shows"
 msgstr ""
 
-#: /1080i/SkinSettings.xml
-msgctxt "#31416"
-msgid "Secondary button"
-msgstr ""
-
 msgctxt "#31417"
 msgid "Random Artists"
 msgstr ""
@@ -2051,6 +2041,7 @@ msgctxt "#31433"
 msgid "Additional tags"
 msgstr ""
 
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31434"
 msgid "Video OSD"
@@ -2100,11 +2091,6 @@ msgctxt "#31443"
 msgid "Open path in dialog"
 msgstr ""
 
-#: /1080i/Settings.xml
-msgctxt "#31444"
-msgid "Customisation"
-msgstr ""
-
 #: /1080i/SkinSettings.xml
 msgctxt "#31445"
 msgid "Replace search with discover"
@@ -2122,7 +2108,7 @@ msgstr ""
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31448"
-msgid "This category contains customisation options for"
+msgid "Show \"More\" item on limited widgets"
 msgstr ""
 
 #: /1080i/Custom_1180_Wizard.xml
@@ -2165,19 +2151,9 @@ msgctxt "#31456"
 msgid "Prebuilt"
 msgstr ""
 
-#: /1080i/SkinSettings.xml
-msgctxt "#31457"
-msgid "Scrollbar"
-msgstr ""
-
 #: /1080i/Includes_Labels.xml
 msgctxt "#31458"
 msgid "Monochrome"
-msgstr ""
-
-#: /1080i/Includes_Labels.xml
-msgctxt "#31459"
-msgid "Letter"
 msgstr ""
 
 #: /1080i/SkinSettings.xml /1080i/MusicOSD.xml
@@ -2190,29 +2166,9 @@ msgctxt "#31461"
 msgid "Choose preset"
 msgstr ""
 
-#: /1080i/Includes_Views_Wall.xml
-msgctxt "#31462"
-msgid "Wall Banner"
-msgstr ""
-
-#: /1080i/Includes_Views.xml
-msgctxt "#31463"
-msgid "Press down for filter and view options"
-msgstr ""
-
-#: /1080i/Includes_Views.xml
-msgctxt "#31464"
-msgid "Press right for filter and view options"
-msgstr ""
-
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31465"
 msgid "Rain chance"
-msgstr ""
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31466"
-msgid "Blur background"
 msgstr ""
 
 #: /1080i/Includes_Items.xml
@@ -2258,11 +2214,6 @@ msgstr ""
 #: /1080i/Includes_Labels.xml
 msgctxt "#31475"
 msgid "The spotlight is a special fullscreen widget designed to showcase one item at a time."
-msgstr ""
-
-#: /1080i/SkinSettings.xml
-msgctxt "#31476"
-msgid "This category contains acknowledgements, contributions, and thanks."
 msgstr ""
 
 #: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
@@ -2313,11 +2264,6 @@ msgstr ""
 #: /1080i/Includes_Labels.xml
 msgctxt "#31486"
 msgid "Dialog"
-msgstr ""
-
-#: /1080i/SkinSettings.xml
-msgctxt "#31487"
-msgid "and"
 msgstr ""
 
 #: /1080i/Includes_Labels.xml
@@ -2475,29 +2421,9 @@ msgctxt "#31518"
 msgid "Highlight type"
 msgstr ""
 
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31519"
-msgid "Empty widget placeholder"
-msgstr ""
-
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31521"
 msgid "Edit global widgets"
-msgstr ""
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31522"
-msgid "Hiding empty widgets may cause positioning issues after video playback."
-msgstr ""
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31523"
-msgid "It is recommended to delete any unused widgets from your configuration instead of hiding them."
-msgstr ""
-
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31524"
-msgid "There is also an overhead refresh cost to performance associated with hiding empty widgets."
 msgstr ""
 
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
@@ -2619,8 +2545,6 @@ msgstr ""
 msgctxt "#31563"
 msgid "Card Row"
 msgstr ""
-
-
 
 
 
