@@ -1075,14 +1075,7 @@
 					<textcolor>FFffffff</textcolor>
                 </control>
 				
-                <!-- Audio queue data -->
-                <control type="label">
-                    <width>480</width>
-					<height>40</height>
-                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
-                    <font>font_debug</font>
-					<textcolor>FFffffff</textcolor>
-                </control>
+               
 			</control>
 
 			<!-- Player Right -->
@@ -1171,6 +1164,15 @@
                     <width>480</width>
 					<height>40</height>
                     <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32009]:[/COLOR] $INFO[Player.Process(video.queue.data.level)]%</label>
+                    <font>font_debug</font>
+					<textcolor>FFffffff</textcolor>
+                </control>
+
+				 <!-- Audio queue data -->
+                <control type="label">
+                    <width>480</width>
+					<height>40</height>
+                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
                     <font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
                 </control>
