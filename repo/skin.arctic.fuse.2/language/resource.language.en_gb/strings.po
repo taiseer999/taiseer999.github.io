@@ -2830,6 +2830,22 @@ msgctxt "#31659"
 msgid "Subtitle language"
 msgstr ""
 
+msgctxt "#32008"
+msgid "Video queue"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Video queue data"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Audio queue"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Audio queue data"
+msgstr ""
+
 msgctxt "#32057"
 msgid "Top left"
 msgstr ""

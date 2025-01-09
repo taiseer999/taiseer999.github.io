@@ -313,7 +313,7 @@
 			</include>
 			<include content="VideoCodecFlag">
 				<param name="groupId">48</param><param name="imageId">49</param>
-				<param name="visible"></param>
+				<param name="visible">String.IsEqual(Player.Process(video.source.hdr.type.raw), 4) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
 				<param name="texture">flags/fullscreen/sv10.png</param>
                 
 			</include>

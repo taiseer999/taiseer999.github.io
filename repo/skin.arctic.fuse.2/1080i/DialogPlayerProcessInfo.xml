@@ -26,16 +26,16 @@
 			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
 			<control type="image">
 				<left>30</left>
-				<top>-210</top>
+				<top>-220</top>
 				<right>30</right>
-				<height>380</height>
+				<height>400</height>
 				<texture colordiffuse="dialog_fg_70">background/coal_blur.png</texture>
 			</control>
 						
 			<!-- PVR Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5551)</visible>
 				<control type="label">
 					<width>1200</width>
@@ -89,7 +89,7 @@
 			<!-- PVR Right -->
 			<control type="grouplist">
 				<left>1250</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5551)</visible>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="label">
@@ -149,7 +149,7 @@
 			<!-- Dolby Vision - HDR Left -->
 			<control type="grouplist">
 				<left>60</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 				<control type="group"> <!-- DV Config -->
@@ -395,7 +395,7 @@
 			<!-- Dolby Vision - HDR Middle -->
 			<control type="grouplist">
 				<left>600</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<visible>String.IsEqual(Player.Process(video.dovi.has.header),1)</visible>
 				<control type="group"> <!-- DV Levels Metadata -->
@@ -712,7 +712,7 @@
 			<!-- Dolby Vision - HDR Right -->
 			<control type="grouplist">
 				<left>1320</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<control type="group">
 					<width>700</width>
@@ -851,7 +851,7 @@
 			<!-- Player Left -->
 			<control type="grouplist">
 				<left>60</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Screen resolution -->
 					<width>620</width>
@@ -961,7 +961,7 @@
 			<!-- Player Middle -->
 			<control type="grouplist">
 				<left>730</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Video source type -->
 					<width>600</width>
@@ -1066,11 +1066,29 @@
 					<visible>VideoPlayer.HasSubtitles</visible>
 					<visible>!String.IsEmpty(VideoPlayer.SubtitlesName)</visible>
 				</control>
+			 <!-- Audio queue -->
+                <control type="label">
+                    <width>480</width>
+					<height>40</height>
+                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32010]:[/COLOR] $INFO[Player.Process(audio.queue.level)]%</label>
+                    <font>font_debug</font>
+					<textcolor>FFffffff</textcolor>
+                </control>
+				
+                <!-- Audio queue data -->
+                <control type="label">
+                    <width>480</width>
+					<height>40</height>
+                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
+                    <font>font_debug</font>
+					<textcolor>FFffffff</textcolor>
+                </control>
 			</control>
+
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1380</left>
-				<top>-204</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Display mode -->
 					<width>480</width>
@@ -1139,38 +1157,27 @@
 					<visible>Player.HasVideo</visible>
 					<visible>Player.Process(videohwdecoder)</visible>
 				</control>
-				<control type="progress">
-					<description>AUDIO QUEUE BAR</description>
-					<width>480</width>
-					<height>12</height>
-					<info>Player.Process(audio.queue.level)</info>
-					
-				</control>
-				<control type="progress">
-					<description>AUDIO QUEUE DATA BAR</description>
-					<width>480</width>
-					<height>12</height>
-					<info>Player.Process(audio.queue.data.level)</info>
-					
-				</control>
-				<control type="progress">
-					<description>VIDEO QUEUE BAR</description>
-					<width>480</width>
-					<height>12</height>
-					<info>Player.Process(video.queue.level)</info>
-					
-				</control>
-				<control type="progress">
-					<description>VIDEO QUEUE DATA BAR</description>
-					<width>480</width>
-					<height>12</height>
-					<info>Player.Process(video.queue.data.level)</info>
-					
-				</control>
+				 <!-- Video queue -->
+                <control type="label">
+                    <width>480</width>
+					<height>40</height>
+                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32008]:[/COLOR] $INFO[Player.Process(video.queue.level)]%</label>
+                    <font>font_debug</font>
+					<textcolor>FFffffff</textcolor>
+                </control>
+                
+                <!-- Video queue data -->
+                <control type="label">
+                    <width>480</width>
+					<height>40</height>
+                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32009]:[/COLOR] $INFO[Player.Process(video.queue.data.level)]%</label>
+                    <font>font_debug</font>
+					<textcolor>FFffffff</textcolor>
+                </control>
 			</control>
 			<control type="grouplist" id="5550">
 				<left>30</left>
-				<top>-260</top>
+				<top>-270</top>
 				<width>1000</width>
 				<height>50</height>
 				<align>left</align>
