@@ -324,7 +324,7 @@
 	        <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>710</left>
+            <left>735</left>
             <control type="group">
 			 <visible></visible>
                 <top>35</top>
@@ -449,7 +449,7 @@
            <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>920</left>
+            <left>945</left>
             <control type="group">
                 <visible></visible>
                 <top>35</top>
@@ -936,7 +936,7 @@
 	        <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>710</left>
+            <left>735</left>
             <control type="group">
 			 <visible></visible>
                 <top>35</top>
@@ -1061,7 +1061,7 @@
            <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>920</left>
+            <left>945</left>
             <control type="group">
                 <visible></visible>
                 <top>35</top>
@@ -1548,7 +1548,7 @@
 	        <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>710</left>
+            <left>735</left>
             <control type="group">
 			 <visible></visible>
                 <top>35</top>
@@ -1673,7 +1673,7 @@
            <include>Animation.FadeIn</include>
             <include>Animation_FadeOut</include>
             <visible>!Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <left>920</left>
+            <left>945</left>
             <control type="group">
                 <visible></visible>
                 <top>35</top>
@@ -1847,7 +1847,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>35</top>
-                     <left>710</left>                   
+                     <left>735</left>                   
                     <width>210</width>
                     <height>90</height>
                     <visible>$PARAM[visible]</visible>
@@ -1868,7 +1868,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>35</top>
-                    <left>920</left>
+                    <left>945</left>
                     <width>210</width>
                     <height>90</height>
                     <visible>$PARAM[visible]</visible>
@@ -1889,7 +1889,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>52</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -1910,7 +1910,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>52</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -1931,7 +1931,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>65</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>33</height>
                     <visible>$PARAM[visible]</visible>
@@ -1952,7 +1952,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -1973,7 +1973,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>57</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>42</height>
                     <visible>$PARAM[visible]</visible>
@@ -1994,7 +1994,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>43</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2014,7 +2014,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>43</top>
-                    <left>895</left>
+                    <left>920</left>
                     <width>8</width>
                     <height>8</height>
                     <visible>$PARAM[visible]</visible>
@@ -2035,7 +2035,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>52</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2056,7 +2056,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>65</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>33</height>
                     <visible>$PARAM[visible]</visible>
@@ -2077,7 +2077,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2098,7 +2098,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>57</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>42</height>
                     <visible>$PARAM[visible]</visible>
@@ -2120,7 +2120,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>55</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>49</height>
                     <visible>$PARAM[visible]</visible>
@@ -2141,7 +2141,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>60</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>40</height>
                     <visible>$PARAM[visible]</visible>
@@ -2162,7 +2162,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2183,7 +2183,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2204,7 +2204,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2225,7 +2225,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2246,7 +2246,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2267,7 +2267,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>55</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>49</height>
                     <visible>$PARAM[visible]</visible>
@@ -2288,7 +2288,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>55</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>100</width>
                     <height>25</height>
                     <visible>$PARAM[visible]</visible>
@@ -2309,7 +2309,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>55</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>46</height>
                     <visible>$PARAM[visible]</visible>
@@ -2330,7 +2330,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>55</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>49</height>
                     <visible>$PARAM[visible]</visible>
@@ -2351,7 +2351,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>62</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>31</height>
                     <visible>$PARAM[visible]</visible>
@@ -2372,7 +2372,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>55</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2393,7 +2393,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>240</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>45</height>
                     <visible>$PARAM[visible]</visible>
@@ -2414,7 +2414,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>240</top>
-                    <left>950</left>
+                    <left>975</left>
                     <width>150</width>
                     <height>45</height>
                     <visible>$PARAM[visible]</visible>
@@ -2436,7 +2436,7 @@
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
                     <top>50</top>
-                    <left>740</left>
+                    <left>765</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>

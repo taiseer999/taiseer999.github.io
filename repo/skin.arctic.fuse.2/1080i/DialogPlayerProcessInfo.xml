@@ -157,7 +157,7 @@
 					<height>40</height>
 					<control type="image">
 						<left>130</left>
-						<top>7</top>
+						<top>4</top>
 						<width>80</width>
 						<height>30</height>
                         <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
@@ -403,7 +403,7 @@
 					<height>40</height>
 					<control type="image">
 						<left>220</left>
-						<top>7</top>
+						<top>4</top>
 						<width>80</width>
 						<height>30</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
@@ -719,15 +719,15 @@
 					<height>40</height>
 					<control type="image">
 						<left>170</left>
-						<top>5</top>
+						<top>6</top>
 						<width>80</width>
 						<height>30</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/hdr10.png</texture>
 					</control>
 					<control type="label">
 						<left>250</left>
-						<width>500</width>
-						<height>40</height>
+						<width>118.25</width>
+						<height>58</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR limegreen]Static Metadata[/COLOR]</label>
@@ -1169,10 +1169,10 @@
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
-				<left>31</left>
-				<top>-250</top>
+				<left>30</left>
+				<top>-260</top>
 				<width>1000</width>
-				<height>40</height>
+				<height>50</height>
 				<align>left</align>
 				<orientation>horizontal</orientation>
 				<itemgap>-10</itemgap>
