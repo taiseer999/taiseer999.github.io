@@ -3126,3 +3126,11 @@ msgstr "Start: Angef. Items fortsetzen"
 msgctxt "#33714"
 msgid "Resume in-progress items directly instead of visiting the media."
 msgstr "Setze angefangene Items direkt fort, anstatt die Mediendetails aufzurufen."
+
+msgctxt "#33715"
+msgid "OSD hide-delay"
+msgstr "OSD Versteck-Verzögerung"
+
+msgctxt "#33716"
+msgid "How long to wait until hiding the OSD. Only works with Plextuary skin or others with configurable OSD timeout. Default: 4s (+/- 1s)"
+msgstr "Nach wieviel Sekunden das OSD automatisch versteckt werden soll. Funktioniert nur mit dem Plextuary Skin oder anderen Skins mit konfigurierbarer OSD Verzögerung. Standard: 4s (+/- 1s)"

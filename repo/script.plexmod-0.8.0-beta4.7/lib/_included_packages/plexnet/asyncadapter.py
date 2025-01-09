@@ -16,7 +16,7 @@ except ImportError:
     # urllib3 >= 2.1.0
     from requests.packages.urllib3.connection import HTTPSConnection as VerifiedHTTPSConnection
 
-from requests.adapters import HTTPAdapter
+from requests.adapters import HTTPAdapter, Retry
 from requests.compat import urlparse
 
 #from six.moves.http_client import HTTPConnection
@@ -76,7 +76,7 @@ class AsyncTimeout(float):
         return self
 
 
-DEFAULT_TIMEOUT = AsyncTimeout(10).setConnectTimeout(10)
+DEFAULT_TIMEOUT = AsyncTimeout(5).setConnectTimeout(5)
 
 
 class AsyncVerifiedHTTPSConnection(VerifiedHTTPSConnection):
@@ -335,12 +335,21 @@ class AsyncHTTPAdapter(HTTPAdapter):
         self.connections.append(conn)
         return conn
 
+STOP_RETRYING_REQUESTS = False
+
+
+class StoppableRetry(Retry):
+    def increment(self, *args, **kwargs):
+        if STOP_RETRYING_REQUESTS:
+            self.total = 0
+        return super(StoppableRetry, self).increment(*args, **kwargs)
+
 
 class Session(requests.Session):
     def __init__(self, *args, **kwargs):
         requests.Session.__init__(self, *args, **kwargs)
-        self.mount('https://', AsyncHTTPAdapter(max_retries=MAX_RETRIES))
-        self.mount('http://', AsyncHTTPAdapter(max_retries=MAX_RETRIES))
+        self.mount('https://', AsyncHTTPAdapter(max_retries=StoppableRetry(MAX_RETRIES)))
+        self.mount('http://', AsyncHTTPAdapter(max_retries=StoppableRetry(MAX_RETRIES)))
 
     def cancel(self):
         for v in self.adapters.values():

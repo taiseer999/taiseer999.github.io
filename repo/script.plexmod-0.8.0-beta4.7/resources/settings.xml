@@ -13,6 +13,11 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="debug_requests" type="boolean" label="33717">
+                    <level>0</level>
+                    <default>false</default>
+                    <control type="toggle"/>
+                </setting>
                 <setting id="subtitle_use_extended_title" type="boolean" label="32950" help="32951">
                     <level>0</level>
                     <default>true</default>
@@ -96,6 +101,21 @@
         <!-- Player -->
         <category id="player" label="32464">
             <group id="2" label="">
+                <setting id="osd_hide_delay" type="number" label="33715" help="33716">
+                    <level>0</level>
+                    <default>4</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>15</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                    <dependencies>
+                        <dependency type="enable" setting="auto_seek">true</dependency>
+                    </dependencies>
+                </setting>
                 <setting id="auto_seek" type="boolean" label="32466" help="32900">
                     <level>0</level>
                     <default>true</default>
@@ -463,7 +483,7 @@
                 </setting>
                 <setting id="requests_timeout_read" type="number" label="33636" help="33637">
                     <level>0</level>
-                    <default>10</default>
+                    <default>5</default>
                     <constraints>
                         <minimum>0.5</minimum>
                         <step>0.5</step>

@@ -24,6 +24,9 @@ else:
     _Event = threading.Event
 
 
+UNDEF = "__UNDEF__"
+
+
 class PlexTimer(plexapp.util.Timer):
     def shouldAbort(self):
         return util.MONITOR.abortRequested()
@@ -124,11 +127,11 @@ class PlexInterface(plexapp.AppInterface):
 
     bingeModeManager = None
 
-    def getPreference(self, pref, default=None):
+    def getPreference(self, pref, default=UNDEF):
         if pref == 'manual_connections':
             return self.getManualConnections()
         else:
-            return util.getSetting(pref, default)
+            return util.getSetting(pref, default=default)
 
     def getPlaybackFeatures(self):
         return self.getPreference("playback_features",
@@ -154,12 +157,12 @@ class PlexInterface(plexapp.AppInterface):
 
     def getRegistry(self, reg, default=None, sec=None):
         if sec == 'myplex' and reg == 'MyPlexAccount':
-            ret = util.getSetting('{0}.{1}'.format(sec, reg), default)
+            ret = util.getSetting('{0}.{1}'.format(sec, reg), default=default)
             if ret:
                 return ret
             return json.dumps({'authToken': util.getSetting('auth.token')})
         else:
-            return util.getSetting('{0}.{1}'.format(sec, reg), default)
+            return util.getSetting('{0}.{1}'.format(sec, reg), default=default)
 
     def setRegistry(self, reg, value, sec=None):
         util.setSetting('{0}.{1}'.format(sec, reg), value)
@@ -299,8 +302,8 @@ plexapp.util.APP.on('change:manual_ip_1', onManualIPChange)
 plexapp.util.APP.on('change:manual_port_0', onManualIPChange)
 plexapp.util.APP.on('change:manual_port_1', onManualIPChange)
 
-plexapp.util.CHECK_LOCAL = util.getSetting('smart_discover_local', True)
-plexapp.util.LOCAL_OVER_SECURE = util.getSetting('prefer_local', False)
+plexapp.util.CHECK_LOCAL = util.getSetting('smart_discover_local')
+plexapp.util.LOCAL_OVER_SECURE = util.getSetting('prefer_local')
 
 # set requests timeout
 TIMEOUT_READ = float(util.addonSettings.requestsTimeoutRead)
@@ -327,6 +330,7 @@ if util.addonSettings.useCertBundle != "system":
     util.LOG("Using certificate bundle: {}".format(util.addonSettings.useCertBundle))
     plexnet_util.USE_CERT_BUNDLE = util.addonSettings.useCertBundle
 plexnet_util.translatePath = util.translatePath
+plexnet_util.DEFAULT_SETTINGS = util.DEFAULT_SETTINGS
 
 
 class CallbackEvent(plexapp.util.CompatEvent):

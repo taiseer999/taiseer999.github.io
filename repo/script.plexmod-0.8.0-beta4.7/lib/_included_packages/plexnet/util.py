@@ -53,9 +53,9 @@ def resetBaseHeaders():
 # Core Settings
 PROJECT = 'PlexNet'                                 # name provided to plex server
 VERSION = '0.0.0a1'                                 # version of this api
-TIMEOUT = 10                                        # request timeout
+TIMEOUT = 5                                        # request timeout
 TIMEOUT_CONNECT = 5                                 # connect timeout
-DEFAULT_TIMEOUT = 10
+DEFAULT_TIMEOUT = 5
 LONG_TIMEOUT = 20
 PLEXTV_TIMEOUT = None                               # set me later
 PLEXTV_TIMEOUT_READ = 20                                   # s

@@ -2535,3 +2535,15 @@ msgstr ""
 msgctxt "#33714"
 msgid "Resume in-progress items directly instead of visiting the media."
 msgstr ""
+
+msgctxt "#33715"
+msgid "OSD hide-delay"
+msgstr ""
+
+msgctxt "#33716"
+msgid "How long to wait until hiding the OSD. Only works with Plextuary skin or others with configurable OSD timeout. Default: 4s (+/- 1s)"
+msgstr ""
+
+msgctxt "#33717"
+msgid "Debug requests"
+msgstr ""

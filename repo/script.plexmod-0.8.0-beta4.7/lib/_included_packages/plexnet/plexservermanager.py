@@ -615,7 +615,9 @@ class PlexServerManager(signalsmixin.SignalsMixin):
             serverAddress = "{0}://{1}:{2}".format(proto, conn.connection, port)
 
             request = http.HttpRequest(serverAddress + "/identity")
-            context = request.createRequestContext("manual_connections", callback.Callable(self.onManualConnectionsResponse))
+            context = request.createRequestContext("manual_connections",
+                                                   callback.Callable(self.onManualConnectionsResponse),
+                                                   timeout=util.CONN_CHECK_TIMEOUT)
             context.serverAddress = serverAddress
             context.address = conn.connection
             context.proto = proto

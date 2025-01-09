@@ -537,7 +537,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             self._updateOnDeckHubs()
 
     def checkPlexDirectHosts(self, servers, source="stored", *args, **kwargs):
-        handlePD = util.getSetting('handle_plexdirect', 'ask')
+        handlePD = util.getSetting('handle_plexdirect')
         if handlePD == "never":
             return
 
@@ -647,7 +647,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         return [combo for combo, data in self.hubSettings.items() if not data.get("show", True)]
 
     def updateProperties(self, *args, **kwargs):
-        self.setBoolProperty('bifurcation_lines', util.getSetting('hubs_bifurcation_lines', False))
+        self.setBoolProperty('bifurcation_lines', util.getSetting('hubs_bifurcation_lines'))
 
     def focusFirstValidHub(self, startIndex=None):
         indices = self.hubFocusIndexes
@@ -762,7 +762,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     util.waitForConsumption('update_response', timeout=200)
                 finally:
                     self._shuttingDown = True
+                    self._ignoreTick = True
+                    self.stopRetryingRequests()
                     #self.closeOption = "update"
+                    self.unhookSignals()
                     self.doClose()
                     return True
 
@@ -792,8 +795,14 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         super(HomeWindow, self).doClose()
 
+    def stopRetryingRequests(self):
+        util.DEBUG_LOG("Stopping request retries")
+        plexnet.asyncadapter.STOP_RETRYING_REQUESTS = True
+
     def shutdown(self):
         self._shuttingDown = True
+        self._ignoreTick = True
+        self.stopRetryingRequests()
         try:
             self.serverList.reset()
         except AttributeError:
@@ -804,7 +813,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     def storeLastBG(self):
         if util.addonSettings.dynamicBackgrounds:
-            oldbg = util.getSetting("last_bg_url", "")
+            oldbg = util.getSetting("last_bg_url", '')
             # store BG url of first hub, first item, as this is most likely to be the one we're focusing on the
             # next start
             try:
@@ -878,10 +887,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 if action == xbmcgui.ACTION_SELECT_ITEM:
                     self.showUserMenu()
                     return
-                elif action == xbmcgui.ACTION_CONTEXT_MENU and util.getSetting('previous_user', None):
+                elif action == xbmcgui.ACTION_CONTEXT_MENU and util.getSetting('previous_user'):
                     # check whether we can fast swap (account is not protected)
                     # get user
-                    uid = util.getSetting('previous_user', None)
+                    uid = util.getSetting('previous_user')
                     if uid == plexapp.ACCOUNT.ID:
                         return
 
@@ -1049,7 +1058,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
     def confirmExit(self):
         lBtnExit = T(32336, 'Exit')
         lBtnQuit = T(32704, 'Quit Kodi')
-        modifier = util.getSetting('exit_default_is_quit', False) and "quit" or "exit"
+        modifier = util.getSetting('exit_default_is_quit') and "quit" or "exit"
 
         ret = plexnet.util.AttributeDict(button=None, modifier=modifier)
 
@@ -1084,7 +1093,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
     def _updateOnDeckHubs(self, **kwargs):
         util.DEBUG_LOG('UpdateOnDeckHubs called')
         self._odHubsDirty = False
-        if util.getSetting("speedy_home_hubs2", False):
+        if util.getSetting("speedy_home_hubs2"):
             util.DEBUG_LOG("Using alternative home hub refresh")
             sections = set()
             for mli in self.sectionList:
@@ -1109,10 +1118,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.cacheSpoilerSettings()
 
     def setThemeDirty(self, *args, **kwargs):
-        self._applyTheme = util.getSetting("theme", "modern-colored")
+        self._applyTheme = util.getSetting("theme")
 
     def setDebugFlag(self, *args, **kwargs):
-        util.DEBUG = util.getSetting("debug", False)
+        util.DEBUG = util.getSetting("debug")
         util.addonSettings.debug = util.DEBUG
 
     def fullyRefreshHome(self, *args, **kwargs):
@@ -1201,7 +1210,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             return
 
         # auto resume for in-progress items
-        if util.getSetting('home_inprogress_resume', True):
+        if util.getSetting('home_inprogress_resume'):
             if mli.dataSource.TYPE in ('episode', 'movie') and mli.dataSource.in_progress:
                 auto_play = True
 
@@ -1337,7 +1346,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                            {'key': 'analyze', 'display': T(33084, "Analyze")},
                            dropdown.SEPARATOR]
 
-            if section.locations and util.getSetting('path_mapping', True):
+            if section.locations and util.getSetting('path_mapping'):
                 for loc in section.locations:
                     source, target = section.getMappedPath(loc)
                     loc_is_mapped = source and target
@@ -1495,7 +1504,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                     options.append({'key': 'remove_cw', 'display': T(33662, "Remove from Continue Watching")})
                     if not has_mp:
                         select_base = 1
-                if util.getSetting('home_inprogress_resume', True) and mli.dataSource.in_progress:
+                if util.getSetting('home_inprogress_resume') and mli.dataSource.in_progress:
                     # this is an in progress item that would be auto resumed; add specific entry to visit media instead
                     options.insert(0, dropdown.SEPARATOR)
                     options.insert(0, {'key': 'to_item', 'display': T(33019, "Visit media item")})
@@ -1530,7 +1539,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             return self.lastSection
 
         elif choice["key"] in ("mark_watched", "mark_unwatched"):
-            if util.getSetting('home_confirm_actions', True):
+            if util.getSetting('home_confirm_actions'):
                 button = optionsdialog.show(
                     T(32319, "Mark Played") if choice["key"] == "mark_watched" else T(32318, "Mark Unplayed"),
                     u"{} {}".format(mli.label, mli.label2),
@@ -1551,7 +1560,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 self._updateOnDeckHubs()
 
         elif choice["key"] == "remove_cw":
-            if util.getSetting('home_confirm_actions', True):
+            if util.getSetting('home_confirm_actions'):
                 button = optionsdialog.show(
                     T(33662, "Remove from Continue Watching"),
                     u"{} {}".format(mli.label, mli.label2),
@@ -1678,7 +1687,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         if not mli or not mli.getProperty('is.end') or mli.getProperty('is.updating') == '1':
             # round robining
-            if mli and util.getSetting("hubs_round_robin", False):
+            if mli and util.getSetting("hubs_round_robin"):
                 mlipos = control.getManagedItemPosition(mli)
 
                 # in order to not round-robin when the next chunk is loading, implement our own cheap round-robining
@@ -1872,7 +1881,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                           for s in [home_section] + sections]
             backgroundthread.BGThreader.addTasks(self.tasks)
 
-        show_pm_indicator = util.getSetting('path_mapping_indicators', True)
+        show_pm_indicator = util.getSetting('path_mapping_indicators')
         for section in sections:
             mli = kodigui.ManagedListItem(section.title,
                                           thumbnailImage='script.plex/home/type/{0}.png'.format(section.type),

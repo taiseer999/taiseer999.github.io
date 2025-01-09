@@ -4,7 +4,7 @@ import logging
 import tempfile
 import sys
 
-from lib.logging import log
+from lib.logging import log, KodiLogProxyHandler
 # noinspection PyUnresolvedReferences
 from lib.kodi_util import translatePath, xbmc, xbmcgui
 from lib.properties import getGlobalProperty, setGlobalProperty
@@ -14,19 +14,11 @@ from tendo_singleton import SingleInstance, SingleInstanceException
 # tempfile's standard temp dirs won't work on specific OS's (android)
 tempfile.tempdir = translatePath("special://temp/")
 
-
-class KodiLogProxyHandler(logging.Handler):
-    def emit(self, record):
-        try:
-            log(self.format(record))
-        except:
-            self.handleError(record)
-
-
 # add custom logger for tendo.singleton, so we can capture its messages
 logger = logging.getLogger("tendo.singleton")
-logger.addHandler(KodiLogProxyHandler())
+logger.addHandler(KodiLogProxyHandler(level=logging.DEBUG))
 logger.setLevel(logging.DEBUG)
+
 
 from_kiosk = False
 boot_delay = False

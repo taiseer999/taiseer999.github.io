@@ -98,6 +98,7 @@ class BasicSetting(Setting):
         self.desc = desc
         self.isThemeRelevant = theme_relevant
         self.backport_from = backport_from
+        util.DEFAULT_SETTINGS[ID] = default
 
     def description(self, desc):
         self.desc = desc
@@ -235,6 +236,9 @@ class MultiOptionsSetting(OptionsSetting):
         self.default = default
         self.noneOption = none_option
         util.JSON_SETTINGS.append(self.ID)
+
+        # fixme: not sure why we initialize default with an empty list in the supercall
+        util.DEFAULT_SETTINGS[ID] = default
 
     def get(self, *args, **kwargs):
         with_default = kwargs.pop('with_default', True)

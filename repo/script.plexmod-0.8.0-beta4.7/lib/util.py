@@ -36,7 +36,7 @@ from .kodi_util import (ADDON, xbmc, xbmcvfs, xbmcaddon, xbmcgui, translatePath,
                         KODI_BUILD_NUMBER, FROM_KODI_REPOSITORY)
 from .properties import setGlobalProperty, setGlobalBoolProperty, waitForGPEmpty, waitForConsumption, getGlobalProperty
 # noinspection PyUnresolvedReferences
-from .settings_util import getSetting, getUserSetting, setSetting, USER_SETTINGS, JSON_SETTINGS
+from .settings_util import getSetting, getUserSetting, setSetting, USER_SETTINGS, JSON_SETTINGS, DEFAULT_SETTINGS
 from .monitor import MONITOR
 
 
@@ -116,6 +116,7 @@ class AddonSettings(object):
 
     _proxiedSettings = (
         ("debug", False),
+        ("debug_requests", False),
         ("kodi_skip_stepping", False),
         ("auto_seek", True),
         ("auto_seek_delay", 1),
@@ -136,7 +137,7 @@ class AddonSettings(object):
         ("background_colour", None),
         ("skip_intro_button_show_early_threshold2", 120),
         ("requests_timeout_connect", 5.0),
-        ("requests_timeout_read", 10.0),
+        ("requests_timeout_read", 5.0),
         ("plextv_timeout_connect", 1.0),
         ("plextv_timeout_read", 2.0),
         ("local_reach_timeout", 10),
@@ -172,6 +173,7 @@ class AddonSettings(object):
         ("honor_plextv_pam", True),
         ("coreelec_resume_seek_wait", 500),
         ("background_resolution_scale_perc", 100),
+        ("osd_hide_delay", 4.0),
     )
 
     def __init__(self):

@@ -713,32 +713,6 @@ updated YouTube addon URL
             <screenshot>resources/screenshot-03.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="plugin.program.cachemgr" name="Cache Manager" version="99.0.2" provider-name="Zaxxon709">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="addon.py">
-		<provides>executable</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">Manage your TMDb Helper players</summary>
-		<description lang="en_GB" />
-		<disclaimer lang="en_GB">This Addon contains no content</disclaimer>
-		<language>en</language>
-		<platform>all</platform>
-		<license>GPL-2.0-or-later</license>
-		<forum />
-		<website /> 
-		<email />
-		<source />
-		<news>
-			1.0.0 - Initial Release 
-		</news>
-		<assets>
-			<icon>icon.png</icon>
-			<fanart>fanart.jpg</fanart>
-		</assets>
-	</extension>
 </addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.12" provider-name="drinfernoo, slamious">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -886,76 +860,6 @@ updated YouTube addon URL
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.daddylive" name="Daddylive" version="4.19" provider-name="THE CREW">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.requests" />
-        <import addon="script.module.inputstreamhelper" />
-        <import addon="script.module.six" />
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <description lang="pl">1.2</description>
-        <disclaimer lang="pl">test
-        </disclaimer>
-        <summary lang="en">Live TV and Sports</summary>
-        <description lang="en">Live TV and Sports</description>
-        <disclaimer lang="en">test
-        </disclaimer>
-        <language>pl</language>
-        <platform>all</platform>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <website />
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
-</addon><addon id="plugin.video.dradis" version="4.11.07" name="Dradis" provider-name="kodifitzwell">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.requests" />
-		<import addon="plugin.video.youtube" optional="true" />
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="dradis.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.service" library="service.py" />
-	<extension point="xbmc.addon.metadata">
-		<reuselanguageinvoker>true</reuselanguageinvoker>
-		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-		<disclaimer lang="en">The author of this addon does not host any of the content which is found and has no affiliation with any of the content providers.[CR]The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.</disclaimer>
-		<summary>[COLOR red]Dradis[/COLOR] is a tracking technology used in the re-imagined Battlestar Galactica miniseries and television show, as well as related spinoff media.[CR]</summary>
-		<description lang="en">This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</description>
-		<news>INFO: For latest changes see Changelog within add-on.</news>
-		<assets><icon>icon.png</icon><fanart>fanart.jpg</fanart></assets>
-	</extension>
-</addon><addon id="plugin.video.dramacool" name="DramaCool" version="3.2.11.3" provider-name="groggyegg">
-    <requires>
-        <import addon="script.module.beautifulsoup4" />
-        <import addon="script.module.peewee" />
-        <import addon="script.module.requests" />
-        <import addon="script.module.resolveurl" />
-        <import addon="script.module.xbmcext" />
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="dramacool/addon.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <description lang="en_GB">Watch Asian Drama and Korean Show with English subtitles on DramaCool.</description>
-        <platform>all</platform>
-        <license>MIT License</license>
-        <source>https://github.com/groggyegg/plugin.video.dramacool</source>
-        <news>v3.2.11 (2024-06-06)
-            - new route for tmdb helper
-        </news>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
 </addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.5.02">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -1002,181 +906,6 @@ updated YouTube addon URL
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
-</addon><addon id="plugin.video.infinity" name="Infinity" provider-name="kodifitzwell" version="4.12.10">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.requests" />
-		<import addon="plugin.video.youtube" optional="true" />
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="addon.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.service" library="service.py" />
-	<extension point="xbmc.addon.metadata">
-		<reuselanguageinvoker>true</reuselanguageinvoker>
-		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-		<disclaimer lang="en">The author of this addon does not host any of the content which is found and have no affiliation with any of the content providers. This addon simply searches websites for content. Use at your own risk!</disclaimer>
-		<summary lang="en">[COLOR FFE68B00]Infinity[/COLOR][CR]</summary>
-		<description lang="en">[B]Infinity[/B][CR]We do not host any of the contents streamed. This addon does not form part of the Kodi Media Centre. Please do not seek assistance with this addon from any of the Official Kodi Support Channels.[CR]The author does not host any of the content in this addon and takes no responsibility for content found.</description>
-		<news>INFO: For latest changes see Changelog within add-on.</news>
-		<assets>
-			<icon>resources/media/icon.png</icon>
-			<fanart>resources/media/fanart.png</fanart>
-		</assets>
-	</extension>
-	<extension point="kodi.context.item">
-		<menu id="kodi.core.main">
-			<item library="resources\lib\context\addtoLibrary.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Add to Library</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.addtoLibrary),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,season) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\addLibtoFavourite.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Add/Remove Favourite</label>
-				<visible>
-					[String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.ListItem.FolderPath,videodb://)] +
-					[String.Contains(Container.ListItem.Path,Window(home).Property(infinity.movieLib.path)) | String.Contains(Container.ListItem.Path,Window(home).Property(infinity.tvLib.path))] +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\addtoFavourite.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Add/Remove Favourite</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.addtoFavourite),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\playTrailer.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Play Trailer</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.playTrailer),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\playTrailerSelect.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Play Trailer (Select)</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.playTrailerSelect),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\traktManager.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Trakt Manager</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.traktManager),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,season) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\clearProviders.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Clear Providers</label>
-				<visible>
-					[String.IsEqual(Window(home).Property(context.infinity.clearProviders),true) +
-					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]] |
-					[String.Contains(Container.FolderPath,videodb://) +
-					[String.Contains(Container.ListItem.Path,Window(home).Property(infinity.movieLib.path)) | String.Contains(Container.ListItem.Path,Window(home).Property(infinity.tvLib.path))] +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]]
-				</visible>
-			</item>
-			<item library="resources\lib\context\clearBookmark.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Clear Item Bookmark</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.clearBookmark),true) +
-					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					ListItem.IsResumable +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\rescrape.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Rescrape Item</label>
-				<visible>
-					[String.IsEqual(Window(home).Property(context.infinity.rescrape),true) +
-					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]]
-				</visible>
-			</item>
-			<item library="resources\lib\context\libRescrape.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Rescrape Lib Item</label>
-				<visible>
-					[String.Contains(Container.FolderPath,videodb://) | String.Contains(Container.ListItem.FolderPath,videodb://)] +
-					[String.Contains(Container.ListItem.Path,Window(home).Property(infinity.movieLib.path)) | String.Contains(Container.ListItem.Path,Window(home).Property(infinity.tvLib.path))] +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\playFromHere.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Play from here</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.playFromHere),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					String.IsEqual(ListItem.dbtype,episode)
-				</visible>
-			</item>
-			<item library="resources\lib\context\autoPlay.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Auto Play</label>
-				<visible>
-					[[String.IsEqual(Window(home).Property(infinity.autoPlayEpisode),false) + String.IsEqual(ListItem.dbtype,episode)] |
-					[String.IsEqual(Window(home).Property(infinity.autoPlayMovie),false) + String.IsEqual(ListItem.dbtype,movie)]] +
-					[String.IsEqual(Window(home).Property(context.infinity.autoPlay),true) +
-					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\sourceSelect.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Source Select</label>
-				<visible>
-					[[String.IsEqual(Window(home).Property(infinity.autoPlayEpisode),true) + String.IsEqual(ListItem.dbtype,episode)] |
-					[String.IsEqual(Window(home).Property(infinity.autoPlayMovie),true) + String.IsEqual(ListItem.dbtype,movie)]] +
-					[String.IsEqual(Window(home).Property(context.infinity.sourceSelect),true) +
-					String.StartsWith(ListItem.FolderPath,plugin://plugin.video.infinity/?action=play) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\findSimilar.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Find Similar</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.findSimilar),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\browseSeries.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Browse Series</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.browseSeries),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow)]
-				</visible>
-			</item>
-			<item library="resources\lib\context\browseEpisodes.py">
-				<label>$INFO[Window(home).Property(context.infinity.showInfinity)]Browse Episodes</label>
-				<visible>
-					String.IsEqual(Window(home).Property(context.infinity.browseEpisodes),true) +
-					String.StartsWith(ListItem.path,plugin://plugin.video.infinity/) +
-					String.IsEqual(ListItem.Property(isInfinity_widget),true) +
-					String.IsEqual(ListItem.dbtype,episode)
-				</visible>
-			</item>
-		</menu>
-	</extension>
-
 </addon><addon id="plugin.video.last_played" name="Last Played" version="6.4.0" provider-name="Luis Rodrigues">
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>video</provides>
@@ -1205,27 +934,6 @@ updated YouTube addon URL
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.mediafusion" version="4.0.1" name="MediaFusion" provider-name="Mohamed Zumair">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="xbmc.metadata" version="2.1.0" />
-        <import addon="script.module.requests" version="2.31.0" />
-        <import addon="script.module.requests-cache" version="0.5.2+matrix.2" />
-        <import addon="inputstream.ffmpegdirect" version="20.5.0" />
-        <import addon="plugin.video.elementum" optional="true" />
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="main.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">MediaFusion addon for Kodi</summary>
-        <description lang="en_GB">A Kodi addon to provide media fusion functionalities similar to the Stremio addon.</description>
-        <platform>all</platform>
-        <assets>
-            <icon>resources/mediafusion_logo.png</icon>
-            <fanart>resources/mediafusion_logo.png</fanart>
-        </assets>
-    </extension>
 </addon><addon id="plugin.video.pov" version="4.12.34" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -2144,22 +1852,6 @@ updated YouTube addon URL
 		</news>
 	</extension>
 
-</addon><addon id="repository.5star" name="5Star Kodi addons" version="6.2.0" provider-name="Luis Rodrigues">
-    <extension point="xbmc.addon.repository" name="5Star Kodi addons">
-		<dir>
-			<info compressed="false">https://raw.githubusercontent.com/5-star/repository.5star/master/addons/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/5-star/repository.5star/master/addons/addons.xml.md5</checksum>
-			<datadir zip="true">https://github.com/5-star/repository.5star/raw/master/zips/</datadir>
-		</dir>
-    </extension> 
-    <extension point="xbmc.addon.metadata">
-		<summary>5Star Kodi addons</summary>
-		<description>5Star Kodi addons</description>
-		<platform>all</platform>
-		<assets>
-			<icon>icon.png</icon>
-		</assets>
-    </extension>
 </addon><addon id="repository.709" name=" The[COLOR FF0C5EB4][B]7o9[/B][/COLOR]Repo" version="1.0.2" provider-name="Zaxxon709">
     <extension point="xbmc.addon.repository" name="The7o9Repo">
         <dir>
@@ -2251,88 +1943,6 @@ updated YouTube addon URL
             <fanart />
         </assets>
     </extension>
-</addon><addon id="repository.diggz" name="Diggz Repository" version="18" provider-name="Diggz">
-    <extension point="xbmc.addon.repository" name="Diggz Repository">
-        <dir minversion="20.0.0" maxversion="20.89.0">
-            <info compressed="false">https://raw.githubusercontent.com/nebulous42069/Nexus/master/nexus/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/nebulous42069/Nexus/master/nexus/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/nebulous42069/Nexus/master/nexus/zips/</datadir>
-        </dir>	
-        <dir minversion="20.90.0" maxversion="22.9.9">
-            <info compressed="false">https://raw.githubusercontent.com/nebulous42069/Omega/master/omega/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/nebulous42069/Omega/master/omega/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/nebulous42069/Omega/master/omega/zips/</datadir>
-        </dir>
-		<dir>
-        <info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
-        <checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
-        <datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
-        </dir>		
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary>Diggz Repository</summary>
-        <description>Diggz Kodi Repository.</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>icon.png</icon>
-        </assets>
-    </extension>
-</addon><addon id="repository.easynews" name="XBMC-Easynews Addons" version="21.1.1" provider-name="xbmc-easynews">
-	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
-		<dir>
-			<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
-			<checksum>https://srbaber.github.io/xbmc-easynews/addons.xml.md5</checksum>
-			<datadir zip="true">https://srbaber.github.io/xbmc-easynews/</datadir>
-		</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary>XBMC Addons for Adults Only</summary>
-		<description>This repository contains addons that are for adults only. You may only view the contents of this repository if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this content.</description>
-		<disclaimer>The owners and submitters to this repository do not host or distribute any of the content displayed by these addons nor do they have any affiliation with the content providers. YMMV.</disclaimer>
-		<platform>all</platform>
-	</extension>
-</addon><addon id="repository.emby.kodi" name="Kodi Emby Addons" version="1.0.7" provider-name="">
-	<requires>
-		<import addon="xbmc.addon" version="12.0.0" />
-	</requires>
-	<extension point="xbmc.addon.repository" name="Kodi Emby Repository">
-		<dir>
-			<info compressed="false">https://embydata.com/downloads/addons/xbmb3c/multi-repo/repositories/addons.xml</info>
-			<checksum>https://embydata.com/downloads/addons/xbmb3c/multi-repo/repositories/addons.xml.md5</checksum>
-			<datadir zip="true">https://embydata.com/downloads/addons/xbmb3c/multi-repo/repositories/</datadir>
-		</dir>
-		<dir minversion="19.999.0">
-			<info compressed="false">https://embydata.com/downloads/addons/xbmb3c/multi-repo/nexus/addons.xml</info>
-			<checksum>https://embydata.com/downloads/addons/xbmb3c/multi-repo/nexus/addons.xml.md5</checksum>
-			<datadir zip="true">https://embydata.com/downloads/addons/xbmb3c/multi-repo/nexus/</datadir>
-		</dir>		
-		<dir minversion="18.999.0">
-			<info compressed="false">https://embydata.com/downloads/addons/xbmb3c/multi-repo/matrix/addons.xml</info>
-			<checksum>https://embydata.com/downloads/addons/xbmb3c/multi-repo/matrix/addons.xml.md5</checksum>
-			<datadir zip="true">https://embydata.com/downloads/addons/xbmb3c/multi-repo/matrix/</datadir>
-		</dir>
-		<dir minversion="17.999.0">
-			<info compressed="false">https://embydata.com/downloads/addons/xbmb3c/multi-repo/leia/addons.xml</info>
-			<checksum>https://embydata.com/downloads/addons/xbmb3c/multi-repo/leia/addons.xml.md5</checksum>
-			<datadir zip="true">https://embydata.com/downloads/addons/xbmb3c/multi-repo/leia/</datadir>
-		</dir>
-		<dir minversion="16.999.0">
-			<info compressed="false">https://embydata.com/downloads/addons/xbmb3c/multi-repo/krypton/addons.xml</info>
-			<checksum>https://embydata.com/downloads/addons/xbmb3c/multi-repo/krypton/addons.xml.md5</checksum>
-			<datadir zip="true">https://embydata.com/downloads/addons/xbmb3c/multi-repo/krypton/</datadir>
-		</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary>Kodi Emby Addon Repository</summary>
-		<description>This repo contains add-ons for Emby related support</description>
-		<disclaimer />
-		<platform>all</platform>
-		<assets>
-			<icon>resources/icon.png</icon>
-			<fanart>resources/fanart.jpg</fanart>
-		</assets>
-	</extension>
 </addon><addon id="repository.funstersplace" name="funstersplace Repository" version="0.3" provider-name="funstersplace">
 	<extension point="xbmc.addon.repository" name="funstersplace">
 		<dir>
@@ -2354,37 +1964,6 @@ updated YouTube addon URL
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
         </assets>
-	</extension>
-</addon><addon id="repository.gaia.full" version="7.0.0" name="Gaia Repository (Full)" provider-name="Gaia">
-	<extension point="xbmc.addon.repository" name="Gaia Repository (Full)">
-		<dir minversion="19.0.0">
-			<info compressed="false">https://github.com/gaiakodi/gaiamain/raw/master/addons.xml?v=7.0.0</info>
-			<checksum>https://github.com/gaiakodi/gaiamain/raw/master/addons.xml.md5?v=7.0.0</checksum>
-			<datadir zip="true">https://github.com/gaiakodi/gaiamain/raw/master/</datadir>
-		</dir>
-		<dir minversion="19.0.0">
-			<info compressed="false">https://github.com/gaiakodi/gaiamain/raw/master/common/addons.full.xml?v=7.0.0</info>
-			<checksum>https://github.com/gaiakodi/gaiamain/raw/master/common/addons.full.xml.md5?v=7.0.0</checksum>
-			<datadir zip="true">https://github.com/gaiakodi/gaiamain/raw/master/common/</datadir>
-		</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Gaia Extended Repository</summary>
-		<description lang="en">The Gaia repository containing both essential and optional addons. The repository holds addons that are needed to install Gaia, but also has optional third-party addons that can be installed to extended the functionality of Gaia.</description>
-		<disclaimer lang="en">Gaia and its developers are not affiliated with Kodi or any of the services used in the addon. Gaia and its developers do not create, host, or distribute any of the content displayed in the addon. Gaia simply searches publicly available sources for content. Gaia is, and always will be, free and open-source. None of its code or resources may be sold or redistributed for commercial purposes.</disclaimer>
-
-		<platform>all</platform>
-		<license>GPL 3.0</license>
-
-		<website>https://gaiakodi.com</website>
-		<forum>https://gaiakodi.com/support</forum>
-
-		<assets>
-			<icon>resources/icon.png</icon>
-			<clearlogo>resources/clearlogo.png</clearlogo>
-			<fanart>resources/fanart.jpg</fanart>
-			<banner>resources/banner.jpg</banner>
-		</assets>
 	</extension>
 </addon><addon id="repository.ivarbrandt" name="ivarbrandt's Repository" version="1.0.1" provider-name="Ivar Brandt">
     <extension point="xbmc.addon.repository" name="ivarbrandt's Repository">
@@ -2559,34 +2138,6 @@ updated YouTube addon URL
 		<description lang="en" />
 		<genre />
 	</extension>
-</addon><addon id="repository.peno64" name="peno64 repository" version="1.5" provider-name="peno64">
-    <extension point="xbmc.addon.repository" name="peno64 repository">
-        <dir>
-            <info compressed="false">https://raw.githubusercontent.com/peno64/repository.peno64/master/repo/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/peno64/repository.peno64/master/repo/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/peno64/repository.peno64/master/repo/zips/</datadir>
-        </dir>
-	<dir minversion="18.0" maxversion="18.9.9">
-            <info compressed="false">https://raw.githubusercontent.com/peno64/repository.peno64/master/leia/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/peno64/repository.peno64/master/leia/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/peno64/repository.peno64/master/leia/zips/</datadir>
-        </dir>
-        <dir minversion="19.0.0">
-            <info compressed="false">https://raw.githubusercontent.com/peno64/repository.peno64/master/matrix/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/peno64/repository.peno64/master/matrix/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/peno64/repository.peno64/master/matrix/zips/</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary>peno64 repository</summary>
-        <description>peno64 repository</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
 </addon><addon id="repository.psp2111" name="psp2111 Repository" version="0.0.3" provider-name="psp2111-ADSLGATE">
     <extension point="xbmc.addon.repository" name="Example Repository">
         <dir>
@@ -4277,7 +3828,7 @@ v1.30.0
         <description lang="en_NZ">Nimbus Helper for the Nimbus Skin.</description>
         <description lang="en_US">Nimbus Helper for the Nimbus Skin.</description>
     </extension>
-</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta6.7" provider-name="pannal">
+</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta6.8" provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.27.1+matrix.1" />

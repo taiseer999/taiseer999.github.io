@@ -11,7 +11,7 @@ from lib.kodi_util import xbmc, xbmcgui, xbmcaddon, ICON_PATH, KODI_VERSION_MAJO
 from lib.settings_util import getSetting, setSetting
 from lib.properties import IPCTimeoutException, waitForGPEmpty, setGlobalProperty, getGlobalProperty
 from lib.updater import get_updater, UpdateException, UpdaterSkipException
-from lib.util import MONITOR
+from lib.util import MONITOR, addonSettings
 from lib.i18n import T
 from lib.logging import service_log as log
 
@@ -97,10 +97,18 @@ def update_loop():
 
                         if resp == "commence":
                             # wait for UI to close
+                            waitForSecs = (addonSettings.requestsTimeoutConnect * addonSettings.maxRetries1
+                                           + addonSettings.requestsTimeoutRead + 2)
+                            log("Waiting for UI to close for: {}s".format(waitForSecs))
                             try:
-                                waitForGPEmpty('running', timeout=200)
+                                waitForGPEmpty('running', timeout=waitForSecs * 10)
                             except IPCTimeoutException:
-                                raise UpdateException('Timeout waiting for UI to close')
+                                #raise UpdateException('Timeout waiting for UI to close')
+                                log('Timeout waiting for UI to close')
+                                try:
+                                    xbmc.executebuiltin('StopScript(script.plexmod)')
+                                except:
+                                    pass
                         else:
                             raise UpdaterSkipException()
 
