@@ -149,27 +149,27 @@
 			<!-- Dolby Vision - HDR Left -->
 			<control type="grouplist">
 				<left>60</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 				<control type="group"> <!-- DV Config -->
 					<width>500</width>
-					<height>40</height>
+					<height>50</height>
 					<control type="image">
-						<left>130</left>
+						<left>180</left>
 						<top>4</top>
-						<width>80</width>
-						<height>30</height>
+						<width>110</width>
+						<height>54</height>
                         <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
-						<left>205</left>
 						<width>300</width>
-						<height>40</height>
+						<top>5</top>
+						<height>50</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR limegreen]Configuration[/COLOR]</label>
-						<font>font_debug</font>
+						<font>font_main_bold</font>
 						<textcolor>FFffffff</textcolor>
 					</control>
 				</control>
@@ -395,27 +395,27 @@
 			<!-- Dolby Vision - HDR Middle -->
 			<control type="grouplist">
 				<left>600</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<visible>String.IsEqual(Player.Process(video.dovi.has.header),1)</visible>
 				<control type="group"> <!-- DV Levels Metadata -->
 					<width>500</width>
-					<height>40</height>
+					<height>50</height>
 					<control type="image">
-						<left>220</left>
+						<left>300</left>
 						<top>4</top>
-						<width>80</width>
-						<height>30</height>
+						<width>110</width>
+						<height>54</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
-						<left>295</left>
 						<width>300</width>
-						<height>40</height>
+						<height>50</height>
+						<top>5</top>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR limegreen]Levels Metadata[/COLOR]</label>
-						<font>font_debug</font>
+						<font>font_main_bold</font>
 						<textcolor>FFffffff</textcolor>
 					</control>
 				</control>
@@ -712,26 +712,26 @@
 			<!-- Dolby Vision - HDR Right -->
 			<control type="grouplist">
 				<left>1320</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<control type="group">
 					<width>700</width>
-					<height>40</height>
+					<height>50</height>
 					<control type="image">
-						<left>170</left>
-						<top>6</top>
-						<width>80</width>
-						<height>30</height>
+						<left>300</left>
+						<top>4</top>
+						<width>110</width>
+						<height>54</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/hdr10.png</texture>
 					</control>
 					<control type="label">
-						<left>250</left>
-						<width>118.25</width>
-						<height>58</height>
+						<top>5</top>
+						<width>300</width>
+						<height>50</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR limegreen]Static Metadata[/COLOR]</label>
-						<font>font_debug</font>
+						<font>font_main_bold</font>
 					</control>
 				</control>
 				<control type="group"> <!-- HDR MaxCLL/MaxFALL -->
