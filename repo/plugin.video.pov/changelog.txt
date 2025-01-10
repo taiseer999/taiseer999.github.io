@@ -9,8 +9,10 @@
 - nyaa in Sources/Torrents sourced from website results.
 
   [COLOR dodgerblue][B]Version 4.12[/B][/COLOR]
+- Added setting "Custom Fanart Image", affects most main menu items.
+- Added aiostreams.
 - Removed comet.
-- Rewrite tb_cloud scaper to include completed TorBox usenet and web download.
+- Rewrite tb_cloud scraper to include completed TorBox usenet and web download.
 - Fix for format change in mediafusion results.
 - Added "Most Favorited This Week" for Movies/TVShows.
   From the context menu restore to default or check for new items.

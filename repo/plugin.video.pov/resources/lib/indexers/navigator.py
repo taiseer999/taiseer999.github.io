@@ -6,10 +6,9 @@ from modules import kodi_utils as k, settings as s
 tp, ls, build_url, notification, list_dirs = k.translate_path, k.local_string, k.build_url, k.notification, k.list_dirs
 make_listitem, add_item, end_directory, add_items = k.make_listitem, k.add_item, k.end_directory, k.add_items
 set_content, set_view_mode, set_sort_method, set_category = k.set_content, k.set_view_mode, k.set_sort_method, k.set_category
-download_directory, source_folders_directory = s.download_directory, s.source_folders_directory
-easynews_active, wi = s.easynews_active, s.watched_indicators
+easynews_active, download_directory, source_folders_directory = s.easynews_active, s.download_directory, s.source_folders_directory
 get_shortcut_folders, get_shortcut_folder_contents, = nc.get_shortcut_folders, nc.get_shortcut_folder_contents
-icon_directory, fanart = 'special://home/addons/plugin.video.pov/resources/media/%s', tp('special://home/addons/plugin.video.pov/fanart.png')
+icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
 _in_str, mov_str, tv_str, edit_str = ls(32484), ls(32028), ls(32029), ls(32705)
 browse_str, add_menu_str, s_folder_str = ls(32706), ls(32730), ls(32731)
 
@@ -36,7 +35,7 @@ class Navigator:
 					listitem.addContextMenuItems(cm)
 					yield (build_url(item), listitem, isFolder)
 				except: pass
-		__handle__ = int(sys.argv[1])
+		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
 		add_items(__handle__, list(build_main_lists()))
 		self._end_directory()
 
@@ -430,7 +429,7 @@ class Navigator:
 					listitem.setArt({'fanart': fanart})
 					yield (url, listitem, tup[1])
 				except: pass
-		__handle__ = int(sys.argv[1])
+		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
 		folder_path = self.params_get('folder_path')
 		sources_folders = self.params_get('sources_folders', None)
 		dirs, files = list_dirs(folder_path)
@@ -457,7 +456,7 @@ class Navigator:
 			_watched = get_watched_info_tv(watched_indicators)
 			_watched.sort(key=lambda x: (x[0], x[1], x[2]), reverse=True)
 			return [(i[0], i[3], i[4], [(i[1], i[2])]) for i in _watched if not (i[0] in seen or seen.add(i[0]))]
-		watched_indicators = wi()
+		watched_indicators = s.watched_indicators()
 		media_type = self.params_get('menu_type')
 		function = get_watched_info_movie if media_type == 'movie' else _convert_pov_watched_episodes_info
 		mode = 'build_movie_list' if media_type == 'movie' else 'build_tvshow_list'
@@ -479,13 +478,13 @@ class Navigator:
 
 	def shortcut_folders(self):
 		def _make_new_item():
-			icon = tp(icon_directory % 'new.png')
+			icon, art = tp(icon_directory % 'new.png'), tp(k.fanart_default)
 			display_name = '[I]%s...[/I]' % ls(32702)
 			url_params = {'mode': 'menu_editor.shortcut_folder_make'}
 			url = build_url(url_params)
 			listitem = make_listitem()
 			listitem.setLabel(display_name)
-			listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
+			listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': art, 'banner': icon})
 			add_item(__handle__, url, listitem, False)
 		def _builder():
 			short_str, delete_str = ls(32514), ls(32703)
@@ -507,7 +506,7 @@ class Navigator:
 					listitem.addContextMenuItems(cm)
 					yield (url, listitem, True)
 				except: pass
-		__handle__ = int(sys.argv[1])
+		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
 		_make_new_item()
 		folders = get_shortcut_folders()
 		if folders: add_items(__handle__, list(_builder()))
@@ -531,14 +530,14 @@ class Navigator:
 					listitem.addContextMenuItems(cm)
 					yield (url, listitem, isFolder)
 				except: pass
-		__handle__ = int(sys.argv[1])
+		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
 		list_name = self.params_get('name')
 		contents = get_shortcut_folder_contents(list_name)
 		add_items(__handle__, list(_process()))
 		self._end_directory()
 
 	def _add_item(self, url_params, iconImage='DefaultFolder.png', prefix='', isFolder=True, list_name=''):
-		__handle__ = int(sys.argv[1])
+		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
 		cm = []
 		cm_append = cm.append
 		icon = iconImage if 'network_id' in url_params else tp(icon_directory % iconImage)

@@ -24,6 +24,7 @@ metacache_db   = translatePath('special://profile/addon_data/plugin.video.pov/me
 debridcache_db = translatePath('special://profile/addon_data/plugin.video.pov/debridcache.db')
 external_db    = translatePath('special://profile/addon_data/plugin.video.pov/providerscache2.db')
 databases_path = translatePath('special://profile/addon_data/plugin.video.pov/')
+fanart_default = 'special://home/addons/plugin.video.pov/fanart.png'
 current_dbs    = ('debridcache.db', 'favourites.db', 'maincache.db', 'metacache.db', 'navigator.db', 'providerscache2.db',
 					'traktcache4.db', 'views.db', 'watched.db', 'fenomcache.db', 'fenomundesirables.db', 'settings.xml')
 myvideos_db_paths = {18: '116', 19: '119', 20: '121', 21: '131'}
@@ -50,6 +51,12 @@ def clear_property(prop):
 
 def addon(addon_id='plugin.video.pov'):
 	return Addon(id=addon_id)
+
+def addon_fanart():
+	fanart = get_setting('custom_fanart')
+	if 'special://' in fanart: fanart = translate_path(fanart)
+	elif 'fanart.png' == fanart: fanart = translate_path(fanart_default)
+	return fanart
 
 def addon_installed(addon_id):
 	return get_visibility('System.HasAddon(%s)' % addon_id)
