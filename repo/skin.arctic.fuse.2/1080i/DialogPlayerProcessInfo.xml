@@ -156,7 +156,7 @@
 					<width>500</width>
 					<height>50</height>
 					<control type="image">
-						<left>180</left>
+						<left>200</left>
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
@@ -402,7 +402,7 @@
 					<width>500</width>
 					<height>50</height>
 					<control type="image">
-						<left>300</left>
+						<left>330</left>
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
@@ -726,7 +726,7 @@
 					</control>
 					<control type="label">
 						<top>5</top>
-						<width>300</width>
+						<width>320</width>
 						<height>50</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
@@ -912,8 +912,8 @@
 				</control>
 				<control type="progress">
 					<description>CACHE BAR</description>
-					<width>620</width>
-					<height>12</height>
+					<width>500</width>
+					<height>8</height>
 					<info>Player.CacheLevel</info>
 					
 				</control>
@@ -927,8 +927,8 @@
 				</control>
 				<control type="progress">
 					<description>RAM BAR</description>
-					<width>620</width>
-					<height>12</height>
+					<width>500</width>
+					<height>8</height>
 					<info>system.memory(used)</info>
 					
 				</control>
@@ -943,8 +943,8 @@
 				</control>
 				<control type="progress">
 					<description>CPU BAR</description>
-					<width>620</width>
-					<height>12</height>
+					<width>500</width>
+					<height>8</height>
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>
 					
@@ -953,7 +953,7 @@
 					<width>620</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31646]:[/COLOR] $INFO[System.CpuFrequency] | $INFO[System.CPUTemperature]</label>
+					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31646]:[/COLOR] $INFO[System.CpuFrequency] | [COLOR limegreen]$INFO[System.CPUTemperature][/COLOR]</label>
 					<font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
 				</control>
@@ -1066,16 +1066,6 @@
 					<visible>VideoPlayer.HasSubtitles</visible>
 					<visible>!String.IsEmpty(VideoPlayer.SubtitlesName)</visible>
 				</control>
-			 <!-- Audio queue -->
-                <control type="label">
-                    <width>480</width>
-					<height>40</height>
-                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32010]:[/COLOR] $INFO[Player.Process(audio.queue.level)]%</label>
-                    <font>font_debug</font>
-					<textcolor>FFffffff</textcolor>
-                </control>
-				
-               
 			</control>
 
 			<!-- Player Right -->
@@ -1153,27 +1143,33 @@
 				 <!-- Video queue -->
                 <control type="label">
                     <width>480</width>
-					<height>40</height>
+					<height>25</height>
                     <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32008]:[/COLOR] $INFO[Player.Process(video.queue.level)]%</label>
-                    <font>font_debug</font>
+                    <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
-                </control>
-                
+                </control>              
                 <!-- Video queue data -->
                 <control type="label">
                     <width>480</width>
-					<height>40</height>
+					<height>25</height>
                     <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32009]:[/COLOR] $INFO[Player.Process(video.queue.data.level)]%</label>
-                    <font>font_debug</font>
+                    <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
                 </control>
-
 				 <!-- Audio queue data -->
                 <control type="label">
                     <width>480</width>
-					<height>40</height>
+					<height>25</height>
                     <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
-                    <font>font_debug</font>
+                    <font>font_tiny_bold</font>
+					<textcolor>FFffffff</textcolor>
+                </control>
+				 <!-- Audio queue -->
+                <control type="label">
+                    <width>480</width>
+					<height>25</height>
+                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32010]:[/COLOR] $INFO[Player.Process(audio.queue.level)]%</label>
+                    <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
                 </control>
 			</control>
