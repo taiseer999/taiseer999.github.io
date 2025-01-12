@@ -156,8 +156,8 @@
 					<width>500</width>
 					<height>50</height>
 					<control type="image">
-						<left>200</left>
 						<top>4</top>
+						<align>left</align>
 						<width>110</width>
 						<height>54</height>
                         <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
@@ -165,9 +165,9 @@
 					<control type="label">
 						<width>300</width>
 						<top>5</top>
+						<left>180</left>
 						<height>50</height>
 						<aligny>bottom</aligny>
-						<align>left</align>
 						<label>[COLOR limegreen]Configuration[/COLOR]</label>
 						<font>font_main_bold</font>
 						<textcolor>FFffffff</textcolor>
@@ -402,18 +402,18 @@
 					<width>500</width>
 					<height>50</height>
 					<control type="image">
-						<left>330</left>
+						<align>left</align>
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
 						<texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
+						<left>250</left>
 						<width>300</width>
 						<height>50</height>
 						<top>5</top>
 						<aligny>bottom</aligny>
-						<align>left</align>
 						<label>[COLOR limegreen]Levels Metadata[/COLOR]</label>
 						<font>font_main_bold</font>
 						<textcolor>FFffffff</textcolor>
@@ -718,7 +718,7 @@
 					<width>700</width>
 					<height>50</height>
 					<control type="image">
-						<left>300</left>
+						<align>left</align>
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
@@ -729,7 +729,7 @@
 						<width>320</width>
 						<height>50</height>
 						<aligny>bottom</aligny>
-						<align>left</align>
+						<left>200</left>
 						<label>[COLOR limegreen]Static Metadata[/COLOR]</label>
 						<font>font_main_bold</font>
 					</control>
@@ -1075,7 +1075,7 @@
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Display mode -->
 					<width>480</width>
-					<height>40</height>
+					<height>30</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32100]:[/COLOR] $INFO[Player.Process(amlogic.displaymode)]</label>
 					<font>font_debug</font>
@@ -1084,7 +1084,7 @@
 				</control>
 				<control type="label"> <!-- EOTF & Gamut -->
 					<width>480</width>
-					<height>40</height>
+					<height>30</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32101]:[/COLOR] $INFO[Player.Process(amlogic.eoft_gamut)]</label>
 					<font>font_debug</font>
@@ -1093,7 +1093,7 @@
 				</control>
 				<control type="label"> <!-- Dolby Vision Profile -->
 					<width>480</width>
-					<height>40</height>
+					<height>30</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31653]:[/COLOR] $VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR FFffffff][,][/COLOR]]</label>
 					<font>font_debug</font>
@@ -1103,7 +1103,7 @@
 				</control>
 				<control type="label"> <!-- Dolby Vision Metadata -->
 					<width>480</width>
-					<height>40</height>
+					<height>30</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31656]:[/COLOR] $INFO[Player.Process(video.dovi.meta.version)]</label>
 					<font>font_debug</font>
@@ -1113,7 +1113,7 @@
 				</control>
 				<control type="label"> <!-- VS10 mode -->
 					<width>480</width>
-					<height>40</height>
+					<height>30</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31654]:[/COLOR] $VAR[DVVS10Var]</label>
 					<font>font_debug</font>
@@ -1123,7 +1123,7 @@
 				</control>
 				<control type="label"> <!--Pixel format -->
 					<width>480</width>
-					<height>40</height>
+					<height>30</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31658]:[/COLOR] $INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR FFffffff][,][/COLOR]]</label>
 					<font>font_debug</font>
@@ -1143,32 +1143,32 @@
 				 <!-- Video queue -->
                 <control type="label">
                     <width>480</width>
-					<height>25</height>
-                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32008]:[/COLOR] $INFO[Player.Process(video.queue.level)]%</label>
+					<height>30</height>
+                    <label>[COLOR green]$LOCALIZE[32008]:[/COLOR] $INFO[Player.Process(video.queue.level)]%</label>
                     <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
                 </control>              
                 <!-- Video queue data -->
                 <control type="label">
                     <width>480</width>
-					<height>25</height>
-                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32009]:[/COLOR] $INFO[Player.Process(video.queue.data.level)]%</label>
+					<height>30</height>
+                    <label>[COLOR green]$LOCALIZE[32009]:[/COLOR] $INFO[Player.Process(video.queue.data.level)]%</label>
                     <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
                 </control>
 				 <!-- Audio queue data -->
                 <control type="label">
                     <width>480</width>
-					<height>25</height>
-                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
+					<height>30</height>
+                    <label>[COLOR green]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
                     <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
                 </control>
 				 <!-- Audio queue -->
                 <control type="label">
                     <width>480</width>
-					<height>25</height>
-                    <label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32010]:[/COLOR] $INFO[Player.Process(audio.queue.level)]%</label>
+					<height>30</height>
+                    <label>[COLOR green]$LOCALIZE[32010]:[/COLOR] $INFO[Player.Process(audio.queue.level)]%</label>
                     <font>font_tiny_bold</font>
 					<textcolor>FFffffff</textcolor>
                 </control>
