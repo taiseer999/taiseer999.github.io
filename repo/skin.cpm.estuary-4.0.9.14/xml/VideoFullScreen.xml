@@ -151,22 +151,22 @@
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">72</param><param name="imageId">73</param>
-				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3)</param>
 				<param name="texture">codecs/Dolby_Audio_Plus.png</param>
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">74</param><param name="imageId">75</param>
-				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</param>
 				<param name="texture">codecs/Dolby_Atmos.png</param>
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">76</param><param name="imageId">77</param>
-				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd)</param>
 				<param name="texture">codecs/Dolby_Audio_TrueHD.png</param>
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">78</param><param name="imageId">79</param>
-				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd) + String.Contains(Player.Process(audio.is.dolby.atmos),Atmos)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
 				<param name="texture">codecs/Dolby_Atmos_TrueHD.png</param>
 			</include>
 			<include content="AudioCodecFlag">
@@ -181,17 +181,17 @@
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">84</param><param name="imageId">85</param>
-				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.IsEqual(Player.Process(audio.dts.x.type),)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</param>
 				<param name="texture">codecs/DTS-HD-MA.png</param>
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">86</param><param name="imageId">87</param>
-				<param name="visible">String.Contains(Player.Process(audio.dts.x.type),DTS)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</param>
 				<param name="texture">codecs/DTS-X.png</param>
 			</include>
 			<include content="AudioCodecFlag">
 				<param name="groupId">88</param><param name="imageId">89</param>
-				<param name="visible">String.Contains(Player.Process(audio.dts.x.type),IMAX)</param>
+				<param name="visible">String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</param>
 				<param name="texture">codecs/IMAX.png</param>
 			</include>
 		</control>

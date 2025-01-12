@@ -885,7 +885,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[VideoPlayer.AudioMibitRate,,] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,,]</label>
+						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1006,7 +1006,7 @@
 					<width>600</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var]$INFO[Player.Process(audio.is.dolby.atmos), [COLOR lightgreen],[/COLOR]]$INFO[Player.Process(audio.dts.x.type), [COLOR lightgreen],[/COLOR]]</label>
+					<label>[COLOR button_focus]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var] $VAR[AudioAtmos]$VAR[AudioDTS]</label>
 					<font>font12</font>
 					<shadowcolor>black</shadowcolor>
 				</control>

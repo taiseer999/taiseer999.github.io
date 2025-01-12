@@ -130,13 +130,6 @@
 						<visible>PVR.CanRecordPlayingChannel</visible>
 						<visible>VideoPlayer.Content(livetv)</visible>
 					</control>
-					<include content="OSDSmallButton">
-						<param name="control_id" value="70017"/>
-						<param name="texture" value="osd/fullscreen/buttons/button-ring-small.png"/>
-						<param name="onclick" value="toggle.video.freerun,mode"/>
-						<param name="selected" value="false"/>
-						<param name="visible" value="true"/>
-					</include>
 				</control>
 				<control type="grouplist" id="202">
 					<right>20</right>
@@ -151,7 +144,7 @@
 					<ondown condition="Control.HasFocus(70043)">11104</ondown>
 					<ondown condition="Control.HasFocus(704)">12104</ondown>
 					<ondown condition="Control.HasFocus(255)">13103</ondown>
-					<onleft>70017</onleft>
+					<onleft>608</onleft>
 					<onright>600</onright>
 
 					<include content="OSDSmallButton">

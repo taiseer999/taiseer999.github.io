@@ -79,8 +79,8 @@
 		</font>
 		<font>
 			<name>font_clock</name>
-			<filename>NotoSans-Regular.ttf</filename>
-			<size>45</size>
+			<filename>Roboto-Thin.ttf</filename>
+			<size>70</size>
 		</font>
 		<!-- Title Fonts -->
 		<font>
