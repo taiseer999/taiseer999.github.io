@@ -31,7 +31,7 @@ class DMMCache:
 		cached_hashes = {}
 		threads = []
 		chunk_size = 100
-		chunks = unchecked_hashes[i:i + chunk_size] for i in range(0, len(unchecked_hashes), chunk_size)
+		chunks = (unchecked_hashes[i:i + chunk_size] for i in range(0, len(unchecked_hashes), chunk_size))
 		for chunk in chunks:
 			thread = Thread(target=_process, args=(chunk, imdb))
 			threads.append(thread)
