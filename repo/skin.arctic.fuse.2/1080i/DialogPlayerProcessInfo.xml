@@ -28,14 +28,14 @@
 				<left>30</left>
 				<top>-220</top>
 				<right>30</right>
-				<height>400</height>
+				<height>380</height>
 				<texture colordiffuse="dialog_fg_70">background/coal_blur.png</texture>
 			</control>
 						
 			<!-- PVR Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5551)</visible>
 				<control type="label">
 					<width>1200</width>
@@ -89,12 +89,12 @@
 			<!-- PVR Right -->
 			<control type="grouplist">
 				<left>1250</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5551)</visible>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="label">
 					<width>600</width>
-					<height>50</height>
+					<height>45</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamBer,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19010]:[/COLOR] ]</label>
 					<font>font_debug</font>
@@ -102,7 +102,7 @@
 				</control>
 				<control type="label">
 					<width>600</width>
-					<height>50</height>
+					<height>45</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamUnc,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19011]:[/COLOR] ]</label>
 					<font>font_debug</font>
@@ -110,7 +110,7 @@
 				</control>
 				<control type="label">
 					<width>600</width>
-					<height>50</height>
+					<height>45</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamMux,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19100]:[/COLOR] ]</label>
 					<font>font_debug</font>
@@ -118,7 +118,7 @@
 				</control>
 				<control type="label">
 					<width>600</width>
-					<height>50</height>
+					<height>45</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamSignal,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19008]:[/COLOR] ]</label>
 					<font>font_debug</font>
@@ -133,7 +133,7 @@
 				<control type="label">
 					<top>5</top>
 					<width>1600</width>
-					<height>50</height>
+					<height>45</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamSNR,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19009]:[/COLOR] ]</label>
 					<font>font_debug</font>
@@ -175,10 +175,10 @@
 				</control>
 				<control type="group"> <!-- DV Version -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>300</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]Version:[/COLOR]</label>
@@ -188,7 +188,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.version.major)].$INFO[Player.Process(video.dovi.version.minor)]</label>
@@ -198,10 +198,10 @@
 				</control>
 				<control type="group"> <!-- DV Profile -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>300</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]Profile:[/COLOR]</label>
@@ -211,7 +211,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVProfileExtVar]</label>
@@ -220,8 +220,8 @@
 					</control>
 					<control type="label">
 						<left>460</left>
-						<width>50</width>
-						<height>40</height>
+						<width>40</width>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR FFffffff]$VAR[DVSourceProfileExtVar][/COLOR]</label>
@@ -233,10 +233,10 @@
 				</control>
 				<control type="group"> <!-- DV Level -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>300</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]Level:[/COLOR]</label>
@@ -246,7 +246,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.dovi.level)]</label>
@@ -256,10 +256,10 @@
 				</control>
 				<control type="group"> <!-- DV RPU -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>300</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]RPU:[/COLOR]</label>
@@ -269,7 +269,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[RPUPresentVar]</label>
@@ -279,10 +279,10 @@
 				</control>
 				<control type="group"> <!-- DV BL -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>300</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]Base Layer:[/COLOR]</label>
@@ -292,7 +292,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$VAR[BLPresentVar][/COLOR]</label>
@@ -302,10 +302,10 @@
 				</control>
 				<control type="group"> <!-- DV EL -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>350</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]Enhancement Layer:[/COLOR]</label>
@@ -315,7 +315,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[ELPresentVar]</label>
@@ -325,7 +325,7 @@
 					<control type="label">
 						<left>460</left>
 						<width>50</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[ELSourcePresentVar]</label>
@@ -337,10 +337,10 @@
 				</control>
 				<control type="group"> <!-- DV EL Type -->
 					<width>500</width>
-					<height>40</height>
+					<height>36</height>
 					<control type="label">
 						<width>400</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR $VAR[ColorHighlight]]Enhancement Layer Type:[/COLOR]</label>
@@ -350,7 +350,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>200</width>
-						<height>40</height>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVELVar]</label>
@@ -358,8 +358,8 @@
 					</control>
 					<control type="label">
 						<left>460</left>
-						<width>50</width>
-						<height>40</height>
+						<width>40</width>
+						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVSourceELVar]</label>
@@ -400,7 +400,7 @@
 				<visible>String.IsEqual(Player.Process(video.dovi.has.header),1)</visible>
 				<control type="group"> <!-- DV Levels Metadata -->
 					<width>500</width>
-					<height>50</height>
+					<height>55</height>
 					<control type="image">
 						<align>left</align>
 						<top>4</top>
@@ -411,7 +411,7 @@
 					<control type="label">
 						<left>250</left>
 						<width>300</width>
-						<height>50</height>
+						<height>45</height>
 						<top>5</top>
 						<aligny>bottom</aligny>
 						<label>[COLOR limegreen]Levels Metadata[/COLOR]</label>
@@ -851,7 +851,7 @@
 			<!-- Player Left -->
 			<control type="grouplist">
 				<left>60</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Screen resolution -->
 					<width>620</width>
@@ -961,7 +961,7 @@
 			<!-- Player Middle -->
 			<control type="grouplist">
 				<left>730</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Video source type -->
 					<width>600</width>
@@ -1071,7 +1071,7 @@
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1380</left>
-				<top>-220</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Display mode -->
 					<width>480</width>
