@@ -94,7 +94,6 @@
                 <style>$PARAM[style_light]</style>
                 <size>80</size>
             </font>
-
             <font>
                 <name>font_title_main_test</name>
                 <filename>RobotoCondensed-Bold.ttf</filename>
