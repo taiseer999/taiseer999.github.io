@@ -190,7 +190,7 @@
             <!-- Title fonts -->
             <font>
                 <name>font_title_huge</name>
-                <filename>majallab.ttf</filename>
+                <filename>LinikSans-SemiBold.ttf</filename>
                 <style>$PARAM[style_bold]</style>
                 <size>$PARAM[size_heavy_huge_x2]</size>
             </font>
