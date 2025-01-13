@@ -1982,26 +1982,42 @@
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
 	</variable>
-	<variable name="AudioCodec1Var">
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtsma)">DTS-HD Master Audio</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD Hi-Res Audio</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,dca) | String.Contains(VideoPlayer.AudioCodec,dts)">DTS</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,eac3)">Dolby Digital+</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,mp3)">MP3</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,mp2)">MP2</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,mp1)">MP1</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,flac)">FLAC</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,aac)">AAC</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,wmav2)">WMA</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
-		<value condition="String.Contains(VideoPlayer.AudioCodec,cook)">Cook</value>
-	  </variable>
+		<variable name="AudioCodec1Var">
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtsma)">DTS-HD Master Audio</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS-HD Master Audio</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">DTS-HD Master Audio</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD Hi-Res Audio</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">Dolby TrueHD</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">Dolby Digital+</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">Dolby Digital+</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">MP3</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,mp2)">MP2</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,mp1)">MP1</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,wmav2)">WMA</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,cook)">Cook</value>
+	</variable>
+
+	<variable name="AudioAtmos">
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">[COLOR lightgreen]Atmos[/COLOR]</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">Atmos[/COLOR]</value>
+	</variable>
+
+	<variable name="AudioDTSX">
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">[COLOR lightgreen]DTS:X[/COLOR]</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">[COLOR lightgreen]IMAX[/COLOR]</value>
+		<value></value>
+	</variable>
+    
       <variable name="VideoConvVar">
         <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(video.dovi.codec.string),8)"></value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(video.dovi.codec.string),7)"></value>

@@ -70,7 +70,7 @@
              <!-- Testing Fonts -->
             <font>
                 <name>font_debug</name>
-                <filename>GeezaPro.ttf</filename>
+                <filename>GeezaPro-Bold.ttf</filename>
                 <size>25</size>
                 <aspect>$PARAM[aspect_system]</aspect>
             </font>

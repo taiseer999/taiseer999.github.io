@@ -2702,32 +2702,32 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31631"
-msgid "CPU frequency"
+msgid "CPU Frequency"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31632"
-msgid "SoC temp"
+msgid "SoC Temp"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31633"
-msgid "Video stream cache"
+msgid "Video Stream Cache"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31634"
-msgid "Player Process"
+msgid "Player Process Info"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31635"
-msgid "Video source type"
+msgid "Video Source Type"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#32100"
-msgid "Display mode"
+msgid "Display Mode"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2737,17 +2737,17 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31641"
-msgid "Kodi fps"
+msgid "Kodi FPS"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31642"
-msgid "Video decoder|deint"
+msgid "Video Decoder|Deint"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31643"
-msgid "A|V bit rate Mbps"
+msgid "A|V Bit Rate Mbps"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2767,27 +2767,27 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31647"
-msgid "Video source type"
+msgid "Video Source Type"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31648"
-msgid "Video encoding"
+msgid "Video Encoding"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31649"
-msgid "Video colour"
+msgid "Video Colour"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31650"
-msgid "Audio encoding"
+msgid "Audio Encoding"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31651"
-msgid "Audio sampling"
+msgid "Audio Sampling"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2802,12 +2802,12 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31654"
-msgid "VS10 mode"
+msgid "VS10 Mode"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31655"
-msgid "AML fps"
+msgid "AML FPS"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2817,12 +2817,12 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31657"
-msgid "Subtitle name"
+msgid "Subtitle Name"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31658"
-msgid "Pixel format"
+msgid "Pixel Format"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2831,20 +2831,21 @@ msgid "Subtitle language"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Video queue"
+msgid "Video Queue"
 msgstr ""
 
 msgctxt "#32009"
-msgid "Video queue data"
+msgid "Video Queue Data"
 msgstr ""
 
 msgctxt "#32010"
-msgid "Audio queue"
+msgid "Audio Queue"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Audio queue data"
+msgid "Audio Queue Data"
 msgstr ""
+
 
 msgctxt "#32057"
 msgid "Top left"

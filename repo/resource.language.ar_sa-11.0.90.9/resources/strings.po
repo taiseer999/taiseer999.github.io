@@ -5476,7 +5476,7 @@ msgid "Video encoder:"
 msgstr "ترميز الفيديو:"
 
 msgctxt "#13287"
-msgid "Screen resolution:"
+msgid "Screen Resolution:"
 msgstr "دقة الشاشة:"
 
 msgctxt "#13292"
