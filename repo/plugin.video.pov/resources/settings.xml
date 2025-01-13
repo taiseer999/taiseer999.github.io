@@ -190,6 +190,7 @@
 		<setting id="provider.animetosho" label="animetosho (pack capable)" type="bool" default="false" />
 		<setting id="provider.bitsearch" label="bitsearch (pack capable)" type="bool" default="false" />
 			<setting id="bitsearch.sort" label="results preference" type="enum" default="0" subsetting="true" values="random|largest" visible="eq(-1,true)" />
+		<setting id="provider.dmm" label="dmm" type="bool" default="false" visible="false" />
 		<setting id="provider.nyaa" label="nyaa" type="bool" default="false" />
 		<setting id="provider.piratebay" label="piratebay (pack capable)" type="bool" default="true" />
 		<setting id="provider.torrentdownload" label="torrentdownload (pack capable)" type="bool" default="false" />

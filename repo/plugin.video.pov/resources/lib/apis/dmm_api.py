@@ -3,8 +3,11 @@ import requests
 
 
 class DMMCache:
-	torrents_link = 'https://debridmediamanager.com/api/torrents'
 	availability_check_link = 'https://debridmediamanager.com/api/availability/check'
+	params =  '&dmmProblemKey=%s&solution=%s&onlyTrusted=false&maxSize=0&page=%s'
+	torrents_link = 'https://debridmediamanager.com/api/torrents'
+	movie_link = '/movie?imdbId=%s'
+	show_link = '/tv?imdbId=%s&seasonNum=%s'
 	timeout = 6.05
 
 	def __init__(self):

@@ -3,8 +3,8 @@
 - Fen, Venom, Mr-Kodi.
 - elfhosted.com for community instances.
 
-- torrentio debrid+ in My Services, sourced from torrentio results with RD+/AD+ tag.
-- mediafusion debrid+ in My Services, sourced from mediafusion results with debrid token.
+- torrentio debrid+ in My Services, sourced from torrentio "cached" results.
+- mediafusion debrid+ in My Services, sourced from mediafusion "cached" results.
 - nyaaio in Sources/Torrents, sourced from torrentio anime results with filters disabled.
 - nyaa in Sources/Torrents sourced from website results.
 

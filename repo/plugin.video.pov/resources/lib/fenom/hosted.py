@@ -5,7 +5,7 @@ from fenom.control import dialog, multiselectDialog, selectDialog, yesnoDialog, 
 timeout = 3.05
 
 
-class Mediafusion:
+class MFDebrid:
 	amble = 'Use custom manifest?[CR][CR]Select No to use Direct Torrent configuration. The cached status of direct torrents is unchecked.'
 #	https://mediafusion.elfhosted.com/docs#/user_data/encrypt_user_data_encrypt_user_data_post
 	base_url = 'https://mediafusion.elfhosted.com'
@@ -15,11 +15,8 @@ class Mediafusion:
 	params = {"streaming_provider":{"token":"","service":"","only_show_cached_streams":False},"enable_catalogs":False,"max_streams_per_resolution":99,"torrent_sorting_priority":[],"certification_filter":["Disable"],"nudity_filter":["Disable"]}
 	services = {
 		0: ('Real Debrid', 'realdebrid', 'rd.token'),
-		1: ('Premiumize', 'premiumize', 'pm.token'),
-		2: ('All Debrid', 'alldebrid', 'ad.token'),
-		3: ('TorBox', 'torbox', 'tb.token'),
-		4: ('EasyDebrid', 'easydebrid', 'ed.token'),
-		5: ('Direct', '', '')
+		1: ('All Debrid', 'alldebrid', 'ad.token'),
+		2: ('Direct', '', '')
 	}
 
 	def __init__(self, name=''):
@@ -53,12 +50,4 @@ class Mediafusion:
 		except:
 			from fenom import log_utils
 			log_utils.error()
-
-
-class MFDebrid(Mediafusion):
-	services = {
-		0: ('Real Debrid', 'realdebrid', 'rd.token'),
-		1: ('All Debrid', 'alldebrid', 'ad.token'),
-		2: ('Direct', '', '')
-	}
 
