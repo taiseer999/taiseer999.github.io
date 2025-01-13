@@ -11833,7 +11833,7 @@ msgid "Episode title"
 msgstr "عنوان الحلقة"
 
 msgctxt "#21443"
-msgid "Video resolution"
+msgid "Video Resolution"
 msgstr "دقة الفيديو"
 
 msgctxt "#21444"

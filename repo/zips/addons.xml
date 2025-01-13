@@ -2378,7 +2378,7 @@ updated YouTube addon URL
 		<description lang="en">White Weather Icons</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="resource.language.ar_sa" version="11.0.90.12" name="Arabic" provider-name="Team Kodi">
+</addon><addon id="resource.language.ar_sa" version="11.0.90.13" name="Arabic" provider-name="Team Kodi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
   </requires>
