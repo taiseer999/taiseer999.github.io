@@ -2586,6 +2586,72 @@ msgid "Card Row"
 msgstr "صفحة بشكل كروت"
 
 #: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video codec name
+msgctxt "#31600"
+msgid "Video codec"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video resolution
+msgctxt "#31601"
+msgid "Video resolution"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video aspect
+msgctxt "#31602"
+msgid "Video aspect"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video bitrate
+msgctxt "#31603"
+msgid "Video bitrate"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the audio codec name
+msgctxt "#31604"
+msgid "Audio codec"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the number of audio channels
+msgctxt "#31605"
+msgid "Audio channels"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the audio bitrate
+msgctxt "#31606"
+msgid "Audio bitrate"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the screen resolution
+msgctxt "#31607"
+msgid "Screen Resolution"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the system rendering speed
+msgctxt "#31608"
+msgid "System rendering speed"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the system CPU usage
+msgctxt "#31609"
+msgid "System CPU usage"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the media (metadata) info page
+msgctxt "#31610"
+msgid "Media"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the system info page
 msgctxt "#31611"
 msgid "System"
@@ -2597,32 +2663,32 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31631"
-msgid "CPU frequency"
+msgid "CPU Frequency"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31632"
-msgid "SoC temp"
+msgid "SoC Temp"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31633"
-msgid "Video stream cache"
+msgid "Video Stream Cache"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31634"
-msgid "Player Process"
+msgid "Player Process Info"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31635"
-msgid "Video source type"
+msgid "Video Source Type"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#32100"
-msgid "Display mode"
+msgid "Display Mode"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2632,17 +2698,17 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31641"
-msgid "Kodi fps"
+msgid "Kodi FPS"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31642"
-msgid "Video decoder|deint"
+msgid "Video Decoder|Deint"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31643"
-msgid "A|V bit rate Mbps"
+msgid "A|V Bit Rate Mbps"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2662,27 +2728,27 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31647"
-msgid "Video source type"
+msgid "Video Source Type"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31648"
-msgid "Video encoding"
+msgid "Video Encoding"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31649"
-msgid "Video colour"
+msgid "Video Colour"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31650"
-msgid "Audio encoding"
+msgid "Audio Encoding"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31651"
-msgid "Audio sampling"
+msgid "Audio Sampling"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2697,12 +2763,12 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31654"
-msgid "VS10 mode"
+msgid "VS10 Mode"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31655"
-msgid "AML fps"
+msgid "AML FPS"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2712,17 +2778,33 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31657"
-msgid "Subtitle name"
+msgid "Subtitle Name"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31658"
-msgid "Pixel format"
+msgid "Pixel Format"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31659"
 msgid "Subtitle language"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Video Queue"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Video Queue Data"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Audio Queue"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Audio Queue Data"
 msgstr ""
 
 msgctxt "#32057"

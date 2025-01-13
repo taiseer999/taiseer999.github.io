@@ -24,7 +24,7 @@
             <font>
                 <name>font_infotag_bold</name>
                 <filename>hacen t.ttf</filename>
-                <size>24</size>
+                <size>27</size>
                 <style>uppercase</style>
             </font>
 
@@ -58,19 +58,19 @@
             <!-- Kodi Logo Font -->
             <font>
                 <name>font_logo</name>
-                <filename>Questrial-Regular.ttf</filename>
+                <filename>LinikSans-SemiBold.ttf</filename>
                 <size>24</size>
             </font>
             <font>
                 <name>font_logo_large</name>
-                <filename>Questrial-Regular.ttf</filename>
+                <filename>LinikSans-SemiBold.ttf</filename>
                 <size>44</size>
             </font>
 
-            <!-- Testing Fonts -->
+             <!-- Testing Fonts -->
             <font>
                 <name>font_debug</name>
-                <filename>GeezaPro.ttf</filename>
+                <filename>GeezaPro-Bold.ttf</filename>
                 <size>25</size>
                 <aspect>$PARAM[aspect_system]</aspect>
             </font>
@@ -94,6 +94,7 @@
                 <style>$PARAM[style_light]</style>
                 <size>80</size>
             </font>
+
             <font>
                 <name>font_title_main_test</name>
                 <filename>RobotoCondensed-Bold.ttf</filename>
@@ -189,7 +190,7 @@
             <!-- Title fonts -->
             <font>
                 <name>font_title_huge</name>
-                <filename>majallab.ttf</filename>
+                <filename>LinikSans-SemiBold.ttf</filename>
                 <style>$PARAM[style_bold]</style>
                 <size>$PARAM[size_heavy_huge_x2]</size>
             </font>

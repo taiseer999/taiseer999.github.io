@@ -2669,7 +2669,7 @@ msgstr ""
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the screen resolution
 msgctxt "#31607"
-msgid "Screen resolution"
+msgid "Screen Resolution"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
