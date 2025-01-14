@@ -799,10 +799,11 @@
                     <onfocus>SetProperty(SideMenu.CurrentName,كوري,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
                 </include>
-                <!-- Sidemenu Widgets for sidemenu 3 الإضافات -->
+                <!-- Sidemenu Widgets for sidemenu 3 Plex -->
+                <!-- Sidemenu Widgets for sidemenu 4 الإضافات -->
                 <include content="Widget_Row">
-                    <param name="id">103601</param>
-                    <param name="groupid">103701</param>
+                    <param name="id">104601</param>
+                    <param name="groupid">104701</param>
                     <param name="label">Video Add-ons</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Square_Row</param>
@@ -818,30 +819,30 @@
                     <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">103801</param>
+                    <param name="positioningid">104801</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">103601</param>
+                        <param name="id">104601</param>
                     </include>
                     <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/video/</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(103601) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(104601) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">103601</param>
+                        <param name="id">104601</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">103601</param>
+                        <param name="id">104601</param>
                     </include>
                     <onfocus>SetProperty(SideMenu.CurrentGUID,guid-3cf57acf,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentName,الإضافات,Home)</onfocus>
-                    <onfocus>SetProperty(SideMenu.CurrentItem,3,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,4,Home)</onfocus>
                 </include>
                 <include content="Widget_Row">
-                    <param name="id">103602</param>
-                    <param name="groupid">103702</param>
+                    <param name="id">104602</param>
+                    <param name="groupid">104702</param>
                     <param name="label">Program Add-ons</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Square_Row</param>
@@ -857,30 +858,30 @@
                     <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">103802</param>
+                    <param name="positioningid">104802</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">103602</param>
+                        <param name="id">104602</param>
                     </include>
                     <content sortby="" sortorder="ascending" target="programs" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/executable/</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(103602) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(104602) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">103602</param>
+                        <param name="id">104602</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">103602</param>
+                        <param name="id">104602</param>
                     </include>
                     <onfocus>SetProperty(SideMenu.CurrentGUID,guid-3cf57acf,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentName,الإضافات,Home)</onfocus>
-                    <onfocus>SetProperty(SideMenu.CurrentItem,3,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,4,Home)</onfocus>
                 </include>
                 <include content="Widget_Row">
-                    <param name="id">103603</param>
-                    <param name="groupid">103703</param>
+                    <param name="id">104603</param>
+                    <param name="groupid">104703</param>
                     <param name="label">الملفات</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Circle_Row</param>
@@ -896,38 +897,38 @@
                     <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">103803</param>
+                    <param name="positioningid">104803</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">103603</param>
+                        <param name="id">104603</param>
                     </include>
                     <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://video/files.xml/</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(103603) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(104603) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">103603</param>
+                        <param name="id">104603</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">103603</param>
+                        <param name="id">104603</param>
                     </include>
                     <onfocus>SetProperty(SideMenu.CurrentGUID,guid-3cf57acf,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentName,الإضافات,Home)</onfocus>
-                    <onfocus>SetProperty(SideMenu.CurrentItem,3,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,4,Home)</onfocus>
                 </include>
                 <include content="Widget_Row">
-                    <param name="id">103604</param>
-                    <param name="groupid">103704</param>
-                    <param name="label">$INFO[Window.Property(WidgetMeta.103603.Label)]</param>
+                    <param name="id">104604</param>
+                    <param name="groupid">104704</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.104603.Label)]</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Circle_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(103603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">Control.HasFocus(103603)</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(104603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(104603)</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
@@ -935,26 +936,26 @@
                     <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">103804</param>
+                    <param name="positioningid">104804</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">103604</param>
+                        <param name="id">104604</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.103603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.103603.FolderPath)]</content>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.104603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.104603.FolderPath)]</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(103604) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(104604) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">103604</param>
+                        <param name="id">104604</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">103604</param>
+                        <param name="id">104604</param>
                     </include>
                     <onfocus>SetProperty(SideMenu.CurrentGUID,guid-3cf57acf,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentName,الإضافات,Home)</onfocus>
-                    <onfocus>SetProperty(SideMenu.CurrentItem,3,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,4,Home)</onfocus>
                 </include>
             </include>
         </include>
@@ -1224,58 +1225,59 @@
             <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(102602)</visible>
         </item>
-        <!-- Sidemenu Widgets for sidemenu 3 الإضافات -->
+        <!-- Sidemenu Widgets for sidemenu 3 Plex -->
+        <!-- Sidemenu Widgets for sidemenu 4 الإضافات -->
         <item>
             <label>Video Add-ons</label>
-            <property name="id">103601</property>
+            <property name="id">104601</property>
             <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(103601)</visible>
+            <visible>Control.IsVisible(104601)</visible>
         </item>
         <item>
             <label>Video Add-ons</label>
-            <property name="id">103601</property>
+            <property name="id">104601</property>
             <property name="include">List_Square_Row</property>
-            <visible>!Control.IsVisible(103601)</visible>
+            <visible>!Control.IsVisible(104601)</visible>
         </item>
         <item>
             <label>Program Add-ons</label>
-            <property name="id">103602</property>
+            <property name="id">104602</property>
             <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(103602)</visible>
+            <visible>Control.IsVisible(104602)</visible>
         </item>
         <item>
             <label>Program Add-ons</label>
-            <property name="id">103602</property>
+            <property name="id">104602</property>
             <property name="include">List_Square_Row</property>
-            <visible>!Control.IsVisible(103602)</visible>
+            <visible>!Control.IsVisible(104602)</visible>
         </item>
         <item>
             <label>الملفات</label>
-            <property name="id">103603</property>
+            <property name="id">104603</property>
             <property name="include">List_Circle_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(103603)</visible>
+            <visible>Control.IsVisible(104603)</visible>
         </item>
         <item>
             <label>الملفات</label>
-            <property name="id">103603</property>
+            <property name="id">104603</property>
             <property name="include">List_Circle_Row</property>
-            <visible>!Control.IsVisible(103603)</visible>
+            <visible>!Control.IsVisible(104603)</visible>
         </item>
         <item>
-            <label>$INFO[Window.Property(WidgetMeta.103603.Label)]</label>
-            <property name="id">103604</property>
+            <label>$INFO[Window.Property(WidgetMeta.104603.Label)]</label>
+            <property name="id">104604</property>
             <property name="include">List_Circle_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(103604)</visible>
+            <visible>Control.IsVisible(104604)</visible>
         </item>
         <item>
-            <label>$INFO[Window.Property(WidgetMeta.103603.Label)]</label>
-            <property name="id">103604</property>
+            <label>$INFO[Window.Property(WidgetMeta.104603.Label)]</label>
+            <property name="id">104604</property>
             <property name="include">List_Circle_Row</property>
-            <visible>!Control.IsVisible(103604)</visible>
+            <visible>!Control.IsVisible(104604)</visible>
         </item>
     </include>
     <!-- Static Mainmenu -->
@@ -1359,13 +1361,38 @@
             <visible>True</visible>
         </item>
         <item>
+            <label>Plex</label>
+            <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fscript.plexmod%2ficon2.png/</icon>
+            <property name="path">RunScript(script.plexmod)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-1330a0a8</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="widget_style"/>
+            <property name="widget_sortby"/>
+            <property name="widget_sortorder"/>
+            <property name="widget_limit"/>
+            <property name="widget_path"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="use_as_widget"/>
+            <label2/>
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <onclick>RunScript(script.plexmod)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
             <label>الإضافات</label>
             <icon>special://skin/extras/icons/appl.png</icon>
             <property name="path">ActivateWindow(addonbrowser)</property>
             <property name="menu">sidemenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[3]</property>
+            <property name="item">$NUMBER[4]</property>
             <property name="guid">guid-3cf57acf</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -1881,6 +1908,20 @@
             <include content="Action_SkinVariables_ShortcutList_Onclick">
                 <param name="id">3302</param>
             </include>
+            <content/>
+            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-1330a0a8)</visible>
+            <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
+        </include>
+        <include content="Hub_Submenu_List">
+            <param name="id">4302</param>
+            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
+            <param name="hidden_button_prefix">4302</param>
+            <param name="window_id">Home</param>
+            <param name="property_window_id">Home</param>
+            <param name="submenu_widget_id">4601</param>
+            <include content="Action_SkinVariables_ShortcutList_Onclick">
+                <param name="id">4302</param>
+            </include>
             <content>
                 <item>
                     <label>Video Add-ons</label>
@@ -1888,12 +1929,12 @@
                     <property name="path">addons://sources/video/</property>
                     <property name="menu">sidemenu</property>
                     <property name="mode">widgets</property>
-                    <property name="node">3</property>
+                    <property name="node">4</property>
                     <property name="item">$NUMBER[0]</property>
                     <property name="guid">guid-1baa5d42</property>
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3601]</property>
+                    <property name="widget_id">$NUMBER[4601]</property>
                     <property name="widget_style">Square</property>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
@@ -1910,12 +1951,12 @@
                     <property name="path">addons://sources/executable/</property>
                     <property name="menu">sidemenu</property>
                     <property name="mode">widgets</property>
-                    <property name="node">3</property>
+                    <property name="node">4</property>
                     <property name="item">$NUMBER[1]</property>
                     <property name="guid">guid-22e2338a</property>
                     <property name="target">programs</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3602]</property>
+                    <property name="widget_id">$NUMBER[4602]</property>
                     <property name="widget_style">Square</property>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
@@ -1932,12 +1973,12 @@
                     <property name="path">library://video/files.xml/</property>
                     <property name="menu">sidemenu</property>
                     <property name="mode">widgets</property>
-                    <property name="node">3</property>
+                    <property name="node">4</property>
                     <property name="item">$NUMBER[2]</property>
                     <property name="guid">guid-9c498aa4</property>
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3603]</property>
+                    <property name="widget_id">$NUMBER[4603]</property>
                     <property name="widget_style">Circle</property>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
@@ -1954,12 +1995,12 @@
                     <property name="path">Stacked_Folder</property>
                     <property name="menu">sidemenu</property>
                     <property name="mode">widgets</property>
-                    <property name="node">3</property>
+                    <property name="node">4</property>
                     <property name="item">$NUMBER[3]</property>
                     <property name="guid">guid-8ceb2698</property>
                     <property name="target"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3604]</property>
+                    <property name="widget_id">$NUMBER[4604]</property>
                     <property name="widget_style">Circle</property>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
@@ -2747,10 +2788,11 @@
                         <param name="id">2602</param>
                     </include>
                 </include>
-                <!-- Standard Widgets for Category sidemenu 3 الإضافات -->
+                <!-- Standard Widgets for Category sidemenu 3 Plex -->
+                <!-- Standard Widgets for Category sidemenu 4 الإضافات -->
                 <include content="Widget_Row">
-                    <param name="id">3601</param>
-                    <param name="groupid">3701</param>
+                    <param name="id">4601</param>
+                    <param name="groupid">4701</param>
                     <param name="label">Video Add-ons</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Square_Row</param>
@@ -2766,27 +2808,27 @@
                     <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">3801</param>
+                    <param name="positioningid">4801</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">3601</param>
+                        <param name="id">4601</param>
                     </include>
                     <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/video/</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3601) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(4601) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3601</param>
+                        <param name="id">4601</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">3601</param>
+                        <param name="id">4601</param>
                     </include>
                 </include>
                 <include content="Widget_Row">
-                    <param name="id">3602</param>
-                    <param name="groupid">3702</param>
+                    <param name="id">4602</param>
+                    <param name="groupid">4702</param>
                     <param name="label">Program Add-ons</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Square_Row</param>
@@ -2802,27 +2844,27 @@
                     <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">3802</param>
+                    <param name="positioningid">4802</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">3602</param>
+                        <param name="id">4602</param>
                     </include>
                     <content sortby="" sortorder="ascending" target="programs" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/executable/</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3602) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(4602) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3602</param>
+                        <param name="id">4602</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">3602</param>
+                        <param name="id">4602</param>
                     </include>
                 </include>
                 <include content="Widget_Row">
-                    <param name="id">3603</param>
-                    <param name="groupid">3703</param>
+                    <param name="id">4603</param>
+                    <param name="groupid">4703</param>
                     <param name="label">الملفات</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Circle_Row</param>
@@ -2838,35 +2880,35 @@
                     <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">3803</param>
+                    <param name="positioningid">4803</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">3603</param>
+                        <param name="id">4603</param>
                     </include>
                     <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://video/files.xml/</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3603) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(4603) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3603</param>
+                        <param name="id">4603</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">3603</param>
+                        <param name="id">4603</param>
                     </include>
                 </include>
                 <include content="Widget_Row">
-                    <param name="id">3604</param>
-                    <param name="groupid">3704</param>
-                    <param name="label">$INFO[Window.Property(WidgetMeta.3603.Label)]</param>
+                    <param name="id">4604</param>
+                    <param name="groupid">4704</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.4603.Label)]</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Circle_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)] + [Control.IsVisible(3603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">Control.HasFocus(3603)</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)] + [Control.IsVisible(4603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(4603)</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
@@ -2874,22 +2916,22 @@
                     <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_positioning">False</param>
-                    <param name="positioningid">3804</param>
+                    <param name="positioningid">4804</param>
                     <param name="positioningtop">0</param>
                     <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
-                        <param name="id">3604</param>
+                        <param name="id">4604</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.3603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.3603.FolderPath)]</content>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.4603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.4603.FolderPath)]</content>
                     <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3604) | System.IdleTime(3)]</param>
+                        <param name="condition">[!Control.HasFocus(4604) | System.IdleTime(3)]</param>
                     </include>
                     <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3604</param>
+                        <param name="id">4604</param>
                     </include>
                     <include content="Action_View_Movement_OnRight">
-                        <param name="id">3604</param>
+                        <param name="id">4604</param>
                     </include>
                 </include>
                 <!-- Global Widgets for sidemenu -->
@@ -3389,58 +3431,59 @@
             <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(2602)</visible>
         </item>
-        <!-- Standard Widgets for Category sidemenu 3 الإضافات -->
+        <!-- Standard Widgets for Category sidemenu 3 Plex -->
+        <!-- Standard Widgets for Category sidemenu 4 الإضافات -->
         <item>
             <label>Video Add-ons</label>
-            <property name="id">3601</property>
+            <property name="id">4601</property>
             <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(3601)</visible>
+            <visible>Control.IsVisible(4601)</visible>
         </item>
         <item>
             <label>Video Add-ons</label>
-            <property name="id">3601</property>
+            <property name="id">4601</property>
             <property name="include">List_Square_Row</property>
-            <visible>!Control.IsVisible(3601)</visible>
+            <visible>!Control.IsVisible(4601)</visible>
         </item>
         <item>
             <label>Program Add-ons</label>
-            <property name="id">3602</property>
+            <property name="id">4602</property>
             <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(3602)</visible>
+            <visible>Control.IsVisible(4602)</visible>
         </item>
         <item>
             <label>Program Add-ons</label>
-            <property name="id">3602</property>
+            <property name="id">4602</property>
             <property name="include">List_Square_Row</property>
-            <visible>!Control.IsVisible(3602)</visible>
+            <visible>!Control.IsVisible(4602)</visible>
         </item>
         <item>
             <label>الملفات</label>
-            <property name="id">3603</property>
+            <property name="id">4603</property>
             <property name="include">List_Circle_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(3603)</visible>
+            <visible>Control.IsVisible(4603)</visible>
         </item>
         <item>
             <label>الملفات</label>
-            <property name="id">3603</property>
+            <property name="id">4603</property>
             <property name="include">List_Circle_Row</property>
-            <visible>!Control.IsVisible(3603)</visible>
+            <visible>!Control.IsVisible(4603)</visible>
         </item>
         <item>
-            <label>$INFO[Window.Property(WidgetMeta.3603.Label)]</label>
-            <property name="id">3604</property>
+            <label>$INFO[Window.Property(WidgetMeta.4603.Label)]</label>
+            <property name="id">4604</property>
             <property name="include">List_Circle_Row</property>
             <property name="visible">True</property>
-            <visible>Control.IsVisible(3604)</visible>
+            <visible>Control.IsVisible(4604)</visible>
         </item>
         <item>
-            <label>$INFO[Window.Property(WidgetMeta.3603.Label)]</label>
-            <property name="id">3604</property>
+            <label>$INFO[Window.Property(WidgetMeta.4603.Label)]</label>
+            <property name="id">4604</property>
             <property name="include">List_Circle_Row</property>
-            <visible>!Control.IsVisible(3604)</visible>
+            <visible>!Control.IsVisible(4604)</visible>
         </item>
         <!-- Global Widgets for sidemenu -->
     </include>
@@ -4768,13 +4811,28 @@
             <visible>True</visible>
         </item>
         <item>
+            <label>تغير المظهر</label>
+            <icon>special://skin/extras/icons/ss.png</icon>
+            <property name="path">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[1]</property>
+            <property name="guid">guid-aebceaab</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
             <label>لون الخط (اعد التحميل)</label>
             <icon>special://skin/extras/icons/paint-roller.png</icon>
             <property name="path">Skin.ToggleSetting(Furniture.ViewLineColour)</property>
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[1]</property>
+            <property name="item">$NUMBER[2]</property>
             <property name="guid">guid-0251ad3f</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4789,7 +4847,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[2]</property>
+            <property name="item">$NUMBER[3]</property>
             <property name="guid">guid-4a37b1d3</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4804,7 +4862,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[3]</property>
+            <property name="item">$NUMBER[4]</property>
             <property name="guid">guid-44cdbd43</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4819,7 +4877,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[4]</property>
+            <property name="item">$NUMBER[5]</property>
             <property name="guid">guid-37a73973</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4834,12 +4892,27 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[5]</property>
+            <property name="item">$NUMBER[6]</property>
             <property name="guid">guid-f7767dcf</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
             <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
             <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=dir_settings)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>CoreELEC اعداد</label>
+            <icon>special://skin/extras/icons/coreelec1.png</icon>
+            <property name="path">RunScript(service.coreelec.settings)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[7]</property>
+            <property name="guid">guid-7eff743e</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>RunScript(service.coreelec.settings)</onclick>
             <visible>True</visible>
         </item>
         <item>
@@ -4849,7 +4922,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[6]</property>
+            <property name="item">$NUMBER[8]</property>
             <property name="guid">guid-03ca4862</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4864,7 +4937,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[7]</property>
+            <property name="item">$NUMBER[9]</property>
             <property name="guid">guid-1f9e232b</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4906,13 +4979,43 @@
             <visible>True</visible>
         </item>
         <item>
+            <label>Reboot</label>
+            <icon>special://skin/extras/icons/coreelec.png</icon>
+            <property name="path">Reboot</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-75f0e072</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>Reboot</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
+            <label>Android</label>
+            <icon>special://skin/extras/icons/RTA.png</icon>
+            <property name="path">RunScript(script.reboottoandroidtv)</property>
+            <property name="menu">options-tray</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[4]</property>
+            <property name="guid">guid-e518cef2</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick>Close</onclick>
+            <onclick>RunScript(script.reboottoandroidtv)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
             <label>Power</label>
             <icon>special://skin/extras/icons/power.png</icon>
             <property name="path">Powerdown</property>
             <property name="menu">options-tray</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[3]</property>
+            <property name="item">$NUMBER[5]</property>
             <property name="guid">guid-d0d5bac5</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -4993,13 +5096,35 @@
             <visible>True</visible>
         </item>
         <item>
+            <label>Plex</label>
+            <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fscript.plexmod%2ficon2.png/</icon>
+            <property name="path">RunScript(script.plexmod)</property>
+            <property name="menu">sidemenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[3]</property>
+            <property name="guid">guid-1330a0a8</property>
+            <property name="target"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <property name="expression"/>
+            <property name="spotlight_path"/>
+            <property name="spotlight_target"/>
+            <property name="spotlight_label"/>
+            <property name="sidemenu_path">plugin://script.skinvariables/?info=get_shortcuts_node&amp;menu=sidemenu-customnode-guid-1330a0a8$VAR[Path_SkinVariables_SkinFolder,&amp;skin=,]</property>
+            <property name="sidemenu_target"/>
+            <property name="widgets_first_id">$VAR[skinvariables-sidemenu-itemfocus-103]</property>
+            <!-- <property name="widgets_first_id">$NUMBER[103601]</property> -->
+            <onclick>RunScript(script.plexmod)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
             <label>الإضافات</label>
             <icon>special://skin/extras/icons/appl.png</icon>
             <property name="path">ActivateWindow(addonbrowser)</property>
             <property name="menu">sidemenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[3]</property>
+            <property name="item">$NUMBER[4]</property>
             <property name="guid">guid-3cf57acf</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -5009,8 +5134,8 @@
             <property name="spotlight_label"/>
             <property name="sidemenu_path">plugin://script.skinvariables/?info=get_shortcuts_node&amp;menu=sidemenu-customnode-guid-3cf57acf$VAR[Path_SkinVariables_SkinFolder,&amp;skin=,]</property>
             <property name="sidemenu_target"/>
-            <property name="widgets_first_id">$VAR[skinvariables-sidemenu-itemfocus-103]</property>
-            <!-- <property name="widgets_first_id">$NUMBER[103601]</property> -->
+            <property name="widgets_first_id">$VAR[skinvariables-sidemenu-itemfocus-104]</property>
+            <!-- <property name="widgets_first_id">$NUMBER[104601]</property> -->
             <onclick>ActivateWindow(addonbrowser)</onclick>
             <visible>True</visible>
         </item>
@@ -5047,12 +5172,16 @@
         <value condition="Control.IsVisible(102602)">102602</value>
         <value>400</value>
     </variable>
-    <!-- Variables for Side Menu الإضافات focus -->
+    <!-- Variables for Side Menu Plex focus -->
     <variable name="skinvariables-sidemenu-itemfocus-103">
-        <value condition="Control.IsVisible(103601)">103601</value>
-        <value condition="Control.IsVisible(103602)">103602</value>
-        <value condition="Control.IsVisible(103603)">103603</value>
-        <value condition="Control.IsVisible(103604)">103604</value>
+        <value>400</value>
+    </variable>
+    <!-- Variables for Side Menu الإضافات focus -->
+    <variable name="skinvariables-sidemenu-itemfocus-104">
+        <value condition="Control.IsVisible(104601)">104601</value>
+        <value condition="Control.IsVisible(104602)">104602</value>
+        <value condition="Control.IsVisible(104603)">104603</value>
+        <value condition="Control.IsVisible(104604)">104604</value>
         <value>400</value>
     </variable>
     <!-- Search Extended -->
