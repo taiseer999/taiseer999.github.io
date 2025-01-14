@@ -1069,11 +1069,11 @@
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1380</left>
-				<top>-210</top>
+				<top>-220</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="label"> <!-- Display mode -->
 					<width>480</width>
-					<height>30</height>
+					<height>33</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32100]:[/COLOR] $INFO[Player.Process(amlogic.displaymode)]</label>
 					<font>font_debug</font>
@@ -1082,7 +1082,7 @@
 				</control>
 				<control type="label"> <!-- EOTF & Gamut -->
 					<width>480</width>
-					<height>30</height>
+					<height>33</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32101]:[/COLOR] $INFO[Player.Process(amlogic.eoft_gamut)]</label>
 					<font>font_debug</font>
@@ -1091,7 +1091,7 @@
 				</control>
 				<control type="label"> <!-- Dolby Vision Profile -->
 					<width>480</width>
-					<height>30</height>
+					<height>33</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31653]:[/COLOR] $VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR FFffffff][,][/COLOR]]</label>
 					<font>font_debug</font>
@@ -1101,7 +1101,7 @@
 				</control>
 				<control type="label"> <!-- Dolby Vision Metadata -->
 					<width>480</width>
-					<height>30</height>
+					<height>33</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31656]:[/COLOR] $INFO[Player.Process(video.dovi.meta.version)]</label>
 					<font>font_debug</font>
@@ -1111,7 +1111,7 @@
 				</control>
 				<control type="label"> <!-- VS10 mode -->
 					<width>480</width>
-					<height>30</height>
+					<height>33</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31654]:[/COLOR] $VAR[DVVS10Var]</label>
 					<font>font_debug</font>
@@ -1121,7 +1121,7 @@
 				</control>
 				<control type="label"> <!--Pixel format -->
 					<width>480</width>
-					<height>30</height>
+					<height>33</height>
 					<aligny>bottom</aligny>
 					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31658]:[/COLOR] $INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR FFffffff][,][/COLOR]]</label>
 					<font>font_debug</font>
@@ -1141,7 +1141,7 @@
 				 <!-- Video queue -->
                 <control type="label">
                     <width>480</width>
-					<height>30</height>
+					<height>33</height>
                     <label>[COLOR green]$LOCALIZE[32008]:[/COLOR] $INFO[Player.Process(video.queue.level)]%</label>
                     <font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
@@ -1149,7 +1149,7 @@
                 <!-- Video queue data -->
                 <control type="label">
                     <width>480</width>
-					<height>30</height>
+					<height>33</height>
                     <label>[COLOR green]$LOCALIZE[32009]:[/COLOR] $INFO[Player.Process(video.queue.data.level)]%</label>
                     <font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
@@ -1157,7 +1157,7 @@
 				 <!-- Audio queue data -->
                 <control type="label">
                     <width>480</width>
-					<height>30</height>
+					<height>33</height>
                     <label>[COLOR green]$LOCALIZE[32011]:[/COLOR]$INFO[Player.Process(audio.queue.data.level)]%</label>
                     <font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
@@ -1165,7 +1165,7 @@
 				 <!-- Audio queue -->
                 <control type="label">
                     <width>480</width>
-					<height>30</height>
+					<height>33</height>
                     <label>[COLOR green]$LOCALIZE[32010]:[/COLOR] $INFO[Player.Process(audio.queue.level)]%</label>
                     <font>font_debug</font>
 					<textcolor>FFffffff</textcolor>

@@ -2758,7 +2758,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31653"
-msgid "Dolby Vision Profile"
+msgid "DV Profile"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2778,7 +2778,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31657"
-msgid "Subtitle Name"
+msgid "Sub Name"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2788,7 +2788,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31659"
-msgid "Subtitle language"
+msgid "Sub language"
 msgstr ""
 
 msgctxt "#32008"

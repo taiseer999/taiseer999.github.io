@@ -126,7 +126,7 @@
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.30</param>
             <param name="plot_linespacing_main">0.9</param>
-            <param name="plot_linespacing_mini">0.1</param>
+            <param name="plot_linespacing_mini">1.1</param>
             <param name="plot_linespacing_tiny">1.07</param>
         </include>
     </fontset>
@@ -138,10 +138,10 @@
             <param name="font_bold">Hacen-Promoter.ttf</param>
             <param name="font_regular">Hacen-Promoter -reg.ttf</param>
             <param name="font_light">Hacen-Promoter -reg.ttf</param>
-             <param name="plot_linespacing_head">0.8</param>
-            <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.15</param>
-            <param name="plot_linespacing_mini">1.2</param>
+             <param name="plot_linespacing_head">1.0</param>
+            <param name="plot_linespacing_midi">1.33</param>
+            <param name="plot_linespacing_main">1.3</param>
+            <param name="plot_linespacing_mini">1.33</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">29</param>
         <param name="size_light_main">29</param>
