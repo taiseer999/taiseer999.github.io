@@ -1001,7 +1001,7 @@
 					<width>600</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var] $VAR[AudioAtmos]$VAR[AudioDTS]</label>
+					<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var] $VAR[ObjectAudio]</label>
 					<font>font_debug</font>
 					<textcolor>FFffffff</textcolor>
 				</control>
