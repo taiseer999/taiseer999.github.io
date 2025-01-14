@@ -2777,7 +2777,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31649"
-msgid "Video Colour"
+msgid "Video Color"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2797,7 +2797,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31653"
-msgid "Dolby Vision Profile"
+msgid "DV Profile"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2812,12 +2812,12 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31656"
-msgid "Dolby Vision Metadata"
+msgid "DV Metadata"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31657"
-msgid "Subtitle Name"
+msgid "Sub Name"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -2827,7 +2827,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31659"
-msgid "Subtitle language"
+msgid "Sub language"
 msgstr ""
 
 msgctxt "#32008"
@@ -2885,4 +2885,40 @@ msgstr ""
 
 msgctxt "#32066"
 msgid "Coloured title lines in PlayerProcessInfo"
+msgstr ""
+
+msgctxt "#32067"
+msgid "Switch Skin"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Highlight Text Color change"
+msgstr ""
+
+msgctxt "#32069"
+msgid "Account Manager"
+msgstr ""
+
+msgctxt "#32070"
+msgid "TMDB Helper Settings"
+msgstr ""
+
+msgctxt "#32071"
+msgid "CoreELEC Settings"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Tools"
+msgstr ""
+
+msgctxt "#32073"
+msgid "Sorted"
+msgstr ""
+
+msgctxt "#32074"
+msgid "My Movies"
+msgstr ""
+
+msgctxt "#32075"
+msgid "My TV Shows"
 msgstr ""

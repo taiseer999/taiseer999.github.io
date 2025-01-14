@@ -2846,3 +2846,39 @@ msgstr "VS10 mode"
 msgctxt "#32066"
 msgid "Coloured title lines in PlayerProcessInfo"
 msgstr ""
+
+msgctxt "#32067"
+msgid "Switch Skin"
+msgstr "التحول لمظهر اخر"
+
+msgctxt "#32068"
+msgid "Highlight Text Color change"
+msgstr "تغير لون الخط"
+
+msgctxt "#32069"
+msgid "Account Manager"
+msgstr "توثيق الحسابات"
+
+msgctxt "#32070"
+msgid "TMDB Helper Settings"
+msgstr "اعدادت TMDB Helper"
+
+msgctxt "#32071"
+msgid "CoreELEC Settings"
+msgstr "اعدادت CoreELEC"
+
+msgctxt "#32072"
+msgid "Tools"
+msgstr "ادوات"
+
+msgctxt "#32073"
+msgid "Sorted"
+msgstr "التصنيف"
+
+msgctxt "#32074"
+msgid "My Movies"
+msgstr "أفلامي"
+
+msgctxt "#32075"
+msgid "My TV Shows"
+msgstr "مسلسلاتي"
