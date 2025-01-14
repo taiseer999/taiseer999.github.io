@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<depth>DepthOSD</depth>
@@ -1006,7 +1007,7 @@
 					<width>600</width>
 					<height>40</height>
 					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var] $VAR[AudioAtmos]$VAR[AudioDTS]</label>
+					<label>[COLOR button_focus]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var] $VAR[ObjectAudio]</label>
 					<font>font12</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
