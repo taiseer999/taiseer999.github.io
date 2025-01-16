@@ -30,10 +30,10 @@
             <param name="font_light">PFDinTextArabic-Medium.ttf</param>
             <param name="plot_linespacing_head">1.1</param>
             <param name="plot_linespacing_midi">1.3</param>
-            <param name="plot_linespacing_main">0.9</param>
+            <param name="plot_linespacing_main">0.93</param>
             <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">31</param>
+        <param name="size_heavy_main">30</param>
         <param name="size_light_main">30</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
@@ -46,15 +46,15 @@
         <include content="Font_Default">
             <param name="font_black">GeezaPro-Bold.ttf</param>
             <param name="font_bold">GeezaPro-Bold.ttf</param>
-            <param name="font_regular">GeezaPro.ttf</param>
+            <param name="font_regular">GeezaPro-Bold.ttf</param>
             <param name="font_light">GeezaPro.ttf</param>
             <param name="plot_linespacing_head">1.1</param>
             <param name="plot_linespacing_midi">1.3</param>
-            <param name="plot_linespacing_main">1.08</param>
+            <param name="plot_linespacing_main">1.2</param>
             <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">30</param>
-        <param name="size_light_main">30</param>
+        <param name="size_heavy_main">28</param>
+        <param name="size_light_main">28</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>    
         </include>
@@ -65,7 +65,7 @@
         <include content="Font_Default">
             <param name="font_black">Figtree-Bold.ttf</param>
             <param name="font_bold">Figtree-Bold.ttf</param>
-            <param name="font_regular">Figtree-Regular.ttf</param>
+            <param name="font_regular">Figtree-Bold.ttf</param>
             <param name="font_light">Figtree-Light.ttf</param>
             <param name="plot_linespacing_head">1.21</param>
             <param name="plot_linespacing_midi">1.43</param>
@@ -99,13 +99,13 @@
             <param name="font_bold">majallab.ttf</param>
             <param name="font_regular">majallab.ttf</param>
             <param name="font_light">majallab.ttf</param>
-            <param name="size_heavy_main">30</param>
-        <param name="size_light_main">28</param>
+            <param name="size_heavy_main">28</param>
+        <param name="size_light_main">26</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param> 
             <param name="plot_linespacing_head">1.0</param>
             <param name="plot_linespacing_midi">1.30</param>
-            <param name="plot_linespacing_main">1.0</param>
+            <param name="plot_linespacing_main">1.12</param>
             <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
         </include>	
@@ -119,13 +119,13 @@
             <param name="font_bold">AmazonEmberV2-Bold.ttf</param>
             <param name="font_regular">AmazonEmberV2-Bold.ttf</param>
             <param name="font_light">AmazonEmberV2-Medium.ttf</param>
-            <param name="size_heavy_main">31</param>
-        <param name="size_light_main">31</param>
+            <param name="size_heavy_main">27</param>
+        <param name="size_light_main">27</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param> 
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.30</param>
-            <param name="plot_linespacing_main">0.9</param>
+            <param name="plot_linespacing_main">1.0</param>
             <param name="plot_linespacing_mini">0.1</param>
             <param name="plot_linespacing_tiny">1.07</param>
         </include>
@@ -140,11 +140,11 @@
             <param name="font_light">Hacen-Promoter -reg.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.15</param>
+            <param name="plot_linespacing_main">1.28</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">29</param>
-        <param name="size_light_main">29</param>
+        <param name="size_heavy_main">28</param>
+        <param name="size_light_main">27</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
         </include>
