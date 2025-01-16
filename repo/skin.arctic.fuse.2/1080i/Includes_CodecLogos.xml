@@ -181,7 +181,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -191,7 +191,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -201,7 +201,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -241,7 +241,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>140</top>
                 <left>30</left>
                 <control type="image">
@@ -261,7 +261,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -271,7 +271,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>140</top>
                 <left>30</left>
                 <control type="image">
@@ -490,7 +490,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -500,7 +500,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -510,7 +510,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -550,7 +550,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -570,7 +570,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>62</top>
                 <left>30</left>
                 <control type="image">
@@ -580,7 +580,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -777,7 +777,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -787,7 +787,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -797,7 +797,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -837,7 +837,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -857,7 +857,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>62</top>
                 <left>30</left>
                 <control type="image">
@@ -867,7 +867,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -1070,7 +1070,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1080,7 +1080,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1090,7 +1090,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1130,7 +1130,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -1150,7 +1150,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>62</top>
                 <left>30</left>
                 <control type="image">
@@ -1160,7 +1160,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -1373,7 +1373,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -1383,7 +1383,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -1393,7 +1393,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
@@ -1433,7 +1433,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>140</top>
                 <left>30</left>
                 <control type="image">
@@ -1453,7 +1453,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>147</top>
                 <left>30</left>
                 <control type="image">
@@ -1463,7 +1463,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>140</top>
                 <left>30</left>
                 <control type="image">
@@ -1682,7 +1682,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1692,7 +1692,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
+                <visible>!String.IsEqual(VideoPlayer.AudioCodec,eac3) + String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1702,7 +1702,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd) + !String.Contains(Player.Process(audio.is.dolby.atmos), Atmos)</visible>
                 <top>50</top>
                 <left>30</left>
                 <control type="image">
@@ -1742,7 +1742,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + !String.Contains(Player.Process(audio.dts.x.type), DTS) + !String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
@@ -1762,7 +1762,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), DTS)</visible>
                 <top>62</top>
                 <left>30</left>
                 <control type="image">
@@ -1772,7 +1772,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) + String.Contains(Player.Process(audio.dts.x.type), IMAX)</visible>
                 <top>55</top>
                 <left>30</left>
                 <control type="image">
