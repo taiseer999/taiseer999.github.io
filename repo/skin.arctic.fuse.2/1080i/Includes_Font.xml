@@ -58,13 +58,13 @@
             <!-- Kodi Logo Font -->
             <font>
                 <name>font_logo</name>
-                <filename>LinikSans-SemiBold.ttf</filename>
+                <filename>Questrial-Regular.ttf</filename>
                 <size>24</size>
             </font>
             <font>
                 <name>font_logo_large</name>
-                <filename>LinikSans-SemiBold.ttf</filename>
-                <size>44</size>
+                <filename>Questrial-Regular.ttf</filename>
+                <size>50</size>
             </font>
 
              <!-- Testing Fonts -->
@@ -190,7 +190,7 @@
             <!-- Title fonts -->
             <font>
                 <name>font_title_huge</name>
-                <filename>LinikSans-SemiBold.ttf</filename>
+                <filename>Roboto-Black.ttf</filename>
                 <style>$PARAM[style_bold]</style>
                 <size>$PARAM[size_heavy_huge_x2]</size>
             </font>
@@ -324,12 +324,12 @@
             <font>
                 <name>font12</name>
                 <filename>$PARAM[font_regular]</filename>
-                <size>$PARAM[size_light_mini]</size>
+                <size>$PARAM[size_light_tiny]</size>
             </font>
             <font>
                 <name>font13</name>
                 <filename>$PARAM[font_regular]</filename>
-                <size>$PARAM[size_light_main]</size>
+                <size>$PARAM[size_light_tiny]</size>
             </font>
             <font>
                 <name>font14</name>
