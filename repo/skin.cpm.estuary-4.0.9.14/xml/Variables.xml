@@ -905,7 +905,7 @@
 	</variable>
 	<variable name="ObjectAudio">
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">[COLOR lightgreen]Atmos[/COLOR]</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)"[COLOR lightgreen]>Atmos[/COLOR]</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">[COLOR lightgreen]Atmos[/COLOR]</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">[COLOR lightgreen]DTS:X[/COLOR]</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">[COLOR lightgreen]IMAX[/COLOR]</value>
 	</variable>
