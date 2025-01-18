@@ -36,13 +36,14 @@ class MFDebrid:
 				select = selectDialog([i[0] for i in self.services.values()])
 				if select < 0: return
 				provider, debrid, token = self.services[select]
-				if not (debrid and token): return
-				token = getSetting(token)
-				self.params['streaming_provider'] = {
-					'token': token, 'service': debrid, 'only_show_cached_streams': True
-				}
-				path = requests.post(self.encr_url, json=self.params, timeout=timeout)
-				path = path.json()['encrypted_str']
+				if debrid and token:
+					token = getSetting(token)
+					self.params['streaming_provider'] = {
+						'token': token, 'service': debrid, 'only_show_cached_streams': True
+					}
+					path = requests.post(self.encr_url, json=self.params, timeout=timeout)
+					path = path.json()['encrypted_str']
+				else: path = ''
 			params = path.replace(url, '').replace('manifest.json', '').strip('/')
 			setSetting(f"{self.name.lower()}.token", str(params))
 			setSetting(f"{self.name.lower()}.url", str(url))

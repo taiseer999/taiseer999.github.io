@@ -9,6 +9,7 @@
 - nyaa in Sources/Torrents sourced from website results.
 
   [COLOR dodgerblue][B]Version 4.12[/B][/COLOR]
+- Added "Reset All Views" to Set Views menu.
 - Added setting "Custom Fanart Image", affects most main menu items.
 - Added aiostreams.
 - Removed comet.

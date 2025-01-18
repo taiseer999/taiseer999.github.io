@@ -275,6 +275,26 @@ def set_view_mode(view_type, content='files'):
 		if view_id: execute_builtin('Container.SetViewMode(%s)' % view_id)
 	except: return
 
+def clear_view(view_type):
+	if not confirm_dialog(): return
+	try:
+		dbcon = database.connect(views_db, timeout=40.0, isolation_level=None)
+		dbcur = dbcon.cursor()
+		dbcur.execute("""PRAGMA synchronous = OFF""")
+		dbcur.execute("""PRAGMA journal_mode = OFF""")
+		dbcur.execute("""SELECT view_type FROM views""")
+		for item in dbcur.fetchall():
+			dbcur.execute("""DELETE FROM views WHERE view_type = ?""", (item[0],))
+			clear_property('pov_%s' % item[0])
+		kodi_db = translate_path('special://home/userdata/Database/ViewModes6.db')
+		dbcon = database.connect(kodi_db)
+		dbcur = dbcon.cursor()
+		dbcur.execute("""DELETE FROM view WHERE path LIKE 'plugin://plugin.video.pov/%'""")
+		dbcur.connection.commit()
+		dbcur.connection.close()
+	except: return notification(32574, 1500)
+	notification(32576, 1500)
+
 def timeIt(func):
 	# Thanks to 123Venom
 	import time
@@ -323,7 +343,7 @@ def focus_index(index, sleep_time=100):
 
 def clean_settings_window_properties():
 	clear_property('pov_settings')
-	notification(32576, 2000)
+	notification(32576, 1500)
 
 def fetch_kodi_imagecache(image):
 	result = None
@@ -461,8 +481,8 @@ def clean_settings():
 			line3 = local_string(32813) % len(removed_settings)
 #			progressDialog.update(percent, '[CR]%s[CR]%s' % (line2, line3))
 #			sleep(500)
-		except: notification(32574, 2000)
-		notification(line3, 2000) if removed_settings else notification(32576, 2000)
+		except: notification(32574, 1500)
+		notification(line3, 1500) if removed_settings else notification(32576, 1500)
 #	progressDialog.close()
 
 def new_settings():
@@ -508,8 +528,8 @@ def new_settings():
 			content += '\n</settings>'
 			with open_file(settings_xml, 'w') as xml_file: xml_file.write(content)
 			line3 = local_string(32813) % len(current_settings)
-		except: notification(32574, 2000)
-		notification(line3, 2000) if current_settings else notification(32576, 2000)
+		except: notification(32574, 1500)
+		notification(line3, 1500) if current_settings else notification(32576, 1500)
 
 def upload_logfile():
 	# Thanks 123Venom

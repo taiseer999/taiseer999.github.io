@@ -330,6 +330,8 @@ def routing(params):
 			kodi_utils.choose_view(params['view_type'], params_get('content', ''))
 		elif mode == 'set_view':
 			kodi_utils.set_view(params['view_type'])
+		elif mode == 'clear_view':
+			kodi_utils.clear_view(params['view_type'])
 	##EXTRA modes##
 	elif mode == 'get_search_term':
 		from indexers.history import get_search_term

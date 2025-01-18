@@ -109,7 +109,7 @@ def clean_databases(current_time=None, database_check=True, silent=False):
 		except: pass
 	limit_metacache_database()
 	remove_old_packages()
-	if not silent: kodi_utils.notification(32576, 2000)
+	if not silent: kodi_utils.notification(32576, 1500)
 
 def limit_metacache_database(max_size=50):
 	with kodi_utils.open_file(metacache_db) as f: s = f.size()
@@ -188,7 +188,7 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from caches.main_cache import main_cache
 		main_cache.delete_all_lists()
-	if not silent and success: kodi_utils.notification(32576, 2000)
+	if not silent and success: kodi_utils.notification(32576, 1500)
 
 def clear_all_cache():
 	if not kodi_utils.confirm_dialog(): return
@@ -213,6 +213,6 @@ def clear_all_cache():
 			kodi_utils.progressDialog.update(int(count / len(caches) * 100), line % (ls(32816), cache_label))
 			clear_cache(cache_type, silent=True)
 			kodi_utils.sleep(200)
-		except: kodi_utils.notification(32574, 2000)
+		except: kodi_utils.notification(32574, 1500)
 	kodi_utils.progressDialog.close()
 

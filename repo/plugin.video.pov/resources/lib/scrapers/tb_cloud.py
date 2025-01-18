@@ -59,7 +59,7 @@ class source:
 			files = []
 			try: files = [
 				{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': mediatype}
-				for i in function(check_cache=False) if i['download_finished']
+				for i in function(check_cache=False) if i['download_finished'] and i['files']
 				for file in i['files'] if file['short_name'].lower().endswith(tuple(extensions))
 			]
 			except: pass
