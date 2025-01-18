@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<depth>DepthOSD</depth>
@@ -837,314 +838,699 @@
 					</control>
 				</control>
 			</control>
+			
 			<!-- Player Left -->
 			<control type="grouplist">
-				<left>60</left>
+				<left>50</left>
 				<top>-204</top>
 				<visible>Control.HasFocus(5553)</visible>
-				<control type="label"> <!-- Screen resolution -->
-					<width>620</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31607]:[/COLOR] $INFO[System.ScreenResolution]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-				</control>
-				<control type="label"> <!-- Kodi fps -->
-					<width>620</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31641]:[/COLOR] $INFO[System.FPS]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-				</control>
-				<control type="label"> <!-- Video decoder|deinterlace -->
-					<width>620</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31642]:[/COLOR] $INFO[Player.Process(videodecoder), ]$VAR[VideoHWDecoder, (,)] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>Player.HasVideo</visible>
-				</control>
-				<control type="group"> <!-- A|V bit rate -->
-					<width>620</width>
+
+				<control type="group"> <!-- Screen resolution -->
+					<width>640</width>
 					<height>40</height>
 					<control type="label">
-						<width>400</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>left</align>
-						<label>[COLOR button_focus]$LOCALIZE[31643]:[/COLOR] $INFO[Player.Process(audio.live.mibit.rate),,] $VAR[|] $INFO[Player.Process(video.live.mibit.rate),,]</label>
-						<font>font12</font>
-						<shadowcolor>black</shadowcolor>
-					</control>
-					<control type="label">
-						<left>400</left>
 						<width>220</width>
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
+						<label>[COLOR button_focus]$LOCALIZE[31607]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>420</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[System.ScreenResolution]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
-				<control type="label"> <!-- Cache -->
-					<width>620</width>
+
+				<control type="group"> <!-- Kodi fps -->
+					<width>640</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31644]:[/COLOR] $INFO[Player.CacheLevel,,%]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31641]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>420</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[System.FPS]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
+
+				<control type="group"> <!-- Video decoder|deinterlace -->
+					<width>640</width>
+					<height>40</height>
+					<control type="label">
+						<width>250</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31642]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>250</left>
+						<width>390</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(videodecoder), ]$VAR[VideoHWDecoder, (,)] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+				</control>
+
+				<control type="group"> <!-- A|V bit rate -->
+					<width>640</width>
+					<height>40</height>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31643]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>240</left>
+						<width>200</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>440</left>
+						<width>200</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(audio.live.mibit.rate),,] $VAR[|] $INFO[Player.Process(video.live.mibit.rate),,]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+				</control>
+
+				<control type="group"> <!-- Cache -->
+					<width>640</width>
+					<height>40</height>
+					<control type="label">
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31644]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>240</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.CacheLevel,,%]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+				</control>
+
 				<control type="progress">
 					<description>CACHE BAR</description>
-					<width>620</width>
+					<width>640</width>
 					<height>8</height>
 					<info>Player.CacheLevel</info>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
 					<midtexture border="3" colordiffuse="button_focus">colors/white.png</midtexture>
 				</control>
-				<control type="label"> <!-- Memory -->
-					<width>620</width>
+
+				<control type="group"> <!-- Memory -->
+					<width>640</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31645]:[/COLOR] $INFO[system.memory(used.percent)] [COLOR dimgrey]([/COLOR]$INFO[system.memory(used)] [COLOR dimgrey]/[/COLOR] $INFO[system.memory(total)][COLOR dimgrey])[/COLOR]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
+					<control type="label">
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31645]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>240</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[system.memory(used.percent)] [COLOR dimgrey]([/COLOR]$INFO[system.memory(used)] [COLOR dimgrey]/[/COLOR] $INFO[system.memory(total)][COLOR dimgrey])[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
+
 				<control type="progress">
 					<description>RAM BAR</description>
-					<width>620</width>
+					<width>640</width>
 					<height>8</height>
 					<info>system.memory(used)</info>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
 					<midtexture border="3" colordiffuse="button_focus">colors/white.png</midtexture>
 				</control>
-				<control type="label"> <!-- CPU -->
-					<width>620</width>
+
+				<control type="group"> <!-- CPU Usage -->
+					<width>640</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31646] %:[/COLOR] $INFO[System.CpuAltUsage]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>System.SupportsCPUUsage</visible>
+					<control type="label">
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31646] %:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>240</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[System.CpuAltUsage]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
+
 				<control type="progress">
 					<description>CPU BAR</description>
-					<width>620</width>
+					<width>640</width>
 					<height>8</height>
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
 					<midtexture border="3" colordiffuse="button_focus">colors/white.png</midtexture>
 				</control>
-				<control type="label"> <!-- CPU -->
-					<width>620</width>
+
+				<control type="group"> <!-- CPU -->
+					<width>640</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31646]:[/COLOR] $INFO[System.CpuFrequency] $VAR[|] $INFO[System.CPUTemperature]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
+					<control type="label">
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31646]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>240</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[System.CpuFrequency] $VAR[|] $INFO[System.CPUTemperature]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
+
 			</control>
 			<!-- Player Middle -->
 			<control type="grouplist">
-				<left>730</left>
+				<left>710</left>
 				<top>-204</top>
 				<visible>Control.HasFocus(5553)</visible>
-				<control type="label"> <!-- Video source type -->
-					<width>600</width>
+
+				<control type="group"> <!-- Video source type -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31647]:[/COLOR] $INFO[Player.Process(video.source.hdr.type)]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
-					<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31647]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label"> <!-- SDR -->
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+					</control>
+					<control type="label"> <!-- HDR -->
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.source.hdr.type)] $VAR[|] [COLOR dimgrey]$INFO[Player.Process(video.source.additional.hdr.type)][/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+					</control>
 				</control>
-				<control type="label"> <!-- Video source type -->
-					<width>600</width>
+
+				<control type="group"> <!-- Video encoding 1 -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31647]:[/COLOR] $INFO[Player.Process(video.source.hdr.type)] $VAR[|] [COLOR dimgrey]$INFO[Player.Process(video.source.additional.hdr.type)][/COLOR]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
-					<visible>!String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31648]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.VideoCodec] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[VideoPlayer.VideoAspect]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Video encoding -->
-					<width>600</width>
+
+				<control type="group"> <!-- Video encoding 2 -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31648]:[/COLOR] $INFO[VideoPlayer.VideoCodec] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[VideoPlayer.VideoAspect]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31648]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Video encoding -->
-					<width>600</width>
+
+				<control type="group"> <!-- Video colour -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31648]:[/COLOR] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>200</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31649]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>200</left>
+						<width>420</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$VAR[ColourVar]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Video colour -->
-					<width>600</width>
+
+				<control type="group"> <!-- Audio encoding -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31649]:[/COLOR] $VAR[ColourVar]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31650]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$VAR[AudioCodec1Var]$VAR[AudioChannels1Var, ]$VAR[ObjectAudio, ]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Audio encoding -->
-					<width>600</width>
+
+				<control type="group"> <!-- Audio sampling -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31650]:[/COLOR] $VAR[AudioCodec1Var] $VAR[AudioChannels1Var] $VAR[ObjectAudio]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31651]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Audio sampling -->
-					<width>600</width>
+
+				<control type="group"> <!-- Audio language -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31651]:[/COLOR] $INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-				</control>
-				<control type="label"> <!-- Audio language -->
-					<width>600</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31652]:[/COLOR] $INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>!String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31652]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Subtitle language -->
-					<width>600</width>
+
+				<control type="group"> <!-- Subtitle language -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[21448]:[/COLOR] $INFO[VideoPlayer.SubtitlesLanguage] $VAR[|] $INFO[VideoPlayer.SubtitlesLangEx]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>VideoPlayer.SubtitlesEnabled</visible>
 					<visible>VideoPlayer.HasSubtitles</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[21448]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.SubtitlesLanguage] $VAR[|] $INFO[VideoPlayer.SubtitlesLangEx]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>VideoPlayer.SubtitlesEnabled</visible>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLanguage][/COLOR] $VAR[|] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLangEx][/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>!VideoPlayer.SubtitlesEnabled</visible>
+					</control>
 				</control>
-				<control type="label">
-					<width>600</width>
+
+				<control type="group"> <!-- Subtitle name -->
+					<width>620</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[21448]:[/COLOR] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLanguage][/COLOR] $VAR[|] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLangEx][/COLOR]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>!VideoPlayer.SubtitlesEnabled</visible>
-					<visible>VideoPlayer.HasSubtitles</visible>
-				</control>
-				<control type="label"> <!-- Subtitle name -->
-					<width>600</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31657]:[/COLOR] $INFO[VideoPlayer.SubtitlesName]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>VideoPlayer.SubtitlesEnabled</visible>
 					<visible>VideoPlayer.HasSubtitles</visible>
 					<visible>!String.IsEmpty(VideoPlayer.SubtitlesName)</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31657]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.SubtitlesName]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>VideoPlayer.SubtitlesEnabled</visible>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]$INFO[VideoPlayer.SubtitlesName][/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>!VideoPlayer.SubtitlesEnabled</visible>
+					</control>
 				</control>
-				<control type="label">
-					<width>600</width>
-					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31657]:[/COLOR] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesName][/COLOR]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>!VideoPlayer.SubtitlesEnabled</visible>
-					<visible>VideoPlayer.HasSubtitles</visible>
-					<visible>!String.IsEmpty(VideoPlayer.SubtitlesName)</visible>
-				</control>
+
 			</control>
 			<!-- Player Right -->
 			<control type="grouplist">
-				<left>1360</left>
+				<left>1350</left>
 				<top>-204</top>
 				<visible>Control.HasFocus(5553)</visible>
-				<control type="label"> <!-- Display mode -->
-					<width>500</width>
+
+				<control type="group"> <!-- Display mode -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[32100]:[/COLOR] $INFO[Player.Process(amlogic.displaymode)]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
-					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[32100]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>300</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(amlogic.displaymode)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- EOTF & Gamut -->
-					<width>500</width>
+
+				<control type="group"> <!-- EOTF & Gamut -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[32101]:[/COLOR] $INFO[Player.Process(amlogic.eoft_gamut)]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[32101]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>300</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(amlogic.eoft_gamut)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Dolby Vision Profile -->
-					<width>500</width>
+
+				<control type="group"> <!-- Dolby Vision Profile -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31653]:[/COLOR] $VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR dimgrey][,][/COLOR]]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
+					<control type="label">
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31653]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>240</left>
+						<width>280</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR dimgrey][,][/COLOR]]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- Dolby Vision Metadata -->
-					<width>500</width>
+
+				<control type="group"> <!-- Dolby Vision Metadata -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31656]:[/COLOR] $INFO[Player.Process(video.dovi.meta.version)]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
+					<control type="label">
+						<width>280</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31656]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>280</left>
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.dovi.meta.version)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- VS10 mode -->
-					<width>500</width>
+
+				<control type="group"> <!-- VS10 mode -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31654]:[/COLOR] $VAR[DVVS10Var]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>!String.Contains(Player.Process(amlogic.vs10.mode),bypass)</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31654]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>300</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$VAR[DVVS10Var]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!--Pixel format -->
-					<width>500</width>
+
+				<control type="group"> <!--Pixel format -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31140]:[/COLOR] $INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey][,][/COLOR]]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31140]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>300</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey][,][/COLOR]]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
-				<control type="label"> <!-- AML fps -->
-					<width>500</width>
+
+				<control type="group"> <!-- AML fps -->
+					<width>520</width>
 					<height>40</height>
-					<aligny>bottom</aligny>
-					<label>[COLOR button_focus]$LOCALIZE[31655]:[/COLOR] $INFO[Player.Process(amlogic.video.fps.info)][COLOR orange]$INFO[Player.Process(amlogic.video.fps.drop),	-&gt; ][/COLOR]</label>
-					<font>font12</font>
-					<shadowcolor>black</shadowcolor>
 					<visible>Player.HasVideo</visible>
 					<visible>Player.Process(videohwdecoder)</visible>
+					<control type="label">
+						<width>160</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR button_focus]$LOCALIZE[31655]:[/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>212</left>
+						<width>308</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>$INFO[Player.Process(amlogic.video.fps.info)][COLOR orange]$INFO[Player.Process(amlogic.video.fps.drop),	-&gt; ][/COLOR]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
 				</control>
+
 				<control type="progress">
 					<description>AUDIO QUEUE BAR</description>
-					<width>500</width>
+					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(audio.queue.level)</info>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
@@ -1152,7 +1538,7 @@
 				</control>
 				<control type="progress">
 					<description>AUDIO QUEUE DATA BAR</description>
-					<width>500</width>
+					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(audio.queue.data.level)</info>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
@@ -1160,7 +1546,7 @@
 				</control>
 				<control type="progress">
 					<description>VIDEO QUEUE BAR</description>
-					<width>500</width>
+					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(video.queue.level)</info>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
@@ -1168,7 +1554,7 @@
 				</control>
 				<control type="progress">
 					<description>VIDEO QUEUE DATA BAR</description>
-					<width>500</width>
+					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(video.queue.data.level)</info>
 					<texturebg border="3" colordiffuse="60FFFFFF">colors/white50.png</texturebg>
