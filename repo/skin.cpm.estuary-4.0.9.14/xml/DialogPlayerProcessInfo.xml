@@ -911,7 +911,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(videodecoder), ]$VAR[VideoHWDecoder, (,)] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
+						<label>$INFO[Player.Process(videodecoder), ]$VAR[VideoHWDecoder, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -938,6 +938,8 @@
 						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEmpty(VideoPlayer.AudioMibitRate)</visible>
+						<visible>!String.IsEmpty(VideoPlayer.VideoMibitRate)</visible>
 					</control>
 					<control type="label">
 						<left>440</left>
@@ -1105,9 +1107,21 @@
 						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
-						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+						<visible>String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 					</control>
 					<control type="label"> <!-- HDR -->
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
+						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+					</control>
+					<control type="label"> <!-- HDR with additional -->
 						<left>220</left>
 						<width>400</width>
 						<height>40</height>
@@ -1116,6 +1130,7 @@
 						<label>$INFO[Player.Process(video.source.hdr.type)] $VAR[|] [COLOR dimgrey]$INFO[Player.Process(video.source.additional.hdr.type)][/COLOR]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
 					</control>
 				</control>
@@ -1496,7 +1511,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey][,][/COLOR]]</label>
+						<label>$VAR[DVTunnelVar,[COLOR dimgrey][,][/COLOR] ]$INFO[Player.Process(amlogic.pixformat)]</label>
 						<font>font12</font>
 						<shadowcolor>black</shadowcolor>
 					</control>

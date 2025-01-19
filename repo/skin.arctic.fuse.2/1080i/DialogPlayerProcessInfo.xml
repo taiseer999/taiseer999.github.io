@@ -29,7 +29,7 @@
 			<!-- PVR Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-204</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5551)</visible>
 				<control type="label">
 					<width>1200</width>
@@ -83,7 +83,7 @@
 			<!-- PVR Right -->
 			<control type="grouplist">
 				<left>1250</left>
-				<top>-204</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5551)</visible>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="label">
@@ -846,7 +846,7 @@
 			<!-- Player Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-204</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5553)</visible>
 
 				<control type="group"> <!-- Screen resolution -->
@@ -939,9 +939,11 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[VideoPlayer.AudioMibitRate,,] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,,]</label>
+						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEmpty(VideoPlayer.AudioMibitRate)</visible>
+						<visible>!String.IsEmpty(VideoPlayer.VideoMibitRate)</visible>
 					</control>
 					<control type="label">
 						<left>440</left>
@@ -952,6 +954,7 @@
 						<label>$INFO[Player.Process(audio.live.mibit.rate),,] $VAR[|] $INFO[Player.Process(video.live.mibit.rate),,]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
+						
 					</control>
 				</control>
 
@@ -1081,7 +1084,7 @@
 			<!-- Player Middle -->
 		<control type="grouplist">
 				<left>710</left>
-				<top>-204</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5553)</visible>
 
 				<control type="group"> <!-- Video source type -->
@@ -1106,9 +1109,21 @@
 						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
-						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+						<visible>String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 					</control>
 					<control type="label"> <!-- HDR -->
+					<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
+						<font>font12</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
+						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
+					</control>
+					<control type="label"> <!-- HDR with additional -->
 						<left>220</left>
 						<width>400</width>
 						<height>40</height>
@@ -1117,6 +1132,7 @@
 						<label>$INFO[Player.Process(video.source.hdr.type)] $VAR[|] [COLOR dimgrey]$INFO[Player.Process(video.source.additional.hdr.type)][/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
 					</control>
 				</control>
@@ -1349,7 +1365,7 @@
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1350</left>
-				<top>-204</top>
+				<top>-210</top>
 				<visible>Control.HasFocus(5553)</visible>
 
 				<control type="group"> <!-- Display mode -->
@@ -1498,7 +1514,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(amlogic.pixformat)]$VAR[DVTunnelVar, [COLOR dimgrey][,][/COLOR]]</label>
+						<label>$VAR[DVTunnelVar,[COLOR dimgrey][,][/COLOR] ]$INFO[Player.Process(amlogic.pixformat)]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
