@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1146">
 
@@ -9,6 +8,8 @@
         <control type="group">
             <left>view_pad</left>
             <right>view_pad</right>
+
+            <include>OSD_HideControls</include>
 
             <visible>!Window.IsActive(DialogPlayerProcessInfo.xml)</visible>
             <visible>!Window.IsVisible(DialogSlider.xml)</visible>
