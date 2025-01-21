@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+
+<fontset id="Default" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">URWGeometricArabic-Bold.ttf</param>
+            <param name="font_bold">URWGeometricArabic-Bold.ttf</param>
+            <param name="font_regular">URWGeometricArabic-SemiBold.ttf</param>
+            <param name="font_light">URWGeometricArabic-Medium.ttf</param>
+            <param name="plot_linespacing_head">0.9</param>
+            <param name="plot_linespacing_midi">1.5</param>
+            <param name="plot_linespacing_main">0.84</param>
+            <param name="plot_linespacing_mini">0.85</param>
+            <param name="plot_linespacing_tiny">0.9</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+
+        </include>
+    </fontset>
+
+
+    <fontset id="PFDinTextArabic" unicode="true">
+<include content="Font_Default">
+            <param name="font_black">PFDinTextArabic-Bold.ttf</param>
+            <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
+            <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
+            <param name="font_light">PFDinTextArabic-Medium.ttf</param>
+            <param name="plot_linespacing_head">1.1</param>
+            <param name="plot_linespacing_midi">1.3</param>
+            <param name="plot_linespacing_main">0.93</param>
+            <param name="plot_linespacing_mini">1</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+            
+         </include>
+
+    </fontset>
+
+    <fontset id="Geeza-Pro" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">GeezaPro-Bold.ttf</param>
+            <param name="font_bold">GeezaPro-Bold.ttf</param>
+            <param name="font_regular">GeezaPro-Bold.ttf</param>
+            <param name="font_light">GeezaPro.ttf</param>
+            <param name="plot_linespacing_head">1.1</param>
+            <param name="plot_linespacing_midi">1.3</param>
+            <param name="plot_linespacing_main">1.2</param>
+            <param name="plot_linespacing_mini">1</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">28</param>
+        <param name="size_light_main">28</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>    
+        </include>
+
+    </fontset>
+	
+<fontset id="Figtree/ المهند" unicode="false">
+        <include content="Font_Default">
+            <param name="font_black">Figtree-Bold.ttf</param>
+            <param name="font_bold">Figtree-Bold.ttf</param>
+            <param name="font_regular">Figtree-Bold.ttf</param>
+            <param name="font_light">Figtree-Light.ttf</param>
+            <param name="plot_linespacing_head">1.21</param>
+            <param name="plot_linespacing_midi">1.43</param>
+            <param name="plot_linespacing_main">1.1</param>
+            <param name="plot_linespacing_mini">1.21</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+            <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        </include>
+    </fontset>
+
+
+	<fontset id="NotoRoboto - Arabic" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">RobotoNotoCondensed-Bold.ttf</param>
+            <param name="font_bold">RobotoNotoCondensed-Bold.ttf</param>
+            <param name="font_regular">RobotoNotoCondensed-Regular.ttf</param>
+            <param name="font_light">RobotoNotoCondensed-Light.ttf</param>
+             <param name="plot_linespacing_head">0.982</param>
+            <param name="plot_linespacing_midi">1.26</param>
+            <param name="plot_linespacing_main">1.15</param>
+            <param name="plot_linespacing_mini">1.</param>
+            <param name="plot_linespacing_tiny">0.96</param>
+        </include>	
+    </fontset>
+
+	
+<fontset id="majalla" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">majallab.ttf</param>
+            <param name="font_bold">majallab.ttf</param>
+            <param name="font_regular">majallab.ttf</param>
+            <param name="font_light">majallab.ttf</param>
+            <param name="size_heavy_main">28</param>
+        <param name="size_light_main">26</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param> 
+            <param name="plot_linespacing_head">1.0</param>
+            <param name="plot_linespacing_midi">1.30</param>
+            <param name="plot_linespacing_main">1.12</param>
+            <param name="plot_linespacing_mini">1</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        </include>	
+    </fontset>
+	
+
+    <fontset id="AmazonEmber" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_bold">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_regular">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_light">AmazonEmberV2-Medium.ttf</param>
+            <param name="size_heavy_main">27</param>
+        <param name="size_light_main">27</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param> 
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">0.95</param>
+            <param name="plot_linespacing_mini">1.0</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+            
+        </include>
+    </fontset>
+
+<fontset id="Hacen-Promote" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">Hacen-Promoter.ttf</param>
+            <param name="font_bold">Hacen-Promoter.ttf</param>
+            <param name="font_regular">Hacen-Promoter -reg.ttf</param>
+            <param name="font_light">Hacen-Promoter -reg.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.28</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">28</param>
+        <param name="size_light_main">27</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+</fonts>
+

@@ -1294,7 +1294,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</visible>
-                <top>140</top>
+                <top>240</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
