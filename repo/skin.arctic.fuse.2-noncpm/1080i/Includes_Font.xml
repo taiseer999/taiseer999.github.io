@@ -23,7 +23,7 @@
             <!-- Font for codec flag -->
             <font>
                 <name>font_infotag_bold</name>
-                <filename>hacen t.ttf</filename>
+                <filename>PFDinTextArabic-Bold.ttf</filename>
                 <size>27</size>
                 <style>uppercase</style>
             </font>
@@ -97,31 +97,31 @@
 
             <font>
                 <name>font_title_main_test</name>
-                <filename>RobotoCondensed-Bold.ttf</filename>
+                <filename>RobotoNotoCondensed-Bold.ttf</filename>
                 <size>60</size>
                 <linespacing>1.146</linespacing>
             </font>
             <font>
                 <name>font_midi_plot_test</name>
-                <filename>RobotoCondensed-Regular.ttf</filename>
+                <filename>RobotoNotoCondensed-Regular.ttf</filename>
                 <size>34</size>
                 <linespacing>1.46</linespacing>
             </font>
             <font>
                 <name>font_main_plot_test</name>
-                <filename>RobotoCondensed-Regular.ttf</filename>
+                <filename>RobotoNotoCondensed-Regular.ttf</filename>
                 <size>30</size>
                 <linespacing>1.135</linespacing>
             </font>
             <font>
                 <name>font_mini_plot_test</name>
-                <filename>RobotoCondensed-Regular.ttf</filename>
+                <filename>RobotoNotoCondensed-Regular.ttf</filename>
                 <size>26</size>
                 <linespacing>1.24</linespacing>
             </font>
             <font>
                 <name>font_tiny_plot_test</name>
-                <filename>RobotoCondensed-Regular.ttf</filename>
+                <filename>RobotoNotoCondensed-Regular.ttf</filename>
                 <size>23</size>
                 <linespacing>1.1</linespacing>
             </font>
@@ -129,9 +129,9 @@
     </include>
 
     <include name="Font_Default">
-        <param name="font_bold">RobotoCondensed-Bold.ttf</param>
-        <param name="font_regular">RobotoCondensed-Regular.ttf</param>
-        <param name="font_light">RobotoCondensed-Light.ttf</param>
+        <param name="font_bold">RobotoNotoCondensed-Bold.ttf</param>
+        <param name="font_regular">RobotoNotoCondensed-Regular.ttf</param>
+        <param name="font_light">RobotoNotoCondensed-Light.ttf</param>
 
         <param name="style_bold" />
         <param name="style_light" />
@@ -190,7 +190,7 @@
             <!-- Title fonts -->
             <font>
                 <name>font_title_huge</name>
-                <filename>Roboto-Black.ttf</filename>
+                <filename>Inter-Bold.ttf</filename>
                 <style>$PARAM[style_bold]</style>
                 <size>$PARAM[size_heavy_huge_x2]</size>
             </font>
