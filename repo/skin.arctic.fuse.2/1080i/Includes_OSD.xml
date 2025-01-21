@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-<include name="VideoCodecFlag">
-		<param name="groupId"/>
-		<param name="imageId"/>
-		<param name="visible"/>
-		<param name="texture"/>
-		<definition>
-			<control type="group" id="$PARAM[groupId]">
-				<control type="image" id="$PARAM[imageId]">
-					<left>1153</left>
-					<top>60</top>
-					<height>45</height>
-					<width>100</width>
-					<visible>$PARAM[visible]</visible>
-					<texture>$PARAM[texture]</texture>
-				</control>
-			</control>
-		</definition>
-	</include>
-
     <include name="OSD_UpNext_Buttons">
 
         <control type="grouplist" id="4000">

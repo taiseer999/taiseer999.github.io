@@ -761,6 +761,45 @@
                     <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
                 </include>
                 <!-- Sidemenu Widgets for sidemenu 3 Plex -->
+                <include content="Widget_Row">
+                    <param name="id">103601</param>
+                    <param name="groupid">103701</param>
+                    <param name="label">tv</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-1330a0a8) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">103801</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">103601</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="programs" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.program.autowidget/?mode=group&amp;group=tv-1736606543.5780401&amp;refresh=&amp;reload=</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(103601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">103601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">103601</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-1330a0a8,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,Plex,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,3,Home)</onfocus>
+                </include>
                 <!-- Sidemenu Widgets for sidemenu 4 Addons -->
                 <include content="Widget_Row">
                     <param name="id">104601</param>
@@ -782,7 +821,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104601</param>
@@ -821,7 +860,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104802</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104602</param>
@@ -860,7 +899,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104803</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104603</param>
@@ -899,7 +938,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104804</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104604</param>
@@ -1174,6 +1213,19 @@
             <visible>!Control.IsVisible(102602)</visible>
         </item>
         <!-- Sidemenu Widgets for sidemenu 3 Plex -->
+        <item>
+            <label>tv</label>
+            <property name="id">103601</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(103601)</visible>
+        </item>
+        <item>
+            <label>tv</label>
+            <property name="id">103601</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(103601)</visible>
+        </item>
         <!-- Sidemenu Widgets for sidemenu 4 Addons -->
         <item>
             <label>Video Add-ons</label>
@@ -1538,7 +1590,7 @@
                     <property name="target">videos</property>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[608]</property>
-                    <property name="widget_style">Landscape</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -1834,7 +1886,30 @@
             <include content="Action_SkinVariables_ShortcutList_Onclick">
                 <param name="id">3302</param>
             </include>
-            <content/>
+            <content>
+                <item>
+                    <label>tv</label>
+                    <icon>image://special%3a%2f%2fhome%2faddons%2fplugin.program.autowidget%2fresources%2fmedia%2fposter%2ffolder-shortcut.png/</icon>
+                    <property name="path">plugin://plugin.program.autowidget/?mode=group&amp;group=tv-1736606543.5780401&amp;refresh=&amp;reload=</property>
+                    <property name="menu">sidemenu</property>
+                    <property name="mode">widgets</property>
+                    <property name="node">3</property>
+                    <property name="item">$NUMBER[0]</property>
+                    <property name="guid">guid-62461fa5</property>
+                    <property name="target">programs</property>
+                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+                    <property name="widget_id">$NUMBER[3601]</property>
+                    <property name="widget_style"/>
+                    <property name="widget_sortby"/>
+                    <property name="widget_sortorder"/>
+                    <property name="widget_limit"/>
+                    <property name="widget_path"/>
+                    <label2>$LOCALIZE[24000]</label2>
+                    <onclick>Dialog.Close(1170,true)</onclick>
+                    <onclick>ActivateWindow(programs,plugin://plugin.program.autowidget/?mode=group&amp;group=tv-1736606543.5780401&amp;refresh=&amp;reload=,return)</onclick>
+                    <visible>True</visible>
+                </item>
+            </content>
             <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-1330a0a8)</visible>
             <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
         </include>
@@ -2679,6 +2754,42 @@
                     </include>
                 </include>
                 <!-- Standard Widgets for Category sidemenu 3 Plex -->
+                <include content="Widget_Row">
+                    <param name="id">3601</param>
+                    <param name="groupid">3701</param>
+                    <param name="label">tv</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-1330a0a8)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">3801</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">3601</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="programs" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.program.autowidget/?mode=group&amp;group=tv-1736606543.5780401&amp;refresh=&amp;reload=</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(3601) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">3601</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">3601</param>
+                    </include>
+                </include>
                 <!-- Standard Widgets for Category sidemenu 4 Addons -->
                 <include content="Widget_Row">
                     <param name="id">4601</param>
@@ -2700,7 +2811,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4601</param>
@@ -2736,7 +2847,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4802</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4602</param>
@@ -2772,7 +2883,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4803</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4603</param>
@@ -2808,7 +2919,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4804</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4604</param>
@@ -3012,7 +3123,7 @@
         </item>
         <item>
             <label>$LOCALIZE[32071]</label>
-            <icon>special://skin/extras/icons/coreelec1.png</icon>
+            <icon>special://skin/extras/icons/coreelec.png</icon>
             <property name="path">RunScript(service.coreelec.settings)</property>
             <property name="menu">sidemenu-customnode-guid-3cf57acf</property>
             <property name="mode"/>
@@ -3294,6 +3405,19 @@
             <visible>!Control.IsVisible(2602)</visible>
         </item>
         <!-- Standard Widgets for Category sidemenu 3 Plex -->
+        <item>
+            <label>tv</label>
+            <property name="id">3601</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(3601)</visible>
+        </item>
+        <item>
+            <label>tv</label>
+            <property name="id">3601</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(3601)</visible>
+        </item>
         <!-- Standard Widgets for Category sidemenu 4 Addons -->
         <item>
             <label>Video Add-ons</label>
@@ -5810,7 +5934,7 @@
         </item>
         <item>
             <label>$LOCALIZE[32071]</label>
-            <icon>special://skin/extras/icons/coreelec1.png</icon>
+            <icon>special://skin/extras/icons/coreelec.png</icon>
             <property name="path">RunScript(service.coreelec.settings)</property>
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
@@ -6100,6 +6224,7 @@
     </variable>
     <!-- Variables for Side Menu Plex focus -->
     <variable name="skinvariables-sidemenu-itemfocus-103">
+        <value condition="Control.IsVisible(103601)">103601</value>
         <value>400</value>
     </variable>
     <!-- Variables for Side Menu Addons focus -->

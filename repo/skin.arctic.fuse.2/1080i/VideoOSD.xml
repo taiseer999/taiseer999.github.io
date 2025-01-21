@@ -131,8 +131,8 @@
                             <param name="groupid">6105</param>
                             <param name="itemgap">osd_itemgap</param>
                         </include>
-                        
-                    <!-- Button PlayerProcessInfo -->
+						
+                        <!-- Button PlayerProcessInfo -->
                         <control type="button" id="6015">
                             <include>Defs_OSD_Button</include>
                             <onclick>CancelAlarm(osd_timeout,true)</onclick>
