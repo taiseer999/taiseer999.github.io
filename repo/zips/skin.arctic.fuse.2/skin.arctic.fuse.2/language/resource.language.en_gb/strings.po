@@ -2886,3 +2886,39 @@ msgstr ""
 msgctxt "#32066"
 msgid "Coloured title lines in PlayerProcessInfo"
 msgstr ""
+
+msgctxt "#32067"
+msgid "Switch Skin"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Highlight Text Color change"
+msgstr ""
+
+msgctxt "#32069"
+msgid "Account Manager"
+msgstr ""
+
+msgctxt "#32070"
+msgid "TMDB Helper Settings"
+msgstr ""
+
+msgctxt "#32071"
+msgid "CoreELEC Settings"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Tools"
+msgstr ""
+
+msgctxt "#32073"
+msgid "Sorted"
+msgstr ""
+
+msgctxt "#32074"
+msgid "My Movies"
+msgstr ""
+
+msgctxt "#32075"
+msgid "My TV Shows"
+msgstr ""
