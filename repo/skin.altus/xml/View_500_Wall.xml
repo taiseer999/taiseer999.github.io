@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+	<include name="View_500_Wall">
+		<control type="group">
+			<include>MediaMenuAnimations</include>
+			<!-- <include>OpenClose_Right</include> -->
+			<left>17</left>
+      <height>100%</height>
+			<visible>Control.IsVisible(500)</visible>
+			<!-- <include>Visible_Right</include> -->
+			<animation condition="Control.HasFocus(500) | Control.HasFocus(531) | ControlGroup(9000).HasFocus">
+				<effect type="fade" start="0" end="100" time="300" tween="cubic" easing="in"/>
+				<effect type="slide" start="0,937" end="0,0" time="500" tween="cubic" easing="out" />
+			</animation>
+			<control type="panel" id="500">
+				<animation effect="slide" end="18,0" time="0" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0)">Conditional</animation>
+				<onleft>531</onleft>
+				<onright>531</onright>
+				<onup>500</onup>
+				<!-- <onup condition="!Integer.IsGreater(Container.NumPages,1)">9000</onup> -->
+				<ondown>500</ondown>
+				<viewtype label="311022">icon</viewtype>
+				<preloaditems>2</preloaditems>
+				<pagecontrol>531</pagecontrol>
+				<scrolltime tween="cubic" easing="out">600</scrolltime>
+				<!-- <visible>Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(artists) | Container.Content(albums) | Container.Content(musicvideos) | Container.Content(images) | Container.Content(videos) | Container.Content(games)</visible> -->
+				<visible>
+					[Container.Content(artists) + [String.IsEqual(Skin.String(Skin.ForcedView.artists),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.artists),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.artists),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.artists))]] | 
+
+					[Container.Content(albums) + [String.IsEqual(Skin.String(Skin.ForcedView.albums),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.albums),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.albums),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.albums))]] | 
+
+					[Container.Content(sets) + [String.IsEqual(Skin.String(Skin.ForcedView.sets),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.sets),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.sets),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.sets))]] | 
+
+					[Container.Content(movies) + [String.IsEqual(Skin.String(Skin.ForcedView.movies),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.movies),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.movies),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.movies))]] | 
+
+					[Container.Content(tvshows) + [String.IsEqual(Skin.String(Skin.ForcedView.tvshows),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.tvshows),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.tvshows),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.tvshows))]] | 
+
+					[Container.Content(seasons) + [String.IsEqual(Skin.String(Skin.ForcedView.seasons),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.seasons),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.seasons),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.seasons))]] | 
+
+					[Container.Content(musicvideos) + [String.IsEqual(Skin.String(Skin.ForcedView.musicvideos),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.musicvideos),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.musicvideos),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.musicvideos))]] | 
+					
+					[Container.Content(images) + [String.IsEqual(Skin.String(Skin.ForcedView.images),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.images),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.images),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.images))]] | 
+
+					[Container.Content(videos) + [String.IsEqual(Skin.String(Skin.ForcedView.videos),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.videos),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.videos),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.videos))]] | 
+
+					[Container.Content(games) + [String.IsEqual(Skin.String(Skin.ForcedView.games),$LOCALIZE[311022]) | String.IsEqual(Skin.String(Skin.ForcedView.games),$LOCALIZE[310981]) | String.IsEqual(Skin.String(Skin.ForcedView.games),$LOCALIZE[31100]) | String.IsEmpty(Skin.String(Skin.ForcedView.games))]]
+				</visible>
+
+				<!-- DEFAULT -->
+				<itemlayout width="230" height="333" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+					<control type="group">
+						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
+						<top>45</top>
+						<include>SmallPosterLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout width="230" height="333" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>45</top>
+						<include content="SmallPosterLayout">
+							<param name="focused" value="true" />
+						</include>
+						<include>PosterWallTimer</include>
+						<include>SetDBTypeProperty</include>
+					</control>
+				</focusedlayout>
+				<itemlayout width="230" height="380" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+					<control type="group">
+						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
+						<top>45</top>
+						<include>SmallPosterLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout width="230" height="380" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>45</top>
+						<include content="SmallPosterLayout">
+							<param name="focused" value="true" />
+						</include>
+						<include>PosterWallTimer</include>
+						<include>SetDBTypeProperty</include>
+					</control>
+				</focusedlayout>
+
+				<!-- LARGE -->
+				<itemlayout height="387" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+					<control type="group">
+						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
+						<top>45</top>
+						<include>PosterLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="387" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>45</top>
+						<include content="PosterLayout">
+							<param name="focused" value="true" />
+						</include>
+						<include>PosterWallTimer</include>
+						<include>SetDBTypeProperty</include>
+					</control>
+				</focusedlayout>
+				<itemlayout height="437" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+					<control type="group">
+						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
+						<top>45</top>
+						<include>PosterLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="437" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>45</top>
+						<include content="PosterLayout">
+							<param name="focused" value="true" />
+						</include>
+						<include>PosterWallTimer</include>
+						<include>SetDBTypeProperty</include>
+					</control>
+				</focusedlayout>
+				<!-- <itemlayout height="301" width="300" condition="Container.Content(episodes) | Container.Content(videos) | [Container.Content(musicvideos) + !Skin.HasSetting(show_musicvideoposter)]">
+					<control type="group">
+						<top>110</top>
+						<include content="FlixEpisodeLayout">
+							<param name="label" value="$INFO[ListItem.Label]" />
+							<param name="thumb_label" value="$INFO[ListItem.Label2]" />
+						</include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="301" width="300" condition="Container.Content(episodes) | Container.Content(videos) | [Container.Content(musicvideos) + !Skin.HasSetting(show_musicvideoposter)]">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>110</top>
+						<include content="FlixEpisodeLayout">
+							<param name="focused" value="true" />
+							<param name="thumb_label" value="$INFO[ListItem.Label2]" />
+						</include>
+					</control>
+				</focusedlayout> -->
+				<itemlayout height="425" width="442" condition="Container.Content(images)">
+					<control type="group">
+						<left>40</left>
+						<top>150</top>
+						<include>PosterInfoPictureLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="425" width="442" condition="Container.Content(images)">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<left>40</left>
+						<top>150</top>
+						<include content="PosterInfoPictureLayout">
+							<param name="focused" value="true" />
+						</include>
+					</control>
+				</focusedlayout>
+				<!-- <itemlayout height="401" width="300" condition="Container.Content(artists) | Container.Content(albums)">
+					<control type="group">
+						<top>150</top>
+						<include content="SquareLayout">
+							<param name="fallback_image" value="DefaultMusicSongs.png" />
+						</include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="401" width="300" condition="Container.Content(artists) | Container.Content(albums)">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>150</top>
+						<include content="SquareLayout">
+							<param name="fallback_image" value="DefaultMusicSongs.png" />
+							<param name="focused" value="true" />
+						</include>
+					</control>
+				</focusedlayout> -->
+				<!-- <itemlayout height="401" width="300" condition="Container.Content(addons)">
+					<control type="group">
+						<top>150</top>
+						<include content="SquareLayout">
+							<param name="fallback_image" value="DefaultAddon.png" />
+						</include>
+					</control>
+				</itemlayout>
+				<focusedlayout height="401" width="300" condition="Container.Content(addons)">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+						<top>150</top>
+						<include content="SquareLayout">
+							<param name="fallback_image" value="DefaultAddon.png" />
+							<param name="focused" value="true" />
+						</include>
+					</control>
+				</focusedlayout> -->
+			</control>
+			<include content="TopBottomBars">
+				<param name="visible" value="!Skin.HasSetting(Enable.500Dim)"/>
+			</include>
+		</control>
+	</include>
+</includes>

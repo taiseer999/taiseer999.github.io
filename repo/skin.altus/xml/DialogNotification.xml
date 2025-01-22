@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<!-- <zorder>3</zorder> -->
+	<controls>
+    <control type="label" id="402">
+      <top>-100</top>
+      <height>34</height>
+      <textcolor>00ffffff</textcolor>
+      <font>Font24</font>
+      <align>top</align>
+    </control>
+    <control type="group">
+      <visible>!String.IsEmpty(Window(home).Property(LanguageNotification))</visible>
+      <control type="label">
+        <top>909</top>
+        <right>90</right>
+        <width>816</width>
+        <height>34</height>
+        <textcolor>osd_light</textcolor>
+        <font>PlayerTime</font>
+        <align>center</align>
+        <label>$INFO[Control.GetLabel(402)]</label>
+      </control>
+    </control>
+    <control type="group">
+      <include>OpenClose_Right</include>
+      <include>Visible_Fade</include>
+      <visible>String.IsEmpty(Window(home).Property(LanguageNotification))</visible>
+      <top>80</top>
+      <right>40</right>
+      <height>90</height>
+      <width>600</width>
+      <control type="image">
+        <texture colordiffuse="$VAR[FocusColorTheme]">focus/notification.png</texture>
+      </control>
+      <control type="image" id="400">
+				<description>avatar</description>
+				<left>10</left>
+				<top>5</top>
+				<width>80</width>
+				<height>80</height>
+				<aspectratio aligny="center" align="center">keep</aspectratio>
+        <texture diffuse="focus/notification_img.png"/>
+			</control>
+      <control type="fadelabel" id="401">
+        <top>6.5</top>
+        <left>97</left>
+        <right>40</right>
+        <height>34</height>
+        <textcolor>osd_light</textcolor>
+        <font>Font30</font>
+        <align>top</align>
+        <scrollout>false</scrollout>
+				<pauseatend>2000</pauseatend>
+      </control>
+      <control type="fadelabel" id="402">
+        <bottom>14.5</bottom>
+        <left>97</left>
+        <right>40</right>
+        <height>34</height>
+        <textcolor>darkgrey</textcolor>
+        <font>Font24</font>
+        <align>top</align>
+        <label>$INFO[Control.GetLabel(402)]</label>
+        <scrollout>false</scrollout>
+				<pauseatend>2000</pauseatend>
+      </control>
+    </control>
+  </controls>
+</window>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+  <defaultcontrol always="true">3000</defaultcontrol>
+  <include>Animation_DialogPopupOpenClose</include>
+  <controls>
+  
+    
+    <!-- Main dialog group -->
+    <control type="group">
+      <visible>String.IsEmpty(Window(home).Property(ViewSwitchLabel))</visible>
+      <include>Animation_DialogPopupVisible</include>
+      <centerleft>50%</centerleft>
+      <centertop>50%</centertop>
+      <width>1740</width>
+      <height>800</height>
+      
+      <!-- Dialog background -->
+      <control type="image">
+        <bordersize>1</bordersize>
+        <texture diffuse="masks/viewselector_back.png" colordiffuse="FF1A1A1A">colors/commons.png</texture>
+        <bordertexture border="15" colordiffuse="FF131313">masks/viewselector_back_border.png</bordertexture>
+      </control>
+        
+      <!-- Dialog header -->
+      <control type="label">
+        <left>30</left>
+        <right>30</right>
+        <top>30</top>
+        <height>40</height>
+        <font>font13</font>
+        <label>[COLOR unfocused_text]Set view$VAR[ContentTypeLabel][/COLOR] [B]|[/B] [COLOR unfocused_text]Current view: $INFO[Container.ViewMode][/COLOR]</label>
+        <textcolor>$VAR[FocusColorTheme]</textcolor>
+        <align>center</align>
+      </control>
+        
+      <!-- View list -->
+      <control type="fixedlist" id="3000">
+        <centertop>50%</centertop>
+        <left>35</left>
+        <width>462</width>
+        <height>600</height>
+        <focusposition>3</focusposition>
+        <movement>4</movement>
+        <scrolltime>200</scrolltime>
+        <include content="List">
+          <param name="id" value="3000" />
+          <param name="list_width" value="340" />
+          <param name="img_width" value="385" />
+          <param name="img_texture" value="focus/addonlaunchermenu.png" />
+        </include>
+      </control>
+      
+      <!-- Preview image -->
+      <control type="image" id="3001">
+        <centerleft>63%</centerleft>
+        <centertop>50%</centertop>
+        <width>1100</width>
+        <height>618</height>
+        <aspectratio>keep</aspectratio>
+        <fadetime>300</fadetime>
+        <bordersize>1</bordersize>
+        <texture diffuse="masks/viewselector_img.png">$VAR[ViewSelectorTexture]</texture>
+        <bordertexture background="true" border="15" colordiffuse="FF2E2E2E">masks/viewselector_img_border.png</bordertexture>
+      </control>
+    </control>
+    
+  </controls>
+</window>
