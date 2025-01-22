@@ -180,7 +180,6 @@
 		<setting id="debug.enabled" label="Enable Debug" type="bool" default="false" />
 		<setting id="debug.location" label="Logging Location" type="enum" default="1" enable="eq(-1,true)" values="Kodi Log|Addon Log" visible="eq(-1,true)" />
 		<setting label="32830" type="lsep" />
-		<setting id="provider.aiostreams" label="aiostreams (torrentio/mediafusion)" type="bool" default="false" />
 		<setting id="provider.knightcrawler" label="knightcrawler (torrentio/dmm)" type="bool" default="false" />
 		<setting id="provider.mediafusion" label="mediafusion" type="bool" default="false" />
 			<setting id="mediafusion.packs" label="Include Show Packs" type="bool" default="false" subsetting="true" visible="eq(-1,true)" />

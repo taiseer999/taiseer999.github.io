@@ -27,7 +27,7 @@ class EasyDebridAPI:
 			response.raise_for_status()
 			result = response.json()
 		except Exception as e: kodi_utils.logger('easydebrid error',
-			f"{e}\n{full_path}\n{response.text}" if result else f"{e}\n{full_path}"
+			f"{e}\n{full_path}\n{response.text}" if response else f"{e}\n{full_path}"
 		)
 		return result
 
