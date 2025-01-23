@@ -256,15 +256,22 @@
 					<onclick>Skin.SetNumeric(altus_digital_release_window)</onclick>
 					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
 				</control>
+				<control type="button" id="63709">
+					<label>    - Stop tracking after $VAR[SkinSettingDigitalExpiredWindow] days</label>
+					<!-- <label2>$VAR[SkinSettingDigitalExpiredWindow]</label2> -->
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.SetNumeric(altus_digital_expired_window)</onclick>
+					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
+				</control>
 				<!-- CLOCK -->
-				<control type="radiobutton" id="63709">
+				<control type="radiobutton" id="63710">
 					<label>Show current time in InfoLine</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(Enable.ClockCrumbs)</selected>
 					<onclick>Skin.ToggleSetting(Enable.ClockCrumbs)</onclick>
 				</control>
 				<!-- STUDIO LOGO -->
-				<control type="button" id="63710">
+				<control type="button" id="63711">
 					<label>Studio logos</label>
 					<label2>$VAR[StudioLogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>

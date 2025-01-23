@@ -385,6 +385,10 @@
 		<value condition="!String.IsEmpty(Skin.String(altus_digital_release_window))">$INFO[Skin.String(altus_digital_release_window)]</value>
 		<value condition="String.IsEmpty(Skin.String(altus_digital_release_window))">3</value> <!-- Default value -->
 	</variable>
+	<variable name="SkinSettingDigitalExpiredWindow">
+		<value condition="!String.IsEmpty(Skin.String(altus_digital_expired_window))">$INFO[Skin.String(altus_digital_expired_window)]</value>
+		<value condition="String.IsEmpty(Skin.String(altus_digital_expired_window))">14</value> <!-- Default value -->
+	</variable>
 	<variable name="SkinSettingRevertFromWallDelay">
 		<value condition="!String.IsEmpty(Skin.String(altus_revert_from_wall_delay))">$INFO[Skin.String(altus_revert_from_wall_delay)]</value>
 		<value condition="String.IsEmpty(Skin.String(altus_revert_from_wall_delay))">2</value> <!-- Default value -->

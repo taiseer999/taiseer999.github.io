@@ -13,7 +13,17 @@ def routing():
     if mode == "widget_monitor":
         from modules.widget_utils import widget_monitor
 
-        return widget_monitor(params.get("list_id"))
+        return widget_monitor(_get("list_id"))
+
+    if mode == "widget_info_timer":
+        from modules.widget_utils import widget_info_timer
+
+        return widget_info_timer(_get("list_id"))
+
+    if mode == "spotlight_timer":
+        from modules.widget_utils import spotlight_timer
+
+        return spotlight_timer(_get("list_id"))
 
     if "actions" in mode:
         from modules import actions
@@ -71,14 +81,19 @@ def routing():
         return SPaths().open_search_window()
 
     if mode == "set_api_key":
-        from modules.MDbList import set_api_key
+        from modules.custom_actions import set_api_key
 
         return set_api_key()
 
-    if mode == "delete_all_ratings":
-        from modules.MDbList import MDbListAPI
+    if mode == "select_view":
+        from modules.select_view import select_view
 
-        return MDbListAPI().delete_all_ratings()
+        return select_view()
+
+    if mode == "delete_all_ratings":
+        from modules.databases.ratings import RatingsDatabase
+
+        return RatingsDatabase().delete_all_ratings()
 
     if mode == "set_image":
         from modules.custom_actions import set_image
@@ -86,34 +101,14 @@ def routing():
         return set_image()
 
     if mode == "play_trailer":
-        from modules.MDbList import play_trailer
+        from modules.custom_actions import play_trailer
 
         return play_trailer()
 
-    if mode == "fix_black_screen":
-        from modules.custom_actions import fix_black_screen
+    if mode == "clear_cache":
+        from modules.helper import clear_cache
 
-        return fix_black_screen()
-
-    if mode == "set_blurradius":
-        from modules.custom_actions import set_blurradius
-
-        return set_blurradius()
-
-    if mode == "set_blursaturation":
-        from modules.custom_actions import set_blursaturation
-
-        return set_blursaturation()
-
-    if mode == "set_autoendplaybackdelay":
-        from modules.custom_actions import set_autoendplaybackdelay
-
-        return set_autoendplaybackdelay()
-
-    if mode == "clear_image_cache":
-        from modules.helper import clear_image_cache
-
-        return clear_image_cache()
+        return clear_cache()
 
     if mode == "calculate_cache_size":
         from modules.helper import calculate_cache_size
@@ -126,6 +121,11 @@ def routing():
         return show_changelog()
 
     if mode == "check_api_key_on_load":
-        from modules.MDbList import check_api_key_on_load
+        from modules.custom_actions import check_api_key_on_load
 
         return check_api_key_on_load()
+
+    # if mode == "set_widget_boundaries":
+    #     from modules.custom_actions import set_widget_boundaries
+
+    #     return set_widget_boundaries()
