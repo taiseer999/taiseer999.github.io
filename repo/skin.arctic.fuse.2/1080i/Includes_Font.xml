@@ -247,7 +247,7 @@
             </font>
             <font>
                 <name>font_hint_bold</name>
-                <filename>$PARAM[font_bold]</filename>
+                <filename>Figtree-Bold.ttf</filename>
                 <style>uppercase $PARAM[style_bold]</style>
                 <size>$PARAM[size_heavy_hint]</size>
             </font>
