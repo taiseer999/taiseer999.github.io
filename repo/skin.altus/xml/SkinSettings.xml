@@ -257,8 +257,8 @@
 					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
 				</control>
 				<control type="button" id="63709">
-					<label>    - Stop tracking after $VAR[SkinSettingDigitalExpiredWindow] days</label>
-					<!-- <label2>$VAR[SkinSettingDigitalExpiredWindow]</label2> -->
+					<label>    - Expiry window (days)</label>
+					<label2>$VAR[SkinSettingDigitalExpiredWindow]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.SetNumeric(altus_digital_expired_window)</onclick>
 					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>

@@ -2332,8 +2332,8 @@
 		<onload condition="String.IsEmpty(Skin.String(TrailerSource))">Skin.SetString(TrailerSource,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(current_search_provider))">Skin.SetString(current_search_provider,1)</onload>
 		<onload condition="String.IsEmpty(Skin.String(OSDAudioButtonSetting))">Skin.SetString(OSDAudioButtonSetting,0)</onload>
-		<onload condition="String.IsEmpty(Skin.String(altus_digital_release_window))">Skin.SetString(altus_digital_release_window,3)</onload>
-		<onload condition="String.IsEmpty(Skin.String(altus_digital_expired_window))">Skin.SetString(altus_digital_expired_window,14)</onload>
+		<onload condition="String.IsEmpty(Skin.String(altus_digital_release_window))">Skin.SetString(altus_digital_release_window,7)</onload>
+		<onload condition="String.IsEmpty(Skin.String(altus_digital_expired_window))">Skin.SetString(altus_digital_expired_window,21)</onload>
 
 		<!-- Initialize rating slots -->
 		<onload condition="String.IsEmpty(Skin.String(RatingSlot1))">Skin.SetString(RatingSlot1,none)</onload>

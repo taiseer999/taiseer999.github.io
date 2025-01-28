@@ -1237,7 +1237,7 @@
 						<height>75</height>
 						<align>center</align>
 						<aligny>center</aligny>
-						<label>$VAR[FocusedPVRNextProgrammeLabel]</label>
+						<label>$VAR[WidgetFocusedPVRNextProgrammeLabel]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
 						<font>font25</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
@@ -1330,7 +1330,7 @@
 						<height>75</height>
 						<align>center</align>
 						<aligny>center</aligny>
-						<label>$VAR[UnfocusedPVRNextProgrammeLabel]</label>
+						<label>$VAR[WidgetUnfocusedPVRNextProgrammeLabel]</label>
 						<font>font25</font>
 						<textcolor>unfocused_text</textcolor>
 					</control>

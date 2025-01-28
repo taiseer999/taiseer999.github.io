@@ -1,10 +1,13 @@
 import xbmc
 import requests
+import datetime as dt
+import time
 from datetime import datetime
 from typing import Dict, Any
 from .base import BaseAPIClient
 from ..databases import RatingsDatabase
 from ..config import API_URLS, RATINGS_IMAGE_PATH
+
 
 class MDbListClient(BaseAPIClient):
     def __init__(self, api_key: str, database: RatingsDatabase):
@@ -12,20 +15,29 @@ class MDbListClient(BaseAPIClient):
         self.api_key = api_key
         self.database = database
 
-    def get_ratings(self, id_with_type: str, media_type: str = 'movie') -> Dict[str, Any]:
-        """Fetch ratings with database check first."""
-        # Check database cache first
-        cached_data = self.database.get_cached_ratings(id_with_type)
-        if cached_data:
-            return cached_data
-            
+    def datetime_workaround(self, data, str_format):
+        try:
+            datetime_object = dt.datetime.strptime(data, str_format)
+        except:
+            datetime_object = dt.datetime(*(time.strptime(data, str_format)[0:6]))
+        return datetime_object
+
+    def get_ratings_from_api(
+        self, id_with_type: str, media_type: str = "movie"
+    ) -> Dict[str, Any]:
+        # """Fetch ratings with database check first."""
+        # # Check database cache first
+        # cached_data = self.database.get_cached_ratings(id_with_type)
+        # if cached_data:
+        #     return cached_data
+
         # Only hit API if no cache
         try:
             if isinstance(id_with_type, str) and id_with_type.isdigit():
                 url = f"{self.base_url}?apikey={self.api_key}&tm={id_with_type}&m={'show' if media_type == 'tv' else 'movie'}"
             else:
                 url = f"{self.base_url}?apikey={self.api_key}&i={id_with_type}"
-                
+
             response = self.session.get(url)
             if response.status_code == 200:
                 result = self._process_response(response.json())
@@ -40,36 +52,39 @@ class MDbListClient(BaseAPIClient):
         """Process API response data."""
         try:
             data = {
-                'imdbid': json_data.get('imdbid'),
-                'tmdbid': json_data.get('tmdbid')
+                "imdbid": json_data.get("imdbid"),
+                "tmdbid": json_data.get("tmdbid"),
             }
 
             # Process digital release info
             released_digital = json_data.get("released_digital")
             try:
-                recent_days = int(xbmc.getInfoLabel('Skin.String(altus_digital_release_window)') or "3")
-                expired_days = int(xbmc.getInfoLabel('Skin.String(altus_digital_expired_window)') or "14")
+                recent_days = int(
+                    xbmc.getInfoLabel("Skin.String(altus_digital_release_window)")
+                    or "7"
+                )
+                expired_days = int(
+                    xbmc.getInfoLabel("Skin.String(altus_digital_expired_window)")
+                    or "21"
+                )
             except ValueError:
-                recent_days = 3
-                expired_days = 14
+                recent_days = 7
+                expired_days = 21
 
             if released_digital:
                 try:
-                    release_date = datetime.strptime(released_digital, "%Y-%m-%d")
-                    current_date = datetime.now()
+                    release_date = self.datetime_workaround(
+                        released_digital, "%Y-%m-%d"
+                    )
+                    current_date = dt.datetime.now()
                     data["digital_release_date"] = release_date.strftime("%m/%d/%Y")
                     if release_date <= current_date:
                         days_since_release = (current_date - release_date).days
-                        xbmc.log(f"Days since release: {days_since_release}", 1)
-                        xbmc.log(f"Expired days setting: {expired_days}", 1)
                         if days_since_release > expired_days:
-                            xbmc.log("Setting to expired", 1)
                             data["digital_release_flag"] = "expired"
                         elif days_since_release <= recent_days:
-                            xbmc.log("Setting to recently", 1)
                             data["digital_release_flag"] = "recently"
                         else:
-                            xbmc.log("Setting to true", 1)
                             data["digital_release_flag"] = "true"
                     else:
                         data["digital_release_flag"] = "false"
@@ -90,10 +105,18 @@ class MDbListClient(BaseAPIClient):
                 data["mdblistImage"] = ""
 
             # Check for certified fresh status
-            is_certified_fresh = "true" if next(
-                (i for i in json_data.get("keywords", []) if i["name"] == "certified-fresh"),
-                None
-            ) else "false"
+            is_certified_fresh = (
+                "true"
+                if next(
+                    (
+                        i
+                        for i in json_data.get("keywords", [])
+                        if i["name"] == "certified-fresh"
+                    ),
+                    None,
+                )
+                else "false"
+            )
 
             # Process individual ratings
             for rating in json_data.get("ratings", []):
@@ -108,13 +131,21 @@ class MDbListClient(BaseAPIClient):
                         if popular is not None:
                             data["popularRating"] = "#" + str(popular)
                             if popular <= 10:
-                                data["popularImage"] = RATINGS_IMAGE_PATH + "purpleflame.png"
+                                data["popularImage"] = (
+                                    RATINGS_IMAGE_PATH + "purpleflame.png"
+                                )
                             elif 10 < popular <= 33:
-                                data["popularImage"] = RATINGS_IMAGE_PATH + "pinkflame.png"
+                                data["popularImage"] = (
+                                    RATINGS_IMAGE_PATH + "pinkflame.png"
+                                )
                             elif 33 < popular <= 66:
-                                data["popularImage"] = RATINGS_IMAGE_PATH + "redflame.png"
+                                data["popularImage"] = (
+                                    RATINGS_IMAGE_PATH + "redflame.png"
+                                )
                             elif 66 < popular <= 100:
-                                data["popularImage"] = RATINGS_IMAGE_PATH + "blueflame.png"
+                                data["popularImage"] = (
+                                    RATINGS_IMAGE_PATH + "blueflame.png"
+                                )
                             else:
                                 data["popularRating"] = ""
                                 data["popularImage"] = ""
@@ -172,7 +203,9 @@ class MDbListClient(BaseAPIClient):
                         if value > 59:
                             data["tomatoUserImage"] = RATINGS_IMAGE_PATH + "popcorn.png"
                         else:
-                            data["tomatoUserImage"] = RATINGS_IMAGE_PATH + "popcorn_spilt.png"
+                            data["tomatoUserImage"] = (
+                                RATINGS_IMAGE_PATH + "popcorn_spilt.png"
+                            )
                     else:
                         data["tomatoUserMeter"] = ""
                         data["tomatoUserImage"] = ""
@@ -191,20 +224,29 @@ class MDbListClient(BaseAPIClient):
 
             # Process collection flags
             keywords = json_data.get("keywords", [])
-            data["first_in_collection"] = "true" if next(
-                (i for i in keywords if i["name"] == "first-in-collection"),
-                None
-            ) else "false"
+            data["first_in_collection"] = (
+                "true"
+                if next(
+                    (i for i in keywords if i["name"] == "first-in-collection"), None
+                )
+                else "false"
+            )
 
-            data["collection_follow_up"] = "true" if next(
-                (i for i in keywords if i["name"] == "collection-follow-up"),
-                None
-            ) else "false"
+            data["collection_follow_up"] = (
+                "true"
+                if next(
+                    (i for i in keywords if i["name"] == "collection-follow-up"), None
+                )
+                else "false"
+            )
 
-            data["belongs_to_collection"] = "true" if next(
-                (i for i in keywords if i["name"] == "belongs-to-collection"),
-                None
-            ) else "false"
+            data["belongs_to_collection"] = (
+                "true"
+                if next(
+                    (i for i in keywords if i["name"] == "belongs-to-collection"), None
+                )
+                else "false"
+            )
 
             return data
 
