@@ -81,6 +81,10 @@ def routing(params):
 			from modules.utils import manual_function_import
 			function = manual_function_import('indexers.trakt', mode.split('.')[-1])
 			function(params)
+		elif 'build_mdb_list' in mode:
+			from modules.utils import manual_function_import
+			function = manual_function_import('indexers.mdblist', mode.split('.')[-1])
+			function(params)
 		elif mode == 'build_movie_list':
 			from indexers.movies import Movies
 			Movies(params).run()

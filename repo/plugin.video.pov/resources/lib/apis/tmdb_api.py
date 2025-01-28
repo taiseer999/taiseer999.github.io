@@ -19,7 +19,7 @@ def get_tmdb(url):
 		response.raise_for_status()
 	except requests.exceptions.RequestException as e:
 		from modules.kodi_utils import logger
-		logger('tmdb error', f"{e}\n{e.request.headers}\n{e.response.text}")
+		logger('tmdb error', f"{e}\n{e.request.url}\n{e.response.text}")
 	response.encoding = 'utf-8'
 	return response
 

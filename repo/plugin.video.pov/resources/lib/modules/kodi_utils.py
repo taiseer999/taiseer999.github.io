@@ -53,7 +53,7 @@ def addon(addon_id='plugin.video.pov'):
 	return Addon(id=addon_id)
 
 def addon_fanart():
-	fanart = get_setting('custom_fanart')
+	fanart = get_setting('fanart_image')
 	if 'special://' in fanart: fanart = translate_path(fanart)
 	elif 'fanart.png' == fanart: fanart = translate_path(fanart_default)
 	return fanart

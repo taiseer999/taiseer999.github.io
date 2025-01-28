@@ -4,7 +4,7 @@
 	<category label="32001">
 		<!-- General -->
 		<setting label="32001" type="lsep" />
-		<setting id="custom_fanart" label="Custom Fanart Image" type="image"  default="fanart.png"/>
+		<setting id="fanart_image" label="Fanart Image" type="image"  default="fanart.png"/>
 		<setting id="auto_start_pov" label="32017" type="bool" default="false" />
 		<setting id="widget_hide_watched" label="32465" type="bool" default="false" />
 		<setting id="kodi_menu_cache" label="32539" type="bool" default="true" />
@@ -338,6 +338,9 @@
 		<setting label="32087" type="lsep" />
 		<setting id="trakt.sync_interval" label="32047" type="slider" default="30" option="int" range="5,5,600" />
 		<setting id="trakt.sync_refresh_widgets" label="32048" type="bool" default="false" />
+		<!-- MDBList -->
+		<setting label="MDBList" type="lsep" />
+		<setting id="mdblist.token" label="API Key" type="text" default="" option="hidden" />
 		<!-- IMDb -->
 		<setting label="32064" type="lsep" />
 		<setting id="imdb_user" label="32065" type="text" default="" enable="true" />

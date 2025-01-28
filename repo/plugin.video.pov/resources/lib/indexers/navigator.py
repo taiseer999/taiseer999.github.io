@@ -131,11 +131,12 @@ class Navigator:
 
 	def my_content(self):
 		trakt_str, imdb_str, coll_str, wlist_str, ls_str = ls(32037), ls(32064), ls(32499), ls(32500), ls(32501)
-		t_n_ins, i_n_ins = _in_str % (trakt_str.upper(), ''), _in_str % (imdb_str.upper(), '')
-		t_str, user_str, l_str, ai_str = ls(32037), ls(32065), ls(32501), ls(32494)
+		t_n_ins, i_n_ins, m_n_ins = _in_str % (trakt_str.upper(), ''), _in_str % (imdb_str.upper(), ''), _in_str % ('MDBList'.upper(), '')
+		t_str, user_str, l_str, ai_str, ml_str = ls(32037), ls(32065), ls(32501), ls(32494), ls(32454)
 		tu_str, pu_str = '%s %s %s' % (ls(32458), user_str, l_str), '%s %s %s' % (ls(32459), user_str, l_str)
 		sea_str, n_ins = '%s %s' % (ls(32477), l_str), _in_str % (t_str.upper(), '')
 		trakt_status = k.get_setting('trakt_user') not in ('', None)
+		mdblist_status = k.get_setting('mdblist.token') not in ('', None)
 		imdb_status = k.get_setting('imdb_user') not in ('', None)
 		if trakt_status:
 			self._add_item({'mode': 'navigator.trakt_collections'                                           , 'name': coll_str }, 'trakt.png', t_n_ins)
@@ -145,6 +146,10 @@ class Navigator:
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'name': tu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'popular' , 'name': pu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.search_trakt_lists'                                       , 'name': sea_str}, 'trakt.png', n_ins)
+		if mdblist_status:
+			self._add_item({'mode': 'build_mdb_list.get_mdb_lists', 'list_type': 'my_lists' , 'name': ml_str }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.get_mdb_toplists'                       , 'name': pu_str }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.search_mdb_lists'                       , 'name': sea_str}, 'mdblist.png', m_n_ins)
 		if imdb_status:
 			self._add_item({'mode': 'navigator.imdb_watchlists', 'name': wlist_str}, 'imdb.png', i_n_ins)
 			self._add_item({'mode': 'navigator.imdb_lists',      'name': ls_str   }, 'imdb.png', i_n_ins)
