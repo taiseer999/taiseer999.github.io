@@ -3836,7 +3836,7 @@ v1.30.0
             <icon>resources/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.nimbus.helper" name="Nimbus Helper" version="0.0.48" provider-name="Ivar Brandt">
+</addon><addon id="script.nimbus.helper" name="Nimbus Helper" version="0.0.48.1" provider-name="Ivar Brandt">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
