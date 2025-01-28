@@ -1782,11 +1782,7 @@
         <value>$LOCALIZE[591]</value>
     </variable>
 	
-    <variable name="VideoDecoder">
-        <value condition="Player.Process(videohwdecoder)">HW</value>
-        <value>SW</value>
-    </variable>
-    	<variable name="VideoResolutionTypeVar">
+    <variable name="VideoResolutionTypeVar">
 		<value condition="String.IsEqual(ListItem.VideoResolution,480)">SD</value>
 		<value condition="String.IsEqual(ListItem.VideoResolution,540)">SD</value>
 		<value condition="String.IsEqual(ListItem.VideoResolution,576)">SD</value>
@@ -1989,21 +1985,4 @@
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">[COLOR lightgreen]DTS:X[/COLOR]</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">[COLOR lightgreen]IMAX[/COLOR]</value>
 	</variable>
-    
-      <variable name="VideoConvVar">
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(video.dovi.codec.string),8)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(video.dovi.codec.string),7)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(video.dovi.codec.string),5)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(video.dovi.codec.string),4)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(video.dovi.codec.string),8)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(video.dovi.codec.string),7)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(video.dovi.codec.string),5)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(video.dovi.codec.string),4)"></value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)">-&gt; Dolby Vision</value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),HDR10) + String.Contains(Player.Process(amlogic.vs10.mode),SDR)">-&gt; SDR</value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(amlogic.vs10.mode),HDR10)">-&gt; HDR10</value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)">-&gt; Dolby Vision</value>
-        <value condition="String.Contains(Player.Process(video.source.hdr.type),Dolby Vision) + String.Contains(Player.Process(amlogic.vs10.mode),SDR)"> -&gt; SDR</value>
-    </variable>
 </includes>
-
