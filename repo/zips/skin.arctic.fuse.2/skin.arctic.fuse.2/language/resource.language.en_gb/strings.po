@@ -2570,11 +2570,6 @@ msgctxt "#31537"
 msgid "Edit submenu items"
 msgstr ""
 
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31538"
-msgid "Customise viewtypes"
-msgstr ""
-
 #: /1080i/Includes_Labels.xml
 msgctxt "#31541"
 msgid "Next episode"

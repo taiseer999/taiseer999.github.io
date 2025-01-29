@@ -1681,12 +1681,12 @@ msgstr "المتبقي"
 #: /1080i/SkinSettings.xml
 msgctxt "#31355"
 msgid "Seekbar time display"
-msgstr "طريقة عرض الوقت للأفلام"
+msgstr "ما يظهر شريط العرض"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/Includes_Items.xml
 msgctxt "#31356"
-msgid "Use local cast details"
-msgstr "استخدم معلومات كودي للممثلين"
+msgid "Use online cast"
+msgstr "استخدم معلومات الممثلين من النت"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31357"
