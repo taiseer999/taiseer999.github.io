@@ -101,7 +101,7 @@ info="http://your.info.url"
 description="بيلد خفيف سريع للاجهزة المتوسطة يدعم CoreELEC CPM".
 
 name="AF/AH2/AF2 Arabic"
-version="2.2"
+version="2.3"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=WJ5dGsH1VMDccdhb2vFpGs5Tyd3cs%2BGvgiLuDCISEB63qu9Z1eh3kb3YkZm2bhmS&expiry=sK99LNkH%2F99Ihdw3nrigBA%3D%3D&mac=73567c1e87eb36a5af6712bd969578336ca7da6e605f131d27d6c160831ba6b1"
 minor="http://"
 gui="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=BDvFbQaA8pigqnm5Bb08rDvItl%2BxOgBJHDJHYBIDR26ltV6WJKYBMQtfGnEd9E7B&expiry=FiIsKDI4zUWCJk%2BvK1YyZQ%3D%3D&mac=9ced8fe83ff67960f743758df391b20c102169dc3feab965b88b3d98ec2a7540"
