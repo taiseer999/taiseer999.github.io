@@ -88,12 +88,26 @@ def trakt_manager_choice(params):
 	kwargs = {'items': json.dumps(list_items), 'heading': ls(32198).replace('[B]', '').replace('[/B]', '')}
 	choice = select_dialog([i[1] for i in choices], **kwargs)
 	if choice is None: return
-	if choice == 'Add':
-		from apis.trakt_api import trakt_add_to_list
-		trakt_add_to_list(params)
-	else:
-		from apis.trakt_api import trakt_remove_from_list
-		trakt_remove_from_list(params)
+	from apis.trakt_api import trakt_add_to_list, trakt_remove_from_list
+	if choice == 'Add': trakt_add_to_list(params)
+	else: trakt_remove_from_list(params)
+
+def mdb_manager_choice(params):
+	if not get_setting('mdblist.token', ''): return notification(32760, 3500)
+	from apis.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list
+	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
+	choices = [(item['name'], str(item['id']), str(item['items'])) for item in mdb_userlists() if not item['dynamic']]
+	if not choices: return
+	list_items = [{'line1': item[0], 'line2': '%s items' % item[2],'icon': icon} for item in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': 'MDBLIST MANAGER', 'enumerate': 'false', 'multi_line': 'true'}
+	choice, name = select_dialog([(i[1], i[0]) for i in choices], **kwargs)
+	if choice is None: return
+	list_items = (True for item in mdb_list_items(choice, None) if item['imdb_id'] == params['imdb_id'])
+	action, message = ('remove', 'Remove from') if next(list_items, False) else ('add', 'Add to')
+	if not confirm_dialog(text='%s %s list?' % (message, name), top_space=True): return
+	if mdb_modify_list(choice, params, action): notification(32576)
+	else: notification(32574)
+	if action == 'remove': container_refresh()
 
 def playback_choice(content, poster, meta):
 	items = [{'line': ls(32014), 'function': 'clear_and_rescrape'},

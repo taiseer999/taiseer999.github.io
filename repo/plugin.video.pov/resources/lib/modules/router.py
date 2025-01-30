@@ -49,6 +49,8 @@ def routing(params):
 			dialogs.favorites_choice(params)
 		elif mode == 'trakt_manager_choice':
 			dialogs.trakt_manager_choice(params)
+		elif mode == 'mdb_manager_choice':
+			dialogs.mdb_manager_choice(params)
 		elif mode == 'folder_scraper_manager_choice':
 			dialogs.folder_scraper_manager_choice()
 		elif mode == 'set_language_filter_choice':

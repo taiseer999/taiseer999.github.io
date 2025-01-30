@@ -15,7 +15,7 @@ build_url, remove_meta_keys, dict_removals = kodi_utils.build_url, kodi_utils.re
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 item_jump, item_next = tp('special://home/addons/plugin.video.pov/resources/media/item_jump.png'), tp('special://home/addons/plugin.video.pov/resources/media/item_next.png')
 poster_empty, fanart_empty = tp('special://home/addons/plugin.video.pov/resources/media/box_office.png'), tp('special://home/addons/plugin.video.pov/fanart.png')
-watched_str, unwatched_str, traktmanager_str = ls(32642), ls(32643), ls(32198)
+watched_str, unwatched_str, traktmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]MDBList Manager[/B]'
 favmanager_str, extras_str, options_str, recomm_str = ls(32197), ls(32645), ls(32646), '[B]%s...[/B]' % ls(32503)
 random_str, exit_str, browse_str = ls(32611), ls(32650), ls(32652)
 nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
@@ -179,6 +179,7 @@ class TVShows:
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'tvshow', 'tmdb_id': tmdb_id})
 			recommended_params = build_url({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_recommendations', 'tmdb_id': tmdb_id})
 			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
+			mdb_manager_params = build_url({'mode': 'mdb_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
 			fav_manager_params = build_url({'mode': 'favorites_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'title': title})
 			cm_append((options_str, run_plugin % options_params))
 			if self.open_extras:
@@ -187,6 +188,7 @@ class TVShows:
 			else:
 				cm_append((extras_str, run_plugin % extras_params))
 			cm_append((traktmanager_str, run_plugin % trakt_manager_params))
+			cm_append((mdbmanager_str, run_plugin % mdb_manager_params))
 			cm_append((favmanager_str, run_plugin % fav_manager_params))
 			if not playcount:
 				watched_params = build_url({'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})

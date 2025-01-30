@@ -1,7 +1,7 @@
-import requests, sys
+import sys
 from queue import SimpleQueue
 from threading import Thread
-from caches.main_cache import cache_object
+from apis import mdblist_api
 from indexers.movies import Movies
 from indexers.tvshows import TVShows
 from modules import kodi_utils
@@ -38,7 +38,7 @@ def search_mdb_lists(params):
 			except: pass
 	page = params.get('new_page', '1')
 	search_title = params.get('search_title', None) or kodi_utils.dialog.input('POV')
-	if search_title: lists, pages = MDBList().call_mdblist(search_lists % search_title), '1'
+	if search_title: lists, pages = mdblist_api.mdb_searchlists(search_title), '1'
 	else: lists, pages = [], page
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
@@ -56,12 +56,13 @@ def get_mdb_lists(params):
 			try:
 				cm = []
 				cm_append = cm.append
-				name, slug, list_id = item['name'], item['slug'], item['id']
+				name, user, slug, list_id = item['name'], item['user_name'], item['slug'], item['id']
 				likes, item_count = item['likes'] or 0, item.get('items', '?')
 				display = '%s (x%s)' % (name, item_count) if item_count else name
 				plot = '[B]Likes[/B]: %s' % likes
 				if item.get('private'): display = '[COLOR cyan][I]%s[/I][/COLOR]' % display
-				url = build_url({'mode': 'build_mdb_list', 'user': '', 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'name': name})
+				elif item.get('dynamic'): display = '[COLOR magenta][I]%s[/I][/COLOR]' % display
+				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': display, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': display, 'iconImage': 'mdblist.png'})))
 				listitem = make_listitem()
@@ -71,7 +72,7 @@ def get_mdb_lists(params):
 				listitem.addContextMenuItems(cm, replaceItems=False)
 				yield (url, listitem, True)
 			except: pass
-	lists = MDBList().mdb_userlists()
+	lists = mdblist_api.mdb_userlists()
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
 	kodi_utils.set_category(__handle__, params.get('name'))
@@ -90,7 +91,7 @@ def get_mdb_toplists(params):
 				likes, item_count = item['likes'], item.get('items', '?')
 				display = '[B]%s[/B] | [I](x%s) - %s[/I]' % (name, item_count, user)
 				plot = '[B]Likes[/B]: %s' % likes
-				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'name': name})
+				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': name, 'iconImage': 'mdblist.png'})))
 				listitem = make_listitem()
@@ -100,7 +101,7 @@ def get_mdb_toplists(params):
 				listitem.addContextMenuItems(cm)
 				yield (url, listitem, True)
 			except: pass
-	lists = MDBList().mdb_toplists()
+	lists = mdblist_api.mdb_toplists()
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
 	kodi_utils.set_category(__handle__, params.get('name'))
@@ -117,8 +118,7 @@ def build_mdb_list(params):
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
-	results = MDBList().call_mdblist(list_items % list_id)
-	results = sorted(results['movies'] + results['shows'], key=lambda k: (k['rank'], k['title']))
+	results = mdblist_api.mdb_list_items(list_id, list_type)
 	if paginate(): process_list, total_pages = paginate_list(results, page, letter, page_limit())
 	else: process_list, total_pages = results, 1
 	movies, tvshows = Movies({'id_type': 'trakt_dict'}), TVShows({'id_type': 'trakt_dict'})
@@ -150,37 +150,4 @@ def build_mdb_list(params):
 	kodi_utils.set_content(__handle__, content)
 	kodi_utils.end_directory(__handle__, False if is_widget else None)
 	kodi_utils.set_view_mode('view.%s' % content, content)
-
-# move this to dedicated module as more functionality is required
-EXPIRES_1_HOURS = 1
-base_url = 'https://api.mdblist.com'
-search_lists = '/lists/search?query=%s'
-user_lists = '/lists/user'
-top_lists = '/lists/top'
-list_items = '/lists/%s/items'
-list_json = 'https://mdblist.com/lists/%s/%s/json'
-timeout = 3.05
-
-class MDBList:
-	def __init__(self):
-		self.token = kodi_utils.get_setting('mdblist.token')
-
-	def call_mdblist(self, url):
-		params = {'apikey': self.token}
-		try:
-			response = requests.get('%s%s' % (base_url, url), params=params, timeout=timeout)
-			response.raise_for_status()
-		except requests.exceptions.RequestException as e:
-			kodi_utils.logger('mdblist error', f"{e}\n{e.request.url}\n{e.response.text}")
-		try: result = response.json()
-		except: result = []
-		return result
-
-	def mdb_userlists(self):
-		string = 'mdb_userlists_%s' % self.token
-		return cache_object(self.call_mdblist, string, user_lists, False, EXPIRES_1_HOURS)
-
-	def mdb_toplists(self):
-		string = 'mdb_toplists'
-		return cache_object(self.call_mdblist, string, top_lists, False)
 
