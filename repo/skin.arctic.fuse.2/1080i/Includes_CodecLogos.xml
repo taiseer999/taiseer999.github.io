@@ -2452,7 +2452,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>240</top>
+                    <top>55</top>
                     <left>975</left>
                     <width>150</width>
                     <height>45</height>
@@ -2473,7 +2473,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>240</top>
+                    <top>55</top>
                     <left>975</left>
                     <width>150</width>
                     <height>45</height>
@@ -2494,7 +2494,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>240</top>
+                    <top>55</top>
                     <left>975</left>
                     <width>150</width>
                     <height>45</height>
