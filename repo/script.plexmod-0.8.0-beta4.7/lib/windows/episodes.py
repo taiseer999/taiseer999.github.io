@@ -201,7 +201,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
     THUMB_AR16X9_DIM = util.scaleResolution(657, 393)
     POSTER_DIM = util.scaleResolution(420, 630)
-    RELATED_DIM = util.scaleResolution(268, 397)
+    RELATED_DIM = util.scaleResolution(268, 402)
     EXTRA_DIM = util.scaleResolution(329, 185)
     ROLES_DIM = util.scaleResolution(334, 334)
 
@@ -306,7 +306,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.initialEpisode.reload(checkFiles=1, **VIDEO_RELOAD_KW)
 
         # We're not hitting onFirstInit when autoplaying from home, setup hooks here, so we can grab video progress
-        self._setup_hooks()
+        #self._setup_hooks()
         self.openedWithAutoPlay = True
         return self.playButtonClicked(force_episode=self.initialEpisode, from_auto_play=True)
 
@@ -333,7 +333,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         if not self.tasks:
             self.tasks = backgroundthread.Tasks()
 
-        vp = VIDEO_PROGRESS.get(self.show_.ratingKey, {}).get(self.season.ratingKey, {})
+        vp = None
+        if self.show_.ratingKey in VIDEO_PROGRESS:
+            # access progress data for current show only
+            vp = copy.deepcopy(VIDEO_PROGRESS[self.show_.ratingKey]).get(self.season.ratingKey, {})
 
         if (self.manuallySelected and not VIDEO_PROGRESS) or self.cameFrom == "info":
             if self.cameFrom == "info":
@@ -542,7 +545,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                     self.episodeListControl.selectItem(mli.pos())
                     self.episodesPaginator.setEpisode(self.episode or mli.dataSource)
                     self.lastItem = mli
-                    selected_new = True
+                    selected_new = mli
                     if just_fully_watched:
                         set_main_progress_to = 0
 
@@ -585,6 +588,12 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             self.lastFocusID = None
             if not from_reinit:
                 self.currentItemLoaded = False
+
+            # wait for ep list to update
+            waited = 0
+            while self.episodeListControl.getSelectedItem() != selected_new and waited < 20:
+                util.MONITOR.waitForAbort(0.05)
+                waited += 1
 
         self.episode = None
 
@@ -630,6 +639,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             if controlID == self.LIST_OPTIONS_BUTTON_ID and self.checkOptionsAction(action):
                 return
             elif action == xbmcgui.ACTION_CONTEXT_MENU:
+                if controlID in (self.PLAY_BUTTON_ID, self.PLAY_BUTTON_ID + 1000) and util.getSetting('assume_resume'):
+                    self.playButtonClicked(force_resume_menu=True)
+                    return
+
                 if not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)):
                     self.lastNonOptionsFocusID = self.lastFocusID
                     self.setFocusId(self.OPTIONS_GROUP_ID)
@@ -789,7 +802,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             x, y = self.getRoleItemDDPosition()
 
             options = [{'role': r, 'display': r.reasonTitle} for r in sectionRoles]
-            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True, close_direction='bottom')
+            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=False)
 
             if not choice:
                 return
@@ -801,7 +814,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.processCommand(opener.open(role))
 
     def getRoleItemDDPosition(self):
-        y = 980
+        y = 900
         if xbmc.getCondVisibility('Control.IsVisible(500)'):
             y += 380
         if xbmc.getCondVisibility('Control.IsVisible(501)'):
@@ -906,7 +919,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         section_id = self.show_.getLibrarySectionId()
         self.processCommand(search.dialog(self, section_id=section_id or None))
 
-    def playButtonClicked(self, shuffle=False, force_episode=None, from_auto_play=False):
+    def playButtonClicked(self, shuffle=False, force_episode=None, from_auto_play=False, force_resume_menu=False):
         if shuffle:
             seasonOrShow = self.season or self.show_
             items = seasonOrShow.all()
@@ -917,7 +930,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             return True
 
         else:
-            return self.episodeListClicked(force_episode=force_episode, from_auto_play=from_auto_play)
+            return self.episodeListClicked(force_episode=force_episode, from_auto_play=from_auto_play,
+                                           force_resume_menu=force_resume_menu)
 
     def shuffleButtonClicked(self):
         self.playButtonClicked(shuffle=True)
@@ -964,7 +978,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         )
         self.cameFrom = "info"
 
-    def episodeListClicked(self, force_episode=None, from_auto_play=False):
+    def episodeListClicked(self, force_episode=None, from_auto_play=False, force_resume_menu=False,
+                           force_startover=False):
         if (not self.currentItemLoaded or self.playBtnClicked) and not from_auto_play:
             util.DEBUG_LOG("Not honoring play action: currentItemLoaded: {0}, "
                            "playBtnClicked: {1}, from_auto_play: {2}",
@@ -985,8 +1000,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             return
 
         resume = False
-        if episode.viewOffset.asInt():
-            if not util.getSetting('assume_resume'):
+        if episode.viewOffset.asInt() and not force_startover:
+            if not util.getSetting('assume_resume') or force_resume_menu:
                 choice = dropdown.showDropdown(
                     options=[
                         {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(episode.viewOffset.asInt()).lstrip('0').lstrip(':'))},
@@ -1035,6 +1050,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         if mli and not mli.getProperty("is.boundary"):
             inProgress = mli.dataSource.viewOffset.asInt()
+            if inProgress and util.getSetting('assume_resume'):
+                options.append({'key': 'play_startover', 'display': T(32317, 'Play from beginning')})
+                options.append(dropdown.SEPARATOR)
+
             if not mli.dataSource.isWatched or inProgress:
                 options.append({'key': 'mark_watched', 'display': T(32319, 'Mark Played')})
             if mli.dataSource.isWatched or inProgress:
@@ -1059,8 +1078,11 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             options.append({'key': 'playback_settings', 'display': T(32925, 'Playback Settings')})
             options.append(dropdown.SEPARATOR)
 
-        if mli.dataSource.server.allowsMediaDeletion:
-            options.append({'key': 'delete', 'display': T(32322, 'Delete')})
+        if plexapp.ACCOUNT.isAdmin:
+            options.append({'key': 'refresh', 'display': T(33719, 'Refresh metadata')})
+
+            if mli.dataSource.server.allowsMediaDeletion:
+                options.append({'key': 'delete', 'display': T(32322, 'Delete')})
 
         # if xbmc.getCondVisibility('Player.HasAudio') and self.section.TYPE == 'artist':
         #     options.append({'key': 'add_to_queue', 'display': 'Add To Queue'})
@@ -1071,6 +1093,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         options.append({'key': 'to_show', 'display': T(32323, 'Go To Show')})
         options.append({'key': 'to_section', 'display': T(32324, u'Go to {0}').format(
             self.show_.getLibrarySectionTitle())})
+
+        if 'items' in util.getSetting('cache_requests'):
+            options.append({'key': 'cache_reset', 'display': T(33728, "Clear cache for item")})
 
         pos = (500, util.vscalei(620))
         bottom = False
@@ -1116,6 +1141,19 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             self.delete(mli.dataSource)
         elif choice['key'] == 'playback_settings':
             self.playbackSettings(self.show_, pos, bottom)
+        elif choice['key'] == 'refresh':
+            mli.dataSource.refresh()
+            self.updateItems(mli)
+        elif choice['key'] == 'play_startover':
+            self.episodeListClicked(force_startover=True)
+        elif choice["key"] == "cache_reset":
+            try:
+                util.DEBUG_LOG('Clearing requests cache for {}...', mli.dataSource)
+                mli.dataSource.clearCache()
+                mli.dataSource.reload()
+                self.updateItems(mli)
+            except Exception as e:
+                util.DEBUG_LOG("Couldn't clear cache: {}", e)
 
     def mediaButtonClicked(self):
         options = []

@@ -6926,7 +6926,6 @@
                         <posy>0</posy>
                         <width>500</width>
                         <height>{{ vscale(900) }}</height>
-                        <onup>201</onup>
                         <onleft>203</onleft>
                         <onright>202</onright>
                         <onunfocus>SetProperty(show.servers,)</onunfocus>
@@ -7303,8 +7302,6 @@
                         <posy>0</posy>
                         <width>300</width>
                         <height>{{ vscale(198) }}</height>
-                        <onup>202</onup>
-                        <ondown>noop</ondown>
                         <onleft>201</onleft>
                         <onunfocus>SetProperty(show.options,)</onunfocus>
                         <scrolltime>200</scrolltime>
@@ -7474,7 +7471,7 @@
 
 <control type="group">
     <visible>!String.IsEmpty(Window.Property(busy))</visible>
-    <animation effect="fade" start="0" end="100" delay="500">Visible</animation>
+    <animation effect="fade" start="0" end="100">Visible</animation>
     <posx>840</posx>
     <posy>{{ vscale(465) }}</posy>
     <control type="image">

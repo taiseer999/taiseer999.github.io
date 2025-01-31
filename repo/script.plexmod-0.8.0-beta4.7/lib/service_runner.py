@@ -8,12 +8,15 @@ except ImportError:
         pass
         # python 2.7 has "reload" natively
 
+from kodi_six import xbmc
+
 import lib.update_checker as uc
 import lib.kodi_util as ku
 import lib.logging as lo
 
-from lib.monitor import MONITOR
 from lib.properties import getGlobalProperty, setGlobalProperty
+
+MONITOR = xbmc.Monitor()
 
 def main(restarting_service=False):
     service_started = getGlobalProperty('service.started')

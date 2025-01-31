@@ -5,7 +5,7 @@ import threading
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
-from plexnet import playlist, util as pnUtil
+from plexnet import playlist, util as pnUtil, plexapp
 
 from lib import metadata
 from lib import player
@@ -42,7 +42,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
     height = 1080
 
     EXTRA_DIM = util.scaleResolution(329, 185)
-    RELATED_DIM = util.scaleResolution(268, 397)
+    RELATED_DIM = util.scaleResolution(268, 402)
     ROLES_DIM = util.scaleResolution(334, 334)
 
     SUB_ITEM_LIST_ID = 400
@@ -458,12 +458,16 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
                     options.append(dropdown.SEPARATOR)
 
                 options.append({'key': 'playback_settings', 'display': T(32925, 'Playback Settings')})
-                if item.server.allowsMediaDeletion:
+                if plexapp.ACCOUNT.isAdmin and item.server.allowsMediaDeletion:
                     options.append(dropdown.SEPARATOR)
+                    if plexapp.ACCOUNT.isAdmin:
+                        options.append({'key': 'refresh', 'display': T(33719, 'Refresh metadata')})
                     options.append({'key': 'delete', 'display': T(32322, 'Delete')})
             elif item.type == "season":
-                if item.server.allowsMediaDeletion:
+                if plexapp.ACCOUNT.isAdmin and item.server.allowsMediaDeletion:
                     options.append(dropdown.SEPARATOR)
+                    if plexapp.ACCOUNT.isAdmin:
+                        options.append({'key': 'refresh', 'display': T(33719, 'Refresh metadata')})
                     options.append({'key': 'delete', 'display': T(32975, 'Delete Season')})
 
         # if xbmc.getCondVisibility('Player.HasAudio') and self.section.TYPE == 'artist':
@@ -475,6 +479,10 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
         options.append(dropdown.SEPARATOR)
 
         options.append({'key': 'to_section', 'display': u'Go to {0}'.format(self.mediaItem.getLibrarySectionTitle())})
+
+        if 'items' in util.getSetting('cache_requests'):
+            options.append({'key': 'cache_reset', 'display': T(33728, "Clear cache for item")})
+
         pos = (880, 618)
         if from_item:
             viewPos = self.subItemListControl.getViewPosition()
@@ -511,6 +519,19 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
                 self.setup()
                 self.initialized = True
                 self.setFocusId(self.PLAY_BUTTON_ID)
+        elif choice['key'] == 'refresh':
+            item.refresh()
+            self.updateItems()
+            self.updateProperties()
+
+        elif choice["key"] == "cache_reset":
+            try:
+                util.DEBUG_LOG('Clearing requests cache for {}...', item)
+                item.clearCache()
+                self.updateItems()
+                self.updateProperties()
+            except Exception as e:
+                util.DEBUG_LOG("Couldn't clear cache: {}", e)
 
     def roleClicked(self):
         mli = self.rolesListControl.getSelectedItem()
@@ -527,7 +548,7 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
             x, y = self.getRoleItemDDPosition()
 
             options = [{'role': r, 'display': r.reasonTitle} for r in sectionRoles]
-            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True, close_direction='bottom')
+            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True)
 
             if not choice:
                 return

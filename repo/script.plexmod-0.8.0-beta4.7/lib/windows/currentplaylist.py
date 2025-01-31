@@ -205,7 +205,7 @@ class CurrentPlaylistWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
         options.append({'key': 'to_artist', 'display': T(32301, 'Go to Artist')})
         options.append({'key': 'to_section', 'display': T(32302, u'Go to {0}').format(track.getLibrarySectionTitle())})
 
-        choice = dropdown.showDropdown(options, pos, close_direction='down', pos_is_bottom=True, close_on_playback_ended=True)
+        choice = dropdown.showDropdown(options, pos, pos_is_bottom=True, close_on_playback_ended=True)
         if not choice:
             return
 

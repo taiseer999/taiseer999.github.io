@@ -2304,12 +2304,12 @@ msgstr "[Spoiler entfernt]"
 
 #: 
 msgctxt "#33009"
-msgid "Blur amount for unwatched/in-progress episodes"
+msgid "Blur amount for unplayed/in-progress episodes"
 msgstr "Stärke der Verschleierung nicht geschauter Episoden"
 
 #: 
 msgctxt "#33010"
-msgid "Unwatched"
+msgid "Unplayed"
 msgstr "Nicht geschaut"
 
 #: 
@@ -2319,7 +2319,7 @@ msgstr "Angefangen"
 
 #: 
 msgctxt "#33012"
-msgid "No unwatched episode titles"
+msgid "No unplayed episode titles"
 msgstr "Keine Episodentitel für nicht geschaute Folgen"
 
 #: 
@@ -2394,14 +2394,14 @@ msgstr "Aktion wählen"
 
 #: 
 msgctxt "#33022"
-msgid "Watched indicators"
+msgid "Played indicators"
 msgstr "Geschaut-Indikatoren"
 
 #:
 msgctxt "#33023"
-msgid "Classic: Show orange triangle for unwatched items\n"
-"Modern: Show green checkmark for watched items\n"
-"Modern (2024): Show white checkmark for watched items\n"
+msgid "Classic: Show orange triangle for unplayed items\n"
+"Modern: Show green checkmark for played items\n"
+"Modern (2024): Show white checkmark for played items\n"
 "(default: Modern (2024))"
 msgstr "Klassisch: Zeige oranges Dreieck für nicht geschaute Elemente\n"
 "Modern: Zeige grünen Haken für geschaute Elemente\n"
@@ -2415,7 +2415,7 @@ msgstr "Hintergrund moderner Intikatoren verstecken"
 
 #: 
 msgctxt "#33025"
-msgid "When the above is enabled, hide the black backdrop of the watched state."
+msgid "When the above is enabled, hide the black backdrop of the played state."
 msgstr "Wenn die vorherige Option aktiviert ist, den schwarzen Hintergrund nicht darstellen."
 
 #: 
@@ -3108,8 +3108,8 @@ msgid "Show ratings for"
 msgstr "Bewertungen anzeigen für"
 
 msgctxt "#33710"
-msgid "Show reviews"
-msgstr "Kritiken anzeigen"
+msgid "Show reviews for"
+msgstr "Kritiken anzeigen für"
 
 msgctxt "#33711"
 msgid "Always resume media"
@@ -3134,3 +3134,59 @@ msgstr "OSD Versteck-Verzögerung"
 msgctxt "#33716"
 msgid "How long to wait until hiding the OSD. Only works with Plextuary skin or others with configurable OSD timeout. Default: 4s (+/- 1s)"
 msgstr "Nach wieviel Sekunden das OSD automatisch versteckt werden soll. Funktioniert nur mit dem Plextuary Skin oder anderen Skins mit konfigurierbarer OSD Verzögerung. Standard: 4s (+/- 1s)"
+
+msgctxt "#33718"
+msgid "Played"
+msgstr "Geschaut"
+
+msgctxt "#33719"
+msgid "Refresh metadata"
+msgstr "Metadaten aktualisieren"
+
+msgctxt "#33720"
+msgid "Clear all caches"
+msgstr "Alle Caches leeren"
+
+msgctxt "#33721"
+msgid "Clear library cache (not items)"
+msgstr "Bibliothek-Cache löschen (ausg. Items)"
+
+msgctxt "#33722"
+msgid "Libraries"
+msgstr "Bibliotheken"
+
+msgctxt "#33723"
+msgid "Media Items"
+msgstr "Medien"
+
+msgctxt "#33724"
+msgid "Cache Plex data for"
+msgstr "Plex-Daten cachen für"
+
+msgctxt "#33725"
+msgid "Persist cached Plex data"
+msgstr "Gecachte Plex-Daten persistieren"
+
+msgctxt "#33726"
+msgid "Instead of clearing the cache when exiting the addon, persist it instead. Warning: You'll most likely encounter missing items in libraries or outdated data. Use the corresponding menu functionalities to clear the cache for specific items or libraries."
+msgstr "Anstatt den Cache beim Beenden zu löschen, behalte ihn. Achtung: Es wird sehr wahrscheinlich zu fehlenden Items in Bibliotheken oder abgelaufene Daten kommen. Die korrespondierenden Menüfunktionalitäten benutzen um den Cache für spezifische Items oder Bibliotheken zu leeren."
+
+msgctxt "#33727"
+msgid "Store Plex server responses for items and library views in a local SQLite database. Doesn't cache anything else (Home/Hubs are always up to date). Massively speeds up consecutive visits to items and libraries. Certain important events, such as watch state changes, automatically delete the item cache and its corresponding library cache. (Default: Off)"
+msgstr "Speichere die Plex-Server-Antworten für Items und Bibliothekansichten in einer lokalen SQLite-Datenbank. Gilt nur für diese zwei Datenbereiche (Start/Hubs sind immer aktuell). Erzeugt massiven Geschwindigkeitsvorteil bei aufeinanderfolgenden Besuchen von Items und Bibliotheken. Bestimmte, wichtige Ereignisse, wie z. B. Abgespielt-Status, löschen automatisch den Item-Cache und die dazugehörigen Bibliothek-Caches. (Standard: Aus)"
+
+msgctxt "#33729"
+msgid "Expire cached Plex data after (hours)"
+msgstr "Ablauf gecachter Plex-Daten (Stunden)"
+
+msgctxt "#33730"
+msgid "Randomly"
+msgstr "Zufällig"
+
+msgctxt "#33731"
+msgid "By Bitrate"
+msgstr "Nach Bitrate"
+
+msgctxt "#33732"
+msgid "Bitrate"
+msgstr "Bitrate"

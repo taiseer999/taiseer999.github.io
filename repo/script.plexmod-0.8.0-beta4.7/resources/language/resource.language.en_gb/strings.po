@@ -1851,11 +1851,11 @@ msgid "[Spoilers removed]"
 msgstr ""
 
 msgctxt "#33009"
-msgid "Blur amount for unwatched/in-progress episodes"
+msgid "Blur amount for unplayed/in-progress episodes"
 msgstr ""
 
 msgctxt "#33010"
-msgid "Unwatched"
+msgid "Unplayed"
 msgstr ""
 
 msgctxt "#33011"
@@ -1863,7 +1863,7 @@ msgid "In progress"
 msgstr ""
 
 msgctxt "#33012"
-msgid "No unwatched episode titles"
+msgid "No unplayed episode titles"
 msgstr ""
 
 msgctxt "#33013"
@@ -1903,11 +1903,11 @@ msgid "Choose action"
 msgstr ""
 
 msgctxt "#33022"
-msgid "Watched indicators"
+msgid "Played indicators"
 msgstr ""
 
 msgctxt "#33023"
-msgid "Classic: Show orange triangle for unwatched items\nModern: Show green checkmark for watched items\nModern (2024): Show white checkmark for watched items\n(default: Modern (2024))"
+msgid "Classic: Show orange triangle for unplayed items\nModern: Show green checkmark for played items\nModern (2024): Show white checkmark for played items\n(default: Modern (2024))"
 msgstr ""
 
 msgctxt "#33024"
@@ -1915,7 +1915,7 @@ msgid "Hide background in modern indicators"
 msgstr ""
 
 msgctxt "#33025"
-msgid "When the above is enabled, hide the black backdrop of the watched state."
+msgid "When the above is enabled, hide the black backdrop of the played state."
 msgstr ""
 
 msgctxt "#33026"
@@ -2517,7 +2517,7 @@ msgid "Show ratings for"
 msgstr ""
 
 msgctxt "#33710"
-msgid "Show reviews"
+msgid "Show reviews for"
 msgstr ""
 
 msgctxt "#33711"
@@ -2546,4 +2546,64 @@ msgstr ""
 
 msgctxt "#33717"
 msgid "Debug requests"
+msgstr ""
+
+msgctxt "#33718"
+msgid "Played"
+msgstr ""
+
+msgctxt "#33719"
+msgid "Refresh metadata"
+msgstr ""
+
+msgctxt "#33720"
+msgid "Clear all caches"
+msgstr ""
+
+msgctxt "#33721"
+msgid "Clear library cache (not items)"
+msgstr ""
+
+msgctxt "#33722"
+msgid "Libraries"
+msgstr ""
+
+msgctxt "#33723"
+msgid "Media Items"
+msgstr ""
+
+msgctxt "#33724"
+msgid "Cache Plex data for"
+msgstr ""
+
+msgctxt "#33725"
+msgid "Persist cached Plex data"
+msgstr ""
+
+msgctxt "#33726"
+msgid "Instead of clearing the cache when exiting the addon, persist it instead. Warning: You'll most likely encounter missing items in libraries or outdated data. Use the corresponding menu functionalities to clear the cache for specific items or libraries."
+msgstr ""
+
+msgctxt "#33727"
+msgid "Store Plex server responses for items and library views in a local SQLite database. Doesn't cache anything else (Home/Hubs are always up to date). Massively speeds up consecutive visits to items and libraries. Certain important events, such as watch state changes, automatically delete the item cache and its corresponding library cache. (Default: Off)"
+msgstr ""
+
+msgctxt "#33728"
+msgid "Clear cache for item"
+msgstr ""
+
+msgctxt "#33729"
+msgid "Expire cached Plex data after (hours)"
+msgstr ""
+
+msgctxt "#33730"
+msgid "Randomly"
+msgstr ""
+
+msgctxt "#33731"
+msgid "By Bitrate"
+msgstr ""
+
+msgctxt "#33732"
+msgid "Bitrate"
 msgstr ""

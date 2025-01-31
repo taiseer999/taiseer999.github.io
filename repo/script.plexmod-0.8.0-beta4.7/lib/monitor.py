@@ -1,6 +1,7 @@
 # coding=utf-8
 from kodi_six import xbmc
 from .settings_util import getSetting
+from .properties_core import _setGlobalProperty
 from plexnet import signalsmixin
 from .logging import log as LOG
 
@@ -51,18 +52,26 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
             from .windows import kodigui, windowutils
 
             def exit_mainloop():
-                LOG("Addon never properly started, can't reactivate")
-                windowutils.HOME.doClose()
+                LOG("Addon never properly started, can't reactivate; stopping and restarting")
+                try:
+                    windowutils.HOME.doClose()
+                except:
+                    xbmc.executebuiltin('StopScript(script.plexmod)')
+                    xbmc.executebuiltin('RunScript(script.plexmod)')
 
             if not kodigui.BaseFunctions.lastWinID:
+                LOG("No lastWinID, restarting")
                 exit_mainloop()
                 return
             if kodigui.BaseFunctions.lastWinID > 13000:
-                from lib.util import reInitAddon, setGlobalProperty
+                from lib.util import reInitAddon
+                LOG("Trying to re-activate addon via window ID: {}".format(kodigui.BaseFunctions.lastWinID))
                 reInitAddon()
-                setGlobalProperty('is_active', '1')
-                xbmc.executebuiltin('ActivateWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
+                _setGlobalProperty('is_active', '1')
+                xbmc.executebuiltin('ReplaceWindow({0})'.format(kodigui.BaseFunctions.lastWinID))
+                return
             else:
+                LOG("LastWinID was: %s, restarting" % kodigui.BaseFunctions.lastWinID)
                 exit_mainloop()
                 return
 

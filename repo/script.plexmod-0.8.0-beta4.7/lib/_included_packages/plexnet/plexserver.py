@@ -4,6 +4,8 @@ from __future__ import absolute_import
 import time
 import re
 import json
+
+import six
 import urllib3.exceptions
 
 from . import http
@@ -24,6 +26,8 @@ from six.moves import range
 
 TOTAL_QUERIES = 0
 DEFAULT_BASEURI = 'http://localhost:32400'
+
+CACHE_MAP = {}
 
 
 class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
@@ -231,10 +235,15 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             return ""
 
     def query(self, path, method=None, **kwargs):
-        method = method or self.session.get
+        if method and isinstance(method, six.string_types):
+            method = getattr(self.session, method)
+        else:
+            method = method or self.session.get
 
         limit = kwargs.pop("limit", None)
         params = kwargs.pop("params", None)
+        cachable = kwargs.pop("cachable", False)
+        cache_ref = kwargs.pop("cache_ref", None)
         if params:
             if limit is None:
                 limit = params.get("limit", None)
@@ -260,12 +269,40 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             url = http.addUrlParam(url, "X-Plex-Container-Start=%s" % offset)
             url = http.addUrlParam(url, "X-Plex-Container-Size=%s" % limit)
 
-        util.LOG('{0} {1}', method.__name__.upper(), re.sub('X-Plex-Token=[^&]+', 'X-Plex-Token=****', url))
+        with_cache = False
+        if cachable and cache_ref:
+            kwargs['with_cache'] = with_cache = True
+
+        util.LOG('{0} (cache enabled: {2}) {1}', method.__name__.upper(), re.sub('X-Plex-Token=[^&]+', 'X-Plex-Token=****', url), with_cache)
         try:
             response = method(url, **kwargs)
             if response.status_code not in (200, 201):
                 codename = http.status_codes.get(response.status_code, ['Unknown'])[0]
                 raise exceptions.BadRequest('({0}) {1}'.format(response.status_code, codename))
+
+            # caching
+            if hasattr(response, "from_cache") and with_cache:
+                if util.DEBUG_REQUESTS:
+                    util.LOG('{0} (from cache: {2}) {1}', method.__name__.upper(),
+                             re.sub('X-Plex-Token=[^&]+', 'X-Plex-Token=****', url), response.from_cache)
+
+                # scope for server+user; URLs itself don't need to be scoped as they differ on X-Plex-Token and domain
+                base_key = util.INTERFACE.getRCBaseKey()
+
+                if base_key not in util.CACHED_PLEX_URLS:
+                    util.CACHED_PLEX_URLS[base_key] = {}
+
+                base = util.CACHED_PLEX_URLS[base_key]
+
+                if cache_ref not in base:
+                    base[cache_ref] = []
+
+                # fixme: this could be faster with a dict
+                if url not in base[cache_ref]:
+                    base[cache_ref].append(url)
+                    if util.DEBUG_REQUESTS:
+                        util.DEBUG_LOG('Storing URL for cached response in {0}: {1}: {2}'.format(base_key, cache_ref, url))
+
             data = response.text.encode('utf8')
         except asyncadapter.TimeoutException:
             util.ERROR()
@@ -283,7 +320,7 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
         if not path:
             return ''
 
-        eOpts = {"minSize": 1}
+        eOpts = {"minSize": 1, "upscale": 1}
         eOpts.update(extraOpts)
 
         params = ("&width=%s&height=%s" % (width, height)) + ''.join(["&%s=%s" % (key, eOpts[key]) for key in eOpts])
@@ -666,6 +703,9 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
 
         for i in range(len(serverObj.get('connections', []))):
             conn = serverObj['connections'][i]
+            if conn['address'].endswith(":None"):
+                continue
+
             isFallback = hasSecureConn and conn['address'][:5] != "https" and not util.LOCAL_OVER_SECURE
             sources = plexconnection.PlexConnection.SOURCE_BY_VAL[conn['sources']]
             connection = plexconnection.PlexConnection(sources, conn['address'], conn['isLocal'], conn['token'], isFallback)

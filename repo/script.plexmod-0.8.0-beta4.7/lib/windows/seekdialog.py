@@ -608,18 +608,20 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
                         if markerDef["marker"]:
                             marker = markerDef["marker"]
                             final = getattr(marker, "final", False)
-                            markerOff = -FINAL_MARKER_NEGOFF if final else MARKER_END_JUMP_OFF
+
+                            if final:
+                                return self.handleFinalMarker(markerDef, immediate=False, context="MarkerSkip")
 
                             util.DEBUG_LOG('MarkerSkip: Skipping marker'
                                            ' {} (final: {}, to: {}, offset: {})'.format(markerDef["marker"],
-                                                                            final, marker.endTimeOffset, markerOff))
+                                                                            final, marker.endTimeOffset, MARKER_END_JUMP_OFF))
                             self.setProperty('show.markerSkip', '')
                             self.setProperty('show.markerSkip_OSDOnly', '')
                             markerDef["skipped"] = True
-                            self.doSeek(marker.endTimeOffset + markerOff)
+                            self.doSeek(marker.endTimeOffset + MARKER_END_JUMP_OFF)
                             self.hideOSD(skipMarkerFocus=True)
 
-                            if marker.type == "credits" and not final:
+                            if marker.type == "credits":
                                 # non-final marker
                                 setattr(self, markerDef["markerAutoSkipShownTimer"], None)
                                 self.resetAutoSeekTimer(None)
@@ -769,15 +771,11 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
                     # Alt-right
                     builtin.PlayerControl('tempoup')
                 elif action == xbmcgui.ACTION_NEXT_ITEM:
-                    self.sendTimeline(state=self.player.STATE_STOPPED)
-                    self._ignoreTick = True
-                    self.killTimeKeeper()
-                    self.handler.next()
+                    self.prepareNewPlayback(queuing_next=True, ignore_tick=True)
+                    self.player.trigger("action", action="next")
                 elif action == xbmcgui.ACTION_PREV_ITEM:
-                    self.sendTimeline(state=self.player.STATE_STOPPED)
-                    self._ignoreTick = True
-                    self.killTimeKeeper()
-                    self.handler.prev()
+                    self.prepareNewPlayback(ignore_tick=True)
+                    self.player.trigger("action", action="prev")
 
                 if action in cancelActions + (xbmcgui.ACTION_SELECT_ITEM,):
                     if self.getProperty('show.PPI') and action in cancelActions:
@@ -932,17 +930,13 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         elif controlID == self.SHUFFLE_BUTTON_ID:
             self.shuffleButtonClicked()
         elif controlID == self.PREV_BUTTON_ID:
-            self.sendTimeline(state=self.player.STATE_STOPPED, ensureFinalTimelineEvent=True)
-            self._ignoreTick = True
-            self.handler.prev()
+            self.prepareNewPlayback(ignore_tick=True)
+            self.player.trigger("action", action="prev")
         elif controlID == self.NEXT_BUTTON_ID:
             if not self.handler.queuingNext:
                 self.sendTimeline(state=self.player.STATE_STOPPED, ensureFinalTimelineEvent=True)
-                self.handler.queuingNext = True
-                self._ignoreTick = True
-                self._ignoreInput = True
-                self.killTimeKeeper()
-                next(self.handler)
+                self.prepareNewPlayback(queuing_next=True, ignore_tick=True, ignore_input=True)
+                self.player.trigger("action", action="next")
             return
         elif controlID == self.PLAYLIST_BUTTON_ID:
             self.showPlaylistDialog()
@@ -964,6 +958,16 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         self.handler.stoppedManually = True
         self.handler.player.stop()
 
+    def prepareNewPlayback(self, queuing_next=False, queuing_specific=False, ignore_tick=False, ignore_input=False,
+                           with_timeline=True):
+        if with_timeline:
+            self.sendTimeline(state=self.player.STATE_STOPPED)
+        self._ignoreTick = ignore_tick
+        self._ignoreInput = ignore_input
+        self.handler.queuingNext = queuing_next
+        self.handler.queuingSpecific = queuing_specific
+        self.killTimeKeeper()
+
     def doClose(self, delete=False):
         util.DEBUG_LOG("SeekDialog: Closing")
         if self.handler.playlist:
@@ -982,6 +986,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             kodigui.BaseDialog.doClose(self)
 
     def showPPIDialog(self, real_ppi=False):
+        from lib.cache import kcm
         if self.getProperty('show.PPI'):
             if real_ppi:
                 self.setProperty('show.PPI', '')
@@ -1005,8 +1010,20 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             except:
                 pass
 
-        while not self.player.started:
+        self.setProperty('ppi.BufferMB', str(kcm.memorySize))
+        if kcm.readFactor > 0:
+            self.setProperty('ppi.ReadFactor', str(kcm.readFactor))
+        else:
+            self.setProperty('ppi.AReadFactor', 'Adaptive')
+
+        tries = 0
+        while not self.player.started and tries < 50:
             util.MONITOR.waitForAbort(0.1)
+            tries += 1
+
+        if tries >= 50:
+            self.hidePPIDialog()
+            return
 
         info = None
         currentVideo = self.player.video
@@ -1329,7 +1346,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             )
 
         # cheap and inaccurate approach to move the dropdown to the left based on how many buttons the user has hidden
-        choice = dropdown.showDropdown(options, (1360 - self.subtitleButtonLeft, 1060), close_direction='down', pos_is_bottom=True,
+        choice = dropdown.showDropdown(options, (1360 - self.subtitleButtonLeft, 1060), pos_is_bottom=True,
                                        close_on_playback_ended=True, select_index=selectIndex)
 
         if not choice:
@@ -2197,10 +2214,39 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             self._currentMarker["countdown"] = None
             self.setProperty('marker.countdown', '')
 
+    def handleFinalMarker(self, marker_def, immediate=False, context="MarkerAutoSkip"):
+        # final marker is _not_ at the end of video, seek and do nothing
+        if marker_def["marker"].endTimeOffset < self.duration - FINAL_MARKER_NEGOFF:
+            target = marker_def["marker"].endTimeOffset
+            util.DEBUG_LOG(
+                "{}: Skipping final marker, its endTime is too early, "
+                "though, seeking and playing back", context)
+            self.doSeek(target)
+            return False
+
+        # tell plex we've arrived at the end of the video
+        self.sendTimeline(state=self.player.STATE_STOPPED, t=self.duration - 1000)
+
+        # go to next video immediately (post play or next episode on bingeMode)
+        if self.handler.playlist and self.handler.playlist.hasNext():
+            if not self.handler.queuingNext:
+                # skip final marker
+                util.DEBUG_LOG("{}: {} final marker, going to next video", context,
+                    immediate and "Immediately skipping" or "Skipping")
+                self.prepareNewPlayback(queuing_next=True, ignore_tick=True, ignore_input=True, with_timeline=False)
+                self.player.stop()
+            return True
+        else:
+            util.DEBUG_LOG("{}: Skipping final marker, stopping", context)
+            self.stop()
+        return False
+
     def sendTimeline(self, state=None, t=None, ensureFinalTimelineEvent=True):
         self.handler.updateNowPlaying(state=state, t=t, overrideChecks=True)
         if ensureFinalTimelineEvent:
             self.handler.ignoreTimelines = True
+            # kill previous timeline data
+            plexapp.util.APP.nowplayingmanager.reset()
 
     def displayMarkers(self, cancelTimer=False, immediate=False, onlyReturnIntroMD=False, setSkipped=False,
                        offset=None):
@@ -2269,34 +2315,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             self.countingDownMarker = False
 
             if getattr(markerDef["marker"], "final", False):
-                # final marker is _not_ at the end of video, seek and do nothing
-                if markerDef["marker"].endTimeOffset < self.duration - FINAL_MARKER_NEGOFF:
-                    target = markerDef["marker"].endTimeOffset
-                    util.DEBUG_LOG(
-                        "MarkerAutoSkip: Skipping final marker, its endTime is too early, "
-                        "though, seeking and playing back")
-                    self.doSeek(target)
-                    return False
-
-                # tell plex we've arrived at the end of the video, playing back
-                self.sendTimeline(state=self.player.STATE_STOPPED, t=self.duration - 1000)
-
-                # go to next video immediately if on bingeMode
-                if self.handler.playlist and self.handler.playlist.hasNext():
-                    if not self.handler.queuingNext:
-                        # skip final marker
-                        util.DEBUG_LOG("MarkerAutoSkip: {} final marker, going to next video".format(
-                            immediate and "Immediately skipping" or "Skipping"))
-                        self.handler.queuingNext = True
-                        self._ignoreTick = True
-                        self._ignoreInput = True
-                        self.killTimeKeeper()
-                        self.player.stop()
-                    return True
-                else:
-                    util.DEBUG_LOG("MarkerAutoSkip: Skipping final marker, stopping")
-                    self.stop()
-                return False
+                return self.handleFinalMarker(markerDef, immediate=immediate)
 
             util.DEBUG_LOG('MarkerAutoSkip: Skipping marker {}', markerDef["marker"])
             self.doSeek(markerDef["marker"].endTimeOffset + MARKER_END_JUMP_OFF)
@@ -2410,7 +2429,10 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
                 xbmc.executebuiltin('Dialog.Close(busydialog,1)')
 
             if not self.hasDialog and not self.playlistDialogVisible and self.osdVisible():
-                if time.time() > self.timeout:
+                t = time.time()
+                # with a customizable OSD hide timeout, OSD hide timeout might happen before autoSeekTimeout;
+                # in case we're still waiting for a seek, postpone OSD hiding
+                if t > self.timeout and (not self.autoSeekTimeout or self.autoSeekTimeout < self.timeout < t):
                     xbmc.executebuiltin('Dialog.Close(videoosd,true)')
                     xbmc.executebuiltin('Dialog.Close(seekbar,true)')
                     if not xbmc.getCondVisibility('Window.IsActive(videoosd) | Player.Rewinding | Player.Forwarding'):
@@ -2444,12 +2466,12 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         self.setProperty('playlist.visible', '1' if value else '')
 
     def showPlaylistDialog(self):
-        if not self.playlistDialog:
-            self.playlistDialog = PlaylistDialog.create(show=False, handler=self.handler)
-
+        self.playlistDialog = PlaylistDialog.create(show=False, handler=self.handler)
         self.playlistDialogVisible = True
         self.playlistDialog.doModal()
         self.resetTimeout()
+        self.playlistDialog.doClose()
+        self.playlistDialog = None
         self.playlistDialogVisible = False
         self.setFocusId(self.PLAYLIST_BUTTON_ID)
 
@@ -2466,6 +2488,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             self.setFocusId(self.PLAY_PAUSE_BUTTON_ID)
 
     def hideOSD(self, skipMarkerFocus=False, closing=False):
+        util.DEBUG_LOG("SeekDialog: HideOSD: {}, {}", skipMarkerFocus, closing)
         self.setProperty('show.OSD', '')
         if closing:
             return
@@ -2481,6 +2504,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         if self.playlistDialog:
             self.playlistDialog.doClose()
             self.playlistDialogVisible = False
+            self.playlistDialog = None
 
 
 class PlaylistDialog(kodigui.BaseDialog, SpoilersMixin):
@@ -2514,6 +2538,14 @@ class PlaylistDialog(kodigui.BaseDialog, SpoilersMixin):
         self.updatePlayingItem()
         self.setFocusId(self.PLAYLIST_LIST_ID)
 
+    def doClose(self):
+        if self.handler:
+            self.handler.player.off('playlist.changed', self.playQueueCallback)
+            self.handler.player.off('session.ended', self.sessionEnded)
+        self.handler = None
+        self.playlist = None
+        super(PlaylistDialog, self).doClose()
+
     def onClick(self, controlID):
         if controlID == self.PLAYLIST_LIST_ID:
             self.playlistListClicked()
@@ -2522,11 +2554,10 @@ class PlaylistDialog(kodigui.BaseDialog, SpoilersMixin):
         mli = self.playlistListControl.getSelectedItem()
         if not mli:
             return
-        self.handler.playAt(mli.pos())
-        self.updatePlayingItem()
+        self.handler.player.trigger("action", action="playAt", pos=mli.pos())
 
     def sessionEnded(self, **kwargs):
-        util.DEBUG_LOG('Video OSD: Session ended - closing')
+        util.DEBUG_LOG('PlaylistDialog: Session ended - closing')
         self.doClose()
 
     def createListItem(self, pi):

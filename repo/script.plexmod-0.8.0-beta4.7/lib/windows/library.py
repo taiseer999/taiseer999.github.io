@@ -50,7 +50,7 @@ MOVE_SET = frozenset(
     )
 )
 
-THUMB_POSTER_DIM = util.scaleResolution(268, 397)
+THUMB_POSTER_DIM = util.scaleResolution(268, 402)
 THUMB_AR16X9_DIM = util.scaleResolution(619, 348)
 THUMB_SQUARE_DIM = util.scaleResolution(355, 355)
 ART_AR16X9_DIM = util.scaleResolution(630, 355)
@@ -130,7 +130,9 @@ SORT_KEYS = {
         'resolution': {'title': T(32361, 'By Resolution'), 'display': T(32362, 'Resolution'), 'defSortDesc': True},
         'duration': {'title': T(32363, 'By Duration'), 'display': T(32364, 'Duration'), 'defSortDesc': True},
         'unwatched': {'title': T(32367, 'By Unplayed'), 'display': T(32368, 'Unplayed'), 'defSortDesc': False},
-        'viewCount': {'title': T(32371, 'By Play Count'), 'display': T(32372, 'Play Count'), 'defSortDesc': True}
+        'viewCount': {'title': T(32371, 'By Play Count'), 'display': T(32372, 'Play Count'), 'defSortDesc': True},
+        'mediaBitrate': {'title': T(33731, 'By Bitrate'), 'display': T(33732, 'Bitrate'), 'defSortDesc': True},
+        'random': {'title': T(33730, 'Randomly'), 'display': T(33730, 'Randomly'), 'defSortDesc': True},
     },
     'show': {
         'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
@@ -147,11 +149,13 @@ SORT_KEYS = {
         'userRating': {'title': T(33103, 'By my Rating'), 'display': T(33104, 'My Rating'), 'defSortDesc': True},
         'contentRating': {'title': T(33105, 'By Content Rating'), 'display': T(33106, 'Content Rating'),
                           'defSortDesc': True},
+        'random': {'title': T(33730, 'Randomly'), 'display': T(33730, 'Randomly'), 'defSortDesc': True},
     },
     'artist': {
         'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
         'artist.titleSort': {'title': T(32463, 'By Artist'), 'display': T(32462, 'Artist'), 'defSortDesc': False},
         'lastViewedAt': {'title': T(32369, 'By Date Played'), 'display': T(32370, 'Date Played'), 'defSortDesc': False},
+        'random': {'title': T(33730, 'Randomly'), 'display': T(33730, 'Randomly'), 'defSortDesc': True},
     },
     'track': {
         'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
@@ -693,7 +697,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             args['unwatched'] = '1'
 
         pq = playqueue.createPlayQueueForItem(self.section, options={'shuffle': shuffle}, args=args)
-        opener.open(pq, auto_play=True)
+        opener.open(pq, auto_play=True, auto_play_open=True)
 
     def shuffleButtonClicked(self):
         self.playButtonClicked(shuffle=True)
@@ -783,7 +787,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
 
         if self.section.TYPE == 'movie':
             searchTypes = ['titleSort', 'addedAt', 'originallyAvailableAt', 'lastViewedAt', 'rating', 'audienceRating',
-                           'userRating', 'contentRating', 'resolution', 'duration']
+                           'userRating', 'contentRating', 'resolution', 'duration', 'mediaBitrate', 'random']
             if ITEM_TYPE == 'collection':
                 searchTypes = ['titleSort', 'addedAt', 'contentRating']
 
@@ -796,10 +800,10 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         elif self.section.TYPE == 'show':
             searchTypes = ['titleSort', 'year', 'originallyAvailableAt', 'rating', 'audienceRating', 'userRating',
                            'contentRating', 'unviewedLeafCount', 'episode.addedAt',
-                           'addedAt', 'lastViewedAt']
+                           'addedAt', 'lastViewedAt', 'random']
             if ITEM_TYPE == 'episode':
                 searchTypes = ['titleSort', 'show.titleSort', 'addedAt', 'originallyAvailableAt', 'lastViewedAt',
-                               'rating', 'audienceRating', 'userRating']
+                               'rating', 'audienceRating', 'userRating', 'mediaBitrate', 'random']
             elif ITEM_TYPE == 'collection':
                 searchTypes = ['titleSort', 'addedAt']
 
@@ -814,7 +818,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         elif self.section.TYPE == 'artist':
             searchTypes = ['titleSort', 'addedAt', 'lastViewedAt', 'viewCount']
             if ITEM_TYPE == 'album':
-                searchTypes = ['titleSort', 'artist.titleSort', 'addedAt', 'lastViewedAt', 'viewCount', 'originallyAvailableAt', 'rating']
+                searchTypes = ['titleSort', 'artist.titleSort', 'addedAt', 'lastViewedAt', 'viewCount',
+                               'originallyAvailableAt', 'rating', 'random']
             elif ITEM_TYPE == 'collection':
                 searchTypes = ['titleSort', 'addedAt']
             elif ITEM_TYPE == 'track':
@@ -848,6 +853,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         else:
             self.sortDesc = defSortByOption.get(choice, False)
 
+        if choice == "random":
+            self.section.clearCache()
         self.sort = choice
 
         self.librarySettings.setSetting('sort', self.sort)
@@ -877,6 +884,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         if force_refresh or self.showPanelControl.size() == 0:
             self.fillShows()
             return
+
+        # inline sorting is disabled; this code will never be reached
 
         if choice == 'addedAt':
             self.showPanelControl.sort(lambda i: i.dataSource.addedAt, reverse=self.sortDesc)
@@ -1060,7 +1069,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         updateUnwatchedAndProgress = False
 
         if mli.dataSource.TYPE == 'collection':
-            prevItemType = self.librarySettings.getItemType()
+            prevItemType = self.librarySettings.getItemType() or ITEM_TYPE
             self.processCommand(opener.open(mli.dataSource))
             self.librarySettings.setItemType(prevItemType)
         elif self.section.TYPE == 'show' or mli.dataSource.TYPE == 'show' or mli.dataSource.TYPE == 'season' or mli.dataSource.TYPE == 'episode':
@@ -1084,7 +1093,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                 section.title = datasource.title
 
                 self.processCommand(opener.handleOpen(LibraryWindow, windows=self._windows, default_window=self._next, section=section, filter_=self.filter, subDir=True))
-                self.librarySettings.setItemType(self.librarySettings.getItemType())
+                self.librarySettings.setItemType(self.librarySettings.getItemType() or ITEM_TYPE)
             else:
                 self.processCommand(opener.handleOpen(preplay.PrePlayWindow, video=datasource, parent_list=self.showPanelControl))
                 updateUnwatchedAndProgress = True
@@ -1232,6 +1241,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                     self.setBoolProperty('no.content.filtered', True)
                 else:
                     self.setBoolProperty('no.content', True)
+
+                return
             else:
                 for startPosition in range(0, totalSize, self.getDefChunkSize(totalSize)):
                     tasks.append(CreateDefaultItemsTask().setup(startPosition, self.getDefChunkSize(totalSize), totalSize, self.thumb_fallback, self._defaultItemsCallback))
@@ -1540,7 +1551,9 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                         if obj.TYPE == 'collection':
                             colArtDim = TYPE_KEYS.get('collection').get('art_dim', (256, 256))
                             mli.setProperty('art', obj.artCompositeURL(*colArtDim))
-                            mli.setThumbnailImage(obj.artCompositeURL(*thumbDim))
+                            mli.setThumbnailImage(obj.server.getImageTranscodeURL(
+                                obj.artCompositeURL(*tuple(2*dim for dim in thumbDim)), *thumbDim)
+                            )
                         else:
                             if obj.TYPE == 'photodirectory' and obj.composite:
                                 mli.setThumbnailImage(obj.composite.asTranscodedImageURL(*thumbDim))

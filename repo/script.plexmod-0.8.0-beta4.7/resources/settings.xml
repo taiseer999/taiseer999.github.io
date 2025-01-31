@@ -227,7 +227,7 @@
             <group id="3" label="">
                 <setting id="auto_skip_offset" type="number" label="33629" help="33630">
                     <level>0</level>
-                    <default>2.5</default>
+                    <default>1</default>
                     <constraints>
                         <minimum>-10</minimum>
                         <step>0.5</step>
@@ -572,6 +572,18 @@
                         <minimum>2</minimum>
                         <step>1</step>
                         <maximum>32</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="requests_cache_expiry" type="number" label="33729">
+                    <level>0</level>
+                    <default>168</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>8760</maximum>
                     </constraints>
                     <control type="slider" format="number">
                         <popup>false</popup>

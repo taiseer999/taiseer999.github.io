@@ -138,6 +138,7 @@ def _main():
                         (len(plexapp.ACCOUNT.homeUsers) > 1 or plexapp.ACCOUNT.isProtected)
 
                     ):
+                        oldAccID = plexapp.ACCOUNT.ID
                         result = userselect.start(BACKGROUND._winID)
                         if not result:
                             return
@@ -153,6 +154,10 @@ def _main():
                             return
                         if not fromSwitch:
                             util.DEBUG_LOG('Main: User selected')
+
+                        # store previous account ID for fast user switch
+                        if oldAccID and oldAccID != plexapp.ACCOUNT.ID:
+                            util.setSetting('previous_user', oldAccID)
 
                     try:
                         selectedServer = plexapp.SERVERMANAGER.selectedServer
@@ -198,7 +203,6 @@ def _main():
                         elif closeOption == 'switch':
                             # store last user ID
                             util.DEBUG_LOG('Main: Switching users...: {}', plexapp.ACCOUNT.ID)
-                            util.setSetting('previous_user', plexapp.ACCOUNT.ID)
                             plexapp.ACCOUNT.isAuthenticated = False
                             fromSwitch = True
                         elif isinstance(closeOption, dict):
@@ -232,6 +236,7 @@ def _main():
         util.DEBUG_LOG('Main: SHUTTING DOWN...')
         dcm.storeDataCache()
         dcm.deinit()
+        plexapp.util.INTERFACE.shutdownCache()
         plexapp.util.INTERFACE.playbackManager.deinit()
         player.shutdown()
         plexapp.util.APP.preShutdown()

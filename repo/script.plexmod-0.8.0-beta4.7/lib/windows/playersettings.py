@@ -346,6 +346,7 @@ def showAudioDialog(video, non_playback=False):
         return
 
     video.selectStream(choice, from_session=not non_playback)
+    video.clearCache()
 
 
 def showSubtitlesDialog(video, non_playback=False):
@@ -367,6 +368,7 @@ def showSubtitlesDialog(video, non_playback=False):
         return
 
     video.selectStream(choice, from_session=not non_playback)
+    video.clearCache()
     video.manually_selected_sub_stream = choice.id
 
 

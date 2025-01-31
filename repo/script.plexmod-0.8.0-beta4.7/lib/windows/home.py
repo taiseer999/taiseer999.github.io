@@ -494,6 +494,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         self.doClose()
 
     def onReInit(self):
+        util.DEBUG_LOG("Home: On ReInit")
         if self._ignoreReInit:
             return
 
@@ -636,7 +637,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
     @property
     def currentHub(self):
-        hub_focus = int(self.getProperty('hub.focus'))
+        try:
+            hub_focus = int(self.getProperty('hub.focus'))
+        except ValueError:
+            return None
+
         if len(self.hubControls) > hub_focus and self.hubControls[hub_focus]:
             hub_control = self.hubControls[hub_focus]
             hub = hub_control.dataSource
@@ -1290,8 +1295,16 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             sections = [playlists_section] + plexapp.SERVERMANAGER.selectedServer.library.sections()
             options = []
 
+            use_sep = False
             if "order" in self.librarySettings and self.librarySettings["order"]:
                 options.append({'key': 'reset_order', 'display': T(33040, "Reset library order")})
+                use_sep = True
+
+            if util.getSetting('cache_requests'):
+                options.append({'key': 'cache_reset', 'display': T(33720, "Clear all caches")})
+                use_sep = True
+
+            if use_sep:
                 options.append(dropdown.SEPARATOR)
 
             had_section = False
@@ -1340,6 +1353,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
 
         else:
             options = []
+
             if plexapp.ACCOUNT.isAdmin and section != playlists_section:
                 options = [{'key': 'refresh', 'display': T(33082, "Scan Library Files")},
                            {'key': 'emptyTrash', 'display': T(33083, "Empty Trash")},
@@ -1362,6 +1376,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             options.append({'key': 'hide', 'display': T(33028, "Hide library")})
             options.append({'key': 'move', 'display': T(33039, "Move")})
             options.append(dropdown.SEPARATOR)
+
+            if 'libraries' in util.getSetting('cache_requests'):
+                options.append({'key': 'section_cache_reset', 'display': T(33721, "Clear library cache (not items)")})
+                options.append(dropdown.SEPARATOR)
 
             if self.hubSettings:
                 for section_hub_key in self.ignoredHubs:
@@ -1452,6 +1470,19 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 section.analyze()
             return
 
+        elif choice["key"] == "cache_reset":
+            try:
+                plexapp.util.INTERFACE.clearRequestsCache()
+            except Exception as e:
+                util.DEBUG_LOG("Couldn't clear requests cache: {}", e)
+
+        elif choice["key"] == "section_cache_reset":
+            try:
+                util.DEBUG_LOG('Clearing requests cache for section {}...', section.title)
+                section.clearCache()
+            except Exception as e:
+                util.DEBUG_LOG("Couldn't clear library cache: {}", e)
+
     def hubMenu(self, hubControlID):
         hub = self.currentHub
         if not hub:
@@ -1516,6 +1547,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 options.append({'key': 'to_show', 'display': T(32323, "Go To Show")})
                 if mli.dataSource.TYPE == 'episode':
                     options.append({'key': 'to_season', 'display': T(32400, "Go To Season")})
+
+            if 'items' in util.getSetting('cache_requests'):
+                options.append({'key': 'cache_reset', 'display': T(33728, "Clear cache for item")})
 
         choice = dropdown.showDropdown(
             options,
@@ -1593,6 +1627,13 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             except util.NoDataException:
                 util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
                 return
+
+        elif choice["key"] == "cache_reset":
+            try:
+                util.DEBUG_LOG('Clearing requests cache for {}...', mli.dataSource)
+                mli.dataSource.clearCache()
+            except Exception as e:
+                util.DEBUG_LOG("Couldn't clear cache: {}", e)
 
     def sectionMover(self, item, action):
         def stop_moving(reset=False):
@@ -1755,7 +1796,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         # fixme: this can be done in a better way, probably
         waited = 0
         while any(self.tasks) and waited < 20:
-            self.showBusy(True)
+            if waited > 5:
+                self.showBusy(True)
             util.MONITOR.waitForAbort(0.1)
             waited += 1
         self.showBusy(False)
@@ -1943,6 +1985,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         rp[identifier] = (str(mli.dataSource.ratingKey), pos)
         return rp
 
+    @busy.busy_property()
     def _showHubs(self, section=None, update=False, force=False, reselect_pos_dict=None):
         if not update:
             self.clearHubs()
@@ -1951,10 +1994,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             return
 
         if section.key is False:
-            self.showBusy(False)
             return
-
-        self.showBusy(True)
 
         hubs = self.sectionHubs.get(section.key)
         section_stale = False
@@ -1966,7 +2006,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             # hubs.invalid is True when the last hub update errored. if the hub is stale, refresh it, though
             if hubs is not None and hubs.invalid and not section_stale:
                 util.DEBUG_LOG("Section fetch has failed: {}", section.key)
-                self.showBusy(False)
                 self.setBoolProperty('no.content', True)
                 return
 
@@ -1977,7 +2016,6 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         break
 
                 if section.type != "home":
-                    self.showBusy(False)
                     self.setBoolProperty('no.content', True)
                 return
 
@@ -2000,49 +2038,46 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             return
 
         util.DEBUG_LOG('Showing hubs - Section: {0} - Update: {1}', section.key, update)
-        try:
-            hasContent = False
-            skip = {}
+        hasContent = False
+        skip = {}
 
-            for hub in hubs:
-                identifier = hub.getCleanHubIdentifier(is_home=not section.key)
+        for hub in hubs:
+            identifier = hub.getCleanHubIdentifier(is_home=not section.key)
 
-                if identifier not in self.HUBMAP:
-                    util.DEBUG_LOG('UNHANDLED - Hub: {0} [{1}]({2})'.format(hub.hubIdentifier, identifier,
-                                                                            len(hub.items)))
+            if identifier not in self.HUBMAP:
+                util.DEBUG_LOG('UNHANDLED - Hub: {0} [{1}]({2})'.format(hub.hubIdentifier, identifier,
+                                                                        len(hub.items)))
+                continue
+
+            skip[self.HUBMAP[identifier]['index']] = 1
+
+            if self.showHub(hub, is_home=not section.key,
+                            reselect_pos=reselect_pos_dict.get(identifier) if reselect_pos_dict else None):
+                if hub.items:
+                    hasContent = True
+                if self.HUBMAP[identifier].get('do_updates'):
+                    self.updateHubs[identifier] = hub
+
+        if not hasContent:
+            self.setBoolProperty('no.content', True)
+
+        lastSkip = 0
+        if skip:
+            lastSkip = min(skip.keys())
+
+        focus = None
+        if update:
+            for i, control in enumerate(self.hubControls):
+                if i in skip:
+                    lastSkip = i
                     continue
+                if self.getFocusId() == control.getId():
+                    focus = lastSkip
+                control.reset()
 
-                skip[self.HUBMAP[identifier]['index']] = 1
-
-                if self.showHub(hub, is_home=not section.key,
-                                reselect_pos=reselect_pos_dict.get(identifier) if reselect_pos_dict else None):
-                    if hub.items:
-                        hasContent = True
-                    if self.HUBMAP[identifier].get('do_updates'):
-                        self.updateHubs[identifier] = hub
-
-            if not hasContent:
-                self.setBoolProperty('no.content', True)
-
-            lastSkip = 0
-            if skip:
-                lastSkip = min(skip.keys())
-
-            focus = None
-            if update:
-                for i, control in enumerate(self.hubControls):
-                    if i in skip:
-                        lastSkip = i
-                        continue
-                    if self.getFocusId() == control.getId():
-                        focus = lastSkip
-                    control.reset()
-
-                if focus is not None:
-                    self.setFocusId(focus)
-            self.storeLastBG()
-        finally:
-            self.showBusy(False)
+            if focus is not None:
+                self.setFocusId(focus)
+        self.storeLastBG()
 
     def showHub(self, hub, items=None, is_home=False, reselect_pos=None):
         identifier = hub.getCleanHubIdentifier(is_home=is_home)
@@ -2316,9 +2351,12 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 for idx, mli in enumerate(control):
                     if mli.dataSource and mli.dataSource.ratingKey and str(mli.dataSource.ratingKey) == rk:
                         if cur_pos != idx:
-                            util.DEBUG_LOG("Hub {}: Reselect: Found {} in list, reselecting", identifier, rk)
+                            util.DEBUG_LOG("Hub {}: Reselect: Found {} in list ({} vs. {}), reselecting",
+                                           identifier, rk, idx, pos)
                             control.selectItem(idx)
                             rk_found = True
+                            pos = idx
+                            break
                         else:
                             return
                 if rk_found:
@@ -2466,7 +2504,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 return
 
         # store last used server
-        util.setSetting('previous_server.{}'.format(plexapp.ACCOUNT.ID), plexapp.SERVERMANAGER.selectedServer.uuid)
+        prevUUID = plexapp.SERVERMANAGER.selectedServer.uuid
 
         self.changingServer = True
 
@@ -2491,6 +2529,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             if not changed:
                 bc.ignoreSignal = True
                 self.changingServer = False
+            else:
+                util.setSetting('previous_server.{}'.format(plexapp.ACCOUNT.ID), prevUUID)
 
     def showUserMenu(self, mouse=False):
         items = []

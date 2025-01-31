@@ -254,7 +254,7 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
             xbmcgui.Window(self._winID).setProperty(key, value)
             xbmcgui.WindowXML.setProperty(self, key, value)
         except RuntimeError:
-            xbmc.log('kodigui.BaseWindow.setProperty: Missing window', xbmc.LOGDEBUG)
+            util.DEBUG_LOG('kodigui.BaseWindow.setProperty: Missing window ({}) ({})', self._winID, key)
 
     def setCondFocusId(self, focus):
         if self.getFocusId() != focus:

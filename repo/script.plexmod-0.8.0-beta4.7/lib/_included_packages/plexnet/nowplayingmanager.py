@@ -71,10 +71,6 @@ class NowPlayingManager(object):
         self.TIMELINE_TYPES = ["video", "music", "photo"]
 
         # Members
-        self.serverTimelines = util.AttributeDict()
-        self.subscribers = util.AttributeDict()
-        self.pollReplies = util.AttributeDict()
-        self.timelines = util.AttributeDict()
         self.location = self.NAVIGATION
 
         self.textFieldName = None
@@ -82,6 +78,13 @@ class NowPlayingManager(object):
         self.textFieldSecure = None
 
         # Initialization
+        self.reset()
+
+    def reset(self):
+        self.serverTimelines = util.AttributeDict()
+        self.subscribers = util.AttributeDict()
+        self.pollReplies = util.AttributeDict()
+        self.timelines = util.AttributeDict()
         for timelineType in self.TIMELINE_TYPES:
             self.timelines[timelineType] = TimelineData(timelineType)
 

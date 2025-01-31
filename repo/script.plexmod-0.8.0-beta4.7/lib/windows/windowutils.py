@@ -58,7 +58,6 @@ class UtilMixin():
                         {'key': 'play', 'display': T(32317, 'Play from beginning')}
                     ],
                     pos=(660, 441),
-                    close_direction='none',
                     set_dropdown_prop=False,
                     header=u'{0} - {1} \u2022 {2}'.format(title,
                                                           T(32310, 'S').format(n.parentIndex),

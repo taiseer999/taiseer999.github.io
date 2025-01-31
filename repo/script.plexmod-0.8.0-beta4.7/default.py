@@ -36,9 +36,12 @@ try:
     # reactivate/maximize
     if getGlobalProperty('running'):
         try:
+            log('Main: script.plexmod: Trying to reactivate minimized addon')
             xbmc.executebuiltin('NotifyAll({0},{1},{2})'.format('script.plexmod', 'RESTORE', '{}'))
         except:
-            log('Main: script.plexmod: Already running, couldn\'t reactivate other instance, exiting.')
+            log('Main: script.plexmod: Already running or faulty, couldn\'t reactivate other instance, exiting.')
+        else:
+            sys.exit(0)
     else:
         # addon not started
         if not getGlobalProperty('started'):

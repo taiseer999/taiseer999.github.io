@@ -45,7 +45,7 @@ class Library(plexobjects.PlexObject):
     def recentlyAdded(self):
         return plexobjects.listItems(self.server, '/library/recentlyAdded')
 
-    def get(self, title):
+    def getByTitle(self, title):
         return plexobjects.findItem(self.server, '/library/all', title)
 
     def getByKey(self, key):
@@ -108,6 +108,18 @@ class LibrarySection(plexobjects.PlexObject):
             sep = norm_sep(loc.path)
             self.locations.append(loc.path if loc.path.endswith(sep) else loc.path + sep)
 
+    @property
+    def cachable(self):
+        return 'libraries' in util.INTERFACE.getPreference('cache_requests')
+
+    def getCacheRef(self, always_return=False):
+        if (hasattr(self, "TYPE") and self.TYPE and self.key
+                and ('libraries' in util.INTERFACE.getPreference('cache_requests') or always_return)):
+            return "_".join(('section', self.key))
+
+    def clearCache(self, override_type=None, **kwargs):
+        super(LibrarySection, self).clearCache(override_type="section")
+
     @staticmethod
     def fromFilter(filter_):
         cls = SECTION_IDS.get(filter_.getLibrarySectionType())
@@ -124,7 +136,7 @@ class LibrarySection(plexobjects.PlexObject):
         initpath = '/library/sections/{0}'.format(self.key)
         key = self.key
         try:
-            data = self.server.query(initpath, params=kwargs)
+            data = self.server.query(initpath, params=kwargs, cachable=self.cachable, cache_ref=self.cacheRef)
         except Exception as e:
             import traceback
             traceback.print_exc()
@@ -240,7 +252,8 @@ class LibrarySection(plexobjects.PlexObject):
         if args:
             path += util.joinArgs(args, '?' not in path)
 
-        return plexobjects.listItems(self.server, path, tag_fallback=tag_fallback)
+        return plexobjects.listItems(self.server, path, tag_fallback=tag_fallback, cachable=self.cachable,
+                                     cache_ref=self.cacheRef)
 
     def jumpList(self, filter_=None, sort=None, unwatched=False, type_=None):
         if self.key.startswith('/'):
@@ -276,14 +289,16 @@ class LibrarySection(plexobjects.PlexObject):
             path += util.joinArgs(args, '?' not in path)
 
         try:
-            return plexobjects.listItems(self.server, path, bytag=True)
+            return plexobjects.listItems(self.server, path, bytag=True, cachable=self.cachable,
+                                         cache_ref=self.cacheRef)
         except exceptions.BadRequest:
             util.ERROR('jumpList() request error for path: {0}'.format(repr(path)))
             return None
 
     @property
     def onDeck(self):
-        return plexobjects.listItems(self.server, '/library/sections/%s/onDeck' % self.key)
+        return plexobjects.listItems(self.server, '/library/sections/%s/onDeck' % self.key, cachable=self.cachable,
+                                     cache_ref=self.cacheRef)
 
     def analyze(self):
         self.server.query('/library/sections/%s/analyze' % self.key, method=self.server.session.put)

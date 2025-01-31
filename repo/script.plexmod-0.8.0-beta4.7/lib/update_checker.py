@@ -11,9 +11,23 @@ from lib.kodi_util import xbmc, xbmcgui, xbmcaddon, ICON_PATH, KODI_VERSION_MAJO
 from lib.settings_util import getSetting, setSetting
 from lib.properties import IPCTimeoutException, waitForGPEmpty, setGlobalProperty, getGlobalProperty
 from lib.updater import get_updater, UpdateException, UpdaterSkipException
-from lib.util import MONITOR, addonSettings
+from lib.addonsettings import addonSettings
 from lib.i18n import T
 from lib.logging import service_log as log
+
+class ServiceMonitor(xbmc.Monitor):
+    def __init__(self, *args, **kwargs):
+        xbmc.Monitor.__init__(self, *args, **kwargs)
+        self.device_sleeping = False
+
+    def onNotification(self, sender, method, data):
+        if sender == "xbmc" and method == "System.OnSleep":
+            self.device_sleeping = True
+
+        elif sender == "xbmc" and method == "System.OnWake":
+            self.device_sleeping = False
+
+MONITOR = ServiceMonitor()
 
 
 def disable_enable_addon():

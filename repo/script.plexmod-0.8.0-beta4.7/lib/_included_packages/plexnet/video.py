@@ -41,7 +41,7 @@ def forceMediaChoice(method):
         # set mediaChoice if we don't have any yet, or the one we have is incomplete and the new one isn't
         media = method_kwargs.get("media", None)
         partIndex = method_kwargs.get("partIndex", 0)
-        if not self.mediaChoice or not self.mediaChoice.media.hasStreams():
+        if not self.mediaChoice or not self.mediaChoice.media or not self.mediaChoice.media.hasStreams():
             if not media:
                 # if we don't have a chosen media yet, check whether the user has previously chosen one
                 pbs = util.INTERFACE.playbackManager(self)
@@ -317,14 +317,20 @@ class Video(media.MediaItem, AudioCodecMixin):
         """
         self.server.query('/%s/analyze' % self.key)
 
+    def refresh(self):
+        self.server.query('/library/metadata/%s/refresh' % self.ratingKey, method="put")
+        self.clearCache()
+
     def markWatched(self, **kwargs):
         path = '/:/scrobble?key=%s&identifier=com.plexapp.plugins.library' % self.ratingKey
         self.server.query(path)
+        self.clearCache()
         self.reload(**kwargs)
 
     def markUnwatched(self, **kwargs):
         path = '/:/unscrobble?key=%s&identifier=com.plexapp.plugins.library' % self.ratingKey
         self.server.query(path)
+        self.clearCache()
         self.reload(**kwargs)
 
     def removeFromContinueWatching(self, **kwargs):
@@ -337,8 +343,6 @@ class Video(media.MediaItem, AudioCodecMixin):
     # def play(self, client):
     #     client.playMedia(self)
 
-    def refresh(self):
-        self.server.query('%s/refresh' % self.key, method=self.server.session.put)
 
     def _getStreamURL(self, **params):
         if self.TYPE not in ('movie', 'episode', 'track'):
@@ -460,7 +464,28 @@ class SectionOnDeckMixin(object):
         return self._sectionOnDeckCount
 
 
-class PlayableVideo(Video, media.RelatedMixin):
+class CachableItemsMixin(object):
+    @property
+    def cachable(self):
+        return 'items' in util.INTERFACE.getPreference('cache_requests')
+
+    def clearChildCaches(self):
+        # clear caches of this season and its items
+        if not self.cachable:
+            return
+        cks = []
+        urls = []
+        for e in self.episodes():
+            cks_, urls_ = e.clearCache(return_urls=True)
+            cks += cks_
+            urls += urls_
+
+        cks = list(set(cks))
+        urls = list(set(urls))
+        self._clearCache(cks, urls)
+
+
+class PlayableVideo(CachableItemsMixin, Video, media.RelatedMixin):
     __slots__ = ("extras", "guids", "chapters")
     TYPE = None
     _videoStreams = None
@@ -657,7 +682,7 @@ class Movie(PlayableVideo):
 
 
 @plexobjects.registerLibType
-class Show(Video, media.RelatedMixin, SectionOnDeckMixin):
+class Show(CachableItemsMixin, Video, media.RelatedMixin, SectionOnDeckMixin):
     __slots__ = ("_genres", "guids", "onDeck")
     TYPE = 'show'
 
@@ -690,7 +715,7 @@ class Show(Video, media.RelatedMixin, SectionOnDeckMixin):
 
     def seasons(self):
         path = self.key
-        return plexobjects.listItems(self.server, path, Season.TYPE)
+        return plexobjects.listItems(self.server, path, Season.TYPE, cachable=self.cachable, cache_ref=self.cacheRef)
 
     def season(self, title):
         path = self.key
@@ -698,7 +723,8 @@ class Show(Video, media.RelatedMixin, SectionOnDeckMixin):
 
     def episodes(self, watched=None, offset=None, limit=None):
         leavesKey = '/library/metadata/%s/allLeaves' % self.ratingKey
-        return plexobjects.listItems(self.server, leavesKey, watched=watched, offset=offset, limit=limit)
+        return plexobjects.listItems(self.server, leavesKey, watched=watched, offset=offset, limit=limit,
+                                     cachable=self.cachable, cache_ref=self.cacheRef)
 
     def episode(self, title):
         path = '/library/metadata/%s/allLeaves' % self.ratingKey
@@ -717,9 +743,6 @@ class Show(Video, media.RelatedMixin, SectionOnDeckMixin):
     def unwatched(self):
         return self.episodes(watched=False)
 
-    def refresh(self):
-        self.server.query('/library/metadata/%s/refresh' % self.ratingKey)
-
     def genres(self):
         genres = dcm.getCacheData("show_genres", self.ratingKey)
         if genres:
@@ -731,9 +754,12 @@ class Show(Video, media.RelatedMixin, SectionOnDeckMixin):
         dcm.setCacheData("show_genres", self.ratingKey, [g.tag for g in self._genres])
         return self._genres
 
+    def clearCache(self, **kwargs):
+        self.clearChildCaches()
+
 
 @plexobjects.registerLibType
-class Season(Video):
+class Season(CachableItemsMixin, Video):
     TYPE = 'season'
 
     def _setData(self, data):
@@ -759,7 +785,8 @@ class Season(Video):
 
     def episodes(self, watched=None, offset=None, limit=None):
         path = self.key
-        return plexobjects.listItems(self.server, path, watched=watched, offset=offset, limit=limit)
+        return plexobjects.listItems(self.server, path, watched=watched, offset=offset, limit=limit,
+                                     cachable=self.cachable, cache_ref=self.cacheRef)
 
     def episode(self, title):
         path = self.key
@@ -769,13 +796,16 @@ class Season(Video):
         return self.episodes()
 
     def show(self):
-        return plexobjects.listItems(self.server, self.parentKey)[0]
+        return plexobjects.listItems(self.server, self.parentKey, cachable=self.cachable, cache_ref=self.cacheRef)[0]
 
     def watched(self):
         return self.episodes(watched=True)
 
     def unwatched(self):
         return self.episodes(watched=False)
+
+    def clearCache(self, **kwargs):
+        self.clearChildCaches()
 
 
 @plexobjects.registerLibType
@@ -851,7 +881,7 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
         skipParent = self.get('skipParent').asBool()
         key = self.parentKey if not skipParent else self.grandparentKey
         if not self._season:
-            items = plexobjects.listItems(self.server, key)
+            items = plexobjects.listItems(self.server, key, cachable=self.cachable, cache_ref=self.cacheRef)
 
             if items:
                 self._season = items[0]
@@ -859,7 +889,8 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
 
     def show(self):
         if not self._show:
-            self._show = plexobjects.listItems(self.server, self.grandparentKey)[0]
+            self._show = plexobjects.listItems(self.server, self.grandparentKey, cachable=self.cachable,
+                                               cache_ref=self.cacheRef)[0]
         return self._show
 
     @property

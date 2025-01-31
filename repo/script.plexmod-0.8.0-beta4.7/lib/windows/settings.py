@@ -647,8 +647,13 @@ class Settings(object):
                         ('movies', T(32348, 'Movies')),
                     ]
                 ),
-                BoolSetting(
-                    'show_reviews', T(33710, ''), True
+                MultiOptionsSetting(
+                    'show_reviews1', T(33710, 'Show reviews for'),
+                    ["watched", "unwatched"],
+                    [
+                        ('watched', T(33718, 'Watched')),
+                        ('unwatched', T(33010, 'Unwatched')),
+                    ]
                 ),
                 MultiOptionsSetting(
                     'no_episode_spoilers4', T(33006, ''),
@@ -885,6 +890,24 @@ class Settings(object):
                                        'edge (possibly unstable)\nStable: Stable branch (faster than Repository)\n'
                                        'Repository: Kodi repository (official (slow) or Don\'t Panic)')
                               ) if not util.FROM_KODI_REPOSITORY else None,
+                MultiOptionsSetting(
+                    'cache_requests', T(33724, 'Cache Plex data for'),
+                    [],
+                    [
+                        ('items', T(33723, 'Media Items')),
+                        ('libraries', T(33722, 'Libraries')),
+                    ]
+                ).description(T(33727, "Store Plex server responses for items and library views in a local "
+                                       "SQLite database. Doesn't cache anything else (Home/Hubs are always up to date)."
+                                       " Massively speeds up consecutive visits to items and libraries. Certain "
+                                       "important events, such as watch state changes, automatically delete the item "
+                                       "cache and its corresponding library cache. The complete cache gets cleared "
+                                       "when exiting the addon. (Default: Off)")),
+                BoolSetting('persist_requests_cache', T(33725, 'Persist cached Plex data'), False)
+                .description(T(33726, "Instead of clearing the cache when exiting the addon, persist it "
+                                      "instead. Warning: You'll most likely encounter missing items in libraries "
+                                      "or outdated data. Use the corresponding menu functionalities to clear the "
+                                      "cache for specific items or libraries.")),
                 BoolSetting('exit_default_is_quit', T(32965, 'Start Plex On Kodi Startup'), False)
                 .description(T(32966, "stub")),
                 BoolSetting('path_mapping', T(33000, ''), True).description(T(33001, '')),

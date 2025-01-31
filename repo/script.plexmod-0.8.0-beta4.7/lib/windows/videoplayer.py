@@ -91,7 +91,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
     NEXT_DIM = util.scaleResolution(537, 303)
     PREV_DIM = util.scaleResolution(462, 259)
     ONDECK_DIM = util.scaleResolution(329, 185)
-    RELATED_DIM = util.scaleResolution(268, 397)
+    RELATED_DIM = util.scaleResolution(268, 402)
     ROLES_DIM = util.scaleResolution(334, 334)
 
     OPTIONS_GROUP_ID = 200
@@ -146,6 +146,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
 
     def onFirstInit(self):
         player.PLAYER.on('session.ended', self.sessionEnded)
+        player.PLAYER.on('videowindow.closed', self.videoWindowClosed)
         player.PLAYER.on('av.started', self.playerPlaybackStarted)
         player.PLAYER.on('starting.video', self.onVideoStarting)
         player.PLAYER.on('started.video', self.onVideoStarted)
@@ -298,7 +299,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
             x, y = self.getRoleItemDDPosition()
 
             options = [{'role': r, 'display': r.reasonTitle} for r in sectionRoles]
-            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True, close_direction='bottom')
+            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True)
 
             if not choice:
                 return
@@ -350,6 +351,12 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         util.DEBUG_LOG('VideoPlayerWindow: Session ended - closing (ID: {0})', id(self))
         self.doClose()
 
+    def videoWindowClosed(self, session_id=None, video=None, **kwargs):
+        if session_id != id(self):
+            return
+
+        video.clearCache()
+
     def play(self, resume=False, handler=None):
         self.hidePostPlay()
 
@@ -384,7 +391,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
                 util.DEBUG_LOG("Stopping BGM before starting playback")
                 player.PLAYER.stopAndWait()
 
-            while player.PLAYER.bgmPlaying:
+            while player.PLAYER.bgmPlaying or player.PLAYER.isPlayingAudio():
                 util.MONITOR.waitForAbort(0.1)
 
         self.setBackground()
@@ -727,6 +734,7 @@ def play(video=None, play_queue=None, resume=False, bgm=False, **kwargs):
         raise
     finally:
         player.PLAYER.off('session.ended', w.sessionEnded)
+        player.PLAYER.off('videowindow.closed', w.videoWindowClosed)
         player.PLAYER.off('post.play', w.postPlay)
         player.PLAYER.off('av.started', w.playerPlaybackStarted)
         player.PLAYER.off('starting.video', w.onVideoStarting)

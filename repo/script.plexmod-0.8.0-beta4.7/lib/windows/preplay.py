@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
-from plexnet import plexplayer, media, util as pnUtil
+from plexnet import plexplayer, media, util as pnUtil, plexapp
 
 from lib import metadata
 from lib import util
@@ -37,7 +37,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
     height = 1080
 
     THUMB_POSTER_DIM = util.scaleResolution(347, 518)
-    RELATED_DIM = util.scaleResolution(268, 397)
+    RELATED_DIM = util.scaleResolution(268, 402)
     EXTRA_DIM = util.scaleResolution(329, 185)
     ROLES_DIM = util.scaleResolution(334, 334)
     PREVIEW_DIM = util.scaleResolution(343, 193)
@@ -74,6 +74,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         self.lastNonOptionsFocusID = None
         self.initialized = False
         self.relatedPaginator = None
+        self.openedWithAutoPlay = False
+        self.needs_related_divider = False
 
     def doClose(self):
         self.relatedPaginator = None
@@ -92,6 +94,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
     def doAutoPlay(self):
         # First reload the video to get all the other info
         self.video.reload(checkFiles=1, **VIDEO_RELOAD_KW)
+        self.openedWithAutoPlay = True
         return self.playVideo(from_auto_play=True)
 
     @busy.dialog()
@@ -111,7 +114,12 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         util.setGlobalProperty('hide.resume', '' if self.video.viewOffset.asInt() else '1')
         # skip setting background when coming from reinit (other window) if we've focused something other than main
         self.setInfo(skip_bg=from_reinit and not (self.PLAY_BUTTON_ID <= oldFocusId <= self.MEDIA_BUTTON_ID))
-        self.fillRelated()
+        show_reviews = util.getSetting('show_reviews1')
+        if show_reviews:
+            if "watched" in show_reviews and "unwatched" not in show_reviews:
+                self.fillReviews()
+
+        self.fillRelated(self.needs_related_divider)
         xbmc.sleep(100)
 
         if oldFocusId == self.PLAY_BUTTON_ID:
@@ -251,8 +259,15 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         if self.video.type in ('episode', 'movie'):
             options.append({'key': 'to_section', 'display': T(32324, u'Go to {0}').format(self.video.getLibrarySectionTitle())})
 
-        if self.video.server.allowsMediaDeletion:
-            options.append({'key': 'delete', 'display': T(32322, 'Delete')})
+        if plexapp.ACCOUNT.isAdmin:
+            options.append(dropdown.SEPARATOR)
+            options.append({'key': 'refresh', 'display': T(33719, 'Refresh metadata')})
+
+            if self.video.server.allowsMediaDeletion:
+                options.append({'key': 'delete', 'display': T(32322, 'Delete')})
+
+        if 'items' in util.getSetting('cache_requests'):
+            options.append({'key': 'cache_reset', 'display': T(33728, "Clear cache for item")})
         # if xbmc.getCondVisibility('Player.HasAudio') and self.section.TYPE == 'artist':
         #     options.append({'key': 'add_to_queue', 'display': 'Add To Queue'})
 
@@ -285,6 +300,16 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             self.goHome(self.video.getLibrarySectionId())
         elif choice['key'] == 'delete':
             self.delete()
+        elif choice['key'] == 'refresh':
+            self.video.refresh()
+            self.refreshInfo()
+        elif choice["key"] == "cache_reset":
+            try:
+                util.DEBUG_LOG('Clearing requests cache for {}...', self.video)
+                self.video.clearCache()
+                self.refreshInfo()
+            except Exception as e:
+                util.DEBUG_LOG("Couldn't clear cache: {}", e)
 
     def mediaButtonClicked(self):
         options = []
@@ -342,7 +367,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             x, y = self.getRoleItemDDPosition()
 
             options = [{'role': r, 'display': r.reasonTitle} for r in sectionRoles]
-            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True, close_direction='bottom')
+            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=False)
 
             if not choice:
                 return
@@ -432,19 +457,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         return True
 
     def getRoleItemDDPosition(self):
-        y = 200
-        if xbmc.getCondVisibility('Control.IsVisible(500)'):
-            y += 360
-        if xbmc.getCondVisibility('Control.IsVisible(501)'):
-            y += 520
-        if xbmc.getCondVisibility('!String.IsEmpty(Window.Property(on.extras))'):
-            y -= 300
-        if xbmc.getCondVisibility('Integer.IsGreater(Window.Property(hub.focus),0) + Control.IsVisible(500)'):
-            y -= 500
-        if xbmc.getCondVisibility('Integer.IsGreater(Window.Property(hub.focus),1) + Control.IsVisible(501)'):
-            y -= 500
-        if xbmc.getCondVisibility('Integer.IsGreater(Window.Property(hub.focus),2) + Control.IsVisible(502)'):
-            y -= 500
+        y = util.vscale(600)
 
         tries = 0
         focus = xbmc.getInfoLabel('Container(400).Position')
@@ -533,7 +546,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         hasRoles = self.fillRoles()
         hasReviews = self.fillReviews()
         hasExtras = self.fillExtras()
-        self.fillRelated(hasRoles and not hasExtras and not hasReviews)
+        self.needs_related_divider = hasRoles and not hasExtras and not hasReviews
+        self.fillRelated(self.needs_related_divider)
 
     def setInfo(self, skip_bg=False):
         if not skip_bg:
@@ -703,7 +717,12 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         items = []
         idx = 0
 
-        if not util.getSetting('show_reviews') or not self.video.reviews:
+        show_reviews = util.getSetting('show_reviews1')
+        fully_watched = self.video.isFullyWatched
+
+        if (not show_reviews or not self.video.reviews or
+                ("unwatched" not in show_reviews and not fully_watched) or
+                ("watched" not in show_reviews and fully_watched)):
             self.reviewsListControl.reset()
             return False
 

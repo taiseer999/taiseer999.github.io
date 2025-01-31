@@ -344,7 +344,8 @@ class RelatedMixin(object):
     def getRelated(self, offset=None, limit=None, _max=36):
         path = '/library/metadata/%s/similar' % self.ratingKey
         try:
-            return plexobjects.listItems(self.server, path, offset=offset, limit=limit, params={"count": _max})
+            return plexobjects.listItems(self.server, path, offset=offset, limit=limit, params={"count": _max},
+                                         cachable=self.cachable, cache_ref=self.cacheRef)
         except exceptions.BadRequest:
             util.DEBUG_LOG("Invalid related items response returned for {}", self)
             return None

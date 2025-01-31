@@ -1,22 +1,23 @@
 # coding=utf-8
-from kodi_six import xbmcgui, xbmc
+from kodi_six import xbmc
+from lib.properties_core import _setGlobalProperty, _setGlobalBoolProperty, _getGlobalProperty
 
-from lib.monitor import MONITOR
+
+MONITOR = xbmc.Monitor()
 
 
-def setGlobalProperty(key, val, base='script.plex.{0}', wait=False):
-    xbmcgui.Window(10000).setProperty(base.format(key), val)
+def setGlobalProperty(key, val, wait=False, timeout=50, base='script.plex.{0}'):
+    _setGlobalProperty(key, val, base=base)
     if wait:
         waited = 0
-        while getGlobalProperty(key) != val and waited < 2:
+        while _getGlobalProperty(key, base=base) != val and waited < timeout:
             if MONITOR.waitForAbort(0.1):
                 break
             waited += 0.1
 
 
 def setGlobalBoolProperty(key, boolean, base='script.plex.{0}'):
-    xbmcgui.Window(10000).setProperty(base.format(key), boolean and '1' or '')
-
+    _setGlobalBoolProperty(key, boolean, base=base)
 
 
 class IPCException(Exception):
@@ -32,14 +33,14 @@ class IPCTimeoutException(IPCException):
     pass
 
 
-def getGlobalProperty(key, consume=False, wait=False, interval=0.1, timeout=36000):
-    resp = xbmc.getInfoLabel('Window(10000).Property(script.plex.{0})'.format(key))
+def getGlobalProperty(key, consume=False, wait=False, interval=0.1, timeout=36000, base='script.plex.{0}'):
+    resp = _getGlobalProperty(key, base=base)
     if wait and not resp:
         waited = 0
         while not MONITOR.abortRequested() and not resp and waited < timeout:
             if MONITOR.waitForAbort(interval):
                 break
-            resp = xbmc.getInfoLabel('Window(10000).Property(script.plex.{0})'.format(key))
+            resp = _getGlobalProperty(key, base=base)
             waited += 1
 
         if waited >= timeout:
@@ -47,19 +48,19 @@ def getGlobalProperty(key, consume=False, wait=False, interval=0.1, timeout=3600
             raise IPCTimeoutException('Timed out while waiting for: {}'.format(key))
 
     if consume:
-        setGlobalProperty(key, '', wait=wait)
+        setGlobalProperty(key, '', wait=wait, timeout=timeout, base=base)
 
     return resp
 
 
-def waitForGPEmpty(key, interval=0.1, timeout=36000):
-    resp = xbmc.getInfoLabel('Window(10000).Property(script.plex.{0})'.format(key))
+def waitForGPEmpty(key, interval=0.1, timeout=36000, base='script.plex.{0}'):
+    resp = _getGlobalProperty(key, base=base)
     if resp:
         waited = 0
         while not MONITOR.abortRequested() and resp and waited < timeout:
             if MONITOR.waitForAbort(interval):
                 break
-            resp = xbmc.getInfoLabel('Window(10000).Property(script.plex.{0})'.format(key))
+            resp = _getGlobalProperty(key, base=base)
             waited += 1
         if waited >= timeout:
             raise IPCTimeoutException('Timed out while waiting for emptiness of: {}'.format(key))
