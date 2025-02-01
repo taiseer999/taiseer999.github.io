@@ -84,7 +84,7 @@ fanart="https://i.postimg.cc/C57Ztxt3/Screenshot-2024-12-12-at-4-05-32-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="بيلد خفيف سريع للاجهزة المتوسطة يدعم كل الاجهزة و CoreELEC بدون CPM."
+description="بيلد خفيف سريع للاجهزة المتوسطة يدعم كل الاجهزة ."
 
 name="AF2 CoreELEC Arabic/English"
 version="1.5"
@@ -98,7 +98,7 @@ fanart="https://i.postimg.cc/44KrGjSC/Screenshot-2024-12-12-at-3-18-08-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="بيلد خفيف سريع للاجهزة المتوسطة يدعم CoreELEC CPM".
+description="فقط لكورالك CPM".
 
 name="AF/AH2/AF2 Arabic"
 version="2.3"
