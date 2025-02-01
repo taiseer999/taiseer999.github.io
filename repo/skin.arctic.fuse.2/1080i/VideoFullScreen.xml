@@ -182,11 +182,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Digital_Plus_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_TrueHD_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -482,11 +482,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Digital_Plus_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_TrueHD_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
@@ -782,11 +782,11 @@
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
-            <include content="Dolby_TrueHD_Atmos1_Flag">
+            <include content="Dolby_Digital_Plus_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
-                <param name="texture">codecs/Dolby_Digital_Plus_Atmos.png</param>
+                <param name="texture">codecs/Dolby_TrueHD_Atmos.png</param>
                 <param name="colordiffuse">FFffffff</param>
             </include>
 			
