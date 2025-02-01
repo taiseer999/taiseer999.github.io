@@ -108,9 +108,9 @@ class MetaCache(BaseCache):
 		except: pass
 		return result
 
-	def set_function(self, prop_string, result, expiration=1):
+	def set_function(self, prop_string, result, expiration=timedelta(days=1)):
 		try:
-			expires = self._get_timestamp(datetime.now() + timedelta(days=expiration))
+			expires = self._get_timestamp(datetime.now() + expiration)
 			self.dbcur.execute(SET_FUNCTION, (prop_string, repr(result), expires))
 		except: return
 

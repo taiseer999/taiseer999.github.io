@@ -13,6 +13,7 @@ class EasyDebridAPI:
 	download = '/link/generate'
 	stats = '/user/details'
 	cache = '/link/lookup'
+	cloud = '/link/request'
 
 	def __init__(self):
 		self.api_key = get_setting('ed.token')
@@ -112,7 +113,12 @@ class EasyDebridAPI:
 			return None
 
 	def add_uncached_torrent(self, magnet_url, pack=False):
-		return kodi_utils.ok_dialog(heading=32733, text=32574)
+		kodi_utils.show_busy_dialog()
+		result = self._POST(self.cloud, json={'url': magnet_url})
+		kodi_utils.hide_busy_dialog()
+		if result.get('success'): kodi_utils.ok_dialog(heading=32733, text=ls(32732) % 'EasyDebrid', top_space=True)
+		else: return kodi_utils.ok_dialog(heading=32733, text=32574)
+		return True
 
 	def _m2ts_check(self, folder_items):
 		for item in folder_items:

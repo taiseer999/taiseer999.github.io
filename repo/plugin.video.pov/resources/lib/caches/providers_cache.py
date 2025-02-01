@@ -25,8 +25,7 @@ class ExternalProvidersCache(BaseCache):
 
 	def set(self, source, media_type, tmdb_id, title, year, season, episode, results, expire_time):
 		try:
-			expiration = timedelta(hours=expire_time)
-			expires = self._get_timestamp(datetime.now() + expiration)
+			expires = self._get_timestamp(datetime.now() + timedelta(hours=expire_time))
 			self.dbcur.execute(INSERT_RESULTS, (source, media_type, tmdb_id, title, year, season, episode, repr(results), int(expires)))
 		except: pass
 

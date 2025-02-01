@@ -8,8 +8,12 @@
 - nyaaio in Sources/Torrents, sourced from torrentio anime results with filters disabled.
 - nyaa in Sources/Torrents sourced from website results.
 
+  [COLOR dodgerblue][B]Version 5.02[/B][/COLOR]
+- Added Ratings/Reviews to Extras window with valid MDBList API Key.
+- Added MDBList Manager to context menu.
+- Added MDBList to My Lists.  Insert API Key in Settings/My Lists.
+
   [COLOR dodgerblue][B]Version 4.12[/B][/COLOR]
-- Added MDBList to My Lists.  Add API Key to Settings/My Lists.
 - Removed aiostreams.
 - Added "Reset All Views" to Set Views menu.
 - Added setting "Custom Fanart Image", affects most main menu items.

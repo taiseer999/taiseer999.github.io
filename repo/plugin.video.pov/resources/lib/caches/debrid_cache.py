@@ -26,7 +26,7 @@ class DebridCache(BaseCache):
 
 	def set_many(self, hash_list, debrid):
 		try:
-			expires = self._get_timestamp(datetime.now() + timedelta(days=1))
+			expires = self._get_timestamp(datetime.now() + timedelta(hours=24))
 			insert_list = [(i[0], debrid, i[1], expires) for i in hash_list]
 			self.dbcur.executemany(SET_MANY, insert_list)
 		except: pass

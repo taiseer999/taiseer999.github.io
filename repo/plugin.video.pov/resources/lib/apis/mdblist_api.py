@@ -1,11 +1,12 @@
 import requests
 from caches.main_cache import cache_object
+from caches.meta_cache import cache_function
 from modules import kodi_utils
 
 EXPIRES_1_HOURS = 1
 base_url = 'https://api.mdblist.com'
 list_json = 'https://mdblist.com/lists/%s/%s/json'
-review_provider_id = {'1': 'Trakt', '2': 'TMDb', '3': 'RT', '4': 'Metacritics'}
+review_provider_id = {1: 'Trakt', 2: 'TMDb', 3: 'RT', 4: 'Metacritics'}
 timeout = 3.05
 session = requests.Session()
 retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502, 503, 504), raise_on_status=False)
@@ -58,4 +59,11 @@ def mdb_modify_list(list_id, params, action='add'):
 	if 'detail' in results: kodi_utils.notification(results['detail'])
 	if 'added' in results and results['added'][key]: return True
 	else: return False
+
+def mdb_media_info(imdb_id, media_type):
+	if not kodi_utils.get_setting('mdblist.token'): return
+	media_type = 'show' if media_type == 'tvshow' else 'movie'
+	string = 'mdb_media_info_%s' % imdb_id
+	url = '%s/%s/%s/%s?append_to_response=review' % (base_url, 'imdb', media_type, imdb_id)
+	return cache_function(call_mdblist, string, url, json=False)
 
