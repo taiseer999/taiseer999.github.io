@@ -2946,7 +2946,7 @@ msgid "VS10 mode"
 msgstr ""
 
 msgctxt "#32066"
-msgid "Coloured title lines in PlayerProcessInfo"
+msgid "Audio codec"
 msgstr ""
 
 msgctxt "#32067"
