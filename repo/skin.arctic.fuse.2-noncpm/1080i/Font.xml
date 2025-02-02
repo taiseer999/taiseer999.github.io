@@ -21,6 +21,25 @@
         </include>
     </fontset>
 
+<fontset id="Naghachian" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">DecoraArabic-Regular.ttf</param>
+            <param name="font_bold">DecoraArabic-Regular.ttf</param>
+            <param name="font_regular">DecoraArabic.ttf</param>
+            <param name="font_light">DecoraArabic.ttf</param>
+            <param name="plot_linespacing_head">0.9</param>
+            <param name="plot_linespacing_midi">1.5</param>
+            <param name="plot_linespacing_main">1.15</param>
+            <param name="plot_linespacing_mini">1.3</param>
+            <param name="plot_linespacing_tiny">0.9</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+
+        </include>
+    </fontset>
 
     <fontset id="PFDinTextArabic" unicode="true">
 <include content="Font_Default">
@@ -84,11 +103,11 @@
             <param name="font_bold">RobotoNotoCondensed-Bold.ttf</param>
             <param name="font_regular">RobotoNotoCondensed-Regular.ttf</param>
             <param name="font_light">RobotoNotoCondensed-Light.ttf</param>
-             <param name="plot_linespacing_head">0.982</param>
-            <param name="plot_linespacing_midi">1.26</param>
-            <param name="plot_linespacing_main">1.15</param>
-            <param name="plot_linespacing_mini">1.</param>
-            <param name="plot_linespacing_tiny">0.96</param>
+            <param name="plot_linespacing_head">1.169</param>
+        <param name="plot_linespacing_midi">1.50</param>
+        <param name="plot_linespacing_main">1.16</param>
+        <param name="plot_linespacing_mini">1.31</param>
+        <param name="plot_linespacing_tiny">1.23</param>
         </include>	
     </fontset>
 	
