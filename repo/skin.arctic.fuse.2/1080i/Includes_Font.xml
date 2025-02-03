@@ -23,7 +23,7 @@
             <!-- Font for codec flag -->
             <font>
                 <name>font_infotag_bold</name>
-                <filename>PFDinTextArabic-Bold.ttf</filename>
+                <filename>hacen t.ttf</filename>
                 <size>22</size>
                 <style>uppercase</style>
             </font>
