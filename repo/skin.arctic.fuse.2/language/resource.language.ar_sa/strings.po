@@ -2947,3 +2947,7 @@ msgstr "أفلامي"
 msgctxt "#32075"
 msgid "My TV Shows"
 msgstr "مسلسلاتي"
+
+msgctxt "#32076"
+msgid "Audio codec"
+msgstr "ترميز الصوت"

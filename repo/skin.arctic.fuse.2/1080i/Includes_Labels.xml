@@ -480,6 +480,10 @@
         <value condition="!Skin.HasSetting(Infoline.DisableHDR)">HDR</value>
     </variable>
 
+    <variable name="Label_Setting_AdditionalTags_AudioCodec">
+        <value condition="!Skin.HasSetting(Infoline.DisableAudioCodec)">$LOCALIZE[32076]</value>
+    </variable>
+
     <variable name="Label_Setting_AdditionalTags_AudioChannels">
         <value condition="!Skin.HasSetting(Infoline.DisableAudioChannels)">$LOCALIZE[21444]</value>
     </variable>
@@ -1957,28 +1961,44 @@
 		<value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
 	</variable>
 	<variable name="AudioCodec1Var">
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtsma)">DTS-HD Master Audio</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD Master Audio</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS-HD Master Audio</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">DTS-HD Master Audio</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD Hi-Res Audio</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">Dolby TrueHD</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">Dolby Digital+</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">Dolby Digital+</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">MP3</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,mp2)">MP2</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,mp1)">MP1</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,wmav2)">WMA</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,wmapro)">WMA Pro</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
-		<value condition="String.IsEqual(VideoPlayer.AudioCodec,cook)">Cook</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_latm)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">Dolby Digital</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aif)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aifc)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aiff)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,alac)">ALAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ape)">APE</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,avc)">AVC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,cdda)">CDDA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dolbydigital)">Dolby Digital</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS:X MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">DTS:X (IMAX)</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">DD+</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">DD+ (Atmos)</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp1)">MP1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp2)">MP2</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">MP3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3float)">MP3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ogg)">OGG</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">OPUS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">Dolby TrueHD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">TrueHD (Atmos)</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,vorbis)">Vorbis</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wav)">WAV</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wavpack)">WAVP</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wmapro)">WMA-PRO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wmav2)">WMA</value>
+        <value condition="String.IsEmpty(VideoPlayer.AudioCodec)">$LOCALIZE[13205]</value>
 	</variable>
 	<variable name="ObjectAudio">
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">[COLOR lightgreen]Atmos[/COLOR]</value>

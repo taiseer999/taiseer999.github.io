@@ -210,7 +210,7 @@
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(Infoline.DisableAudioCodec)</onclick>
             <selected>!Skin.HasSetting(Infoline.DisableAudioCodec)</selected>
-            <label>$LOCALIZE[32066]</label>
+            <label>$LOCALIZE[32076]</label>
         </include>
         <include content="Settings_Button" description="Audio Channels">
             <param name="id">8004</param>
