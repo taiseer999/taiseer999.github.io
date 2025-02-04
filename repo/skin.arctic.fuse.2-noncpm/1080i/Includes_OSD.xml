@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-<include name="VideoCodecFlag">
-		<param name="groupId"/>
-		<param name="imageId"/>
-		<param name="visible"/>
-		<param name="texture"/>
-		<definition>
-			<control type="group" id="$PARAM[groupId]">
-				<control type="image" id="$PARAM[imageId]">
-					<left>1153</left>
-					<top>60</top>
-					<height>45</height>
-					<width>100</width>
-					<visible>$PARAM[visible]</visible>
-					<texture>$PARAM[texture]</texture>
-				</control>
-			</control>
-		</definition>
-	</include>
-
     <include name="OSD_UpNext_Buttons">
 
         <control type="grouplist" id="4000">
@@ -498,6 +479,7 @@
             <include content="Info_Line_VideoQuality">
                 <param name="textcolor">panel_fg_90</param>
                 <param name="listitem_videoresolution">VideoPlayer.VideoResolution</param>
+                <param name="listitem_audiocodec">VideoPlayer.AudioCodec</param>
                 <param name="listitem_audiochannels">VideoPlayer.AudioChannels</param>
                 <param name="listitem_hdrtype">VideoPlayer.HdrType</param>
                 <param name="visible">$PARAM[visible]</param>
@@ -846,7 +828,7 @@
                 <centertop>50%</centertop>
                 <height>80</height>
                 <include content="Object_InfoCircle">
-                    <param name="name">[UPPERCASE]$INFO[VideoPlayer.VideoResolution]$INFO[VideoPlayer.VideoCodec, • ,]$INFO[VideoPlayer.VideoAspect, • ,:1]$INFO[VideoPlayer.AudioCodec, • ,]$VAR[Label_VideoPlayer_AudioChannels, • ,][/UPPERCASE]</param>
+                    <param name="name">[UPPERCASE]$INFO[VideoPlayer.VideoResolution]$VAR[Label_VideoHDRCodec, • ,]$VAR[AudioCodec1Var, • ,]$VAR[Label_VideoPlayer_AudioChannels, • ,][/UPPERCASE]</param>
                     <param name="role">$INFO[VideoPlayer.VideoVersionName]</param>
                     <param name="icon">special://skin/extras/icons/photo-film.png</param>
                     <param name="fallback_role">$LOCALIZE[31207]</param>

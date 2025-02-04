@@ -204,8 +204,16 @@
             <selected>!Skin.HasSetting(Infoline.DisableHDR)</selected>
             <label>HDR</label>
         </include>
-        <include content="Settings_Button" description="Audio Channels">
+        <include content="Settings_Button" description="Audio codec">
             <param name="id">8003</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
+            <onclick>Skin.ToggleSetting(Infoline.DisableAudioCodec)</onclick>
+            <selected>!Skin.HasSetting(Infoline.DisableAudioCodec)</selected>
+            <label>$LOCALIZE[32076]</label>
+        </include>
+        <include content="Settings_Button" description="Audio Channels">
+            <param name="id">8004</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(Infoline.DisableAudioChannels)</onclick>
@@ -213,7 +221,7 @@
             <label>$LOCALIZE[21444]</label>
         </include>
         <include content="Settings_Button" description="Version">
-            <param name="id">8004</param>
+            <param name="id">8005</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(Infoline.DisableVersion)</onclick>
@@ -221,7 +229,7 @@
             <label>$LOCALIZE[40013]</label>
         </include>
         <include content="Settings_Button" description="Collection">
-            <param name="id">8005</param>
+            <param name="id">8006</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(Infoline.DisableCollection)</onclick>
@@ -229,11 +237,12 @@
             <label>$LOCALIZE[31108]</label>
         </include>
         <include content="Settings_Button" description="None">
-            <param name="id">8006</param>
+            <param name="id">8007</param>
             <param name="control">button</param>
             <param name="dialog">true</param>
             <onclick>Skin.SetBool(Infoline.DisableSource)</onclick>
             <onclick>Skin.SetBool(Infoline.DisableHDR)</onclick>
+            <onclick>Skin.SetBool(Infoline.DisableAudioCodec)</onclick>
             <onclick>Skin.SetBool(Infoline.DisableAudioChannels)</onclick>
             <onclick>Skin.SetBool(Infoline.DisableVersion)</onclick>
             <onclick>Skin.SetBool(Infoline.DisableCollection)</onclick>
@@ -329,12 +338,28 @@
             <param name="id">8006</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
+            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableSeasons)</onclick>
+            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableSeasons)</selected>
+            <label>$LOCALIZE[33054]</label>
+        </include>
+        <include content="Settings_Button">
+            <param name="id">8007</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
+            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableEpisodes)</onclick>
+            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes)</selected>
+            <label>$LOCALIZE[20360]</label>
+        </include>
+        <include content="Settings_Button">
+            <param name="id">8008</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableStudio)</onclick>
             <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableStudio)</selected>
             <label>$LOCALIZE[572]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8007</param>
+            <param name="id">8009</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableYear)</onclick>
@@ -342,7 +367,7 @@
             <label>$LOCALIZE[345]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8008</param>
+            <param name="id">8010</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableCrew)</onclick>
@@ -350,7 +375,7 @@
             <label>$LOCALIZE[31050]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8009</param>
+            <param name="id">8011</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableVideos)</onclick>
@@ -358,7 +383,7 @@
             <label>$LOCALIZE[10025]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8010</param>
+            <param name="id">8012</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableComments)</onclick>
@@ -366,7 +391,7 @@
             <label>$LOCALIZE[31334]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8011</param>
+            <param name="id">8013</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableRecommendations)</onclick>
@@ -374,7 +399,7 @@
             <label>$LOCALIZE[31018]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8012</param>
+            <param name="id">8014</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableGallery)</onclick>
@@ -382,12 +407,12 @@
             <label>$LOCALIZE[31098]</label>
         </include>
         <include content="Settings_Label">
-            <param name="id">8013</param>
+            <param name="id">8015</param>
             <param name="dialog">true</param>
             <label>$LOCALIZE[33063]</label>
         </include>
         <include content="Settings_Button">
-            <param name="id">8014</param>
+            <param name="id">8016</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <label>$LOCALIZE[31356]</label>
@@ -395,7 +420,7 @@
             <selected>!Skin.HasSetting(Info.UseLocalCast)</selected>
         </include>
         <include content="Settings_Button">
-            <param name="id">8015</param>
+            <param name="id">8017</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <label>$LOCALIZE[31540]</label>
@@ -404,7 +429,7 @@
             <visible>!Skin.HasSetting(VideoInfo.Widgets.DisableCollection)</visible>
         </include>
         <include content="Settings_Button">
-            <param name="id">8016</param>
+            <param name="id">8018</param>
             <param name="control">radiobutton</param>
             <param name="dialog">true</param>
             <label>$LOCALIZE[31539]</label>
