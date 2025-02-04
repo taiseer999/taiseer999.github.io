@@ -1,90 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <fonts>
     <font>
-        <filename>Gill Sans MT.ttf</filename>
-        <familyname>Gill Sans MT</familyname>
-    </font>
-    <font>
-        <filename>Verdana.ttf</filename>
-        <familyname>Verdana</familyname>
-    </font>
-    <font>
-        <filename>Lucida-Grande-Regular.ttf</filename>
-        <familyname>Lucida Grande</familyname>
-    </font>
-    <font>
-        <filename>OpenSans-Regular.ttf</filename>
-        <familyname>Open Sans</familyname>
-    </font>
-    <font>
-        <filename>NotoSerif-Regular.ttf</filename>
-        <familyname>Noto Serif</familyname>
-    </font>
-    <font>
-        <filename>Futura medium bt.ttf</filename>
-        <familyname>Futura Md BT</familyname>
-    </font>
-    <font>
-        <filename>Roboto-Regular.ttf</filename>
-        <familyname>Roboto</familyname>
-    </font>
-    <font>
-        <filename>Arvo-Regular.ttf</filename>
-        <familyname>Arvo</familyname>
-    </font>
-    <font>
-        <filename>Helvetica.ttf</filename>
-        <familyname>Helvetica</familyname>
-    </font>
-    <font>
-        <filename>Calibri.ttf</filename>
-        <familyname>Calibri</familyname>
-    </font>
-    <font>
-        <filename>IBMPlexSans-Regular.otf</filename>
-        <familyname>IBM Plex Sans</familyname>
-    </font>
-    <font>
-        <filename>Helvetica Neue Medium Extended.ttf</filename>
-        <familyname>Helvetica Neue</familyname>
-    </font>
-    <font>
-        <filename>IBMPlexMono-Regular.otf</filename>
-        <familyname>IBM Plex Mono</familyname>
-    </font>
-    <font>
-        <filename>Tahoma Regular.ttf</filename>
-        <familyname>Tahoma</familyname>
-    </font>
-    <font>
-        <filename>SourceSansPro-Regular.ttf</filename>
-        <familyname>Source Sans Pro</familyname>
-    </font>
-    <font>
-        <filename>Montserrat-Regular.ttf</filename>
-        <familyname>Montserrat</familyname>
-    </font>
-    <font>
-        <filename>IBMPlexSerif-Regular.otf</filename>
-        <familyname>IBM Plex Serif</familyname>
-    </font>
-    <font>
-        <filename>Lato-Medium.ttf</filename>
-        <familyname>Lato Medium</familyname>
-    </font>
-    <font>
-        <filename>GillSans-Bold.ttf</filename>
-        <familyname>GillSans</familyname>
-    </font>
-    <font>
-        <filename>geeza reg.ttf</filename>
-        <familyname>Geeza Pro</familyname>
-    </font>
-    <font>
-        <filename>AL-Mohanad Bold.ttf</filename>
-        <familyname>Al-Mohanad Bold</familyname>
-    </font>
-    <font>
         <filename>Adobe Arabic Regular.ttf</filename>
         <familyname>Adobe Arabic</familyname>
     </font>
@@ -117,15 +33,23 @@
         <familyname>Amazon Arabic Ember</familyname>
     </font>
     <font>
-        <filename>AL-Mohanad.ttf</filename>
-        <familyname>Al-Mohanad</familyname>
-    </font>
-    <font>
         <filename>Madani Arabic Regular.ttf</filename>
         <familyname>MadaniArabic-Regular</familyname>
     </font>
     <font>
         <filename>Samim-Medium.ttf</filename>
         <familyname>Samim</familyname>
+    </font>
+    <font>
+        <filename>geeza reg.ttf</filename>
+        <familyname>Geeza Pro</familyname>
+    </font>
+    <font>
+        <filename>AL-Mohanad Bold.ttf</filename>
+        <familyname>Al-Mohanad Bold</familyname>
+    </font>
+    <font>
+        <filename>AL-Mohanad.ttf</filename>
+        <familyname>Al-Mohanad</familyname>
     </font>
 </fonts>
