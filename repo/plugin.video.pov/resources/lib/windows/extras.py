@@ -193,11 +193,11 @@ class Extras(BaseDialog):
 					updated_at = item['updated_at'] or 'NA'
 					rating = item['rating'] or 'NA'
 					if 'spoiler' in item and item['spoiler']: content = (
-						'[B][COLOR red][%s][/COLOR][CR]%02d. [I]%s - %s - %s[/I][/B]\n\n%s'
+						'[B][COLOR red][%s][/COLOR][CR][I]%02d. %s - %s - %s[/I][/B]\n\n%s'
 						% (spoiler, count, provider, rating, updated_at, item['content'])
 					)
 					else: content = (
-						'[B]%02d. [I]%s - %s - %s[/I][/B]\n\n%s'
+						'[B][I]%02d. %s - %s - %s[/I][/B]\n\n%s'
 						% (count, provider, rating, updated_at, item['content'])
 					)
 					listitem.setProperty('tikiskins.extras.text', content)
