@@ -33,14 +33,6 @@
         <familyname>Bahij Droid Naskh</familyname>
     </font>
     <font>
-        <filename>Droid Naskh Shift Alt.ttf</filename>
-        <familyname>Droid Naskh Shift Alt</familyname>
-    </font>
-    <font>
-        <filename>Droid.Arabic.Naskh_.Regular_DownloadSoftware.iR_.ttf</filename>
-        <familyname>Droid Arabic Naskh</familyname>
-    </font>
-    <font>
         <filename>DroidNaskh-Regular.ttf</filename>
         <familyname>Droid Arabic Naskh</familyname>
     </font>
@@ -50,7 +42,7 @@
     </font>
     <font>
         <filename>geeza reg.ttf</filename>
-        <familyname>geeza reg</familyname>
+        <familyname>geeza</familyname>
     </font>
     <font>
         <filename>Lollipop font by insan waq3y.ttf</filename>
@@ -61,16 +53,12 @@
         <familyname>Madani Arabic Regular</familyname>
     </font>
     <font>
-        <filename>NotoNaskhArabicUI-Regular.ttf</filename>
-        <familyname>NotoNaskhArabicUI-Regular</familyname>
+        <filename>Greta Arabic.ttf</filename>
+        <familyname>Greta Arabic</familyname>
     </font>
     <font>
         <filename>NotoNaskhArabicUI-Bold.ttf</filename>
         <familyname>NotoNaskhArabicUI-Bold</familyname>
-    </font>
-    <font>
-        <filename>NotoSerif-Regular.ttf</filename>
-        <familyname>NotoSerif-Regular</familyname>
     </font>
     <font>
         <filename>Osama Font Regular.ttf</filename>
@@ -79,10 +67,6 @@
     <font>
         <filename>Samim Bold.ttf</filename>
         <familyname>Samim Bold</familyname>
-    </font>
-    <font>
-        <filename>Samim-Medium.ttf</filename>
-        <familyname>SamimMedium</familyname>
     </font>
     <font>
         <filename>Samim.ttf</filename>
