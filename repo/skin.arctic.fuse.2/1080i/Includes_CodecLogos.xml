@@ -337,7 +337,7 @@
             <left>735</left>
             <control type="group">
 			 <visible></visible>
-                <top>35</top>
+                <top>45</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
@@ -346,7 +346,7 @@
 				 </control>
 				<control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -356,7 +356,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -366,7 +366,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -375,8 +375,8 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>50</top>
+                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -396,7 +396,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>43</top>
+                <top>53</top>
                 <left>185</left>
                 <control type="image">
                     <width>8</width>
@@ -416,7 +416,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -426,7 +426,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -435,8 +435,8 @@
                 </control>
             </control>
             <control type="group">
-                <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>50</top>
+                <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -446,7 +446,7 @@
             </control>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -462,7 +462,7 @@
             <left>945</left>
             <control type="group">
                 <visible></visible>
-                <top>35</top>
+                <top>45</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
@@ -471,7 +471,7 @@
             </control>        
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -481,7 +481,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>60</top>
+                <top>70</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -491,7 +491,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -501,7 +501,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -511,7 +511,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -521,7 +521,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -531,7 +531,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -541,7 +541,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -551,7 +551,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dca)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>55</left>
                 <control type="image">
                     <width>100</width>
@@ -561,7 +561,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -571,7 +571,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -581,7 +581,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
-                <top>62</top>
+                <top>72</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -591,7 +591,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -601,7 +601,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,flac)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -611,7 +611,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -621,7 +621,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,opus)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -969,7 +969,7 @@
             <left>735</left>
             <control type="group">
 			 <visible></visible>
-                <top>35</top>
+                <top>45</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
@@ -978,7 +978,7 @@
 				 </control>
 				<control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -988,7 +988,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -998,7 +998,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1008,7 +1008,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1028,7 +1028,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>43</top>
+                <top>53</top>
                 <left>185</left>
                 <control type="image">
                     <width>8</width>
@@ -1048,7 +1048,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1058,7 +1058,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1068,7 +1068,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1078,7 +1078,7 @@
             </control>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1094,7 +1094,7 @@
             <left>945</left>
             <control type="group">
                 <visible></visible>
-                <top>35</top>
+                <top>45</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
@@ -1103,7 +1103,7 @@
             </control>        
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1113,7 +1113,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>60</top>
+                <top>70</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1123,7 +1123,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1133,7 +1133,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1143,7 +1143,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1153,7 +1153,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1163,7 +1163,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1173,7 +1173,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1183,7 +1183,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dca)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>55</left>
                 <control type="image">
                     <width>100</width>
@@ -1193,7 +1193,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1203,7 +1203,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1213,7 +1213,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
-                <top>62</top>
+                <top>72</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1223,7 +1223,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1233,7 +1233,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,flac)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1243,7 +1243,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1253,7 +1253,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,opus)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1263,7 +1263,7 @@
             </control>
         </control>
     </include>
-
+    
     <include name="CodecLogosRightPPI">
         <control type="group">
             <left>1675</left>
@@ -1601,7 +1601,7 @@
             <left>735</left>
             <control type="group">
 			 <visible></visible>
-                <top>35</top>
+                <top>45</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
@@ -1610,7 +1610,7 @@
 				 </control>
 				<control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 0) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1620,7 +1620,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 1) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1630,7 +1630,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1640,7 +1640,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1660,7 +1660,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>43</top>
+                <top>53</top>
                 <left>185</left>
                 <control type="image">
                     <width>8</width>
@@ -1680,7 +1680,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>52</top>
+                <top>62</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1690,7 +1690,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(Player.Process(video.source.hdr.type.raw), 2) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1700,7 +1700,7 @@
             </control>
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1710,7 +1710,7 @@
             </control>
             <control type="group">
                 <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.IsEqual(Player.Process(video.dovi.el.type),full)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1726,7 +1726,7 @@
             <left>945</left>
             <control type="group">
                 <visible></visible>
-                <top>35</top>
+                <top>45</top>
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
@@ -1735,7 +1735,7 @@
             </control>        
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1745,7 +1745,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>60</top>
+                <top>70</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1755,7 +1755,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,ac3)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1765,7 +1765,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1775,7 +1775,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1785,7 +1785,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1795,7 +1795,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</visible>
-                <top>50</top>
+                <top>60</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1805,7 +1805,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1815,7 +1815,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dca)</visible>
-                <top>65</top>
+                <top>75</top>
                 <left>55</left>
                 <control type="image">
                     <width>100</width>
@@ -1825,7 +1825,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1835,7 +1835,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1845,7 +1845,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)</visible>
-                <top>62</top>
+                <top>72</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1855,7 +1855,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1865,7 +1865,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,flac)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1875,7 +1875,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1885,7 +1885,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,opus)</visible>
-                <top>55</top>
+                <top>65</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1906,7 +1906,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>35</top>
+                    <top>45</top>
                      <left>735</left>                   
                     <width>210</width>
                     <height>90</height>
@@ -1927,7 +1927,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>35</top>
+                    <top>45</top>
                     <left>945</left>
                     <width>210</width>
                     <height>90</height>
@@ -1948,7 +1948,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>52</top>
+                    <top>62</top>
                     <left>765</left>
                     <width>150</width>
                     <height>52</height>
@@ -1969,7 +1969,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>52</top>
+                    <top>62</top>
                     <left>765</left>
                     <width>150</width>
                     <height>52</height>
@@ -1990,7 +1990,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
+                    <top>75</top>
                     <left>765</left>
                     <width>150</width>
                     <height>33</height>
@@ -2011,7 +2011,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>765</left>
                     <width>150</width>
                     <height>56</height>
@@ -2032,7 +2032,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>57</top>
+                    <top>67</top>
                     <left>765</left>
                     <width>150</width>
                     <height>42</height>
@@ -2053,7 +2053,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>43</top>
+                    <top>53</top>
                     <left>765</left>
                     <width>150</width>
                     <height>52</height>
@@ -2073,7 +2073,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>43</top>
+                    <top>53</top>
                     <left>920</left>
                     <width>8</width>
                     <height>8</height>
@@ -2094,7 +2094,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>52</top>
+                    <top>62</top>
                     <left>765</left>
                     <width>150</width>
                     <height>52</height>
@@ -2115,7 +2115,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
+                    <top>75</top>
                     <left>765</left>
                     <width>150</width>
                     <height>33</height>
@@ -2136,7 +2136,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>765</left>
                     <width>150</width>
                     <height>56</height>
@@ -2157,7 +2157,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>57</top>
+                    <top>67</top>
                     <left>765</left>
                     <width>150</width>
                     <height>42</height>
@@ -2179,7 +2179,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>49</height>
@@ -2200,7 +2200,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
+                    <top>70</top>
                     <left>975</left>
                     <width>150</width>
                     <height>40</height>
@@ -2221,7 +2221,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>975</left>
                     <width>150</width>
                     <height>56</height>
@@ -2242,7 +2242,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>975</left>
                     <width>150</width>
                     <height>56</height>
@@ -2263,7 +2263,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>975</left>
                     <width>150</width>
                     <height>56</height>
@@ -2284,7 +2284,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>975</left>
                     <width>150</width>
                     <height>56</height>
@@ -2305,7 +2305,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>975</left>
                     <width>150</width>
                     <height>56</height>
@@ -2326,7 +2326,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>49</height>
@@ -2347,7 +2347,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
+                    <top>75</top>
                     <left>1000</left>
                     <width>100</width>
                     <height>25</height>
@@ -2368,7 +2368,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>46</height>
@@ -2389,7 +2389,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>49</height>
@@ -2410,7 +2410,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>62</top>
+                    <top>72</top>
                     <left>975</left>
                     <width>150</width>
                     <height>31</height>
@@ -2431,7 +2431,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>52</height>
@@ -2452,7 +2452,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>45</height>
@@ -2473,7 +2473,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>45</height>
@@ -2494,7 +2494,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>55</top>
+                    <top>65</top>
                     <left>975</left>
                     <width>150</width>
                     <height>45</height>
@@ -2515,7 +2515,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>50</top>
+                    <top>60</top>
                     <left>765</left>
                     <width>150</width>
                     <height>56</height>
