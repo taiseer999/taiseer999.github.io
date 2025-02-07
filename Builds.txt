@@ -45,7 +45,7 @@ info="http://your.info.url"
 description="بيلد خفيف للاجهزة المتوسطة."
 
 name="Netflix Arabic"
-version="2.3"
+version="2.4"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=eGnaxaGGKoI5uNOWv2ARLrKFEqD0qp5uO2LD8WvOEtm3RcpG3ZqxldwtFLUCAZH8&expiry=cRUXKwXwvReLk4L2%2F7K9Fw%3D%3D&mac=82df0edb71ee30513abf8cf55c7a9a78664b3a046d867d7c8188dea2b8506604"
 minor="http://"
 gui="http://"
