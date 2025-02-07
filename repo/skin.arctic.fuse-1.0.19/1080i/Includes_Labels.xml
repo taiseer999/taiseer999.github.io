@@ -133,14 +133,31 @@
     </variable>
 	
 	<variable name="Label_Discover_Style">
-		<value condition="Skin.HasSetting(Discover.Landscape)">Landscape</value>
-		<value>Poster</value>
+		<value condition="Skin.HasSetting(Discover.Landscape)">$LOCALIZE[31045]</value>
+		<value>$LOCALIZE[20021]</value>
 	</variable>
 	
-	<variable name="Trailers_Delay">
-		<value condition="!String.IsEmpty(Skin.String(Start_Trailer))">$INFO[Skin.String(Start_Trailer)]</value>
-		<value condition="String.IsEmpty(Skin.String(Start_Trailer))">5</value>
-	</variable>		
+	<variable name="Label_Topbar_Style">
+		<value condition="Skin.HasSetting(Topbar.EnableFocusedText)">$LOCALIZE[31329]</value>
+		<value>$LOCALIZE[536]</value>
+	</variable>
+	
+	<variable name="Label_Trailers_Delay">
+		<value condition="!Skin.HasSetting(Trailers.EnableAutoPlayback)">$LOCALIZE[13106]</value>
+		<value condition="!String.IsEmpty(Skin.String(Start_Trailer))">$INFO[Skin.String(Start_Trailer),,s]</value>
+		<value condition="Skin.HasSetting(Trailers.EnableAutoPlayback) + String.IsEmpty(Skin.String(Start_Trailer))">5s</value>
+	</variable>
+	
+	<variable name="Label_Fullscreen_Trailers_Delay">
+		<value condition="!Skin.HasSetting(Trailers.EnableAutoFullscreen)">$LOCALIZE[13106]</value>
+		<value condition="!String.IsEmpty(Skin.String(Fullscreen_Trailer_Delay))">$INFO[Skin.String(Fullscreen_Trailer_Delay),,s]</value>
+		<value condition="Skin.HasSetting(Trailers.EnableAutoFullscreen) + String.IsEmpty(Skin.String(Fullscreen_Trailer_Delay))">20s</value>
+	</variable>
+
+	<variable name="Label_Fullscreen_Trailers">
+		<value condition="!Skin.HasSetting(Background.DisableVideo) + Skin.HasSetting(Trailers.EnableAutoPlayback)">$LOCALIZE[19171] [LOWERCASE]$LOCALIZE[31482] $LOCALIZE[21408][/LOWERCASE] X [LOWERCASE]$LOCALIZE[31130][/LOWERCASE]</value>
+		<value>$LOCALIZE[19171] [LOWERCASE]$LOCALIZE[31482] $LOCALIZE[21408][/LOWERCASE] X [LOWERCASE]$LOCALIZE[31130][/LOWERCASE] ($LOCALIZE[14116])</value>
+	</variable>			
 
     <variable name="Label_Settings_NavigationOnBack">
         <value condition="$EXP[Exp_Navigation_OnMenu]">$LOCALIZE[33061]</value>
@@ -562,8 +579,48 @@
 
     <variable name="Label_Setting_OptionalInfoLine">
         <value condition="Skin.HasSetting(InfoLine.EndTime)">$LOCALIZE[31192]</value>
-        <value>$LOCALIZE[515] / $LOCALIZE[31285]</value>
-    </variable>
+        <value>$LOCALIZE[515]</value>
+    </variable>    
+	
+	<variable name="Label_Setting_AdditionalTags">
+		<value condition="Skin.HasSetting(Info.EnablePillboxStyle) + Skin.HasSetting(Infoline.DisableSource) + Skin.HasSetting(Infoline.DisableHDR) + Skin.HasSetting(Infoline.DisableAudioChannels) + Skin.HasSetting(Infoline.DisableCodec) + Skin.HasSetting(Infoline.DisableVersion) + Skin.HasSetting(Infoline.DisableCollection)">$LOCALIZE[16018]</value> <!--  NONE -->
+		<value>$VAR[Label_Setting_AdditionalTags_Source]$VAR[Label_Setting_AdditionalTags_HDR]$VAR[Label_Setting_AdditionalTags_AudioChannels]$VAR[Label_Setting_AdditionalTags_AudioCodecs]$VAR[Label_Setting_AdditionalTags_Version]$VAR[Label_Setting_AdditionalTags_Collection]</value>								
+	</variable>	
+	
+	<variable name="Label_Setting_AdditionalTags_Source">		
+		<value condition="[!Skin.HasSetting(Infoline.DisableSource) | !Skin.HasSetting(Info.EnablePillboxStyle)] + [!Skin.HasSetting(Infoline.DisableHDR) | !Skin.HasSetting(Infoline.DisableAudioChannels) | !Skin.HasSetting(Infoline.DisableCodec) | !Skin.HasSetting(Infoline.DisableVersion) | !Skin.HasSetting(Infoline.DisableCollection)]">$LOCALIZE[21870] + </value>
+		<value condition="!Skin.HasSetting(Infoline.DisableSource) | !Skin.HasSetting(Info.EnablePillboxStyle)">$LOCALIZE[21870]</value>
+	</variable>
+	
+	<variable name="Label_Setting_AdditionalTags_HDR">		
+		<value condition="!Skin.HasSetting(Infoline.DisableHDR) + [!Skin.HasSetting(Infoline.DisableAudioChannels) | !Skin.HasSetting(Infoline.DisableCodec) | !Skin.HasSetting(Infoline.DisableVersion) | !Skin.HasSetting(Infoline.DisableCollection)]">HDR + </value>
+		<value condition="!Skin.HasSetting(Infoline.DisableHDR)">HDR</value>
+	</variable>
+	
+	<variable name="Label_Setting_AdditionalTags_AudioChannels">
+		<value condition="!Skin.HasSetting(Infoline.DisableAudioChannels) + Skin.HasSetting(Infoline.DisableCodec) + [!Skin.HasSetting(Infoline.DisableVersion) | !Skin.HasSetting(Infoline.DisableCollection)]">$LOCALIZE[21444] + </value> 
+		<value condition="!Skin.HasSetting(Infoline.DisableAudioChannels) + Skin.HasSetting(Infoline.DisableCodec)">$LOCALIZE[21444]</value> 
+	</variable>
+	
+	<variable name="Label_Setting_AdditionalTags_AudioCodecs">
+		<value condition="!Skin.HasSetting(Infoline.DisableCodec) + !Skin.HasSetting(Infoline.DisableAudioChannels) + [!Skin.HasSetting(Infoline.DisableVersion) | !Skin.HasSetting(Infoline.DisableCollection)]">$LOCALIZE[21444][LOWERCASE] & $LOCALIZE[31207][/LOWERCASE] + </value>
+		<value condition="!Skin.HasSetting(Infoline.DisableCodec) + !Skin.HasSetting(Infoline.DisableAudioChannels)">$LOCALIZE[21444][LOWERCASE] & $LOCALIZE[31207][/LOWERCASE]</value>
+	</variable>
+	
+	<variable name="Label_Setting_AdditionalTags_Version">
+		<value condition="!Skin.HasSetting(Infoline.DisableVersion) + !Skin.HasSetting(Infoline.DisableCollection)">$LOCALIZE[40013] + </value>
+		<value condition="!Skin.HasSetting(Infoline.DisableVersion)">$LOCALIZE[40013]</value>
+	</variable>
+	
+	<variable name="Label_Setting_AdditionalTags_Collection">
+		<value condition="!Skin.HasSetting(Infoline.DisableCollection)">$LOCALIZE[31108]</value>
+	</variable>	
+	
+	<variable name="Label_Setting_EpisodeNumber">
+		<value condition="Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.DisableDetailsLine)">$LOCALIZE[31178] ($LOCALIZE[13106])</value>
+		<value condition="Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.DisableDetailsLine)">$LOCALIZE[31178]</value>
+		<value>$LOCALIZE[207]</value>
+	</variable>
 
     <variable name="Label_Trailer_PlayPause">
         <value condition="Player.Paused">$LOCALIZE[208]</value>
@@ -606,9 +663,10 @@
     </variable>
 
     <variable name="Label_Player_Plot">
-        <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Plot)">$VAR[Label_OSD_Plot_Episode_Number,,. ]$INFO[VideoPlayer.Title,, ~ ]$INFO[VideoPlayer.Plot]</value>
+        <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Plot) + !String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title,, ~ ]$INFO[VideoPlayer.Plot]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.Plot)">$INFO[VideoPlayer.EpisodeName,, ~ ]$INFO[VideoPlayer.Plot]</value>
         <value>$INFO[VideoPlayer.Plot]</value>
-    </variable>
+    </variable>	
 
     <variable name="Label_Setting_SearchStyle">
         <value condition="Window.IsVisible(1185)">$LOCALIZE[137]</value>
@@ -992,7 +1050,7 @@
         <value>$LOCALIZE[19055]</value>
     </variable>
 
-    <variable name="Label_OSD_HeaderEpisodeChapter">
+    <variable name="Label_OSD_Header">
         <value condition="!String.IsEmpty(PVR.ChannelNumberInput)">$INFO[PVR.ChannelNumberInput,$LOCALIZE[19165] ,]</value>
         <value condition="!String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekNumeric,$LOCALIZE[31233] ,]</value>
         <value condition="Player.Forwarding32x">FF 32x</value>
@@ -1011,12 +1069,13 @@
         <value condition="Player.Seeking + String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekStepSize, ,]</value>
         <value condition="Player.Caching">$LOCALIZE[439] $INFO[Player.CacheLevel,,%]</value>
         <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Title)">$VAR[Label_OSD_Plot_Episode_Number,,. ]$INFO[VideoPlayer.Title]</value>
-        <value condition="VideoPlayer.Content(movies) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00)">$INFO[Player.Chapter,$LOCALIZE[21396] ,]$INFO[Player.ChapterCount, $LOCALIZE[1443] ,]</value>
+        <value condition="VideoPlayer.Content(movies) + !String.IsEmpty(Player.Chapter) + !String.IsEmpty(Player.ChapterName) + ![String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 1) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 2) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 3) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 4) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 5) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 6) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 7) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 8) | String.IsEqual(Player.ChapterName,$LOCALIZE[21396] 9) | [String.StartsWith(Player.ChapterName,$LOCALIZE[21396]) + String.EndsWith(Player.ChapterName,Player.Chapter)]] + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00)">$INFO[Player.Chapter,$LOCALIZE[21396] ,]$INFO[Player.ChapterCount, / ,]$INFO[Player.ChapterName, - ]</value>                       
+        <value condition="VideoPlayer.Content(movies) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00)">$INFO[Player.Chapter,$LOCALIZE[21396] ,]$INFO[Player.ChapterCount, / ,]</value>
         <value condition="VideoPlayer.Content(livetv) + !String.IsEmpty(VideoPlayer.ChannelNumberLabel)">$INFO[VideoPlayer.ChannelNumberLabel,$LOCALIZE[19029] ,]</value>
         <value condition="VideoPlayer.Content(files) + !String.IsEmpty(VideoPlayer.Studio)">$INFO[VideoPlayer.Studio]</value>
         <value condition="Player.Paused">$LOCALIZE[112]</value>
-        <value condition="!String.IsEmpty(Player.PlaySpeed) + !String.IsEqual(Player.PlaySpeed,1.00) + !String.IsEqual(Player.PlaySpeed,0.00)">$INFO[Player.PlaySpeed,$LOCALIZE[31071] ,x]</value>
-        <value>$LOCALIZE[31134]</value>
+        <value condition="!String.IsEmpty(Player.PlaySpeed) + !String.IsEqual(Player.PlaySpeed,1.00) + !String.IsEqual(Player.PlaySpeed,0.00)">$INFO[Player.PlaySpeed,$LOCALIZE[31071] ,x]</value>       
+		<value>$LOCALIZE[31134]</value>
     </variable>
 
     <variable name="Label_VideoHWDecoder">
@@ -1131,6 +1190,23 @@
         <value condition="!String.IsEmpty(Container(7000).ListItem.Studio)">$INFO[Container(7000).ListItem.Studio]</value>
         <value condition="!String.IsEmpty(Container(7000).ListItem.Premiered)">$INFO[Container(7000).ListItem.Premiered]</value>
     </variable>
+	
+	<variable name="Label_AudioChannel_Switch">
+		<value condition="!VideoPlayer.IsFullscreen">$VAR[Label_ListItem_AudioChannels]</value>
+		<value condition="VideoPlayer.IsFullscreen">$VAR[Label_VideoPlayer_AudioChannels]</value>
+	</variable>
+	
+	<variable name="Label_AudioCodec_Switch">
+		<value condition="!VideoPlayer.IsFullscreen + !String.StartsWith(System.BuildVersionShort,22.)">$VAR[Label_ListItem_Sur_Tech]</value>
+		<value condition="!VideoPlayer.IsFullscreen + String.StartsWith(System.BuildVersionShort,22.)">$VAR[Label_ListItem_Sur_Tech_v22]</value>
+		<value condition="VideoPlayer.IsFullscreen + !String.StartsWith(System.BuildVersionShort,22.)">$VAR[Label_VideoPlayer_Sur_Tech]</value>
+		<value condition="VideoPlayer.IsFullscreen + String.StartsWith(System.BuildVersionShort,22.)">$VAR[Label_VideoPlayer_Sur_Tech_v22]</value>
+	</variable>	
+	
+	<variable name="Label_AudioCodec_Switch_2">
+		<value condition="String.StartsWith(System.BuildVersionShort,21.)">$VAR[Label_ListItem_Sur_Tech]</value>
+		<value condition="String.StartsWith(System.BuildVersionShort,22.)">$VAR[Label_ListItem_Sur_Tech_v22]</value>		
+	</variable>	
 
     <variable name="Label_VideoPlayer_AudioChannels">
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
@@ -1139,7 +1215,10 @@
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,7)">6.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,6)">5.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,5)">4.1</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,4)">4.0</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,3)">2.1</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,2)">2.0</value>
+        <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,1)">1.0</value>
         <value>$INFO[VideoPlayer.AudioChannels,,.0]</value>
     </variable>
     <variable name="Label_ListItem_AudioChannels">
@@ -1149,16 +1228,21 @@
         <value condition="[Integer.IsEqual(ListItem.AudioChannels,7) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),7)]">6.1</value>
         <value condition="[Integer.IsEqual(ListItem.AudioChannels,6) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),6)]">5.1</value>
         <value condition="[Integer.IsEqual(ListItem.AudioChannels,5) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),5)]">4.1</value>
+        <value condition="[Integer.IsEqual(ListItem.AudioChannels,4) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),4)]">4.0</value>
         <value condition="[Integer.IsEqual(ListItem.AudioChannels,3) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),3)]">2.1</value>
+        <value condition="[Integer.IsEqual(ListItem.AudioChannels,2) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),2)]">2.0</value>
+        <value condition="[Integer.IsEqual(ListItem.AudioChannels,1) | Integer.IsEqual(Container(99950).ListItem.Property(base_audiochannels),1)]">1.0</value>
 		<value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_audiochannels))">$INFO[Container(99950).ListItem.Property(base_audiochannels),,.0]</value>
         <value>$INFO[ListItem.AudioChannels,,.0]</value>
     </variable>
 		
 	<variable name="Label_ListItem_Sur_Tech">
 		<!-- DOLBY -->
-		<value condition="String.Contains(ListItem.FileNameAndPath,atmos) + [String.IsEqual(ListItem.AudioCodec,truehd) | String.IsEqual(ListItem.AudioCodec,eac3)]">ATMOS</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,atmos) + String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD ATMOS</value>
+		<value condition="String.Contains(ListItem.FileNameAndPath,atmos) + String.IsEqual(ListItem.AudioCodec,eac3)">DOLBY ATMOS</value>
 		<value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TRUEHD</value>
-		<value condition="String.Contains(Container(99950).ListItem.Property(base_filenameandpath),atmos) + [String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),truehd) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),eac3)]">ATMOS</value>
+		<value condition="String.Contains(Container(99950).ListItem.Property(base_filenameandpath),atmos) + String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),truehd)">TRUEHD ATMOS</value>
+		<value condition="String.Contains(Container(99950).ListItem.Property(base_filenameandpath),atmos) + String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),eac3)">DOLBY ATMOS</value>
 		<value condition="String.Contains(Container(99950).ListItem.Property(base_audiocodec),truehd)">TRUEHD</value>
 			
 		<!-- DTS -->
@@ -1167,14 +1251,93 @@
 		<value condition="[String.Contains(Container(99950).ListItem.Property(base_filenameandpath),dtsx) | String.Contains(Container(99950).ListItem.Property(base_filenameandpath),dts-x)] + String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd_ma)">DTS-X</value>
 		<value condition="String.Contains(Container(99950).ListItem.Property(base_audiocodec),dtshd)">DTS-HD</value>
 		
+		<!-- OTHERS -->
+		<value condition="[String.IsEqual(ListItem.AudioCodec,aac) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aac)]">AAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aac_latm) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aac_latm)]">AAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,ac3) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),ac3)]">DD</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aif) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aif)]">AIFF</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aifc) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aifc)]">AIFF</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aiff) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aiff)]">AIFF</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,alac) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),alac)]">ALAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,ape) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),ape)]">APE</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,avc) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),avc)]">AVC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,cdda) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),cdda)]">CDDA</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dca) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dca)]">DTS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dolbydigital) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dolbydigital)]">DD</value>
+		<value condition="[String.IsEqual(ListItem.AudioCodec,dts) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dts)]">DTS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd)]">DTS-HD</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd_ma) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd_ma)]">DTS-HD MA</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd_hra) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd_hra)]">DTS-HD HRA</value>      
+        <value condition="[String.IsEqual(ListItem.AudioCodec,eac3) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),eac3)]">DD+</value>       
+        <value condition="[String.IsEqual(ListItem.AudioCodec,flac) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),flac)]">FLAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp1) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp1)]">MP1</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp2) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp2)]">MP2</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp3) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp3)]">MP3</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp3float) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp3float)]">MP3</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,ogg) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),ogg)]">OGG</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,opus) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),opus)]">OPUS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm_bluray) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm_bluray)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm_s16le) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm_s16le)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm_s24le) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm_s24le)]">PCM</value>        
+        <value condition="[String.IsEqual(ListItem.AudioCodec,vorbis) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),vorbis)]">VORBIS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wav) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wav)]">WAV</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wavpack) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wavpack)]">WAVP</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wmapro) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wmapro)]">WMA-PRO</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wmav2) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wmav2)]">WMA</value>
+		
 		<!-- Fallback -->
 		<value condition="!String.IsEmpty(ListItem.AudioCodec)">$INFO[ListItem.AudioCodec]</value>
-		<value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_audiocodec))">$INFO[Container(99950).ListItem.Property(base_audiocodec)]</value>
-	</variable>		
+		<value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_audiocodec))">$INFO[Container(99950).ListItem.Property(base_audiocodec)]</value>		
+	</variable>
+
+	<variable name="Label_ListItem_Sur_Tech_v22">
+		<!-- NEW v22-->
+		<value condition="[String.IsEqual(ListItem.AudioCodec,aac) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aac)]">AAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aac_latm) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aac_latm)]">AAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,ac3) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),ac3)]">DD</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aif) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aif)]">AIFF</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aifc) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aifc)]">AIFF</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,aiff) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),aiff)]">AIFF</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,alac) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),alac)]">ALAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,ape) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),ape)]">APE</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,avc) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),avc)]">AVC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,cdda) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),cdda)]">CDDA</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dca) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dca)]">DTS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dolbydigital) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dolbydigital)]">DD</value>
+		<value condition="[String.IsEqual(ListItem.AudioCodec,dts) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dts)]">DTS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd)]">DTS-HD</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd_ma) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd_ma)]">DTS-HD MA</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd_hra) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd_hra)]">DTS-HD HRA</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd_ma_x) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd_ma_x)]">DTS-X MA</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,dtshd_ma_x_imax) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),dtshd)_ma_x_imax]">DTS-X (IMAX)</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,eac3) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),eac3)]">DD+</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,eac3_ddp_atmos) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),eac3_ddp_atmos)]">DOLBY ATMOS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,flac) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),flac)]">FLAC</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp1) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp1)]">MP1</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp2) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp2)]">MP2</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp3) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp3)]">MP3</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,mp3float) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),mp3float)]">MP3</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,ogg) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),ogg)]">OGG</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,opus) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),opus)]">OPUS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm_bluray) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm_bluray)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm_s16le) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm_s16le)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,pcm_s24le) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),pcm_s24le)]">PCM</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,truehd) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),truehd)]">TRUEHD</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,truehd_atmos) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),truehd_atmos)]">TRUEHD ATMOS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,vorbis) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),vorbis)]">VORBIS</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wav) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wav)]">WAV</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wavpack) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wavpack)]">WAVP</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wmapro) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wmapro)]">WMA-PRO</value>
+        <value condition="[String.IsEqual(ListItem.AudioCodec,wmav2) | String.IsEqual(Container(99950).ListItem.Property(base_audiocodec),wmav2)]">WMA</value>
+        <value condition="[!String.IsEmpty(ListItem.AudioCodec) | !String.IsEmpty(Container(99950).ListItem.Property(base_audiocodec))]">$INFO[ListItem.AudioCodec]</value>        
+	</variable>	
 	
 	<variable name="Label_VideoPlayer_Sur_Tech">	
 		<!-- ATMOS -->
-		<value condition="String.Contains(Player.FilenameAndPath,atmos) + [String.Contains(VideoPlayer.AudioCodec,truehd) | String.Contains(VideoPlayer.AudioCodec,eac3)]">ATMOS</value>
+		<value condition="String.Contains(Player.FilenameAndPath,atmos) + String.Contains(VideoPlayer.AudioCodec,truehd)">TRUEHD ATMOS</value>
+		<value condition="String.Contains(Player.FilenameAndPath,atmos) + String.Contains(VideoPlayer.AudioCodec,eac3)">DOLBY ATMOS</value>
 		
 		<!-- TRUEHD -->
 		<value condition="String.Contains(VideoPlayer.AudioCodec,truehd)">TRUEHD</value>	
@@ -1185,8 +1348,86 @@
 		<!-- DTS-HD -->
 		<value condition="String.Contains(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
 		
+		<!-- OTHERS -->
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_latm)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">DD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aif)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aifc)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aiff)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,alac)">ALAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ape)">APE</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,avc)">AVC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,cdda)">CDDA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dolbydigital)">DD</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>        
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">DD+</value>        
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp1)">MP1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp2)">MP2</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">MP3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3float)">MP3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ogg)">OGG</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">OPUS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>        
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,vorbis)">VORBIS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wav)">WAV</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wavpack)">WAVP</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wmapro)">WMA-PRO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wmav2)">WMA</value>
+		
 		<!-- Fallback -->
-		<value condition="!String.IsEmpty(VideoPlayer.AudioCodec)">$INFO[VideoPlayer.AudioCodec]</value>
+		<value condition="!String.IsEmpty(VideoPlayer.AudioCodec)">$INFO[VideoPlayer.AudioCodec]</value>		
+	</variable>
+	
+	<variable name="Label_VideoPlayer_Sur_Tech_v22">		
+		<!-- NEW v22-->
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac_latm)">AAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">DD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aif)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aifc)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,aiff)">AIFF</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,alac)">ALAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ape)">APE</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,avc)">AVC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,cdda)">CDDA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dolbydigital)">DD</value>
+		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd)">DTS-HD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS-X MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">DTS-X (IMAX)</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">DD+</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">DOLBY ATMOS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp1)">MP1</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp2)">MP2</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3)">MP3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,mp3float)">MP3</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,ogg)">OGG</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">OPUS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le)">PCM</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">TRUEHD</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">TRUEHD ATMOS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,vorbis)">VORBIS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wav)">WAV</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wavpack)">WAVP</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wmapro)">WMA-PRO</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,wmav2)">WMA</value>
+        <value condition="!String.IsEmpty(VideoPlayer.AudioCodec)">$INFO[VideoPlayer.AudioCodec]</value>       
 	</variable>
 	
 	<variable name="Label_EpisodeCount">
@@ -1195,7 +1436,7 @@
 		<value condition="[String.IsEqual(Container(99950).ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,episode)]">$LOCALIZE[20366]</value>
 	</variable>
 	<variable name="Label_Video_Info">
-		<value>$INFO[ListItem.VideoResolution,, • ]$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</value>
+		<value>$INFO[ListItem.VideoResolution,, • ]$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoAspect, • ,:1]$VAR[Label_AudioCodec_Switch_2, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</value>
 	</variable>
 	
 	<variable name="Label_HDRLogo_Type">
@@ -1212,6 +1453,13 @@
     </variable>
 
     <variable name="Label_OSD_Plot_Episode_Number">
+        <value condition="String.IsEmpty(VideoPlayer.Season) | String.IsEmpty(VideoPlayer.Episode)" />
+        <value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode,E,]</value>
+        <value condition="!Skin.HasSetting(Infoline.SETags) + !Integer.IsLess(VideoPlayer.Episode,10)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,]</value>
+        <value condition="!Skin.HasSetting(Infoline.SETags)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x0,]</value>
+    </variable>
+	
+	<variable name="Label_OSD_Infoline_Plot_Episode_Number">
         <value condition="String.IsEmpty(VideoPlayer.Season) | String.IsEmpty(VideoPlayer.Episode)" />
         <value condition="Skin.HasSetting(Info.UseS1E1StyleNumbers)">$INFO[VideoPlayer.Season,S,]$INFO[VideoPlayer.Episode,E,]</value>
         <value condition="!Integer.IsLess(VideoPlayer.Episode,10)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,]</value>
@@ -1265,9 +1513,38 @@
         <value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_artist_description))">$INFO[Container(99950).ListItem.Property(base_artist_description)]</value>
         <value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_album_description))">$INFO[Container(99950).ListItem.Property(base_album_description)]</value>
         <value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_addon_description))">$INFO[Container(99950).ListItem.Property(base_addon_description)]</value>
-        <value condition="String.IsEqual(Container(99950).ListItem.Property(base_dbtype),episode) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$VAR[Label_Plot_Episode_Type_C99950,,: ]$VAR[Label_Plot_Episode_Number_C99950,,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
-		<value condition="String.IsEqual(Container(99950).ListItem.Property(base_dbtype),episode) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$VAR[Label_Plot_Episode_Type_C99950,,: ]$VAR[Label_Plot_Episode_Number_C99950,,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
-        <value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_plot))">$INFO[Container(99950).ListItem.Property(base_plot)]</value>
+        
+		<value condition="!Skin.HasSetting(Infoline.SETags) + String.IsEqual(Container(99950).ListItem.Property(base_dbtype),episode) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$VAR[Label_Plot_Episode_Type_C99950,,: ]$VAR[Label_Plot_Episode_Number_C99950,,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
+		<value condition="!Skin.HasSetting(Infoline.SETags) + String.IsEqual(Container(99950).ListItem.Property(base_dbtype),episode) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$VAR[Label_Plot_Episode_Type_C99950,,: ]$VAR[Label_Plot_Episode_Number_C99950,,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
+		
+		<value condition="String.IsEqual(Container(99950).ListItem.Property(base_dbtype),episode) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$VAR[Label_Plot_Episode_Type_C99950,,: ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
+		<value condition="String.IsEqual(Container(99950).ListItem.Property(base_dbtype),episode) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$VAR[Label_Plot_Episode_Type_C99950,,: ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
+        
+		<!-- PVR S1E1-->
+		<value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.EpisodeName) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Season,S,]$INFO[Container(99950).ListItem.Episode,E,. ]$INFO[Container(99950).ListItem.EpisodeName][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
+        <value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Title) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Season,S,]$INFO[Container(99950).ListItem.Episode,E,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>        
+        
+		
+		<value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Season,S,]$INFO[Container(99950).ListItem.Episode][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>		
+		<value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.EpisodeName) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.Season,S,]$INFO[Container(99950).ListItem.Episode,E,. ]$INFO[Container(99950).ListItem.EpisodeName][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
+        <value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Title) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.Season,S,]$INFO[Container(99950).ListItem.Episode,E,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>            
+        <value condition="!Skin.HasSetting(Infoline.SETags) + Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.Season,S,]$INFO[Container(99950).ListItem.Episode][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
+		
+		<!-- PVR -->
+		<value condition="!Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.EpisodeName) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Season,,x]$INFO[Container(99950).ListItem.Episode,,. ]$INFO[Container(99950).ListItem.EpisodeName][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
+        <value condition="!Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Title) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Season,,x]$INFO[Container(99950).ListItem.Episode,,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>              
+        <value condition="!Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Season,,x]$INFO[Container(99950).ListItem.Episode][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
+		
+		<value condition="!Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.EpisodeName) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.Season,,x]$INFO[Container(99950).ListItem.Episode,,. ]$INFO[Container(99950).ListItem.EpisodeName][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
+        <value condition="!Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Title) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.Season,,x]$INFO[Container(99950).ListItem.Episode,,. ]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>               
+        <value condition="!Skin.HasSetting(Infoline.SETags) + !Skin.HasSetting(Info.UseS1E1StyleNumbers) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.Season,,x]$INFO[Container(99950).ListItem.Episode][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>
+		
+		<!-- PVR extras-->
+		<value condition="Skin.HasSetting(Infoline.SETags) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.EpisodeName) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.EpisodeName][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>       
+        <value condition="Skin.HasSetting(Infoline.SETags) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.Episode) + !String.IsEmpty(Container(99950).ListItem.Title) + !String.IsEmpty(Container(99950).ListItem.Property(base_plot))">[B]$INFO[Container(99950).ListItem.Title][/B]$INFO[Container(99950).ListItem.Property(base_plot), ~ ,]</value>
+		<value condition="Skin.HasSetting(Infoline.SETags) + String.IsEmpty(Container(99950).ListItem.Property(base_dbtype)) + !String.IsEmpty(Container(99950).ListItem.EpisodeName) + !String.IsEmpty(Container(99950).ListItem.Plot)">[B]$INFO[Container(99950).ListItem.EpisodeName][/B]$INFO[Container(99950).ListItem.Plot, ~ ,]</value>   
+		
+		<value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_plot))">$INFO[Container(99950).ListItem.Property(base_plot)]</value>
         <value condition="!String.IsEmpty(Container(99950).ListItem.Plot)">$INFO[Container(99950).ListItem.Plot]</value>
         <value>$VAR[Def_PlotDetails_Fallback]</value>
     </variable>
@@ -1797,7 +2074,13 @@
         <value>$LOCALIZE[571]</value>
     </variable>
 	
-	<variable name="OSDCodecLogosStartupLabel">
+	<variable name="Label_Changelog">
+		<value>- Add changelog history.
+- Additional audio codec labels for Kodi v22.		
+- Other small bug fixes and enhancements.
+		</value>		
+	</variable>
+<variable name="OSDCodecLogosStartupLabel">
         <value condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">$LOCALIZE[32057]</value>
         <value condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">$LOCALIZE[32058]</value>
         <value condition="Skin.HasSetting(osd.userightCodecStartupLogos)">$LOCALIZE[32059]</value>
@@ -1817,8 +2100,7 @@
         <value condition="Skin.HasSetting(ppi.userightCodecLogos)">$LOCALIZE[32059]</value>
         <value>$LOCALIZE[591]</value>
     </variable>
-	
-    <variable name="VideoDecoder">
+<variable name="VideoDecoder">
         <value condition="Player.Process(videohwdecoder)">HW</value>
         <value>SW</value>
     </variable>
@@ -2034,5 +2316,5 @@
         <value condition="String.Contains(Player.Process(video.source.hdr.type),SDR) + String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)">-&gt; Dolby Vision</value>
         <value condition="String.Contains(Player.Process(video.source.hdr.type),Dolby Vision) + String.Contains(Player.Process(amlogic.vs10.mode),SDR)"> -&gt; SDR</value>
     </variable>
-</includes>
 
+</includes>

@@ -247,7 +247,11 @@
 
             <!-- Hub Widgets Group -->
             <control type="group" id="320">
-                <include>Animation_View_SlideOver</include>
+			
+				<!-- Trailer fade animation -->
+				<include>Animation_Trailer_Dim</include>
+                
+				<include>Animation_View_SlideOver</include>
                 <include>Animation_View_WindowChange</include>
                 <include>Animation_Group_Bumper</include>
 

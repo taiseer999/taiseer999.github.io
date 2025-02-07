@@ -498,11 +498,11 @@
                     <description>Busy animation</description>
                     <animation effect="rotate" condition="$PARAM[spinprogress]" start="0" end="360" loop="true" time="2000" center="auto">Conditional</animation>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorHighlight]">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                        <texture colordiffuse="$VAR[ColorHighlight]" flipx="true" flipy="true">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                     </control>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorGradient]">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                        <texture colordiffuse="$VAR[ColorGradient]" flipx="true" flipy="true">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
                         <animation effect="fade" end="66" condition="true">Conditional</animation>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                         <include content="Defs_Progress_Colorfade">
@@ -810,7 +810,7 @@
             <centertop>400</centertop>
             <orientation>vertical</orientation>
             <align>center</align>
-            <control type="image">
+            <!-- <control type="image">
                 <width>96</width>
                 <height>96</height>
                 <centerleft>50%</centerleft>
@@ -823,7 +823,7 @@
                 <label>KODI</label>
                 <font>font_logo_large</font>
                 <align>center</align>
-            </control>
+            </control> -->
         </control>
         <control type="label">
             <height>80</height>
@@ -858,7 +858,7 @@
                     <left>-10</left>
                     <label>$INFO[Window(Weather).Property(Current.Temperature), [B],[/B]°]</label>
                     <width>auto</width>
-                    <height>90</height>
+                    <height>115</height> <!-- to fit larger fonts -->
                     <align>center</align>
                     <aligny>center</aligny>
                     <font>font_title_huge</font>
@@ -964,7 +964,7 @@
         </definition>
     </include>
 
-    <include name="Object_ContentBanner">
+	<include name="Object_ContentBanner">
         <param name="listitem">ListItem</param>
         <definition>
             <include content="Object_MovieVersionBanner" condition="Skin.HasSetting(Indicator.MovieVersionBanner)">
@@ -1015,7 +1015,7 @@
             </control>
         </definition>
     </include>
-    <include name="Object_MovieVersionBanner">
+	<include name="Object_MovieVersionBanner">
         <param name="listitem">ListItem</param>
         <definition>
             <control type="group">
@@ -1071,12 +1071,12 @@
         <definition>
             <include content="Object_Indicator_Visible_$PARAM[include_type]">
                 <param name="playing">$PARAM[listitem].IsPlaying</param>
-                <param name="episodes">!Skin.HasSetting(Indicator.DisableEpisodes) + !Integer.IsEqual($PARAM[listitem].Property(UnWatchedEpisodes),0) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season) | String.IsEqual($PARAM[listitem].DBType,episode)]</param>
+				<param name="episodes">!Skin.HasSetting(Indicator.DisableEpisodes) + !Integer.IsEqual($PARAM[listitem].Property(UnWatchedEpisodes),0) + [!Integer.IsEqual($PARAM[listitem].Property(WatchedEpisodes),0) | Skin.HasSetting(Indicator.EnableUnwatchedCount)] + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season) | String.IsEqual($PARAM[listitem].DBType,episode)]</param>	
                 <param name="timers">$PARAM[listitem].IsRecording | $PARAM[listitem].HasTimer</param>
                 <param name="progress">!Skin.HasSetting(Indicator.DisableProgress) + !$PARAM[listitem].IsCollection + [$PARAM[listitem].IsResumable | [!String.IsEmpty($PARAM[listitem].Property(WatchedProgress)) + !Integer.IsEqual($PARAM[listitem].Property(WatchedProgress),0) + !Integer.IsEqual($PARAM[listitem].Property(WatchedProgress),100)]]</param>
                 <param name="watched">!Skin.HasSetting(Indicator.DisableWatched) + [String.IsEqual($PARAM[listitem].Overlay,OverlayWatched.png) | [!Integer.IsEqual($PARAM[listitem].PlayCount,0) + [String.IsEqual($PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season) | String.IsEqual($PARAM[listitem].DBType,set) | String.IsEqual($PARAM[listitem].DBType,video) | String.IsEqual($PARAM[listitem].DBType,episode)]]]</param>
                 <param name="library">!Skin.HasSetting(Indicator.DisableLibrary) + !String.IsEmpty($PARAM[listitem].DBID) + !String.IsEmpty($PARAM[listitem].Property(Item.Info))</param>
-                <param name="collection">!Skin.HasSetting(Indicator.DisableCollection) + [$PARAM[listitem].IsCollection | $PARAM[listitem].HasVideoVersions]</param>
+                <param name="collection">!Skin.HasSetting(Indicator.DisableCollection) + [$PARAM[listitem].IsCollection]</param>
             </include>
         </definition>
     </include>
@@ -1135,7 +1135,7 @@
                 <!-- Percentage -->
                 <include content="Object_Control">
                     <param name="control">image</param>
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true">$VAR[Defs_PercentPlayed$PARAM[affix],progress/circle/p,.png]</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">$VAR[Defs_PercentPlayed$PARAM[affix],progress/circle/p,.png]</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <include content="Object_Indicator_Visible">
                         <param name="include_type">Percentage</param>
@@ -1191,7 +1191,7 @@
                 <include content="Object_Control" condition="!Skin.HasSetting(Indicator.DisableWatched)">
                     <param name="control">group</param>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true">progress/circle/p100.png</texture>
+                        <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">progress/circle/p100.png</texture>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                     </control>
                     <control type="image">
@@ -1256,7 +1256,7 @@
                     <include content="Dimension_Padding"><param name="pad">10</param></include>
                     <include content="Object_ColorDiffuse" condition="$PARAM[selected]"><param name="colordiffuse">$VAR[ColorSelected_30]</param></include>
                     <colordiffuse>main_fg_30</colordiffuse>
-                    <texture>progress/circle/p100.png</texture>
+                    <texture flipx="true" flipy="true">progress/circle/p100.png</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$EXP[Exp_HasWatchedProgress]</visible>
                 </control>
@@ -1264,7 +1264,7 @@
                     <include content="Dimension_Padding"><param name="pad">10</param></include>
                     <include content="Object_ColorDiffuse" condition="$PARAM[selected]"><param name="colordiffuse">$VAR[ColorSelected]</param></include>
                     <colordiffuse>main_fg_90</colordiffuse>
-                    <texture>$VAR[Defs_PercentPlayed,progress/circle/p,.png]</texture>
+                    <texture flipx="true" flipy="true">$VAR[Defs_PercentPlayed,progress/circle/p,.png]</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>$EXP[Exp_HasWatchedProgress]</visible>
                 </control>
@@ -1359,13 +1359,13 @@
                 </control>
                 <control type="image">
                     <include content="Dimension_Padding"><param name="pad">0</param></include>
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]">progress/circle/p$PARAM[progress].png</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]" flipx="true" flipy="true">progress/circle/p$PARAM[progress].png</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>!String.IsEqual(Window(Home).Property(ColorPicker_Type),Indicator) | !Control.HasFocus(3000)</visible>
                 </control>
                 <control type="image">
                     <include content="Dimension_Padding"><param name="pad">0</param></include>
-                    <texture colordiffuse="$INFO[Container(3000).ListItem.Label]">progress/circle/p$PARAM[progress].png</texture>
+                    <texture colordiffuse="$INFO[Container(3000).ListItem.Label]" flipx="true" flipy="true">progress/circle/p$PARAM[progress].png</texture>
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <visible>String.IsEqual(Window(Home).Property(ColorPicker_Type),Indicator) + Control.HasFocus(3000)</visible>
                 </control>

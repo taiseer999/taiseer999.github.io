@@ -25,7 +25,7 @@
     <include name="Settings_Left_Group">
         <control type="group">
             <nested />
-            <width>480</width>
+            <width>360</width>
 
             <control type="image">
                 <texture colordiffuse="dialog_fg_12">common/white.png</texture>
@@ -112,7 +112,7 @@
                     <param name="arrow_next_visible">$PARAM[arrow_next_visible]</param>
                 </include>
                 <nested />
-                <left>580</left>
+                <left>460</left>
                 <right>80</right>
                 <bottom>160</bottom>
                 <top>160</top>
@@ -375,49 +375,49 @@
                     <content>
                         <item>
                             <label>$LOCALIZE[166]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[31177] / $LOCALIZE[480] / $LOCALIZE[33029]</label2>
                             <icon>special://skin/extras/icons/paintbrush.png</icon>
                             <onclick>ActivateWindow(SkinSettings)</onclick>
                         </item>
                         <item>
                             <label>$LOCALIZE[14206]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[166] / $LOCALIZE[14222] / $LOCALIZE[360]</label2>
                             <icon>special://skin/extras/icons/skinsettings.png</icon>
                             <onclick>ActivateWindow(InterfaceSettings)</onclick>
                         </item>
                         <item>
                             <label>$LOCALIZE[14211]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[14022] / $LOCALIZE[14241] / $LOCALIZE[19033]</label2>
                             <icon>special://skin/extras/icons/tags.png</icon>
                             <onclick>ActivateWindow(MediaSettings)</onclick>
                         </item>
                         <item>
                             <label>$LOCALIZE[14200]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[14086] / $LOCALIZE[287] / $LOCALIZE[14087]</label2>
                             <icon>special://skin/extras/icons/equalizer.png</icon>
                             <onclick>ActivateWindow(PlayerSettings)</onclick>
                         </item>
                         <item>
                             <label>$LOCALIZE[13000]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[131] / $LOCALIZE[292] / $LOCALIZE[14125] / $LOCALIZE[443]</label2>
                             <icon>special://skin/extras/icons/configure.png</icon>
                             <onclick>ActivateWindow(SystemSettings)</onclick>
                         </item>
                         <item>
                             <label>$LOCALIZE[19099]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[14223] / UPnP / $LOCALIZE[1273] / $LOCALIZE[8]</label2>
                             <icon>special://skin/extras/icons/network.png</icon>
                             <onclick>ActivateWindow(servicesettings)</onclick>
                         </item>
                         <item>
                             <label>PVR</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[14301] / $LOCALIZE[19069] / $LOCALIZE[19043]</label2>
                             <icon>special://skin/extras/icons/livetv.png</icon>
                             <onclick>ActivateWindow(pvrsettings)</onclick>
                         </item>
                         <item>
                             <label>$LOCALIZE[13200]</label>
-                            <label2>$LOCALIZE[5]</label2>
+                            <label2>$LOCALIZE[10029] / $LOCALIZE[13200]</label2>
                             <icon>special://skin/extras/icons/actor.png</icon>
                             <onclick>ActivateWindow(Profiles)</onclick>
                         </item>
@@ -435,25 +435,9 @@
             </include>
             <include content="Furniture_Top">
                 <param name="label">$LOCALIZE[5]</param>
+				<param name="textcolor">main_fg_100</param>
             </include>
-            <include condition="Skin.String(Furniture.BottomLeft.Enable,Library) | Skin.String(Furniture.BottomLeft.Enable,Always)">Furniture_Bottom_Left</include>
-            <control type="group">
-                <include>Dimension_Bottombar</include>
-                <visible>!Skin.String(Furniture.BottomLeft.Enable,Library)</visible>
-                <visible>!Skin.String(Furniture.BottomLeft.Enable,Always)</visible>
-                <animation effect="fade" start="100" end="30" condition="true">Conditional</animation>
-                <control type="group">
-                    <height>35</height>
-                    <include content="Info_Viewline">
-                        <param name="library_condition">false</param>
-                        <param name="label"></param>
-                        <param name="custom_icon_condition">Skin.HasSetting(Furniture.EnableViewLineIcons)</param>
-                        <param name="custom_icon">special://skin/extras/icons/kodi.png</param>
-                        <top>0</top>
-                        <left>0</left>
-                    </include>
-                </control>
-            </control>
+            <include condition="Skin.String(Furniture.BottomLeft.Enable,Library) | Skin.String(Furniture.BottomLeft.Enable,Always)">Furniture_Bottom_Left</include>            
         </control>
         <control type="group">
             <include>Furniture_Bottom_Right</include>

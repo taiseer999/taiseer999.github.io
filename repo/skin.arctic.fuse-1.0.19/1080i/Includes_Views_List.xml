@@ -2,7 +2,7 @@
 <includes>
 
     <!-- Media List -->
-    <include name="View_056_MediaList">
+    <include name="View_056_MediaList">		
         <include content="View_MediaList_Include" condition="Window.IsVisible(MyVideoNav.xml)">
             <param name="id">56</param>
             <param name="viewtype_label">$LOCALIZE[31479]</param>
@@ -56,6 +56,10 @@
     <include name="View_MediaList_Landscape">
         <control type="group">
             <right>-40</right>
+			
+			<animation effect="slide" start="40" end="-80" time="400" tween="cubic" easing="out" condition="!String.IsEmpty(Window(Home).Property(SideMenu.HasFocus))" reversible="false">Conditional</animation>
+			<animation effect="slide" start="-80" end="40" time="400" tween="cubic" easing="out" condition="String.IsEmpty(Window(Home).Property(SideMenu.HasFocus))" reversible="false">Conditional</animation>
+			
             <bottom>0</bottom>
             <height>view_poster_itemlayout_h</height>
             <control type="group">
@@ -84,6 +88,10 @@
         <definition>
             <control type="group">
                 <right>-40</right>
+				
+				<animation effect="slide" start="40" end="-80" time="400" tween="cubic" easing="out" condition="!String.IsEmpty(Window(Home).Property(SideMenu.HasFocus))" reversible="false">Conditional</animation>
+				<animation effect="slide" start="-80" end="40" time="400" tween="cubic" easing="out" condition="String.IsEmpty(Window(Home).Property(SideMenu.HasFocus))" reversible="false">Conditional</animation>
+				
                 <bottom>0</bottom>
                 <height>view_poster_itemlayout_h</height>
                 <control type="group">
@@ -201,9 +209,9 @@
                         <param name="id">$PARAM[id]</param>
                         <param name="textcolor">main_fg</param>
                         <param name="control">fixedlist</param>
-                        <param name="itemlayout_include">Layout_MediaList</param>
-
-                        <right>-20</right>
+                        <param name="itemlayout_include">Layout_MediaList</param>						
+						
+                        <right>30</right>						
 
                         <!-- <onleft>SetProperty(List.ViewContainer.Bump,True)</onleft> -->
                         <onleft>SetProperty(List.ViewContainer,50)</onleft>
@@ -228,7 +236,7 @@
                         <viewtype label="$PARAM[viewtype_label]">list</viewtype>
                         <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus>
                         <include>Action_View_SlideOver_OnFocus</include>
-                    </include>
+                    </include>				
                 </control>
             </control>
         </definition>

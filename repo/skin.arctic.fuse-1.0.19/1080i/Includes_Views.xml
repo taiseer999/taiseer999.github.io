@@ -139,7 +139,11 @@
                 <animation type="Conditional" reversible="false" condition="![$EXP[Exp_FilterWall_IsActive] | $EXP[Exp_DiscoverWall_IsActive]]">
                     <effect type="slide" start="0,-334" end="0" time="400" delay="0" tween="cubic" easing="out" />
                 </animation>
-                <include content="Info_Viewline">
+				
+				<!-- Trailer fade animation -->
+				<include>Animation_Trailer_Dim</include>
+                
+				<include content="Info_Viewline">
                     <param name="item_condition">true</param>
                     <param name="library_condition">true</param>
                 </include>
@@ -446,6 +450,10 @@
             <include>Background_Transition</include>
 
             <control type="group">
+					
+				<!-- Trailer fade animation -->
+				<include>Animation_Trailer_Dim</include>
+			
                 <include>Animation_Group_Bumper</include>
                 <include>Animation_View_SlideOver</include>
                 <include>Animation_View_WindowChange</include>

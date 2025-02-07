@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+	<include name="Animation_Trailer_Dim">
+		<param name="condition">!Window.IsActive(DialogVideoInfo.xml) + Player.HasVideo + !Skin.HasSetting(Background.DisableVideo) + Skin.HasSetting(Trailers.EnableAutoPlayback) + !String.IsEmpty(Window(Home).Property(PlayTrailerTrigger)) + !String.IsEqual(Window(Home).Property(PlayTrailer),Container(99950).ListItem.Trailer) + System.IdleTime(1)</param>
+		<param name="end">FF2d2d2d</param>
+		<param name="time">600</param>	
+		<definition>
+			<animation effect="fadediffuse" start="FFFFFFFF" end="$PARAM[end]" time="$PARAM[time]" condition="$PARAM[condition]" reversible="true">Conditional</animation>
+		</definition>
+	</include>
+
     <include name="Animation_View_SlideOver_Invert">
         <param name="time">0</param>
         <definition>

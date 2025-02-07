@@ -2053,28 +2053,13 @@
             <visible>True</visible>
         </item>
         <item>
-            <label>تغير المظهر</label>
-            <icon>special://skin/extras/icons/ss.png</icon>
-            <property name="path">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</property>
-            <property name="menu">powermainmenu</property>
-            <property name="mode"/>
-            <property name="node"/>
-            <property name="item">$NUMBER[2]</property>
-            <property name="guid">guid-aebceaab</property>
-            <property name="target"/>
-            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
-            <onclick>PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</onclick>
-            <visible>True</visible>
-        </item>
-        <item>
             <label>TheMovieDb اعداد</label>
             <icon>special://skin/extras/icons/imdb.png</icon>
             <property name="path">RunPlugin(plugin://plugin.video.themoviedb.helper/?info=dir_settings)</property>
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[3]</property>
+            <property name="item">$NUMBER[2]</property>
             <property name="guid">guid-f7767dcf</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -2089,7 +2074,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[4]</property>
+            <property name="item">$NUMBER[3]</property>
             <property name="guid">guid-7eff743e</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -2104,7 +2089,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[5]</property>
+            <property name="item">$NUMBER[4]</property>
             <property name="guid">guid-4a37b1d3</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -2119,7 +2104,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[6]</property>
+            <property name="item">$NUMBER[5]</property>
             <property name="guid">guid-44cdbd43</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -2134,7 +2119,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[7]</property>
+            <property name="item">$NUMBER[6]</property>
             <property name="guid">guid-37a73973</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -2149,7 +2134,7 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[8]</property>
+            <property name="item">$NUMBER[7]</property>
             <property name="guid">guid-07db2182</property>
             <property name="target"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>

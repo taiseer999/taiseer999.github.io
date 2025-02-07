@@ -26,25 +26,6 @@
         </include>
     </include>
 
-<include name="VideoCodecFlag">
-		<param name="groupId"/>
-		<param name="imageId"/>
-		<param name="visible"/>
-		<param name="texture"/>
-		<definition>
-			<control type="group" id="$PARAM[groupId]">
-				<control type="image" id="$PARAM[imageId]">
-					<left>30</left>
-					<bottom>30</bottom>
-					<height>91</height>
-					<width>330</width>
-					<visible>$PARAM[visible]</visible>
-					<texture>$PARAM[texture]</texture>
-				</control>
-			</control>
-		</definition>
-	</include>
-
     <include name="OSD_UpNext_FakeButtons">
         <control type="image">
             <bordersize>12</bordersize>
@@ -228,7 +209,7 @@
         <definition>
             <control type="group">
                 <left>20</left>
-                <right>20</right>
+                <right>20</right>			
                 <include content="Object_Control" condition="$PARAM[selected]">
                     <param name="control">image</param>
                     <include>Texture_Menu_Highlight_H</include>
@@ -679,7 +660,7 @@
                     <param name="label">$INFO[VideoPlayer.ChannelName]</param>
                     <param name="visible">!String.IsEmpty(VideoPlayer.ChannelName)</param>
                     <param name="textcolor">panel_fg_70</param>
-                </include>
+                </include>										
 
                 <!-- Year / Premiered -->
                 <include content="Info_Line_Item">
@@ -690,6 +671,13 @@
                 <include content="Info_Line_Item">
                     <param name="label">$INFO[VideoPlayer.Premiered]</param>
                     <param name="visible">!String.IsEmpty(VideoPlayer.Premiered)</param>
+                    <param name="textcolor">panel_fg_70</param>
+                </include>
+				
+				 <!-- Episode Number -->
+                <include content="Info_Line_Item">
+                    <param name="label">$VAR[Label_OSD_Infoline_Plot_Episode_Number]</param>
+                    <param name="visible">Skin.HasSetting(Infoline.SETags) + !String.IsEmpty(VideoPlayer.Episode)</param>
                     <param name="textcolor">panel_fg_70</param>
                 </include>
 
@@ -1442,11 +1430,9 @@
     <include name="OSD_VideoSeekBar">
         <control type="group">
             <include>OSD_Panel</include>
-
-            <include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
+			<include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
             <include condition="Skin.HasSetting(osd.usecenterCodecLogos)">CodecLogosCenterOSD</include>
             <include condition="Skin.HasSetting(osd.userightCodecLogos)">CodecLogosRightOSD</include>
-
             <!-- Progress Bar Group -->
             <control type="group">
 
@@ -1474,14 +1460,13 @@
 
             <!-- Top Left Label -->
             <control type="group">
-                <visible>!Skin.HasSetting(osd.useleftCodecLogos)</visible>
                 <include content="Furniture_Top">
                     <param name="id">3099</param>
-                    <param name="label">$VAR[Label_OSD_HeaderEpisodeChapter]</param>
+                    <param name="label">$VAR[Label_OSD_Header]</param>
+					<param name="textcolor">main_fg_100</param>
                 </include>
             </control>
             <control type="group">
-                <visible>!Skin.HasSetting(osd.useleftCodecLogos)</visible>
                 <width>40</width>
                 <left>view_menu</left>
                 <control type="image">
@@ -1634,6 +1619,7 @@
         <control type="group">
             <include content="Furniture_Top">
                 <param name="label">$VAR[Label_OSD_Title]</param>
+				<param name="textcolor">main_fg_100</param>
             </include>
         </control>
     </include>

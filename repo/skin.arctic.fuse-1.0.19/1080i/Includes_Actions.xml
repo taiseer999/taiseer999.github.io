@@ -164,6 +164,9 @@
 
     <include name="Action_Hubs_Onload">
         <definition>
+		
+			<onload>RunScript(script.skinvariables,action=buildviews,no_reload)</onload>
+		
             <menucontrol>303</menucontrol>
 
             <include content="Object_DefaultControl" condition="Window.IsVisible(Home)">
@@ -282,15 +285,6 @@
 		<value condition="Skin.HasSetting(Home.OnUp.Hub) + Skin.HasSetting(SideMenu.EnableSearchAndOptions) + Skin.HasSetting(SideMenu.SwapSearchForDiscover)">ActivateWindow(1105)</value>
 		<value condition="Skin.HasSetting(Home.OnUp.Hub) + Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)">ActivateWindow(1185)</value>
 		<value condition="!Skin.HasSetting(Home.OnUp.Hub)"></value>
-	</variable>
-	
-	<variable name="Label_SearchDiscover_Switch">
-		<value condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions) + Skin.HasSetting(SideMenu.SwapSearchForDiscover)">$LOCALIZE[31066]</value>
-		<value condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)">$LOCALIZE[137]</value>
-	</variable>
-	<variable name="Label_Home_OnUp">
-		<value condition="!Skin.HasSetting(Home.OnUp.Hub)">$LOCALIZE[31446]</value>
-		<value condition="Skin.HasSetting(Home.OnUp.Hub)">$VAR[Label_SearchDiscover_Switch]</value>
 	</variable>
 
     <include name="Action_Widget_End">
@@ -977,8 +971,20 @@
     </include>
 
     <variable name="Action_PlayTrailer_Trigger">
-        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback) + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + String.IsEmpty(Window.Property(Slide.WidgetContainer))]">Spotlight</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Spotlight) + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + String.IsEmpty(Window.Property(Slide.WidgetContainer))]">Spotlight</value>
         <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Info) + Window.IsVisible(DialogVideoInfo.xml)]">VideoInfo</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(Home)]">Home</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1101)]">1101</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1102)]">1102</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1103)]">1103</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1104)]">1104</value>        
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1106)]">1106</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1107)]">1107</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1108)]">1108</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Widgets) + Window.IsVisible(1109)]">1109</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Library) + Window.IsVisible(MyVideoNav.xml)]">Library</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Hubs) + Window.IsVisible(1105)]">Discover</value>
+        <value condition="[Skin.HasSetting(Trailers.EnableAutoPlayback.Hubs) + Window.IsVisible(1185)]">Search</value>		
         <value>Unknown</value>
     </variable>
 
