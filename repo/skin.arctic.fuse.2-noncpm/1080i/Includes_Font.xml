@@ -137,7 +137,7 @@
         <param name="style_light" />
 
         <!-- Hint -->
-        <param name="size_heavy_hint">17</param>
+        <param name="size_heavy_hint">16</param>
         <param name="size_light_hint">17</param>
 
         <!-- Tiny -->
