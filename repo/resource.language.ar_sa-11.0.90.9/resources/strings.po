@@ -7118,7 +7118,7 @@ msgstr "جارٍ التخزين المؤقت..."
 
 msgctxt "#15108"
 msgid "GUI Sounds"
-msgstr "أصوات واجهة المستخدم الرسومية"
+msgstr "أصوات واجهة المستخدم"
 
 msgctxt "#15109"
 msgid "Skin default"
