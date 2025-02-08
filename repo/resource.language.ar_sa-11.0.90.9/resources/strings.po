@@ -12568,7 +12568,7 @@ msgstr "مصادر إعلامية"
 #. Name of an add-on type
 msgctxt "#24006"
 msgid "GUI sounds"
-msgstr "أصوات واجهة المستخدم الرسومية"
+msgstr "أصوات واجهة المستخدم"
 
 msgctxt "#24007"
 msgid "Movie information"
@@ -14305,7 +14305,7 @@ msgstr "للحفاظ على بعض AVRs قيد التشغيل ، سوف نرسل
 
 msgctxt "#34120"
 msgid "Play GUI sounds"
-msgstr "تشغيل أصوات واجهة المستخدم الرسومية"
+msgstr "تشغيل أصوات واجهة المستخدم"
 
 #. play GUI sounds
 msgctxt "#34121"
