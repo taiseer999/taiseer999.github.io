@@ -6023,7 +6023,7 @@ Added arabic fonts
         <description lang="en_US">Arctic: Zephyr - Reloaded is based on original Arctic: Zephyr skin, created by jurialmunkey. Arctic focuses on being simple, clean and minimalistic with a light spin.</description>
         <description lang="fr">Arctic: Zephyr - Reloaded est basé sur le skin original Arctic: Zephyr, créé par jurialmunkey. Arctic se focalise sur le fait d'être simple, claire et minimaliste.</description>
     </extension>
-</addon><addon id="skin.bingie" version="1.0.0" name="Bingie" provider-name="matke">
+</addon><addon id="skin.bingie" version="1.0.1" name="Bingie" provider-name="matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />
@@ -6031,7 +6031,7 @@ Added arabic fonts
 		<import addon="script.bingie.widgets" version="1.0.0" />
 		<import addon="script.skinshortcuts" version="2.0.3" />
 		<import addon="resource.images.studios.coloured" version="0.0.23" />
-		<import addon="plugin.video.themoviedb.helper" version="5.4.19" />
+		<import addon="plugin.video.themoviedb.helper" version="5.4.21" />
 		<import addon="script.wikipedia" version="0.0.6" />
 		<import addon="plugin.program.autocompletion" version="2.1.3" />
 	</requires>

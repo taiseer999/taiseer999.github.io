@@ -287,22 +287,40 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31050]</label>
-			<label2>Movies</label2>
+			<label>تكملة المشاهدة</label>
+			<label2>Video Add-On</label2>
 			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">31050--0</property>
-			<property name="defaultID">135</property>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
 			<visible>[!Library.HasContent(Movies) + !Library.HasContent(TVShows)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">3</property>
+			<label>قائمة المشاهدة</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">qym-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[31127]</label>
 			<label2>Movies</label2>
@@ -318,8 +336,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[31035]</label>
 			<label2>Movies</label2>
@@ -335,8 +353,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[16101]</label>
 			<label2>Movies</label2>
@@ -352,8 +370,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[135]</label>
 			<label2>Movies</label2>
@@ -369,8 +387,59 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
+			<property name="mainmenuid">3</property>
+			<label>$LOCALIZE[20434]</label>
+			<label2>Movies</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb />
+			<property name="labelID">20434</property>
+			<property name="defaultID">135</property>
+			<visible>[!Library.HasContent(Movies) + !Library.HasContent(TVShows)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
+			<property name="mainmenuid">3</property>
+			<label>شاهدتها مؤخرًا</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shhdthmwkhran</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="10">
+			<property name="id">$NUMBER[10]</property>
+			<property name="mainmenuid">3</property>
+			<label>التصنيف</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">ltsnyf</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="11">
+			<property name="id">$NUMBER[11]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[135]</label>
 			<label2>Movies</label2>
@@ -386,14 +455,48 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="8">
-			<property name="id">$NUMBER[8]</property>
+		<item id="12">
+			<property name="id">$NUMBER[12]</property>
+			<property name="mainmenuid">3</property>
+			<label>Movies Networks</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">moviesnetworks</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="13">
+			<property name="id">$NUMBER[13]</property>
+			<property name="mainmenuid">3</property>
+			<label>kmovies AK</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">kmoviesak</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="14">
+			<property name="id">$NUMBER[14]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[20434]</label>
 			<label2>Movies</label2>
 			<icon>DefaultShortcut.png</icon>
 			<thumb />
-			<property name="labelID">20434</property>
+			<property name="labelID">20434--0</property>
 			<property name="defaultID">135</property>
 			<visible>[[Library.HasContent(MovieSets)] + [Library.HasContent(Movies) | Library.HasContent(TVShows)]] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
 			<onclick>ActivateWindow(Videos,videodb://movies/sets/,return)</onclick>
@@ -403,58 +506,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="9">
-			<property name="id">$NUMBER[9]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[20434]</label>
-			<label2>Movies</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">20434--0</property>
-			<property name="defaultID">135</property>
-			<visible>[!Library.HasContent(Movies) + !Library.HasContent(TVShows)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">movies</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="10">
-			<property name="id">$NUMBER[10]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[137]</label>
-			<label2>Movies</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">137</property>
-			<property name="defaultID">137</property>
-			<onclick>ActivateWindow(1108,return)</onclick>
-			<property name="path">ActivateWindow(1108,return)</property>
-			<property name="list">1108</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),movies)</visible>
-			<property name="group">movies</property>
-			<property name="isSubmenu">True</property>
-		</item>
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">4</property>
-			<label>التجميعات</label>
-			<label2>Video Add-On</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">ltjmy-t</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),tvshows)</visible>
-			<property name="group">tvshows</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">4</property>
 			<label>قائمة المشاهدة</label>
 			<label2>Video Add-On</label2>
@@ -470,8 +523,76 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">4</property>
+			<label>حلقاتك التالية</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">hlqtkltly</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">4</property>
+			<label>تكملة مشاهدة الحلقات</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-mshhd-lhlqt</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
+			<property name="mainmenuid">4</property>
+			<label>تكملة المشاهدة </label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
+			<property name="mainmenuid">4</property>
+			<label>التجميعات</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">ltjmy-t</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(900).ListItem.Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">4</property>
 			<label>النوع</label>
 			<label2>Video Add-On</label2>
@@ -487,8 +608,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">4</property>
 			<label>TV Networks</label>
 			<label2>Video Add-On</label2>
@@ -504,8 +625,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
 			<property name="mainmenuid">4</property>
 			<label>التصنيف</label>
 			<label2>Video Add-On</label2>
@@ -521,8 +642,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
 			<property name="mainmenuid">4</property>
 			<label>كوري</label>
 			<label2>Video Add-On</label2>
@@ -874,22 +995,40 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31050]</label>
-			<label2>Movies</label2>
+			<label>تكملة المشاهدة</label>
+			<label2>Video Add-On</label2>
 			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">31050--0</property>
-			<property name="defaultID">135</property>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
 			<visible>!Library.HasContent(Movies) + !Library.HasContent(TVShows)</visible>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">3</property>
+			<label>قائمة المشاهدة</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">qym-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[31127]</label>
 			<label2>Movies</label2>
@@ -905,8 +1044,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[31035]</label>
 			<label2>Movies</label2>
@@ -922,8 +1061,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[16101]</label>
 			<label2>Movies</label2>
@@ -939,8 +1078,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[135]</label>
 			<label2>Movies</label2>
@@ -956,8 +1095,59 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
+			<property name="mainmenuid">3</property>
+			<label>$LOCALIZE[20434]</label>
+			<label2>Movies</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb />
+			<property name="labelID">20434</property>
+			<property name="defaultID">135</property>
+			<visible>!Library.HasContent(Movies) + !Library.HasContent(TVShows)</visible>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
+			<property name="mainmenuid">3</property>
+			<label>شاهدتها مؤخرًا</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shhdthmwkhran</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="10">
+			<property name="id">$NUMBER[10]</property>
+			<property name="mainmenuid">3</property>
+			<label>التصنيف</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">ltsnyf</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="11">
+			<property name="id">$NUMBER[11]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[135]</label>
 			<label2>Movies</label2>
@@ -973,25 +1163,42 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="8">
-			<property name="id">$NUMBER[8]</property>
+		<item id="12">
+			<property name="id">$NUMBER[12]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[20434]</label>
-			<label2>Movies</label2>
+			<label>Movies Networks</label>
+			<label2>Video Add-On</label2>
 			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">20434</property>
-			<property name="defaultID">135</property>
-			<visible>[Library.HasContent(MovieSets)] + [Library.HasContent(Movies) | Library.HasContent(TVShows)]</visible>
-			<onclick>ActivateWindow(Videos,videodb://movies/sets/,return)</onclick>
-			<property name="path">ActivateWindow(Videos,videodb://movies/sets/,return)</property>
-			<property name="list">videodb://movies/sets/</property>
+			<thumb>thumb</thumb>
+			<property name="labelID">moviesnetworks</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="9">
-			<property name="id">$NUMBER[9]</property>
+		<item id="13">
+			<property name="id">$NUMBER[13]</property>
+			<property name="mainmenuid">3</property>
+			<label>kmovies AK</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">kmoviesak</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="14">
+			<property name="id">$NUMBER[14]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[20434]</label>
 			<label2>Movies</label2>
@@ -999,26 +1206,10 @@
 			<thumb />
 			<property name="labelID">20434--0</property>
 			<property name="defaultID">135</property>
-			<visible>!Library.HasContent(Movies) + !Library.HasContent(TVShows)</visible>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">movies</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="10">
-			<property name="id">$NUMBER[10]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[137]</label>
-			<label2>Movies</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">137</property>
-			<property name="defaultID">137</property>
-			<onclick>ActivateWindow(1108,return)</onclick>
-			<property name="path">ActivateWindow(1108,return)</property>
-			<property name="list">1108</property>
+			<visible>[Library.HasContent(MovieSets)] + [Library.HasContent(Movies) | Library.HasContent(TVShows)]</visible>
+			<onclick>ActivateWindow(Videos,videodb://movies/sets/,return)</onclick>
+			<property name="path">ActivateWindow(Videos,videodb://movies/sets/,return)</property>
+			<property name="list">videodb://movies/sets/</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
@@ -1045,22 +1236,40 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31050]</label>
-			<label2>Movies</label2>
+			<label>تكملة المشاهدة</label>
+			<label2>Video Add-On</label2>
 			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">31050--0</property>
-			<property name="defaultID">135</property>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
 			<visible>[!Library.HasContent(Movies) + !Library.HasContent(TVShows)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_movie&amp;tmdb_type=None&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=movie&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">3</property>
+			<label>قائمة المشاهدة</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">qym-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_sortby&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;parent_info=trakt_watchlist&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[31127]</label>
 			<label2>Movies</label2>
@@ -1076,8 +1285,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[31035]</label>
 			<label2>Movies</label2>
@@ -1093,8 +1302,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[16101]</label>
 			<label2>Movies</label2>
@@ -1110,8 +1319,8 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[135]</label>
 			<label2>Movies</label2>
@@ -1127,8 +1336,59 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
+			<property name="mainmenuid">3</property>
+			<label>$LOCALIZE[20434]</label>
+			<label2>Movies</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb />
+			<property name="labelID">20434</property>
+			<property name="defaultID">135</property>
+			<visible>[!Library.HasContent(Movies) + !Library.HasContent(TVShows)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
+			<property name="mainmenuid">3</property>
+			<label>شاهدتها مؤخرًا</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shhdthmwkhran</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="10">
+			<property name="id">$NUMBER[10]</property>
+			<property name="mainmenuid">3</property>
+			<label>التصنيف</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">ltsnyf</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=moviesub.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="11">
+			<property name="id">$NUMBER[11]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[135]</label>
 			<label2>Movies</label2>
@@ -1144,14 +1404,48 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="8">
-			<property name="id">$NUMBER[8]</property>
+		<item id="12">
+			<property name="id">$NUMBER[12]</property>
+			<property name="mainmenuid">3</property>
+			<label>Movies Networks</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">moviesnetworks</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=Movies+Networks.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="13">
+			<property name="id">$NUMBER[13]</property>
+			<property name="mainmenuid">3</property>
+			<label>kmovies AK</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">kmoviesak</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=kmovies+AK.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="14">
+			<property name="id">$NUMBER[14]</property>
 			<property name="mainmenuid">3</property>
 			<label>$LOCALIZE[20434]</label>
 			<label2>Movies</label2>
 			<icon>DefaultShortcut.png</icon>
 			<thumb />
-			<property name="labelID">20434</property>
+			<property name="labelID">20434--0</property>
 			<property name="defaultID">135</property>
 			<visible>[[Library.HasContent(MovieSets)] + [Library.HasContent(Movies) | Library.HasContent(TVShows)]] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
 			<onclick>ActivateWindow(Videos,videodb://movies/sets/,return)</onclick>
@@ -1161,60 +1455,10 @@
 			<property name="group">movies</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="9">
-			<property name="id">$NUMBER[9]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[20434]</label>
-			<label2>Movies</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">20434--0</property>
-			<property name="defaultID">135</property>
-			<visible>[!Library.HasContent(Movies) + !Library.HasContent(TVShows)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=all_items&amp;tmdb_type=collection&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">movies</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="10">
-			<property name="id">$NUMBER[10]</property>
-			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[137]</label>
-			<label2>Movies</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb />
-			<property name="labelID">137</property>
-			<property name="defaultID">137</property>
-			<onclick>ActivateWindow(1108,return)</onclick>
-			<property name="path">ActivateWindow(1108,return)</property>
-			<property name="list">1108</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
-			<property name="group">movies</property>
-			<property name="isSubmenu">True</property>
-		</item>
 	</include>
 	<include name="skinshortcuts-group-tvshows">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">4</property>
-			<label>التجميعات</label>
-			<label2>Video Add-On</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">ltjmy-t</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">tvshows</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">4</property>
 			<label>قائمة المشاهدة</label>
 			<label2>Video Add-On</label2>
@@ -1230,8 +1474,76 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">4</property>
+			<label>حلقاتك التالية</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">hlqtkltly</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">4</property>
+			<label>تكملة مشاهدة الحلقات</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-mshhd-lhlqt</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
+			<property name="mainmenuid">4</property>
+			<label>تكملة المشاهدة </label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
+			<property name="mainmenuid">4</property>
+			<label>التجميعات</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">ltjmy-t</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">4</property>
 			<label>النوع</label>
 			<label2>Video Add-On</label2>
@@ -1247,8 +1559,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">4</property>
 			<label>TV Networks</label>
 			<label2>Video Add-On</label2>
@@ -1264,8 +1576,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
 			<property name="mainmenuid">4</property>
 			<label>التصنيف</label>
 			<label2>Video Add-On</label2>
@@ -1281,8 +1593,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
 			<property name="mainmenuid">4</property>
 			<label>كوري</label>
 			<label2>Video Add-On</label2>
@@ -1303,23 +1615,6 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">4</property>
-			<label>التجميعات</label>
-			<label2>Video Add-On</label2>
-			<icon>DefaultShortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">ltjmy-t</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tvshows)</visible>
-			<property name="group">tvshows</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">4</property>
 			<label>قائمة المشاهدة</label>
 			<label2>Video Add-On</label2>
 			<icon>DefaultShortcut.png</icon>
@@ -1334,8 +1629,76 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">4</property>
+			<label>حلقاتك التالية</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">hlqtkltly</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">4</property>
+			<label>تكملة مشاهدة الحلقات</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-mshhd-lhlqt</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
+			<property name="mainmenuid">4</property>
+			<label>تكملة المشاهدة </label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml-lmshhd</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%AA%D9%83%D9%85%D9%84%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;info=trakt_inprogress&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
+			<property name="mainmenuid">4</property>
+			<label>التجميعات</label>
+			<label2>Video Add-On</label2>
+			<icon>DefaultShortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">ltjmy-t</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?tmdb_type=tv&amp;list_name=%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D9%8A%D8%B9%D8%A7%D8%AA&amp;tmdb_id=None&amp;info=trakt_collection&amp;sort_by=collected&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">4</property>
 			<label>النوع</label>
 			<label2>Video Add-On</label2>
@@ -1351,8 +1714,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">4</property>
 			<label>TV Networks</label>
 			<label2>Video Add-On</label2>
@@ -1368,8 +1731,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
 			<property name="mainmenuid">4</property>
 			<label>التصنيف</label>
 			<label2>Video Add-On</label2>
@@ -1385,8 +1748,8 @@
 			<property name="group">tvshows</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
 			<property name="mainmenuid">4</property>
 			<label>كوري</label>
 			<label2>Video Add-On</label2>
