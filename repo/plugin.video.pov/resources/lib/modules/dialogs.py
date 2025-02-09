@@ -105,7 +105,9 @@ def mdb_manager_choice(params):
 	list_items = (True for item in mdb_list_items(choice[0], None) if item['imdb_id'] == params['imdb_id'])
 	action, message = ('remove', 'Remove from') if next(list_items, False) else ('add', 'Add to')
 	if not confirm_dialog(text='%s %s list?' % (message, choice[1]), top_space=True): return
-	if mdb_modify_list(choice[0], params, action): notification(32576)
+	key = 'shows' if params['media_type'] == 'tvshow' else 'movies'
+	val = [{'tmdb': int(params.get('tmdb_id')), 'imdb': params.get('imdb_id')}]
+	if mdb_modify_list(choice[0], {key: val}, action): notification(32576)
 	else: notification(32574)
 	if action == 'remove': container_refresh()
 

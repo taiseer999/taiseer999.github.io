@@ -272,7 +272,7 @@ class Extras(BaseDialog):
 					yield listitem
 				except: pass
 		try:
-			data = imdb_api.imdb_parentsguide(self.imdb_id)
+			data = mdblist_api.mdb_parentsguide(self.imdb_id, self.media_type)
 			item_list = list(builder())
 			self.setProperty('tikiskins.extras.imdb_parentsguide.number', '(x%02d)' % len(item_list))
 			self.item_action_dict[parentsguide_id] = 'tikiskins.extras.listings'

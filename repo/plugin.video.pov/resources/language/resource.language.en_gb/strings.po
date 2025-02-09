@@ -2763,7 +2763,7 @@ msgid "Select TV Show to Hide/Unhide from Trakt Progress:"
 msgstr ""
 
 msgctxt "#32807"
-msgid "Scrape With All Filters Ignored"
+msgid "Scrape with All Filters Ignored"
 msgstr ""
 
 msgctxt "#32808"

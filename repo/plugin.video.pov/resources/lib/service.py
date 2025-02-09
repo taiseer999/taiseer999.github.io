@@ -91,14 +91,7 @@ class TraktMonitor:
 	def run(self):
 		from caches.trakt_cache import clear_trakt_list_contents_data
 		from apis.trakt_api import trakt_sync_activities, trakt_refresh
-		if get_setting('trakt_user') != '':
-			try:
-				duration = 7
-				expires = float(get_setting('trakt.expires', '0'))
-				days_remaining = (expires - time.time())/86400
-				if days_remaining <= duration and trakt_refresh():
-					kodi_utils.notification('Trakt Authorization updated')
-			except: pass
+		from apis.mdblist_api import mdb_clean_watchlist
 		logger('POV', 'TraktMonitor Service Starting')
 		trakt_service_string = 'TraktMonitor Service Update %s - %s'
 		update_string = 'Next Update in %s minutes...'
@@ -117,12 +110,20 @@ class TraktMonitor:
 					kodi_utils.widget_refresh()
 					logger('POV', trakt_service_string % ('POV TraktMonitor - Widgets Refresh', 'Setting Activated. Widget Refresh Performed'))
 				else: logger('POV', trakt_service_string % ('POV TraktMonitor - Widgets Refresh', 'Setting Disabled. Skipping Widget Refresh'))
+				if get_setting('mdblist_clean_watchlist') == 'true': mdb_clean_watchlist(silent=True)
 			elif status == 'no account':
 				logger('POV', trakt_service_string % ('POV TraktMonitor - Aborted. No Trakt Account Active', next_update_string))
 			elif status == 'failed':
 				logger('POV', trakt_service_string % ('POV TraktMonitor - Failed. Error from Trakt', next_update_string))
 			else:# 'not needed'
 				logger('POV', trakt_service_string % ('POV TraktMonitor - Success. No Changes Needed', next_update_string))
+			if get_setting('trakt_user') != '':
+				try:
+					expires = float(get_setting('trakt.expires', '0'))
+					hours_remaining = (expires - time.time())//3600
+					if hours_remaining < 8 and trakt_refresh():
+						logger('POV', trakt_service_string % ('POV TraktMonitor - Success.', 'Trakt Authorization Updated'))
+				except: pass
 			monitor.waitForAbort(interval)
 		return logger('POV', 'TraktMonitor Service Finished')
 

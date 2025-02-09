@@ -302,3 +302,4 @@ def make_title_slug(name):
 	name = re.sub('[^a-z0-9_]', '-', name)
 	name = re.sub('--+', '-', name)
 	return name
+

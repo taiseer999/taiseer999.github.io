@@ -49,11 +49,11 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 
 def trakt_refresh():
 	try:
-		data = {'refresh_token': get_setting('trakt.refresh'), 'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET,
-				'redirect_uri': REDIRECT_URI, 'grant_type': 'refresh_token'}
+		data = {'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET, 'redirect_uri': REDIRECT_URI,
+				'refresh_token': get_setting('trakt.refresh'), 'grant_type': 'refresh_token'}
 		response = call_trakt('oauth/token', data=data, with_auth=False)
-		token, refresh = response['access_token'], response['refresh_token']
 		expires = int(response['created_at']) + int(response['expires_in'])
+		refresh, token = response['refresh_token'], response['access_token']
 		set_setting('trakt.token', token)
 		set_setting('trakt.refresh', refresh)
 		set_setting('trakt.expires', str(expires))
@@ -653,20 +653,18 @@ def trakt_sync_activities(force_update=False):
 	return 'success'
 
 def trakt_auth():
-	headers = {'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': V2_API_KEY}
-	code = {'client_id': V2_API_KEY}
-	response = session.post(base_url % 'oauth/device/code', data=json.dumps(code), headers=headers, timeout=timeout).json()
-	device_code = response['device_code']
+	data = {'client_id': V2_API_KEY}
+	response = call_trakt('oauth/device/code', data=data, with_auth=False)
+	data.update({'client_secret': CLIENT_SECRET, 'code': response['device_code']})
 	expires_in = int(response['expires_in'])
 	sleep_interval = int(response['interval'])
-	data = {'code': device_code, 'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET}
 	try:
 		qr_url = '&color=f00&data=%s' % requests.utils.quote(response['verification_url'])
 		qr_icon = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s' % qr_url
 		kodi_utils.notification(response['verification_url'], icon=qr_icon, time=15000)
 	except: pass
-	verification_url = ls(32700) % response.get('verification_url')
-	user_code = ls(32701) % response.get('user_code')
+	verification_url = ls(32700) % response['verification_url']
+	user_code = ls(32701) % response['user_code']
 	dialog_text = '%s[CR]%s[CR]%s' % ('Authorize Trakt Service', verification_url, user_code)
 	progressDialog = kodi_utils.progressDialog
 	progressDialog.create('POV', dialog_text)
@@ -677,25 +675,26 @@ def trakt_auth():
 		kodi_utils.sleep(1000)
 		time_passed -= 1
 		if time_passed % sleep_interval: continue
-		response = session.post(base_url % 'oauth/device/token', data=json.dumps(data), headers=headers, timeout=timeout)
-		if response.status_code == 400: continue
-		try: token = response.json()
+		response = call_trakt('oauth/device/token', data=data, with_auth=False)
+		if not response: continue
+		try:
+			expires = int(response['created_at']) + int(response['expires_in'])
+			refresh, token = response['refresh_token'], response['access_token']
 		except: kodi_utils.ok_dialog(text=32574, top_space=True)
 	try: progressDialog.close()
 	except: pass
 	if token:
 		kodi_utils.sleep(1000)
-		expires = int(token['created_at']) + int(token['expires_in'])
-		headers['Authorization'] = 'Bearer %s' % token['access_token']
-		response = session.get(base_url % 'users/me', headers=headers, timeout=timeout).json()
+		session.headers['Authorization'] = 'Bearer %s' % token
+		response = call_trakt('users/me')
 		set_setting('trakt_user', str(response['username']))
-		set_setting('trakt.token', token['access_token'])
-		set_setting('trakt.refresh', token['refresh_token'])
+		set_setting('trakt.token', token)
+		set_setting('trakt.refresh', refresh)
 		set_setting('trakt.expires', str(expires))
 		set_setting('trakt_indicators_active', 'true')
 		set_setting('watched_indicators', '1')
-		kodi_utils.notification('%s: Trakt Authorization' % ls(32576))
 		kodi_utils.sleep(500)
+		kodi_utils.notification('%s: Trakt Authorization' % ls(32576))
 		trakt_sync_activities(force_update=True)
 		return True
 	return False

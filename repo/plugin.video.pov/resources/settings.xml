@@ -89,7 +89,7 @@
         <setting id="sort.watched" label="$ADDON[plugin.video.pov 32475] $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32226" />
         <setting id="sort.collection" label="$ADDON[plugin.video.pov 32499] $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32223|32221" />
         <setting id="sort.watchlist" label="$ADDON[plugin.video.pov 32500] $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32223|32221" />
-        <setting id="sort.mdblist" label="MDBList $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32223|32221" />
+        <setting id="sort.mdblist" label="MDBList $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32223|32221|32504|32215" />
         <setting id="ignore_articles" label="32025" type="bool" default="true" />
     </category>
     <!-- Playback -->
@@ -337,11 +337,12 @@
         <setting id="trakt.calendar_future_days" label="32084" type="number" default="7" />
         <!-- Trakt Cache -->
         <setting label="32087" type="lsep" />
-        <setting id="trakt.sync_interval" label="32047" type="slider" default="30" option="int" range="5,5,600" />
+        <setting id="trakt.sync_interval" label="32047" type="slider" default="30" option="int" range="5,5,480" />
         <setting id="trakt.sync_refresh_widgets" label="32048" type="bool" default="false" />
         <!-- MDBList -->
         <setting label="MDBList" type="lsep" />
         <setting id="mdblist.token" label="API Key" type="text" default="" option="hidden" />
+        <setting id="mdblist_clean_watchlist" label="Clean Watchlist With Trakt Cache Refresh" type="bool" default="false" />
         <!-- IMDb -->
         <setting label="32064" type="lsep" />
         <setting id="imdb_user" label="32065" type="text" default="" enable="true" />

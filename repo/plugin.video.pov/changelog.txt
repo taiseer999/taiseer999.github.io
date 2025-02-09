@@ -1,14 +1,15 @@
 
   [COLOR dodgerblue][B]CREDITS[/B][/COLOR]
 - Fen, Venom, Mr-Kodi.
-- elfhosted.com for community instances.
-
-- torrentio debrid+ in My Services, sourced from torrentio "cached" results.
-- mediafusion debrid+ in My Services, sourced from mediafusion "cached" results.
-- nyaaio in Sources/Torrents, sourced from torrentio anime results with filters disabled.
-- nyaa in Sources/Torrents sourced from website results.
 
   [COLOR dodgerblue][B]Version 5.02[/B][/COLOR]
+- Added Parental Guide to Extras window.
+- Added EasyDebrid endpoint to add uncached torrents.
+  Currently the only response is success/fail, no way to check status.
+- Added Clean List context menu item for MDBList lists.
+  This will attempt to remove watched Movies and in progress/watched TVShows.
+- Added support for MDBList private lists.
+- Added MDBList Sort Types List Default, Random.
 - Added MDBList Sort Type to Settings/Navigation/Sorting, only affects user lists.
 - Added Ratings/Reviews to Extras window with valid MDBList API Key.
 - Added MDBList Manager to context menu.

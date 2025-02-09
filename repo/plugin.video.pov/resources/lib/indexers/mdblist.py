@@ -59,12 +59,13 @@ def get_mdb_lists(params):
 				name, user, slug, list_id = item['name'], item['user_name'], item['slug'], item['id']
 				likes, item_count = item['likes'] or 0, item.get('items', '?')
 				display = '%s (x%s)' % (name, item_count) if item_count else name
-				plot = '[B]Likes[/B]: %s' % likes
-				if item.get('private'): continue
+				plot, cln_str = '[B]Likes[/B]: %s' % likes, '[B]Clean List[/B]'
+				if item.get('private'): display = '[COLOR cyan][I]%s[/I][/COLOR]' % display
 				elif item.get('dynamic'): display = '[COLOR magenta][I]%s[/I][/COLOR]' % display
 				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': display, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': display, 'iconImage': 'mdblist.png'})))
+				cm_append((cln_str, 'RunPlugin(%s)' % build_url({'mode': 'mdblist.clean_watchlist', 'list_id': list_id})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
@@ -118,7 +119,7 @@ def build_mdb_list(params):
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
-	results = mdblist_api.mdb_list_items(list_id, slug, user, list_type)
+	results = mdblist_api.mdb_list_items(list_id, list_type)
 	if paginate(): process_list, total_pages = paginate_list(results, page, letter, page_limit())
 	else: process_list, total_pages = results, 1
 	movies, tvshows = Movies({'id_type': 'trakt_dict'}), TVShows({'id_type': 'trakt_dict'})
