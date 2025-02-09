@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.fonts.installer" version="1.0.5" name="Extra SubFonts" provider-name="AbuKareem">
+<addon id="script.fonts.installer" version="1.0.7" name="Extra SubFonts" provider-name="AbuKareem">
 	<extension point="xbmc.python.script" library="default.py" />
 	<extension point="xbmc.addon.metadata">
 		<summary>Kodi Extra Subtitle Fonts Installer</summary>

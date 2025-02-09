@@ -2851,7 +2851,7 @@ Version 1.0.0
         <description lang="en_NZ">FENtastic Helper for the FENtastic Skin.</description>
         <description lang="en_US">FENtastic Helper for the FENtastic Skin.</description>
     </extension>
-</addon><addon id="script.fonts.installer" version="1.0.5" name="Extra SubFonts" provider-name="AbuKareem">
+</addon><addon id="script.fonts.installer" version="1.0.7" name="Extra SubFonts" provider-name="AbuKareem">
 	<extension point="xbmc.python.script" library="default.py" />
 	<extension point="xbmc.addon.metadata">
 		<summary>Kodi Extra Subtitle Fonts Installer</summary>
