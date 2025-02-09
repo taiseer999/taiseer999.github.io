@@ -24,7 +24,7 @@
 				<top>-220</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="dialog_fg_70">background/coal_blur.png</texture>
+				<texture colordiffuse="main_fg_90">background/coal_blur.png</texture>
 			</control>
 			<!-- PVR Left -->
 			<control type="grouplist">
@@ -35,7 +35,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamServiceName,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19099]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamServiceName,[COLOR white]$LOCALIZE[19099]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -43,7 +43,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamProviderName,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19101]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamProviderName,[COLOR white]$LOCALIZE[19101]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -51,7 +51,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamClient,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19012]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamClient,[COLOR white]$LOCALIZE[19012]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -59,7 +59,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamDevice,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19006]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamDevice,[COLOR white]$LOCALIZE[19006]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -67,7 +67,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamStatus,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19007]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamStatus,[COLOR white]$LOCALIZE[19007]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -75,7 +75,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19015]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR white]$LOCALIZE[19015]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -90,7 +90,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamBer,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19010]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamBer,[COLOR white]$LOCALIZE[19010]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -98,7 +98,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamUnc,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19011]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamUnc,[COLOR white]$LOCALIZE[19011]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -106,7 +106,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamMux,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19100]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamMux,[COLOR white]$LOCALIZE[19100]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -114,7 +114,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamSignal,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19008]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamSignal,[COLOR white]$LOCALIZE[19008]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -129,7 +129,7 @@
 					<width>1600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamSNR,[COLOR $VAR[ColorHighlight]]$LOCALIZE[19009]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamSNR,[COLOR white]$LOCALIZE[19009]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					<shadowcolor>black</shadowcolor>
 				</control>
@@ -175,7 +175,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Version:[/COLOR]</label>
+						<label>[COLOR white]Version:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -198,7 +198,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Profile:[/COLOR]</label>
+						<label>[COLOR white]Profile:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -233,7 +233,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Level:[/COLOR]</label>
+						<label>[COLOR white]Level:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -256,7 +256,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]RPU:[/COLOR]</label>
+						<label>[COLOR white]RPU:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -279,7 +279,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Base Layer:[/COLOR]</label>
+						<label>[COLOR white]Base Layer:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -302,7 +302,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Enhancement Layer:[/COLOR]</label>
+						<label>[COLOR white]Enhancement Layer:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -337,7 +337,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Enhancement Layer Type:[/COLOR]</label>
+						<label>[COLOR white]Enhancement Layer Type:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -370,7 +370,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Metadata:[/COLOR]</label>
+						<label>[COLOR white]Metadata:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -422,7 +422,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]L6 Max CLL/FALL:[/COLOR]</label>
+						<label>[COLOR white]L6 Max CLL/FALL:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -466,7 +466,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]L6 Min/Max:[/COLOR]</label>
+						<label>[COLOR white]L6 Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -509,7 +509,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Source Min/Max:[/COLOR]</label>
+						<label>[COLOR white]Source Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -552,7 +552,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]L1 Min/Max/Avg:[/COLOR]</label>
+						<label>[COLOR white]L1 Min/Max/Avg:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -614,7 +614,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Source Min/Max:[/COLOR]</label>
+						<label>[COLOR white]Source Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -657,7 +657,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]L1 Min/Max/Avg:[/COLOR]</label>
+						<label>[COLOR white]L1 Min/Max/Avg:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -737,7 +737,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Max CLL/FALL:[/COLOR]</label>
+						<label>[COLOR white]Max CLL/FALL:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -781,7 +781,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Min/Max:[/COLOR]</label>
+						<label>[COLOR white]Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -827,7 +827,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Colour Primaries:[/COLOR]</label>
+						<label>[COLOR white]Colour Primaries:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 						<shadowcolor>black</shadowcolor>
@@ -862,7 +862,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31607]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31607]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -886,7 +886,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31641]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31641]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -910,7 +910,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31642]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31642]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -934,7 +934,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31643]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31643]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -971,7 +971,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31644]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31644]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1003,7 +1003,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31645]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31645]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1036,7 +1036,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31646] %:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31646] %:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1069,7 +1069,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31646]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31646]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1101,7 +1101,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31647]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31647]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1151,7 +1151,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31648]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31648]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1177,7 +1177,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31648]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31648]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1202,7 +1202,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31649]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31649]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1226,7 +1226,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31650]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31650]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1250,7 +1250,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31651]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31651]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1275,7 +1275,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31652]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31652]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1300,7 +1300,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Subtitle language:[/COLOR]</label>
+						<label>[COLOR white]Subtitle language:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1338,7 +1338,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Subtitles Name:[/COLOR]</label>
+						<label>[COLOR white]Subtitles Name:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1381,7 +1381,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32100]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[32100]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1406,7 +1406,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[32101]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[32101]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1432,7 +1432,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31653]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31653]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1458,7 +1458,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31656]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31656]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1484,7 +1484,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31654]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31654]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1509,7 +1509,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]Pixel Format:[/COLOR]</label>
+						<label>[COLOR white]Pixel Format:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1535,7 +1535,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR $VAR[ColorHighlight]]$LOCALIZE[31655]:[/COLOR]</label>
+						<label>[COLOR white]$LOCALIZE[31655]:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
