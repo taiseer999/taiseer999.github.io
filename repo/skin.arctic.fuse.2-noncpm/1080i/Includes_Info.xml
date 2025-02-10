@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -1275,7 +1276,7 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">DD</param>
+                <param name="label">Dolby Digital</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],ac3) | String.IsEqual($PARAM[listitem_audiocodec],dolbydigital)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1286,7 +1287,7 @@
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">DTS</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],dca)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],dca) | String.IsEqual($PARAM[listitem_audiocodec],dts)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1315,12 +1316,12 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">DD+</param>
+                <param name="label">Dolby Digital+</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],eac3)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">DD+ (Atmos)</param>
+                <param name="label">Dolby Atmos</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1350,12 +1351,12 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">TrueHD</param>
+                <param name="label">Dolby TrueHD</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],truehd)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">TrueHD (Atmos)</param>
+                <param name="label">Dolby Atmos</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1624,7 +1625,7 @@
                 </include>
 
                 <!-- Genres -->
-                <include content="Info_Line_Items" condition="!Skin.HasSetting(InfoLine.EndTime)">
+                <include content="Info_Line_Items" condition="Skin.String(InfoLine.Optional,Genre)">
                     <include content="Info_Line_Visible_03">
                         <param name="altvisible">[!String.IsEmpty($PARAM[container]ListItem.ChannelNumberLabel) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_channelnumberlabel))]</param>
                         <param name="container">$PARAM[container]</param>
@@ -1715,8 +1716,8 @@
                     <param name="label_01">$INFO[$PARAM[container]ListItem.EndTimeResume,$LOCALIZE[31184] ,]</param>
                     <param name="label_02">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),$LOCALIZE[31184] ,]</param>                    
                     <param name="visible_01">!String.IsEmpty($PARAM[container]ListItem.EndTimeResume) + !String.IsEqual($PARAM[container]ListItem.EndTimeResume,System.Time)</param>
-                    <param name="visible_02">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),System.Time)</param>          
-                     <param name="textcolor">$PARAM[colordiffuse]_70</param>
+                    <param name="visible_02">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),System.Time)</param>                    
+                    <param name="textcolor">$PARAM[colordiffuse]_70</param>
                 </include>
 
                 <!-- Person Info -->

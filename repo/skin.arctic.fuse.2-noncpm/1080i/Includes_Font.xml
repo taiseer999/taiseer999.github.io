@@ -71,7 +71,7 @@
             <font>
                 <name>font_debug</name>
                 <filename>monadi-reg.ttf</filename>
-                <size>25</size>
+                <size>27</size>
                 <aspect>$PARAM[aspect_system]</aspect>
             </font>
 
