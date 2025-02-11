@@ -906,6 +906,17 @@
 				<visible>Player.HasVideo</visible>
 				<onclick>Skin.ToggleSetting(EnableOSDInfo)</onclick>
 			</control>
+			<control type="button" id="70011">
+			<description> PPI </description>
+				<width>$PARAM[size]</width>
+				<height>$PARAM[size]</height>
+				<label>31134</label>
+				<font/>
+						<texturefocus colordiffuse="$INFO[Skin.String(OSDButtonsFocusColor)]">$PARAM[iconspath]processinfo.png</texturefocus>
+				        <texturenofocus colordiffuse="$INFO[Skin.String(OSDButtonsColor)]">$PARAM[iconspath]processinfo.png</texturenofocus>
+						<onclick>Action(Close)</onclick>
+						<onclick>ActivateWindow(playerprocessinfo)</onclick>
+					</control>
 		</control>
 		
 		<control type="grouplist" id="3000">
