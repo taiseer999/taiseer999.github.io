@@ -91,6 +91,15 @@
         <setting id="sort.watchlist" label="$ADDON[plugin.video.pov 32500] $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32223|32221" />
         <setting id="sort.mdblist" label="MDBList $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32223|32221|32504|32215" />
         <setting id="ignore_articles" label="32025" type="bool" default="true" />
+        <!-- Context Menu -->
+        <setting label="Context Menu Sorting" type="lsep" />
+        <setting id="context.options" label="32646" type="slider" default="1" range="0,1,7" option="int" />
+        <setting id="context.extras" label="$ADDON[plugin.video.pov 32645]/[B]$ADDON[plugin.video.pov 32174]...[/B]/$ADDON[plugin.video.pov 32652]" type="slider" default="2" range="0,1,7" option="int" />
+        <setting id="context.trakt" label="32198" type="slider" default="3" range="0,1,7" option="int" />
+        <setting id="context.mdblist" label="[B]MDBList Manager[/B]" type="slider" default="4" range="0,1,7" option="int" />
+        <setting id="context.favourites" label="32197" type="slider" default="5" range="0,1,7" option="int" />
+        <setting id="context.mark" label="[B]Mark Watched/Unwatched[/B]" type="slider" default="6" range="0,1,7" option="int" />
+        <setting id="context.exit" label="[B]Exit List[/B]" type="slider" default="7" range="0,1,7" option="int" />
     </category>
     <!-- Playback -->
     <category label="32174">
@@ -285,6 +294,8 @@
             <setting id="mfdebrid.url" label="Mediafusion url" type="text" default="" subsetting="true" enable="false" visible="eq(-3,true)" />
             <setting id="mfdebrid.debrid" label="Debrid Provider" type="text" default="" subsetting="true" enable="false" visible="eq(-4,true)" />
             <setting label="Configure" type="action" subsetting="true" visible="eq(-5,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=mfdebrid_configure)" />
+        <setting label="[COLOR BFFD3DB5]Enable/Configure torrentio/mediafusion debrid+ After RD/AD Authorization[/COLOR]" type="lsep" />
+        <setting id="amble.debrid" label="" type="text" visible="false" />
         <!-- Real Debrid -->
         <setting label="32054" type="lsep" />
         <setting id="rd.token" label="rd token" type="text" default="" visible="false" />
@@ -343,6 +354,9 @@
         <setting label="MDBList" type="lsep" />
         <setting id="mdblist.token" label="API Key" type="text" default="" option="hidden" />
         <setting id="mdblist_clean_watchlist" label="Clean Watchlist With Trakt Cache Refresh" type="bool" default="false" />
+        <!-- Simkl -->
+        <setting label="SIMKL" type="lsep" />
+        <setting id="simkl_api" label="32053" type="text" default="" enable="true" option="hidden" />
         <!-- IMDb -->
         <setting label="32064" type="lsep" />
         <setting id="imdb_user" label="32065" type="text" default="" enable="true" />
@@ -367,9 +381,6 @@
         <setting label="32068" type="lsep" />
         <setting id="image_resolutions" label="32149" type="enum" default="2" values="Low|Medium|High|Original" />
         <setting id="tmdb_api" label="32053" type="text" default="d848316a33e79095beb945a2bd2d53b1" enable="true" option="hidden" />
-        <!-- Simkl -->
-        <setting label="SIMKL" type="lsep" />
-        <setting id="simkl_api" label="32053" type="text" default="" enable="true" option="hidden" />
         <!-- Trakt -->
         <setting id="trakt.client_id" type="text" default="6bc29124c3d9466e06a3ed19a7b5976fcb28311008401e1ce04cf08196f8b16a" visible="false" />
         <setting id="trakt.client_secret" type="text" default="99478842b17d44d7accafef45c6c1bbba235792753c195069ae149595cd3a919" visible="false" />

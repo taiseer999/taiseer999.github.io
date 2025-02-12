@@ -334,3 +334,9 @@ def make_global_list():
 	global global_list
 	global_list = []
 
+def context_menu_sort():
+	return {
+		option: int(get_setting('context.%s' % option, idx))
+		for idx, option in enumerate(('options', 'extras', 'trakt', 'mdblist', 'favourites', 'mark', 'exit'), 1)
+	}
+

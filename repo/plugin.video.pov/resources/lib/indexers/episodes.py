@@ -190,17 +190,7 @@ class Episodes:
 				cm_append((nextep_manager_str, self.container_update % build_url({'mode': 'build_next_episode_manager'})))
 			props['pov_name'] = '%s - %sx%s' % (title, str_season_zfill2, str_episode_zfill2)
 			props['pov_first_aired'] = premiered
-			if self.is_widget: props.update({
-				'pov_widget': 'true',
-				'pov_playcount': string(playcount),
-				'pov_browse_params': browse_params,
-				'pov_browse_seas_params': browse_seas_params,
-				'pov_options_menu_params': options_params,
-				'pov_extras_menu_params': extras_params,
-				'pov_unwatched_params': unwatched_params,
-				'pov_watched_params': watched_params,
-				'pov_clearprog_params': clearprog_params})
-			else: props['pov_widget'] = 'false'
+			props['pov_widget'] = 'true' if self.is_widget else 'false'
 			listitem = kodi_utils.make_listitem()
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)
@@ -209,6 +199,15 @@ class Episodes:
 			listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': thumb,
 							'season.poster': season_poster, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
 			if KODI_VERSION < 20:
+				if self.is_widget: props.update({
+					'pov_playcount': string(playcount),
+					'pov_browse_params': browse_params,
+					'pov_browse_seas_params': browse_seas_params,
+					'pov_options_menu_params': options_params,
+					'pov_extras_menu_params': extras_params,
+					'pov_unwatched_params': unwatched_params,
+					'pov_watched_params': watched_params,
+					'pov_clearprog_params': clearprog_params})
 				listitem.setCast(cast + item_get('guest_stars', []))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 				listitem.setInfo('video', remove_meta_keys(item, dict_removals))

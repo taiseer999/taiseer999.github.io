@@ -3,6 +3,7 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.02[/B][/COLOR]
+- Added Navigation/Context Menu Sorting settings (0 disables item).
 - Added Parental Guide to Extras window.
 - Added EasyDebrid endpoint to add uncached torrents.
   Currently the only response is success/fail, no way to check status.

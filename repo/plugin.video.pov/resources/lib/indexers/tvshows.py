@@ -180,35 +180,30 @@ class TVShows:
 			recommended_params = build_url({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_recommendations', 'tmdb_id': tmdb_id})
 			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
 			mdb_manager_params = build_url({'mode': 'mdb_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
-			fav_manager_params = build_url({'mode': 'favorites_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'title': title})
-			cm_append((options_str, run_plugin % options_params))
+			fav_manager_params = build_url({'mode': 'favourites_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'title': title})
+			cm_append((self.cm_sort['options'], options_str, run_plugin % options_params))
 			if self.open_extras:
-				cm_append((browse_str, container_update % url_params))
+				cm_append((self.cm_sort['extras'], browse_str, container_update % url_params))
 				url_params = extras_params
 			else:
-				cm_append((extras_str, run_plugin % extras_params))
-			cm_append((traktmanager_str, run_plugin % trakt_manager_params))
-			cm_append((mdbmanager_str, run_plugin % mdb_manager_params))
-			cm_append((favmanager_str, run_plugin % fav_manager_params))
+				cm_append((self.cm_sort['extras'], extras_str, run_plugin % extras_params))
+			cm_append((self.cm_sort['trakt'], traktmanager_str, run_plugin % trakt_manager_params))
+			cm_append((self.cm_sort['mdblist'], mdbmanager_str, run_plugin % mdb_manager_params))
+			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
 			if not playcount:
 				watched_params = build_url({'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
-				cm_append((watched_str % self.watched_title, run_plugin % watched_params))
+				cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % watched_params))
 			elif self.widget_hide_watched: return
 			if total_watched:
 				unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_unwatched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
-				cm_append((unwatched_str % self.watched_title, run_plugin % unwatched_params))
-			cm_append((exit_str, container_refresh % self.exit_list_params))
+				cm_append((self.cm_sort['mark'], unwatched_str % self.watched_title, run_plugin % unwatched_params))
+			cm_append((self.cm_sort['exit'], exit_str, container_refresh % self.exit_list_params))
+			cm.sort(key=lambda k: k[0])
+			cm = [(i[1], i[2]) for i in cm if i[0]]
 			props['unwatchedepisodes'] = string(total_unwatched)
 			props['totalepisodes'] = string(total_aired_eps)
 			props['totalseasons'] = string(total_seasons)
-			if self.is_widget: props.update({
-				'pov_widget': 'true',
-				'pov_playcount': string(playcount),
-				'pov_extras_menu_params': extras_params,
-				'pov_options_menu_params': options_params,
-				'pov_trakt_manager_params': trakt_manager_params,
-				'pov_fav_manager_params': fav_manager_params})
-			else: props['pov_widget'] = 'false'
+			props['pov_widget'] = 'true' if self.is_widget else 'false'
 			listitem = kodi_utils.make_listitem()
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)
@@ -217,6 +212,12 @@ class TVShows:
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': landscape,
 							'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': landscape, 'tvshow.banner': banner})
 			if KODI_VERSION < 20:
+				if self.is_widget: props.update({
+					'pov_playcount': string(playcount),
+					'pov_extras_menu_params': extras_params,
+					'pov_options_menu_params': options_params,
+					'pov_trakt_manager_params': trakt_manager_params,
+					'pov_fav_manager_params': fav_manager_params})
 				listitem.setCast(meta_get('cast', []))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 				listitem.setInfo('video', remove_meta_keys(meta, dict_removals))
@@ -258,6 +259,7 @@ class TVShows:
 		self.all_episodes = settings.default_all_episodes()
 		self.include_year_in_title = settings.include_year_in_title('tvshow')
 		self.open_extras = settings.extras_open_action('tvshow')
+		self.cm_sort = settings.context_menu_sort()
 		self.is_folder = False if self.open_extras else True
 		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
 		if self.is_widget == 'unchecked': self.is_widget = kodi_utils.external_browse()

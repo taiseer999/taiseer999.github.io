@@ -26,8 +26,8 @@ def call_mdblist(path, params=None, json=None, method=None):
 			timeout=timeout
 		)
 		response.raise_for_status()
-	except requests.exceptions.RequestException as e: kodi_utils.logger('mdblist error',
-		f"{e}\n{e.response.text if response else e.request.url}")
+	except requests.exceptions.RequestException as e:
+		kodi_utils.logger('mdblist error', f"{e}\n{e.response.text}" if response else f"{e}")
 	try: result = response.json()
 	except: result = []
 	return result

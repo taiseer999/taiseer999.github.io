@@ -17,8 +17,8 @@ def get_tmdb(url):
 	try:
 		response = session.get(url, timeout=timeout)
 		response.raise_for_status()
-	except requests.exceptions.RequestException as e: kodi_utils.logger('tmdb error',
-		f"{e}\n{e.response.text if response else e.request.url}")
+	except requests.exceptions.RequestException as e:
+		kodi_utils.logger('tmdb error', f"{e}\n{e.response.text}" if response else f"{e}")
 	response.encoding = 'utf-8'
 	return response
 

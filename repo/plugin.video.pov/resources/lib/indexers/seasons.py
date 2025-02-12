@@ -96,12 +96,7 @@ class Seasons:
 					props['unwatchedepisodes'] = string(unwatched)
 					props['totalepisodes'] = string(episode_count)
 					props['pov_sort_order'] = string(params.get('sort', ''))
-					if is_widget: props.update({
-						'pov_widget': 'true',
-						'pov_playcount': string(playcount),
-						'pov_extras_menu_params': extras_params,
-						'pov_options_menu_params': options_params})
-					else: props['pov_widget'] = 'false'
+					props['pov_widget'] = 'true' if is_widget else 'false'
 					listitem = make_listitem()
 					listitem.addContextMenuItems(cm)
 					listitem.setProperties(props)
@@ -110,6 +105,10 @@ class Seasons:
 					listitem.setArt({'poster': poster, 'icon': poster, 'thumb': poster, 'fanart': fanart, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo,
 									'landscape': landscape, 'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': landscape, 'tvshow.banner': banner})
 					if KODI_VERSION < 20:
+						if is_widget: props.update({
+							'pov_playcount': string(playcount),
+							'pov_extras_menu_params': extras_params,
+							'pov_options_menu_params': options_params})
 						listitem.setCast(show_cast)
 						listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 						listitem.setInfo('video', {'mediatype': 'season', 'trailer': trailer, 'title': title, 'size': '0', 'duration': episode_run_time, 'plot': plot,
@@ -197,15 +196,7 @@ class Seasons:
 							watched_params = build_url({'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'tmdb_id': tmdb_id,
 														'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': show_title, 'year': show_year})
 							cm_append((watched_str % watched_title, run_plugin % watched_params))
-					if is_widget: props.update({
-						'pov_widget': 'true',
-						'pov_playcount': string(playcount),
-						'pov_options_menu_params': options_params,
-						'pov_extras_menu_params': extras_params,
-						'pov_unwatched_params': unwatched_params,
-						'pov_watched_params': watched_params,
-						'pov_clearprog_params': clearprog_params})
-					else: props['pov_widget'] = 'false'
+					props['pov_widget'] = 'true' if is_widget else 'false'
 					listitem = make_listitem()
 					listitem.addContextMenuItems(cm)
 					listitem.setProperties(props)
@@ -214,6 +205,13 @@ class Seasons:
 					listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo,
 									'landscape': thumb, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
 					if KODI_VERSION < 20:
+						if is_widget: props.update({
+							'pov_playcount': string(playcount),
+							'pov_options_menu_params': options_params,
+							'pov_extras_menu_params': extras_params,
+							'pov_unwatched_params': unwatched_params,
+							'pov_watched_params': watched_params,
+							'pov_clearprog_params': clearprog_params})
 						listitem.setCast(cast)
 						listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 						listitem.setInfo('video', remove_meta_keys(item, dict_removals))

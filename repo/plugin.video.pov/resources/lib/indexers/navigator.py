@@ -126,7 +126,7 @@ class Navigator:
 		n_ins, c_n_ins = _in_str % (fav_str.upper(), ''), _in_str % (ls(32524).upper(), '')
 		self._add_item({'mode': 'build_movie_list', 'action': 'favourites_movies',   'name': mov_str      }, 'movies.png', n_ins)
 		self._add_item({'mode': 'build_tvshow_list', 'action': 'favourites_tvshows', 'name': tv_str       }, 'tv.png'    , n_ins)
-		self._add_item({'mode': 'favorites_choice', 'cache': 'clear_favourites',     'name': clear_fav_str}, 'tools.png' , c_n_ins, False)
+		self._add_item({'mode': 'favourites_choice', 'cache': 'clear_favourites',     'name': clear_fav_str}, 'tools.png' , c_n_ins, False)
 		self._end_directory()
 
 	def my_content(self):

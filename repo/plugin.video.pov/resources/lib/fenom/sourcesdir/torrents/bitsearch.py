@@ -42,17 +42,18 @@ class source:
 
 			query = '%s %s' % (self.title, self.hdlr)
 			query = re.sub(r'[^A-Za-z0-9\s\.-]+', '', query)
-			urls = ['%s%s' % (self.base_link, self.search_link % quote_plus(query))]
-#			url = '%s%s' % (self.base_link, self.search_link % quote_plus(query))
+#			urls = []
+			url = '%s%s' % (self.base_link, self.search_link % quote_plus(query))
 #			urls.append(url)
 #			urls.append(url + '&page2')
 			# log_utils.log('urls = %s' % urls)
-			threads = []
-			append = threads.append
-			for url in urls:
-				append(i := source_utils.Thread(self.get_sources, url))
-				i.start()
-			[i.join() for i in threads]
+#			threads = []
+#			append = threads.append
+#			for url in urls:
+#				append(source_utils.Thread(self.get_sources, url))
+#			[i.start() for i in threads]
+#			[i.join() for i in threads]
+			self.get_sources(url)
 			return self.sources
 		except:
 			source_utils.scraper_error('BITSEARCH')
@@ -140,8 +141,8 @@ class source:
 			append = threads.append
 			for url in queries:
 				link = '%s%s' % (self.base_link, url)
-				append(i := source_utils.Thread(self.get_sources_packs, link))
-				i.start()
+				append(source_utils.Thread(self.get_sources_packs, link))
+			[i.start() for i in threads]
 			[i.join() for i in threads]
 			return self.sources
 		except:

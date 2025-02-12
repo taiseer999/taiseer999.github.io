@@ -6,7 +6,7 @@ database = kodi_utils.database
 delete_file = kodi_utils.delete_file
 navigator_db = kodi_utils.navigator_db
 watched_db = kodi_utils.watched_db
-favorites_db = kodi_utils.favorites_db
+favourites_db = kodi_utils.favourites_db
 views_db = kodi_utils.views_db
 trakt_db = kodi_utils.trakt_db
 maincache_db = kodi_utils.maincache_db
@@ -34,7 +34,7 @@ def check_databases():
 					last_played text, resume_id integer, title text, unique(db_type, media_id, season, episode))""")
 	dbcon.close()
 	# Favourites
-	dbcon = database.connect(favorites_db)
+	dbcon = database.connect(favourites_db)
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS favourites (db_type text, tmdb_id text, title text, unique (db_type, tmdb_id))""")
 	dbcon.close()
 	# Views

@@ -36,8 +36,8 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 			timeout=timeout
 		)
 		response.raise_for_status()
-	except requests.exceptions.RequestException as e: logger('trakt error',
-		f"{e}\n{e.response.text if response else e.request.headers}")
+	except requests.exceptions.RequestException as e:
+		logger('trakt error', f"{e}\n{e.response.text}" if response else f"{e}")
 	response.encoding = 'utf-8'
 	try: result = response.json()
 	except: result = None

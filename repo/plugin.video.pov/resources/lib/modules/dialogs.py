@@ -351,7 +351,7 @@ def meta_language_choice():
 	set_setting('meta_language_display', chosen_language_display)
 	clear_cache('meta', silent=True)
 
-def favorites_choice(params):
+def favourites_choice(params):
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/favourites.png')
 	if params.get('cache'):
 		from caches.favourites_cache import favourites_cache

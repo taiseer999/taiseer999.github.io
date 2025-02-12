@@ -45,8 +45,8 @@ def routing(params):
 			dialogs.extras_menu(params)
 		elif mode == 'enable_scrapers_choice':
 			dialogs.enable_scrapers_choice()
-		elif mode == 'favorites_choice':
-			dialogs.favorites_choice(params)
+		elif mode == 'favourites_choice':
+			dialogs.favourites_choice(params)
 		elif mode == 'trakt_manager_choice':
 			dialogs.trakt_manager_choice(params)
 		elif mode == 'mdb_manager_choice':
