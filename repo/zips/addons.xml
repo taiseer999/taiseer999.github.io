@@ -5848,7 +5848,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
 		<description lang="en_NZ">Altus Skin</description>
 		<description lang="en_US">Altus Skin</description>
 	</extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="1.0.24">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="1.0.25">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -5878,7 +5878,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.7.4">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.7.5">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -6050,7 +6050,7 @@ Added arabic fonts
 			<fanart>resources/fanart.jpg</fanart>			
 		</assets>
 	</extension>
-</addon><addon id="skin.cpm.estuary" version="4.0.9.25" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
+</addon><addon id="skin.cpm.estuary" version="4.0.9.26" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 	</requires>

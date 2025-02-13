@@ -2687,6 +2687,16 @@ msgctxt "#31563"
 msgid "This feature is experimental and may cause degraded system performance or other issues."
 msgstr ""
 
+#: /1080i/SkinSettings.xml
+msgctxt "#31564"
+msgid "Additional tags"
+msgstr "علامات إضافية"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31565"
+msgid "Visibility"
+msgstr "ظهور"
+
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the video codec name
 msgctxt "#31600"
