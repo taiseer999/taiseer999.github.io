@@ -95,14 +95,13 @@
         <param name="plot_linespacing_tiny">1.23</param>
         </include>	
     </fontset>
-	
 
     <fontset id="AmazonEmber" unicode="true">
 
         <include content="Font_Default">
             <param name="font_black">AmazonEmberV2-Bold.ttf</param>
             <param name="font_bold">AmazonEmberV2-Bold.ttf</param>
-            <param name="font_regular">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_regular">AmazonEmberV2-Medium.ttf</param>
             <param name="font_light">AmazonEmberV2-Medium.ttf</param>
             <param name="size_heavy_main">27</param>
         <param name="size_light_main">27</param>
