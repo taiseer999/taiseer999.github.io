@@ -34,8 +34,7 @@
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
-            </animation>
+                <effect type="fade" start="100" end="0" time="500" tween="sine"/>
 			
 			
             <include content="Video_Background_Flag">
@@ -334,7 +333,7 @@
             <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
+                <effect type="fade" start="100" end="0" time="500" tween="sine"/>
             </animation>
 			
 			
@@ -634,7 +633,7 @@
             <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <animation type="Hidden">
-                <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
+                <effect type="fade" start="100" end="0" time="500" tween="sine"/>
             </animation>
 			
 			
