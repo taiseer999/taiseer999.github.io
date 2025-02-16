@@ -14,16 +14,6 @@
             </control>
             
             <control type="group">
-                <visible>String.IsEqual(ListItem.HdrType,sdr)</visible>
-                <top>52</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
-                </control>
-            </control>
-            <control type="group">
                 <visible>String.IsEqual(VideoPlayer.HdrType,hdr10)</visible>
                 <top>52</top>
                 <left>30</left>
@@ -73,16 +63,7 @@
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
-            <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>52</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
-                </control>
-            </control>
+           
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
                 <top>50</top>
@@ -307,16 +288,7 @@
                     <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
 				 </control>
-				<control type="group">
-                <visible>String.IsEqual(VideoPlayer.HdrType,)</visible>
-                <top>62</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
-                </control>
-            </control>
+				
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.HdrType,hdr10)</visible>
                 <top>62</top>
@@ -368,16 +340,7 @@
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
-            <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>62</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
-                </control>
-            </control>
+           
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
                 <top>60</top>
@@ -589,16 +552,7 @@
                 </control>
             </control>
             
-            <control type="group">
-                <visible>String.IsEqual(VideoPlayer.HdrType,)</visible>
-                <top>52</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
-                </control>
-            </control>
+           
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.HdrType,hdr10)</visible>
                 <top>52</top>
@@ -650,17 +604,7 @@
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
-            <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>52</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
-                </control>
-            </control>
-        
+            
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
                 <top>50</top>
@@ -885,16 +829,7 @@
                     <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
 				 </control>
-				<control type="group">
-                <visible>String.IsEqual(VideoPlayer.HdrType,)</visible>
-                <top>62</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
-                </control>
-            </control>
+				
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.HdrType,hdr10)</visible>
                 <top>62</top>
@@ -946,16 +881,7 @@
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
-            <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>62</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
-                </control>
-            </control>
+        
             
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
@@ -1169,16 +1095,6 @@
             </control>
             
             <control type="group">
-                <visible>String.IsEqual(VideoPlayer.HdrType,)</visible>
-                <top>52</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
-                </control>
-            </control>
-            <control type="group">
                 <visible>String.IsEqual(VideoPlayer.HdrType,hdr10)</visible>
                 <top>52</top>
                 <left>30</left>
@@ -1229,16 +1145,7 @@
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
-            <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>52</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
-                </control>
-            </control>
+           
             
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>
@@ -1464,16 +1371,7 @@
                     <texture colordiffuse="main_fg_70">common/corner_small.png</texture>
                 </control>
 				 </control>
-				<control type="group">
-                <visible>String.IsEqual(VideoPlayer.HdrType,)</visible>
-                <top>62</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
-                </control>
-            </control>
+				
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.HdrType,hdr10)</visible>
                 <top>62</top>
@@ -1525,16 +1423,7 @@
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
-            <control type="group">
-                <visible>String.Contains(Player.Process(amlogic.vs10.mode),HDR10)</visible>
-                <top>62</top>
-                <left>30</left>
-                <control type="image">
-                    <width>150</width>
-                    <height>52</height>
-                    <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
-                </control>
-            </control>
+           
             
             <control type="group">
                 <visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</visible>

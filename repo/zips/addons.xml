@@ -5848,7 +5848,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
 		<description lang="en_NZ">Altus Skin</description>
 		<description lang="en_US">Altus Skin</description>
 	</extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="1.0.27">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="1.0.28">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -5911,7 +5911,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.4.16">
+</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.4.17">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
