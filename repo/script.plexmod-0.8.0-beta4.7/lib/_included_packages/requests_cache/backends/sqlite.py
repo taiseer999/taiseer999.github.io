@@ -9,7 +9,7 @@
 import os
 
 from .base import BaseCache
-from .storage.dbdict import DbDict, DbPickleDict, sqlite
+from .storage.dbdict import DbDict, DbPickleDict, sqlite, DbJSONDict
 
 
 class DbCache(BaseCache):
@@ -40,7 +40,7 @@ class DbCache(BaseCache):
                 except OSError:
                     pass
         self.keys_map = DbDict(location + extension, 'urls', fast_save=fast_save)
-        self.other = DbPickleDict(location + extension, 'other', fast_save=fast_save)
+        self.other = DbJSONDict(location + extension, 'other', fast_save=fast_save)
 
     def vacuum(self):
         self.responses.vacuum()

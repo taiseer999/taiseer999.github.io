@@ -167,18 +167,19 @@ class PlexInterface(plexapp.AppInterface):
             pass
 
     def prepareCache(self):
-        plexnet_util.CACHED_PLEX_URLS = self.loadCachedURLs()
-
-    def loadCachedURLs(self):
         if not util.getSetting('persist_requests_cache'):
-            return {}
+            return
+        self.loadCache()
 
+    def loadCache(self):
         s = asyncadapter.Session()
         urls = {}
+        hub_item_states = {}
         try:
             urls = s.cache.other["stored_urls"]
+            hub_item_states = s.cache.other["item_states"]
             success = s.cache.other["last_shutdown_successful"] == True
-        except KeyError:
+        except (KeyError, ValueError, UnicodeDecodeError):
             success = False
 
         if not success:
@@ -192,12 +193,14 @@ class PlexInterface(plexapp.AppInterface):
                 # this should never happen; might've been old interference with the service and the old style of
                 # initializing the cache load in global space, not via plex.init()
                 pass
-        return urls
+        plexnet_util.CACHED_PLEX_URLS = urls
+        util.HUB_ITEM_STATES = hub_item_states
 
     def shutdownCache(self):
         if util.getSetting('persist_requests_cache'):
             s = asyncadapter.Session()
             s.cache.other["stored_urls"] = plexnet_util.CACHED_PLEX_URLS
+            s.cache.other["item_states"] = util.HUB_ITEM_STATES
             s.cache.other["last_shutdown_successful"] = True
             s.remove_expired_responses()
             util.LOG('PlexInterface: Stored cached urls.')

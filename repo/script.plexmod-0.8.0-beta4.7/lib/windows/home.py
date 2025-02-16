@@ -958,11 +958,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                         return
 
                     if controlID == self.SECTION_LIST_ID and self.sectionList.control.getSelectedPosition() > 0:
-                        self.sectionList.setSelectedItemByPos(0)
-                        # set lastSection here already, otherwise tick() might interfere
-                        # fixme: Might still happen in a race condition, check later
-                        self.lastSection = home_section
-                        self.showHubs(home_section)
+                        self.goHome()
                         return
 
                     if util.addonSettings.fastBack and not optionsFocused and offSections \
@@ -1060,6 +1056,16 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         if player.PLAYER.bgmPlaying:
             player.PLAYER.stopAndWait()
 
+    def goHome(self, **kwargs):
+        self.setProperty('hub.focus', '')
+        self.setFocusId(self.SECTION_LIST_ID)
+        self.sectionList.setSelectedItemByPos(0)
+        # set lastSection here already, otherwise tick() might interfere
+        # fixme: Might still happen in a race condition, check later
+        self.lastSection = home_section
+        self.showHubs(home_section)
+        return
+
     def confirmExit(self):
         lBtnExit = T(32336, 'Exit')
         lBtnQuit = T(32704, 'Quit Kodi')
@@ -1150,7 +1156,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
             self.showHubs(self.lastSection, force=True, update=True)
 
     def onWake(self, *args, **kwargs):
-        wakeAction = util.getSetting('action_on_wake', util.isCoreELEC and 'wait_5' or 'wait_1')
+        wakeAction = util.getSetting('action_on_wake', util.platformFlavor == 'CoreELEC' and 'wait_5' or 'wait_1')
         if wakeAction == "restart":
             self._ignoreReInit = True
             self._restarting = True
@@ -2269,6 +2275,17 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
         items = []
 
         check_spoilers = False
+
+        # fetch previously seen item states
+        # date, view count, last viewed at
+        hub_item_state_key = "_".join([plexapp.util.INTERFACE.getRCBaseKey(), identifier])
+        hub_item_states = (util.HUB_ITEM_STATES.get(hub_item_state_key, {}) or {"movie": 0,
+                                                                                "episode": 0,
+                                                                                "season": 0,
+                                                                                "show": 0})
+        cks = []
+        urls = []
+
         for obj in hubitems or hub.items:
             if not self.backgroundSet and not use_reselect_pos:
                 if self.updateBackgroundFrom(obj):
@@ -2284,9 +2301,27 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, SpoilersMixin):
                 # with_art sets the wide parameter which includes the episode title
                 wide = no_spoilers in ("funwatched", "unwatched") and not self.noTitles
 
+            # determine whether we need to clear caches based on item parameters
+            if obj.cachable and obj.type in hub_item_states:
+                seen = hub_item_states[obj.type]
+                last_update = max(int(obj.get('addedAt', 0)), int(obj.get('updatedAt', 0)))
+                if seen < last_update:
+                    _cks, _urls = obj.clearCache(return_urls=True)
+                    cks += _cks
+                    urls += _urls
+                    hub_item_states[obj.type] = last_update
+
             mli = self.createListItem(obj, wide=wide)
             if mli:
                 items.append(mli)
+
+        if util.getSetting('cache_requests'):
+            cks = list(set(cks))
+            urls = list(set(urls))
+            if cks:
+                obj._clearCache(cks, urls)
+
+            util.HUB_ITEM_STATES[hub_item_state_key] = hub_item_states
 
         if with_progress:
             for mli in items:

@@ -422,7 +422,9 @@ AUDIO_CODECS_VERB = {
 
 AUDIO_CODECS = list(AUDIO_CODECS_VERB.keys())
 
-AUDIO_CODECS_TC = ['mp3', 'ac3', 'dca', 'aac', 'opus']
+AUDIO_CODECS_TC = ['mp3', 'ac3', 'aac', 'opus', 'vorbis', 'eac3', 'flac', 'alac']
+
+AUDIO_CODECS_TC_VERB = {codec: AUDIO_CODECS_VERB[codec] for codec in AUDIO_CODECS_TC}
 
 
 

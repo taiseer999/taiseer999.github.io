@@ -3919,7 +3919,7 @@ v1.30.0
         <description lang="en_NZ">Nimbus Helper for the Nimbus Skin.</description>
         <description lang="en_US">Nimbus Helper for the Nimbus Skin.</description>
     </extension>
-</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta9" provider-name="pannal">
+</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta10.2" provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.27.1+matrix.1" />

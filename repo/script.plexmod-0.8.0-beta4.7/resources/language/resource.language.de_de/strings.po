@@ -2475,8 +2475,8 @@ msgstr "Maximales erwägtes Intro-Offset"
 
 #: 
 msgctxt "#33038"
-msgid "When encountering an intro marker with a start time offset greater than this, ignore it (default: 600s/10m)"
-msgstr "Wenn ein Intro-Marker mit einem Startzeitpunkt größer als diese Einstellung ist, diesen ignorieren (default: 600s/10m)"
+msgid "When encountering an intro marker with a start time offset greater than this, ignore it (default: 1400s/23m)"
+msgstr "Wenn ein Intro-Marker mit einem Startzeitpunkt größer als diese Einstellung ist, diesen ignorieren (standard: 1400s/23m)"
 
 #: 
 msgctxt "#33039"
@@ -2857,13 +2857,13 @@ msgstr "Nur plex.direct Hosts behandeln, wenn das Attribut des Servers publicAdd
 
 #: 
 msgctxt "#33649"
-msgid "CoreELEC: Resume-fix wait for seek"
-msgstr "CoreELEC: Fortsetzen-Fix Sprungwartezeit"
+msgid "\"Use alternate seek\" wait for seek"
+msgstr "\"Alternatives Spulen\" Sprungwartezeit"
 
 #: 
 msgctxt "#33650"
-msgid "This adjusts the delay between seek-tries on CoreELEC, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. Default: 500ms"
-msgstr "Dies passt die Wartezeit zwischen Sprungversuchen auf CoreELEC an, welches den Fehler behebt, dass das Fortsetzen manchmal nicht funktioniert, oder doppelt gesprungen wird. Solltest Du Fortsetzen-/Doppelsprungprobleme haben, diesen Wert erhöhen. Standard: 500ms"
+msgid "This adjusts the delay between seek-tries on problematic platforms when \"Use alternate seek\" is enabled, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. Default: 500ms"
+msgstr "Dies passt die Wartezeit zwischen Sprungversuchen auf problematischen Plattformen an, wenn \"Alternatives Spulen\" aktiv ist, welches den Fehler behebt, dass das Fortsetzen manchmal nicht funktioniert, oder doppelt gesprungen wird. Solltest Du Fortsetzen-/Doppelsprungprobleme haben, diesen Wert erhöhen. Standard: 500ms"
 
 #: 
 msgctxt "#33651"
@@ -2932,12 +2932,12 @@ msgid "Audio codecs you can't play back. Disables Direct Play for such media ite
 msgstr "Audio-Codecs, die Du nicht wiedergeben kannst. Deaktiviert Direktes Abspielen für betroffene Mediendateien, aktiviert Direktes Streamen, wenn möglich, transkodiert den Audio-Stream zu einem kompatiblen Format."
 
 msgctxt "#33667"
-msgid "CoreELEC: Use alternate seek"
-msgstr "CoreELEC: Alternatives Spulen"
+msgid "Use alternate seek"
+msgstr "Alternatives Spulen"
 
 msgctxt "#33668"
-msgid "Enables an alternate method to seek on CoreELEC due to a seemingly buggy implementation. Use this if you have audio issues after seeking/resuming."
-msgstr "Aktiviert eine alternative Methode zum Spulen auf CoreELEC-Clients, wegen einer fehleranfälligen Implementation. Das kann benutzt werden, sollten beim Spulen/Fortsetzen Audio-Probleme auftreten."
+msgid "ATTENTION: Only enable this if you have reproducible audio issues after seeking/resuming.\n\nUse an alternative seek method in videos, which can help in problematic scenarios; brings its own issues/quirks. Disabled by default (enabled by default for CoreELEC and LG WebOS)"
+msgstr "ACHTUNG: Ausschließlich verwenden, wenn reproduzierbare Audio-Probleme beim Spulen/Fortsetzen auftreten.\n\nVerwende eine alternative Methode zum Spulen beim Video-Abspielen, die in bestimmten problematischen Szenarios helfen kann. Kann selbst Probleme verursachen. Standardm. deaktiviert (standardm. aktiviert bei CoreELEC und LG WebOS)"
 
 msgctxt "#33669"
 msgid "Really sign out?"
@@ -3190,3 +3190,11 @@ msgstr "Nach Bitrate"
 msgctxt "#33732"
 msgid "Bitrate"
 msgstr "Bitrate"
+
+msgctxt "#33733"
+msgid "Transcode target codec"
+msgstr "Transkodieren Ziel-Codec"
+
+msgctxt "#33734"
+msgid "Sets the target codec when transcoding/direct streaming. Overridden when \"Transcode audio to AC3\" is set."
+msgstr "Setzt den Ziel-Codec beim Transkodieren/Direkt Streamen. Wird überschrieben wenn \"Transkodiere Ton zu AC3\" aktiv ist."

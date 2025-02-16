@@ -1057,6 +1057,8 @@ class MultiWindow(object):
     def onAction(self, action):
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.doClose()
+        elif XMLBase.goHomeAction(self, action):
+            return
         self._currentOnAction(action)
 
     def onClick(self, controlID):

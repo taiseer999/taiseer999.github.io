@@ -402,6 +402,11 @@ class PlexPlayer(BasePlayer):
             disACodecs = self.item.settings.getPreference("audio_disabled_codecs", [])
             if disACodecs:
                 audioCodecs = list(set(audioCodecs) - set(disACodecs))
+
+            # force transcode audio codec
+            tcACodec = self.item.settings.getPreference("audio_transcode_codec", "default")
+            if tcACodec != "default":
+                audioCodecs = [tcACodec]
         else:
             if dtsIsAC3:
                 audioCodecs = ["ac3", "dca"]

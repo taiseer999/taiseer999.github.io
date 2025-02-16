@@ -1612,7 +1612,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             backgroundthread.BGThreader.addTasksToFront([task])
 
 
-class PostersWindow(kodigui.ControlledWindow):
+class PostersWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     xmlFile = 'script-plex-posters.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'

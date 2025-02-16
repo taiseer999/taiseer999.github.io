@@ -146,11 +146,6 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="use_alternate_seek" type="boolean" label="33667" help="33668">
-                    <level>0</level>
-                    <default>true</default>
-                    <control type="toggle"/>
-                </setting>
                 <setting id="coreelec_resume_seek_wait" type="integer" label="33649" help="33650">
                     <level>0</level>
                     <default>500</default>
@@ -162,9 +157,6 @@
                     <control type="slider" format="integer">
                         <popup>false</popup>
                     </control>
-                    <dependencies>
-                        <dependency type="enable" setting="use_alternate_seek">true</dependency>
-                    </dependencies>
                 </setting>
                 <setting id="show_media_ends_info" type="boolean" label="32540" help="32541">
                     <level>0</level>
@@ -279,11 +271,11 @@
                 </setting>
                 <setting id="intro_marker_max_offset" type="integer" label="33037" help="33038">
                     <level>0</level>
-                    <default>600</default>
+                    <default>1400</default>
                     <constraints>
                         <minimum>1</minimum>
                         <step>10</step>
-                        <maximum>1800</maximum>
+                        <maximum>3600</maximum>
                     </constraints>
                     <control type="slider" format="integer">
                         <heading>33510</heading>

@@ -8,10 +8,7 @@ from . import opener
 HOME = None
 
 
-class UtilMixin():
-    def __init__(self):
-        self.exitCommand = None
-
+class GoHomeMixin():
     def goHome(self, section=None, with_root=False):
         HOME.go_root = with_root
 
@@ -21,6 +18,11 @@ class UtilMixin():
             self.closeWithCommand('HOME')
 
         HOME.show()
+
+
+class UtilMixin(GoHomeMixin):
+    def __init__(self):
+        self.exitCommand = None
 
     def openItem(self, obj):
         self.processCommand(opener.open(obj))
@@ -90,6 +92,7 @@ class UtilMixin():
             use = non_special[-1]
         pl.setCurrent(use)
         return False
+
 
 
 def shutdownHome():

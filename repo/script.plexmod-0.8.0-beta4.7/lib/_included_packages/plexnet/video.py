@@ -469,19 +469,23 @@ class CachableItemsMixin(object):
     def cachable(self):
         return 'items' in util.INTERFACE.getPreference('cache_requests')
 
-    def clearChildCaches(self):
+    def clearChildCaches(self, return_urls=False):
         # clear caches of this season and its items
         if not self.cachable:
             return
         cks = []
         urls = []
-        for e in self.episodes():
+        for e in self.getImmediateChildren():
             cks_, urls_ = e.clearCache(return_urls=True)
             cks += cks_
             urls += urls_
 
         cks = list(set(cks))
         urls = list(set(urls))
+
+        if return_urls:
+            return cks, urls
+
         self._clearCache(cks, urls)
 
 
@@ -754,7 +758,12 @@ class Show(CachableItemsMixin, Video, media.RelatedMixin, SectionOnDeckMixin):
         dcm.setCacheData("show_genres", self.ratingKey, [g.tag for g in self._genres])
         return self._genres
 
-    def clearCache(self, **kwargs):
+    def getImmediateChildren(self):
+        return self.seasons()
+
+    def clearCache(self, return_urls=False, **kwargs):
+        if return_urls:
+            return self.clearChildCaches(return_urls=True)
         self.clearChildCaches()
 
 
@@ -804,7 +813,12 @@ class Season(CachableItemsMixin, Video):
     def unwatched(self):
         return self.episodes(watched=False)
 
-    def clearCache(self, **kwargs):
+    def getImmediateChildren(self):
+        return self.episodes()
+
+    def clearCache(self, return_urls=False, **kwargs):
+        if return_urls:
+            return self.clearChildCaches(return_urls=True)
         self.clearChildCaches()
 
 

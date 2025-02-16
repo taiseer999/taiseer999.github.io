@@ -37,6 +37,7 @@ class BasePlayerHandler(object):
         self.queuingSpecific = False
         self.playQueue = None
         self.sessionID = session_id
+        self.isMapped = False
 
     def onAVChange(self):
         pass
@@ -149,7 +150,7 @@ class BasePlayerHandler(object):
 
         obj = item.choice
 
-        # Ignore sending timelines for multi part media with no duration
+        # Ignore sending timelines for multi-part media with no duration
         if obj and obj.part and obj.part.duration.asInt() == 0 and obj.media.parts and len(obj.media.parts) > 1:
             util.LOG("Timeline not supported: the current part doesn't have a valid duration")
             return
@@ -230,8 +231,9 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.prePlayWitnessed = False
         self.queuingNext = False
         self.queuingSpecific = False
-        self.useAlternateSeek = util.isCoreELEC and util.getSetting('use_alternate_seek')
+        self.useAlternateSeek = util.getSetting('use_alternate_seek2')
         self.useResumeFix = self.useAlternateSeek
+        self.isMapped = False
         self.reset()
 
     def reset(self):
@@ -250,8 +252,10 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.prePlayWitnessed = False
         self.queuingNext = False
         self.queuingSpecific = False
+        self.isMapped = False
 
-    def setup(self, duration, meta, offset, bif_url, title='', title2='', seeking=NO_SEEK, chapters=None):
+    def setup(self, duration, meta, offset, bif_url, title='', title2='', seeking=NO_SEEK, chapters=None,
+              is_mapped=False):
         self.ended = False
         self.baseOffset = offset / 1000.0
         self.seeking = seeking
@@ -268,6 +272,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.skipPostPlay = False
         self.prePlayWitnessed = False
         self._subtitleStreamOffset = None
+        self.isMapped = is_mapped
         self.getDialog(setup=True)
         self.dialog.setup(self.duration, meta, int(self.baseOffset * 1000), self.bifURL, self.title, self.title2,
                           chapters=self.chapters, keepMarkerDef=seeking == self.SEEK_IN_PROGRESS)
@@ -410,7 +415,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         if self.isDirectPlay and not settings_changed:
             util.DEBUG_LOG('New absolute player offset: {0}', self.offset)
 
-            if self.player.playerObject.offsetIsValid(offset / 1000):
+            if self.player.playerObject.offsetIsValid(offset / 1000) and not self.player.isExternal:
                 if self.seekAbsolute(offset):
                     return
 
@@ -435,6 +440,10 @@ class SeekPlayerHandler(BasePlayerHandler):
 
     def seekAbsolute(self, seek=None):
         self.seekOnStart = seek or (self.seekOnStart if self.seekOnStart else None)
+
+        if self.player.isExternal:
+            return True
+
         if self.seekOnStart is not None:
             seekSeconds = self.seekOnStart / 1000.0
             try:
@@ -912,7 +921,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         if (self.seeking != self.SEEK_IN_PROGRESS and not self.ended and self.player.started and not self.seekOnStart
                 and not self.queuingNext and not self.queuingSpecific and not self.stoppedManually and
                 self.player.isPlayingVideo() and self.player.playState != self.player.STATE_STOPPED):
-            self.updateNowPlaying()
+            self.updateNowPlaying(t=self.dialog.timeKeeperTime if self.player.isExternal else None)
         else:
             util.DEBUG_LOG("Not ticking UpdateNowPlaying: {}, {}, {}, {}, {}, {}, {}, {}", self.seeking,
                            self.ended, self.player.started, self.seekOnStart, self.queuingNext, self.stoppedManually,
@@ -1455,7 +1464,8 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
         #        especially when .next() is used
         self.handler.reset()
         self.handler.setup(self.video.duration.asInt(), meta, offset, bifURL, title=self.video.grandparentTitle,
-                           title2=self.video.title, seeking=seeking, chapters=self.video.chapters)
+                           title2=self.video.title, seeking=seeking, chapters=self.video.chapters,
+                           is_mapped=meta.isMapped)
 
         # try to get an early intro offset so we can skip it if necessary
         introOffset = None
@@ -1843,6 +1853,10 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
     def onPlayBackEnded(self):
         if not self.sessionID:
             return
+
+        if self.isExternal:
+            self.trigger('videowindow.closed', session_id=self.sessionID, video=self.video)
+
         util.DEBUG_LOG('Player - ENDED' + (not self.started and ': FAILED' or ''))
         if self.ignoreStopEvents:
             return
@@ -2000,15 +2014,16 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
                 util.DEBUG_LOG("VideoMonitor: Started")
 
-            p_time = None
-            t_tries = 0
-            while not p_time and not util.MONITOR.abortRequested() and t_tries < 50:
-                try:
-                    self.currentTime = p_time = self.getTime()
-                except RuntimeError:
-                    util.DEBUG_LOG("VideoMonitor: Waiting for player readiness...")
-                    t_tries += 1
-                    util.MONITOR.waitForAbort(0.1)
+            if not self.isExternal:
+                p_time = None
+                t_tries = 0
+                while not p_time and not util.MONITOR.abortRequested() and t_tries < 50 and not self.isExternal:
+                    try:
+                        self.currentTime = p_time = self.getTime()
+                    except RuntimeError:
+                        util.DEBUG_LOG("VideoMonitor: Waiting for player readiness...")
+                        t_tries += 1
+                        util.MONITOR.waitForAbort(0.1)
 
             util.MONITOR.waitForAbort(0.1)
             if xbmc.getCondVisibility('Window.IsActive(videoosd)'):

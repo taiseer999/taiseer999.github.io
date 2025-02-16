@@ -12,6 +12,7 @@ except ImportError:
     from collections import MutableMapping
 
 import sqlite3 as sqlite
+import json
 from contextlib import contextmanager
 try:
     import threading
@@ -171,3 +172,13 @@ class DbPickleDict(DbDict):
 
     def __getitem__(self, key):
         return pickle.loads(bytes(super(DbPickleDict, self).__getitem__(key)))
+
+
+class DbJSONDict(DbDict):
+    """ Same as :class:`DbDict`, but encodes values to JSON before saving
+    """
+    def __setitem__(self, key, item):
+        super(DbJSONDict, self).__setitem__(key, json.dumps(item))
+
+    def __getitem__(self, key):
+        return json.loads(super(DbJSONDict, self).__getitem__(key))

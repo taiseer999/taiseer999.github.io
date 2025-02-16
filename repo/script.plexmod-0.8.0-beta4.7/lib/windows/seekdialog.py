@@ -21,6 +21,7 @@ from lib.util import T
 from . import busy
 from . import dropdown
 from . import kodigui
+from . import windowutils
 from . import playersettings
 from . import optionsdialog
 from .mixins import SpoilersMixin, PlexSubtitleDownloadMixin
@@ -89,7 +90,7 @@ MARKER_CHAPTER_OVERLAP_THRES = 30000  # 30 seconds
 MARKER_END_JUMP_OFF = 1000
 
 
-class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
+class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownloadMixin):
     """
     fixme: This is a convoluted mess.
     """
@@ -209,6 +210,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         self.resumeSeekBehindPause = util.getSetting('resume_seek_behind_pause')
         self.resumeSeekBehindAfter = util.getSetting('resume_seek_behind_after') / 1000.0
         self.resumeSeekBehindOnlyDP = util.getSetting('resume_seek_behind_onlydp')
+        self.useAlternateSeek = util.getSetting('use_alternate_seek2')
         self.pausedAt = None
         self.isDirectPlay = True
         self.isTranscoded = False
@@ -474,7 +476,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         """
         this is called by our handler and occurs earlier than onFirstInit.
         """
-        util.DEBUG_LOG("SeekDialog: setup, keepMarkerDef={}", keepMarkerDef)
+        util.DEBUG_LOG("SeekDialog: setup, keepMarkerDef={}, offset={}", keepMarkerDef, offset)
         self._duration = duration
         self.title = title
         self.title2 = title2
@@ -554,6 +556,10 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
             self.selectedOffset = self.trueOffset()
 
         self.updateProgress()
+
+    def closeWithCommand(self, command):
+        self.exitCommand = command
+        self.stop()
 
     def onAction(self, action):
         if xbmc.getCondVisibility('Window.IsActive(selectdialog)'):
@@ -1543,7 +1549,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
                     # On CoreELEC changing the audio stream causes the audio to stutter or delay
                     # so this small seek helps sync things back up.  But we also need to pause the
                     # video for a short time if it's playing or the seek doesn't work
-                    if util.isCoreELEC and changed.audio:
+                    if self.useAlternateSeek and changed.audio:
                         if not xbmc.getCondVisibility('Player.Paused'):
                             self.videoPausedForAudioStreamChange = True
                             self.handler.player.control('pause')
@@ -2118,7 +2124,7 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         util.DEBUG_LOG("SeekDialog: OnPlaybackPaused")
 
         # Need to resume the video when changing streams on CoreELEC
-        if util.isCoreELEC and self.videoPausedForAudioStreamChange:
+        if self.useAlternateSeek and self.videoPausedForAudioStreamChange:
             self.videoPausedForAudioStreamChange = False
             self.handler.player.control('play')
             return
@@ -2151,7 +2157,16 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         if not self.handler.player.playerObject:
             return
 
-        self.timeKeeperTime = self.trueOffset()#int(self.handler.player.getTime() * 1000)
+        if not self.handler.player.isExternal:
+            self.timeKeeperTime = self.trueOffset()#int(self.handler.player.getTime() * 1000)
+        else:
+            # special case for external players - we don't know the actual progress, but we can make an educated guess
+            # for the start point
+            if not self.timeKeeperTime:
+                self.timeKeeperTime = self.baseOffset or self.handler.seekOnStart
+                if self.timeKeeperTime is None:
+                    self.timeKeeperTime = 0
+
         if not self.timeKeeper:
             self.timeKeeper = plexapp.util.RepeatingCounterTimer(1.0, self.onTimeKeeperCallback)
         self.onTimeKeeperCallback(tick=False)
@@ -2170,21 +2185,29 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         """
         called by playbackTimer periodically, sets playback time/ends in UI
         """
-        # we might be a little early on slower systems
-        if not self.started or not self.handler.player.playerObject:
-            return
+        force_tick = self.handler.player.isExternal
 
-        if self.stopPlaybackOnIdle:
-            if self.idleTime and time.time() - self.idleTime >= self.stopPlaybackOnIdle:
-                util.LOG("Player has been idle for {}s, stopping.", int(time.time() - self.idleTime))
-                self.handler.player.stopAndWait()
+        # we might be a little early on slower systems
+        if not force_tick:
+            if not self.started or not self.handler.player.playerObject:
                 return
 
-            if not self.idleTime and xbmc.getCondVisibility('Player.Paused'):
-                self.idleTime = time.time()
+            if self.stopPlaybackOnIdle:
+                if self.idleTime and time.time() - self.idleTime >= self.stopPlaybackOnIdle:
+                    util.LOG("Player has been idle for {}s, stopping.", int(time.time() - self.idleTime))
+                    self.handler.player.stopAndWait()
+                    return
 
-        if tick and xbmc.getCondVisibility('Player.HasVideo + Player.Playing'):
+                if not self.idleTime and xbmc.getCondVisibility('Player.Paused'):
+                    self.idleTime = time.time()
+
+        # force_tick is enabled when we're using an external player. In this case we simply count the time spent while
+        # the external player is open and report that to the PMS
+        if tick and (xbmc.getCondVisibility('Player.HasVideo + Player.Playing') or force_tick):
             self.timeKeeperTime += 1000
+
+        if force_tick:
+            return
 
         # Update buffer state in PPI if open and old Kodi version
         if util.KODI_BUILD_NUMBER < 2090821 and self.getProperty('show.PPI'):
@@ -2394,6 +2417,9 @@ class SeekDialog(kodigui.BaseDialog, PlexSubtitleDownloadMixin):
         """
         Called ~1/s; can be wildly inaccurate.
         """
+
+        if self.handler and self.handler.player and self.handler.player.isExternal:
+            return
 
         # we might be called with an offset for seekOnStart even before we're initialized (onFirstInit)
         # in that case, skip all functionality and just seekOnStart

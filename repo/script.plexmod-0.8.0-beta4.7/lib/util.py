@@ -100,6 +100,8 @@ NEEDS_SCALING = round(CURRENT_AR, 2) < round(1920 / 1080, 2)
 
 HOME_BUTTON_MAPPED = None
 
+HUB_ITEM_STATES = {}
+
 
 def homeButtonMapped(*args, **kwargs):
     global HOME_BUTTON_MAPPED
@@ -669,12 +671,38 @@ def getCoreELEC():
         if match:
             return True
 
-        return False
     except:
-        return False
+        pass
+    return False
+
+def getWebOS():
+    try:
+        stdout = subprocess.check_output('uname -a', shell=True).decode()
+        match = re.search(r'webos', stdout, re.IGNORECASE)
+        if match:
+            return True
+
+    except:
+        pass
+    return False
 
 
-isCoreELEC = getCoreELEC() if platform in ['Linux', 'RaspberryPi'] else False
+def getPlatformFlavor():
+    # detected before?
+    flavor = getSetting('platform_flavor', None)
+    if flavor is None:
+        flavor = 'default'
+        if platform in ['Linux', 'RaspberryPi']:
+            flavor = "CoreELEC" if getCoreELEC() else "LG WebOS" if getWebOS() else 'default'
+        setSetting('platform_flavor', flavor)
+
+    if flavor != 'default':
+        LOG("{} detected".format(flavor))
+    return flavor
+
+
+platformFlavor = getPlatformFlavor()
+altSeekRecommended = platformFlavor != 'default'
 
 
 def getRunningAddons():
