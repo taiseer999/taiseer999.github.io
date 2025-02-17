@@ -2676,7 +2676,7 @@ v1.0.0
         <website />
         <source />
     </extension>
-</addon><addon id="script.bingie.widgets" name="Bingie Widgets" version="1.0.0" provider-name="matke">
+</addon><addon id="script.bingie.widgets" name="Bingie Widgets" version="1.0.1" provider-name="matke">
     <requires>
 		<import addon="xbmc.python" version="3.0.0" />
         <import addon="xbmc.addon" version="12.0.0" />
@@ -2693,10 +2693,6 @@ v1.0.0
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Bingie Widgets</summary>
         <description>Widgets for Bingie skin.</description>
-<news>
-Version 1.0.0
-- Initial release
-</news>
 		<assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
@@ -6023,7 +6019,7 @@ Added arabic fonts
         <description lang="en_US">Arctic: Zephyr - Reloaded is based on original Arctic: Zephyr skin, created by jurialmunkey. Arctic focuses on being simple, clean and minimalistic with a light spin.</description>
         <description lang="fr">Arctic: Zephyr - Reloaded est basé sur le skin original Arctic: Zephyr, créé par jurialmunkey. Arctic se focalise sur le fait d'être simple, claire et minimaliste.</description>
     </extension>
-</addon><addon id="skin.bingie" version="1.0.1.5" name="Bingie" provider-name="matke">
+</addon><addon id="skin.bingie" version="1.0.1.6" name="Bingie" provider-name="matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />
