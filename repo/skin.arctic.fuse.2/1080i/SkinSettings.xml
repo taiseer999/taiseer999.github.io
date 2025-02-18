@@ -58,7 +58,7 @@
                                 <item id="8" description="Thanks">
                                     <label>$VAR[Label_SkinSettings_Level]</label>
                                     <label2>$LOCALIZE[31550]</label2>
-                                   <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),1)">Skin.SetString(Skin.SettingsLevel,$NUMBER[2])</onclick>
+                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),1)">Skin.SetString(Skin.SettingsLevel,$NUMBER[2])</onclick>
                                     <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),2)">Skin.SetString(Skin.SettingsLevel,$NUMBER[3])</onclick>
                                     <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),3)">Skin.SetString(Skin.SettingsLevel,$NUMBER[1])</onclick>
                                 </item>

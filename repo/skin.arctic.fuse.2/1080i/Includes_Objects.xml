@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -1232,7 +1233,7 @@
         </definition>
     </include>
 
-<include name="Object_ColorSlider">
+    <include name="Object_ColorSlider">
         <control type="group">
             <top>20</top>
             <height>40</height>
