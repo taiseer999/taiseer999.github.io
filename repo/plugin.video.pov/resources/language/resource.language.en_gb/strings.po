@@ -668,7 +668,9 @@ msgctxt "#32170"
 msgid "Resolution"
 msgstr ""
 
-# msgctxt "#32171"
+msgctxt "#32171"
+msgid "Seconds"
+msgstr ""
 
 msgctxt "#32172"
 msgid "Filter Results by Name"
@@ -778,7 +780,9 @@ msgctxt "#32199"
 msgid "Trakt List"
 msgstr ""
 
-# msgctxt "#32200"
+msgctxt "#32200"
+msgid "[B]MDBList Manager[/B]"
+msgstr ""
 
 msgctxt "#32201"
 msgid "TITLE: SxE - EPISODE"

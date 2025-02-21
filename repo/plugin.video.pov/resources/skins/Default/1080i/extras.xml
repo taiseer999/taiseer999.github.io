@@ -39,16 +39,6 @@
                     <textcolor>FFCCCCCC</textcolor>
                     <align>left</align>
                     <aligny>top</aligny>
-                    <label>[I]$ADDON[plugin.video.pov 32049][/I]</label>
-                    <visible>Control.HasFocus(2057) | Control.HasFocus(2058)</visible>
-                </control>
-                <control type="label">
-                    <width max="500">auto</width>
-                    <height>20</height>
-                    <font>font10</font>
-                    <textcolor>FFCCCCCC</textcolor>
-                    <align>left</align>
-                    <aligny>top</aligny>
                     <label>[I]$ADDON[plugin.video.pov 32136][/I]</label>
                     <visible>Control.HasFocus(10) + String.IsEqual(Window.Property(tikiskins.extras.media_type),movie)</visible>
                 </control>
@@ -57,7 +47,7 @@
                     <height>30</height>
                     <aspectratio aligny="top">keep</aspectratio>
                     <texture>common/info.png</texture>
-                    <visible>Control.HasFocus(2057) | Control.HasFocus(2058) | [Control.HasFocus(10) + String.IsEqual(Window.Property(tikiskins.extras.media_type),movie)]</visible>
+                    <visible>Control.HasFocus(10) + String.IsEqual(Window.Property(tikiskins.extras.media_type),movie)</visible>
                 </control>
             </control>
         </control>
@@ -1290,6 +1280,17 @@
                         <align>left</align>
                         <aligny>bottom</aligny>
                         <label>[B]$ADDON[plugin.video.pov 32616][/B] $INFO[Window.Property(tikiskins.extras.tmdb_artwork.posters.number)]</label>
+                        <visible>!Control.HasFocus(2057)</visible>
+                    </control>
+                    <control type="label">
+                        <width max="1160">auto</width>
+                        <height>20</height>
+                        <font>font14</font>
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>bottom</aligny>
+                        <label>[B]$ADDON[plugin.video.pov 32616][/B]  |  [I]$ADDON[plugin.video.pov 32049][/I]</label>
+                        <visible>Control.HasFocus(2057)</visible>
                     </control>
                     <control type="panel" id="2057">
                         <pagecontrol>4057</pagecontrol>
@@ -1412,6 +1413,17 @@
                         <align>left</align>
                         <aligny>bottom</aligny>
                         <label>[B]$ADDON[plugin.video.pov 32617][/B] $INFO[Window.Property(tikiskins.extras.tmdb_artwork.backdrops.number)]</label>
+                        <visible>!Control.HasFocus(2058)</visible>
+                    </control>
+                    <control type="label">
+                        <width max="1160">auto</width>
+                        <height>20</height>
+                        <font>font14</font>
+                        <textcolor>FFCCCCCC</textcolor>
+                        <align>left</align>
+                        <aligny>bottom</aligny>
+                        <label>[B]$ADDON[plugin.video.pov 32617][/B]  |  [I]$ADDON[plugin.video.pov 32049][/I]</label>
+                        <visible>Control.HasFocus(2058)</visible>
                     </control>
                     <control type="panel" id="2058">
                         <pagecontrol>4058</pagecontrol>

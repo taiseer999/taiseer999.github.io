@@ -113,8 +113,8 @@ def get_mdb_toplists(params):
 def build_mdb_list(params):
 	def _thread_target(q):
 		while not q.empty():
-			target, *args = q.get()
-			target(*args)
+			try: target, *args = q.get() ; target(*args)
+			except: pass
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')

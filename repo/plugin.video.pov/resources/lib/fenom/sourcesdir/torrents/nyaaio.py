@@ -106,7 +106,7 @@ class source:
 				source_utils.scraper_error('NYAAIO')
 		return sources
 
-	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=True):
+	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
 		sources = []
 		if not data: return sources
 		sources_append = sources.append

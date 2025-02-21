@@ -14,7 +14,7 @@ def results_xml_style():
 
 def results_xml_window_number(window_style=None):
 	if not window_style: window_style = results_xml_style()
-	return {'list': 2000, 'infolist': 2001, 'columns': 2002}[window_style.split(' ')[0]]
+	return {'list': 2000, 'infolist': 2001, 'widelist': 2002}[window_style.split(' ')[0]]
 
 def store_resolved_torrent_to_cloud(debrid_service):
 	return get_setting('store_torrent.%s' % debrid_service.lower()) == 'true'
@@ -335,8 +335,6 @@ def make_global_list():
 	global_list = []
 
 def context_menu_sort():
-	return {
-		option: int(get_setting('context.%s' % option, idx))
-		for idx, option in enumerate(('options', 'extras', 'trakt', 'mdblist', 'favourites', 'mark', 'exit'), 1)
-	}
+	options = enumerate(('options', 'extras', 'trakt', 'mdblist', 'favourites', 'mark', 'exit'), 1)
+	return {i[1]: int(get_setting('context.%s' % i[1], i[0])) for i in options}
 

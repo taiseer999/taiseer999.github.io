@@ -183,7 +183,6 @@ class SourceResults(BaseDialog):
 				prescrape_listitem.setProperty('tikiskins.perform_full_search', 'true')
 				prescrape_listitem.setProperty('tikiskins.start_full_scrape', '[B]***%s***[/B]' % upper(start_full_scrape))
 			self.total_results = string(len(self.item_list))
-			self.scrape_time = ls(32675) % '[B]%.2f[/B]' % self.meta.get('scrape_time', '0')
 			if self.prescrape: self.item_list.append(prescrape_listitem)
 		except: pass
 
@@ -197,7 +196,7 @@ class SourceResults(BaseDialog):
 		self.setProperty('tikiskins.plot', self.meta['plot'])
 		self.setProperty('tikiskins.total_results', self.total_results)
 		self.setProperty('tikiskins.filters_ignored', self.filters_ignored)
-		self.setProperty('tikiskins.scrape_time', self.scrape_time)
+		self.setProperty('tikiskins.scrape_time', '%.2f' % self.meta['scrape_time'])
 
 	def original_poster(self):
 		poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or backup_poster

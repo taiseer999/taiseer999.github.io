@@ -367,9 +367,6 @@ def routing(params):
 	elif mode == 'undesirablesUserRemove':
 		from caches.undesirables_cache import undesirablesUserRemove
 		undesirablesUserRemove()
-	elif mode == 'mfdebrid_configure':
-		from fenom.hosted import MFDebrid
-		MFDebrid().configure()
 	elif mode == 'mdblist.clean_watchlist':
 		from apis.mdblist_api import mdb_clean_watchlist
 		mdb_clean_watchlist(params['list_id'])

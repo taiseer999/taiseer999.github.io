@@ -576,6 +576,7 @@ class Sources():
 #				if self.progress_dialog: self._kill_progress_dialog()
 				if self.progress_dialog: pass
 				else: progressBG.close()
+				if not self.url: self._kill_progress_dialog()
 			if background: return self.url
 			if self.caching_confirmed:
 				kodi_utils.clear_property('pov.progress_is_alive')

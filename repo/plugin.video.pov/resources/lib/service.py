@@ -110,7 +110,6 @@ class TraktMonitor:
 					kodi_utils.widget_refresh()
 					logger('POV', trakt_service_string % ('POV TraktMonitor - Widgets Refresh', 'Setting Activated. Widget Refresh Performed'))
 				else: logger('POV', trakt_service_string % ('POV TraktMonitor - Widgets Refresh', 'Setting Disabled. Skipping Widget Refresh'))
-				if get_setting('mdblist_clean_watchlist') == 'true': mdb_clean_watchlist(silent=True)
 			elif status == 'no account':
 				logger('POV', trakt_service_string % ('POV TraktMonitor - Aborted. No Trakt Account Active', next_update_string))
 			elif status == 'failed':

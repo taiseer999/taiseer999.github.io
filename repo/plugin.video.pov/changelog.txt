@@ -3,15 +3,16 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.02[/B][/COLOR]
-- Added Navigation/Context Menu Sorting settings (0 disables item).
+- Added Results/Results Display/WideList settings.
+- Added Navigation/Context Menu Sorting settings. (0 disables item)
 - Added Parental Guide to Extras window.
 - Added EasyDebrid endpoint to add uncached torrents.
   Currently the only response is success/fail, no way to check status.
 - Added Clean List context menu item for MDBList lists.
   This will attempt to remove watched Movies and in progress/watched TVShows.
 - Added support for MDBList private lists.
-- Added MDBList Sort Types List Default, Random.
-- Added MDBList Sort Type to Settings/Navigation/Sorting, only affects user lists.
+- Added Navigation/MDBList Sort Types/List Default, Random settings.
+- Added Navigation/Sorting/MDBList Sort Type settings. (only affects user lists)
 - Added Ratings/Reviews to Extras window with valid MDBList API Key.
 - Added MDBList Manager to context menu.
 - Added MDBList to My Lists.  Insert API Key in Settings/My Lists.

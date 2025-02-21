@@ -7,7 +7,7 @@
 import re, requests, queue
 #from fenom import client
 from fenom import source_utils
-from fenom.control import setting as getSetting
+from fenom.control import setting as getSetting, setSetting
 
 
 class source:
@@ -17,14 +17,31 @@ class source:
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
-		direct = 'eJwBYACf_4hAkZJe85krAoD5hN50-2M0YuyGmgswr-cis3uap4FNnLMvSfOc4e1IcejWJmykujTnWAlQKRi9cct5k3IRqhu-wFBnDoe_QmwMjJI3FnQtFNp2u3jDo23THEEgKXHYqTMrLos='
-		token = getSetting('mfdebrid.token')
-		self.params, self.cache = (token, 'MF+') if token else (direct, 'MF')
+		debrid, url, token = getSetting('mfdebrid.debrid'), getSetting('mfdebrid.url'), getSetting('mfdebrid.token')
+		params = token if debrid == url and token else self._get_token(debrid)
+		self.cache = 'MF' if debrid == '2' else 'MF+'
 		self.language = ['en']
-		self.base_link = getSetting('mfdebrid.url') or "https://mediafusion.elfhosted.com"
-		self.movieSearch_link = f"/{self.params}/stream/movie/%s.json"
-		self.tvSearch_link = f"/{self.params}/stream/series/%s:%s:%s.json"
+		self.base_link = "https://mediafusion.elfhosted.com"
+		self.movieSearch_link = f"/{params}/stream/movie/%s.json"
+		self.tvSearch_link = f"/{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0
+
+	def _get_token(self, debrid):
+		encr_url = 'https://mediafusion.elfhosted.com/encrypt-user-data'
+		direct = 'eJwBYACf_4hAkZJe85krAoD5hN50-2M0YuyGmgswr-cis3uap4FNnLMvSfOc4e1IcejWJmykujTnWAlQKRi9cct5k3IRqhu-wFBnDoe_QmwMjJI3FnQtFNp2u3jDo23THEEgKXHYqTMrLos='
+		params = {"streaming_provider":{"token":"","service":"","only_show_cached_streams":False},"enable_catalogs":False,"max_streams_per_resolution":99,"torrent_sorting_priority":[],"certification_filter":["Disable"],"nudity_filter":["Disable"]}
+		services = {'0': ('realdebrid', 'rd.token'), '1': ('alldebrid', 'ad.token'), '2': ('', '')}
+		if debrid != '2':
+			params['streaming_provider'] = {
+				'token': getSetting(services[debrid][1]), 'service': services[debrid][0], 'only_show_cached_streams': True
+			}
+			response = requests.post(encr_url, json=params, timeout=3.05)
+			token = response.json()['encrypted_str']
+		else: token = direct
+		setSetting('mfdebrid.debrid', debrid)
+		setSetting('mfdebrid.url', debrid)
+		setSetting('mfdebrid.token', token)
+		return token
 
 	def sources(self, data, hostDict):
 		sources = []
