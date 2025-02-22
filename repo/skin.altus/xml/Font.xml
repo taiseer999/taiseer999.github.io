@@ -4,73 +4,73 @@
 		<!-- Normal Fonts -->
 		<font>
 			<name>font10</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>21</size>
 		</font>
 		<font>
 			<name>font12</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>23</size>
 		</font>
 		<font>
 			<name>font13</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>28</size>
 		</font>
 		<font>
 			<name>font14</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>31</size>
 		</font>
 		<font>
 			<name>font23_narrow</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>21</size>
 			<linespacing>0.8</linespacing>
 		</font>
 		<font>
 			<name>font23</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>25</size>
 		</font>
 		<font>
 			<name>font25</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>23</size>
 		</font>
 		<font>
 			<name>font25_narrow</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>23</size>
 			<linespacing>0.8</linespacing>
 		</font>
 		<font>
 			<name>font27</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>27</size>
 			<linespacing>1.13</linespacing>
 		</font>
 		<font>
 			<name>font27_narrow</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>27</size>
 			<linespacing>0.8</linespacing>
 		</font>
 		<font>
 			<name>Font30</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>28</size>
 			<aspect>0.92</aspect>
 		</font>
 		<font>
 			<name>Font22</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>20</size>
 			<aspect>0.92</aspect>
 		</font>
 		<font>
 			<name>PlayerTime</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>28</size>
 			<aspect>0.98</aspect>
 		</font>
@@ -82,32 +82,32 @@
 		</font>
 		<font>
 			<name>font32</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>30</size>
 		</font>
 		<font>
 			<name>font37</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>35</size>
 		</font>
 		<font>
 			<name>font45</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>43</size>
 		</font>
 		<font>
 			<name>font60</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>56</size>
 		</font>
 		<font>
 			<name>font_clock</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>68</size>
 		</font>
 		<font>
 			<name>font_clock_small</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>38</size>
 		</font>
 		<!-- ICON FONTS -->
@@ -132,85 +132,85 @@
 		<!-- Title Fonts -->
 		<font>
 			<name>font10_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>21</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>FlixPanelIcon</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>27</size>
 			<aspect>0.93</aspect>
 		</font>
 		<font>
 			<name>font_flag</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>16</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font12_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>23</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font20_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>18</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font18_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>20</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font25_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>23</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font27_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>27</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font30_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>28</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font32_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>30</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font36_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>34</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font40_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>36</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font45_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>43</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>font52_title</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>50</size>
 			<style>bold</style>
 		</font>
@@ -227,20 +227,20 @@
 		</font>
 		<font>
 			<name>font_MainMenu</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>58</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>WeatherTemp</name>
 			<aspect>0.85</aspect>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>118</size>
 			<style>bold</style>
 		</font>
 		<font>
 			<name>Mono26</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>25</size>
 		</font>
 	</fontset>
@@ -498,7 +498,7 @@
 		</font>
 		<font>
 			<name>Mono26</name>
-			<filename>AmazonFullRegular.ttf</filename>
+			<filename>monadi.ttf</filename>
 			<size>24</size>
 		</font>
 	</fontset>
