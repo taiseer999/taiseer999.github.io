@@ -93,13 +93,14 @@ def update_check(action=4):
 
 def rollback_check():
 	current_version = get_versions()[0]
-	url = 'https://api.github.com/repos/%s/%s/contents/packages' % ('Tikipeter', 'tikipeter.github.io')#(get_setting('update.username'), get_setting('update.location'))
+	url = 'https://api.github.com/repos/%s/%s/contents/packages' % (get_setting('fenlight.update.username'), get_setting('update.location'))
 	show_busy_dialog()
 	results = requests.get(url)
 	hide_busy_dialog()
 	if results.status_code != 200: return ok_dialog(heading=heading_str, text=error_rollback_str)
 	results = [i['name'].split('-')[1].replace('.zip', '') for i in results.json() if 'plugin.video.fenlight' in i['name'] \
-				and not i['name'].split('-')[1].replace('.zip', '') == current_version]
+#				and not i['name'].split('-')[1].replace('.zip', '') == current_version
+	]
 	if not results: return ok_dialog(heading=heading_str, text=no_rollback_str)
 	results.sort(reverse=True)
 	list_items = [{'line1': item, 'icon': downloads_icon} for item in results]

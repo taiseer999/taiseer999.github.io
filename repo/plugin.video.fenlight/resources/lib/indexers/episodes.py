@@ -229,6 +229,19 @@ def build_single_episode(list_type, params={}):
 												'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': title})))
 				else: cm_append(('[B]Mark Watched %s[/B]' % watched_title, run_plugin % build_url({'mode': 'watched_status.mark_episode', 'action': 'mark_as_watched',
 												'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': title})))
+				# Added option to unwatch previous episodes in 'Next' lists
+				if list_type_starts_with('next_'):
+					prev_ep = episode
+					prev_season = season
+					prev_episodes_data = episodes_data
+					if episode > 1:
+						prev_ep = episode - 1
+					elif season > 1:
+						prev_season = season - 1
+						prev_ep = next((i['episode_count'] for i in season_data if i['season_number'] == int(prev_season)), None)
+					cm_append(("[B]Mark Previous Unwatched[/B]", run_plugin % build_url({'mode': 'watched_status.mark_episode', 'action': 'mark_as_unwatched',
+												'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': prev_season, 'episode': prev_ep,  'title': title})))
+				# End Addition
 				if progress:
 					cm_append(('[B]Clear Progress[/B]', run_plugin % build_url({'mode': 'watched_status.erase_bookmark', 'media_type': 'episode', 'tmdb_id': tmdb_id,
 												'season': season, 'episode': episode, 'refresh': 'true'})))

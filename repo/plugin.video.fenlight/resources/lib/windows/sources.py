@@ -213,7 +213,7 @@ class SourcesResults(BaseDialog):
 		if self.window_id == 2000: self.set_image(200, self.poster)
 
 	def context_menu(self, item):
-		down_file_params, down_pack_params, browse_pack_params, add_magnet_to_cloud_params = None, None, None, None
+		pack_or_file, download_id, delete_params, down_file_params, down_pack_params, browse_pack_params, add_magnet_to_cloud_params = None, None, None, None, None, None, None
 		item_get = item.get
 		item_id, name, magnet_url, info_hash = item_get('id', None), item_get('name'), item_get('url', 'None'), item_get('hash', 'None')
 		provider_source, scrape_provider, cache_provider = item_get('source'), item_get('scrape_provider'), item_get('cache_provider', 'None')
@@ -221,6 +221,18 @@ class SourcesResults(BaseDialog):
 		source, meta_json = json.dumps(item), json.dumps(self.meta)
 		choices = []
 		choices_append = choices.append
+		# === CHANGE: Check if the item is part of a pack ===
+		delete_id = item_get('delete_id', None)  # Retrieve pack info from the item dictionary
+		download_id = item_get('dl_id', None)
+		if provider_source == 'rd_cloud':
+			if delete_id:
+				delete_params = {'mode': 'real_debrid.delete', 'id': delete_id, 'cache_type': 'torrent'}
+				pack_or_file = 'Pack'
+			if download_id:
+				delete_params = {'mode': 'real_debrid.delete', 'id': download_id, 'cache_type': 'download'}
+				pack_or_file = 'File'
+		if delete_params: choices_append((f"Delete {pack_or_file}",delete_params))
+		# === END CHANGE ===
 		if not uncached and scrape_provider != 'folders':
 			down_file_params = {'mode': 'downloader.runner', 'action': 'meta.single', 'name': self.meta.get('rootname', ''), 'source': source,
 								'url': None, 'provider': scrape_provider, 'meta': meta_json}

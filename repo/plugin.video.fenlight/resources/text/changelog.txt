@@ -1,4 +1,11 @@
-[COLOR darkgoldenrod]GOD BLESS HIM AND KEEP HIM SAFE.[/COLOR]
+[COLOR dodgerblue][B]Online Release Version 2.0.09[/B][/COLOR]
+- Added option to unmark previous episode as watched in Next Episodes list
+- Re-enabled 'Rollback to Previous Version' option
+
+[COLOR dodgerblue][B]Version 2.0.08[/B][/COLOR]
+- Added ability to delete RD Cloud files from results window
+
+[COLOR darkgoldenrod]Changes below are from Tikipeter's original FenLight[/COLOR]
 
 [COLOR dodgerblue][B]Version 2.0.07[/B][/COLOR]
 - Added support for Season and Episode items included in Trakt list contents (My Lists, Liked Lists).
