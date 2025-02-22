@@ -14,7 +14,7 @@
 				<!-- <include content="PVRInfoPanel">
 					<param name="top" value="15"/>
 				</include> -->
-				<control type="label">
+				<!-- <control type="label">
 					<top>60</top>
 					<height>60</height>
 					<label>$VAR[ClockCrumbs]$VAR[BreadcrumbsPVRChannelsVar]</label>
@@ -24,14 +24,14 @@
 					<aligny>center</aligny>
 					<wrapmultiline>true</wrapmultiline>
 					<font>font32</font>
-				</control>
+				</control> -->
 				<control type="fixedlist" id="50">
-					<left>80</left>
-					<right>50</right>
+					<left>-25</left>
+					<right>0</right>
 					<align>center</align>
-					<top>130</top>
+					<top>100</top>
 					<!-- <right>918</right> -->
-					<bottom>70</bottom>
+					<bottom>0</bottom>
 					<onleft>9000</onleft>
 					<onright>73</onright>
 					<onup>50</onup>
@@ -118,7 +118,7 @@
 							<top>0</top>
 							<right>0</right>
 							<height>70</height>
-							<texture colordiffuse="button_focus">masks/focus.png</texture>
+							<texture colordiffuse="button_focus">colors/white.png</texture>
 							<visible>Control.HasFocus(51)</visible>
 						</control>
 						<control type="progress">

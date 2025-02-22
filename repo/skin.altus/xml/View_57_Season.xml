@@ -7,38 +7,30 @@
 			<control type="group">
 				<visible>!String.IsEmpty(ListItem.Art(fanart)) | !String.IsEmpty(ListItem.Art(landscape))</visible>
 				<control type="image">
-					<left>14</left>
-					<top>5</top>
-					<width>594</width>
-					<height>339</height>
-					<texture border="20" colordiffuse="$VAR[FocusColorTheme]" infill="false">masks/flixscape.png</texture>
-					<visible>$PARAM[focused] + Control.HasFocus(5057)</visible>
-					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
-				</control>
-				<control type="image">
 					<left>20</left>
 					<top>11</top>
 					<width>582</width>
 					<height>327</height>
-					<texture diffuse="masks/flixscape.png" background="true">$VAR[LandscapeTextureVar]</texture>
-					<bordersize>1</bordersize>
-					<aspectratio scalediffuse="false">scale</aspectratio>
-					<bordertexture colordiffuse="$VAR[BorderColorVar]" border="20" infill="false">masks/flixscape-border.png</bordertexture>
+					<texture colordiffuse="artwork_dim" background="true">$VAR[LandscapeTextureVar]</texture>
+					<!-- <bordersize>1</bordersize> -->
+					<!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
+					<bordertexture colordiffuse="$VAR[BorderColorVar]" infill="false">masks/bordertexture.png</bordertexture>
 				</control>
         <control type="image">
-					<left>21</left>
-					<top>217</top>
-					<width>580</width>
-					<height>120</height>
-					<texture colordiffuse="E6FFFFFF">overlays/overlayfade-fs-ep.png</texture>
+					<left>20</left>
+					<top>212</top>
+					<width>582</width>
+					<height>126</height>
+					<texture colordiffuse="overlay_fade_color">overlays/overlay_bg_long.png</texture>
 				</control>
         <control type="group">
-          <left>40</left>
-          <top>285</top>
+          <left>46</left>
+          <top>279</top>
           <control type="label">
 						<width>542</width>
             <label>$INFO[Container($PARAM[list_id]).ListItem.Season]$INFO[Container($PARAM[list_id]).ListItem.Episode,x,]$INFO[Container($PARAM[list_id]).ListItem.Title, | ]</label>
             <font>font25_title</font>
+            <textcolor>FFFFFFFF</textcolor>
             <shadowcolor>text_shadow</shadowcolor>
             <align>left</align>
             <scroll>$PARAM[focused] + Control.IsVisible(57)</scroll>
@@ -55,17 +47,18 @@
             <scrollspeed>100</scrollspeed>
           </control> -->
         </control>
-				<!-- <control type="label">
-					<left>306</left>
-					<top>297</top>
+				<control type="label">
+					<left>305</left>
+					<top>291</top>
 					<width>280</width>
 					<label>$INFO[ListItem.Property(WatchedProgress)]% watched</label>
 					<font>font18_title</font>
+          <textcolor>FFFFFFFF</textcolor>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
 					<visible>[$PARAM[focused] + Control.IsVisible(5057)] + !Integer.IsEqual(Container(5057).ListItem.Property(WatchedProgress),0)</visible>
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
-				</control> -->
+				</control>
 			</control>
       <!-- <control type="group">
         <left>650</left>
@@ -111,47 +104,51 @@
         <orientation>vertical</orientation>
         <align>left</align>
         <control type="textbox">
-          <align>left</align>
-          <label>$VAR[SeasonInfoPanelTop_Alt][CR][COLOR unfocused_text]$VAR[RI_Plot][/COLOR]</label>
-          <font>font27</font>
-          <textcolor>$VAR[FocusColorTheme]</textcolor>
-          <aligny>center</aligny>
-          <visible>[$PARAM[focused] + Control.HasFocus(5057)] + ![Container(5057).OnNext | Container(5057).OnPrevious]</visible>
-          <autoscroll delay="12000" time="6000" repeat="12000">true</autoscroll>
-        </control>
-        <control type="textbox">
-          <align>left</align>
-          <label>$VAR[SeasonInfoPanelTop_Alt][CR][COLOR unfocused_text]$VAR[RI_Plot][/COLOR]</label>
-          <font>font27</font>
-          <textcolor>$VAR[FocusColorTheme]</textcolor>
-          <aligny>center</aligny>
-          <visible>[[!$PARAM[focused] + Control.HasFocus(5057)] | Control.HasFocus(5157)] | [Container(5057).OnNext | Container(5057).OnPrevious]</visible>
-        </control>
-        <control type="textbox">
-          <right>380</right>
+          <right>350</right>
           <align>left</align>
           <label>$VAR[SeasonInfoPanelTop][CR][COLOR unfocused_text]$VAR[RI_Plot][/COLOR]</label>
           <font>font27</font>
           <textcolor>$VAR[FocusColorTheme]</textcolor>
           <aligny>center</aligny>
-          <visible>Control.HasFocus(57) | $EXP[sidebar_visible]</visible>
+          <autoscroll delay="6000" time="1500" repeat="8000">$PARAM[focused]</autoscroll>
+          <visible>[Window.IsVisible(10106) + ![Container(5057).OnNext | Container(5057).OnPrevious]] | [[$PARAM[focused] + Control.HasFocus(5057)] + ![Container(5057).OnNext | Container(5057).OnPrevious]]</visible>
+        </control>
+        <control type="textbox">
+          <right>350</right>
+          <align>left</align>
+          <label>$VAR[SeasonInfoPanelTop][CR][COLOR unfocused_text]$VAR[RI_Plot][/COLOR]</label>
+          <font>font27</font>
+          <textcolor>$VAR[FocusColorTheme]</textcolor>
+          <aligny>center</aligny>
+          <visible>[Window.IsVisible(10106) + [Container(5057).OnNext | Container(5057).OnPrevious]] | [[[!$PARAM[focused] + Control.HasFocus(5057)] | Control.HasFocus(5157) | Control.HasFocus(57) | $EXP[sidebar_visible]] | [Container(5057).OnNext | Container(5057).OnPrevious]]</visible>
         </control>
       </control>
       
 			<control type="image">
-				<left>560</left>
-				<top>295</top>
+				<left>554</left>
+				<top>289</top>
 				<width>23</width>
 				<height>23</height>
-				<texture>$VAR[WallWatchedIconVar]</texture>
+				<texture colordiffuse="FFFFFFFF">$VAR[WallWatchedIconVar]</texture>
+        <visible>$PARAM[focused] + Control.HasFocus(5057)</visible>
 			</control>
-			<include content="ProgressBar">
-				<param name="left" value="40"/>
-				<param name="top" value="350"/>
-				<param name="width" value="545"/>
-				<param name="visible1" value="![$PARAM[focused] + Control.HasFocus($PARAM[list_id])]"/>
-				<param name="visible2" value="![$PARAM[focused] + Control.IsVisible(57)]"/>
-			</include>
+      <control type="group">
+        <visible>![$PARAM[focused] + Control.HasFocus(5057)]</visible>
+        <include content="ProgressBar">
+          <param name="left" value="20"/>
+          <param name="top" value="332"/>
+          <param name="width" value="582"/>
+        </include>
+      </control>
+      <control type="image">
+        <left>20</left>
+        <top>11</top>
+        <width>582</width>
+        <height>327</height>
+        <texture border="6" colordiffuse="$VAR[FocusColorTheme]" infill="false">colors/white.png</texture>
+        <visible>$PARAM[focused] + Control.HasFocus(5057)</visible>
+        <!-- <include condition="$PARAM[focused]">Animation_FocusTextureFade</include> -->
+      </control>
 		</definition>
 	</include>
 
@@ -159,14 +156,19 @@
     <control type="group">
       <include>MediaMenuAnimations</include>
       <include>OpenClose_Right</include>
-      <left>12</left>
+      <left>0</left>
       <visible>Control.IsVisible(57)</visible>
       <include>Visible_Right</include>
       <!-- Season Control List -->
+      <include content="MenuContentPanel">
+        <param name="width" value="380"/>
+        <param name="dividerleft" value="355"/>
+        <param name="bg_left" value="-25"/>
+      </include>
       <control type="fixedlist" id="57">
         <top>113</top>
-        <left>50</left>
-        <width>305</width>
+        <left>-25</left>
+        <width>380</width>
         <height>854</height>
         <onleft>9000</onleft>
         <onright>5057</onright>
@@ -180,14 +182,14 @@
         <visible>
           [Container.Content(seasons) + [String.IsEqual(Skin.String(Skin.ForcedView.seasons),$LOCALIZE[311024]) | String.IsEmpty(Skin.String(Skin.ForcedView.seasons))]]
         </visible>
-        <animation condition="!Control.HasFocus(57) + !$EXP[sidebar_visible]" reversible="true">
+        <!-- <animation condition="!Control.HasFocus(57) + !$EXP[sidebar_visible]" reversible="true">
           <effect type="slide" start="0,0" end="-370,0" time="500" tween="cubic" easing="inout" />
-        </animation>
+        </animation> -->
         <scrolltime tween="cubic" easing="out">500</scrolltime>
         <itemlayout height="75" condition="Container.Content(seasons)">
           <control type="group">
             <control type="image">
-              <left>25</left>
+              <left>65</left>
               <top>24</top>
               <width>27</width>
               <height>27</height>
@@ -195,8 +197,8 @@
               <animation effect="fade" start="30" end="100" time="300" reversible="false">Focus</animation>
             </control>
             <control type="label">
-              <left>50</left>
-              <right>10</right>
+              <left>72</left>
+              <right>-2</right>
               <top>5</top>
               <aligny>center</aligny>
               <font>font37</font>
@@ -211,11 +213,11 @@
           <control type="group">
             <!-- <animation effect="fade" start="100" end="0" time="0">UnFocus</animation> -->
             <control type="image">
-              <texture colordiffuse="$VAR[FocusColorTheme]">focus/season.png</texture>
+              <texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
               <animation effect="fade" start="100" end="60" time="40" condition="Control.HasFocus(5057) | Control.HasFocus(5157) | $EXP[sidebar_visible]">Conditional</animation>
             </control>
             <control type="image">
-							<left>25</left>
+							<left>65</left>
 							<top>39</top>
 							<width>27</width>
 							<height>27</height>
@@ -223,8 +225,8 @@
 							<animation effect="fade" start="30" end="100" time="300" reversible="false">Focus</animation>
 						</control>
             <control type="label">
-              <left>50</left>
-              <right>10</right>
+              <left>71</left>
+              <right>-2</right>
               <top>-32</top>
               <aligny>center</aligny>
               <font>font37</font>
@@ -237,8 +239,8 @@
               <scroll>$PARAM[focused]</scroll>
             </control>
             <control type="label">
-              <left>50</left>
-              <right>10</right>
+              <left>62</left>
+              <right>-2</right>
               <top>42</top>
               <aligny>center</aligny>
               <font>font27</font>
@@ -258,7 +260,7 @@
         <top>227</top>
         <!-- <top>0</top> -->
         <width>1800</width>
-        <left>380</left>
+        <left>400</left>
         <height>100%</height>
         <onleft>SetFocus(5057,0,absolute),57</onleft>
         <onleft>57</onleft>
@@ -273,13 +275,15 @@
         <preloaditems>2</preloaditems>
         <pagecontrol>5157</pagecontrol>
         <orientation>vertical</orientation>
-        <animation condition="!Control.HasFocus(57) + !$EXP[sidebar_visible]" reversible="true">
+        <!-- <animation condition="!Control.HasFocus(57) + !$EXP[sidebar_visible]" reversible="true">
           <effect type="slide" start="0,0" end="-360,0" time="500" tween="cubic" easing="inout" />
-        </animation>
-        <scrolltime tween="cubic" easing="out">700</scrolltime>
+        </animation> -->
+        <scrolltime tween="cubic" easing="inout">500</scrolltime>
         <itemlayout height="365" condition="Container.Content(episodes)">
           <control type="group">
-            <animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.57Dim)">Conditional</animation>
+            <include content="ViewUnfocusedAnimations">
+							<param name="id" value="57"/>
+						</include>
             <left>20</left>
             <!-- <top>227</top> -->
             <include>SeasonLayout</include>
@@ -287,7 +291,12 @@
         </itemlayout>
         <focusedlayout height="365" condition="Container.Content(episodes)" infoupdate="30">
           <control type="group">
-          <animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.57Dim) + [Control.HasFocus(57) | $EXP[sidebar_visible] | Control.HasFocus(5157)]">Conditional</animation>
+            <animation condition="Skin.HasSetting(Enable.57Dim) + String.IsEqual(Skin.String(BackgroundSetting),1) + [Control.HasFocus(57) | $EXP[sidebar_visible] | Control.HasFocus(5157)]" reversible="true">
+              <effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="0" />
+            </animation>
+            <animation condition="Skin.HasSetting(Enable.57Dim) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)] + [Control.HasFocus(57) | $EXP[sidebar_visible] | Control.HasFocus(5157)]" reversible="true">
+              <effect type="fade" start="100" end="50" time="0" tween="sine" easing="inout" />
+            </animation>
             <depth>DepthContentPopout</depth>
             <left>20</left>
             <!-- <top>227</top> -->
@@ -299,13 +308,13 @@
         <content>$INFO[Container(57).ListItem.FolderPath]</content>
       </control>
       <control type="group">
-        <animation condition="!Control.HasFocus(57) + !$EXP[sidebar_visible]" reversible="true">
+        <!-- <animation condition="!Control.HasFocus(57) + !$EXP[sidebar_visible]" reversible="true">
           <effect type="slide" start="0,0" end="-360,0" time="500" tween="cubic" easing="inout" />
-        </animation>
+        </animation> -->
         <control type="image">
           <top>50</top>
           <!-- <left>770</left> -->
-          <left>415</left>
+          <left>434</left>
           <width>700</width>
           <height>150</height>
           <fadetime>200</fadetime>
@@ -317,7 +326,7 @@
         </control>
         <control type="label">
           <top>90</top>
-          <left>415</left>
+          <left>431</left>
           <width>700</width>
           <height>150</height>
           <align>left</align>
@@ -370,7 +379,7 @@
       <control type="image">
         <bottom>0</bottom>
         <left>-530</left>
-        <width>2450</width>
+        <width>2500</width>
         <height>115</height>
         <texture flipy="true">frame/InfoBar.png</texture>
         <visible>!Skin.HasSetting(Enable.57Dim)</visible>

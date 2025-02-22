@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<defaultcontrol always="true">3</defaultcontrol>
-	<include>Animation_DialogPopupOpenClose</include>
+	<include>OpenClose_Right</include>
 	<depth>DepthOSD</depth>
 	<controls>
 		<include condition="![Window.IsActive(gamesaves) | Window.IsActive(gamestretchmode) | Window.IsActive(gamevideofilter) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]">DefaultDialogSelectLayout</include>

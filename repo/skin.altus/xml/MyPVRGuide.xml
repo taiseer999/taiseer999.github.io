@@ -16,7 +16,7 @@
 				<include content="PVRInfoPanel">
 					<param name="top" value="825"/>
 				</include>
-				<control type="label">
+				<!-- <control type="label">
 					<top>60</top>
 					<height>60</height>
 					<label>$VAR[ClockCrumbs]$VAR[BreadcrumbsPVRGuideVar]</label>
@@ -26,8 +26,8 @@
 					<aligny>center</aligny>
 					<wrapmultiline>true</wrapmultiline>
 					<font>font32</font>
-					<!-- <visible>![Window.IsVisible(Home) | Window.IsVisible(10702)]</visible> -->
-				</control>
+					<visible>![Window.IsVisible(Home) | Window.IsVisible(10702)]</visible>
+				</control> -->
 				<control type="group">
 					<height>1055</height>
 					<!-- 140 -->
@@ -234,10 +234,10 @@
 				</control> -->
 			</control>
 			<include>PVRChannelNumberInput</include>
-			<!-- <include content="TopBar">
+			<include content="TopBar">
 				<param name="breadcrumbs_label" value="$VAR[BreadcrumbsPVRGuideVar]" />
 				<param name="sublabel" value="" />
-			</include> -->
+			</include>
 			<!-- <include content="BottomBar">
 				<param name="info_visible" value="true" />
 			</include> -->

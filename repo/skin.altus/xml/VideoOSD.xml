@@ -53,7 +53,7 @@
             <height>62</height>
             <label></label>
             <font></font>
-            <texturefocus colordiffuse="button_focus">osd/fullscreen/buttons/button-fo.png</texturefocus>
+            <texturefocus colordiffuse="$VAR[PlayerProgressColor]">osd/fullscreen/buttons/button-fo.png</texturefocus>
             <texturenofocus />
             <onleft>702</onleft>
             <onright>704</onright>
@@ -77,7 +77,7 @@
             <height>40</height>
             <animation center="32,31" effect="zoom" end="100" reversible="false" start="90" time="480" tween="back" condition="Control.HasFocus(7031)">Conditional</animation>
             <visible>Control.HasFocus(7031)</visible>
-            <texture colordiffuse="focused_text">$VAR[PlayerControlsPlayImageVar]</texture>
+            <texture colordiffuse="$VAR[PlayerProgressTextColor]">$VAR[PlayerControlsPlayImageVar]</texture>
           </control>
         </control>
         <control type="radiobutton" id="704">

@@ -16,7 +16,6 @@
 		<font>font13</font>
 		<textcolor>white</textcolor>
 		<disabledcolor>disabled</disabledcolor>
-		<selectedcolor>selected</selectedcolor>
 		<scroll>false</scroll>
 		<scrollspeed>40</scrollspeed>
 	</default>
@@ -54,9 +53,8 @@
 		<font>font13</font>
 	</default>
 	<default type="progress">
-		<!-- <texturebg colordiffuse="$VAR[FocusColorTheme]" border="3">progress/bars/progressback_pvr.png</texturebg> -->
-		<texturebg/>
-		<midtexture colordiffuse="$VAR[FocusColorTheme]" border="3">progress/bars/progress_pvr.png</midtexture>
+		<texturebg colordiffuse="$VAR[FocusColorTheme]">colors/greyer.png</texturebg>
+		<midtexture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</midtexture>
 		<lefttexture></lefttexture>
 		<righttexture></righttexture>
 		<overlaytexture></overlaytexture>

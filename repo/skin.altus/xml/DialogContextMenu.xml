@@ -4,7 +4,7 @@
 	<include>Animation_DialogPopupOpenClose</include>
 	<onload condition="!String.IsEmpty(Window(Home).Property(CurrentDBType)) + !String.IsEqual(Window(Home).Property(CurrentDBType),season) + !String.IsEqual(Window(Home).Property(CurrentDBType),episode)">SetFocus(8001)</onload>
 	<coordinates>
-		<origin x="712" y="155"/>
+		<origin x="712" y="50"/>
 	</coordinates>
 	<controls>
 		<include>ContextFade</include>
@@ -12,7 +12,7 @@
 			<include content="CenterContext">
 				<param name="id" value="996" />
 			</include>
-			<control type="label">
+			<!-- <control type="label">
 				<top>-70</top>
 				<left>-225</left>
 				<width>896</width>
@@ -21,7 +21,7 @@
 				<textcolor>$VAR[FocusColorTheme]</textcolor>
 				<align>center</align>
 				<label>$VAR[ContextMenuTitleVar]</label>
-			</control>
+			</control> -->
 			<control type="button">
 				<left>-1920</left>
 				<top>-1080</top>
@@ -31,24 +31,34 @@
 				<texturenofocus />
 				<onclick>Action(close)</onclick>
 			</control>
+			<control type="image" id="999">
+				<description>background image</description>
+				<left>0</left>
+				<top>0</top>
+				<width>446</width>
+				<height>910</height>
+				<!-- <bordersize>1</bordersize> -->
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/commons.png</texture>
+				<!-- <bordertexture colordiffuse="$VAR[FocusColorTheme]" >masks/bordertexture.png</bordertexture> -->
+			</control>
 			<control type="grouplist" id="996">
 				<description>grouplist for context buttons</description>
 				<left>0</left>
 				<top>0</top>
 				<width>446</width>
-				<height max="780">auto</height>
+				<height max="910">auto</height>
 				<usecontrolcoords>true</usecontrolcoords>
 				<control type="button" id="8001">
-					<height>70</height>
+					<height>65</height>
 					<align>center</align>
 					<textoffsetx>20</textoffsetx>
-					<textoffsety>12</textoffsety>
-					<label>[B]Play Trailer[/B]</label>
+					<textoffsety>9</textoffsety>
+					<label>[B]Play Trailer (Altus)[/B]</label>
 					<font>font32</font>
 					<textcolor>unfocused_text</textcolor>
 					<!-- <textcolor>$VAR[FocusColorTheme]</textcolor> -->
 					<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
-					<texturefocus colordiffuse="$VAR[FocusColorTheme]">focus/contextmenu.png</texturefocus>
+					<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
 					<texturenofocus />
 					<onclick>RunScript(script.altus.helper, mode=play_trailer)</onclick>
 					<visible>!String.IsEmpty(Window(Home).Property(CurrentDBType)) + !String.IsEqual(Window(Home).Property(CurrentDBType),season) + !String.IsEqual(Window(Home).Property(CurrentDBType),episode)</visible>
@@ -57,22 +67,22 @@
 			<include content="UpDownArrows">
 				<param name="container_id" value="996" />
 				<param name="posx" value="199" />
-				<param name="up_posy" value="-130" />
-				<param name="down_posy" value="790" />
+				<param name="up_posy" value="-185" />
+				<param name="down_posy" value="920" />
 			</include>
 			<control type="button" id="1000">
 				<description>button template</description>
 				<left>0</left>
 				<top></top>
 				<width>446</width>
-				<height>70</height>
+				<height>65</height>
 				<align>center</align>
 				<aligny>left</aligny>
-				<textoffsety>12</textoffsety>
+				<textoffsety>9</textoffsety>
 				<font>font32</font>
 				<textcolor>unfocused_text</textcolor>
 				<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
-				<texturefocus colordiffuse="$VAR[FocusColorTheme]">focus/contextmenu.png</texturefocus>
+				<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
 				<texturenofocus />
 			</control>
 		</control>

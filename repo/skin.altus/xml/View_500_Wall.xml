@@ -4,7 +4,7 @@
 		<control type="group">
 			<include>MediaMenuAnimations</include>
 			<!-- <include>OpenClose_Right</include> -->
-			<left>17</left>
+			<left>-10</left>
       <height>100%</height>
 			<visible>Control.IsVisible(500)</visible>
 			<!-- <include>Visible_Right</include> -->
@@ -13,7 +13,6 @@
 				<effect type="slide" start="0,937" end="0,0" time="500" tween="cubic" easing="out" />
 			</animation>
 			<control type="panel" id="500">
-				<animation effect="slide" end="18,0" time="0" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0)">Conditional</animation>
 				<onleft>531</onleft>
 				<onright>531</onright>
 				<onup>500</onup>
@@ -47,78 +46,88 @@
 				</visible>
 
 				<!-- DEFAULT -->
-				<itemlayout width="230" height="333" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<!-- W:249 H:375 -->
+				<itemlayout width="275" height="401" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
-						<top>45</top>
-						<include>SmallPosterLayout</include>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="500"/>
+						</include>
+						<top>39</top>
+						<include>PosterLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="230" height="333" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="275" height="401" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<top>45</top>
-						<include content="SmallPosterLayout">
+						<top>39</top>
+						<include content="PosterLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>PosterWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
-				<itemlayout width="230" height="380" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<itemlayout  width="275" height="440" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
-						<top>45</top>
-						<include>SmallPosterLayout</include>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="500"/>
+						</include>
+						<top>39</top>
+						<include>PosterLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="230" height="380" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout  width="275" height="440" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),0) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<top>45</top>
-						<include content="SmallPosterLayout">
+						<top>39</top>
+						<include content="PosterLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>PosterWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
 
-				<!-- LARGE -->
-				<itemlayout height="387" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<!-- SMALL LAYOUT -->
+				<!-- W: 204 H: 306 -->
+				<itemlayout width="237" height="339"  condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
-						<top>45</top>
-						<include>PosterLayout</include>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="500"/>
+						</include>
+						<top>39</top>
+						<left>18</left>
+						<include>SmallPosterLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout height="387" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="237" height="339"  condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + !Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<top>45</top>
-						<include content="PosterLayout">
+						<top>39</top>
+						<left>18</left>
+						<include content="SmallPosterLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>PosterWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
-				<itemlayout height="437" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<itemlayout width="237" height="375"  condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.500Dim)">Conditional</animation>
-						<top>45</top>
-						<include>PosterLayout</include>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="500"/>
+						</include>
+						<top>39</top>
+						<left>18</left>
+						<include>SmallPosterLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout height="437" width="268" condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="237" height="375"  condition="String.IsEqual(Skin.String(ArtworkSize500Setting),1) + Skin.HasSetting(Enable.500Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<top>45</top>
-						<include content="PosterLayout">
+						<top>39</top>
+						<left>18</left>
+						<include content="SmallPosterLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>PosterWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
 				<!-- <itemlayout height="301" width="300" condition="Container.Content(episodes) | Container.Content(videos) | [Container.Content(musicvideos) + !Skin.HasSetting(show_musicvideoposter)]">
@@ -195,7 +204,8 @@
 				</focusedlayout> -->
 			</control>
 			<include content="TopBottomBars">
-				<param name="visible" value="!Skin.HasSetting(Enable.500Dim)"/>
+				<param name="top_visible" value="!Skin.HasSetting(Enable.500Dim)"/>
+				<param name="bottom_visible" value="!Skin.HasSetting(Enable.500Dim)"/>
 			</include>
 		</control>
 	</include>

@@ -72,7 +72,7 @@
 						<right>30</right>
 						<width>300</width>
 						<height>300</height>
-						<texture diffuse="masks/addons.png" colordiffuse="button_focus">masks/addons.png</texture>
+						<texture colordiffuse="button_focus">colors/white.png</texture>
 						<visible>Control.HasFocus(52)</visible>
 					</control>
 					<control type="image">
@@ -80,8 +80,8 @@
 						<top>20</top>
 						<height>200</height>
 						<width>200</width>
-						<texture diffuse="icons/profiles/profile-diffuse.png">$INFO[ListItem.Icon]</texture>
-						<aspectratio scalediffuse="false">scale</aspectratio>
+						<texture>$INFO[ListItem.Icon]</texture>
+						<!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
 					</control>
 					<control type="textbox">
 						<left>60</left>
@@ -120,7 +120,7 @@
 				<onright>52</onright>
 				<onup>52</onup>
 				<ondown>52</ondown>
-				<texturefocus border="40" colordiffuse="button_focus">masks/focus.png</texturefocus>
+				<texturefocus border="40" colordiffuse="button_focus">colors/white.png</texturefocus>
 				<texturenofocus/>
 			</control>
 		</control>

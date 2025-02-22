@@ -13,21 +13,21 @@
 				<control type="group">
 					<visible>!VideoPlayer.HasEPG</visible>
 					<control type="progress">
-						<texturebg colordiffuse="33a0a0a0" border="5">progress/bars/progress_sysinfo.png</texturebg>
-						<midtexture colordiffuse="player_cache" border="5">progress/bars/progress_sysinfo.png</midtexture>
+						<texturebg colordiffuse="33a0a0a0">colors/white.png</texturebg>
+						<midtexture colordiffuse="$VAR[PlayerCacheColor]">colors/white.png</midtexture>
 						<info>Player.ProgressCache</info>
 					</control>
 					<control type="progress">
-						<texturebg colordiffuse="00FFFFFF" border="5">progress/bars/progress_sysinfo.png</texturebg>
-						<midtexture colordiffuse="accent_color" border="5">progress/bars/progress_sysinfo.png</midtexture>
+						<texturebg colordiffuse="00FFFFFF">colors/white.png</texturebg>
+						<midtexture colordiffuse="$VAR[PlayerProgressColor]">colors/white.png</midtexture>
 						<info>Player.Progress</info>
 					</control>
 				</control>
 				<control type="group">
 					<visible>VideoPlayer.HasEPG</visible>
 					<control type="progress">
-						<texturebg colordiffuse="33a0a0a0" border="5">progress/bars/progress_sysinfo.png</texturebg>
-						<midtexture colordiffuse="accent_color" border="5">progress/bars/progress_sysinfo.png</midtexture>
+						<texturebg colordiffuse="33a0a0a0">colors/white.png</texturebg>
+						<midtexture colordiffuse="$VAR[PlayerProgressColor]">colors/white.png</midtexture>
 						<info>PVR.TimeshiftProgressPlayPos</info>
 						<info2>PVR.TimeshiftProgressEpgStart</info2>
 					</control>
@@ -103,9 +103,9 @@
 				<top>-75</top>
 				<width>363</width>
 				<height>96</height>
-				<texture>$INFO[Player.Icon]</texture>
+				<texture>$INFO[Window(Home).Property(listitem_clearlogo_cropped_video)]</texture>
 				<aspectratio align="left" aligny="bottom">keep</aspectratio>
-				<visible>VideoPlayer.Content(livetv) + !Skin.HasSetting(Disable.OSDClearlogo)</visible>
+				<visible>VideoPlayer.Content(livetv) + !Skin.HasSetting(Disable.OSDClearlogo) + !String.IsEmpty(Window(Home).Property(listitem_clearlogo_cropped_video))</visible>
 			</control>
 			<control type="grouplist">
 				<top>40</top>

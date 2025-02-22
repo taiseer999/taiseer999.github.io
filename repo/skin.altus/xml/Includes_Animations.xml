@@ -158,13 +158,6 @@
 			<effect type="zoom" time="1733" start="97" end="100" center="$PARAM[pos_x],$PARAM[pos_y]" tween="cubic" easing="in"/>
 		</animation>
 	</include>
-	
-	<include name="Animation_Widget_Poster_Slide">
-    <animation effect="slide" end="0,-563.5" time="0" tween="cubic" easing="inout" reversible="true" condition="Integer.IsGreater(Container($PARAM[container]).Position,1)">Conditional</animation>
-    <animation effect="slide" end="0,-563.5" time="0" tween="cubic" easing="inout" reversible="true" condition="Integer.IsGreater(Container($PARAM[container]).Position,2)">Conditional</animation>
-    <animation effect="slide" end="0,-563.5" time="0" tween="cubic" easing="inout" reversible="true" condition="Integer.IsGreater(Container($PARAM[container]).Position,3)">Conditional</animation>
-    <animation effect="slide" end="0,-563.5" time="0" tween="cubic" easing="inout" reversible="true" condition="Integer.IsGreater(Container($PARAM[container]).Position,4)">Conditional</animation>
-  </include>
 
 	<include name="CenterList72">
 		<animation effect="slide" start="0,0" end="0,504" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
@@ -196,19 +189,21 @@
 	</include>
 
 	<include name="CenterContext">
-		<animation effect="slide" start="0,0" end="0,310" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,280" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,250" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,220" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,190" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,5)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,160" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,6)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,130" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,7)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,100" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,8)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,70" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,9)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,40" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,10)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,10" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,11)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="0,10" time="0" condition="Integer.IsGreater(Container($PARAM[id]).NumItems,11)">Conditional</animation>
-	</include>
+    <animation effect="slide" start="0,0" end="0,375" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,345" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,315" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,285" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,255" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,5)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,225" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,6)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,195" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,7)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,165" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,8)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,135" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,9)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,105" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,10)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,75" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,11)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,45" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,12)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,15" time="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,13)">Conditional</animation>
+    <animation effect="slide" start="0,0" end="0,15" time="0" condition="Integer.IsGreater(Container($PARAM[id]).NumItems,13)">Conditional</animation>
+</include>
 
 	<include name="ListLandscapeSlideAnimations">
     <animation effect="slide" start="0,0" end="0,67" time="0" condition="Integer.IsEqual(Container($PARAM[list_id]).NumItems,10)">Conditional</animation>
@@ -323,7 +318,7 @@
 
 	<include name="MainMenuAnimations">
 		<animation condition="!ControlGroup(2000).HasFocus + !Control.IsVisible(20000) + !Control.IsVisible(20001)" reversible="true">
-			<effect type="slide" start="0,0" end="450,0" time="500" tween="cubic" easing="inout" />
+			<effect type="slide" start="0,0" end="498,0" time="500" tween="cubic" easing="inout" />
 		</animation>
 	</include>
 
@@ -340,13 +335,13 @@
 
 	<include name="AddonsMenuAnimations">
 		<animation condition="!ControlGroup(400).HasFocus" reversible="true">
-			<effect type="slide" start="0,0" end="500,0" time="500" tween="cubic" easing="inout" />
+			<effect type="slide" start="0,0" end="442,0" time="500" tween="cubic" easing="inout" />
 		</animation>
 	</include>
 
 	<include name="SearchMenuAnimations">
 		<animation condition="!ControlGroup(2000).HasFocus" reversible="true">
-			<effect type="slide" start="0,0" end="531,0" time="500" tween="cubic" easing="inout" />
+			<effect type="slide" start="0,0" end="498,0" time="500" tween="cubic" easing="inout" />
 		</animation>
 	</include>
 
@@ -361,32 +356,33 @@
 		<animation effect="fade" start="0" end="100" time="500"  tween="cubic" easing="inout">WindowOpen</animation>
 	</include>
 
-	<include name="WidgetAutoInfoAnimations">
-		<animation condition="!Skin.HasSetting(Disable.WidgetAutoInfo) + Control.HasFocus($PARAM[list_id]) + !Container($PARAM[list_id]).IsUpdating + !String.IsEmpty(Window.Property(WidgetInfo.Timer.Complete.$PARAM[list_id])) + String.IsEqual(Skin.String(AutoInfoFadeSetting),0)" reversible="false">
-			<!-- <effect type="fade" start="100" end="60" time="300" tween="sine" easing="inout" /> -->
-			<effect type="fadediffuse" start="FFE9E9E9" end="FF4C4C4C" time="300" />
-		</animation>
-		<animation condition="!Skin.HasSetting(Disable.WidgetAutoInfo) + Control.HasFocus($PARAM[list_id]) + !Container($PARAM[list_id]).IsUpdating + !String.IsEmpty(Window.Property(WidgetInfo.Timer.Complete.$PARAM[list_id])) + String.IsEqual(Skin.String(AutoInfoFadeSetting),1)" reversible="false">
-			<!-- <effect type="fade" start="100" end="40" time="300" tween="sine" easing="inout" /> -->
-			<effect type="fadediffuse" start="FFE9E9E9" end="FF3A3A3A" time="300" />
-		</animation>
-		<animation condition="!Skin.HasSetting(Disable.WidgetAutoInfo) + Control.HasFocus($PARAM[list_id]) + !Container($PARAM[list_id]).IsUpdating + !String.IsEmpty(Window.Property(WidgetInfo.Timer.Complete.$PARAM[list_id])) + String.IsEqual(Skin.String(AutoInfoFadeSetting),2)" reversible="false">
-			<effect type="fade" start="100" end="0" time="300" tween="sine" easing="inout" />
-			<!-- <effect type="fadediffuse" start="FFE9E9E9" end="FF161616" time="300" /> -->
-		</animation>
+	<include name="ViewUnfocusedAnimations">
+    <animation condition="Skin.HasSetting(Enable.$PARAM[id]Dim) + String.IsEqual(Skin.String(BackgroundSetting),1)" reversible="true">
+			<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="0" />
+    </animation>
+    <animation condition="Skin.HasSetting(Enable.$PARAM[id]Dim) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)]" reversible="true">
+			<effect type="fade" start="100" end="50" time="0" tween="sine" easing="inout" />
+			<!-- <effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="0" /> -->
+    </animation>
 	</include>
 
 	<include name="WidgetUnfocusedAnimations">
-    <animation condition="!Skin.HasSetting(Disable.WidgetDimming) + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus" reversible="true">
-			<!-- <effect type="fade" start="100" end="80" time="300" tween="sine" easing="inout" /> -->
+    <animation condition="!Skin.HasSetting(Disable.WidgetDimming) + String.IsEqual(Skin.String(BackgroundSetting),1) + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus" reversible="true">
 			<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
+    </animation>
+    <animation condition="!Skin.HasSetting(Disable.WidgetDimming) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)] + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus" reversible="true">
+			<effect type="fade" start="100" end="40" time="300" tween="sine" easing="inout" />
+			<!-- <effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" /> -->
     </animation>
 	</include>
 
 	<include name="StackedWidgetAnimations">
-		<animation condition="!Skin.HasSetting(Disable.WidgetDimming) + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus" reversible="true">
-			<!-- <effect type="fade" start="100" end="80" time="300" tween="sine" easing="inout" /> -->
+		<animation condition="!Skin.HasSetting(Disable.WidgetDimming) + String.IsEqual(Skin.String(BackgroundSetting),1) + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus" reversible="true">
 			<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
+    </animation>
+		<animation condition="!Skin.HasSetting(Disable.WidgetDimming) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)] + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus" reversible="true">
+			<effect type="fade" start="100" end="40" time="300" tween="sine" easing="inout" />
+			<!-- <effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" /> -->
     </animation>
 		<animation condition="Container($PARAM[list_id]).IsUpdating" reversible="true" pulse="true">
 			<effect type="fade" start="100" end="80" time="700" tween="sine" easing="inout" />
@@ -410,8 +406,8 @@
 	</include>
 
 	<include name="SpotlightAnimations_Fade">
-		<animation effect="fade" start="100" end="0" time="500" tween="cubic" easing="in" condition="!Skin.HasSetting(Enable.AlternateSpotlight) + !String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Control.HasFocus($PARAM[list_id])">Conditional</animation>
-		<animation effect="fade" start="0" end="100" time="500" tween="cubic" easing="in" condition="[Skin.HasSetting(Enable.AlternateSpotlight) | String.IsEmpty(Window(Home).Property(SpotlightWidget)) | !Control.HasFocus($PARAM[list_id])]">Conditional</animation>
+		<animation effect="fade" start="100" end="0" time="500" tween="cubic" easing="in" condition="!String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Control.HasFocus($PARAM[list_id])">Conditional</animation>
+		<animation effect="fade" start="0" end="100" time="500" tween="cubic" easing="in" condition="String.IsEmpty(Window(Home).Property(SpotlightWidget)) | !Control.HasFocus($PARAM[list_id])">Conditional</animation>
 	</include>
 
 </includes>

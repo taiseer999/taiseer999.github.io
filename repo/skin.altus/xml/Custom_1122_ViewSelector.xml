@@ -17,8 +17,8 @@
       <!-- Dialog background -->
       <control type="image">
         <bordersize>1</bordersize>
-        <texture diffuse="masks/viewselector_back.png" colordiffuse="FF1A1A1A">colors/commons.png</texture>
-        <bordertexture border="15" colordiffuse="FF131313">masks/viewselector_back_border.png</bordertexture>
+        <texture colordiffuse="FF1A1A1A">colors/commons.png</texture>
+        <bordertexture colordiffuse="FF131313">masks/bordertexture.png</bordertexture>
       </control>
         
       <!-- Dialog header -->
@@ -35,32 +35,29 @@
         
       <!-- View list -->
       <control type="fixedlist" id="3000">
-        <centertop>50%</centertop>
-        <left>35</left>
-        <width>462</width>
+        <centertop>49.6%</centertop>
+        <left>0</left>
+        <width>497</width>
         <height>600</height>
         <focusposition>3</focusposition>
         <movement>4</movement>
         <scrolltime>200</scrolltime>
         <include content="List">
           <param name="id" value="3000" />
-          <param name="list_width" value="340" />
-          <param name="img_width" value="385" />
-          <param name="img_texture" value="focus/addonlaunchermenu.png" />
         </include>
       </control>
       
       <!-- Preview image -->
       <control type="image" id="3001">
-        <centerleft>63%</centerleft>
-        <centertop>50%</centertop>
-        <width>1100</width>
-        <height>618</height>
+        <right>0</right>
+        <centertop>56%</centertop>
+        <width>1250</width>
+        <!-- <height>618</height> -->
         <aspectratio>keep</aspectratio>
         <fadetime>300</fadetime>
         <bordersize>1</bordersize>
-        <texture diffuse="masks/viewselector_img.png">$VAR[ViewSelectorTexture]</texture>
-        <bordertexture background="true" border="15" colordiffuse="FF2E2E2E">masks/viewselector_img_border.png</bordertexture>
+        <texture background="true">$VAR[ViewSelectorTexture]</texture>
+        <!-- <bordertexture colordiffuse="FF2E2E2E">masks/bordertexture.png</bordertexture> -->
       </control>
     </control>
     

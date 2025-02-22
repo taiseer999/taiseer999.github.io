@@ -9,9 +9,9 @@
 			<control type="grouplist" id="5">
 				<description>control area</description>
 				<top>133</top>
-				<left>515</left>
+				<left>470</left>
 				<pagecontrol>60</pagecontrol>
-				<right>45</right>
+				<right>0</right>
 				<bottom>137</bottom>
 				<onleft>3</onleft>
 				<onright>60</onright>
@@ -19,16 +19,16 @@
 				<ondown>5</ondown>
 			</control>
 			<control type="image">
-				<left>515</left>
+				<left>470</left>
 				<top>130</top>
-				<right>45</right>
+				<right>0</right>
 				<height>2</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
 			<control type="image">
-				<left>515</left>
+				<left>470</left>
 				<bottom>135</bottom>
-				<right>45</right>
+				<right>0</right>
 				<height>2</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
@@ -66,7 +66,7 @@
 			<align>center</align>
 			<aligny>center</aligny>
 			<font>font25_title</font>
-			<textcolor>grey</textcolor>
+			<textcolor>unfocused_text</textcolor>
 			<shadowcolor>black</shadowcolor>
 		</control>
 		<control type="colorbutton" id="15">
@@ -76,12 +76,15 @@
 		<control type="group">
 			<depth>DepthContentPanel</depth>
 			<include>OpenClose_Left</include>
-			<!-- <include content="ContentPanel">
-				<param name="width" value="530" />
-			</include> -->
+			<include content="MenuContentPanel">
+				<!-- <param name="top" value="130" /> -->
+				<param name="width" value="470" />
+				<param name="dividerleft" value="470" />
+				<!-- <param name="color" value="4D000000" /> -->
+			</include>
 			<control type="grouplist" id="3">
 				<description>button area</description>
-				<left>10</left>
+				<left>0</left>
 				<top>130</top>
 				<width>470</width>
 				<height>810</height>
@@ -93,14 +96,14 @@
 			</control>
 			<control type="button" id="10">
 				<description>Default Category Button</description>
-				<left>25</left>
+				<left>0</left>
 				<height>85</height>
-				<width>445</width>
+				<width>470</width>
 				<textoffsetx>40</textoffsetx>
 				<aligny>center</aligny>
 				<align>center</align>
 				<font>font37</font>
-				<texturefocus colordiffuse="$VAR[FocusColorTheme]">focus/settingsmenu.png</texturefocus>
+				<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
 				<texturenofocus />
 			</control>
 		</control>
@@ -134,18 +137,17 @@
 			<depth>DepthContentPanel</depth>
 			<include>OpenClose_Left</include>
 			<control type="radiobutton" id="20">
-				<width>445</width>
-				<left>35</left>
+				<width>470</width>
+				<left>0</left>
 				<bottom>70</bottom>
 				<height>90</height>
 				<aligny>center</aligny>
-				<align>center</align>
 				<onclick>SettingsLevelChange</onclick>
-				<textoffsetx>0</textoffsetx>
+				<textoffsetx>100</textoffsetx>
 				<textoffsety>0</textoffsety>
-				<texturefocus colordiffuse="$VAR[FocusColorTheme]">focus/settingsmenu.png</texturefocus>
+				<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
 				<texturenofocus />
-				<radioposx>202.5</radioposx>
+				<radioposx>40</radioposx>
 				<radioposy>0</radioposy>
 				<radiowidth>40</radiowidth>
 				<radioheight>40</radioheight>
@@ -156,10 +158,10 @@
 				<textcolor>unfocused_text</textcolor>
 				<font>font32</font>
 				<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
-				<!-- <textureradioonfocus colordiffuse="$VAR[FocusedTextColorVar]">icons/settings.png</textureradioonfocus>
+				<textureradioonfocus colordiffuse="$VAR[FocusedTextColorVar]">icons/settings.png</textureradioonfocus>
 				<textureradioonnofocus colordiffuse="unfocused_text">icons/settings.png</textureradioonnofocus>
 				<textureradioofffocus colordiffuse="$VAR[FocusedTextColorVar]">icons/settings.png</textureradioofffocus>
-				<textureradiooffnofocus colordiffuse="unfocused_text">icons/settings.png</textureradiooffnofocus> -->
+				<textureradiooffnofocus colordiffuse="unfocused_text">icons/settings.png</textureradiooffnofocus>
 				<textureradioonfocus/>
 				<textureradioonnofocus/>
 				<textureradioofffocus/>
@@ -170,7 +172,7 @@
 			<include>OpenClose_Right</include>
 			<control type="textbox" id="6">
 				<description>description area</description>
-				<left>520</left>
+				<left>510</left>
 				<bottom>27</bottom>
 				<right>60</right>
 				<height>105</height>

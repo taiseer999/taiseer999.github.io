@@ -18,7 +18,7 @@
 				<top>181</top>
 				<width>457</width>
 				<height>60</height>
-				<texture colordiffuse="$VAR[FocusColorTheme]">masks/focus.png</texture>
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 			</control>
 			<control type="label" id="4">
 				<description>Edit Text</description>

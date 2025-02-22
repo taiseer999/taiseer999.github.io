@@ -8,17 +8,6 @@
 			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
 			<control type="group" id="400">
 			<include>AddonsMenuAnimations</include>
-				<control type="label">
-					<top>920</top>
-					<left>80</left>
-					<aligny>center</aligny>
-					<width>1440</width>
-					<font>font27</font>
-					<textcolor>$VAR[FocusColorTheme]</textcolor>
-					<label>[COLOR unfocused_text]$INFO[ListItem.AddonVersion][/COLOR] • [COLOR unfocused_text]$INFO[ListItem.AddonCreator][/COLOR]</label>
-					<visible>ControlGroup(400).HasFocus + !ControlGroup(507).HasFocus + ![String.StartsWith(ListItem.Property(Addon.ID),repository) | ListItem.IsFolder]</visible>
-					<animation effect="fade" time="200" tween="cubic" easing="out">VisibleChange</animation>
-				</control>
 				<include>OpenClose_Right</include>
 				<include content="TieredAddonLauncherList">
 					<param name="group_id" value="501" />
@@ -68,18 +57,30 @@
 					<param name="container_path" value="androidapp://sources/apps/" />
 					<param name="container_target" value="programs" />
 				</include>
+				<control type="label">
+					<top>920</top>
+					<left>80</left>
+					<aligny>center</aligny>
+					<width>1440</width>
+					<font>font27</font>
+					<textcolor>$VAR[FocusColorTheme]</textcolor>
+					<label>[COLOR unfocused_text]$INFO[ListItem.AddonVersion][/COLOR] • [COLOR unfocused_text]$INFO[ListItem.AddonCreator][/COLOR]</label>
+					<visible>ControlGroup(400).HasFocus + !ControlGroup(507).HasFocus + ![String.StartsWith(ListItem.Property(Addon.ID),repository) | ListItem.IsFolder]</visible>
+					<animation effect="fade" time="200" tween="cubic" easing="out">VisibleChange</animation>
+				</control>
 			</control>
 			<control type="group">
 				<include>OpenClose_Left</include>
-				<!-- <include content="MenuContentPanel">
-					<param name="width" value="530" />
-				</include> -->
-				<animation effect="slide" time="500" start="-540,0" end="0,0" tween="cubic" easing="inout">VisibleChange</animation>
+				<include content="MenuContentPanel">
+					<param name="width" value="442" />
+					<param name="dividerleft" value="442"/>
+				</include>
+				<animation effect="slide" time="500" start="-442,0" end="0,0" tween="cubic" easing="inout">VisibleChange</animation>
 				<visible allowhiddenfocus="true">!ControlGroup(400).HasFocus</visible>
 				<control type="fixedlist" id="9000">
-					<left>33</left>
+					<left>0</left>
 					<top>250</top>
-					<width>462</width>
+					<width>442</width>
 					<height>757</height>
 					<pagecontrol>70</pagecontrol>
 					<movement>9</movement>
@@ -90,9 +91,6 @@
 					<scrolltime tween="cubic" easing="out">500</scrolltime>
 					<include content="List">
 						<param name="id" value="9000" />
-						<param name="list_width" value="340" />
-						<param name="img_width" value="385" />
-						<param name="img_texture" value="focus/addonlaunchermenu.png" />
 					</include>
 					<content>
 						<item id="1">
@@ -110,7 +108,7 @@
 							<property name="menu_id">$NUMBER[502]</property>
 						</item>
 						<item id="3">
-							<label>repositories</label>
+							<label>Repositories</label>
 							<onclick>ActivateWindow(addonbrowser,addons://repos/,return)</onclick>
 							<property name="id">Repositories</property>
 							<property name="path">addons://repos/</property>
@@ -148,7 +146,7 @@
 					</content>
 				</control>
 				<control type="group">
-					<left>105</left>
+					<left>52</left>
 					<top>130</top>
 					<width>343</width>
 					<height>140</height>

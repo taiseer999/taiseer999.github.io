@@ -48,14 +48,14 @@
 				<top>182</top>
 				<width>1546</width>
 				<height>104</height>
-				<texture diffuse="masks/focus-long.png" colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 			</control> -->
 			<!-- <control type="image">
 				<centerleft>50%</centerleft>
 				<top>184</top>
 				<width>1542</width>
 				<height>100</height>
-				<texture diffuse="masks/focus-long.png" colordiffuse="dialog_bg2">colors/white.png</texture>
+				<texture colordiffuse="dialog_bg2">colors/white.png</texture>
 			</control> -->
 			<control type="edit" id="312">
 				<centerleft>50%</centerleft>
@@ -599,7 +599,7 @@
 						<left>10</left>
 						<width>380</width>
 						<height>60</height>
-						<texture colordiffuse="$VAR[FocusColorTheme]">focus/suggestions.png</texture>
+						<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 						<include>Animation_FocusTextureFade</include>
 					</control>
 					<control type="label">

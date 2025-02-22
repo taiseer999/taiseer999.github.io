@@ -14,8 +14,8 @@
 	</variable>
 	
 	<variable name="PlayerEndTimeVar">
-		<value condition="!VideoPlayer.Content(livetv)">$INFO[System.Time] [COLOR accent_color][B]»[/B][/COLOR] $INFO[VideoPlayer.FinishTime]</value>
-		<value condition="VideoPlayer.Content(livetv)">$INFO[System.Time] [COLOR accent_color][B]»[/B][/COLOR] $INFO[PVR.EpgEventFinishTime]</value>
+		<value condition="!VideoPlayer.Content(livetv)">$INFO[System.Time] [COLOR $VAR[PlayerProgressColor]][B]»[/B][/COLOR] $INFO[VideoPlayer.FinishTime]</value>
+		<value condition="VideoPlayer.Content(livetv)">$INFO[System.Time] [COLOR $VAR[PlayerProgressColor]][B]»[/B][/COLOR] $INFO[PVR.EpgEventFinishTime]</value>
 	</variable>
 
 	<!-- <variable name="DO_PlayerEndTimeVar">
@@ -24,8 +24,8 @@
 	</variable> -->
 
 	<variable name="SeekLabel">
-		<value condition="!String.IsEmpty(Player.SeekStepSize)">[COLOR accent_color]$LOCALIZE[773][/COLOR] $INFO[Player.SeekStepSize]</value>
-		<value condition="!String.IsEmpty(Player.SeekOffset) + Player.HasPerformedSeek(3)">[COLOR accent_color]$LOCALIZE[773][/COLOR] $INFO[Player.SeekOffset]</value>
+		<value condition="!String.IsEmpty(Player.SeekStepSize)">[COLOR $VAR[PlayerProgressColor]]$LOCALIZE[773][/COLOR] $INFO[Player.SeekStepSize]</value>
+		<value condition="!String.IsEmpty(Player.SeekOffset) + Player.HasPerformedSeek(3)">[COLOR $VAR[PlayerProgressColor]]$LOCALIZE[773][/COLOR] $INFO[Player.SeekOffset]</value>
 		<value condition="Player.Paused">$LOCALIZE[112]</value>
 		<value condition="Player.Forwarding">$LOCALIZE[31039] $VAR[VideoPlayerForwardRewindVar]</value>
 		<value condition="Player.Rewinding">$LOCALIZE[31038] $VAR[VideoPlayerForwardRewindVar]</value>
@@ -58,9 +58,9 @@
 	</variable>
 
 	<variable name="MiniNowPlayingLabelVar">
-		<value condition="VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,] $VAR[Altus_Divider] $INFO[VideoPlayer.Title]</value>
+		<value condition="VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)">$INFO[VideoPlayer.Season]$INFO[VideoPlayer.Episode,x,] $VAR[Altus_Video_Divider] $INFO[VideoPlayer.Title]</value>
 		<value condition="VideoPlayer.Content(livetv) + Skin.HasSetting(Disable.OSDClearlogo)">$INFO[VideoPlayer.ChannelName]</value>
-		<value condition="VideoPlayer.Content(livetv) + !Skin.HasSetting(Disable.OSDClearlogo)">$INFO[VideoPlayer.Title] $VAR[Altus_Divider] $INFO[VideoPlayer.ChannelName]</value>
+		<value condition="VideoPlayer.Content(livetv) + !Skin.HasSetting(Disable.OSDClearlogo)">$INFO[VideoPlayer.Title] $VAR[Altus_Video_Divider] $INFO[VideoPlayer.ChannelName]</value>
 	</variable>
 
 	<variable name="MainNowPlayingLabelVar">

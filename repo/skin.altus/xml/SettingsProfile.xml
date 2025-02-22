@@ -6,19 +6,16 @@
 		<include>DefaultBackground</include>
 		<control type="group" id="9100">
 			<include>OpenClose_Right</include>
-			<left>492</left>
-			<right>20</right>
+			<left>472</left>
 			<control type="image">
 				<top>130</top>
-				<left>-5</left>
-				<right>25</right>
+				<right>0</right>
 				<height>3</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
 			<control type="image">
 				<bottom>134</bottom>
-				<left>-5</left>
-				<right>25</right>
+				<right>0</right>
 				<height>3</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
@@ -38,7 +35,7 @@
 						<top>5</top>
 						<width>320</width>
 						<height>380</height>
-						<texture colordiffuse="dialog_bg">masks/addons.png</texture>
+						<texture colordiffuse="dialog_bg">colors/white.png</texture>
 						<!-- <bordertexture border="21" infill="false">overlays/shadow.png</bordertexture> -->
 						<bordersize>20</bordersize>
 					</control>
@@ -48,7 +45,7 @@
 						<width>215</width>
 						<height>215</height>
 						<!-- <aspectratio>scale</aspectratio> -->
-						<texture diffuse="masks/addons.png" fallback="DefaultUser.png">$INFO[Listitem.Icon]</texture>
+						<texture fallback="DefaultUser.png">$INFO[Listitem.Icon]</texture>
 					</control>
 					<control type="label">
 						<left>10</left>
@@ -91,7 +88,7 @@
 							<top>5</top>
 							<width>320</width>
 							<height>380</height>
-							<texture colordiffuse="dialog_bg">masks/addons.png</texture>
+							<texture colordiffuse="dialog_bg">colors/white.png</texture>
 							<!-- <bordertexture border="21" infill="false">overlays/shadow.png</bordertexture> -->
 							<bordersize>20</bordersize>
 						</control>
@@ -99,7 +96,7 @@
 							<top>5</top>
 							<width>320</width>
 							<height>380</height>
-							<texture colordiffuse="$VAR[FocusColorTheme]">masks/addons.png</texture>
+							<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 							<bordersize>20</bordersize>
 							<include>Animation_FocusTextureFade</include>
 						</control>
@@ -109,7 +106,7 @@
 							<width>215</width>
 							<height>215</height>
 							<!-- <aspectratio>scale</aspectratio> -->
-							<texture diffuse="masks/addons.png" fallback="DefaultUser.png">$INFO[Listitem.Icon]</texture>
+							<texture fallback="DefaultUser.png">$INFO[Listitem.Icon]</texture>
 						</control>
 						<control type="label">
 							<left>10</left>
@@ -172,13 +169,16 @@
 		<control type="group">
 			<depth>DepthContentPanel</depth>
 			<include>OpenClose_Left</include>
-			<!-- <include content="ContentPanel">
-				<param name="width" value="530" />
-			</include> -->
+			<include content="MenuContentPanel">
+				<!-- <param name="top" value="130" /> -->
+				<param name="width" value="470" />
+				<param name="dividerleft" value="470" />
+				<!-- <param name="color" value="4D000000" /> -->
+			</include>
 			<control type="list" id="9000">
-				<left>35</left>
+				<left>0</left>
 				<top>130</top>
-				<width>445</width>
+				<width>470</width>
 				<height>567</height>
 				<onleft>9100</onleft>
 				<onright>9100</onright>
@@ -187,8 +187,9 @@
 				<scrolltime>300</scrolltime>
 				<itemlayout height="85" width="470">
 					<control type="label">
-						<left>-20</left>
+						<left>30</left>
 						<right>30</right>
+						<bottom>0</bottom>
 						<label>$INFO[ListItem.Label]</label>
 						<textcolor>unfocused_text</textcolor>
 						<font>font37</font>
@@ -198,13 +199,15 @@
 				</itemlayout>
 				<focusedlayout height="85" width="470">
 					<control type="image">
-						<right>50</right>
-						<texture colordiffuse="$VAR[FocusColorTheme]">focus/settingsmenu.png</texture>
+						<right>0</right>
+						<bottom>0</bottom>
+						<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 						<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">
-						<left>-20</left>
+						<left>30</left>
 						<right>30</right>
+						<bottom>0</bottom>
 						<label>$INFO[ListItem.Label]</label>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<font>font37</font>

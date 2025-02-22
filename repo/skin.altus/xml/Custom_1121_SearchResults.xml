@@ -8,11 +8,15 @@
 			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
 			<!-- WIDGETS GROUP -->
 			<control type="group" id="2000">
-				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + !ControlGroup(2000).HasFocus" reversible="true">
-					<effect type="fade" start="100" end="80" time="500" tween="sine" easing="inout" />
-					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="500" />
+				<left>500</left>
+				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming + String.IsEqual(Skin.String(BackgroundSetting),1) + !ControlGroup(2000).HasFocus" reversible="true">
+					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
 				</animation>
-				<include>SearchMenuAnimations</include>
+				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)] + !ControlGroup(2000).HasFocus" reversible="true">
+					<effect type="fade" start="100" end="60" time="300" tween="sine" easing="inout" />
+					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
+				</animation>
+				<!-- <include>SearchMenuAnimations</include> -->
 				<include>OpenClose_Right</include>
 				<!-- SEARCH RESULTS -->
 				<control type="group" id="27000">
@@ -23,55 +27,55 @@
 					<visible allowhiddenfocus="true">!String.IsEmpty(Skin.String(SearchInput)) + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
 						<include>WidgetGroupListCommon</include>
 						<pagecontrol>27099</pagecontrol>
-						<include content="WidgetListPoster" condition="!Skin.HasSetting(HideMovieResults)">
+						<include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideMovieResults)">
               <param name="content_path" value="$VAR[SearchProviderMoviesVar]"/>
               <param name="widget_header" value="$LOCALIZE[342]"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27011"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideTVShowResults)">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideTVShowResults)">
               <param name="content_path" value="$VAR[SearchProviderTVShowsVar]"/>
               <param name="widget_header" value="TV Shows"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27012"/>
             </include>
-						<include content="WidgetListPoster" condition="!Skin.HasSetting(HideAnimeResults) + String.IsEqual(Skin.String(current_search_provider),1)">
+						<include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideAnimeResults) + String.IsEqual(Skin.String(current_search_provider),1)">
               <param name="content_path" value="$VAR[SearchProviderAnimeVar]"/>
               <param name="widget_header" value="Anime"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27013"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideCollectionsResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),3)]">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideCollectionsResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),3)]">
               <param name="content_path" value="$VAR[SearchProviderCollectionsVar]"/>
               <param name="widget_header" value="Collections"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27014"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
               <param name="content_path" value="$VAR[SearchProviderPeopleVar]"/>
               <param name="widget_header" value="Actors/Actresses"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27015"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
               <param name="content_path" value="$VAR[SearchProviderActors/ActressesMoviesVar]"/>
               <param name="widget_header" value="Actors/Actresses (Movies)"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27016"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
               <param name="content_path" value="$VAR[SearchProviderActors/ActressesTVShowsVar]"/>
               <param name="widget_header" value="Actors/Actresses (TV Shows)"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27017"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideMovieKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideMovieKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
 							<param name="content_path" value="$VAR[SearchProviderKeywordMoviesVar]"/>
               <param name="widget_header" value="$VAR[KeywordMoviesLabelVar]"/>
               <param name="widget_target" value="videos"/>
               <param name="list_id" value="27018"/>
             </include>
-            <include content="WidgetListPoster" condition="!Skin.HasSetting(HideTVShowKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideTVShowKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
 							<param name="content_path" value="$VAR[SearchProviderKeywordTVShowsVar]"/>
               <param name="widget_header" value="$VAR[KeywordTVShowsLabelVar]"/>
               <param name="widget_target" value="videos"/>
@@ -84,7 +88,7 @@
 							<param name="list_id" value="27020"/>
 							<param name="child_id" value="270201"/>
 						</include>
-						<include content="WidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
+						<include content="SmallWidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
 							<param name="content_path" value="$INFO[Window(1121).Property(altus.27020.path)]"/>
 							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27020.label)]"/>
 							<param name="widget_target" value="videos"/>
@@ -98,7 +102,7 @@
 							<param name="list_id" value="27021"/>
 							<param name="child_id" value="270211"/>
 						</include>
-						<include content="WidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+						<include content="SmallWidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
 							<param name="content_path" value="$INFO[Window(1121).Property(altus.27021.path)]"/>
 							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27021.label)]"/>
 							<param name="widget_target" value="videos"/>
@@ -112,7 +116,7 @@
 							<param name="list_id" value="27022"/>
 							<param name="child_id" value="270221"/>
 						</include>
-						<include content="WidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
+						<include content="SmallWidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
 							<param name="content_path" value="$INFO[Window(1121).Property(altus.27022.path)]"/>
 							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27022.label)]"/>
 							<param name="widget_target" value="videos"/>
@@ -130,10 +134,10 @@
 			</include>
 			<include>BottomBar</include>
 			<control type="label">
-				<include>SearchMenuAnimations</include>
+				<!-- <include>SearchMenuAnimations</include> -->
 				<visible>!String.IsEmpty(Skin.String(SearchInput)) + Control.HasFocus(27011) + String.IsEmpty(Skin.String(DatabaseStatus)) + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]]</visible>
 				<top>35</top>
-				<left>57</left>
+				<left>540</left>
 				<width>1400</width>
 				<aligny>center</aligny>
 				<height>40</height>
@@ -156,22 +160,30 @@
 					<param name="button3_onclick" value="ActivateWindow(home)"/>
 					<param name="button_id" value="27400"/>
 				</include>
+				<include content="MenuContentPanel">
+					<param name="bg_left" value="0"/>
+					<param name="width" value="498"/>
+					<param name="dividerleft" value="498"/>
+				</include>
 				<control type="group">
-					<left>-610</left>
-					<animation type="Conditional" condition="!ControlGroup(2000).HasFocus" reversible="true">
+					<visible allowhiddenfocus="true">!$EXP[isContent]</visible>
+					<animation effect="fade" condition="!$EXP[isContent]" time="300" end="100" tween="sine" easing="inout">Conditional</animation>
+				<!-- <animation effect="slide" condition="ControlGroup(2000).HasFocus" time="500" start="0,0" end="-500,0" tween="cubic" easing="inout">Conditional</animation> -->
+					<!-- <left>-610</left> -->
+					<!-- <animation type="Conditional" condition="!ControlGroup(2000).HasFocus" reversible="true">
 						<effect type="slide" start="0" end="610" time="500" tween="cubic" easing="inout" />
-					</animation>
+					</animation> -->
 					<!-- <include content="MenuContentPanel">
 						<param name="width" value="611"/>
 						<param name="width" value="600"/>
 					</include> -->
 					<!-- <visible allowhiddenfocus="true">true</visible> -->
 					<control type="group">
-						<visible>![$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]] + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
-						<top>200</top>
-						<width>820</width>
+						<visible>String.IsEmpty(Skin.String(DatabaseStatus))</visible>
+						<top>160</top>
+						<width>498</width>
 						<control type="label">
-							<left>135</left>
+							<left>100</left>
 							<aligny>center</aligny>
 							<height>98</height>
 							<font>font36_title</font>
@@ -180,7 +192,7 @@
 							<visible>String.IsEqual(Skin.String(MenuCaseSetting),0)</visible>
 						</control>
 						<control type="label">
-							<left>120</left>
+							<left>85</left>
 							<aligny>center</aligny>
 							<height>98</height>
 							<font>font36_title</font>
@@ -189,7 +201,7 @@
 							<visible>String.IsEqual(Skin.String(MenuCaseSetting),1)</visible>
 						</control>
 						<control type="label">
-							<left>140</left>
+							<left>105</left>
 							<aligny>center</aligny>
 							<height>98</height>
 							<font>font36_title</font>
@@ -198,7 +210,7 @@
 							<visible>String.IsEqual(Skin.String(MenuCaseSetting),2)</visible>
 						</control>
 						<control type="label">
-							<left>133</left>
+							<left>98</left>
 							<aligny>center</aligny>
 							<height>98</height>
 							<font>font36_title</font>
@@ -208,16 +220,15 @@
 						</control>
 					</control>
 					<control type="fixedlist" id="9000">
-						<left>10</left>
-						<top>300</top>
-						<width>825</width>
-						<height>677</height>
-						<movement>8</movement>
+						<left>0</left>
+						<top>260</top>
+						<width>498</width>
+						<height>757</height>
+						<movement>9</movement>
 						<focusposition>0</focusposition>
 						<onfocus>ClearProperty(listposition,home)</onfocus>
 						<onfocus>ClearProperty(altus_saved_list_id,Home)</onfocus>
 						<onfocus>ClearProperty(altus_stacked_linked_list_id,Home)</onfocus>
-						<onfocus>ClearProperty(CurrentDBType,Home)</onfocus>
 						<onright>SetFocus($INFO[Container(9000).ListItem.Property(menu_id)])</onright>
 						<onleft>9000</onleft>
 						<onright condition="!String.IsEmpty(Skin.String(SearchInput))">SetFocus(2000)</onright>
@@ -226,9 +237,6 @@
 						<scrolltime tween="cubic" easing="out">500</scrolltime>
 						<include content="List">
               <param name="id" value="9000" />
-              <param name="list_width" value="380" />
-              <param name="img_width" value="422" />
-              <param name="img_texture" value="focus/searchmenu.png" />
             </include>
 						<content>
 							<!-- SEARCH HISTORY -->
@@ -236,7 +244,7 @@
 						</content>
 					</control>
 					<control type="group">
-						<left>95</left>
+						<left>75</left>
 						<top>70</top>
 						<width>343</width>
 						<height>140</height>
@@ -288,7 +296,7 @@
 							<textcolor>grey</textcolor>
 							<label>$VAR[SearchSubmenuButtonLabelsVar]</label>
 						</control>
-						<control type="label">
+						<!-- <control type="label">
 							<left>0</left>
 							<top>100</top>
 							<width>340</width>
@@ -299,9 +307,10 @@
 							<textcolor>grey</textcolor>
 							<label>Click to cycle providers</label>
 							<visible>Control.HasFocus(801)</visible>
-						</control>
+						</control> -->
 					</control>
 				</control>
+				<include>VerticalInfoPanel</include>
 			</control>
 			<control type="group">
 				<depth>DepthBars</depth>

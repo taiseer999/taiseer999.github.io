@@ -56,10 +56,10 @@
           <width>127</width>
           <!-- 354 -->
           <height>190</height>
-          <texture diffuse="masks/poster50small.png" background="true">$VAR[FlixPosterVar]</texture>
+          <texture background="true">$VAR[FlixPosterVar]</texture>
           <bordersize>3</bordersize>
           <aspectratio scalediffuse="false">scale</aspectratio>
-          <bordertexture colordiffuse="$VAR[FocuscolorTheme]" border="15" infill="false">masks/poster50small_border.png</bordertexture>
+          <bordertexture colordiffuse="$VAR[FocuscolorTheme]" border="15" infill="false">colors/white.png</bordertexture>
           <!-- <animation condition="Container($PARAM[list_id]).IsUpdating + String.IsEmpty(Skin.String(TrailerPlaying))" effect="fade" time="700" start="50" end="100" pulse="true">Conditional</animation> -->
           <visible>$PARAM[focused] + Control.IsVisible($PARAM[list_id])</visible>
         </control>

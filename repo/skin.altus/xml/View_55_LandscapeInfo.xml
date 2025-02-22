@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-	<include name="LandscapeLayout">
+	<include name="BigLandscapeLayout">
 		<param name="focused">false</param>
 		<definition>
 			<control type="group">
@@ -11,7 +11,7 @@
 					<top>11</top>
 					<width>582</width>
 					<height>327</height>
-					<texture colordiffuse="$VAR[FocusColorTheme]">masks/flixscape.png</texture>
+					<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 					<visible>[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] + !Player.HasMedia + String.IsEmpty(Skin.String(TrailerPlaying))] | [[$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]] + !Player.HasMedia + String.IsEmpty(Skin.String(TrailerPlaying))]</visible>
 					<visible>!Container($PARAM[list_id]).IsUpdating</visible>
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
@@ -46,7 +46,7 @@
 					<top>35.5</top>
 					<width>270</width>
 					<height>270</height>
-					<texture diffuse="masks/addons.png" fallback="DefaultMovies.png" background="true">$VAR[IconWallThumbVar]</texture>
+					<texture fallback="DefaultMovies.png" background="true">$VAR[IconWallThumbVar]</texture>
 					<aspectratio scalediffuse="false">scale</aspectratio>
 					<bordersize>20</bordersize>
 					<visible>!ListItem.IsParentFolder + $PARAM[focused] + Control.HasFocus($PARAM[list_id])</visible>
@@ -56,7 +56,7 @@
 					<top>35.5</top>
 					<width>270</width>
 					<height>270</height>
-					<texture diffuse="masks/addons.png" colordiffuse="unfocused_text" fallback="DefaultMovies.png" background="true">$VAR[IconWallThumbVar]</texture>
+					<texture colordiffuse="unfocused_text" fallback="DefaultMovies.png" background="true">$VAR[IconWallThumbVar]</texture>
 					<aspectratio scalediffuse="false">scale</aspectratio>
 					<bordersize>20</bordersize>
 					<visible>!ListItem.IsParentFolder + ![$PARAM[focused] + Control.HasFocus($PARAM[list_id])]</visible>
@@ -65,33 +65,18 @@
 			<control type="group">
 				<visible>!String.IsEmpty(ListItem.Art(fanart)) | !String.IsEmpty(ListItem.Art(landscape))</visible>
 				<control type="image">
-					<left>14</left>
-					<top>5</top>
-					<width>594</width>
-					<height>339</height>
-					<texture border="20" colordiffuse="$VAR[FocusColorTheme]" infill="false">masks/flixscape.png</texture>
-					<!-- <bordersize>-5</bordersize> -->
-					<visible>[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</visible>
-					<!-- <visible>!Container($PARAM[list_id]).IsUpdating</visible> -->
-					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
-				</control>
-				<control type="image">
 					<left>20</left>
 					<top>11</top>
 					<width>582</width>
 					<height>327</height>
-					<texture diffuse="masks/flixscape.png" background="true">$VAR[LandscapeTextureVar]</texture>
-					<bordersize>1</bordersize>
-					<aspectratio scalediffuse="false">scale</aspectratio>
-					<bordertexture colordiffuse="$VAR[BorderColorVar]" border="20" infill="false">masks/flixscape-border.png</bordertexture>
-					<!-- <animation condition="Container($PARAM[list_id]).IsUpdating + String.IsEmpty(Skin.String(TrailerPlaying))" effect="fade" time="700" start="50" end="100" pulse="true">Conditional</animation> -->
+					<texture colordiffuse="artwork_dim" background="true">$VAR[LandscapeTextureVar]</texture>
 				</control>
 				<control type="image">
-					<left>21</left>
-					<top>243</top>
-					<width>94</width>
-					<height>94</height>
-					<texture>overlays/overlaybg-fs.png</texture>
+					<left>20</left>
+					<top>232</top>
+					<width>106</width>
+					<height>106</height>
+					<texture colordiffuse="overlay_fade_color">overlays/overlay_bg.png</texture>
 					<visible>
 							Listitem.IsCollection | ListItem.IsPlaying | 
 							[
@@ -105,7 +90,8 @@
 							[
 									Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),0) | 
 									!Window.IsVisible(Home)
-							]
+							] + 
+							[[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]]
 					</visible>
 					<animation condition="
 						[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]] + 
@@ -117,11 +103,11 @@
 						" effect="fade" time="0" start="100" end="0">Conditional</animation>
 				</control>
 				<control type="image">
-					<left>21</left>
-					<top>282</top>
-					<width>580</width>
-					<height>55</height>
-					<texture colordiffuse="E6FFFFFF">overlays/overlayfade-fs.png</texture>
+					<left>20</left>
+					<top>267</top>
+					<width>583</width>
+					<height>71</height>
+					<texture colordiffuse="overlay_fade_color">overlays/overlay_bg_long.png</texture>
 					<visible>
 							[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]] + 
 							!Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0) + 
@@ -142,16 +128,16 @@
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
 				</control>
         <control type="image">
-					<left>21</left>
-					<top>217</top>
-					<width>580</width>
-					<height>120</height>
-					<texture colordiffuse="E6FFFFFF">overlays/overlayfade-fs-ep.png</texture>
+					<left>20</left>
+					<top>202</top>
+					<width>583</width>
+					<height>136</height>
+					<texture colordiffuse="overlay_fade_color">overlays/overlay_bg_long.png</texture>
 					<visible>$EXP[isEpisode] | [Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),1)]</visible>
 				</control>
         <control type="group">
-          <left>40</left>
-          <top>255</top>
+          <left>45</left>
+          <top>249</top>
 					<control type="image">
 						<left>10</left>
 						<top>-20</top>
@@ -168,6 +154,7 @@
 						<width>390</width>
             <label>[LIGHT]$INFO[Container($PARAM[list_id]).ListItem.Title][/LIGHT]</label>
             <font>font25_title</font>
+						<textcolor>FFFFFFFF</textcolor>
             <shadowcolor>text_shadow</shadowcolor>
             <align>left</align>
             <scroll>[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</scroll>
@@ -179,6 +166,7 @@
             <visible>$EXP[isEpisode]</visible>
             <label>$INFO[Container($PARAM[list_id]).ListItem.Season]$INFO[Container($PARAM[list_id]).ListItem.Episode,x,]$INFO[Container($PARAM[list_id]).ListItem.Title, | ]</label>
             <font>font25_title</font>
+						<textcolor>FFFFFFFF</textcolor>
             <shadowcolor>text_shadow</shadowcolor>
             <align>left</align>
             <scroll>[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</scroll>
@@ -190,6 +178,7 @@
             <top>35</top>
             <label>[LIGHT]$INFO[Container($PARAM[list_id]).ListItem.TVShowTitle][/LIGHT]</label>
             <font>font10_title</font>
+						<textcolor>FFFFFFFF</textcolor>
             <shadowcolor>text_shadow</shadowcolor>
             <align>left</align>
             <scroll>[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</scroll>
@@ -197,10 +186,11 @@
           </control>
         </control>
 				<control type="label">
-					<left>306</left>
-					<top>297</top>
+					<left>305</left>
+					<top>291</top>
 					<width>280</width>
 					<label>$VAR[Item_WatchedProgress]</label>
+					<textcolor>FFFFFFFF</textcolor>
 					<font>font18_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
@@ -210,12 +200,13 @@
 			</control>
 			<control type="group">
 				<visible>$EXP[isTVShow] | $EXP[isSeason]</visible>
-				<top>293</top>
+				<top>288</top>
 				<control type="label">
-					<left>217</left>
+					<left>212</left>
 					<top>4</top>
 					<width>369</width>
 					<label>$INFO[ListItem.Property(UnwatchedEpisodes),, remaining]</label>
+					<textcolor>FFFFFFFF</textcolor>
 					<font>font18_title</font>
 					<shadowcolor>text_shadow</shadowcolor>
 					<align>right</align>
@@ -237,42 +228,29 @@
 				</control> -->
 			</control>
 			<control type="image">
-				<left>33</left>
-				<top>300</top>
-				<width>23</width>
-				<height>23</height>
-				<texture>$VAR[WallWatchedIconVar]</texture>
-				<visible>!$EXP[isEpisode] + [Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),0) | !Window.IsVisible(Home)]</visible>
-			</control>
-			<control type="image">
-				<left>560</left>
+				<left>38</left>
 				<top>295</top>
 				<width>23</width>
 				<height>23</height>
-				<texture>$VAR[WallWatchedIconVar]</texture>
-				<visible>Window.IsVisible(Home) + [$EXP[isEpisode] | String.IsEqual(Skin.String(HomeItemArtworkChoice),1)]</visible>
+				<texture colordiffuse="FFFFFFFF">$VAR[WallWatchedIconVar]</texture>
+				<visible>!$EXP[isEpisode] + [[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]]</visible>
+			</control>
+			<control type="image">
+				<left>553</left>
+				<top>290</top>
+				<width>23</width>
+				<height>23</height>
+				<texture colordiffuse="FFFFFFFF">$VAR[WallWatchedIconVar]</texture>
+				<visible>$EXP[isEpisode] + [[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]] | [Integer.IsGreater(ListItem.Playcount,0) + !Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)]]</visible>
         <animation condition="[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]] + !Integer.IsEqual(Container($PARAM[id]).ListItem.Property(WatchedProgress),0)" effect="fade" time="0" start="100" end="0">Conditional</animation>
 			</control>
-			<!-- <control type="group">
-				<left>188</left>
-				<top>-8</top>
-				<include content="RatingCircle" condition="Skin.HasSetting(circle_rating) | Skin.HasSetting(circle_userrating)">
-					<param name="left">-71.7</param>
-					<param name="top">20</param>
-					<param name="width">139</param>
-					<param name="height">139</param>
-					<param name="label-left">13</param>
-					<param name="label-top">25</param>
-					<param name="cornerdiffuse">overlays/overlaybg3.png</param>
-				</include>
-			</control> -->
 			<control type="label">
 				<left>40</left>
-				<top>358</top>
+				<top>348</top>
 				<right>20</right>
 				<!-- <width>390</width> -->
-				<label>[LIGHT]$INFO[Container($PARAM[list_id]).ListItem.Title][/LIGHT]</label>
-				<font>font25_title</font>
+				<label>$INFO[Container($PARAM[list_id]).ListItem.Title]</label>
+				<font>font10</font>
 				<shadowcolor>text_shadow</shadowcolor>
 				<textcolor>unfocused_text</textcolor>
 				<align>center</align>
@@ -280,29 +258,41 @@
 				<scrollspeed>100</scrollspeed>
 				<visible>!$EXP[isEpisode] + [Control.IsVisible(55) + Skin.HasSetting(Enable.55Titles)] | [Control.IsVisible(501) + Skin.HasSetting(Enable.501Titles)]</visible>
 			</control>
-			<include content="ProgressBar">
-				<param name="left" value="40"/>
-				<param name="top" value="341"/>
-				<param name="width" value="545"/>
-				<param name="visible1" value="![$PARAM[focused] + Control.HasFocus($PARAM[list_id])]"/>
-				<param name="visible2" value="![$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]"/>
-			</include>
+			<control type="group">
+				<visible>![[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]]</visible>
+				<include content="ProgressBar">
+					<param name="left" value="20"/>
+					<param name="top" value="332"/>
+					<param name="width" value="582"/>
+				</include>
+			</control>
+			<control type="image">
+				<left>20</left>
+				<top>11</top>
+				<width>582</width>
+				<height>327</height>
+				<texture border="6" colordiffuse="$VAR[FocusColorTheme]" infill="false">colors/white.png</texture>
+				<visible>[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</visible>
+			</control>
 		</definition>
 	</include>
 
 	<include name="View_55_LandscapeInfo">
 		<control type="group">
 			<include>OpenClose_Right</include>
+			<include>Visible_Right</include>
 			<include>MediaMenuAnimations</include>
 			<left>0</left>
 			<top>70</top>
 			<visible>Control.IsVisible(55)</visible>
 			<control type="label">
-				<left>40</left>
-				<right>50</right>
+				<left>525</left>
+				<right>30</right>
+				<scroll>true</scroll>
+				<scrollspeed>170</scrollspeed>
 				<top>-57</top>
 				<!-- <width>1815</width> -->
-				<label>$VAR[ClockCrumbs]$VAR[BreadcrumbsVideoVar]$VAR[FlixCategory]$VAR[VideoFlixCrumbsVar]</label>
+				<label>$VAR[BreadcrumbsVideoVar]$VAR[FlixCategory]$VAR[VideoFlixCrumbsVar]</label>
 				<font>font37</font>
 				<textcolor>$VAR[FocusColorTheme]</textcolor>
 				<shadowcolor>text_shadow</shadowcolor>
@@ -319,7 +309,7 @@
 				<align>right</align>
 			</control> -->
 			<control type="panel" id="55">
-				<left>2</left>
+				<left>480</left>
 				<right>0</right>
 				<height>100%</height>
 				<onleft>531</onleft>
@@ -357,96 +347,106 @@
 				[Container.Content(games) + [String.IsEqual(Skin.String(Skin.ForcedView.games),$LOCALIZE[311012]) | String.IsEmpty(Skin.String(Skin.ForcedView.games))]]</visible>
 
 				<!-- DEFAULT -->
-				<itemlayout width="470" height="283" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<!-- W:430 H:242 -->
+				<itemlayout width="471" height="283" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.55Dim)">Conditional</animation>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="55"/>
+						</include>
 						<left>18</left>
 						<top>0</top>
-						<include>SmallLandscapeLayout</include>
+						<include>LandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="470" height="283" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="471" height="283" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
 						<left>18</left>
 						<top>0</top>
-						<include content="SmallLandscapeLayout">
+						<include content="LandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
-				<itemlayout width="470" height="337" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<itemlayout width="471" height="315" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.55Dim)">Conditional</animation>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="55"/>
+						</include>
 						<left>18</left>
 						<top>0</top>
-						<include>SmallLandscapeLayout</include>
+						<include>LandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="470" height="337" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="471" height="315" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),0) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
 						<left>18</left>
 						<top>0</top>
-						<include content="SmallLandscapeLayout">
+						<include content="LandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
 
-				<!-- LARGE -->
-				<itemlayout width="622" height="369" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<!-- SMALL LAYOUT -->
+				<!-- W:317 H:178 -->
+				<itemlayout width="353" height="214" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.55Dim)">Conditional</animation>
-						<left>25</left>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="55"/>
+						</include>
+						<left>20</left>
 						<top>0</top>
-						<include>LandscapeLayout</include>
+						<include>SmallLandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="622" height="369" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="353" height="214" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + !Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<left>25</left>
+						<left>20</left>
 						<top>0</top>
-						<include content="LandscapeLayout">
+						<include content="SmallLandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 					</control>
 				</focusedlayout>
-				<itemlayout width="622" height="410" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<itemlayout width="353" height="240" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.55Dim)">Conditional</animation>
-						<left>25</left>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="55"/>
+						</include>
+						<left>20</left>
 						<top>0</top>
-						<include>LandscapeLayout</include>
+						<include>SmallLandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="622" height="410" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="353" height="240" condition="String.IsEqual(Skin.String(ArtworkSize55Setting),1) + Skin.HasSetting(Enable.55Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<left>25</left>
+						<left>20</left>
 						<top>0</top>
-						<include content="LandscapeLayout">
+						<include content="SmallLandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 					</control>
 				</focusedlayout>
 
 				<!-- EPISODES -->
-				<itemlayout width="623" height="373" condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]">
+				<itemlayout width="471" height="283" condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.55Dim)">Conditional</animation>
-						<left>25</left>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="55"/>
+						</include>
+						<left>20</left>
 						<top>0</top>
 						<include>LandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="623" height="373" condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]" infoupdate="30">
+				<focusedlayout width="471" height="283" condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-						<left>25</left>
+						<left>20</left>
 						<top>0</top>
 						<include content="LandscapeLayout">
 							<param name="focused" value="true" />
@@ -470,19 +470,13 @@
 						<include content="LandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout> -->
 			</control>
-			<control type="image">
-        <bottom>0</bottom>
-        <left>-530</left>
-        <width>2450</width>
-        <height>350</height>
-        <texture colordiffuse="black">overlays/bottombarinfo.png</texture>
-        <!-- <visible>!Skin.HasSetting(Enable.55Dim)</visible> -->
-        <animation effect="fade" start="0" end="100" time="300">VisibleChange</animation>
-      </control>
+			<include content="TopBottomBars">
+				<param name="top_visible" value="false"/>
+				<param name="bottom_visible" value="!Skin.HasSetting(Enable.55Dim)"/>
+			</include>
 		</control>
 	</include>
 

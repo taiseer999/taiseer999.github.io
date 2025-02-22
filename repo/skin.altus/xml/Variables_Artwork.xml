@@ -12,7 +12,7 @@
 
   <variable name="AltusCustomBackgroundImage">
 		<value condition="!String.IsEmpty(Skin.String(AltusCustomBackground))">$INFO[Skin.String(AltusCustomBackground)]</value>
-		<value condition="String.IsEmpty(Skin.String(AltusCustomBackground))">special://skin/resources/altus_fallback.jpg</value>
+		<value condition="String.IsEmpty(Skin.String(AltusCustomBackground))">special://skin/resources/fallback.jpg</value>
 	</variable>
   <!-- <variable name="SpotlightColorDiffuse">
 		<value condition="String.IsEmpty(Window(Home).Property(SpotlightWidget))">FF404040</value>
@@ -23,7 +23,7 @@
 
   <variable name="HomeFanartVar">
     <value condition="Window.IsActive(musicinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo)">$INFO[Window(home).Property(infobackground)]</value>
-    <value condition="!String.IsEmpty(ListItem.Thumb) + ![Skin.HasSetting(Enable.AlternateSpotlight) | String.IsEmpty(Window(Home).Property(SpotlightWidget))] + $EXP[isEpisode]">$INFO[ListItem.Thumb]</value>
+    <value condition="!String.IsEmpty(ListItem.Thumb) + !String.IsEmpty(Window(Home).Property(SpotlightWidget)) + $EXP[isEpisode]">$INFO[ListItem.Thumb]</value>
     <value condition="!String.IsEmpty(ListItem.Art(fanart)) | [String.IsEmpty(ListItem.Art(landscape)) + !String.IsEmpty(ListItem.Art(fanart))] | [!$EXP[isContent] + !String.IsEmpty(ListItem.Art(fanart))]">$INFO[ListItem.Art(fanart)]</value>
     <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
     <value condition="Window.IsActive(musicinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo)">$INFO[Window(home).Property(infobackground)]</value>
@@ -62,9 +62,39 @@
 		<value>$INFO[ListItem.Art(clearlogo)]</value>
 	</variable>
 
+  <variable name="PlayerCacheColor">
+		<value condition="String.IsEmpty(Window(Home).Property(listitem_logo_color_alt_video))">osd_light</value>
+		<value>$INFO[Window(Home).Property(listitem_logo_color_alt_video)]</value>
+	</variable>
+
+  <variable name="PlayerProgressColor">
+    <value condition="String.IsEqual(Skin.String(BackgroundSetting),0) + String.IsEqual(Skin.String(FocusColorThemeSetting),0)">accent_color</value>
+    <value condition="!String.IsEmpty(Window(Home).Property(listitem_logo_color_video)) + String.IsEqual(Skin.String(FocusColorThemeSetting),0) + [String.IsEqual(Skin.String(BackgroundSetting),1) | String.IsEqual(Skin.String(BackgroundSetting),2)]">$INFO[Window(Home).Property(listitem_logo_color_video)]</value>
+    <value condition="String.IsEqual(Skin.String(FocusColorThemeSetting),1)">FFA3A3A3</value>
+    <value>FFA3A3A3</value>
+  </variable>
+
+  <variable name="PlayerProgressTextColor">
+    <value condition="String.IsEqual(Skin.String(BackgroundSetting),0) + String.IsEqual(Skin.String(FocusColorThemeSetting),0)">focused_text</value>
+    <value condition="!String.IsEmpty(Window(Home).Property(listitem_logo_text_color_video)) + String.IsEqual(Skin.String(FocusColorThemeSetting),0) + [String.IsEqual(Skin.String(BackgroundSetting),1) | String.IsEqual(Skin.String(BackgroundSetting),2)]">$INFO[Window(Home).Property(listitem_logo_text_color_video)]</value>
+    <value condition="String.IsEqual(Skin.String(FocusColorThemeSetting),1)">FF141415</value>
+    <value>FF141415</value>
+  </variable>
+
   <variable name="PlayerClearlogoVar">
 		<value condition="!String.IsEmpty(Player.Art(clearlogo))">$INFO[Player.Art(clearlogo)]</value>
 		<value condition="!String.IsEmpty(Player.Art(tvshow.clearlogo))">$INFO[Player.Art(tvshow.clearlogo)]</value>
+	</variable>
+
+  <variable name="DialogBackground">
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),2)">$INFO[Window(home).Property(listitem_blurred)]</value>
+		<value>colors/darker.png</value>
+	</variable>
+
+  <variable name="DialogBackgroundDiffuse">
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),2)">E6666666</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),1)">$VAR[FocusColorTheme]</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">accent_color</value>
 	</variable>
 
 	<variable name="FlixPosterVar">
@@ -220,7 +250,7 @@
     <value>[COLOR unfocused_text]No information[/COLOR]</value>
   </variable>	
 
-  <include name="altus.HiddenArtwork">
+  <!-- <include name="altus.HiddenArtwork">
 		<left>-3000</left>
 		<top>-3000</top>
 		<width>1</width>
@@ -324,7 +354,7 @@
 	<include name="altus.Preload50_Addons">
 		<include>altus.PreloadFanart</include>
 		<include>altus.PreloadIcon</include>
-	</include>
+	</include> -->
 
 
 </includes>

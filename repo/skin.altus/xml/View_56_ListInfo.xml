@@ -46,14 +46,6 @@
 					<align>center</align>
 					<visible>Container.Content(favourites)</visible>
 				</control>
-				<!-- <control type="image">
-					<include>NetflixScreenDimensions</include>
-					<aspectratio>stretch</aspectratio>
-					<fadetime>500</fadetime>
-					<include>ArtworkAnimations</include>
-					<texture background="true" diffuse="overlays/netflixfanartdiffuse.png" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[MediaFanartVar]</texture>
-					<visible>!Container.Content(movies) + !Container.Content(tvshows) + !Container.Content(seasons) + !Container.Content(episodes)</visible>
-				</control> -->
 				<control type="panel" id="56">
 					<left>50</left>
 					<top>103.5</top>			
@@ -100,9 +92,8 @@
 						[!Container.Content(songs) + !Container.Content(addons) + !Container.Content(playlists) + !Container.Content() + !Container.Content(tvshows) + !Container.Content(seasons) + !Container.Content(episodes) + !Container.Content(movies) + !Container.Content(musicvideos) + !Container.Content(videos) + !Container.Content(favourites) + !Container.Content(genres)]
 					</visible>
 					<focusedlayout height="list_item_height" width="608" condition="Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(movies) | Container.Content(musicvideos) | Container.Content(videos) | Container.Content(games) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)" infoupdate="30">
-						<include>SetDBTypeProperty</include>
 						<control type="image">
-							<texture colordiffuse="$VAR[FocusColorTheme]">focus/listinfo_3_column.png</texture>
+							<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 							<animation effect="fade" start="100" end="40" time="40" condition="!Control.HasFocus(56)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -188,7 +179,7 @@
 						</control>
 					</focusedlayout>
 					<itemlayout height="list_item_height" width="608" condition="Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(movies) | Container.Content(musicvideos) | Container.Content(videos) | Container.Content(games) | Window.IsActive(videoplaylist) | Window.IsActive(musicplaylist)">
-						<include>altus.PreloadFanart</include>
+		
 						<control type="image">
 							<left>25</left>
 							<top>24</top>
@@ -267,7 +258,7 @@
 					</itemlayout>
 					<focusedlayout height="list_item_height" width="608" condition="!Container.Content(songs) + !Container.Content(addons) + !Container.Content(playlists) + !Container.Content() + !Container.Content(tvshows) + !Container.Content(seasons) + !Container.Content(episodes) + !Container.Content(movies) + !Container.Content(musicvideos) + !Container.Content(videos)+ !Container.Content(favourites)" infoupdate="300">
 						<control type="image">
-							<texture colordiffuse="$VAR[FocusColorTheme]">focus/listinfo_3_column.png</texture>
+							<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 							<animation effect="fade" start="100" end="40" time="40" condition="!Control.HasFocus(56)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -334,7 +325,7 @@
 					</itemlayout>
 					<focusedlayout height="list_item_height" width="608" condition="Container.Content(playlists) | Container.Content(favourites) | Container.Content()" infoupdate="300">
 						<control type="image">
-							<texture colordiffuse="$VAR[FocusColorTheme]">focus/listinfo_3_column.png</texture>
+							<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 							<animation effect="fade" start="100" end="40" time="40" condition="!Control.HasFocus(56)">Conditional</animation>
 						</control>
 						<control type="image">
@@ -344,7 +335,7 @@
 							<width>50</width>
 							<bottom>10</bottom>
 							<aspectratio>keep</aspectratio>
-							<texture colordiffuse="$VAR[FocusedTextColorVar]" diffuse="focus/listinfo_3_column_img.png">$INFO[ListItem.Icon]</texture>
+							<texture colordiffuse="$VAR[FocusedTextColorVar]">$INFO[ListItem.Icon]</texture>
 						</control>
 						<control type="label">
 							<left>90</left>
@@ -367,7 +358,7 @@
 							<width>50</width>
 							<bottom>10</bottom>
 							<aspectratio>keep</aspectratio>
-							<texture diffuse="focus/listinfo_3_column_img.png">$INFO[ListItem.Icon]</texture>
+							<texture>$INFO[ListItem.Icon]</texture>
 						</control>
 						<control type="label">
 							<left>90</left>
@@ -398,7 +389,7 @@
 	<include name="SongsListLayout">
 		<focusedlayout height="list_item_height" condition="Container.Content(songs)">
 			<control type="image">
-				<texture colordiffuse="$VAR[FocusColorTheme]">masks/focus-long.png</texture>
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 				<animation effect="fade" start="100" end="40" time="40" condition="!Control.HasFocus(56)">Conditional</animation>
 			</control>
 			<control type="label">
@@ -440,7 +431,7 @@
 	<include name="AddonsListLayout">
 		<focusedlayout height="list_item_height" width="913" condition="Container.Content(addons)" infoupdate="30">
 			<control type="image">
-				<texture colordiffuse="$VAR[FocusColorTheme]">focus/listinfo_2_column.png</texture>
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 				<animation effect="fade" start="100" end="40" time="40" condition="!Control.HasFocus(56)">Conditional</animation>
 			</control>
 			<control type="image">
@@ -480,7 +471,6 @@
 			</control>
 		</focusedlayout>
 		<itemlayout height="list_item_height" width="913" condition="Container.Content(addons)">
-			<include>altus.PreloadFanart</include>
 			<control type="image">
 				<left>20</left>
 				<top>18</top>

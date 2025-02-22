@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<defaultcontrol always="true">450</defaultcontrol>
-	<include>Animation_DialogPopupOpenClose</include>
+	<include>OpenClose_Right</include>
 	<controls>
 		<control type="group">
-			<centerleft>45%</centerleft>
-			<centertop>47%</centertop>
-			<width>1050</width>
-			<height>850</height>
+			<top>0</top>
+			<right>0</right>
+			<height>100%</height>
+			<width>1220</width>
 			<include content="DialogBackgroundCommons">
 				<param name="header_label" value="" />
 				<param name="header_id" value="411" />
@@ -17,14 +17,14 @@
 					<effect type="fade" start="100" end="0" time="300" tween="cubic" easing="in"/>
 					<effect type="slide" start="0,0" end="200,0" time="300" tween="cubic" easing="in" />
 				</animation> -->
-				<left>1000</left>
-				<top>95</top>
+				<left>970</left>
+				<top>105</top>
 				<width>400</width>
 				<height>400</height>
 				<itemgap>dialogbuttons_itemgap</itemgap>
 				<orientation>vertical</orientation>
-				<onleft>450</onleft>
-				<onright>60</onright>
+				<onleft>60</onleft>
+				<onright>450</onright>
 				<onup>9000</onup>
 				<ondown>9000</ondown>
 				<include content="DefaultDialogButton">
@@ -51,28 +51,30 @@
 					<effect type="fade" start="100" end="0" time="300" tween="cubic" easing="in"/>
 					<effect type="slide" start="0,0" end="200,0" time="300" tween="cubic" easing="in" />
 				</animation> -->
-				<left>1010</left>
-				<top>275</top>
-				<width>397</width>
-				<height>580</height>
-				<aspectratio aligny="top">keep</aspectratio>
+				<left>-650</left>
+				<centertop>50%</centertop>
+				<width>600</width>
+				<height>877</height>
+				<fadetime>200</fadetime>
+				<aspectratio aligny="center">keep</aspectratio>
 				<bordersize>4</bordersize>
-				<texture colordiffuse="darkgrey" border="4" background="true">$INFO[ListItem.Icon]</texture>
+				<texture border="4" background="true">$INFO[ListItem.Icon]</texture>
+				<visible>Control.IsVisible(451)</visible>
 			</control>
 			<control type="panel" id="450">
-				<left>20</left>
-				<top>100</top>
-				<width>940</width>
-				<height>760</height>
-				<onleft>60</onleft>
-				<onright>9000</onright>
+				<left>0</left>
+				<top>105</top>
+				<width>930</width>
+				<bottom>75</bottom>
+				<onleft>9000</onleft>
+				<onright>60</onright>
 				<onup>450</onup>
 				<ondown>450</ondown>
 				<pagecontrol>60</pagecontrol>
 				<scrolltime>200</scrolltime>
 				<itemlayout height="75" width="940">
 					<control type="image">
-						<left>55</left>
+						<left>30</left>
 						<top>10</top>
 						<width>50</width>
 						<height>50</height>
@@ -80,8 +82,8 @@
 						<aspectratio>keep</aspectratio>
 					</control>
 					<control type="label">
-						<left>120</left>
-						<right>20</right>
+						<left>100</left>
+						<right>40</right>
 						<height>70</height>
 						<aligny>center</aligny>
 						<selectedcolor>green</selectedcolor>
@@ -92,13 +94,13 @@
 				</itemlayout>
 				<focusedlayout height="75" width="940">
 					<control type="image">
-						<left>25</left>
+						<left>0</left>
 						<height>71</height>
 						<visible>Control.HasFocus(450)</visible>
-						<texture colordiffuse="$VAR[FocusColorTheme]">focus/filebrowser.png</texture>
+						<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 					</control>
 					<control type="image">
-						<left>55</left>
+						<left>30</left>
 						<top>10</top>
 						<width>50</width>
 						<height>50</height>
@@ -106,8 +108,8 @@
 						<aspectratio>keep</aspectratio>
 					</control>
 					<control type="label">
-						<left>120</left>
-						<right>20</right>
+						<left>100</left>
+						<right>40</right>
 						<height>70</height>
 						<aligny>center</aligny>
 						<selectedcolor>green</selectedcolor>
@@ -118,19 +120,19 @@
 				</focusedlayout>
 			</control>
 			<control type="panel" id="451">
-				<left>20</left>
-				<top>100</top>
-				<width>940</width>
-				<height>760</height>
-				<onleft>60</onleft>
-				<onright>9000</onright>
+				<left>0</left>
+				<top>105</top>
+				<width>930</width>
+				<bottom>75</bottom>
+				<onleft>9000</onleft>
+				<onright>60</onright>
 				<onup>451</onup>
 				<ondown>451</ondown>
 				<pagecontrol>60</pagecontrol>
 				<scrolltime>200</scrolltime>
 				<itemlayout height="75" width="940">
 					<control type="image">
-						<left>55</left>
+						<left>30</left>
 						<top>10</top>
 						<width>50</width>
 						<height>50</height>
@@ -138,8 +140,8 @@
 						<aspectratio>keep</aspectratio>
 					</control>
 					<control type="label">
-						<left>120</left>
-						<right>20</right>
+						<left>100</left>
+						<right>40</right>
 						<height>70</height>
 						<aligny>center</aligny>
 						<selectedcolor>green</selectedcolor>
@@ -150,13 +152,13 @@
 				</itemlayout>
 				<focusedlayout height="75" width="940">
 					<control type="image">
-						<left>25</left>
+						<left>0</left>
 						<height>71</height>
 						<visible>Control.HasFocus(451)</visible>
-						<texture colordiffuse="$VAR[FocusColorTheme]">focus/filebrowser.png</texture>
+						<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 					</control>
 					<control type="image">
-						<left>55</left>
+						<left>30</left>
 						<top>10</top>
 						<width>50</width>
 						<height>50</height>
@@ -164,8 +166,8 @@
 						<aspectratio>keep</aspectratio>
 					</control>
 					<control type="label">
-						<left>120</left>
-						<right>20</right>
+						<left>100</left>
+						<right>40</right>
 						<height>70</height>
 						<aligny>center</aligny>
 						<selectedcolor>green</selectedcolor>
@@ -176,32 +178,32 @@
 				</focusedlayout>
 			</control>
 			<control type="scrollbar" id="60">
-				<left>10</left>
-				<top>100</top>
-				<width>12</width>
-				<height>746</height>
-				<onleft>9000</onleft>
-				<onright>451</onright>
+				<left>926</left>
+				<top>0</top>
+				<width>8</width>
+				<bottom>0</bottom>
+				<onleft>451</onleft>
+				<onright>9000</onright>
 				<orientation>vertical</orientation>
 			</control>
 			<control type="label" id="412">
 				<description>Path label</description>
-				<left>65</left>
-				<bottom>-37</bottom>
-				<width>665</width>
+				<left>40</left>
+				<bottom>33</bottom>
+				<width>860</width>
 				<height>30</height>
 				<haspath>true</haspath>
-				<font>font13</font>
+				<font>font12</font>
 				<aligny>bottom</aligny>
 				<textcolor>grey</textcolor>
 			</control>
 			<control type="label">
-				<right>90</right>
-				<bottom>-37</bottom>
-				<width>1270</width>
-				<height>30</height>
-				<align>right</align>
-				<aligny>bottom</aligny>
+				<left>990</left>
+				<bottom>30</bottom>
+				<width>275</width>
+				<height>35</height>
+				<font>font13</font>
+				<align>left</align>
 				<font>font13</font>
 				<label>$VAR[FileBrowserSelectLabel]</label>
 				<textcolor>$VAR[FocusColorTheme]</textcolor>

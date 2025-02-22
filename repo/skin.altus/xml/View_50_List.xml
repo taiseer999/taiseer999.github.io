@@ -84,7 +84,7 @@
 		<definition>
 			<control type="group">
 				<visible>
-				!Player.HasMedia + Control.IsVisible(50) + 
+				!Player.HasMedia + Control.IsVisible(50) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),1)] + 
 					[
 						[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),2)] | 
 						[Container.Content(tvshows) + String.IsEqual(Skin.String(ListArtworkChoice.tvshows),2)] | 
@@ -112,11 +112,44 @@
 					<include>ArtworkAnimations</include>
 				</control>
 				<control type="image">
-					<texture colordiffuse="99000000">overlays/fanart-diffuse.png</texture>
+					<texture colordiffuse="99000000">overlays/fanart-diffuse_setting0or1.png</texture>
 				</control>
 			</control>
 			<control type="group">
-				<include>OpenClose_Right</include>
+				<visible>
+				!Player.HasMedia + Control.IsVisible(50) + String.IsEqual(Skin.String(BackgroundSetting),2) + 
+					[
+						[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),2)] | 
+						[Container.Content(tvshows) + String.IsEqual(Skin.String(ListArtworkChoice.tvshows),2)] | 
+						[Container.Content(seasons) + String.IsEqual(Skin.String(ListArtworkChoice.seasons),2)] | 
+						[Container.Content(episodes) + String.IsEqual(Skin.String(ListArtworkChoice.episodes),2)] | [Container.Content(files) + String.IsEqual(Skin.String(ListArtworkChoice.files),2)] | 
+						[Container.Content(favourites) + String.IsEqual(Skin.String(ListArtworkChoice.favourites),2)] | 
+						[Container.Content() + String.IsEqual(Skin.String(ListArtworkChoice.),2)] |
+						[Container.Content(addons) + String.IsEqual(Skin.String(ListArtworkChoice.addons),2)]
+					]
+				</visible>
+				<include>FullScreenDimensions</include>
+				<!-- <control type="image">
+					<fadetime>500</fadetime>
+					<texture background="true" colordiffuse="FFE0E0E8" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[ListLandscapeVar]</texture>
+					<aspectratio>scale</aspectratio>
+					<include>ArtworkAnimations</include>
+				</control>
+				<control type="image">
+					<texture colordiffuse="BF000000">overlays/fanart-diffuse.png</texture>
+				</control> -->
+				<control type="image">
+					<fadetime>500</fadetime>
+					<texture background="true" diffuse="overlays/fanart-diffuse.png" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[ListLandscapeVar]</texture>
+					<aspectratio>scale</aspectratio>
+					<include>ArtworkAnimations</include>
+				</control>
+				<!-- <control type="image">
+					<texture colordiffuse="99000000">overlays/fanart-diffuse.png</texture>
+				</control> -->
+			</control>
+			<control type="group">
+				<include>OpenClose_Left</include>
 				<left>0</left>
 				<top>0</top>
 				<visible>Control.IsVisible(50)</visible>
@@ -149,12 +182,12 @@
 					<width>930</width>
 					<height>523</height>
 					<fadetime>500</fadetime>
-					<texture diffuse="masks/giant-landscape.png" background="true" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[ListLandscapeVar]</texture>
+					<texture colordiffuse="artwork_dim" background="true" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[ListLandscapeVar]</texture>
 					<bordersize>1</bordersize>
-					<aspectratio scalediffuse="false">scale</aspectratio>
-					<include>ArtworkAnimations</include>
+					<!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
+					<!-- <include>ArtworkAnimations</include> -->
 					<include>ListLandscapeArtworkSlide</include>
-					<bordertexture colordiffuse="$VAR[BorderColorVar]" border="17" infill="false">masks/giant-border.png</bordertexture>
+					<bordertexture colordiffuse="$VAR[BorderColorVar]" infill="false">masks/bordertexture.png</bordertexture>
 					<visible>
 						!Player.HasMedia + 
 						[
@@ -168,16 +201,53 @@
 						]
 					</visible>
 				</control>
+				<control type="group">
+					<visible>[
+						[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),0)] | 
+						[Container.Content(tvshows) + String.IsEqual(Skin.String(ListArtworkChoice.tvshows),0)] | 
+						[Container.Content(seasons) + String.IsEqual(Skin.String(ListArtworkChoice.seasons),0)] | 
+						[Container.Content(episodes) + String.IsEqual(Skin.String(ListArtworkChoice.episodes),0)] | [Container.Content(files) + String.IsEqual(Skin.String(ListArtworkChoice.files),0)] | 
+						[Container.Content(favourites) + String.IsEqual(Skin.String(ListArtworkChoice.favourites),0)] | 
+						[Container.Content() + String.IsEqual(Skin.String(ListArtworkChoice.),0)] |
+						[Container.Content(addons) + String.StartsWith(Container.PluginName,plugin.video.otaku) + String.IsEqual(Skin.String(ListArtworkChoice.addons),0)]
+					]</visible>
+					<include>ListLandscapeArtworkSlide</include>
+					<include content="ProgressBar">
+						<param name="left" value="70"/>
+						<param name="top" value="840"/>
+						<param name="width" value="930"/>
+						<param name="visible1" value="true"/>
+						<param name="visible2" value="true"/>
+					</include>
+				</control>
+				<control type="group">
+					<visible>[
+						[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),1)] | 
+						[Container.Content(tvshows) + String.IsEqual(Skin.String(ListArtworkChoice.tvshows),1)] | 
+						[Container.Content(seasons) + String.IsEqual(Skin.String(ListArtworkChoice.seasons),1)] | 
+						[Container.Content(episodes) + String.IsEqual(Skin.String(ListArtworkChoice.episodes),1)] | [Container.Content(files) + String.IsEqual(Skin.String(ListArtworkChoice.files),1)] | 
+						[Container.Content(favourites) + String.IsEqual(Skin.String(ListArtworkChoice.favourites),1)] | 
+						[Container.Content() + String.IsEqual(Skin.String(ListArtworkChoice.),1)] |
+						[Container.Content(addons) + String.StartsWith(Container.PluginName,plugin.video.otaku) + String.IsEqual(Skin.String(ListArtworkChoice.addons),1)]
+					]</visible>
+					<include content="ProgressBar">
+						<param name="left" value="224"/>
+						<param name="top" value="990"/>
+						<param name="width" value="610"/>
+						<param name="visible1" value="true"/>
+						<param name="visible2" value="true"/>
+					</include>
+				</control>
 				<control type="image">
 					<left>224</left>
 					<bottom>90</bottom>
 					<width>610</width>
 					<height>915</height>
 					<fadetime>500</fadetime>
-					<texture diffuse="masks/colossal-poster.png" background="true" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[FlixPosterVar]</texture>
+					<texture colordiffuse="artwork_dim" background="true" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[FlixPosterVar]</texture>
 					<bordersize>1</bordersize>
-					<bordertexture colordiffuse="$VAR[BorderColorVar]" border="20" infill="false">masks/colossal-poster-border.png</bordertexture>
-					<aspectratio scalediffuse="false">scale</aspectratio>
+					<bordertexture colordiffuse="$VAR[BorderColorVar]" infill="false">masks/bordertexture.png</bordertexture>
+					<!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
 					<include>ArtworkAnimations</include>
 					<animation condition="
 						Skin.HasSetting(Disable.50_ListSetting1_Ratings) | 
@@ -208,7 +278,7 @@
 					<width>470</width>
 					<height>182</height>
 					<fadetime>300</fadetime>
-					<texture background="true">$VAR[ClearlogoVar]</texture>
+					<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
 					<aspectratio align="right" aligny="top">keep</aspectratio>
 					<visible>
 						!Player.HasMedia + !String.IsEmpty(ListItem.Art(clearlogo)) + Skin.HasSetting(Enable.FanartClearlogo) +
@@ -227,8 +297,10 @@
 					<width>700</width>
 					<height>700</height>
 					<fadetime>500</fadetime>
-					<texture diffuse="masks/addons.png" background="true" fallback="$VAR[AltusCustomBackgroundImage]">$INFO[ListItem.Icon]</texture>
+					<!-- <bordersize>1</bordersize> -->
+					<texture background="true" fallback="$VAR[AltusCustomBackgroundImage]">$INFO[ListItem.Icon]</texture>
 					<aspectratio scalediffuse="true">keep</aspectratio>
+					<!-- <bordertexture border="1" colordiffuse="$VAR[BorderColorVar]" infill="false">masks/bordertexture.png</bordertexture> -->
 					<include>ArtworkAnimations</include>
 					<visible>
 						!Player.HasMedia + 
@@ -243,7 +315,7 @@
 					<width>500</width>
 					<height>500</height>
 					<fadetime>500</fadetime>
-					<texture diffuse="masks/addons.png" background="true" fallback="$VAR[AltusCustomBackgroundImage]">$INFO[ListItem.Icon]</texture>
+					<texture background="true" fallback="$VAR[AltusCustomBackgroundImage]">$INFO[ListItem.Icon]</texture>
 					<aspectratio scalediffuse="false">keep</aspectratio>
 					<include>ArtworkAnimations</include>
 					<visible>!Player.HasMedia + Container.Content() + !String.StartsWith(Container.PluginName,plugin.video.otaku)</visible>
@@ -270,9 +342,9 @@
 					<control type="image">
 						<top>589</top>
 						<left>71</left>
-						<width>928</width>
+						<width>929</width>
 						<height>250</height>
-						<texture colordiffuse="A8FFFFFF" background="true">overlays/overlayfade-ls.png</texture>
+						<texture colordiffuse="overlay_fade_color" background="true">overlays/overlay_bg_long.png</texture>
 					</control>
 					<control type="image">
 						<top>674</top>
@@ -280,7 +352,7 @@
 						<width>300</width>
 						<height>116</height>
 						<fadetime>300</fadetime>
-						<texture background="true">$VAR[ClearlogoVar]</texture>
+						<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
 						<aspectratio align="left" aligny="bottom">keep</aspectratio>
 					</control>
 				</control>
@@ -298,7 +370,7 @@
 						!String.IsEmpty(ListItem.Genre) + 
 						$EXP[isContent]"/>
 						<param name="align" value="center"/>
-						<param name="top" value="239.5"/>
+						<param name="top" value="249.5"/>
 						<param name="left" value="-850"/>
 					</include>
 				</control>
@@ -470,21 +542,11 @@
 						<bottom>124</bottom>
 						<fadetime>200</fadetime>
 						<aspectratio aligny="top">keep</aspectratio>
-						<texture diffuse="masks/poster-50.png" fallback="DefaultVideo.png" background="true">$VAR[FlixThumbVar]</texture>
+						<texture fallback="DefaultVideo.png" background="true">$VAR[FlixThumbVar]</texture>
 					</control>
 					<control type="group">
 						<left>540</left>
 						<top>143</top>
-						<!-- <include content="RatingCircle">
-							<param name="animation" value="True" />
-							<param name="left">-72</param>
-							<param name="top">17</param>
-							<param name="width">119</param>
-							<param name="height">119</param>
-							<param name="label-left">-16</param>
-							<param name="label-top">38</param>
-							<param name="cornerdiffuse">overlays/overlaybg4.png</param>
-						</include> -->
 					</control>
 					<include content="ProgressBar">
 						<!-- 48 -->
@@ -700,10 +762,10 @@
 								<width>127</width>
 								<!-- 354 -->
 								<height>190</height>
-								<texture diffuse="masks/poster50small.png" background="true">$VAR[FlixPosterVar]</texture>
-								<bordersize>3</bordersize>
-								<aspectratio scalediffuse="false">scale</aspectratio>
-								<bordertexture colordiffuse="$VAR[FocuscolorTheme]" border="15" infill="false">masks/poster50small_border.png</bordertexture>
+								<texture background="true">$VAR[FlixPosterVar]</texture>
+								<bordersize>4</bordersize>
+								<!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
+								<bordertexture border="4" colordiffuse="$VAR[FocuscolorTheme]" infill="false">colors/white.png</bordertexture>
 								<!-- <animation condition="Container($PARAM[list_id]).IsUpdating + String.IsEmpty(Skin.String(TrailerPlaying))" effect="fade" time="700" start="50" end="100" pulse="true">Conditional</animation> -->
 							</control>
 							<!-- <control type="image">
@@ -845,7 +907,6 @@
 								<animation effect="fade" time="150">VisibleChange</animation>
 								<visible>Control.HasFocus($PARAM[list_id])</visible>
 							</control>
-							<include>SetDBTypeProperty</include>
 						</control>
 					</focusedlayout>
 					<itemlayout condition="[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),2) + !String.StartsWith(Container.PluginName,plugin.video.the-loop)] | 
@@ -857,7 +918,7 @@
 					Container.Content(games) | 
 					Window.IsActive(videoplaylist) | 
 					Window.IsActive(musicplaylist)" height="67" width="610">
-						<include>altus.Preload50_ListSetting2</include>
+						<include>altus.PreloadPoster</include>
 						<control type="label">
 							<left>70</left>
 							<width>810</width>
@@ -1025,7 +1086,6 @@
 							<animation effect="fade" time="150">VisibleChange</animation>
 							<visible>Control.HasFocus($PARAM[list_id])</visible>
 						</control>
-						<include>SetDBTypeProperty</include>
 					</focusedlayout>
 					<itemlayout condition="[Container.Content(movies) + !String.IsEqual(Skin.String(ListArtworkChoice.movies),2) + !String.StartsWith(Container.PluginName,plugin.video.the-loop)] | 
 					Container.Content(sets) | 
@@ -1036,7 +1096,6 @@
 					Container.Content(games) | 
 					Window.IsActive(videoplaylist) | 
 					Window.IsActive(musicplaylist)" height="67" width="610">
-						<include>altus.Preload50_ListSetting0or1</include>
 						<control type="label">
 							<left>70</left>
 							<width>810</width>
@@ -1272,7 +1331,6 @@
 						</control> -->
 					</focusedlayout>
 					<itemlayout condition="String.IsEqual(Window(Home).Property(CurrentFolder),addons) | [Container.Content(addons) + !String.StartsWith(Container.PluginName,plugin.video)]" height="67" width="610">
-						<include>altus.Preload50_Addons</include>
 						<control type="label">
 							<left>79</left>
 							<width>810</width>
@@ -1326,7 +1384,7 @@
 					<height>170</height>
 					<aspectratio aligny="center" align="center">keep</aspectratio>
 					<fadetime>300</fadetime>
-					<texture diffuse="focus/listthumb_img.png" fallback="$PARAM[fallback_image]" background="true">$INFO[ListItem.Icon]</texture>
+					<texture fallback="$PARAM[fallback_image]" background="true">$INFO[ListItem.Icon]</texture>
 					<visible>!String.IsEqual(Container.PluginName,plugin.video.dramacool) + ![$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode] | String.IsEqual(ListItem.DBType,song)] + !Container.Content(addons)</visible>
 				</control> -->
 				<control type="image">
@@ -1336,7 +1394,7 @@
 					<height>470</height>
 					<aspectratio aligny="bottom">keep</aspectratio>
 					<fadetime>300</fadetime>
-					<texture diffuse="masks/addons.png" fallback="DefaultAudio.png" background="true">$VAR[IconWallThumbVar]</texture>
+					<texture fallback="DefaultAudio.png" background="true">$VAR[IconWallThumbVar]</texture>
 					<visible>String.IsEqual(ListItem.DBType,song)</visible>
 				</control>
 				<control type="group">

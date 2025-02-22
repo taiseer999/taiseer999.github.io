@@ -26,7 +26,7 @@
       <fadetime>500</fadetime>
       <animation effect="fade" time="400">VisibleChange</animation>
       <texture background="true" colordiffuse="FF333333">$INFO[ListItem.Art(fanart)]</texture>
-      <visible>Skin.HasSetting(Enable.Fanart)</visible>
+      <visible>String.IsEqual(Skin.String(BackgroundSetting),1)</visible>
     </control>
     <control type="group">
       <animation type="WindowOpen">
@@ -36,12 +36,16 @@
         <effect type="fade" start="100" end="0" time="400" tween="sine" easing="inout" />
       </animation>
       <animation effect="fade" start="100" end="0" time="200" condition="Window.IsActive(DialogSelect.xml) | Window.IsActive(FileBrowser.xml)">Conditional</animation>
+      <include content="MenuContentPanel">
+        <param name="width" value="370"/>
+        <param name="dividerleft" value="370"/>
+      </include>
       <control type="group">
         <control type="list" id="20000">
           <include content="CenterList72">
             <param name="id" value="20000" />
           </include>
-          <left>10</left>
+          <left>0</left>
           <width>370</width>
           <onleft>back</onleft>
           <onright condition="String.IsEqual(Container(20000).ListItem.Property(id),cast)">SetFocus(50,0)</onright>
@@ -89,10 +93,10 @@
           <top>160</top>
           <bottom>0</bottom>
           <right>65</right>
-          <aspectratio scalediffuse="false">scale</aspectratio>
-          <texture diffuse="masks/poster-big.png">$VAR[FlixPosterVar]</texture>
+          <!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
+          <texture>$VAR[FlixPosterVar]</texture>
           <bordersize>1</bordersize>
-          <bordertexture colordiffuse="FF5B5B5B" border="20" infill="false">masks/poster-big-border.png</bordertexture>
+          <bordertexture colordiffuse="FF5B5B5B" border="1" infill="false">masks/bordertexture.png</bordertexture>
           <visible>!String.IsEqual(Container(20000).ListItem.Property(id),cast)</visible>
         </control>
         <control type="group">
@@ -174,11 +178,11 @@
             <top>160</top>
             <bottom>160</bottom>
             <right>-20</right>
-            <aspectratio scalediffuse="false">scale</aspectratio>
-            <texture diffuse="masks/poster-big.png">$INFO[Container(50).ListItem.Art(thumb)]</texture>
+            <!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
+            <texture>$INFO[Container(50).ListItem.Art(thumb)]</texture>
             <bordersize>1</bordersize>
             <fadetime>600</fadetime>
-            <bordertexture colordiffuse="FF5B5B5B" border="20" infill="false">masks/poster-big-border.png</bordertexture>
+            <bordertexture colordiffuse="FF5B5B5B" border="1" infill="false">masks/bordertexture.png</bordertexture>
           </control>
           <control type="image">
             <visible>Container(50).IsUpdating</visible>

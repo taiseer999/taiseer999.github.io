@@ -3,19 +3,26 @@
 	<defaultcontrol>9000</defaultcontrol>
 	<backgroundcolor>background</backgroundcolor>
 	<onload>RunScript(script.altus.helper, mode=calculate_cache_size)</onload>
+	<!-- <onload>RunScript(script.altus.helper,mode=getkodisettings&amp;window_id=10035&amp;altus_kodisetting_language=locale.language&amp;altus_kodisetting_country=locale.country&amp;altus_kodisetting_screensaver=screensaver.mode&amp;altus_kodisetting_audiolang=locale.audiolanguage&amp;altus_kodisetting_vidprefer=videoplayer.preferdefaultflag&amp;altus_kodisetting_subtitlelang=locale.subtitlelanguage&amp;altus_kodisetting_weather=weather.addon)</onload> -->
 	<onload>ClearProperty(SpotlightWidget,Home)</onload>
 	<onload>ClearProperty(altus_saved_list_id,Home)</onload>
 	<onload>ClearProperty(altus_stacked_saved_list_id,Home)</onload>
 	<controls>
 		<include>DefaultBackground</include>
 		<control type="group" id="10000">
-			<left>490</left>
+			<left>470</left>
 			<include>OpenClose_Right</include>
+			<include content="MenuContentPanel">
+				<param name="bg_left" value="980" />
+				<param name="width" value="470" />
+				<param name="dividerleft" value="980" />
+				<!-- <param name="color" value="4D000000" /> -->
+			</include>
 			<control type="grouplist" id="610">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>610</onup>
@@ -203,9 +210,9 @@
 
 			<control type="grouplist" id="637">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>637</onup>
@@ -219,6 +226,20 @@
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(OneClickClose)</onclick>
 					<selected>Skin.HasSetting(OneClickClose)</selected>
+				</control>
+				<!-- HOMESCREEN ON BACK -->
+				<control type="button" id="63702">
+					<label>Home screen on back action</label>
+					<label2>$VAR[OnBackSettingVar]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>$VAR[OnBackSettingToggleVar]</onclick>
+				</control>
+				<!-- HOMESCREEN ON LEFT -->
+				<control type="button" id="63703">
+					<label>Home screen on left action</label>
+					<label2>$VAR[OnLeftSettingVar]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>$VAR[OnLeftSettingToggleVar]</onclick>
 				</control>
 				<!-- MENU ITEMS CASE -->
 				<control type="button" id="63704">
@@ -234,44 +255,35 @@
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[FocusColorThemeToggleVar]</onclick>
 				</control>
-				<!-- TRAILER SOURCE -->
-				<control type="button" id="63706">
-					<label>Trailer source</label>
-					<label2>$VAR[TrailerSourceSettingVar]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>$VAR[TrailerSourceToggleVar]</onclick>
-				</control>
-				<!-- DIGITAL RELEASE -->
-				<control type="radiobutton" id="64707">
-					<label>Enable smart status (movies)</label>
-					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(Enable.SmartStatus)</selected>
-					<onclick>Skin.ToggleSetting(Enable.SmartStatus)</onclick>
-					<visible>!String.IsEmpty(Skin.String(valid_api_key))</visible>
-				</control>
-				<control type="button" id="63708">
-					<label>    - Recent window (days)</label>
-					<label2>$VAR[SkinSettingDigitalReleaseWindow]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>Skin.SetNumeric(altus_digital_release_window)</onclick>
-					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
-				</control>
-				<control type="button" id="63709">
-					<label>    - Expiry window (days)</label>
-					<label2>$VAR[SkinSettingDigitalExpiredWindow]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>Skin.SetNumeric(altus_digital_expired_window)</onclick>
-					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
-				</control>
 				<!-- CLOCK -->
-				<control type="radiobutton" id="63710">
+				<control type="radiobutton" id="63706">
 					<label>Show current time in InfoLine</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(Enable.ClockCrumbs)</selected>
 					<onclick>Skin.ToggleSetting(Enable.ClockCrumbs)</onclick>
 				</control>
+				<!-- ITEM TITLE -->
+				<control type="radiobutton" id="63707">
+					<label>Show item title in InfoLine</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(Disable.WidgetInfoLineTitle)</selected>
+					<onclick>Skin.ToggleSetting(Disable.WidgetInfoLineTitle)</onclick>
+				</control>
+				<!-- DIM/FADE WIDGETS -->
+				<control type="radiobutton" id="63708">
+					<label>$VAR[Capitalize_DimorFadeLabel] unfocused widgets</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(Disable.WidgetDimming)</selected>
+					<onclick>Skin.ToggleSetting(Disable.WidgetDimming)</onclick>
+				</control>
+				<control type="radiobutton" id="63709">
+					<label>$VAR[Capitalize_DimorFadeLabel] widgets on main menu focus</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(Enable.MainMenuWidgetDimming)</selected>
+					<onclick>Skin.ToggleSetting(Enable.MainMenuWidgetDimming)</onclick>
+				</control>
 				<!-- STUDIO LOGO -->
-				<control type="button" id="63711">
+				<control type="button" id="63710">
 					<label>Studio logos</label>
 					<label2>$VAR[StudioLogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>
@@ -282,9 +294,9 @@
 
 			<control type="grouplist" id="647">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>647</onup>
@@ -305,7 +317,7 @@
 					<onclick>Skin.ToggleSetting(NoSearchResultsWindow)</onclick>
 				</control>
 				<control type="button" id="64702">
-					<label>Default home screen search icon behavior</label>
+					<label>Home screen search icon behavior</label>
 					<label2>$VAR[DefaultSearchWindowBehaviorVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(DefaultSearchWindowBehavior)</onclick>
@@ -401,9 +413,9 @@
 
 			<control type="grouplist" id="648">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>648</onup>
@@ -478,13 +490,41 @@
 					<onclick>$VAR[Rating7ToggleVar]</onclick>
 					<visible>!String.IsEmpty(Skin.String(valid_api_key))</visible>
 				</control>
+				<control type="radiobutton" id="6489">
+					<label>Enable smart status (movies)</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(Enable.SmartStatus)</selected>
+					<onclick>Skin.ToggleSetting(Enable.SmartStatus)</onclick>
+					<visible>!String.IsEmpty(Skin.String(valid_api_key))</visible>
+				</control>
+				<control type="button" id="6490">
+					<label>    - Recent window (days)</label>
+					<label2>$VAR[SkinSettingDigitalReleaseWindow]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.SetNumeric(altus_digital_release_window)</onclick>
+					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
+				</control>
+				<control type="button" id="6491">
+					<label>    - Expiry window (days)</label>
+					<label2>$VAR[SkinSettingDigitalExpiredWindow]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>Skin.SetNumeric(altus_digital_expired_window)</onclick>
+					<visible>Skin.HasSetting(Enable.SmartStatus)</visible>
+				</control>
+				<!-- TRAILER SOURCE -->
+				<control type="button" id="6492">
+					<label>Trailer source</label>
+					<label2>$VAR[TrailerSourceSettingVar]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>$VAR[TrailerSourceToggleVar]</onclick>
+				</control>
 			</control>
 
 			<control type="grouplist" id="700">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>700</onup>
@@ -496,12 +536,12 @@
 					<selected>!Skin.HasSetting(no_slide_animations)</selected>
 					<onclick>Skin.ToggleSetting(no_slide_animations)</onclick>
 				</control>
-				<!-- <control type="radiobutton" id="703">
+				<control type="radiobutton" id="703">
 					<label>$LOCALIZE[20189]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(autoscroll)</onclick>
-					<selected>$PARAM[focused]</selected>
-				</control> -->
+					<selected>Skin.HasSetting(autoscroll)</selected>
+				</control>
 				<control type="radiobutton" id="704">
 					<label>$LOCALIZE[31158]</label>
 					<include>DefaultSettingButton</include>
@@ -537,42 +577,64 @@
 
 			<control type="grouplist" id="600">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>600</onup>
 				<ondown>600</ondown>
 				<visible>Container(9000).HasFocus(6)</visible>
+				<control type="button" id="6002">
+					<label>Background style</label>
+					<label2>$VAR[BackgroundSettingVar]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>$VAR[BackgroundToggleVar]</onclick>
+				</control>
 				<!-- FANART -->
-				<control type="radiobutton" id="6002">
+				<!-- <control type="radiobutton" id="6002">
 					<label>$LOCALIZE[31002]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(Enable.Fanart)</onclick>
 					<selected>Skin.HasSetting(Enable.Fanart)</selected>
-				</control>
+				</control> -->
 				<!-- DEFAULT BACKGROUND -->
 				<control type="button" id="6003">
 					<label>Choose default background</label>
 					<label2>$INFO[Skin.String(AltusCustomBackground)]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>RunScript(script.altus.helper, mode=set_image)</onclick>
+					<visible>!String.IsEqual(Skin.String(BackgroundSetting),0)</visible>
 				</control>
 				<control type="button" id="6004">
+					<label>    - Set blur radius</label>
+					<label2>$INFO[Skin.String(BlurRadius)]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>RunScript(script.altus.helper, mode=set_blurradius)</onclick>
+					<visible>String.IsEqual(Skin.String(BackgroundSetting),2)</visible>
+				</control>
+				<!-- BLUR SATURATION -->
+				<control type="button" id="6005">
+					<label>    - Set blur saturation</label>
+					<label2>$INFO[Skin.String(BlurSaturation)]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>RunScript(script.altus.helper, mode=set_blursaturation)</onclick>
+					<visible>String.IsEqual(Skin.String(BackgroundSetting),2)</visible>
+				</control>
+				<control type="button" id="6006">
 					<label>   - Restore default background</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.Reset(AltusCustomBackground)</onclick>
-					<visible>!String.IsEmpty(Skin.String(AltusCustomBackground))</visible>
+					<visible>!String.IsEqual(Skin.String(BackgroundSetting),0) + !String.IsEmpty(Skin.String(AltusCustomBackground))</visible>
 				</control>
 				<!-- CLEARLOGO -->
-				<control type="radiobutton" id="6005">
+				<control type="radiobutton" id="6007">
 					<label>Enable clearlogo (views)</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(Enable.Clearlogo)</onclick>
 					<selected>Skin.HasSetting(Enable.Clearlogo)</selected>
 				</control>
-				<control type="button" id="6006">
+				<control type="button" id="6008">
 					<label>$LOCALIZE[31131]</label>
 					<label2>$INFO[Skin.String(HomeFanart.name)]</label2>
 					<include>DefaultSettingButton</include>
@@ -580,7 +642,7 @@
 					<onclick condition="System.HasAddon(script.image.resource.select) + !System.AddonIsEnabled(script.image.resource.select)">EnableAddon(script.image.resource.select)</onclick>
 					<onclick condition="!System.HasAddon(script.image.resource.select)">InstallAddon(script.image.resource.select)</onclick>
 				</control>
-				<control type="button" id="6007">
+				<control type="button" id="6009">
 					<label>$LOCALIZE[31062]</label>
 					<label2>$INFO[Skin.String(WeatherFanart.name)]</label2>
 					<include>DefaultSettingButton</include>
@@ -588,7 +650,7 @@
 					<onclick condition="System.HasAddon(script.image.resource.select) + !System.AddonIsEnabled(script.image.resource.select)">EnableAddon(script.image.resource.select)</onclick>
 					<onclick condition="!System.HasAddon(script.image.resource.select)">InstallAddon(script.image.resource.select)</onclick>
 				</control>
-				<control type="button" id="6008">
+				<control type="button" id="6010">
 					<label>$LOCALIZE[31149]</label>
 					<label2>$INFO[Skin.String(MovieGenreFanart.Name)]</label2>
 					<include>DefaultSettingButton</include>
@@ -596,7 +658,7 @@
 					<onclick condition="System.HasAddon(script.image.resource.select) + !System.AddonIsEnabled(script.image.resource.select)">EnableAddon(script.image.resource.select)</onclick>
 					<onclick condition="!System.HasAddon(script.image.resource.select)">InstallAddon(script.image.resource.select)</onclick>
 				</control>
-				<control type="radiobutton" id="6009">
+				<control type="radiobutton" id="6011">
 					<label>$LOCALIZE[31168]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(show_musicvideoposter)</onclick>
@@ -606,9 +668,9 @@
 			
 			<control type="grouplist" id="622">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>622</onup>
@@ -663,51 +725,37 @@
 
 			<control type="grouplist" id="640">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>640</onup>
 				<pagecontrol>60</pagecontrol>
 				<ondown>640</ondown>
 				<visible>Container(9000).HasFocus(9)</visible>
-				<!-- HOMESCREEN ON BACK -->
-				<control type="button" id="64001">
-					<label>On back action</label>
-					<label2>$VAR[OnBackSettingVar]</label2>
+				<!-- SPOTLIGHT CLEARLOGO -->
+				<control type="radiobutton" id="64004">
+					<label>Enable spotlight clearlogo</label>
 					<include>DefaultSettingButton</include>
-					<onclick>$VAR[OnBackSettingToggleVar]</onclick>
-				</control>
-				<!-- HOMESCREEN ON LEFT -->
-				<control type="button" id="64002">
-					<label>On left action</label>
-					<label2>$VAR[OnLeftSettingVar]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>$VAR[OnLeftSettingToggleVar]</onclick>
-				</control>
-				<!--SPOTLIGHT -->
-				<control type="radiobutton" id="64003">
-					<label>Use alternate spotlight</label>
-					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(Enable.AlternateSpotlight)</selected>
-					<onclick>Skin.ToggleSetting(Enable.AlternateSpotlight)</onclick>
+					<selected>!Skin.HasSetting(Disable.SpotlightClearlogo)</selected>
+					<onclick>Skin.ToggleSetting(Disable.SpotlightClearlogo)</onclick>
 				</control>
 				<!--STACKED SPOTLIGHT CONTROL -->
-				<control type="radiobutton" id="64004">
+				<control type="radiobutton" id="64005">
 					<label>Show stacked control with stacked spotlight</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(Enable.StackedSpotlightControl)</selected>
 					<onclick>Skin.ToggleSetting(Enable.StackedSpotlightControl)</onclick>
 				</control>
 				<!--AUTOSCROLL SPOTLIGHT -->
-				<control type="radiobutton" id="64005">
+				<control type="radiobutton" id="64006">
 					<label>Autoscroll spotlight widgets</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(Enable.AutoScrollSpotlight)</selected>
 					<onclick>Skin.ToggleSetting(Enable.AutoScrollSpotlight)</onclick>
 				</control>
-				<control type="button" id="64006">
+				<control type="button" id="64007">
 					<label>    - Delay (milliseconds)</label>
 					<label2>$VAR[SkinSettingAutoScrollSpotlightDelay]</label2>
 					<include>DefaultSettingButton</include>
@@ -715,15 +763,14 @@
 					<visible>Skin.HasSetting(Enable.AutoScrollSpotlight)</visible>
 				</control>
 				<!-- LANDSCAPE DISPLAY STYLE -->
-				<control type="button" id="64007">
-					<label>Landscape display style</label>
+				<control type="button" id="64008">
+					<label>Feature landscape display style</label>
 					<label2>$VAR[HomeItemArtworkChoiceSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[HomeItemArtworkChoiceToggleVar]</onclick>
 					<onclick condition="!Skin.HasSetting(Disable.LandscapeWidgetClearlogo)">Skin.SetBool(Disable.LandscapeWidgetClearlogo)</onclick>
 				</control>
-				<!-- LANDSCAPE DISPLAY STYLE -->
-				<control type="radiobutton" id="64008">
+				<control type="radiobutton" id="64009">
 					<label>    - Enable clearlogo</label>
 					<include>DefaultSettingButton</include>
 					<selected>!Skin.HasSetting(Disable.LandscapeWidgetClearlogo)</selected>
@@ -731,90 +778,45 @@
 					<visible>String.IsEqual(Skin.String(HomeItemArtworkChoice),1)</visible>
 				</control>
 				<!-- STACKED WIDGET DELAY -->
-				<control type="button" id="64009">
+				<control type="button" id="64010">
 					<label>Set stacked load delay (milliseconds)</label>
 					<label2>$VAR[SkinSettingStackedLoadDelay]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.SetNumeric(altus_category_widget_delay)</onclick>
 				</control>
 				<!-- COUNTDOWN TIMER -->
-				<control type="radiobutton" id="64010">
+				<control type="radiobutton" id="64011">
 					<label>Show countdown timer</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(altus_category_widget_display_delay)</selected>
 					<onclick>Skin.ToggleSetting(altus_category_widget_display_delay)</onclick>
 				</control>
-				<!-- AUTO INFO -->
-				<control type="radiobutton" id="64011">
-					<label>Enable auto info</label>
-					<include>DefaultSettingButton</include>
-					<selected>!Skin.HasSetting(Disable.WidgetAutoInfo)</selected>
-					<onclick>Skin.ToggleSetting(Disable.WidgetAutoInfo)</onclick>
-				</control>
 				<control type="button" id="64012">
-					<label>    - Choose amount to dim unfocused items</label>
-					<label2>$VAR[AutoInfoFadeSettingVar]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>$VAR[AutoInfoFadeToggleVar]</onclick>
-					<visible>!Skin.HasSetting(Disable.WidgetAutoInfo)</visible>
-				</control>
-				<control type="button" id="64013">
-					<label>    - Delay (milliseconds)</label>
-					<label2>$VAR[SkinSettingWidgetAutoInfoDelay]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>Skin.SetNumeric(altus_widget_autoinfo_delay)</onclick>
-					<visible>!Skin.HasSetting(Disable.WidgetAutoInfo)</visible>
-				</control>
-				<control type="button" id="64014">
-					<label>    - Clearlogo</label>
+					<label>Clearlogo</label>
 					<label2>$VAR[WidgetClearlogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[WidgetClearlogoToggleVar]</onclick>
-					<visible>!Skin.HasSetting(Disable.WidgetAutoInfo)</visible>
 				</control>
-				<control type="radiobutton" id="64015">
-					<label>    - Ratings</label>
+				<control type="radiobutton" id="64013">
+					<label>Ratings</label>
 					<include>DefaultSettingButton</include>
-					<onclick>Skin.ToggleSetting(Disable.AutoInfoRatings)</onclick>
-					<selected>!Skin.HasSetting(Disable.AutoInfoRatings)</selected>
-					<visible>!Skin.HasSetting(Disable.WidgetAutoInfo)</visible>
+					<onclick>Skin.ToggleSetting(Disable.HomePanelRatings)</onclick>
+					<selected>!Skin.HasSetting(Disable.HomePanelRatings)</selected>
 				</control>
-				<control type="radiobutton" id="64016">
-					<label>    - Studio logo</label>
+				<control type="radiobutton" id="64014">
+					<label>Studio logo</label>
 					<include>DefaultSettingButton</include>
 					<onclick condition="!System.HasAddon(resource.images.studios.white)">InstallAddon(resource.images.studios.white)</onclick>
-					<selected>Skin.HasSetting(Enable.WidgetStudioLogos)</selected>
-					<onclick>Skin.ToggleSetting(Enable.WidgetStudioLogos)</onclick>
-					<visible>!Skin.HasSetting(Disable.WidgetAutoInfo)</visible>
+					<selected>Skin.HasSetting(Enable.HomePanelStudioLogos)</selected>
+					<onclick>Skin.ToggleSetting(Enable.HomePanelStudioLogos)</onclick>
 				</control>
-				<!-- ITEM TITLE -->
-				<control type="radiobutton" id="64017">
-					<label>Show item title in InfoLine</label>
-					<include>DefaultSettingButton</include>
-					<selected>!Skin.HasSetting(Disable.WidgetInfoLineTitle)</selected>
-					<onclick>Skin.ToggleSetting(Disable.WidgetInfoLineTitle)</onclick>
-				</control>
-				<!-- DIM WIDGETS -->
-				<control type="radiobutton" id="64018">
-					<label>Dim unfocused widgets</label>
-					<include>DefaultSettingButton</include>
-					<selected>!Skin.HasSetting(Disable.WidgetDimming)</selected>
-					<onclick>Skin.ToggleSetting(Disable.WidgetDimming)</onclick>
-				</control>
-				<control type="radiobutton" id="64019">
-					<label>Dim widgets on main menu focus</label>
-					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(Enable.MainMenuWidgetDimming)</selected>
-					<onclick>Skin.ToggleSetting(Enable.MainMenuWidgetDimming)</onclick>
-				</control>
-				
 			</control>
 
 			<control type="grouplist" id="641">
 				<top>133</top>
-				<left>25</left>
-				<right>20</right>
-				<bottom>140</bottom>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
 				<onleft>9000</onleft>
 				<onright>60</onright>
 				<onup>641</onup>
@@ -864,36 +866,97 @@
 					<onclick>Notification(Views Unlocked,All forced views have been reset)</onclick>
 				</control>
 				<control type="button" id="64104">
-					<label>Clear cache (colors, cropped logos)</label>
-					<label2>$INFO[Skin.String(CacheSize)]</label2>
+					<label>Clear ALL image caches</label>
+					<label2>$INFO[Skin.String(TotalImageCacheSize)]</label2>
 					<include>DefaultSettingButton</include>
-					<onclick>RunScript(script.altus.helper, mode=clear_cache)</onclick>
+					<onclick>RunScript(script.altus.helper, mode=clear_all_image_caches)</onclick>
 				</control>
 				<control type="button" id="64105">
+					<label>    - Clear color cache</label>
+					<label2>$INFO[Skin.String(ColorCacheSize)]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>RunScript(script.altus.helper, mode=clear_color_cache)</onclick>
+				</control>
+				<control type="button" id="64106">
+					<label>    - Clear logo cache</label>
+					<label2>$INFO[Skin.String(LogoCacheSize)]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>RunScript(script.altus.helper, mode=clear_logo_cache)</onclick>
+				</control>
+				<control type="button" id="64107">
+					<label>    - Clear blur cache</label>
+					<label2>$INFO[Skin.String(BlurCacheSize)]</label2>
+					<include>DefaultSettingButton</include>
+					<onclick>RunScript(script.altus.helper, mode=clear_blur_cache)</onclick>
+				</control>
+				<control type="button" id="64108">
 					<label>Clear ratings cache</label>
+					<label2>$INFO[Skin.String(RatingsDatabaseSize)]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>RunScript(script.altus.helper,mode=delete_all_ratings)</onclick>
 				</control>
-				<control type="button" id="64106">
+				<control type="button" id="64109">
 					<label>Clear search history</label>
+					<label2>$INFO[Skin.String(SearchHistoryDatabaseSize)]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>RunScript(script.altus.helper,mode=remove_all_spaths)</onclick>
 				</control>
 			</control>
 
+			<!-- <control type="grouplist" id="642">
+				<top>133</top>
+				<left>0</left>
+				<right>470</right>
+				<bottom>70</bottom>
+				<onleft>9000</onleft>
+				<onright>60</onright>
+				<onup>642</onup>
+				<pagecontrol>60</pagecontrol>
+				<ondown>642</ondown>
+				<visible>Container(9000).HasFocus(11)</visible>
+				<control type="button" id="64101">
+					<label>View changelog</label>
+					<include>DefaultSettingButton</include>
+					<onclick>RunScript(script.altus.helper,mode=show_changelog)</onclick>
+				</control>
+				<control type="button" id="64102">
+					<label>View welcome screen</label>
+					<include>DefaultSettingButton</include>
+					<onclick>ActivateWindow(1112)</onclick>
+				</control>
+				<control type="button" id="64201">
+					<include>DefaultSettingButton</include>
+					<label>$LOCALIZE[14200] » $LOCALIZE[14218] » $LOCALIZE[285]</label>
+					<label2>$INFO[Window(skinsettings).Property(altus_kodisetting_audiolang)]</label2>
+					<onclick>ActivateWindowAndFocus(playersettings,-196,0,-179,0)</onclick>
+				</control>
+				<control type="button" id="64202">
+					<include>DefaultSettingButton</include>
+					<label>$LOCALIZE[14200] » $LOCALIZE[14218] » $LOCALIZE[286]</label>
+					<label2>$INFO[Window(skinsettings).Property(altus_kodisetting_subtitlelang)]</label2>
+					<onclick>ActivateWindowAndFocus(playersettings,-196,0,-175,0)</onclick>
+				</control>
+				<control type="button" id="64203">
+					<include>DefaultSettingButton</include>
+					<label>$LOCALIZE[14200] » $LOCALIZE[14218] » $LOCALIZE[37040]</label>
+					<label2>$INFO[Window(skinsettings).Property(altus_kodisetting_vidprefer)]</label2>
+					<onclick>ActivateWindowAndFocus(playersettings,-196,0,-178,0)</onclick>
+				</control>
+			</control> -->
+
 			<control type="image">
 				<description>Dialog Header image</description>
-				<left>25</left>
+				<left>0</left>
 				<top>130</top>
-				<right>45</right>
+				<right>470</right>
 				<height>3</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
 			<control type="image">
 				<description>Dialog Header image</description>
-				<left>25</left>
-				<bottom>134</bottom>
-				<right>45</right>
+				<left>0</left>
+				<bottom>64</bottom>
+				<right>470</right>
 				<height>3</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
@@ -902,12 +965,20 @@
 			<depth>DepthContentPanel</depth>
 			<left>0</left>
 			<include>OpenClose_Left</include>
-			<!-- <include content="ContentPanel">
-				<param name="width" value="530" />
+			<include content="MenuContentPanel">
+				<param name="width" value="470" />
+				<param name="dividerleft" value="470" />
+				<!-- <param name="color" value="4D000000" /> -->
+			</include>
+			<!-- <include content="MenuContentPanel">
+				<param name="width" value="1920" />
+				<param name="height" value="130" />
+				<param name="divider_visible" value="false" />
+				<param name="color" value="4D000000" />
 			</include> -->
 			<control type="list" id="9000">
 				<description>button area</description>
-				<left>10</left>
+				<left>0</left>
 				<top>130</top>
 				<width>470</width>
 				<height>900</height>
@@ -917,9 +988,8 @@
 				<ondown>9000</ondown>
 				<itemlayout height="85" width="470">
 					<control type="label">
-						<left>25</left>
 						<textoffsetx>30</textoffsetx>
-						<width>445</width>
+						<width>470</width>
 						<height>85</height>
 						<label>$INFO[ListItem.Label]</label>
 						<textcolor>unfocused_text</textcolor>
@@ -930,16 +1000,14 @@
 				</itemlayout>
 				<focusedlayout height="85" width="470" infoupdate="300">
 					<control type="image">
-						<left>25</left>
-						<width>445</width>
+						<width>470</width>
 						<height>85</height>
-						<texture colordiffuse="$VAR[FocusColorTheme]">focus/settingsmenu.png</texture>
+						<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 						<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(9000)">Conditional</animation>
 					</control>
 					<control type="label">
-						<left>25</left>
 						<textoffsetx>30</textoffsetx>
-						<width>445</width>
+						<width>470</width>
 						<height>85</height>
 						<font>font37</font>
 						<aligny>center</aligny>
@@ -971,7 +1039,7 @@
 						<onclick>noop</onclick>
 					</item>
 					<item id="4">
-						<label>Ratings config</label>
+						<label>API features</label>
 						<onclick>noop</onclick>
 					</item>
 					<item id="3">
@@ -982,6 +1050,10 @@
 						<label>$LOCALIZE[31170]</label>
 						<onclick>noop</onclick>
 					</item>
+					<!-- <item id="11">
+						<label>Shortcuts</label>
+						<onclick>noop</onclick>
+					</item> -->
 					<item id="10">
 						<label>Extras</label>
 						<onclick>noop</onclick>
@@ -1019,13 +1091,15 @@
 		<!-- <control type="textbox" id="6">
 			<include>OpenClose_Right</include>
 			<description>description area</description>
-			<left>520</left>
-			<bottom>27</bottom>
-			<width>1360</width>
-			<height>105</height>
-			<font>font12</font>
-			<align>justify</align>
+			<left>1480</left>
+			<top>130</top>
+			<right>30</right>
+			<height>877</height>
+			<font>font27</font>
+			<align>center</align>
+			<aligny>center</aligny>
 			<textcolor>$VAR[FocusedColorVar]</textcolor>
+			<label>Bacon ipsum dolor amet sausage picanha pancetta rump, bresaola meatball kielbasa. Turkey strip steak t-bone landjaeger beef ribs pork belly boudin chuck sirloin chislic fatback kevin kielbasa. Turducken hamburger jerky meatloaf, t-bone tenderloin ground round tail brisket pig bacon. Chislic tail sausage tenderloin. Leberkas doner ground round fatback, sirloin sausage filet mignon t-bone cupim capicola tenderloin pork andouille turkey chuck. Kielbasa pork chop ham hock bacon. Landjaeger spare ribs ham drumstick, capicola tenderloin hamburger turducken ribeye tail salami beef. Corned beef pastrami turkey meatball rump alcatra capicola, hamburger andouille sausage landjaeger pork cupim beef ribs kielbasa. Ribeye ball tip strip steak boudin sausage, t-bone chicken leberkas pork loin. Ham hock turducken shank biltong salami. Drumstick buffalo shank, ribeye swine ham chicken meatloaf. Hamburger rump ham tail. Chuck strip steak bresaola prosciutto kevin. Fatback drumstick pancetta, andouille chislic burgdoggen flank pork chop ham buffalo ham hock porchetta. Pork loin buffalo ball tip tongue leberkas. Rump burgdoggen kevin, landjaeger pork pastrami frankfurter. Drumstick sausage pork, prosciutto kielbasa ground round pork chop. Fatback kevin tri-tip cow, meatloaf filet mignon ground round andouille shoulder pastrami. Capicola meatloaf sausage shankle ribeye swine. Pork swine beef, andouille salami cupim turducken fatback landjaeger. Bacon meatloaf ham hock rump tail turducken tri-tip flank pork loin shoulder drumstick pork cow beef ribs. Beef pastrami t-bone frankfurter pork loin sausage. Strip steak beef corned beef spare ribs.</label>
 			<label>$VAR[SkinSettingsHelpTextVar]</label>
 			<autoscroll time="3000" delay="5000" repeat="5000">true</autoscroll>
 		</control> -->

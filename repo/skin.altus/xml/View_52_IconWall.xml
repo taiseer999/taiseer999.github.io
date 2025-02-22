@@ -51,9 +51,7 @@
 							<top>40</top>
 							<width>360</width>
 							<height>210</height>
-							<texture colordiffuse="66000000">masks/landscape.png</texture>
-							<bordertexture colordiffuse="$VAR[FocusColorTheme]" border="20" infill="false">masks/landscape-border.png</bordertexture>
-							<bordersize>1</bordersize>
+							<texture colordiffuse="66000000">colors/white.png</texture>
 						</control>
 						<!-- IMAGE CONTROL -->
 						<control type="image">
@@ -61,7 +59,7 @@
 							<top>60</top>
 							<width>120</width>
 							<height>120</height>
-							<texture diffuse="masks/addons.png" fallback="DefaultStudios.png">$INFO[ListItem.Icon]</texture>
+							<texture fallback="DefaultStudios.png">$INFO[ListItem.Icon]</texture>
 							<aspectratio>keep</aspectratio>
 						</control>
 						<control type="label">
@@ -82,12 +80,11 @@
 						<depth>DepthContentPopout</depth>
 						<top>0</top>
 						<control type="image">
-							<left>34</left>
-							<top>34</top>
-							<width>372</width>
-							<height>222</height>
-							<texture colordiffuse="$VAR[FocusColorTheme]">masks/landscape.png</texture>
-							<!-- <bordersize>-5</bordersize> -->
+							<left>40</left>
+							<top>40</top>
+							<width>360</width>
+							<height>210</height>
+							<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 							<include>Animation_FocusTextureFade</include>
 						</control>
 						<control type="image">
@@ -95,7 +92,7 @@
 							<top>60</top>
 							<width>120</width>
 							<height>120</height>
-							<texture diffuse="masks/addons.png" fallback="DefaultStudios.png">$INFO[ListItem.Icon]</texture>
+							<texture fallback="DefaultStudios.png">$INFO[ListItem.Icon]</texture>
 							<aspectratio>keep</aspectratio>
 							<align>center</align>
 						</control>

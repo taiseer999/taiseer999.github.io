@@ -131,7 +131,7 @@
 		<value>$INFO[ListItem.Plot]</value>
 	</variable> -->
 	<variable name="SelectLabel">
-		<value condition="!Skin.HasSetting(Enable.Fanart)">$VAR[SelectLabel.NoBlur]</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">$VAR[SelectLabel.NoBlur]</value>
 		<value>$VAR[SelectLabel.Blur]</value>
 	</variable>
 	<variable name="SelectLabel.NoBlur">
@@ -143,7 +143,7 @@
 		<value>$INFO[Container(6).NumItems] [COLOR unfocused_text]$LOCALIZE[31036][/COLOR] - [COLOR unfocused_text]$INFO[Container(6).CurrentPage]/$INFO[Container(6).NumPages][/COLOR]</value>
 	</variable>
 	<variable name="FileBrowserSelectLabel">
-		<value condition="!Skin.HasSetting(Enable.Fanart)">$VAR[FileBrowserSelectLabel.NoBlur]</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">$VAR[FileBrowserSelectLabel.NoBlur]</value>
 		<value>$VAR[FileBrowserSelectLabel.Blur]</value>
 	</variable>
 	<variable name="FileBrowserSelectLabel.NoBlur">
@@ -369,10 +369,6 @@
 		<value condition="!String.IsEmpty(Skin.String(OSDAutoCloseTime))">$INFO[Skin.String(OSDAutoCloseTime)]</value>
 		<value condition="String.IsEmpty(Skin.String(OSDAutoCloseTime))">4</value> <!-- Default value -->
 	</variable>
-	<variable name="SkinSettingWidgetAutoInfoDelay">
-    <value condition="!String.IsEmpty(Skin.String(altus_widget_autoinfo_delay))">$INFO[Skin.String(altus_widget_autoinfo_delay)]</value>
-    <value condition="String.IsEmpty(Skin.String(altus_widget_autoinfo_delay))">750</value> <!-- Default 750ms -->
-	</variable>
 	<variable name="SkinSettingAutoScrollSpotlightDelay">
     <value condition="!String.IsEmpty(Skin.String(altus_spotlight_delay))">$INFO[Skin.String(altus_spotlight_delay)]</value>
     <value condition="String.IsEmpty(Skin.String(altus_spotlight_delay))">10</value> <!-- Default 750ms -->
@@ -548,7 +544,7 @@
 	</variable>
 	
 	<!-- <variable name="BreadcrumbsPVRChannelsVar">
-		<value condition="!Skin.HasSetting(Enable.Fanart)">$VAR[BreadcrumbsPVRChannels.NoBlur]</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">$VAR[BreadcrumbsPVRChannels.NoBlur]</value>
 		<value>$VAR[BreadcrumbsPVRChannels.Blur]</value>
 	</variable> -->
 	<variable name="BreadcrumbsPVRChannels.NoBlur">
@@ -560,7 +556,7 @@
 		<value>[COLOR unfocused_text]$LOCALIZE[19021][/COLOR] [B]»[/B] [COLOR unfocused_text]$LOCALIZE[19019][/COLOR] [B]»[/B] [COLOR unfocused_text]$INFO[Control.GetLabel(29)][/COLOR]</value>
 	</variable>
 	<!-- <variable name="BreadcrumbsPVRGuideVar">
-		<value condition="!Skin.HasSetting(Enable.Fanart)">$VAR[BreadcrumbsPVRGuide.NoBlur]</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">$VAR[BreadcrumbsPVRGuide.NoBlur]</value>
 		<value>$VAR[BreadcrumbsPVRGuide.Blur]</value>
 	</variable> -->
 	<variable name="BreadcrumbsPVRGuideVar">
@@ -596,7 +592,7 @@
 		<value>$LOCALIZE[19021] [B]»[/B] $LOCALIZE[137]$INFO[Control.GetLabel(29), [B]»[/B] ]$INFO[Control.GetLabel(30), ]</value>
 	</variable>
 	<variable name="BreadcrumbsPVRChannelsOSDVar">
-		<value condition="!Skin.HasSetting(Enable.Fanart)">$VAR[BreadcrumbsPVRChannelsOSD.NoBlur]</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">$VAR[BreadcrumbsPVRChannelsOSD.NoBlur]</value>
 		<value>$VAR[BreadcrumbsPVRChannelsOSD.Blur]</value>
 	</variable>
 	<variable name="BreadcrumbsPVRChannelsOSD.NoBlur">

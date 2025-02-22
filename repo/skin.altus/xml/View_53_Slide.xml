@@ -30,7 +30,7 @@
 				<include>Visible_Right</include>
 				<include>OpenClose_Right</include>
 				<control type="fixedlist" id="53">
-					<left>0</left>
+					<left>-25</left>
 					<top>0</top>
 					<width>110%</width>
 					<height>704</height>
@@ -89,18 +89,19 @@
 					</visible>
 					<preloaditems>1</preloaditems>
 					<viewtype label="31100">icon</viewtype>
-					<itemlayout width="260">
+					<itemlayout width="265">
 						<control type="group">
-              <animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.53Dim)">Conditional</animation>
+              <include content="ViewUnfocusedAnimations">
+								<param name="id" value="53"/>
+							</include>
               <!-- <visible>!$EXP[sidebar_visible]</visible>
               <animation effect="fade" time="300">VisibleChange</animation> -->
-							<left>-205</left>
+							<left>-211</left>
 							<top>18</top>
 							<include>PosterLayout</include>
-							<include>altus.PreloadFanart</include>
 						</control>
 					</itemlayout>
-					<focusedlayout width="490">
+					<focusedlayout width="515">
 						<control type="group">
 							<control type="group">
 								<left>-220</left>
@@ -119,7 +120,6 @@
 								<include>PosterLayout</include>
 							</control>
 						</control>
-            <include>SetDBTypeProperty</include>
 						<include>ReturntoView</include>
 					</focusedlayout>
 				</control>
@@ -158,7 +158,7 @@
 					</control> -->
           <control type="group">
             <top>400</top>
-            <left>605</left>
+            <left>575</left>
             <include condition="!Skin.HasSetting(Disable.53StudioLogo)">53InfoWidth_StudioEnabled</include>
 						<include condition="Skin.HasSetting(Disable.53StudioLogo)">53InfoWidth_StudioDisabled</include>
             <!-- <bottom>160</bottom> -->
@@ -234,7 +234,7 @@
 		<control type="group">
 			<centertop>50%</centertop>
 			<height>670</height>
-			<left>66</left>
+			<left>56</left>
 			<depth>DepthContentPopout</depth>
 			<visible>Control.IsVisible(53)</visible>
 			<include>OpenClose_Left</include>
@@ -250,13 +250,15 @@
 				<bordersize>20</bordersize>
 			</control> -->
       <control type="image">
-				<left>-1</left>
-				<top>-1</top>
-				<width>486</width>
-				<height>724</height>
+				<left>4</left>
+				<top>4</top>
+				<width>476</width>
+				<height>714</height>
+				<fadetime>200</fadetime>
+				<bordersize>-6</bordersize>
 				<visible>Control.HasFocus(53)</visible>
 				<animation effect="fade" time="100">VisibleChange</animation>
-				<texture border="20" colordiffuse="$VAR[FocusColorTheme]">masks/poster53.png</texture>
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
 			</control>
 			<control type="image">
 				<left>4</left>
@@ -264,21 +266,13 @@
 				<width>476</width>
 				<height>714</height>
 				<fadetime>200</fadetime>
-				<aspectratio scalediffuse="false">scale</aspectratio>
-        <bordersize>2</bordersize>
-				<texture diffuse="masks/poster53.png" fallback="DefaultMovies.png" background="true">$VAR[FlixPosterVar]</texture>
+				<!-- <aspectratio scalediffuse="false">scale</aspectratio>
+        <bordersize>2</bordersize> -->
+				<texture colordiffuse="artwork_dim" fallback="DefaultMovies.png" background="true">$VAR[FlixPosterVar]</texture>
 			</control>
 			
 			<control type="group">
 				<visible>String.IsEqual(ListItem.DBtype,tvshow) | String.IsEqual(ListItem.DBType,season) | ListItem.IsRecording | ListItem.HasReminder | ListItem.HasTimer | ListItem.IsCollection | ListItem.HasVideoVersions | ListItem.IsPlaying | ListItem.IsResumable | ListItem.HasVideoExtras | ListItem.HasArchive | Integer.IsGreater(ListItem.Playcount,0)</visible>
-				<!-- <control type="image">
-					<left>4</left>
-					<top>670</top>
-					<width>476</width>
-					<height>50</height>
-					<texture colordiffuse="CCFFFFFF">overlays/overlayfade.png</texture>
-					<visible>!String.IsEmpty(ListItem.Art(poster))</visible>
-				</control> -->
 				<control type="image">
 					<left>10</left>
 					<top>684</top>

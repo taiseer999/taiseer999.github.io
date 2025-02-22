@@ -49,104 +49,158 @@
 				</visible>
 
 				<!-- DEFAULT -->
-				<itemlayout width="470" height="283" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<!-- W:430 H:242 -->
+				<itemlayout width="470" height="282" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.501Dim)">Conditional</animation>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
             <left>21</left>
 						<top>45</top>
-						<include>SmallLandscapeLayout</include>
+						<include>LandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="470" height="283" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="470" height="282" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
             <left>21</left>
 						<top>45</top>
-						<include content="SmallLandscapeLayout">
+						<include content="LandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>LandscapeWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
-				<itemlayout width="470" height="333" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<itemlayout width="470" height="310" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.501Dim)">Conditional</animation>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
             <left>21</left>
 						<top>45</top>
-						<include>SmallLandscapeLayout</include>
+						<include>LandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout width="470" height="333" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="470" height="310" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),0) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
             <left>21</left>
 						<top>45</top>
-						<include content="SmallLandscapeLayout">
+						<include content="LandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>LandscapeWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
 
-				<!-- LARGE -->
-				<itemlayout height="365" width="617" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<!-- LARGE LAYOUT -->
+				<!-- W:582 H:327 -->
+				<itemlayout width="616" height="361" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.501Dim)">Conditional</animation>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
             <left>33</left>
 						<top>45</top>
-						<include>LandscapeLayout</include>
+						<include>BigLandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout height="365" width="617" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="616" height="361" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
             <left>33</left>
 						<top>45</top>
-						<include content="LandscapeLayout">
+						<include content="BigLandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>LandscapeWallTimer</include>
-						<include>SetDBTypeProperty</include>
 					</control>
 				</focusedlayout>
-				<itemlayout height="418" width="617" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+				<itemlayout width="636" height="400" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.501Dim)">Conditional</animation>
-            <left>33</left>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
+            <left>13</left>
 						<top>45</top>
-						<include>LandscapeLayout</include>
+						<include>BigLandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout height="418" width="617" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+				<focusedlayout width="636" height="400" condition="String.IsEqual(Skin.String(ArtworkSize501Setting),1) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
-            <left>33</left>
+            <left>13</left>
 						<top>45</top>
-						<include content="LandscapeLayout">
+						<include content="BigLandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>LandscapeWallTimer</include>
-						<include>SetDBTypeProperty</include>
+					</control>
+				</focusedlayout>
+
+				<!-- SMALL LAYOUT -->
+				<!-- W:317 H:178 -->
+				<itemlayout width="370" height="225"  condition="String.IsEqual(Skin.String(ArtworkSize501Setting),2) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+					<control type="group">
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
+            <left>42</left>
+						<top>45</top>
+						<include>SmallLandscapeLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout width="370" height="225"  condition="String.IsEqual(Skin.String(ArtworkSize501Setting),2) + !Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+            <left>42</left>
+						<top>45</top>
+						<include content="SmallLandscapeLayout">
+							<param name="focused" value="true" />
+						</include>
+						<include>LandscapeWallTimer</include>
+					</control>
+				</focusedlayout>
+				<itemlayout width="370" height="245"  condition="String.IsEqual(Skin.String(ArtworkSize501Setting),2) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]">
+					<control type="group">
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
+						<left>42</left>
+						<top>45</top>
+						<include>SmallLandscapeLayout</include>
+					</control>
+				</itemlayout>
+				<focusedlayout width="370" height="245"  condition="String.IsEqual(Skin.String(ArtworkSize501Setting),2) + Skin.HasSetting(Enable.501Titles) + [Container.Content(movies) | Container.Content(sets) | Container.Content(tvshows) | Container.Content(seasons) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]]" infoupdate="30">
+					<control type="group">
+						<depth>DepthContentPopout</depth>
+            <left>42</left>
+						<top>45</top>
+						<include content="SmallLandscapeLayout">
+							<param name="focused" value="true" />
+						</include>
+						<include>LandscapeWallTimer</include>
 					</control>
 				</focusedlayout>
 
 				<!-- EPISODES -->
-				<itemlayout height="365" width="617" condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]">
+				<!-- W:582 H:327 -->
+				<itemlayout width="616" height="361"  condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]">
 					<control type="group">
-						<animation effect="fadediffuse" end="FF9C9C9C" start="FFFFFFFF" time="0" condition="Skin.HasSetting(Enable.501Dim)">Conditional</animation>
+						<include content="ViewUnfocusedAnimations">
+							<param name="id" value="501"/>
+						</include>
             <left>33</left>
 						<top>45</top>
-						<include>LandscapeLayout</include>
+						<include>BigLandscapeLayout</include>
 					</control>
 				</itemlayout>
-				<focusedlayout height="365" width="617" condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]" infoupdate="30">
+				<focusedlayout width="616" height="361"  condition="Container.Content(episodes) | [Container.Content(musicvideos) + Skin.HasSetting(show_musicvideoposter)]" infoupdate="30">
 					<control type="group">
 						<depth>DepthContentPopout</depth>
             <left>33</left>
 						<top>45</top>
-						<include content="LandscapeLayout">
+						<include content="BigLandscapeLayout">
 							<param name="focused" value="true" />
 						</include>
 						<include>LandscapeWallTimer</include>
@@ -226,7 +280,8 @@
 				</focusedlayout> -->
 			</control>
 			<include content="TopBottomBars">
-				<param name="visible" value="!Skin.HasSetting(Enable.501Dim)"/>
+				<param name="top_visible" value="!Skin.HasSetting(Enable.501Dim)"/>
+				<param name="bottom_visible" value="!Skin.HasSetting(Enable.501Dim)"/>
 			</include>
 		</control>
 	</include>

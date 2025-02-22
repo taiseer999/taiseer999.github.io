@@ -30,15 +30,19 @@
 					<include>ListThumbInfoPanel</include>
 				</control>
 				<control type="group">
-					<include>MediaMenuAnimations</include>
-					<include>FlixPanel</include>
 					<depth>DepthContentPanel</depth>
 					<include>OpenClose_Left</include>
-					<visible>Control.IsVisible(50) | Control.IsVisible(54) | Control.IsVisible(55) | [Control.IsVisible(501) + String.IsEqual(Skin.AspectRatio,21:9)]</visible>
 					<include>Visible_Left</include>
-					<!-- <include content="ContentPanel">
-						<param name="width" value="1106" />
-					</include> -->
+					<include>MediaMenuAnimations</include>
+					<include content="MenuContentPanel">
+						<param name="width" value="517"/>
+						<param name="dividerleft" value="492"/>
+						<param name="left" value="-31"/>
+						<param name="bg_left" value="-25"/>
+						<param name="visible" value="Control.IsVisible(54) | Control.IsVisible(55)"/>
+					</include>
+					<include>VerticalInfoPanel</include>
+					<visible>Control.IsVisible(54) | Control.IsVisible(55) | [Control.IsVisible(501) + String.IsEqual(Skin.AspectRatio,21:9)]</visible>
 					<control type="group">
 						<!-- <width>550</width> -->
 						<control type="group">

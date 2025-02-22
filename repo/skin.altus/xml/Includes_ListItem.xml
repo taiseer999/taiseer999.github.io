@@ -78,22 +78,18 @@
 
   <include name="ListItem">
     <param name="focused">false</param>
-    <param name="list_width">260</param>
     <param name="img_top">0</param>
     <param name="img_bottom">0</param>
-    <param name="img_width">305</param>
-    <param name="img_left">45</param>
     <!-- <param name="img_left">47</param> -->
     <param name="focused_font">font37</param>
     <param name="unfocused_font">font37</param>
-    <param name="img_texture">focus/mainmenu.png</param>
+    <param name="img_texture">colors/grey.png</param>
     <definition>
       <control type="group">
         <control type="image">
           <top>$PARAM[img_top]</top>
           <bottom>$PARAM[img_bottom]</bottom>
-          <width>$PARAM[img_width]</width>
-          <left>$PARAM[img_left]</left>
+          <left>0</left>
           <right>0</right>
           <texture colordiffuse="$VAR[FocusColorTheme]">$PARAM[img_texture]</texture>
           <visible>Control.HasFocus($PARAM[id]) + $PARAM[focused]</visible>
@@ -103,16 +99,15 @@
           <left>0</left>
           <right>0</right>
           <bottom>0</bottom>
-          <texture colordiffuse="$VAR[FocusColorTheme]">masks/focus.png</texture>
+          <texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
           <animation effect="fade" start="100" end="40" time="40" condition="!Control.HasFocus(56)">Conditional</animation>
         </control> -->
         <control type="group">
           <control type="label">
-            <left>70</left>
+            <!-- <centerleft>50%</centerleft> -->
             <top>5</top>
-            
-            <!-- <width>670</width> -->
-            <width>$PARAM[list_width]</width>
+            <left>20</left>
+            <right>20</right>
             <aligny>center</aligny>
             <font>$PARAM[unfocused_font]</font>
             <textcolor>unfocused_text</textcolor>
@@ -122,11 +117,10 @@
             <visible>!Control.HasFocus($PARAM[id]) | !$PARAM[focused]</visible>
           </control>
           <control type="label">
-            <left>70</left>
+            <!-- <centerleft>50%</centerleft> -->
             <top>5</top>
-            
-            <!-- <width>670</width> -->
-            <width>$PARAM[list_width]</width>
+            <left>20</left>
+            <right>20</right>
             <aligny>center</aligny>
             <font>$PARAM[focused_font]</font>
             <label>[B]$VAR[MenuCaseVar][/B]</label>
@@ -139,11 +133,10 @@
             <scroll>$PARAM[focused]</scroll>
           </control>
           <control type="label">
-            <left>70</left>
+            <!-- <centerleft>50%</centerleft> -->
             <top>5</top>
-            
-            <!-- <width>670</width> -->
-            <width>$PARAM[list_width]</width>
+            <left>20</left>
+            <right>20</right>
             <aligny>center</aligny>
             <font>$PARAM[unfocused_font]</font>
             <align>center</align>

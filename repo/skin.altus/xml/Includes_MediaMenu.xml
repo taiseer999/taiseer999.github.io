@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <includes>
 	<include name="MediaMenuItemsCommon">
-		<width>470</width>
-		<textoffsetx>40</textoffsetx>
+		<width>504</width>
+		<textoffsetx>20</textoffsetx>
 		<textoffsety>14</textoffsety>
 		<top>0</top>
 		<height>71</height>
-		<radioposx>350</radioposx>
+		<radioposx>400</radioposx>
 		<aligny>left</aligny>
 		<textcolor>unfocused_text</textcolor>
 		<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
 		<invalidcolor>invalid</invalidcolor>
-		<texturefocus colordiffuse="$VAR[FocusColorTheme]">focus/mediapanel.png</texturefocus>
+		<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
 		<texturenofocus />
-		<alttexturefocus colordiffuse="$VAR[FocusColorTheme]">focus/mediapanel.png</alttexturefocus>
+		<alttexturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</alttexturefocus>
 		<alttexturenofocus></alttexturenofocus>
 	</include>
 	<include name="PVRQuickNavItemsCommon">
@@ -51,8 +51,8 @@
 			</control>
 			<control type="grouplist" id="9000">
 				<top>50</top>
-				<left>20</left>
-				<width>470</width>
+				<left>0</left>
+				<width>505</width>
 				<height>100%</height>
 				<onleft>9000</onleft>
 				<onup>9000</onup>
@@ -66,7 +66,7 @@
 						<label>$LOCALIZE[31148]</label>
 					</control>
 					<control type="label">
-						<width>470</width>
+						<width>505</width>
 						<textoffsetx>20</textoffsetx>
 						<textoffsety>15</textoffsety>
 						<height>50</height>
@@ -81,7 +81,7 @@
 					<height>95</height>
 					<control type="grouplist" id="6056">
 						<orientation>horizontal</orientation>
-						<itemgap>-18</itemgap>
+						<itemgap>-11</itemgap>
 						<left>0</left>
 						<height>120</height>
 						<onleft>6056</onleft>
@@ -255,8 +255,8 @@
 		</definition>
 	</include>
 	<include name="MediaMenuLabelCommon">
-		<width>470</width>
-		<textoffsetx>41</textoffsetx>
+		<width>505</width>
+		<textoffsetx>20</textoffsetx>
 		<textoffsety>10</textoffsety>
 		<height>50</height>
 		<radioposx>300</radioposx>
@@ -267,9 +267,9 @@
 	<include name="MediaMenuCommon">
 		<include>OpenClose_Left</include>
 		<depth>DepthSideBlade</depth>
-		<left>-570</left>
+		<left>-505</left>
 		<animation type="Conditional" condition="$EXP[sidebar_visible]" reversible="true">
-			<effect type="slide" start="0" end="570" time="500" tween="cubic" easing="inout" />
+			<effect type="slide" start="0" end="505" time="500" tween="cubic" easing="inout" />
 		</animation>
 		<!-- <control type="image">
 			<width>4000</width>
@@ -279,22 +279,11 @@
 			<visible>$EXP[sidebar_visible] + !System.HasActiveModalDialog</visible>
 			<animation effect="fade" time="200">VisibleChange</animation>
 		</control> -->
-		<!-- <control type="image">
-			<left>0</left>
-			<top>0</top>
-			<width>570</width>
-			<height>100%</height>
-			<texture colordiffuse="$VAR[MediaMenuDiffuse]">masks/mediapanel.png</texture>
-			<visible>!Control.IsVisible(51)</visible>
-		</control>
-		<control type="image">
-			<left>0</left>
-			<top>0</top>
-			<width>515</width>
-			<height>100%</height>
-			<texture colordiffuse="$VAR[MediaMenuDiffuse]">colors/white.png</texture>
-			<visible>Control.IsVisible(51)</visible>
-		</control> -->
+		<include content="MenuContentPanel">
+			<param name="width" value="505"/>
+			<param name="dividerleft" value="504"/>
+			<param name="bg_left" value="-1"/>
+		</include>
 		<control type="button" id="6131">
 			<left>0</left>
 			<top>0</top>
@@ -357,9 +346,9 @@
 	</include>
 	<include name="MediaMenuListCommon">
 		<definition>
-			<left>30</left>
+			<left>0</left>
 			<top>100</top>
-			<width>470</width>
+			<width>505</width>
 			<height>970</height>
 			<onleft>9000</onleft>
 			<onup>9000</onup>
@@ -592,7 +581,7 @@
 				<visible>Control.IsVisible(55) + String.IsEqual(Skin.String(LandscapeSizeSetting),1) + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 			</control> -->
 			<control type="radiobutton" id="6066">
-				<label>Dim unfocused artwork</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused artwork</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Disable.51Dim)</onclick>
 				<selected>!Skin.HasSetting(Disable.51Dim)</selected>
@@ -616,7 +605,7 @@
 
 			<!-- 53 -->
 			<control type="radiobutton" id="6069">
-				<label>Dim unfocused items</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused items</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Enable.53Dim)</onclick>
 				<selected>Skin.HasSetting(Enable.53Dim)</selected>
@@ -655,7 +644,7 @@
 				<visible>Control.IsVisible(54) + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes)]</visible>
 			</control>
 			<control type="radiobutton" id="6074">
-				<label>Dim unfocused items</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused items</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Enable.54Dim)</onclick>
 				<selected>Skin.HasSetting(Enable.54Dim)</selected>
@@ -686,7 +675,7 @@
 				<visible>Control.IsVisible(55) + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 			</control>
 			<control type="radiobutton" id="6078">
-				<label>Dim unfocused items</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused items</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Enable.55Dim)</onclick>
 				<selected>Skin.HasSetting(Enable.55Dim)</selected>
@@ -720,7 +709,7 @@
 				<visible>Control.IsVisible(57)</visible>
 			</control>
 			<control type="radiobutton" id="6083">
-				<label>Dim unfocused items</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused items</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Enable.57Dim)</onclick>
 				<selected>Skin.HasSetting(Enable.57Dim)</selected>
@@ -750,7 +739,7 @@
 				<visible>Control.IsVisible(500) + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 			</control>
 			<control type="radiobutton" id="6087">
-				<label>Dim unfocused items</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused items</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Enable.500Dim)</onclick>
 				<selected>Skin.HasSetting(Enable.500Dim)</selected>
@@ -773,7 +762,7 @@
 				<visible>Control.IsVisible(501) + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons)]</visible>
 			</control>
 			<control type="radiobutton" id="6090">
-				<label>Dim unfocused items</label>
+				<label>$VAR[Capitalize_DimorFadeLabel] unfocused items</label>
 				<include>MediaMenuItemsCommon</include>
 				<onclick>Skin.ToggleSetting(Enable.501Dim)</onclick>
 				<selected>Skin.HasSetting(Enable.501Dim)</selected>

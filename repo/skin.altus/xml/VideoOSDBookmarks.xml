@@ -83,7 +83,7 @@
 							<width>330</width>
 							<height>250</height>
 							<!-- <aspectratio>scale</aspectratio> -->
-							<texture diffuse="masks/landscape.png" fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
+							<texture fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
 							<!-- <bordertexture colordiffuse="border_alpha">colors/black.png</bordertexture> -->
 							<bordersize>4</bordersize>
 						</control>
@@ -107,7 +107,7 @@
 							<top>5</top>
 							<width>330</width>
 							<height>250</height>
-							<texture border="3" colordiffuse="button_focus">masks/landscape.png</texture>
+							<texture border="3" colordiffuse="button_focus">colors/grey.png</texture>
 							<visible>Control.HasFocus(11)</visible>
 						</control>
 						<control type="image">
@@ -116,7 +116,7 @@
 							<width>330</width>
 							<height>250</height>
 							<!-- <aspectratio>scale</aspectratio> -->
-							<texture diffuse="masks/landscape.png" fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
+							<texture fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
 							<!-- <bordertexture colordiffuse="border_alpha">colors/black.png</bordertexture> -->
 							<bordersize>4</bordersize>
 						</control>

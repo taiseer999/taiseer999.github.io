@@ -268,332 +268,295 @@
 		</definition>
 	</include>
 
-
-	<include name="WidgetInfoPanel">
-		<param name="ratings_api_enabled">
-			!Skin.HasSetting(Disable.AutoInfoRatings) + 
-			[
-					[String.IsEqual(Skin.String(RatingSlot1),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot1),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot1),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot1),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot1),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot1),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot1),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot1),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot1),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot2),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot2),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot2),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot2),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot2),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot2),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot2),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot2),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot2),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot3),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot3),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot3),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot3),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot3),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot3),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot3),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot3),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot3),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot4),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot4),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot4),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot4),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot4),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot4),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot4),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot4),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot4),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot5),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot5),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot5),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot5),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot5),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot5),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot5),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot5),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot5),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot6),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot6),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot6),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot6),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot6),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot6),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot6),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot6),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot6),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot7),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
-					[String.IsEqual(Skin.String(RatingSlot7),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-					[String.IsEqual(Skin.String(RatingSlot7),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-					[String.IsEqual(Skin.String(RatingSlot7),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-					[String.IsEqual(Skin.String(RatingSlot7),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot7),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-					[String.IsEqual(Skin.String(RatingSlot7),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-					[String.IsEqual(Skin.String(RatingSlot7),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-					[String.IsEqual(Skin.String(RatingSlot7),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-			]
-		</param>
-		<param name="ratings_api_disabled">
-			Skin.HasSetting(Disable.AutoInfoRatings) | 
-			[
-					[String.IsEqual(Skin.String(RatingSlot1),none) | 
-							[String.IsEqual(Skin.String(RatingSlot1),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot1),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot1),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot1),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot1),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot1),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot1),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot1),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot1),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					] +
-					[String.IsEqual(Skin.String(RatingSlot2),none) | 
-							[String.IsEqual(Skin.String(RatingSlot2),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot2),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot2),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot2),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot2),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot2),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot2),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot2),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot2),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					] +
-					[String.IsEqual(Skin.String(RatingSlot3),none) | 
-							[String.IsEqual(Skin.String(RatingSlot3),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot3),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot3),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot3),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot3),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot3),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot3),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot3),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot3),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					] +
-					[String.IsEqual(Skin.String(RatingSlot4),none) | 
-							[String.IsEqual(Skin.String(RatingSlot4),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot4),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot4),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot4),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot4),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot4),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot4),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot4),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot4),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					] +
-					[String.IsEqual(Skin.String(RatingSlot5),none) | 
-							[String.IsEqual(Skin.String(RatingSlot5),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot5),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot5),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot5),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot5),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot5),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot5),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot5),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot5),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					] +
-					[String.IsEqual(Skin.String(RatingSlot6),none) | 
-							[String.IsEqual(Skin.String(RatingSlot6),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot6),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot6),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot6),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot6),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot6),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot6),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot6),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot6),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					] +
-					[String.IsEqual(Skin.String(RatingSlot7),none) | 
-							[String.IsEqual(Skin.String(RatingSlot7),metacritic) + String.IsEmpty(Window(Home).Property(altus.metascore))] |
-							[String.IsEqual(Skin.String(RatingSlot7),trakt) + String.IsEmpty(Window(Home).Property(altus.traktRating))] |
-							[String.IsEqual(Skin.String(RatingSlot7),letterboxd) + String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
-							[String.IsEqual(Skin.String(RatingSlot7),mdblist) + String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
-							[String.IsEqual(Skin.String(RatingSlot7),rtc) + String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot7),rta) + String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
-							[String.IsEqual(Skin.String(RatingSlot7),imdb) + String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
-							[String.IsEqual(Skin.String(RatingSlot7),imdbpop) + String.IsEmpty(Window(Home).Property(altus.popularRating))] |
-							[String.IsEqual(Skin.String(RatingSlot7),tmdb) + String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
-					]
-			]
-		</param>
-		<param name="clearlogo_vis_cond">String.IsEqual(Skin.String(WidgetClearlogoSetting),0) + !String.IsEmpty(ListItem.Art(clearlogo)) + [String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) | [!$EXP[isEpisode] + !String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + Skin.HasSetting(Disable.LandscapeWidgetClearlogo)] | [$EXP[isEpisode] + !String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused))]]</param>
-		<param name="substitute_label_vis_cond">String.IsEmpty(ListItem.Art(clearlogo)) | ![$EXP[isEpisode] | String.IsEqual(Skin.String(WidgetClearlogoSetting),0) | String.IsEqual(Skin.String(WidgetClearlogoSetting),2)]</param>
-		<param name="align">center</param>
-		<param name="bottom">0</param>
-		<param name="clearlogo_width"></param>
-		<param name="clearlogo_height">95</param>
-		<param name="tagline_vis_cond">false</param>
-		<param name="textbox_height_1">170</param>
-		<param name="textbox_height_2">255</param>
-		<param name="textbox_height_3">170</param>
-		<param name="textbox_height_4">170</param>
-		<param name="textbox_height_5">295</param>
-		<param name="textbox_height_6">210</param>
+	<include name="VerticalInfoPanel">
+		<param name="left">-25</param>
 		<definition>
-			<control type="grouplist">
-				<left>50</left>
-				<width>895</width>
-				<top>-108</top>
-				<bottom>$PARAM[bottom]</bottom>
-				<orientation>vertical</orientation>
-				<itemgap>7</itemgap>
-				<align>$PARAM[align]</align>
-				<control type="image">
-					<width>$PARAM[clearlogo_width]</width>
-					<height>$PARAM[clearlogo_height]</height>
-					<fadetime>200</fadetime>
-					<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
-					<aspectratio align="left" aligny="bottom">keep</aspectratio>
-					<visible>$PARAM[clearlogo_vis_cond]</visible>
-				</control>
-				<control type="label">
-					<height>40</height>
-					<aligny>center</aligny>
-					<font>font52_title</font>
-					<textcolor>unfocused_text</textcolor>
-					<label>$VAR[SubstituteLabel]</label>
-					<scroll>true</scroll>
-					<scrollspeed>200</scrollspeed>
-					<visible>$PARAM[substitute_label_vis_cond]</visible>
-				</control>
-				<control type="textbox">
-					<top>0</top>
-					<left>0</left>
-					<right>0</right>
-					<height>20</height>
+			<control type="group">
+				<width>498</width>
+				<animation effect="fade" condition="$EXP[isContent] + String.IsEmpty(Window(Home).Property(SpotlightWidget))" time="300" end="100" tween="sine" easing="inout">Conditonal</animation>
+				<include>OpenClose_Left</include>
+				<control type="grouplist">
+					<left>$PARAM[left]</left>
+					<top>50</top>
+					<bottom>50</bottom>
+					<width>498</width>
+					<orientation>horizontal</orientation>
 					<align>center</align>
-					<aligny>center</aligny>
-					<label></label>
-					<visible>!String.IsEmpty(Window(Home).Property(SpotlightWidget))</visible>
-				</control>
-				<!-- Watched Status Labels First -->
-				<control type="label">
-					<height>37</height>
-					<label>$VAR[SpotlightWidgetStatus]</label>
-					<font>font27_title</font>
-					<textcolor>$VAR[FocusColorTheme]</textcolor>
-					<scroll>true</scroll>
-					<scrollspeed>100</scrollspeed>
-					<visible>!String.IsEmpty(Window(Home).Property(SpotlightWidget)) + [
-						!$EXP[isMovie] + !$EXP[isTVShow] | 
-						[$EXP[isMovie] + [Integer.IsGreater(ListItem.Playcount,0) | !Integer.IsEqual(ListItem.Property(WatchedProgress),0)]] | 
-						[$EXP[isTVShow] + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(ListItem.Property(UnWatchedEpisodes),-1)]
-					]</visible>
-				</control>
-				<!-- Metadata Labels Below -->
-				<control type="label">
-					<height>40</height>
-					<label>$VAR[WidgetInfoPanelTop]</label>
-					<font>font27</font>
-					<textcolor>$VAR[FocusColorTheme]</textcolor>
-					<scroll>false</scroll>
-					<scrollspeed>100</scrollspeed>
-				</control>
-				<include condition="!String.IsEmpty(Skin.String(valid_api_key))" content="HorizontalRatings"/>
-				<control type="label">
-					<height>35</height>
-					<label>[I][LIGHT]$VAR[RI_Tagline][/LIGHT][/I]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<scroll>true</scroll>
-					<scrollspeed>100</scrollspeed>
-					<visible>$PARAM[tagline_vis_cond]</visible>
-				</control>
-				<!-- API KEY ENABLED -->
-				<control type="textbox">
-					<height max="$PARAM[textbox_height_1]">auto</height>
-					<label>$VAR[RI_Plot]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<autoscroll delay="10000" time="4000" repeat="10000">$PARAM[focused]</autoscroll>
-					<visible>
-						!String.IsEmpty(Skin.String(valid_api_key)) + 
-						[[String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-						[!String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + $EXP[isEpisode] + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-						[!String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + !$EXP[isEpisode] + Skin.HasSetting(Disable.LandscapeWidgetClearlogo) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)]] + 
-						$PARAM[ratings_api_enabled]
-					</visible>
-				</control>
-				<control type="textbox">
-					<height max="$PARAM[textbox_height_2]">auto</height>
-					<label>$VAR[RI_Plot]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<autoscroll delay="10000" time="4000" repeat="10000">$PARAM[focused]</autoscroll>
-					<visible>
-						!String.IsEmpty(Skin.String(valid_api_key)) + 
-						[[!String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + !$EXP[isEpisode] + !Skin.HasSetting(Disable.LandscapeWidgetClearlogo) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-						[$EXP[isEpisode] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-						[!$EXP[isEpisode] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2)]] + 
-						$PARAM[ratings_api_enabled]
-					</visible>
-				</control>
-				<control type="textbox">
-					<height max="$PARAM[textbox_height_3]">auto</height>
-					<label>$VAR[RI_Plot]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<autoscroll delay="10000" time="4000" repeat="10000">$PARAM[focused]</autoscroll>
-					<visible>
-						!String.IsEmpty(Skin.String(valid_api_key)) + 
-						[!$EXP[isEpisode] + String.IsEqual(Skin.String(WidgetClearlogoSetting),1)] + 
-						$PARAM[ratings_api_enabled]
-					</visible>
-				</control>
-				<!-- API KEY DISABLED -->
-				<control type="textbox">
-					<height max="$PARAM[textbox_height_4]">auto</height>
-					<label>$VAR[RI_Plot]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<autoscroll delay="10000" time="4000" repeat="10000">$PARAM[focused]</autoscroll>
-					<visible>
-						[String.IsEmpty(Skin.String(valid_api_key)) | 
-								$PARAM[ratings_api_disabled]
-						] + 
-						[
-								[String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-								[!String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + $EXP[isEpisode] + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-								[!String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + !$EXP[isEpisode] + Skin.HasSetting(Disable.LandscapeWidgetClearlogo) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)]
-						]
-					</visible>
-				</control>
-				<control type="textbox">
-					<height max="$PARAM[textbox_height_5]">auto</height>
-					<label>$VAR[RI_Plot]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<autoscroll delay="10000" time="4000" repeat="10000">$PARAM[focused]</autoscroll>
-					<visible>
-						[String.IsEmpty(Skin.String(valid_api_key)) | 
-						$PARAM[ratings_api_disabled]
-						] + 
-						[
-							[!String.IsEmpty(Window(Home).Property(LandscapeWidgetFocused)) + !$EXP[isEpisode] + !Skin.HasSetting(Disable.LandscapeWidgetClearlogo) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-							[$EXP[isEpisode] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
-							[!$EXP[isEpisode] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2)]
-						]
-					</visible>
-				</control>
-				<control type="textbox">
-					<height max="$PARAM[textbox_height_6]">auto</height>
-					<label>$VAR[RI_Plot]</label>
-					<font>font27</font>
-					<textcolor>unfocused_text</textcolor>
-					<autoscroll delay="10000" time="4000" repeat="10000">$PARAM[focused]</autoscroll>
-					<visible>
-						[String.IsEmpty(Skin.String(valid_api_key)) | 
-						$PARAM[ratings_api_disabled]
-						] + 
-						[!$EXP[isEpisode] + String.IsEqual(Skin.String(WidgetClearlogoSetting),1)]
-					</visible>
+					<itemgap>-20</itemgap>
+					<control type="grouplist">
+						<width>150</width>
+						<orientation>vertical</orientation>
+						<itemgap>36</itemgap>
+						<aligny>center</aligny>
+						<align>center</align>
+						<visible>!Skin.HasSetting(Disable.HomePanelRatings)</visible>
+						<include condition="!String.IsEmpty(Skin.String(valid_api_key)) + !Skin.HasSetting(Disable.HomePanelRatings)">VerticalRatings</include>
+						<visible>!String.IsEmpty(ListItem.Genre) + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason]] + 
+							[
+								[[Window.IsVisible(Home) | Window.IsVisible(1121)] + !Skin.HasSetting(Disable.HomePanelRatings)] | [Control.IsVisible(51) + !Skin.HasSetting(Disable.51Ratings)] | [Control.IsVisible(53) + !Skin.HasSetting(Disable.53Ratings)] | [Control.IsVisible(54) + !Skin.HasSetting(Disable.54Ratings)] | [Control.IsVisible(55) + !Skin.HasSetting(Disable.55Ratings)] | [Control.IsVisible(56) + !Skin.HasSetting(Disable.56Ratings)]
+							]</visible>
+						<!-- <visible>!String.IsEmpty(ListItem.Genre) + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason]] + 
+							[
+								[[Window.IsVisible(Home) | Window.IsVisible(1121)] + !Skin.HasSetting(Disable.HomePanelRatings)] | [Control.IsVisible(51) + !Skin.HasSetting(Disable.51Ratings)] | [Control.IsVisible(53) + !Skin.HasSetting(Disable.53Ratings)] | [Control.IsVisible(54) + !Skin.HasSetting(Disable.54Ratings)] | [Control.IsVisible(55) + !Skin.HasSetting(Disable.55Ratings)] | [Control.IsVisible(56) + !Skin.HasSetting(Disable.56Ratings)]
+							] + 
+							[
+								[String.IsEqual(Skin.String(RatingSlot1),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] | 
+								[String.IsEqual(Skin.String(RatingSlot1),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot1),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot1),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot1),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot1),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot1),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot1),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot1),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot2),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] |
+								[String.IsEqual(Skin.String(RatingSlot2),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot2),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot2),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot2),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot2),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot2),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot2),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot2),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot3),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] |
+								[String.IsEqual(Skin.String(RatingSlot3),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot3),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot3),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot3),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot3),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot3),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot3),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot3),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot4),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] |
+								[String.IsEqual(Skin.String(RatingSlot4),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot4),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot4),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot4),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot4),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot4),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot4),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot4),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot5),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] |
+								[String.IsEqual(Skin.String(RatingSlot5),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot5),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot5),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot5),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot5),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot5),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot5),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot5),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot6),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] |
+								[String.IsEqual(Skin.String(RatingSlot6),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot6),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot6),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot6),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot6),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot6),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot6),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot6),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot7),metacritic) + !String.IsEmpty(Window(Home).Property(altus.metascore))] |
+								[String.IsEqual(Skin.String(RatingSlot7),trakt) + !String.IsEmpty(Window(Home).Property(altus.traktRating))] |
+								[String.IsEqual(Skin.String(RatingSlot7),letterboxd) + !String.IsEmpty(Window(Home).Property(altus.letterboxdRating))] |
+								[String.IsEqual(Skin.String(RatingSlot7),mdblist) + !String.IsEmpty(Window(Home).Property(altus.mdblistRating))] |
+								[String.IsEqual(Skin.String(RatingSlot7),rtc) + !String.IsEmpty(Window(Home).Property(altus.tomatoMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot7),rta) + !String.IsEmpty(Window(Home).Property(altus.tomatoUserMeter))] |
+								[String.IsEqual(Skin.String(RatingSlot7),imdb) + !String.IsEmpty(Window(Home).Property(altus.imdbRating))] |
+								[String.IsEqual(Skin.String(RatingSlot7),imdbpop) + !String.IsEmpty(Window(Home).Property(altus.popularRating))] |
+								[String.IsEqual(Skin.String(RatingSlot7),tmdb) + !String.IsEmpty(Window(Home).Property(altus.tmdbRating))]
+						]</visible> -->
+					</control>
+					<control type="grouplist">
+						<width>338</width>
+						<orientation>vertical</orientation>
+						<align>center</align>
+						<itemgap>14</itemgap>
+						<animation effect="slide" condition="$EXP[isEpisode] | [[[Window.IsVisible(Home) | Window.IsVisible(1121)] + Skin.HasSetting(Disable.HomePanelRatings)] | [Control.IsVisible(51) + Skin.HasSetting(Disable.51Ratings)] | [Control.IsVisible(53) + Skin.HasSetting(Disable.53Ratings)] | [Control.IsVisible(54) + Skin.HasSetting(Disable.54Ratings)] | [Control.IsVisible(55) + Skin.HasSetting(Disable.55Ratings)] | [Control.IsVisible(56) + Skin.HasSetting(Disable.56Ratings)]
+							]" time="0" start="0,0" end="25,0" tween="sine" easing="inout">Conditional</animation>
+						<animation effect="slide" condition="!$EXP[isContent]" time="0" start="0,0" end="-498,0" tween="sine" easing="inout">Conditional</animation>
+						<control type="textbox">
+							<align>left</align>
+							<height max="100">auto</height>
+							<label>$VAR[InfoTitle]</label>
+							<font>font36_title</font>
+							<textcolor>unfocused_text</textcolor>
+							<autoscroll delay="2000" time="1000" repeat="2000">true</autoscroll>
+							<visible>!String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + [String.IsEqual(Skin.String(WidgetClearlogoSetting),1) | String.IsEmpty(ListItem.Art(clearlogo))]</visible>
+						</control>
+						<control type="image">
+						<width>auto</width>
+							<height>100</height>
+							<fadetime>200</fadetime>
+							<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
+							<aspectratio align="center" aligny="center">keep</aspectratio>
+							<visible>String.IsEqual(Skin.String(WidgetClearlogoSetting),0) + !String.IsEmpty(ListItem.Art(clearlogo))</visible>
+						</control>
+						<control type="textbox">
+							<top>0</top>
+							<left>0</left>
+							<right>0</right>
+							<height>3</height>
+							<label></label>
+							<visible>String.IsEqual(Skin.String(WidgetClearlogoSetting),0)</visible>
+						</control>
+						<control type="image">
+							<height>2</height>
+							<texture colordiffuse="$VAR[FocusColorTheme]">masks/infopanel_divider.png</texture>
+							<visible>Window.IsVisible(videos) + $EXP[isEpisode]</visible>
+						</control>
+						<control type="textbox">
+							<align>left</align>
+							<height max="300">auto</height>
+							<label>$INFO[ListItem.Title]</label>
+							<font>font27_title</font>
+							<textcolor>unfocused_text</textcolor>
+							<scroll>true</scroll>
+							<scrollspeed>150</scrollspeed>
+							<visible>Window.IsVisible(videos) + $EXP[isEpisode]</visible>
+						</control>
+						<control type="image">
+							<height>2</height>
+							<texture colordiffuse="$VAR[FocusColorTheme]">masks/infopanel_divider.png</texture>
+							<visible>$EXP[isContent]</visible>
+						</control>
+						<control type="textbox">
+							<align>left</align>
+							<height max="300">auto</height>
+							<label>$VAR[VI_WidgetInfoPanelTop]</label>
+							<font>font27</font>
+							<textcolor>unfocused_text</textcolor>
+							<scroll>true</scroll>
+							<scrollspeed>150</scrollspeed>
+						</control>
+						<control type="image">
+							<height>2</height>
+							<texture colordiffuse="$VAR[FocusColorTheme]">masks/infopanel_divider.png</texture>
+							<visible>$EXP[isContent]</visible>
+						</control>
+						<control type="textbox">
+							<height max="502">auto</height>
+							<font>font27</font>
+							<textcolor>unfocused_text</textcolor>
+							<align>left</align>
+							<label>$VAR[RI_Plot]</label>
+							<autoscroll delay="8000" time="1000" repeat="8000">Skin.HasSetting(autoscroll)</autoscroll>
+							<visible>[$EXP[isMovie] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),2)] | [!$EXP[isMovie] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + !Skin.HasSetting(Enable.HomePanelStudioLogos)]</visible>
+						</control>
+						<control type="textbox">
+							<height max="587">auto</height>
+							<font>font27</font>
+							<textcolor>unfocused_text</textcolor>
+							<align>left</align>
+							<label>$VAR[RI_Plot]</label>
+							<autoscroll delay="8500" time="1500" repeat="8500">Skin.HasSetting(autoscroll)</autoscroll>
+							<visible>[$EXP[isMovie] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2)] | [!$EXP[isMovie] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + !Skin.HasSetting(Enable.HomePanelStudioLogos)]</visible>
+						</control>
+						<control type="textbox">
+							<height max="377">auto</height>
+							<font>font27</font>
+							<textcolor>unfocused_text</textcolor>
+							<align>left</align>
+							<label>$VAR[RI_Plot]</label>
+							<autoscroll delay="6000" time="1000" repeat="6000">Skin.HasSetting(autoscroll)</autoscroll>
+							<visible>!$EXP[isMovie] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + Skin.HasSetting(Enable.HomePanelStudioLogos)</visible>
+						</control>
+						<control type="textbox">
+							<height max="544">auto</height>
+							<font>font27</font>
+							<textcolor>unfocused_text</textcolor>
+							<align>left</align>
+							<label>$VAR[RI_Plot]</label>
+							<autoscroll delay="7000" time="1000" repeat="7000">Skin.HasSetting(autoscroll)</autoscroll>
+							<visible>!$EXP[isMovie] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + Skin.HasSetting(Enable.HomePanelStudioLogos)</visible>
+						</control>
+						<control type="image">
+							<height>2</height>
+							<texture colordiffuse="$VAR[FocusColorTheme]">masks/infopanel_divider.png</texture>
+							<visible>$EXP[isContent]</visible>
+						</control>
+						<control type="image">
+							<height>115</height>
+							<fadetime>200</fadetime>
+							<texture colordiffuse="$VAR[StudioColorDiffuseVar]">$VAR[StudioLogoPathVar]</texture>
+							<aspectratio align="center" aligny="top">keep</aspectratio>
+							<visible>Skin.HasSetting(Enable.HomePanelStudioLogos) + !$EXP[isMovie]</visible>
+						</control>
+					</control>
 				</control>
 			</control>
 		</definition>
+	</include>
+
+
+	<include name="SpotlightInfoPanel">
+		<control type="grouplist">
+			<left>37</left>
+			<width>895</width>
+			<top>-108</top>
+			<bottom>160</bottom>
+			<orientation>vertical</orientation>
+			<itemgap>7</itemgap>
+			<align>right</align>
+			<control type="image">
+				<width>700</width>
+				<height>175</height>
+				<fadetime>200</fadetime>
+				<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
+				<aspectratio align="left" aligny="bottom">keep</aspectratio>
+				<visible>!String.IsEmpty(ListItem.Art(clearlogo)) + !Skin.HasSetting(Disable.SpotlightClearlogo)</visible>
+			</control>
+			<control type="label">
+				<height>40</height>
+				<aligny>center</aligny>
+				<font>font52_title</font>
+				<textcolor>unfocused_text</textcolor>
+				<label>$VAR[SubstituteLabel]</label>
+				<scroll>true</scroll>
+				<scrollspeed>200</scrollspeed>
+				<visible>String.IsEmpty(ListItem.Art(clearlogo)) | Skin.HasSetting(Disable.SpotlightClearlogo)</visible>
+			</control>
+			<control type="textbox">
+				<top>0</top>
+				<left>0</left>
+				<right>0</right>
+				<height>20</height>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label></label>
+				<visible>!String.IsEmpty(Window(Home).Property(SpotlightWidget))</visible>
+			</control>
+			<!-- Watched Status Labels First -->
+			<control type="label">
+				<height>37</height>
+				<label>$VAR[SpotlightWidgetStatus]</label>
+				<font>font27_title</font>
+				<textcolor>$VAR[FocusColorTheme]</textcolor>
+				<scroll>true</scroll>
+				<scrollspeed>100</scrollspeed>
+				<visible>!String.IsEmpty(Window(Home).Property(SpotlightWidget)) + [
+					!$EXP[isMovie] + !$EXP[isTVShow] | 
+					[$EXP[isMovie] + [Integer.IsGreater(ListItem.Playcount,0) | !Integer.IsEqual(ListItem.Property(WatchedProgress),0)]] | 
+					[$EXP[isTVShow] + Integer.IsGreater(ListItem.Property(WatchedEpisodes),0) + !String.IsEqual(ListItem.Property(UnWatchedEpisodes),-1)]
+				]</visible>
+			</control>
+			<!-- Metadata Labels Below -->
+			<control type="label">
+				<height>40</height>
+				<label>$VAR[Spotlight_WidgetInfoPanelTop]</label>
+				<font>font27</font>
+				<textcolor>$VAR[FocusColorTheme]</textcolor>
+				<scroll>false</scroll>
+				<scrollspeed>100</scrollspeed>
+			</control>
+			<include condition="!String.IsEmpty(Skin.String(valid_api_key))" content="HorizontalRatings"/>
+			<control type="textbox">
+				<height max="170">auto</height>
+				<label>$VAR[RI_Plot]</label>
+				<font>font27</font>
+				<textcolor>unfocused_text</textcolor>
+				<autoscroll delay="10000" time="4000" repeat="10000">Skin.HasSetting(autoscroll)</autoscroll>
+				<visible>!String.IsEmpty(ListItem.Plot)</visible>
+			</control>
+		</control>
 	</include>
 
 </includes>

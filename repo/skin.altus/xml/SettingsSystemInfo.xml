@@ -5,8 +5,7 @@
 	<controls>
 		<include>DefaultBackground</include>
 		<control type="group">
-			<left>60</left>
-			<right>20</right>
+			<left>40</left>
 			<top>133</top>
 			<include>OpenClose_Right</include>
 			<control type="grouplist">
@@ -106,9 +105,9 @@
 				<animation effect="fade" start="100" end="0" time="150">WindowClose</animation>
 			</control>
 			<control type="image">
-				<left>415</left>
+				<left>380</left>
 				<top>-3</top>
-				<right>45</right>
+				<right>0</right>
 				<height>3</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
@@ -118,13 +117,16 @@
 			<top>0</top>
 			<depth>DepthContentPanel</depth>
 			<include>OpenClose_Left</include>
-			<!-- <include content="ContentPanel">
-				<param name="width" value="480" />
-			</include> -->
+			<include content="MenuContentPanel">
+				<!-- <param name="top" value="130" /> -->
+				<param name="width" value="420" />
+				<param name="dividerleft" value="420" />
+				<!-- <param name="color" value="4D000000" /> -->
+			</include>
 			<control type="grouplist" id="9100">
-				<left>35</left>
+				<left>0</left>
 				<top>130</top>
-				<width>395</width>
+				<width>420</width>
 				<height>100%</height>
 				<onup>9100</onup>
 				<ondown>9100</ondown>
@@ -134,7 +136,7 @@
 					<include content="DefaultSystemSettingsButton">
 						<param name="height" value="85" />
 					</include>
-					<width>395</width>
+					<width>420</width>
 					<label>$LOCALIZE[20037]</label>
 				</control>
 				<control type="button" id="94">
@@ -142,7 +144,7 @@
 					<include content="DefaultSystemSettingsButton">
 						<param name="height" value="85" />
 					</include>
-					<width>395</width>
+					<width>420</width>
 					<label>$LOCALIZE[13277]</label>
 				</control>
 				<control type="button" id="96">
@@ -150,7 +152,7 @@
 					<include content="DefaultSystemSettingsButton">
 						<param name="height" value="85" />
 					</include>
-					<width>395</width>
+					<width>420</width>
 					<label>$LOCALIZE[13279]</label>
 				</control>
 				<control type="button" id="97">
@@ -158,7 +160,7 @@
 					<include content="DefaultSystemSettingsButton">
 						<param name="height" value="85" />
 					</include>
-					<width>395</width>
+					<width>420</width>
 					<label>$LOCALIZE[13280]</label>
 				</control>
 				<control type="button" id="98">
@@ -174,7 +176,7 @@
 					<include content="DefaultSystemSettingsButton">
 						<param name="height" value="85" />
 					</include>
-					<width>395</width>
+					<width>420</width>
 					<label>$LOCALIZE[19191]</label>
 				</control>
 				<control type="button" id="100">
@@ -182,7 +184,7 @@
 					<include content="DefaultSystemSettingsButton">
 						<param name="height" value="85" />
 					</include>
-					<width>395</width>
+					<width>420</width>
 					<label>$LOCALIZE[12389]</label>
 				</control>
 			</control>
@@ -197,15 +199,15 @@
 			<height>370</height>
 			<include>OpenClose_Right</include>
 			<control type="image">
-				<left>435</left>
+				<left>380</left>
 				<top>30</top>
-				<right>45</right>
+				<right>0</right>
 				<height>3</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]" border="2">dialogs/separator-grey.png</texture>
 			</control>
 			<control type="grouplist">
 				<itemgap>4</itemgap>
-				<left>440</left>
+				<left>420</left>
 				<orientation>vertical</orientation>
 				<control type="label">
 					<description>Memory Text</description>
@@ -224,8 +226,6 @@
 					<height>12</height>
 					<info>system.memory(used)</info>
 					<colordiffuse>$VAR[FocusColorTheme]</colordiffuse>
-					<texturebg colordiffuse="$VAR[FocusColorTheme]" border="5">progress/bars/progressback_sysinfo.png</texturebg>
-					<midtexture colordiffuse="$VAR[FocusColorTheme]" border="5">progress/bars/progress_sysinfo.png</midtexture>
 				</control>
 				<control type="label">
 					<description>CPU Text</description>
@@ -245,8 +245,6 @@
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>
 					<!-- <colordiffuse>unfocused_text</colordiffuse> -->
-					<texturebg colordiffuse="$VAR[FocusColorTheme]" border="5">progress/bars/progressback_sysinfo.png</texturebg>
-					<midtexture colordiffuse="$VAR[FocusColorTheme]" border="5">progress/bars/progress_sysinfo.png</midtexture>
 				</control>
 			</control>
 			<control type="group">
@@ -254,7 +252,7 @@
 				<animation effect="slide" end="0,-55" time="0" condition="!System.SupportsCPUUsage">Conditional</animation>
 				<control type="label">
 					<top>155</top>
-					<left>440</left>
+					<left>420</left>
 					<width>auto</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
@@ -268,7 +266,7 @@
 					<description>Kodi build version</description>
 					<itemgap>10</itemgap>
 					<top>200</top>
-					<left>440</left>
+					<left>420</left>
 					<width>820</width>
 					<orientation>horizontal</orientation>
 					<control type="label">
@@ -294,7 +292,7 @@
 					<description>Git version</description>
 					<itemgap>10</itemgap>
 					<top>235</top>
-					<left>440</left>
+					<left>420</left>
 					<width>820</width>
 					<orientation>horizontal</orientation>
 					<control type="label">
@@ -320,7 +318,7 @@
 					<description>Build date</description>
 					<itemgap>10</itemgap>
 					<top>270</top>
-					<left>440</left>
+					<left>420</left>
 					<width>820</width>
 					<orientation>horizontal</orientation>
 					<control type="label">

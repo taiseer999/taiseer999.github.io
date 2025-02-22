@@ -2468,7 +2468,7 @@ updated YouTube addon URL
             <screenshot>resources/images/screenshot04.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="script.altus.helper" name="Altus Helper" version="0.1.5" provider-name="Ivar Brandt">
+</addon><addon id="script.altus.helper" name="Altus Helper" version="0.1.6" provider-name="Ivar Brandt">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
@@ -5815,7 +5815,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <disclaimer lang="zh_CN">可放心使用此脚本，更多信息访问 kodi.tv</disclaimer>
     <disclaimer lang="zh_TW">歡迎使用本腳本，相關資訊請參閱kodi.tv</disclaimer>
   </extension>
-</addon><addon id="skin.altus" version="0.2.4" name="Altus" provider-name="Ivar Brandt">
+</addon><addon id="skin.altus" version="0.2.5" name="Altus" provider-name="Ivar Brandt">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 		<import addon="script.altus.helper" />
