@@ -3014,6 +3014,10 @@ msgctxt "#31760"
 msgid "Volume indicator style"
 msgstr ""
 
+msgctxt "#31761"
+msgid "Reboot to android"
+msgstr ""
+
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the video codec name
 msgctxt "#31600"
