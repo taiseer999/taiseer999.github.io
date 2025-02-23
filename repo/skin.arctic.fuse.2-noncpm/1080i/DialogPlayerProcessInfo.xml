@@ -5,6 +5,7 @@
 	<defaultcontrol always="true">5553</defaultcontrol>
 	<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
 	<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+	<param name="posy">48</param>
 	<onunload>ClearProperty(PlayerInfoDialogFocus,Home)</onunload>
 	<controls>
         <include content="Object_Control">
@@ -599,7 +600,7 @@
 				</control>
 				<control type="label">
 					<width>250</width>
-					<height>40</height>
+					<height>20</height>
 					<aligny>bottom</aligny>
 					<align>left</align>
 					<label></label>
@@ -698,6 +699,109 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR dimgrey]12-bit PQ[/COLOR]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+				</control>
+				<control type="label"> <!-- Spacer-->
+					<width>250</width>
+					<height>20</height>
+					<aligny>bottom</aligny>
+					<align>left</align>
+					<label></label>
+					<font>font_debug</font>
+					<shadowcolor>black</shadowcolor>
+				</control>
+				<control type="group"> <!-- DV L5 Left:Right Top:Bottom -->
+					<visible>String.IsEqual(Player.Process(video.dovi.has.l5),1)</visible>
+					<width>500</width>
+					<height>40</height>
+					<control type="label">
+						<width>250</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR white]L5 Active Offsets:[/COLOR]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>250</left>
+						<width>100</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.dovi.l5.left.offset)]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<width>20</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]L[/COLOR]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>350</left>
+						<width>100</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.dovi.l5.right.offset)]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>450</left>
+						<width>20</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]R[/COLOR]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>450</left>
+						<width>100</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.dovi.l5.top.offset)]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>550</left>
+						<width>20</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]T[/COLOR]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>550</left>
+						<width>100</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(video.dovi.l5.bottom.offset)]</label>
+						<font>font_debug</font>
+						<shadowcolor>black</shadowcolor>
+					</control>
+					<control type="label">
+						<left>650</left>
+						<width>20</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]B[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1123,7 +1227,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.source.hdr.type)]</label>
-						<font>font12</font>
+						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),0)</visible>
 						<visible>String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
