@@ -185,7 +185,7 @@ class BuildMenu:
                                icon=icon, themeit=CONFIG.THEME1)
                                
             if guicheck:
-                directory.add_file('Apply build fix  الغاء اختصارات كورالك', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
+                directory.add_file('Apply build fix  تحديثات جديدة', {'mode': 'install', 'action': 'gui', 'name': name}, description=description, fanart=fanart,
                                    icon=icon, themeit=CONFIG.THEME1)
                                    
             if themecheck:
