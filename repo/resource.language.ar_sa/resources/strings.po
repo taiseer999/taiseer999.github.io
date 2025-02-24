@@ -1,4 +1,4 @@
-ب# Kodi Media Center language file
+# Kodi Media Center language file
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
@@ -19330,7 +19330,7 @@ msgstr ""
 #. "video version" string in plural capital format
 msgctxt "#40013"
 msgid "Video versions"
-msgstr ""
+msgstr "إصدارات الفيديو"
 
 #. Add new video version dialog title
 msgctxt "#40014"
