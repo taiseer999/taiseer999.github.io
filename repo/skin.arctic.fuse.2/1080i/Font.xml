@@ -11,7 +11,7 @@
             <param name="font_regular">monadi-reg.ttf</param>
             <param name="font_light">monadi-reg.ttf</param>
             <param name="plot_linespacing_head">0.9</param>
-            <param name="plot_linespacing_midi">1.3</param>
+            <param name="plot_linespacing_midi">1.2</param>
             <param name="plot_linespacing_main">1.12</param>
             <param name="plot_linespacing_mini">0.85</param>
             <param name="plot_linespacing_tiny">0.9</param>
@@ -31,7 +31,7 @@
             <param name="font_regular">URWGeometricArabic-SemiBold.ttf</param>
             <param name="font_light">URWGeometricArabic-Medium.ttf</param>
             <param name="plot_linespacing_head">0.9</param>
-            <param name="plot_linespacing_midi">1.5</param>
+            <param name="plot_linespacing_midi">1.2</param>
             <param name="plot_linespacing_main">0.84</param>
             <param name="plot_linespacing_mini">0.85</param>
             <param name="plot_linespacing_tiny">0.9</param>
@@ -50,7 +50,7 @@
             <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
             <param name="font_light">PFDinTextArabic-Medium.ttf</param>
             <param name="plot_linespacing_head">1.1</param>
-            <param name="plot_linespacing_midi">1.3</param>
+            <param name="plot_linespacing_midi">1.2</param>
             <param name="plot_linespacing_main">0.93</param>
             <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
@@ -70,7 +70,7 @@
             <param name="font_regular">Outfit-Regular.ttf</param>
             <param name="font_light">Outfit-Regular.ttf</param>
                <param name="plot_linespacing_head">1.169</param>
-        <param name="plot_linespacing_midi">1.50</param>
+        <param name="plot_linespacing_midi">1.2</param>
         <param name="plot_linespacing_main">1.16</param>
         <param name="plot_linespacing_mini">1.2</param>
         <param name="plot_linespacing_tiny">1.23</param>
@@ -89,7 +89,7 @@
             <param name="font_regular">RobotoNotoCondensed-Regular.ttf</param>
             <param name="font_light">RobotoNotoCondensed-Light.ttf</param>
             <param name="plot_linespacing_head">1.169</param>
-        <param name="plot_linespacing_midi">1.50</param>
+        <param name="plot_linespacing_midi">1.2</param>
         <param name="plot_linespacing_main">1.16</param>
         <param name="plot_linespacing_mini">1.31</param>
         <param name="plot_linespacing_tiny">1.23</param>
