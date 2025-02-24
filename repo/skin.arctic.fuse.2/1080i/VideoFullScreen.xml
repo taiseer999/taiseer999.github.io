@@ -49,7 +49,7 @@
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
                 <param name="imageId">49</param>
-                <param name="visible"></param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
                 <param name="colordiffuse">80FFFFFF</param>
             </include>
@@ -57,7 +57,7 @@
             <include content="Audio_Background_Flag">
                 <param name="groupId">50</param>
                 <param name="imageId">51</param>
-                <param name="visible"></param>
+                <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
                 <param name="colordiffuse">80FFFFFF</param>
             </include>
@@ -357,7 +357,7 @@
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
                 <param name="imageId">49</param>
-                <param name="visible"></param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
                 <param name="colordiffuse">80FFFFFF</param>
             </include>
@@ -365,7 +365,7 @@
             <include content="Audio_Background_Flag">
                 <param name="groupId">50</param>
                 <param name="imageId">51</param>
-                <param name="visible"></param>
+                <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
                 <param name="colordiffuse">80FFFFFF</param>
             </include>
@@ -665,7 +665,7 @@
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
                 <param name="imageId">49</param>
-                <param name="visible"></param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
                 <param name="colordiffuse">80FFFFFF</param>
             </include>
@@ -673,7 +673,7 @@
             <include content="Audio_Background_Flag">
                 <param name="groupId">50</param>
                 <param name="imageId">51</param>
-                <param name="visible"></param>
+                <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
                 <param name="colordiffuse">80FFFFFF</param>
             </include>
