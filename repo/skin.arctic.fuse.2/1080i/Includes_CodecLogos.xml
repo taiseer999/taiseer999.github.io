@@ -1955,6 +1955,26 @@
     </include>
 
     
+ <include name="Video_Audio_Background_Flag">
+        <param name="groupId" />
+        <param name="imageId" />
+        <param name="visible" />
+        <param name="texture" />
+        <param name="colordiffuse" />
+        <definition>
+            <control type="group" id="$PARAM[groupId]">
+                <control type="image" id="$PARAM[imageId]">
+                    <top>35</top>
+                    <width>210</width>
+                    <height>170</height>
+                    <visible>$PARAM[visible]</visible>
+                    <texture>$PARAM[texture]</texture>
+                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Video_Background_Flag">
         <param name="groupId" />
         <param name="imageId" />
@@ -1964,8 +1984,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>45</top>
-                     <left>735</left>                   
+                     <top>35</top>
                     <width>210</width>
                     <height>90</height>
                     <visible>$PARAM[visible]</visible>
@@ -1985,8 +2004,7 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>45</top>
-                    <left>945</left>
+                    <top>120</top>
                     <width>210</width>
                     <height>90</height>
                     <visible>$PARAM[visible]</visible>
@@ -2006,8 +2024,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>62</top>
-                    <left>765</left>
+                    <top>52</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2027,8 +2045,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>62</top>
-                    <left>765</left>
+                     <top>52</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2048,10 +2066,10 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>75</top>
-                    <left>765</left>
+                   <top>52</top>
+                    <left>30</left>
                     <width>150</width>
-                    <height>33</height>
+                    <height>52</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2069,8 +2087,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>765</left>
+                   <top>50</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2090,8 +2108,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>67</top>
-                    <left>765</left>
+                     <top>57</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>42</height>
                     <visible>$PARAM[visible]</visible>
@@ -2111,8 +2129,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>53</top>
-                    <left>765</left>
+                    <top>52</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2131,8 +2149,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>53</top>
-                    <left>920</left>
+                   <top>43</top>
+                    <left>192</left>
                     <width>8</width>
                     <height>8</height>
                     <visible>$PARAM[visible]</visible>
@@ -2152,8 +2170,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>62</top>
-                    <left>765</left>
+                   <top>52</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>52</height>
                     <visible>$PARAM[visible]</visible>
@@ -2173,10 +2191,10 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>75</top>
-                    <left>765</left>
+                   <top>52</top>
+                    <left>30</left>
                     <width>150</width>
-                    <height>33</height>
+                    <height>52</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2194,8 +2212,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>765</left>
+                    <top>50</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2215,10 +2233,11 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>67</top>
-                    <left>765</left>
+                                        <top>57</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>42</height>
+
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2227,6 +2246,26 @@
         </definition>
     </include>
 	
+     <include name="Separation_Line_Flag">
+        <param name="groupId" />
+        <param name="imageId" />
+        <param name="visible" />
+        <param name="texture" />
+        <param name="colordiffuse" />
+        <definition>
+            <control type="group" id="$PARAM[groupId]">
+                <control type="image" id="$PARAM[imageId]">
+                    <top>120</top>
+                    <left>15</left>
+                    <width>180</width>
+                    <height>1.5</height>
+                    <visible>$PARAM[visible]</visible>
+                    <texture>$PARAM[texture]</texture>
+                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                </control>
+            </control>
+        </definition>
+    </include>
 	
     <include name="PCM_Flag">
         <param name="groupId" />
@@ -2237,8 +2276,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                    <top>140</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>49</height>
                     <visible>$PARAM[visible]</visible>
@@ -2258,10 +2297,10 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>70</top>
-                    <left>975</left>
+                     <top>135</top>
+                    <left>30</left>
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2279,8 +2318,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>975</left>
+                     <top>135</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2300,8 +2339,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>975</left>
+                     <top>135</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2321,8 +2360,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>975</left>
+                     <top>135</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2342,8 +2381,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>975</left>
+                     <top>135</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2363,8 +2402,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>975</left>
+                     <top>135</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>
@@ -2384,8 +2423,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                    <top>140</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>49</height>
                     <visible>$PARAM[visible]</visible>
@@ -2405,10 +2444,10 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>75</top>
-                    <left>1000</left>
+                   <top>150</top>
+                    <left>55</left>
                     <width>100</width>
-                    <height>25</height>
+                    <height>25</height>>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2426,8 +2465,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                   <top>140</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>46</height>
                     <visible>$PARAM[visible]</visible>
@@ -2447,10 +2486,10 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                    <top>140</top>
+                    <left>30</left>
                     <width>150</width>
-                    <height>49</height>
+                    <height>46</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2468,8 +2507,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>72</top>
-                    <left>975</left>
+                     <top>147</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>31</height>
                     <visible>$PARAM[visible]</visible>
@@ -2489,10 +2528,10 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                    <top>140</top>
+                    <left>30</left>
                     <width>150</width>
-                    <height>52</height>
+                    <height>48</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2510,8 +2549,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                     <top>140</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>45</height>
                     <visible>$PARAM[visible]</visible>
@@ -2531,8 +2570,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                    <top>140</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>45</height>
                     <visible>$PARAM[visible]</visible>
@@ -2552,8 +2591,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>65</top>
-                    <left>975</left>
+                     <top>140</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>45</height>
                     <visible>$PARAM[visible]</visible>
@@ -2573,8 +2612,8 @@
         <definition>
             <control type="group" id="$PARAM[groupId]">
                 <control type="image" id="$PARAM[imageId]">
-                    <top>60</top>
-                    <left>765</left>
+                    <top>50</top>
+                    <left>30</left>
                     <width>150</width>
                     <height>56</height>
                     <visible>$PARAM[visible]</visible>

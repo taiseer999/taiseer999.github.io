@@ -2469,6 +2469,11 @@ msgctxt "#31576"
 msgid "Seekbar delayed pause time"
 msgstr ""
 
+ /1080i/Includes_SkinSettings.xml
+msgctxt "#31577"
+msgid "Expanded info on OSD controls"
+msgstr ""
+
 #: /1080i/Includes_Labels.xml
 msgctxt "#31515"
 msgid "Main Items"
