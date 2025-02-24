@@ -33,10 +33,18 @@
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
+            <left>35</left>
             <animation type="Hidden">
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
 			
+            <include content="Video_Audio_Background_Flag">
+                <param name="groupId">46</param>
+                <param name="imageId">47</param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
+                <param name="texture">common/corner.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+            </include>
 			
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
@@ -333,10 +341,18 @@
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.usecenterCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
+            <left>855</left>
             <animation type="Hidden">
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
 			
+            <include content="Video_Audio_Background_Flag">
+                <param name="groupId">46</param>
+                <param name="imageId">47</param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
+                <param name="texture">common/corner.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+            </include>
 			
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
@@ -633,11 +649,19 @@
             <depth>DepthOSD+</depth>
             <visible>Skin.HasSetting(osd.userightCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
+            <left>1675</left>
             <animation type="Hidden">
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
 			
-			
+			<include content="Video_Audio_Background_Flag">
+                <param name="groupId">46</param>
+                <param name="imageId">47</param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
+                <param name="texture">common/corner.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+            </include>
+
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
                 <param name="imageId">49</param>
