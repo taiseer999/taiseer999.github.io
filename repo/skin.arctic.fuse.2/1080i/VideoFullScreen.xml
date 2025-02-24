@@ -38,6 +38,13 @@
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
 			
+            <include content="Video_Audio_Background_Flag">
+                <param name="groupId">46</param>
+                <param name="imageId">47</param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
+                <param name="texture">common/corner.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+            </include>
 			
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
@@ -339,6 +346,13 @@
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
 			
+            <include content="Video_Audio_Background_Flag">
+                <param name="groupId">46</param>
+                <param name="imageId">47</param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
+                <param name="texture">common/corner.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+            </include>
 			
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
@@ -640,7 +654,14 @@
                 <effect type="fade" start="100" end="0" delay="3000" time="500" tween="sine" />
             </animation>
 			
-			
+			<include content="Video_Audio_Background_Flag">
+                <param name="groupId">46</param>
+                <param name="imageId">47</param>
+                <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
+                <param name="texture">common/corner.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+            </include>
+
             <include content="Video_Background_Flag">
                 <param name="groupId">48</param>
                 <param name="imageId">49</param>
