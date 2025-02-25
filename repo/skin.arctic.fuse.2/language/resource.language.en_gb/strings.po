@@ -1,4 +1,3 @@
-
 # Kodi Media Center language file
 # Addon Name: Arctic Fuse
 # Addon Name: skin.arctic.fuse
@@ -2773,6 +2772,16 @@ msgstr ""
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31578"
 msgid "Expanded info landscape art"
+msgstr ""
+
+#: /1080i/Includes_Items.xml
+msgctxt "#31579"
+msgid "Use mirrored layout"
+msgstr ""
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31580"
+msgid "Combined List"
 msgstr ""
 
 

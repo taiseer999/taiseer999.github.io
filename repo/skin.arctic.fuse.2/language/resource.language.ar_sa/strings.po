@@ -1,3 +1,4 @@
+
 # Kodi Media Center language file
 # Addon Name: Arctic Fuse
 # Addon Name: skin.arctic.fuse
@@ -2589,6 +2590,167 @@ msgstr "بالامس"
 msgctxt "#31548"
 msgid "Use detailed status"
 msgstr "الحالة مفصلة"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31549"
+msgid "Choose which hub window to use as the home screen."
+msgstr "اختار اي واجهة HUB لتكون عنصر اليوم "
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31550"
+msgid "Change the visibility level of skin settings."
+msgstr "تغير مستوى اعدادات المظهر"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31551"
+msgid "Use as home"
+msgstr "استخدم كصفحة اليوم"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31552"
+msgid "Settings level"
+msgstr "مستوى الإعدادات"
+
+#: /1080i/Custom_1175_Dialog_Discover.xml
+msgctxt "#31553"
+msgid "Query"
+msgstr "استعلام"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31554"
+msgid "Wall Poster"
+msgstr "جدارية ملصقات"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31555"
+msgid "Wall Landscape"
+msgstr "جدارية صور افقية"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31556"
+msgid "Wall Square"
+msgstr "جدادرية صور مربعة"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31557"
+msgid "Wall Circle"
+msgstr "جدارية صور دائرية"
+
+#: /1080i/Includes_Actions.xml
+msgctxt "#31558"
+msgid "Signpost"
+msgstr "صورة مع الوصف"
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31559"
+msgid "List Details"
+msgstr "تفاصيل القائمة"
+
+#: /1080i/Includes_Items.xml
+msgctxt "#31560"
+msgid "Bright White"
+msgstr "أبيض ساطع"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31561"
+msgid "Wall Overview"
+msgstr "الترتيب جداري"
+
+#: /1080i/Includes_Views_Row.xml
+msgctxt "#31562"
+msgid "Overview Row"
+msgstr "الترتيب صفوص"
+
+#: /1080i/Includes_Views_Row.xml
+msgctxt "#31563"
+msgid "Card Row"
+msgstr "صفحة بشكل كروت"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31564"
+msgid "General appearance and widget layout customisations."
+msgstr "تخصيص المظهر العام وترتيب الودجتس"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31565"
+msgid "Detailed adjustments and additional hub customisations."
+msgstr "تخصيص التعديلات المفصلة والإضافية للفئات"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31566"
+msgid "Development tools and experimental options."
+msgstr "ادوات التطوير والخيارات التجريبية"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31567"
+msgid "Add a single item or a list of several items?"
+msgstr "اضافة عنصر واحد أو قائمة من العناصر"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31568"
+msgid "Add new item(s)"
+msgstr "اضافة عنصر او اكثر"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31569"
+msgid "Add item"
+msgstr "اضافة عنصر"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31570"
+msgid "Delete item(s)"
+msgstr "مسح عنصر او اكثر"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31571"
+msgid "Delete a single item or a list of several items?"
+msgstr "مسح عنصر واحد أو قائمة من العناصر"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31572"
+msgid "Delete item"
+msgstr "مسح عنصر"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31573"
+msgid "Delete list"
+msgstr "مسح قائمة"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31574"
+msgid "Unhide hubs"
+msgstr "اظهار الفئات المخفية"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31575"
+msgid "Click to toggle hub window customisation options."
+msgstr "اضغط هنا لتفعيل نافذة خيارات الصفحة"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31576"
+msgid "Seekbar delayed pause time"
+msgstr "تاخير شريط التقدم عند التوقف المؤقت"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31577"
+msgid "Expanded info on OSD controls"
+msgstr "معلومات اكثر على شريط  OSD"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31578"
+msgid "Expanded info landscape art"
+msgstr "اظهار الصورة"
+
+#: /1080i/Includes_Items.xml
+msgctxt "#31579"
+msgid "Use mirrored layout"
+msgstr "استخدم تصميم معكوس"
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31580"
+msgid "Combined List"
+msgstr "قائمة مجمعة"
+
 
 #: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
 msgctxt "#31549"

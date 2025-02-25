@@ -34,8 +34,7 @@
     <include file="Includes_Keyboard.xml" />
     <include file="Includes_Keyboard_Mini.xml" />
     <include file="Includes_ButtonMenu.xml" />
-    <include file="Includes_Weather_Forecast.xml" />
-    <include file="Includes_Weather_Radar.xml" />
+
     <include file="Includes_DialogInfo.xml" />
     <include file="Includes_DialogSelect.xml" />
     <include file="Includes_DialogContextMenu.xml" />
@@ -51,7 +50,8 @@
     <include file="Includes_Actions.xml" />
     <include file="Includes_Animations.xml" />
     <include file="Includes_Weather.xml" />
-
+    <include file="Includes_Weather_Forecast.xml" />
+    <include file="Includes_Weather_Radar.xml" />
     <include file="Includes_Lists.xml" />
     <include file="Includes_Layouts.xml" />
     <include file="Includes_Widgets.xml" />
@@ -59,7 +59,6 @@
     <include file="Includes_Recommendations.xml" />
     <include file="Includes_Paths.xml" />
     <include file="Includes_CodecLogos.xml"/>
-
     <include file="Includes_Views.xml" />
     <include file="Includes_Views_List.xml" />
     <include file="Includes_Views_Row.xml" />
