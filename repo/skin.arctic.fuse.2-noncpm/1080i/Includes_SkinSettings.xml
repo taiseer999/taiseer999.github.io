@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -487,17 +488,6 @@
             <onclick>Skin.SetNumeric(OSD_Timeout)</onclick>
         </include>
 
-        <include content="Settings_Button" description="Autohide seekbar timing">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">024</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31577]</label>
-            <selected>Skin.HasSetting(OSD.DisplayInfoOnControls)</selected>
-            <onclick>Skin.ToggleSetting(OSD.DisplayInfoOnControls)</onclick>
-        </include>
-
         <include content="Settings_Button" description="Autohide seekbar after pausing">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
@@ -730,6 +720,36 @@
             <selected>!Skin.HasSetting(CustomRating.TVShows.DisablePremiereStatus) | Skin.HasSetting(CustomRating.Movies.EnablePremiereStatus)</selected>
         </include>
 
+        <include content="Settings_Label" description="Playback">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">009</param>
+            <label>$LOCALIZE[14086]</label>
+        </include>
+
+        <include content="Settings_Button" description="Expanded info on OSD">
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">010</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31577]</label>
+            <selected>Skin.HasSetting(OSD.DisplayInfoOnControls)</selected>
+            <onclick>Skin.ToggleSetting(OSD.DisplayInfoOnControls)</onclick>
+        </include>
+
+        <include content="Settings_Button" description="Expanded info landscape art">
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">011</param>
+            <param name="control">radiobutton</param>
+            <param name="slevel">2</param>
+            <label>$LOCALIZE[31578]</label>
+            <selected>!Skin.HasSetting(OSD.DisableLandscapeOnInfo)</selected>
+            <onclick>Skin.ToggleSetting(OSD.DisableLandscapeOnInfo)</onclick>
+        </include>
+
     </include>
 
     <!-- Other -->
@@ -833,7 +853,7 @@
             <visible>!Skin.HasSetting(SkinUserLogin.Disabled)</visible>
         </include>
 
-    <include content="Settings_Label" description="Codec logos">
+        <include content="Settings_Label" description="Codec logos">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">018</param>

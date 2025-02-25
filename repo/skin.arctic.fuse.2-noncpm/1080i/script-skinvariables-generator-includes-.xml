@@ -6202,7 +6202,7 @@
         </item>
         <item>
             <label>Exit</label>
-            <icon>special://skin/extras/icons/kodi2.png</icon>
+            <icon>special://skin/extras/icons/kodi.png</icon>
             <property name="path">PlayMedia(plugin://plugin.program.openwizardTaiseer/?mode=forceclose)</property>
             <property name="menu">options-tray</property>
             <property name="mode"/>

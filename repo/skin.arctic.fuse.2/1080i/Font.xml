@@ -10,10 +10,10 @@
             <param name="font_bold">monadi.ttf</param>
             <param name="font_regular">monadi-reg.ttf</param>
             <param name="font_light">monadi-reg.ttf</param>
-            <param name="plot_linespacing_head">0.9</param>
+            <param name="plot_linespacing_head">1.2</param>
             <param name="plot_linespacing_midi">1.2</param>
             <param name="plot_linespacing_main">1.12</param>
-            <param name="plot_linespacing_mini">0.85</param>
+            <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">30</param>
         <param name="size_light_main">30</param>
