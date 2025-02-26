@@ -82,7 +82,7 @@
 		</font>
 		<font>
 			<name>font37_bold</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>37</size>
 			<style>bold</style>
 		</font>
@@ -100,69 +100,69 @@
 		</font>
 		<font>
 			<name>font_clock</name>
-			<filename>Roboto-Thin.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>70</size>
 		</font>
 		<font>
 			<name>font_date</name>
-			<filename>Roboto-Thin.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>30</size>
 		</font>
 		<!-- Title Fonts -->
 		<font>
 			<name>font_flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>38</size>
 		</font>
 		<font>
 			<name>font20_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>20</size>
 		</font>
 		<font>
 			<name>font25_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>25</size>
 		</font>
 		<font>
 			<name>font28_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>28</size>
 		</font>
 		<font>
 			<name>font30_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>30</size>
 		</font>
 		<font>
 			<name>font32_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>32</size>
 		</font>
 		<font>
 			<name>font36_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>36</size>
 		</font>
 		<font>
 			<name>font45_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>45</size>
 		</font>
 		<font>
 			<name>font52_title</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>52</size>
 		</font>
 		<font>
 			<name>font_MainMenu</name>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>60</size>
 		</font>
 		<font>
 			<name>WeatherTemp</name>
 			<aspect>0.85</aspect>
-			<filename>NotoSans-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>120</size>
 		</font>
 		<font>
@@ -177,22 +177,22 @@
 		</font>
 		<font>
 			<name>Font-Flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>39</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>33</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small2</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>32</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small3</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>28</size>
 		</font>
 		<!-- Lyrics Fonts -->
@@ -677,7 +677,7 @@
 		<!-- Title Fonts -->
 		<font>
 			<name>font_flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>38</size>
 		</font>
 		<font>
@@ -746,22 +746,22 @@
 		</font>
 		<font>
 			<name>Font-Flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>39</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>33</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small2</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>32</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small3</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>28</size>
 		</font>
 		<!-- Lyrics Fonts -->
@@ -1266,7 +1266,7 @@
 		<!-- Title Fonts -->
 		<font>
 			<name>font_flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>38</size>
 		</font>
 		<font>
@@ -1342,22 +1342,22 @@
 		</font>
 		<font>
 			<name>Font-Flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>39</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>33</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small2</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>32</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small3</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>28</size>
 		</font>
 		<!-- Lyrics Fonts -->
@@ -1927,22 +1927,22 @@
 		</font>
 		<font>
 			<name>Font-Flag</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>39</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>33</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small2</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>32</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small3</name>
-			<filename>RobotoCondensed-Bold.ttf</filename>
+			<filename>NotoSans-Regular.ttf</filename>
 			<size>28</size>
 		</font>
 		<!-- Lyrics Fonts -->
