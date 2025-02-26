@@ -2784,6 +2784,10 @@ msgctxt "#31580"
 msgid "Combined List"
 msgstr ""
 
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31581"
+msgid "List Broad"
+msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the video codec name

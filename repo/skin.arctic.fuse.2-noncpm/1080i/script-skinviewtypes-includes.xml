@@ -61,6 +61,8 @@
     <expression name="Exp_View_552_Include">True</expression>
     <expression name="Exp_View_553">[[Container.Content(songs) + [!String.IsEmpty(Container.PluginName)]] | [Container.Content() + !Window.IsVisible(MyGames.xml) + !Window.IsVisible(MyPVRRecordings.xml) + !Window.IsVisible(MyPVRTimers.xml) + !Window.IsVisible(MyPVRSearch.xml) + !String.IsEqual(Container.Property(param.info),watch_providers) + [[String.IsEqual(Container.PluginName,plugin.video.fen)] | [!String.IsEmpty(Container.PluginName) + !String.IsEqual(Container.PluginName,plugin.video.realizerx)]]] | [Container.Content(files) + [String.IsEqual(Container.PluginName,plugin.video.fenlight)]] | [Container.Content(episodes) + [String.IsEqual(Container.PluginName,plugin.video.dramacool)]] | [Container.Content(movies) + [String.IsEqual(Container.PluginName,plugin.video.realizerx) | String.IsEqual(Container.PluginName,plugin.video.videodevil) | String.IsEqual(Container.PluginName,plugin.video.the-loop)]] | [Container.Content(addons) + [String.IsEqual(Container.PluginName,plugin.video.realizerx)]] | [Container.Content(videos) + [String.IsEqual(Container.PluginName,plugin.video.co.bellesa.free) | String.IsEqual(Container.PluginName,plugin.video.cb20)]]]</expression>
     <expression name="Exp_View_553_Include">True</expression>
+    <expression name="Exp_View_557">[False]</expression>
+    <expression name="Exp_View_557_Include">False</expression>
     <expression name="Exp_View_561">[False]</expression>
     <expression name="Exp_View_561_Include">False</expression>
 </includes>
