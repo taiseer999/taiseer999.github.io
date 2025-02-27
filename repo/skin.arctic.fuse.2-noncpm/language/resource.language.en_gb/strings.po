@@ -1,3 +1,4 @@
+
 # Kodi Media Center language file
 # Addon Name: Arctic Fuse
 # Addon Name: skin.arctic.fuse
@@ -2786,8 +2787,14 @@ msgstr ""
 
 #: /1080i/Includes_Views_List.xml
 msgctxt "#31581"
-msgid "List Broad"
+msgid "List Expanded"
 msgstr ""
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31582"
+msgid "List Information"
+msgstr ""
+
 
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the video codec name

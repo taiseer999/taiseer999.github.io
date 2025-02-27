@@ -2751,10 +2751,15 @@ msgctxt "#31580"
 msgid "Combined List"
 msgstr "قائمة مجمعة"
 
-#: /1080i/Includes_Views_List.xml
 msgctxt "#31581"
-msgid "List Broad"
-msgstr ""
+msgid "List Expanded"
+msgstr "قائمة موسعة"
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31582"
+msgid "List Information"
+msgstr "قائمة معلومات"
+
 
 #: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
 msgctxt "#31549"
