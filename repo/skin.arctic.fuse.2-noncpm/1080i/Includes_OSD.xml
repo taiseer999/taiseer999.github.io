@@ -626,7 +626,7 @@
                     <include>OSD_Info_Line</include>
                 </control>
 
-                <include content="Info_Panel_Textbox">
+                <include content="Info_Panel_Textbox" condition="!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)">
                     <param name="plotlabel">$VAR[Label_Player_Plot]</param>
                     <param name="plotwidth">90%</param>
                     <param name="plotheight">160</param>
@@ -637,10 +637,11 @@
 
                 <control type="group">
                     <top>12</top>
+                    <visible>!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)</visible>
                     <visible>!String.IsEmpty(VideoPlayer.Plot) | !VideoPlayer.Content(livetv)</visible>
                 </control>
 
-                <include content="Info_RatingsLine">
+                <include content="Info_RatingsLine" condition="!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)">
                     <param name="is_player">true</param>
                     <top>0</top>
                     <left>view_pad</left>
@@ -1165,6 +1166,8 @@
         <param name="button_6">false</param>
         <param name="button_7">false</param>
         <param name="button_8">false</param>
+        <param name="button_9">false</param>
+        <param name="button_10">false</param>
         <param name="iconoffset_condition">false</param>
         <definition>
 
@@ -1260,6 +1263,14 @@
                     <param name="icon">$PARAM[icon]</param>
                     <param name="label">$PARAM[label]</param>
                     <param name="iconoffset_condition">$PARAM[iconoffset_condition]</param>
+                </include>
+
+                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_9]]">
+                    <param name="id">9</param>
+                </include>
+
+                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_10]]">
+                    <param name="id">10</param>
                 </include>
 
                 <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_6]]">

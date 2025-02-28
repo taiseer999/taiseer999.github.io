@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -482,7 +481,6 @@
             <include content="Info_Line_VideoQuality">
                 <param name="textcolor">panel_fg_90</param>
                 <param name="listitem_videoresolution">VideoPlayer.VideoResolution</param>
-                <param name="listitem_audiocodec">VideoPlayer.AudioCodec</param>
                 <param name="listitem_audiochannels">VideoPlayer.AudioChannels</param>
                 <param name="listitem_hdrtype">VideoPlayer.HdrType</param>
                 <param name="visible">$PARAM[visible]</param>
@@ -628,7 +626,7 @@
                     <include>OSD_Info_Line</include>
                 </control>
 
-                <include content="Info_Panel_Textbox">
+                <include content="Info_Panel_Textbox" condition="!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)">
                     <param name="plotlabel">$VAR[Label_Player_Plot]</param>
                     <param name="plotwidth">90%</param>
                     <param name="plotheight">160</param>
@@ -639,10 +637,11 @@
 
                 <control type="group">
                     <top>12</top>
+                    <visible>!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)</visible>
                     <visible>!String.IsEmpty(VideoPlayer.Plot) | !VideoPlayer.Content(livetv)</visible>
                 </control>
 
-                <include content="Info_RatingsLine">
+                <include content="Info_RatingsLine" condition="!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)">
                     <param name="is_player">true</param>
                     <top>0</top>
                     <left>view_pad</left>
@@ -827,7 +826,7 @@
                 <centertop>50%</centertop>
                 <height>80</height>
                 <include content="Object_InfoCircle">
-                    <param name="name">[UPPERCASE]$INFO[VideoPlayer.VideoResolution]$VAR[Label_OSD_VideoHDRCodec, • ,]$VAR[Label_VideoPlayer_AudioCodec, • ,]$VAR[Label_VideoPlayer_AudioChannels, • ,][/UPPERCASE]</param>
+                    <param name="name">[UPPERCASE]$INFO[VideoPlayer.VideoResolution]$INFO[VideoPlayer.VideoCodec, • ,]$INFO[VideoPlayer.VideoAspect, • ,:1]$INFO[VideoPlayer.AudioCodec, • ,]$VAR[Label_VideoPlayer_AudioChannels, • ,][/UPPERCASE]</param>
                     <param name="role">$INFO[VideoPlayer.VideoVersionName]</param>
                     <param name="icon">special://skin/extras/icons/photo-film.png</param>
                     <param name="fallback_role">$LOCALIZE[31207]</param>
@@ -1320,3 +1319,5 @@
         </definition>
     </include>
 </includes>
+
+
