@@ -736,15 +736,17 @@
             <label>$LOCALIZE[14086]</label>
         </include>
 
-        <include content="Settings_Button" description="CustomDialog Playback">       
+        <include content="Settings_Button" description="CustomDialog Playback">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">010</param>
-           <label>$LOCALIZE[31430]: $LOCALIZE[31434]</label>
+            <label>$LOCALIZE[31430]: $LOCALIZE[31434]</label>
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31430]: $LOCALIZE[31434][/CAPITALIZE],Home)</onclick>
             <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_OSDStyle,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
+        </include>
+
     </include>
 
     <!-- Other -->
@@ -847,7 +849,8 @@
             <selected>Skin.HasSetting(SkinUserLogin.StartupLoginScreen)</selected>
             <visible>!Skin.HasSetting(SkinUserLogin.Disabled)</visible>
         </include>
-         <include content="Settings_Label" description="Codec logos">
+
+        <include content="Settings_Label" description="Codec logos">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">018</param>
