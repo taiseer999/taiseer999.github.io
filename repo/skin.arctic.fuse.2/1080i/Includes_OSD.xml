@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -481,6 +482,7 @@
             <include content="Info_Line_VideoQuality">
                 <param name="textcolor">panel_fg_90</param>
                 <param name="listitem_videoresolution">VideoPlayer.VideoResolution</param>
+                <param name="listitem_audiocodec">VideoPlayer.AudioCodec</param>
                 <param name="listitem_audiochannels">VideoPlayer.AudioChannels</param>
                 <param name="listitem_hdrtype">VideoPlayer.HdrType</param>
                 <param name="visible">$PARAM[visible]</param>
@@ -825,7 +827,7 @@
                 <centertop>50%</centertop>
                 <height>80</height>
                 <include content="Object_InfoCircle">
-                    <param name="name">[UPPERCASE]$INFO[VideoPlayer.VideoResolution]$INFO[VideoPlayer.VideoCodec, • ,]$INFO[VideoPlayer.VideoAspect, • ,:1]$INFO[VideoPlayer.AudioCodec, • ,]$VAR[Label_VideoPlayer_AudioChannels, • ,][/UPPERCASE]</param>
+                    <param name="name">[UPPERCASE]$INFO[VideoPlayer.VideoResolution]$VAR[Label_OSD_VideoHDRCodec, • ,]$VAR[Label_VideoPlayer_AudioCodec, • ,]$VAR[Label_VideoPlayer_AudioChannels, • ,][/UPPERCASE]</param>
                     <param name="role">$INFO[VideoPlayer.VideoVersionName]</param>
                     <param name="icon">special://skin/extras/icons/photo-film.png</param>
                     <param name="fallback_role">$LOCALIZE[31207]</param>
@@ -1165,6 +1167,8 @@
         <param name="button_6">false</param>
         <param name="button_7">false</param>
         <param name="button_8">false</param>
+        <param name="button_9">false</param>
+        <param name="button_10">false</param>
         <param name="iconoffset_condition">false</param>
         <definition>
 
@@ -1262,6 +1266,14 @@
                     <param name="iconoffset_condition">$PARAM[iconoffset_condition]</param>
                 </include>
 
+                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_9]]">
+                    <param name="id">9</param>
+                </include>
+
+                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_10]]">
+                    <param name="id">10</param>
+                </include>
+
                 <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_6]]">
                     <param name="id">6</param>
                 </include>
@@ -1308,5 +1320,3 @@
         </definition>
     </include>
 </includes>
-
-
