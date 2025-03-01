@@ -5,23 +5,23 @@
 		<font>
 			<name>font05</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>12</size>
+			<size>14</size>
 		</font>
 		<font>
 			<name>font09</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>20</size>
+			<size>24</size>
 		</font>
 		<font>
 			<name>font10</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>23</size>
+			<size>27</size>
 			<style>lighten</style>
 		</font>
 		<font>
 			<name>font12</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>25</size>
+			<size>30</size>
 			<style>lighten</style>
 		</font>
 		<font>
@@ -33,13 +33,13 @@
 		<font>
 			<name>fontplot</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>27</size>
+			<size>30</size>
 			<style>lighten</style>
 		</font>
 		<font>
 			<name>fontplot2</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>29</size>
+			<size>30</size>
 			<style>lighten</style>
 		</font>
 		<font>
@@ -117,27 +117,27 @@
 		<font>
 			<name>font20_title</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>20</size>
+			<size>25</size>
 		</font>
 		<font>
 			<name>font25_title</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>25</size>
+			<size>30</size>
 		</font>
 		<font>
 			<name>font28_title</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>28</size>
+			<size>30</size>
 		</font>
 		<font>
 			<name>font30_title</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>30</size>
+			<size>32</size>
 		</font>
 		<font>
 			<name>font32_title</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>32</size>
+			<size>34</size>
 		</font>
 		<font>
 			<name>font36_title</name>
@@ -168,12 +168,12 @@
 		<font>
 			<name>Mono26</name>
 			<filename>NotoMono-Regular.ttf</filename>
-			<size>26</size>
+			<size>28</size>
 		</font>
 		<font>
 			<name>Mono30</name>
 			<filename>NotoMono-Regular.ttf</filename>
-			<size>30</size>
+			<size>32</size>
 		</font>
 		<font>
 			<name>Font-Flag</name>
@@ -183,17 +183,17 @@
 		<font>
 			<name>Font-Flag-Small</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>33</size>
+			<size>35</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small2</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>32</size>
+			<size>34</size>
 		</font>
 		<font>
 			<name>Font-Flag-Small3</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>28</size>
+			<size>30</size>
 		</font>
 		<!-- Lyrics Fonts -->
 		<font>
