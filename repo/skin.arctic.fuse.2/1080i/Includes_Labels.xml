@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -48,6 +47,12 @@
     <variable name="Label_DialogInfo_Biography">
         <value condition="!String.IsEmpty(ListItem.Property(biography))">$INFO[ListItem.Property(biography)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.biography))">$INFO[Window(Home).Property(TMDbHelper.ListItem.biography)]</value>
+    </variable>
+
+    <variable name="Label_Settings_InfoLayout">
+        <value condition="Skin.String(Info.Layout,Flix)">FlixArt</value>
+        <value condition="Skin.String(Info.Layout,Flip)">$LOCALIZE[31583]</value>
+        <value>$LOCALIZE[571]</value>
     </variable>
 
     <variable name="Label_Settings_WidgetNoResults">
@@ -1337,11 +1342,21 @@
         <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label]</value>
     </variable>
 
-
     <variable name="Label_MediaList_Rating">
         <value condition="!String.IsEmpty(ListItem.TrackNumber)">$INFO[ListItem.TrackNumber,#,]</value>
         <value condition="!String.IsEmpty(ListItem.Rating)">$INFO[ListItem.Rating]</value>
         <value>——</value>
+    </variable>
+
+    <variable name="Label_MediaList_Details_LeftLabel">
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$INFO[ListItem.Episode,, $LOCALIZE[20453]]</value>
+        <value>$INFO[ListItem.Premiered]</value>
+    </variable>
+
+    <variable name="Label_MediaList_Details_RightLabel">
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$INFO[ListItem.Year]</value>
+        <value condition="!Integer.IsEqual(ListItem.Duration(h),0)">$INFO[ListItem.Duration(h),,h ]$INFO[ListItem.Duration(m),,m]</value>
+        <value>$INFO[ListItem.Duration(m),,m]</value>
     </variable>
 
     <variable name="Label_MediaList_Year_DetailedLabels">

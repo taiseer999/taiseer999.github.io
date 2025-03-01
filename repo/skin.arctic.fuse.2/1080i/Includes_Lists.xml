@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -102,6 +101,7 @@
         <param name="timeblocks">24</param>
         <param name="programs_left">0</param>
         <param name="programs_left_text">40</param>
+        <param name="programs_left_text_slide">70</param>
         <definition>
             <control type="epggrid" id="$PARAM[id]">
                 <nested />
@@ -144,6 +144,7 @@
                         <param name="border_genre">$PARAM[border_genre]</param>
                         <param name="left">$PARAM[programs_left]</param>
                         <param name="left_text">$PARAM[programs_left_text]</param>
+                        <param name="left_text_slide">$PARAM[programs_left_text_slide]</param>
                     </include>
                 </itemlayout>
                 <focusedlayout height="$PARAM[programheight]" width="$PARAM[programwidth]">
@@ -155,6 +156,7 @@
                         <param name="border_genre">$PARAM[border_genre]</param>
                         <param name="left">$PARAM[programs_left]</param>
                         <param name="left_text">$PARAM[programs_left_text]</param>
+                        <param name="left_text_slide">$PARAM[programs_left_text_slide]</param>
                     </include>
                     <include content="$PARAM[include_programs]">
                         <param name="selected">true</param>
@@ -164,6 +166,7 @@
                         <param name="border_genre">$PARAM[border_genre]</param>
                         <param name="left">$PARAM[programs_left]</param>
                         <param name="left_text">$PARAM[programs_left_text]</param>
+                        <param name="left_text_slide">$PARAM[programs_left_text_slide]</param>
                     </include>
                 </focusedlayout>
             </control>
@@ -1123,14 +1126,14 @@
                     </include>
                 </itemlayout>
 
-                <focusedlayout width="100" height="80" condition="!Control.HasFocus($PARAM[id])">
+                <focusedlayout width="100" height="80" condition="![Control.HasFocus($PARAM[id]) + !Window.IsActive(1163)]">
                     <include content="Layout_IconMenu">
                         <param name="selected">false</param>
                         <param name="color_nf">$PARAM[color_nf]</param>
                     </include>
                 </focusedlayout>
 
-                <focusedlayout width="300" height="80" condition="Control.HasFocus($PARAM[id])">
+                <focusedlayout width="300" height="80" condition="[Control.HasFocus($PARAM[id]) + !Window.IsActive(1163)]">
 
                     <include content="$PARAM[hidden_button]">
                         <param name="id">$PARAM[id]</param>
