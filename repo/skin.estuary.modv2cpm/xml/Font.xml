@@ -10,12 +10,12 @@
 		<font>
 			<name>font09</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>24</size>
+			<size>27</size>
 		</font>
 		<font>
 			<name>font10</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>27</size>
+			<size>30</size>
 			<style>lighten</style>
 		</font>
 		<font>
@@ -27,7 +27,7 @@
 		<font>
 			<name>font12_bold</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>25</size>
+			<size>30</size>
 			<style>bold</style>
 		</font>
 		<font>
@@ -57,20 +57,20 @@
 		<font>
 			<name>font25_narrow</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>25</size>
+			<size>27</size>
 			<style>lighten</style>
 			<linespacing>0.8</linespacing>
 		</font>
 		<font>
 			<name>font27</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>27</size>
+			<size>30</size>
 			<style>lighten</style>
 		</font>
 		<font>
 			<name>font27_narrow</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>25</size>
+			<size>27</size>
 			<style>lighten</style>
 			<linespacing>0.8</linespacing>
 		</font>

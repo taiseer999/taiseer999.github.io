@@ -333,7 +333,8 @@
 					<onclick>SetProperty(settingslist_header,$LOCALIZE[31725],home)</onclick>
 					<onclick>ActivateWindow(1112)</onclick>
 					<visible>Player.Process(videohwdecoder)</visible>
-				    <visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw), 2)</visible>
+					<visible>!Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)</visible>
+				    <visible>!String.IsEqual(Player.Process(video.source.hdr.type.raw),2)</visible>
 				</control>
 			</control>
 			<control type="group">

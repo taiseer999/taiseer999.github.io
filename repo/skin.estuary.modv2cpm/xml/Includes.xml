@@ -45,15 +45,15 @@
 	<constant name="list_item_height">80</constant>
 	<expression name="infodialog_active">Window.IsActive(musicinformation) | Window.IsActive(songinformation) | Window.IsActive(movieinformation) | Window.IsActive(addoninformation) | Window.IsActive(pvrguideinfo) | Window.IsActive(pvrrecordinginfo) | Window.IsActive(pictureinfo) | Window.IsVisible(script-embuary-image.xml) | Window.IsVisible(script-embuary-person.xml) | Window.IsVisible(script-embuary-video.xml) | Window.IsVisible(1132)</expression>
 	<expression name="sidebar_visible">ControlGroup(9000).HasFocus | ControlGroup(8000).HasFocus | Control.HasFocus(6130) | Control.HasFocus(6131) | Window.IsActive(videoplaylist)</expression>
-	<expression name="EnableTheme">![VideoPlayer.IsFullscreen | Window.IsActive(fullscreeninfo) | Window.IsVisible(visualisation) | Window.IsVisible(1104)]</expression>
+	<expression name="EnableTheme">![VideoPlayer.IsFullscreen | Window.IsActive(fullscreeninfo) | Window.IsActive(slideshow) | Window.IsVisible(visualisation) | Window.IsVisible(1104)]</expression>
 	<!-- Christmas Time from 1. Advent to 2. Christmas Date, fix end date (26.12.) -->
-	<expression name="ChristmasTime">System.Date(12-01,12-27) + !Skin.HasSetting(DisableThemes)</expression>
+	<expression name="ChristmasTime">System.Date(11-30,12-27) + !Skin.HasSetting(DisableThemes)</expression>
 	<expression name="ChristmasTheme">$EXP[ChristmasTime] + $EXP[EnableTheme]</expression>
 	<!-- Palm Sunday to Maundy Thursday, variable date -->
-	<expression name="PreEasterTime">System.Date(03-24,03-29) + !Skin.HasSetting(DisableThemes)</expression>
+	<expression name="PreEasterTime">System.Date(04-13,04-18) + !Skin.HasSetting(DisableThemes)</expression>
 	<expression name="PreEasterTheme">$EXP[PreEasterTime] + $EXP[EnableTheme]</expression>
 	<!-- Easter from Good Friday to Easter Monday, variable date -->
-	<expression name="EasterTime">System.Date(03-29,04-02) + !Skin.HasSetting(DisableThemes)</expression>
+	<expression name="EasterTime">System.Date(04-18,04-22) + !Skin.HasSetting(DisableThemes)</expression>
 	<expression name="EasterTheme">$EXP[EasterTime] + $EXP[EnableTheme]</expression>
 	<!-- Valentines Day, fix date (14.02) -->
 	<expression name="ValentineTime">System.Date(02-14,02-15) + !Skin.HasSetting(DisableThemes)</expression>
@@ -64,7 +64,7 @@
 	<!-- Expression lossless audio -->
 	<expression name="isLossless">String.isEqual(Videoplayer.AudioCodec,cdda) | String.IsEqual(VideoPlayer.AudioCodec,wavpack) | String.IsEqual(Videoplayer.AudioCodec,flac) | String.IsEqual(Videoplayer.AudioCodec,pcm_bluray) | String.IsEqual(Videoplayer.AudioCodec,wav) | String.IsEqual(Videoplayer.AudioCodec,pcm) | String.IsEqual(Videoplayer.AudioCodec,pcm_s16le) | String.IsEqual(Videoplayer.AudioCodec,alac) | String.IsEqual(Videoplayer.AudioCodec,pcm_s24le) | String.IsEqual(Videoplayer.AudioCodec,ape) | String.IsEqual(Videoplayer.AudioCodec,sacd)</expression>
 	<!-- Expression Seek, Skip Forwarding and Rewinding -->
-	<expression name="isSeeking">Player.Seeking | Player.HasPerformedSeek(5) | Player.Forwarding | Player.Rewinding</expression>
+	<expression name="isSeeking">Player.Seeking | Player.HasPerformedSeek(2) | Player.Forwarding | Player.Rewinding</expression>
 	<!-- Expression not media, all types except movies, videos, tvshows, sets, seasons, epsiodes, music, musicvidoes -->
 	<expression name="subCategories">Container.Content(genres) | Container.Content(tags) | Container.Content(years) | Container.Content(directors) | Container.Content(actors) | Container.Content(artists) | Container.Content(roles) | Container.Content(countries) | Container.Content(studios) | Container.Content(files) | Container.Content(playlists)</expression>
 	<!-- Expression Categories Widget has Focus -->
@@ -267,7 +267,6 @@
             <scrollout>false</scrollout>
             <randomize>true</randomize>
             <resetonlabelchange>true</resetonlabelchange>
-            <visible>Skin.HasSetting(EnableExtraFanart)</visible>
             <label>$INFO[ListItem.Art(fanart)]</label>
             <label>$INFO[ListItem.Art(fanart1)]</label>
             <label>$INFO[ListItem.Art(fanart2)]</label>
@@ -288,11 +287,6 @@
             <label>$INFO[ListItem.Art(tvshow.fanart7)]</label>
             <label>$INFO[ListItem.Art(tvshow.fanart8)]</label>
             <label>$INFO[ListItem.Art(tvshow.fanart9)]</label>
-			<label>$INFO[Window(Home).Property(PVR.Artwork.fanart)]</label>
-            <label>$INFO[Window(Home).Property(PVR.Artwork.fanart1)]</label>
-            <label>$INFO[Window(Home).Property(PVR.Artwork.fanart2)]</label>
-            <label>$INFO[Window(Home).Property(PVR.Artwork.fanart3)]</label>
-            <label>$INFO[Window(Home).Property(PVR.Artwork.fanart4)]</label>
             <pauseatend>8000</pauseatend>
         </control>
 		<control type="image" id="4398">
@@ -2640,60 +2634,49 @@
 		</definition>
 	</include>
 	<include name="ColoredBackgroundImages">
-		<control type="image">
+		<control type="group">
 			<depth>DepthBackground</depth>
 			<include>FullScreenDimensions</include>
-			<aspectratio>scale</aspectratio>
+			<control type="image">
+				<aspectratio>scale</aspectratio>
 			<texture colordiffuse="$VAR[BackgroundColorVar]">special://skin/extras/backgrounds/primary.jpg</texture>
 			<visible>![[Player.HasVideo | Slideshow.IsActive] + Skin.HasSetting(opacity_100)]</visible>
 		</control>
 		<control type="image">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
+				<aspectratio>scale</aspectratio>
+				<texture colordiffuse="$VAR[PatternColorVar]">$INFO[Skin.String(background_overlay),special://skin/extras/patterns/pattern,.png]</texture>
+				<visible>!Window.IsVisible(visualisation) + !Window.IsVisible(pvrradiordsinfo)</visible>
+			</control>
+			<control type="image">
 			<aspectratio>scale</aspectratio>
 			<texture colordiffuse="$VAR[PatternColorVar]">special://skin/extras/patterns/pattern13.png</texture>
 			<visible>!Window.IsVisible(visualisation)</visible>
 			<visible>$EXP[ChristmasTheme]</visible>
 		</control>
 		<control type="image">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
 			<aspectratio>scale</aspectratio>
 			<texture colordiffuse="$VAR[PatternColorVar]">special://skin/extras/patterns/pattern14.png</texture>
 			<visible>!Window.IsVisible(visualisation)</visible>
 			<visible>$EXP[HalloweenTheme]</visible>
 		</control>
 		<control type="image">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
 			<aspectratio>scale</aspectratio>
 			<texture colordiffuse="$VAR[PatternColorVar]">special://skin/extras/patterns/pattern17.png</texture>
 			<visible>!Window.IsVisible(visualisation)</visible>
 			<visible>$EXP[PreEasterTheme]</visible>
 		</control>
 		<control type="image">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
 			<aspectratio>scale</aspectratio>
 			<texture colordiffuse="$VAR[PatternColorVar]">special://skin/extras/patterns/pattern15.png</texture>
 			<visible>!Window.IsVisible(visualisation)</visible>
 			<visible>$EXP[EasterTheme]</visible>
 		</control>
 		<control type="image">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
 			<aspectratio>scale</aspectratio>
 			<texture colordiffuse="$VAR[PatternColorVar]">special://skin/extras/patterns/pattern16.png</texture>
 			<visible>!Window.IsVisible(visualisation)</visible>
 			<visible>$EXP[ValentineTheme]</visible>
 		</control>
-		<control type="image">
-			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
-			<aspectratio>scale</aspectratio>
-			<texture colordiffuse="$VAR[PatternColorVar]">$INFO[Skin.String(background_overlay),special://skin/extras/patterns/pattern,.png]</texture>
-			<visible>!Window.IsVisible(visualisation) + !Window.IsVisible(pvrradiordsinfo)</visible>
-			<visible>!$EXP[ChristmasTheme] + !$EXP[HalloweenTheme] + !$EXP[PreEasterTheme] + !$EXP[EasterTheme] + !$EXP[ValentineTheme]</visible>
 		</control>
 	</include>
 	<include name="DefaultBackground">
@@ -3790,7 +3773,7 @@
 					<width>360</width>
 					<height>360</height>
 					<include content="ItemBottom" condition="!Window.IsVisible(visualisation) + !Skin.HasSetting(show_discart)">
-						<param name="bottom" value="435" />
+						<param name="bottom" value="415" />
 					</include>
 					<include content="ItemBottom" condition="Window.IsVisible(visualisation) + !Skin.HasSetting(show_disc) + Player.HasAudio">
 						<param name="bottom" value="245" />
@@ -4122,7 +4105,13 @@
 								<param name="width" value="104" />
 								<param name="visible" value="!Window.IsVisible(visualisation)" />
 							</include>
-							<include content="MediaFlag">
+				            <include content="MediaFlag">
+					            <param name="texture" value="$VAR[VideoPlayerHdrTypeVar]" />
+					            <param name="visible" value="String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision | String.Contains(Player.Process(amlogic.vs10.mode),HDR10 | [String.IsEqual(Player.Process(video.source.hdr.type.raw),3) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass) + ![String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),2) + Integer.IsEqual(System.GetInt(coreelec.amlogic.dolbyvision.mode),2)]] | !Integer.IsEqual(Player.Process(video.source.hdr.type.raw),1) + String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | [String.IsEqual(Player.Process(video.source.hdr.type.raw),1) + !String.Contains(Player.Process(amlogic.vs10.mode),SDR)] | String.IsEqual(Player.Process(video.source.hdr.type.raw),1) + !String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision) |String.Contains(Player.Filenameandpath,.hdrplus.) | String.Contains(Player.Filenameandpath,.12bit.) | String.Contains(Player.Filenameandpath,.hdr10plus.) | String.Contains(Player.Filenameandpath,_hdr10plus_) | String.Contains(Player.Filenameandpath,_hdr10plus-) | [String.IsEqual(Player.Process(video.source.hdr.type.raw),4) + String.Contains(Player.Process(amlogic.vs10.mode),Bypass)] | String.Contains(Player.Process(amlogic.eoft_gamut),HLG)" />
+					            <param name="visible" value="!String.IsEmpty(VideoPlayer.HdrType) + !Window.IsVisible(MusicVisualisation.xml)" />
+					            <param name="width" value="92" />
+				            </include>
+							<!--include content="MediaFlag">
 								<param name="texture" value="$INFO[VideoPlayer.HdrType,flags/videoresolution/,.png]" />
 								<param name="visible" value="[String.Contains(VideoPlayer.HdrType,hdr) | String.Contains(VideoPlayer.HdrType,hlg)] + !String.Contains(Player.Filenameandpath,.hdrplus.) + !Window.IsVisible(visualisation)" />
 								<param name="width" value="58" />
@@ -4136,7 +4125,7 @@
 								<param name="texture" value="$INFO[VideoPlayer.HdrType,flags/videoresolution/,.png]" />
 								<param name="visible" value="String.IsEqual(VideoPlayer.HdrType,dolbyvision) + !Window.IsVisible(visualisation)" />
 								<param name="width" value="94" />
-							</include>
+							</include-->
 							<include content="MediaFlag">
 								<param name="texture" value="$INFO[VideoPlayer.VideoAspect,flags/aspectratio/,.png]" />
 								<param name="fallback" value="flags/aspectratio/fallback.png" />
@@ -4158,7 +4147,7 @@
 								<param name="width" value="104" />
 							</include>
 							<include content="MediaFlag">
-								<param name="texture" value="$INFO[VideoPlayer.AudioChannels,flags/audiochannel/,.png]" />
+								<param name="texture" value="$VAR[Image_VideoPlayer_AudioChannelsVar]" />
 								<param name="fallback" value="flags/audiochannel/fallback.png" />
 								<param name="width" value="104" />
 							</include>
@@ -4168,7 +4157,7 @@
 								<param name="label_left" value="2" />
 								<param name="label" value="$INFO[MusicPlayer.SampleRate,, kHz]" />
 								<param name="texture" value="flags/cadre3.png" />
-								<param name="visible" value="!String.IsEmpty(MusicPlayer.Samplerate) + $EXP[isLossless] + Window.IsVisible(visualisation)" />
+								<param name="visible" value="!String.IsEmpty(MusicPlayer.Samplerate) + Window.IsVisible(visualisation)" />
 							</include>
 							<include content="MediaFlag">
 								<param name="width" value="155" />
@@ -4176,7 +4165,7 @@
 								<param name="label_left" value="2" />
 								<param name="label" value="$INFO[MusicPlayer.BitRate,, kbps]" />
 								<param name="texture" value="flags/cadre.png" />
-								<param name="visible" value="!String.IsEmpty(MusicPlayer.Samplerate) + $EXP[isLossless] + Window.IsVisible(visualisation)" />
+								<param name="visible" value="!String.IsEmpty(MusicPlayer.Samplerate) + Window.IsVisible(visualisation)" />
 							</include>
 							<include content="MediaFlag">
 								<param name="width" value="120" />
@@ -4294,7 +4283,7 @@
 			</include>
 		</control>
 	</include>
-    <include name="VideoCodecFlag">
+	<include name="VideoCodecFlag">
 		<param name="groupId"/>
 		<param name="imageId"/>
 		<param name="visible"/>
@@ -4302,8 +4291,8 @@
 		<definition>
 			<control type="group" id="$PARAM[groupId]">
 				<control type="image" id="$PARAM[imageId]">
-					<left>30</left>
-					<bottom>30</bottom>
+					<left>0</left>
+					<bottom>88</bottom>
 					<height>91</height>
 					<width>330</width>
 					<visible>$PARAM[visible]</visible>
@@ -4312,22 +4301,22 @@
 			</control>
 		</definition>
 	</include>
-	<!--include name="AudioCodecFlag">
-		<param name="groupId"/>
-		<param name="imageId"/>
-		<param name="visible"/>
-		<param name="texture"/>
-		<definition>
-			<control type="group" id="$PARAM[groupId]">
-				<control type="image" id="$PARAM[imageId]">
-					<left>200</left>
-					<bottom>30</bottom>
-					<height>91</height>
-					<width>200</width>
-					<visible>$PARAM[visible]</visible>
-					<texture>$PARAM[texture]</texture>
-				</control>
-			</control>
-		</definition>
-	</include-->
+	<include name="AudioCodecFlag">
+	    <param name="groupId"/>
+	    <param name="imageId"/>
+	    <param name="visible"/>
+    	<param name="texture"/>
+	   <definition>
+	     <control type="group" id="$PARAM[groupId]">
+	      <control type="image" id="$PARAM[imageId]">
+	       <left>0</left>
+	       <bottom>0</bottom>
+	       <height>91</height>
+	       <width>200</width>
+	       <visible>$PARAM[visible]</visible>
+	       <texture>$PARAM[texture]</texture>
+          </control>
+         </control>
+	</definition>
+   </include>
 </includes>
