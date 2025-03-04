@@ -5871,7 +5871,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.9.0.2">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.9.0.3">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -5904,7 +5904,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.5.2">
+</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.5.3">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -6176,7 +6176,7 @@ Added arabic fonts
 		<disclaimer lang="zh_CN">Estuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Estuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
 	</extension>
-</addon><addon id="skin.estuary.modv2cpm" version="21.1.22" name="Estuary MOD V2 Omega Cpm" provider-name="Guilouz, K21 branch by PvD">
+</addon><addon id="skin.estuary.modv2cpm" version="21.1.23" name="Estuary MOD V2 Omega Cpm" provider-name="Guilouz, K21 branch by PvD">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="xbmc.gui" version="5.17.0" />
