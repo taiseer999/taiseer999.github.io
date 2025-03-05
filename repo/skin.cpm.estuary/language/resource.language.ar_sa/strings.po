@@ -229,8 +229,8 @@ msgid "filtered"
 msgstr "مفلتر"
 
 msgctxt "#31053"
-msgid "Arial based"
-msgstr "Arial based"
+msgid "RobotoNotoCondensed"
+msgstr "RobotoNotoCondensed"
 
 msgctxt "#31054"
 msgid "Press [B]Left[/B] to step back, or [B]Right[/B] to step forward"
@@ -759,3 +759,8 @@ msgstr "النظام"
 #~ msgctxt "#31138"
 #~ msgid "Player process info"
 #~ msgstr "معلومات المعالجة لمشغل الوسائط"
+
+#: /xml/Font.xml
+msgctxt "#31658"
+msgid "AmazonEmber"
+msgstr "AmazonEmber"

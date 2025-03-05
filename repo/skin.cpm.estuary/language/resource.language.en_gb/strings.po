@@ -280,7 +280,7 @@ msgstr ""
 
 #: /xml/Font.xml
 msgctxt "#31053"
-msgid "Arial based"
+msgid "RobotoNotoCondensed"
 msgstr ""
 
 #: /xml/Variables.xml
@@ -1048,4 +1048,9 @@ msgstr ""
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31657"
 msgid "Subtitle name"
+msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#31658"
+msgid "AmazonEmber"
 msgstr ""

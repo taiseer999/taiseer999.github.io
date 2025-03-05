@@ -197,6 +197,173 @@
         <disclaimer lang="uk_UA">Джерело зображення: Wikipedia (wikipedia.org)</disclaimer>
         <disclaimer lang="zh_CN">图片来源：维基百科（Wikipedia.org）</disclaimer>
     </extension>
+</addon><addon id="inputstream.adaptive" version="21.5.9.1" name="InputStream Adaptive" provider-name="peak3d, Team Kodi">
+  <requires>
+    <import addon="kodi.binary.global.main" minversion="2.0.0" version="2.0.2" />
+    <import addon="kodi.binary.global.general" minversion="1.0.4" version="1.0.5" />
+    <import addon="kodi.binary.global.gui" minversion="5.15.0" version="5.15.0" />
+    <import addon="kodi.binary.global.filesystem" minversion="1.1.7" version="1.1.8" />
+    <import addon="kodi.binary.global.tools" minversion="1.0.0" version="1.0.4" />
+    <import addon="kodi.binary.instance.inputstream" minversion="3.3.0" version="3.3.0" />
+    <import addon="kodi.binary.instance.videocodec" minversion="2.1.0" version="2.1.0" />
+  </requires>
+  <extension point="kodi.inputstream" name="adaptive" extension="" tags="true" listitemprops="drm_legacy|license_type|license_key|license_url|license_url_append|license_data|license_flags|manifest_type|server_certificate|manifest_update_parameter|manifest_upd_params|manifest_params|manifest_headers|stream_params|stream_headers|original_audio_language|play_timeshift_buffer|pre_init_data|stream_selection_type|chooser_bandwidth_max|chooser_resolution_max|chooser_resolution_secure_max|live_delay|internal_cookies|config|manifest_config" library_linux="inputstream.adaptive.so.21.5.9" />
+  <extension point="xbmc.addon.metadata">
+    <platform />
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/xbmc/inputstream.adaptive</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <summary lang="ca_ES">Client InputStream per a transmissions adaptatives</summary>
+    <summary lang="cs_CZ">Klient adaptivních toků protokolu InputStream</summary>
+    <summary lang="da_DK">InputStream-klient til adaptive streams</summary>
+    <summary lang="de_DE">InputStream-Client für adaptive Streams</summary>
+    <summary lang="en_GB">InputStream client for adaptive streams</summary>
+    <summary lang="es_ES">Cliente InputStream para transmisiones adaptativas</summary>
+    <summary lang="es_MX">Cliente InputStream para transmisiones adaptativas</summary>
+    <summary lang="et_EE">InputStream klient kohanduvate voogude jaoks</summary>
+    <summary lang="fi_FI">InputStream-asiakas mukautuville mediavirroille</summary>
+    <summary lang="fr_FR">Client InputStream pour les flux adaptatifs</summary>
+    <summary lang="he_IL">לקוח InputStream לתזרימים מסתגלים</summary>
+    <summary lang="hr_HR">InputStream klijent za prilagodljiva strujanja</summary>
+    <summary lang="hu_HU">InputStream kliens az adaptív streamekhez</summary>
+    <summary lang="is_IS">InputStream-biðlari fyrir aðlaganleg streymi</summary>
+    <summary lang="it_IT">Client InputStream per flussi adattivi</summary>
+    <summary lang="ko_KR">적응형 스트림을 위한 InputStream 클라이언트</summary>
+    <summary lang="lv_LV">InputStream klients adaptīvām straumēm</summary>
+    <summary lang="nl_NL">InputStream client voor adaptive streams</summary>
+    <summary lang="pl_PL">Klient InputStream dla strumieni adaptacyjnych</summary>
+    <summary lang="pt_BR">Cliente InputStream para transmissões adaptáveis</summary>
+    <summary lang="ru_RU">Клиент InputStream для адаптивных потоков</summary>
+    <summary lang="zh_CN">用于自适应流的 InputStream 客户端</summary>
+    <description lang="ca_ES">Client InputStream per a transmissions adaptatives</description>
+    <description lang="cs_CZ">Klient adaptivních toků protokolu InputStream</description>
+    <description lang="da_DK">InputStream-klient til adaptive streams</description>
+    <description lang="de_DE">InputStream-Client für adaptive Streams. Unterstützt werden Streamingprotokolle wie MPEG-DASH, HLS und Microsoft Smooth Streaming.[CR][CR] Das Addon unterstützt ebenfalls DRM-geschützte Streams, wie Google Widevine, Microsoft Playready und andere.[CR][CR]Für Dokumentation https://github.com/xbmc/inputstream.adaptive besuchen</description>
+    <description lang="en_GB">InputStream client for adaptive streams. Common streaming protocols such as MPEG-DASH, HLS and Microsoft Smooth Streaming are supported.[CR][CR]The add-on also has support for DRM protected streams, such as Google Widevine, Microsoft PlayReady and others.[CR][CR]For documentation visit: https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="es_ES">Cliente InputStream para transmisiones de datos adaptativos. Se admiten protocolos de transmisión comunes como MPEG-DASH, HLS y Microsoft Smooth Streaming.[CR][CR]El complemento también es compatible con transmisiones protegidas por DRM, como Google Widevine, Microsoft PlayReady y otros.[CR][CR]Para consultar la documentación, visite: https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="es_MX">Cliente InputStream para transmisiones adaptativas</description>
+    <description lang="et_EE">InputStream klient adaptiivsete voogude jaoks. Toetatakse levinud voogedastusprotokolle, nagu MPEG-DASH, HLS ja Microsoft Smooth Streaming.[CR][CR]Lisamoodul toetab ka DRM-iga kaitstud vooge, nagu Google Widevine, Microsoft PlayReady ja teised.[CR][CR][CR] ]Dokumentatsiooni saamiseks külasta aadressi https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="fi_FI">InputStream-asiakas mukautuville mediavirroille, joka tukee yleisiä suoratoistoprotokollia, kuten MPEG-DASH, HLS ja Microsoft Smooth Streaming.[CR][CR]Tukee myös mm. Google Widevine ja Microsoft PlayReady -tekniikoilla DRM-suojattua suoratoistoa.[CR][CR]Ohjeita löydät osoitteesta https://github.com/xbmc/inputstream.adaptive.</description>
+    <description lang="fr_FR">Client InputStream pour les flux adaptatifs. Les protocoles de streaming courants tels que MPEG-DASH, HLS et Microsoft Smooth Streaming sont pris en charge.[CR][CR]Le module complémentaire prend également en charge les flux protégés par DRM, tels que Google Widevine, Microsoft PlayReady et autres.[CR][CR] Pour la documentation, visitez : https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="he_IL">לקוח InputStream לתזרימים מסתגלים</description>
+    <description lang="hr_HR">InputStream klijent za prilagodljiva strujanja</description>
+    <description lang="hu_HU">InputStream kliens az adaptív streamekhez</description>
+    <description lang="it_IT">Client InputStream per flussi adattivi. Sono supportati protocolli di streaming comuni come MPEG-DASH, HLS e Microsoft Smooth Streaming.[CR][CR]L'add-on supporta anche flussi protetti da DRM, come Google Widevine, Microsoft PlayReady e altri.[CR][CR] ]Per la documentazione visita: https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="ko_KR">적응형 스트림을 위한 InputStream 클라이언트입니다. MPEG-DASH, HLS 및 Microsoft Smooth Streaming과 같은 일반적인 스트리밍 프로토콜이 지원됩니다.[CR][CR]추가 기능은 Google Widevine, Microsoft PlayReady 등과 같은 DRM 보호 스트림도 지원합니다.[CR][CR ]문서를 보려면 https://github.com/xbmc/inputstream.adaptive를 방문하세요</description>
+    <description lang="lv_LV">InputStream klients adaptīvām straumēm</description>
+    <description lang="pl_PL">Klient InputStream dla strumieni adaptacyjnych. Obsługiwane są popularne protokoły przesyłania strumieniowego, takie jak MPEG-DASH, HLS i Microsoft Smooth Streaming.[CR][CR]Dodatek obsługuje również strumienie chronione DRM, takie jak Google Widevine, Microsoft PlayReady i inne.[CR][CR] ]Dokumentacja znajduje się na stronie: https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="pt_BR">Cliente InputStream para transmissões adaptáveis. Há suporte para protocolos de streaming comuns, como MPEG-DASH, HLS e Microsoft Smooth Streaming.[CR][CR]O addon também oferece suporte a transmissões protegidas por DRM, como Google Widevine, Microsoft PlayReady e outros.[CR][CR]Para obter a documentação, visite: https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="ru_RU">Клиент InputStream для адаптивных потоков. Поддерживаются такие распространенные потоковые протоколы, как MPEG-DASH, HLS и Microsoft Smooth Streaming.[CR][CR]Дополнение также поддерживает потоки, защищенные DRM, такие как Google Widevine, Microsoft PlayReady и другие.[CR][CR]Для получения документации посетите: https://github.com/xbmc/inputstream.adaptive</description>
+    <description lang="zh_CN">用于自适应流的 InputStream 客户端</description>
+  </extension>
+</addon><addon id="inputstream.ffmpegdirect" version="21.3.7.1" name="Inputstream FFmpeg Direct" provider-name="Ross Nicholson">
+  <requires>
+    <import addon="kodi.binary.global.main" minversion="2.0.0" version="2.0.2" />
+    <import addon="kodi.binary.global.general" minversion="1.0.4" version="1.0.5" />
+    <import addon="kodi.binary.global.filesystem" minversion="1.1.7" version="1.1.8" />
+    <import addon="kodi.binary.global.network" minversion="1.0.0" version="1.0.4" />
+    <import addon="kodi.binary.global.tools" minversion="1.0.0" version="1.0.4" />
+    <import addon="kodi.binary.instance.inputstream" minversion="3.3.0" version="3.3.0" />
+  </requires>
+  <extension point="kodi.inputstream" name="ffmpegdirect" extension="" tags="true" listitemprops="program_number|stream_mode|open_mode|manifest_type|default_url|is_realtime_stream|playback_as_live|programme_start_time|programme_end_time|catchup_url_format_string|catchup_url_near_live_format_string|catchup_buffer_start_time|catchup_buffer_end_time|catchup_buffer_offset|catchup_terminates|catchup_granularity|timezone_shift|default_programme_duration|programme_catchup_id" library_linux="inputstream.ffmpegdirect.so.21.3.7" />
+  <extension point="xbmc.service" library="resources/lib/runner.py" />
+  <extension point="xbmc.addon.metadata">
+    <platform />
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/xbmc/inputstream.ffmpegdirect</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+    <summary lang="ca_ES">Client InputStream per a fluxos FFmpeg (libavformat)</summary>
+    <summary lang="cs_CZ">Klient toků FFmpeg (libavformat) protokolu InputStream</summary>
+    <summary lang="da_DK">InputStream-klient til FFmpeg-streams (libavformat)</summary>
+    <summary lang="de_DE">InputStream-Client für FFmpeg-Streams (libavformat)</summary>
+    <summary lang="en_GB">InputStream Client for FFmpeg streams (libavformat)</summary>
+    <summary lang="es_ES">Cliente de InputStream para transmisiones FFmpeg (libavformat)</summary>
+    <summary lang="es_MX">Cliente InputStream para flujos FFmpeg (libavformat)</summary>
+    <summary lang="et_EE">InputStream klient FFmpeg voogudele (libavformat)</summary>
+    <summary lang="fi_FI">InputStream-asiakas FFmpeg-mediavirroille (libavformat)</summary>
+    <summary lang="fr_FR">Client InputStream pour les flux FFmpeg (format libav)</summary>
+    <summary lang="hr_HR">InputStream klijent za FFmpeg strujanja (libavformat)</summary>
+    <summary lang="it_IT">InputStream Client per flussi FFmpeg (libavformat)</summary>
+    <summary lang="ko_KR">FFmpeg 스트림용 InputStream 클라이언트(libavformat)</summary>
+    <summary lang="pl_PL">Klient InputStream dla strumieni FFmpeg (libavformat)</summary>
+    <summary lang="pt_BR">Cliente InputStream para transmissões FFmpeg (libavformat)</summary>
+    <summary lang="ru_RU">InputStream клиент для FFmpeg потоков (libavformat)</summary>
+    <summary lang="zh_CN">FFmpeg 流的 InputStream 客户端（libavformat）</summary>
+    <description lang="ca_ES">Client InputStream per a fluxos que es poden obrir mitjançant el libavformat de FFmpeg o el cURL de Kodi. S’admeten formats de flux comuns, com ara TS simple, HLS i DASH (sense DRM), així com molts altres.[CR][CR]El complement també és compatible amb els serveis Archive/Catchup , on hi ha una finestra de reproducció (normalment en dies) i pot canviar de temps en aquest interval.[CR][CR]Per a la documentació, visiteu: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="cs_CZ">Klient protokolu InputStream pro toky, které mohou být otevřeny pomocí FFmpeg libavformat nebo Kodi cURL.Běžné formáty toků jako prosté TS, HLS, DASH (bez DRM) a mnoho dalších jsou podporovány.[CR][CR]Doplněk má též podporu pro služby Archive/Catchup, které mají dobu pro opětovné přehrání (obvykle ve dnech) a mohou mít v tomto období časový posun.[CR][CR]Pro dokumentaci navštivte: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="da_DK">InputStream-klient til streams, der kan åbnes af enten FFmpeg's libavformat eller Kodi's cURL. Almindelige streamformater som f.eks. almindelig TS, HLS og DASH (uden DRM) understøttes såvel som mange andre.[CR][CR]Add-on'et har også understøttelse af arkiv-/indhentningstjenester, hvor der er et afspilningsvindue (normalt i dage) og kan tidsforskyde på tværs af dette spænd.[CR][CR]For dokumentation besøg: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="de_DE">InputStream-Client für Streams, die entweder mit dem libav-Format von FFmpeg oder mit cURL von Kodi geöffnet werden können. Gängige Stream-Formate wie TS, HLS und DASH (ohne DRM) werden ebenso unterstützt wie viele andere.[CR][CR]Das Addon unterstützt auch Archiv-/Aufholdienste, bei denen Wiedergabefenster vorhanden sind (normalerweise in Tagen), und kann über diesen Zeitraum hinweg eine Zeitverschiebung bewirken.[CR][CR]Dokumentation unter: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="en_GB">InputStream Client for streams that can be opened by either FFmpeg's libavformat or Kodi's cURL. Common stream formats such as plain TS, HLS and DASH (without DRM) are supported as well as many others.[CR][CR]The addon also has support for Archive/Catchup services where there is a replay windows (usually in days) and can timeshift across that span.[CR][CR]For documenation visit: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="es_ES">Cliente InputStream para transmisiones que se pueden abrir mediante libavformat de FFmpeg o cURL de Kodi. Se admiten formatos de transmisión comunes, como TS simple, HLS y DASH (sin DRM), así como muchos otros.[CR][CR]El complemento también es compatible con los servicios Archive/Catchup donde hay ventanas de repetición (generalmente en días) y puede realizar timeshift durante ese lapso.[CR][CR]Para documentación visita: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="es_MX">Cliente InputStream para flujos de datos que pueden abrirse con libavformat de FFmpeg o cURL integrado en Kodi. Formatos de flujo comunes tales como TS simple, HLS y DASH (sin DRM) también están soportados, al igual que muchos otros.[CR][CR]El complemento también soporta servicios Archive/Catchup donde hay un espacio de repetición (usualmente en días) y se puede mover a través del tiempo de dicho espacio.[CR][CR]Para documentación visita: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="et_EE">InputStream klient voogudele, mida avavad kas FFmpeg libavformat või Kodi cURL. Toetatakse tavalisi vorminguid, nagu TS, HLS ja DASH (ilma DRM-ita), aga ka paljusid teisi.[CR][CR]Lisamoodul toetab ka järelvaatamise teenuseid, kus ajanihe on võimalik teatud ajavahemikus (tavaliselt päevades).[CR][CR]Dokumentatsiooni saamiseks külasta: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="fi_FI">InputStream-asiakas mediavirroille, jotka voidaan avata joko FFmpegin libavformat- tai Kodi cURL-kirjastolla. Monien muiden ohella tuetaan yleisiä mediavirtamuotoja, kuten puhdas TS, HLS ja DASH (ilman DRM-suojausta).[CR][CR]Lisäosa tukee myös Archive-/Catchup-palveluita, joissa toisto ja ajansiirto on mahdollista tiettyjen ajanjaksojen sisällä (yleensä päiviä).[CR][CR]Ohjeita löytyy täältä: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="fr_FR">InputStream Client pour les flux pouvant être ouverts soit par le libavformat de FFmpeg, soit par le cURL de Kodi. Les formats de flux courants tels que TS, HLS et DASH (sans DRM) sont pris en charge ainsi que bien d'autres. et peut être décalé dans le temps dans la période.[CR][CR]Pour la documentation, visitez : https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="hr_HR">InputStream klijent za strujanja koja se mogu otvoriti ili FFmpeg libavformatom ili Kodijevim cURL-om. Uobičajeni formati strujanja poput običnog TS, HLS i DASH (bez DRM zaštite sadržaja) formata su podržani kao i mnogi drugi.[CR][CR]Dodatak ima još podršku za Arhive/Hvatanje usluga gdje postoji prozor ponovne raprodukcije (uobičajeno u danima) i može se vremenski premotavati u zadanom vremenskom razdoblju.[CR][CR]Za dokumentaciju posjetite: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="it_IT">Client InputStream per flussi che possono essere aperti da libavformat di FFmpeg o cURL di Kodi. Sono supportati formati di flussi comuni come TS, HLS e DASH (senza DRM) e molti altri.[CR][CR]L'add-on ha anche il supporto per i servizi Archivio/Recupero in cui è presente una finestra di riproduzione (di solito in giorni) e può passare attraverso tale intervallo.[CR][CR]Per la documentazione visita: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="ko_KR">FFmpeg의 libavformat 또는 Kodi의 cURL로 열 수 있는 스트림용 InputStream 클라이언트. 일반 TS, HLS 및 DASH(DRM 제외)와 같은 일반적인 스트림 형식은 물론 다른 많은 형식도 지원됩니다.[CR][CR]이 애드온은 재생 창(보통 며칠)이 있는 아카이브/따라잡기 서비스도 지원합니다. 해당 범위에서 타임시프트할 수 있습니다.[CR][CR]문서를 보려면 https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md를 방문하세요</description>
+    <description lang="pl_PL">Klient InputStream dla strumieni, które można otworzyć za pomocą libavformat FFmpeg lub cURL Kodi. Obsługiwane są popularne formaty strumieniowe, takie jak zwykły TS, HLS i DASH (bez DRM), a także wiele innych.[CR][CR]Dodatek obsługuje również usługę archiwizacji, która zapewnia okno powtórek (zazwyczaj w dniach) i może wykonywać przesunięcie czasowe przez ten zakres.[CR][CR]W celu uzyskania dokumentacji odwiedź: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="pt_BR">Cliente InputStream para transmissões que podem ser abertas pelo libavformat do FFmpeg ou pelo cURL do Kodi. Os formatos de transmissão comuns, como TS simples, HLS e DASH (sem DRM), são suportados, bem como muitos outros.[CR][CR]O addon também tem suporte para serviços de Arquivo/Catchup em que há uma janela de reprodução (geralmente em dias) e pode mudar o tempo ao longo desse intervalo.[CR][CR]Para obter documentação, visite: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="ru_RU">Клиент InputStream для потоков, которые можно открыть с помощью libavformat от FFmpeg или с помощью Kodi cURL. Поддерживаются основные форматы потоков такие, как простой TS, HLS, DASH (без DRM) и многие другие.[CR][CR]Дополнение также имеет поддержку служб Архива/Перемотки, где есть окна воспроизведения (обычно в днях), которые могут сдвигаться по времени в течение этого промежутка.[CR][CR]Для документации посетите: https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+    <description lang="zh_CN">InputStream 客户端，用于可通过 FFmpeg 的 libavformat 或 Kodi 的 cURL 打开的流。支持普通 TS、HLS 和 DASH（无DRM）等常见流格式以及其他许多格式。[CR][CR]该插件还支持有重播窗口（通常以天为单位）的归档/捕获服务，并可以在该时间跨度内进行时光平移。[CR][CR]相关文档请访问：https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/README.md</description>
+  </extension>
+</addon><addon id="inputstream.rtmp" version="21.1.2.1" name="RTMP Input" provider-name="spiff">
+  <requires>
+    <import addon="kodi.binary.global.main" minversion="2.0.0" version="2.0.2" />
+    <import addon="kodi.binary.global.general" minversion="1.0.4" version="1.0.5" />
+    <import addon="kodi.binary.instance.inputstream" minversion="3.3.0" version="3.3.0" />
+  </requires>
+  <extension point="kodi.inputstream" name="rtmp" protocols="rtmp|rtmpt|rtmpe|rtmpte|rtmps" listitemprops="SWFPlayer|swfurl|PageURL|PlayPath|TcUrl|IsLive|swfvfy" library_linux="inputstream.rtmp.so.21.1.2" />
+  <extension point="xbmc.addon.metadata">
+    <platform />
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/xbmc/inputstream.rtmp</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+    <summary lang="af_ZA">Kliënt vir RTMP strome</summary>
+    <summary lang="ca_ES">Client per a transmissió RTMP</summary>
+    <summary lang="cs_CZ">Klient přenosů RTMP</summary>
+    <summary lang="da_DK">Klient til RTMP-streams</summary>
+    <summary lang="de_DE">Client für RTMP-Streams</summary>
+    <summary lang="en_GB">Client for RTMP streams</summary>
+    <summary lang="es_ES">Cliente para transmisiones RTMP</summary>
+    <summary lang="es_MX">Cliente para flujos RTMP</summary>
+    <summary lang="et_EE">Klient RTMP voogudele</summary>
+    <summary lang="fi_FI">Asiakaspääte RTMP-mediavirroille</summary>
+    <summary lang="fr_FR">Client pour flux RTMP</summary>
+    <summary lang="hr_HR">Klijent za RTMP strujanja</summary>
+    <summary lang="it_IT">Client per stream RTMP</summary>
+    <summary lang="ko_KR">RTMP 스트림용 클라이언트</summary>
+    <summary lang="lv_LV">RTMP straumju klients</summary>
+    <summary lang="pl_PL">Klient strumieni RTMP</summary>
+    <summary lang="ru_RU">Клиент для трансляции потоков RTMP</summary>
+    <summary lang="zh_CN">RTMP 流的客户端</summary>
+    <description lang="af_ZA">Die Real Time Messaging Protocol (RTMP) is 'n eiendoms network protokol ontwikkel deur Adobe Inc. om oudio, video en ander data oor die internet te stuur van 'n media bediener na flash speler.[CR][CR]Hierdie byvoegsel implementeer RTMP stroom ondersteuning vir Kodi en geïnstalleerde byvoegsels.</description>
+    <description lang="ca_ES">El protocol de missatgeria en temps real (RTMP) és un protocol de xarxa propietari desenvolupat per Adobe Inc. per transmetre àudio, vídeo i altres dades a través d'Internet des d'un servidor multimèdia a un reproductor flash.[CR][CR]Aquest complement implementa el suport de transmissió RTMP per a Kodi i per als complements instal·lats.</description>
+    <description lang="cs_CZ">Real Time Messaging Protocol (RTMP) je patentovaný síťový protokol vyvinutý společností Adobe Inc. pro přenos zvuku, videa a dalších dat přes internet z multimediálního serveru do přehrávače.[CR][CR]Tento doplněk implementuje podporu proudů RTMP pro Kodi a instalované doplňky.</description>
+    <description lang="da_DK">Real Time Messaging Protocol (RTMP) er en proprietær netværksprotokol udviklet af Adobe Inc. til at overføre lyd, video og andre data via internettet fra en medieserver til en flashafspiller.[CR][CR]Dette add-on implementerer RTMP-understøttelse af streaming til Kodi og installerede add-ons.</description>
+    <description lang="de_DE">Das Real Time Messaging Protocol (RTMP) ist ein proprietäres Netzwerkprotokoll, das von Adobe Inc. entwickelt wurde, um Audio-, Video- und andere Daten über das Internet von einem Medienserver zu einem Flash Player zu übertragen.[CR][CR]Dieses Addon implementiert die RTMP-Streaming-Unterstützung für Kodi und installierte Add-Ons.</description>
+    <description lang="en_GB">The Real Time Messaging Protocol (RTMP) is a proprietary network protocol developed by Adobe Inc. to transmit audio, video and other data over the Internet from a media server to a flash player.[CR][CR]This addon implements RTMP streaming support for Kodi and installed add-ons.</description>
+    <description lang="es_ES">El Protocolo de mensajería en tiempo real (RTMP) es un protocolo de red patentado desarrollado por Adobe Inc. para transmitir audio, vídeo y otros datos a través de Internet desde un servidor multimedia a un reproductor flash.[CR][CR]Este complemento implementa soporte de transmisión RTMP para Kodi y complementos instalados.</description>
+    <description lang="es_MX">El Protocolo de Mensajería en Tiempo Real (RTMP) es un protocolo de red propietario desarrollado por Adobe Inc. para transmitir audio, video y otros datos por internet desde un servidor de medios a un reproductor flash.[CR][CR]Este complemento implementa el soporte de reproducción RTMP para Kodi y para cualquier complemento instalado.</description>
+    <description lang="et_EE">Real Time Messaging Protocol (RTMP) on patenteeritud võrguprotokoll, mille on välja töötanud Adobe Inc. heli-, video- ja muude andmete edastamiseks interneti kaudu meediaserverist flash-mängijasse.[CR][CR]See lisamoodul võimaldab RTMP voogesituse Kodi ja paigaldatud lisamoodulite jaoks.</description>
+    <description lang="fi_FI">Real Time Messaging Protocol (RTMP) on Adoben kehittämä verkkoprotokolla äänen, videon ja muun tiedon siirtoon madiapalvelimen ja Flash-soittimen välillä Internetin välityksellä.[CR][CR]Tämä lisäosa mahdollistaa RTMP-suoratoiston Kodille ja asennetuille lisäosille.</description>
+    <description lang="fr_FR">Le protocole RTMP (Real Time Messaging Protocol) est un protocole réseau propriétaire développé par Adobe Inc. pour transmettre des données audio, vidéo et autres sur Internet d'un serveur multimédia à un lecteur flash.[CR][CR]Ce module complémentaire implémente la prise en charge du streaming RTMP pour Kodi et les modules complémentaires installés.</description>
+    <description lang="hr_HR">Protokol slanja poruka u stvarnom vremenu (RTMP) je vlasnički mrežni protokol razvijen od strane Adobe Inc. za odašiljanje zvuka, videa i drugih podataka putem interneta s medijskog poslužitelja prema Flash reproduktoru.[CR][CR]Ovaj dodatak implementira podršku RTMP strujanja za Kodi i instalirane dodatke.</description>
+    <description lang="it_IT">Il Real Time Messaging Protocol (RTMP) è un protocollo di rete proprietario sviluppato da Adobe Inc. per trasmettere audio, video e altri dati su Internet da un server multimediale a un lettore flash.[CR][CR]Questo componente aggiuntivo implementa il supporto dello streaming RTMP per Kodi e per gli Add-on.</description>
+    <description lang="ko_KR">실시간 메시징 프로토콜(RTMP)은 인터넷을 통해 미디어 서버에서 플래시 플레이어로 오디오, 비디오 및 기타 데이터를 전송하기 위해 Adobe Inc.에서 개발한 독점 네트워크 프로토콜입니다.[CR][CR]이 애드온은 Kodi와 설치된 애드온을 위한 RTMP 스트리밍 지원을 구현합니다.</description>
+    <description lang="lv_LV">Real Time Messaging Protocol (RTMP) ir patentēts tīkla protokols, ko izstrādājusi Adobe Inc., lai pārraidītu audio, video un citus datus internetā no multimedijas servera uz Flash atskaņotāju.[CR][CR]Šis papildinājums nodrošina Kodi un to papildinājumus ar RTMP straumēšanas atbalstu.</description>
+    <description lang="pl_PL">Protokół RTMP (Real Time Messaging Protocol) to własnościowy protokół sieciowy opracowany przez firmę Adobe Inc. do przesyłania dźwięku, obrazu i innych danych przez Internet z serwera multimediów do odtwarzacza Flash.[CR][CR]Ten dodatek implementuje obsługę przesyłania strumieniowego RTMP dla Kodi i zainstalowanych dodatków.</description>
+    <description lang="ru_RU">Протокол обмена сообщениями в реальном времени (The Real Time Messaging Protocol - RTMP) - это запатентованный сетевой протокол, разработанный компанией Adobe Inc. для передачи аудио, видео и других данных через Интернет с медиа-сервера на флеш-плеер.[CR][CR]Это приложение реализует поддержку потоковой передачи RTMP для Kodi и установленных дополнений.</description>
+    <description lang="zh_CN">实时消息协议（RTMP）是 Adobe Inc. 开发的一种专有网络协议，用于通过互联网将音频、视频和其他数据从媒体服务器传输到 flash 播放器。[CR][CR]此插件实现对 Kodi 和已安装插件的 RTMP 流支持。</description>
+  </extension>
 </addon><addon id="metadata.album.universal" name="Universal Album Scraper" version="3.1.9" provider-name="Olympia, Team Kodi">
   <requires>
     <import addon="xbmc.metadata" version="2.1.0" />
@@ -679,6 +846,67 @@ updated YouTube addon URL
     <description lang="tr_TR">The Movie Database (TMDb), topluluk tarafından oluşturulmuş bir film ve TV veritabanıdır. Her bir veri parçası, 2008 yılına dayanan muhteşem topluluğumuz tarafından eklenmiştir. TMDb'nin güçlü uluslararası odağı ve veri genişliği büyük ölçüde benzersizdir ve inanılmaz derecede gurur duyduğumuz bir şeydir. Basitçe söylemek gerekirse, topluluk içinde yaşıyor ve nefes alıyoruz ve bizi farklı kılan da tam olarak bu.</description>
     <description lang="zh_CN">TMDb 是一个由网络社区创建的影视数据库。每一条数据都是由我们令人惊叹的社区添加的，可以追溯到2008年。TMDb 强大的国际关注度和数据广度在很大程度上是无与伦比的，我们对此感到无比自豪。简单地说，我们生活在社区中，呼吸着社区的气息，这正是我们与众不同的原因。</description>
   </extension>
+</addon><addon id="peripheral.joystick" version="21.1.22" name="Joystick Support" provider-name="Team Kodi">
+  <requires>
+<import addon="kodi.binary.global.main" minversion="2.0.0" version="2.0.2" />
+<import addon="kodi.binary.global.general" minversion="1.0.4" version="1.0.5" />
+<import addon="kodi.binary.global.filesystem" minversion="1.1.7" version="1.1.8" />
+<import addon="kodi.binary.global.tools" minversion="1.0.0" version="1.0.4" />
+<import addon="kodi.binary.instance.peripheral" minversion="3.0.0" version="3.0.2" /></requires>
+  <extension point="kodi.peripheral" provides_joysticks="true" provides_buttonmaps="true" library_osx="peripheral.joystick.21.1.22.dylib" />
+  <extension point="xbmc.addon.metadata">
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/xbmc/peripheral.joystick</source>
+    <platform>osx-arm64</platform>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+    <summary lang="af_ZA">Kodi Speelstok Biblioteek</summary>
+    <summary lang="ca_ES">Llibreria Kodi Joystick</summary>
+    <summary lang="da_DK">Kodi Joystick Bibliotek</summary>
+    <summary lang="de_DE">Joystick-Bibliothek für Kodi</summary>
+    <summary lang="en_GB">Kodi Joystick Library</summary>
+    <summary lang="es_ES">Biblioteca de Joysticks Kodi</summary>
+    <summary lang="es_MX">Biblioteca de Joysticks de Kodi</summary>
+    <summary lang="fi_FI">Kodin peliohjainkirjasto</summary>
+    <summary lang="fr_FR">Bibliothèque de joystick Kodi</summary>
+    <summary lang="hr_HR">Kodi Joystick biblioteka</summary>
+    <summary lang="id_ID">Pustaka Joystick Kodi</summary>
+    <summary lang="is_IS">Aðgerðasafn Kodi fyrir stýripinna</summary>
+    <summary lang="it_IT">Libreria Joystick Kodi</summary>
+    <summary lang="ko_KR">Kodi 조이스틱 라이브러리</summary>
+    <summary lang="lv_LV">Kodi kursorsviru katalogs</summary>
+    <summary lang="nb_NO">Kodi Joystick-bibliotek</summary>
+    <summary lang="pl_PL">Biblioteka joysticków Kodi</summary>
+    <summary lang="pt_BR">Biblioteca de Joystick do Kodi</summary>
+    <summary lang="pt_PT">Biblioteca de joysticks do Kodi</summary>
+    <summary lang="ru_RU">Каталог джойстиков для Kodi</summary>
+    <summary lang="sv_SE">Kodi Joystick bibliotek</summary>
+    <summary lang="tr_TR">Kodi Oyun Çubuğu Kütüphanesi</summary>
+    <summary lang="zh_CN">Kodi 游戏杆库</summary>
+    <description lang="af_ZA">Hierdie biblioteek verskaf speelstok drywers en knoppie kaarte. Veelvuldige speelstok APIs word ondersteun, insluitend DirectX, XInput, DSL en die Linux Joystick API.</description>
+    <description lang="ca_ES">Aquesta llibreria proporciona controladors de joystick i mapes de botons. S'admeten diverses API de joystick, incloses DirectX, XInput, SDL i l'API Joystick de Linux.</description>
+    <description lang="da_DK">Dette bibliotek indeholder joystick-drivere og knapgrupperinger. Flere joystick-API'er understøttes, herunder DirectX, XInput, SDL og Linux Joystick API.</description>
+    <description lang="de_DE">Diese Bibliothek enthält Joysticktreiber und Schaltflächenzuordnungen. Es werden mehrere Joystick-APIs unterstützt, darunter DirectX, XInput, SDL und die Linux-Joystick-API.</description>
+    <description lang="en_GB">This library provides joystick drivers and button maps. Multiple joystick APIs are supported, including DirectX, XInput, SDL and the Linux Joystick API.</description>
+    <description lang="es_ES">Esta biblioteca otorga drivers de joystick y mapeo de botones. Soporta múltiples APIs de joystick, incluyendo DirectX, XInput, SDL y la API de Joystick de Linux.</description>
+    <description lang="es_MX">Esta biblioteca provee controladores de joysticks y mapas de botones. Múltiples APIs de joystick están soportadas, incluyendo DirectX, XInput, SDL y la Linux Joystick API.</description>
+    <description lang="fi_FI">Tämä kirjasto sisältää peliohjaimien ajureita ja painikemäärtiyksiä. Useita ohjainrajapintoja tuetaan, kuten mm. DirectX, XInput, SDL ja Linux Joystick API.</description>
+    <description lang="fr_FR">Cette bibliothèque fournit des pilotes de joystick et les maps de boutons. Plusieurs API de joystick sont prises en charge, notamment DirectX, XInput, SDL et l’API Linux Joystick.</description>
+    <description lang="hr_HR">Ova biblioteka omogućuje upravljačke programe igračih palica i mapiranje tipki. Više API igračih palica je podržano, uključujući DirectX, XInput, SDL i Linux Joystick API.</description>
+    <description lang="id_ID">Pustaka ini menyediakan penggerak joystick dan pemetaan tombol. Beberapa API joystick didukung, termasuk DirectX, XInput, SDL, dan API Joystick Linux.</description>
+    <description lang="is_IS">Þetta aðgerðasafn kemur með rekla fyrir stýripinna og hnappavarpanir. Stuðningur er við margskyns API fyrir stýripinna, þar með talið DirectX, XInput, SDL og Linux Joystick API.</description>
+    <description lang="it_IT">Questa libreria fornisce i driver del joystick e le mappe dei pulsanti. Sono supportate più API per joystick, tra cui DirectX, XInput, SDL e Linux Joystick API.</description>
+    <description lang="ko_KR">이 라이브러리는 조이스틱 드라이버와 버튼 맵을 제공합니다. DirectX, XInput, SDL 및 Linux Joystick API를 비롯한 여러 조이스틱 API가 지원됩니다.</description>
+    <description lang="lv_LV">Šajā katalogā ir pieejami kursorsviras draiveri un pogu izkārtojuma kartes. Tiek atbalstītas vairākas kursorsviras API, tostarp DirectX, XInput, SDL un Linux kursorsviras API.</description>
+    <description lang="nb_NO">Dette biblioteket inneholder joystick-drivere og knappkartlegging. Flere joystick-APIer støttes, blant annet DirectX, XInput, SDL og Linux Joystick API.</description>
+    <description lang="pl_PL">Ta biblioteka zawiera sterowniki joysticków i mapy przycisków. Obsługiwanych jest wiele interfejsów API joysticków, m.in. DirectX, XInput, SDL oraz Joystick API systemu Linux.</description>
+    <description lang="pt_BR">Esta biblioteca fornece drivers de joystick e mapeamento de botões. Diversas APIs de joystick são suportadas, incluindo DirectX, XInput, SDL e API de Joystick do Linux.</description>
+    <description lang="pt_PT">Esta biblioteca fornece controladores de joystick e mapeamentos de botões. São suportadas múltiplas APIs de joystick, incluindo DirectX, XInput, SDL e a API do joystick para Linux.</description>
+    <description lang="ru_RU">Этот каталог предоставляет драйверы джойстиков и схемы расположения кнопок. Поддерживается несколько API джойстиков, включая DirectX, XInput, SDL и Linux Joystick API.</description>
+    <description lang="tr_TR">Bu kitaplık, oyun çubuğu sürücüleri ve düğme haritaları sağlar. DirectX, XInput, SDL ve Linux Oyun Çubuğu API dahil olmak üzere çoklu oyun çubuğu API'leri desteklenir.</description>
+    <description lang="zh_CN">此库提供游戏杆驱动程序和按钮图。支持多个游戏杆 API，包括 DirectX、XInput、SDL 和 Linux 游戏杆 API。</description>
+  </extension>
 </addon><addon id="plugin.close.kodi" name="[COLOR red] Force Close Kodi[/COLOR] " version="3.1.3" provider-name="Based_Skid">
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>executable</provides>
@@ -688,6 +916,85 @@ updated YouTube addon URL
     <description lang="en" />
     <platform>all</platform>
   </extension>
+</addon><addon id="plugin.image.flickrexplorer" name="FlickrExplorer" version="0.7.6+nexus" provider-name="rols1 (rols1@gmx.de)">
+  <requires>
+   <import addon="xbmc.python" version="3.0.1" />
+    <import addon="script.module.kodi-six" />
+ </requires>
+  <extension point="xbmc.python.pluginsource" library="flickrexplorer.py">
+        <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="de">flickr-Addon für Kodi</summary>
+	<summary lang="en">flickr-addon for Kodi</summary>
+	<description lang="de">Blättern und Suchen in öffentlichen Flickr-Beständen (Photostream, Gallerien, Alben, Favoriten)</description>
+	<description lang="en">Browse and search public content on Flickr (Photostream, Galleries, Albums, Faves, People)</description>
+	<platform>all</platform>
+         <source>https://github.com/rols1/Kodi-Addon-FlickrExplorer</source>
+        <forum>will be added</forum>
+	<license>The MIT License (MIT)</license>
+	<language>"en_GB"</language>
+ 	<email>rols1@gmx.de</email>
+        <assets>
+             <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>           
+     </assets>
+   </extension>
+</addon><addon id="plugin.library.node.editor" name="Library Node Editor" version="2.0.5" provider-name="Unfledged, Team-Kodi">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.unidecode" version="1.1.1" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=224512</forum>
+        <source>https://github.com/XBMC-Addons/plugin.library.node.editor</source>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+        <news>
+            2.0.5 (31/12/2021)
+            - Sync translations
+        </news>
+        <summary lang="da_DK">Administrer brugerdefinerede biblioteksnoder.</summary>
+        <summary lang="de_DE">Benutzerdefinierte Bibliotheksknoten verwalten.</summary>
+        <summary lang="en_GB">Manage custom library nodes.</summary>
+        <summary lang="en_NZ">Manage custom library nodes.</summary>
+        <summary lang="en_US">Manage custom library nodes.</summary>
+        <summary lang="fr_CA">Gérer des nœuds de médiathèque personnalisés.</summary>
+        <summary lang="fr_FR">Gére des nœuds de médiathèque personnalisés.</summary>
+        <summary lang="it_IT">Gestisci nodi libreria personalizzati</summary>
+        <summary lang="ko_KR">사용자 정의 라이브러리 노드를 관리합니다.</summary>
+        <summary lang="lt_LT">Tvarkykite savus bibliotekos mazgus.</summary>
+        <summary lang="nl_NL">Beheer aangepaste bibliotheek nodes.</summary>
+        <summary lang="pl_PL">Zarządzanie niestandardowymi węzłami biblioteki.</summary>
+        <summary lang="pt_BR">Gerenciar nós customizados da biblioteca.</summary>
+        <summary lang="ro_RO">Administrați noduri mediatecă personalizate</summary>
+        <summary lang="ru_RU">Управление узлами пользовательских медиатек.</summary>
+        <summary lang="sv_SE">Hantera anpassade biblioteksnoder.</summary>
+        <summary lang="vi_VN">Quản lý các nút thư viện tùy chỉnh.</summary>
+        <summary lang="zh_CN">管理自定义资料库节点。</summary>
+        <description lang="da_DK">Opret og rediger brugerdefinerede biblioteksnoder.</description>
+        <description lang="de_DE">Benutzerdefinierte Bibliotheksknoten erstellen und bearbeiten.</description>
+        <description lang="en_GB">Create and edit custom library nodes.</description>
+        <description lang="en_NZ">Create and edit custom library nodes.</description>
+        <description lang="en_US">Create and edit custom library nodes.</description>
+        <description lang="fr_CA">Créer et modifier des nœuds de médiathèque personnalisés.</description>
+        <description lang="fr_FR">Crée et modifie des nœuds de médiathèque personnalisés.</description>
+        <description lang="it_IT">Crea e modifica nodi libreria personalizzati.</description>
+        <description lang="ko_KR">사용자 라이브러리 노드를 생성하고 편집합니다.</description>
+        <description lang="lt_LT">Sukurkite ir keiskite savus bibliotekos mazgus.</description>
+        <description lang="nl_NL">Creëer en wijzig aangepaste bibliotheek nodes.</description>
+        <description lang="pl_PL">Tworzenie i edytowanie niestandardowych węzłów biblioteki.</description>
+        <description lang="pt_BR">Crie e edite nós customizados na biblioteca.</description>
+        <description lang="ru_RU">Создание и редактирование пользовательских узлов медиатеки.</description>
+        <description lang="sv_SE">Skapa och redigera anpassade biblioteksnoder.</description>
+        <description lang="zh_CN">创建和编辑自定义资料库节点。</description>
+    </extension>
 </addon><addon id="plugin.program.autocompletion" name="AutoCompletion for virtual keyboard" version="2.1.2" provider-name="Philipp Temminghoff (phil65), sualfred, xulek, finkleandeinhorn">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -711,6 +1018,369 @@ updated YouTube addon URL
             <screenshot>resources/screenshot-01.jpg</screenshot>
             <screenshot>resources/screenshot-02.jpg</screenshot>
             <screenshot>resources/screenshot-03.jpg</screenshot>
+        </assets>
+    </extension>
+</addon><addon id="plugin.program.autowidget" name="AutoWidget" version="3.7.0" provider-name="drinfernoo">
+    <requires>
+        <import addon="script.module.pil" />
+        <import addon="script.module.six" />
+    </requires>
+    
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>executable video music</provides>
+    </extension>
+    
+    <extension point="xbmc.service" library="service.py" />
+    
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+            <item library="context_add.py">
+                <label>$ADDON[plugin.program.autowidget 30003]</label>
+                <visible>String.IsEqual(Window(10000).Property(context.autowidget),true)</visible>
+            </item>
+            <item library="context_refresh.py">
+                <label>$ADDON[plugin.program.autowidget 30006]</label>
+                <visible>String.Contains(ListItem.FolderPath, plugin://plugin.program.autowidget)</visible>
+            </item>
+			<item library="context_refresh_single.py">
+                <label>$ADDON[plugin.program.autowidget 30046]</label>
+                <visible>!String.IsEmpty(ListItem.Property(autoID)) + [!String.IsEqual(ListItem.Property(autoAction),static) + !String.IsEqual(ListItem.Property(autoAction),merged)]</visible>
+            </item>
+			<item library="clear_cache_single.py">
+                <label>$ADDON[plugin.program.autowidget 30116]</label>
+                <visible>!String.IsEmpty(ListItem.Property(autoCache))</visible>
+            </item>
+        </menu>
+    </extension>
+    
+    <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <summary lang="en_GB">Automatically changes out widgets</summary>
+        <description lang="en_GB">Automatically changes out widgets on the homescreen for a more interesting browsing experience.</description>
+	<summary lang="es_ES">Cambia los widgets automáticamente</summary>
+	<description lang="es_ES">Cambia los widgets en la pantalla de inicio automáticamente para una experiencia de navegación más interesante.</description>
+	<platform>all</platform>
+        <license>LGPL-3.0</license>
+        <website>https://www.github.com/drinfernoo/</website>
+        <source>https://www.github.com/drinfernoo/plugin.program.autowidget/</source>
+        <news>
+3.7.0
+ - Optimize caching for performance and reliability
+ - Fix direct shortcuts
+ - Fix Settings Shortcuts for dependency add-ons
+3.6.1
+ - Fix playing direct shortcuts for some items
+ - Fix cache clearing again
+3.6.0
+ - Convert all file and path handling to xbmcvfs
+ - Add more feedback and granular controls during backup/restore
+3.5.1
+ - Fix sorting bug with higher group counts
+3.5.0
+ - Allow bulk operations in some groups
+ - More informative dialogs
+ - Allow manually sorting groups in "My Groups"
+ - Fixes for direct shortcuts
+ - Update "version" attribute in metafiles when updating
+3.4.2
+ - Some fixes for constant notification
+3.4.1
+ - Fix clearing cache from settings
+3.4.0
+ - Rework caching mechanism
+ - Add more notifications of progress
+ - Add placeholder items when no content is loaded
+3.3.7
+ - Delay widget updates during library scans or when in media views
+ - Fix widget cleaning scan for skins which don't use Skin Shortcuts
+ - Fix refreshing widgets created before 3.3.0
+ - Add more content type choices in editor dialog
+3.3.6
+ - Fix "Next Page" for Python 2.7
+3.3.5
+ - Better handling of error and empty states
+ - Better handling of "Next Page" items
+ - Fix "Active Widgets" menu
+ - Delay library updates when inside media views
+3.3.4
+ - Fix "Next Page" localizations
+3.3.3
+ - Fix "Clear Cache"
+3.3.2
+ - Fix bug when paths return no items
+3.3.1
+ - Fix bug when Skin Shortcuts is not installed
+ - More improvements to page item handling
+3.3.0
+ - Add "Copy Group" in group context menu
+ - Add "Create New ... Group" in "My Groups" menu
+ - Add "Clear Cache" in "Tools" menu
+ - Add "Refresh Widget" to widget context menu
+ - Add "Clear Cache" to widget context menu
+ - Add rudimentary error item for failed widgets
+ - Add "Icon Packs" for library widgets from genres, studios, and countries
+ - Remove dependency on Kodi Six
+ - Allow editing content type
+ - Allow Cycling Widgets to pull from a subset of paths
+ - Support cast thumbnails for Kodi N
+ - Fix translatePath reference again
+ - Faster and more robust item creation
+ - Make `.widget` files much simpler
+ - Better support for library paths
+ - Better support for music
+3.2.3
+ - Add English (US) and Portugese localizations
+3.2.2
+ - Add more localizations
+ - Better "Next Page" detection
+ - Support for "Next Page" items in other languages
+3.2.1
+ - Fix for items with no artwork
+3.2.0
+ - Add setting to prefer episodes/shows when removing duplicates
+ - Rework duplicate removal
+ - Fix bug in Active Widgets editor dialog
+ - Fix landscape art for some items
+ - Fix paged widgets not resetting on boot
+ - Format with black
+3.1.9
+ - Fix error with translatePath
+3.1.8
+ - Fix resume progress on items
+3.1.7
+ - Fix widget cleaning
+ - Fix Active Widgets menu
+3.1.6
+ - Fix detection of JSON-RPC version
+3.1.5
+ - Fix editor dialog
+3.1.4
+ - Fix settings shortcuts
+ - Fix some Unicode errors
+ - Fix some dialog labels in editor
+3.1.3
+ - Fix hashing in Matrix
+3.1.2
+ - Fix "Clear Cache"
+3.1.1
+ - Fixes for cache mechanism
+ - Add "Force Refresh Widgets" to context menu for AutoWidget items
+3.1.0
+ - Improved background caching for paths that change frequently
+ - Fix unneeded refreshes
+ - Fix caching on merged widgets
+ - Fix more Unicode errors
+3.0.2
+ - Fix bug in background caching
+3.0.1
+ - Fix bug when adding paths
+3.0.0
+ - Huge speed improvements thanks to @djay's background caching implementation
+ - Fix merged widget duplicate removal
+2.3.7
+ - Unicode fixes
+ - Fix method calls
+ - Fix separator in menus
+ - Fix logging in Kodi 19
+ - Update Spanish translation
+2.3.6
+ - Fix separator in shortcut groups
+2.3.5
+ - Fix various shortcut- and refresh-related bugs
+ - Fix error when path contained no items
+ - Add more debug logging
+ - Add widget ID as ListItem property (autoID)
+ - Reduce library updates (again)
+2.3.4
+ - Fix logging error
+2.3.3
+ - Fix shortcuts to Android apps
+2.3.2
+ - Fix error in debug logging logic
+2.3.1
+ - Fix editing and adding new groups
+ - Overall cleanup
+ - Trim as many library updates as possible
+2.3.0
+ - Huge simplification of plugin paths
+ - Speed improvements
+ - Better detection for "Next Page" items in various add-ons
+ - Add dedicated debug log
+ - Allow 'path' to be editing for static widgets
+2.2.0
+ - Reduce library updates to improve overall speed
+ - Sort "Active Widgets" by most recently refreshed
+ - Fix any straggling widget errors, I hope :D
+2.1.6
+ - Fix "Next Page" error
+2.1.5
+ - Fix non-merged paths :D
+2.1.4
+ - Support more add-ons' "Next Page" items
+ - Fix merged paths
+2.1.3
+- Fixes for Unicode characters in path labels
+- Fix for viewing groups in Kodi 17.x
+- Change "Icon Color" to a per-path basis
+2.1.2
+ - Add per-widget icon color
+2.1.1
+ - Fix "Icon Color"
+2.1.0
+ - New artwork for add-on
+ - Add icon coloring
+ - Improved "Active Widgets" menu
+ - Added "Clean Old Widget Files" shortcut in Tools
+ - Fix shortcut paths
+ - Fix missing InfoLabels
+2.0.2
+ - Make artwork for groups and paths more consistent
+2.0.1
+ - Add "Toggle Skin Debugging" shortcut
+2.0.0
+ - Rewrite most of add-on functions
+ - Add "Static Path" option
+ - Add "Merged Path" option
+ - Add "Paged Widgets"
+ - Revamp editor dialog
+ - More complete skin compatibility
+ - More miscellaneous fixes
+1.6.8
+ - Add setting for notification sound
+1.6.7
+ - Fix crash when window cannot be detected. Notably fixes Disney+ support.
+1.6.6
+ - Fix extract location
+1.6.5
+ - Add backup/restore features
+1.6.4
+ - Fix more rogue refreshes
+ - Fix wording in Spanish translation (again, thanks to @roliverosc)
+1.6.3
+ - Update settings localizations
+1.6.2
+ - Fix bug that caused Skin Shortcuts to not be able to rebuild the skin
+1.6.1
+ - Fix bug with shortcut widgets being "converted"
+1.6.0
+ - Android App shortcut support (thanks to @Sandmann79)
+ - Add Spanish translation (thanks to @roliverosc)
+ - Fix bug with empty action nodes
+ - Reduce refreshes
+ - Prettify .props file output
+1.5.5
+ - Fix regex for labels in some skins
+1.5.4
+ - Fix recursion crash during refresh
+1.5.3
+ - Fix indent error
+1.5.2
+ - Fix shortcut calls for YouTube
+1.5.1
+ - Fix error in editor dialog
+ - Fix changelog
+1.5.0
+ - Add "Active Widgets" menu
+ - Consistency fixes during initialization and refresh
+ - Allow adding playable items as shortcuts
+ - Fix crashes in Krypton
+ - Fix crashes from invalid group/widget files
+ - Fix Unicode compatibility
+1.4.5
+ - Refresh Shortcut widgets Automatically
+ - Add "Next Path" widget action
+ - Add "Clone" and "Explode" widget modes
+ - Allow refreshing between 15m-2h, at 15m intervals
+1.4.3
+ - Add context menu on more items
+ - Fix some log spam
+ - Catch more errors from invalid files
+ - Fix "Settings" shortcuts
+ - Gracefully handle remote artwork
+ - Use special paths for artwork
+1.4.2
+ - Fix bug in conversion
+1.4.1
+ - Fix bug in migration
+1.4.0
+ - Add "Clean Old References" shortcuts
+ - Change main menu layout
+1.3.9
+ - Fix label bug in Embuary (and maybe elsewhere)
+1.3.8
+ - Add "Wipe Add-on Data" shortcuts
+ - Allow Unicode characters in labels
+1.3.7
+ - Fix typo in path handling
+1.3.6
+ - Fix error handling
+1.3.5
+ - Add extra error checking for file operations
+1.3.4
+ - Add proper migration from old JSON to current
+1.3.3
+ - Rewrite editor dialog
+ - Fix path conversion for skin string paths
+1.3.2
+ - Fixes and cleanup in editor dialog
+1.3.1
+ - Cleanup skin string conversion
+1.3.0
+ - Add group editing dialog
+ - Non-Skin Shortcuts skin support
+ - Fix issues with groups and paths with the same name
+ - Fix settings shortcuts
+ - Add rudimentary JSON migration
+1.2.5
+ - Update some skin localizations
+ - Add more widget artwork
+ - Update documentation
+1.2.3
+ - Fix paths made from add-on browser
+ - Add ability to set plot
+1.2.2
+ - Fix group dialog calls
+1.2.1
+ - Fix imports
+1.2.0
+ - Better handling of art
+ - Better add-on art added
+ - Redesigned path addition dialog
+ - Settings shortcuts added
+1.1.2
+ - Add art editing for paths
+ - Add group renaming
+1.1.1
+ - Add setting to disable notification
+1.1.0
+ - Remove Skin Shortcuts dependency
+ - Expand context menu options
+ - Add support for skins with "basic" Skin Shortcuts integration
+ - Add setting to pause AutoWidget's service
+1.0.7
+ - Fix context menu option not showing
+1.0.6
+ - Fix paths not saving
+1.0.5
+ - Raise required Skin Shortcuts version to  1.0.19
+1.0.4
+ - Allow custom labels
+ - Add removal notifications    
+1.0.3
+ - Fix shortcuts and widgets added from context menu
+1.0.2
+ - Fix crash from non-XML files
+1.0.1
+ - Fix crash from non-existent context menu setting
+1.0.0
+ - First stable release
+        </news>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.png</fanart>
+            <poster>resources/media/poster.png</poster>
+            <banner>resources/media/banner.png</banner>
+            <clearlogo>resources/media/clearlogo.png</clearlogo>
         </assets>
     </extension>
 </addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.13" provider-name="drinfernoo, slamious">
@@ -2721,6 +3391,25 @@ v.3.3.7
 			<screenshot>resources/fanart.jpg</screenshot>
 		</assets>
 	</extension>
+</addon><addon id="script.common.plugin.cache" name="Common plugin cache" provider-name="anxdpanic, TheCollective" version="3.0.0">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1" />
+    </requires>
+    <extension point="xbmc.service" library="resources/lib/entry_point.py" />
+    <extension point="xbmc.python.module" library="resources/lib/storage_server/" />
+    <extension point="xbmc.addon.metadata">
+        <news>
+[fix] use xbmcvfs.translatePath when available, xbmc.translatePath deprecated(Matrix) and removed(Nexus) |contrib: Gujal00|
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+        <platform>all</platform>
+        <license>GPL-3.0-only</license>
+        <source>https://github.com/anxdpanic/script.common.plugin.cache</source>
+        <summary lang="en_GB">A common caching API for Kodi add-ons.</summary>
+        <description lang="en_GB">A common caching API for Kodi add-ons.</description>
+    </extension>
 </addon><addon id="script.embuary.helper" name="Embuary Helper" version="2.0.8" provider-name="sualfred">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -3100,6 +3789,23 @@ v.3.3.7
             <icon>icon.png</icon>
         </assets>
     </extension>
+</addon><addon id="script.module.backports.zoneinfo" name="zoneinfo" version="0.2.1" provider-name="pganssle">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.tzdata" version="2021.5" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">A concrete time zone implementation to support the IANA time zone database</summary>
+    <description lang="en_GB">The zoneinfo module provides a concrete time zone implementation to support the IANA time zone database as originally specified in PEP 615.</description>
+    <platform>all</platform>
+    <license>Apache-2.0</license>
+    <website>https://pypi.org/project/backports.zoneinfo</website>
+    <source>https://github.com/pganssle/zoneinfo</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
 </addon><addon id="script.module.beautifulsoup4" name="beautifulsoup4" version="4.12.2" provider-name="Leonard Richardson">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -3407,6 +4113,29 @@ v0.5.9 (2022-03-22)
       <icon>icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.jetextractors" name="JetExtractors" version="3.0.7a" provider-name="THE TEAM">
+	<requires>
+		<import addon="script.module.requests" />
+		<import addon="script.module.beautifulsoup4" />
+		<import addon="script.module.dateutil" />
+		<import addon="script.module.soupsieve" />
+		<import addon="script.module.pyairtable" />
+		<import addon="script.module.pyamf" />
+		<import addon="script.module.pycryptodome" optional="true" />
+		<import addon="script.module.pyjsparser" />
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Jet Extractors</summary>
+		<description lang="en">Jet Extractors</description>
+		<disclaimer lang="en" />
+		<license>MIT</license>
+		<assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+		</assets>
+	</extension>
 </addon><addon id="script.module.jurialmunkey" name="jurialmunkey common" provider-name="jurialmunkey" version="0.1.19.1">
   <requires>
     <import addon="xbmc.python" version="3.0.1" />
@@ -3505,6 +4234,32 @@ v1.30.0
 - Fixed incorrect meta causing exception on marking as watched. -umbrella
 		</news>
 	</extension>
+</addon><addon id="script.module.microjenscrapers" name="MicroJen Scraper Module" version="1.4" provider-name="MicroJen Community">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.beautifulsoup4" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.six" />
+        <import addon="script.module.kodi-six" />
+        <import addon="script.module.simplejson" />
+    </requires>
+    <extension point="xbmc.python.module" library="lib" />
+    <extension point="xbmc.python.pluginsource" library="lib/default.py">
+        <provides>executable</provides>
+    </extension>
+        <extension point="xbmc.addon.metadata">
+            <platform>all</platform>
+            <summary lang="en">MicroJen Scrapers Module</summary>
+            <description>Scrape common video host for URL's to be playable in Kodi, simplifying addon development of video plugins requiring multi video hosts. [CR]Massive thanks and respect to Crucial Minds for permission to use the Base Code and to The Jen Crew for their valuable contributions in bringing this project together.</description>
+                <disclaimer lang="en">The author is not responsible for the use of this addon. The author is not responsible for the content found using this addon. The author does not host or own any content found within this addon.[CR]The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.[CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</disclaimer>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>
+    <news />
+    </extension>
 </addon><addon id="script.module.musicbrainz" name="Musicbrainz NGS webservice python bindings" version="0.7.0" provider-name="marcelveldt and others">
   <requires>
 	<import addon="xbmc.python" version="3.0.0" />
@@ -3574,6 +4329,57 @@ v1.30.0
 			<fanart />
 		</assets>
     </extension>
+</addon><addon id="script.module.pyairtable" name="pyairtable" version="1.4.0">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.requests" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Python Client for the Airtable API</summary>
+    <description lang="en_GB">Python Client for the Airtable API</description>
+    <license>MIT</license>
+    <platform>all</platform>
+    <website>https://pyairtable.readthedocs.io/</website>
+    <source>https://github.com/gtalarico/pyairtable</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
+</addon><addon id="script.module.pyamf" name="PyAMF" version="0.8.10+matrix.4" provider-name="The Py3AMF Project">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.defusedxml" version="0.6.0+matrix.1" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">PyAMF provides Action Message Format (AMF) support for Python that is compatible with the Adobe Flash Player.</summary>
+    <description lang="en_GB">The Adobe Integrated Runtime and Adobe Flash Player use AMF to communicate between an application and a remote server. AMF encodes remote procedure calls (RPC) into a compact binary representation that can be transferred over HTTP/HTTPS or the RTMP/RTMPS protocol. Objects and data values are serialized into this binary format, which increases performance, allowing applications to load data up to 10 times faster than with text-based formats such as XML or SOAP.
+AMF3, the default serialization for ActionScript 3.0, provides various advantages over AMF0, which is used for ActionScript 1.0 and 2.0. AMF3 sends data over the network more efficiently than AMF0. AMF3 supports sending int and uint objects as integers and supports data types that are available only in ActionScript 3.0, such as ByteArray, ArrayCollection, ObjectProxy and IExternalizable.</description>
+    <license>MIT</license>
+    <platform>all</platform>
+	  <website>https://pypi.org/project/Py3AMF/</website>
+	  <source>https://github.com/StdCarrot/Py3AMF</source>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon><addon id="script.module.pyjsparser" name="pyjsparser" version="3.0.0" provider-name="Addons4Kodi">
+  <requires>
+    
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary>Pure Python JavaScript Translator/Interpreter</summary>
+    <description>Packed for Kodi from https://github.com/PiotrDabkowski/pyjsparser</description>
+    <platform>all</platform>
+    <language />
+    <license>MIT</license>
+    <forum />
+    <website>https://github.com/PiotrDabkowski/pyjsparser</website>
+    <source>https://github.com/PiotrDabkowski/pyjsparser</source>
+    <email />
+  </extension>
 </addon><addon id="script.module.pyqrcode" version="1.2.1+matrix.4" name="pyQRcode" provider-name="Michael Nooner">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -3606,6 +4412,22 @@ v1.30.0
             <icon>icon.png</icon>
         </assets>
     </extension>
+</addon><addon id="script.module.pytz" name="pytz" version="2023.3.0+matrix.1" provider-name="Stuart Bishop">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">World Timezone Definitions for Python.</summary>
+    <description lang="en_GB">pytz brings the Olson tz database into Python. This library allows accurate and cross platform timezone calculations using Python 2.4 or higher. It also solves the issue of ambiguous times at the end of daylight saving time, which you can read more about in the Python Library Reference (datetime.tzinfo).</description>
+    <license>MIT</license>
+    <platform>all</platform>
+    <website>https://pythonhosted.org/pytz/</website>
+    <source>https://github.com/stub42/pytz</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
 </addon><addon id="script.module.requests" name="requests" version="2.31.0" provider-name="Python Software Foundation">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -3748,6 +4570,36 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.slyguy" name="SlyGuy Common" provider-name="SlyGuy" version="0.85.67">
+  <requires>
+    <import addon="slyguy.dependencies" version="0.0.20" />
+    <import addon="repository.slyguy" version="0.0.9" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py" start="login" />
+  <extension point="kodi.context.item">
+    <menu id="kodi.core.main">
+      <item library="default.py">
+        <label>$LOCALIZE[20410]</label>
+        <visible>!String.IsEmpty(ListItem.Trailer) + ![String.StartsWith(Container.FolderPath,plugin://) + String.Contains(Container.FolderPath,trailer)] + Integer.IsEqual(Window(10000).Property(_slyguy_trailer_context_menu),1)</visible>
+      </item>
+    </menu>
+  </extension>
+  <extension point="xbmc.python.module" library="resources/modules" />
+  <extension point="xbmc.addon.metadata">
+    <description lang="en">Common code, proxy and settings required by all Slyguy add-ons</description>
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <license />
+    <language />
+    <website />
+    <news>Move userdata and bookmarks into settings!</news>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
 </addon><addon id="script.module.soupsieve" name="soupsieve" version="2.4.1" provider-name="Isaac Muse">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -3785,6 +4637,22 @@ v1.30.0
             <icon>resources/icon.png</icon>
         </assets>
    </extension>
+</addon><addon id="script.module.tabulate" name="Tabulate" version="0.9.1.2">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Pretty-print tabular data</summary>
+    <description lang="en_GB">Pretty-print tabular data</description>
+    <license>MIT</license>
+    <platform>all</platform>
+    <website>https://github.com/astanin/python-tabulate</website>
+    <source>https://github.com/astanin/python-tabulate</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
 </addon><addon id="script.module.thetvdb" name="The TVDB API v2" version="1.0.34" provider-name="marcelveldt and others">
     <requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -3816,6 +4684,40 @@ v1.30.0
     <license>PSF-2.0</license>
     <website>https://typing-extensions.readthedocs.io/en/latest/</website>
     <source>https://github.com/python/typing_extensions</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
+</addon><addon id="script.module.tzdata" name="tzdata" version="2023.3.0+matrix.1" provider-name="Python Software Foundation">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Provider of IANA time zone data</summary>
+    <description lang="en_GB">This is a Python package containing zic-compiled binaries for the IANA time zone database. It is intended to be a fallback for systems that do not have system time zone data installed</description>
+    <platform>all</platform>
+    <license>Apache-2.0</license>
+    <website>https://pypi.org/project/tzdata/</website>
+    <source>https://github.com/python/tzdata</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
+</addon><addon id="script.module.tzlocal" name="tzlocal" version="5.0.1" provider-name="Lennart Regebro">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.tzdata" version="2023.3.0+matrix.1" />
+    <import addon="script.module.backports.zoneinfo" version="0.2.1" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">tzinfo object for the local timezone</summary>
+    <description lang="en_GB">tzinfo object for the local timezone</description>
+    <platform>all</platform>
+    <license>MIT</license>
+    <website>https://github.com/regebro/tzlocal</website>
+    <source>https://github.com/regebro/tzlocal</source>
     <assets>
       <icon>resources/icon.png</icon>
     </assets>
@@ -4090,6 +4992,58 @@ Version 1.30.0
 		<language />
 		<platform>all</platform>
 	</extension>
+</addon><addon id="script.skinshortcuts" name="Skin Shortcuts" version="2.0.3" provider-name="BigNoid, marcelveldt, SiLVO, anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.unidecode" version="1.1.1+matrix.2" />
+        <import addon="script.module.simpleeval" version="0.9.10" />
+    </requires>
+    <extension point="xbmc.python.library" library="resources/lib/entry_point.py" />
+    <extension point="xbmc.addon.metadata">
+        <news>
+[fix] translations in PVR |contrib: Dis90|
+[fix] titles missing in some dialogs
+[fix] handle missing profiles.xml gracefully (fixes Apple TV)
+[lang] update translations from Weblate
+        </news>
+        <platform>all</platform>
+        <license>GPL-2.0-only</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=178294</forum>
+        <source>https://github.com/mikesilvo164/script.skinshortcuts</source>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+        <description lang="ar_SA">إضافة مخصصه للمظهر لتوفير إدارة بسيطة للودجيت "الأقسام" و الاختصارات على الشاشة (تتطلب دعم المظهر لها)</description>
+        <description lang="cs_CZ">Doplněk pro vzhledy poskytující jednoduchý management a seznamy uživatelských zkratek (vyžaduje podporu vzhledu)</description>
+        <description lang="da_DK">Add-on til skins der giver enkel styring og lister over brugergenveje (kræver skin-understøttelse)</description>
+        <description lang="de_DE">Addon für Skins zum einfachen Bearbeiten und Auflisten von benutzerdefinierten Verknüpfungen (erfordert Skinunterstützung)</description>
+        <description lang="el_GR">Πρόσθετο για κελύφη, το οποίο παρέχει έναν απλό τρόπο διαχείρισης και κατηγοριοποίησης των συντομεύσεων του χρήστη (πρέπει να υποστηρίζεται από το κέλυφος)</description>
+        <description lang="en_GB">Add-on for skins to provide simple managing and listing of user shortcuts (requires skin support)</description>
+        <description lang="en_NZ">Add-on for skins to provide simple managing and listing of user shortcuts (requires skin support)</description>
+        <description lang="en_US">Add-on for skins to provide simple managing and listing of user shortcuts (requires skin support)</description>
+        <description lang="es_ES">Complemento para las pieles para proporcionar una gestión sencilla y lista de atajos de usuario (requiere que la piel lo soporte)</description>
+        <description lang="fi_FI">Lisäosa, joka mahdollistaa ulkoasujen valikkokohteiden ja omien pikavalintojen lisäyksen ja niiden muokkauksen (vaatii tuen ulkoasulta)</description>
+        <description lang="fr_CA">Addiciel pour habillages qui fournit une gestion simple et un listage des raccourcis utilisateurs (exige la prise en charge de l'habillage)</description>
+        <description lang="fr_FR">Module complémentaire pour les skins pour fournir une gestion et une liste simples de raccourcis utilisateur (nécessite la prise en charge des skins)</description>
+        <description lang="gl_ES">Complemento que fornece aos temas dunha xestión sinxela dos atallos dos usuarios (require soporte do tema)</description>
+        <description lang="hr_HR">Dodatak za presvlake koji omogućuje jednostavno upravljanje i prikaz prečaca korisnika (zahtijeva podršku presvlake)</description>
+        <description lang="hu_HU">Felszín kiegészítő amely könnyen kezelhetővé és listázhatóvá teszi a felhasználói parancsikonokat (Felszín támogatás szükséges)</description>
+        <description lang="is_IS">Viðbót fyrir viðmót til að halda utan um flýtivísa og fá yfirlit yfir þá (þarfnast stuðnings frá viðmóti)</description>
+        <description lang="it_IT">Add-on per gli skin per consentire un facile gestione ed elenco delle scorciatoie utente (richiede che lo skin lo supporti)</description>
+        <description lang="ko_KR">사용자 단축키의 간단한 관리 및 목록을 제공하는 스킨용 애드온(스킨 지원 필요)</description>
+        <description lang="lt_LT">Priedas teminėms išvaizdoms, kad jos turėtų galimybę paprastai tvarkyti ir atvaizduoti vartotojo sukurtas nuorodas (reikalingas teminės išvaizdos palaikymas)</description>
+        <description lang="nb_NO">Tillegg for enkel administrering og opplisting av bruker-snarveier i tema (krever støtte i tema)</description>
+        <description lang="nl_NL">Add-on voor skins om te voorzien in het eenvoudig beheren en sorteren van gebruikers snelkoppelingen (vereist skin ondersteuning)</description>
+        <description lang="pl_PL">Wtyczka dla skór, która zapewnia proste zarządzanie i tworzenie list skrótów użytkownika (wymaga wsparcia skóry)</description>
+        <description lang="pt_BR">Add-on para que as skins possam prover gerenciamento de lista de atalhos para o menu principal (requer suporte da skin)</description>
+        <description lang="pt_PT">Um add-on que permite que os temas tenham recursos simples para gerir e listar atalhos de utilizadores (é necessário suporte do tema)</description>
+        <description lang="ru_RU">Дополнение для обложек, предоставляющее простой способ управления пользовательскими ярлыками (требуется поддержка обложкой)</description>
+        <description lang="sk_SK">Doplnok poskytujúci jednoduchý manažment zoznamu užívateľských odkazov (vyžaduje podporu v doplnku pre vzhľad)</description>
+        <description lang="sv_SE">Skinntillägg som tillhandahåller enkel hantering och översikt av användargenvägar (om skinnet stöder det)</description>
+        <description lang="zh_CN">皮肤加载项，提供简单的用户快捷方式管理和列表（需要皮肤支持）</description>
+        <description lang="zh_TW">插件为皮肤提供了简单的管理和用户连接方式列表 (需要皮肤支持)</description>
+    </extension>
 </addon><addon id="script.skinswitcher" name="Skin Switcher" version="1.0.2" provider-name="Surfacingx, OpenELEQ, Fire TV Guru, X">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -5991,7 +6945,7 @@ Added arabic fonts
 			<fanart>resources/fanart.jpg</fanart>			
 		</assets>
 	</extension>
-</addon><addon id="skin.cpm.estuary" version="4.0.9.29" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
+</addon><addon id="skin.cpm.estuary" version="4.0.9.30" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 	</requires>
@@ -6176,7 +7130,7 @@ Added arabic fonts
 		<disclaimer lang="zh_CN">Estuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Estuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
 	</extension>
-</addon><addon id="skin.estuary.modv2cpm" version="21.1.23" name="Estuary MOD V2 Omega Cpm" provider-name="Guilouz, K21 branch by PvD">
+</addon><addon id="skin.estuary.modv2cpm" version="21.1.24" name="Estuary MOD V2 Omega Cpm" provider-name="Guilouz, K21 branch by PvD">
 	<requires>
 		<import addon="xbmc.python" version="3.0.1" />
 		<import addon="xbmc.gui" version="5.17.0" />
@@ -6296,6 +7250,61 @@ For a complete view of changes visit https://github.com/b-jesch/skin.estuary.mod
 		<description lang="en_NZ">Nimbus Skin</description>
 		<description lang="en_US">Nimbus Skin</description>
 	</extension>
+</addon><addon id="vfs.libarchive" version="21.0.2.1" name="Archive support" provider-name="spiff">
+  <requires>
+    <import addon="kodi.binary.global.main" minversion="2.0.0" version="2.0.2" />
+    <import addon="kodi.binary.global.general" minversion="1.0.4" version="1.0.5" />
+    <import addon="kodi.binary.global.filesystem" minversion="1.1.7" version="1.1.8" />
+    <import addon="kodi.binary.instance.vfs" minversion="3.0.1" version="3.0.1" />
+  </requires>
+  
+  <extension point="kodi.vfs" protocols="archive" extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.tgz|.tbz2|.gz|.bz2|.xz|.tar" files="true" directories="true" filedirectories="true" encodedhostname="true" library_linux="vfs.libarchive.so.21.0.2" />
+  <extension point="xbmc.addon.metadata">
+    <platform />
+    <license>GPL-2.0-or-later</license>
+    <source>https://github.com/xbmc/vfs.libarchive</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+    <summary lang="ca_ES">Complement d'arxiu i compressió multi-format</summary>
+    <summary lang="da_DK">Multiformat arkiverings- og komprimerings-add-on</summary>
+    <summary lang="de_DE">Addon zur Verarbeitung mehrerer Archivformate</summary>
+    <summary lang="en_GB">Multi-format archive and compression addon</summary>
+    <summary lang="es_ES">Complemento de compresión y archivos multiformato</summary>
+    <summary lang="es_MX">Complemento de compresión y archivado en múltiples formatos</summary>
+    <summary lang="et_EE">Lisamoodul mitme arhiveerimis- ja tihendusvormingu jaoks</summary>
+    <summary lang="fi_FI">Lisäosa useiden arkistointi- ja pakkausmuotojen lukuun</summary>
+    <summary lang="fr_FR">Addon d'archivage et de compression multi-formats</summary>
+    <summary lang="hr_HR">Arhiva više formata i dodatak sažimanja</summary>
+    <summary lang="id_ID">Pengaya arsip multi-format dan kompresi</summary>
+    <summary lang="it_IT">Archivio multiformato e Add-on di compressione</summary>
+    <summary lang="ko_KR">다중 형식 아카이브 및 압축 애드온</summary>
+    <summary lang="lv_LV">Vairāku formātu arhīva un saspiešanas papildinājums</summary>
+    <summary lang="nb_NO">Multiformat arkiverings- og komprimeringsutvidelse</summary>
+    <summary lang="pl_PL">Dodatek wieloformatowych archiwów i kompresji</summary>
+    <summary lang="pt_BR">Add-on para arquivos multiformato e compressão</summary>
+    <summary lang="ru_RU">Дополнение для архивирования и сжатия в нескольких форматах</summary>
+    <summary lang="zh_CN">多格式文档和压缩插件</summary>
+    <description lang="ca_ES">Aquest complement utilitza la llibreria libarchive per llegir diversos formats d'arxiu i compressió.[CR][CR]Els formats compatibles són:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="da_DK">Dette add-on anvender libarchive-biblioteket til at læse en række arkiv- og komprimeringsformater.[CR][CR]Understøttede formater er:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="de_DE">Dieses Addon verwendet die Bibliothek libarchive, um verschiedene Archiv- und Komprimierungsformate zu verarbeiten.[CR][CR]Unterstützte Formate sind:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="en_GB">This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="es_ES">Este complemento usa la librería 'libarchive' para leer una variedad de formatos de archivo y compresión.[CR][CR]Los formatos soportados son:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="es_MX">Este complemento utiliza libarchive para leer una variedad de formatos de archivado y compresión. [CR][CR]Los formatos soportados son:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="et_EE">See lisamoodul kasutab erinevate arhiivi- ja tihendusvormingute lugemiseks libarchive teeki.[CR][CR]Toetatud vormingud on: [CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="fi_FI">Lisäosa käyttää libarchive-kirjastoa useiden arkoistointi- ja pakkausmuotojen lukuun.[CR][CR]Tuetut muodot ovat: [CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="fr_FR">Ce module complémentaire utilise la bibliothèque libarchive pour lire une variété de formats d'archives et de compression.[CR][CR]Les formats pris en charge sont :[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="hr_HR">Ovaj dodatak koristi libarchive biblioteku za čitanje raznih arhiva i sažetih formata.[CR][CR]Podržani formati su:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="id_ID">Pengaya ini menggunakan pustaka libarchive untuk membaca berbagai format arsip dan kompresi.[CR][CR]Format yang didukung:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="it_IT">Questo Add-on usa la libreria libarchive per leggere una varietà di formati di compressione e archivio.[CR][CR]I formati supportati sono:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="ko_KR">이 추가 기능은 libarchive 라이브러리를 사용하여 다양한 아카이브 및 압축 형식을 읽습니다.[CR][CR]지원되는 형식은 다음과 같습니다.[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="lv_LV">Šis papildinājums izmanto libarchive bibliotēku, lai varētu lasīt un veikt dažādu arhīva formātu saspiešanu.[CR][CR]Atbalstītie formāti:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="nb_NO">Denne utvidelsen benytter libarchive-biblioteket til å lese en rekke arkiv- og komprimeringsformater.[CR][CR]Støttede formater er:[CR]7z, bz2, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="pl_PL">Dodatek ten używa biblioteki libarchive do odczytu różnych formatów archiwów i kompresji.[CR][CR]Obsługiwane formaty to:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="pt_BR">Este add-on usa a biblioteca libarchive para ler uma variedade de arquivos e formatos de compressão.[CR][CR]Os formatos suportados são:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="ru_RU">Это дополнение использует библиотеку libarchive для чтения различных форматов архивов и сжатия.[CR][CR]Поддерживаемые форматы:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="zh_CN">此插件使用 libarchive 库读取各种文档和压缩格式。[CR][CR]支持的格式有：[CR]7z、bz2、gz、tar、tar.bz2、tar.gz、tar.xz、tgz、tbz2、xz、zip</description>
+  </extension>
 </addon><addon id="weather.gismeteo" version="0.6.4+matrix.1" name="Gismeteo" provider-name="vl.maksime">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -6335,6 +7344,27 @@ For a complete view of changes visit https://github.com/b-jesch/skin.estuary.mod
 		<assets>
 			<icon>icon.png</icon>
 		</assets>
+	</extension>
+</addon><addon id="weather.multi2" name="Multi Weather 2" version="420" provider-name="ronie">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.openweathermap.maps" version="1.0.4" />
+		<import addon="script.module.requests" version="2.22.0+matrix.1" />
+		<import addon="script.module.dateutil" version="2.8.1+matrix.1" />
+	</requires>
+	<extension point="xbmc.python.weather" library="default.py" />
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Weather forecast from several providers</summary>
+		<description lang="en_GB">Weather forecast provided by Yahoo, Weatherbit and Openweathermap</description>
+		<platform>all</platform>
+		<license>GPL-2.0-only</license>
+		<forum>https://forum.kodi.tv/showthread.php?tid=352028</forum>
+		<source>https://gitlab.com/ronie/weather.multi2/</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+		</assets>
+		<news>- fix yahoo weather again</news>
 	</extension>
 </addon><addon id="weather.openmeteo" name="Open-Meteo" version="1.0.0" provider-name="OpenHT">
 	<requires>

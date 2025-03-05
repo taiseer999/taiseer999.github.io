@@ -267,7 +267,7 @@ msgstr ""
 
 #: /xml/Font.xml
 msgctxt "#31053"
-msgid "Arial based"
+msgid "RobotoNotoCondensed"
 msgstr ""
 
 #: /xml/Variables.xml
@@ -3010,3 +3010,8 @@ msgstr ""
 msgctxt "#31738"
 msgid "SoC temp"
 msgstr ""
+
+#: /xml/Font.xml
+msgctxt "#31739"
+msgid "AmazonEmber"
+msgstr "AmazonEmber"
