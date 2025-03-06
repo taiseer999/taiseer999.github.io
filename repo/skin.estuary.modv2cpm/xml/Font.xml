@@ -101,7 +101,7 @@
 		<font>
 			<name>font_clock</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>70</size>
+			<size>50</size>
 		</font>
 		<font>
 			<name>font_date</name>
@@ -672,7 +672,7 @@
 		<font>
 			<name>font_clock</name>
 			<filename>AmazonEmberV2-Medium.ttf</filename>
-			<size>70</size>
+			<size>50</size>
 		</font>
 		<!-- Title Fonts -->
 		<font>
@@ -1255,7 +1255,7 @@
 		<font>
 			<name>font_clock</name>
 			<filename>RobotoNotoCondensed-Regular.ttf</filename>
-			<size>70</size>
+			<size>50</size>
 		</font>
 		<font>
 			<name>font_date</name>
