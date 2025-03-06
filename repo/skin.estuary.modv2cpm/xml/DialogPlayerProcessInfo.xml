@@ -29,7 +29,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamServiceName,$LOCALIZE[19099] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -38,7 +38,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamProviderName,$LOCALIZE[19101] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -47,7 +47,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamClient,$LOCALIZE[19012] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -56,7 +56,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamDevice,$LOCALIZE[19006] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -65,7 +65,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamStatus,$LOCALIZE[19007] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -74,7 +74,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamEncryptionName,$LOCALIZE[19015] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -97,7 +97,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[Player.Process(videodecoder),$LOCALIZE[31139] : [COLOR white],]$VAR[VideoHWDecoder, (,)[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -106,7 +106,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31728] : [COLOR white]$INFO[System.FPS] FPS$COMMA cache : $INFO[Player.CacheLevel] %[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -116,7 +116,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[Player.Process(deintmethod),Memory usage : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -125,7 +125,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31729] : [COLOR white]$INFO[system.memory(used),, / ]$INFO[system.memory(total),,  -  ]$INFO[system.memory(used.percent),,] [/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -133,7 +133,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Audio stream  : [COLOR white]$INFO[Player.Process(audiochannels),][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -141,7 +141,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Audio bitrate : [COLOR white]$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiobitspersample),$COMMA , bits]$INFO[Player.Process(audiosamplerate),$COMMA , Hz]$INFO[Player.Process(audio.live.kibit.rate),$COMMA , kb/s][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -149,7 +149,7 @@
 					<width>810</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[Player.Process(videowidth),Video stream : [COLOR white],x]$INFO[Player.Process(videoheight)]$INFO[Player.Process(videoscantype),, Pixel] $INFO[Player.Process(videofps),$COMMA , fps] $INFO[Player.Process(videodar),$COMMA , AR] $INFO[Player.Process(video.bit.depth),$COMMA ,-bit] $INFO[Player.Process(video.live.mibit.rate),$COMMA , Mb/s][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -159,7 +159,7 @@
 					<width>800</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[System.CpuUsage,$LOCALIZE[31692] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 			</control>
@@ -182,7 +182,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>RPU (L6) MDL : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -192,7 +192,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>RPU (L6) MaxCLL/MaxFALL : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -202,7 +202,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>L1 Min/Max/Avg Lum : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -211,7 +211,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>L1 Min/Max/Avg PQ : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -220,7 +220,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -230,7 +230,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>HDR10 BL MDL : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -239,7 +239,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>HDR10 BL MaxCLL/MaxFALL : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>			
 			</control>
@@ -265,7 +265,7 @@
 					<width>1420</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -434,7 +434,7 @@
 					<width>1420</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -467,7 +467,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white]$INFO[Player.Process(video.dovi.source.min.nits)]  /  [COLOR lightgreen]$INFO[Player.Process(video.dovi.source.max.nits)][/COLOR]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
@@ -478,7 +478,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white]$INFO[Player.Process(video.dovi.l6.max.cll)]  /  $INFO[Player.Process(video.dovi.l6.max.fall)]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>				
@@ -489,7 +489,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white] $INFO[Player.Process(video.dovi.l1.min.nits)]  /  [COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.nits)][/COLOR]  /  $INFO[Player.Process(video.dovi.l1.avg.nits)]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -499,7 +499,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white] $INFO[Player.Process(video.dovi.l1.min.pq)]  /  [COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.pq)][/COLOR]  /  $INFO[Player.Process(video.dovi.l1.avg.pq)]  PQ-12bit</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -509,7 +509,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -518,7 +518,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white] $INFO[Player.Process(video.hdr.min.lum)]  /  [COLOR lightgreen]$INFO[Player.Process(video.hdr.max.lum)][/COLOR]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision) | String.Contains(Player.Process(video.hdr.type),hdr)</visible>
 				</control>
@@ -527,7 +527,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white] $INFO[Player.Process(video.hdr.max.cll)]  /  [COLOR lightgreen]$INFO[Player.Process(video.hdr.max.fall)][/COLOR]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision) | String.Contains(Player.Process(video.hdr.type),hdr)</visible>
 				</control>
@@ -551,7 +551,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -560,7 +560,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>RPU (L6) MDL : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -569,7 +569,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>RPU (L6) MaxCLL/MaxFALL : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -578,7 +578,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>L1 Min/Max/Avg Lum : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 				</control>
@@ -587,7 +587,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>L1 Min/Max/Avg PQ : </label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 				</control>
@@ -612,7 +612,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
@@ -622,7 +622,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white]$INFO[Player.Process(video.dovi.source.min.nits)]  /  [COLOR lightgreen]$INFO[Player.Process(video.dovi.source.max.nits)][/COLOR]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
@@ -632,7 +632,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white]$INFO[Player.Process(video.dovi.l6.max.cll)]  /  $INFO[Player.Process(video.dovi.l6.max.fall)]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>			
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -642,7 +642,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white] $INFO[Player.Process(video.dovi.l1.min.nits)]  /  [COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.nits)][/COLOR]  /  $INFO[Player.Process(video.dovi.l1.avg.nits)]  nits[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 				</control>
@@ -651,7 +651,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white] $INFO[Player.Process(video.dovi.l1.min.pq)]  /  [COLOR lightgreen]$INFO[Player.Process(video.dovi.l1.max.pq)][/COLOR]  /  $INFO[Player.Process(video.dovi.l1.avg.pq)]  PQ-12bit</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
 				</control>
@@ -676,7 +676,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>L5 active : Left [COLOR white]$INFO[Player.Process(video.dovi.l5.left.offset)]px [/COLOR] Right [COLOR white]$INFO[Player.Process(video.dovi.l5.right.offset)]px[/COLOR]  Top [COLOR white]$INFO[Player.Process(video.dovi.l5.top.offset)]px [/COLOR] Bottom [COLOR white]$INFO[Player.Process(video.dovi.l5.bottom.offset)]px[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Skin.HasSetting(SmallOSDVideo) + Window.IsVisible(fullscreenvideo) + !Window.IsActive(fullscreeninfo)</visible>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -686,7 +686,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>L5 : L: [COLOR white]$INFO[Player.Process(video.dovi.l5.left.offset)]px [/COLOR] R: [COLOR white]$INFO[Player.Process(video.dovi.l5.right.offset)]px[/COLOR] T: [COLOR white]$INFO[Player.Process(video.dovi.l5.top.offset)]px [/COLOR] B: [COLOR white]$INFO[Player.Process(video.dovi.l5.bottom.offset)]px[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>![Skin.HasSetting(SmallOSDVideo) + Window.IsVisible(fullscreenvideo) + !Window.IsActive(fullscreeninfo)]</visible>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -713,7 +713,7 @@
 					<width>1420</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
@@ -747,7 +747,7 @@
 					<width>1420</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEqual(Player.Process(video.dovi.has.config),1) + String.IsEqual(Player.Process(video.dovi.has.l6),1)</visible>
@@ -782,7 +782,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label>Dolby Vision profile : [COLOR white]$VAR[DVProfileExtVar][/COLOR][COLOR lightgreen] $VAR[DVELVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -790,7 +790,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[1RPUPresentVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -799,7 +799,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[1BLPresentVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -809,7 +809,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[1ELPresentVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -817,7 +817,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -825,7 +825,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 			</control>
@@ -849,7 +849,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -858,7 +858,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR white]$INFO[Player.Process(video.dovi.meta.version)][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision) + String.Contains(Player.Process(amlogic.eoft_gamut),DV) + String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -868,7 +868,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR dimgrey]$VAR[DVTunnelVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>String.Contains(Player.Process(video.hdr.type),dolby vision) + String.Contains(Player.Process(amlogic.eoft_gamut),DV) + String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -878,7 +878,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR ff795548]($INFO[Player.Process(video.source.additional.hdr.type)])[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<visible>String.IsEqual(Player.Process(video.dovi.has.config),1) + !String.IsEqual(Player.Process(video.source.additional.hdr.type.raw),0)</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -904,7 +904,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -913,7 +913,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[RPUPresentVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -923,7 +923,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[BLPresentVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
@@ -934,7 +934,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[ELPresentVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -944,7 +944,7 @@
 					<width>700</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -953,7 +953,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor></textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -962,7 +962,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor></textcolor>
 				<visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
 				</control>
@@ -990,7 +990,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>[COLOR dimgrey]$VAR[DVSourceProfileExtVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1017,7 +1017,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$VAR[DVSourceELVar]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1041,7 +1041,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31732] : [COLOR white][CAPITALIZE]$INFO[Player.Process(video.source.hdr.type)][/CAPITALIZE][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1049,7 +1049,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31731] : [COLOR white]$VAR[DVNameVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1057,7 +1057,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31735] : [COLOR white]$INFO[VideoPlayer.VideoCodec] - $INFO[VideoPlayer.VideoResolution][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEmpty(VideoPlayer.VideoCodec)</visible>
 				</control>
@@ -1066,7 +1066,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31736] : [COLOR white]$VAR[AudioCodecVar] [COLOR dimgrey]$VAR[AtmosVar][/COLOR][COLOR dimgrey]$VAR[ImaxVar][/COLOR] $VAR[AudioChannelsVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEmpty(VideoPlayer.AudioCodec)</visible>
 				</control>
@@ -1075,7 +1075,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[VideoPlayer.AudioLanguage,$LOCALIZE[31733] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEmpty(VideoPlayer.AudioLanguage) + !Skin.HasSetting(SmallOSDVideo)</visible>
 				</control>
@@ -1084,7 +1084,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[VideoPlayer.AudioLanguageEx,$LOCALIZE[31733] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.IsEmpty(VideoPlayer.AudioLanguage) + Skin.HasSetting(SmallOSDVideo)</visible>
 				</control>
@@ -1093,7 +1093,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[VideoPlayer.SubtitlesLanguage,$LOCALIZE[31734] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>VideoPlayer.SubtitlesEnabled + !Skin.HasSetting(SmallOSDVideo)</visible>
@@ -1103,7 +1103,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>$INFO[VideoPlayer.SubtitlesLanguage,$LOCALIZE[31734] : [COLOR dimgrey],  (off)[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!VideoPlayer.SubtitlesEnabled + !Skin.HasSetting(SmallOSDVideo)</visible>
@@ -1113,7 +1113,7 @@
 					<width>385</width>
 					<aligny>bottom</aligny>
 					<label>$LOCALIZE[31734] : [COLOR white]$INFO[VideoPlayer.SubtitlesLangEx] $VAR[SubNameVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<scroll>true</scroll>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -1124,7 +1124,7 @@
 					<width>385</width>
 					<aligny>bottom</aligny>>
 					<label>$LOCALIZE[31734] : [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLangEx] $VAR[SubNameVar] (off)[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<scroll>true</scroll>
 					<visible>Player.HasVideo</visible>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
@@ -1150,7 +1150,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Video queue : [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1158,7 +1158,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Video data : [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1166,7 +1166,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Audio queue : [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1174,7 +1174,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Audio data : [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1182,7 +1182,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Video cache : [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1190,7 +1190,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Memory used : [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="label">
@@ -1198,7 +1198,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>CPU used: [COLOR white][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 			</control>
@@ -1220,7 +1220,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="progress">
@@ -1237,7 +1237,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="progress">
@@ -1254,7 +1254,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="progress">
@@ -1271,7 +1271,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>			
 				<control type="progress">
@@ -1288,7 +1288,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="progress">
@@ -1305,7 +1305,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
 				<control type="progress">
@@ -1322,7 +1322,7 @@
 					<width>200</width>
 					<aligny>bottom</aligny>
 					<label></label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>			
 				<control type="progress">
@@ -1355,7 +1355,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[Player.Process(amlogic.displaymode),$LOCALIZE[31610] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1364,7 +1364,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Dolby Vision : [COLOR white]Profile $VAR[DVProfileExtVar][/COLOR][COLOR lightgreen] $VAR[DVELVar][/COLOR] [COLOR white]$VAR[DVMetaVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>String.Contains(Player.Process(video.hdr.type),"dolby vision")</visible>
 				</control>
@@ -1373,7 +1373,7 @@
 					<width>710</width>
 					<aligny>bottom</aligny>
 					<label>Dolby Vision : [COLOR white]None[/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>!String.Contains(Player.Process(video.hdr.type),"dolby vision")</visible>
 				</control>
@@ -1382,7 +1382,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[Player.Process(amlogic.pixformat),$LOCALIZE[31612] : [COLOR white],[/COLOR]]  [COLOR dimgrey]$VAR[DVTunnelVar][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1391,7 +1391,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[Player.Process(amlogic.eoft_gamut),$LOCALIZE[31611] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1400,7 +1400,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>AML fps : [COLOR white]$INFO[Player.Process(amlogic.video.fps.info)][/COLOR][COLOR orange]$INFO[Player.Process(amlogic.video.fps.drop), -&gt; ][/COLOR]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1409,7 +1409,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[System.CpuFrequency,$LOCALIZE[31737] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1418,7 +1418,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[System.CpuTemperature,$LOCALIZE[31738] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 					<visible>System.HasAddon(service.coreelec.settings)</visible>
@@ -1443,7 +1443,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamBer,$LOCALIZE[19010] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1452,7 +1452,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamUnc,$LOCALIZE[19011] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1461,7 +1461,7 @@
 					<height>35</height>
 					<aligny>bottom</aligny>
 					<label>$INFO[PVR.ActStreamMux,$LOCALIZE[19100] : [COLOR white],[/COLOR]]</label>
-					<font>font10</font>
+					<font>font27_narrow</font>
 					<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 					<textcolor>$VAR[SkinColorVar]</textcolor>
 				</control>
@@ -1473,7 +1473,7 @@
 						<height>30</height>
 						<aligny>bottom</aligny>
 						<label>$INFO[PVR.ActStreamSignal,$LOCALIZE[19008] : [COLOR white],[/COLOR]]</label>
-						<font>font10</font>
+						<font>font27_narrow</font>
 						<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 						<textcolor>$VAR[SkinColorVar]</textcolor>
 					</control>
@@ -1494,7 +1494,7 @@
 						<height>30</height>
 						<aligny>bottom</aligny>
 						<label>$INFO[PVR.ActStreamSnr,$LOCALIZE[19009] : [COLOR white],[/COLOR]]</label>
-						<font>font10</font>
+						<font>font27_narrow</font>
 						<shadowcolor>$VAR[ShadowColorVar]</shadowcolor>
 						<textcolor>$VAR[SkinColorVar]</textcolor>
 					</control>
