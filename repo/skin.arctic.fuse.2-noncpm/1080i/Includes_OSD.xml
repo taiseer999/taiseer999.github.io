@@ -541,7 +541,7 @@
 
                 <!-- Ends (Video) -->
                 <include content="Info_Line_Item">
-                <param name="label">$INFO[Player.FinishTime,$LOCALIZE[31184] ,]$INFO[System.Time, ($LOCALIZE[19030] ,)]</param>
+                    <param name="label">$INFO[Player.FinishTime,$LOCALIZE[31184] ,]$INFO[System.Time, ($LOCALIZE[19030] ,)]</param>
                     <param name="visible">!String.IsEmpty(Player.FinishTime) + !Pvr.IsPlayingTv</param>
                     <param name="textcolor">panel_fg_70</param>
                 </include>
@@ -1079,7 +1079,7 @@
                     <aspectratio align="left" aligny="center">keep</aspectratio>
                     <fadetime>200</fadetime>
                     <texture background="true">$PARAM[top_logo]</texture>
-                    <width>$PARAM[top_logo_width]</width></texture>
+                    <width>$PARAM[top_logo_width]</width>
                 </control>
             </control>
             <control type="label">
@@ -1167,8 +1167,6 @@
         <param name="button_6">false</param>
         <param name="button_7">false</param>
         <param name="button_8">false</param>
-        <param name="button_9">false</param>
-        <param name="button_10">false</param>
         <param name="iconoffset_condition">false</param>
         <definition>
 
@@ -1264,14 +1262,6 @@
                     <param name="icon">$PARAM[icon]</param>
                     <param name="label">$PARAM[label]</param>
                     <param name="iconoffset_condition">$PARAM[iconoffset_condition]</param>
-                </include>
-
-                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_9]]">
-                    <param name="id">9</param>
-                </include>
-
-                <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_10]]">
-                    <param name="id">10</param>
                 </include>
 
                 <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_6]]">

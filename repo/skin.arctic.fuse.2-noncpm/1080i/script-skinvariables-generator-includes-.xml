@@ -6202,7 +6202,7 @@
         </item>
         <item>
             <label>Exit</label>
-            <icon>special://skin/extras/icons/kodi2.png</icon>
+            <icon>special://skin/extras/icons/mastermode.png</icon>
             <property name="path">PlayMedia(plugin://plugin.program.openwizardTaiseer/?mode=forceclose)</property>
             <property name="menu">options-tray</property>
             <property name="mode"/>
@@ -6217,7 +6217,7 @@
         </item>
         <item>
             <label>Reboot</label>
-            <icon>special://skin/extras/icons/coreelec.png</icon>
+            <icon>special://skin/extras/icons/reboot_emmc.png</icon>
             <property name="path">Reboot</property>
             <property name="menu">options-tray</property>
             <property name="mode"/>
@@ -6232,7 +6232,7 @@
         </item>
         <item>
             <label>Android</label>
-            <icon>special://skin/extras/icons/android.png</icon>
+            <icon>special://skin/extras/icons/reboot_android.png</icon>
             <property name="path">RunScript(script.reboottoandroidtv)</property>
             <property name="menu">options-tray</property>
             <property name="mode"/>
@@ -6247,7 +6247,7 @@
         </item>
         <item>
             <label>Power</label>
-            <icon>special://skin/extras/icons/poweroff.png</icon>
+            <icon>special://skin/extras/icons/powerdown.png</icon>
             <property name="path">Powerdown</property>
             <property name="menu">options-tray</property>
             <property name="mode"/>
@@ -6260,6 +6260,14 @@
             <onclick>Powerdown</onclick>
             <visible>True</visible>
         </item>
+    </include>
+    <!-- Options Onload Tray Check -->
+    <include name="skinvariables-options-tray-onload">
+        <onload>Skin.Reset(Options.DisableBottomTray)</onload>
+        <onload>Skin.Reset(Options.DisableBottomTray)</onload>
+        <onload>Skin.Reset(Options.DisableBottomTray)</onload>
+        <onload>Skin.Reset(Options.DisableBottomTray)</onload>
+        <onload>Skin.Reset(Options.DisableBottomTray)</onload>
     </include>
     <!-- Static Sidemenu -->
     <include name="skinvariables-sidemenu-staticitems">
@@ -6431,8 +6439,8 @@
             <param name="label">Movies</param>
             <param name="include">List_Poster_Row</param>
             <param name="visible">[String.IsEqual(Container(5099).ListItem.Property(guid),guid-c4f6c581) | String.IsEmpty(Container(5099).ListITem.Property(guid))]</param>
-            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
-            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="altvisible">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
+            <param name="busy_isupdating">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
             <param name="busy_visible">[Integer.IsEqual(Container(5001).NumItems,0) | Container(5001).IsUpdating]</param>
             <param name="widgetfade_include">true</param>
             <param name="widget_hideartwork">[!Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + String.IsEmpty(Container(5099).ListItem.Property(guid))]</param>
@@ -6473,8 +6481,8 @@
             <param name="label">TV Shows</param>
             <param name="include">List_Poster_Row</param>
             <param name="visible">[String.IsEqual(Container(5099).ListItem.Property(guid),guid-c7e4fc64) | String.IsEmpty(Container(5099).ListITem.Property(guid))]</param>
-            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
-            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="altvisible">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
+            <param name="busy_isupdating">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
             <param name="busy_visible">[Integer.IsEqual(Container(5002).NumItems,0) | Container(5002).IsUpdating]</param>
             <param name="widgetfade_include">true</param>
             <param name="widget_hideartwork">[!Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + String.IsEmpty(Container(5099).ListItem.Property(guid))]</param>
@@ -6515,8 +6523,8 @@
             <param name="label">Albums</param>
             <param name="include">List_Square_Row</param>
             <param name="visible">[String.IsEqual(Container(5099).ListItem.Property(guid),guid-7c3e4a00) | String.IsEmpty(Container(5099).ListITem.Property(guid))]</param>
-            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
-            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="altvisible">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
+            <param name="busy_isupdating">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
             <param name="busy_visible">[Integer.IsEqual(Container(5003).NumItems,0) | Container(5003).IsUpdating]</param>
             <param name="widgetfade_include">true</param>
             <param name="widget_hideartwork">[!Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + String.IsEmpty(Container(5099).ListItem.Property(guid))]</param>
@@ -6557,8 +6565,8 @@
             <param name="label">Artists</param>
             <param name="include">List_Square_Row</param>
             <param name="visible">[String.IsEqual(Container(5099).ListItem.Property(guid),guid-ae74895a) | String.IsEmpty(Container(5099).ListITem.Property(guid))]</param>
-            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
-            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="altvisible">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
+            <param name="busy_isupdating">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
             <param name="busy_visible">[Integer.IsEqual(Container(5004).NumItems,0) | Container(5004).IsUpdating]</param>
             <param name="widgetfade_include">true</param>
             <param name="widget_hideartwork">[!Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + String.IsEmpty(Container(5099).ListItem.Property(guid))]</param>
@@ -6599,8 +6607,8 @@
             <param name="label">Movies (TMDb)</param>
             <param name="include">List_Poster_Row</param>
             <param name="visible">[String.IsEqual(Container(5099).ListItem.Property(guid),guid-e69b2a46) | String.IsEmpty(Container(5099).ListITem.Property(guid))]</param>
-            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
-            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="altvisible">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
+            <param name="busy_isupdating">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
             <param name="busy_visible">[Integer.IsEqual(Container(5005).NumItems,0) | Container(5005).IsUpdating]</param>
             <param name="widgetfade_include">true</param>
             <param name="widget_hideartwork">[!Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + String.IsEmpty(Container(5099).ListItem.Property(guid))]</param>
@@ -6641,8 +6649,8 @@
             <param name="label">TV Shows (TMDb)</param>
             <param name="include">List_Poster_Row</param>
             <param name="visible">[String.IsEqual(Container(5099).ListItem.Property(guid),guid-8473c078) | String.IsEmpty(Container(5099).ListITem.Property(guid))]</param>
-            <param name="altvisible">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
-            <param name="busy_isupdating">[[Control.HasFocus(9099) | ControlGroup(9090).HasFocus() | Control.HasFocus(5099)] + !String.IsEmpty(Control.GetLabel(9099).index(1)) + System.IdleTime(1) + !System.IdleTime(2)]</param>
+            <param name="altvisible">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
+            <param name="busy_isupdating">[!String.IsEmpty(Control.GetLabel(9099).index(1)) + [[Control.HasFocus(9099) + System.IdleTime(1) + !System.IdleTime(2)] | !String.IsEmpty(Window(Home).Property(UpdateSearchRows))]]</param>
             <param name="busy_visible">[Integer.IsEqual(Container(5006).NumItems,0) | Container(5006).IsUpdating]</param>
             <param name="widgetfade_include">true</param>
             <param name="widget_hideartwork">[!Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + String.IsEmpty(Container(5099).ListItem.Property(guid))]</param>
