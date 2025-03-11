@@ -5,7 +5,6 @@
 			<visible>Control.IsVisible(52)</visible>
 			<include>OpenClose_Right</include>
 			<include>Visible_Right</include>
-			<include>MediaMenuAnimations</include>
 			<control type="panel" id="52">
 				<centerleft>50%</centerleft>
 				<top>120</top>
@@ -51,7 +50,9 @@
 							<top>40</top>
 							<width>360</width>
 							<height>210</height>
+							<bordersize>1</bordersize>
 							<texture colordiffuse="66000000">colors/white.png</texture>
+							<bordertexture border="1" colordiffuse="$VAR[FocusColorTheme]" infill="false">masks/bordertexture2.png</bordertexture>
 						</control>
 						<!-- IMAGE CONTROL -->
 						<control type="image">
@@ -92,7 +93,7 @@
 							<top>60</top>
 							<width>120</width>
 							<height>120</height>
-							<texture fallback="DefaultStudios.png">$INFO[ListItem.Icon]</texture>
+							<texture colordiffuse="$VAR[IconDiffuse]" fallback="DefaultStudios.png">$INFO[ListItem.Icon]</texture>
 							<aspectratio>keep</aspectratio>
 							<align>center</align>
 						</control>

@@ -4,18 +4,36 @@
 	<controls>
 		<control type="group">
 			<centertop>50%</centertop>
-			<height>750</height>
+			<height>830</height>
 			<centerleft>50%</centerleft>
 			<width>1720</width>
 			<control type="group" id="250">
 				<include content="DialogBackgroundCommons">
 					<param name="header_label" value="$LOCALIZE[24012]" />
 					<param name="header_id" value="100" />
+					<param name="width" value="1720" />
+					<param name="height" value="830" />
+					<param name="shade_right" value="415" />
+					<param name="divider_left" value="1720" />
 				</include>
+				<control type="image">
+					<left>335</left>
+					<top>0</top>
+					<width>1</width>
+					<bottom>125</bottom>
+					<texture colordiffuse="$VAR[FocusColorTheme]">masks/mainmenupanel_divider.png</texture>
+				</control>
+				<control type="image">
+					<left>1305</left>
+					<top>0</top>
+					<width>1</width>
+					<bottom>125</bottom>
+					<texture colordiffuse="$VAR[FocusColorTheme]">masks/mainmenupanel_divider.png</texture>
+				</control>
 				<control type="group">
 					<left>1320</left>
 					<control type="grouplist">
-						<top>125</top>
+						<top>130</top>
 						<left>5</left>
 						<onright>150</onright>
 						<onleft>73</onleft>
@@ -24,12 +42,12 @@
 							<param name="id" value="160" />
 							<param name="label" value="$LOCALIZE[24120]" />
 							<param name="width" value="370" />
-							<param name="height" value="77" />
+							<param name="height" value="70" />
 						</include>
 					</control>
 					<control type="label" id="140">
 						<description>textarea</description>
-						<top>280</top>
+						<top>240</top>
 						<width>380</width>
 						<height>40</height>
 						<align>center</align>
@@ -37,7 +55,7 @@
 						<wrapmultiline>true</wrapmultiline>
 					</control>
 					<control type="grouplist" id="130">
-						<top>630</top>
+						<top>690</top>
 						<width>380</width>
 						<height>300</height>
 						<orientation>vertical</orientation>
@@ -66,15 +84,16 @@
 				<control type="label">
 					<description>Video label</description>
 					<top>-45</top>
-					<width>920</width>
+					<width>970</width>
 					<height>30</height>
 					<font>font30_title</font>
 					<label>$INFO[Player.Filename]</label>
 					<align>center</align>
 					<aligny>center</aligny>
-					<textcolor>grey</textcolor>
+					<textcolor>unfocused_text</textcolor>
 					<shadowcolor>black</shadowcolor>
 					<scroll>true</scroll>
+					<scrollspeed>100</scrollspeed>
 				</control>
 				<control type="list" id="120">
 					<width>970</width>
@@ -142,7 +161,8 @@
 					<focusedlayout width="970" height="100">
 						<control type="image">
 							<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
-							<visible>Control.HasFocus(120)</visible>
+							<!-- <visible>Control.HasFocus(120)</visible> -->
+							<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(120)">Conditional</animation>
 						</control>
 						<control type="image">
 							<left>50</left>
@@ -199,9 +219,10 @@
 					</focusedlayout>
 				</control>
 				<control type="scrollbar" id="73">
-					<left>937</left>
-					<width>12</width>
-					<height>600</height>
+					<left>1301</left>
+					<width>8</width>
+					<top>0</top>
+					<bottom>125</bottom>
 					<onleft>120</onleft>
 					<onright>160</onright>
 					<ondown>73</ondown>
@@ -211,11 +232,11 @@
 			</control>
 			<control type="group">
 				<left>0</left>
-				<top>130</top>
+				<top>105</top>
 				<control type="label">
 					<left>0</left>
-					<top>-50</top>
-					<width>320</width>
+					<top>-25</top>
+					<width>335</width>
 					<height>26</height>
 					<label>$LOCALIZE[24018]</label>
 					<align>center</align>
@@ -227,14 +248,15 @@
 				</control>
 				<control type="image" id="110">
 					<description>Service Logo</description>
-					<top>500</top>
+					<top>525</top>
 					<width>320</width>
 					<height>80</height>
 					<fadetime>200</fadetime>
 					<aspectratio>keep</aspectratio>
 				</control>
 				<control type="list" id="150">
-					<width>320</width>
+					<top>25</top>
+					<width>335</width>
 					<height>480</height>
 					<onleft>160</onleft>
 					<onright>120</onright>
@@ -242,8 +264,8 @@
 					<ondown>150</ondown>
 					<scrolltime>200</scrolltime>
 					<include content="DefaultSimpleListLayout">
-						<param name="width" value="320" />
-						<param name="height" value="60" />
+						<param name="width" value="335" />
+						<!-- <param name="height" value="60" /> -->
 						<param name="list_id" value="150" />
 						<param name="align" value="center" />
 						<param name="diffuse" value="colors/grey.png" />

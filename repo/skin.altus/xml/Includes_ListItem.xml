@@ -12,6 +12,8 @@
           <param name="id" value="$PARAM[id]" />
           <param name="focused" value="true" />
           <param name="list_width" value="$PARAM[list_width]" />
+          <param name="align" value="$PARAM[align]" />
+          <param name="left_right_text" value="$PARAM[left_right_text]" />
           <param name="img_top" value="$PARAM[img_top]" />
           <param name="img_bottom" value="$PARAM[img_bottom]" />
           <param name="img_width" value="$PARAM[img_width]" />
@@ -24,6 +26,8 @@
         <include content="ListItem">
           <param name="id" value="$PARAM[id]" />
           <param name="list_width" value="$PARAM[list_width]" />
+          <param name="align" value="$PARAM[align]" />
+          <param name="left_right_text" value="$PARAM[left_right_text]" />
           <param name="unfocused_font" value="$PARAM[unfocused_font]" />
         </include>
       </itemlayout>
@@ -80,6 +84,8 @@
     <param name="focused">false</param>
     <param name="img_top">0</param>
     <param name="img_bottom">0</param>
+    <param name="align">center</param>
+    <param name="left_right_text">20</param>
     <!-- <param name="img_left">47</param> -->
     <param name="focused_font">font37</param>
     <param name="unfocused_font">font37</param>
@@ -106,26 +112,26 @@
           <control type="label">
             <!-- <centerleft>50%</centerleft> -->
             <top>5</top>
-            <left>20</left>
-            <right>20</right>
+            <left>$PARAM[left_right_text]</left>
+            <right>$PARAM[left_right_text]</right>
             <aligny>center</aligny>
             <font>$PARAM[unfocused_font]</font>
             <textcolor>unfocused_text</textcolor>
             <label>$VAR[MenuCaseVar]</label>
-            <align>center</align>
+            <align>$PARAM[align]</align>
             <shadowcolor>text_shadow</shadowcolor>
             <visible>!Control.HasFocus($PARAM[id]) | !$PARAM[focused]</visible>
           </control>
           <control type="label">
             <!-- <centerleft>50%</centerleft> -->
             <top>5</top>
-            <left>20</left>
-            <right>20</right>
+            <left>$PARAM[left_right_text]</left>
+            <right>$PARAM[left_right_text]</right>
             <aligny>center</aligny>
             <font>$PARAM[focused_font]</font>
             <label>[B]$VAR[MenuCaseVar][/B]</label>
             <textcolor>$VAR[FocusedTextColorVar]</textcolor>
-            <align>center</align>
+            <align>$PARAM[align]</align>
             <!-- <textcolor>FFFFFFFF</textcolor> -->
             <shadowcolor>text_shadow</shadowcolor>
             <visible>Control.HasFocus($PARAM[id]) + $PARAM[focused]</visible>
@@ -135,11 +141,11 @@
           <control type="label">
             <!-- <centerleft>50%</centerleft> -->
             <top>5</top>
-            <left>20</left>
-            <right>20</right>
+            <left>$PARAM[left_right_text]</left>
+            <right>$PARAM[left_right_text]</right>
             <aligny>center</aligny>
             <font>$PARAM[unfocused_font]</font>
-            <align>center</align>
+            <align>$PARAM[align]</align>
             <textcolor>unfocused_text</textcolor>
             <label>$VAR[MenuCaseVar]</label>
             <shadowcolor>text_shadow</shadowcolor>

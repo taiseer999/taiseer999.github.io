@@ -526,9 +526,9 @@ msgid "Teletext"
 msgstr ""
 
 #. viewtype name
-#: /xml/View_56_ListInfo.xml
+#: /xml/View_56_FlixInfo.xml
 msgctxt "#31107"
-msgid "ListInfo"
+msgid "FlixInfo"
 msgstr ""
 
 #empty strings from id 31108 to 31109

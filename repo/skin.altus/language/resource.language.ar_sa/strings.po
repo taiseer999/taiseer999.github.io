@@ -405,7 +405,7 @@ msgstr "نصوص التلفاز"
 
 #. viewtype name
 msgctxt "#31107"
-msgid "ListInfo"
+msgid "FlixInfo"
 msgstr "قائمة واسعة"
 
 # empty strings from id 31108 to 31109

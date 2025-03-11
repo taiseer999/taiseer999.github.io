@@ -9,7 +9,6 @@
 		<control type="group">
 			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
 			<control type="group">
-				<include>MediaMenuAnimations</include>
 				<include>OpenClose_Right</include>
 				<!-- <include content="PVRInfoPanel">
 					<param name="top" value="15"/>
@@ -170,7 +169,6 @@
 				</control> -->
 			</control>
 			<control type="group">
-				<include>MediaMenuAnimations</include>
 				<depth>DepthContentPanel</depth>
 				<include>OpenClose_Right</include>
 				<width>870</width>

@@ -395,8 +395,8 @@ msgstr "문자다중방송"
 
 #. viewtype name
 msgctxt "#31107"
-msgid "ListInfo"
-msgstr "ListInfo"
+msgid "FlixInfo"
+msgstr "FlixInfo"
 
 msgctxt "#31110"
 msgid "Enter files section"

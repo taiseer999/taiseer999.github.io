@@ -87,14 +87,40 @@
 	</variable>
 
   <variable name="DialogBackground">
-		<value condition="String.IsEqual(Skin.String(BackgroundSetting),2)">$INFO[Window(home).Property(listitem_blurred)]</value>
-		<value>colors/darker.png</value>
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">$INFO[Window(home).Property(listitem_blurred)]</value>
+		<value condition="Player.HasMedia + [String.IsEqual(Skin.String(BackgroundSetting),1) | String.IsEqual(Skin.String(BackgroundSetting),2)] + !String.IsEmpty(Window(home).Property(listitem_blurred))">colors/darker.png</value>
+		<value>colors/darkest.png</value>
 	</variable>
 
   <variable name="DialogBackgroundDiffuse">
-		<value condition="String.IsEqual(Skin.String(BackgroundSetting),2)">E6666666</value>
-		<value condition="String.IsEqual(Skin.String(BackgroundSetting),1)">$VAR[FocusColorTheme]</value>
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">E6888888</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEqual(Skin.String(FocusColorThemeSetting),0) + !String.IsEmpty(Window(home).Property(listitem_blurred))">$INFO[Window(Home).Property(listitem_logo_color_video)]</value>
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEmpty(Window(home).Property(listitem_blurred))">CC000000</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEmpty(Window(home).Property(listitem_blurred))">$INFO[Window(Home).Property(listitem_logo_color_video)]</value>
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),1)">$VAR[FocusColorTheme]</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),1) + String.IsEqual(Skin.String(FocusColorThemeSetting),0)">$INFO[Window(Home).Property(listitem_logo_color_video)]</value>
 		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">accent_color</value>
+	</variable>
+
+  <variable name="MenuBackgroundTexture">
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">$INFO[Window(home).Property(listitem_blurred)]</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">colors/darkest.png</value>
+		<value>colors/black.png</value>
+	</variable>
+
+  <variable name="MenuBackgroundDiffuse">
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">FF888888</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">CC000000</value>
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEmpty(Window(home).Property(listitem_blurred))">CC000000</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEmpty(Window(home).Property(listitem_blurred))">CC000000</value>
+		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),1)">D9FFFFFF</value>
+		<value condition="Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),1)">CC000000</value>
+		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">80000000</value>
+	</variable>
+
+  <variable name="IconDiffuse">
+		<value condition="![String.IsEqual(Container.PluginCategory,browse providers...) | String.IsEqual(Container.PluginCategory,providers) | String.IsEqual(Container.PluginCategory,browse networks...) | String.IsEqual(Container.PluginCategory,networks)]">$VAR[FocusedTextColorVar]</value>
+		<value></value>
 	</variable>
 
 	<variable name="FlixPosterVar">
@@ -250,7 +276,7 @@
     <value>[COLOR unfocused_text]No information[/COLOR]</value>
   </variable>	
 
-  <!-- <include name="altus.HiddenArtwork">
+  <include name="altus.HiddenArtwork">
 		<left>-3000</left>
 		<top>-3000</top>
 		<width>1</width>
@@ -354,7 +380,7 @@
 	<include name="altus.Preload50_Addons">
 		<include>altus.PreloadFanart</include>
 		<include>altus.PreloadIcon</include>
-	</include> -->
+	</include>
 
 
 </includes>

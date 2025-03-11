@@ -13,7 +13,6 @@
 			<description>Poster Viewtype</description>
 			<centertop>50%</centertop>
 			<height>720</height>
-      <include>MediaMenuAnimations</include>
 			<!-- <control type="image">
 				<left>0</left>
 				<top>8</top>
@@ -37,7 +36,7 @@
 					<focusposition>1</focusposition>
 					<movement>0</movement>
 					<pagecontrol>5199</pagecontrol>
-					<scrolltime tween="cubic" easing="out">500</scrolltime>
+					<scrolltime tween="cubic" easing="out">350</scrolltime>
 					<orientation>horizontal</orientation>
 					<onleft>53</onleft>
 					<onup>9000</onup>
@@ -89,16 +88,16 @@
 					</visible>
 					<preloaditems>1</preloaditems>
 					<viewtype label="31100">icon</viewtype>
-					<itemlayout width="265">
+					<itemlayout width="223">
 						<control type="group">
               <include content="ViewUnfocusedAnimations">
 								<param name="id" value="53"/>
 							</include>
               <!-- <visible>!$EXP[sidebar_visible]</visible>
               <animation effect="fade" time="300">VisibleChange</animation> -->
-							<left>-211</left>
+							<left>-175</left>
 							<top>18</top>
-							<include>PosterLayout</include>
+							<include>SmallPosterLayout</include>
 						</control>
 					</itemlayout>
 					<focusedlayout width="515">
@@ -109,7 +108,7 @@
 								<visible>Container.OnScrollPrevious</visible>
 								<visible>Control.IsVisible(20000)</visible>
 								<animation effect="fade" time="200" start="100" end="0">Hidden</animation>
-								<include>PosterLayout</include>
+								<include>SmallPosterLayout</include>
 							</control>
 							<control type="group">
 								<left>-40</left>
@@ -117,7 +116,7 @@
 								<visible>Container.OnScrollNext</visible>
 								<visible>Control.IsVisible(20000)</visible>
 								<animation effect="fade" time="200" start="100" end="0">Hidden</animation>
-								<include>PosterLayout</include>
+								<include>SmallPosterLayout</include>
 							</control>
 						</control>
 						<include>ReturntoView</include>
@@ -157,8 +156,8 @@
 						<visible>![ListItem.IsCollection + String.IsEmpty(ListItem.PlotOutline) + String.IsEmpty(ListItem.Plot)]</visible>
 					</control> -->
           <control type="group">
-            <top>400</top>
-            <left>575</left>
+            <top>363</top>
+            <left>600</left>
             <include condition="!Skin.HasSetting(Disable.53StudioLogo)">53InfoWidth_StudioEnabled</include>
 						<include condition="Skin.HasSetting(Disable.53StudioLogo)">53InfoWidth_StudioDisabled</include>
             <!-- <bottom>160</bottom> -->
@@ -210,7 +209,7 @@
                 <scrollspeed>150</scrollspeed>
               </control>
               <control type="textbox">
-                <height max="130">auto</height>
+                <height max="168">auto</height>
                 <font>font27</font>
                 <textcolor>unfocused_text</textcolor>
                 <align>left</align>
@@ -219,7 +218,7 @@
 								<visible>Control.HasFocus(53)</visible>
               </control>
               <control type="textbox">
-                <height max="130">auto</height>
+                <height max="168">auto</height>
                 <font>font27</font>
                 <textcolor>unfocused_text</textcolor>
                 <align>left</align>
@@ -234,12 +233,11 @@
 		<control type="group">
 			<centertop>50%</centertop>
 			<height>670</height>
-			<left>56</left>
+			<left>49</left>
 			<depth>DepthContentPopout</depth>
 			<visible>Control.IsVisible(53)</visible>
 			<include>OpenClose_Left</include>
 			<include>Visible_Left</include>
-      <include>MediaMenuAnimations</include>
 			<!-- <control type="image">
 				<top>-16</top>
 				<left>-16</left>
@@ -249,28 +247,16 @@
 				<bordertexture border="21" infill="false">overlays/shadow.png</bordertexture>
 				<bordersize>20</bordersize>
 			</control> -->
-      <control type="image">
-				<left>4</left>
-				<top>4</top>
-				<width>476</width>
-				<height>714</height>
-				<fadetime>200</fadetime>
-				<bordersize>-6</bordersize>
-				<visible>Control.HasFocus(53)</visible>
-				<animation effect="fade" time="100">VisibleChange</animation>
-				<texture colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texture>
-			</control>
 			<control type="image">
 				<left>4</left>
 				<top>4</top>
 				<width>476</width>
 				<height>714</height>
 				<fadetime>200</fadetime>
-				<!-- <aspectratio scalediffuse="false">scale</aspectratio>
-        <bordersize>2</bordersize> -->
+				<aspectratio scalediffuse="false">scale</aspectratio>
 				<texture colordiffuse="artwork_dim" fallback="DefaultMovies.png" background="true">$VAR[FlixPosterVar]</texture>
 			</control>
-			
+      
 			<control type="group">
 				<visible>String.IsEqual(ListItem.DBtype,tvshow) | String.IsEqual(ListItem.DBType,season) | ListItem.IsRecording | ListItem.HasReminder | ListItem.HasTimer | ListItem.IsCollection | ListItem.HasVideoVersions | ListItem.IsPlaying | ListItem.IsResumable | ListItem.HasVideoExtras | ListItem.HasArchive | Integer.IsGreater(ListItem.Playcount,0)</visible>
 				<control type="image">
@@ -324,6 +310,17 @@
 				<info>ListItem.PercentPlayed</info>
 				<visible>!Integer.IsEqual(ListItem.PercentPlayed,0)</visible>
 			</control>
+			<control type="image">
+				<left>4</left>
+				<top>4</top>
+				<width>476</width>
+				<height>714</height>
+				<fadetime>200</fadetime>
+				<bordersize>-6</bordersize>
+				<visible>Control.HasFocus(53)</visible>
+				<animation effect="fade" time="100">VisibleChange</animation>
+				<texture border="6" colordiffuse="$VAR[FocusColorTheme]" infill="false">colors/white.png</texture>
+			</control>
 			<control type="group">
 				<left>216</left>
 				<top>-18</top>
@@ -336,10 +333,9 @@
 			<visible>Control.IsVisible(53)</visible>
 			<include>OpenClose_Right</include>
 			<include>Visible_Right</include>
-			<include>MediaMenuAnimations</include>
 			<control type="image">
         <left>1621</left>
-        <top>680</top>
+        <top>640</top>
         <width>270</width>
         <height>126</height>
 				<fadetime>200</fadetime>

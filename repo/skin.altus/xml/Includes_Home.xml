@@ -5,7 +5,7 @@
 		<orientation>vertical</orientation>
 		<height>100%</height>
 		<itemgap>-180</itemgap>
-		<scrolltime tween="cubic" easing="out">700</scrolltime>
+		<scrolltime tween="cubic" easing="out">500</scrolltime>
 		<!-- <onup>20000</onup>
 		<ondown>20001</ondown> -->
 		<usecontrolcoords>true</usecontrolcoords>
@@ -14,7 +14,7 @@
 	<include name="FocusedCategoryLabel">
 		<control type="label" id="$PARAM[id]">
 			<label>[LIGHT]$PARAM[label][/LIGHT]</label>
-			<font>font32_title</font>
+			<font>widget_header_focused</font>
 			<textcolor>$VAR[FocusColorTheme]</textcolor>
 			<shadowcolor>text_shadow</shadowcolor>
 			<scroll>true</scroll>
@@ -28,7 +28,7 @@
 		<control type="label" id="$PARAM[id]">
 			<top>5</top>
 			<label>$PARAM[label]</label>
-			<font>font27</font>
+			<font>widget_header_unfocused</font>
 			<textcolor>$VAR[FocusColorTheme]</textcolor>
 			<shadowcolor>text_shadow</shadowcolor>
 			<visible>$PARAM[visible]</visible>
@@ -47,7 +47,7 @@
 					<param name="c1" value="57" />
 					<param name="c2" value="225" />
 				</include> -->
-				<left>38</left>
+				<left>40</left>
 				<top>80</top>
 				<height>50</height>
 				<width>1380</width>
@@ -80,7 +80,7 @@
 			<control type="group" id="$PARAM[list_id]665">
 				<animation effect="fade" start="100" end="45" time="300" tween="sine" easing="inout" condition="!Skin.HasSetting(Disable.WidgetDimming) + String.IsEmpty(Skin.String(TrailerPlaying)) + ![Control.HasFocus($PARAM[list_id]) | Control.HasFocus($PARAM[list_id]1) | String.IsEqual(Window(Home).Property(altus_child_id),$PARAM[list_id])] + ControlGroup(2000).HasFocus">Conditional</animation>
 				<!-- <animation effect="slide" end="7,0" time="300" condition="Control.HasFocus($PARAM[list_id])">Conditional</animation> -->
-				<left>38</left>
+				<left>40</left>
 				<top>80</top>
 				<height>50</height>
 				<width>1380</width>
@@ -199,12 +199,12 @@
 					<include>SpotlightInfoPanel</include>
 					<control type="image">
 						<left>1620</left>
-						<top>410</top>
+						<top>430</top>
 						<width>300</width>
 						<height>140</height>
 						<aspectratio align="left" aligny="center">keep</aspectratio>
 						<texture colordiffuse="$VAR[StudioColorDiffuseVar]">$VAR[StudioLogoPathVar]</texture>
-						<visible>Skin.HasSetting(Enable.HomePanelStudioLogos) + !String.IsEmpty(ListItem.Studio)</visible>
+						<visible>!String.IsEmpty(ListItem.Studio) + [String.IsEqual(Skin.String(StudioLogoSetting),3) | [String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | [String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]]]</visible>
 					</control>
 					<animation effect="fade" time="300">Visible</animation>
 				</control>
@@ -216,12 +216,6 @@
 		<param name="visible">true</param>
 		<definition>
 			<control type="group" id="$PARAM[list_id]671">
-				<include content="WidgetUnfocusedAnimations" condition="String.IsEmpty(Window(Home).Property(StackedWidget))">
-					<param name="list_id" value="$PARAM[list_id]"/>
-				</include>
-				<include content="StackedWidgetAnimations" condition="!String.IsEmpty(Window(Home).Property(StackedWidget))">
-					<param name="list_id" value="$PARAM[list_id]"/>
-				</include>
 				<top>-297</top>
 				<height>470</height>
 				<width>1815</width>
@@ -256,22 +250,19 @@
 				<!-- <param name="visible" value="String.IsEmpty(Window(Home).Property(SpotlightWidget))"/> -->
 				<!-- <param name="visible" value="!ControlGroup(2000).HasFocus | [!Control.HasFocus($PARAM[list_id]) + !String.IsEmpty(Window(Home).Property(SpotlightWidget))] | [String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Skin.HasSetting(Enable.AlternateSpotlight)]"/> -->
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="spotlight"/>
-				<param name="posy" value="330"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>973</height>
-				<!-- <height>970</height> -->
+				<height>1078</height>
+				<!-- <height>1027</height> -->
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 				<onfocus>SetProperty(SpotlightWidget,true,Home)</onfocus>
-				<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_spotlight_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
@@ -321,17 +312,17 @@
 				<param name="visible" value="false"/>
 				<!-- <param name="visible" value="!ControlGroup(2000).HasFocus | [!Control.HasFocus($PARAM[list_id]) + !String.IsEmpty(Window(Home).Property(SpotlightWidget))] | [String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Skin.HasSetting(Enable.AlternateSpotlight)]"/> -->
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="label" value="stacked spotlight"/>
-				<param name="posy" value="380"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<right>0</right>
 				<left>0</left>
 				<!-- 153 difference -->
-				<height>1023</height>
+				<height>1118</height>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
@@ -340,8 +331,6 @@
 				</include> -->
 				<include>SpotlightAnimations_Stacked</include>
 				<onfocus>SetProperty(SpotlightWidget,true,Home)</onfocus>
-				<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_spotlight_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<include content="WidgetListCommonStacked">
@@ -385,16 +374,14 @@
 				<param name="label">$PARAM[widget_header]</param>
 				<param name="list_id" value="$PARAM[list_id]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="poster"/>
-				<param name="posy" value="340"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>619</height>
+				<height>599</height>
 				<focusposition>0</focusposition>
 				<movement>4</movement>
 				<onright>$PARAM[list_id]</onright>
@@ -402,7 +389,7 @@
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -441,27 +428,25 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="false"/>
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="stacked poster"/>
-				<param name="posy" value="285"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<left>0</left>
 				<right>0</right>
-				<height>619</height>
+				<height>599</height>
 				<focusposition>0</focusposition>
 				<movement>4</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<include>SpotlightAnimations_Stacked</include>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_spotlight_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommonStacked">
@@ -499,16 +484,14 @@
 				<param name="label">$PARAM[widget_header]</param>
 				<param name="list_id" value="$PARAM[list_id]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="small poster"/>
-				<param name="posy" value="310"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>549</height>
+				<height>529</height>
 				<focusposition>0</focusposition>
 				<movement>5</movement>
 				<onright>$PARAM[list_id]</onright>
@@ -516,7 +499,7 @@
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -555,27 +538,25 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="false"/>
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="stacked small poster"/>
-				<param name="posy" value="255"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<right>0</right>
 				<left>0</left>
-				<height>549</height>
+				<height>529</height>
 				<focusposition>0</focusposition>
 				<movement>5</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<include>SpotlightAnimations_Stacked</include>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_spotlight_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommonStacked">
@@ -613,24 +594,22 @@
 				<param name="label">$PARAM[widget_header]</param>
 				<param name="list_id" value="$PARAM[list_id]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="feature poster"/>
-				<param name="posy" value="475"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>890</height>
+				<height>875</height>
 				<focusposition>0</focusposition>
 				<movement>2</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
+				<onfocus>SetProperty(FeatureWidgetFocused,true,Home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -669,27 +648,25 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="false"/>
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="stacked feature poster"/>
-				<param name="posy" value="420"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<left>0</left>
 				<right>0</right>
-				<height>890</height>
+				<height>875</height>
 				<focusposition>0</focusposition>
 				<movement>2</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<include>SpotlightAnimations_Stacked</include>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
+				<onfocus>SetProperty(FeatureWidgetFocused,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_spotlight_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommonStacked">
@@ -727,23 +704,20 @@
 				<param name="label">$PARAM[widget_header]</param>
 				<param name="list_id" value="$PARAM[list_id]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="landscape"/>
-				<param name="posy" value="290"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>481</height>
+				<height>471</height>
 				<focusposition>0</focusposition>
 				<movement>2</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
-				<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -782,24 +756,21 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="false"/>
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="stacked landscape"/>
-				<param name="posy" value="230"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<right>0</right>
 				<left>0</left>
-				<height>481</height>
+				<height>471</height>
 				<focusposition>0</focusposition>
 				<movement>2</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<include>SpotlightAnimations_Stacked</include>
-				<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
@@ -839,16 +810,14 @@
 				<param name="label">$PARAM[widget_header]</param>
 				<param name="list_id" value="$PARAM[list_id]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="small landscape"/>
-				<param name="posy" value="290"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>417</height>
+				<height>407</height>
 				<focusposition>0</focusposition>
 				<movement>3</movement>
 				<onright>$PARAM[list_id]</onright>
@@ -856,7 +825,7 @@
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<onfocus>SetProperty(SmallLandscapeWidgetFocused,true,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -895,16 +864,15 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="false"/>
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="stacked small landscape"/>
-				<param name="posy" value="230"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<right>0</right>
 				<left>0</left>
-				<height>417</height>
+				<height>407</height>
 				<focusposition>0</focusposition>
 				<movement>3</movement>
 				<onright>$PARAM[list_id]</onright>
@@ -912,10 +880,9 @@
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<include>SpotlightAnimations_Stacked</include>
 				<onfocus>SetProperty(SmallLandscapeWidgetFocused,true,Home)</onfocus>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
 				<onfocus>ClearProperty(altus_spotlight_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommonStacked">
@@ -955,10 +922,8 @@
 				<!-- <param name="visible" value="String.IsEmpty(Window(Home).Property(SpotlightWidget))"/> -->
 				<!-- <param name="visible" value="!ControlGroup(2000).HasFocus | [!Control.HasFocus($PARAM[list_id]) + !String.IsEmpty(Window(Home).Property(SpotlightWidget))] | [String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Skin.HasSetting(Enable.AlternateSpotlight)]"/> -->
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="feature landscape"/>
-				<param name="posy" value="330"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
@@ -969,10 +934,9 @@
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
-				<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
+				<onfocus>SetProperty(FeatureWidgetFocused,true,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(StackedWidget,Home)</onfocus>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<!-- <include content="SpotlightAnimations_Fade">
 					<param name="list_id" value="$PARAM[list_id]"/>
@@ -1014,13 +978,12 @@
 				<param name="visible" value="false"/>
 				<!-- <param name="visible" value="!ControlGroup(2000).HasFocus | [!Control.HasFocus($PARAM[list_id]) + !String.IsEmpty(Window(Home).Property(SpotlightWidget))] | [String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Skin.HasSetting(Enable.AlternateSpotlight)]"/> -->
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
-				<param name="label" value="stacked feature landscape"/>
-				<param name="posy" value="380"/>
+				<param name="posy" value="97"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
-				<top>57</top>
+				<top>17</top>
 				<right>0</right>
 				<left>0</left>
 				<!-- 153 difference -->
@@ -1029,8 +992,7 @@
 				<orientation>horizontal</orientation>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<include>SpotlightAnimations_Stacked</include>
-				<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
+				<onfocus>SetProperty(FeatureWidgetFocused,true,Home)</onfocus>
 				<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
@@ -1074,17 +1036,15 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="square"/>
-				<param name="posy" value="330"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<left>50</left>
 				<right>0</right>
-				<height>540</height>
+				<height>550</height>
 				<onright>$PARAM[list_id]</onright>
 				<movement>5</movement>
 				<include content="WidgetListCommon">
@@ -1136,7 +1096,7 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 				<param name="label" value="small square"/>
@@ -1152,7 +1112,7 @@
 				<include content="WidgetListCommon">
 					<param name="list_id" value="$PARAM[list_id]"/>
 				</include>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<animation effect="slide" end="10,0" time="300" condition="Control.HasFocus($PARAM[list_id])">Conditional</animation>
 				<visible>$PARAM[visible]</visible>
 				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
@@ -1199,17 +1159,15 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="small square"/>
-				<param name="posy" value="285"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<left>0</left>
 				<right>0</right>
-				<height>499</height>
+				<height>489</height>
 				<onright>$PARAM[list_id]</onright>
 				<focusposition>0</focusposition>
 				<movement>6</movement>
@@ -1261,11 +1219,9 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="category"/>
-				<param name="posy" value="240"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
@@ -1276,7 +1232,7 @@
 				<movement>5</movement>
 				<onright>$PARAM[list_id]</onright>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -1324,23 +1280,21 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="category"/>
-				<param name="posy" value="240"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
-				<height>350</height>
+				<height>370</height>
 				<focusposition>0</focusposition>
 				<movement>3</movement>
 				<onright>$PARAM[list_id]</onright>
 				<movement>5</movement>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
 				<include content="WidgetListCommon">
@@ -1388,26 +1342,24 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListWidgetLabel">
+			<include content="BusyListWidgetSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="stacked control"/>
-				<param name="posy" value="214"/>
+				<param name="posy" value="187"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
 				<right>0</right>
 				<left>0</left>
 				<!-- 350 -->
-				<height>233</height>
+				<height>273</height>
 				<focusposition>0</focusposition>
 				<movement>4</movement>
 				<onright>$PARAM[list_id]</onright>
 				<onfocus>SetProperty(altus_saved_list_id,$PARAM[list_id],home)</onfocus>
 				<onfocus>SetProperty(altus_child_id,$PARAM[child_id],home)</onfocus>
-				<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-				<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
+				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(SmallLandscapeWidgetFocused,Home)</onfocus>
 				<onfocus>ClearProperty(altus_spotlight_linked_list_id,home)</onfocus>
 				<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
@@ -1537,11 +1489,9 @@
 				<param name="visible" value="$PARAM[visible]"/>
 				<param name="item_treshold" value="$PARAM[item_treshold]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="PVR"/>
-				<param name="posy" value="315"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>107</top>
@@ -1592,11 +1542,9 @@
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
 			</include>
-			<include content="BusyListLabel">
+			<include content="BusyListSpinner">
 				<param name="list_id" value="$PARAM[list_id]"/>
 				<param name="visible" value="$PARAM[visible]"/>
-				<param name="label" value="weather"/>
-				<param name="posy" value="340"/>
 			</include>
 			<control type="fixedlist" id="$PARAM[list_id]">
 				<top>157</top>
@@ -1948,50 +1896,58 @@
 		<preloaditems>2</preloaditems>
 	</include>
 
-	<include name="BusyListLabel">
-		<param name="posy">160</param>
-		<!-- <param name="posx">50</param> -->
+	<include name="BusyListSpinner">
+		<param name="posy">187</param>
 		<param name="visible">true</param>
-		<param name="label">$PARAM[label]</param>
 		<definition>
 			<control type="group" id="$PARAM[list_id]599">
 				<height>180</height>
-				<left>50</left>
+				<left>43</left>
 				<visible>Container($PARAM[list_id]).IsUpdating + !Integer.IsGreater(Container($PARAM[list_id]).NumItems,0)</visible>
 				<visible>$PARAM[visible]</visible>
-				<animation condition="true" reversible="true" pulse="true">
-					<effect type="fade" start="100" end="10" time="900" tween="sine" easing="inout" />
-				</animation>
-				<control type="label" id="$PARAM[list_id]600">
+				<control type="image">
 					<top>$PARAM[posy]</top>
-					<label>[I]Loading $PARAM[label] widget...[/I]</label>
-					<font>font32_title</font>
-					<textcolor>$VAR[FocusColorTheme]</textcolor>
-					<shadowcolor>text_shadow</shadowcolor>
+					<width>50</width>
+					<height>50</height>
+					<aspectratio aligny="center">keep</aspectratio>
+					<texture colordiffuse="$VAR[FocusColorTheme]">dialogs/extendedprogress/loading-back.png</texture>
+				</control>
+				<control type="image">
+					<top>$PARAM[posy]</top>
+					<width>50</width>
+					<height>50</height>
+					<aspectratio aligny="center">keep</aspectratio>
+					<texture colordiffuse="$VAR[FocusColorTheme]">dialogs/extendedprogress/loading.png</texture>
+					<animation effect="rotate" center="auto" start="360" end="0" time="3333" loop="true" condition="true">Conditional</animation>
 				</control>
 			</control>
 		</definition>
 	</include>
 
-	<include name="BusyListWidgetLabel">
+	<include name="BusyListWidgetSpinner">
 		<param name="posy">285</param>
 		<param name="visible">true</param>
 		<param name="label">$PARAM[label]</param>
 		<definition>
 			<control type="group" id="$PARAM[list_id]599">
 				<height>180</height>
-				<left>50</left>
+				<left>43</left>
 				<visible>Container($PARAM[list_id]).IsUpdating + !Integer.IsGreater(Container($PARAM[list_id]).NumItems,0)</visible>
 				<visible>$PARAM[visible]</visible>
-				<animation condition="true" reversible="true" pulse="true">
-					<effect type="fade" start="100" end="10" time="900" tween="sine" easing="inout" />
-				</animation>
-				<control type="label" id="$PARAM[list_id]600">
+				<control type="image">
 					<top>$PARAM[posy]</top>
-					<label>[I]Loading $PARAM[label] widget...[/I]</label>
-					<font>font32_title</font>
-					<textcolor>$VAR[FocusColorTheme]</textcolor>
-					<shadowcolor>text_shadow</shadowcolor>
+					<width>50</width>
+					<height>50</height>
+					<aspectratio aligny="center">keep</aspectratio>
+					<texture colordiffuse="$VAR[FocusColorTheme]">dialogs/extendedprogress/loading-back.png</texture>
+				</control>
+				<control type="image">
+					<top>$PARAM[posy]</top>
+					<width>50</width>
+					<height>50</height>
+					<aspectratio aligny="center">keep</aspectratio>
+					<texture colordiffuse="$VAR[FocusColorTheme]">dialogs/extendedprogress/loading.png</texture>
+					<animation effect="rotate" center="auto" start="360" end="0" time="3333" loop="true" condition="true">Conditional</animation>
 				</control>
 			</control>
 		</definition>
@@ -2058,6 +2014,7 @@
 		<onload condition="String.IsEmpty(Skin.String(53OnDownSetting.MovieTV))">Skin.SetString(53OnDownSetting.MovieTV,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(53OnDownSetting.Other))">Skin.SetString(53OnDownSetting.Other,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(StudioLogoSetting))">Skin.SetString(StudioLogoSetting,0)</onload>
+		<onload condition="String.IsEmpty(Skin.String(StudioLogoColorSetting))">Skin.SetString(StudioLogoColorSetting,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(OnRightSetting.MovieTV))">Skin.SetString(OnRightSetting.MovieTV,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(OnRightSetting.Other))">Skin.SetString(OnRightSetting.Other,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(OnRightSetting))">Skin.SetString(OnRightSetting,0)</onload>

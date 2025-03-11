@@ -33,7 +33,7 @@
 	<include file="View_53_Slide.xml" />
 	<include file="View_54_PosterInfo.xml" />
 	<include file="View_55_LandscapeInfo.xml" />
-	<include file="View_56_ListInfo.xml" />
+	<include file="View_56_FlixInfo.xml" />
 	<include file="View_57_Season.xml" />
 	<include file="View_503_NowPlaying.xml" />
 	<include file="View_500_Wall.xml" />
@@ -65,6 +65,7 @@
 	<constant name="list_bottom_offset">70</constant>
 	<constant name="list_top_offset">660</constant>
 	<constant name="list_item_height">69</constant>
+	<constant name="border_size">0.6</constant>
 
 	<include name="CommonScrollbars">
 		<param name="bottom_offset">list_bottom_offset</param>
@@ -108,7 +109,23 @@
 						<orientation>vertical</orientation>
 						<texturesliderbackground />
 						<animation effect="zoom" end="50,100" time="300" tween="sine" center="35,0" easing="inout" condition="![Container.Scrolling | Control.HasFocus(531)]">conditional</animation>
-						<visible>Control.IsVisible(54) | Control.IsVisible(55) | Control.IsVisible(56) | Control.IsVisible(500) | Control.IsVisible(501)</visible>
+						<visible>Control.IsVisible(500) | Control.IsVisible(501)</visible>
+					</control>
+					<control type="scrollbar" id="532">
+						<left>529.5</left>
+						<top>0</top>
+						<bottom>0</bottom>
+						<width>8</width>
+						<texturesliderbar colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texturesliderbar>
+						<texturesliderbarfocus colordiffuse="$VAR[FocusColorTheme]">colors/white.png</texturesliderbarfocus>
+						<onleft condition="![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">9000</onleft>
+						<onleft condition="Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)">9000</onleft>
+						<onright condition="![Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)]">50</onright>
+						<onright condition="Window.IsVisible(musicplaylist) | Window.IsVisible(videoplaylist)">56</onright>
+						<orientation>vertical</orientation>
+						<texturesliderbackground />
+						<animation effect="fade" time="300" start="0" end="100" tween="cubic" easing="inout">Visible</animation>
+						<visible>[Control.IsVisible(54) | Control.IsVisible(55)] + [Control.HasFocus(532) | Container.Scrolling]</visible>
 					</control>
 					<!-- <control type="scrollbar" id="532">
 						<left>35</left>
@@ -147,7 +164,7 @@
 						<!-- <ondown condition="Control.IsVisible(51) | Control.IsVisible(54)">Container.SetViewMode(500)</ondown>
 						<ondown condition="Control.IsVisible(55)">Container.SetViewMode(501)</ondown> -->
 						<orientation>horizontal</orientation>
-						<visible>Control.IsVisible(51) | Control.IsVisible(53) | Control.IsVisible(57)</visible>
+						<visible>Control.IsVisible(51) | Control.IsVisible(53) | Control.IsVisible(56) |  Control.IsVisible(57)</visible>
 						<animation effect="slide" end="0,6" time="300" tween="sine" easing="inout" condition="![Control.HasFocus(5199) | Container.Scrolling]">conditional</animation>
 						<animation effect="fade" start="0" end="100" time="200" delay="300">Visible</animation>
 						<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
@@ -333,7 +350,7 @@
 					<control type="label">
 						<left>40</left>
 						<top>0</top>
-						<right>40</right>
+						<right>70</right>
 						<bottom>0</bottom>
 						<align>$PARAM[align]</align>
 						<font>$PARAM[font]</font>
@@ -399,7 +416,7 @@
 					<control type="label">
 						<left>40</left>
 						<top>0</top>
-						<right>40</right>
+						<right>70</right>
 						<bottom>0</bottom>
 						<align>$PARAM[align]</align>
 						<font>$PARAM[font]</font>
@@ -1460,9 +1477,12 @@
 	<include name="DialogBackgroundCommons">
 		<param name="width">1220</param>
 		<param name="height">100%</param>
+		<param name="shade_visible">true</param>
+		<param name="darken_bg">true</param>
 		<param name="shade_right">290</param>
 		<param name="divider_left">930</param>
-		<param name="divider_visible">true</param>
+		<param name="left_divider_visible">true</param>
+		<param name="right_divider_visible">true</param>
 		<definition>
 			<control type="image">
 				<left>-2000</left>
@@ -1472,7 +1492,7 @@
 				<animation effect="fade" time="300">VisibleChange</animation>
 				<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
 				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
-				<texture colordiffuse="BFFFFFFF">colors/black.png</texture>
+				<texture colordiffuse="A6FFFFFF">colors/black.png</texture>
 				<visible>$PARAM[darken_bg]</visible>
 			</control>
 			<control type="button">
@@ -1502,6 +1522,7 @@
 					<right>0</right>
 					<bottom>0</bottom>
 					<texture colordiffuse="$VAR[DialogBackgroundDiffuse]">$VAR[DialogBackground]</texture>
+					<aspectratio>scale</aspectratio>
 				</control>
 				<control type="image">
 					<left>0</left>
@@ -1509,6 +1530,7 @@
 					<right>$PARAM[shade_right]</right>
 					<bottom>0</bottom>
 					<texture colordiffuse="4D000000">colors/dark.png</texture>
+					<visible>$PARAM[shade_visible]</visible>
 				</control>
 				<control type="image">
 					<left>-1</left>
@@ -1516,7 +1538,7 @@
 					<width>1</width>
 					<bottom>0</bottom>
 					<texture colordiffuse="$VAR[FocusColorTheme]">masks/mainmenupanel_divider.png</texture>
-					<visible>$PARAM[divider_visible]</visible>
+					<visible>$PARAM[left_divider_visible]</visible>
 				</control>
 				<control type="image">
 					<left>$PARAM[divider_left]</left>
@@ -1524,10 +1546,12 @@
 					<width>1</width>
 					<bottom>0</bottom>
 					<texture colordiffuse="$VAR[FocusColorTheme]">masks/mainmenupanel_divider.png</texture>
-					<visible>$PARAM[divider_visible]</visible>
+					<visible>$PARAM[right_divider_visible]</visible>
 				</control>
 				<control type="label" id="$PARAM[header_id]">
-					<posx>30</posx> 
+					<!-- <posx>30</posx> -->
+					<left>30</left>
+					<right>30</right>
 					<top>20</top>
 					<height>70</height>
 					<label>$PARAM[header_label]</label>
@@ -1536,6 +1560,8 @@
 					<font>font36_title</font>
 					<textcolor>unfocused_text</textcolor>
 					<shadowcolor>black</shadowcolor>
+					<scroll>true</scroll>
+					<scrollspeed>100</scrollspeed>
 				</control>
 			</control>
 		</definition>
@@ -1628,16 +1654,6 @@
 	</include>
 
 	<include name="ContextFade">
-		<!-- <control type="image">
-			<left>-1920</left>
-			<top>-1080</top>
-			<width>5760</width>
-			<height>3240</height>
-			<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
-			<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
-			<texture colordiffuse="F2FFFFFF">colors/black.png</texture>
-			<texture colordiffuse="$VAR[FocusColorTheme]" flipy="true">colors/commons.png</texture>
-		</control> -->
 		<control type="image">
 			<left>-1920</left>
 			<top>-1080</top>
@@ -1653,7 +1669,6 @@
 		<!-- <param name="sublabel">$INFO[Container.SortMethod,$LOCALIZE[31022]: ,  ∙  ]$INFO[Container.CurrentItem,, / ]$INFO[Container.NumItems]</param> -->
 		<definition>
 			<control type="group">
-				<!-- <include>MediaMenuAnimations</include> -->
 				<animation effect="slide" end="0,-112" time="300" tween="sine" easing="inout" condition="$EXP[infodialog_active]">conditional</animation>
 				<depth>DepthBars</depth>
 				<!-- <animation effect="fade" start="0" end="100" time="300" condition="!Container.Scrolling">Conditional</animation> -->
@@ -1942,7 +1957,7 @@
 	<include name="ColoredBackgroundImages">
 		<control type="group">
 			<depth>DepthBackground</depth>
-			<include>FullScreenDimensions</include>
+			<include>FullScreenFanartDimensions</include>
 			<control type="image" id="100000">
 				<visible>false</visible>
 				<texture fallback="$VAR[AltusCustomBackgroundImage]">$VAR[ImageTextureSourceVar]</texture>
@@ -2080,7 +2095,7 @@
 					<aspectratio>scale</aspectratio>
 					<fadetime>400</fadetime>
 					<texture background="true" colordiffuse="$VAR[MainFanartDiffuse]" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[ImageTextureSourceVar]</texture>
-					<visible>[[String.IsEqual(Skin.String(BackgroundSetting),1) | [String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEmpty(Window(home).Property(listitem_blurred))]] + String.IsEmpty(Window(Home).Property(SpotlightWidget)) + 
+					<visible>[[[String.IsEqual(Skin.String(BackgroundSetting),1) + !Control.IsVisible(56)] | [String.IsEqual(Skin.String(BackgroundSetting),2) + String.IsEmpty(Window(home).Property(listitem_blurred))]] + String.IsEmpty(Window(Home).Property(SpotlightWidget)) + 
 					![Player.HasVideo | [Player.HasAudio + Visualisation.Enabled + !String.IsEmpty(Visualisation.Name)]] | 
 					!String.IsEmpty(Window(Videos).Property(PlayingBackgroundMedia))]
 					</visible>
@@ -2312,14 +2327,14 @@
 	</include>
 
 	<include name="MenuContentPanel">
-    <param name="width">498</param>
-    <param name="height">1080</param>
+    <param name="width">492</param>
+    <param name="height">100%</param>
     <param name="bg_left">0</param>
-		<param name="dividerleft">498</param>
+		<param name="dividerleft">492</param>
     <param name="right"></param>
     <param name="top">0</param>
     <param name="bottom">0</param>
-    <param name="color">80000000</param>
+    <param name="color">$VAR[MenuBackgroundDiffuse]</param>
     <param name="visible">true</param>
     <param name="divider_visible">true</param>
     <definition>
@@ -2331,7 +2346,9 @@
 					<height>$PARAM[height]</height>
 					<width>$PARAM[width]</width>
 					<right>$PARAM[right]</right>
-					<texture colordiffuse="$PARAM[color]">colors/white.png</texture>
+					<texture colordiffuse="$PARAM[color]">$VAR[MenuBackgroundTexture]</texture>
+					<aspectratio>scale</aspectratio>
+					<fadetime>500</fadetime>
 				</control>
 				<control type="image">
 					<top>$PARAM[top]</top>
@@ -2502,7 +2519,9 @@
 				<left>25</left>
 				<width>338</width>
 				<height>198</height>
+				<bordersize>1</bordersize>
 				<texture colordiffuse="66000000">colors/white.png</texture>
+				<bordertexture border="1" colordiffuse="$VAR[FocusColorTheme]" infill="false">masks/bordertexture2.png</bordertexture>
 			</control>
 			<control type="image">
 				<centerleft>54%</centerleft>
@@ -2700,8 +2719,10 @@
 			<include>HiddenObject</include>
 			<onfocus condition="Control.IsVisible(51)">SetProperty(Returnto51,true,Home)</onfocus>
 			<onfocus condition="Control.IsVisible(53)">SetProperty(Returnto53,true,Home)</onfocus>
+			<onfocus condition="Control.IsVisible(56)">SetProperty(Returnto56,true,Home)</onfocus>
 			<onunfocus>ClearProperty(Returnto51,Home)</onunfocus>
 			<onunfocus>ClearProperty(Returnto53,Home)</onunfocus>
+			<onunfocus>ClearProperty(Returnto56,Home)</onunfocus>
 		</control>
 	</include>
 
@@ -2719,83 +2740,12 @@
 		</control>
 	</include> -->
 
-	<!-- <include name="SetLandscapeArtworkProperties">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>SetProperty(LandscapeWidgetFocused,true,Home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="SetStackedProperties">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>SetProperty(StackedWidget,true,Home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="SaveSpotlightLinkedListID">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>SetProperty(altus_spotlight_linked_list_id,$PARAM[parent_id],home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="SaveStackedLinkedListID">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>SetProperty(altus_stacked_linked_list_id,$PARAM[parent_id],home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="ClearStackedLinkedListID">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="ClearSpotlightLinkedListID">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>ClearProperty(altus_spotlight_linked_list_id,home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="SetSpotlightProperties">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus condition="!Skin.HasSetting(Enable.AlternateSpotlight)">SetProperty(SpotlightWidget,true,Home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="ClearStackedProperties">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>ClearProperty(StackedWidget,Home)</onfocus>
-			<onfocus>ClearProperty(altus_stacked_linked_list_id,home)</onfocus>
-		</control>
-	</include> -->
-
-	<!-- <include name="ClearSpotlightProperties">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
-		</control>
-	</include> -->
-	
-	<!-- <include name="ClearLandscapeProperties">
-		<control type="button">
-			<visible>false</visible>
-			<onfocus>ClearProperty(LandscapeWidgetFocused,Home)</onfocus>
-		</control>
-	</include> -->
-
 	<include name="53InfoWidth_StudioEnabled">
-		<right>300</right>
+		<right>310</right>
 	</include>
 
 	<include name="53InfoWidth_StudioDisabled">
-		<right>50</right>
+		<right>70</right>
 	</include>
 
 </includes>

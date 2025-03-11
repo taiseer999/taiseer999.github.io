@@ -285,10 +285,10 @@
 				<!-- STUDIO LOGO -->
 				<control type="button" id="63710">
 					<label>Studio logos</label>
-					<label2>$VAR[StudioLogoSettingVar]</label2>
+					<label2>$VAR[StudioLogoColorSettingVar]</label2>
 					<include>DefaultSettingButton</include>
-					<onclick>$VAR[StudioLogoToggleVar]</onclick>
-					<onclick condition="String.IsEqual(Skin.String(StudioLogoSetting),2) + !System.HasAddon(resource.images.studios.coloured)">InstallAddon(resource.images.studios.coloured)</onclick>
+					<onclick>$VAR[StudioLogoColorToggleVar]</onclick>
+					<onclick condition="String.IsEqual(Skin.String(StudioLogoColorSetting),2) + !System.HasAddon(resource.images.studios.coloured)">InstallAddon(resource.images.studios.coloured)</onclick>
 				</control>
 			</control>
 
@@ -792,7 +792,7 @@
 					<onclick>Skin.ToggleSetting(altus_category_widget_display_delay)</onclick>
 				</control>
 				<control type="button" id="64012">
-					<label>Clearlogo</label>
+					<label>Header</label>
 					<label2>$VAR[WidgetClearlogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[WidgetClearlogoToggleVar]</onclick>
@@ -803,12 +803,12 @@
 					<onclick>Skin.ToggleSetting(Disable.HomePanelRatings)</onclick>
 					<selected>!Skin.HasSetting(Disable.HomePanelRatings)</selected>
 				</control>
-				<control type="radiobutton" id="64014">
-					<label>Studio logo</label>
+				<control type="button" id="64014">
+					<label>Footer (Studio logo)</label>
+					<label2>$VAR[StudioLogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick condition="!System.HasAddon(resource.images.studios.white)">InstallAddon(resource.images.studios.white)</onclick>
-					<selected>Skin.HasSetting(Enable.HomePanelStudioLogos)</selected>
-					<onclick>Skin.ToggleSetting(Enable.HomePanelStudioLogos)</onclick>
+					<onclick>$VAR[StudioLogoToggleVar]</onclick>
 				</control>
 			</control>
 
@@ -1094,7 +1094,7 @@
 			<left>1480</left>
 			<top>130</top>
 			<right>30</right>
-			<height>877</height>
+			<height>890</height>
 			<font>font27</font>
 			<align>center</align>
 			<aligny>center</aligny>

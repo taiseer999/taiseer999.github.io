@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <includes>
 	<include name="MediaMenuItemsCommon">
-		<width>504</width>
+		<width>492</width>
 		<textoffsetx>20</textoffsetx>
 		<textoffsety>14</textoffsety>
 		<top>0</top>
 		<height>71</height>
-		<radioposx>400</radioposx>
+		<radioposx>385</radioposx>
 		<aligny>left</aligny>
 		<textcolor>unfocused_text</textcolor>
 		<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
@@ -52,7 +52,7 @@
 			<control type="grouplist" id="9000">
 				<top>50</top>
 				<left>0</left>
-				<width>505</width>
+				<width>492</width>
 				<height>100%</height>
 				<onleft>9000</onleft>
 				<onup>9000</onup>
@@ -66,7 +66,7 @@
 						<label>$LOCALIZE[31148]</label>
 					</control>
 					<control type="label">
-						<width>505</width>
+						<width>492</width>
 						<textoffsetx>20</textoffsetx>
 						<textoffsety>15</textoffsety>
 						<height>50</height>
@@ -255,7 +255,7 @@
 		</definition>
 	</include>
 	<include name="MediaMenuLabelCommon">
-		<width>505</width>
+		<width>492</width>
 		<textoffsetx>20</textoffsetx>
 		<textoffsety>10</textoffsety>
 		<height>50</height>
@@ -267,9 +267,9 @@
 	<include name="MediaMenuCommon">
 		<include>OpenClose_Left</include>
 		<depth>DepthSideBlade</depth>
-		<left>-505</left>
+		<left>-493</left>
 		<animation type="Conditional" condition="$EXP[sidebar_visible]" reversible="true">
-			<effect type="slide" start="0" end="505" time="500" tween="cubic" easing="inout" />
+			<effect type="slide" start="0" end="492" time="400" tween="cubic" easing="inout" />
 		</animation>
 		<!-- <control type="image">
 			<width>4000</width>
@@ -279,10 +279,14 @@
 			<visible>$EXP[sidebar_visible] + !System.HasActiveModalDialog</visible>
 			<animation effect="fade" time="200">VisibleChange</animation>
 		</control> -->
-		<include content="MenuContentPanel">
-			<param name="width" value="505"/>
-			<param name="dividerleft" value="504"/>
-			<param name="bg_left" value="-1"/>
+		<include content="DialogBackgroundCommons">
+			<param name="header_label" value="" />
+			<param name="header_id" value="1" />
+			<param name="width" value="492" />
+			<param name="left_divider_visible" value="false" />
+			<param name="divider_left" value="492" />
+			<param name="shade_right" value="0" />
+			<param name="darken_bg" value="$EXP[sidebar_visible]" />
 		</include>
 		<control type="button" id="6131">
 			<left>0</left>
@@ -348,7 +352,7 @@
 		<definition>
 			<left>0</left>
 			<top>100</top>
-			<width>505</width>
+			<width>492</width>
 			<height>970</height>
 			<onleft>9000</onleft>
 			<onup>9000</onup>

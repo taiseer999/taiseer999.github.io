@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window type="dialog" id="1101">
 	<defaultcontrol always="true">11000</defaultcontrol>
-	<include>Animation_DialogPopupOpenClose</include>
+	<include>OpenClose_Right</include>
 	<onunload>ClearProperty(settingslist_header,Home)</onunload>
 	<onunload>ClearProperty(settingslist_content,Home)</onunload>
 	<controls>
 		<control type="group">
-			<centerleft>50%</centerleft>
-			<height>670</height>
-			<centertop>50%</centertop>
+			<right>0</right>
+			<height>100%</height>
+			<top>0</top>
 			<width>700</width>
 			<visible>!Window.IsActive(DialogSettings.xml) + !Window.IsActive(DialogSlider.xml) + !Window.IsActive(GameVideoFilter) + !Window.IsActive(GameStretchMode) + !Window.IsActive(GameControllers) + !Window.IsActive(GameVideoRotation)</visible>
 			<animation effect="fade" time="200">VisibleChange</animation>
 			<control type="group">
-				<left>50</left>
+				<left>0</left>
 				<include content="DialogBackgroundCommons">
+					<param name="width" value="700" />
+					<param name="shade_right" value="0" />
+					<param name="divider_left" value="0" />
 					<param name="header_label" value="$INFO[Window(home).Property(settingslist_Header)]" />
 					<param name="header_id" value="1" />
 				</include>
 			</control>
 			<control type="group" id="11000">
-				<left>25</left>
+				<left>0</left>
 				<top>100</top>
 				<control type="grouplist" id="11100">
 					<visible>String.IsEqual(window(home).Property(settingslist_content),osd)</visible>
 					<width>700</width>
-					<height>350</height>
+					<height>700</height>
 					<itemgap>0</itemgap>
 					<onup>11100</onup>
 					<ondown>11100</ondown>

@@ -16,6 +16,7 @@
 					<effect type="fade" start="100" end="60" time="300" tween="sine" easing="inout" />
 					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
 				</animation>
+				
 				<!-- <include>SearchMenuAnimations</include> -->
 				<include>OpenClose_Right</include>
 				<!-- SEARCH RESULTS -->
@@ -293,7 +294,7 @@
 							<font>font12</font>
 							<align>center</align>
 							<aligny>center</aligny>
-							<textcolor>grey</textcolor>
+							<textcolor>lightgrey</textcolor>
 							<label>$VAR[SearchSubmenuButtonLabelsVar]</label>
 						</control>
 						<!-- <control type="label">

@@ -2,28 +2,20 @@
 <window>
 	<defaultcontrol>9000</defaultcontrol>
 	<coordinates>
-		<origin x="712" y="50"/>
+		<origin x="0" y="0"/>
 	</coordinates>
-	<include>Animation_DialogPopupOpenClose</include>
+	<include>OpenClose_Left</include>
 	<controls>
-		<include>ContextFade</include>
 		<control type="group">
-			<include content="CenterContext">
-				<param name="id" value="9000" />
+			<include content="DialogBackgroundCommons">
+				<param name="header_label" value="$LOCALIZE[31072]" />
+				<param name="header_id" value="1" />
+				<param name="width" value="498" />
+				<param name="left_divider_visible" value="false" />
+				<param name="divider_left" value="498" />
+				<param name="shade_right" value="0" />
 			</include>
-			<width>446</width>
-			<height max="910">auto</height>
-			<!-- <usecontrolcoords>true</usecontrolcoords> -->
-			<!-- <control type="label">
-				<top>-70</top>
-				<left>-225</left>
-				<width>896</width>
-				<height>70</height>
-				<font>font36_title</font>
-				<textcolor>unfocused_text</textcolor>
-				<align>center</align>
-				<label>$LOCALIZE[31072]</label>
-			</control> -->
+			<width>498</width>
 			<control type="panel" id="9000">
 				<include>ButtonMenuList</include>
 				<content>
@@ -107,12 +99,6 @@
 					</item>
 				</content>
 			</control>
-			<include content="UpDownArrows">
-				<param name="container_id" value="9000" />
-				<param name="posx" value="199" />
-				<param name="up_posy" value="-185" />
-				<param name="down_posy" value="920" />
-			</include>
 		</control>
 	</controls>
 </window>

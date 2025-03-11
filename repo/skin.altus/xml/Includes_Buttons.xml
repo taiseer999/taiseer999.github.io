@@ -355,45 +355,45 @@
 	</include>
 	<include name="ButtonMenuList">
 		<left>0</left>
-		<top>0</top>
-		<width>496</width>
-		<height>910</height>
+		<top>105</top>
+		<width>498</width>
+		<bottom>0</bottom>
 		<onleft>9000</onleft>
-		<onright>9000</onright>
+		<onright>Action(close)</onright>
 		<onup>9000</onup>
 		<ondown>9000</ondown>
 		<orientation>vertical</orientation>
-		<itemlayout height="70" width="446">
-			<control type="image">
+		<itemlayout height="65" width="498">
+			<!-- <control type="image">
 				<left>0</left>
 				<top>0</top>
-				<width>446</width>
-				<height>70</height>
+				<width>498</width>
+				<height>65</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]">colors/commons.png</texture>
-			</control>
+			</control> -->
 			<control type="label">
-				<textoffsetx>20</textoffsetx>
-				<width>446</width>
-				<height>70</height>
-				<align>center</align>
+				<textoffsetx>45</textoffsetx>
+				<width>498</width>
+				<height>65</height>
+				<align>left</align>
 				<aligny>center</aligny>
 				<textcolor>unfocused_text</textcolor>
 				<label>$INFO[ListItem.Label]</label>
 				<font>font32</font>
 			</control>
 		</itemlayout>
-		<focusedlayout height="70" width="446">
+		<focusedlayout height="65" width="498">
 			<control type="image">
 				<top></top>
-				<width>446</width>
-				<height>70</height>
+				<width>498</width>
+				<height>65</height>
 				<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
 			</control>
 			<control type="label">
-				<textoffsetx>20</textoffsetx>
-				<width>446</width>
-				<height>70</height>
-				<align>center</align>
+				<textoffsetx>45</textoffsetx>
+				<width>498</width>
+				<height>65</height>
+				<align>left</align>
 				<aligny>center</aligny>
 				<label>$INFO[ListItem.Label]</label>
 				<font>font32</font>

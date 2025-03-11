@@ -405,7 +405,7 @@ msgstr "Teletestu"
 
 #. viewtype name
 msgctxt "#31107"
-msgid "ListInfo"
+msgid "FlixInfo"
 msgstr ""
 
 # empty strings from id 31108 to 31109

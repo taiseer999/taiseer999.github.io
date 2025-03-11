@@ -427,9 +427,9 @@
     <param name="has_status_icon">false</param>
     <param name="info_update">0</param>
     <definition>
-			<itemlayout height="101" infoupdate="$PARAM[info_update]">
+			<itemlayout height="99.1" infoupdate="$PARAM[info_update]">
 				<control type="progress">
-					<left>40</left>
+					<left>30</left>
 					<top>66</top>
 					<width>70</width>
 					<height>7</height>
@@ -437,16 +437,23 @@
 					<aligny>center</aligny>
 					<visible>ListItem.HasEpg + !$PARAM[has_info_icon]</visible>
 					<info>ListItem.Progress</info>
-					<texturebg colordiffuse="$VAR[FocusColorTheme]" border="3">progress/bars/progressback_pvr.png</texturebg>
-					<midtexture colordiffuse="$VAR[FocusColorTheme]" border="3">progress/bars/progress_pvr.png</midtexture>
+				</control>
+				<control type="image">
+					<right>25</right>
+					<top>0</top>
+					<width>6</width>
+					<height>99.1</height>
+					<aligny>center</aligny>
+					<texture colordiffuse="FF39FF14">colors/white.png</texture>
+					<visible>ListItem.IsPlaying</visible>
 				</control>
 				<control type="group">
 					<left>20</left>
-					<top>0</top>
+					<top>-1</top>
 					<right>0</right>
 					<bottom>0</bottom>
 					<control type="label">
-						<left>10</left>
+						<left>0</left>
 						<top>10</top>
 						<width>90</width>
 						<height>50</height>
@@ -454,6 +461,7 @@
 						<aligny>center</aligny>
 						<font>font32_title</font>
 						<textcolor>unfocused_text</textcolor>
+						<selectedcolor>unfocused_text</selectedcolor>
 						<label>$INFO[ListItem.ChannelNumberLabel]</label>
 					</control>
 					<control type="label">
@@ -463,6 +471,7 @@
 						<height>30</height>
 						<aligny>top</aligny>
 						<textcolor>unfocused_text</textcolor>
+						<selectedcolor>unfocused_text</selectedcolor>
 						<label>$PARAM[label1]</label>
 					</control>
 					<control type="label">
@@ -473,6 +482,7 @@
 						<align>right</align>
 						<aligny>top</aligny>
 						<textcolor>unfocused_text</textcolor>
+						<selectedcolor>unfocused_text</selectedcolor>
 						<label>$PARAM[label2]</label>
 					</control>
 					<control type="label">
@@ -483,6 +493,7 @@
 						<font>font12</font>
 						<aligny>top</aligny>
 						<textcolor>unfocused_text</textcolor>
+						<selectedcolor>unfocused_text</selectedcolor>
 						<label>$VAR[PVRListItemSubLabel]</label>
 					</control>
 					<control type="label">
@@ -494,6 +505,7 @@
 						<align>right</align>
 						<aligny>top</aligny>
 						<textcolor>unfocused_text</textcolor>
+						<selectedcolor>unfocused_text</selectedcolor>
 						<label>$INFO[ListItem.Comment]</label>
 					</control>
 					<control type="image">
@@ -516,7 +528,7 @@
 					</control>
 				</control>
 			</itemlayout>
-			<focusedlayout height="101" infoupdate="$PARAM[info_update]">
+			<focusedlayout height="99.1" infoupdate="$PARAM[info_update]">
 				<control type="image">
 					<left>0</left>
 					<top>0</top>
@@ -525,93 +537,106 @@
 					<visible>Control.HasFocus($PARAM[list_id])</visible>
 				</control>
 				<control type="progress">
-					<left>40</left>
+					<left>30</left>
 					<top>66</top>
 					<width>70</width>
 					<height>7</height>
 					<align>center</align>
 					<aligny>center</aligny>
 					<colordiffuse>$VAR[FocusedTextColorVar]</colordiffuse>
-					<texturebg border="3">osd/ProgressBack.png</texturebg>
-					<midtexture border="3">progress/bars/progress_pvr.png</midtexture>
+					<midtexture colordiffuse="$VAR[FocusedTextColorVar]">colors/white.png</midtexture>
 					<visible>ListItem.HasEpg + !$PARAM[has_info_icon]</visible>
 					<info>ListItem.Progress</info>
 				</control>
+				<control type="image">
+					<right>25</right>
+					<top>0</top>
+					<width>6</width>
+					<height>99.1</height>
+					<aligny>center</aligny>
+					<texture colordiffuse="$VAR[FocusedTextColorVar]">colors/white.png</texture>
+					<visible>ListItem.IsPlaying</visible>
+				</control>
 				<control type="group">
 					<left>20</left>
-					<top>0</top>
+					<top>-1</top>
 					<right>0</right>
 					<bottom>0</bottom>
-						<control type="label">
-							<left>10</left>
-							<top>10</top>
-							<width>90</width>
-							<height>50</height>
-							<align>center</align>
-							<aligny>center</aligny>
-							<font>font32_title</font>
-							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
-							<label>$INFO[ListItem.ChannelNumberLabel]</label>
-						</control>
-						<control type="label">
-							<left>105</left>
-							<right>180</right>
-							<top>10</top>
-							<height>30</height>
-							<aligny>top</aligny>
-							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
-							<label>$PARAM[label1]</label>
-						</control>
-						<control type="label">
-							<left>105</left>
-							<right>180</right>
-							<top>10</top>
-							<height>30</height>
-							<align>right</align>
-							<aligny>top</aligny>
-							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
-							<label>$PARAM[label2]</label>
-						</control>
-						<control type="label">
-							<left>105</left>
-							<right>180</right>
-							<top>53</top>
-							<height>30</height>
-							<font>font12</font>
-							<aligny>top</aligny>
-							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
-							<label>$VAR[PVRListItemSubLabelFocused]</label>
-						</control>
-						<control type="label">
-							<left>105</left>
-							<right>180</right>
-							<top>53</top>
-							<height>30</height>
-							<font>font12</font>
-							<align>right</align>
-							<aligny>top</aligny>
-							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
-							<label>$INFO[ListItem.Comment]</label>
-						</control>
-						<control type="image">
-							<right>110</right>
-							<top>0</top>
-							<width>32</width>
-							<aligny>center</aligny>
-							<aspectratio align="center">keep</aspectratio>
-							<texture>$VAR[PVRStatusImageVar]</texture>
-							<visible>$PARAM[has_status_icon]</visible>
-						</control>
-						<control type="image">
-							<right>70</right>
-							<top>0</top>
-							<width>80</width>
-							<aligny>center</aligny>
-							<aspectratio align="center">keep</aspectratio>
-							<visible>!$PARAM[only_label_condition] | ListItem.IsParentFolder</visible>
-							<texture>$INFO[ListItem.ActualIcon]</texture>
-						</control>
+					<control type="label">
+						<left>0</left>
+						<top>10</top>
+						<width>90</width>
+						<height>50</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<font>font32_title</font>
+						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
+						<label>$INFO[ListItem.ChannelNumberLabel]</label>
 					</control>
+					<control type="label">
+						<left>105</left>
+						<right>180</right>
+						<top>10</top>
+						<height>30</height>
+						<aligny>top</aligny>
+						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
+						<label>$PARAM[label1]</label>
+					</control>
+					<control type="label">
+						<left>105</left>
+						<right>180</right>
+						<top>10</top>
+						<height>30</height>
+						<align>right</align>
+						<aligny>top</aligny>
+						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
+						<label>$PARAM[label2]</label>
+					</control>
+					<control type="label">
+						<left>105</left>
+						<right>180</right>
+						<top>53</top>
+						<height>30</height>
+						<font>font12</font>
+						<aligny>top</aligny>
+						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
+						<label>$VAR[PVRListItemSubLabelFocused]</label>
+					</control>
+					<control type="label">
+						<left>105</left>
+						<right>180</right>
+						<top>53</top>
+						<height>30</height>
+						<font>font12</font>
+						<align>right</align>
+						<aligny>top</aligny>
+						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
+						<label>$INFO[ListItem.Comment]</label>
+					</control>
+					<control type="image">
+						<right>110</right>
+						<top>0</top>
+						<width>32</width>
+						<aligny>center</aligny>
+						<aspectratio align="center">keep</aspectratio>
+						<texture>$VAR[PVRStatusImageVar]</texture>
+						<visible>$PARAM[has_status_icon]</visible>
+					</control>
+					<control type="image">
+						<right>70</right>
+						<top>0</top>
+						<width>80</width>
+						<aligny>center</aligny>
+						<aspectratio align="center">keep</aspectratio>
+						<visible>!$PARAM[only_label_condition] | ListItem.IsParentFolder</visible>
+						<texture>$INFO[ListItem.ActualIcon]</texture>
+					</control>
+				</control>
 			</focusedlayout>
     </definition>
 	</include>

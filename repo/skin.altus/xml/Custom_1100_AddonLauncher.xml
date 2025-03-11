@@ -75,7 +75,7 @@
 					<param name="width" value="442" />
 					<param name="dividerleft" value="442"/>
 				</include>
-				<animation effect="slide" time="500" start="-442,0" end="0,0" tween="cubic" easing="inout">VisibleChange</animation>
+				<animation effect="slide" time="400" start="-442,0" end="0,0" tween="cubic" easing="inout">VisibleChange</animation>
 				<visible allowhiddenfocus="true">!ControlGroup(400).HasFocus</visible>
 				<control type="fixedlist" id="9000">
 					<left>0</left>
@@ -190,7 +190,7 @@
 						<font>font12</font>
 						<align>center</align>
 						<aligny>center</aligny>
-						<textcolor>grey</textcolor>
+						<textcolor>unfocused_text</textcolor>
 						<label>$VAR[AddonLauncherSubmenuButtonLabelsVar]</label>
 					</control>
 				</control>

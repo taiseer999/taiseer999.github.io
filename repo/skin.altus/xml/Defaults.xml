@@ -83,8 +83,8 @@
 		<spinheight>60</spinheight>
 		<texturefocus border="40" colordiffuse="$VAR[FocusColorTheme]">buttons/button-fo.png</texturefocus>
 		<texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
-		<textureup colordiffuse="FF686868">buttons/spinctrl/arrow-light-up.png</textureup>
-		<texturedown colordiffuse="FF686868">buttons/spinctrl/arrow-light-down.png</texturedown>
+		<textureup colordiffuse="FFCFCFCF">buttons/spinctrl/arrow-light-up.png</textureup>
+		<texturedown colordiffuse="FFCFCFCF">buttons/spinctrl/arrow-light-down.png</texturedown>
 		<textureupfocus colordiffuse="$VAR[FocusedTextColorVar]">buttons/spinctrl/arrow-light-up.png</textureupfocus>
 		<texturedownfocus colordiffuse="$VAR[FocusedTextColorVar]">buttons/spinctrl/arrow-light-down.png</texturedownfocus>
 		<textureupdisabled colordiffuse="disabled">buttons/spinctrl/arrow-light-up.png</textureupdisabled>
@@ -152,15 +152,16 @@
 		<textoffsetx>7</textoffsetx>
 		<aligny>center</aligny>
 		<texturefocus border="40" colordiffuse="$VAR[FocusColorTheme]">buttons/button-fo.png</texturefocus>
-		<texturenofocus border="40">buttons/button-nofo.png</texturenofocus>
+		<texturenofocus border="40" >buttons/button-nofo.png</texturenofocus>
 		<sliderwidth>150</sliderwidth>
 		<sliderheight>30</sliderheight>
-		<texturesliderbar colordiffuse="FF686868">buttons/slider-back.png</texturesliderbar>
-		<textureslidernib colordiffuse="FF686868">buttons/slider-nib.png</textureslidernib>
+		<texturesliderbar colordiffuse="FFCFCFCF">buttons/slider-back.png</texturesliderbar>
+		<textureslidernib colordiffuse="FFCFCFCF">buttons/slider-nib.png</textureslidernib>
 		<textureslidernibfocus colordiffuse="$VAR[FocusedTextColorVar]">buttons/slider-nib.png</textureslidernibfocus>
 		<font>font13</font>
 		<textcolor>white</textcolor>
 		<disabledcolor>disabled</disabledcolor>
+		<pulseonselect>false</pulseonselect>
 	</default>
 	<default type="mover">
 		<texturefocus border="40" colordiffuse="$VAR[FocusColorTheme]">buttons/button-fo.png</texturefocus>

@@ -70,6 +70,7 @@
 					<width>582</width>
 					<height>327</height>
 					<texture colordiffuse="artwork_dim" background="true">$VAR[LandscapeTextureVar]</texture>
+					<aspectratio scalediffuse="false">scale</aspectratio>
 				</control>
 				<control type="image">
 					<left>20</left>
@@ -80,17 +81,9 @@
 					<visible>
 							Listitem.IsCollection | ListItem.IsPlaying | 
 							[
-									Integer.IsGreater(ListItem.Playcount,0) + 
-									[
-											Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),0) | 
-											!Window.IsVisible(Home)
-									]
+									Integer.IsGreater(ListItem.Playcount,0)
 							]
 							+ !$EXP[isEpisode] + 
-							[
-									Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),0) | 
-									!Window.IsVisible(Home)
-							] + 
 							[[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]]
 					</visible>
 					<animation condition="
@@ -114,16 +107,9 @@
 							!String.IsEqual(ListItem.Property(UnWatchedEpisodes),-1) + 
 							[
 									[$EXP[isMovie]] | 
-									[[$EXP[isTVShow] | $EXP[isSeason]] + Integer.IsGreater(ListItem.Property(UnWatchedEpisodes),0)] | 
-									[!$EXP[isMovie] + !$EXP[isTVShow] + !$EXP[isSeason] + !$EXP[isEpisode]]
+									[[$EXP[isTVShow] | $EXP[isSeason]] + Integer.IsGreater(ListItem.Property(UnWatchedEpisodes),0)]
 							] + 
-							[
-									!$EXP[isEpisode] + 
-									[
-											Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),0) | 
-											!Window.IsVisible(Home)
-									]
-							]
+							!$EXP[isEpisode]
 					</visible>
 					<include condition="$PARAM[focused]">Animation_FocusTextureFade</include>
 				</control>
@@ -133,34 +119,11 @@
 					<width>583</width>
 					<height>136</height>
 					<texture colordiffuse="overlay_fade_color">overlays/overlay_bg_long.png</texture>
-					<visible>$EXP[isEpisode] | [Window.IsVisible(Home) + String.IsEqual(Skin.String(HomeItemArtworkChoice),1)]</visible>
+					<visible>$EXP[isEpisode]</visible>
 				</control>
         <control type="group">
           <left>45</left>
           <top>249</top>
-					<control type="image">
-						<left>10</left>
-						<top>-20</top>
-						<width>200</width>
-						<height>77</height>
-						<texture background="true">$VAR[ClearlogoVar]</texture>
-						<aspectratio align="left" aligny="bottom">keep</aspectratio>
-						<visible>[Window.IsVisible(Home) | Window.IsVisible(1121)] + !$EXP[isEpisode] + !String.IsEmpty(ListItem.Art(clearlogo)) + !String.IsEqual(Skin.String(HomeItemArtworkChoice),0) + !Skin.HasSetting(Disable.LandscapeWidgetClearlogo)</visible>
-						<!-- <visible>!$EXP[isEpisode] + Window.IsVisible(Home) + !String.IsEqual(Skin.String(HomeItemArtworkChoice),0) + [!String.IsEmpty(ListItem.Art(clearlogo)) + !Skin.HasSetting(Disable.LandscapeWidgetClearlogo)]</visible> -->
-					</control>
-          <control type="label">
-            <left>9</left>
-            <top>25</top>
-						<width>390</width>
-            <label>[LIGHT]$INFO[Container($PARAM[list_id]).ListItem.Title][/LIGHT]</label>
-            <font>font25_title</font>
-						<textcolor>FFFFFFFF</textcolor>
-            <shadowcolor>text_shadow</shadowcolor>
-            <align>left</align>
-            <scroll>[[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | $PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</scroll>
-            <scrollspeed>100</scrollspeed>
-						<visible>Window.IsVisible(Home) + !$EXP[isEpisode] + !String.IsEqual(Skin.String(HomeItemArtworkChoice),0) + [String.IsEmpty(ListItem.Art(clearlogo)) | Skin.HasSetting(Disable.LandscapeWidgetClearlogo)]</visible>
-          </control>
           <control type="label">
 						<width>542</width>
             <visible>$EXP[isEpisode]</visible>
@@ -262,7 +225,7 @@
 				<visible>![[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]]</visible>
 				<include content="ProgressBar">
 					<param name="left" value="20"/>
-					<param name="top" value="332"/>
+					<param name="top" value="331.5"/>
 					<param name="width" value="582"/>
 				</include>
 			</control>
@@ -274,6 +237,15 @@
 				<texture border="6" colordiffuse="$VAR[FocusColorTheme]" infill="false">colors/white.png</texture>
 				<visible>[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | [$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]</visible>
 			</control>
+			<control type="image">
+				<left>20</left>
+				<top>11</top>
+				<width>582</width>
+				<height>327</height>
+				<texture border="border_size" colordiffuse="$VAR[BorderColorVar]" infill="false">masks/bordertexture.png</texture>
+				<visible>![[$PARAM[focused] + Control.HasFocus($PARAM[list_id])] | 
+				[$PARAM[focused] + [Control.IsVisible(55) | Control.IsVisible(501)]]]</visible>
+			</control>
 		</definition>
 	</include>
 
@@ -281,12 +253,11 @@
 		<control type="group">
 			<include>OpenClose_Right</include>
 			<include>Visible_Right</include>
-			<include>MediaMenuAnimations</include>
 			<left>0</left>
 			<top>70</top>
 			<visible>Control.IsVisible(55)</visible>
 			<control type="label">
-				<left>525</left>
+				<left>520</left>
 				<right>30</right>
 				<scroll>true</scroll>
 				<scrollspeed>170</scrollspeed>
@@ -312,12 +283,12 @@
 				<left>480</left>
 				<right>0</right>
 				<height>100%</height>
-				<onleft>531</onleft>
+				<onleft>532</onleft>
 				<onright>55</onright>
 				<orientation>vertical</orientation>
 				<viewtype label="311012">icon</viewtype>
 				<preloaditems>2</preloaditems>
-				<pagecontrol>531</pagecontrol>
+				<pagecontrol>532</pagecontrol>
 				<scrolltime tween="cubic" easing="out">600</scrolltime>
 				<onunfocus condition="Player.HasMedia + !String.IsEmpty(Skin.String(TrailerPlaying))">Stop</onunfocus>
 				<onunfocus condition="!String.IsEmpty(Skin.String(TrailerPlaying))">Skin.Reset(TrailerPlaying)</onunfocus>

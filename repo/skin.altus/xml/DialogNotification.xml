@@ -27,39 +27,42 @@
       <include>Visible_Fade</include>
       <visible>String.IsEmpty(Window(home).Property(LanguageNotification))</visible>
       <top>80</top>
-      <right>40</right>
-      <height>90</height>
-      <width>600</width>
+      <right>30</right>
+      <height>100</height>
+      <width>700</width>
       <control type="image">
-        <texture colordiffuse="4D000000">colors/dark.png</texture>
+        <aspectratio>scale</aspectratio>
+        <bordersize>1</bordersize>
+        <texture colordiffuse="$VAR[DialogBackgroundDiffuse]">$VAR[DialogBackground]</texture>
+        <bordertexture border="1" colordiffuse="$VAR[FocusColorTheme]" infill="false">masks/bordertexture1.png</bordertexture>
       </control>
       <control type="image" id="400">
 				<description>avatar</description>
-				<left>10</left>
-				<top>5</top>
-				<width>80</width>
-				<height>80</height>
-				<aspectratio aligny="center" align="center">keep</aspectratio>
+				<left>1</left>
+				<top>1</top>
+				<width>98</width>
+				<height>98</height>
+				<aspectratio aligny="center" align="center">stretch</aspectratio>
         <texture />
 			</control>
       <control type="fadelabel" id="401">
-        <top>6.5</top>
-        <left>97</left>
-        <right>40</right>
+        <top>9</top>
+        <left>113</left>
+        <right>25</right>
         <height>34</height>
-        <textcolor>osd_light</textcolor>
-        <font>Font30</font>
+        <textcolor>$VAR[FocusColorTheme]</textcolor>
+        <font>notification_header</font>
         <align>top</align>
         <scrollout>false</scrollout>
 				<pauseatend>2000</pauseatend>
       </control>
       <control type="fadelabel" id="402">
-        <bottom>14.5</bottom>
-        <left>97</left>
-        <right>40</right>
+        <bottom>17</bottom>
+        <left>113</left>
+        <right>25</right>
         <height>34</height>
-        <textcolor>darkgrey</textcolor>
-        <font>Font24</font>
+        <textcolor>unfocused_text</textcolor>
+        <font>notification_footer</font>
         <align>top</align>
         <label>$INFO[Control.GetLabel(402)]</label>
         <scrollout>false</scrollout>

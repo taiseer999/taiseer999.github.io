@@ -18,13 +18,25 @@
 				<depth>DepthMax</depth>
 				<centerleft>50%</centerleft>
 				<centertop>50%</centertop>
+				<width>70</width>
+				<height>70</height>
 				<control type="image">
 					<centerleft>50%</centerleft>
 					<centertop>50%</centertop>
-					<width>333</width>
-					<height>333</height>
+					<width>70</width>
+					<height>70</height>
 					<aspectratio>keep</aspectratio>
-					<texture colordiffuse="$VAR[FocusColorTheme]">loading.gif</texture>
+					<animation effect="rotate" end="-45" center="auto" time="200" delay="600" loop="true" reversible="false" condition="true">Conditional</animation>
+					<texture colordiffuse="$VAR[FocusColorTheme]">spinner.png</texture>
+				</control>
+				<control type="image">
+					<centerleft>50%</centerleft>
+					<centertop>50%</centertop>
+					<width>44</width>
+					<height>44</height>
+					<aspectratio>keep</aspectratio>
+					<animation effect="rotate" end="45" center="auto" time="200" delay="600" loop="true" reversible="false" condition="true">Conditional</animation>
+					<texture flipx="true" colordiffuse="$VAR[FocusColorTheme]">spinner.png</texture>
 				</control>
 				<control type="image">
 					<centerleft>50%</centerleft>

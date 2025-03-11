@@ -268,17 +268,30 @@
 		</definition>
 	</include>
 
+	<include name="PlotBox">
+		<control type="textbox">
+			<height max="$PARAM[max_height]">auto</height>
+			<font>font27</font>
+			<textcolor>unfocused_text</textcolor>
+			<align>left</align>
+			<label>$VAR[RI_Plot]</label>
+			<autoscroll delay="$PARAM[delay_repeat]" time="1500" repeat="$PARAM[delay_repeat]">Skin.HasSetting(autoscroll)</autoscroll>
+			<visible>$PARAM[visible]</visible>
+		</control>
+	</include>
+
 	<include name="VerticalInfoPanel">
 		<param name="left">-25</param>
 		<definition>
 			<control type="group">
 				<width>498</width>
 				<animation effect="fade" condition="$EXP[isContent] + String.IsEmpty(Window(Home).Property(SpotlightWidget))" time="300" end="100" tween="sine" easing="inout">Conditonal</animation>
+				<animation effect="slide" end="0,-40" time="300" tween="sine" easing="inout" condition="!String.IsEmpty(Window(Home).Property(altus.widgets_load_state))">conditional</animation>
 				<include>OpenClose_Left</include>
 				<control type="grouplist">
 					<left>$PARAM[left]</left>
-					<top>50</top>
-					<bottom>50</bottom>
+					<top>0</top>
+					<bottom>0</bottom>
 					<width>498</width>
 					<orientation>horizontal</orientation>
 					<align>center</align>
@@ -369,26 +382,62 @@
 						<width>338</width>
 						<orientation>vertical</orientation>
 						<align>center</align>
-						<itemgap>14</itemgap>
+						<itemgap>10</itemgap>
 						<animation effect="slide" condition="$EXP[isEpisode] | [[[Window.IsVisible(Home) | Window.IsVisible(1121)] + Skin.HasSetting(Disable.HomePanelRatings)] | [Control.IsVisible(51) + Skin.HasSetting(Disable.51Ratings)] | [Control.IsVisible(53) + Skin.HasSetting(Disable.53Ratings)] | [Control.IsVisible(54) + Skin.HasSetting(Disable.54Ratings)] | [Control.IsVisible(55) + Skin.HasSetting(Disable.55Ratings)] | [Control.IsVisible(56) + Skin.HasSetting(Disable.56Ratings)]
 							]" time="0" start="0,0" end="25,0" tween="sine" easing="inout">Conditional</animation>
 						<animation effect="slide" condition="!$EXP[isContent]" time="0" start="0,0" end="-498,0" tween="sine" easing="inout">Conditional</animation>
-						<control type="textbox">
+						<control type="label">
 							<align>left</align>
-							<height max="100">auto</height>
+							<height>50</height>
 							<label>$VAR[InfoTitle]</label>
 							<font>font36_title</font>
 							<textcolor>unfocused_text</textcolor>
-							<autoscroll delay="2000" time="1000" repeat="2000">true</autoscroll>
-							<visible>!String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + [String.IsEqual(Skin.String(WidgetClearlogoSetting),1) | String.IsEmpty(ListItem.Art(clearlogo))]</visible>
+							<scroll>true</scroll>
+							<scrollspeed>170</scrollspeed>
+							<visible>
+									[
+											!Window.IsVisible(videos) + 
+											!String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + 
+											[
+													String.IsEqual(Skin.String(WidgetClearlogoSetting),1) | 
+													String.IsEmpty(ListItem.Art(clearlogo))
+											]
+									]
+							</visible>
 						</control>
-						<control type="image">
-						<width>auto</width>
+						<!-- <control type="image">
+							<width>auto</width>
 							<height>100</height>
 							<fadetime>200</fadetime>
 							<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
 							<aspectratio align="center" aligny="center">keep</aspectratio>
 							<visible>String.IsEqual(Skin.String(WidgetClearlogoSetting),0) + !String.IsEmpty(ListItem.Art(clearlogo))</visible>
+						</control> -->
+						<control type="image">
+							<width>338</width>
+							<height>100</height>
+							<fadetime>200</fadetime>
+							<texture background="true">$INFO[Window(Home).Property(listitem_clearlogo_cropped)]</texture>
+							<aspectratio align="center" aligny="bottom">keep</aspectratio>
+							<visible>
+									!String.IsEmpty(ListItem.Art(clearlogo)) + 
+									[
+											!Window.IsVisible(videos) + 
+											!String.IsEmpty(ListItem.Art(clearlogo)) + 
+											!String.IsEqual(Skin.String(WidgetClearlogoSetting),1) + 
+											[
+													[String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + 
+													String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
+													!String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + 
+													$EXP[isEpisode]
+											]
+									] | 
+									[
+											Window.IsVisible(videos) + 
+											!String.IsEmpty(ListItem.Art(clearlogo)) + 
+											Skin.HasSetting(Enable.Clearlogo)
+									]
+							</visible>
 						</control>
 						<control type="textbox">
 							<top>0</top>
@@ -396,7 +445,25 @@
 							<right>0</right>
 							<height>3</height>
 							<label></label>
-							<visible>String.IsEqual(Skin.String(WidgetClearlogoSetting),0)</visible>
+							<visible>
+									!String.IsEmpty(ListItem.Art(clearlogo)) + 
+									[
+											!Window.IsVisible(videos) + 
+											!String.IsEmpty(ListItem.Art(clearlogo)) + 
+											!String.IsEqual(Skin.String(WidgetClearlogoSetting),1) + 
+											[
+													[String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + 
+													String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
+													!String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + 
+													$EXP[isEpisode]
+											]
+									] | 
+									[
+											Window.IsVisible(videos) + 
+											!String.IsEmpty(ListItem.Art(clearlogo)) + 
+											Skin.HasSetting(Enable.Clearlogo)
+									]
+							</visible>
 						</control>
 						<control type="image">
 							<height>2</height>
@@ -432,42 +499,141 @@
 							<texture colordiffuse="$VAR[FocusColorTheme]">masks/infopanel_divider.png</texture>
 							<visible>$EXP[isContent]</visible>
 						</control>
-						<control type="textbox">
-							<height max="502">auto</height>
-							<font>font27</font>
-							<textcolor>unfocused_text</textcolor>
-							<align>left</align>
-							<label>$VAR[RI_Plot]</label>
-							<autoscroll delay="8000" time="1000" repeat="8000">Skin.HasSetting(autoscroll)</autoscroll>
-							<visible>[$EXP[isMovie] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),2)] | [!$EXP[isMovie] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + !Skin.HasSetting(Enable.HomePanelStudioLogos)]</visible>
-						</control>
-						<control type="textbox">
-							<height max="587">auto</height>
-							<font>font27</font>
-							<textcolor>unfocused_text</textcolor>
-							<align>left</align>
-							<label>$VAR[RI_Plot]</label>
-							<autoscroll delay="8500" time="1500" repeat="8500">Skin.HasSetting(autoscroll)</autoscroll>
-							<visible>[$EXP[isMovie] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2)] | [!$EXP[isMovie] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + !Skin.HasSetting(Enable.HomePanelStudioLogos)]</visible>
-						</control>
-						<control type="textbox">
-							<height max="377">auto</height>
-							<font>font27</font>
-							<textcolor>unfocused_text</textcolor>
-							<align>left</align>
-							<label>$VAR[RI_Plot]</label>
-							<autoscroll delay="6000" time="1000" repeat="6000">Skin.HasSetting(autoscroll)</autoscroll>
-							<visible>!$EXP[isMovie] + !String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + Skin.HasSetting(Enable.HomePanelStudioLogos)</visible>
-						</control>
-						<control type="textbox">
-							<height max="544">auto</height>
-							<font>font27</font>
-							<textcolor>unfocused_text</textcolor>
-							<align>left</align>
-							<label>$VAR[RI_Plot]</label>
-							<autoscroll delay="7000" time="1000" repeat="7000">Skin.HasSetting(autoscroll)</autoscroll>
-							<visible>!$EXP[isMovie] + String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + Skin.HasSetting(Enable.HomePanelStudioLogos)</visible>
-						</control>
+						<include content="PlotBox">
+							<param name="max_height" value="544"/>
+							<param name="delay_repeat" value="8000"/>
+							<param name="visible" value="
+							[
+									!Window.IsVisible(videos) + 
+									!String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + 
+									[
+											[
+													[
+															String.IsEqual(Skin.String(StudioLogoSetting),0) | 
+															[String.IsEqual(Skin.String(StudioLogoSetting),1) + !$EXP[isMovie]] | 
+															[String.IsEqual(Skin.String(StudioLogoSetting),2) + $EXP[isMovie]]
+													] + 
+													[
+															[String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
+															!String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + $EXP[isEpisode]
+													]
+											] | 
+											[
+													[
+															[String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | 
+															[String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]] | 
+															String.IsEqual(Skin.String(StudioLogoSetting),3)
+													] + 
+													!
+													[
+															[String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
+															!String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + $EXP[isEpisode]
+													]
+											]
+									]
+							] | 
+							[
+									Window.IsVisible(videos) + 
+									[
+											String.IsEqual(Skin.String(StudioLogoSetting),0) | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + !$EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + $EXP[isMovie]]
+									] + 
+									Skin.HasSetting(Enable.Clearlogo)
+							]"/>
+						</include>
+						<include content="PlotBox">
+							<param name="max_height" value="628"/>
+							<param name="delay_repeat" value="8000"/>
+							<param name="visible" value="
+							[
+									!Window.IsVisible(videos) + 
+									!String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + 
+									[
+											String.IsEqual(Skin.String(StudioLogoSetting),0) | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + !$EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + $EXP[isMovie]]
+									] + 
+									!
+									[
+											[String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
+											!String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + $EXP[isEpisode]
+									]
+							]"/>
+						</include>
+						<include content="PlotBox">
+							<param name="max_height" value="587"/>
+							<param name="delay_repeat" value="8500"/>
+							<param name="visible" value="
+							[
+									!Window.IsVisible(videos) + 
+									String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + 
+									[
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]] | 
+											String.IsEqual(Skin.String(StudioLogoSetting),3)
+									]
+							] | 
+							[
+									Window.IsVisible(videos) + 
+									[
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]] | 
+											String.IsEqual(Skin.String(StudioLogoSetting),3)
+									] + 
+									!Skin.HasSetting(Enable.Clearlogo)
+							]"/>
+						</include>
+						<include content="PlotBox">
+							<param name="max_height" value="460"/>
+							<param name="delay_repeat" value="6500"/>
+							<param name="visible" value="
+							[
+									!Window.IsVisible(videos) + 
+									!String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + 
+									[
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]] | 
+											String.IsEqual(Skin.String(StudioLogoSetting),3)
+									] + 
+									[
+											[String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + String.IsEqual(Skin.String(WidgetClearlogoSetting),0)] | 
+											!String.IsEmpty(Window(Home).Property(FeatureWidgetFocused)) + $EXP[isEpisode]
+									]
+							] | 
+							[
+									Window.IsVisible(videos) + 
+									[
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]] | 
+											String.IsEqual(Skin.String(StudioLogoSetting),3)
+									] + 
+									Skin.HasSetting(Enable.Clearlogo)
+							]"/>
+						</include>
+						<include content="PlotBox">
+							<param name="max_height" value="669"/>
+							<param name="delay_repeat" value="6500"/>
+							<param name="visible" value="
+							[
+									!Window.IsVisible(videos) + 
+									String.IsEqual(Skin.String(WidgetClearlogoSetting),2) + 
+									[
+											String.IsEqual(Skin.String(StudioLogoSetting),0) | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + !$EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + $EXP[isMovie]]
+									]
+							] | 
+							[
+									Window.IsVisible(videos) + 
+									[
+											String.IsEqual(Skin.String(StudioLogoSetting),0) | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),1) + !$EXP[isMovie]] | 
+											[String.IsEqual(Skin.String(StudioLogoSetting),2) + $EXP[isMovie]]
+									] + 
+									!Skin.HasSetting(Enable.Clearlogo)
+							]"/>
+						</include>
 						<control type="image">
 							<height>2</height>
 							<texture colordiffuse="$VAR[FocusColorTheme]">masks/infopanel_divider.png</texture>
@@ -478,7 +644,7 @@
 							<fadetime>200</fadetime>
 							<texture colordiffuse="$VAR[StudioColorDiffuseVar]">$VAR[StudioLogoPathVar]</texture>
 							<aspectratio align="center" aligny="top">keep</aspectratio>
-							<visible>Skin.HasSetting(Enable.HomePanelStudioLogos) + !$EXP[isMovie]</visible>
+							<visible>!String.IsEmpty(ListItem.Studio) + [String.IsEqual(Skin.String(StudioLogoSetting),3) | [String.IsEqual(Skin.String(StudioLogoSetting),1) + $EXP[isMovie]] | [String.IsEqual(Skin.String(StudioLogoSetting),2) + !$EXP[isMovie]]]</visible>
 						</control>
 					</control>
 				</control>
@@ -489,10 +655,10 @@
 
 	<include name="SpotlightInfoPanel">
 		<control type="grouplist">
-			<left>37</left>
+			<left>30</left>
 			<width>895</width>
 			<top>-108</top>
-			<bottom>160</bottom>
+			<bottom>140</bottom>
 			<orientation>vertical</orientation>
 			<itemgap>7</itemgap>
 			<align>right</align>
@@ -549,7 +715,7 @@
 			</control>
 			<include condition="!String.IsEmpty(Skin.String(valid_api_key))" content="HorizontalRatings"/>
 			<control type="textbox">
-				<height max="170">auto</height>
+				<height max="168">auto</height>
 				<label>$VAR[RI_Plot]</label>
 				<font>font27</font>
 				<textcolor>unfocused_text</textcolor>

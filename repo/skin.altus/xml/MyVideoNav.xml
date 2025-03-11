@@ -10,6 +10,17 @@
 		<include>DefaultBackground</include>
 		<control type="group">
 			<visible>String.IsEmpty(Window(home).Property(ViewTransitioning))</visible>
+			<control type="image">
+				<visible>Control.IsVisible(56) + !Window.IsVisible(movieinformation)</visible>
+				<top>0</top>
+				<right>0</right>
+				<width>1427</width>
+				<height>803</height>
+				<fadetime>500</fadetime>
+				<texture colordiffuse="artwork_dim" background="true" diffuse="overlays/flixinfo-fanartdiffuse.png" fallback="$VAR[AltusCustomBackgroundImage]">$VAR[MediaFanartVar]</texture>
+				<aspectratio align="left" aligny="top">keep</aspectratio>
+				<include>ArtworkAnimations</include>
+			</control>
 			<control type="group">
 				<!-- <include>TrailerPlayingFade</include> -->
 				<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
@@ -18,7 +29,7 @@
 				<include>View_53_Slide</include>
 				<include>View_54_PosterInfo</include>
 				<include>View_55_LandscapeInfo</include>
-				<include>View_56_ListInfo</include>	
+				<include>View_56_FlixInfo</include>	
 				<include>View_57_Season</include>
 				<include>View_500_Wall</include>
 				<include>View_501_LandscapeWall</include>
@@ -33,16 +44,11 @@
 					<depth>DepthContentPanel</depth>
 					<include>OpenClose_Left</include>
 					<include>Visible_Left</include>
-					<include>MediaMenuAnimations</include>
 					<include content="MenuContentPanel">
-						<param name="width" value="517"/>
-						<param name="dividerleft" value="492"/>
-						<param name="left" value="-31"/>
-						<param name="bg_left" value="-25"/>
-						<param name="visible" value="Control.IsVisible(54) | Control.IsVisible(55)"/>
+						<param name="visible" value="Control.IsVisible(54) | Control.IsVisible(55) | Control.IsVisible(56)"/>
 					</include>
 					<include>VerticalInfoPanel</include>
-					<visible>Control.IsVisible(54) | Control.IsVisible(55) | [Control.IsVisible(501) + String.IsEqual(Skin.AspectRatio,21:9)]</visible>
+					<visible>Control.IsVisible(54) | Control.IsVisible(55) | Control.IsVisible(56) | [Control.IsVisible(501) + String.IsEqual(Skin.AspectRatio,21:9)]</visible>
 					<control type="group">
 						<!-- <width>550</width> -->
 						<control type="group">

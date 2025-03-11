@@ -9,7 +9,6 @@
 			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
 			<control type="group">
 				<include>OpenClose_Right</include>
-				<include>MediaMenuAnimations</include>
 				<control type="label">
 					<top>60</top>
 					<height>60</height>

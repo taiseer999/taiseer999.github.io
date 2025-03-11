@@ -2,7 +2,6 @@
 <includes>
 	<include name="View_501_LandscapeWall">
 		<control type="group">
-			<include>MediaMenuAnimations</include>
 			<!-- <include>OpenClose_Right</include> -->
 			<height>100%</height>
 			<visible>Control.IsVisible(501)</visible>

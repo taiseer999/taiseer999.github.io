@@ -462,11 +462,11 @@
 		<value condition="!String.IsEmpty(Container.ListItem.Art(fanart))">$INFO[Container.ListItem.Art(fanart)]</value>
 	</variable> -->
 	<variable name="ListWatchedIconVar">
-    <value condition="String.IsEqual(Container.PluginName,plugin.video.pov) | String.IsEqual(Container.PluginName,plugin.video.umbrella) | String.IsEqual(Container.PluginName,plugin.video.fen)">$VAR[ListWatchedIconVar.Fallback]</value>
-    <value>$VAR[ListWatchedIconVar.Main]</value>
+    <value condition="String.IsEqual(Container.PluginName,plugin.video.fenlight) | String.StartsWith(ListItem.Path,plugin://plugin.video.fenlight)">$VAR[ListWatchedIconVar.Other]</value>
+    <value>$VAR[ListWatchedIconVar.All]</value>
 	</variable>
 
-	<variable name="ListWatchedIconVar.Fallback">
+	<variable name="ListWatchedIconVar.All">
     <value condition="ListItem.IsRecording">windows/pvr/record.png</value>
     <value condition="ListItem.IsPlaying">overlays/watched/OverlayPlaying-List.png</value>
     <value condition="ListItem.IsCollection">overlays/set.png</value>
@@ -483,7 +483,7 @@
     <value condition="!String.IsEmpty(ListItem.Overlay)">$INFO[ListItem.Overlay]</value>
 	</variable>
 
-	<variable name="ListWatchedIconVar.Main">
+	<variable name="ListWatchedIconVar.Other">
     <value condition="ListItem.IsRecording">windows/pvr/record.png</value>
     <value condition="ListItem.IsPlaying">overlays/watched/OverlayPlaying-List.png</value>
     <value condition="!Integer.IsEqual(Container.ListItem.Property(WatchedProgress),0)">progress/unwatched/$INFO[ListItem.Property(WatchedProgress),,.png]</value>
@@ -592,18 +592,9 @@
 		<value>$LOCALIZE[19021] [B]»[/B] $LOCALIZE[137]$INFO[Control.GetLabel(29), [B]»[/B] ]$INFO[Control.GetLabel(30), ]</value>
 	</variable>
 	<variable name="BreadcrumbsPVRChannelsOSDVar">
-		<value condition="String.IsEqual(Skin.String(BackgroundSetting),0)">$VAR[BreadcrumbsPVRChannelsOSD.NoBlur]</value>
-		<value>$VAR[BreadcrumbsPVRChannelsOSD.Blur]</value>
-	</variable>
-	<variable name="BreadcrumbsPVRChannelsOSD.NoBlur">
-		<value condition="PVR.IsPlayingTV">$LOCALIZE[19020] [COLOR accent_color][B]»[/B][/COLOR] $LOCALIZE[19019] [COLOR accent_color][B]»[/B][/COLOR] $INFO[VideoPlayer.ChannelGroup]</value>
-		<value condition="PVR.IsPlayingRadio">$LOCALIZE[19021] [COLOR accent_color][B]»[/B][/COLOR] $LOCALIZE[19019] [COLOR accent_color][B]»[/B][/COLOR] $INFO[VideoPlayer.ChannelGroup]</value>
-		<value>$LOCALIZE[19019] [COLOR accent_color][B]»[/B][/COLOR] $INFO[VideoPlayer.ChannelGroup]</value>
-	</variable>
-	<variable name="BreadcrumbsPVRChannelsOSD.Blur">
-		<value condition="PVR.IsPlayingTV">$LOCALIZE[19020] [COLOR unfocused_text][B]»[/B][/COLOR] $LOCALIZE[19019] [COLOR unfocused_text][B]»[/B][/COLOR] $INFO[VideoPlayer.ChannelGroup]</value>
-		<value condition="PVR.IsPlayingRadio">$LOCALIZE[19021] [COLOR unfocused_text][B]»[/B][/COLOR] $LOCALIZE[19019] [COLOR unfocused_text][B]»[/B][/COLOR] $INFO[VideoPlayer.ChannelGroup]</value>
-		<value>$LOCALIZE[19019] [COLOR unfocused_text][B]»[/B][/COLOR] $INFO[VideoPlayer.ChannelGroup]</value>
+		<value condition="PVR.IsPlayingTV">[COLOR unfocused_text]$LOCALIZE[19020][/COLOR] [B]»[/B] [COLOR unfocused_text]$LOCALIZE[19019][/COLOR] [B]»[/B] [COLOR unfocused_text]$INFO[VideoPlayer.ChannelGroup][/COLOR]</value>
+		<value condition="PVR.IsPlayingRadio">[COLOR unfocused_text]$LOCALIZE[19021][/COLOR] [B]»[/B] [COLOR unfocused_text]$LOCALIZE[19019][/COLOR] [B]»[/B] [COLOR unfocused_text]$INFO[VideoPlayer.ChannelGroup][/COLOR]</value>
+		<value>[COLOR unfocused_text]$LOCALIZE[19019][/COLOR] [B]»[/B] [COLOR unfocused_text]$INFO[VideoPlayer.ChannelGroup][/COLOR]</value>
 	</variable>
 	<variable name="BreadcrumbsGameVar">
 		<value>$LOCALIZE[15016]</value>

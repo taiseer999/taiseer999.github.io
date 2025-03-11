@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
   <defaultcontrol always="true">20000</defaultcontrol>
+  <!-- <onload>ClearProperty(SpotlightWidget,Home)</onload> -->
   <controls>
     <control type="button" id="6">
       <texturefocus/>
@@ -37,8 +38,8 @@
       </animation>
       <animation effect="fade" start="100" end="0" time="200" condition="Window.IsActive(DialogSelect.xml) | Window.IsActive(FileBrowser.xml)">Conditional</animation>
       <include content="MenuContentPanel">
-        <param name="width" value="370"/>
-        <param name="dividerleft" value="370"/>
+        <param name="width" value="310"/>
+        <param name="dividerleft" value="310"/>
       </include>
       <control type="group">
         <control type="list" id="20000">
@@ -46,7 +47,7 @@
             <param name="id" value="20000" />
           </include>
           <left>0</left>
-          <width>370</width>
+          <width>310</width>
           <onleft>back</onleft>
           <onright condition="String.IsEqual(Container(20000).ListItem.Property(id),cast)">SetFocus(50,0)</onright>
           <onright condition="String.IsEqual(Container(20000).ListItem.Property(id),moreinfo)">SetFocus(53,0)</onright>
@@ -92,11 +93,11 @@
           <height>780</height>
           <top>160</top>
           <bottom>0</bottom>
-          <right>65</right>
+          <right>60</right>
           <!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
           <texture>$VAR[FlixPosterVar]</texture>
-          <bordersize>1</bordersize>
-          <bordertexture colordiffuse="FF5B5B5B" border="1" infill="false">masks/bordertexture.png</bordertexture>
+          <bordersize>border_size</bordersize>
+          <bordertexture colordiffuse="FF5B5B5B" border="border_size" infill="false">masks/bordertexture.png</bordertexture>
           <visible>!String.IsEqual(Container(20000).ListItem.Property(id),cast)</visible>
         </control>
         <control type="group">
@@ -104,9 +105,9 @@
           <animation effect="fade" start="0" end="100" time="300" delay="300">Visible</animation>
           <animation effect="fade" start="100" end="0" time="300">Hidden</animation>
           <top>160</top>
-          <left>390</left>
+          <left>345</left>
           <bottom>160</bottom>
-          <right>640</right>
+          <right>625</right>
           <control type="grouplist">
             <left>12.5</left>
             <!-- <width>815</width> -->
@@ -180,9 +181,9 @@
             <right>-20</right>
             <!-- <aspectratio scalediffuse="false">scale</aspectratio> -->
             <texture>$INFO[Container(50).ListItem.Art(thumb)]</texture>
-            <bordersize>1</bordersize>
+            <bordersize>border_size</bordersize>
             <fadetime>600</fadetime>
-            <bordertexture colordiffuse="FF5B5B5B" border="1" infill="false">masks/bordertexture.png</bordertexture>
+            <bordertexture colordiffuse="FF5B5B5B" border="border_size" infill="false">masks/bordertexture.png</bordertexture>
           </control>
           <control type="image">
             <visible>Container(50).IsUpdating</visible>

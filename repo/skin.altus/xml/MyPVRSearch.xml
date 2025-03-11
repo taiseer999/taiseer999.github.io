@@ -12,7 +12,6 @@
 				<visible>Control.IsVisible(50)</visible>
 				<include>OpenClose_Right</include>
 				<include>Visible_Left</include>
-				<include>MediaMenuAnimations</include>
 				<control type="label">
 					<top>60</top>
 					<height>60</height>

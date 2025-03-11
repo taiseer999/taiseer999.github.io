@@ -441,21 +441,36 @@
 
 
 	<variable name="RI_EpisodeType">
-		<value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)"> • [COLOR unfocused_text]Series Premiere[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)"> • [COLOR ff8fc5d9][UPPERCASE]Series Premiere[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_premiere)"> • [COLOR ff8fd9c5][UPPERCASE]Season Premiere[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)"> • [COLOR ffc5d98f][UPPERCASE]Mid-Season Premiere[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_finale)"> • [COLOR ffc58fd9][UPPERCASE]Series Finale[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_finale)"> • [COLOR ffd98fc5][UPPERCASE]Season Finale[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)"> • [COLOR ffd9c58f][UPPERCASE]Mid-Season Finale[/UPPERCASE][/COLOR]</value>
+		<!-- <value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)"> • [COLOR unfocused_text]Series Premiere[/COLOR]</value>
 		<value condition="String.IsEqual(ListItem.Property(episode_type), season_premiere)"> • [COLOR unfocused_text]Season Premiere[/COLOR]</value>
 		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)"> • [COLOR unfocused_text]Mid-Season Premiere[/COLOR]</value>
 		<value condition="String.IsEqual(ListItem.Property(episode_type), series_finale)"> • [COLOR unfocused_text]Series Finale[/COLOR]</value>
 		<value condition="String.IsEqual(ListItem.Property(episode_type), season_finale)"> • [COLOR unfocused_text]Season Finale[/COLOR]</value>
-		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)"> • [COLOR unfocused_text]Mid-Season Finale[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)"> • [COLOR unfocused_text]Mid-Season Finale[/COLOR]</value> -->
 	</variable>
 
+	<!-- <variable name="RI_EpisodeType_Season">
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)"> • [COLOR ff8fc5d9]Series Premiere[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_premiere)"> • [COLOR ff8fd9c5]Season Premiere[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)"> • [COLOR ffc5d98f]Mid-Season Premiere[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_finale)"> • [COLOR ffc58fd9]Series Finale[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_finale)"> • [COLOR ffd98fc5]Season Finale[/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)"> • [COLOR ffd9c58f]Mid-Season Finale[/COLOR]</value>
+	</variable> -->
+
 	<variable name="VI_EpisodeType">
-		<value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)">Series Premiere</value>
-		<value condition="String.IsEqual(ListItem.Property(episode_type), season_premiere)">Season Premiere</value>
-		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)">Mid-Season Premiere</value>
-		<value condition="String.IsEqual(ListItem.Property(episode_type), series_finale)">Series Finale</value>
-		<value condition="String.IsEqual(ListItem.Property(episode_type), season_finale)">Season Finale</value>
-		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)">Mid-Season Finale</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_premiere)">[COLOR ff8fc5d9][UPPERCASE]Series Premiere[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_premiere)">[COLOR ff8fd9c5][UPPERCASE]Season Premiere[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_premiere)">[COLOR ffc5d98f][UPPERCASE]Mid-Season Premiere[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), series_finale)">[COLOR ffc58fd9][UPPERCASE]Series Finale[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), season_finale)">[COLOR ffd98fc5][UPPERCASE]Season Finale[/UPPERCASE][/COLOR]</value>
+		<value condition="String.IsEqual(ListItem.Property(episode_type), mid_season_finale)">[COLOR ffd9c58f][UPPERCASE]Mid-Season Finale[/UPPERCASE][/COLOR]</value>
 	</variable>
 	
 	<variable name="RI_EpisodesRemaining">
@@ -495,11 +510,7 @@
 
 	<variable name="SeasonInfoPanelTop">
 		<!-- EPISODES -->
-		<value condition="!ListItem.IsCollection + $EXP[isEpisode]">$VAR[RI_Aired]$VAR[RI_Rating]$VAR[RI_Runtime]$VAR[RI_WatchedProgress]$VAR[RI_EpisodeType]</value>
-	</variable>
-	<variable name="SeasonInfoPanelTop_Alt">
-		<!-- EPISODES -->
-		<value>$VAR[RI_Aired]$VAR[RI_Rating]$VAR[RI_Runtime]$VAR[RI_WatchedProgress]$VAR[RI_Endsat]$VAR[RI_EpisodeType]</value>
+		<value condition="!ListItem.IsCollection + $EXP[isEpisode]">$VAR[RI_Aired]$VAR[RI_Rating]$VAR[RI_Runtime]$VAR[RI_EpisodeType]</value>
 	</variable>
 
 	<variable name="VideoInfoPanelTop">
@@ -513,12 +524,12 @@
 		<value condition="!ListItem.IsCollection + $EXP[isSeason] + !Control.IsVisible(53)">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[RI_Genre]$VAR[RI_Runtime]$VAR[RI_Rating_Other]$VAR[RI_Network]$VAR[RI_Endsat]</value>
 		<value condition="!ListItem.IsCollection + $EXP[isSeason] + Control.IsVisible(53)">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_Runtime]$VAR[RI_Rating_Other]$VAR[RI_Network]$VAR[RI_Endsat]</value>
 		<!-- EPISODES -->
-		<value condition="!ListItem.IsCollection + $EXP[isEpisode]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_Rating]$VAR[RI_Runtime]$VAR[RI_Network]$VAR[RI_EpisodeType]$VAR[RI_Endsat]</value>
+		<value condition="!ListItem.IsCollection + $EXP[isEpisode]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[RI_Rating]$VAR[RI_Runtime]$VAR[RI_Network]$VAR[RI_Endsat]$VAR[RI_EpisodeType]</value>
 	</variable>
 
 	<variable name="InfoPanelTop">
 		<!-- MOVIES -->
-		<value condition="!ListItem.IsCollection + $EXP[isMovie] + Integer.IsEqual(ListItem.Property(WatchedProgress),0)">$VAR[RI_Digital]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_MovieCollection]$VAR[RI_Rating_Other]$VAR[RI_Runtime]</value>
+		<value condition="!ListItem.IsCollection + $EXP[isMovie] + Integer.IsEqual(ListItem.Property(WatchedProgress),0)">$VAR[RI_Digital]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_Rating_Other]$VAR[RI_Runtime]$VAR[RI_AltEndsat]</value>
 		<value condition="!ListItem.IsCollection + $EXP[isMovie] + !Integer.IsEqual(ListItem.Property(WatchedProgress),0)">$VAR[RI_Digital]$VAR[RI_WatchedProgress]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_Rating_Other]$VAR[RI_Runtime]</value>
 		<!-- SHOWS -->
 		<value condition="!ListItem.IsCollection + $EXP[isTVShow]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_TotalSeasons]$VAR[RI_EpisodesRemaining]$VAR[RI_Rating_Other]$VAR[RI_Status]</value>
@@ -550,7 +561,7 @@
 		<!-- MOVIES -->
 		<value condition="!ListItem.IsCollection + $EXP[isMovie]">$VAR[RI_Digital]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_MovieCollection]$VAR[RI_Rating_Other]$VAR[RI_Runtime]$VAR[RI_AltEndsat]</value>
 		<!-- SHOWS -->
-		<value condition="!ListItem.IsCollection + $EXP[isTVShow]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_TotalSeasons]$VAR[RI_Rating_Other]$VAR[RI_Runtime]$VAR[RI_Widget_Status]</value>
+		<value condition="!ListItem.IsCollection + $EXP[isTVShow]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_TotalSeasons]$VAR[RI_Rating_Other]$VAR[RI_Widget_Status]</value>
 		<!-- SEASONS -->
 		<value condition="!ListItem.IsCollection + $EXP[isSeason]">$VAR[RI_Aired]$VAR[RI_Mpaa]$VAR[_Genre]$VAR[RI_Rating_Other]$VAR[RI_Runtime]$VAR[RI_AltEndsat]</value>
 		<!-- EPISODES -->

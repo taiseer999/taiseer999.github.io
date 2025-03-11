@@ -395,7 +395,7 @@ msgstr "Teleteks"
 
 #. viewtype name
 msgctxt "#31107"
-msgid "ListInfo"
+msgid "FlixInfo"
 msgstr "Geniş Liste"
 
 msgctxt "#31110"
