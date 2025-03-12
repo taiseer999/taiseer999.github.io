@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol>996</defaultcontrol>
+	<include>OpenClose_Left</include>
+	<onload condition="!String.IsEmpty(Window(Home).Property(CurrentDBType)) + !String.IsEqual(Window(Home).Property(CurrentDBType),season) + !String.IsEqual(Window(Home).Property(CurrentDBType),episode)">SetFocus(8001)</onload>
+	<coordinates>
+		<origin x="0" y="0"/>
+	</coordinates>
+	<controls>
+		<control type="group">
+			<width>498</width>
+			<top>0</top>
+			<bottom>0</bottom>
+			<include content="DialogBackgroundCommons">
+				<param name="header_label" value="$VAR[ContextMenuTitleVar]" />
+				<param name="header_id" value="1" />
+				<param name="width" value="498" />
+				<param name="left_divider_visible" value="false" />
+				<param name="divider_left" value="498" />
+				<param name="shade_right" value="0" />
+			</include>
+			<control type="button">
+				<left>-1920</left>
+				<top>-1080</top>
+				<width>5760</width>
+				<height>3240</height>
+				<texturefocus />
+				<texturenofocus />
+				<onclick>Action(close)</onclick>
+			</control>
+			<!-- <control type="image" id="999">
+				<description>background image</description>
+				<left>0</left>
+				<top>0</top>
+				<width>498</width>
+				<height>780</height>
+				<texture colordiffuse="$VAR[FocusColorTheme]">colors/commons.png</texture>
+			</control> -->
+			<control type="grouplist" id="996">
+				<description>grouplist for context buttons</description>
+				<left>0</left>
+				<top>105</top>
+				<onright>Action(close)</onright>
+				<usecontrolcoords>true</usecontrolcoords>
+				<control type="button" id="8001">
+					<height>65</height>
+					<align>left</align>
+					<textoffsetx>45</textoffsetx>
+					<textoffsety>9</textoffsety>
+					<label>[B]Play Trailer (Altus)[/B]</label>
+					<font>font32</font>
+					<textcolor>unfocused_text</textcolor>
+					<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
+					<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
+					<texturenofocus />
+					<onclick>RunScript(script.altus.helper, mode=play_trailer)</onclick>
+					<visible>!String.IsEmpty(Window(Home).Property(CurrentDBType)) + !String.IsEqual(Window(Home).Property(CurrentDBType),season) + !String.IsEqual(Window(Home).Property(CurrentDBType),episode)</visible>
+				</control>
+			</control>
+			<control type="button" id="1000">
+				<description>button template</description>
+				<left>0</left>
+				<top></top>
+				<width>498</width>
+				<height>65</height>
+				<align>left</align>
+				<aligny>left</aligny>
+				<textoffsetx>45</textoffsetx>
+				<textoffsety>9</textoffsety>
+				<font>font32</font>
+				<textcolor>unfocused_text</textcolor>
+				<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
+				<texturefocus colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texturefocus>
+				<texturenofocus />
+			</control>
+		</control>
+	</controls>
+</window>

@@ -443,9 +443,7 @@ msgid "In-Progress"
 msgstr "Продовжити перегляд"
 
 #: /1080i/SkinSettings.xml
-msgctxt "#31091"
-msgid "Blur background for classic widgets"
-msgstr "Блюрити фон для класичних віджетів"
+
 
 #: /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31092"
@@ -473,9 +471,7 @@ msgid "Use spotlight"
 msgstr "Використовувати сцену"
 
 #: /1080i/SkinSettings.xml
-msgctxt "#31097"
-msgid "Customise video info widgets"
-msgstr "Віджети деталей про відео"
+
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31098"
@@ -883,11 +879,6 @@ msgstr "Час та дата"
 msgctxt "#31200"
 msgid "Added on"
 msgstr "Додано"
-
-#: /1080i/SkinSettings.xml
-msgctxt "#31201"
-msgid "Seekbar displays title details while seeking"
-msgstr "Відображати деталі стрічки при прокруткі панелі відтворення"
 
 msgctxt "#31202"
 msgid "Ratings"
@@ -1353,9 +1344,7 @@ msgid "Square"
 msgstr "Квадрат"
 
 #: /1080i/SkinSettings.xml
-msgctxt "#31321"
-msgid "Configure viewtypes"
-msgstr "Налаштувати види"
+
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31322"
@@ -1454,9 +1443,7 @@ msgid "Seekbar time display"
 msgstr "Формат часу в панелі відтворювання"
 
 #: /1080i/SkinSettings.xml
-msgctxt "#31356"
-msgid "Use local cast details"
-msgstr "Використовувати локальні відомості про акторів"
+
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31357"
@@ -1753,9 +1740,7 @@ msgid "Chapters"
 msgstr "Глави"
 
 #: /1080i/SkinSettings.xml
-msgctxt "#31430"
-msgid "Customise video OSD widgets"
-msgstr "OSD віджетів відео"
+
 
 #: /1080i/Includes_Views_Row.xml
 msgctxt "#31431"
@@ -1827,9 +1812,6 @@ msgid "Kodi logo"
 msgstr "Логотип Kodi"
 
 #: /1080i/SkinSettings.xml
-msgctxt "#31448"
-msgid "Show \"More\" item on limited widgets"
-msgstr "Показувати \"Ще\" на лімітованих віджетах"
 
 #: /1080i/Custom_1180_Wizard.xml
 msgctxt "#31449"

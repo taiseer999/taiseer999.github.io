@@ -2756,6 +2756,16 @@ msgid "List Information"
 msgstr "قائمة معلومات"
 
 
+#: /1080i/Includes_Items.xml
+msgctxt "#31583"
+msgid "Mirrored"
+msgstr "معكوسة"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31584"
+msgid "Edit background"
+msgstr "تحرير الخلفية"
+
 #: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
 msgctxt "#31549"
 msgid "Choose which hub window to use as the home screen."

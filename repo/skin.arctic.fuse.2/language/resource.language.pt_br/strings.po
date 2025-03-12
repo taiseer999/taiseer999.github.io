@@ -442,12 +442,12 @@ msgctxt "#31090"
 msgid "In-Progress"
 msgstr "Em Andamento"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31091"
-msgid "Blur background for classic widgets"
-msgstr "Desfocar o fundo para widgets clássicos"
+msgid "Add a \"more items\" folder to widgets with item limits"
+msgstr "Adicione uma pasta \"mais itens\" aos widgets com limites de itens"
 
-#: /1080i/Includes_Shortcuts_Window.xml
+#: /1080i/SkinSettings.xml /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31092"
 msgid "Detailed information"
 msgstr "Informações detalhadas"
@@ -472,12 +472,12 @@ msgctxt "#31096"
 msgid "Use spotlight"
 msgstr "Usar destaques"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31097"
-msgid "Customise video info widgets"
-msgstr "Personalize widgets de informações de vídeo"
+msgid "Customise ratings"
+msgstr "Personalizar avaliações"
 
-#: /1080i/Includes_Items.xml
+#: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
 msgctxt "#31098"
 msgid "Gallery"
 msgstr "Galeria"
@@ -703,10 +703,20 @@ msgctxt "#31146"
 msgid "Profile image and logo"
 msgstr "Imagem de perfil e logotipo"
 
+#: /1080i/Includes_Shortcuts_Window.xml
+msgctxt "#31147"
+msgid "More"
+msgstr "Mais"
+
 #: /1080i/Includes_DialogInfo.xml
 msgctxt "#31148"
 msgid "Explore"
 msgstr "Explorar"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31149"
+msgid "Edit spotlight"
+msgstr "Editar destaque"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31150"
@@ -737,6 +747,16 @@ msgctxt "#31155"
 msgid "Combined Poster"
 msgstr "Pôster Combinado"
 
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31156"
+msgid "Edit categories and widgets"
+msgstr "Editar categorias e widgets"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31157"
+msgid "Category items appear as a vertical menu at the left of the home screen."
+msgstr "Os itens da categoria aparecem como um menu vertical à esquerda da tela inicial."
+
 #: /1080i/Includes_Keyboard_Mini.xml
 msgctxt "#31158"
 msgid "Layout"
@@ -751,10 +771,25 @@ msgctxt "#31160"
 msgid "REC"
 msgstr "Gravar"
 
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31161"
+msgid "Edit the widgets shown in the hub."
+msgstr "Editar os widgets mostrados no hub."
+
 #: /1080i/Includes_Labels.xml
 msgctxt "#31162"
 msgid "Hide"
 msgstr "Ocultar"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31163"
+msgid "Customise hubs"
+msgstr "Personalizar hubs"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31164"
+msgid "Global widgets are shown at the end of the widget stack for all categories in the hub."
+msgstr "Os widgets globais são mostrados no final da pilha de widgets para todas as categorias no hub."
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31165"
@@ -781,10 +816,20 @@ msgctxt "#31169"
 msgid "Birthday"
 msgstr "Aniversário"
 
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31170"
+msgid "Note"
+msgstr "Nota"
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31171"
 msgid "On-screen keyboard size"
 msgstr "Tamanho do teclado na tela"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31172"
+msgid "Global widgets are not shown for categories in combined widget mode."
+msgstr "Os widgets globais não são mostrados para categorias no modo de widget combinado."
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31173"
@@ -794,6 +839,16 @@ msgstr "Rolar"
 msgctxt "#31174"
 msgid "Navigation"
 msgstr "Navegação"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31175"
+msgid "These widgets are in addition to any widgets for the specific category."
+msgstr "Esses widgets são adicionais a quaisquer widgets da categoria específica."
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31176"
+msgid "Home focus and navigation"
+msgstr "Foco inicial e navegação"
 
 msgctxt "#31177"
 msgid "Menus"
@@ -843,7 +898,7 @@ msgstr "Comportamento"
 
 msgctxt "#31187"
 msgid "Autoscroll time interval"
-msgstr "Intervalo de tempo de rolagem automática"
+msgstr "Intervalo de tempo da rolagem automática"
 
 msgctxt "#31188"
 msgid "Limit"
@@ -907,10 +962,10 @@ msgctxt "#31200"
 msgid "Added on"
 msgstr "Adicionado em"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
 msgctxt "#31201"
-msgid "Seekbar displays title details while seeking"
-msgstr "Barra de progresso exibe detalhes do título durante a busca"
+msgid "Use a label to differentiate this hub from others."
+msgstr "Usar um rótulo para diferenciar este hub dos outros."
 
 msgctxt "#31202"
 msgid "Ratings"
@@ -1251,9 +1306,34 @@ msgctxt "#31275"
 msgid "Customise search"
 msgstr "Personalizar pesquisa"
 
+#: /1080i/SkinSettings.xml
+msgctxt "#31276"
+msgid "Widgets mode sets navigation to loop on left and right."
+msgstr "O modo Widgets define a navegação para fazer um loop à esquerda e à direita."
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31277"
+msgid "Ensure that your device has an alternative mode of accessing the menu and settings before selecting this option."
+msgstr "Certifique-se de que seu dispositivo tenha um modo alternativo de acesso ao menu e às configurações antes de selecionar esta opção."
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31278"
+msgid "Switch the hub from a basic widgets-only layout to more advanced modes with additional features."
+msgstr "Mude o hub de um layout básico apenas de widgets para modos mais avançados com recursos adicionais."
+
 msgctxt "#31279"
 msgid "Studio icons"
 msgstr "Ícones dos estúdios"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31280"
+msgid "Basic is a simple widgets-only mode."
+msgstr "Básico é um modo simples apenas de widgets."
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31281"
+msgid "Welcome"
+msgstr "Bem-vindo"
 
 #: /1080i/Includes_Shortcuts_Pallette.xml
 msgctxt "#31282"
@@ -1264,6 +1344,11 @@ msgstr "Widget"
 msgctxt "#31283"
 msgid "Played"
 msgstr "Reproduzido"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31284"
+msgid "Discover movies and tvshows on TMDb."
+msgstr "Descobrir filmes e seriados no TMDb."
 
 msgctxt "#31285"
 msgid "Classification (MPAA)"
@@ -1277,6 +1362,11 @@ msgctxt "#31287"
 msgid "Nominated for"
 msgstr "Indicado por"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31288"
+msgid "Explore now."
+msgstr "Explorar agora."
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31289"
 msgid "Touch mode"
@@ -1286,6 +1376,16 @@ msgstr "Modo toque"
 msgctxt "#31290"
 msgid "Attribution"
 msgstr "Atribuição"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31291"
+msgid "Search for movies$COMMA tvshows$COMMA and more."
+msgstr "Pesquisar filmes$COMMA seriados$COMMA e muito mais."
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31292"
+msgid "Text labels"
+msgstr "Rótulos de texto"
 
 msgctxt "#31293"
 msgid "Press down for cast and more info"
@@ -1321,6 +1421,11 @@ msgctxt "#31300"
 msgid "Customise window background"
 msgstr "Personalizar fundo da janela"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31301"
+msgid "Press down for crew"
+msgstr "Pressione para baixo para a equipe"
+
 msgctxt "#31302"
 msgid "Management options"
 msgstr "Opções de gerenciamento"
@@ -1329,6 +1434,21 @@ msgstr "Opções de gerenciamento"
 msgctxt "#31303"
 msgid "Customise fallback image folder"
 msgstr "Pasta de imagem substituta personalizada"
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31304"
+msgid "lists"
+msgstr "listas"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31305"
+msgid "Detailed adds an information panel."
+msgstr "Detalhado adiciona um painel de informações."
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31306"
+msgid "Advanced adds categories and spotlights."
+msgstr "Avançado adiciona categorias e destaques."
 
 #: /1080i/Includes_DialogInfo.xml
 msgctxt "#31307"
@@ -1365,6 +1485,31 @@ msgctxt "#31313"
 msgid "Always visible"
 msgstr "Sempre visível"
 
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31314"
+msgid "Advanced mode is only available in horizontal hub windows."
+msgstr "O modo avançado está disponível apenas em janelas de hub horizontais."
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31315"
+msgid "Hub windows other than classic home may not have access to the settings window in their default configuration."
+msgstr "As janelas do hub que não sejam a página inicial clássica podem não ter acesso à janela de configurações em sua configuração padrão."
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31316"
+msgid "Dark glass"
+msgstr "Vidro escuro"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31317"
+msgid "Ribbon"
+msgstr "Fita"
+
+#: /1080i/Includes_Views.xml
+msgctxt "#31318"
+msgid "Combined Circle"
+msgstr "Círculo Combinado"
+
 #: /1080i/Includes_MediaFilter.xml
 msgctxt "#31319"
 msgid "View"
@@ -1375,20 +1520,35 @@ msgctxt "#31320"
 msgid "Square"
 msgstr "Quadrado"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31321"
-msgid "Configure viewtypes"
-msgstr "Configurar tipos de exibição"
+msgid "Select viewtypes"
+msgstr "Selecionar tipos de exibição"
 
-#: /1080i/Includes_Labels.xml
+#: /1080i/SkinSettings.xml /1080i/Includes_Labels.xml
 msgctxt "#31322"
 msgid "Age"
 msgstr "Idade"
+
+#: /1080i/Includes_Views.xml
+msgctxt "#31323"
+msgid "Combined Card"
+msgstr "Cartão Combinado"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31324"
 msgid "Content"
 msgstr "Conteúdo"
+
+#: /1080i/Includes_Views.xml
+msgctxt "#31325"
+msgid "Combined Board"
+msgstr "Painel Combinado"
+
+#: /1080i/Includes_Views_Row.xml
+msgctxt "#31326"
+msgid "Quad Row"
+msgstr "Linha com Quadrangular"
 
 #: /1080i/Includes_Shortcuts_Options.xml
 msgctxt "#31327"
@@ -1420,6 +1580,11 @@ msgctxt "#31332"
 msgid "New search"
 msgstr "Nova pesquisa"
 
+#: /1080i/Includes_Lists.xml
+msgctxt "#31333"
+msgid "Quad"
+msgstr "Quadrangular"
+
 msgctxt "#31334"
 msgid "Comments"
 msgstr "Comentários"
@@ -1444,22 +1609,72 @@ msgctxt "#31338"
 msgid "Select + Right Stick"
 msgstr "Select + Direcional Direito"
 
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31339"
+msgid "Wall Quad"
+msgstr "Parede com Quadrangulares"
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31340"
 msgid "Reset skin to defaults"
-msgstr "Redefinir pele para o padrão"
+msgstr "Redefinir skin para o padrão"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31341"
+msgid "Combined Quad"
+msgstr "Quadrangulares Combinados"
+
+#: /1080i/Includes_Views_Row.xml
+msgctxt "#31342"
+msgid "Disc Row"
+msgstr "Linha com Discos"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31343"
+msgid "Wall Disc"
+msgstr "Parede com Discos"
+
+#: /1080i/Includes_Widgets.xml
+msgctxt "#31344"
+msgid "Combined Disc"
+msgstr "Discos Combinados"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31345"
+msgid "Advanced mode applies a horizontal category layout."
+msgstr "O modo avançado aplica um layout de categoria horizontal."
 
 msgctxt "#31346"
 msgid "Press down for more by this artist"
 msgstr "Pressione para ver mais deste artista"
 
+#: /1080i/Includes_DialogInfo.xml
+msgctxt "#31347"
+msgid "Photography"
+msgstr "Fotografia"
+
 msgctxt "#31348"
 msgid "Press down for channel EPG"
 msgstr "Pressione para baixo para o canal EPG"
 
+#: /1080i/SkinSettings.xml
+msgctxt "#31349"
+msgid "Up"
+msgstr "Para cima"
+
 msgctxt "#31350"
 msgid "Thanks"
 msgstr "Agradecimentos"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31351"
+msgid "Kodi forces content to refresh on playback start and stop."
+msgstr "Kodi força a atualização do conteúdo no início e na parada da reprodução."
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31352"
+msgid "Autoplaying trailers will trigger frequent plugin reloading."
+msgstr "A reprodução automática de trailers acionará o recarregamento frequente do plugin."
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31353"
@@ -1476,15 +1691,15 @@ msgctxt "#31355"
 msgid "Seekbar time display"
 msgstr "Exibição do tempo da barra de progresso"
 
-#: /1080i/SkinSettings.xml
-msgctxt "#31356"
-msgid "Use local cast details"
-msgstr "Use detalhes do elenco local"
-
 #: /1080i/Includes_Items.xml
+msgctxt "#31356"
+msgid "Use online cast"
+msgstr "Usar elenco online"
+
+#: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
 msgctxt "#31357"
 msgid "Artwork Overlay"
-msgstr "Sobreposição de Arte"
+msgstr "Sobreposição de Artwork"
 
 msgctxt "#31358"
 msgid "Waiting for plugins"
@@ -1494,6 +1709,16 @@ msgstr "Esperando por plugins"
 msgctxt "#31359"
 msgid "Switch user"
 msgstr "Trocar de usuário"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31360"
+msgid "No support is provided. Use at your own risk."
+msgstr "Nenhum suporte é fornecido. Use por sua conta e risco."
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31361"
+msgid "Do NOT report issues while this setting is enabled."
+msgstr "NÃO relate problemas enquanto esta configuração estiver habilitada."
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31362"
@@ -1520,6 +1745,11 @@ msgctxt "#31366"
 msgid "Uncropped"
 msgstr "Não cortado"
 
+#: /1080i/SkinSettings.xml
+msgctxt "#31367"
+msgid "This feature is experimental and may cause degraded system performance or other issues."
+msgstr "Este recurso é experimental e pode causar degradação do desempenho do sistema ou outros problemas."
+
 #: /1080i/Includes_Search_View.xml
 msgctxt "#31368"
 msgid "Searching for"
@@ -1544,10 +1774,15 @@ msgctxt "#31372"
 msgid "Options tray"
 msgstr "Opções de bandeja"
 
+#: /1080i/Includes_DialogInfo.xml
+msgctxt "#31373"
+msgid "from"
+msgstr "de"
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31374"
 msgid "Reset skin settings to defaults"
-msgstr "Redefinir pela para as configurações padrões"
+msgstr "Redefinir para as configurações padrões"
 
 msgctxt "#31375"
 msgid "Install zip"
@@ -1591,7 +1826,7 @@ msgstr "Produção"
 #: /1080i/SkinSettings.xml
 msgctxt "#31384"
 msgid "Tray labels"
-msgstr "Rótulos da bandeja"
+msgstr "Rótulos na bandeja"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31385"
@@ -1631,6 +1866,21 @@ msgstr "Mínimo"
 msgctxt "#31392"
 msgid "Explore Widgets"
 msgstr "Explorar Widgets"
+
+#: /1080i/Includes_Items.xml Shorter label for use in info dialog buttons
+msgctxt "#31393"
+msgid "Trailer"
+msgstr "Trailer"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31394"
+msgid "Picture-in-picture video"
+msgstr "Vídeo imagem em imagem"
+
+#: /1080i/Custom_1180_Wizard.xml
+msgctxt "#31395"
+msgid "Choose prebuilt widget configuration"
+msgstr "Escolha a configuração do widget pré-construído"
 
 msgctxt "#31396"
 msgid "Recent Movies"
@@ -1678,7 +1928,7 @@ msgstr "Filmes Melhor Avaliados"
 
 msgctxt "#31407"
 msgid "Top Rated TV Shows"
-msgstr "Seriados Melhor Avaliadas"
+msgstr "Seriados Melhor Avaliados"
 
 msgctxt "#31408"
 msgid "Random Movies"
@@ -1686,7 +1936,7 @@ msgstr "Filmes Aleatórios"
 
 msgctxt "#31409"
 msgid "Random TV Shows"
-msgstr "Seriados Aleatórias"
+msgstr "Seriados Aleatórios"
 
 msgctxt "#31410"
 msgid "Random Episodes"
@@ -1706,11 +1956,16 @@ msgstr "Todos os Filmes"
 
 msgctxt "#31414"
 msgid "All TV Shows"
-msgstr "Todas as Seriados"
+msgstr "Todas os Seriados"
 
 msgctxt "#31415"
 msgid "Movies and TV Shows"
 msgstr "Filmes e Seriados"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31416"
+msgid "Secondary button"
+msgstr "Botão secundário"
 
 msgctxt "#31417"
 msgid "Random Artists"
@@ -1733,7 +1988,7 @@ msgstr "Apps"
 
 msgctxt "#31421"
 msgid "Choose submenu list"
-msgstr "Escolha a lista de submenus"
+msgstr "Escolher a lista de submenus"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31422"
@@ -1775,12 +2030,12 @@ msgctxt "#31429"
 msgid "Chapters"
 msgstr "Capítulos"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/Includes_SkinSettings.xml
 msgctxt "#31430"
-msgid "Customise video OSD widgets"
-msgstr "Personalizar widgets OSD de vídeo"
+msgid "Customise style"
+msgstr "Personalizar o estilo"
 
-#: /1080i/Includes_Views_Row.xml
+#: /1080i/SkinSettings.xml /1080i/Includes_Views_Row.xml
 msgctxt "#31431"
 msgid "Circle"
 msgstr "Círculo"
@@ -1791,18 +2046,28 @@ msgid "Adaptive"
 msgstr "Adaptativo"
 
 #: /1080i/SkinSettings.xml
+msgctxt "#31433"
+msgid "Additional tags"
+msgstr "Etiquetas adicionais"
+
+#: /1080i/SkinSettings.xml
 msgctxt "#31434"
 msgid "Video OSD"
-msgstr "OSD de Vídeo"
+msgstr "OSD do Vídeo"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31435"
 msgid "TMDbHelper lookups"
-msgstr "Pesquisas TMDbHelper"
+msgstr "Pesquisas do TMDbHelper"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31436"
+msgid "Cycle background extrafanart"
+msgstr "Alternar fundo de extrafanart"
 
 msgctxt "#31437"
 msgid "Choose spotlight"
-msgstr "Escolha o destaque"
+msgstr "Escolher o destaque"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31438"
@@ -1834,10 +2099,15 @@ msgctxt "#31443"
 msgid "Open path in dialog"
 msgstr "Abrir caminho na caixa de diálogo"
 
+#: /1080i/Settings.xml
+msgctxt "#31444"
+msgid "Customisation"
+msgstr "Personalização"
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31445"
 msgid "Replace search with discover"
-msgstr "Substitua a pesquisa pela descoberta"
+msgstr "Substituir a pesquisa pelo descobrir"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31446"
@@ -1851,8 +2121,8 @@ msgstr "Logo do Kodi"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31448"
-msgid "Show \"More\" item on limited widgets"
-msgstr "Mostrar item \"Mais\" em widgets limitados"
+msgid "This category contains customisation options for"
+msgstr "Esta categoria contém opções de personalização para"
 
 #: /1080i/Custom_1180_Wizard.xml
 msgctxt "#31449"
@@ -1877,27 +2147,37 @@ msgstr "Composto"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31453"
 msgid "Choose colour theme"
-msgstr "Escolha o tema da cor"
+msgstr "Escolher a cor do tema"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31454"
 msgid "Choose dialog style"
-msgstr "Escolha o estilo da caixa de diálogo"
+msgstr "Escolher o estilo da caixa de diálogo"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31455"
 msgid "Choose layout style"
-msgstr "Escolha o estilo do layout"
+msgstr "Escolher o estilo do layout"
 
 #: /1080i/Custom_1115_Dialog_WideSettings.xml
 msgctxt "#31456"
 msgid "Prebuilt"
 msgstr "Pré-construído"
 
+#: /1080i/SkinSettings.xml
+msgctxt "#31457"
+msgid "Scrollbar"
+msgstr "Barra de rolagem"
+
 #: /1080i/Includes_Labels.xml
 msgctxt "#31458"
 msgid "Monochrome"
 msgstr "Monocromático"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31459"
+msgid "Letter"
+msgstr "Carta"
 
 #: /1080i/SkinSettings.xml /1080i/MusicOSD.xml
 msgctxt "#31460"
@@ -1907,12 +2187,32 @@ msgstr "Personalizar visualizações"
 #: /1080i/Includes_Items.xml
 msgctxt "#31461"
 msgid "Choose preset"
-msgstr "Escolha predefinição"
+msgstr "Escolher predefinição"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31462"
+msgid "Wall Banner"
+msgstr "Parede de Banner"
+
+#: /1080i/Includes_Views.xml
+msgctxt "#31463"
+msgid "Press down for filter and view options"
+msgstr "Pressione para baixo para ver opções de filtro e visualização"
+
+#: /1080i/Includes_Views.xml
+msgctxt "#31464"
+msgid "Press right for filter and view options"
+msgstr "Pressione à direita para ver opções de filtro e visualização"
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31465"
 msgid "Rain chance"
 msgstr "Chance de chuva"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31466"
+msgid "Blur background"
+msgstr "Desfocar fundo"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31467"
@@ -1927,7 +2227,7 @@ msgstr "Layout do bloco"
 #: /1080i/Includes_Items.xml
 msgctxt "#31469"
 msgid "Choose shortcut"
-msgstr "Escolha o atalho"
+msgstr "Escolher atalho"
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31470"
@@ -1942,7 +2242,7 @@ msgstr "Perigo de incêndio"
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31472"
 msgid "Rain since 9am"
-msgstr "Chovendo desde 9am"
+msgstr "Chovendo desde das 9am"
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31473"
@@ -1959,10 +2259,15 @@ msgctxt "#31475"
 msgid "The spotlight is a special fullscreen widget designed to showcase one item at a time."
 msgstr "O destaque é um widget especial em tela cheia projetado para exibir um item por vez."
 
+#: /1080i/SkinSettings.xml
+msgctxt "#31476"
+msgid "This category contains acknowledgements, contributions, and thanks."
+msgstr "Esta categoria contém reconhecimentos, contribuições e agradecimentos."
+
 #: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
 msgctxt "#31477"
 msgid "Progress percentage"
-msgstr "Porcentagem de progresso"
+msgstr "Percentual do progresso"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31478"
@@ -2008,6 +2313,11 @@ msgstr "Parar"
 msgctxt "#31486"
 msgid "Dialog"
 msgstr "Diálogo"
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31487"
+msgid "and"
+msgstr "e"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31488"
@@ -2112,7 +2422,7 @@ msgstr "pseudoperfis"
 #: /1080i/Custom_1195_SkinUserLoginScreen.xml
 msgctxt "#31508"
 msgid "Loading skin user profiles"
-msgstr "Carregando perfis de usuário de skin"
+msgstr "Carregando perfis de usuário da skin"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31509"
@@ -2164,20 +2474,85 @@ msgctxt "#31518"
 msgid "Highlight type"
 msgstr "Tipo de destaque"
 
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31519"
+msgid "Empty widget placeholder"
+msgstr "Espaço reservado para widget vazio"
+
+#: /1080i/Includes_Weather_Radar.xml
+msgctxt "#31520"
+msgid "Cloudiness"
+msgstr "Nebulosidade"
+
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31521"
 msgid "Edit global widgets"
 msgstr "Editar widgets globais"
 
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31522"
+msgid "Hiding empty widgets may cause positioning issues after video playback."
+msgstr "Ocultar widgets vazios pode causar problemas de posicionamento após a reprodução do vídeo."
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31523"
+msgid "It is recommended to delete any unused widgets from your configuration instead of hiding them."
+msgstr "É recomendado excluir quaisquer widgets não utilizados da sua configuração em vez de ocultá-los."
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31524"
+msgid "There is also an overhead refresh cost to performance associated with hiding empty widgets."
+msgstr "Há também um custo indireto de atualização para o desempenho associado à ocultação de widgets vazios."
+
+#: /1080i/Includes_Weather_Radar.xml
+msgctxt "#31525"
+msgid "Visibility"
+msgstr "Visibilidade"
+
+#: /1080i/Includes_Weather_Forecast.xml
+msgctxt "#31526"
+msgid "Hour"
+msgstr "Hora"
+
+#: /1080i/Includes_Weather_Forecast.xml
+msgctxt "#31527"
+msgid "Later"
+msgstr "Depois"
+
+#: /1080i/Includes_Weather_Forecast.xml
+msgctxt "#31528"
+msgid "Particulate"
+msgstr "Partículas"
+
+#: /1080i/Includes_Weather_Forecast.xml
+msgctxt "#31529"
+msgid "Ozone"
+msgstr "Ozono"
+
+#: /1080i/Includes_Weather_Forecast.xml
+msgctxt "#31530"
+msgid "Solar radiation"
+msgstr "Radiação solar"
+
+#: /1080i/Includes_Weather_Forecast.xml
+msgctxt "#31531"
+msgid "Carbon monoxide"
+msgstr "Monóxido de carbono"
+
+#: /1080i/Includes_Weather.xml
+msgctxt "#31532"
+msgid "Charts"
+msgstr "Gráficos"
+
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31533"
 msgid "Add list"
-msgstr "Adicionar à lista"
+msgstr "Adic. à lista"
 
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31534"
 msgid "Del list"
-msgstr "Excluir da lista"
+msgstr "Exc. da lista"
 
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31535"
@@ -2187,12 +2562,27 @@ msgstr "Restaurar"
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31536"
 msgid "Choose fallback image folder"
-msgstr "Escolha a pasta de imagens substituta"
+msgstr "Escolher a pasta de imagens substitutas"
 
 #: /1080i/Custom_1115_Dialog_Shortcuts.xml
 msgctxt "#31537"
 msgid "Edit submenu items"
 msgstr "Editar itens do submenu"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31538"
+msgid "Customise viewtypes"
+msgstr "Personalizar tipos de exibição"
+
+#: /1080i/Includes_Items.xml
+msgctxt "#31539"
+msgid "Use online gallery"
+msgstr "Use a galeria online"
+
+#: /1080i/Includes_Items.xml
+msgctxt "#31540"
+msgid "Use online collection"
+msgstr "Use coleção online"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31541"
@@ -2229,10 +2619,30 @@ msgctxt "#31547"
 msgid "Yesterday"
 msgstr "Ontem"
 
+#: /1080i/Includes_Items.xml
+msgctxt "#31548"
+msgid "Use detailed status"
+msgstr "Use status detalhado"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31549"
+msgid "Choose which hub window to use as the home screen."
+msgstr "Escolha qual janela do hub para usar como tela inicial."
+
+#: /1080i/SkinSettings.xml
+msgctxt "#31550"
+msgid "Change the visibility level of skin settings."
+msgstr "Altera o nível de visibilidade das configurações da skin."
+
 #: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
 msgctxt "#31551"
 msgid "Use as home"
-msgstr "Use como início"
+msgstr "Usar como início"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31552"
+msgid "Settings level"
+msgstr "Nível de configurações"
 
 #: /1080i/Custom_1175_Dialog_Discover.xml
 msgctxt "#31553"
@@ -2262,7 +2672,7 @@ msgstr "Parede com Círculos"
 #: /1080i/Includes_Actions.xml
 msgctxt "#31558"
 msgid "Signpost"
-msgstr "Posto de sinalização"
+msgstr "Placa de sinalização"
 
 #: /1080i/Includes_Views_List.xml
 msgctxt "#31559"
@@ -2277,14 +2687,114 @@ msgstr "Branco Brilhante"
 #: /1080i/Includes_Views_Wall.xml
 msgctxt "#31561"
 msgid "Wall Overview"
-msgstr "Parede com Visão Geral"
+msgstr "Parede com Resumo"
 
 #: /1080i/Includes_Views_Row.xml
 msgctxt "#31562"
 msgid "Overview Row"
-msgstr "Linha com Visão Geral"
+msgstr "Linha com Resumo"
 
 #: /1080i/Includes_Views_Row.xml
 msgctxt "#31563"
 msgid "Card Row"
 msgstr "Linha com Cartões"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31564"
+msgid "General appearance and widget layout customisations."
+msgstr "Aparência geral e personalizações de layout do widget."
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31565"
+msgid "Detailed adjustments and additional hub customisations."
+msgstr "Ajustes detalhados e personalizações adicionais do hub."
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31566"
+msgid "Development tools and experimental options."
+msgstr "Ferramentas de desenvolvimento e opções experimentais."
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31567"
+msgid "Add a single item or a list of several items?"
+msgstr "Adicionar um único item ou uma lista de vários itens?"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31568"
+msgid "Add new item(s)"
+msgstr "Adicionar novo(s) item(ns)"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31569"
+msgid "Add item"
+msgstr "Adicionar item"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31570"
+msgid "Delete item(s)"
+msgstr "Excluir item(ns)"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31571"
+msgid "Delete a single item or a list of several items?"
+msgstr "Excluir um único item ou uma lista de vários itens?"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31572"
+msgid "Delete item"
+msgstr "Excluir item"
+
+#: /1080i/Custom_1116_Dialog_Shortcuts.xml
+msgctxt "#31573"
+msgid "Delete list"
+msgstr "Excluir lista"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31574"
+msgid "Unhide hubs"
+msgstr "Reexibir hubs"
+
+#: /1080i/Custom_1115_Dialog_Shortcuts_Window.xml
+msgctxt "#31575"
+msgid "Click to toggle hub window customisation options."
+msgstr "Clique para alternar as opções de personalização da janela do hub."
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31576"
+msgid "Seekbar delayed pause time"
+msgstr "Tempo de pausa atrasado da barra de progresso"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31577"
+msgid "Expanded info on OSD controls"
+msgstr "Informações expandidas sobre controles OSD"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31578"
+msgid "Expanded info landscape art"
+msgstr "Informação Expandida com arte da paisagem"
+
+#: /1080i/Includes_ButtonMenu.xml
+msgctxt "#31579"
+msgid "Prev"
+msgstr "Anterior"
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31580"
+msgid "Combined List"
+msgstr "Lista Combinada"
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31581"
+msgid "List Expanded"
+msgstr "Lista Expandida"
+
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31582"
+msgid "List Information"
+msgstr "Lista de Informações"
+
+#: /1080i/Includes_Items.xml
+msgctxt "#31583"
+msgid "Mirrored"
+msgstr "Espelhado"

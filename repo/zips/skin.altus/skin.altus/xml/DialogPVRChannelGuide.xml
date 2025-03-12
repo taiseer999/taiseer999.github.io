@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+	<defaultcontrol always="true">11</defaultcontrol>
+	<controls>
+		<control type="group">
+			<animation effect="fade" start="0" end="100" time="100">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="100">WindowClose</animation>
+			<animation effect="fade" start="100" end="75" time="0" condition="true">Conditional</animation>
+			<visible>!Window.IsActive(fullscreenvideo)</visible>
+			<include>ColoredBackgroundImages</include>
+		</control>
+		<control type="group">
+			<depth>DepthOSD</depth>
+			<animation effect="fade" start="100" end="0" time="200" tween="sine" condition="$EXP[infodialog_active]">Conditional</animation>
+			<control type="group">
+				<include>OpenClose_Left</include>
+				<include content="DialogBackgroundCommons">
+					<param name="width" value="1375" />
+					<param name="shade_right" value="430" />
+					<param name="divider_left" value="945" />
+					<param name="header_label" value="" />
+					<param name="header_id" value="" />
+				</include>
+				<control type="image">
+					<left>1375</left>
+					<width>1</width>
+					<texture colordiffuse="$VAR[FocusColorTheme]">masks/mainmenupanel_divider.png</texture>
+				</control>
+				<control type="image">
+					<left>1000</left>
+					<top>450</top>
+					<width>320</width>
+					<height>280</height>
+					<aspectratio align="center" aligny="center">keep</aspectratio>
+					<texture fallback="DefaultTVShows.png" >$INFO[Listitem.Icon]</texture>
+					<visible>Control.HasFocus(11)</visible>
+				</control>
+				<control type="fixedlist" id="11">
+					<left>0</left>
+					<top>70</top>
+					<width>945</width>
+					<bottom>0</bottom>
+					<onleft>60</onleft>
+					<onright>60</onright>
+					<onup>11</onup>
+					<ondown>11</ondown>
+					<pagecontrol>60</pagecontrol>
+					<scrolltime tween="cubic" easing="out">500</scrolltime>
+					<movement>4</movement>
+					<focusposition>4</focusposition>
+					<itemlayout height="86" width="945">
+						<control type="label">
+							<height>86</height>
+							<left>30</left>
+							<width>130</width>
+							<top>2</top>
+							<aligny>left</aligny>
+							<textoffsety>20</textoffsety>
+							<textcolor>lightgrey</textcolor>
+							<label>$INFO[ListItem.StartTime]</label>
+						</control>
+						<control type="label">
+							<height>86</height>
+							<right>30</right>
+							<width>725</width>
+							<top>2</top>
+							<align>right</align>
+							<aligny>left</aligny>
+							<textoffsety>20</textoffsety>
+							<label>$VAR[PVRListItemSubLabelFocused]</label>
+							<textcolor>unfocused_text</textcolor>
+						</control>
+					</itemlayout>
+					<focusedlayout height="330" width="945">
+						<control type="image">
+							<bottom>0</bottom>
+							<texture colordiffuse="99000000">colors/darkest.png</texture>
+							<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(11)">Conditional</animation>
+						</control>
+						<control type="image">
+							<height>86</height>
+							<texture colordiffuse="$VAR[FocusColorTheme]">colors/grey.png</texture>
+							<animation effect="fade" start="100" end="50" time="40" condition="!Control.HasFocus(11)">Conditional</animation>
+						</control>
+						<control type="image">
+							<height>1</height>
+							<bottom>0</bottom>
+							<texture colordiffuse="$VAR[FocusColorTheme]">masks/posterflowdivider.png</texture>
+						</control>
+						<control type="label">
+							<height>86</height>
+							<left>30</left>
+							<width>130</width>
+							<top>2</top>
+							<aligny>left</aligny>
+							<textoffsety>20</textoffsety>
+							<label>$INFO[ListItem.StartTime]</label>
+							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+						</control>
+						<control type="label">
+							<height>86</height>
+							<right>30</right>
+							<width>725</width>
+							<top>2</top>
+							<align>right</align>
+							<aligny>left</aligny>
+							<textoffsety>20</textoffsety>
+							<label>$VAR[PVRListItemSubLabelFocused]</label>
+							<textcolor>$VAR[FocusedTextColorVar]</textcolor>
+							<scroll>true</scroll>
+						</control>
+						<control type="textbox">
+							<left>30</left>
+							<top>105</top>
+							<right>30</right>
+							<height>193</height>
+							<label>$INFO[ListItem.Plot]</label>
+							<autoscroll time="3000" delay="4000" repeat="5000">$PARAM[focused]</autoscroll>
+							<visible>!String.IsEmpty(ListItem.Plot)</visible>
+						</control>
+					</focusedlayout>
+				</control>
+				
+				<control type="scrollbar" id="60">
+					<left>0</left>
+					<top>0</top>
+					<width>8</width>
+					<bottom>0</bottom>
+					<onleft>11</onleft>
+					<onright>11</onright>
+					<texturesliderbackground />
+					<!-- <animation effect="zoom" start="100,100" end="50,100" center="780,0" time="300" tween="sine" easing="inout" condition="!Control.HasFocus(60)">conditional</animation> -->
+					<animation effect="fade" time="300" start="0" end="100" tween="cubic" easing="inout">VisibleChange</animation>
+					<visible>Control.HasFocus(60) | Container.Scrolling</visible>
+				</control>
+			</control>
+			<control type="group">
+				<include>Animation_TopSlide</include>
+				<control type="label" id="2">
+					<description>header label</description>
+					<textoffsetx>40</textoffsetx>
+					<width>1300</width>
+					<height>70</height>
+					<font>font45</font>
+					<aligny>center</aligny>
+					<label>$LOCALIZE[19069]$INFO[Container(11).ListItem.StartDate, - ]</label>
+					<textcolor>unfocused_text</textcolor>
+					<shadowcolor>black</shadowcolor>
+				</control>
+			</control>
+		</control>
+	</controls>
+</window>
