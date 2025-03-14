@@ -3,13 +3,11 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
-import re, requests, queue
-#from fenom import client
+from json import loads as jsloads, dumps as jsdumps
+import base64, re, requests, queue
+#from resources.lib.fenom import client
 from fenom import source_utils
-
-#SERVER_ERROR = ('521 Origin Down', 'No results returned', 'Connection Time-out', 'Database maintenance')
-headers = {'User-Agent': 'Mozilla/5.0'}
+from fenom.control import setting as getSetting
 
 
 class source:
@@ -19,14 +17,22 @@ class source:
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
+		params = '/%s' % self._token()
 		self.language = ['en']
-		self.base_link = "https://torrentio.strem.fun"
-		# self.movieSearch_link = '/language=english/stream/movie/%s.json'
-		# self.tvSearch_link = '/language=english/stream/series/%s:%s:%s.json'
-		self.movieSearch_link = '/providers=horriblesubs,nyaasi,tokyotosho,anidex,comando,bludv,torrent9,ilcorsaronero,mejortorrent,wolfmax4k,cinecalidad/stream/movie/%s.json'
-		self.tvSearch_link = '/providers=horriblesubs,nyaasi,tokyotosho,anidex,comando,bludv,torrent9,ilcorsaronero,mejortorrent,wolfmax4k,cinecalidad/stream/series/%s:%s:%s.json'
+		self.base_link = "https://comet.elfhosted.com"
+		self.movieSearch_link = f"{params}/stream/movie/%s.json"
+		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0
-# Currently supports YTS(+), EZTV(+), RARBG(+), 1337x(+), ThePirateBay(+), KickassTorrents(+), TorrentGalaxy(+), HorribleSubs(+), NyaaSi(+), NyaaPantsu(+), Rutor(+), Comando(+), ComoEuBaixo(+), Lapumia(+), OndeBaixa(+), Torrent9(+).
+
+	def _token(self):
+		debrid = getSetting('cmdebrid.debrid')
+		params = {"maxResultsPerResolution":0,"maxSize":0,"cachedOnly":False,"removeTrash":True,"resultFormat":["title","metadata","size","languages"],"debridService":"torrent","debridApiKey":"","debridStreamProxyPassword":"","languages":{"required":[],"exclude":[],"preferred":[]},"resolutions":{},"options":{"remove_ranks_under":-10000000000,"allow_english_in_languages":False,"remove_unknown_languages":False}}
+		token = 'eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2UsInJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUiLCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJkZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhjbHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3ZlX3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxzZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
+		if debrid not in ('0', '1'): return token
+		service, token = {'0': ('realdebrid', 'rd.token'), '1': ('alldebrid', 'ad.token')}[debrid]
+		params.update({'debridApiKey': getSetting(token), 'debridService': service, 'cachedOnly': True})
+		token = base64.b64encode(jsdumps(params).encode('utf-8')).decode('utf-8')
+		return token
 
 	def sources(self, data, hostDict):
 		sources = []
@@ -49,24 +55,27 @@ class source:
 				hdlr = year
 			# log_utils.log('url = %s' % url)
 			try:
-				results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
-#				if not results or any(value in results for value in SERVER_ERROR): return sources
+				results = requests.get(url, timeout=7) # client.request(url, timeout=7)
 				files = results.json()['streams'] # jsloads(results)['streams']
 			except: files = []
 			self._queue.put_nowait(files) # if seasons
 			self._queue.put_nowait(files) # if shows
-			_INFO = re.compile(r'👤.*')
+			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('NYAAIO')
+			source_utils.scraper_error('CMDEBRID')
 			return sources
 
 		for file in files:
 			try:
-				hash = file['infoHash']
-				file_title = file['title'].split('\n')
+				if 'url' in file:
+					path = file['url'].split('/')
+					hash = path[path.index('playback') + 1]
+				else: hash = file['infoHash']
+				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
+				cached = 'CM+' if '⚡' in file['name'] else 'CM'
 				# try:
 					# index = file_title.index(file_info)
 					# if index == 1: combo = file_title[0].replace(' ', '.')
@@ -76,7 +85,7 @@ class source:
 
 				name = source_utils.clean_name(file_title[0])
 
-#				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
+				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
@@ -88,7 +97,7 @@ class source:
 					# if any(re.search(item, name_lower) for item in ep_strings): continue
 
 				try:
-					seeders = int(re.search(r'(\d+)', file_info).group(1))
+					seeders = 0 # int(re.search(r'(\d+)', file_info).group(1))
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
@@ -100,10 +109,10 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': 'nyaaio', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				append({'provider': 'cmdebrid', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'cache': cached})
 			except:
-				source_utils.scraper_error('NYAAIO')
+				source_utils.scraper_error('CMDEBRID')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
@@ -117,21 +126,24 @@ class source:
 			year = data['year']
 			season = data['season']
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
-#			results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
-#			if not results or any(value in results for value in SERVER_ERROR): return sources
-			files = self._queue.get(timeout=6) # jsloads(results)['streams']
-			_INFO = re.compile(r'👤.*')
+#			results = requests.get(url, timeout=7) # client.request(url, timeout=7)
+			files = self._queue.get(timeout=8) # jsloads(results)['streams']
+			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('NYAAIO')
+			source_utils.scraper_error('CMDEBRID')
 			return sources
 
 		for file in files:
 			try:
-				hash = file['infoHash']
-				file_title = file['title'].split('\n')
+				if 'url' in file:
+					path = file['url'].split('/')
+					hash = path[path.index('playback') + 1]
+				else: hash = file['infoHash']
+				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
+				cached = 'CM+' if '⚡' in file['name'] else 'CM'
 				# try:
 					# index = file_title.index(file_info)
 					# if index == 1: combo = file_title[0].replace(' ', '.')
@@ -161,7 +173,7 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				try:
-					seeders = int(re.search(r'(\d+)', file_info).group(1))
+					seeders = 0 # int(re.search(r'(\d+)', file_info).group(1))
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
@@ -173,12 +185,12 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'nyaaio', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
+				item = {'provider': 'cmdebrid', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package, 'cache': cached}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
 			except:
-				source_utils.scraper_error('NYAAIO')
+				source_utils.scraper_error('CMDEBRID')
 		return sources
 

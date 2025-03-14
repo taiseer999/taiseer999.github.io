@@ -141,7 +141,7 @@ class SourceResults(BaseDialog):
 								if highlight_type == 0: key = 'torrent_highlight'
 								elif highlight_type == 1: key = provider_lower
 								else: key = basic_quality
-								status = 'UNCHECKED' if get('cache') in ('TI', 'MF') else 'CACHED'
+								status = 'UNCHECKED' if get('cache') in ('TI', 'MF', 'CM') else 'CACHED'
 								set_property('tikiskins.source_type',
 									'%s [B]%s[/B]' % (status, upper(get('package')))
 									if pack else

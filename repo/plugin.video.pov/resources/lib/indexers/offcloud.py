@@ -58,13 +58,14 @@ def browse_oc_cloud(folder_id):
 		for count, item in enumerate(video_files, 1):
 			try:
 				cm = []
+				cm_append = cm.append
 				name = item.split('/')[-1]
 				name = clean_file_name(name).upper()
 				link = Offcloud.requote_uri(item)
 				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, file_str, name)
 				url_params = {'mode': 'offcloud.resolve_oc', 'url': link, 'play': 'true'}
 				down_file_params = {'mode': 'downloader', 'action': 'cloud.offcloud_direct', 'name': name, 'url': link, 'image': default_oc_icon}
-				cm.append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+				cm_append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)

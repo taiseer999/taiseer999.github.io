@@ -2,7 +2,7 @@ import json
 from indexers import metadata
 from modules import kodi_utils, source_utils, settings
 from modules.cache_utils import clear_cache
-from modules.utils import get_datetime
+from modules.utils import get_datetime, clean_file_name
 # logger = kodi_utils.logger
 
 ls, build_url, translate_path, select_dialog = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.translate_path, kodi_utils.select_dialog
@@ -17,7 +17,6 @@ def trailer_choice(media_type, poster, tmdb_id, trailer_url, all_trailers=[]):
 		try: all_trailers = tmdb_media_videos(media_type, tmdb_id)['results']
 		except: pass
 	if all_trailers:
-		from modules.utils import clean_file_name
 		if len(all_trailers) == 1:
 			video_id = all_trailers[0].get('key')
 		else:
@@ -94,10 +93,11 @@ def trakt_manager_choice(params):
 
 def mdb_manager_choice(params):
 	if not get_setting('mdblist.token', ''): return notification(32760, 3500)
-	from apis.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list
+	from apis.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list, watchlist_obj
 	heading = ls(32200).replace('[B]', '').replace('[/B]', '')
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
 	choices = [(item['name'], str(item['id']), str(item['items'])) for item in mdb_userlists() if not item['dynamic']]
+	choices += [(watchlist_obj['name'], str(watchlist_obj['id']), 'NA')]
 	if not choices: return
 	list_items = [{'line1': item[0], 'line2': '%s items' % item[2],'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_line': 'true'}
@@ -465,12 +465,14 @@ def options_menu(params, meta=None):
 #		if 'external' in active_internal_scrapers:
 #			listing += [(base_str1 % ('', ls(32160)), base_str2 % uncached_torrents_status, 'toggle_torrents_display_uncached')]
 	else: multi_line = 'false'
+	if content in ('episode') and meta: listing += [('Scrape From Episode Group', '%s %s' % (ls(32533), ls(32841)), 'scrape_from_episode_group', meta['poster'])]
 	if content in ('tvshow') and meta: listing += [(ls(32541), '', 'play_random', meta['poster']), (ls(32542), '', 'play_random_continual', meta['poster'])]
-	if content in ('movie', 'tvshow') and meta: listing += [(ls(32604) % (ls(32028) if meta['mediatype'] == 'movie' else ls(32029)), '', 'clear_media_cache', meta['poster'])]
-	if watched_indicators == 1: listing += [(ls(32497) % ls(32037), '', 'clear_trakt_cache')]
 	if content in ('movie', 'episode'): listing += [(ls(32637), '', 'clear_scrapers_cache')]
 	listing += [('%s %s' % (ls(32118), ls(32513)), '', 'open_external_scrapers_choice')]
 #	listing += [('%s %s %s' % (open_str, ls(32522), settings_str), '', 'open_scraper_settings')]
+	if content in ('movie', 'tvshow') and meta: listing += [(ls(32604) % (ls(32028) if meta['mediatype'] == 'movie' else ls(32029)), '', 'clear_media_cache', meta['poster'])]
+	if watched_indicators == 1: listing += [(ls(32497) % ls(32037), '', 'clear_trakt_cache')]
+	if content in ('movie', 'tvshow', 'episode') and meta: listing += [('TorBox Usenet Search', '%s %s' % (ls(32533), ls(32841)), 'torbox_usenet_query', meta['poster'])]
 	listing += [(ls(32046), '', 'extras_lists_choice')]
 	listing += [('%s %s %s' % (open_str, ls(32036), settings_str), '', 'open_pov_settings')]
 #	listing += [(ls(32640), '', 'save_and_exit')]
@@ -483,6 +485,8 @@ def options_menu(params, meta=None):
 	elif choice == 'rescrape_with_disabled': return rescrape_with_disabled(content, meta, season, episode)
 	elif choice == 'scrape_with_filters_ignored': return scrape_with_filters_ignored(content, meta, season, episode)
 	elif choice == 'scrape_with_custom_values': return scrape_with_custom_values(content, meta, season, episode)
+	elif choice == 'scrape_from_episode_group': return scrape_from_episode_group(meta, season, episode)
+	elif choice == 'torbox_usenet_query': return torbox_usenet_query(meta, season, episode)
 	elif choice == 'toggle_autoplay': set_setting('auto_play_%s' % content, autoplay_toggle)
 	elif choice == 'toggle_autoplay_next': set_setting('autoplay_next_episode', autoplay_next_toggle)
 	elif choice == 'enable_scrapers': enable_scrapers_choice()
@@ -572,9 +576,9 @@ def refresh_cached_meta(meta):
 		media_type, tmdb_id = meta['mediatype'], meta['tmdb_id']
 		MetaCache().delete(media_type, 'tmdb_id', tmdb_id, meta)
 		if media_type == 'tvshow': MetaCache().delete_all_seasons_memory_cache(tmdb_id)
-		kodi_utils.notification(32576, 1500)
-		kodi_utils.container_refresh()
-	except: kodi_utils.notification(32574)
+		notification(32576, 1500)
+		container_refresh()
+	except: notification(32574)
 
 def build_navigate_to_page(params):
 	use_alphabet = settings.nav_jump_use_alphabet() == 2
@@ -659,4 +663,76 @@ def scrape_with_custom_values(media_type, meta, season=None, episode=None):
 		play_params['ignore_scrape_filters'] = 'true'
 		set_property('fs_filterless_search', 'true')
 	Sources().playback_prep(play_params)
+
+def scrape_from_episode_group(meta, season=None, episode=None):
+	from apis.tmdb_api import episode_groups, episode_group_details
+	from modules.sources import Sources
+	user_info = settings.metadata_user_info()
+	tmdb_id, heading, poster = meta['tmdb_id'], meta['tvshowtitle'], meta['poster']
+	groups = episode_groups(tmdb_id, user_info['tmdb_api'])
+	choices = [
+		(item['id'], '%s (%s)' % (item['name'], item['type']), '%s Groups, %s Episodes' % (item['group_count'], item['episode_count']))
+		for item in groups
+	]
+	if not choices: return notification(32760)
+	list_items = [{'line1': item[1], 'line2': item[2], 'icon': poster} for item in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'true', 'multi_line': 'true'}
+	choice = select_dialog([i[0] for i in choices], **kwargs)
+	if choice is None: return
+	episodes_data = metadata.season_episodes_meta(season, meta, user_info)
+	orig_ep = next((i for i in episodes_data if i['season'] == int(season) and i['episode'] == int(episode)), {})
+	title, premiered = orig_ep.get('title', ''), orig_ep.get('premiered', '')
+	episodes = episode_group_details(choice, user_info['tmdb_api'])
+	if not episodes: return notification(32760)
+	episodes = [
+		{**episode, 'custom_episode': episode['order'] + 1, 'custom_season': group['order'],
+		'custom_name': f"S{group['order']}xE{episode['order'] + 1:02d} - {episode['name']}",
+		'custom_title': f"S{episode['season_number']}xE{episode['episode_number']:02d} - {episode['name']}"}
+		for group in episodes for episode in group['episodes']
+	]
+	title_check = (episodes.index(i) for i in episodes if (title and title.lower() in i['name'].lower()))
+	meta_check = (
+		episodes.index(i) for i in episodes
+		if (premiered and premiered in i['air_date'])
+		or (i['season_number'] == int(season) and i['episode_number'] == int(episode))
+	)
+	index = next(title_check, None) or next(meta_check, None)
+	if index is None: preselect = []
+	else: episodes, preselect = episodes[index:] + episodes[:index], [0]
+	choices = [(item['custom_season'], item['custom_episode'], item['custom_name'], item['custom_title']) for item in episodes]
+	if not choices: return
+	list_items = [{'line1': item[2], 'line2': item[3], 'icon': poster} for item in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': title, 'multi_line': 'true', 'preselect': preselect}
+	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
+	if choice is None: return
+	play_params = {'mode': 'play_media', 'tmdb_id': tmdb_id, 'media_type': 'episode', 'season': season, 'episode': episode}
+	play_params.update({'custom_season': choice[0], 'custom_episode': choice[1]})
+	Sources().playback_prep(play_params)
+
+def torbox_usenet_query(meta, season, episode):
+	from apis.torbox_api import TorBoxAPI as TorBox
+	def _builder():
+		for item in files:
+			try:
+				name = clean_file_name(item['raw_title']).upper()
+				age, tracker, size = item['age'], item['tracker'], float(int(item['size']))/1073741824
+				if item['owned']: line1 = '[COLOR cyan]%s[/COLOR]' % name
+				elif item['cached']: line1 = '[COLOR magenta]%s[/COLOR]' % name
+				else: line1 = name
+				line2 = '%.2f GB | %s | %s' % (size, age, tracker)
+				url_params = {'mode': 'manual_add_nzb_to_cloud', 'provider': 'TorBox', 'url': item['nzb'], 'name': name}
+				yield url_params, line1, line2
+			except: pass
+	query = meta.get('tvshowtitle') or '%s %s' % (meta['title'], meta['year'])
+	show_busy_dialog()
+	files = TorBox().usenet_query(query, season, episode, meta.get('imdb_id', ''))
+	hide_busy_dialog()
+	if not files: return notification(32760)
+	choices = list(_builder())
+	if not choices: return
+	list_items = [{'line1': item[1], 'line2': item[2], 'icon': meta['poster']} for item in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': query, 'enumerate': 'true', 'multi_line': 'true'}
+	choice = select_dialog([i[0] for i in choices], **kwargs)
+	if choice is None: return
+	execute_builtin('RunPlugin(%s)' % build_url(choice))
 

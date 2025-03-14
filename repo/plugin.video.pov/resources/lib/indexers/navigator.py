@@ -111,12 +111,13 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud', 'name': clca_str }, 'offcloud.png', n_ins, False)
 
 	def torbox(self):
-		tor_str, usenet_str, web_str = 'Torrent', 'Usenet', 'Web Download'
+		tor_str, usenet_str, web_str, query_str = 'Torrent', 'Usenet', 'Web Download', 'Usenet Search'
 		tb_str, cloud_str, ai_str = 'TorBox', ls(32496), ls(32494)
 		clca_str, n_ins = ls(32497) % tb_str, _in_str % (tb_str.upper(), '')
 		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'torent', 'name': tor_str   }, 'torbox.png', n_ins)
 		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'usenet', 'name': usenet_str}, 'torbox.png', n_ins)
 		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'webdl',  'name': web_str   }, 'torbox.png', n_ins)
+		self._add_item({'mode': 'search_history', 'action': 'tb_usenet',           'name': query_str }, 'torbox.png', n_ins)
 		self._add_item({'mode': 'torbox.tb_account_info',                          'name': ai_str    }, 'torbox.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',                'name': clca_str  }, 'torbox.png', n_ins, False)
 
@@ -135,6 +136,7 @@ class Navigator:
 		t_str, user_str, l_str, ai_str, ml_str = ls(32037), ls(32065), ls(32501), ls(32494), ls(32454)
 		tu_str, pu_str = '%s %s %s' % (ls(32458), user_str, l_str), '%s %s %s' % (ls(32459), user_str, l_str)
 		sea_str, n_ins = '%s %s' % (ls(32477), l_str), _in_str % (t_str.upper(), '')
+		mdb_m_str, mdb_t_str = 'My %s %s' % (wlist_str, mov_str), 'My %s %s' % (wlist_str, tv_str)
 		trakt_status = k.get_setting('trakt_user') not in ('', None)
 		mdblist_status = k.get_setting('mdblist.token') not in ('', None)
 		imdb_status = k.get_setting('imdb_user') not in ('', None)
@@ -147,9 +149,11 @@ class Navigator:
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'popular' , 'name': pu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.search_trakt_lists'                                       , 'name': sea_str}, 'trakt.png', n_ins)
 		if mdblist_status:
-			self._add_item({'mode': 'build_mdb_list.get_mdb_lists', 'list_type': 'my_lists' , 'name': ml_str }, 'mdblist.png', m_n_ins)
-			self._add_item({'mode': 'build_mdb_list.get_mdb_toplists'                       , 'name': pu_str }, 'mdblist.png', m_n_ins)
-			self._add_item({'mode': 'build_mdb_list.search_mdb_lists'                       , 'name': sea_str}, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_movie_list', 'action': 'mdblist_watchlist'       , 'name': mdb_m_str }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_tvshow_list', 'action': 'mdblist_watchlist'      , 'name': mdb_t_str }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.get_mdb_lists', 'list_type': 'my_lists' , 'name': ml_str    }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.get_mdb_toplists'                       , 'name': pu_str    }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.search_mdb_lists'                       , 'name': sea_str   }, 'mdblist.png', m_n_ins)
 		if imdb_status:
 			self._add_item({'mode': 'navigator.imdb_watchlists', 'name': wlist_str}, 'imdb.png', i_n_ins)
 			self._add_item({'mode': 'navigator.imdb_lists',      'name': ls_str   }, 'imdb.png', i_n_ins)
@@ -250,7 +254,7 @@ class Navigator:
 		clean_databases_str = '%s %s' % (clean_str, ls(32003))
 		clean_all_str = '%s %s %s' % (clean_str, all_str, settings_str)
 		clear_all_str, clear_meta_str = clca_str % all_str, clca_str % ls(32527)
-		clear_list_str, clear_trakt_str = clca_str % ls(32501), clca_str % ls(32037)
+		clear_list_str, clear_trakt_str, clear_mdbl_str = clca_str % ls(32501), clca_str % ls(32037), clca_str % 'MDBList'
 		clear_imdb_str, clint_str, clext_str = clca_str % ls(32064), clca_str % ls(32096), clca_str % ls(32118)
 		clear_rd_str, clear_pm_str, clear_ad_str = clca_str % ls(32054), clca_str % ls(32061), clca_str % ls(32063)
 		clear_oc_str, clear_tb_str, clear_ed_str = clca_str % 'Offcloud', clca_str % 'TorBox', clca_str % 'EasyDebrid'
@@ -263,6 +267,7 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'meta',              'name': clear_meta_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'list',              'name': clear_list_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'trakt',             'name': clear_trakt_str    }, 'tools.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'mdbl',              'name': clear_mdbl_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'imdb',              'name': clear_imdb_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'internal_scrapers', 'name': clint_str          }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'external_scrapers', 'name': clext_str          }, 'tools.png', n_ins, False)

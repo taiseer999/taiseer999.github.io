@@ -14,6 +14,7 @@ from modules import kodi_utils
 
 get_setting, sleep, monitor, ls = kodi_utils.get_setting, kodi_utils.sleep, kodi_utils.monitor, kodi_utils.local_string
 show_busy_dialog, hide_busy_dialog, notification = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification
+ok_dialog, progressDialogBG = kodi_utils.ok_dialog, kodi_utils.progressDialogBG
 RealDebrid, Premiumize, AllDebrid = RealDebridAPI(), PremiumizeAPI(), AllDebridAPI()
 Offcloud, TorBox, EasyDebrid = OffcloudAPI(), TorBoxAPI(), EasyDebridAPI()
 debrid_list = [
@@ -50,6 +51,15 @@ def manual_add_magnet_to_cloud(params):
 	hide_busy_dialog()
 	if result: notification(32576)
 	else: notification(32575)
+
+def manual_add_nzb_to_cloud(params):
+	show_busy_dialog()
+	function = [i[2] for i in debrid_list if i[0] == params['provider']][0]
+	result = function.create_transfer(params['url'], params['name'])
+	function.clear_cache()
+	hide_busy_dialog()
+	text = '%s...[CR][CR]%s' % (params['name'][:40], ls(32576) if result else ls(32575))
+	ok_dialog(heading=32733, text=text, top_space=True)
 
 class DebridCheck:
 	def __init__(self, hash_list, background, debrid_enabled, meta, progress_dialog):
@@ -98,7 +108,7 @@ class DebridCheck:
 		threads = []
 		threads_append = threads.append
 		if not self.background:
-			if not self.progress_dialog: progressBG = kodi_utils.progressDialogBG
+			if not self.progress_dialog: progressBG = progressDialogBG
 			dialog = Thread(target=_foreground)
 		else: dialog = Thread(target=_background)
 		dialog.start()

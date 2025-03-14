@@ -293,6 +293,12 @@ def scraping_settings():
 			'rd_cloud': debrid_cloud_highlight, 'pm_cloud': debrid_cloud_highlight, 'ad_cloud': debrid_cloud_highlight, 'oc_cloud': debrid_cloud_highlight, 'tb_cloud': debrid_cloud_highlight,
 			'easynews': easynews_highlight, '4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD, 'cam': highlight_SD, 'tele': highlight_SD, 'scr': highlight_SD}
 
+def get_rpdb_data():
+	return get_setting('get_rpdb_data') == 'true', get_setting('get_rpdb_data_series') == 'true'
+
+def rpdb_api_key():
+	return get_setting('rpdb_api_key')
+
 def get_fanart_data():
 	return get_setting('get_fanart_data') == 'true'
 
@@ -327,8 +333,12 @@ def metadata_user_info():
 	hide_watched = widget_hide_watched()
 	if extra_fanart_enabled: fanart_client_key = fanarttv_client_key()
 	else: fanart_client_key = ''
+	extra_rpdb_enabled, extra_rpdb_enabled_series = get_rpdb_data()
+	if extra_rpdb_enabled or extra_rpdb_enabled_series: rpdb_api = rpdb_api_key()
+	else: rpdb_api = ''
 	return {'extra_fanart_enabled': extra_fanart_enabled, 'image_resolution': image_resolution , 'language': meta_language,
-			'fanart_client_key': fanart_client_key, 'tmdb_api': tmdb_api, 'widget_hide_watched': hide_watched}
+			'fanart_client_key': fanart_client_key, 'tmdb_api': tmdb_api, 'widget_hide_watched': hide_watched,
+			'rpdb_api_key': rpdb_api, 'extra_rpdb_enabled': extra_rpdb_enabled, 'extra_rpdb_enabled_series': extra_rpdb_enabled_series}
 
 def make_global_list():
 	global global_list

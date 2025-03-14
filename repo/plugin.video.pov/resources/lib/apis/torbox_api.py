@@ -26,24 +26,26 @@ class TorBoxAPI:
 	explore_webdl = '/webdl/mylist?id=%s'
 	cache = '/torrents/checkcached'
 	cloud = '/torrents/createtorrent'
+	cloud_usenet = '/usenet/createusenetdownload'
 
 	def __init__(self):
 		self.user_agent = 'Mozilla/5.0'
 		self.api_key = get_setting('tb.token')
+		self.tb_sort = int(get_setting('tb.sort'))
 
 	def _request(self, method, path, params=None, json=None, data=None):
 		if not self.api_key: return
 		session.headers['Authorization'] = 'Bearer %s' % self.api_key
-		full_path = '%s%s' % (base_url, path)
+		url = '%s%s' % (base_url, path) if not path.startswith('http') else path
 		try:
 			response, result = None, None
-			response = session.request(method, full_path, params=params, json=json, data=data, timeout=timeout)
+			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
 			response.raise_for_status()
 			result = response.json()
 			if 'control' in path: result = result.get('success')
 			elif result.get('success') and 'data' in result: result = result['data']
 		except Exception as e: kodi_utils.logger('torbox error',
-			f"{e}\n{full_path}\n{response.text}" if response else f"{e}\n{full_path}"
+			f"{e}\n{url}\n{response.text}" if response else f"{e}\n{url}"
 		)
 		return result
 
@@ -111,14 +113,20 @@ class TorBoxAPI:
 		data = {'hashes': hashlist}
 		return self._POST(self.cache, params={'format': 'list'}, json=data)
 
+	def add_nzb(self, nzb, name=''):
+		data = {'link': nzb}
+		if name: data['name'] = name
+		return self._POST(self.cloud_usenet, data=data)
+
 	def add_magnet(self, magnet):
 		data = {'magnet': magnet, 'seed': 3, 'allow_zip': 'false'}
 		return self._POST(self.cloud, data=data)
 
-	def create_transfer(self, magnet_url):
-		result = self.add_magnet(magnet_url)
+	def create_transfer(self, link, name=''):
+		if link.startswith('magnet'): key, result = 'torrent_id', self.add_magnet(link)
+		else: key, result = 'usenetdownload_id', self.add_nzb(link, name)
 		if not result: return ''
-		return result.get('torrent_id', '')
+		return result.get(key, '')
 
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
 		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
@@ -202,6 +210,20 @@ class TorBoxAPI:
 		set_setting('tb.token', '')
 		set_setting('tb.account_id', '')
 		kodi_utils.notification('%s %s' % (ls(32576), ls(32059)))
+
+	def usenet_query(self, query, season='', episode='', imdb=''):
+		if imdb: query = 'imdb:%s' % imdb
+		else: query = 'search/%s' % requests.utils.quote(query)
+		url = 'https://search-api.torbox.app/usenet/%s' % query
+		params = {'check_cache': 'true', 'check_owned': 'true', 'search_user_engines': 'true'}
+		if season and episode: params.update({'season': int(season), 'episode': int(episode)})
+		result = self._GET(url, params=params)
+		try: result = result['nzbs']
+		except: result = []
+		if   self.tb_sort == 1: result.sort(key=lambda k: int(k['size']), reverse=True)
+		elif self.tb_sort == 2: result.sort(key=lambda k: k['tracker'], reverse=False)
+		else: result.sort(key=lambda k: int(k['age'].rstrip('d')), reverse=False)
+		return result
 
 	def user_cloud(self, request_id=None, check_cache=True):
 		string = 'pov_tb_user_cloud_info_%s' % request_id if request_id else 'pov_tb_user_cloud'

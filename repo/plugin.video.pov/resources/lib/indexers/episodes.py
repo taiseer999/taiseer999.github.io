@@ -176,7 +176,6 @@ class Episodes:
 					clearprog_params = build_url({'mode': 'watched_unwatched_erase_bookmark', 'media_type': 'episode', 'tmdb_id': tmdb_id,
 												'season': season, 'episode': episode, 'refresh': 'true'})
 					cm_append((clearprog_str, run_plugin % clearprog_params))
-					props['pov_in_progress'] = 'true'
 				if playcount:
 					if self.hide_watched: return
 					unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_unwatched', 'tmdb_id': tmdb_id,
@@ -199,15 +198,6 @@ class Episodes:
 			listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': thumb,
 							'season.poster': season_poster, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
 			if KODI_VERSION < 20:
-				if self.is_widget: props.update({
-					'pov_playcount': string(playcount),
-					'pov_browse_params': browse_params,
-					'pov_browse_seas_params': browse_seas_params,
-					'pov_options_menu_params': options_params,
-					'pov_extras_menu_params': extras_params,
-					'pov_unwatched_params': unwatched_params,
-					'pov_watched_params': watched_params,
-					'pov_clearprog_params': clearprog_params})
 				listitem.setCast(cast + item_get('guest_stars', []))
 				listitem.setUniqueIDs({'imdb': imdb_id, 'tmdb': string(tmdb_id), 'tvdb': string(tvdb_id)})
 				listitem.setInfo('video', remove_meta_keys(item, dict_removals))

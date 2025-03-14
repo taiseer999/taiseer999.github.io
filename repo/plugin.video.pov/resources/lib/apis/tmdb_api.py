@@ -7,6 +7,7 @@ from modules.settings import tmdb_api_key, get_language
 EXPIRES_4_HOURS, EXPIRES_2_DAYS, EXPIRES_1_WEEK, EXPIRES_1_MONTH = 4, 48, 168, 672
 movies_append = 'external_ids,videos,credits,release_dates,alternative_titles,translations,images'
 tvshows_append = 'external_ids,videos,credits,content_ratings,alternative_titles,translations,images'
+eps_map = {1: 'Original air date', 2: 'Absolute', 3: 'DVD', 4: 'Digital', 5: 'Story arc', 6: 'Production', 7: 'TV'}
 base_url = 'https://api.themoviedb.org/3'
 timeout = 3.05
 session = requests.Session()
@@ -329,4 +330,21 @@ def english_translation(media_type, tmdb_id, tmdb_api=None):
 
 def get_tmdb_api(tmdb_api):
 	return tmdb_api or tmdb_api_key()
+
+def episode_groups(tmdb_id, tmdb_api=None):
+	string = 'tmdb_episode_group_%s' % tmdb_id
+	url = '%s/tv/%s/episode_groups?api_key=%s' % (base_url, tmdb_id, get_tmdb_api(tmdb_api))
+	result = cache_function(get_tmdb, string, url, EXPIRES_1_WEEK)
+	for i in result['results']: i['type'] = eps_map[i['type']]
+	result = result['results']
+	return result
+
+def episode_group_details(group_id, tmdb_api=None):
+	try:
+		string = 'tmdb_episode_group_details_%s' % group_id
+		url = '%s/tv/episode_group/%s?api_key=%s' % (base_url, group_id, get_tmdb_api(tmdb_api))
+		result = cache_function(get_tmdb, string, url, EXPIRES_1_WEEK)
+		result = sorted(result['groups'], key=lambda k: k['order'])
+		return result
+	except: return []
 

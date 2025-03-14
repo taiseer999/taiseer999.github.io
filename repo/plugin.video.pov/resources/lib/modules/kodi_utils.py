@@ -29,8 +29,8 @@ current_dbs    = ('debridcache.db', 'favourites.db', 'maincache.db', 'metacache.
 					'traktcache4.db', 'views.db', 'watched.db', 'fenomcache.db', 'fenomundesirables.db', 'settings.xml')
 myvideos_db_paths = {18: '116', 19: '119', 20: '121', 21: '131'}
 movie_dict_removals = ('tmdblogo', 'fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers',
-						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title',
-						'extra_info', 'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2')
+						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title', 'extra_info',
+						'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2')
 tvshow_dict_removals = ('tmdblogo', 'fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers',
 						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title',
 						'extra_info', 'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2',
@@ -541,7 +541,7 @@ def upload_logfile():
 	try:
 		import requests
 		with open_file(log_file) as f: text = f.read()
-		UserAgent = 'POV %s' % Addon().getAddonInfo('version')
+		UserAgent = 'script.kodi.loguploader: 1.0' # 'POV %s' % Addon().getAddonInfo('version')
 		response = requests.post(''.join([url, 'documents']), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
 		if 'key' in response: ok_dialog(text=''.join([url, response['key']]), top_space=True)
 		else: ok_dialog(text='Error. Log Upload Failed')

@@ -279,6 +279,9 @@ def routing(params):
 		elif mode == 'torbox.resolve_tb':
 			from indexers.torbox import resolve_tb
 			resolve_tb(params)
+		elif mode == 'torbox.tb_usenet_query':
+			from indexers.torbox import tb_usenet_query
+			tb_usenet_query(params)
 		elif mode == 'torbox.tb_account_info':
 			from indexers.torbox import tb_account_info
 			tb_account_info()
@@ -342,6 +345,9 @@ def routing(params):
 	elif mode == 'get_search_term':
 		from indexers.history import get_search_term
 		get_search_term(params)
+	elif mode == 'person_search':
+		from indexers.people import person_search
+		return person_search(params['query'])
 	elif 'person_data_dialog' in mode:
 		from indexers.people import person_data_dialog
 		person_data_dialog(params)
@@ -354,6 +360,9 @@ def routing(params):
 	elif mode == 'manual_add_magnet_to_cloud':
 		from modules.debrid import manual_add_magnet_to_cloud
 		manual_add_magnet_to_cloud(params)
+	elif mode == 'manual_add_nzb_to_cloud':
+		from modules.debrid import manual_add_nzb_to_cloud
+		manual_add_nzb_to_cloud(params)
 	elif mode == 'debrid.browse_packs':
 		from modules.sources import Sources
 		Sources().debridPacks(params['provider'], params['name'], params['magnet_url'], params['info_hash'], params['highlight'])
