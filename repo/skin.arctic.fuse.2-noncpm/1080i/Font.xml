@@ -123,8 +123,8 @@
  <fontset id="GeezaPro" unicode="true">
 
         <include content="Font_Default">
-            <param name="font_black">GeezaPro-bold.ttf</param>
-            <param name="font_bold">GeezaPro-bold.ttf</param>
+            <param name="font_black">GeezaPro.ttf</param>
+            <param name="font_bold">GeezaPro.ttf</param>
             <param name="font_regular">GeezaPro.ttf</param>
             <param name="font_light">GeezaPro.ttf</param>
            <param name="plot_linespacing_head">1.15</param>
@@ -140,6 +140,7 @@
             
         </include>
     </fontset>
+
 
 <fontset id="Hacen-Promote" unicode="true">
 
