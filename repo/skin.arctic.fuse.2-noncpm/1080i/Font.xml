@@ -141,28 +141,6 @@
         </include>
     </fontset>
 
-<fontset id="san frans" unicode="true">
-
-        <include content="Font_Default">
-            <param name="font_black">san frans-bold.ttf</param>
-            <param name="font_bold">san frans-bold.ttf</param>
-            <param name="font_regular">san frans.ttf</param>
-            <param name="font_light">san frans.ttf</param>
-           <param name="plot_linespacing_head">1.15</param>
-            <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">0.98</param>
-            <param name="plot_linespacing_mini">1.2</param>
-            <param name="plot_linespacing_tiny">0.9</param>
-        <param name="size_heavy_main">30</param>
-        <param name="size_light_main">32</param>
-        <param name="size_heavy_main_x2">60</param>
-        <param name="size_light_main_x2">60</param>
-
-            
-        </include>
-    </fontset>
-
-
 <fontset id="Hacen-Promote" unicode="true">
 
         <include content="Font_Default">
