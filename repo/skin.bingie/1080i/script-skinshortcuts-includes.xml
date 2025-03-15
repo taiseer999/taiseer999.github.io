@@ -3,7 +3,7 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<label>$LOCALIZE[137]</label>
-			<label2>$LOCALIZE[137]</label2>
+			<label2>بحث</label2>
 			<icon>shortcuts/search.png</icon>
 			<thumb />
 			<property name="labelID">137</property>
@@ -22,7 +22,7 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<label>$LOCALIZE[10000]</label>
-			<label2>$LOCALIZE[10000]</label2>
+			<label2>الصفحة الرئيسية</label2>
 			<icon>shortcuts/home.png</icon>
 			<thumb />
 			<property name="labelID">10000</property>
@@ -71,7 +71,7 @@
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
 			<label>$LOCALIZE[31625]</label>
-			<label2>$LOCALIZE[31625]</label2>
+			<label2>New &amp; Popular</label2>
 			<icon>shortcuts/new.png</icon>
 			<thumb />
 			<property name="labelID">31625</property>
@@ -90,7 +90,7 @@
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
 			<label>$LOCALIZE[31590]</label>
-			<label2>$LOCALIZE[31590]</label2>
+			<label2>Shows</label2>
 			<icon>shortcuts/tv.png</icon>
 			<thumb />
 			<property name="labelID">31590</property>
@@ -109,7 +109,7 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<label>$LOCALIZE[342]</label>
-			<label2>$LOCALIZE[342]</label2>
+			<label2>الأفلام</label2>
 			<icon>shortcuts/clapperboard.png</icon>
 			<thumb />
 			<property name="labelID">movies</property>
@@ -128,7 +128,7 @@
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
 			<label>$LOCALIZE[31025]</label>
-			<label2>$LOCALIZE[31025]</label2>
+			<label2>Categories</label2>
 			<icon>shortcuts/categories.png</icon>
 			<thumb />
 			<property name="labelID">31025</property>
@@ -147,7 +147,7 @@
 		<item id="7">
 			<property name="id">$NUMBER[7]</property>
 			<label>$LOCALIZE[31534]</label>
-			<label2>$LOCALIZE[31534]</label2>
+			<label2>My List</label2>
 			<icon>shortcuts/mylist.png</icon>
 			<thumb />
 			<property name="labelID">31534</property>
@@ -160,6 +160,26 @@
 			<onclick condition="$EXP[IsKnownMenuEntryPath]">SetFocus($VAR[MenuEntryOverrideFocus])</onclick>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 			<property name="submenuVisibility">num-31534</property>
+			<property name="group">mainmenu</property>
+			<property name="hasSubmenu">False</property>
+		</item>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
+			<label>$LOCALIZE[10001]</label>
+			<label2>برامج</label2>
+			<icon>defaultaddonprogram.png</icon>
+			<thumb />
+			<property name="labelID">programs</property>
+			<property name="defaultID">programs</property>
+			<property name="translatedPath">ActivateWindow(Programs,addons://sources/executable/,return)</property>
+			<onclick>ActivateWindow(Programs,addons://sources/executable/,return)</onclick>
+			<property name="path">ActivateWindow(Programs,addons://sources/executable/,return)</property>
+			<property name="list">addons://sources/executable/</property>
+			<onclick>SetProperty(flushWidgetProps,1,Home)</onclick>
+			<onclick condition="$EXP[IsKnownMenuEntryPath]">ClearProperty(ShowViewSubMenu,Home)</onclick>
+			<onclick condition="$EXP[IsKnownMenuEntryPath]">SetFocus($VAR[MenuEntryOverrideFocus])</onclick>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="submenuVisibility">programs</property>
 			<property name="group">mainmenu</property>
 			<property name="hasSubmenu">False</property>
 		</item>
@@ -472,7 +492,7 @@
 		</item>
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[5]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/settings1.png</icon>
@@ -489,7 +509,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31706]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/reload-skin.png</icon>
@@ -506,7 +526,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31629]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/exit1.png</icon>
@@ -524,7 +544,7 @@
 		</item>
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31630]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/reboot1.png</icon>
@@ -542,7 +562,7 @@
 		</item>
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31631]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/shutdown1.png</icon>
@@ -560,7 +580,7 @@
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[20126]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/lock.png</icon>
@@ -1223,10 +1243,16 @@
 	<include name="skinshortcuts-group-alt-num-31534">
 		<description>No items</description>
 	</include>
+	<include name="skinshortcuts-group-programs">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-alt-programs">
+		<description>No items</description>
+	</include>
 	<include name="skinshortcuts-group-powermenu">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[5]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/settings1.png</icon>
@@ -1243,7 +1269,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31706]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/reload-skin.png</icon>
@@ -1260,7 +1286,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31629]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/exit1.png</icon>
@@ -1278,7 +1304,7 @@
 		</item>
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31630]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/reboot1.png</icon>
@@ -1296,7 +1322,7 @@
 		</item>
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31631]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/shutdown1.png</icon>
@@ -1314,7 +1340,7 @@
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[20126]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/lock.png</icon>
@@ -1334,7 +1360,7 @@
 	<include name="skinshortcuts-group-alt-powermenu">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[5]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/settings1.png</icon>
@@ -1351,7 +1377,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31706]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/reload-skin.png</icon>
@@ -1368,7 +1394,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31629]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/exit1.png</icon>
@@ -1386,7 +1412,7 @@
 		</item>
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31630]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/reboot1.png</icon>
@@ -1404,7 +1430,7 @@
 		</item>
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[31631]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/shutdown1.png</icon>
@@ -1422,7 +1448,7 @@
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
-			<property name="mainmenuid">8</property>
+			<property name="mainmenuid">9</property>
 			<label>$LOCALIZE[20126]</label>
 			<label2>Kodi Command</label2>
 			<icon>common/lock.png</icon>

@@ -1212,7 +1212,7 @@
 					<control type="label">
 						<left>240</left>
 						<width>400</width>
-						<height>40</height>
+						<height>30</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.CacheLevel,,%]</label>
@@ -1224,7 +1224,7 @@
 				<control type="progress">
 					<description>CACHE BAR</description>
 					<width>640</width>
-					<height>8</height>
+					<height>6</height>
 					<info>Player.CacheLevel</info>
 					
 				</control>
@@ -1234,7 +1234,7 @@
 					<height>40</height>
 					<control type="label">
 						<width>240</width>
-						<height>40</height>
+						<height>30</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR white]Memory:[/COLOR]</label>
@@ -1244,7 +1244,7 @@
 					<control type="label">
 						<left>240</left>
 						<width>400</width>
-						<height>40</height>
+						<height>30</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[system.memory(used.percent)] [COLOR dimgrey]([/COLOR]$INFO[system.memory(used)] [COLOR dimgrey]/[/COLOR] $INFO[system.memory(total)][COLOR dimgrey])[/COLOR]</label>
@@ -1256,7 +1256,7 @@
 				<control type="progress">
 					<description>RAM BAR</description>
 					<width>640</width>
-					<height>8</height>
+					<height>6</height>
 					<info>system.memory(used)</info>
 					
 				</control>
@@ -1267,7 +1267,7 @@
 					<visible>System.SupportsCPUUsage</visible>
 					<control type="label">
 						<width>240</width>
-						<height>40</height>
+						<height>30</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR white]CPU Usage %:[/COLOR]</label>
@@ -1289,7 +1289,7 @@
 				<control type="progress">
 					<description>CPU BAR</description>
 					<width>640</width>
-					<height>8</height>
+					<height>6</height>
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>
 					
@@ -1788,28 +1788,28 @@
 				<control type="progress">
 					<description>AUDIO QUEUE BAR</description>
 					<width>520</width>
-					<height>8</height>
+					<height>6</height>
 					<info>Player.Process(audio.queue.level)</info>
 					
 				</control>
 				<control type="progress">
 					<description>AUDIO QUEUE DATA BAR</description>
 					<width>520</width>
-					<height>8</height>
+					<height>6</height>
 					<info>Player.Process(audio.queue.data.level)</info>
 					
 				</control>
 				<control type="progress">
 					<description>VIDEO QUEUE BAR</description>
 					<width>520</width>
-					<height>8</height>
+					<height>6</height>
 					<info>Player.Process(video.queue.level)</info>
 					
 				</control>
 				<control type="progress">
 					<description>VIDEO QUEUE DATA BAR</description>
 					<width>520</width>
-					<height>8</height>
+					<height>6</height>
 					<info>Player.Process(video.queue.data.level)</info>
 					
 				</control>
