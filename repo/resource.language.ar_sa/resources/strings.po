@@ -6725,7 +6725,7 @@ msgstr "أساسي"
 #. Label for the "Information" event level
 msgctxt "#14116"
 msgid "Information"
-msgstr "معلومات الفيديو"
+msgstr "المعلومات"
 
 #. Label for the "Warning" event level
 msgctxt "#14117"

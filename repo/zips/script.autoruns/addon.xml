@@ -1,13 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="script.autoruns"
        name="Autoruns"
-       version="11.2"
+       version="11"
        provider-name="fight night, Jon Bovi">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
         <import addon="script.module.six" />
         <import addon="script.module.kodi-six" />
-			
+		<import addon="inputstream.adaptive" />
+		<import addon="inputstream.ffmpegdirect" />
+		<import addon="inputstream.rtmp" />		
+		<import addon="script.favourites" />
+        <import addon="script.texturemaker" />
+        <import addon="resource.images.studios.coloured" />
+        <import addon="resource.images.studios.white" />
+		<import addon="resource.images.recordlabels.white" />
+        <import addon="script.colorbox" />
+        <import addon="resource.images.weatherfanart.single" />	
+        <import addon="visualization.waveform" />		
+        <import addon="resource.font.robotocjksc" />		
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>executable</provides>

@@ -3012,7 +3012,7 @@ updated YouTube addon URL
 		<description lang="en">White Weather Icons</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="resource.language.ar_sa" version="11.0.90.16" name="Arabic" provider-name="Team Kodi">
+</addon><addon id="resource.language.ar_sa" version="11.0.90.17" name="Arabic" provider-name="Team Kodi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
   </requires>
@@ -3237,12 +3237,23 @@ v.3.3.7
 		<description lang="sv_SE">Tillägg för att ladda ner bilder och tilläggsinformation från fanart.tv och theaudiodb.com om artisten som spelas för tillfället. Bilderna, tillsammans med lokala artistbilder och information, kan användas av skinnet för att skapa ett bildspel av artisten man lyssnar på.</description>
 		<description lang="zh_CN">从fanart.tv和theaudiodb.com下载当前播放艺人的图片和附加信息的插件。这此图片可以和本地艺人图片及信息一起，被皮肤用来创建正收听的艺人的幻灯片。</description>
 	</extension>
-</addon><addon id="script.autoruns" name="Autoruns" version="11.2" provider-name="fight night, Jon Bovi">
+</addon><addon id="script.autoruns" name="Autoruns" version="11" provider-name="fight night, Jon Bovi">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.six" />
         <import addon="script.module.kodi-six" />
-			
+		<import addon="inputstream.adaptive" />
+		<import addon="inputstream.ffmpegdirect" />
+		<import addon="inputstream.rtmp" />		
+		<import addon="script.favourites" />
+        <import addon="script.texturemaker" />
+        <import addon="resource.images.studios.coloured" />
+        <import addon="resource.images.studios.white" />
+		<import addon="resource.images.recordlabels.white" />
+        <import addon="script.colorbox" />
+        <import addon="resource.images.weatherfanart.single" />	
+        <import addon="visualization.waveform" />		
+        <import addon="resource.font.robotocjksc" />		
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>executable</provides>
@@ -6789,7 +6800,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.9.5.1">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.9.6">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -6822,7 +6833,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.5.11">
+</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.5.12">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
