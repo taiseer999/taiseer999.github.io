@@ -117,19 +117,17 @@
         <value>$LOCALIZE[31314]</value>
     </variable>
 
-    <variable name="Label_Settings_InfoText_Top">
-        <value condition="System.HasVisibleModalDialog | ControlGroup(30030).HasFocus() | ControlGroup(30000).HasFocus() | ControlGroup(30040).HasFocus() | ControlGroup(30700).HasFocus() | Control.HasFocus(60)">$LOCALIZE[14116]</value>
-        <value condition="Window.IsVisible(SettingsCategory.xml) + [ControlGroup(3).HasFocus() | ControlGroup(5).HasFocus()]">$INFO[System.CurrentControl]</value>
-        <value condition="Window.IsVisible(addonbrowser) + Control.HasFocus(50)">$INFO[Container(50).ListItem.AddonName]</value>
-        <value>$LOCALIZE[14116]</value>
-    </variable>
-
     <variable name="Label_Settings_SideMenuCollapse">
         <value condition="$EXP[Exp_HomeMenu_IsTopBar]">$LOCALIZE[31352]</value>
-        <value condition="Skin.String(Home.SideMenuCollapse,Always)">$LOCALIZE[34123]</value>
+        <value condition="Skin.String(Home.SideMenuCollapse,Always)">$LOCALIZE[34122]</value>
         <value condition="Skin.String(Home.SideMenuCollapse,Library)">$LOCALIZE[14211]</value>
         <value condition="Skin.String(Home.SideMenuCollapse,Hubs)">$LOCALIZE[14022]</value>
-        <value condition="Skin.String(Home.SideMenuCollapse,Never)">$LOCALIZE[34122]</value>
+        <value condition="Skin.String(Home.SideMenuCollapse,Never)">$LOCALIZE[34123]</value>
+    </variable>
+	
+	<variable name="Label_Settings_SideMenuCollapse_Selector">
+        <value condition="$EXP[Exp_HomeMenu_IsTopBar]">$LOCALIZE[31149]</value>
+        <value>$LOCALIZE[13014] [LOWERCASE]$LOCALIZE[31416][/LOWERCASE]</value>
     </variable>
 	
 	<variable name="Label_Discover_Style">
@@ -141,6 +139,11 @@
 		<value condition="Skin.HasSetting(Topbar.EnableFocusedText)">$LOCALIZE[31329]</value>
 		<value>$LOCALIZE[536]</value>
 	</variable>
+	
+	<variable name="Label_Settings_WidgetNoResults">
+        <value condition="Skin.HasSetting(Widgets.DisableNoResultsItem)">$LOCALIZE[19022]</value>
+        <value>$LOCALIZE[19218]</value>
+    </variable>
 	
 	<variable name="Label_Trailers_Delay">
 		<value condition="!Skin.HasSetting(Trailers.EnableAutoPlayback)">$LOCALIZE[13106]</value>
@@ -205,12 +208,21 @@
         <value condition="Skin.String(Furniture.BottomLeft.Enable,Always)">2</value>
         <value condition="Skin.String(Furniture.BottomLeft.Enable,Library)">1</value>
         <value>0</value>
+    </variable>	
+	
+    <variable name="Label_Settings_InfoText_Top">
+        <value condition="System.HasVisibleModalDialog | ControlGroup(30030).HasFocus() | ControlGroup(30000).HasFocus() | ControlGroup(30040).HasFocus() | ControlGroup(30700).HasFocus() | Control.HasFocus(60)">$LOCALIZE[14116]</value>
+        <value condition="Window.IsVisible(SettingsCategory.xml) + [ControlGroup(3).HasFocus() | ControlGroup(5).HasFocus()]">$INFO[System.CurrentControl]</value>
+        <value condition="Window.IsVisible(SkinSettings.xml) + [ControlGroup(3).HasFocus() | String.IsEmpty(Window.Property(InfoText.Header))]">$INFO[Container(3).ListItem.Label]</value>
+		<value condition="Window.IsVisible(addonbrowser) + Control.HasFocus(50)">$INFO[Container(50).ListItem.AddonName]</value>
+        <value>$LOCALIZE[14116]</value>
     </variable>
 
     <variable name="Label_Settings_InfoText_Sub">
         <value condition="System.HasVisibleModalDialog | ControlGroup(30030).HasFocus() | ControlGroup(30000).HasFocus() | ControlGroup(30040).HasFocus() | ControlGroup(30700).HasFocus() | Control.HasFocus(60)">$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.mod), • AFMod v,]</value>
         <value condition="Window.IsVisible(SettingsCategory.xml) + [ControlGroup(3).HasFocus() | ControlGroup(5).HasFocus()]">$INFO[Control.GetLabel(6)]</value>
-        <value condition="Window.IsVisible(addonbrowser) + Control.HasFocus(50)">$INFO[Container(50).ListItem.AddonVersion,v,]$INFO[Container(50).ListItem.AddonOrigin, • ,]$INFO[Container(50).ListItem.AddonCreator, • ,]$INFO[Container(50).ListItem.AddonDescription,[CR],]</value>
+        <value condition="Window.IsVisible(SkinSettings.xml) + [ControlGroup(3).HasFocus() | String.IsEmpty(Window.Property(InfoText.Header))]">$INFO[Container(3).ListItem.Label2]</value>
+		<value condition="Window.IsVisible(addonbrowser) + Control.HasFocus(50)">$INFO[Container(50).ListItem.AddonVersion,v,]$INFO[Container(50).ListItem.AddonOrigin, • ,]$INFO[Container(50).ListItem.AddonCreator, • ,]$INFO[Container(50).ListItem.AddonDescription,[CR],]</value>
         <value>$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.mod), • AFMod v,]</value>
     </variable>
 
@@ -697,6 +709,11 @@
         <value condition="!Skin.HasSetting(Views.UseHalfPVRGuide)">$LOCALIZE[10036]</value>
         <value>$LOCALIZE[31137]</value>
     </variable>
+	
+	<variable name="Label_Setting_ComboListDetailedView">
+        <value condition="Skin.HasSetting(Disable.ComboListDetailedView)">$LOCALIZE[10036]</value>
+        <value>$LOCALIZE[31137]</value>
+    </variable>
 
     <variable name="Label_Player_Plot">
         <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Plot) + !String.IsEmpty(VideoPlayer.Title)">$INFO[VideoPlayer.Title,, ~ ]$INFO[VideoPlayer.Plot]</value>
@@ -715,6 +732,26 @@
 		<value condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions) + !Skin.HasSetting(SideMenu.SwapSearchForDiscover)">$LOCALIZE[137]</value>
 	</variable>
 	
+	<variable name="Label_Filter_Hub_SearchDiscover_Switch">
+		<value condition="Window.IsVisible(1105)">$LOCALIZE[31066]</value>
+		<value condition="Window.IsVisible(1185)">$LOCALIZE[137]</value>		
+	</variable>
+	
+	<variable name="Label_Image_SearchDiscover_Switch">
+		<value condition="Window.IsVisible(1105)">&#xf0b0;</value>
+		<value condition="Window.IsVisible(1185)">&#xf002;</value>		
+	</variable>
+		
+	<variable name="Label_Filter_ModeLabel1_Switch">
+		<value condition="Window.IsVisible(1105)">$LOCALIZE[456]</value>
+		<value condition="Window.IsVisible(1185)">$LOCALIZE[31324]</value>
+	</variable>
+	
+	<variable name="Label_Filter_ModeLabel2_Switch">
+		<value condition="Window.IsVisible(1105)">$INFO[Container(5099).ListItem.Label]</value>
+		<value condition="Window.IsVisible(1185)">$INFO[Container(5097).ListItem.Label]</value>
+	</variable>
+		
 	<variable name="Label_Home_OnUp">
 		<value condition="!Skin.HasSetting(Home.OnUp.Hub)">$LOCALIZE[31446]</value>
 		<value condition="Skin.HasSetting(Home.OnUp.Hub)">$VAR[Label_SearchDiscover_Switch]</value>
@@ -897,14 +934,14 @@
 
     <variable name="Label_VideoInfo_DetailsItem">
         <value condition="ListItem.IsCollection">$LOCALIZE[31236]</value>
-        <value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.Director)">$INFO[ListItem.Director,[COLOR=main_fg_30]$LOCALIZE[31478][/COLOR] ,]</value>
+        <value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.Director)">$INFO[ListItem.Director]</value>
         <value condition="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(ListItem.Property(totalepisodes)) + !String.IsEmpty(ListItem.Property(watchedepisodes))">$INFO[ListItem.Property(watchedepisodes),, $LOCALIZE[1443] ]$INFO[ListItem.Property(totalepisodes),, [LOWERCASE]$LOCALIZE[16102][/LOWERCASE]]</value>
         <value condition="[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(ListItem.Episode)">$INFO[ListItem.Episode,, $LOCALIZE[20453]]</value>
-        <value condition="!String.IsEmpty(ListItem.Artist) + !String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Artist,[COLOR=main_fg_30]$LOCALIZE[31478][/COLOR] ,]</value>
-        <value condition="!String.IsEmpty(ListItem.AlbumArtist) + !String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.AlbumArtist,[COLOR=main_fg_30]$LOCALIZE[31478][/COLOR] ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Artist) + !String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Artist]</value>
+        <value condition="!String.IsEmpty(ListItem.AlbumArtist) + !String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.AlbumArtist]</value>
         <value condition="!String.IsEmpty(ListItem.Property(Artist_Genre))">$INFO[ListItem.Property(Artist_Genre),,]</value>
         <value condition="!String.IsEmpty(ListItem.Property(Artist_YearsActive))">$INFO[ListItem.Property(Artist_YearsActive),,]</value>
-        <value condition="!String.IsEmpty(ListItem.Property(role))">$INFO[ListItem.Property(role),[COLOR=main_fg_30]$LOCALIZE[20347][/COLOR] ,]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(role))">$INFO[ListItem.Property(role)]</value>
         <value condition="!String.IsEmpty(ListItem.Label2)">$INFO[ListItem.Label2]</value>
         <value condition="!String.IsEmpty(ListItem.DBType)">[CAPITALIZE]$INFO[ListItem.DBType][/CAPITALIZE]</value>
 
@@ -1610,6 +1647,24 @@
     <variable name="Label_OSD_PVR_Recording">
         <value condition="PVR.IsRecordingPlayingChannel">$LOCALIZE[31160]</value>
     </variable>
+	
+	<variable name="Label_MediaList_Details_LeftLabel">
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$INFO[ListItem.Episode,, $LOCALIZE[20453]]</value>
+        <value>$INFO[ListItem.Premiered]</value>
+    </variable>
+
+    <variable name="Label_MediaList_Details_RightLabel">
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)">$INFO[ListItem.Year]</value>
+        <value condition="!Integer.IsEqual(ListItem.Duration(h),0)">$INFO[ListItem.Duration(h),,h ]$INFO[ListItem.Duration(m),,m]</value>
+        <value condition="!String.IsEmpty(ListItem.Duration)">$INFO[ListItem.Duration(m),,m]</value>
+        <value>— ——</value>
+    </variable>
+	
+	<variable name="Label_MediaList_Episode_Number_Title">
+		<value condition="!Skin.HasSetting(Info.UseS1E1StyleNumbers) + !String.StartsWith(ListItem.Label,ListItem.Season) + !String.Contains(ListItem.Label,ListItem.Episode)">$VAR[Label_Plot_Episode_Number_C526,,. ]$INFO[ListItem.Label]</value>
+		<value condition="Skin.HasSetting(Info.UseS1E1StyleNumbers)">$VAR[Label_Plot_Episode_Number_C526,,. ]$INFO[ListItem.Title]</value>
+		<value>$INFO[ListItem.Label]</value>
+	</variable>
 
     <variable name="Label_MediaList_Title">
         <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
@@ -1880,6 +1935,7 @@
         <value condition="Window.IsMedia + Control.IsVisible(502)">$INFO[Container.Content,[CAPITALIZE],[/CAPITALIZE] [COLOR=main_fg_30]&gt;[/COLOR] ]$INFO[Container(502).ListItem.Label]</value>
         <value condition="Window.IsMedia + Control.IsVisible(512)">$INFO[Container.Content,[CAPITALIZE],[/CAPITALIZE] [COLOR=main_fg_30]&gt;[/COLOR] ]$INFO[Container(512).ListItem.Label]</value>
         <value condition="Window.IsMedia + Control.IsVisible(522)">$INFO[Container.Content,[CAPITALIZE],[/CAPITALIZE] [COLOR=main_fg_30]&gt;[/COLOR] ]$INFO[Container(522).ListItem.Label]</value>
+        <value condition="Window.IsMedia + Control.IsVisible(524)">$INFO[Container.Content,[CAPITALIZE],[/CAPITALIZE] [COLOR=main_fg_30]&gt;[/COLOR] ]$INFO[Container(524).ListItem.Label]</value>
 
         <!-- Playlist label -->
         <value condition="Window.IsVisible(videoplaylist)">$LOCALIZE[10025]</value>
@@ -1972,8 +2028,8 @@
     </variable>
 	
 	<variable name="Label_Overlay_FileDetails">
-        <value condition="!String.IsEmpty(Container.ListItem.PlayCount)">$INFO[Container.ListItem.PlayCount,[CR]$LOCALIZE[16102] , $LOCALIZE[31183]. ]$INFO[Container.ListItem.LastPlayed,$LOCALIZE[568] ,]$INFO[Container.ListItem.DateAdded,[CR]$LOCALIZE[31200] ,]$INFO[Container.ListItem.FileNameAndPath,[CR],]</value>
-        <value>$INFO[Container.ListItem.LastPlayed,[CR]$LOCALIZE[568] ,]$INFO[Container.ListItem.DateAdded,[CR]$LOCALIZE[31200] ,]$INFO[Container.ListItem.FileNameAndPath,[CR],]</value>
+        <value condition="!String.IsEmpty(Container(99950).ListItem.Property(base_playcount))">$INFO[Container(99950).ListItem.Property(base_playcount),[CR]$LOCALIZE[16102] , $LOCALIZE[31183]. ]$INFO[Container(99950).ListItem.Property(base_lastplayed),$LOCALIZE[568] ,]$INFO[Container(99950).ListItem.Property(base_dateadded),[CR]$LOCALIZE[31200] ,]$INFO[Container(99950).ListItem.FileNameAndPath,[CR],]</value>
+        <value>$INFO[Container(99950).ListItem.Property(base_lastplayed),[CR]$LOCALIZE[568] ,]$INFO[Container(99950).ListItem.Property(base_dateadded),[CR]$LOCALIZE[31200] ,]$INFO[Container(99950).ListItem.FileNameAndPath,[CR],]</value>
     </variable>
 
     <variable name="Label_Overlay_Providers">
@@ -2123,8 +2179,10 @@
     </variable>
 	
 	<variable name="Label_Changelog">
-		<value>- Added IMDb as an alternative trailer source (will need to install the [B]IMDb Trailers[/B] add-on from the official Kodi repo).
-- Fixed PVR widget targets. 		
+		<value>- Add all existing viewtypes inside add-on/library view.
+- Generate first widget id dynamically to fallback to next when unavailable.
+- Fix some poor visibility when inverted text is enabled.
+- Cleanup some settings.
 - Other small bug fixes and enhancements.
 		</value>		
 	</variable>

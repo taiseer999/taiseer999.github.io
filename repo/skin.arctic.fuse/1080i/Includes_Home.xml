@@ -256,7 +256,7 @@
 					<control type="image">
 						<include content="Texture_Menu_Highlight_H">
 							<param name="border">30</param>
-						</include>
+						</include>						
 						<top>40</top>
 						<height>75</height>
 						<left>40</left>
@@ -266,7 +266,7 @@
 					<control type="label">
 						<label>$INFO[Container(303).ListItem.Label]</label>
 						<font>font_mini_bold</font>
-						<textcolor>main_fg_90</textcolor>
+						<textcolor>$VAR[ColorSelected]</textcolor>
 						<top>55</top>
 						<right>-45</right>
 						<centerleft>140</centerleft>
@@ -436,12 +436,12 @@
                 </include>
             </control>
             <control type="image">
-                <texture colordiffuse="$VAR[Layout_Home_Menu_Color_NF]">$VAR[Image_SearchDiscover]</texture>
+                <texture colordiffuse="$VAR[Layout_Home_Menu_Color_NF]">special://skin/extras/icons/search.png</texture>
                 <bordersize>icon_home_bordersize</bordersize>
                 <visible>!Control.HasFocus(309)</visible>
             </control>
             <control type="image">
-                <texture colordiffuse="$VAR[ColorSelected]">$VAR[Image_SearchDiscover]</texture>
+                <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/search.png</texture>
                 <bordersize>icon_home_bordersize</bordersize>
                 <visible>Control.HasFocus(309)</visible>
             </control>

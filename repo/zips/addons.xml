@@ -6770,7 +6770,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
 		<description lang="en_NZ">Altus Skin</description>
 		<description lang="en_US">Altus Skin</description>
 	</extension>
-</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="1.0.30">
+</addon><addon id="skin.arctic.fuse" name="Arctic Fuse" provider-name="jurialmunkey" version="1.0.31">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />

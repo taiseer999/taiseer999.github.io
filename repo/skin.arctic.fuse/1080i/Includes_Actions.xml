@@ -44,6 +44,7 @@
         <value condition="$EXP[Exp_View_502]">502</value>
         <value condition="$EXP[Exp_View_512]">512</value>
         <value condition="$EXP[Exp_View_522]">522</value>
+        <value condition="$EXP[Exp_View_524]">524</value>
         <value>50</value>
     </variable>
 
@@ -84,11 +85,15 @@
     </variable>
 
     <include name="Action_Media_Onload">
-        <onload>RunScript(script.skinvariables,action=buildviews)</onload>
-        <onload>ClearProperty(MediaFilterBase)</onload>
+		<include content="Generator_BuildViewTypes_Onload">
+             <param name="params" />
+         </include>
+        <onload condition="!Control.IsVisible(524)">ClearProperty(Background.ShowOverlay,Home)</onload>
+		<onload>ClearProperty(MediaFilterBase)</onload>
         <onload>ClearProperty(MediaFilterWall)</onload>
         <onunload>ClearProperty(MediaFilterBase)</onunload>
         <onunload>ClearProperty(MediaFilterWall)</onunload>
+		<onunload>ClearProperty(Background.ShowOverlay,Home)</onunload>
         <onload>AlarmClock(refocus_window,SetFocus(50),00:00,silent)</onload>
     </include>
 
@@ -165,7 +170,10 @@
     <include name="Action_Hubs_Onload">
         <definition>
 		
-			<onload>RunScript(script.skinvariables,action=buildviews,no_reload)</onload>
+			<include content="Generator_BuildViewTypes_Onload">
+                 <param name="params">,no_reload</param>
+             </include>
+			<onload>ClearProperty(Background.ShowOverlay,Home)</onload>
 		
             <menucontrol>303</menucontrol>
 
@@ -323,11 +331,11 @@
 
     <include name="Action_Recommendations_OnClick">
         <oninfo>Action(Select)</oninfo>
-		<onclick>ClearProperty(TMDbHelper.Image.Override,Home)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Container($PARAM[id]).ListItem.FolderPath],call_auto=1190,return)</onclick>
+		<onclick>ClearProperty(TMDbHelper.Image.Override,Home)</onclick>		
+        <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Container($PARAM[id]).ListItem.FolderPath],call_auto=1190,origin_tmdb_type=$INFO[Window.Property(origin_tmdb_type)],origin_tmdb_id=$INFO[Window.Property(origin_tmdb_id)],return)</onclick>
         <onclick>Dialog.Close(1120,true)</onclick>
         <onclick>Dialog.Close(1121,true)</onclick>
-        <onclick>Dialog.Close(1122,true)</onclick>
+        <onclick>Dialog.Close(1122,true)</onclick>		       
     </include>
 
     <variable name="Action_Recommendations_SetFocusID">
@@ -378,8 +386,8 @@
             <ondown>ClearProperty(List.ViewContainer.Bump)</ondown>
 
             <onleft condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">SetProperty(SearchDiscover.FocusFilter,True,Home)</onleft>
-            <onleft condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">$VAR[Action_ActivateSearchDiscover]</onleft>
-            <onright condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">ActivateWindow(1170)</onright>
+            <onleft condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">SetFocus(309)</onleft>
+            <onright condition="Skin.HasSetting(SideMenu.EnableSearchAndOptions)">SetFocus(308)</onright>
 
         </definition>
     </include>
@@ -452,6 +460,9 @@
     </include>
 
     <include name="Action_VideoInfo_Main_OnRight">
+	
+		<onright condition="$PARAM[condition]">SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],1120)</onright>
+		<onright condition="$PARAM[condition]">SetProperty(origin_tmdb_type,$VAR[Path_ContextParams_TMDbType],1120)</onright>
 	
         <onright condition="$PARAM[condition]">SetProperty(Director_Label,$VAR[Label_FromDirector],1120)</onright>
         <onright condition="$PARAM[condition]">SetProperty(Director_Image,$VAR[Image_DirectorIcon],1120)</onright>
@@ -991,8 +1002,7 @@
     <include name="Action_PlayTrailer_OnClick">
         <onclick condition="String.IsEmpty($PARAM[trailer]) + !String.IsEmpty($PARAM[trailer_fallback]) + !Skin.HasSetting(Trailers.Source.IMDb)">SetProperty(PlayTrailer,$ESCINFO[$PARAM[trailer_fallback]],Home)</onclick>        
         <onclick condition="String.IsEmpty($PARAM[trailer]) + !String.IsEmpty($PARAM[trailer_fallback]) + Skin.HasSetting(Trailers.Source.IMDb)">SetProperty(PlayTrailer,plugin://plugin.video.imdb.trailers/?action=play_id&imdb=$VAR[Trailer_IMDbID_Switch],Home)</onclick>        
-        <onclick condition="!String.IsEmpty($PARAM[trailer]) + !Skin.HasSetting(Trailers.Source.IMDb)">SetProperty(PlayTrailer,$ESCINFO[$PARAM[trailer]],Home)</onclick>
-        <onclick condition="!String.IsEmpty($PARAM[trailer]) + Skin.HasSetting(Trailers.Source.IMDb)">SetProperty(PlayTrailer,plugin://plugin.video.imdb.trailers/?action=play_id&imdb=$VAR[Trailer_IMDbID_Switch],Home)</onclick>
+        <onclick condition="!String.IsEmpty($PARAM[trailer])">SetProperty(PlayTrailer,$ESCINFO[$PARAM[trailer]],Home)</onclick>       
 		<onclick condition="!String.IsEmpty($PARAM[trailer]) | !String.IsEmpty($PARAM[trailer_fallback])">SetProperty(PlayTrailerTitle,$PARAM[title],Home)</onclick>
 		<onclick condition="!String.IsEmpty($PARAM[trailer]) | !String.IsEmpty($PARAM[trailer_fallback])">SetProperty(PlayTrailerItems,$PARAM[items],Home)</onclick>
         <onclick condition="!String.IsEmpty($PARAM[trailer]) | !String.IsEmpty($PARAM[trailer_fallback])">ActivateWindow(1123)</onclick>
