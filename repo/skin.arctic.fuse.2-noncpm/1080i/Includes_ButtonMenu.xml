@@ -78,7 +78,7 @@
                             <param name="selected">true</param>
                             <param name="color_nf">dialog_fg_70</param>
                             <param name="centertop">40</param>
-                            <param name="include_hintlabel">true</param>
+                            <param name="include_hintlabel">false</param>
                         </include>
                     </control>
                     <control type="group">
@@ -134,7 +134,7 @@
                             <param name="selected">true</param>
                             <param name="color_nf">dialog_fg_70</param>
                             <param name="centertop">40</param>
-                            <param name="include_hintlabel">true</param>
+                            <param name="include_hintlabel">false</param>
                         </include>
                     </control>
                     <control type="group">
