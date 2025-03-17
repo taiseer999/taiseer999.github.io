@@ -269,21 +269,8 @@
 					<selected>!Skin.HasSetting(Disable.WidgetInfoLineTitle)</selected>
 					<onclick>Skin.ToggleSetting(Disable.WidgetInfoLineTitle)</onclick>
 				</control>
-				<!-- DIM/FADE WIDGETS -->
-				<control type="radiobutton" id="63708">
-					<label>$VAR[Capitalize_DimorFadeLabel] unfocused widgets</label>
-					<include>DefaultSettingButton</include>
-					<selected>!Skin.HasSetting(Disable.WidgetDimming)</selected>
-					<onclick>Skin.ToggleSetting(Disable.WidgetDimming)</onclick>
-				</control>
-				<control type="radiobutton" id="63709">
-					<label>$VAR[Capitalize_DimorFadeLabel] widgets on main menu focus</label>
-					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(Enable.MainMenuWidgetDimming)</selected>
-					<onclick>Skin.ToggleSetting(Enable.MainMenuWidgetDimming)</onclick>
-				</control>
 				<!-- STUDIO LOGO -->
-				<control type="button" id="63710">
+				<control type="button" id="63708">
 					<label>Studio logos</label>
 					<label2>$VAR[StudioLogoColorSettingVar]</label2>
 					<include>DefaultSettingButton</include>
@@ -310,104 +297,96 @@
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[CurrentSearchProviderToggleVar]</onclick>
 				</control>
-				<control type="radiobutton" id="64701">
-					<label>Enable search results window</label>
+				<control type="button" id="64701">
+					<label>Home screen search icon opens...</label>
+					<label2>$VAR[SearchSettingVar]</label2>
 					<include>DefaultSettingButton</include>
-					<selected>!Skin.HasSetting(NoSearchResultsWindow)</selected>
-					<onclick>Skin.ToggleSetting(NoSearchResultsWindow)</onclick>
+					<onclick>$VAR[SearchToggleVar]</onclick>
 				</control>
-				<control type="button" id="64702">
-					<label>Home screen search icon behavior</label>
-					<label2>$VAR[DefaultSearchWindowBehaviorVar]</label2>
-					<include>DefaultSettingButton</include>
-					<onclick>Skin.ToggleSetting(DefaultSearchWindowBehavior)</onclick>
-					<selected>Skin.HasSetting(DefaultSearchWindowBehavior)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow)</visible>
-				</control>
-				<control type="radiobutton" id="64703">
+				<control type="radiobutton" id="64702">
 					<label>   - $LOCALIZE[342]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideMovieResults)</onclick>
 					<selected>!Skin.HasSetting(HideMovieResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0)</visible>
 				</control>
-				<control type="radiobutton" id="64704">
+				<control type="radiobutton" id="64703">
 					<label>   - TV Shows</label>
 					<!-- <label>   - $LOCALIZE[20343]</label> -->
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideTVShowResults)</onclick>
 					<selected>!Skin.HasSetting(HideTVShowResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0)</visible>
 				</control>
-				<control type="radiobutton" id="64705">
+				<control type="radiobutton" id="64704">
 					<label>   - Anime</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideAnimeResults)</onclick>
 					<selected>!Skin.HasSetting(HideAnimeResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + String.IsEqual(Skin.String(current_search_provider),1)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + String.IsEqual(Skin.String(current_search_provider),1)</visible>
 				</control>
-				<control type="radiobutton" id="64706">
+				<control type="radiobutton" id="64705">
 					<label>   - Collections</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideCollectionsResults)</onclick>
 					<selected>!Skin.HasSetting(HideCollectionsResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
 				</control>
-				<control type="radiobutton" id="64707">
+				<control type="radiobutton" id="64706">
 					<label>   - Actors/Actresses</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HidePeopleResults)</onclick>
 					<selected>!Skin.HasSetting(HidePeopleResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
 				</control>
-				<control type="radiobutton" id="64708">
+				<control type="radiobutton" id="64707">
 					<label>   - Actors/Actresses (Movies)</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideUmbrellaPeopleMovieResults)</onclick>
 					<selected>!Skin.HasSetting(HideUmbrellaPeopleMovieResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
 				</control>
-				<control type="radiobutton" id="64709">
+				<control type="radiobutton" id="64708">
 					<label>   - Actors/Actresses (TV Shows)</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideUmbrellaPeopleTVResults)</onclick>
 					<selected>!Skin.HasSetting(HideUmbrellaPeopleTVResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
 				</control>
-				<control type="radiobutton" id="64710">
+				<control type="radiobutton" id="64709">
 					<label>   - $VAR[KeywordMoviesLabelVar]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideMovieKeywordResults)</onclick>
 					<selected>!Skin.HasSetting(HideMovieKeywordResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
 				</control>
-				<control type="radiobutton" id="64711">
+				<control type="radiobutton" id="64710">
 					<label>   - $VAR[KeywordTVShowsLabelVar]</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideTVShowKeywordResults)</onclick>
 					<selected>!Skin.HasSetting(HideTVShowKeywordResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
 				</control>
-				<control type="radiobutton" id="64712">
+				<control type="radiobutton" id="64711">
 					<label>   - TRAKT Lists</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideTraktResults)</onclick>
 					<selected>!Skin.HasSetting(HideTraktResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]</visible>
 				</control>
-				<control type="radiobutton" id="64713">
+				<control type="radiobutton" id="64712">
 					<label>   - TRAKT Lists (Movies)</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideUmbrellaTraktMovieResults)</onclick>
 					<selected>!Skin.HasSetting(HideUmbrellaTraktMovieResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
 				</control>
-				<control type="radiobutton" id="64714">
+				<control type="radiobutton" id="64713">
 					<label>   - TRAKT Lists (TV Shows)</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(HideUmbrellaTraktTVResults)</onclick>
 					<selected>!Skin.HasSetting(HideUmbrellaTraktTVResults)</selected>
-					<visible>!Skin.HasSetting(NoSearchResultsWindow) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
+					<visible>String.IsEqual(Skin.String(SearchSetting),0) + String.IsEqual(Skin.String(current_search_provider),2)</visible>
 				</control>
 			</control>
 
@@ -741,36 +720,29 @@
 					<selected>!Skin.HasSetting(Disable.SpotlightClearlogo)</selected>
 					<onclick>Skin.ToggleSetting(Disable.SpotlightClearlogo)</onclick>
 				</control>
-				<!--STACKED SPOTLIGHT CONTROL -->
-				<control type="radiobutton" id="64005">
-					<label>Show stacked control with stacked spotlight</label>
-					<include>DefaultSettingButton</include>
-					<selected>Skin.HasSetting(Enable.StackedSpotlightControl)</selected>
-					<onclick>Skin.ToggleSetting(Enable.StackedSpotlightControl)</onclick>
-				</control>
 				<!--AUTOSCROLL SPOTLIGHT -->
-				<control type="radiobutton" id="64006">
+				<control type="radiobutton" id="64005">
 					<label>Autoscroll spotlight widgets</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(Enable.AutoScrollSpotlight)</selected>
 					<onclick>Skin.ToggleSetting(Enable.AutoScrollSpotlight)</onclick>
 				</control>
-				<control type="button" id="64007">
-					<label>    - Delay (milliseconds)</label>
+				<control type="button" id="64006">
+					<label>    - Delay (seconds)</label>
 					<label2>$VAR[SkinSettingAutoScrollSpotlightDelay]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.SetNumeric(altus_spotlight_delay)</onclick>
 					<visible>Skin.HasSetting(Enable.AutoScrollSpotlight)</visible>
 				</control>
 				<!-- LANDSCAPE DISPLAY STYLE -->
-				<control type="button" id="64008">
+				<control type="button" id="64007">
 					<label>Feature landscape display style</label>
 					<label2>$VAR[HomeItemArtworkChoiceSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[HomeItemArtworkChoiceToggleVar]</onclick>
 					<onclick condition="!Skin.HasSetting(Disable.LandscapeWidgetClearlogo)">Skin.SetBool(Disable.LandscapeWidgetClearlogo)</onclick>
 				</control>
-				<control type="radiobutton" id="64009">
+				<control type="radiobutton" id="64008">
 					<label>    - Enable clearlogo</label>
 					<include>DefaultSettingButton</include>
 					<selected>!Skin.HasSetting(Disable.LandscapeWidgetClearlogo)</selected>
@@ -778,37 +750,50 @@
 					<visible>String.IsEqual(Skin.String(HomeItemArtworkChoice),1)</visible>
 				</control>
 				<!-- STACKED WIDGET DELAY -->
-				<control type="button" id="64010">
+				<control type="button" id="64009">
 					<label>Set stacked load delay (milliseconds)</label>
 					<label2>$VAR[SkinSettingStackedLoadDelay]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.SetNumeric(altus_category_widget_delay)</onclick>
 				</control>
 				<!-- COUNTDOWN TIMER -->
-				<control type="radiobutton" id="64011">
+				<control type="radiobutton" id="64010">
 					<label>Show countdown timer</label>
 					<include>DefaultSettingButton</include>
 					<selected>Skin.HasSetting(altus_category_widget_display_delay)</selected>
 					<onclick>Skin.ToggleSetting(altus_category_widget_display_delay)</onclick>
 				</control>
-				<control type="button" id="64012">
+				<control type="button" id="64011">
 					<label>Header</label>
 					<label2>$VAR[WidgetClearlogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick>$VAR[WidgetClearlogoToggleVar]</onclick>
 				</control>
-				<control type="radiobutton" id="64013">
+				<control type="radiobutton" id="64012">
 					<label>Ratings</label>
 					<include>DefaultSettingButton</include>
 					<onclick>Skin.ToggleSetting(Disable.HomePanelRatings)</onclick>
 					<selected>!Skin.HasSetting(Disable.HomePanelRatings)</selected>
 				</control>
-				<control type="button" id="64014">
+				<control type="button" id="64013">
 					<label>Footer (Studio logo)</label>
 					<label2>$VAR[StudioLogoSettingVar]</label2>
 					<include>DefaultSettingButton</include>
 					<onclick condition="!System.HasAddon(resource.images.studios.white)">InstallAddon(resource.images.studios.white)</onclick>
 					<onclick>$VAR[StudioLogoToggleVar]</onclick>
+				</control>
+				<!-- DIM/FADE WIDGETS -->
+				<control type="radiobutton" id="64014">
+					<label>$VAR[Capitalize_DimorFadeLabel] unfocused widgets</label>
+					<include>DefaultSettingButton</include>
+					<selected>!Skin.HasSetting(Disable.WidgetDimming)</selected>
+					<onclick>Skin.ToggleSetting(Disable.WidgetDimming)</onclick>
+				</control>
+				<control type="radiobutton" id="64015">
+					<label>$VAR[Capitalize_DimorFadeLabel] widgets on main menu focus</label>
+					<include>DefaultSettingButton</include>
+					<selected>Skin.HasSetting(Enable.MainMenuWidgetDimming)</selected>
+					<onclick>Skin.ToggleSetting(Enable.MainMenuWidgetDimming)</onclick>
 				</control>
 			</control>
 

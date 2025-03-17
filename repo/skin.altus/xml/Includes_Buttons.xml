@@ -176,16 +176,15 @@
 		</definition>
 	</include>
 	<include name="KeyboardButton">
-		<width>120</width>
-		<height>120</height>
-		<textoffsety>27</textoffsety>
-		<texturefocus colordiffuse="$VAR[FocusColorTheme]">buttons/roundbutton-fo.png</texturefocus>
-		<texturenofocus />
-		<textcolor>unfocused_text</textcolor>
-		<focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
-		<align>center</align>
-		<aligny>top</aligny>
-		<font>font45</font>
+    <width>120</width>
+    <height>120</height>
+    <texturefocus colordiffuse="$VAR[FocusColorTheme]">buttons/roundbutton-fo.png</texturefocus>
+    <texturenofocus colordiffuse="4D000000">buttons/roundbutton-fo.png</texturenofocus>
+    <textcolor>unfocused_text</textcolor>
+    <focusedcolor>$VAR[FocusedTextColorVar]</focusedcolor>
+    <align>center</align>
+    <aligny>center</aligny>
+    <font>font45</font>
 	</include>
 	<include name="PlaylistWindowButton">
 		<param name="width">100%</param>

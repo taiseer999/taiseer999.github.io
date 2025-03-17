@@ -2,19 +2,20 @@
 <includes>
 	<include file="Defaults.xml" />
 	<include file="Expressions.xml" />
-	<include file="Includes_Home.xml" />
-	<include file="Includes_HomeLayouts.xml" />
 	<include file="Includes_Animations.xml" />
-	<include file="Includes_Games.xml" />
-	<include file="Includes_MediaMenu.xml" />
 	<include file="Includes_Buttons.xml" />
 	<include file="Includes_DialogSelect.xml" />
+	<include file="Includes_FlixPanel.xml" />
+	<include file="Includes_Games.xml" />
+	<include file="Includes_Home.xml" />
+	<include file="Includes_HomeLayouts.xml" />
 	<include file="Includes_ListItem.xml" />
+	<include file="Includes_MediaMenu.xml" />
 	<include file="Includes_MusicInfo.xml" />
 	<include file="Includes_PVR.xml" />
-	<include file="Includes_FlixPanel.xml" />
-	<include file="Includes_Weather.xml" />
+	<include file="Includes_Search.xml" />
 	<include file="Includes_Seekbar.xml" />
+	<include file="Includes_Weather.xml" />
 	<include file="script-altus-main_menu_movies.xml" />
 	<include file="script-altus-main_menu_tvshows.xml" />
 	<include file="script-altus-main_menu_custom1.xml" />
@@ -25,7 +26,6 @@
 	<include file="script-altus-widget_custom1.xml" />
 	<include file="script-altus-widget_custom2.xml" />
 	<include file="script-altus-widget_custom3.xml" />
-	<include file="script-altus-search_history.xml" />
 	<include file="View_50_Includes.xml" />
 	<include file="View_50_List.xml" />
 	<include file="View_51_PosterFlow.xml" />
@@ -38,7 +38,6 @@
 	<include file="View_503_NowPlaying.xml" />
 	<include file="View_500_Wall.xml" />
 	<include file="View_501_LandscapeWall.xml" />
-	<include file="Custom_1122_ViewSelector.xml" />
 	<include file="Variables.xml" />
 	<include file="Variables_Artwork.xml" />
 	<include file="Variables_FlixPanel.xml" />

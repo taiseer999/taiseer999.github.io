@@ -666,6 +666,7 @@
 
 	<variable name="MainBlurDiffuse">
 	<value condition="$EXP[infodialog_active]">4DFFFFFF</value>
+		<value condition="Control.IsVisible(53) | Control.IsVisible(56)">66FFFFFF</value>
 		<value condition="Control.IsVisible(50) + 
 		[
 			[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),2)] | 
@@ -685,7 +686,7 @@
 			[Container.Content(favourites) + String.IsEqual(Skin.String(ListArtworkChoice.favourites),0)] | 
 			[Container.Content() + String.IsEqual(Skin.String(ListArtworkChoice.),0)] |
 			[Container.Content(addons) + String.IsEqual(Skin.String(ListArtworkChoice.addons),0)]
-		] | Control.IsVisible(53) | Control.IsVisible(56)] + !Window.IsVisible(systeminfo)">33FFFFFF</value>
+		]] + !Window.IsVisible(systeminfo)">33FFFFFF</value>
 		<value condition="[Control.IsVisible(50) + 
 		[
 			[Container.Content(movies) + String.IsEqual(Skin.String(ListArtworkChoice.movies),1)] | 
@@ -736,6 +737,16 @@
 		<value condition="String.IsEqual(Skin.String(BackgroundSetting),1)">Skin.SetString(BackgroundSetting,2)</value>
 		<value condition="String.IsEqual(Skin.String(BackgroundSetting),2)">Skin.SetString(BackgroundSetting,0)</value>
 	</variable>
+	
+	<variable name="SearchSettingVar">
+		<value condition="String.IsEqual(Skin.String(SearchSetting),0)">Search window</value>
+		<value condition="String.IsEqual(Skin.String(SearchSetting),1)">Search dialog</value>
+	</variable>
+
+	<variable name="SearchToggleVar">
+		<value condition="String.IsEqual(Skin.String(SearchSetting),0)">Skin.SetString(SearchSetting,1)</value>
+		<value condition="String.IsEqual(Skin.String(SearchSetting),1)">Skin.SetString(SearchSetting,0)</value>
+	</variable>
 
 	<!-- MAIN MENU SUBMENU BUTTONS -->
 	<variable name="HomePowerButtonActionVar">
@@ -744,9 +755,8 @@
 	</variable>
 
 	<variable name="HomeSearchButtonActionVar">
-		<value condition="!Skin.HasSetting(NoSearchResultsWindow) + !Skin.HasSetting(DefaultSearchWindowBehavior)">RunScript(script.altus.helper,mode=open_search_window)</value>
-		<value condition="!Skin.HasSetting(NoSearchResultsWindow) + Skin.HasSetting(DefaultSearchWindowBehavior)">RunScript(script.altus.helper,mode=search_input)</value>
-		<value condition="Skin.HasSetting(NoSearchResultsWindow)">ActivateWindow(1107)</value>
+		<value condition="String.IsEqual(Skin.String(SearchSetting),0)">RunScript(script.altus.helper,mode=open_search_window)</value>
+		<value condition="String.IsEqual(Skin.String(SearchSetting),1)">ActivateWindow(1107)</value>
 	</variable>
 
 	<!-- MAIN MENU SUBMENU BUTTON LABELS -->
@@ -754,9 +764,8 @@
 		<value condition="Control.HasFocus(801) + Skin.HasSetting(OneClickClose)">Exit Kodi</value>
 		<value condition="Control.HasFocus(801) + !Skin.HasSetting(OneClickClose)">Open shutdownmenu</value>
 		<value condition="Control.HasFocus(802)">Open settings</value>
-		<value condition="Control.HasFocus(803) + !Skin.HasSetting(NoSearchResultsWindow) + !Skin.HasSetting(DefaultSearchWindowBehavior)">Open search window</value>
-		<value condition="Control.HasFocus(803) + !Skin.HasSetting(NoSearchResultsWindow) + Skin.HasSetting(DefaultSearchWindowBehavior)">Open search input</value>
-		<value condition="Control.HasFocus(803) + Skin.HasSetting(NoSearchResultsWindow)">Open search dialog</value>
+		<value condition="Control.HasFocus(803) + String.IsEqual(Skin.String(SearchSetting),0)">Open search window</value>
+		<value condition="Control.HasFocus(803) + String.IsEqual(Skin.String(SearchSetting),1)">Open search dialog</value>
 		<value condition="Control.HasFocus(804) + Integer.IsEqual(System.AddonUpdateCount,1)">$INFO[System.AddonUpdateCount] available update</value>
 		<value condition="Control.HasFocus(804) + Integer.IsGreater(System.AddonUpdateCount,1)">$INFO[System.AddonUpdateCount] available updates</value>
 		<value condition="Control.HasFocus(805)">Toggle fullscreen</value>

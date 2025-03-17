@@ -1365,7 +1365,7 @@
 					<centertop>54%</centertop>
 					<left>20</left>
 					<right>20</right>
-					<height>71</height>
+					<height>66</height>
 					<align>center</align>
 					<aligny>center</aligny>
 					<label>$INFO[ListItem.Label]</label>
@@ -1378,7 +1378,7 @@
 					<centertop>54%</centertop>
 					<left>20</left>
 					<right>20</right>
-					<height>71</height>
+					<height>66</height>
 					<align>center</align>
 					<aligny>center</aligny>
 					<label>$INFO[ListItem.Label]</label>
@@ -1523,6 +1523,7 @@
 						<aligny>center</aligny>
 						<label>[LIGHT]$PARAM[label][/LIGHT]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
+						<scrollspeed>125</scrollspeed>
 						<font>font25_title</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
@@ -1536,6 +1537,7 @@
 						<aligny>center</aligny>
 						<label>$PARAM[label2]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
+						<scrollspeed>125</scrollspeed>
 						<font>font25</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
@@ -1549,6 +1551,7 @@
 						<aligny>center</aligny>
 						<label>$PARAM[label3]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
+						<scrollspeed>125</scrollspeed>
 						<font>font25</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
@@ -1563,6 +1566,7 @@
 						<aligny>center</aligny>
 						<label>$PARAM[label4]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
+						<scrollspeed>125</scrollspeed>
 						<font>font25</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
@@ -1577,6 +1581,7 @@
 						<aligny>center</aligny>
 						<label>$INFO[ListItem.StartTime] - $INFO[ListItem.EndTime]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
+						<scrollspeed>125</scrollspeed>
 						<font>font25</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>
@@ -1591,6 +1596,7 @@
 						<aligny>center</aligny>
 						<label>$VAR[WidgetFocusedPVRNextProgrammeLabel]</label>
 						<scroll>$PARAM[focused] + Control.HasFocus($PARAM[list_id])</scroll>
+						<scrollspeed>125</scrollspeed>
 						<font>font25</font>
 						<textcolor>$VAR[FocusedTextColorVar]</textcolor>
 						<selectedcolor>$VAR[FocusedTextColorVar]</selectedcolor>

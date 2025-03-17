@@ -45,7 +45,7 @@
 				<left>-1</left>
 				<!-- <top>-20</top>
 				<width>200%</width> -->
-				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming + String.IsEqual(Skin.String(BackgroundSetting),1) + !ControlGroup(2000).HasFocus" reversible="true">
+				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + String.IsEqual(Skin.String(BackgroundSetting),1) + !ControlGroup(2000).HasFocus" reversible="true">
 					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
 				</animation>
 				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)] + !ControlGroup(2000).HasFocus" reversible="true">

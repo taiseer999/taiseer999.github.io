@@ -496,7 +496,11 @@
 				<movement>5</movement>
 				<onright>$PARAM[list_id]</onright>
 				<orientation>horizontal</orientation>
-				<visible>Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | Container($PARAM[list_id]).IsUpdating</visible>
+				<animation condition="Window.IsVisible(1121) + Container($PARAM[list_id]).IsUpdating" reversible="true" pulse="true">
+					<effect type="fade" start="100" end="80" time="700" tween="sine" easing="inout" />
+					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="700" />
+				</animation>
+				<visible>Container($PARAM[list_id]).IsUpdating | Integer.IsGreater(Container($PARAM[list_id]).NumItems,0) | String.IsEqual(Window(Home).Property(altus.search.refreshing),true)</visible>
 				<onclick condition="$PARAM[onclick_condition]">$PARAM[onclick_action]</onclick>
 				<onfocus>ClearProperty(SpotlightWidget,Home)</onfocus>
 				<onfocus>ClearProperty(FeatureWidgetFocused,Home)</onfocus>
@@ -1367,7 +1371,7 @@
 					<param name="list_id" value="$PARAM[list_id]"/>
 				</include>
 				<!-- <animation effect="slide" end="7,0" time="300" condition="Control.HasFocus($PARAM[list_id])">Conditional</animation> -->
-				<animation condition="!Skin.HasSetting(Enable.StackedSpotlightControl) + !String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Integer.IsEqual($PARAM[list_id],Window(Home).Property(altus_spotlight_linked_list_id))" reversible="false">
+				<animation condition="!String.IsEmpty(Window(Home).Property(SpotlightWidget)) + Integer.IsEqual($PARAM[list_id],Window(Home).Property(altus_spotlight_linked_list_id))" reversible="false">
 					<effect type="fade" start="100" end="0" time="400" />
 				</animation>
 				<visible>$PARAM[visible]</visible>
@@ -2004,6 +2008,7 @@
 		<onload condition="String.IsEmpty(Skin.String(RatingSlot6))">Skin.SetString(RatingSlot6,none)</onload>
 		<onload condition="String.IsEmpty(Skin.String(RatingSlot7))">Skin.SetString(RatingSlot7,none)</onload>
 
+		<onload condition="String.IsEmpty(Skin.String(SearchSetting))">Skin.SetString(SearchSetting,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(BackgroundSetting))">Skin.SetString(BackgroundSetting,0)</onload>
 		<onload condition="String.IsEmpty(Skin.String(WidgetClearlogoSetting))">Skin.SetString(WidgetClearlogoSetting,1)</onload>
 		<onload condition="String.IsEmpty(Skin.String(PosterSizeSetting))">Skin.SetString(PosterSizeSetting,0)</onload>

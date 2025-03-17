@@ -3102,7 +3102,7 @@ updated YouTube addon URL
             <screenshot>resources/images/screenshot04.jpg</screenshot>
         </assets>
     </extension>
-</addon><addon id="script.altus.helper" name="Altus Helper" version="0.1.7" provider-name="Ivar Brandt">
+</addon><addon id="script.altus.helper" name="Altus Helper" version="0.2.5" provider-name="Ivar Brandt">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
@@ -3118,7 +3118,7 @@ updated YouTube addon URL
         <source />
         <assets>
             <icon>resources/media/icon.png</icon>
-            <fanart>resources/media/fanart.jpg</fanart>
+            
         </assets>
         <description lang="en_GB">Altus Helper for the Altus Skin.</description>
         <description lang="en_NZ">Altus Helper for the Altus Skin.</description>
@@ -6740,11 +6740,11 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <disclaimer lang="zh_CN">可放心使用此脚本，更多信息访问 kodi.tv</disclaimer>
     <disclaimer lang="zh_TW">歡迎使用本腳本，相關資訊請參閱kodi.tv</disclaimer>
   </extension>
-</addon><addon id="skin.altus" version="0.4.0" name="Altus" provider-name="Ivar Brandt">
+</addon><addon id="skin.altus" version="0.5.7" name="Altus" provider-name="Ivar Brandt">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 		<import addon="resource.images.weathericons.white" version="0.0.1" />
-		<import addon="script.altus.helper" version="0.1.7" />
+		<import addon="script.altus.helper" version="0.2.5" />
 	</requires>
 	<extension point="xbmc.gui.skin" debugging="false">
 		<res width="1920" height="1440" aspect="4:3" default="false" folder="xml" />
@@ -6761,7 +6761,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
 		<license>CC BY-SA 4.0, GNU GENERAL PUBLIC LICENSE Version 2.0</license>
 		<assets>
 			<icon>resources/icon.jpg</icon>
-			<fanart>resources/fanart.jpg</fanart>
+			
 		</assets>
 		<summary lang="en_GB">Altus skin by Ivar Brandt</summary>
 		<summary lang="en_NZ">Altus skin by Ivar Brandt</summary>

@@ -89,7 +89,7 @@
   <variable name="DialogBackground">
 		<value condition="!Player.HasMedia + String.IsEqual(Skin.String(BackgroundSetting),2) + !String.IsEmpty(Window(home).Property(listitem_blurred))">$INFO[Window(home).Property(listitem_blurred)]</value>
 		<value condition="Player.HasMedia + [String.IsEqual(Skin.String(BackgroundSetting),1) | String.IsEqual(Skin.String(BackgroundSetting),2)] + !String.IsEmpty(Window(home).Property(listitem_blurred))">colors/darker.png</value>
-		<value>colors/darkest.png</value>
+		<value>colors/darker.png</value>
 	</variable>
 
   <variable name="DialogBackgroundDiffuse">

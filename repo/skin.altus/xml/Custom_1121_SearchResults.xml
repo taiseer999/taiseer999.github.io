@@ -9,124 +9,27 @@
 			<!-- WIDGETS GROUP -->
 			<control type="group" id="2000">
 				<left>500</left>
-				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming + String.IsEqual(Skin.String(BackgroundSetting),1) + !ControlGroup(2000).HasFocus" reversible="true">
+				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + String.IsEqual(Skin.String(BackgroundSetting),1) + !ControlGroup(2000).HasFocus" reversible="true">
 					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
 				</animation>
 				<animation condition="Skin.HasSetting(Enable.MainMenuWidgetDimming) + [String.IsEqual(Skin.String(BackgroundSetting),0) | String.IsEqual(Skin.String(BackgroundSetting),2)] + !ControlGroup(2000).HasFocus" reversible="true">
 					<effect type="fade" start="100" end="60" time="300" tween="sine" easing="inout" />
 					<effect type="fadediffuse" start="FFE9E9E9" end="FF777777" time="300" />
 				</animation>
-				
-				<!-- <include>SearchMenuAnimations</include> -->
 				<include>OpenClose_Right</include>
 				<!-- SEARCH RESULTS -->
-				<control type="group" id="27000">
+				<control type="group" id="26000">
 					<include content="Visible_Right_Delayed">
 						<param name="id" value="movies"/>
 					</include>
-					<control type="grouplist" id="27001">
-					<visible allowhiddenfocus="true">!String.IsEmpty(Skin.String(SearchInput)) + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
+					<control type="grouplist" id="26001">
+						<visible>!String.IsEmpty(Window(home).Property(altus.search.input)) + !String.IsEqual(Window(home).Property(altus.search.history.count),0)</visible>
 						<include>WidgetGroupListCommon</include>
-						<pagecontrol>27099</pagecontrol>
-						<include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideMovieResults)">
-              <param name="content_path" value="$VAR[SearchProviderMoviesVar]"/>
-              <param name="widget_header" value="$LOCALIZE[342]"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27011"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideTVShowResults)">
-              <param name="content_path" value="$VAR[SearchProviderTVShowsVar]"/>
-              <param name="widget_header" value="TV Shows"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27012"/>
-            </include>
-						<include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideAnimeResults) + String.IsEqual(Skin.String(current_search_provider),1)">
-              <param name="content_path" value="$VAR[SearchProviderAnimeVar]"/>
-              <param name="widget_header" value="Anime"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27013"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideCollectionsResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),3)]">
-              <param name="content_path" value="$VAR[SearchProviderCollectionsVar]"/>
-              <param name="widget_header" value="Collections"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27014"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
-              <param name="content_path" value="$VAR[SearchProviderPeopleVar]"/>
-              <param name="widget_header" value="Actors/Actresses"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27015"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
-              <param name="content_path" value="$VAR[SearchProviderActors/ActressesMoviesVar]"/>
-              <param name="widget_header" value="Actors/Actresses (Movies)"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27016"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HidePeopleResults) + String.IsEqual(Skin.String(current_search_provider),2)">
-              <param name="content_path" value="$VAR[SearchProviderActors/ActressesTVShowsVar]"/>
-              <param name="widget_header" value="Actors/Actresses (TV Shows)"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27017"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideMovieKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
-							<param name="content_path" value="$VAR[SearchProviderKeywordMoviesVar]"/>
-              <param name="widget_header" value="$VAR[KeywordMoviesLabelVar]"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27018"/>
-            </include>
-            <include content="SmallWidgetListPoster" condition="!Skin.HasSetting(HideTVShowKeywordResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
-							<param name="content_path" value="$VAR[SearchProviderKeywordTVShowsVar]"/>
-              <param name="widget_header" value="$VAR[KeywordTVShowsLabelVar]"/>
-              <param name="widget_target" value="videos"/>
-              <param name="list_id" value="27019"/>
-            </include>
-            <include content="WidgetListCategoryStacked" condition="!Skin.HasSetting(HideTraktResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
-							<param name="content_path" value="$VAR[SearchProviderTRAKTListsVar]"/>
-							<param name="widget_header" value="TRAKT Lists"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="27020"/>
-							<param name="child_id" value="270201"/>
-						</include>
-						<include content="SmallWidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + [String.IsEqual(Skin.String(current_search_provider),0) | String.IsEqual(Skin.String(current_search_provider),1) | String.IsEqual(Skin.String(current_search_provider),3)]">
-							<param name="content_path" value="$INFO[Window(1121).Property(altus.27020.path)]"/>
-							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27020.label)]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="270201"/>
-							<param name="parent_id" value="27020"/>
-						</include>
-						<include content="WidgetListCategoryStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
-							<param name="content_path" value="$VAR[SearchProviderTRAKTListsMoviesVar]"/>
-							<param name="widget_header" value="TRAKT Lists (Movies)"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="27021"/>
-							<param name="child_id" value="270211"/>
-						</include>
-						<include content="SmallWidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
-							<param name="content_path" value="$INFO[Window(1121).Property(altus.27021.path)]"/>
-							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27021.label)]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="270211"/>
-							<param name="parent_id" value="27021"/>
-						</include>
-						<include content="WidgetListCategoryStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
-							<param name="content_path" value="$VAR[SearchProviderTRAKTListsTVShowsVar]"/>
-							<param name="widget_header" value="TRAKT Lists (TV Shows)"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="27022"/>
-							<param name="child_id" value="270221"/>
-						</include>
-						<include content="SmallWidgetListPosterStacked" condition="!Skin.HasSetting(HideTraktResults) + String.IsEqual(Skin.String(current_search_provider),2)">
-							<param name="content_path" value="$INFO[Window(1121).Property(altus.27022.path)]"/>
-							<param name="widget_header" value="$INFO[Window(1121).Property(altus.27022.label)]"/>
-							<param name="widget_target" value="videos"/>
-							<param name="list_id" value="270221"/>
-							<param name="parent_id" value="27022"/>
-						</include>
+						<pagecontrol>26099</pagecontrol>
+						<include content="SearchWidgets"/>
 					</control>
 					<include content="WidgetScrollbar" condition="Skin.HasSetting(touchmode)">
-						<param name="scrollbar_id" value="27099"/>
+						<param name="scrollbar_id" value="26099"/>
 					</include>
 				</control>
 			</control>
@@ -136,7 +39,7 @@
 			<include>BottomBar</include>
 			<control type="label">
 				<!-- <include>SearchMenuAnimations</include> -->
-				<visible>!String.IsEmpty(Skin.String(SearchInput)) + Control.HasFocus(27011) + String.IsEmpty(Skin.String(DatabaseStatus)) + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]]</visible>
+				<visible>!String.IsEmpty(Window(home).Property(altus.search.input)) + Control.HasFocus(26011) + !String.IsEqual(Window(home).Property(altus.search.history.count),0) + [$EXP[isMovie] | $EXP[isTVShow] | $EXP[isSeason] | $EXP[isEpisode]]</visible>
 				<top>35</top>
 				<left>540</left>
 				<width>1400</width>
@@ -144,7 +47,7 @@
 				<height>40</height>
 				<font>font37</font>
 				<textcolor>unfocused_text</textcolor>
-				<label>Search results for: [B]$INFO[Skin.String(SearchInput)][/B]</label>
+				<label>Search results for: [B]$INFO[Window(home).Property(altus.search.input)][/B]</label>
 				<scroll>true</scroll>
 				<scrollspeed>160</scrollspeed>
 				<animation effect="fade" time="300">VisibleChange</animation>
@@ -153,14 +56,14 @@
 				<depth>DepthContentPanel</depth>
 				<include>OpenClose_Left</include>
 				<!-- <include>osd_darkenBG</include> -->
-				<include content="ImageWidget" condition="!String.IsEmpty(Skin.String(DatabaseStatus))">
+				<!-- <include content="ImageWidget" condition="String.IsEqual(Window(home).Property(altus.search.history.count),0)">
 					<param name="left">50</param>
 					<param name="text_label" value="Your search history is currently empty. Would you like to perform a new search or return to the home screen?" />
 					<param name="button_label" value="New search" />
 					<param name="button_onclick" value="RunScript(script.altus.helper,mode=re_search)"/>
 					<param name="button3_onclick" value="ActivateWindow(home)"/>
-					<param name="button_id" value="27400"/>
-				</include>
+					<param name="button_id" value="26400"/>
+				</include> -->
 				<include content="MenuContentPanel">
 					<param name="bg_left" value="0"/>
 					<param name="width" value="498"/>
@@ -179,60 +82,34 @@
 						<param name="width" value="600"/>
 					</include> -->
 					<!-- <visible allowhiddenfocus="true">true</visible> -->
-					<control type="group">
-						<visible>String.IsEmpty(Skin.String(DatabaseStatus))</visible>
-						<top>160</top>
-						<width>498</width>
-						<control type="label">
-							<left>100</left>
-							<aligny>center</aligny>
-							<height>98</height>
-							<font>font36_title</font>
-							<label>Recent searches</label>
-							<textcolor>$VAR[FocusColorTheme]</textcolor>
-							<visible>String.IsEqual(Skin.String(MenuCaseSetting),0)</visible>
-						</control>
-						<control type="label">
-							<left>85</left>
-							<aligny>center</aligny>
-							<height>98</height>
-							<font>font36_title</font>
-							<label>[UPPERCASE]Recent searches[/UPPERCASE]</label>
-							<textcolor>$VAR[FocusColorTheme]</textcolor>
-							<visible>String.IsEqual(Skin.String(MenuCaseSetting),1)</visible>
-						</control>
-						<control type="label">
-							<left>105</left>
-							<aligny>center</aligny>
-							<height>98</height>
-							<font>font36_title</font>
-							<label>[LOWERCASE]Recent searches[/LOWERCASE]</label>
-							<textcolor>$VAR[FocusColorTheme]</textcolor>
-							<visible>String.IsEqual(Skin.String(MenuCaseSetting),2)</visible>
-						</control>
-						<control type="label">
-							<left>98</left>
-							<aligny>center</aligny>
-							<height>98</height>
-							<font>font36_title</font>
-							<label>[CAPITALIZE]Recent searches[/CAPITALIZE]</label>
-							<textcolor>$VAR[FocusColorTheme]</textcolor>
-							<visible>String.IsEqual(Skin.String(MenuCaseSetting),3)</visible>
-						</control>
+					
+					<control type="textbox">
+						<top>145</top>
+						<left>40</left>
+						<width>418</width>
+						<aligny>center</aligny>
+						<align>center</align>
+						<height>200</height>
+						<font>font27</font>
+						<label>$INFO[Window(home).Property(altus.search.history.empty)]</label>
+						<textcolor>unfocused_text</textcolor>
+						<visible>String.IsEqual(Window(home).Property(altus.search.history.count),0)</visible>
 					</control>
+					
 					<control type="fixedlist" id="9000">
+						<visible>!String.IsEqual(Window(home).Property(altus.search.history.count),0)</visible>
 						<left>0</left>
-						<top>260</top>
+						<top>185</top>
 						<width>498</width>
-						<height>757</height>
-						<movement>9</movement>
+						<height>824</height>
+						<movement>10</movement>
 						<focusposition>0</focusposition>
 						<onfocus>ClearProperty(listposition,home)</onfocus>
 						<onfocus>ClearProperty(altus_saved_list_id,Home)</onfocus>
 						<onfocus>ClearProperty(altus_stacked_linked_list_id,Home)</onfocus>
-						<onright>SetFocus($INFO[Container(9000).ListItem.Property(menu_id)])</onright>
+						<!-- <onright>SetFocus($INFO[Container(9000).ListItem.Property(menu_id)])</onright> -->
 						<onleft>9000</onleft>
-						<onright condition="!String.IsEmpty(Skin.String(SearchInput))">SetFocus(2000)</onright>
+						<onright condition="!String.IsEmpty(Window(home).Property(altus.search.input))">SetFocus(2000)</onright>
 						<onup>700</onup>
 						<ondown>9000</ondown>
 						<scrolltime tween="cubic" easing="out">500</scrolltime>
@@ -254,14 +131,17 @@
 							<itemgap>-19</itemgap>
 							<width>343</width>
 							<height>100</height>
-							<onup>SetFocus(9000,99,absolute)</onup>
-							<ondown>SetFocus(9000,0,absolute)</ondown>
-							<onright condition="!String.IsEmpty(Skin.String(SearchInput))">2000</onright>
+							<onup condition="!String.IsEqual(Window(home).Property(altus.search.history.count),0)">SetFocus(9000,99,absolute)</onup>
+							<onup condition="String.IsEqual(Window(home).Property(altus.search.history.count),0)">700</onup>
+							<ondown condition="!String.IsEqual(Window(home).Property(altus.search.history.count),0)">SetFocus(9000,0,absolute)</ondown>
+							<ondown condition="String.IsEqual(Window(home).Property(altus.search.history.count),0)">700</ondown>
+							<onright condition="String.IsEmpty(Window(home).Property(altus.search.input))">801</onright>
+							<onright condition="!String.IsEmpty(Window(home).Property(altus.search.input))">2000</onright>
 							<onback>9000</onback>
 							<align>center</align>
 							<include content="IconButton">
 								<param name="control_id" value="801" />
-								<param name="onclick" value="$VAR[CurrentSearchProviderToggleVar]" />
+								<param name="onclick" value="RunScript(script.altus.helper,mode=toggle_search_provider)" />
 								<param name="icon" value="icons/submenu/cycleproviders.png" />
 							</include>
 							<include content="IconButton">
@@ -331,7 +211,7 @@
 				<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
 				<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 				<control type="label">
-				<visible>String.IsEmpty(Skin.String(SearchInput)) + String.IsEmpty(Skin.String(DatabaseStatus))</visible>
+				<visible>String.IsEmpty(Window(home).Property(altus.search.input)) + !String.IsEqual(Window(home).Property(altus.search.history.count),0)</visible>
 					<top>500</top>
 					<left>650</left>
 					<width>1085</width>
