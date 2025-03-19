@@ -32,7 +32,6 @@
     <include file="Includes_Images.xml" />
     <include file="Includes_Dialogs.xml" />
     <include file="Includes_Keyboard.xml" />
-    <include file="Includes_Keyboard_Mini.xml" />
     <include file="Includes_ButtonMenu.xml" />
 
     <include file="Includes_DialogInfo.xml" />
@@ -58,7 +57,7 @@
     <include file="Includes_NextAired.xml" />
     <include file="Includes_Recommendations.xml" />
     <include file="Includes_Paths.xml" />
-    <include file="Includes_CodecLogos.xml"/>
+
     <include file="Includes_Views.xml" />
     <include file="Includes_Views_List.xml" />
     <include file="Includes_Views_Row.xml" />
