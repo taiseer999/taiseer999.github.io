@@ -132,9 +132,8 @@
                             <param name="itemgap">osd_itemgap</param>
                         </include>
 						
-                        						
                         <!-- Button PlayerProcessInfo -->
-                                                <control type="button" id="6009">
+                        <control type="button" id="6009">
                             <include>Defs_OSD_Button</include>
                             <onclick>CancelAlarm(osd_timeout,true)</onclick>
                             <onclick>ActivateWindow(playerprocessinfo)</onclick>
