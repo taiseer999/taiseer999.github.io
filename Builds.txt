@@ -73,7 +73,7 @@ info="http://your.info.url"
 description="بيلد خفيف سريع للاجهزة المتوسطة يدعم كل الاجهزة و CoreELEC."
 
 name="AF2 Arabic / English"
-version="1.6"
+version="1.7"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=mx9QsgjfJSRt1q%2BbUBPjmVE7jX1oUXKhlYdEUxfhgP9W4DYuv1oKHZwHoz%2FpgbRK&expiry=mvsCyYB2y9Yn7dDBRKY9Ig%3D%3D&mac=4ab96af92cb552f73b68ac16d86c4cdd90ac22730acd2b37f306da523cf7a64b"
 minor="http://"
 gui="http://"
