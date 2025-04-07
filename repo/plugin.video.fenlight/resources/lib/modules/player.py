@@ -20,14 +20,15 @@ class FenLightPlayer(xbmc_player):
 	def __init__ (self):
 		xbmc_player.__init__(self)
 
-	def run(self, url=None, obj=None):
+	def run(self, url=None, obj=None, num_episodes=None):
 		hide_busy_dialog()
 		self.clear_playback_properties()
+		self.num_episodes = num_episodes  # Store num_episodes
 		if not url: return self.run_error()
-		try: return self.play_video(url, obj)
+		try: return self.play_video(url, obj, num_episodes)
 		except: return self.run_error()
 
-	def play_video(self, url, obj):
+	def play_video(self, url, obj, num_episodes=None):
 		self.set_constants(url, obj)
 		volume_checker()
 		self.play(self.url, self.make_listing())
@@ -95,7 +96,11 @@ class FenLightPlayer(xbmc_player):
 					if self.current_point >= set_watched:
 						if play_random_continual: self.run_random_continual(); break
 						if not self.media_marked: self.media_watched_marker()
-					if self.autoplay_nextep or self.autoscrape_nextep:
+					if self.num_episodes and int(self.num_episodes) > 1:
+						playNextNum = True
+					else:
+						playNextNum = False
+					if self.autoplay_nextep or self.autoscrape_nextep or playNextNum:
 						if not self.nextep_info_gathered: self.info_next_ep()
 						if round(self.total_time - self.curr_time) <= self.start_prep: self.run_next_ep(); break
 				except: pass
@@ -178,7 +183,7 @@ class FenLightPlayer(xbmc_player):
 	def run_next_ep(self):
 		from modules.episode_tools import EpisodeTools
 		if not self.media_marked: self.media_watched_marker(force_watched=True)
-		EpisodeTools(self.meta, self.nextep_settings).auto_nextep()
+		EpisodeTools(self.meta, {**self.nextep_settings, 'num_episodes': self.num_episodes}).auto_nextep()
 
 	def run_random_continual(self):
 		from modules.episode_tools import EpisodeTools
@@ -191,15 +196,18 @@ class FenLightPlayer(xbmc_player):
 	def info_next_ep(self):
 		self.nextep_info_gathered = True
 		try:
-			play_type = 'autoplay_nextep' if self.autoplay_nextep else 'autoscrape_nextep'
-			nextep_settings = auto_nextep_settings(play_type)
-			final_chapter = self.final_chapter() if nextep_settings['use_chapters'] else None
-			percentage = 100 - final_chapter if final_chapter else nextep_settings['window_percentage']
-			window_time = round((percentage/100) * self.total_time)
-			use_window = nextep_settings['alert_method'] == 0
-			default_action = nextep_settings['default_action']
-			self.start_prep = nextep_settings['scraper_time'] + window_time
-			self.nextep_settings = {'use_window': use_window, 'window_time': window_time, 'default_action': default_action, 'play_type': play_type}
+				play_type = 'autoplay_nextep' if self.autoplay_nextep else 'autoscrape_nextep'
+				nextep_settings = auto_nextep_settings(play_type)
+				final_chapter = self.final_chapter() if nextep_settings['use_chapters'] else None
+				percentage = 100 - final_chapter if final_chapter else nextep_settings['window_percentage']
+				window_time = round((percentage/100) * self.total_time)
+				use_window = nextep_settings['alert_method'] == 0
+				default_action = nextep_settings['default_action']
+				self.start_prep = nextep_settings['scraper_time'] + window_time
+				if self.num_episodes and int(self.num_episodes) > 1:
+					self.nextep_settings = {'num_episodes': self.num_episodes, 'use_window': use_window, 'window_time': window_time, 'default_action': default_action, 'play_type': play_type}
+				else:
+					self.nextep_settings = {'use_window': use_window, 'window_time': window_time, 'default_action': default_action, 'play_type': play_type}
 		except: pass
 
 	def final_chapter(self):

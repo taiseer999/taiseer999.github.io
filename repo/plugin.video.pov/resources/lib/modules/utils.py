@@ -14,6 +14,13 @@ from modules.kodi_utils import local_string as ls, get_setting
 days_translate = {'Monday': 32971, 'Tuesday': 32972, 'Wednesday': 32973, 'Thursday': 32974, 'Friday': 32975, 'Saturday': 32976, 'Sunday': 32977}
 
 class TaskPool:
+	@staticmethod
+	def process(_threads):
+		for i in _threads:
+			try: i.start()
+			except: pass
+			else: yield i
+
 	def __init__(self, maxsize=None):
 		self.maxsize = maxsize or int(get_setting('pov.max_threads', '100'))
 		self._queue = SimpleQueue()
@@ -27,14 +34,14 @@ class TaskPool:
 		maxsize = min(len(_list), self.maxsize)
 		[self._queue.put(tag) for tag in _list]
 		threads = [_thread(target=self._thread_target, args=(self._queue, _target)) for i in range(maxsize)]
-		[i.start() for i in threads]
+		threads = self.process(threads)
 		return threads
 
 	def tasks_enumerate(self, _target, _list, _thread):
 		maxsize = min(len(_list), self.maxsize)
 		[self._queue.put((p, tag)) for p, tag in enumerate(_list, 1)]
 		threads = [_thread(target=self._thread_target, args=(self._queue, _target)) for i in range(maxsize)]
-		[i.start() for i in threads]
+		threads = self.process(threads)
 		return threads
 
 def manual_function_import(location, function_name):
@@ -43,14 +50,14 @@ def manual_function_import(location, function_name):
 def make_thread_list(_target, _list, _thread):
 	for item in _list:
 		threaded_object = _thread(target=_target, args=(item,))
-		yield threaded_object
 		threaded_object.start()
+		yield threaded_object
 
 def make_thread_list_enumerate(_target, _list, _thread):
 	for item_position, item in enumerate(_list):
 		threaded_object = _thread(target=_target, args=(item_position, item))
-		yield threaded_object
 		threaded_object.start()
+		yield threaded_object
 
 def chunks(item_list, limit):
 	"""

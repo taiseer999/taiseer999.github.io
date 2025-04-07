@@ -247,6 +247,57 @@ def clear_all_cache():
 	progressDialog.close()
 	sleep(100)
 	ok_dialog(text='Success')
+	clear_icons()
+	
+def clear_icons():
+    from sqlite3 import dbapi2 as db
+    import sqlite3
+    import xbmcvfs
+    import xbmc
+    
+    cleared = False
+    thumbnailsPath = xbmcvfs.translatePath('special://profile/Thumbnails/')
+    databasePath = xbmcvfs.translatePath('special://profile/Database/')
+    addonPath = xbmcvfs.translatePath('special://home/addons')
+    
+    kodi_utils.logger('thumbnailsPath', thumbnailsPath)
+    kodi_utils.logger('databasePath', databasePath)
+    kodi_utils.logger('addonPath', addonPath)
+    
+    try:
+        dbcon = sqlite3.connect(databasePath+'/Textures13.db')
+        dbcur = dbcon.cursor()
+        
+        # Get the cached paths
+        icon = dbcur.execute("SELECT cachedurl FROM texture WHERE url ='" + addonPath + "/plugin.video.fenlight/resources/media/fenlight_icon.png';").fetchone()
+        fanart = dbcur.execute("SELECT cachedurl FROM texture WHERE url ='" + addonPath + "/plugin.video.fenlight/resources/media/fenlight_fanart2.jpg';").fetchone()
+        
+        if icon is not None:
+            if xbmcvfs.exists(thumbnailsPath + icon[0]):
+                xbmcvfs.delete(thumbnailsPath + icon[0])
+            dbcur.execute("DELETE FROM texture WHERE url ='" + addonPath + "/plugin.video.fenlight/resources/media/fenlight_icon.png';")
+        
+        if fanart is not None:
+            if xbmcvfs.exists(thumbnailsPath + fanart[0]):
+                xbmcvfs.delete(thumbnailsPath + fanart[0])
+            dbcur.execute("DELETE FROM texture WHERE url ='" + addonPath + "/plugin.video.fenlight/resources/media/fenlight_fanart2.jpg';")
+        
+        # Commit changes before closing the connection
+        dbcon.commit()
+        dbcon.close()
+        
+        # Add a delay before reloading the skin
+        xbmc.sleep(500)
+        
+        # Reload the skin to refresh textures
+        xbmc.executebuiltin('ReloadSkin()')
+        
+        cleared = True
+    except Exception as e:
+        kodi_utils.logger('ERROR', f'Error clearing icon cache: {str(e)}')
+        cleared = False
+    
+    return cleared
 
 def refresh_cached_data(meta):
 	from caches.meta_cache import meta_cache

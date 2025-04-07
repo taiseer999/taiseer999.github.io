@@ -90,14 +90,14 @@ def clean_databases(current_time=None, database_check=True, silent=False):
 	if database_check: check_databases()
 	if not current_time: current_time = get_current_time()
 	command_base = 'DELETE from %s WHERE CAST(%s AS INT) <= ?'
-	functions_list = (
-					(external_db, command_base % ('results_data', 'expires')),
-					(maincache_db, command_base % ('maincache', 'expires')),
-					(metacache_db, command_base % ('metadata', 'expires')),
-					(metacache_db, command_base % ('function_cache', 'expires')),
-					(metacache_db, command_base % ('season_metadata', 'expires')),
-					(debridcache_db, command_base % ('debrid_data', 'expires')))
-	for db, sql in functions_list:
+	for db, sql in (
+		(external_db, command_base % ('results_data', 'expires')),
+		(maincache_db, command_base % ('maincache', 'expires')),
+		(metacache_db, command_base % ('metadata', 'expires')),
+		(metacache_db, command_base % ('function_cache', 'expires')),
+		(metacache_db, command_base % ('season_metadata', 'expires')),
+		(debridcache_db, command_base % ('debrid_data', 'expires'))
+	):
 		try:
 			dbcon = database.connect(db)
 			dbcur = dbcon.cursor()
@@ -141,8 +141,8 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from apis import easynews_api
 		easynews_api.clear_media_results_database()
-		for item in ('pm_cloud', 'rd_cloud', 'ad_cloud', 'oc_cloud', 'folders'):
-			clear_cache(item, silent=True)
+		items = 'pm_cloud', 'rd_cloud', 'ad_cloud', 'oc_cloud', 'folders'
+		for item in items: clear_cache(item, silent=True)
 	elif cache_type == 'external_scrapers':
 		if not _confirm(): return
 		from caches.providers_cache import ExternalProvidersCache
@@ -151,12 +151,9 @@ def clear_cache(cache_type, silent=False):
 		debrid_cache = DebridCache().clear_database()
 		success = (data, debrid_cache) == ('success', 'success')
 	elif cache_type == 'trakt':
-		from caches.trakt_cache import clear_all_trakt_cache_data
-		success = clear_all_trakt_cache_data(silent=silent)
-	elif cache_type == 'mdbl':
 		if not _confirm(): return
-		from apis.mdblist_api import clear_mdbl_cache
-		success = clear_mdbl_cache()
+		from caches.trakt_cache import clear_all_trakt_cache_data
+		success = clear_all_trakt_cache_data()
 	elif cache_type == 'imdb':
 		if not _confirm(): return
 		from apis.imdb_api import clear_imdb_cache
@@ -202,7 +199,6 @@ def clear_all_cache():
 			('list', '%s %s' % (ls(32815), ls(32524))),
 			('trakt', ls(32087)),
 			('imdb', '%s %s' % (ls(32064), ls(32524))),
-			('imdb', '%s %s' % ('MDBList', ls(32524))),
 			('internal_scrapers', '%s %s' % (ls(32096), ls(32524))),
 			('external_scrapers', '%s %s' % (ls(32118), ls(32524))),
 			('rd_cloud', '%s %s' % (ls(32054), ls(32524))),

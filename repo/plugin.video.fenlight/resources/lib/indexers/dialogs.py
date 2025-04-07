@@ -221,11 +221,13 @@ def playback_choice(params):
 		meta = function('tmdb_id', meta, tmdb_api_key(), mpaa_region(), get_datetime())
 	poster = meta.get('poster') or empty_poster
 	aliases = get_aliases_titles(make_alias_dict(meta, meta['title']))
-	items = [{'line': 'Select Source', 'function': 'scrape'},
+	items = []
+	if media_type == 'episode': items.append({'line': 'Play # Episodes', 'function': 'play_number_eps'})
+	items.extend([{'line': 'Select Source', 'function': 'scrape'},
 			{'line': 'Rescrape & Select Source', 'function': 'clear_and_rescrape'},
 			{'line': 'Scrape with DEFAULT External Scrapers', 'function': 'scrape_with_default'},
 			{'line': 'Scrape with ALL External Scrapers', 'function': 'scrape_with_disabled'},
-			{'line': 'Scrape With All Filters Ignored', 'function': 'scrape_with_filters_ignored'}]
+			{'line': 'Scrape With All Filters Ignored', 'function': 'scrape_with_filters_ignored'}])
 	if media_type == 'episode': items.append({'line': 'Scrape with Custom Episode Groups Value', 'function': 'scrape_with_episode_group'})
 	if aliases: items.append({'line': 'Scrape with an Alias', 'function': 'scrape_with_aliases'})
 	items.append({'line': 'Scrape with Custom Values', 'function': 'scrape_with_custom_values'})
@@ -240,7 +242,13 @@ def playback_choice(params):
 		clear_cache('internal_scrapers', silent=True)
 		ExternalCache().delete_cache_single(media_type, str(meta['tmdb_id']))
 		hide_busy_dialog()
-	if choice == 'scrape':
+	if choice == 'play_number_eps':
+		num_episodes = kodi_dialog().input('Number of episodes', type=numeric_input)
+		if num_episodes == '':
+			return notification('Cancelled', 2500)
+		else:
+			play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'num_episodes': num_episodes}
+	elif choice == 'scrape':
 		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
 		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'autoplay': 'false'}
 	elif choice == 'clear_and_rescrape':

@@ -6,8 +6,10 @@ from modules import kodi_utils
 
 ls, get_setting, set_setting = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.set_setting
 base_url = 'https://api.torbox.app/v1/api'
+user_agent = 'POV for Kodi'
 timeout = 28.0
 session = requests.Session()
+session.headers['User-Agent'] = user_agent
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class TorBoxAPI:
@@ -29,9 +31,8 @@ class TorBoxAPI:
 	cloud_usenet = '/usenet/createusenetdownload'
 
 	def __init__(self):
-		self.user_agent = 'Mozilla/5.0'
 		self.api_key = get_setting('tb.token')
-		self.tb_sort = int(get_setting('tb.sort'))
+		self.tb_sort = int(get_setting('tb.sort', '0'))
 
 	def _request(self, method, path, params=None, json=None, data=None):
 		if not self.api_key: return
@@ -59,7 +60,7 @@ class TorBoxAPI:
 		return url + '|' + kodi_utils.urlencode(self.headers())
 
 	def headers(self):
-		return {'User-Agent': self.user_agent}
+		return {'User-Agent': user_agent}
 
 	@property
 	def days_remaining(self):
@@ -150,7 +151,7 @@ class TorBoxAPI:
 				selected_files = [i for i in selected_files if seas_ep_filter(season, episode, i['filename'])]
 			else:
 				if self._m2ts_check(selected_files): raise Exception('_m2ts_check failed')
-				selected_files = [i for i in selected_files if not any(x in i['filename'] for x in extras_filtering_list)]
+				selected_files = [i for i in selected_files if not any(x in i['filename'].lower() for x in extras_filtering_list)]
 				selected_files.sort(key=lambda k: k['size'], reverse=True)
 			if not selected_files: return None
 			file_key = selected_files[0]['link']
@@ -260,6 +261,10 @@ class TorBoxAPI:
 			user_cloud_success = False
 			dbcon = kodi_utils.database.connect(kodi_utils.maincache_db)
 			dbcur = dbcon.cursor()
+			try:
+				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('torbox_usenet_queries',))
+				kodi_utils.clear_property(str(i))
+			except: pass
 			# USER CLOUD
 			try:
 				dbcur.execute("""SELECT id FROM maincache WHERE id LIKE ?""", ('pov_tb_user_cloud%',))

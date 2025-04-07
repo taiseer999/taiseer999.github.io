@@ -5,7 +5,7 @@ from modules import kodi_utils, settings
 from modules.metadata import movie_meta, movieset_meta
 from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, make_thread_list_multi_arg, get_current_timestamp, paginate_list, jsondate_to_datetime
 from modules.watched_status import get_database, watched_info_movie, get_watched_status_movie, get_bookmarks_movie, get_progress_status_movie
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 make_listitem, build_url, nextpage_landscape = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.nextpage_landscape
 string, external, add_items, add_dir, get_property = str, kodi_utils.external, kodi_utils.add_items, kodi_utils.add_dir, kodi_utils.get_property
@@ -19,13 +19,13 @@ tmdb_api_key, mpaa_region = settings.tmdb_api_key, settings.mpaa_region
 run_plugin = 'RunPlugin(%s)'
 main = ('tmdb_movies_popular', 'tmdb_movies_popular_today','tmdb_movies_blockbusters','tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases',
 'tmdb_movies_premieres', 'tmdb_movies_oscar_winners')
-special = ('tmdb_movies_languages', 'tmdb_movies_providers', 'tmdb_movies_year', 'tmdb_movies_decade', 'tmdb_movies_certifications', 'tmdb_movies_recommendations',
+special = ('tmdb_movies_languages', 'tmdb_movies_providers', 'tmdb_movies_providers_uk', 'tmdb_movies_year', 'tmdb_movies_decade', 'tmdb_movies_certifications', 'tmdb_movies_recommendations',
 'tmdb_movies_genres', 'tmdb_movies_search', 'tmdb_movie_keyword_results', 'tmdb_movie_keyword_results_direct')
 personal = {'favorites_movies': ('modules.favorites', 'get_favorites'), 'in_progress_movies': ('modules.watched_status', 'get_in_progress_movies'),
 'watched_movies': ('modules.watched_status', 'get_watched_items'), 'recent_watched_movies': ('modules.watched_status', 'get_recently_watched')}
-trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
+trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_trending_uk', 'trakt_movies_trending_recent_uk','trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
 trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists', 'trakt_watchlist_lists', 'trakt_favorites')
-meta_list_dict = {'tmdb_movies_languages': meta_lists.languages, 'tmdb_movies_providers': meta_lists.watch_providers_movies, 'tmdb_movies_year': meta_lists.years_movies,
+meta_list_dict = {'tmdb_movies_languages': meta_lists.languages, 'tmdb_movies_providers': meta_lists.watch_providers_movies, 'tmdb_movies_providers_uk': meta_lists.watch_providers_movies_uk, 'tmdb_movies_year': meta_lists.years_movies,
 			'tmdb_movies_decade': meta_lists.decades_movies, 'tmdb_movies_certifications': meta_lists.movie_certifications, 'tmdb_movies_genres': meta_lists.movie_genres}
 view_mode, content_type = 'view.movies', 'movies'
 

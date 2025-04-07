@@ -297,8 +297,19 @@ class Navigator:
 		if menu_type == 'movie': mode, action, providers = 'build_movie_list', 'tmdb_movies_providers', ml.watch_providers_movies
 		else:
 			mode, providers = 'build_tvshow_list', ml.watch_providers_tvshows
-			if menu_type == 'tvshow': action = 'tmdb_tv_providers'
-			else: action = 'tmdb_anime_providers'
+			if menu_type == 'tvshow': 
+				action = 'tmdb_tv_providers'
+			else: 
+				action = 'tmdb_anime_providers'
+		for i in providers: self.add({'mode': mode, 'action': action, 'key_id': i['id'], 'name': i['name']}, i['name'], image_insert % i['icon'], original_image=True)
+		self.end_directory()
+		
+	def providersuk(self):
+		menu_type = self.params_get('menu_type')
+		image_insert = 'https://image.tmdb.org/t/p/original/%s'
+		if menu_type == 'movie': mode, action, providers = 'build_movie_list', 'tmdb_movies_providers_uk', ml.watch_providers_movies_uk
+		else:
+			action, mode, providers = 'tmdb_tv_providers_uk', 'build_tvshow_list', ml.watch_providers_tvshows_uk
 		for i in providers: self.add({'mode': mode, 'action': action, 'key_id': i['id'], 'name': i['name']}, i['name'], image_insert % i['icon'], original_image=True)
 		self.end_directory()
 

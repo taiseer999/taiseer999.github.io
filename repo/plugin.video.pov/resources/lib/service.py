@@ -29,6 +29,7 @@ class CheckSettingsFile:
 			kodi_utils.sleep(500)
 		make_settings_dict()
 		set_property('pov_kodi_menu_cache', get_setting('kodi_menu_cache'))
+		set_property('pov_rli_fix', get_setting('rli_fix'))
 		return logger('POV', 'CheckSettingsFile Service Finished')
 
 class ClearSubs:
@@ -90,8 +91,7 @@ class DatabaseMaintenance:
 class TraktMonitor:
 	def run(self):
 		from caches.trakt_cache import clear_trakt_list_contents_data
-		from apis.trakt_api import trakt_sync_activities, trakt_refresh
-		from apis.mdblist_api import mdb_clean_watchlist
+		from apis.trakt_api import trakt_sync_activities
 		logger('POV', 'TraktMonitor Service Starting')
 		trakt_service_string = 'TraktMonitor Service Update %s - %s'
 		update_string = 'Next Update in %s minutes...'
@@ -116,13 +116,6 @@ class TraktMonitor:
 				logger('POV', trakt_service_string % ('POV TraktMonitor - Failed. Error from Trakt', next_update_string))
 			else:# 'not needed'
 				logger('POV', trakt_service_string % ('POV TraktMonitor - Success. No Changes Needed', next_update_string))
-			if get_setting('trakt_user') != '':
-				try:
-					expires = float(get_setting('trakt.expires', '0'))
-					hours_remaining = (expires - time.time())//3600
-					if hours_remaining < 8 and trakt_refresh():
-						logger('POV', trakt_service_string % ('POV TraktMonitor - Success.', 'Trakt Authorization Updated'))
-				except: pass
 			monitor.waitForAbort(interval)
 		return logger('POV', 'TraktMonitor Service Finished')
 
@@ -210,6 +203,7 @@ class POVMonitor(kodi_utils.xbmc_monitor):
 		kodi_utils.sleep(50)
 		make_settings_dict()
 		set_property('pov_kodi_menu_cache', get_setting('kodi_menu_cache'))
+		set_property('pov_rli_fix', get_setting('rli_fix'))
 
 	def onNotification(self, sender, method, data):
 		if method == 'System.OnSleep': set_property('pov_pause_services', 'true')

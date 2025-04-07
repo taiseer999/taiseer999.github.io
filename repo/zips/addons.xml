@@ -1530,6 +1530,26 @@ updated YouTube addon URL
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
+</addon><addon id="plugin.video.daddylive" name="DaddyLive" version="5.00" provider-name="FubuZ">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.inputstreamhelper" />
+        <import addon="script.module.six" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Live Sports and TV</summary>
+		<description lang="en">Free streming of Live Sports and TV.</description>
+        <license>GPL-3.0</license>
+        <website>https://daddylive.sx/</website>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
 </addon><addon id="plugin.video.fen" name="Fen" provider-name="Tikipeter" version="3.5.02">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -1553,7 +1573,7 @@ updated YouTube addon URL
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
-</addon><addon id="plugin.video.fenlight" name="Fen Light+" provider-name="Tikipeter/thejason40" version="2.0.09">
+</addon><addon id="plugin.video.fenlight" name="Fen Light+" provider-name="Tikipeter/thejason40" version="2.1.20">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.19.1" />
@@ -1569,10 +1589,9 @@ updated YouTube addon URL
         <description lang="en">This add-on is intended for advanced Kodi users only. You must own the content of any media you play through this addon. This is an English language only add-on.</description>
         <platform>all</platform>
 		<disclaimer lang="en">The author of this addon does not host any of the content which is found and has no affiliation with any of the content providers.</disclaimer>
-        <license />
         <assets>
-            <icon>resources/media/fenlight_icon.png</icon>
-            <fanart>resources/media/fenlight_fanart2.jpg</fanart>
+            <icon>resources/media/flpi.png</icon>
+            <fanart>resources/media/flpfa.jpg</fanart>
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
@@ -1604,7 +1623,7 @@ updated YouTube addon URL
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.pov" version="5.03.11" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.03.32" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -1612,7 +1631,7 @@ updated YouTube addon URL
     <extension point="xbmc.python.pluginsource" library="resources/lib/pov.py">
         <provides>video</provides>
     </extension>
-    
+    <extension point="xbmc.service" library="resources/lib/service.py" />
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
@@ -1621,14 +1640,6 @@ updated YouTube addon URL
         <description lang="en">This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</description>
         <news>INFO: For latest changes see Changelog within add-on.</news>
         <assets><icon>icon.png</icon><fanart>fanart.png</fanart></assets>
-    </extension>
-    <extension point="kodi.context.item">
-        <menu id="kodi.core.main">
-            <item library="resources/lib/pov.py" args="refresh_widgets">
-                <label>40001</label>
-                <visible>String.IsEqual(ListItem.Property(pov_widget),true)</visible>
-            </item>
-        </menu>
     </extension>
 </addon><addon id="plugin.video.seren" version="3.0.62" name="Seren" provider-name="Nixgates">
     <requires>

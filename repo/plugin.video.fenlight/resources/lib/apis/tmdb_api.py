@@ -269,6 +269,13 @@ def tmdb_movies_providers(provider, page_no):
 	string = 'tmdb_movies_providers_%s_%s' % (provider, page_no)
 	url = '%s/discover/movie?api_key=%s&watch_region=US&with_watch_providers=%s&vote_count.gte=100&page=%s' % (base_url, api_key, provider, page_no)
 	return lists_cache_object(get_data, string, url, expiration= EXPIRY_1_WEEK)
+	
+def tmdb_movies_providers_uk(provider, page_no):
+	api_key = tmdb_api_key()
+	if api_key in empty_setting_check: return no_api_key()
+	string = 'tmdb_movies_providers_UK_%s_%s' % (provider, page_no)
+	url = '%s/discover/movie?api_key=%s&watch_region=GB&with_watch_providers=%s&vote_count.gte=100&page=%s' % (base_url, api_key, provider, page_no)
+	return lists_cache_object(get_data, string, url, expiration= EXPIRY_1_WEEK)
 
 def tmdb_movies_recommendations(tmdb_id, page_no):
 	api_key = tmdb_api_key()
@@ -382,6 +389,14 @@ def tmdb_tv_providers(provider, page_no):
 	if api_key in empty_setting_check: return no_api_key()
 	string = 'tmdb_tv_providers_%s_%s' % (provider, page_no)
 	url = '%s/discover/tv?api_key=%s&watch_region=US&with_watch_providers=%s&include_null_first_air_dates=false&vote_count.gte=100&first_air_date.lte=%s&page=%s' \
+				% (base_url, api_key, provider, get_current_date(), page_no)
+	return lists_cache_object(get_data, string, url, expiration= EXPIRY_1_WEEK)
+	
+def tmdb_tv_providers_uk(provider, page_no):
+	api_key = tmdb_api_key()
+	if api_key in empty_setting_check: return no_api_key()
+	string = 'tmdb_tv_providers_UK_%s_%s' % (provider, page_no)
+	url = '%s/discover/tv?api_key=%s&watch_region=GB&with_watch_providers=%s&include_null_first_air_dates=false&vote_count.gte=100&first_air_date.lte=%s&page=%s' \
 				% (base_url, api_key, provider, get_current_date(), page_no)
 	return lists_cache_object(get_data, string, url, expiration= EXPIRY_1_WEEK)
 

@@ -143,7 +143,7 @@ class source:
 					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
 				# except: pass
 
-				name = source_utils.clean_name(file_title[0].split('/')[0])
+				name = source_utils.clean_name(file_title[0])
 
 				episode_start, episode_end = 0, 0
 				if not search_series:

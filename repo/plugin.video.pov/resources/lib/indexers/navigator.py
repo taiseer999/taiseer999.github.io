@@ -68,8 +68,9 @@ class Navigator:
 		if 'Real-Debrid' in debrids: self.real_debrid()
 		if 'Premiumize.me' in debrids: self.premiumize()
 		if 'AllDebrid' in debrids: self.alldebrid()
-		if 'Offcloud' in debrids: self.offcloud()
 		if 'TorBox' in debrids: self.torbox()
+		if 'Offcloud' in debrids: self.offcloud()
+		if 'EasyDebrid' in debrids: self.easydebrid()
 		self._end_directory()
 
 	def easynews(self):
@@ -121,6 +122,11 @@ class Navigator:
 		self._add_item({'mode': 'torbox.tb_account_info',                          'name': ai_str    }, 'torbox.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',                'name': clca_str  }, 'torbox.png', n_ins, False)
 
+	def easydebrid(self):
+		ed_str, cloud_str, ai_str = 'EasyDebrid', ls(32496), ls(32494)
+		n_ins = _in_str % (ed_str.upper(), '')
+		self._add_item({'mode': 'easydebrid.ed_account_info',                      'name': ai_str    }, 'easydebrid.png', n_ins, False)
+
 	def favourites(self):
 		fav_str = ls(32453)
 		clear_fav_str = ls(32497) % fav_str
@@ -138,6 +144,7 @@ class Navigator:
 		sea_str, n_ins = '%s %s' % (ls(32477), l_str), _in_str % (t_str.upper(), '')
 		mdb_m_str, mdb_t_str = 'My %s %s' % (wlist_str, mov_str), 'My %s %s' % (wlist_str, tv_str)
 		trakt_status = k.get_setting('trakt_user') not in ('', None)
+		tmdb_status = k.get_setting('tmdb.account_id') not in ('', None)
 		mdblist_status = k.get_setting('mdblist.token') not in ('', None)
 		imdb_status = k.get_setting('imdb_user') not in ('', None)
 		if trakt_status:
@@ -148,6 +155,8 @@ class Navigator:
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'name': tu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'popular' , 'name': pu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.search_trakt_lists'                                       , 'name': sea_str}, 'trakt.png', n_ins)
+		if tmdb_status:
+			self._add_item({'mode': 'build_tmdb_list.get_tmdb_lists', 'name': 'My Lists'}, 'tmdb.png', '[B]TMDB:[/B] ')
 		if mdblist_status:
 			self._add_item({'mode': 'build_movie_list', 'action': 'mdblist_watchlist'       , 'name': mdb_m_str }, 'mdblist.png', m_n_ins)
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'mdblist_watchlist'      , 'name': mdb_t_str }, 'mdblist.png', m_n_ins)
@@ -254,7 +263,7 @@ class Navigator:
 		clean_databases_str = '%s %s' % (clean_str, ls(32003))
 		clean_all_str = '%s %s %s' % (clean_str, all_str, settings_str)
 		clear_all_str, clear_meta_str = clca_str % all_str, clca_str % ls(32527)
-		clear_list_str, clear_trakt_str, clear_mdbl_str = clca_str % ls(32501), clca_str % ls(32037), clca_str % 'MDBList'
+		clear_list_str, clear_trakt_str = clca_str % ls(32501), clca_str % ls(32037)
 		clear_imdb_str, clint_str, clext_str = clca_str % ls(32064), clca_str % ls(32096), clca_str % ls(32118)
 		clear_rd_str, clear_pm_str, clear_ad_str = clca_str % ls(32054), clca_str % ls(32061), clca_str % ls(32063)
 		clear_oc_str, clear_tb_str, clear_ed_str = clca_str % 'Offcloud', clca_str % 'TorBox', clca_str % 'EasyDebrid'
@@ -267,7 +276,6 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'meta',              'name': clear_meta_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'list',              'name': clear_list_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'trakt',             'name': clear_trakt_str    }, 'tools.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'mdbl',              'name': clear_mdbl_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'imdb',              'name': clear_imdb_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'internal_scrapers', 'name': clint_str          }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'external_scrapers', 'name': clext_str          }, 'tools.png', n_ins, False)

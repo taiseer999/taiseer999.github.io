@@ -34,14 +34,14 @@
             </control>
             <control type="label">
                 <left>100</left>
-                <top>37</top>
+                <top>30</top>
                 <width max="710">auto</width> <!-- <width max="355">auto</width> -->
-                <height>20</height>
+                <height>40</height>
                 <font>font10</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>[UPPERCASE]$INFO[Window.Property(tikiskins.total_results),[B],[/B]] $ADDON[plugin.video.pov 32139] - $INFO[Window.Property(tikiskins.scrape_time),[B],[/B]] $ADDON[plugin.video.pov 32171] $INFO[Window.Property(tikiskins.filters_ignored)][/UPPERCASE]</label>
+                <label>[UPPERCASE]$INFO[Window.Property(tikiskins.scrape_time),[B],[/B]] $ADDON[plugin.video.pov 32171][CR]$INFO[Window.Property(tikiskins.total_results),[B],[/B]] $ADDON[plugin.video.pov 32139] $INFO[Window.Property(tikiskins.filters_ignored)][/UPPERCASE]</label>
             </control>
         </control>
         <!-- List -->

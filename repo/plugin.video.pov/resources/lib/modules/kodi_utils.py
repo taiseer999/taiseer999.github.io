@@ -2,7 +2,7 @@ import xbmc, xbmcgui, xbmcplugin, xbmcvfs
 from xbmcaddon import Addon
 import json
 import sqlite3 as database
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qsl
 
 window, dialog, progressDialog, progressDialogBG = xbmcgui.Window(10000), xbmcgui.Dialog(), xbmcgui.DialogProgress(), xbmcgui.DialogProgressBG()
 player, xbmc_player, monitor, xbmc_monitor, execute_JSON = xbmc.Player(), xbmc.Player, xbmc.Monitor(), xbmc.Monitor, xbmc.executeJSONRPC
@@ -32,8 +32,8 @@ movie_dict_removals = ('tmdblogo', 'fanart_added', 'cast', 'poster', 'rootname',
 						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title', 'extra_info',
 						'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2')
 tvshow_dict_removals = ('tmdblogo', 'fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers',
-						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title',
-						'extra_info', 'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2',
+						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title', 'extra_info',
+						'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2',
 						'total_episodes', 'total_seasons', 'total_aired_eps', 'season_summary', 'season_data')
 episode_dict_removals = ('thumb', 'guest_stars', 'episode_type')
 

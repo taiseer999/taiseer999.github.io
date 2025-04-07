@@ -15,7 +15,7 @@ build_url, remove_meta_keys, dict_removals = kodi_utils.build_url, kodi_utils.re
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 item_jump, item_next = tp('special://home/addons/plugin.video.pov/resources/media/item_jump.png'), tp('special://home/addons/plugin.video.pov/resources/media/item_next.png')
 poster_empty, fanart_empty = tp('special://home/addons/plugin.video.pov/resources/media/box_office.png'), tp('special://home/addons/plugin.video.pov/fanart.png')
-watched_str, unwatched_str, traktmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), ls(32200)
+watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDBList Manager[/B]', ls(32200)
 favmanager_str, extras_str, options_str, recomm_str = ls(32197), ls(32645), ls(32646), '[B]%s...[/B]' % ls(32503)
 hide_str, exit_str, clearprog_str, play_str = ls(32648), ls(32649), ls(32651), '[B]%s...[/B]' % ls(32174)
 nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
@@ -23,7 +23,7 @@ nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
 class Movies:
 	tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
 	tmdb_special_key_dict = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_movies_certifications': 'certification'}
-	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited, ''trakt_movies_top10_boxoffice')
+	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
 	mdblist_personal = ('mdblist_watchlist',)
 	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
@@ -195,9 +195,10 @@ class Movies:
 			else: banner, clearart, landscape, discart = '', '', '', ''
 			play_params = build_url({'mode': 'play_media', 'media_type': 'movie', 'tmdb_id': tmdb_id})
 			extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
-			options_params = build_url({'mode': 'options_menu_choice', 'content': 'movie', 'tmdb_id': tmdb_id})
+			options_params = build_url({'mode': 'options_menu_choice', 'content': 'movie', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
 			recommended_params = build_url({'mode': 'build_movie_list', 'action': 'tmdb_movies_recommendations', 'tmdb_id': tmdb_id})
 			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': 'None'})
+			tmdb_manager_params = build_url({'mode': 'tmdb_manager_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': 'None'})
 			mdb_manager_params = build_url({'mode': 'mdb_manager_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': 'None'})
 			fav_manager_params = build_url({'mode': 'favourites_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'title': title})
 			cm_append((self.cm_sort['options'], options_str, run_plugin % options_params))
@@ -208,6 +209,7 @@ class Movies:
 				url_params = play_params
 				cm_append((self.cm_sort['extras'], extras_str, run_plugin % extras_params))
 			cm_append((self.cm_sort['trakt'], traktmanager_str, run_plugin % trakt_manager_params))
+			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['mdblist'], mdbmanager_str, run_plugin % mdb_manager_params))
 			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
 			if progress != '0' or resumetime != '0':
@@ -223,7 +225,6 @@ class Movies:
 			cm_append((self.cm_sort['exit'], exit_str, container_refresh % self.exit_list_params))
 			cm.sort(key=lambda k: k[0])
 			cm = [(i[1], i[2]) for i in cm if i[0]]
-			props['pov_widget'] = 'true' if self.is_widget else 'false'
 			listitem = kodi_utils.make_listitem()
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)

@@ -2,7 +2,13 @@
   [COLOR dodgerblue][B]CREDITS[/B][/COLOR]
 - Fen, Venom, Mr-Kodi.
 
+
   [COLOR dodgerblue][B]Version 5.03[/B][/COLOR]
+- Added TMDBList Manager to context menu.
+- Added TMDB Custom Lists to My Lists.  Authorize account in Settings/My Lists.
+- Probable Fix for Autoplay Next Episode/Continual Random Play only playing one episode.
+- Added Sort Priority Language at Top in Settings/Results/Sorting and Filtering.
+- Added Enable Reuse Language Invoker Fix setting in Settings/General.
 - Added TorBox Usenet Search Sort setting in Settings/My Services/TorBox.
 - Added TorBox Usenet Search to Options... context menu and My Services menu.
 - Added Clear MDBList Cache.

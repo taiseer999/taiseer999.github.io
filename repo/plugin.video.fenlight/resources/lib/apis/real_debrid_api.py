@@ -11,10 +11,17 @@ from modules.source_utils import supported_video_extensions, seas_ep_filter, EXT
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
+
 sleep, confirm_dialog, ok_dialog, xbmc_monitor = kodi_utils.sleep, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.xbmc_monitor
 progress_dialog, get_icon, notification = kodi_utils.progress_dialog, kodi_utils.get_icon, kodi_utils.notification
-base_url = 'https://api.real-debrid.com/rest/1.0/'
-auth_url = 'https://api.real-debrid.com/oauth/v2/'
+alt_api = get_setting('rd.alt_api', 'false')
+if alt_api == 'true':
+	base_url = 'https://app.real-debrid.com/rest/1.0/'
+	auth_url = 'https://app.real-debrid.com/oauth/v2/'
+else:
+	base_url = 'https://api.real-debrid.com/rest/1.0/'
+	auth_url = 'https://api.real-debrid.com/oauth/v2/'
+
 device_url = 'device/code?%s'
 credentials_url = 'device/credentials?%s'
 icon = get_icon('realdebrid')

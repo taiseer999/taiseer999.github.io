@@ -1,4 +1,21 @@
-[COLOR dodgerblue][B]Online Release Version 2.0.09[/B][/COLOR]
+[COLOR dodgerblue][B]Version 2.1.02[/B][/COLOR]
+- Added alternative Real Debrid API option for if the main API URL is blocked.
+
+[COLOR dodgerblue][B]Version 2.1.02[/B][/COLOR]
+- Added "Trending UK" and "Trending Recent UK" to the TV and Movies menus. You might need to use the "Check for new menu items" option in the context menu.
+- Updated the icon to something much more ugly. 
+
+[COLOR dodgerblue][B]Version 2.1.01[/B][/COLOR]
+- Added "Providers UK" to the TV and Movies menus. You might need to use the "Check for new menu items" option in the context menu. 
+
+[COLOR dodgerblue][B]Version 2.1.0[/B][/COLOR]
+- Added 'Play # episodes' option to play a set number of episodes. After that, your default autoplay settings will take over.
+- Removed future years from collections. These are now generated based on the current date to future-proof.
+
+[COLOR dodgerblue][B]Version 2.0.10[/B][/COLOR]
+- Fix for name matching on TorBox
+
+[COLOR dodgerblue][B]Version 2.0.09[/B][/COLOR]
 - Added option to unmark previous episode as watched in Next Episodes list
 - Re-enabled 'Rollback to Previous Version' option
 

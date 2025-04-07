@@ -7,7 +7,7 @@ from indexers.movies import Movies
 from indexers.tvshows import TVShows
 from indexers.seasons import Seasons
 from modules import kodi_utils
-from modules.utils import paginate_list, jsondate_to_datetime
+from modules.utils import paginate_list, jsondate_to_datetime, TaskPool
 from modules.settings import paginate, page_limit, nav_jump_use_alphabet
 # logger = kodi_utils.logger
 
@@ -154,8 +154,8 @@ def build_trakt_list(params):
 			params = {'tmdb_id': tag['show']['ids']['tmdb'], 'season': tag['season']['number'], 'sort': idx}
 			_queue.put((seasons.build_season_list, params))
 	maxsize = min(_queue.qsize(), int(kodi_utils.get_setting('pov.max_threads', '100')))
-	threads = [Thread(target=_thread_target, args=(_queue,)) for i in range(maxsize)]
-	[i.start() for i in threads]
+	threads = (Thread(target=_thread_target, args=(_queue,)) for i in range(maxsize))
+	threads = list(TaskPool.process(threads))
 	[i.join() for i in threads]
 	items = movies.items + tvshows.items + episodes.items + seasons.items
 	items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))

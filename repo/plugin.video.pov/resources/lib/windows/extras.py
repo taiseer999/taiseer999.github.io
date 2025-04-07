@@ -38,9 +38,11 @@ class Extras(BaseDialog):
 		self.set_properties()
 
 	def onInit(self):
-		tasks = (self.set_poster, self.make_cast, self.make_recommended, self.make_reviews, self.make_trivia, self.make_blunders,
-				self.make_parentsguide, self.make_videos, self.make_year, self.make_genres, self.make_network)
-		[Thread(target=i).start() for i in tasks]
+		for i in (
+			self.set_poster, self.make_cast, self.make_recommended, self.make_reviews,
+			self.make_trivia, self.make_blunders, self.make_parentsguide,
+			self.make_videos, self.make_year, self.make_genres, self.make_network
+		): Thread(target=i).start()
 		for i in ('posters', 'backdrops'): Thread(target=self.make_artwork, args=(i,)).start()
 		if self.media_type == 'movie': Thread(target=self.make_collection).start()
 		else: self.setProperty('tikiskins.extras.make.collection', 'false')

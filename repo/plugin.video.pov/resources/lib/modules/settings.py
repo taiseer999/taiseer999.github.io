@@ -226,7 +226,7 @@ def auto_resume(media_type):
 
 def nav_jump_use_alphabet():
 #	return get_setting('nav_jump') == '1'
-	return int(get_setting('nav_jump'))
+	return int(get_setting('nav_jump', '0'))
 
 def use_season_title():
 	return get_setting('use_season_title') == 'true'
@@ -345,6 +345,14 @@ def make_global_list():
 	global_list = []
 
 def context_menu_sort():
-	options = enumerate(('options', 'extras', 'trakt', 'mdblist', 'favourites', 'mark', 'exit'), 1)
-	return {i[1]: int(get_setting('context.%s' % i[1], i[0])) for i in options}
+	return {
+		'options': int(get_setting('context.options', 1)),
+		'extras': int(get_setting('context.extras', 2)),
+		'trakt': int(get_setting('context.trakt', 3)),
+		'tmdblist': int(get_setting('context.tmdblist', 4)),
+		'mdblist': int(get_setting('context.mdblist', 4)),
+		'favourites': int(get_setting('context.favourites', 5)),
+		'mark': int(get_setting('context.mark', 6)),
+		'exit': int(get_setting('context.exit', 7))
+	}
 

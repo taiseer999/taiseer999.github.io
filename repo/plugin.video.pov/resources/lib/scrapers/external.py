@@ -302,7 +302,7 @@ class source:
 
 	def _make_progress_dialog(self):
 		if self.progress_dialog: return
-		self.progress_dialog = create_window(('windows.yes_no_progress_media', 'YesNoProgressMedia'), 'yes_no_progress_media.xml', meta=self.meta)
+		self.progress_dialog = create_window(('windows.sources', 'ProgressMedia'), 'progress_media.xml', meta=self.meta)
 		Thread(target=self.progress_dialog.run).start()
 
 	def _kill_progress_dialog(self):

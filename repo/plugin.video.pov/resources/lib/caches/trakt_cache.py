@@ -165,19 +165,17 @@ def clear_trakt_recommendations(media_type):
 		dbcur.execute(DELETE, (string,))
 	except: pass
 
-def clear_all_trakt_cache_data(silent=False, refresh=True):
+def clear_all_trakt_cache_data(refresh=True):
 	try:
-		start = silent or confirm_dialog()
-		if not start: return False
 		_cache = TraktCache()
 		dbcon = _cache.connect_database()
 		dbcur = _cache.set_PRAGMAS(dbcon)
 		for table in ('trakt_data', 'progress', 'watched_status'): dbcur.execute(BASE_DELETE % table)
 		dbcur.execute("""VACUUM""")
-		if refresh:
-			from threading import Thread
-			from apis.trakt_api import trakt_sync_activities
-			Thread(target=trakt_sync_activities).start()
+		if not refresh: return True
+		from threading import Thread
+		from apis.trakt_api import trakt_sync_activities
+		Thread(target=trakt_sync_activities).start()
 		return True
 	except: return False
 

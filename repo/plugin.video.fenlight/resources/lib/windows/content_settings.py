@@ -36,7 +36,7 @@ content_settings = '\
 \n                        <property name="setting_label">Autostart FenLight When Kodi Starts</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.auto_start_fenlight)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will autostart after running its services upon Kodi start</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will autostart after running its services upon Kodi start</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=auto_start_fenlight)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -53,7 +53,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Restore Default Background Image</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">...</property>\
-\n                        <property name="setting_description">Restore default Fen Light background</property>\
+\n                        <property name="setting_description">Restore default Fen Light+ background</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.restore_setting_default&amp;setting_id=default_addon_fanart)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -61,7 +61,7 @@ content_settings = '\
 \n                        <property name="setting_label">Limit Concurrent Threads</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.limit_concurrent_threads)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will limit the threads enacted simultaneously. Best to leave this disabled unless you are having issues with your device not supporting high numbers of concurrent threads in python</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will limit the threads enacted simultaneously. Best to leave this disabled unless you are having issues with your device not supporting high numbers of concurrent threads in python</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=limit_concurrent_threads)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -70,7 +70,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Maximum Active Threads</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.max_threads)]</property>\
-\n                        <property name="setting_description">Choose the maximum active concurrent threads Fen Light will be limited to</property>\
+\n                        <property name="setting_description">Choose the maximum active concurrent threads Fen Light+ will be limited to</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=max_threads)</onclick>\
 \n                    </item>\
 \n            <!-- Watched Indicators -->\
@@ -86,7 +86,7 @@ content_settings = '\
 \n                        <property name="setting_label">Watched Status Provider</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.watched_indicators_name)]</property>\
-\n                        <property name="setting_description">Choose the provider that keeps track of the Movies and Episodes you have watched within Fen Light. Options are the built in method of Fen Light or your Trakt account</property>\
+\n                        <property name="setting_description">Choose the provider that keeps track of the Movies and Episodes you have watched within Fen Light. Options are the built in method of Fen Light+ or your Trakt account</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=watched_indicators)</onclick>\
 \n                    </item>\
 \n            <!-- Trakt Cache -->\
@@ -102,7 +102,7 @@ content_settings = '\
 \n                        <property name="setting_label">Resync Interval (mins)</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.trakt.sync_interval)]</property>\
-\n                        <property name="setting_description">Choose how often Fen Light polls your Trakt service for any changes</property>\
+\n                        <property name="setting_description">Choose how often Fen Light+ polls your Trakt service for any changes</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=trakt.sync_interval)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -111,7 +111,7 @@ content_settings = '\
 \n                        <property name="setting_label">Refresh Widgets After Trakt Sync</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.trakt.refresh_widgets)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will refresh widgets after performing a Trakt Sync if there were any changes</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will refresh widgets after performing a Trakt Sync if there were any changes</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=trakt.refresh_widgets)</onclick>\
 \n                    </item>\
 \n            <!-- UTC Time Offset -->\
@@ -286,7 +286,7 @@ content_settings = '\
 \n                        <property name="setting_label">Refresh Widgets on Timer</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.widget_refresh_timer_name)]</property>\
-\n                        <property name="setting_description">Choose whether Fen Light refreshes widgets based on a set timer. You should set a value here if you are using random widgets from Fen Light, and wish for their contents to update between Kodi starts</property>\
+\n                        <property name="setting_description">Choose whether Fen Light+ refreshes widgets based on a set timer. You should set a value here if you are using random widgets from Fen Light, and wish for their contents to update between Kodi starts</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=widget_refresh_timer_choice)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -295,7 +295,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Show Notification after Refresh</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.widget_refresh_notification)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will show a notification whenever widgets are refreshed by the timer</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will show a notification whenever widgets are refreshed by the timer</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=widget_refresh_notification)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -303,7 +303,7 @@ content_settings = '\
 \n                        <property name="setting_label">Hide Watched Items in Widgets</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.widget_hide_watched)]</property>\
-\n                        <property name="setting_description">Enable this and watched items will be hidden in Fen Light widgets</property>\
+\n                        <property name="setting_description">Enable this and watched items will be hidden in Fen Light+ widgets</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_watched)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -311,7 +311,7 @@ content_settings = '\
 \n                        <property name="setting_label">Hide Next Page Item in Widgets</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.widget_hide_next_page)]</property>\
-\n                        <property name="setting_description">Enable this and the "Next Page" item will be hidden in Fen Light widgets</property>\
+\n                        <property name="setting_description">Enable this and the "Next Page" item will be hidden in Fen Light+ widgets</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=widget_hide_next_page)</onclick>\
 \n                    </item>\
 \n            <!-- General -->\
@@ -326,7 +326,7 @@ content_settings = '\
 \n                        <property name="setting_label">Paginate Lists When Available</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.paginate.lists_name)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will attempt to paginate lists when possible. This is mainly applicable to personal lists</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will attempt to paginate lists when possible. This is mainly applicable to personal lists</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=paginate.lists)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -344,7 +344,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Widgets Item Limit</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.paginate.limit_widgets)]</property>\
-\n                        <property name="setting_description">Choose the limit of pagination for Fen Light widgets</property>\
+\n                        <property name="setting_description">Choose the limit of pagination for Fen Light+ widgets</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=paginate.limit_widgets)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -384,7 +384,7 @@ content_settings = '\
 \n                        <property name="setting_label">Show Special Episodes When Available</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.show_specials)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will show TV Show Special Episodes</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will show TV Show Special Episodes</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=show_specials)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -392,7 +392,7 @@ content_settings = '\
 \n                        <property name="setting_label">Flatten TV Show Seasons</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.default_all_episodes_name)]</property>\
-\n                        <property name="setting_description">Choose the times when Fen Light will load all episodes of a TV Show when browsed into</property>\
+\n                        <property name="setting_description">Choose the times when Fen Light+ will load all episodes of a TV Show when browsed into</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=default_all_episodes)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -400,7 +400,7 @@ content_settings = '\
 \n                        <property name="setting_label">Include Unaired Media in Trakt Watchlists</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.show_unaired_watchlist)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will display any unaired media in your Trakt Movie/TV Show Watchlists. Disable this and any unaired Media will be hidden</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will display any unaired media in your Trakt Movie/TV Show Watchlists. Disable this and any unaired Media will be hidden</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=show_unaired_watchlist)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -408,7 +408,7 @@ content_settings = '\
 \n                        <property name="setting_label">Include Adult Results from Media Searches</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.meta_filter)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will attempt to filter out adult content from Movie, TV Show and People searches. Success is based purely on the accuracy of TMDbs database. Expect that some adult results may come through and plan accordingly</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will attempt to filter out adult content from Movie, TV Show and People searches. Success is based purely on the accuracy of TMDbs database. Expect that some adult results may come through and plan accordingly</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=meta_filter)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -416,7 +416,7 @@ content_settings = '\
 \n                        <property name="setting_label">Control Viewtypes within Addon</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.use_viewtypes)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will control view types used within the addon. This can be disabled if the skin you are using has a helper that provides a "lock view" type function. If enabled, views can be set in Tools->Set Views within the addon</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will control view types used within the addon. This can be disabled if the skin you are using has a helper that provides a "lock view" type function. If enabled, views can be set in Tools->Set Views within the addon</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=use_viewtypes)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -504,7 +504,7 @@ content_settings = '\
 \n                        <property name="setting_label">Single Episode Display Format - Within Addon</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.single_ep_display_name)]</property>\
-\n                        <property name="setting_description">Choose the display format Fen Light uses when naming single episodes within the addon. Applicable for lists like Next Episodes, In Progress Episodes etc</property>\
+\n                        <property name="setting_description">Choose the display format Fen Light+ uses when naming single episodes within the addon. Applicable for lists like Next Episodes, In Progress Episodes etc</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=single_ep_display)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -512,7 +512,7 @@ content_settings = '\
 \n                        <property name="setting_label">Single Episode Display Format - Widgets</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.single_ep_display_widget_name)]</property>\
-\n                        <property name="setting_description">Choose the display format Fen Light uses when naming single episodes for widgets. Applicable for lists like Next Episodes, In Progress Episodes etc</property>\
+\n                        <property name="setting_description">Choose the display format Fen Light+ uses when naming single episodes for widgets. Applicable for lists like Next Episodes, In Progress Episodes etc</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=single_ep_display_widget)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -573,10 +573,10 @@ content_settings = '\
 \n                    </item>\
 \n                    <item>\
 \n                        <visible>Container(2000).HasFocus(40)</visible>\
-\n                        <property name="setting_label">Include Trakt Watchlist/Fen Light Favorites</property>\
+\n                        <property name="setting_label">Include Trakt Watchlist/Fen Light+ Favorites</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.nextep.include_unwatched_name)]</property>\
-\n                        <property name="setting_description">Choose which lists are included within Fen Lights Next Episodes. You can include your Trakt Watchlist, your Fen Light Favorites, or both. They will show with a DARKGOLDENROD highlight</property>\
+\n                        <property name="setting_description">Choose which lists are included within Next Episodes. You can include your Trakt Watchlist, your Fen Light+ Favorites, or both. They will show with a DARKGOLDENROD highlight</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=nextep.include_unwatched)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -746,7 +746,7 @@ content_settings = '\
 \n                        <property name="setting_label">API Key</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.omdb_api)]</property>\
-\n                        <property name="setting_description">Enter here your OMDb API key. This will allow you to utilize extra ratings information in Fen Lights Extras window</property>\
+\n                        <property name="setting_description">Enter here your OMDb API key. This will allow you to utilize extra ratings information in the Extras window</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_string&amp;setting_id=omdb_api)</onclick>\
 \n                    </item>\
 \n            <!-- External Scrapers -->\
@@ -836,7 +836,7 @@ content_settings = '\
 \n                        <property name="setting_label">Search Cloud Storage</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.provider.rd_cloud)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search your Real Debrid Cloud for media</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search your Real Debrid Cloud for media</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=provider.rd_cloud)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -847,7 +847,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Filter Results by Name</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.rd_cloud.title_filter)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will perform extra name matching functions on your Real Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will perform extra name matching functions on your Real Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=rd_cloud.title_filter)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -858,7 +858,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Check Before Full Search</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.check.rd_cloud)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search for results in your Real Debrid Cloud before checking other enabled scrapers</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search for results in your Real Debrid Cloud before checking other enabled scrapers</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=check.rd_cloud)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -869,7 +869,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Show Results at Top</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.sort_rdcloud_first)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will sort the results from your Real Debrid Cloud to the top of all results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will sort the results from your Real Debrid Cloud to the top of all results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_rdcloud_first)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -881,6 +881,16 @@ content_settings = '\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.rd.priority)]</property>\
 \n                        <property name="setting_description">Choose the order in which Real Debrid results appear in relation to any other active accounts. The lower the number, the higher the sort order</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=rd.priority)</onclick>\
+\n                    </item>\
+\n                    <item>\
+\n                        <visible>Container(2000).HasFocus(50)</visible>\
+\n                        <visible>!String.IsEqual(Window(10000).Property(fenlight.rd.token),empty_setting)</visible>\
+\n                        <visible>String.IsEqual(Window(10000).Property(fenlight.rd.enabled),true)</visible>\
+\n                        <property name="setting_label">Alternative API URL</property>\
+\n                        <property name="setting_type">boolean</property>\
+\n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.rd.alt_api)]</property>\
+\n                        <property name="setting_description">Use alternative URL for the RD API. Useful if api.real-debrid.com is blocked.</property>\
+\n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=rd.alt_api)</onclick>\
 \n                    </item>\
 \n            <!-- Premiumize -->\
 \n                    <item>\
@@ -934,7 +944,7 @@ content_settings = '\
 \n                        <property name="setting_label">Search Cloud Storage</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.provider.pm_cloud)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search your Premiumize Cloud for media</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search your Premiumize Cloud for media</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=provider.pm_cloud)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -945,7 +955,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Filter Results by Name</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.pm_cloud.title_filter)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will perform extra name matching functions on your Premiumize Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will perform extra name matching functions on your Premiumize Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=pm_cloud.title_filter)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -956,7 +966,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Check Before Full Search</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.check.pm_cloud)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search for results in your Premiumize Cloud before checking other enabled scrapers</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search for results in your Premiumize Cloud before checking other enabled scrapers</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=check.pm_cloud)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -967,7 +977,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Show Results at Top</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.sort_pmcloud_first)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will sort the results from your Premiumize Cloud to the top of all results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will sort the results from your Premiumize Cloud to the top of all results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_pmcloud_first)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1032,7 +1042,7 @@ content_settings = '\
 \n                        <property name="setting_label">Search Cloud Storage</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.provider.ad_cloud)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search your All Debrid Cloud for media</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search your All Debrid Cloud for media</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=provider.ad_cloud)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1043,7 +1053,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Filter Results by Name</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.ad_cloud.title_filter)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will perform extra name matching functions on your All Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will perform extra name matching functions on your All Debrid Cloud results. Will help to limit incorrect results, but may also filter some relevant results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=ad_cloud.title_filter)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1054,7 +1064,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Check Before Full Search</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.check.ad_cloud)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search for results in your All Debrid Cloud before checking other enabled scrapers</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search for results in your All Debrid Cloud before checking other enabled scrapers</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=check.ad_cloud)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1065,7 +1075,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Show Results at Top</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.sort_adcloud_first)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will sort the results from your All Debrid Cloud to the top of all results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will sort the results from your All Debrid Cloud to the top of all results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_adcloud_first)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1118,7 +1128,7 @@ content_settings = '\
 \n                        <property name="setting_label">Filter Results by Name</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.easynews.title_filter)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will perform extra name matching functions on your Easynews results. Will help to limit incorrect results, but may also filter some relevant results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will perform extra name matching functions on your Easynews results. Will help to limit incorrect results, but may also filter some relevant results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=easynews.title_filter)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1128,7 +1138,7 @@ content_settings = '\
 \n                        <property name="setting_label">Filter Languages</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.easynews.filter_lang)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will perform extra language filtering on your Easynews results. Will help to limit incorrect results, but may also filter some relevant results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will perform extra language filtering on your Easynews results. Will help to limit incorrect results, but may also filter some relevant results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=easynews.filter_lang)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1149,7 +1159,7 @@ content_settings = '\
 \n                        <property name="setting_label">Check Before Full Search</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.check.easynews)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search for results from your Easynews service before checking other enabled scrapers</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search for results from your Easynews service before checking other enabled scrapers</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=check.easynews)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1192,7 +1202,7 @@ content_settings = '\
 \n                        <property name="setting_label">Filter Results by Name</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.folders.title_filter)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will perform extra name matching functions on your local media folders results. Will help to limit incorrect results, but may also filter some relevant results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will perform extra name matching functions on your local media folders results. Will help to limit incorrect results, but may also filter some relevant results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=folders.title_filter)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1201,7 +1211,7 @@ content_settings = '\
 \n                        <property name="setting_label">Check Before Full Search</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.check.folders)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will search for results from your local media folders before checking other enabled scrapers</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will search for results from your local media folders before checking other enabled scrapers</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=check.folders)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1210,7 +1220,7 @@ content_settings = '\
 \n                        <property name="setting_label">Show Results at Top</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.sort_folders_first)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will sort the results from your local media folders to the top of all results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will sort the results from your local media folders to the top of all results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=results.sort_folders_first)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1219,7 +1229,7 @@ content_settings = '\
 \n                        <property name="setting_label">Ignore Quality and Size Filters</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.folders_ignore_filters)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will ignore any Quality or Size filters when processing local media folders results</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will ignore any Quality or Size filters when processing local media folders results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=results.folders_ignore_filters)</onclick>\
 \n                    </item>\
 \n        <!-- RESULTS 60 -->\
@@ -1235,7 +1245,7 @@ content_settings = '\
 \n                        <property name="setting_label">Scraper Timeout</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.timeout)]</property>\
-\n                        <property name="setting_description">Choose the amount of time Fen Light will allow all scrapers to search for results</property>\
+\n                        <property name="setting_description">Choose the amount of time Fen Light+ will allow all scrapers to search for results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=results.timeout)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1243,7 +1253,7 @@ content_settings = '\
 \n                        <property name="setting_label">Results Display Format</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.list_format)]</property>\
-\n                        <property name="setting_description">Choose the format in which Fen Light will display the results of a source search. Lists, Rows and WideList are provided</property>\
+\n                        <property name="setting_description">Choose the format in which Fen Light+ will display the results of a source search. Lists, Rows and WideList are provided</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=results_format_choice)</onclick>\
 \n                    </item>\
 \n            <!-- General -->\
@@ -1289,7 +1299,7 @@ content_settings = '\
 \n                        <property name="setting_label">Results Sorting</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.sort_order_display)]</property>\
-\n                        <property name="setting_description">Choose the priority ordering performed by Fen Light before displaying source results</property>\
+\n                        <property name="setting_description">Choose the priority ordering performed by Fen Light+ before displaying source results</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=results_sorting_choice)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1314,7 +1324,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Internet Speed (Mbit/s)</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.line_speed)]</property>\
-\n                        <property name="setting_description">Enter here your internet line speed. It is a good idea to choose a value slightly below your true internet speed, although Fen Light will still reduce this value by 10% before filtering results by size</property>\
+\n                        <property name="setting_description">Enter here your internet line speed. It is a good idea to choose a value slightly below your true internet speed, although Fen Light+ will still reduce this value by 10% before filtering results by size</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=results.line_speed)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1359,7 +1369,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Include Results with Unknown Size</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.results.size_unknown)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will include results where the size of the file is unknown</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will include results where the size of the file is unknown</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=results.size_unknown)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1367,7 +1377,7 @@ content_settings = '\
 \n                        <property name="setting_label">Include Pre-Release Results (CAM/SCR/TELE)</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.include_prerelease_results)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will include CAMS, SCR and TELE results through the filter</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will include CAMS, SCR and TELE results through the filter</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=include_prerelease_results)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1605,7 +1615,7 @@ content_settings = '\
 \n                        <property name="setting_label">Automatically Resume Playback</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.auto_resume_movie_name)]</property>\
-\n                        <property name="setting_description">Choose when Fen Light will automatically resume playback of an in-progress Movie</property>\
+\n                        <property name="setting_description">Choose when Fen Light+ will automatically resume playback of an in-progress Movie</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=auto_resume_movie)</onclick>\
 \n                    </item>\
 \n            <!-- Playback Episodes -->\
@@ -1647,7 +1657,7 @@ content_settings = '\
 \n                        <property name="setting_label">Autoplay Next Episode</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.autoplay_next_episode)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will automatically search for sources for the next episode of a TV Show towards the end of the episode currently being watched</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will automatically search for sources for the next episode of a TV Show towards the end of the episode currently being watched</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=autoplay_next_episode)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1674,7 +1684,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Show Alert After (%) Playback</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.autoplay_next_window_percentage)]</property>\
-\n                        <property name="setting_description">Choose when Fen Light will show the Next Episode Alert</property>\
+\n                        <property name="setting_description">Choose when Fen Light+ will show the Next Episode Alert</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=autoplay_next_window_percentage)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1683,7 +1693,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Use Chapter Info For Alert When Available</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.autoplay_use_chapters)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will attempt to use video file Chapter information to ascertain when to show the Next Episode alert. If unsuccessful, then the percentage of playback value will be used instead</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will attempt to use video file Chapter information to ascertain when to show the Next Episode alert. If unsuccessful, then the percentage of playback value will be used instead</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=autoplay_use_chapters)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1692,7 +1702,7 @@ content_settings = '\
 \n                        <property name="setting_label">Autoscrape Next Episode</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.autoscrape_next_episode)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will automatically search for sources for the next episode of a TV Show towards the end of the episode currently being watched</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will automatically search for sources for the next episode of a TV Show towards the end of the episode currently being watched</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=autoscrape_next_episode)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1701,7 +1711,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Show Notification After (%) Playback</property>\
 \n                        <property name="setting_type">numeric</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.autoscrape_next_window_percentage)]</property>\
-\n                        <property name="setting_description">Choose when Fen Light will show the Next Episode Alert</property>\
+\n                        <property name="setting_description">Choose when Fen Light+ will show the Next Episode Alert</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_numeric&amp;setting_id=autoscrape_next_window_percentage)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1710,7 +1720,7 @@ content_settings = '\
 \n                        <property name="setting_label">    - Use Chapter Info For Alert When Available</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.autoscrape_use_chapters)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will attempt to use video file Chapter information to ascertain when to show the Next Episode alert. If unsuccessful, then the percentage of playback value will be used instead</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will attempt to use video file Chapter information to ascertain when to show the Next Episode alert. If unsuccessful, then the percentage of playback value will be used instead</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=autoscrape_use_chapters)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1718,7 +1728,7 @@ content_settings = '\
 \n                        <property name="setting_label">Automatically Resume Playback</property>\
 \n                        <property name="setting_type">action</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.auto_resume_episode_name)]</property>\
-\n                        <property name="setting_description">Choose when Fen Light will automatically resume playback of an in-progress Episode</property>\
+\n                        <property name="setting_description">Choose when Fen Light+ will automatically resume playback of an in-progress Episode</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_from_list&amp;setting_id=auto_resume_episode)</onclick>\
 \n                    </item>\
 \n            <!-- Playback Utilities -->\
@@ -1733,7 +1743,7 @@ content_settings = '\
 \n                        <property name="setting_label">Limit Resolve Attempts to Selected Result</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.playback.limit_resolve)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will limit the playback attempts to only the source result chosen. If disabled, Fen Light will potentially try 15 results of similar properties to your chosen source result until it is able to successfully resolve and playback</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will limit the playback attempts to only the source result chosen. If disabled, Fen Light+ will potentially try 15 results of similar properties to your chosen source result until it is able to successfully resolve and playback</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=playback.limit_resolve)</onclick>\
 \n                    </item>\
 \n                    <item>\
@@ -1741,7 +1751,7 @@ content_settings = '\
 \n                        <property name="setting_label">Check Volume Before Start of Playback</property>\
 \n                        <property name="setting_type">boolean</property>\
 \n                        <property name="setting_value">$INFO[Window(10000).Property(fenlight.playback.volumecheck_enabled)]</property>\
-\n                        <property name="setting_description">Enable this and Fen Light will attempt to check the current level of volume within Kodi, and adjust it downwards if it is exceeding a set level</property>\
+\n                        <property name="setting_description">Enable this and Fen Light+ will attempt to check the current level of volume within Kodi, and adjust it downwards if it is exceeding a set level</property>\
 \n                        <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=playback.volumecheck_enabled)</onclick>\
 \n                    </item>\
 \n                    <item>\

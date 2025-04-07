@@ -388,7 +388,7 @@ def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
 	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
 
 def notification(line1, time=5000, icon=None):
-	kodi_dialog().notification('Fen Light', line1, icon or addon_icon(), time)
+	kodi_dialog().notification('Fen Light+', line1, icon or addon_icon(), time)
 
 def timeIt(func):
 	# Thanks to 123Venom

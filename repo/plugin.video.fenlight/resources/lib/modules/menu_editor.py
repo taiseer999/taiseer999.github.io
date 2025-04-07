@@ -3,7 +3,7 @@ import json
 from urllib.parse import parse_qsl, unquote
 from caches.navigator_cache import navigator_cache, main_menus
 from modules import kodi_utils
-# logger = kodi_utils.logger
+logger = kodi_utils.logger
 
 build_url, confirm_dialog, kodi_dialog, sleep, kodi_refresh = kodi_utils.build_url, kodi_utils.confirm_dialog, kodi_utils.kodi_dialog, kodi_utils.sleep, kodi_utils.kodi_refresh
 get_infolabel, select_dialog, notification, execute_builtin = kodi_utils.get_infolabel, kodi_utils.select_dialog, kodi_utils.notification, kodi_utils.execute_builtin
@@ -60,6 +60,7 @@ class MenuEditor:
 		current_list = edited or default
 		if default == new_contents: return notification('No New Items', 1500)
 		new_entry = [i for i in new_contents if not i in default][0]
+		logger('NEW', new_entry)
 		new_entry_translated_name = new_entry.get('name')
 		if not confirm_dialog(text='New item [B]%s[/B] Exists[CR]Would you like to add this to the Menu?' % new_entry_translated_name): return notification('Cancelled', 1500)
 		item_position = self._menu_select(current_list, new_entry_translated_name, position_list=True)

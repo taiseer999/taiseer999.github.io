@@ -18,7 +18,7 @@ def call_simkl(url):
 		response = session.get(url, params=params, timeout=timeout)
 		response.raise_for_status()
 	except requests.exceptions.RequestException as e:
-		kodi_utils.logger('simkl error', f"{e}\n{e.response.text}" if response else f"{e}")
+		kodi_utils.logger('simkl error', str(e))
 	try: result = response.json()
 	except: result = []
 	return result

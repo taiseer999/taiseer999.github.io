@@ -31,13 +31,16 @@ class EpisodeTools:
 			current_season, current_episode = int(self.meta_get('season')), int(self.meta_get('episode'))
 			season, episode = get_next(current_season, current_episode, watched_info_episode(self.meta_get('tmdb_id')), season_data, 0)
 			ep_data = episodes_meta(season, self.meta)
-			if not ep_data: return 'no_next_episode'
+			if not ep_data:
+				return 'no_next_episode'
 			ep_data = next((i for i in ep_data if i['episode'] == episode), None)
-			if not ep_data: return 'no_next_episode'
+			if not ep_data:
+				return 'no_next_episode'
 			airdate = ep_data['premiered']
 			d = airdate.split('-')
 			episode_date = date(int(d[0]), int(d[1]), int(d[2]))
-			if current_date < episode_date: return 'no_next_episode'
+			if current_date < episode_date: 
+				return 'no_next_episode'
 			custom_title = self.meta_get('custom_title', None)
 			title = custom_title or self.meta_get('title')
 			display_name = '%s - %dx%.2d' % (title, int(season), int(episode))

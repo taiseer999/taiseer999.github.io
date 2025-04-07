@@ -1,4 +1,4 @@
-from caches.base_cache import BaseCache
+from caches import BaseCache
 from modules import settings
 from modules.utils import sort_for_article, paginate_list
 from modules.kodi_utils import container_refresh, favourites_db

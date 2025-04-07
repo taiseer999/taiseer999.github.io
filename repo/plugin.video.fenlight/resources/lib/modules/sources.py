@@ -49,6 +49,7 @@ preference_values = {0:100, 1:50, 2:20, 3:10, 4:5, 5:2}
 class Sources():
 	def __init__(self):
 		self.params = {}
+		self.num_episodes = None
 		self.prescrape_scrapers, self.prescrape_threads, self.prescrape_sources, self.uncached_results = [], [], [], []
 		self.threads, self.providers, self.sources, self.internal_scraper_names, self.remove_scrapers = [], [], [], [], ['external']
 		self.rescrape_with_all, self.rescrape_with_episode_group = False, False
@@ -63,8 +64,11 @@ class Sources():
 
 	def playback_prep(self, params=None):
 		hide_busy_dialog()
-		if params: self.params = params
+		if params: 
+			self.params = params
+			self.num_episodes = params.get('num_episodes', None)
 		params_get = self.params.get
+		self.num_episodes = params.get('nextep_settings', {}).get('num_episodes', params.get('num_episodes', None))
 		self.play_type, self.background, self.prescrape = params_get('play_type', ''), params_get('background', 'false') == 'true', params_get('prescrape', self.prescrape) == 'true'
 		self.random, self.random_continual = params_get('random', 'false') == 'true', params_get('random_continual', 'false') == 'true'
 		if self.play_type:
@@ -650,7 +654,7 @@ class Sources():
 							self.progress_dialog.busy_spinner('false')
 							self.progress_dialog.update_resolver(percent=resolve_percent)
 							sleep(200)
-							player.run(url, self)
+							player.run(url, self, num_episodes=self.num_episodes)
 						else: continue
 						if self.cancel_all_playback: break
 						if self.playback_successful: break
@@ -691,6 +695,8 @@ class Sources():
 	def continue_resolve_check(self):
 		try:
 			if not self.background or self.autoscrape_nextep: return True
+			if self.num_episodes and int(self.num_episodes) > 1: 
+				return self.autoplay_nextep_handler()
 			if self.autoplay_nextep: return self.autoplay_nextep_handler()
 			return self.random_continual_handler()
 		except: return False
@@ -703,7 +709,7 @@ class Sources():
 		return True
 
 	def autoplay_nextep_handler(self):
-		if not self.nextep_settings: return False
+		if not self.nextep_settings and not self.num_episodes: return False
 		player = xbmc_player()
 		if player.isPlayingVideo():
 			total_time = player.getTotalTime()
@@ -719,7 +725,12 @@ class Sources():
 					sleep(100)
 				except: pass
 			if continue_nextep:
-				if use_window: action = self._make_nextep_dialog(default_action=default_action)
+				if self.num_episodes and int(self.num_episodes) > 1:
+					while player.isPlayingVideo(): sleep(100)
+					self.num_episodes = str(int(self.num_episodes) - 1)
+					self._make_resolve_dialog()
+					return True
+				elif use_window: action = self._make_nextep_dialog(default_action=default_action)
 				else: notification('[B]Next Up:[/B] %s S%02dE%02d' % (self.meta.get('title'), self.meta.get('season'), self.meta.get('episode')), 6500, self.meta.get('poster'))
 				if not action: action = default_action
 				if action == 'cancel': return False

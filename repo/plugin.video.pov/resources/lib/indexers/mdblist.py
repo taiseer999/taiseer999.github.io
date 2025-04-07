@@ -5,7 +5,7 @@ from apis import mdblist_api
 from indexers.movies import Movies
 from indexers.tvshows import TVShows
 from modules import kodi_utils
-from modules.utils import paginate_list
+from modules.utils import paginate_list, TaskPool
 from modules.settings import paginate, page_limit, nav_jump_use_alphabet
 # logger = kodi_utils.logger
 
@@ -130,8 +130,8 @@ def build_mdb_list(params):
 		elif mtype == 'show':
 			_queue.put((tvshows.build_tvshow_content, idx, {'imdb': tag['imdb_id']}))
 	maxsize = min(_queue.qsize(), int(kodi_utils.get_setting('pov.max_threads', '100')))
-	threads = [Thread(target=_thread_target, args=(_queue,)) for i in range(maxsize)]
-	[i.start() for i in threads]
+	threads = (Thread(target=_thread_target, args=(_queue,)) for i in range(maxsize))
+	threads = list(TaskPool.process(threads))
 	[i.join() for i in threads]
 	items = movies.items + tvshows.items
 	items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
