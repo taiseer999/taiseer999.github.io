@@ -1452,10 +1452,11 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[VideoPlayer.SubtitlesName]</label>
+						<label>$VAR[SubtitleVar] $VAR[SubtitleNameVar]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>VideoPlayer.SubtitlesEnabled</visible>
+						<visible>VideoPlayer.HasSubtitles</visible>
 					</control>
 					<control type="label">
 						<left>220</left>

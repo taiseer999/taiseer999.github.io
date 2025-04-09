@@ -141,6 +141,24 @@
         </include>
     </fontset>
 
+<fontset id="MOHANDbold" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">MOHANDbold.ttf</param>
+            <param name="font_bold">MOHANDbold.ttf</param>
+            <param name="font_regular">MOHANDbold.ttf</param>
+            <param name="font_light">MOHANDbold.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">0.85</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">28</param>
+        <param name="size_light_main">29</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
 
 <fontset id="Hacen-Promote" unicode="true">
 

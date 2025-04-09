@@ -1999,5 +1999,14 @@
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x)">[COLOR lightgreen]DTS:X[/COLOR]</value>
 		<value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax)">[COLOR lightgreen]IMAX[/COLOR]</value>
 	</variable>
+    <variable name="SubtitleVar">
+        <value condition="String.IsEmpty(VideoPlayer.SubtitlesLanguage)">$INFO[VideoPlayer.SubtitlesLangEx]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.SubtitlesLanguage)">[UPPERCASE]$INFO[VideoPlayer.SubtitlesLanguage][/UPPERCASE]</value>
+    </variable>
+	
+    <variable name="SubtitleNameVar">
+        <value condition="String.IsEmpty(VideoPlayer.SubtitlesName)"></value>
+        <value condition="!String.IsEmpty(VideoPlayer.SubtitlesName)">$INFO[VideoPlayer.SubtitlesName,| ,, (,)]</value>
+    </variable>
 </includes>
 
