@@ -3116,7 +3116,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31654"
-msgid "VS10 Mode"
+msgid "VS10"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml

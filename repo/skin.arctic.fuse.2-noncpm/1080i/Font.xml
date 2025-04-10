@@ -23,7 +23,7 @@
         </include>
     </fontset>
 
-<fontset id="URWGeometricArabic" unicode="true">
+<fontset id="URW" unicode="true">
 
         <include content="Font_Default">
             <param name="font_black">URWGeometricArabic-Bold.ttf</param>
@@ -43,7 +43,7 @@
         </include>
     </fontset>
 
-    <fontset id="PFDinTextArabic" unicode="true">
+    <fontset id="خط pdf" unicode="true">
 <include content="Font_Default">
             <param name="font_black">PFDinTextArabic-Bold.ttf</param>
             <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
@@ -82,7 +82,7 @@
 
     </fontset>
 	
-<fontset id="NotoRoboto - Arabic" unicode="true">
+<fontset id="الخط الاصلي" unicode="true">
         <include content="Font_Default">
             <param name="font_black">RobotoNotoCondensed-Bold.ttf</param>
             <param name="font_bold">RobotoNotoCondensed-Bold.ttf</param>
@@ -100,7 +100,7 @@
         </include>	
     </fontset>
 
-    <fontset id="AmazonEmber" unicode="true">
+    <fontset id="امزون" unicode="true">
 
         <include content="Font_Default">
             <param name="font_black">AmazonEmberV2-Bold.ttf</param>
@@ -120,7 +120,7 @@
         </include>
     </fontset>
 
- <fontset id="GeezaPro" unicode="true">
+ <fontset id="جيزا" unicode="true">
 
         <include content="Font_Default">
             <param name="font_black">GeezaPro.ttf</param>
@@ -141,7 +141,7 @@
         </include>
     </fontset>
 
-<fontset id="MOHANDbold" unicode="true">
+<fontset id="المهند" unicode="true">
 
         <include content="Font_Default">
             <param name="font_black">MOHANDbold.ttf</param>
@@ -150,7 +150,7 @@
             <param name="font_light">MOHANDbold.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">0.8</param>
+            <param name="plot_linespacing_main">1.0</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">33</param>
@@ -160,7 +160,7 @@
         </include>
     </fontset>
 
-<fontset id="Hacen-Promote" unicode="true">
+<fontset id="حسن" unicode="true">
 
         <include content="Font_Default">
             <param name="font_black">Hacen-Promoter.ttf</param>
