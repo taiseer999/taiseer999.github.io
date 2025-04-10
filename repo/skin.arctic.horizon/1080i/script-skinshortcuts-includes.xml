@@ -2,6 +2,25 @@
 	<include name="skinshortcuts-mainmenu">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
+			<label>تكملة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>special://skin/extras/icons/trakttv.png</thumb>
+			<property name="labelID">tkml</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F",return)</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="submenuVisibility">tkml</property>
+			<property name="group">mainmenu</property>
+			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-tkml)]</property>
+			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-tkml)]</property>
+			<property name="hasSubmenu">False</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
 			<label>$LOCALIZE[342]</label>
 			<label2>عنصر مخصص</label2>
 			<icon>special://skin/extras/icons/film.png</icon>
@@ -23,8 +42,8 @@
 			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-movies)]</property>
 			<property name="hasSubmenu">False</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<label>$LOCALIZE[20343]</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/tv.png</icon>
@@ -44,25 +63,6 @@
 			<property name="group">mainmenu</property>
 			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-tvshows)]</property>
 			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-tvshows)]</property>
-			<property name="hasSubmenu">False</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<label>تكملة</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/trakttv.png</thumb>
-			<property name="labelID">tkml</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F",return)</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="submenuVisibility">tkml</property>
-			<property name="group">mainmenu</property>
-			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-tkml)]</property>
-			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-tkml)]</property>
 			<property name="hasSubmenu">False</property>
 		</item>
 		<item id="4">
@@ -142,22 +142,6 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">5</property>
-			<label>CoreELEC Configuration</label>
-			<label2>Program</label2>
-			<icon>DefaultAddon.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">service.coreelec.settings</property>
-			<property name="defaultID">service.coreelec.settings</property>
-			<onclick>RunAddOn(service.coreelec.settings)</onclick>
-			<property name="path">RunAddOn(service.coreelec.settings)</property>
-			<property name="list">RunAddOn(service.coreelec.settings)</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001)</visible>
-			<property name="group">24001</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">5</property>
 			<label>tmdbhelper إعدادات</label>
 			<label2>إضافات الفيديو</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -172,8 +156,8 @@
 			<property name="group">24001</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">5</property>
 			<label>$LOCALIZE[1037]</label>
 			<label2>مقاطع مرئيه</label2>
@@ -188,8 +172,8 @@
 			<property name="group">24001</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">5</property>
 			<label>$LOCALIZE[10001]</label>
 			<label2>برامج</label2>
@@ -341,22 +325,6 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">7</property>
-			<label>تغير المظهر</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/ss.png</thumb>
-			<property name="labelID">tgyrlmzhr</property>
-			<property name="defaultID">20077</property>
-			<onclick>PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</onclick>
-			<property name="path">PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</property>
-			<property name="list">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg,return)</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
-			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[1036]</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/favourites2.png</icon>
@@ -370,8 +338,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">7</property>
 			<label>قياس السرعة</label>
 			<label2>Custom item</label2>
@@ -386,8 +354,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="8">
-			<property name="id">$NUMBER[8]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[7]</label>
 			<label2>Power Shortcut</label2>
@@ -402,8 +370,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="9">
-			<property name="id">$NUMBER[9]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[24001]</label>
 			<label2>Power Shortcut</label2>
@@ -415,8 +383,8 @@
 			<onclick>noop</onclick>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="10">
-			<property name="id">$NUMBER[10]</property>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
 			<property name="mainmenuid">7</property>
 			<label>ايقاف تشغيل كودي</label>
 			<label2>Custom item</label2>
@@ -431,53 +399,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="11">
-			<property name="id">$NUMBER[11]</property>
-			<property name="mainmenuid">7</property>
-			<label>التحول لاندرويد</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/power.png</icon>
-			<thumb>special://skin/extras/icons/RTA.png</thumb>
-			<property name="labelID">script.reboottoandroidtv</property>
-			<property name="defaultID">rebootfromnand</property>
-			<onclick>RunAddOn(script.reboottoandroidtv)</onclick>
-			<property name="path">RunAddOn(script.reboottoandroidtv)</property>
-			<property name="list">RunAddOn(script.reboottoandroidtv)</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="12">
-			<property name="id">$NUMBER[12]</property>
-			<property name="mainmenuid">7</property>
-			<label>إعادة تشغيل CoreELEC</label>
-			<label2>أوامر كودي</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">d-tshgylcoreelec</property>
-			<property name="defaultID">13013</property>
-			<onclick>Reboot</onclick>
-			<property name="path">Reboot</property>
-			<property name="list">Reboot</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="13">
-			<property name="id">$NUMBER[13]</property>
-			<property name="mainmenuid">7</property>
-			<label>إيقاف تشغيل CoreELEC</label>
-			<label2>Kodi Command</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">yqftshgylcoreelec</property>
-			<property name="defaultID">13005</property>
-			<visible>[False] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="14">
-			<property name="id">$NUMBER[14]</property>
+		<item id="10">
+			<property name="id">$NUMBER[10]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[13005]</label>
 			<label2>Kodi Command</label2>
@@ -546,6 +469,45 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">1</property>
+			<label>تكملة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tkml</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Button</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
+			<property name="group">tkml.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">1</property>
+			<label>تكملة</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb />
+			<property name="labelID">tkml--0</property>
+			<property name="defaultID" />
+			<property name="widgetAspect">Poster</property>
+			<property name="widgetInfo">Full</property>
+			<property name="widgetSortby">lastplayed</property>
+			<property name="widgetSortorder">descending</property>
+			<onclick>Stacked</onclick>
+			<property name="path">Stacked</property>
+			<property name="list">Stacked</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
+			<property name="group">tkml.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="1">
+			<property name="id">$NUMBER[1]</property>
+			<property name="mainmenuid">2</property>
 			<label>تقسيم الافلام</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -564,7 +526,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">1</property>
+			<property name="mainmenuid">2</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -582,7 +544,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">1</property>
+			<property name="mainmenuid">2</property>
 			<label>المحتوى</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -602,7 +564,7 @@
 		</item>
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>تقسيم المسلسلات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -621,7 +583,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -639,7 +601,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>.</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -659,7 +621,7 @@
 		</item>
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>الموسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -677,7 +639,7 @@
 		</item>
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>الحلقات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -691,45 +653,6 @@
 			<property name="list">Stacked</property>
 			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)</visible>
 			<property name="group">tvshows.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="1">
-			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">3</property>
-			<label>تكملة</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">tkml</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">3</property>
-			<label>تكملة</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">tkml--0</property>
-			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
-			<property name="widgetInfo">Full</property>
-			<property name="widgetSortby">lastplayed</property>
-			<property name="widgetSortorder">descending</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="1">
@@ -799,7 +722,7 @@
 			<property name="labelID">1037</property>
 			<property name="defaultID">1037</property>
 			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Big Square</property>
+			<property name="widgetAspect">Square</property>
 			<onclick>ActivateWindow(Videos,addons://sources/video/,return)</onclick>
 			<property name="path">ActivateWindow(Videos,addons://sources/video/,return)</property>
 			<property name="list">addons://sources/video/</property>
@@ -817,7 +740,7 @@
 			<property name="labelID">programs</property>
 			<property name="defaultID">programs</property>
 			<property name="widgetTarget">programs</property>
-			<property name="widgetAspect">Big Square</property>
+			<property name="widgetAspect">Square</property>
 			<onclick>addons://sources/executable/</onclick>
 			<property name="path">addons://sources/executable/</property>
 			<property name="list">addons://sources/executable/</property>
@@ -918,127 +841,91 @@
 	<include name="skinshortcuts-submenu-4" />
 	<include />
 	<include name="skinshortcuts-submenu-5" />
-	<include name="skinshortcuts-group-movies">
+	<include name="skinshortcuts-group-tkml">
 		<description>No items</description>
 	</include>
-	<include name="skinshortcuts-group-alt-movies">
+	<include name="skinshortcuts-group-alt-tkml">
 		<description>No items</description>
 	</include>
-	<include name="skinshortcuts-group-movies-1">
+	<include name="skinshortcuts-group-tkml-1">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">1</property>
-			<label>تقسيم الافلام</label>
-			<label2>Custom item</label2>
+			<label>تكملة</label>
+			<label2>Video Add-On</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb>thumb</thumb>
-			<property name="labelID">tqsymlflm</property>
+			<property name="labelID">tkml</property>
 			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=%D8%AA%D9%82%D8%B3%D9%8A%D9%85+%D8%A7%D9%84%D8%A7%D9%81%D9%84%D8%A7%D9%85.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
 			<property name="widgetTarget">videos</property>
 			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">movies.1</property>
+			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">1</property>
-			<label>القسم</label>
+			<label>تكملة</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb />
-			<property name="labelID">lqsm</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">movies.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">1</property>
-			<label>المحتوى</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">lmhtw</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
-			<property name="widgetAspect">Landscape</property>
+			<property name="labelID">tkml--0</property>
+			<property name="defaultID" />
+			<property name="widgetAspect">Poster</property>
 			<property name="widgetInfo">Full</property>
-			<property name="widgetSortby">random</property>
+			<property name="widgetSortby">lastplayed</property>
+			<property name="widgetSortorder">descending</property>
 			<onclick>Stacked</onclick>
 			<property name="path">Stacked</property>
 			<property name="list">Stacked</property>
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">movies.1</property>
+			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
 	</include>
-	<include name="skinshortcuts-group-alt-movies-1">
+	<include name="skinshortcuts-group-alt-tkml-1">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">1</property>
-			<label>تقسيم الافلام</label>
-			<label2>Custom item</label2>
+			<label>تكملة</label>
+			<label2>Video Add-On</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb>thumb</thumb>
-			<property name="labelID">tqsymlflm</property>
+			<property name="labelID">tkml</property>
 			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=%D8%AA%D9%82%D8%B3%D9%8A%D9%85+%D8%A7%D9%84%D8%A7%D9%81%D9%84%D8%A7%D9%85.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
 			<property name="widgetTarget">videos</property>
 			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
-			<property name="group">movies.1</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
+			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">1</property>
-			<label>القسم</label>
+			<label>تكملة</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb />
-			<property name="labelID">lqsm</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
-			<property name="group">movies.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">1</property>
-			<label>المحتوى</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">lmhtw</property>
-			<property name="defaultID">31371</property>
-			<property name="translatedPath">Stacked</property>
-			<property name="widgetAspect">Landscape</property>
+			<property name="labelID">tkml--0</property>
+			<property name="defaultID" />
+			<property name="widgetAspect">Poster</property>
 			<property name="widgetInfo">Full</property>
-			<property name="widgetSortby">random</property>
+			<property name="widgetSortby">lastplayed</property>
+			<property name="widgetSortorder">descending</property>
 			<onclick>Stacked</onclick>
 			<property name="path">Stacked</property>
 			<property name="list">Stacked</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
-			<property name="group">movies.1</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
+			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
 	</include>
@@ -1051,11 +938,11 @@
 			<include content="Object_Control" condition="!False">
 				<param name="control">group</param>
 				<include content="Animation_LeftRight">
-					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)]" />
+					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)]" />
 				</include>
-				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
+				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
 				<control type="grouplist" id="1400">
-					<animation effect="slide" end="0,120" condition="Integer.IsEqual(Container(1400).NumItems,1) + True + True">Conditional</animation>
+					<animation effect="slide" end="0,120" condition="Integer.IsEqual(Container(1400).NumItems,1) + False + True">Conditional</animation>
 					<visible>!$EXP[Exp_InfoDialogs]</visible>
 					<visible>!$EXP[Exp_RecommendationDialogs]</visible>
 					<include>Animation_Common</include>
@@ -1066,11 +953,11 @@
 					<ondown condition="Skin.HasSetting(Home.VerticalMenu)">SetFocus(300)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">SetProperty(CustomHubHeader,$INFO[Container(300).ListItem.Label],Home)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">SetProperty(submenuVisibility,$INFO[Container(300).ListItem.Property(submenuVisibility)],Home)</ondown>
-					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">$INFO[Skin.String(widgetEndRowAction-movies)]</ondown>
+					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">$INFO[Skin.String(widgetEndRowAction-tkml)]</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True]">ClearProperty(330_FocusBounce,Home)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True] + !String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full)">SetFocus(330)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True] + String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full)">AlarmClock(330_FocusBounce_Reset,SetProperty(330_FocusBounce,1,Home),00:00,silent)</ondown>
-					<include content="Object_Control" condition="True + True">
+					<include content="Object_Control" condition="False + True">
 						<param name="control">group</param>
 						<param name="id">1500</param>
 						<top>fullscreenwidget_buttongroup_t</top>
@@ -1158,7 +1045,7 @@
 					<control type="group" id="1600">
 						<height>widget_tbump_h</height>
 					</control>
-					<include content="Object_Control" condition="True + ![True]">
+					<include content="Object_Control" condition="False + ![True]">
 						<param name="control">group</param>
 						<param name="id">1597</param>
 						<height>infowidget_main_t</height>
@@ -1186,13 +1073,13 @@
 							<left>view_pad</left>
 						</include>
 					</include>
-					<include content="Widget_Poster" condition="True + ![True]">
+					<include content="Widget_Poster" condition="False + ![True]">
 						<param name="groupid" value="1500" />
 						<param name="id" value="301" />
-						<param name="label" value="TheMovieDb Helper - Popular" />
+						<param name="label" value="$LOCALIZE[31105]" />
 						<param name="include" value="List_Poster_Row" />
 						<param name="labelvisible">!Skin.HasSetting(Widgets.ExpandedHeader)</param>
-						<param name="visible" value="String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)" />
+						<param name="visible" value="String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)" />
 						<param name="busy_visible" value="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]" />
 						<content>
 							<item>
@@ -1203,16 +1090,16 @@
 						<include content="Object_ContentDynamic" condition="!False">
 							<param name="sortby" />
 							<param name="sortorder" />
-							<param name="target">videos</param>
+							<param name="target" />
 							<param name="limit" />
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content" />
 						</include>
 						<include content="Object_ContentDynamic" condition="False">
 							<param name="sortby" />
 							<param name="sortorder" />
-							<param name="target">videos</param>
+							<param name="target" />
 							<param name="limit">7</param>
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content" />
 						</include>
 						<include content="Defs_AutoScroll" condition="False">
 							<param name="condition" value="!Control.HasFocus(301) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
@@ -1222,7 +1109,7 @@
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,TheMovieDb Helper - Popular,Home)</onfocus>
+						<onfocus condition="Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,$LOCALIZE[31105],Home)</onfocus>
 						<onfocus condition="[Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))] + !Integer.IsEqual(Window.Property(TMDbHelper.WidgetContainer),301)">Action(Up)</onfocus>
 						<onfocus condition="[Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))] + Integer.IsEqual(Window.Property(TMDbHelper.WidgetContainer),301)">Action(Down)</onfocus>
 						<onback condition="!Integer.IsEqual(Container(301).ListItem.CurrentItem,1)">SetFocus(301,0,absolute)</onback>
@@ -1234,12 +1121,12 @@
 						<param name="id" value="1601" />
 						<param name="spacerid" value="1801" />
 						<param name="buttonid" value="100100" />
-						<param name="label" value="تقسيم الافلام" />
+						<param name="label" value="تكملة" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(1600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![False] | [!Integer.IsEqual(Container(1600).NumItems,0) + Container(1600).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![False] | [!Integer.IsEqual(Container(1600).NumItems,0) + Container(1600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(1601).NumItems,0) | [False + Container(1601).IsUpdating]" />
@@ -1252,7 +1139,7 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + False">
 							<param name="sortby" />
@@ -1269,17 +1156,17 @@
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
 							<param name="visible">Integer.IsEqual(Container(1601).NumItems,) | Integer.IsEqual(Container(1601).NumItems,100000)</param>
 						</include>
 						<include content="Object_ContentItem" condition="False + !False">
 							<param name="visible">Integer.IsEqual(Container(1600).NumItems,0) | String.IsEmpty(Container(1600).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-movies</param>
+							<param name="include">skinshortcuts-group-tkml</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1601,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تقسيم الافلام,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,1601,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
@@ -1296,25 +1183,25 @@
 						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
 						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
-					<include content="Widget_Submenu">
+					<include content="Widget_Poster">
 						<param name="groupid" value="1702" />
 						<param name="id" value="1602" />
 						<param name="spacerid" value="1802" />
 						<param name="buttonid" value="100200" />
-						<param name="label" value="القسم" />
+						<param name="label" value="تكملة" />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(1601).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(1601).NumItems,0) + Container(1601).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
+						<param name="include" value="List_Poster_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![True] | [!Integer.IsEqual(Container(1601).NumItems,0) + Container(1601).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="True" />
+						<param name="infowidget_full" value="True" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(1602).NumItems,0) | [True + Container(1602).IsUpdating]" />
-						<param name="detailed">true</param>
+						<param name="detailed">false</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby" />
-							<param name="sortorder" />
+							<param name="sortby">lastplayed</param>
+							<param name="sortorder">descending</param>
 							<param name="target">videos</param>
 							<param name="limit" />
 							<param name="autolimit">7</param>
@@ -1322,8 +1209,8 @@
 							<param name="content">Stacked</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby" />
-							<param name="sortorder" />
+							<param name="sortby">lastplayed</param>
+							<param name="sortorder">descending</param>
 							<param name="target">videos</param>
 							<param name="limit" />
 							<param name="autolimit">7</param>
@@ -1343,14 +1230,14 @@
 							<param name="visible">Integer.IsEqual(Container(1601).NumItems,0) | String.IsEmpty(Container(1601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-movies</param>
+							<param name="include">skinshortcuts-group-tkml</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1602,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,1602,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
+						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="True">SetProperty(Slide.WidgetContainer,1602,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Poster,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -1363,73 +1250,6 @@
 						<onback condition="Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
 						<onback condition="Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="1703" />
-						<param name="id" value="1603" />
-						<param name="spacerid" value="1803" />
-						<param name="buttonid" value="100300" />
-						<param name="label" value="المحتوى" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(1602).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Landscape_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(1602).NumItems,0) + Container(1602).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="True" />
-						<param name="infowidget_full" value="True" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(1603).NumItems,0) | [True + Container(1603).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby">random</param>
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby">random</param>
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(1602).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(1603) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
-							<param name="visible">Integer.IsEqual(Container(1603).NumItems,) | Integer.IsEqual(Container(1603).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="True + !False">
-							<param name="visible">Integer.IsEqual(Container(1602).NumItems,0) | String.IsEmpty(Container(1602).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-movies</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1603,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,المحتوى,Home)</onfocus>
-						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="True">SetProperty(Slide.WidgetContainer,1603,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(1603,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(1601)</onback>
-						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
-						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="1798" />
 						<param name="id" value="1698" />
@@ -1438,7 +1258,7 @@
 						<param name="label" value="$LOCALIZE[1034]" />
 						<param name="include" value="List_Button_Row" />
 						<param name="detailed">True</param>
-						<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)]" />
+						<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)]" />
 						<param name="infowidget" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(1698).NumItems,0)" />
 						<include content="Object_ContentDynamic" condition="False">
@@ -1446,7 +1266,7 @@
 							<param name="target" />
 						</include>
 						<include content="Object_ContentInclude" condition="![False]">
-							<param name="include">skinshortcuts-group-movies</param>
+							<param name="include">skinshortcuts-group-tkml</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1698,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
@@ -1488,9 +1308,9 @@
 			<include content="Object_Control" condition="False">
 				<param name="control">group</param>
 				<include content="Animation_LeftRight">
-					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)]" />
+					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)]" />
 				</include>
-				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
+				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
 				<control type="group">
 					<control type="button" id="1599">
 						<visible allowhiddenfocus="true">False</visible>
@@ -1512,9 +1332,9 @@
 			<include content="Object_Control" condition="!False">
 				<param name="control">group</param>
 				<include content="Animation_LeftRight">
-					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)]" />
+					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)]" />
 				</include>
-				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
+				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
 				<control type="grouplist" id="2400">
 					<animation effect="slide" end="0,120" condition="Integer.IsEqual(Container(2400).NumItems,1) + True + True">Conditional</animation>
 					<visible>!$EXP[Exp_InfoDialogs]</visible>
@@ -1527,7 +1347,7 @@
 					<ondown condition="Skin.HasSetting(Home.VerticalMenu)">SetFocus(300)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">SetProperty(CustomHubHeader,$INFO[Container(300).ListItem.Label],Home)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">SetProperty(submenuVisibility,$INFO[Container(300).ListItem.Property(submenuVisibility)],Home)</ondown>
-					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">$INFO[Skin.String(widgetEndRowAction-tvshows)]</ondown>
+					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">$INFO[Skin.String(widgetEndRowAction-movies)]</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True]">ClearProperty(330_FocusBounce,Home)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True] + !String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full)">SetFocus(330)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True] + String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full)">AlarmClock(330_FocusBounce_Reset,SetProperty(330_FocusBounce,1,Home),00:00,silent)</ondown>
@@ -1653,7 +1473,7 @@
 						<param name="label" value="TheMovieDb Helper - Popular" />
 						<param name="include" value="List_Poster_Row" />
 						<param name="labelvisible">!Skin.HasSetting(Widgets.ExpandedHeader)</param>
-						<param name="visible" value="String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)" />
+						<param name="visible" value="String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)" />
 						<param name="busy_visible" value="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]" />
 						<content>
 							<item>
@@ -1666,14 +1486,14 @@
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Object_ContentDynamic" condition="False">
 							<param name="sortby" />
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit">7</param>
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Defs_AutoScroll" condition="False">
 							<param name="condition" value="!Control.HasFocus(301) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
@@ -1695,12 +1515,12 @@
 						<param name="id" value="2601" />
 						<param name="spacerid" value="2801" />
 						<param name="buttonid" value="200100" />
-						<param name="label" value="تقسيم المسلسلات" />
+						<param name="label" value="تقسيم الافلام" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(2600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![False] | [!Integer.IsEqual(Container(2600).NumItems,0) + Container(2600).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![False] | [!Integer.IsEqual(Container(2600).NumItems,0) + Container(2600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(2601).NumItems,0) | [False + Container(2601).IsUpdating]" />
@@ -1713,7 +1533,7 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsections.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + False">
 							<param name="sortby" />
@@ -1730,17 +1550,17 @@
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsections.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
 							<param name="visible">Integer.IsEqual(Container(2601).NumItems,) | Integer.IsEqual(Container(2601).NumItems,100000)</param>
 						</include>
 						<include content="Object_ContentItem" condition="False + !False">
 							<param name="visible">Integer.IsEqual(Container(2600).NumItems,0) | String.IsEmpty(Container(2600).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tvshows</param>
+							<param name="include">skinshortcuts-group-movies</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2601,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تقسيم المسلسلات,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تقسيم الافلام,Home)</onfocus>
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2601,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
@@ -1767,7 +1587,7 @@
 						<param name="altlabel">$INFO[Container(2601).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(2601).NumItems,0) + Container(2601).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(2601).NumItems,0) + Container(2601).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(2602).NumItems,0) | [True + Container(2602).IsUpdating]" />
@@ -1804,7 +1624,7 @@
 							<param name="visible">Integer.IsEqual(Container(2601).NumItems,0) | String.IsEmpty(Container(2601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tvshows</param>
+							<param name="include">skinshortcuts-group-movies</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2602,Home)</onfocus>
 						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
@@ -1829,12 +1649,12 @@
 						<param name="id" value="2603" />
 						<param name="spacerid" value="2803" />
 						<param name="buttonid" value="200300" />
-						<param name="label" value="." />
+						<param name="label" value="المحتوى" />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(2602).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Landscape_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(2602).NumItems,0) + Container(2602).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(2602).NumItems,0) + Container(2602).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="True" />
 						<param name="infowidget_full" value="True" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(2603).NumItems,0) | [True + Container(2603).IsUpdating]" />
@@ -1871,10 +1691,10 @@
 							<param name="visible">Integer.IsEqual(Container(2602).NumItems,0) | String.IsEmpty(Container(2602).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tvshows</param>
+							<param name="include">skinshortcuts-group-movies</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2603,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,.,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,المحتوى,Home)</onfocus>
 						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="True">SetProperty(Slide.WidgetContainer,2603,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
@@ -1891,140 +1711,6 @@
 						<onback condition="Integer.IsEqual(Container(2603).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
 						<onback condition="Integer.IsEqual(Container(2603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="2704" />
-						<param name="id" value="2604" />
-						<param name="spacerid" value="2804" />
-						<param name="buttonid" value="200400" />
-						<param name="label" value="الموسم" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(2603).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Landscape_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(2603).NumItems,0) + Container(2603).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(2604).NumItems,0) | [True + Container(2604).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(2603).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(2604) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
-							<param name="visible">Integer.IsEqual(Container(2604).NumItems,) | Integer.IsEqual(Container(2604).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="True + !False">
-							<param name="visible">Integer.IsEqual(Container(2603).NumItems,0) | String.IsEmpty(Container(2603).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tvshows</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2604,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الموسم,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2604,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(2604,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
-						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
-						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="2705" />
-						<param name="id" value="2605" />
-						<param name="spacerid" value="2805" />
-						<param name="buttonid" value="200500" />
-						<param name="label" value="الحلقات" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(2604).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Landscape_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(2604).NumItems,0) + Container(2604).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(2605).NumItems,0) | [True + Container(2605).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(2604).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(2605) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
-							<param name="visible">Integer.IsEqual(Container(2605).NumItems,) | Integer.IsEqual(Container(2605).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="True + !False">
-							<param name="visible">Integer.IsEqual(Container(2604).NumItems,0) | String.IsEmpty(Container(2604).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tvshows</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2605,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الحلقات,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2605).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2605,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(2605).ListItem.CurrentItem,1)">SetFocus(2605,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(2605).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
-						<onback condition="Integer.IsEqual(Container(2605).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(2605).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
-						<onback condition="Integer.IsEqual(Container(2605).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="2798" />
 						<param name="id" value="2698" />
@@ -2033,7 +1719,7 @@
 						<param name="label" value="$LOCALIZE[1034]" />
 						<param name="include" value="List_Button_Row" />
 						<param name="detailed">True</param>
-						<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)]" />
+						<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)]" />
 						<param name="infowidget" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(2698).NumItems,0)" />
 						<include content="Object_ContentDynamic" condition="False">
@@ -2041,7 +1727,7 @@
 							<param name="target" />
 						</include>
 						<include content="Object_ContentInclude" condition="![False]">
-							<param name="include">skinshortcuts-group-tvshows</param>
+							<param name="include">skinshortcuts-group-movies</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2698,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
@@ -2083,9 +1769,9 @@
 			<include content="Object_Control" condition="False">
 				<param name="control">group</param>
 				<include content="Animation_LeftRight">
-					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)]" />
+					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)]" />
 				</include>
-				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
+				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
 				<control type="group">
 					<control type="button" id="2599">
 						<visible allowhiddenfocus="true">False</visible>
@@ -2107,11 +1793,11 @@
 			<include content="Object_Control" condition="!False">
 				<param name="control">group</param>
 				<include content="Animation_LeftRight">
-					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)]" />
+					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)]" />
 				</include>
-				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
+				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
 				<control type="grouplist" id="3400">
-					<animation effect="slide" end="0,120" condition="Integer.IsEqual(Container(3400).NumItems,1) + False + True">Conditional</animation>
+					<animation effect="slide" end="0,120" condition="Integer.IsEqual(Container(3400).NumItems,1) + True + True">Conditional</animation>
 					<visible>!$EXP[Exp_InfoDialogs]</visible>
 					<visible>!$EXP[Exp_RecommendationDialogs]</visible>
 					<include>Animation_Common</include>
@@ -2122,11 +1808,11 @@
 					<ondown condition="Skin.HasSetting(Home.VerticalMenu)">SetFocus(300)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">SetProperty(CustomHubHeader,$INFO[Container(300).ListItem.Label],Home)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">SetProperty(submenuVisibility,$INFO[Container(300).ListItem.Property(submenuVisibility)],Home)</ondown>
-					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">$INFO[Skin.String(widgetEndRowAction-tkml)]</ondown>
+					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + True">$INFO[Skin.String(widgetEndRowAction-tvshows)]</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True]">ClearProperty(330_FocusBounce,Home)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True] + !String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full)">SetFocus(330)</ondown>
 					<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + ![True] + String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full)">AlarmClock(330_FocusBounce_Reset,SetProperty(330_FocusBounce,1,Home),00:00,silent)</ondown>
-					<include content="Object_Control" condition="False + True">
+					<include content="Object_Control" condition="True + True">
 						<param name="control">group</param>
 						<param name="id">3500</param>
 						<top>fullscreenwidget_buttongroup_t</top>
@@ -2214,7 +1900,7 @@
 					<control type="group" id="3600">
 						<height>widget_tbump_h</height>
 					</control>
-					<include content="Object_Control" condition="False + ![True]">
+					<include content="Object_Control" condition="True + ![True]">
 						<param name="control">group</param>
 						<param name="id">3597</param>
 						<height>infowidget_main_t</height>
@@ -2242,13 +1928,13 @@
 							<left>view_pad</left>
 						</include>
 					</include>
-					<include content="Widget_Poster" condition="False + ![True]">
+					<include content="Widget_Poster" condition="True + ![True]">
 						<param name="groupid" value="3500" />
 						<param name="id" value="301" />
-						<param name="label" value="$LOCALIZE[31105]" />
+						<param name="label" value="TheMovieDb Helper - Popular" />
 						<param name="include" value="List_Poster_Row" />
 						<param name="labelvisible">!Skin.HasSetting(Widgets.ExpandedHeader)</param>
-						<param name="visible" value="String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)" />
+						<param name="visible" value="String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)" />
 						<param name="busy_visible" value="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]" />
 						<content>
 							<item>
@@ -2259,16 +1945,16 @@
 						<include content="Object_ContentDynamic" condition="!False">
 							<param name="sortby" />
 							<param name="sortorder" />
-							<param name="target" />
+							<param name="target">videos</param>
 							<param name="limit" />
-							<param name="content" />
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Object_ContentDynamic" condition="False">
 							<param name="sortby" />
 							<param name="sortorder" />
-							<param name="target" />
+							<param name="target">videos</param>
 							<param name="limit">7</param>
-							<param name="content" />
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Defs_AutoScroll" condition="False">
 							<param name="condition" value="!Control.HasFocus(301) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
@@ -2278,7 +1964,7 @@
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,$LOCALIZE[31105],Home)</onfocus>
+						<onfocus condition="Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,TheMovieDb Helper - Popular,Home)</onfocus>
 						<onfocus condition="[Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))] + !Integer.IsEqual(Window.Property(TMDbHelper.WidgetContainer),301)">Action(Up)</onfocus>
 						<onfocus condition="[Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))] + Integer.IsEqual(Window.Property(TMDbHelper.WidgetContainer),301)">Action(Down)</onfocus>
 						<onback condition="!Integer.IsEqual(Container(301).ListItem.CurrentItem,1)">SetFocus(301,0,absolute)</onback>
@@ -2290,12 +1976,12 @@
 						<param name="id" value="3601" />
 						<param name="spacerid" value="3801" />
 						<param name="buttonid" value="300100" />
-						<param name="label" value="تكملة" />
+						<param name="label" value="تقسيم المسلسلات" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(3600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![False] | [!Integer.IsEqual(Container(3600).NumItems,0) + Container(3600).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![False] | [!Integer.IsEqual(Container(3600).NumItems,0) + Container(3600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(3601).NumItems,0) | [False + Container(3601).IsUpdating]" />
@@ -2308,7 +1994,7 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsections.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + False">
 							<param name="sortby" />
@@ -2325,17 +2011,17 @@
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsections.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
 							<param name="visible">Integer.IsEqual(Container(3601).NumItems,) | Integer.IsEqual(Container(3601).NumItems,100000)</param>
 						</include>
 						<include content="Object_ContentItem" condition="False + !False">
 							<param name="visible">Integer.IsEqual(Container(3600).NumItems,0) | String.IsEmpty(Container(3600).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tkml</param>
+							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3601,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تقسيم المسلسلات,Home)</onfocus>
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3601,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
@@ -2352,25 +2038,25 @@
 						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
 						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
-					<include content="Widget_Poster">
+					<include content="Widget_Submenu">
 						<param name="groupid" value="3702" />
 						<param name="id" value="3602" />
 						<param name="spacerid" value="3802" />
 						<param name="buttonid" value="300200" />
-						<param name="label" value="تكملة" />
+						<param name="label" value="القسم" />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(3601).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Poster_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![True] | [!Integer.IsEqual(Container(3601).NumItems,0) + Container(3601).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="True" />
-						<param name="infowidget_full" value="True" />
+						<param name="include" value="List_Button_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3601).NumItems,0) + Container(3601).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(3602).NumItems,0) | [True + Container(3602).IsUpdating]" />
-						<param name="detailed">false</param>
+						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby">lastplayed</param>
-							<param name="sortorder">descending</param>
+							<param name="sortby" />
+							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
 							<param name="autolimit">7</param>
@@ -2378,8 +2064,8 @@
 							<param name="content">Stacked</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby">lastplayed</param>
-							<param name="sortorder">descending</param>
+							<param name="sortby" />
+							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
 							<param name="autolimit">7</param>
@@ -2399,14 +2085,14 @@
 							<param name="visible">Integer.IsEqual(Container(3601).NumItems,0) | String.IsEmpty(Container(3601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tkml</param>
+							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3602,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
-						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="True">SetProperty(Slide.WidgetContainer,3602,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Poster,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3602,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -2419,6 +2105,207 @@
 						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
 						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="3703" />
+						<param name="id" value="3603" />
+						<param name="spacerid" value="3803" />
+						<param name="buttonid" value="300300" />
+						<param name="label" value="." />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(3602).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3602).NumItems,0) + Container(3602).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="True" />
+						<param name="infowidget_full" value="True" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(3603).NumItems,0) | [True + Container(3603).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby">random</param>
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby">random</param>
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(3602).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(3603) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(3603).NumItems,) | Integer.IsEqual(Container(3603).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(3602).NumItems,0) | String.IsEmpty(Container(3602).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tvshows</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3603,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,.,Home)</onfocus>
+						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="True">SetProperty(Slide.WidgetContainer,3603,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(3603,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
+						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
+						<onback condition="Integer.IsEqual(Container(3603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="3704" />
+						<param name="id" value="3604" />
+						<param name="spacerid" value="3804" />
+						<param name="buttonid" value="300400" />
+						<param name="label" value="الموسم" />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(3603).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3603).NumItems,0) + Container(3603).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(3604).NumItems,0) | [True + Container(3604).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(3603).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(3604) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(3604).NumItems,) | Integer.IsEqual(Container(3604).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(3603).NumItems,0) | String.IsEmpty(Container(3603).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tvshows</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3604,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الموسم,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3604,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(3604,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
+						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
+						<onback condition="Integer.IsEqual(Container(3604).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="3705" />
+						<param name="id" value="3605" />
+						<param name="spacerid" value="3805" />
+						<param name="buttonid" value="300500" />
+						<param name="label" value="الحلقات" />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(3604).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3604).NumItems,0) + Container(3604).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(3605).NumItems,0) | [True + Container(3605).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(3604).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(3605) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(3605).NumItems,) | Integer.IsEqual(Container(3605).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(3604).NumItems,0) | String.IsEmpty(Container(3604).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tvshows</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3605,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الحلقات,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3605).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3605,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(3605,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
+						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
+						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="3798" />
 						<param name="id" value="3698" />
@@ -2427,7 +2314,7 @@
 						<param name="label" value="$LOCALIZE[1034]" />
 						<param name="include" value="List_Button_Row" />
 						<param name="detailed">True</param>
-						<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)]" />
+						<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)]" />
 						<param name="infowidget" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(3698).NumItems,0)" />
 						<include content="Object_ContentDynamic" condition="False">
@@ -2435,7 +2322,7 @@
 							<param name="target" />
 						</include>
 						<include content="Object_ContentInclude" condition="![False]">
-							<param name="include">skinshortcuts-group-tkml</param>
+							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3698,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
@@ -2477,9 +2364,9 @@
 			<include content="Object_Control" condition="False">
 				<param name="control">group</param>
 				<include content="Animation_LeftRight">
-					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)]" />
+					<param name="visible" value="[String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)]" />
 				</include>
-				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
+				<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | !String.IsEmpty(Window(Home).Property(WidgetWait))</visible>
 				<control type="group">
 					<control type="button" id="3599">
 						<visible allowhiddenfocus="true">False</visible>
@@ -3149,7 +3036,7 @@
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(5600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_BigSquare_Row" />
+						<param name="include" value="List_Square_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001) + [![False] | [!Integer.IsEqual(Container(5600).NumItems,0) + Container(5600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
@@ -3161,7 +3048,7 @@
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
-							<param name="autolimit">5</param>
+							<param name="autolimit">6</param>
 							<param name="is_autolimit">false</param>
 							<param name="content">addons://sources/video/</param>
 						</include>
@@ -3170,7 +3057,7 @@
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
-							<param name="autolimit">5</param>
+							<param name="autolimit">6</param>
 							<param name="is_autolimit">false</param>
 							<param name="content">$INFO[Container(5600).ListItem.FolderPath]</param>
 						</include>
@@ -3194,7 +3081,7 @@
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(5601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,5601,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Big Square,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Square,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -3216,7 +3103,7 @@
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(5601).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_BigSquare_Row" />
+						<param name="include" value="List_Square_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001) + [![False] | [!Integer.IsEqual(Container(5601).NumItems,0) + Container(5601).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
@@ -3228,7 +3115,7 @@
 							<param name="sortorder" />
 							<param name="target">programs</param>
 							<param name="limit" />
-							<param name="autolimit">5</param>
+							<param name="autolimit">6</param>
 							<param name="is_autolimit">false</param>
 							<param name="content">addons://sources/executable/</param>
 						</include>
@@ -3237,7 +3124,7 @@
 							<param name="sortorder" />
 							<param name="target">programs</param>
 							<param name="limit" />
-							<param name="autolimit">5</param>
+							<param name="autolimit">6</param>
 							<param name="is_autolimit">false</param>
 							<param name="content">$INFO[Container(5601).ListItem.FolderPath]</param>
 						</include>
@@ -3261,7 +3148,7 @@
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(5602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,5602,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Big Square,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Square,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -3947,6 +3834,154 @@
 			</include>
 		</include>
 	</include>
+	<include name="skinshortcuts-group-tkml-2">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-alt-tkml-2">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-tkml-3">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-alt-tkml-3">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-tkml-4">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-alt-tkml-4">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-tkml-5">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-alt-tkml-5">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-movies">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-alt-movies">
+		<description>No items</description>
+	</include>
+	<include name="skinshortcuts-group-movies-1">
+		<item id="1">
+			<property name="id">$NUMBER[1]</property>
+			<property name="mainmenuid">2</property>
+			<label>تقسيم الافلام</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tqsymlflm</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=%D8%AA%D9%82%D8%B3%D9%8A%D9%85+%D8%A7%D9%84%D8%A7%D9%81%D9%84%D8%A7%D9%85.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Button</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">2</property>
+			<label>القسم</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb />
+			<property name="labelID">lqsm</property>
+			<property name="defaultID">31371</property>
+			<property name="translatedPath">Stacked</property>
+			<property name="widgetAspect">Button</property>
+			<onclick>Stacked</onclick>
+			<property name="path">Stacked</property>
+			<property name="list">Stacked</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">2</property>
+			<label>المحتوى</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb />
+			<property name="labelID">lmhtw</property>
+			<property name="defaultID">31371</property>
+			<property name="translatedPath">Stacked</property>
+			<property name="widgetAspect">Landscape</property>
+			<property name="widgetInfo">Full</property>
+			<property name="widgetSortby">random</property>
+			<onclick>Stacked</onclick>
+			<property name="path">Stacked</property>
+			<property name="list">Stacked</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+	</include>
+	<include name="skinshortcuts-group-alt-movies-1">
+		<item id="1">
+			<property name="id">$NUMBER[1]</property>
+			<property name="mainmenuid">2</property>
+			<label>تقسيم الافلام</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">tqsymlflm</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=%D8%AA%D9%82%D8%B3%D9%8A%D9%85+%D8%A7%D9%84%D8%A7%D9%81%D9%84%D8%A7%D9%85.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Button</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">2</property>
+			<label>القسم</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb />
+			<property name="labelID">lqsm</property>
+			<property name="defaultID">31371</property>
+			<property name="translatedPath">Stacked</property>
+			<property name="widgetAspect">Button</property>
+			<onclick>Stacked</onclick>
+			<property name="path">Stacked</property>
+			<property name="list">Stacked</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
+			<property name="mainmenuid">2</property>
+			<label>المحتوى</label>
+			<label2>Custom item</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb />
+			<property name="labelID">lmhtw</property>
+			<property name="defaultID">31371</property>
+			<property name="translatedPath">Stacked</property>
+			<property name="widgetAspect">Landscape</property>
+			<property name="widgetInfo">Full</property>
+			<property name="widgetSortby">random</property>
+			<onclick>Stacked</onclick>
+			<property name="path">Stacked</property>
+			<property name="list">Stacked</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+	</include>
 	<include name="skinshortcuts-group-movies-2">
 		<description>No items</description>
 	</include>
@@ -3980,7 +4015,7 @@
 	<include name="skinshortcuts-group-tvshows-1">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>تقسيم المسلسلات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -3999,7 +4034,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4017,7 +4052,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>.</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4037,7 +4072,7 @@
 		</item>
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>الموسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4055,7 +4090,7 @@
 		</item>
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>الحلقات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4075,7 +4110,7 @@
 	<include name="skinshortcuts-group-alt-tvshows-1">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>تقسيم المسلسلات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4094,7 +4129,7 @@
 		</item>
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4112,7 +4147,7 @@
 		</item>
 		<item id="3">
 			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>.</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4132,7 +4167,7 @@
 		</item>
 		<item id="4">
 			<property name="id">$NUMBER[4]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>الموسم</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4150,7 +4185,7 @@
 		</item>
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
-			<property name="mainmenuid">2</property>
+			<property name="mainmenuid">3</property>
 			<label>الحلقات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4189,118 +4224,6 @@
 		<description>No items</description>
 	</include>
 	<include name="skinshortcuts-group-alt-tvshows-5">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-tkml">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-alt-tkml">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-tkml-1">
-		<item id="1">
-			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">3</property>
-			<label>تكملة</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">tkml</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">3</property>
-			<label>تكملة</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">tkml--0</property>
-			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
-			<property name="widgetInfo">Full</property>
-			<property name="widgetSortby">lastplayed</property>
-			<property name="widgetSortorder">descending</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-	</include>
-	<include name="skinshortcuts-group-alt-tkml-1">
-		<item id="1">
-			<property name="id">$NUMBER[1]</property>
-			<property name="mainmenuid">3</property>
-			<label>تكملة</label>
-			<label2>Video Add-On</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>thumb</thumb>
-			<property name="labelID">tkml</property>
-			<property name="defaultID" />
-			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Button</property>
-			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
-			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
-			<property name="list">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
-			<property name="mainmenuid">3</property>
-			<label>تكملة</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb />
-			<property name="labelID">tkml--0</property>
-			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
-			<property name="widgetInfo">Full</property>
-			<property name="widgetSortby">lastplayed</property>
-			<property name="widgetSortorder">descending</property>
-			<onclick>Stacked</onclick>
-			<property name="path">Stacked</property>
-			<property name="list">Stacked</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
-			<property name="group">tkml.1</property>
-			<property name="isSubmenu">True</property>
-		</item>
-	</include>
-	<include name="skinshortcuts-group-tkml-2">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-alt-tkml-2">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-tkml-3">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-alt-tkml-3">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-tkml-4">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-alt-tkml-4">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-tkml-5">
-		<description>No items</description>
-	</include>
-	<include name="skinshortcuts-group-alt-tkml-5">
 		<description>No items</description>
 	</include>
 	<include name="skinshortcuts-group-kwry">
@@ -4471,22 +4394,6 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">5</property>
-			<label>CoreELEC Configuration</label>
-			<label2>Program</label2>
-			<icon>DefaultAddon.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">service.coreelec.settings</property>
-			<property name="defaultID">service.coreelec.settings</property>
-			<onclick>RunAddOn(service.coreelec.settings)</onclick>
-			<property name="path">RunAddOn(service.coreelec.settings)</property>
-			<property name="list">RunAddOn(service.coreelec.settings)</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">24001</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">5</property>
 			<label>tmdbhelper إعدادات</label>
 			<label2>إضافات الفيديو</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4501,8 +4408,8 @@
 			<property name="group">24001</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">5</property>
 			<label>$LOCALIZE[1037]</label>
 			<label2>مقاطع مرئيه</label2>
@@ -4517,8 +4424,8 @@
 			<property name="group">24001</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">5</property>
 			<label>$LOCALIZE[10001]</label>
 			<label2>برامج</label2>
@@ -4554,22 +4461,6 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">5</property>
-			<label>CoreELEC Configuration</label>
-			<label2>Program</label2>
-			<icon>DefaultAddon.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">service.coreelec.settings</property>
-			<property name="defaultID">service.coreelec.settings</property>
-			<onclick>RunAddOn(service.coreelec.settings)</onclick>
-			<property name="path">RunAddOn(service.coreelec.settings)</property>
-			<property name="list">RunAddOn(service.coreelec.settings)</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),num-24001)</visible>
-			<property name="group">24001</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
-			<property name="mainmenuid">5</property>
 			<label>tmdbhelper إعدادات</label>
 			<label2>إضافات الفيديو</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4584,8 +4475,8 @@
 			<property name="group">24001</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">5</property>
 			<label>$LOCALIZE[1037]</label>
 			<label2>مقاطع مرئيه</label2>
@@ -4600,8 +4491,8 @@
 			<property name="group">24001</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">5</property>
 			<label>$LOCALIZE[10001]</label>
 			<label2>برامج</label2>
@@ -4628,7 +4519,7 @@
 			<property name="labelID">1037</property>
 			<property name="defaultID">1037</property>
 			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Big Square</property>
+			<property name="widgetAspect">Square</property>
 			<onclick>ActivateWindow(Videos,addons://sources/video/,return)</onclick>
 			<property name="path">ActivateWindow(Videos,addons://sources/video/,return)</property>
 			<property name="list">addons://sources/video/</property>
@@ -4646,7 +4537,7 @@
 			<property name="labelID">programs</property>
 			<property name="defaultID">programs</property>
 			<property name="widgetTarget">programs</property>
-			<property name="widgetAspect">Big Square</property>
+			<property name="widgetAspect">Square</property>
 			<onclick>addons://sources/executable/</onclick>
 			<property name="path">addons://sources/executable/</property>
 			<property name="list">addons://sources/executable/</property>
@@ -4702,7 +4593,7 @@
 			<property name="labelID">1037</property>
 			<property name="defaultID">1037</property>
 			<property name="widgetTarget">videos</property>
-			<property name="widgetAspect">Big Square</property>
+			<property name="widgetAspect">Square</property>
 			<onclick>ActivateWindow(Videos,addons://sources/video/,return)</onclick>
 			<property name="path">ActivateWindow(Videos,addons://sources/video/,return)</property>
 			<property name="list">addons://sources/video/</property>
@@ -4720,7 +4611,7 @@
 			<property name="labelID">programs</property>
 			<property name="defaultID">programs</property>
 			<property name="widgetTarget">programs</property>
-			<property name="widgetAspect">Big Square</property>
+			<property name="widgetAspect">Square</property>
 			<onclick>addons://sources/executable/</onclick>
 			<property name="path">addons://sources/executable/</property>
 			<property name="list">addons://sources/executable/</property>
@@ -5123,22 +5014,6 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">7</property>
-			<label>تغير المظهر</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/ss.png</thumb>
-			<property name="labelID">tgyrlmzhr</property>
-			<property name="defaultID">20077</property>
-			<onclick>PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</onclick>
-			<property name="path">PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</property>
-			<property name="list">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg,return)</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
-			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[1036]</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/favourites2.png</icon>
@@ -5152,8 +5027,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">7</property>
 			<label>قياس السرعة</label>
 			<label2>Custom item</label2>
@@ -5168,8 +5043,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="8">
-			<property name="id">$NUMBER[8]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[7]</label>
 			<label2>Power Shortcut</label2>
@@ -5184,8 +5059,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="9">
-			<property name="id">$NUMBER[9]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[24001]</label>
 			<label2>Power Shortcut</label2>
@@ -5197,8 +5072,8 @@
 			<onclick>noop</onclick>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="10">
-			<property name="id">$NUMBER[10]</property>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
 			<property name="mainmenuid">7</property>
 			<label>ايقاف تشغيل كودي</label>
 			<label2>Custom item</label2>
@@ -5213,53 +5088,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="11">
-			<property name="id">$NUMBER[11]</property>
-			<property name="mainmenuid">7</property>
-			<label>التحول لاندرويد</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/power.png</icon>
-			<thumb>special://skin/extras/icons/RTA.png</thumb>
-			<property name="labelID">script.reboottoandroidtv</property>
-			<property name="defaultID">rebootfromnand</property>
-			<onclick>RunAddOn(script.reboottoandroidtv)</onclick>
-			<property name="path">RunAddOn(script.reboottoandroidtv)</property>
-			<property name="list">RunAddOn(script.reboottoandroidtv)</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="12">
-			<property name="id">$NUMBER[12]</property>
-			<property name="mainmenuid">7</property>
-			<label>إعادة تشغيل CoreELEC</label>
-			<label2>أوامر كودي</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">d-tshgylcoreelec</property>
-			<property name="defaultID">13013</property>
-			<onclick>Reboot</onclick>
-			<property name="path">Reboot</property>
-			<property name="list">Reboot</property>
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="13">
-			<property name="id">$NUMBER[13]</property>
-			<property name="mainmenuid">7</property>
-			<label>إيقاف تشغيل CoreELEC</label>
-			<label2>Kodi Command</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">yqftshgylcoreelec</property>
-			<property name="defaultID">13005</property>
-			<visible>False</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="14">
-			<property name="id">$NUMBER[14]</property>
+		<item id="10">
+			<property name="id">$NUMBER[10]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[13005]</label>
 			<label2>Kodi Command</label2>
@@ -5345,22 +5175,6 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">7</property>
-			<label>تغير المظهر</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/ss.png</thumb>
-			<property name="labelID">tgyrlmzhr</property>
-			<property name="defaultID">20077</property>
-			<onclick>PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</onclick>
-			<property name="path">PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</property>
-			<property name="list">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg,return)</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="6">
-			<property name="id">$NUMBER[6]</property>
-			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[1036]</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/favourites2.png</icon>
@@ -5374,8 +5188,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="7">
-			<property name="id">$NUMBER[7]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">7</property>
 			<label>قياس السرعة</label>
 			<label2>Custom item</label2>
@@ -5390,8 +5204,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="8">
-			<property name="id">$NUMBER[8]</property>
+		<item id="7">
+			<property name="id">$NUMBER[7]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[7]</label>
 			<label2>Power Shortcut</label2>
@@ -5406,8 +5220,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="9">
-			<property name="id">$NUMBER[9]</property>
+		<item id="8">
+			<property name="id">$NUMBER[8]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[24001]</label>
 			<label2>Power Shortcut</label2>
@@ -5419,8 +5233,8 @@
 			<onclick>noop</onclick>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="10">
-			<property name="id">$NUMBER[10]</property>
+		<item id="9">
+			<property name="id">$NUMBER[9]</property>
 			<property name="mainmenuid">7</property>
 			<label>ايقاف تشغيل كودي</label>
 			<label2>Custom item</label2>
@@ -5435,53 +5249,8 @@
 			<property name="group">powermenu</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="11">
-			<property name="id">$NUMBER[11]</property>
-			<property name="mainmenuid">7</property>
-			<label>التحول لاندرويد</label>
-			<label2>Custom item</label2>
-			<icon>special://skin/extras/icons/power.png</icon>
-			<thumb>special://skin/extras/icons/RTA.png</thumb>
-			<property name="labelID">script.reboottoandroidtv</property>
-			<property name="defaultID">rebootfromnand</property>
-			<onclick>RunAddOn(script.reboottoandroidtv)</onclick>
-			<property name="path">RunAddOn(script.reboottoandroidtv)</property>
-			<property name="list">RunAddOn(script.reboottoandroidtv)</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="12">
-			<property name="id">$NUMBER[12]</property>
-			<property name="mainmenuid">7</property>
-			<label>إعادة تشغيل CoreELEC</label>
-			<label2>أوامر كودي</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">d-tshgylcoreelec</property>
-			<property name="defaultID">13013</property>
-			<onclick>Reboot</onclick>
-			<property name="path">Reboot</property>
-			<property name="list">Reboot</property>
-			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<property name="group">powermenu</property>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="13">
-			<property name="id">$NUMBER[13]</property>
-			<property name="mainmenuid">7</property>
-			<label>إيقاف تشغيل CoreELEC</label>
-			<label2>Kodi Command</label2>
-			<icon>special://skin/extras/icons/shortcut.png</icon>
-			<thumb>special://skin/extras/icons/coreelec.png</thumb>
-			<property name="labelID">yqftshgylcoreelec</property>
-			<property name="defaultID">13005</property>
-			<visible>[False] + String.IsEqual(Window(10000).Property(submenuVisibility),powermenu)</visible>
-			<onclick>noop</onclick>
-			<property name="isSubmenu">True</property>
-		</item>
-		<item id="14">
-			<property name="id">$NUMBER[14]</property>
+		<item id="10">
+			<property name="id">$NUMBER[10]</property>
 			<property name="mainmenuid">7</property>
 			<label>$LOCALIZE[13005]</label>
 			<label2>Kodi Command</label2>
@@ -5553,18 +5322,6 @@
 			<param name="id" value="9005" />
 			<param name="groupid" value="9105" />
 			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/ss.png" />
-			<param name="bordersize" value="10" />
-			<label>تغير المظهر</label>
-			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick>PlayMedia("plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg",return)</onclick>
-			<onclick />
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-		</include>
-		<include content="Dialog_Menu_Button">
-			<param name="id" value="9006" />
-			<param name="groupid" value="9106" />
-			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/favourites2.png" />
 			<param name="bordersize" value="10" />
 			<label>$LOCALIZE[1036]</label>
@@ -5574,8 +5331,8 @@
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
-			<param name="id" value="9007" />
-			<param name="groupid" value="9107" />
+			<param name="id" value="9006" />
+			<param name="groupid" value="9106" />
 			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/Speed.png" />
 			<param name="bordersize" value="10" />
@@ -5586,8 +5343,8 @@
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
-			<param name="id" value="9008" />
-			<param name="groupid" value="9108" />
+			<param name="id" value="9007" />
+			<param name="groupid" value="9107" />
 			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/filebox.png" />
 			<param name="bordersize" value="10" />
@@ -5598,8 +5355,8 @@
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
-			<param name="id" value="9009" />
-			<param name="groupid" value="9109" />
+			<param name="id" value="9008" />
+			<param name="groupid" value="9108" />
 			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/addon.png" />
 			<param name="bordersize" value="10" />
@@ -5610,8 +5367,8 @@
 			<visible>False</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
-			<param name="id" value="9010" />
-			<param name="groupid" value="9110" />
+			<param name="id" value="9009" />
+			<param name="groupid" value="9109" />
 			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/kodi.png" />
 			<param name="bordersize" value="10" />
@@ -5622,44 +5379,8 @@
 			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
 		</include>
 		<include content="Dialog_Menu_Button">
-			<param name="id" value="9011" />
-			<param name="groupid" value="9111" />
-			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/RTA.png" />
-			<param name="bordersize" value="10" />
-			<label>التحول لاندرويد</label>
-			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick>RunAddOn(script.reboottoandroidtv)</onclick>
-			<onclick />
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-		</include>
-		<include content="Dialog_Menu_Button">
-			<param name="id" value="9012" />
-			<param name="groupid" value="9112" />
-			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/coreelec.png" />
-			<param name="bordersize" value="10" />
-			<label>إعادة تشغيل CoreELEC</label>
-			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick>Reboot</onclick>
-			<onclick />
-			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
-		</include>
-		<include content="Dialog_Menu_Button">
-			<param name="id" value="9013" />
-			<param name="groupid" value="9113" />
-			<param name="control" value="button" />
-			<param name="icon" value="special://skin/extras/icons/coreelec.png" />
-			<param name="bordersize" value="10" />
-			<label>إيقاف تشغيل CoreELEC</label>
-			<onclick condition="Window.IsActive(DialogButtonMenu.xml)">Close</onclick>
-			<onclick />
-			<onclick />
-			<visible>False</visible>
-		</include>
-		<include content="Dialog_Menu_Button">
-			<param name="id" value="9014" />
-			<param name="groupid" value="9114" />
+			<param name="id" value="9010" />
+			<param name="groupid" value="9110" />
 			<param name="control" value="button" />
 			<param name="icon" value="special://skin/extras/icons/power.png" />
 			<param name="bordersize" value="10" />
@@ -5974,14 +5695,14 @@
 		<include condition="String.IsEqual(System.ProfileName,Master user)">skinshortcuts-template-wallfade-top-visible-Master user</include>
 	</include>
 	<include name="skinshortcuts-template-wallfade-top-visible-Master user">
-		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Container(1400).HasPrevious]</visible>
-		<visible>!Control.HasFocus(1601) | [True + False]</visible>
+		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Container(1400).HasPrevious]</visible>
+		<visible>!Control.HasFocus(1601) | [False + False]</visible>
 		<visible>!Control.HasFocus(1501) + !Control.HasFocus(1503) + !Control.HasFocus(301)</visible>
-		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Container(2400).HasPrevious]</visible>
+		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Container(2400).HasPrevious]</visible>
 		<visible>!Control.HasFocus(2601) | [True + False]</visible>
 		<visible>!Control.HasFocus(2501) + !Control.HasFocus(2503) + !Control.HasFocus(301)</visible>
-		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Container(3400).HasPrevious]</visible>
-		<visible>!Control.HasFocus(3601) | [False + False]</visible>
+		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Container(3400).HasPrevious]</visible>
+		<visible>!Control.HasFocus(3601) | [True + False]</visible>
 		<visible>!Control.HasFocus(3501) + !Control.HasFocus(3503) + !Control.HasFocus(301)</visible>
 		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + Container(4400).HasPrevious]</visible>
 		<visible>!Control.HasFocus(4601) | [False + False]</visible>
@@ -5997,9 +5718,9 @@
 		<include condition="String.IsEqual(System.ProfileName,Master user)">skinshortcuts-template-wallfade-bottom-visible-Master user</include>
 	</include>
 	<include name="skinshortcuts-template-wallfade-bottom-visible-Master user">
-		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Container(1400).HasNext]</visible>
-		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Container(2400).HasNext]</visible>
-		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Container(3400).HasNext]</visible>
+		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Container(1400).HasNext]</visible>
+		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Container(2400).HasNext]</visible>
+		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Container(3400).HasNext]</visible>
 		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + Container(4400).HasNext]</visible>
 		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001) + Container(5400).HasNext]</visible>
 		<visible>!String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085) | [String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085) + Container(6400).HasNext]</visible>
@@ -6009,13 +5730,13 @@
 	</include>
 	<include name="skinshortcuts-template-textmenu-Master user">
 		<include content="Home_Horz_Menubar_Text_Button" condition="String.IsEqual(System.ProfileName,Master user)">
+			<param name="label">تكملة</param>
+		</include>
+		<include content="Home_Horz_Menubar_Text_Button" condition="String.IsEqual(System.ProfileName,Master user)">
 			<param name="label">$LOCALIZE[342]</param>
 		</include>
 		<include content="Home_Horz_Menubar_Text_Button" condition="String.IsEqual(System.ProfileName,Master user)">
 			<param name="label">$LOCALIZE[20343]</param>
-		</include>
-		<include content="Home_Horz_Menubar_Text_Button" condition="String.IsEqual(System.ProfileName,Master user)">
-			<param name="label">تكملة</param>
 		</include>
 		<include content="Home_Horz_Menubar_Text_Button" condition="String.IsEqual(System.ProfileName,Master user)">
 			<param name="label">كوري</param>
@@ -6032,6 +5753,11 @@
 	</include>
 	<include name="skinshortcuts-template-dialog-lookup-Master user">
 		<item>
+			<visible>String.IsEqual(Container(211).ListItem.Property(labelID),tkml)</visible>
+			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-tkml)]</property>
+			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-tkml)]</property>
+		</item>
+		<item>
 			<visible>String.IsEqual(Container(211).ListItem.Property(labelID),movies)</visible>
 			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-movies)]</property>
 			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-movies)]</property>
@@ -6040,11 +5766,6 @@
 			<visible>String.IsEqual(Container(211).ListItem.Property(labelID),tvshows)</visible>
 			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-tvshows)]</property>
 			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-tvshows)]</property>
-		</item>
-		<item>
-			<visible>String.IsEqual(Container(211).ListItem.Property(labelID),tkml)</visible>
-			<property name="widgetOnDownAction">$INFO[Skin.String(widgetEndRowAction-tkml)]</property>
-			<property name="menuOnUpAction">$INFO[Skin.String(menuOnUpAction-tkml)]</property>
 		</item>
 		<item>
 			<visible>String.IsEqual(Container(211).ListItem.Property(labelID),kwry)</visible>
@@ -6066,27 +5787,27 @@
 		<include condition="String.IsEqual(System.ProfileName,Master user)">skinshortcuts-template-menubar-Master user</include>
 	</include>
 	<include name="skinshortcuts-template-menubar-Master user">
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + !Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !String.IsEmpty(Window(Home).Property(TMDBHelper.WidgetContainer))">SetFocus($INFO[Window(Home).Property(TMDBHelper.WidgetContainer)])</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + True">1599</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + !True">301</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !True">1601</onright>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + True + True">1599</ondown>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + True + !True">301</ondown>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + !True">1601</ondown>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + !Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !String.IsEmpty(Window(Home).Property(TMDBHelper.WidgetContainer))">SetFocus($INFO[Window(Home).Property(TMDBHelper.WidgetContainer)])</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + True">2599</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + !True">301</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !True">2601</onright>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + True + True">2599</ondown>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + True + !True">301</ondown>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + !True">2601</ondown>
 		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + !Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !String.IsEmpty(Window(Home).Property(TMDBHelper.WidgetContainer))">SetFocus($INFO[Window(Home).Property(TMDBHelper.WidgetContainer)])</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + False + True">3599</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + False + True">1599</onright>
 		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + False + !True">301</onright>
-		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !False">3601</onright>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + False + True">3599</ondown>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !False">1601</onright>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + False + True">1599</ondown>
 		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + False + !True">301</ondown>
-		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + !False">3601</ondown>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + !False">1601</ondown>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + !Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !String.IsEmpty(Window(Home).Property(TMDBHelper.WidgetContainer))">SetFocus($INFO[Window(Home).Property(TMDBHelper.WidgetContainer)])</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + True">2599</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + !True">301</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !True">2601</onright>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + True + True">2599</ondown>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + True + !True">301</ondown>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + !True">2601</ondown>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + !Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !String.IsEmpty(Window(Home).Property(TMDBHelper.WidgetContainer))">SetFocus($INFO[Window(Home).Property(TMDBHelper.WidgetContainer)])</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + True">3599</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + True + !True">301</onright>
+		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !True">3601</onright>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + True + True">3599</ondown>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + True + !True">301</ondown>
+		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + !True">3601</ondown>
 		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + !Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + !String.IsEmpty(Window(Home).Property(TMDBHelper.WidgetContainer))">SetFocus($INFO[Window(Home).Property(TMDBHelper.WidgetContainer)])</onright>
 		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + False + True">4599</onright>
 		<onright condition="Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + Integer.IsEqual(Window(Home).Property(TMDBHelper.WidgetContainer),301) + False + !True">301</onright>
@@ -6108,6 +5829,41 @@
 		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085) + False + True">6599</ondown>
 		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085) + False + !True">301</ondown>
 		<ondown condition="!Skin.HasSetting(Home.VerticalMenu) + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085) + !False">6601</ondown>
+	</include>
+	<include name="skinshortcuts-template-fullscreen-fallback">
+		<include condition="String.IsEqual(System.ProfileName,Master user)">skinshortcuts-template-fullscreen-fallback-Master user</include>
+	</include>
+	<include name="skinshortcuts-template-fullscreen-fallback-Master user">
+		<item>
+			<label>[COLOR=00ffffff]$INFO[Container(1601).ListItem.Label][/COLOR]</label>
+			<property name="fanart">$INFO[Container(1601).ListItem.Art(fanart)]</property>
+			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
+		</item>
+		<item>
+			<label>[COLOR=00ffffff]$INFO[Container(2601).ListItem.Label][/COLOR]</label>
+			<property name="fanart">$INFO[Container(2601).ListItem.Art(fanart)]</property>
+			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)</visible>
+		</item>
+		<item>
+			<label>[COLOR=00ffffff]$INFO[Container(3601).ListItem.Label][/COLOR]</label>
+			<property name="fanart">$INFO[Container(3601).ListItem.Art(fanart)]</property>
+			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)</visible>
+		</item>
+		<item>
+			<label>[COLOR=00ffffff]$INFO[Container(4601).ListItem.Label][/COLOR]</label>
+			<property name="fanart">$INFO[Container(4601).ListItem.Art(fanart)]</property>
+			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry)</visible>
+		</item>
+		<item>
+			<label>[COLOR=00ffffff]$INFO[Container(5601).ListItem.Label][/COLOR]</label>
+			<property name="fanart">$INFO[Container(5601).ListItem.Art(fanart)]</property>
+			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001)</visible>
+		</item>
+		<item>
+			<label>[COLOR=00ffffff]$INFO[Container(6601).ListItem.Label][/COLOR]</label>
+			<property name="fanart">$INFO[Container(6601).ListItem.Art(fanart)]</property>
+			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085)</visible>
+		</item>
 	</include>
 	<include name="skinshortcuts-template-fullscreen-widget">
 		<include condition="String.IsEqual(System.ProfileName,Master user)">skinshortcuts-template-fullscreen-widget-Master user</include>
@@ -6163,40 +5919,5 @@
 				<param name="limit" />
 			</include>
 		</include>
-	</include>
-	<include name="skinshortcuts-template-fullscreen-fallback">
-		<include condition="String.IsEqual(System.ProfileName,Master user)">skinshortcuts-template-fullscreen-fallback-Master user</include>
-	</include>
-	<include name="skinshortcuts-template-fullscreen-fallback-Master user">
-		<item>
-			<label>[COLOR=00ffffff]$INFO[Container(1601).ListItem.Label][/COLOR]</label>
-			<property name="fanart">$INFO[Container(1601).ListItem.Art(fanart)]</property>
-			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)</visible>
-		</item>
-		<item>
-			<label>[COLOR=00ffffff]$INFO[Container(2601).ListItem.Label][/COLOR]</label>
-			<property name="fanart">$INFO[Container(2601).ListItem.Art(fanart)]</property>
-			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)</visible>
-		</item>
-		<item>
-			<label>[COLOR=00ffffff]$INFO[Container(3601).ListItem.Label][/COLOR]</label>
-			<property name="fanart">$INFO[Container(3601).ListItem.Art(fanart)]</property>
-			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
-		</item>
-		<item>
-			<label>[COLOR=00ffffff]$INFO[Container(4601).ListItem.Label][/COLOR]</label>
-			<property name="fanart">$INFO[Container(4601).ListItem.Art(fanart)]</property>
-			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry)</visible>
-		</item>
-		<item>
-			<label>[COLOR=00ffffff]$INFO[Container(5601).ListItem.Label][/COLOR]</label>
-			<property name="fanart">$INFO[Container(5601).ListItem.Art(fanart)]</property>
-			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-24001)</visible>
-		</item>
-		<item>
-			<label>[COLOR=00ffffff]$INFO[Container(6601).ListItem.Label][/COLOR]</label>
-			<property name="fanart">$INFO[Container(6601).ListItem.Art(fanart)]</property>
-			<visible>String.IsEqual(Container(300).ListItem.Property(submenuVisibility),num-31085)</visible>
-		</item>
 	</include>
 </includes>
