@@ -94,11 +94,11 @@ class Router:
 				function(params)
 		elif 'tmdb.' in mode:
 			if 'tmdb_auth' in mode:
-				from indexers.tmdb import TMDBList
-				TMDBList().authorize()
+				from apis.tmdb_api import authorize
+				authorize()
 			elif 'tmdb_revoke' in mode:
-				from indexers.tmdb import TMDBList
-				TMDBList().deauthorize()
+				from apis.tmdb_api import deauthorize
+				deauthorize()
 		elif 'build' in mode:
 			if 'build_trakt_list' in mode:
 				from modules.utils import manual_function_import

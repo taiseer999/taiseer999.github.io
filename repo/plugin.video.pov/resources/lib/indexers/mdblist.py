@@ -14,7 +14,8 @@ build_url, make_listitem = kodi_utils.build_url, kodi_utils.make_listitem
 default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 item_jump = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/item_jump.png')
-add2menu_str, add2folder_str, nextpage_str, jump2_str = ls(32730), ls(32731), ls(32799), ls(32964)
+add2menu_str, add2folder_str, copy2str = ls(32730), ls(32731), '[B]Export to TMDBList[/B]'
+nextpage_str, jump2_str = ls(32799), ls(32964)
 
 def search_mdb_lists(params):
 	def _process():
@@ -29,6 +30,7 @@ def search_mdb_lists(params):
 				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': name, 'iconImage': 'mdblist.png'})))
+				cm_append((copy2str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb_manager_choice', 'mdbl_list_id': list_id, 'mdbl_list_name': name, 'user': user, 'list_slug': slug})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
@@ -65,7 +67,7 @@ def get_mdb_lists(params):
 				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': display, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': display, 'iconImage': 'mdblist.png'})))
-				cm_append((cln_str, 'RunPlugin(%s)' % build_url({'mode': 'mdblist.clean_watchlist', 'list_id': list_id})))
+				cm_append((copy2str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb_manager_choice', 'mdbl_list_id': list_id, 'mdbl_list_name': name, 'user': user, 'list_slug': slug})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
@@ -95,6 +97,7 @@ def get_mdb_toplists(params):
 				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': name, 'iconImage': 'mdblist.png'})))
+				cm_append((copy2str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb_manager_choice', 'mdbl_list_id': list_id, 'mdbl_list_name': name, 'user': user, 'list_slug': slug})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
@@ -116,11 +119,12 @@ def build_mdb_list(params):
 			try: target, *args = q.get() ; target(*args)
 			except: pass
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
+	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
 	results = mdblist_api.mdb_list_items(list_id, list_type)
-	if paginate(): process_list, total_pages = paginate_list(results, page, letter, page_limit())
+	if paginate() and results: process_list, total_pages = paginate_list(results, page, letter, page_limit())
 	else: process_list, total_pages = results, 1
 	movies, tvshows = Movies({'id_type': 'trakt_dict'}), TVShows({'id_type': 'trakt_dict'})
 	for idx, tag in enumerate(process_list, 1):
@@ -129,8 +133,8 @@ def build_mdb_list(params):
 			_queue.put((movies.build_movie_content, idx, {'imdb': tag['imdb_id']}))
 		elif mtype == 'show':
 			_queue.put((tvshows.build_tvshow_content, idx, {'imdb': tag['imdb_id']}))
-	maxsize = min(_queue.qsize(), int(kodi_utils.get_setting('pov.max_threads', '100')))
-	threads = (Thread(target=_thread_target, args=(_queue,)) for i in range(maxsize))
+	max_threads = min(_queue.qsize(), max_threads)
+	threads = (Thread(target=_thread_target, args=(_queue,)) for i in range(max_threads))
 	threads = list(TaskPool.process(threads))
 	[i.join() for i in threads]
 	items = movies.items + tvshows.items

@@ -34,15 +34,13 @@ class TaskPool:
 		maxsize = min(len(_list), self.maxsize)
 		[self._queue.put(tag) for tag in _list]
 		threads = [_thread(target=self._thread_target, args=(self._queue, _target)) for i in range(maxsize)]
-		threads = self.process(threads)
-		return threads
+		return list(self.process(threads))
 
 	def tasks_enumerate(self, _target, _list, _thread):
 		maxsize = min(len(_list), self.maxsize)
 		[self._queue.put((p, tag)) for p, tag in enumerate(_list, 1)]
 		threads = [_thread(target=self._thread_target, args=(self._queue, _target)) for i in range(maxsize)]
-		threads = self.process(threads)
-		return threads
+		return list(self.process(threads))
 
 def manual_function_import(location, function_name):
 	return getattr(import_module(location), function_name)

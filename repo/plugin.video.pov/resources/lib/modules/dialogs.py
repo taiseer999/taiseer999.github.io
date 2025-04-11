@@ -95,52 +95,54 @@ def trakt_manager_choice(params):
 	else: trakt_remove_from_list(params)
 
 def tmdb_manager_choice(params):
-	def _new_list():
-		obj = TMDBList.list_obj.copy()
-		obj['name'] = kodi_utils.dialog.input('New List Name').strip()
-		if not obj['name']: return tmdb_manager_choice(params)
-		if not TMDb.create(obj)['success']: return notification(32574)
-		TMDb.clear_tmdbl_cache()
-		return tmdb_manager_choice(params)
 	if not get_setting('tmdb.token', ''): return notification(32760, 3500)
-	from apis.tmdb_api import TMDBList
-	TMDb = TMDBList()
+	from apis import tmdb_api
 	image_resolution = settings.get_resolution()
-	tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
 	heading = ls('[B]TMDBList[/B]').replace('[B]', '').replace('[/B]', '')
-	default_icon = translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
-	results = TMDb.user_lists()['results']
+	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
+	list_name = params.get('trakt_list_name') or params.get('mdbl_list_name') or ''
 	choices = [
-		(item['name'], str(item['id']), str(item['number_of_items']),
-		tmdb_image_base % (image_resolution['poster'], item['poster_path']) if item['poster_path'] else default_icon)
-		for item in results
+		(str(item['id']), item['name'], '%s items' % item['number_of_items'],
+		tmdb_api.tmdb_image_base % (image_resolution['poster'], item['poster_path']) if item['poster_path'] else icon)
+		for item in tmdb_api.user_lists_all()
 	]
-	choices = choices + [('Create a new list', 'new', '0', default_icon), ('Clear list cache', 'clear', '0', default_icon)]
+	choices += [('new', 'Create a new list', list_name, icon), ('clear', 'Clear list cache', '', icon)]
 	if not choices: return
-	list_items = [{'line1': item[0], 'line2': '%s items' % item[2] if not item[1] in ('new', 'clear') else '', 'icon': item[3]} for item in choices]
+	list_items = [{'line1': item[1], 'line2': item[2], 'icon': item[3]} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_line': 'true'}
-	choice = select_dialog([(i[1], i[0]) for i in choices], **kwargs)
+	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
-	if 'new' in choice[0]: return _new_list()
-	if 'clear' in choice[0]:
-		TMDb.clear_tmdbl_cache()
+	if 'new' in choice[0]:
+		obj = tmdb_api.list_obj.copy()
+		obj['name'] = kodi_utils.dialog.input('New List Name', defaultt=list_name)
+		if not obj['name']: return tmdb_manager_choice(params)
+		if not tmdb_api.list_create(obj)['success']: return notification(32574)
+		tmdb_api.clear_tmdbl_cache()
 		return tmdb_manager_choice(params)
+	if 'clear' in choice[0]:
+		tmdb_api.clear_tmdbl_cache()
+		return tmdb_manager_choice(params)
+	if 'trakt_list_id' in params or 'mdbl_list_id' in params:
+		from threading import Thread
+		function = tmdb_api.import_trakt_list if 'trakt_list_id' in params else tmdb_api.import_mdbl_list
+		items = {'items': function(params)}
+		Thread(target=tmdb_api.list_add_items, args=(choice[0], items)).start()
+		tmdb_api.clear_tmdbl_cache()
+		return notification('Import request sent to TMDBList')
 	try:
 		add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
 		params['media_type'] = 'tv' if params['media_type'] == 'tvshow' else 'movie'
-		status = TMDb.status(choice[0], params['media_type'], params['tmdb_id'])
-		if status and status['success']:
-			if not confirm_dialog(text=rem_str): return
-			action, function = 'remove', TMDb.remove_items
-		else: action, function = 'add', TMDb.add_items
 		items = {'items': [{'media_type': params['media_type'], 'media_id': params['tmdb_id']}]}
-		if action == 'remove' and function(choice[0], items)['success']:
+		status = tmdb_api.list_status(choice[0], params['media_type'], params['tmdb_id'])
+		if status and status['success']:
+			if not confirm_dialog(text=rem_str, top_space=True): return
+			action, function = 'remove', tmdb_api.list_remove_items
+		else: action, function = 'add', tmdb_api.list_add_items
+		if function(choice[0], items)['success']:
+			tmdb_api.clear_tmdbl_cache()
 			notification(32576)
-			container_refresh()
-		elif action == 'add' and function(choice[0], items)['success']:
-			notification(32576)
-		else: return notification(32574)
-		TMDb.clear_tmdbl_cache()
+			if action == 'remove': container_refresh()
+		else: notification(32574)
 	except: pass
 
 def mdb_manager_choice(params):
@@ -148,19 +150,19 @@ def mdb_manager_choice(params):
 	from apis.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list, watchlist_obj, clear_mdbl_cache
 	heading = ls(32200).replace('[B]', '').replace('[/B]', '')
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
-	choices = [(item['name'], str(item['id']), str(item['items'])) for item in mdb_userlists() if not item['dynamic']]
-	choices += [(watchlist_obj['name'], str(watchlist_obj['id']), '0'), ('Clear list cache', 'clear', '0')]
+	choices = [(str(item['id']), item['name'], '%s items' % item['items']) for item in mdb_userlists() if not item['dynamic']]
+	choices += [(str(watchlist_obj['id']), watchlist_obj['name'], ''), ('clear', 'Clear list cache', '')]
 	if not choices: return
-	list_items = [{'line1': item[0], 'line2': '%s items' % item[2] if item[1] not in ('clear',) else '','icon': icon} for item in choices]
+	list_items = [{'line1': item[1], 'line2': item[2],'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_line': 'true'}
-	choice = select_dialog([(i[1], i[0]) for i in choices], **kwargs)
+	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
 	if choice[0] == 'clear':
 		clear_mdbl_cache()
 		return mdb_manager_choice(params)
 	list_items = (True for item in mdb_list_items(choice[0], None) if item['imdb_id'] == params['imdb_id'])
 	action, message = ('remove', 'Remove from') if next(list_items, False) else ('add', 'Add to')
-	if not confirm_dialog(text='%s %s list?' % (message, choice[1]), top_space=True): return
+	if action == 'remove' and not confirm_dialog(text='%s %s list?' % (message, choice[1]), top_space=True): return
 	key = 'shows' if params['media_type'] == 'tvshow' else 'movies'
 	val = [{'tmdb': int(params.get('tmdb_id')), 'imdb': params.get('imdb_id')}]
 	if mdb_modify_list(choice[0], {key: val}, action):
@@ -485,6 +487,8 @@ def options_menu(params, meta=None):
 	results_xml_style_status = get_setting('results.xml_style', 'Default')
 	active_internal_scrapers = [i.replace('_', '') for i in settings.active_internal_scrapers()]
 	uncached_torrents_status, uncached_torrents_toggle = (on_str, 'false') if settings.display_uncached_torrents() else (off_str, 'true')
+	container_update = 'ActivateWindow(Videos,%s,return)' if is_widget else 'Container.Update(%s)'
+	progress_manager_url = container_update % build_url({'mode': 'build_next_episode_manager'})
 	base_str1, base_str2 = '%s%s', '%s: [B]%s[/B]' % (currently_str, '%s')
 	scraper_options_str = '%s %s' % (ls(32533), ls(32841))
 	multi_line = 'true' if content in ('movie', 'episode') else 'false'
@@ -496,6 +500,7 @@ def options_menu(params, meta=None):
 		('scrape_from_episode_group', 'Scrape From Episode Group', scraper_options_str, meta['poster']) if content == 'episode' else None,
 		('play_random', ls(32541), '', meta['poster']) if content in ('tvshow') and meta else None,
 		('play_random_continual', ls(32542), '', meta['poster']) if content in ('tvshow') and meta else None,
+		('progress_manager', ls(32599).replace('[B]', '').replace('[/B]', ''), '') if content in ('tvshow') and meta else None,
 		('clear_scrapers_cache', ls(32637), '') if content in ('movie', 'episode') else None,
 		('open_external_scrapers_choice', '%s %s' % (ls(32118), ls(32513)), ''),
 		('torbox_usenet_query', 'TorBox Usenet Search', scraper_options_str, meta['poster']) if content in ('movie', 'tvshow', 'episode') and meta else None,
@@ -519,6 +524,7 @@ def options_menu(params, meta=None):
 	elif choice == 'scrape_from_episode_group': return scrape_from_episode_group(meta, season, episode)
 	elif choice == 'play_random': return random_choice(choice, meta)
 	elif choice == 'play_random_continual': return random_choice(choice, meta)
+	elif choice == 'progress_manager': return execute_builtin(progress_manager_url)
 	elif choice == 'clear_scrapers_cache': return clear_scrapers_cache()
 	elif choice == 'open_external_scrapers_choice': return source_utils.enable_disable('all')
 	elif choice == 'torbox_usenet_query': return torbox_usenet_query(meta, season, episode)

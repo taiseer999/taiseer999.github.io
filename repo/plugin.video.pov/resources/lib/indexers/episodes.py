@@ -257,7 +257,7 @@ class Episodes:
 			self.nextep_include_airdate, self.nextep_include_unaired = nextep_disp_settings['include_airdate'], nextep_settings['include_unaired']
 			if self.watched_indicators == 1:
 				try:
-					hidden_data = trakt_get_hidden_items('progress_watched')
+					hidden_data = trakt_get_hidden_items('dropped')
 					self.list = [i for i in self.list if not i['media_ids']['tmdb'] in hidden_data]
 				except: pass
 				if nextep_settings['include_unwatched']:

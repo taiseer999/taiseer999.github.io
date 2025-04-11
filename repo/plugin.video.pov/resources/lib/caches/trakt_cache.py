@@ -208,7 +208,8 @@ def default_activities():
 				'watchlisted_at': '2020-01-01T00:00:01.000Z',
 				'recommendations_at': '2020-01-01T00:00:01.000Z',
 				'commented_at': '2020-01-01T00:00:01.000Z',
-				'hidden_at': '2020-01-01T00:00:01.000Z'
+				'hidden_at': '2020-01-01T00:00:01.000Z',
+				'dropped_at': '2020-01-01T00:00:01.000Z'
 				},
 			'seasons':
 				{

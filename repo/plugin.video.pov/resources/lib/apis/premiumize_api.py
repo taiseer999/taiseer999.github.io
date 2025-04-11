@@ -273,7 +273,7 @@ class PremiumizeAPI:
 			('cancel', 'Cancel', 'Cancel')
 		]
 		list_items = [{'line1': item[1], 'line2': item[2], 'icon': qr_icon} for item in choices]
-		kwargs = {'items': json.dumps(list_items), 'heading': 'Real-Debrid', 'multi_line': 'true'}
+		kwargs = {'items': json.dumps(list_items), 'heading': 'Premiumize.me', 'multi_line': 'true'}
 		choice = kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
 		if choice != 'approve': return
 		response = session.post(url, data=data, timeout=timeout)

@@ -45,7 +45,7 @@ def build_next_episode_manager():
 			else: color, action, status, sort_value = 'green', 'hide', included_str, 0
 			display = '[COLOR %s][%s][/COLOR] %s' % (color, status, title)
 			extras_params = {'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_widget': 'False'}
-			url_params = {'mode': 'trakt.hide_unhide_trakt_items', 'action': action, 'media_type': 'shows', 'media_id': imdb_id, 'section': 'progress_watched'}
+			url_params = {'mode': 'trakt.hide_unhide_trakt_items', 'action': action, 'media_type': 'shows', 'media_id': imdb_id, 'section': 'dropped'}
 			url = build_url(url_params)
 			if show_all_episodes:
 				if all_episodes == 1 and total_seasons > 1: browse_params = {'mode': 'build_season_list', 'tmdb_id': tmdb_id}
@@ -90,7 +90,7 @@ def build_next_episode_manager():
 	all_episodes = settings.default_all_episodes()
 	show_all_episodes = True if all_episodes in (1, 2) else False
 	poster_main, poster_backup, fanart_main, fanart_backup = settings.get_art_provider()
-	try: exclude_list = trakt_get_hidden_items('progress_watched')
+	try: exclude_list = trakt_get_hidden_items('dropped')
 	except: exclude_list = []
 	show_list = get_next_episodes(watched_info)
 	threads = list(make_thread_list(build_content, show_list, Thread))

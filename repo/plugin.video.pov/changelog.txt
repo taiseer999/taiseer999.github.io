@@ -3,7 +3,21 @@
 - Fen, Venom, Mr-Kodi.
 
 
+  [COLOR dodgerblue][B]Version 5.04[/B][/COLOR]
+- TMDBList pagination now respects Settings/Navigation/Paginate Lists When Possible.
+- Removed Page Multiplier for List Items in Settings/My Lists/TMDBList.
+- Added Export to TMDBList context menu item to MDBlist Public/Personal lists.
+- Added Trakt Dropped Manager to any tv show Options... context menu.
+- Changed Next Episode Manager to Trakt Dropped Manager.
+  Utilizes Trakt "dropped" api to mimic website behavior.  Hidden shows can be transferred
+  to dropped from the Trakt website under Settings/Hidden Items/Watched Progress.
+- Final feature update.
+
   [COLOR dodgerblue][B]Version 5.03[/B][/COLOR]
+- Added aiostreams.
+- Added Export to TMDBList context menu item to Trakt Public/Personal lists.
+- Added Page Multiplier for List Items in Settings/My Lists/TMDBList.
+- Fixed TMDBList to allow for more than 20 lists.
 - Added TMDBList Manager to context menu.
 - Added TMDB Custom Lists to My Lists.  Authorize account in Settings/My Lists.
 - Probable Fix for Autoplay Next Episode/Continual Random Play only playing one episode.

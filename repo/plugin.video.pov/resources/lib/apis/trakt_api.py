@@ -639,7 +639,7 @@ def trakt_sync_activities(force_update=False):
 	if _compare(latest_episodes['collected_at'], cached_episodes['collected_at']): trakt_cache.clear_trakt_collection_watchlist_data('collection', 'tvshow')
 	if _compare(latest_movies['watchlisted_at'], cached_movies['watchlisted_at']): trakt_cache.clear_trakt_collection_watchlist_data('watchlist', 'movie')
 	if _compare(latest_shows['watchlisted_at'], cached_shows['watchlisted_at']): trakt_cache.clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
-	if _compare(latest_shows['hidden_at'], cached_shows['hidden_at']): trakt_cache.clear_trakt_hidden_data('progress_watched')
+	if _compare(latest_shows['dropped_at'], cached_shows['dropped_at']): trakt_cache.clear_trakt_hidden_data('dropped')
 	if _compare(latest_movies['recommendations_at'], cached_movies['recommendations_at']): trakt_cache.clear_trakt_recommendations('movies')
 	if _compare(latest_shows['recommendations_at'], cached_shows['recommendations_at']): trakt_cache.clear_trakt_recommendations('shows')
 	if _compare(latest_movies['watched_at'], cached_movies['watched_at']): trakt_indicators_movies()

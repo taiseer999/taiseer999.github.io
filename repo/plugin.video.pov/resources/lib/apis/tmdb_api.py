@@ -1,27 +1,29 @@
+import json
 import requests
 from caches.main_cache import cache_object
 from caches.meta_cache import cache_function
 from modules.settings import tmdb_api_key, get_language
 from modules import kodi_utils
 
-
 EXPIRES_4_HOURS, EXPIRES_2_DAYS, EXPIRES_1_WEEK, EXPIRES_1_MONTH = 4, 48, 168, 672
-get_setting, set_setting, logger = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.logger
+ls, logger = kodi_utils.local_string, kodi_utils.logger
+get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
 movies_append = 'external_ids,videos,credits,release_dates,alternative_titles,translations,images'
 tvshows_append = 'external_ids,videos,credits,content_ratings,alternative_titles,translations,images'
 eps_map = {1: 'Original air date', 2: 'Absolute', 3: 'DVD', 4: 'Digital', 5: 'Story arc', 6: 'Production', 7: 'TV'}
+tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
 base_url = 'https://api.themoviedb.org/3'
 timeout = 3.05
 session = requests.Session()
 retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502, 503, 504))
-session.mount(base_url, requests.adapters.HTTPAdapter(pool_maxsize=100, max_retries=retry))
+session.mount('https://api.themoviedb.org', requests.adapters.HTTPAdapter(pool_maxsize=100, max_retries=retry))
 
-def get_tmdb(url):
+def get_tmdb(url, errors=True):
 	try:
 		response = session.get(url, timeout=timeout)
 		response.raise_for_status()
 	except requests.exceptions.RequestException as e:
-		logger('tmdb error', str(e))
+		if errors: logger('tmdb error', str(e))
 	response.encoding = 'utf-8'
 	return response
 
@@ -277,7 +279,7 @@ def tvshow_details(tmdb_id, language, tmdb_api=None):
 def season_episodes_details(tmdb_id, season_no, language, tmdb_api=None):
 	try:
 		url = '%s/tv/%s/season/%s?api_key=%s&language=%s&append_to_response=credits' % (base_url, tmdb_id, season_no, get_tmdb_api(tmdb_api), language)
-		return get_tmdb(url).json()
+		return get_tmdb(url, False).json()
 	except: return None
 
 def movie_external_id(external_source, external_id, tmdb_api=None):
@@ -350,137 +352,188 @@ def episode_group_details(group_id, tmdb_api=None):
 		return result
 	except: return []
 
+list_obj = {'description': '', 'name': '', 'iso_3166_1': 'US', 'iso_639_1': 'en', 'public': True}
+list_url = 'https://api.themoviedb.org/4'
 
-class TMDBList:
-	list_obj = {'description': '', 'name': '', 'iso_3166_1': 'US', 'iso_639_1': 'en', 'public': True}
-	base_url = 'https://api.themoviedb.org/4'
-
-	def __init__(self):
-		self.account_id = get_setting('tmdb.account_id')
-		self.access_token = get_setting('tmdb.token')
-
-	def _request(self, url, params=None, data=None, method='get'):
-		headers = {'Authorization': f"Bearer {self.access_token}"}
-		try:
-			response = requests.request(method, url, params=params, json=data, headers=headers, timeout=timeout)
-			response.raise_for_status()
-			results = response.json()
-		except requests.exceptions.RequestException as e:
-			kodi_utils.logger('tmdb error', str(e))
-			results = None
+def list_request(url, params=None, data=None, method='get'):
+	access_token = get_setting('tmdb.token')
+	headers = {'Authorization': f"Bearer {access_token}"}
+	try:
+		response = session.request(
+			method,
+			url,
+			params=params,
+			json=data,
+			headers=headers,
+			timeout=timeout
+		)
+		response.raise_for_status()
+		results = response.json()
 		return results
+	except requests.exceptions.RequestException as e:
+		kodi_utils.logger('tmdb error', str(e))
 
-	def user_lists(self):
-		sort = int(get_setting('tmdblist.sort_name', '0'))
-		string = 'tmdblist_user_lists'
-		url = '%s/account/%s/lists' % (self.base_url, self.account_id)
-		results = cache_object(self._request, string, url, json=False)
-		try:
-			if   sort == 2: results['results'].sort(key=lambda k: k['updated_at'], reverse=True)
-			elif sort == 1: results['results'].sort(key=lambda k: k['number_of_items'], reverse=True)
-			else: results['results'].sort(key=lambda k: k['name'], reverse=False)
-		except: pass
-		return results
+def _account_id(func):
+	def wrapper(*args, **kwargs):
+		kwargs['account_id'] = get_setting('tmdb.account_id')
+		result = func(*args, **kwargs)
+		return result
+	return wrapper
 
-	def details(self, list_id, page=1):
-		string = 'tmdblist_detail_%s_%s' % (list_id, page)
-		url = '%s/list/%s?page=%s' % (self.base_url, list_id, page)
-		return cache_object(self._request, string, url, json=False)
+def user_lists_all():
+	sort = int(get_setting('tmdblist.sort_name', '0'))
+	results = []
+	page, total_pages = 1, 1
+	while page <= total_pages:
+		lists = user_lists(page)
+		results += lists['results']
+		total_pages = lists['total_pages']
+		page = lists['page'] + 1
+	try:
+		if   sort == 2: results.sort(key=lambda k: k['updated_at'], reverse=True)
+		elif sort == 1: results.sort(key=lambda k: k['number_of_items'], reverse=True)
+		else: results.sort(key=lambda k: k['name'].lower(), reverse=False)
+	except: pass
+	return results
 
-	def add_items(self, list_id, items=None):
-		url = '%s/list/%s/items' % (self.base_url, list_id)
-		return self._request(url, data=items, method='post')
+@_account_id
+def user_lists(page=1, account_id=''):
+	sort = int(get_setting('tmdblist.sort_name', '0'))
+	string = 'tmdblist_user_lists_%s' % page
+	url = '%s/account/%s/lists?page=%s' % (list_url, account_id, page)
+	return cache_object(list_request, string, url, json=False)
 
-	def remove_items(self, list_id, items=None):
-		url = '%s/list/%s/items' % (self.base_url, list_id)
-		return self._request(url, data=items, method='delete')
+def list_details(list_id, page=1):
+	string = 'tmdblist_detail_%s_%s' % (list_id, page)
+	url = '%s/list/%s?page=%s' % (list_url, list_id, page)
+	return cache_object(list_request, string, url, json=False)
 
-	def status(self, list_id, media_type, media_id):
-		params = {'media_type': media_type, 'media_id': int(media_id)}
-		url = '%s/list/%s/item_status' % (self.base_url, list_id)
-		return self._request(url, params=params)
+def list_add_items(list_id, items=None):
+	url = '%s/list/%s/items' % (list_url, list_id)
+	return list_request(url, data=items, method='post')
 
-	def create(self, item):
-		url = '%s/list' % self.base_url
-		return self._request(url, data=item, method='post')
+def list_remove_items(list_id, items=None):
+	url = '%s/list/%s/items' % (list_url, list_id)
+	return list_request(url, data=items, method='delete')
 
-	def clear(self, list_id):
-		url = '%s/list/%s/clear' % (self.base_url, list_id)
-		return self._request(url)
+def list_status(list_id, media_type, media_id):
+	params = {'media_type': media_type, 'media_id': int(media_id)}
+	url = '%s/list/%s/item_status' % (list_url, list_id)
+	return list_request(url, params=params)
 
-	def delete(self, list_id):
-		url = '%s/list/%s' % (self.base_url, list_id)
-		return self._request(url, method='delete')
+def list_create(item):
+	url = '%s/list' % list_url
+	return list_request(url, data=item, method='post')
 
-	def watchlist(self, media_type, page=1):
-		params = {'language': 'en-US', 'sort_by': 'created_at.desc', 'page': page}
-		url = '%s/account/%s/%s/watchlist' % (self.base_url, self.account_id, media_type)
-		return self._request(url, params)
+def list_clear(list_id):
+	url = '%s/list/%s/clear' % (list_url, list_id)
+	return list_request(url)
 
-	def favorites(self, media_type, page=1):
-		params = {'language': 'en-US', 'sort_by': 'created_at.desc', 'page': page}
-		url = '%s/account/%s/%s/favorites' % (self.base_url, self.account_id, media_type)
-		return self._request(url, params)
+def list_delete(list_id):
+	url = '%s/list/%s' % (list_url, list_id)
+	return list_request(url, method='delete')
 
-	def authorize(self):
-		read_token = get_setting('tmdb_read_token')
-		headers = {'Authorization': f"Bearer {read_token}"}
-		url = 'https://api.themoviedb.org/4/auth/request_token'
-		response = requests.post(url, headers=headers, timeout=timeout)
-		result = response.json()
-		if not result['success']: return
-		url = 'https://www.themoviedb.org/auth/access?request_token=%s' % result['request_token']
-		kodi_utils.logger('tmdblist', url)
-		qr_url = '&data=%s' % requests.utils.quote(url)
-		qr_icon = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s' % qr_url
-		choices = [
-			('none', 'Use the QR Code to approve access at TMDB', 'Step 1'),
-			('approve', 'Access approved at TMDB', 'Step 2'),
-			('cancel', 'Cancel', 'Cancel')
-		]
-		list_items = [{'line1': item[1], 'line2': item[2], 'icon': qr_icon} for item in choices]
-		kwargs = {'items': json.dumps(list_items), 'heading': 'TMDBList', 'multi_line': 'true'}
-		choice = kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
-		if choice != 'approve': return
-		data = {'request_token': result['request_token']}
-		url = 'https://api.themoviedb.org/4/auth/access_token'
-		response = requests.post(url, json=data, headers=headers, timeout=timeout)
-		result = response.json()
-		if not result['success']: return kodi_utils.notification(32574)
-		account_id, access_token = str(result['account_id']), str(result['access_token'])
-		self.access_token = access_token
-		set_setting('tmdb.account_id', account_id)
-		set_setting('tmdb.token', access_token)
-		kodi_utils.notification('%s %s' % (ls(32576), 'TMDBList'))
+@_account_id
+def watchlist(media_type, page=1, account_id=''):
+	params = {'language': 'en-US', 'sort_by': 'created_at.desc', 'page': page}
+	url = '%s/account/%s/%s/watchlist' % (list_url, account_id, media_type)
+	return list_request(url, params)
 
-	def deauthorize(self):
-		read_token = get_setting('tmdb_read_token')
-		headers = {'Authorization': f"Bearer {read_token}"}
-		data = {'access_token': self.access_token}
-		url = 'https://api.themoviedb.org/4/auth/access_token'
-		response = requests.delete(url, json=data, headers=headers, timeout=timeout)
-		result = response.json()
-		if not result['success']: return kodi_utils.notification(32574)
-		self.access_token = ''
-		set_setting('tmdb.account_id', '')
-		set_setting('tmdb.token', '')
-		kodi_utils.notification('%s %s' % (ls(32576), 'TMDBList'))
-		self.clear_tmdbl_cache()
+@_account_id
+def favorites(media_type, page=1, account_id=''):
+	params = {'language': 'en-US', 'sort_by': 'created_at.desc', 'page': page}
+	url = '%s/account/%s/%s/favorites' % (list_url, account_id, media_type)
+	return list_request(url, params)
 
-	@staticmethod
-	def clear_tmdbl_cache(silent=False):
-		maincache_db = kodi_utils.maincache_db
-		try:
-			if not kodi_utils.path_exists(maincache_db): return True
-			dbcon = kodi_utils.database.connect(maincache_db, timeout=40.0, isolation_level=None)
-			dbcur = dbcon.cursor()
-			dbcur.execute("""PRAGMA synchronous = OFF""")
-			dbcur.execute("""PRAGMA journal_mode = OFF""")
-			dbcur.execute("""SELECT id FROM maincache WHERE id LIKE ?""", ('tmdblist_%',))
-			tmdb_results = [str(i[0]) for i in dbcur.fetchall()]
-			if not tmdb_results: return True
-			dbcur.execute("""DELETE FROM maincache WHERE id LIKE ?""", ('tmdblist_%',))
-			for i in tmdb_results: kodi_utils.clear_property(i)
-			return True
-		except: return False
+def authorize():
+	read_token = get_setting('tmdb_read_token')
+	headers = {'Authorization': f"Bearer {read_token}"}
+	url = 'https://api.themoviedb.org/4/auth/request_token'
+	response = requests.post(url, headers=headers, timeout=timeout)
+	result = response.json()
+	if not result['success']: return
+	url = 'https://www.themoviedb.org/auth/access?request_token=%s' % result['request_token']
+	qr_url = '&data=%s' % requests.utils.quote(url)
+	qr_icon = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s' % qr_url
+	tiny_url = 'http://tinyurl.com/api-create.php'
+	try: tiny_url = requests.get(tiny_url, params={'url': url}, timeout=timeout).text
+	except: pass
+	kodi_utils.logger('tmdblist', '%s\n%s' % (tiny_url, url))
+	line2 = ls(32700) % tiny_url
+	choices = [
+		('none', 'Use the QR Code to approve access at TMDB', 'Step 1: %s' % line2),
+		('approve', 'Access approved at TMDB', 'Step 2'),
+		('cancel', 'Cancel', 'Cancel')
+	]
+	list_items = [{'line1': item[1], 'line2': item[2], 'icon': qr_icon} for item in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': 'TMDBList', 'multi_line': 'true'}
+	choice = kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
+	if choice != 'approve': return
+	data = {'request_token': result['request_token']}
+	url = 'https://api.themoviedb.org/4/auth/access_token'
+	response = requests.post(url, json=data, headers=headers, timeout=timeout)
+	result = response.json()
+	if not result['success']: return kodi_utils.notification(32574)
+	account_id, access_token = str(result['account_id']), str(result['access_token'])
+	set_setting('tmdb.account_id', account_id)
+	set_setting('tmdb.token', access_token)
+	kodi_utils.notification('%s %s' % (ls(32576), 'TMDBList'))
+
+def deauthorize():
+	read_token, access_token = get_setting('tmdb_read_token'), get_setting('tmdb.token')
+	headers = {'Authorization': f"Bearer {read_token}"}
+	data = {'access_token': access_token}
+	url = 'https://api.themoviedb.org/4/auth/access_token'
+	response = requests.delete(url, json=data, headers=headers, timeout=timeout)
+	result = response.json()
+	if not result['success']: return kodi_utils.notification(32574)
+	set_setting('tmdb.account_id', '')
+	set_setting('tmdb.token', '')
+	kodi_utils.notification('%s %s' % (ls(32576), 'TMDBList'))
+	clear_tmdbl_cache()
+
+def clear_tmdbl_cache(silent=False):
+	maincache_db = kodi_utils.maincache_db
+	try:
+		if not kodi_utils.path_exists(maincache_db): return True
+		dbcon = kodi_utils.database.connect(maincache_db, timeout=40.0, isolation_level=None)
+		dbcur = dbcon.cursor()
+		dbcur.execute("""PRAGMA synchronous = OFF""")
+		dbcur.execute("""PRAGMA journal_mode = OFF""")
+		dbcur.execute("""SELECT id FROM maincache WHERE id LIKE ?""", ('tmdblist_%',))
+		tmdb_results = [str(i[0]) for i in dbcur.fetchall()]
+		if not tmdb_results: return True
+		dbcur.execute("""DELETE FROM maincache WHERE id LIKE ?""", ('tmdblist_%',))
+		for i in tmdb_results: kodi_utils.clear_property(i)
+		return True
+	except: return False
+
+def import_trakt_list(params):
+	from apis.trakt_api import get_trakt_list_contents
+	list_id, user, slug = params['trakt_list_id'], params['user'], params['list_slug']
+	items = get_trakt_list_contents(params.get('list_type'), list_id, user, slug)
+	return [
+		{'media_type': 'tv' if mtype == 'show' else mtype, 'media_id': item[mtype]['ids']['tmdb']}
+		for item in items if (mtype := item['type']) in ('movie', 'show') and 'tmdb' in item[mtype]['ids']
+	]
+
+def import_mdbl_list(params):
+	def _process(item, api_key):
+		key = 'tv_results' if item['media_type'] == 'tv' else 'movie_results'
+		url = '%s/find/%s?api_key=%s&external_source=%s' % (base_url, item['media_id'], api_key, 'imdb_id')
+		result = get_tmdb(url).json()
+		result = next((i for i in result[key]), None) if result else None
+		item['media_id'] = result['id'] if result else None
+	from threading import Thread
+	from apis.mdblist_api import mdb_list_items
+	from modules.utils import TaskPool
+	list_id, api_key = params['mdbl_list_id'], tmdb_api_key()
+	items = mdb_list_items(list_id, None)
+	items = [
+		({'media_type': 'tv' if mtype == 'show' else mtype, 'media_id': imdb_id}, api_key) for item in items
+		if (mtype := item['mediatype']) in ('movie', 'show') and (imdb_id := item.get('imdb_id'))
+	]
+	threads = TaskPool(40).tasks(_process, items, Thread)
+	[i.join() for i in threads]
+	return [i[0] for i in items if i[0]['media_id']]
 
