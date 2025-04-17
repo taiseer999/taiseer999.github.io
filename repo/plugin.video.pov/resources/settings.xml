@@ -60,7 +60,7 @@
         <setting id="nextep.sort_airing_today_to_top" label="32819" type="bool" default="false" />
         <setting id="nextep.include_airdate" label="32076" type="bool" default="true" />
         <setting id="nextep.include_unaired" label="32073" type="bool" default="true" />
-        <setting id="nextep.include_unwatched" label="32074" type="bool" default="false" />
+        <!--setting id="nextep.include_unwatched" label="32074" type="bool" default="false" /-->
         <!-- Extras -->
         <setting label="33038" type="lsep" />
         <setting id="extras.open_action" label="32026" type="enum" default="0" lvalues="32965|32028|32029|32030" />
@@ -81,9 +81,9 @@
             <setting id="nav_jump" label="32021" type="enum" default="0" lvalues="32024|32022|32023" subsetting="true" visible="eq(-2,true)" />
         <setting id="show_specials" label="32008" type="bool" default="false" />
         <setting id="use_season_title" label="32010" type="bool" default="false" />
-        <setting id="show_unaired_watchlist" label="Include Unaired Items in Trakt Watchlists" type="bool" default="true" />
         <setting id="show_unaired" label="32073" type="bool" default="true" />
         <setting id="thumb_fanart" label="32088" type="bool" default="false" />
+        <setting id="show_unaired_watchlist" label="Include Unaired Items in Watchlists" type="bool" default="true" />
         <!-- Sorting -->
         <setting label="32694" type="lsep" />
         <setting id="sort.progress" label="$ADDON[plugin.video.pov 32476] $ADDON[plugin.video.pov 32066]" type="enum" default="0" lvalues="32228|32226" />
@@ -97,7 +97,7 @@
         <setting id="context.options" label="Options..." type="slider" default="1" range="0,1,7" option="int" />
         <setting id="context.extras" label="Extras.../Playback.../Browse..." type="slider" default="2" range="0,1,7" option="int" />
         <setting id="context.trakt" label="Trakt Lists Manager" type="slider" default="3" range="0,1,7" option="int" />
-        <setting id="context.tmdblist" label="TMDBList Manager" type="slider" default="4" range="0,1,7" option="int" />
+        <setting id="context.tmdblist" label="TMDB Lists Manager" type="slider" default="4" range="0,1,7" option="int" />
         <setting id="context.mdblist" label="MDBList Manager" type="slider" default="4" range="0,1,7" option="int" />
         <setting id="context.favourites" label="Favorites Manager" type="slider" default="5" range="0,1,7" option="int" />
         <setting id="context.mark" label="Mark Watched/Unwatched" type="slider" default="6" range="0,1,7" option="int" />
@@ -355,13 +355,17 @@
         <setting label="32087" type="lsep" />
         <setting id="trakt.sync_interval" label="32047" type="slider" default="30" option="int" range="5,5,480" />
         <setting id="trakt.sync_refresh_widgets" label="32048" type="bool" default="false" />
-        <!-- TMDBList -->
-        <setting label="TMDBList" type="lsep" />
+        <!-- TMDB -->
+        <setting label="TMDB Lists" type="lsep" />
+        <setting id="tmdb.session_id" type="text" default="" visible="false" />
+        <setting id="tmdb.session_account_id" type="text" default="" visible="false" />
+        <setting id="tmdb.username" label="32056" type="text" default="" enable="false" visible="!eq(1,)" />
         <setting id="tmdb.token" type="text" default="" visible="false" />
-        <setting id="tmdb.account_id" label="32065" type="text" default="" enable="false" visible="!eq(-1,)"/>
+        <setting id="tmdb.account_id" label="32065" type="text" default="" enable="false" visible="false"/>
         <setting id="tmdblist.sort_name" label="Sort List Names Type" type="enum" default="0" values="Title|Number of Items|Recently Updated" visible="!eq(-2,)" />
-        <setting label="Authorize" type="action" visible="eq(-3,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.tmdb_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-4,)" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.tmdb_revoke)" />
+        <setting id="tmdblist.watchlist_sync" label="Purge Watchlist on Trakt Refresh" type="bool" default="false" visible="!eq(-3,)" />
+        <setting label="Authorize" type="action" visible="eq(-4,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.tmdb_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-5,)" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.tmdb_revoke)" />
         <!-- MDBList -->
         <setting label="MDBList" type="lsep" />
         <setting id="mdblist.token" label="API Key" type="text" default="" option="hidden" />

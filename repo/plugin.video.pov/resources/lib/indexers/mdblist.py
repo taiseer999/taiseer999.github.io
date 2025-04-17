@@ -14,7 +14,7 @@ build_url, make_listitem = kodi_utils.build_url, kodi_utils.make_listitem
 default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 item_jump = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/item_jump.png')
-add2menu_str, add2folder_str, copy2str = ls(32730), ls(32731), '[B]Export to TMDBList[/B]'
+add2menu_str, add2folder_str, copy2str = ls(32730), ls(32731), '[B]Export to TMDB[/B]'
 nextpage_str, jump2_str = ls(32799), ls(32964)
 
 def search_mdb_lists(params):
@@ -130,9 +130,9 @@ def build_mdb_list(params):
 	for idx, tag in enumerate(process_list, 1):
 		mtype = tag['mediatype']
 		if   mtype == 'movie':
-			_queue.put((movies.build_movie_content, idx, {'imdb': tag['imdb_id']}))
+			_queue.put((movies.build_movie_content, idx, {'imdb': tag['imdb_id'], 'tmdb': tag['id']}))
 		elif mtype == 'show':
-			_queue.put((tvshows.build_tvshow_content, idx, {'imdb': tag['imdb_id']}))
+			_queue.put((tvshows.build_tvshow_content, idx, {'imdb': tag['imdb_id'], 'tmdb': tag['id']}))
 	max_threads = min(_queue.qsize(), max_threads)
 	threads = (Thread(target=_thread_target, args=(_queue,)) for i in range(max_threads))
 	threads = list(TaskPool.process(threads))

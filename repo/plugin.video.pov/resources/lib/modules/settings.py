@@ -256,10 +256,10 @@ def nextep_content_settings():
 	sort_direction = sort_order == 0
 	sort_key = 'pov_last_played' if sort_type == 0 else 'pov_first_aired' if sort_type == 1 else 'pov_name'
 	include_unaired = get_setting('nextep.include_unaired') == 'true'
-	include_unwatched = get_setting('nextep.include_unwatched') == 'true'
+#	include_unwatched = get_setting('nextep.include_unwatched') == 'true'
 	sort_airing_today_to_top = get_setting('nextep.sort_airing_today_to_top', 'false') == 'true'
 	return {'sort_key': sort_key, 'sort_direction': sort_direction, 'sort_type': sort_type, 'sort_order':sort_order,
-			'include_unaired': include_unaired, 'include_unwatched': include_unwatched, 'sort_airing_today_to_top': sort_airing_today_to_top}
+			'include_unaired': include_unaired, 'include_unwatched': False, 'sort_airing_today_to_top': sort_airing_today_to_top}
 
 def scraping_settings():
 	def provider_color(provider, fallback):

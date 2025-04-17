@@ -144,8 +144,8 @@ class Navigator:
 		sea_str, n_ins = '%s %s' % (ls(32477), l_str), _in_str % (t_str.upper(), '')
 		mdb_m_str, mdb_t_str = 'My %s %s' % (wlist_str, mov_str), 'My %s %s' % (wlist_str, tv_str)
 		trakt_status = k.get_setting('trakt_user') not in ('', None)
-		mdblist_status = k.get_setting('mdblist.token') not in ('', None)
 		tmdb_status = k.get_setting('tmdb.account_id') not in ('', None)
+		mdblist_status = k.get_setting('mdblist.token') not in ('', None)
 		imdb_status = k.get_setting('imdb_user') not in ('', None)
 		if trakt_status:
 			self._add_item({'mode': 'navigator.trakt_collections'                                           , 'name': coll_str }, 'trakt.png', t_n_ins)
@@ -155,14 +155,20 @@ class Navigator:
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'name': tu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'popular' , 'name': pu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.search_trakt_lists'                                       , 'name': sea_str}, 'trakt.png', n_ins)
+		if tmdb_status:
+			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_watchlist'          , 'name': 'Movie Watchlist'        }, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_watchlist'         , 'name': 'TV Show Watchlist'      }, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_favorite'           , 'name': 'Movie Favorite'         }, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_favorite'          , 'name': 'TV Show Favorite'       }, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_recommendations'    , 'name': 'Movie Recommendations'  }, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_recommendations'   , 'name': 'TV Show Recommendations'}, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_tmdb_list.get_tmdb_lists'                        , 'name': 'My Lists'               }, 'tmdb.png', '[B]TMDB:[/B] ')
 		if mdblist_status:
 			self._add_item({'mode': 'build_movie_list', 'action': 'mdblist_watchlist'       , 'name': mdb_m_str }, 'mdblist.png', m_n_ins)
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'mdblist_watchlist'      , 'name': mdb_t_str }, 'mdblist.png', m_n_ins)
 			self._add_item({'mode': 'build_mdb_list.get_mdb_lists', 'list_type': 'my_lists' , 'name': ml_str    }, 'mdblist.png', m_n_ins)
 			self._add_item({'mode': 'build_mdb_list.get_mdb_toplists'                       , 'name': pu_str    }, 'mdblist.png', m_n_ins)
 			self._add_item({'mode': 'build_mdb_list.search_mdb_lists'                       , 'name': sea_str   }, 'mdblist.png', m_n_ins)
-		if tmdb_status:
-			self._add_item({'mode': 'build_tmdb_list.get_tmdb_lists', 'name': 'My Lists'}, 'tmdb.png', '[B]TMDB:[/B] ')
 		if imdb_status:
 			self._add_item({'mode': 'navigator.imdb_watchlists', 'name': wlist_str}, 'imdb.png', i_n_ins)
 			self._add_item({'mode': 'navigator.imdb_lists',      'name': ls_str   }, 'imdb.png', i_n_ins)
@@ -189,17 +195,20 @@ class Navigator:
 		t_str, watchlist_str = ls(32037), ls(32500)
 		trakt_watchlist_str = '%s %s' % (t_str, watchlist_str)
 		n_ins = _in_str % (trakt_watchlist_str.upper(), '')
+		tmdb_status = k.get_setting('tmdb.account_id') not in ('', None)
 		self._add_item({'mode': 'build_movie_list', 'action': 'trakt_watchlist',  'name': mov_str}, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_tvshow_list', 'action': 'trakt_watchlist', 'name': tv_str }, 'trakt.png', n_ins)
+		self._add_item({'mode': 'tmdb.import_trakt_watchlist',                    'name': 'Export to TMDB'}, 'trakt.png', n_ins, False) if tmdb_status else None
 		self._end_directory()
 
 	def trakt_lists(self):
 		t_str, ml_str, ll_str, rec_str = ls(32037), ls(32454), ls(32502), ls(32503)
-		cal_str, ani_str = ls(32081), ls(32081).replace('Calendar', 'Anime Calendar')
+		cal_str, ani_str, drp_str = ls(32081), 'Anime Calendar', 'Dropped TV Shows'
 		n_ins = _in_str % (t_str.upper(), '')
 		self._add_item({'mode': 'build_trakt_list.get_trakt_lists', 'list_type': 'my_lists'   , 'name': ml_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_lists', 'list_type': 'liked_lists', 'name': ll_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'navigator.trakt_recommendations'                             , 'name': rec_str}, 'trakt.png', n_ins)
+		self._add_item({'mode': 'build_tvshow_list', 'action': 'trakt_droplist'               , 'name': drp_str}, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_my_calendar'                                           , 'name': cal_str}, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_my_anime_calendar'                                     , 'name': ani_str}, 'trakt.png', n_ins)
 		self._end_directory()

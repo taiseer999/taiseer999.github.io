@@ -27,11 +27,11 @@ def call_mdblist(path, params=None, json=None, method=None):
 			json=json,
 			timeout=timeout
 		)
-		response.raise_for_status()
+		if not response.ok: response.raise_for_status()
+		result = response.json()
 	except requests.exceptions.RequestException as e:
 		kodi_utils.logger('mdblist error', str(e))
-	try: result = response.json()
-	except: result = []
+		result = []
 	return result
 
 def mdb_searchlists(query):
@@ -56,6 +56,10 @@ def mdb_media_info(imdb_id, media_type):
 	string = 'mdb_%s_mediainfo_%s' % (media_type, imdb_id)
 	url = '%s/%s/%s/%s?append_to_response=review' % (base_url, 'imdb', media_type, imdb_id)
 	return cache_function(call_mdblist, string, url, json=False)
+
+def mdb_media_info_batch(items, provider, media_type):
+	url = '%s/%s/%s' % (base_url, provider, media_type)
+	return call_mdblist(url, json=items, method='post')
 
 def mdb_parentsguide(imdb_id, media_type):
 	media_type = 'show' if media_type == 'tvshow' else 'movie'
@@ -119,6 +123,7 @@ def mdb_clean_watchlist(list_id=None, silent=False):
 		if list_id: url = '%s/lists/%s/items/%s' % (base_url, list_id, 'remove')
 		else: url = '%s/watchlist/items/%s' % (base_url, 'remove')
 		call_mdblist(url, json=data, method='post')
+		clear_mdbl_cache()
 	except: pass
 
 def get_mdb(params):

@@ -431,7 +431,7 @@ class RealDebridAPI:
 		url = '%stoken' % auth_url
 		response = requests.post(url, data=data, timeout=timeout)
 		result = response.json()
-		self.client_id, self.client_secret = data['client_id'], data['client_secret']
+		self.client_id, self.secret = data['client_id'], data['client_secret']
 		self.token, self.refresh = result['access_token'], result['refresh_token']
 		kodi_utils.sleep(500) # from My Accounts
 		username = self.account_info()['username']

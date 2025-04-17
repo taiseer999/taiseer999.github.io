@@ -83,6 +83,7 @@ def databaseMaintenance():
 def traktMonitor():
 	from caches.trakt_cache import clear_trakt_list_contents_data
 	from apis.trakt_api import trakt_sync_activities
+	from apis.tmdb_api import tmdb_clean_watchlist
 	logger('POV', 'TraktMonitor Service Starting')
 	trakt_service_string = 'TraktMonitor Service Update %s - %s'
 	update_string = 'Next Update in %s minutes...'
@@ -107,6 +108,9 @@ def traktMonitor():
 			logger('POV', trakt_service_string % ('POV TraktMonitor - Failed. Error from Trakt', next_update_string))
 		else:# 'not needed'
 			logger('POV', trakt_service_string % ('POV TraktMonitor - Success. No Changes Needed', next_update_string))
+		if get_setting('tmdb.token') and get_setting('tmdblist.watchlist_sync') == 'true':
+			status = tmdb_clean_watchlist(silent=True)
+			if status: logger('POV', 'TMDB Lists Service Update - Success. %s' % status)
 		monitor.waitForAbort(interval)
 	return logger('POV', 'TraktMonitor Service Finished')
 

@@ -8,7 +8,7 @@ from queue import SimpleQueue
 from html.parser import HTMLParser
 from importlib import import_module
 from datetime import datetime, timedelta, date
-from modules.kodi_utils import local_string as ls, get_setting
+from modules.kodi_utils import local_string as ls, get_setting, logger
 # from modules.kodi_utils import logger
 
 days_translate = {'Monday': 32971, 'Tuesday': 32972, 'Wednesday': 32973, 'Thursday': 32974, 'Friday': 32975, 'Saturday': 32976, 'Sunday': 32977}
@@ -16,9 +16,9 @@ days_translate = {'Monday': 32971, 'Tuesday': 32972, 'Wednesday': 32973, 'Thursd
 class TaskPool:
 	@staticmethod
 	def process(_threads):
-		for i in _threads:
+		for index, i in enumerate(_threads, 1):
 			try: i.start()
-			except: pass
+			except Exception as e: logger('thread error', f"{index}: {e}")
 			else: yield i
 
 	def __init__(self, maxsize=None):
@@ -28,7 +28,7 @@ class TaskPool:
 	def _thread_target(self, queue, target):
 		while not queue.empty():
 			try: target(*queue.get())
-			except: pass
+			except Exception as e: logger('queue error', f"{e}")
 
 	def tasks(self, _target, _list, _thread):
 		maxsize = min(len(_list), self.maxsize)

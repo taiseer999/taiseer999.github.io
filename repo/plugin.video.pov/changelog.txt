@@ -4,9 +4,27 @@
 
 
   [COLOR dodgerblue][B]Version 5.04[/B][/COLOR]
-- TMDBList pagination now respects Settings/Navigation/Paginate Lists When Possible.
-- Removed Page Multiplier for List Items in Settings/My Lists/TMDBList.
-- Added Export to TMDBList context menu item to MDBlist Public/Personal lists.
+- Increased timeout for TMDB/Trakt non 'get' methods.
+- Added Toggle Dropped... to Trakt Lists Manager for tv shows.
+- Added Trakt Dropped TV Shows menu item to My Lists/Trakt Lists.
+- Watched/In Progress TV Shows and Next Episodes now respect Trakt Dropped TV Shows.
+- Removed Next Episode Manager.
+- Added Edit List Properties to TMDB Lists context menu.
+- Probable Fix for Real Debrid, requires reauthorization.
+- Changed MDBList.  "the call is coming from inside the house"
+- Fixed slow Export to TMDB for MDBList Public/Personal lists.
+- Changed Trakt Watchlist Export to TMDB, sent in ascending collected_at sequence.
+- Removed Include Trakt Watchlist from Next Episodes settings.
+- Added Export to TMDB to Trakt Watchlist menu.
+- Added Purge Watchlist on Trakt Refresh to Settings/My Lists/TMDB Lists.
+  With this enabled, POV will programmatically attempt to remove watched/in progress
+  movies and tv shows from the TMDB Watchlist.  This will occur on the same sync interval
+  as the Trakt Service (startup and Settings/My Lists/Trakt Cache interval Refresh Data...).
+- Added TMDB Watchlist, Favorites to TMDB Lists Manager context menu.
+- Added TMDB Watchlist, Favorites, Recommendations to My Lists.
+- TMDB Lists pagination now respects Settings/Navigation/Paginate Lists When Possible.
+- Removed Page Multiplier for List Items in Settings/My Lists/TMDB Lists.
+- Added Export to TMDB context menu item to MDBList Public/Personal lists.
 - Added Trakt Dropped Manager to any tv show Options... context menu.
 - Changed Next Episode Manager to Trakt Dropped Manager.
   Utilizes Trakt "dropped" api to mimic website behavior.  Hidden shows can be transferred
@@ -15,10 +33,10 @@
 
   [COLOR dodgerblue][B]Version 5.03[/B][/COLOR]
 - Added aiostreams.
-- Added Export to TMDBList context menu item to Trakt Public/Personal lists.
-- Added Page Multiplier for List Items in Settings/My Lists/TMDBList.
-- Fixed TMDBList to allow for more than 20 lists.
-- Added TMDBList Manager to context menu.
+- Added Export to TMDB context menu item to Trakt Public/Personal lists.
+- Added Page Multiplier for List Items in Settings/My Lists/TMDB Lists.
+- Fixed TMDB Lists to allow for more than 20 lists.
+- Added TMDB Lists Manager to context menu.
 - Added TMDB Custom Lists to My Lists.  Authorize account in Settings/My Lists.
 - Probable Fix for Autoplay Next Episode/Continual Random Play only playing one episode.
 - Added Sort Priority Language at Top in Settings/Results/Sorting and Filtering.

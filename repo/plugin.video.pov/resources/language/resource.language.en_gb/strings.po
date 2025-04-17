@@ -1953,7 +1953,7 @@ msgid "Currently"
 msgstr ""
 
 msgctxt "#32599"
-msgid "[B]Trakt Dropped Manager[/B]"
+msgid "[B]Next Episode Manager[/B]"
 msgstr ""
 
 msgctxt "#32600"

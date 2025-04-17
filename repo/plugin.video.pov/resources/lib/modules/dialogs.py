@@ -85,27 +85,69 @@ def random_choice(choice, meta):
 def trakt_manager_choice(params):
 	if not get_setting('trakt_user', ''): return notification(32760, 3500)
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/trakt.png')
-	choices = [('%s %s...' % (ls(32602), ls(32199)), 'Add'), ('%s %s...' % (ls(32603), ls(32199)), 'Remove')]
+	choices = [('[B][I]%s [/I][/B]' % ls(32499), 'Collection'), ('[B][I]%s [/I][/B]' % ls(32500), 'Watchlist')]
+	choices += [('%s %s...' % (ls(32602), ls(32199)), 'Add'), ('%s %s...' % (ls(32603), ls(32199)), 'Remove')]
+	choices += [('%s %s...' % ('Toggle', 'Dropped'), 'Drop')] if params['media_type'] == 'tvshow' else []
 	list_items = [{'line1': item[0], 'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': ls(32198).replace('[B]', '').replace('[/B]', '')}
 	choice = select_dialog([i[1] for i in choices], **kwargs)
 	if choice is None: return
-	from apis.trakt_api import trakt_add_to_list, trakt_remove_from_list
-	if choice == 'Add': trakt_add_to_list(params)
-	else: trakt_remove_from_list(params)
+	from apis import trakt_api
+	add_str, rem_str = 'Add to %s?' % choice, 'Remove from %s?' % choice
+	if   choice == 'Collection':
+		data = trakt_api.trakt_fetch_collection_watchlist('collection', params['media_type'])
+		action = 'remove' if params['tmdb_id'] in {str(i['media_ids']['tmdb']) for i in data} else 'add'
+		data = {
+			i[0]: i[1] if i[0] == 'imdb' else int(i[1])
+			for i in (('imdb', params.get('imdb_id')), ('tmdb', params.get('tmdb_id')), ('tvdb', params.get('tvdb_id')))
+			if not i[1] in ('', 'None', None)
+		}
+		data = {'shows' if params['media_type'] == 'tvshow' else 'movies': [{'ids': data}]}
+		if action == 'remove':
+			if not kodi_utils.confirm_dialog(text=rem_str, top_space=True): return
+			trakt_api.remove_from_collection(data)
+		else: trakt_api.add_to_collection(data)
+	elif choice == 'Watchlist':
+		data = trakt_api.trakt_fetch_collection_watchlist('watchlist', params['media_type'])
+		action = 'remove' if params['tmdb_id'] in {str(i['media_ids']['tmdb']) for i in data} else 'add'
+		data = {
+			i[0]: i[1] if i[0] == 'imdb' else int(i[1])
+			for i in (('imdb', params.get('imdb_id')), ('tmdb', params.get('tmdb_id')), ('tvdb', params.get('tvdb_id')))
+			if not i[1] in ('', 'None', None)
+		}
+		data = {'shows' if params['media_type'] == 'tvshow' else 'movies': [{'ids': data}]}
+		if action == 'remove':
+			if not kodi_utils.confirm_dialog(text=rem_str, top_space=True): return
+			trakt_api.remove_from_watchlist(data)
+		else: trakt_api.add_to_watchlist(data)
+	elif choice == 'Add': trakt_api.trakt_add_to_list(params)
+	elif choice == 'Remove': trakt_api.trakt_remove_from_list(params)
+	else: trakt_api.hide_unhide_trakt_items(params['tmdb_id'], 'shows', params['imdb_id'], 'dropped')
 
 def tmdb_manager_choice(params):
 	if not get_setting('tmdb.token', ''): return notification(32760, 3500)
 	from apis import tmdb_api
 	image_resolution = settings.get_resolution()
-	heading = ls('[B]TMDBList[/B]').replace('[B]', '').replace('[/B]', '')
+	heading = ls(tmdb_api.list_heading).replace('[B]', '').replace('[/B]', '')
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
 	list_name = params.get('trakt_list_name') or params.get('mdbl_list_name') or ''
-	choices = [
+	choices = []
+	choices += [
 		(str(item['id']), item['name'], '%s items' % item['number_of_items'],
 		tmdb_api.tmdb_image_base % (image_resolution['poster'], item['poster_path']) if item['poster_path'] else icon)
 		for item in tmdb_api.user_lists_all()
 	]
+	if not list_name:
+		infolabel = kodi_utils.get_infolabel('Container.FolderPath')
+		watch_media_type = 'TV Show' if params['media_type'] == 'tvshow' else 'Movie'
+		choices += [
+			('watchlist_rem', 'Remove from Watchlist', watch_media_type, icon)
+			if 'tmdb_watchlist' in infolabel else
+			('watchlist_add', 'Add to Watchlist', watch_media_type, icon),
+			('favorite_rem', 'Remove from Favorite', watch_media_type, icon)
+			if 'tmdb_favorite' in infolabel else
+			('favorite_add', 'Add to Favorite', watch_media_type, icon)
+		]
 	choices += [('new', 'Create a new list', list_name, icon), ('clear', 'Clear list cache', '', icon)]
 	if not choices: return
 	list_items = [{'line1': item[1], 'line2': item[2], 'icon': item[3]} for item in choices]
@@ -123,27 +165,31 @@ def tmdb_manager_choice(params):
 		tmdb_api.clear_tmdbl_cache()
 		return tmdb_manager_choice(params)
 	if 'trakt_list_id' in params or 'mdbl_list_id' in params:
-		from threading import Thread
 		function = tmdb_api.import_trakt_list if 'trakt_list_id' in params else tmdb_api.import_mdbl_list
-		items = {'items': function(params)}
-		Thread(target=tmdb_api.list_add_items, args=(choice[0], items)).start()
-		tmdb_api.clear_tmdbl_cache()
-		return notification('Import request sent to TMDBList')
-	try:
-		add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
+		return function({**params, 'list_id': choice[0]})
+	if 'watchlist' in choice[0] or 'favorite' in choice[0]:
+		action = False if choice[0] in ('watchlist_rem', 'favorite_rem') else True
+		list_type = 'favorite' if 'favorite' in choice[0] else 'watchlist'
 		params['media_type'] = 'tv' if params['media_type'] == 'tvshow' else 'movie'
-		items = {'items': [{'media_type': params['media_type'], 'media_id': params['tmdb_id']}]}
-		status = tmdb_api.list_status(choice[0], params['media_type'], params['tmdb_id'])
-		if status and status['success']:
-			if not confirm_dialog(text=rem_str, top_space=True): return
-			action, function = 'remove', tmdb_api.list_remove_items
-		else: action, function = 'add', tmdb_api.list_add_items
-		if function(choice[0], items)['success']:
+		item = {'media_type': params['media_type'], 'media_id': params['tmdb_id'], list_type: action}
+		if tmdb_api.add_to_watchlist_favorite(item, list_type)['success']:
 			tmdb_api.clear_tmdbl_cache()
-			notification(32576)
-			if action == 'remove': container_refresh()
-		else: notification(32574)
-	except: pass
+			if not action: container_refresh()
+			return notification(32576)
+		else: return notification(32574)
+	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
+	params['media_type'] = 'tv' if params['media_type'] == 'tvshow' else 'movie'
+	items = {'items': [{'media_type': params['media_type'], 'media_id': params['tmdb_id']}]}
+	status = tmdb_api.list_status(choice[0], params['media_type'], params['tmdb_id'])
+	if status and status['success']:
+		if not confirm_dialog(text=rem_str, top_space=True): return
+		action, function = 'remove', tmdb_api.list_remove_items
+	else: action, function = 'add', tmdb_api.list_add_items
+	if function(choice[0], items)['success']:
+		tmdb_api.clear_tmdbl_cache()
+		if action == 'remove': container_refresh()
+		notification(32576)
+	else: notification(32574)
 
 def mdb_manager_choice(params):
 	if not get_setting('mdblist.token', ''): return notification(32760, 3500)
@@ -487,8 +533,6 @@ def options_menu(params, meta=None):
 	results_xml_style_status = get_setting('results.xml_style', 'Default')
 	active_internal_scrapers = [i.replace('_', '') for i in settings.active_internal_scrapers()]
 	uncached_torrents_status, uncached_torrents_toggle = (on_str, 'false') if settings.display_uncached_torrents() else (off_str, 'true')
-	container_update = 'ActivateWindow(Videos,%s,return)' if is_widget else 'Container.Update(%s)'
-	progress_manager_url = container_update % build_url({'mode': 'build_next_episode_manager'})
 	base_str1, base_str2 = '%s%s', '%s: [B]%s[/B]' % (currently_str, '%s')
 	scraper_options_str = '%s %s' % (ls(32533), ls(32841))
 	multi_line = 'true' if content in ('movie', 'episode') else 'false'
@@ -500,7 +544,6 @@ def options_menu(params, meta=None):
 		('scrape_from_episode_group', 'Scrape From Episode Group', scraper_options_str, meta['poster']) if content == 'episode' else None,
 		('play_random', ls(32541), '', meta['poster']) if content in ('tvshow') and meta else None,
 		('play_random_continual', ls(32542), '', meta['poster']) if content in ('tvshow') and meta else None,
-		('progress_manager', ls(32599).replace('[B]', '').replace('[/B]', ''), '') if content in ('tvshow') and meta else None,
 		('clear_scrapers_cache', ls(32637), '') if content in ('movie', 'episode') else None,
 		('open_external_scrapers_choice', '%s %s' % (ls(32118), ls(32513)), ''),
 		('torbox_usenet_query', 'TorBox Usenet Search', scraper_options_str, meta['poster']) if content in ('movie', 'tvshow', 'episode') and meta else None,
@@ -524,7 +567,6 @@ def options_menu(params, meta=None):
 	elif choice == 'scrape_from_episode_group': return scrape_from_episode_group(meta, season, episode)
 	elif choice == 'play_random': return random_choice(choice, meta)
 	elif choice == 'play_random_continual': return random_choice(choice, meta)
-	elif choice == 'progress_manager': return execute_builtin(progress_manager_url)
 	elif choice == 'clear_scrapers_cache': return clear_scrapers_cache()
 	elif choice == 'open_external_scrapers_choice': return source_utils.enable_disable('all')
 	elif choice == 'torbox_usenet_query': return torbox_usenet_query(meta, season, episode)

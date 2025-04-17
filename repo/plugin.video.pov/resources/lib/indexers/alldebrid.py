@@ -6,7 +6,7 @@ from modules.source_utils import supported_video_extensions
 from modules.utils import clean_file_name, normalize
 # from modules.kodi_utils import logger
 
-ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, make_listitem = kodi_utils.make_listitem
+ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, make_listitem
 folder_str, file_str, archive_str, down_str = ls(32742).upper(), ls(32743).upper(), ls(32982), ls(32747)
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/alldebrid.png')

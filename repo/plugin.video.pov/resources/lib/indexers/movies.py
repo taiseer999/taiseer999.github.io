@@ -15,13 +15,14 @@ build_url, remove_meta_keys, dict_removals = kodi_utils.build_url, kodi_utils.re
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
 item_jump, item_next = tp('special://home/addons/plugin.video.pov/resources/media/item_jump.png'), tp('special://home/addons/plugin.video.pov/resources/media/item_next.png')
 poster_empty, fanart_empty = tp('special://home/addons/plugin.video.pov/resources/media/box_office.png'), tp('special://home/addons/plugin.video.pov/fanart.png')
-watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDBList Manager[/B]', ls(32200)
+watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDB Lists Manager[/B]', ls(32200)
 favmanager_str, extras_str, options_str, recomm_str = ls(32197), ls(32645), ls(32646), '[B]%s...[/B]' % ls(32503)
 hide_str, exit_str, clearprog_str, play_str = ls(32648), ls(32649), ls(32651), '[B]%s...[/B]' % ls(32174)
 nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
 
 class Movies:
 	tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
+	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
 	tmdb_special_key_dict = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_movies_certifications': 'certification'}
 	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
@@ -67,6 +68,10 @@ class Movies:
 				data = function(page_no)
 				self.list = [i['movie']['ids'] for i in data]
 				if self.action not in ('trakt_movies_top10_boxoffice'): self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action in Movies.tmdb_personal:
+				data, total_pages = function('movie', page_no, letter)
+				self.list = [i['id'] for i in data]
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
 			elif self.action in Movies.trakt_personal:
 				self.id_type = 'trakt_dict'
 				data, total_pages = function('movies', page_no, letter)
@@ -78,7 +83,7 @@ class Movies:
 			elif self.action in Movies.mdblist_personal:
 				self.id_type = 'trakt_dict'
 				data, total_pages = function('movies', page_no, letter)
-				self.list = [{'imdb': i['imdb_id']} for i in data]
+				self.list = [{'imdb': i['imdb_id'], 'tmdb': i['id']} for i in data]
 				if total_pages > 2: self.total_pages = total_pages
 				try:
 					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}

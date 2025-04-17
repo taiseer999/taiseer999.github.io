@@ -99,6 +99,13 @@ class Router:
 			elif 'tmdb_revoke' in mode:
 				from apis.tmdb_api import deauthorize
 				deauthorize()
+			elif 'edit_tmdb_list' in mode:
+				from indexers.tmdb import edit_tmdb_list
+				edit_tmdb_list(params)
+			else:
+				from modules.utils import manual_function_import
+				function = manual_function_import('apis.tmdb_api', mode.split('.')[-1])
+				function(params)
 		elif 'build' in mode:
 			if 'build_trakt_list' in mode:
 				from modules.utils import manual_function_import
@@ -142,9 +149,6 @@ class Router:
 			elif mode == 'build_navigate_to_page':
 				from modules.dialogs import build_navigate_to_page
 				build_navigate_to_page(params)
-			elif mode == 'build_next_episode_manager':
-				from modules.episode_tools import build_next_episode_manager
-				build_next_episode_manager()
 			elif mode == 'imdb_build_user_lists':
 				from apis.imdb_api import imdb_build_user_lists
 				imdb_build_user_lists(params_get('media_type'))

@@ -22,7 +22,7 @@ run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Re
 poster = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 watched_str, unwatched_str, extras_str, options_str = ls(32642), ls(32643), ls(32645), ls(32646)
-clearprog_str, browse_str, browse_seas_str, nextep_manager_str = ls(32651), ls(32652), ls(32544), ls(32599)
+clearprog_str, browse_str, browse_seas_str, traktmanager_str = ls(32651), ls(32652), ls(32544), ls(32198)
 
 class Episodes:
 	def __init__(self, params):
@@ -186,7 +186,8 @@ class Episodes:
 												'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': title, 'year': year})
 					cm_append((watched_str % self.watched_title, run_plugin % watched_params))
 			if self.list_type == 'next_episode_trakt':
-				cm_append((nextep_manager_str, self.container_update % build_url({'mode': 'build_next_episode_manager'})))
+				trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
+				cm_append((traktmanager_str, run_plugin % trakt_manager_params))
 			props['pov_name'] = '%s - %sx%s' % (title, str_season_zfill2, str_episode_zfill2)
 			props['pov_first_aired'] = premiered
 			listitem = kodi_utils.make_listitem()
@@ -260,10 +261,10 @@ class Episodes:
 					hidden_data = trakt_get_hidden_items('dropped')
 					self.list = [i for i in self.list if not i['media_ids']['tmdb'] in hidden_data]
 				except: pass
-				if nextep_settings['include_unwatched']:
-					try: unwatched = [{'media_ids': i['media_ids'], 'season': 1, 'episode': 0, 'unwatched': True} for i in trakt_fetch_collection_watchlist('watchlist', 'tvshow')]
-					except: unwatched = []
-					self.list += unwatched
+#				if nextep_settings['include_unwatched']:
+#					try: unwatched = [{'media_ids': i['media_ids'], 'season': 1, 'episode': 0, 'unwatched': True} for i in trakt_fetch_collection_watchlist('watchlist', 'tvshow')]
+#					except: unwatched = []
+#					self.list += unwatched
 				resformat, self.resinsert = '%Y-%m-%dT%H:%M:%S.%fZ', '2000-01-01T00:00:00.000Z'
 			else: resformat, self.resinsert = '%Y-%m-%d %H:%M:%S', '2000-01-01 00:00:00'
 #		threads = list(make_thread_list_enumerate(self.build_episode_content, self.list, Thread))

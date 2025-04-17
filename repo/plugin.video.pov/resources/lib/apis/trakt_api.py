@@ -33,17 +33,16 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 			params=None if data is not None else params,
 			data=json.dumps(data) if data else None,
 			headers=headers,
-			timeout=timeout
+			timeout=timeout ** 2 if not method in ('get', None) else timeout
 		)
-		response.raise_for_status()
+		if not response.ok: response.raise_for_status()
+		result = response.json()
+		if 'X-Sort-By' in response.headers and 'X-Sort-How' in response.headers:
+			sort_by, sort_how = response.headers['X-Sort-By'], response.headers['X-Sort-How']
+			result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
 	except requests.exceptions.RequestException as e:
 		logger('trakt error', str(e))
-	response.encoding = 'utf-8'
-	try: result = response.json()
-	except: result = None
-	if 'X-Sort-By' in response.headers and 'X-Sort-How' in response.headers:
-		sort_by, sort_how = response.headers['X-Sort-By'], response.headers['X-Sort-How']
-		result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
+		result = None
 	if pagination: return (result, response.headers.get('X-Pagination-Page-Count', page))
 	else: return result
 
@@ -135,6 +134,10 @@ def trakt_get_hidden_items(list_type):
 	url = {'path': 'users/hidden/%s', 'path_insert': list_type, 'params': {'limit': 1000, 'type': 'show'}, 'with_auth': True, 'pagination': False}
 	return trakt_cache.cache_trakt_object(_process, string, url)
 
+def trakt_droplist(media_type, page_no, letter):
+	results = trakt_get_hidden_items('dropped')
+	return [{'media_ids': {'tmdb': i}} for i in results], 1
+
 def trakt_watched_unwatched(action, media, media_id, tvdb_id=0, season=None, episode=None, key='tmdb'):
 	if action == 'mark_as_watched': url, result_key = 'sync/history', 'added'
 	else: url, result_key = 'sync/history/remove', 'deleted'
@@ -209,12 +212,13 @@ def trakt_watchlist(media_type, page_no, letter):
 	return final_list, total_pages
 
 def trakt_fetch_collection_watchlist(list_type, media_type):
-	key, string_insert = ('movie', 'movie') if media_type in ('movie', 'movies') else ('show', 'tvshow')
+	if media_type in ('movie', 'movies'): key, string_insert, path_insert = ('movie', 'movie', 'movies')
+	else: key, string_insert, path_insert = ('show', 'tvshow', 'shows')
 	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type in ('movie', 'movies') else 'last_collected_at'
 	premiered = 'released' if key == 'movie' else 'first_aired'
 	string = 'trakt_%s_%s' % (list_type, string_insert)
 	path = 'sync/%s/' % list_type
-	url = {'path': path + '%s', 'path_insert': media_type, 'params': {'extended': 'full'}, 'with_auth': True, 'pagination': False}
+	url = {'path': path + '%s', 'path_insert': path_insert, 'params': {'extended': 'full'}, 'with_auth': True, 'pagination': False}
 	data = trakt_cache.cache_trakt_object(get_trakt, string, url)
 	if list_type == 'watchlist': data = [i for i in data if i['type'] == key]
 	result = [
@@ -269,6 +273,11 @@ def remove_from_collection(data):
 	return result
 
 def hide_unhide_trakt_items(action, media_type, media_id, list_type):
+	if not action in ('hide', 'unhide'):
+		try:
+			hidden_data = set(map(str, trakt_get_hidden_items('dropped')))
+			action = 'unhide' if action in hidden_data else 'hide'
+		except: return kodi_utils.notification(32574)
 	media_type = 'movies' if media_type in ['movie', 'movies'] else 'shows'
 	key = 'tmdb' if media_type == 'movies' else 'imdb'
 	url = 'users/hidden/%s' % list_type if action == 'hide' else 'users/hidden/%s/remove' % list_type
@@ -317,9 +326,10 @@ def get_trakt_list_selection(list_choice=None, highlight=None):
 								'slug': item['list']['ids']['slug']} for item in trakt_get_lists('liked_lists')]
 		liked_lists.sort(key=lambda k: (k['display']))
 		my_lists.extend(liked_lists)
-	else:
-		my_lists.insert(0, {'name': 'Collection', 'display': '[B][I]%s [/I][/B]' % ls(32499).upper(), 'user': 'Collection', 'slug': 'Collection'})
-		my_lists.insert(0, {'name': 'Watchlist', 'display': '[B][I]%s [/I][/B]' % ls(32500).upper(),  'user': 'Watchlist', 'slug': 'Watchlist'})
+#	else:
+#		my_lists.insert(0, {'name': 'Collection', 'display': '[B][I]%s [/I][/B]' % ls(32499).upper(), 'user': 'Collection', 'slug': 'Collection'})
+#		my_lists.insert(0, {'name': 'Watchlist', 'display': '[B][I]%s [/I][/B]' % ls(32500).upper(),  'user': 'Watchlist', 'slug': 'Watchlist'})
+	if not my_lists: return kodi_utils.notification(32760)
 	list_items = [{'line1': item['display'], 'icon': default_icon} for item in my_lists]
 	kwargs = {'items': json.dumps(list_items), 'heading': 'Select list', 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
 	if highlight: kwargs['highlight'] = highlight
