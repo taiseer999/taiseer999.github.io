@@ -2,8 +2,8 @@
 # Module: default
 # Author: jurialmunkey
 # License: GPL v.3 https://www.gnu.org/copyleft/gpl.html
-from jurialmunkey.window import set_to_windowprop, clear_windowprops
-from jurialmunkey.litems import Container
+from jurialmunkey.window import set_to_windowprop, clear_windowprops, get_property
+from jurialmunkey.litems import ContainerDirectory
 
 
 KEYS_PROP = 'PropertiesList'
@@ -24,7 +24,23 @@ def clear_windowprops_decorator(func):
     return wrapper
 
 
-class ListGetNumberSum(Container):
+class ListGetRefreshCounter(ContainerDirectory):
+
+    @clear_windowprops_decorator
+    def get_directory(self, uid, window_prop=None, window_id=None, **kwargs):
+
+        affix = 'SkinVariables'
+        value = int(get_property(uid, prefix=affix) or 0) + 1
+        get_property(uid, prefix=affix, set_property=str(value))
+
+        label = f'{value}'
+        items = [self.get_list_item(label)]
+        set_to_windowprop(label, 0, window_prop, window_id)
+
+        self.add_items(items)
+
+
+class ListGetNumberSum(ContainerDirectory):
 
     @clear_windowprops_decorator
     def get_directory(self, expression, window_prop=None, window_id=None, **kwargs):
@@ -39,7 +55,7 @@ class ListGetNumberSum(Container):
         self.add_items(items)
 
 
-class ListRunExecuteBuiltin(Container):
+class ListRunExecuteBuiltin(ContainerDirectory):
     def get_directory(self, paths, **kwargs):
         from resources.lib.method import run_executebuiltin
 
@@ -51,7 +67,7 @@ class ListRunExecuteBuiltin(Container):
         self.add_items(items)
 
 
-class ListGetJSONRPC(Container):
+class ListGetJSONRPC(ContainerDirectory):
 
     @clear_windowprops_decorator
     def get_directory(self, info, method, window_prop=None, window_id=None, **kwargs):
@@ -76,7 +92,7 @@ class ListGetJSONRPC(Container):
         return result
 
 
-class ListGetARGBColors(Container):
+class ListGetARGBColors(ContainerDirectory):
 
     @clear_windowprops_decorator
     def get_directory(self, colorhex=None, window_prop=None, window_id=None, slider_window_id=None, **kwargs):
@@ -131,7 +147,7 @@ class ListGetARGBColors(Container):
         self.add_items(items)
 
 
-class ListGetSplitString(Container):
+class ListGetSplitString(ContainerDirectory):
 
     @clear_windowprops_decorator
     def get_directory(self, values=None, infolabel=None, separator='|', window_prop=None, window_id=None, **kwargs):
@@ -155,7 +171,7 @@ class ListGetSplitString(Container):
         self.add_items(items)
 
 
-class ListGetEncodedString(Container):
+class ListGetEncodedString(ContainerDirectory):
 
     @clear_windowprops_decorator
     def get_directory(self, paths=None, window_prop=None, window_id=None, **kwargs):
@@ -174,7 +190,7 @@ class ListGetEncodedString(Container):
         self.add_items(items)
 
 
-class ListGetFileExists(Container):
+class ListGetFileExists(ContainerDirectory):
 
     @clear_windowprops_decorator
     def get_directory(self, paths, window_prop=None, window_id=None, **kwargs):
@@ -194,7 +210,7 @@ class ListGetFileExists(Container):
         self.add_items(items)
 
 
-class ListGetDottedProperties(Container):
+class ListGetDottedProperties(ContainerDirectory):
     def get_directory(
             self, source='Container.ListItem', string='', infoproperties='', label='', thumb=None, fanart=None,
             separator='/', xmax='10', ymax=None, no_label_dupes=False,
@@ -275,7 +291,7 @@ class ListGetDottedProperties(Container):
         self.add_items(items)
 
 
-class ListGetSelectedItem(Container):
+class ListGetSelectedItem(ContainerDirectory):
     def get_directory(
             self, container, infolabels='', artwork='', separator='/', listitem='ListItem(0)',
             window_prop=None, window_id=None, **kwargs

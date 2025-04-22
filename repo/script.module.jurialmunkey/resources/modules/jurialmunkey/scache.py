@@ -4,8 +4,7 @@ import zlib
 import xbmcvfs
 from xbmc import Monitor
 from xbmcgui import Window
-from contextlib import contextmanager
-from jurialmunkey.locker import MutexFileLock
+from jurialmunkey.locker import MutexPropLock
 from jurialmunkey.tmdate import set_timestamp
 from jurialmunkey.futils import FileUtils
 from jurialmunkey.futils import json_loads as data_loads
@@ -22,24 +21,16 @@ TIME_HOURS = 60 * TIME_MINUTES
 TIME_DAYS = 24 * TIME_HOURS
 
 
-def busy_task(func):
-    def wrapper(self, *args, **kwargs):
-        with self.busy_tasks(f'{func.__name__}.{args}.{kwargs}'):
-            return func(self, *args, **kwargs)
-    return wrapper
-
-
 class SimpleCache(object):
     '''simple stateless caching system for Kodi'''
     _exit = False
     _auto_clean_interval = 4 * TIME_HOURS
-    _busy_tasks = []
     _database = None
     _basefolder = ''
     _fileutils = FILEUTILS
     _db_timeout = 3.0
     _db_read_timeout = 1.0
-    _queue_limit = 100
+    _row_factory = False
 
     def __init__(self, folder=None, filename=None):
         '''Initialize our caching class'''
@@ -50,18 +41,8 @@ class SimpleCache(object):
         self._db_file = self._fileutils.get_file_path(basefolder, filename, join_addon_data=basefolder == folder)
         self._sc_name = f'{folder}_{filename}_simplecache'
 
-        self._queue = {}
-
         self.check_cleanup()
         self.kodi_log(f"CACHE: Initialized: {self._sc_name} - Thread Safety Level: {sqlite3.threadsafety} - SQLite v{sqlite3.sqlite_version}")
-
-    @property
-    def window(self):
-        try:
-            return self._window
-        except AttributeError:
-            self._window = Window(10000)
-            return self._window
 
     @property
     def monitor(self):
@@ -72,13 +53,13 @@ class SimpleCache(object):
             return self._monitor
 
     def get_window_property(self, name):
-        return self.window.getProperty(name)
+        return Window(10000).getProperty(name)
 
     def set_window_property(self, name, value):
-        return self.window.setProperty(name, value)
+        return Window(10000).setProperty(name, value)
 
     def del_window_property(self, name):
-        return self.window.clearProperty(name)
+        return Window(10000).clearProperty(name)
 
     def exit_requested(self):
         return self._exit or self.monitor.abortRequested()
@@ -92,46 +73,14 @@ class SimpleCache(object):
         '''tell any tasks to stop immediately (as we can be called multithreaded) and cleanup objects'''
         self._exit = True
 
-        # wait for all tasks to complete
-        while self._busy_tasks and not self.monitor.abortRequested():
-            self.monitor.waitForAbort(0.25)
-
-        self.kodi_log(f'CACHE: Closed {self._sc_name}', 2)
-
-    def __del__(self):
-        '''make sure close is called'''
-        self.write()
-        self.close()
-
-    @contextmanager
-    def busy_tasks(self, task_name):
-        self._busy_tasks.append(task_name)
-        try:
-            yield
-        finally:
-            self._busy_tasks.remove(task_name)
-
-    @busy_task
-    def write(self):
-        if not self._queue:
-            return
-
-        items = [i for _, i in self._queue.items()]
-        self._queue = {}
-
-        for i in items:
-            self._set_db_cache(*i)
-
-        self.kodi_log(f'CACHE: Write {len(items)} Items in Queue\n{self._sc_name}', 2)
-
     def get(self, endpoint, cur_time=None):
         '''
             get object from cache and return the results
             endpoint: the (unique) name of the cache object as reference
         '''
         cur_time = cur_time or set_timestamp(0, True)
-        result = self._get_queue(endpoint)  # Try from memory first
-        result = result or self._get_mem_cache(endpoint, cur_time)  # Try from memory first
+        result = None
+        # result = result or self._get_mem_cache(endpoint, cur_time)  # Try from memory first
         result = result or self._get_db_cache(endpoint, cur_time)  # Fallback to checking database if not in memory
         return result
 
@@ -139,13 +88,7 @@ class SimpleCache(object):
         """ set data in cache """
         expires = set_timestamp(cache_days * TIME_DAYS, True)
         data = data_dumps(data, separators=(',', ':'))
-
-        self._set_queue(endpoint, expires, data)
-
-        if len(self._queue) < self._queue_limit:
-            return
-
-        self.write()
+        self._set_db_cache(endpoint, expires, data)
 
     def check_cleanup(self):
         '''check if cleanup is needed - public method, may be called by calling addon'''
@@ -158,17 +101,6 @@ class SimpleCache(object):
         cur_time = set_timestamp(0, True)
         if (int(lastexecuted) + self._auto_clean_interval) < cur_time:
             self._do_cleanup()
-
-    def _get_queue(self, endpoint):
-        if endpoint not in self._queue:
-            return
-        return data_loads(self._queue[endpoint][0])
-
-    def _set_queue(self, endpoint, expires, data):
-        if not self._queue_limit:
-            return
-        self._queue[endpoint] = (endpoint, expires, data, )
-        self._set_mem_cache(endpoint, expires, data)
 
     def _get_mem_cache(self, endpoint, cur_time):
         '''
@@ -203,12 +135,13 @@ class SimpleCache(object):
         '''get cache data from sqllite _database'''
 
         query = "SELECT expires, data, checksum FROM simplecache WHERE id = ? LIMIT 1"
-        cache_data = self._execute_sql(query, (endpoint,), read_only=True)
+        connection = self._execute_sql(query, (endpoint,), read_only=True)
 
-        if not cache_data:
+        if not connection:
             return
 
-        cache_data = cache_data.fetchone()
+        cache_data = connection.fetchone()
+        connection.close()
 
         if not cache_data:
             return
@@ -247,9 +180,9 @@ class SimpleCache(object):
         except Exception as error:
             self.kodi_log(f'CACHE: _set_db_cache zlib.compress error: {error}\n{self._sc_name} - {endpoint}', 1)
             return
-        self._execute_sql(query, (endpoint, expires, data, 0))
+        connection = self._execute_sql(query, (endpoint, expires, data, 0))
+        connection.close() if connection else None
 
-    @busy_task
     def _do_delete(self):
         """ Delete all cache entries in simplecache """
         if self.exit_requested():
@@ -259,8 +192,11 @@ class SimpleCache(object):
         self.kodi_log(f'CACHE: Deleting {self._sc_name}...')
 
         query = 'DELETE FROM simplecache'
-        self._execute_sql(query)
-        self._execute_sql("VACUUM")
+        connection = self._execute_sql(query)
+        connection.close() if connection else None
+
+        connection = self._execute_sql("VACUUM")
+        connection.close() if connection else None
 
         # Washup
         cur_time = set_timestamp(0, True)
@@ -268,7 +204,6 @@ class SimpleCache(object):
         self.del_window_property(f'{self._sc_name}.cleanbusy')
         self.kodi_log(f'CACHE: Delete {self._sc_name} done')
 
-    @busy_task
     def _do_cleanup(self, force=False):
         """ Delete expired cache objects from simplecache """
         if self.exit_requested():
@@ -280,11 +215,17 @@ class SimpleCache(object):
         self.kodi_log(f"CACHE: Running cleanup...\n{self._sc_name}", 1)
         self.set_window_property(f'{self._sc_name}.cleanbusy', "busy")
 
-        with MutexFileLock(f'{self._db_file}.lockfile', kodi_log=self.kodi_log):
+        with MutexPropLock(f'{self._db_file}.lockfile', kodi_log=self.kodi_log):
             cur_time = set_timestamp(0, True)
             query = "SELECT id, expires FROM simplecache"
 
-            for cache_data in self._execute_sql(query).fetchall():
+            connection = self._execute_sql(query)
+            if not connection:
+                return
+            fetch_data = connection.fetchall()
+            connection.close()
+
+            for cache_data in fetch_data:
                 if self.exit_requested():
                     return
 
@@ -299,13 +240,15 @@ class SimpleCache(object):
 
                 # delete
                 query = 'DELETE FROM simplecache WHERE id = ?'
-                self._execute_sql(query, (cache_id,))
-
-                # compact db
-                self._execute_sql("VACUUM")
+                connection = self._execute_sql(query, (cache_id,))
+                connection.close() if connection else None
 
                 # logging
                 self.kodi_log(f'CACHE: delete from db {cache_id}')
+
+            # compact db
+            connection = self._execute_sql("VACUUM")
+            connection.close() if connection else None
 
             # Washup
             self.set_window_property(f'{self._sc_name}.clean.lastexecuted', str(cur_time))
@@ -320,7 +263,7 @@ class SimpleCache(object):
         return connection
 
     def _init_database(self):
-        with MutexFileLock(f'{self._db_file}.lockfile', kodi_log=self.kodi_log):
+        with MutexPropLock(f'{self._db_file}.lockfile', kodi_log=self.kodi_log):
             if xbmcvfs.exists(self._db_file):
                 return
             database = self._create_database()
@@ -328,13 +271,21 @@ class SimpleCache(object):
             self.set_window_property(f'{self._sc_name}.clean.lastexecuted', str(cur_time - self._auto_clean_interval + 600))
         return database
 
+    @staticmethod
+    def create_database_execute(connection):
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS simplecache(
+                id TEXT UNIQUE,
+                expires INTEGER,
+                data TEXT,
+                checksum INTEGER
+            )""")
+
     def _create_database(self):
         try:
             self.kodi_log(f'CACHE: Initialising: {self._db_file}...', 1)
             connection = sqlite3.connect(self._db_file, timeout=5.0, isolation_level=None)
-            connection.execute(
-                """CREATE TABLE IF NOT EXISTS simplecache(
-                id TEXT UNIQUE, expires INTEGER, data TEXT, checksum INTEGER)""")
+            self.create_database_execute(connection)
         except Exception as error:
             self.kodi_log(f'CACHE: Exception while initializing _database: {error}\n{self._sc_name}', 1)
         try:
@@ -346,15 +297,17 @@ class SimpleCache(object):
         except Exception as error:
             self.kodi_log(f'CACHE: Exception while setting pragmas for _database: {error}\n{self._sc_name}', 1)
 
-    def _get_database(self, read_only=False):
-        '''get reference to our sqllite _database - performs basic integrity check'''
+    def _get_database(self, read_only=False, log_level=1):
         timeout = self._db_read_timeout if read_only else self._db_timeout
         try:
             connection = sqlite3.connect(self._db_file, timeout=timeout, isolation_level=None)
-            connection.execute('SELECT * FROM simplecache LIMIT 1')
-            return self._set_pragmas(connection)
+            # connection.execute('SELECT * FROM simplecache LIMIT 1')  # Integrity check ?
         except Exception as error:
-            self.kodi_log(f'CACHE: ERROR while retrieving _database: {error}\n{self._sc_name}', 1)
+            self.kodi_log(f'CACHE: ERROR while retrieving _database: {error}\n{self._sc_name}', log_level)
+            return
+        if self._row_factory:
+            connection.row_factory = sqlite3.Row
+        return self._set_pragmas(connection)
 
     def _execute_sql(self, query, data=None, read_only=False):
         '''little wrapper around execute and executemany to just retry a db command if db is locked'''

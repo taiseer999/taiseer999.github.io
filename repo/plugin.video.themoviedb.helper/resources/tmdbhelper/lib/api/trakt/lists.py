@@ -1,9 +1,9 @@
 from jurialmunkey.parser import try_int
 from tmdbhelper.lib.addon.plugin import convert_type, PLUGINPATH, get_plugin_category, get_localized, get_setting, encode_url
-from tmdbhelper.lib.items.container import Container
+from tmdbhelper.lib.items.container import ContainerDirectory
 
 
-class ListBasic(Container):
+class ListBasic(ContainerDirectory):
     def get_items(
             self, info, tmdb_type, page=None, randomise=False, limit=None,
             genres=None, years=None, query=None, languages=None, countries=None, runtimes=None, studio_ids=None,
@@ -55,7 +55,7 @@ class ListBasic(Container):
         return items
 
 
-class ListSync(Container):
+class ListSync(ContainerDirectory):
     def get_list_items(self, sync_type, item_type, page=1, limit=None, sort_by=None, sort_how=None, params=None, next_page=True, filters=None, tmdb_id=None, **kwargs):
         from tmdbhelper.lib.api.trakt.sync.itemlist import ItemListSyncDataFactory
         from tmdbhelper.lib.items.itemlist import ItemListPagination
@@ -108,7 +108,7 @@ class ListToWatch(ListSync):
             page=page)
 
 
-class ListComments(Container):
+class ListComments(ContainerDirectory):
     def get_items(self, info, tmdb_type, tmdb_id, sort=None, **kwargs):
         """ Get a mix of watchlisted and inprogress """
         from tmdbhelper.lib.api.mapping import get_empty_item
@@ -173,7 +173,7 @@ class ListBecauseYouWatched(ListSync):
         return items
 
 
-class ListCalendar(Container):
+class ListCalendar(ContainerDirectory):
     def _get_calendar_items(self, info, startdate, days, page=None, kodi_db=None, endpoint=None, user=True, **kwargs):
         from tmdbhelper.lib.addon.tmdate import get_calendar_name
 
@@ -207,35 +207,52 @@ class ListLibraryCalendar(ListCalendar):
         return self._get_calendar_items(kodi_db=kodi_db, user=False, **kwargs)
 
 
-class ListInProgress(ListSync):
-    def get_items(self, info, tmdb_type, page=None, sort_by=None, sort_how=None, **kwargs):
-        if tmdb_type == 'tv':
-            sync_type = 'inprogress'
-            item_type = 'show'
-            params = {
-                'info': 'trakt_upnext',
-                'tmdb_type': 'tv',
-                'tmdb_id': '{tmdb_id}'}
-        else:
-            sync_type = 'playback'
-            item_type = 'movie'
-            params = None
-
-        self.tmdb_cache_only = False
-        self.kodi_db = self.get_kodi_database(tmdb_type)
-        self.library = convert_type(tmdb_type, 'library')
-        self.container_content = convert_type(tmdb_type, 'container')
-        self.plugin_category = f'{get_localized(32196)} {convert_type(tmdb_type, "plural")}'
-        return self.get_list_items(sync_type=sync_type, item_type=item_type, page=page, sort_by=sort_by, sort_how=sort_how, params=params)
-
-
 class ListOnDeck(ListSync):
-    def get_items(self, page=None, sort_by=None, sort_how=None, **kwargs):
-        self.tmdb_cache_only = False
-        self.library = 'video'
+    def get_ondeck_movies(self, page=None, sort_by=None, sort_how=None, unwatched=False, **kwargs):
+        self.container_content = 'movies'
+        self.plugin_category = f'{get_localized(32196)} {convert_type("movie", "plural")}'
+        self.kodi_db = self.get_kodi_database('movie')
+        sync_type = 'unwatchedplayback' if unwatched else 'playback'
+        return self.get_list_items(sync_type=sync_type, item_type='movie', page=page, sort_by=sort_by, sort_how=sort_how)
+
+    def get_ondeck_episodes(self, page=None, sort_by=None, sort_how=None, unwatched=False, **kwargs):
         self.container_content = 'episodes'
         self.plugin_category = get_localized(32406)
-        return self.get_list_items(sync_type='playback', item_type='episode', page=page, sort_by=sort_by, sort_how=sort_how)
+        self.kodi_db = self.get_kodi_database('tv')
+        sync_type = 'unwatchedplayback' if unwatched else 'playback'
+        return self.get_list_items(sync_type=sync_type, item_type='episode', page=page, sort_by=sort_by, sort_how=sort_how)
+
+    def get_items(self, **kwargs):
+        self.tmdb_cache_only = False
+        self.library = 'video'
+        return self.get_ondeck_episodes(**kwargs)
+
+
+class ListOnDeckUnWatched(ListOnDeck):
+    def get_items(self, tmdb_type, **kwargs):
+        self.tmdb_cache_only = False
+        self.library = 'video'
+        func = self.get_ondeck_episodes if tmdb_type == 'tv' else self.get_ondeck_movies
+        return func(unwatched=True, **kwargs)
+
+
+class ListInProgress(ListOnDeck):
+    def get_items(self, info, tmdb_type, page=None, sort_by=None, sort_how=None, **kwargs):
+        self.tmdb_cache_only = False
+        self.library = convert_type(tmdb_type, 'library')
+
+        if tmdb_type != 'tv':
+            return self.get_ondeck_movies(page=page, sort_by=sort_by, sort_how=sort_how, **kwargs)
+
+        params = {
+            'info': 'trakt_upnext',
+            'tmdb_type': 'tv',
+            'tmdb_id': '{tmdb_id}'}
+
+        self.kodi_db = self.get_kodi_database(tmdb_type)
+        self.container_content = convert_type(tmdb_type, 'container')
+        self.plugin_category = f'{get_localized(32196)} {convert_type(tmdb_type, "plural")}'
+        return self.get_list_items(sync_type='inprogress', item_type='show', page=page, sort_by=sort_by, sort_how=sort_how, params=params)
 
 
 class ListNextEpisodes(ListSync):
@@ -275,7 +292,7 @@ class ListUpNext(ListSync):
         return items
 
 
-class ListGenres(Container):
+class ListGenres(ContainerDirectory):
     def get_items(self, info, tmdb_type, **kwargs):
         items = self.trakt_api.get_list_of_genres(convert_type(tmdb_type, 'trakt'))
         self.library = 'video'
@@ -283,7 +300,7 @@ class ListGenres(Container):
         return items
 
 
-class ListLists(Container):
+class ListLists(ContainerDirectory):
     def get_items(self, info, page=None, **kwargs):
         from xbmcplugin import SORT_METHOD_UNSORTED
         from tmdbhelper.lib.addon.consts import TRAKT_LIST_OF_LISTS
@@ -305,7 +322,7 @@ class ListLists(Container):
         return items
 
 
-class ListCustom(Container):
+class ListCustom(ContainerDirectory):
     def get_items(
             self, list_slug, user_slug=None, page=None,
             **kwargs
@@ -327,7 +344,7 @@ class ListCustom(Container):
         return response.get('items', []) + response.get('next_page', [])
 
 
-class ListCustomSearch(Container):
+class ListCustomSearch(ContainerDirectory):
     def get_items(self, query=None, **kwargs):
         from xbmcgui import Dialog
         if not query:
@@ -340,7 +357,7 @@ class ListCustomSearch(Container):
         return items
 
 
-class ListSortBy(Container):
+class ListSortBy(ContainerDirectory):
     def get_items(self, info, **kwargs):
         from tmdbhelper.lib.api.trakt.sorting import get_sort_methods
         from tmdbhelper.lib.api.mapping import get_empty_item

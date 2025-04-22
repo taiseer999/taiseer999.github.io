@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from jurialmunkey.parser import LazyPropertyProtected, LazyProperty
+from tmdbhelper.lib.files.ftools import cached_property
 from jurialmunkey.checks import has_arg_value
 from tmdbhelper.lib.addon.consts import LASTACTIVITIES_DATA
 from tmdbhelper.lib.api.trakt.sync.database import SyncDataBase
@@ -37,17 +37,20 @@ class SyncDataGetterAll:
     clause_keys = ()  # WHERE {query_clauses} AND ({clause_key} IS NOT NULL {operator} {clause_key} IS NOT NULL)
     additional_keys = ()  # Additional keys to retrieve values for
     query_value_item_argx = 0  # Query value to use as sync item_type (normally item_type query is first ie 0 index)
-    item_type = LazyProperty('item_type')
-    base_keys = LazyProperty('base_keys')
-    clause = LazyPropertyProtected('clause')
-    items = LazyPropertyProtected('items')
-    keys = LazyPropertyProtected('keys')
 
     def __init__(self, class_instance_syncdata):
         self._class_instance_syncdata = class_instance_syncdata  # The SyncData object sync called from
 
+    @cached_property
+    def item_type(self):
+        return self.get_item_type()
+
     def get_item_type(self):
         return self.query_values[self.query_value_item_argx]
+
+    @cached_property
+    def base_keys(self):
+        return self.get_base_keys()
 
     def get_base_keys(self):
         if self.item_type == 'season':
@@ -56,6 +59,10 @@ class SyncDataGetterAll:
             return ('tmdb_id', 'title', 'season_number', 'episode_number', )
         return ('tmdb_id', 'title', )
 
+    @cached_property
+    def clause(self):
+        return self.get_clause()
+
     def get_clause(self):
         clause = [f'{k} IS NOT NULL' for k in self.clause_keys]
         clause = '({})'.format(f' {self.operator} '.join(clause))
@@ -63,12 +70,20 @@ class SyncDataGetterAll:
         clause = ' AND '.join(clause)
         return clause
 
+    @cached_property
+    def keys(self):
+        return self.get_keys()
+
     def get_keys(self):
         return (*(self.base_keys or ()), *(self.clause_keys or ()), *(self.additional_keys or ()), )
 
+    @cached_property
+    def items(self):
+        return self.get_items()
+
     def get_items(self):
         self._class_instance_syncdata.sync(self.item_type, self.keys)
-        return self._class_instance_syncdata.cache.get_list_values(self.clause, self.query_values, self.keys)
+        return self._class_instance_syncdata.cache.get_list_values(keys=self.keys, values=self.query_values, conditions=self.clause)
 
 
 class SyncDataGetterAllUnHidden(SyncDataGetterAll):
@@ -106,6 +121,14 @@ class SyncDataGetterAllItems(SyncDataGetterAll):
         return (self.item_type, )
 
 
+class SyncDataGetterAllUnwatchedItems(SyncDataGetterAll):
+    query_clauses = ('item_type=?', 'last_watched_at IS NULL')  # WHERE {query_clauses}
+
+    @property
+    def query_values(self):
+        return (self.item_type, )
+
+
 class SyncDataGetterAllItemsCollected(SyncDataGetterAllItems):
     clause_keys = ('collection_last_collected_at', )
 
@@ -126,6 +149,10 @@ class SyncDataGetterAllItemsPlayback(SyncDataGetterAllItems):
     clause_keys = ('playback_progress', )
 
 
+class SyncDataGetterAllUnwatchedItemsPlayback(SyncDataGetterAllUnwatchedItems):
+    clause_keys = ('playback_progress', )
+
+
 class SyncDataGetterUnHiddenShowEpisodesUpNext(SyncDataGetterAllUnHidden):
     clause_keys = ('upnext_episode_id', )
     query_clauses = ('item_type=?', 'tmdb_id=?', )
@@ -138,13 +165,6 @@ class SyncDataGetterUnHiddenShowEpisodesUpNext(SyncDataGetterAllUnHidden):
 class SyncDataGetterAllUnHiddenShowsInProgress:
     calendar_startdate = -14
     calendar_days = 15
-    calendar_episodes = LazyPropertyProtected('calendar_episodes')
-    calendar_data = LazyPropertyProtected('calendar_data')
-    calendar_data = LazyPropertyProtected('calendar_data')
-    calendar_data = LazyPropertyProtected('calendar_data')
-    parent_getter = LazyPropertyProtected('parent_getter')
-    items = LazyPropertyProtected('items')
-    keys = LazyPropertyProtected('keys')
     additional_keys = ()
 
     def __init__(self, class_instance_syncdata):
@@ -158,9 +178,17 @@ class SyncDataGetterAllUnHiddenShowsInProgress:
     def get_episode_playcount(self):
         return self._class_instance_syncdata.get_episode_playcount
 
+    @cached_property
+    def calendar_data(self):
+        return self.get_calendar_data()
+
     def get_calendar_data(self):
         return self._class_instance_syncdata._class_instance_trakt_api.get_calendar_episodes(
             startdate=self.calendar_startdate, days=self.calendar_days)
+
+    @cached_property
+    def calendar_episodes(self):
+        return self.get_calendar_episodes()
 
     def get_calendar_episodes(self):
         from tmdbhelper.lib.addon.tmdate import date_in_range
@@ -203,10 +231,18 @@ class SyncDataGetterAllUnHiddenShowsInProgress:
                 return False
         return True
 
+    @cached_property
+    def parent_getter(self):
+        return self.get_parent_getter()
+
     def get_parent_getter(self):
         sd = self._class_instance_syncdata.get_all_unhidden_shows_started_getter()
         sd.additional_keys = self.parent_additional_keys
         return sd
+
+    @cached_property
+    def keys(self):
+        return self.get_keys()
 
     def get_keys(self):
         return self.parent_getter.keys
@@ -215,10 +251,13 @@ class SyncDataGetterAllUnHiddenShowsInProgress:
     def parent_additional_keys(self):
         return ('aired_episodes', 'watched_episodes', 'hidden_at', 'last_watched_at', *(self.additional_keys or ()))
 
+    @cached_property
+    def items(self):
+        return self.get_items()
+
     def get_items(self):
         sd = self.parent_getter
-        x1, x2, x3 = sd.keys.index('tmdb_id'), sd.keys.index('aired_episodes'), sd.keys.index('watched_episodes')
-        return [i for i in sd.items if self.is_inprogress_show(i[x1], i[x2], i[x3])]
+        return [i for i in sd.items if self.is_inprogress_show(i['tmdb_id'], i['aired_episodes'], i['watched_episodes'])]
 
 
 class SyncDataGetters:
@@ -267,6 +306,11 @@ class SyncDataGetters:
         sd.item_type = item_type
         return sd
 
+    def get_all_unwatched_playback_getter(self, item_type):
+        sd = SyncDataGetterAllUnwatchedItemsPlayback(self)
+        sd.item_type = item_type
+        return sd
+
     def get_unhidden_show_episodes_upnext(self, tmdb_id):
         sd = SyncDataGetterUnHiddenShowEpisodesUpNext(self)
         sd.tmdb_id = tmdb_id
@@ -299,11 +343,7 @@ class SyncDataGetters:
 
 class SyncData(SyncDataGetters):
 
-    cache_filename = 'TraktSync.db'
-
-    cache = LazyPropertyProtected('cache')
-    window = LazyPropertyProtected('window')
-    routes = LazyPropertyProtected('routes')
+    cache_filename = 'TraktSync_v2.db'
 
     def __init__(self, class_instance_trakt_api):
         self._class_instance_trakt_api = class_instance_trakt_api  # The TraktAPI object sync called from
@@ -317,14 +357,26 @@ class SyncData(SyncDataGetters):
     def get_response_json(self, *args, **kwargs):
         return self._class_instance_trakt_api.get_response_json(*args, **kwargs)
 
+    @cached_property
+    def routes(self):
+        return self.get_routes()
+
     def get_routes(self):
         return {k: v['sync'] for k, v in self.cache.simplecache_columns.items()}
 
     def reset_lastactivities(self):
         self.window.get_property(LASTACTIVITIES_DATA, clear_property=True)  # Wipe new last activities cache
 
+    @cached_property
+    def cache(self):
+        return self.get_cache()
+
     def get_cache(self):
         return SyncDataBase(filename=self.cache_filename)
+
+    @cached_property
+    def window(self):
+        return self.get_window()
 
     def get_window(self):
         from jurialmunkey.window import WindowPropertySetter
@@ -344,7 +396,7 @@ class SyncData(SyncDataGetters):
     @has_arg_value(0, ('tv', 'movie', ))
     def get_values(self, tmdb_type, tmdb_id, season=None, episode=None, keys=None):
         self.sync('show' if tmdb_type == 'tv' else 'movie', keys)
-        return self.cache.get_values(self.get_name(tmdb_type, tmdb_id, season, episode), keys)
+        return self.cache.get_values(item_id=self.get_name(tmdb_type, tmdb_id, season, episode), keys=keys)
 
     def get_value(self, tmdb_type, tmdb_id, season=None, episode=None, key=None):
         data = self.get_values(tmdb_type, tmdb_id, season, episode, keys=(key,))

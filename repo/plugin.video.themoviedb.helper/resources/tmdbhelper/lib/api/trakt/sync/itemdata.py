@@ -1,13 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from jurialmunkey.parser import LazyProperty
+from tmdbhelper.lib.files.ftools import cached_property
 
 
-class SyncItemDataAttributes:
+class SyncItemData:
+
+    def __init__(self, item, item_type):
+        self.item = item
+        self.item_type = item_type
+
     """
     season_number
     """
-    season_number = LazyProperty('season_number')
+    @cached_property
+    def season_number(self):
+        return self.get_season_number()
 
     def get_season_number(self):
         if self.item_type == 'season':
@@ -18,7 +25,9 @@ class SyncItemDataAttributes:
     """
     episode_number
     """
-    episode_number = LazyProperty('episode_number')
+    @cached_property
+    def episode_number(self):
+        return self.get_episode_number()
 
     def get_episode_number(self):
         if self.item_type == 'episode':
@@ -27,7 +36,9 @@ class SyncItemDataAttributes:
     """
     tmdb_id
     """
-    tmdb_id = LazyProperty('tmdb_id')
+    @cached_property
+    def tmdb_id(self):
+        return self.get_tmdb_id()
 
     def get_tmdb_id(self):
         return self.item[self.parent_item_type]['ids']['tmdb']
@@ -35,7 +46,9 @@ class SyncItemDataAttributes:
     """
     tmdb_type
     """
-    tmdb_type = LazyProperty('tmdb_type')
+    @cached_property
+    def tmdb_type(self):
+        return self.get_tmdb_type()
 
     def get_tmdb_type(self):
         if self.item_type in ('show', 'season', 'episode',):
@@ -44,19 +57,23 @@ class SyncItemDataAttributes:
             return 'movie'
 
     """
-    slug
+    trakt_id
     """
-    slug = LazyProperty('slug')
+    @cached_property
+    def trakt_id(self):
+        return self.get_trakt_id()
 
-    def get_slug(self):
+    def get_trakt_id(self):
         if self.parent_item_type not in self.item:
             return
-        return self.item[self.parent_item_type]['ids']['slug']
+        return self.item[self.parent_item_type]['ids']['trakt']
 
     """
     item_id
     """
-    item_id = LazyProperty('item_id')
+    @cached_property
+    def item_id(self):
+        return self.get_item_id()
 
     def get_item_id(self):
         item_id = f'{self.tmdb_type}.{self.tmdb_id}'
@@ -69,7 +86,9 @@ class SyncItemDataAttributes:
     """
     parent_item_type
     """
-    parent_item_type = LazyProperty('parent_item_type')
+    @cached_property
+    def parent_item_type(self):
+        return self.get_parent_item_type()
 
     def get_parent_item_type(self):
         if self.item_type in ('season', 'episode'):
@@ -79,7 +98,9 @@ class SyncItemDataAttributes:
     """
     plays
     """
-    plays = LazyProperty('plays')
+    @cached_property
+    def plays(self):
+        return self.get_plays()
 
     def get_plays(self):
         return self.item.get('plays')
@@ -87,7 +108,9 @@ class SyncItemDataAttributes:
     """
     last_watched_at
     """
-    last_watched_at = LazyProperty('last_watched_at')
+    @cached_property
+    def last_watched_at(self):
+        return self.get_last_watched_at()
 
     def get_last_watched_at(self):
         return self.item.get('last_watched_at') or self.item.get('watched_at')
@@ -95,7 +118,9 @@ class SyncItemDataAttributes:
     """
     last_updated_at
     """
-    last_updated_at = LazyProperty('last_updated_at')
+    @cached_property
+    def last_updated_at(self):
+        return self.get_last_updated_at()
 
     def get_last_updated_at(self):
         return self.item.get('last_updated_at') or self.item.get('updated_at')
@@ -103,7 +128,9 @@ class SyncItemDataAttributes:
     """
     last_collected_at
     """
-    last_collected_at = LazyProperty('last_collected_at')
+    @cached_property
+    def last_collected_at(self):
+        return self.get_last_collected_at()
 
     def get_last_collected_at(self):
         return self.item.get('last_collected_at') or self.item.get('collected_at')
@@ -111,7 +138,9 @@ class SyncItemDataAttributes:
     """
     aired_episodes
     """
-    aired_episodes = LazyProperty('aired_episodes')
+    @cached_property
+    def aired_episodes(self):
+        return self.get_aired_episodes()
 
     def get_aired_episodes(self):
         if 'show' not in self.item.keys():
@@ -121,7 +150,9 @@ class SyncItemDataAttributes:
     """
     reset_at
     """
-    reset_at = LazyProperty('reset_at')
+    @cached_property
+    def reset_at(self):
+        return self.get_reset_at()
 
     def get_reset_at(self):
         return self.item.get('reset_at')
@@ -129,7 +160,9 @@ class SyncItemDataAttributes:
     """
     rating
     """
-    rating = LazyProperty('rating')
+    @cached_property
+    def rating(self):
+        return self.get_rating()
 
     def get_rating(self):
         return self.item.get('rating')
@@ -137,7 +170,9 @@ class SyncItemDataAttributes:
     """
     rated_at
     """
-    rated_at = LazyProperty('rated_at')
+    @cached_property
+    def rated_at(self):
+        return self.get_rated_at()
 
     def get_rated_at(self):
         return self.item.get('rated_at')
@@ -145,7 +180,9 @@ class SyncItemDataAttributes:
     """
     rank
     """
-    rank = LazyProperty('rank')
+    @cached_property
+    def rank(self):
+        return self.get_rank()
 
     def get_rank(self):
         return self.item.get('rank')
@@ -153,7 +190,9 @@ class SyncItemDataAttributes:
     """
     listed_at
     """
-    listed_at = LazyProperty('listed_at')
+    @cached_property
+    def listed_at(self):
+        return self.get_listed_at()
 
     def get_listed_at(self):
         return self.item.get('listed_at')
@@ -161,23 +200,19 @@ class SyncItemDataAttributes:
     """
     notes
     """
-    notes = LazyProperty('notes')
+    @cached_property
+    def notes(self):
+        return self.get_notes()
 
     def get_notes(self):
         return self.item.get('notes')
 
     """
-    episode_type
-    """
-    episode_type = LazyProperty('episode_type')
-
-    def get_episode_type(self):
-        return self.item.get('episode_type')
-
-    """
     id
     """
-    id = LazyProperty('id')
+    @cached_property
+    def id(self):
+        return self.get_id()
 
     def get_id(self):
         return self.item.get('id')
@@ -185,7 +220,9 @@ class SyncItemDataAttributes:
     """
     paused_at
     """
-    paused_at = LazyProperty('paused_at')
+    @cached_property
+    def paused_at(self):
+        return self.get_paused_at()
 
     def get_paused_at(self):
         return self.item.get('paused_at')
@@ -193,7 +230,9 @@ class SyncItemDataAttributes:
     """
     progress
     """
-    progress = LazyProperty('progress')
+    @cached_property
+    def progress(self):
+        return self.get_progress()
 
     def get_progress(self):
         return self.item.get('progress')
@@ -201,7 +240,9 @@ class SyncItemDataAttributes:
     """
     watched_episodes
     """
-    watched_episodes = LazyProperty('watched_episodes')
+    @cached_property
+    def watched_episodes(self):
+        return self.get_watched_episodes()
 
     def get_watched_episodes(self):
         return
@@ -209,7 +250,9 @@ class SyncItemDataAttributes:
     """
     hidden_at
     """
-    hidden_at = LazyProperty('hidden_at')
+    @cached_property
+    def hidden_at(self):
+        return self.get_hidden_at()
 
     def get_hidden_at(self):
         return self.item.get('hidden_at')
@@ -217,7 +260,9 @@ class SyncItemDataAttributes:
     """
     next_episode_id
     """
-    next_episode_id = LazyProperty('next_episode_id')
+    @cached_property
+    def next_episode_id(self):
+        return self.get_next_episode_id()
 
     def get_next_episode_id(self):
         return self.item.get('next_episode_id')
@@ -225,7 +270,9 @@ class SyncItemDataAttributes:
     """
     upnext_episode_id
     """
-    upnext_episode_id = LazyProperty('upnext_episode_id')
+    @cached_property
+    def upnext_episode_id(self):
+        return self.get_upnext_episode_id()
 
     def get_upnext_episode_id(self):
         return self.item.get('upnext_episode_id')
@@ -233,7 +280,9 @@ class SyncItemDataAttributes:
     """
     premiered
     """
-    premiered = LazyProperty('premiered')
+    @cached_property
+    def premiered(self):
+        return self.get_premiered()
 
     def get_premiered(self):
         if 'show' in self.item.keys():
@@ -244,7 +293,9 @@ class SyncItemDataAttributes:
     """
     year
     """
-    year = LazyProperty('year')
+    @cached_property
+    def year(self):
+        return self.get_year()
 
     def get_year(self):
         if 'show' in self.item.keys():
@@ -255,7 +306,9 @@ class SyncItemDataAttributes:
     """
     title
     """
-    title = LazyProperty('title')
+    @cached_property
+    def title(self):
+        return self.get_title()
 
     def get_title(self):
         if 'show' in self.item.keys():
@@ -266,7 +319,9 @@ class SyncItemDataAttributes:
     """
     status
     """
-    status = LazyProperty('status')
+    @cached_property
+    def status(self):
+        return self.get_status()
 
     def get_status(self):
         if 'show' in self.item.keys():
@@ -277,7 +332,9 @@ class SyncItemDataAttributes:
     """
     country
     """
-    country = LazyProperty('country')
+    @cached_property
+    def country(self):
+        return self.get_country()
 
     def get_country(self):
         if 'show' in self.item.keys():
@@ -288,7 +345,9 @@ class SyncItemDataAttributes:
     """
     language
     """
-    language = LazyProperty('language')
+    @cached_property
+    def language(self):
+        return self.get_language()
 
     def get_language(self):
         if 'show' in self.item.keys():
@@ -299,7 +358,9 @@ class SyncItemDataAttributes:
     """
     certification
     """
-    certification = LazyProperty('certification')
+    @cached_property
+    def certification(self):
+        return self.get_certification()
 
     def get_certification(self):
         if 'show' in self.item.keys():
@@ -310,7 +371,9 @@ class SyncItemDataAttributes:
     """
     runtime
     """
-    runtime = LazyProperty('runtime')
+    @cached_property
+    def runtime(self):
+        return self.get_runtime()
 
     def get_runtime(self):
         if 'show' in self.item.keys():
@@ -321,7 +384,9 @@ class SyncItemDataAttributes:
     """
     trakt_rating
     """
-    trakt_rating = LazyProperty('trakt_rating')
+    @cached_property
+    def trakt_rating(self):
+        return self.get_trakt_rating()
 
     def get_trakt_rating(self):
         if 'show' in self.item.keys():
@@ -332,7 +397,9 @@ class SyncItemDataAttributes:
     """
     trakt_votes
     """
-    trakt_votes = LazyProperty('trakt_votes')
+    @cached_property
+    def trakt_votes(self):
+        return self.get_trakt_votes()
 
     def get_trakt_votes(self):
         if 'show' in self.item.keys():
@@ -341,18 +408,11 @@ class SyncItemDataAttributes:
             return self.item['movie'].get('votes')
 
 
-class SyncItemData(SyncItemDataAttributes):
-
-    def __init__(self, item, item_type):
-        self.item = item
-        self.item_type = item_type
-
-
 class SyncItem:
 
     _additional_keys = (
         'item_type', 'tmdb_type', 'tmdb_id', 'season_number', 'episode_number',
-        'slug', 'premiered', 'year', 'title', 'status', 'country', 'certification', 'runtime',
+        'trakt_id', 'premiered', 'year', 'title', 'status', 'country', 'certification', 'runtime',
         'trakt_rating', 'trakt_votes',
     )
 
@@ -396,13 +456,9 @@ class SyncItem:
     def table_keys(self):
         return (*self.base_table_keys, *self.additional_keys)
 
-    @property
+    @cached_property
     def data(self):
-        try:
-            return self._data
-        except AttributeError:
-            self._data = self.get_data()
-            return self._data
+        return self.get_data()
 
     def get_data(self):
         data = {}
@@ -461,3 +517,4 @@ class SyncItem:
             data[item_data.item_id] = [getattr(item_data, k) for k in self.keys]
 
         return data
+

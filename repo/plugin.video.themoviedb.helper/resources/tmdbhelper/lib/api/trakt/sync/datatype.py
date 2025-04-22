@@ -1,6 +1,7 @@
+from tmdbhelper.lib.files.ftools import cached_property
 from tmdbhelper.lib.addon.tmdate import set_timestamp, get_timestamp
 from tmdbhelper.lib.api.trakt.sync.activity import SyncLastActivities
-from jurialmunkey.parser import LazyPropertyProtected
+from tmdbhelper.lib.files.locker import mutexlock
 
 
 def timerlock(func):
@@ -18,53 +19,28 @@ def timerlock(func):
 
 def progress_bg(func):
     def wrapper(self, *args, **kwargs):
-        from xbmcgui import DialogProgressBG
-        self.dialog_progress_bg = DialogProgressBG()
-        self.dialog_progress_bg.create(heading=f'Syncing {self.item_type} {self.method}')
+        from tmdbhelper.lib.addon.dialog import DialogProgressSyncBG
+        self.dialog_progress_bg = DialogProgressSyncBG()
+        self.dialog_progress_bg.heading = f'Syncing {self.item_type} {self.method}'
+        self.dialog_progress_bg.create()
         data = func(self, *args, **kwargs)
         self.dialog_progress_bg.close()
         return data
     return wrapper
 
 
-def mutexlock(func):
-    def wrapper(self, *args, **kwargs):
-        from jurialmunkey.locker import MutexPropLock
-        filename = f'{self.lock_name}.{self.item_type}.{self.method}'
-        filename = f'{self.cache._db_file}.{filename}.lockfile'
-        with MutexPropLock(filename, timeout=300, kodi_log=self.cache.kodi_log) as mutex_lock:
-            if mutex_lock.lockstate == -1:  # Abort or Timeout
-                return
-            return func(self, *args, **kwargs)
-    return wrapper
-
-
-class DialogProgressIncrementor:
-    def __init__(self, dialog_progress_bg, max_value=100, now_value=0):
-        self.max_value = max_value
-        self.now_value = now_value
-        self.dialog_progress_bg = dialog_progress_bg
-
-    def increment(self, x=1):
-        self.now_value += x
-
-    @property
-    def progress(self):
-        return int((self.now_value / self.max_value) * 100)
-
-    def set_message(self, message):
-        self.dialog_progress_bg.update(self.progress, message=message)
-
-
 class DataType:
     sync_kwgs = {}
     lock_name = 'sync_trakt'
     key_prefix = None
-    last_activities = LazyPropertyProtected('last_activities')
 
     def __init__(self, class_instance_syncdata, item_type):
         self._class_instance_syncdata = class_instance_syncdata
         self._item_type = item_type
+
+    @property
+    def mutex_lockname(self):
+        return f'{self.cache._db_file}.{self.lock_name}.{self.item_type}.{self.method}.lockfile'
 
     @property
     def cache(self):
@@ -98,6 +74,10 @@ class DataType:
     def trakt_api(self):
         return self._class_instance_syncdata._class_instance_trakt_api
 
+    @cached_property
+    def last_activities(self):
+        return self.get_last_activities()
+
     def get_last_activities(self):
         return SyncLastActivities(self._class_instance_syncdata)
 
@@ -113,7 +93,7 @@ class DataType:
         return (self.last_activities_item_type, self.last_activities_key, )
 
     def clear_columns(self, keys):
-        self.cache.del_column_values(keys, self.item_type)
+        self.cache.del_column_values(keys=keys, item_type=self.item_type)
         self.clear_child_columns(keys)
 
     def clear_child_columns(self, keys):
@@ -150,7 +130,7 @@ class DataType:
         data = item.data
 
         self.dialog_progress_bg.update(80, message='Updating Data')
-        self.cache.set_many_values(item.table_keys, data)
+        self.cache.set_many_values(keys=item.table_keys, data=data)
 
         return (item.table_keys, data, )
 
@@ -165,8 +145,8 @@ class DataType:
 class DataTypeEpisodes(DataType):
     def clear_child_columns(self, keys):
         if self.item_type == 'show':
-            self.cache.del_column_values(self.keys, 'season')
-            self.cache.del_column_values(self.keys, 'episode')
+            self.cache.del_column_values(keys=keys, item_type='season')
+            self.cache.del_column_values(keys=keys, item_type='episode')
 
     @property
     def last_activities_item_type(self):
@@ -250,13 +230,13 @@ class SyncAllNextEpisodes(DataTypeEpisodes):
             for season in response.get('seasons', []) for episode in season.get('episodes', [])
             if not episode.get('completed') or (reset_at and convert_timestamp(episode.get('last_watched_at')) < reset_at))
 
-    def get_next_episodes_response(self, slug):
-        if not slug:
+    def get_next_episodes_response(self, trakt_id):
+        if not trakt_id:
             return
-        return self.get_response_sync('shows', slug, 'progress/watched')
+        return self.get_response_sync('shows', trakt_id, 'progress/watched')
 
-    def get_next_episodes(self, tmdb_id, slug):
-        response = self.get_next_episodes_response(slug)
+    def get_next_episodes(self, tmdb_id, trakt_id):
+        response = self.get_next_episodes_response(trakt_id)
         if not response:
             return
         return self.get_all_next_episodes(response, tmdb_id)
@@ -267,31 +247,28 @@ class SyncAllNextEpisodes(DataTypeEpisodes):
         from tmdbhelper.lib.addon.thread import ParallelThread
         from tmdbhelper.lib.addon.logger import TimerFunc
 
-        dpro = DialogProgressIncrementor(self.dialog_progress_bg)
-        argx = {}
+        dpro = self.dialog_progress_bg
 
         def get_item(i, item_id):
             tmdb_type, tmdb_id, season_number, episode_number = item_id.split('.')
-            item = {"show": {"ids": {"tmdb": i[argx["tmdb_id"]], "slug": i[argx["slug"]]}}}
+            item = {"show": {"ids": {"tmdb": i["tmdb_id"], "trakt": i["trakt_id"]}}}
             item['upnext_episode_id'] = item_id
             item['type'] = 'episode'
             item['episode'] = {'season': season_number, 'number': episode_number}
             return item
 
         def get_items(i):
-            next_episodes = self.get_next_episodes(i[argx["tmdb_id"]], i[argx["slug"]])
+            next_episodes = self.get_next_episodes(i["tmdb_id"], i["trakt_id"])
             dpro.increment()
             if not next_episodes:
-                dpro.set_message(f'Skip: {i[argx["tmdb_id"]]} {i[argx["slug"]]}')
+                dpro.set_message(f'Skip: {i["tmdb_id"]} {i["trakt_id"]}')
                 return
-            dpro.set_message(f'Sync: {i[argx["tmdb_id"]]} {i[argx["slug"]]}')
+            dpro.set_message(f'Sync: {i["tmdb_id"]} {i["trakt_id"]}')
             return [get_item(i, item_id) for item_id in next_episodes]
 
         with TimerFunc(f'Sync: {self.method} {self.item_type}', inline=True, log_threshold=0.001):
             sd = self._class_instance_syncdata.get_all_unhidden_shows_inprogress_getter()
-            sd.additional_keys = ('slug', )
-            for k in sd.keys:
-                argx[k] = sd.keys.index(k)
+            sd.additional_keys = ('trakt_id', )
             dpro.max_value = len(sd.items)
             with ParallelThread(sd.items, get_items) as pt:
                 item_queue = pt.queue
@@ -304,8 +281,8 @@ class SyncNextEpisodes(SyncAllNextEpisodes):
     last_activities_key = 'watched_at'
     method = 'nextup'
 
-    def get_next_episode(self, tmdb_id, slug):
-        response = self.get_next_episodes_response(slug)
+    def get_next_episode(self, tmdb_id, trakt_id):
+        response = self.get_next_episodes_response(trakt_id)
         if not response:
             return
         if not response.get('reset_at') and response.get('next_episode'):
@@ -324,23 +301,20 @@ class SyncNextEpisodes(SyncAllNextEpisodes):
         from tmdbhelper.lib.addon.thread import ParallelThread
         from tmdbhelper.lib.addon.logger import TimerFunc
 
-        dpro = DialogProgressIncrementor(self.dialog_progress_bg)
-        argx = {}
+        dpro = self.dialog_progress_bg
 
         def get_item(i):
-            next_episode_id = self.get_next_episode(i[argx["tmdb_id"]], i[argx["slug"]])
+            next_episode_id = self.get_next_episode(i["tmdb_id"], i["trakt_id"])
             dpro.increment()
             if not next_episode_id:
                 dpro.set_message(f'Skip: {next_episode_id}')
                 return
             dpro.set_message(f'Sync: {next_episode_id}')
-            return {"next_episode_id": next_episode_id, "show": {"ids": {"tmdb": i[argx["tmdb_id"]], "slug": i[argx["slug"]]}}}
+            return {"next_episode_id": next_episode_id, "show": {"ids": {"tmdb": i["tmdb_id"], "trakt": i["trakt_id"]}}}
 
         with TimerFunc(f'Sync: {self.method} {self.item_type}', inline=True, log_threshold=0.001):
             sd = self._class_instance_syncdata.get_all_unhidden_shows_inprogress_getter()
-            sd.additional_keys = ('slug', )
-            for k in sd.keys:
-                argx[k] = sd.keys.index(k)
+            sd.additional_keys = ('trakt_id', )
             dpro.max_value = len(sd.items)
             with ParallelThread(sd.items, get_item) as pt:
                 item_queue = pt.queue
