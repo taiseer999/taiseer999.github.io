@@ -1,8 +1,6 @@
 '''
 **********************************************************
-* Updated on 2025-04-04.
-* 
-* @license GNU General Public License, version 3 (GPL-3.0)
+*@license GNU General Public License, version 3 (GPL-3.0)*
 **********************************************************
 '''
 
@@ -25,13 +23,12 @@ import base64
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 params = dict(parse_qsl(sys.argv[2][1:]))
-addon = xbmcaddon.Addon(id='plugin.video.daddylive')
+addon = xbmcaddon.Addon(id='plugin.video.daddylivehd')
 
 mode = addon.getSetting('mode')
-#baseurl = 'https://dlhd.so/'
-baseurl = 'https://daddylive.mp/'
-json_url = f'{baseurl}stream/stream-%s.php'
-schedule_url = baseurl + 'schedule/schedule-generated.php'
+baseurl = addon.getSetting('baseurl').strip()
+schedule_path = addon.getSetting('schedule_path').strip()
+schedule_url = baseurl + schedule_path
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36'
 FANART = addon.getAddonInfo('fanart')
 ICON = addon.getAddonInfo('icon')
@@ -39,7 +36,7 @@ ICON = addon.getAddonInfo('icon')
 
 def log(msg):
     LOGPATH = xbmcvfs.translatePath('special://logpath/')
-    FILENAME = 'daddylive.log'
+    FILENAME = 'daddylivehd.log'
     LOG_FILE = os.path.join(LOGPATH, FILENAME)
     try:
         if isinstance(msg, str):
@@ -62,12 +59,10 @@ def log(msg):
 
 
 def clean_category_name(name):
-    """Cleans up HTML tags and entities from sport categories."""
+    """Cleans up HTML entities from sport categories."""
     if isinstance(name, str):
-        # Decode HTML entities
-        name = html.unescape(name)
-        # Remove any lingering span tags (i.e., </span>) and extra whitespace
-        name = name.replace('</span>', '').strip()
+        # Decode HTML entities only
+        name = html.unescape(name).strip()
     return name
 
 
@@ -139,13 +134,19 @@ def getKodiversion():
 
 
 def Main_Menu():
-    menu = [
-        ['LIVE SPORTS', 'sched'],
-        ['LIVE TV', 'live_tv'],
-    ]
-    for m in menu:
-        addDir(m[0], build_url({'mode': 'menu', 'serv_type': m[1]}))
+    addDir('LIVE SPORTS', build_url({'mode': 'menu', 'serv_type': 'sched'}))
+    addDir('LIVE TV', build_url({'mode': 'menu', 'serv_type': 'live_tv'}))
+
+    li = xbmcgui.ListItem("Settings")
+    li.setArt({'icon': ICON, 'fanart': FANART})
+    li.setProperty("IsPlayable", "false")
+
+    # Point to your addon with custom mode that opens settings
+    url = build_url({'mode': 'open_settings'})
+    xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=False)
+
     closeDir()
+
 
 
 def getCategTrans():
@@ -281,6 +282,9 @@ def channels():
 
 def PlayStream(link):
     try:
+        # Get the stream path from settings (it can be customized in settings.xml)
+        stream_path = addon.getSetting('stream_path').strip()
+        
         headers = {'Referer': baseurl, 'user-agent': UA}
         resp = requests.post(link, headers=headers).text
         url_1 = re.findall('iframe src="([^"]*)', resp)[0]
@@ -296,7 +300,7 @@ def PlayStream(link):
         url_3 = requests.post(resp3, headers=headers).text
         key = re.findall(':"([^"]*)',url_3)[0]
 
-        final_link = f'https://{key}.newkso.ru/{key}/{url_2}{m3u8}|Referer={referer}/&Origin={referer}&Keep-Alive=true&User-Agent={user_agent}'
+        final_link = f'https://{key}{stream_path}/{key}/{url_2}{m3u8}|Referer={referer}/&Origin={referer}&Keep-Alive=true&User-Agent={user_agent}'
 
         if final_link.startswith("http"):
             liz = xbmcgui.ListItem('Daddylive', path=final_link)
@@ -342,3 +346,7 @@ else:
     if mode == 'play':
         link = params.get('url')
         PlayStream(link)
+        
+    if mode == 'open_settings':
+        xbmcaddon.Addon().openSettings()
+        xbmcplugin.endOfDirectory(addon_handle)
