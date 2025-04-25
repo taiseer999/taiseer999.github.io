@@ -1593,9 +1593,10 @@ updated YouTube addon URL
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
-</addon><addon id="plugin.video.fenlight" name="Fen Light+" provider-name="Tikipeter/thejason40" version="2.1.20">
+</addon><addon id="plugin.video.fenlight" name="FenLightAM" provider-name="Tikipeter/AnonyMouse" version="2.1.22">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.pil" version="1.1.7" />
         <import addon="script.module.requests" version="2.19.1" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/fenlight.py">
@@ -1609,9 +1610,10 @@ updated YouTube addon URL
         <description lang="en">This add-on is intended for advanced Kodi users only. You must own the content of any media you play through this addon. This is an English language only add-on.</description>
         <platform>all</platform>
 		<disclaimer lang="en">The author of this addon does not host any of the content which is found and has no affiliation with any of the content providers.</disclaimer>
+        <license />
         <assets>
-            <icon>resources/media/flpi.png</icon>
-            <fanart>resources/media/flpfa.jpg</fanart>
+            <icon>resources/media/fenlightam_icon.png</icon>
+            <fanart>resources/media/fenlightam_fanart.jpg</fanart>
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
@@ -7563,7 +7565,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.5.33">
+</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.5.34">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
