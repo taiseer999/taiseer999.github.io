@@ -251,7 +251,7 @@
                         <align>center</align>
                         <font>font_mini</font>
                         <textcolor>dialog_fg_90</textcolor>
-                        <label>[B]$LOCALIZE[20474][/B][CR]$VAR[HDRSourceVar]$VAR[DVProfileVar]$VAR[DVELVar]$VAR[VideoConvVar]</label>
+                        <label>[B]$LOCALIZE[20474][/B][CR]$VAR[Label_VideoHDRCodec]$VAR[DVProfileVar]$VAR[DVELVar]$VAR[VideoConvVar]</label>
                         <visible>!VideoPlayer.Content(livetv)</visible>
                     </control>
                     <control type="textbox">
