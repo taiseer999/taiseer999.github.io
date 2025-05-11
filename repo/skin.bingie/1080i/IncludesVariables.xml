@@ -548,7 +548,7 @@
 	<variable name="RemoveRatingLabel">
 		<value condition="$EXP[IsMovieDBType]">$LOCALIZE[31310]</value>
 		<value condition="$EXP[IsTvShowDBType]">$LOCALIZE[31384]</value>
-		<value condition="$EXP[IsEpisodeDBType]">$LOCALIZE[31678]</value>
+		<value condition="$EXP[IsEpisodeDBType]">$LOCALIZE[31223]</value>
 	</variable>
 	
 	<variable name="SettingsButton">
@@ -589,6 +589,11 @@
 	<variable name="PVRVideoBullet2">
 		<value condition="[!String.IsEmpty(VideoPlayer.Episode) | !String.IsEmpty(VideoPlayer.Season)] + !String.IsEmpty(VideoPlayer.EpisodeName)">‎ </value>
 		<value condition="String.IsEmpty(VideoPlayer.Episode) + String.IsEmpty(VideoPlayer.Season) + !String.IsEmpty(VideoPlayer.EpisodeName)"> • </value>
+	</variable>
+	
+	<variable name="FooterIconColor">
+		<value condition="!Skin.HasSetting(PreferWhiteFooter)">white</value>
+		<value condition="Skin.HasSetting(PreferWhiteFooter)">$INFO[Skin.String(FooterIconColor)]</value>
 	</variable>
 	
 </includes>

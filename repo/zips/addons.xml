@@ -7659,7 +7659,7 @@ Added arabic fonts
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.bingie" version="1.0.7" name="Bingie" provider-name="matke">
+</addon><addon id="skin.bingie" version="1.0.9" name="Bingie" provider-name="matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />

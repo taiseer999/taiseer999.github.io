@@ -2447,7 +2447,7 @@ msgid "Focused/active color for radiobuttons and spin controls"
 msgstr ""
 
 msgctxt "#31619"
-msgid "Prefer trailers from YouTube in 'Trailers & More'"
+msgid "Home main menu line under icon'"
 msgstr ""
 
 msgctxt "#31620"
@@ -2667,7 +2667,7 @@ msgid "Do not display channel logo in the guide"
 msgstr ""
 
 msgctxt "#31674"
-msgid "Home main menu line under icon"
+msgid "PVR Guide progress indicator colorn"
 msgstr ""
 
 msgctxt "#31675"
@@ -2675,13 +2675,13 @@ msgid "Display tags on widgets"
 msgstr ""
 
 msgctxt "#31676"
-msgid "Configure ratings list"
+msgid "Icon color for footer"
 msgstr ""
 
 msgctxt "#31677"
-msgid "Similar"
+msgid "OSD media/codec info color"
 msgstr ""
 
 msgctxt "#31678"
-msgid "Are you sure you want to remove the rating for episode?"
+msgid "Letterboxd Rating"
 msgstr ""

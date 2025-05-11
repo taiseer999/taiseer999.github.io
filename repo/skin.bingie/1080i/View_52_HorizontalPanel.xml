@@ -11,6 +11,7 @@
                 <ondown condition="!Skin.HasSetting(EnableQuickJump)">60</ondown>
             <onleft>52</onleft>
             <onright>52</onright>
+			<onback>ClearProperty(ListAnimation,home)</onback>
             <pagecontrol>60</pagecontrol>
             <viewtype label="31445">bigwrap</viewtype>
         <include content="View_Forced">
@@ -20,11 +21,11 @@
             <focusposition>3</focusposition>
             <preloaditems>2</preloaditems>
             <orientation>horizontal</orientation>
-        <itemlayout height="348" width="258">
+        <itemlayout height="352" width="258">
             <!-- Poster UnFocus Layout -->
 			<control type="group">
                 <width>248</width>
-                <height>348</height>
+                <height>352</height>
                 <include>PosterPanelLayout</include>
 				<control type="group">
 					<!--Watched Overlay-->
@@ -35,11 +36,11 @@
             </control>
         </itemlayout>
         <!-- Poster Focus Layout -->
-		<focusedlayout height="348" width="258">
+		<focusedlayout height="352" width="258">
             <control type="group">
                 <width>248</width>
-                <height>348</height>
-                <animation effect="zoom" center="auto" start="100" end="106" time="160" tween="quadratic" condition="Skin.HasSetting(View52_EnableZoomEffect)">Focus</animation>
+                <height>352</height>
+                <animation effect="zoom" center="auto" start="100" end="107" time="160" tween="quadratic" condition="Skin.HasSetting(View52_EnableZoomEffect)">Focus</animation>
                 <include condition="Skin.HasSetting(View52_EnableZoomEffect)">PosterPanelLayoutFocus</include>
 				<include>PosterPanelLayout</include>
 				<control type="group">
@@ -50,6 +51,11 @@
         </control>
           </control>
 		  <include>LibraryAutoTrailerStopButton</include>
+		  <control type="button">
+			<visible>false</visible>	
+			<onfocus>AlarmClock(SetList,ClearProperty(ListAnimation,home),00:00,silent)</onfocus>
+			<onfocus>AlarmClock(SetList,SetProperty(ListAnimation,1,home),00:00,silent)</onfocus>					
+		  </control>	
         </focusedlayout>
 </include>
 
@@ -79,7 +85,7 @@
                 <param name="containerid" value="52" />
                 <param name="top" value="577" />
                 <param name="width" value="248" />
-                <param name="height" value="348" />
+                <param name="height" value="352" />
                 <texture background="true" border="12">$INFO[Skin.String(thumbsborder_focused),bingie/border/poster_fo_,.png]</texture>
 				<bordersize>2</bordersize>
 				<posx>836</posx>
