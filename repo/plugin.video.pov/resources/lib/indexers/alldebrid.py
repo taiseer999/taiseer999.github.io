@@ -6,7 +6,8 @@ from modules.source_utils import supported_video_extensions
 from modules.utils import clean_file_name, normalize
 # from modules.kodi_utils import logger
 
-ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, make_listitem
+get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
+ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
 folder_str, file_str, archive_str, down_str = ls(32742).upper(), ls(32743).upper(), ls(32982), ls(32747)
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/alldebrid.png')
@@ -71,7 +72,7 @@ def resolve_ad(params):
 	from modules.player import POVPlayer
 	POVPlayer().run(resolved_link, 'video')
 
-def ad_account_info():
+def show_account_info():
 	from datetime import datetime
 	try:
 		kodi_utils.show_busy_dialog()
@@ -91,4 +92,44 @@ def ad_account_info():
 		kodi_utils.hide_busy_dialog()
 		return kodi_utils.show_text(ls(32063).upper(), '\n\n'.join(body), font_size='large')
 	except: kodi_utils.hide_busy_dialog()
+
+def get_auth():
+	import urllib.parse
+	from apis.alldebrid_api import base_url, user_agent, session, timeout
+	session.cookies.clear()
+	url = base_url + 'pin/get?agent=%s' % user_agent
+	response = session.get(url, timeout=timeout)
+	result = response.json()['data']
+	try:
+		qr_url = '&bgcolor=ffd700&data=%s' % urllib.parse.quote(result['user_url'])
+		qr_icon = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s' % qr_url
+	except: pass
+	line2 = '%s, %s' % (ls(32700) % result['base_url'], ls(32701) % result['pin'])
+	choices = [
+		('none', 'Use the QR Code to approve access at AllDebrid', 'Step 1: %s' % line2),
+		('approve', 'Access approved at AllDebrid', 'Step 2'), 
+		('cancel', 'Cancel', 'Cancel')
+	]
+	list_items = [{'line1': item[1], 'line2': item[2], 'icon': qr_icon} for item in choices]
+	kwargs = {'items': json.dumps(list_items), 'heading': 'AllDebrid', 'multi_line': 'true'}
+	choice = kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
+	if choice != 'approve': return
+	url = result['check_url']
+	response = session.get(url, timeout=timeout)
+	result = response.json()['data']
+	token = result['apikey']
+	kodi_utils.sleep(500)
+	url = base_url + 'user?agent=%s&apikey=%s' % (user_agent, token)
+	result = session.get(url, timeout=timeout).json()['data']
+	username = result['user']['username']
+	set_setting('ad.account_id', str(username))
+	set_setting('ad.token', token)
+	kodi_utils.notification('%s %s' % (ls(32576), ls(32063)))
+	return True
+
+def del_auth():
+	if not kodi_utils.confirm_dialog(): return
+	set_setting('ad.account_id', '')
+	set_setting('ad.token', '')
+	kodi_utils.notification('%s %s' % (ls(32576), ls(32059)))
 

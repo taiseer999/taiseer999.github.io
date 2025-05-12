@@ -300,9 +300,9 @@ def timeIt(func):
 	import time
 	fnc_name = func.__name__
 	def wrap(*args, **kwargs):
-		started_at = time.time()
+		started_at = time.perf_counter()
 		result = func(*args, **kwargs)
-		logger('%s.%s' % (__name__ , fnc_name), (time.time() - started_at))
+		logger('%s.%s' % (__name__ , fnc_name), (time.perf_counter() - started_at))
 		return result
 	return wrap
 

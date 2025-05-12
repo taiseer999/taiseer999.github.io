@@ -234,8 +234,8 @@
             <setting id="results.sort_pmcloud_first" label="32103" type="bool" default="true" subsetting="true" visible="eq(-3,true)+eq(-8,true)+!eq(-9,)" />
         <setting id="pm.priority" label="32011" type="slider" default="8" option="int" range="1,1,10" visible="eq(-9,true)+!eq(-10,)" />
         <setting id="pm.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
-        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=premiumize.pm_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=premiumize.pm_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=premiumize.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=premiumize.del_auth)" />
         <!-- EasyDebrid -->
         <setting label="EasyDebrid" type="lsep" />
         <setting id="ed.token" label="key" type="text" default="" visible="false" />
@@ -244,8 +244,8 @@
         <setting id="ed.torrent.enabled" label="Enable torrents" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
         <setting id="ed.priority" label="32011" type="slider" default="9" option="int" range="1,1,10" visible="eq(-3,true)+!eq(-4,)" />
         <setting id="ed.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-4,true)+!eq(-5,)" />
-        <setting label="Authorize" type="action" visible="eq(-6,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=easydebrid.ed_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-7,)" action="RunPlugin(plugin://plugin.video.pov/?mode=easydebrid.ed_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-6,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=easydebrid.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-7,)" action="RunPlugin(plugin://plugin.video.pov/?mode=easydebrid.del_auth)" />
         <!-- TorBox-->
         <setting label="TorBox" type="lsep" />
         <setting id="tb.token" label="key" type="text" default="" visible="false" />
@@ -260,8 +260,8 @@
         <setting id="tb.sort" label="TorBox Usenet Search Sort" type="enum" default="0" values="Age|Size|Tracker" visible="eq(-8,true)+!eq(-9,)" />
         <setting id="tb.priority" label="32011" type="slider" default="9" option="int" range="1,1,10" visible="eq(-9,true)+!eq(-10,)" />
         <setting id="tb.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
-        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=torbox.tb_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=torbox.tb_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=torbox.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=torbox.del_auth)" />
         <!-- Offcloud -->
         <setting label="Offcloud" type="lsep" />
         <setting id="oc.token" label="key" type="text" default="" visible="false" />
@@ -273,8 +273,8 @@
             <setting id="check.oc_cloud" label="32104" type="bool" default="false" subsetting="true" visible="eq(-2,true)+eq(-5,true)+!eq(-6,)" />
             <setting id="results.sort_occloud_first" label="32103" type="bool" default="true" subsetting="true" visible="eq(-3,true)+eq(-6,true)+!eq(-7,)" />
         <setting id="oc.priority" label="32011" type="slider" default="9" option="int" range="1,1,10" visible="eq(-7,true)+!eq(-8,)" />
-        <setting label="Authorize" type="action" visible="eq(-9,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=offcloud.oc_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-10,)" action="RunPlugin(plugin://plugin.video.pov/?mode=offcloud.oc_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-9,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=offcloud.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-10,)" action="RunPlugin(plugin://plugin.video.pov/?mode=offcloud.del_auth)" />
         <!-- Easynews -->
         <setting label="32070" type="lsep" />
         <setting id="provider.easynews" label="32055" type="bool" default="false" />
@@ -315,8 +315,8 @@
             <setting id="results.sort_rdcloud_first" label="32103" type="bool" default="true" subsetting="true" visible="eq(-3,true)+eq(-8,true)+!eq(-9,)" />
         <setting id="rd.priority" label="32011" type="slider" default="10" option="int" range="1,1,10" visible="eq(-9,true)+!eq(-10,)" />
         <setting id="rd.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
-        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=real_debrid.rd_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=real_debrid.rd_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=real_debrid.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=real_debrid.del_auth)" />
         <!-- All Debrid -->
         <setting label="32063" type="lsep" />
         <setting id="ad.token" label="ad token" type="text" default="" visible="false" />
@@ -331,8 +331,8 @@
             <setting id="results.sort_adcloud_first" label="32103" type="bool" default="true" subsetting="true" visible="eq(-3,true)+eq(-8,true)+!eq(-9,)" />
         <setting id="ad.priority" label="32011" type="slider" default="9" option="int" range="1,1,10" visible="eq(-9,true)+!eq(-10,)" />
         <setting id="ad.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
-        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=alldebrid.ad_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=alldebrid.ad_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=alldebrid.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=alldebrid.del_auth)" />
     </category>
     <!-- Trakt -->
     <category label="32454">
@@ -343,8 +343,8 @@
         <setting id="trakt_indicators_active" label="trakt_indicators_active" type="text" default="false" visible="false" />
         <setting id="watched_indicators" label="32035" type="enum" default="0" lvalues="32036|32037" visible="eq(-1,true)" />
         <setting label="Sync Trakt Activity (update now)" type="action" visible="!eq(-4,)" action="RunPlugin(plugin://plugin.video.pov/?mode=trakt.trakt_sync_activities&amp;force_update=True)" />
-        <setting label="Authorize" type="action" visible="eq(-5,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=trakt.trakt_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-6,)" action="RunPlugin(plugin://plugin.video.pov/?mode=trakt.trakt_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-5,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=trakt.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-6,)" action="RunPlugin(plugin://plugin.video.pov/?mode=trakt.del_auth)" />
         <!-- Trakt Calendar -->
         <setting label="32081" type="lsep" />
         <setting id="trakt.calendar_focus_today" label="32082" type="bool" default="true" />
@@ -364,8 +364,8 @@
         <setting id="tmdb.account_id" label="32065" type="text" default="" enable="false" visible="false"/>
         <setting id="tmdblist.sort_name" label="Sort List Names Type" type="enum" default="0" values="Title|Number of Items|Recently Updated" visible="!eq(-2,)" />
         <setting id="tmdblist.watchlist_sync" label="Purge Watchlist on Trakt Refresh" type="bool" default="false" visible="!eq(-3,)" />
-        <setting label="Authorize" type="action" visible="eq(-4,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.tmdb_auth)" />
-        <setting label="Revoke" type="action" visible="!eq(-5,)" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.tmdb_revoke)" />
+        <setting label="Authorize" type="action" visible="eq(-4,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.get_auth)" />
+        <setting label="Revoke" type="action" visible="!eq(-5,)" action="RunPlugin(plugin://plugin.video.pov/?mode=tmdb.del_auth)" />
         <!-- MDBList -->
         <setting label="MDBList" type="lsep" />
         <setting id="mdblist.token" label="API Key" type="text" default="" option="hidden" />

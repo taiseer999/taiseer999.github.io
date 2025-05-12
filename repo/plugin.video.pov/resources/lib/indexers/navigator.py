@@ -84,7 +84,7 @@ class Navigator:
 		clca_str, n_ins = ls(32497) % rd_str, _in_str % (rd_str.upper(), '')
 		self._add_item({'mode': 'real_debrid.rd_torrent_cloud',     'name': cloud_str}, 'realdebrid.png', n_ins)
 		self._add_item({'mode': 'real_debrid.rd_downloads',         'name': his_str  }, 'realdebrid.png', n_ins)
-		self._add_item({'mode': 'real_debrid.rd_account_info',      'name': acc_str  }, 'realdebrid.png', n_ins, False)
+		self._add_item({'mode': 'real_debrid.show_account_info',    'name': acc_str  }, 'realdebrid.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'rd_cloud', 'name': clca_str }, 'realdebrid.png', n_ins, False)
 
 	def premiumize(self):
@@ -92,14 +92,14 @@ class Navigator:
 		clca_str, n_ins = ls(32497) % pm_str, _in_str % (pm_str.upper(), '')
 		self._add_item({'mode': 'premiumize.pm_torrent_cloud',      'name': cloud_str}, 'premiumize.png', n_ins)
 		self._add_item({'mode': 'premiumize.pm_transfers',          'name': his_str  }, 'premiumize.png', n_ins)
-		self._add_item({'mode': 'premiumize.pm_account_info',       'name': acc_str  }, 'premiumize.png', n_ins, False)
+		self._add_item({'mode': 'premiumize.show_account_info',     'name': acc_str  }, 'premiumize.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'pm_cloud', 'name': clca_str }, 'premiumize.png', n_ins, False)
 
 	def alldebrid(self):
 		ad_str, acc_str, cloud_str = ls(32063), ls(32494), ls(32496)
 		clca_str, n_ins = ls(32497) % ad_str, _in_str % (ad_str.upper(), '')
 		self._add_item({'mode': 'alldebrid.ad_torrent_cloud',       'name': cloud_str}, 'alldebrid.png', n_ins)
-		self._add_item({'mode': 'alldebrid.ad_account_info',        'name': acc_str  }, 'alldebrid.png', n_ins, False)
+		self._add_item({'mode': 'alldebrid.show_account_info',        'name': acc_str  }, 'alldebrid.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'ad_cloud', 'name': clca_str }, 'alldebrid.png', n_ins, False)
 
 	def offcloud(self):
@@ -107,7 +107,7 @@ class Navigator:
 		cloud_str, ai_str = ls(32496), ls(32494)
 		clca_str, n_ins = ls(32497) % oc_str, _in_str % (oc_str.upper(), '')
 		self._add_item({'mode': 'offcloud.oc_torrent_cloud',        'name': cloud_str}, 'offcloud.png', n_ins)
-		self._add_item({'mode': 'offcloud.oc_account_info',         'name': ai_str   }, 'offcloud.png', n_ins, False)
+		self._add_item({'mode': 'offcloud.show_account_info',       'name': ai_str   }, 'offcloud.png', n_ins, False)
 		self._add_item({'mode': 'offcloud.user_cloud_clear',        'name': clc_str  }, 'offcloud.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud', 'name': clca_str }, 'offcloud.png', n_ins, False)
 
@@ -119,13 +119,13 @@ class Navigator:
 		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'usenet', 'name': usenet_str}, 'torbox.png', n_ins)
 		self._add_item({'mode': 'torbox.tb_torrent_cloud', 'media_type': 'webdl',  'name': web_str   }, 'torbox.png', n_ins)
 		self._add_item({'mode': 'search_history', 'action': 'tb_usenet',           'name': query_str }, 'torbox.png', n_ins)
-		self._add_item({'mode': 'torbox.tb_account_info',                          'name': ai_str    }, 'torbox.png', n_ins, False)
+		self._add_item({'mode': 'torbox.show_account_info',                        'name': ai_str    }, 'torbox.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',                'name': clca_str  }, 'torbox.png', n_ins, False)
 
 	def easydebrid(self):
 		ed_str, cloud_str, ai_str = 'EasyDebrid', ls(32496), ls(32494)
 		n_ins = _in_str % (ed_str.upper(), '')
-		self._add_item({'mode': 'easydebrid.ed_account_info',                      'name': ai_str    }, 'easydebrid.png', n_ins, False)
+		self._add_item({'mode': 'easydebrid.show_account_info',                    'name': ai_str    }, 'easydebrid.png', n_ins, False)
 
 	def favourites(self):
 		fav_str = ls(32453)

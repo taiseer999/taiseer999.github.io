@@ -6,7 +6,7 @@ from windows import open_window, create_window
 from scrapers import external, folders
 from modules import debrid, kodi_utils, settings
 from modules.player import POVPlayer
-from modules.source_utils import internal_sources, internal_folders_import, scraper_names, get_cache_expiry
+from modules.source_utils import internal_sources, internal_folders_import, scraper_names, get_cache_expiry, pack_enable_check
 from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime
 #from modules.kodi_utils import logger
 
@@ -22,6 +22,8 @@ metadata_user_info, quality_filter, sort_to_top  = settings.metadata_user_info, 
 results_xml_style, results_xml_window_number = settings.results_xml_style, settings.results_xml_window_number
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
 debrid_list, import_debrid, main_line = debrid.debrid_list, debrid.import_debrid, debrid.main_line
+resolve_cached_torrents, resolve_debrid = debrid.resolve_cached_torrents, debrid.resolve_debrid
+resolve_internal_sources, manual_add_magnet_to_cloud = debrid.resolve_internal_sources, debrid.manual_add_magnet_to_cloud
 quality_ranks = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}
 cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
 default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'folders')
@@ -231,6 +233,15 @@ class Sources():
 			elif not self.debrid_hoster_enabled: self.exclude_list.extend(scraper_names('hosters'))
 			external_providers = fenom_sources(ret_all=self.disabled_ignored)
 			self.external_providers = [i for i in external_providers if not i[0] in self.exclude_list]
+			if not self.season: return
+			season_packs, show_packs = pack_enable_check(self.meta, self.season, self.episode)
+			if not season_packs: return
+			self.external_providers = [(i[0], i[1], '') for i in self.external_providers]
+			pack_capable = [i for i in self.external_providers if i[1].pack_capable]
+			if pack_capable:
+				self.external_providers.extend([(i[0], i[1], ls(32537)) for i in pack_capable])
+			if pack_capable and show_packs:
+				self.external_providers.extend([(i[0], i[1], ls(32089)) for i in pack_capable])
 
 	def play_source(self, results):
 		if self.background: return self.play_execute_background(results)
@@ -279,9 +290,16 @@ class Sources():
 
 	def display_results(self, results):
 		window_style = results_xml_style()
-		chosen_item = open_window(('windows.sources', 'SourceResults'), 'sources_results.xml',
-							window_style=window_style, window_id=results_xml_window_number(window_style), results=results,
-							meta=self.meta, scraper_settings=self.scraper_settings, prescrape=self.prescrape, filters_ignored=self.filters_ignored)
+		kwargs = dict(
+			window_style=window_style,
+			window_id=results_xml_window_number(window_style),
+			results=results,
+			meta=self.meta,
+			scraper_settings=self.scraper_settings,
+			prescrape=self.prescrape,
+			filters_ignored=self.filters_ignored
+		)
+		chosen_item = open_window(('windows.sources', 'SourceResults'), 'sources_results.xml', **kwargs)
 		if not chosen_item: return self._kill_progress_dialog()
 		action, chosen_item = chosen_item
 		if action == 'play':
@@ -370,12 +388,14 @@ class Sources():
 		return ep_name
 
 	def _make_alias_dict(self, title):
+		aliases = []
+		meta_title = self.meta['title']
 		original_title = self.meta['original_title']
 		alternative_titles = self.meta.get('alternative_titles', [])
-		if not alternative_titles: return []
 		country_codes = set([i.replace('GB', 'UK') for i in self.meta.get('country_codes', [])])
-		aliases = [{'title': i, 'country': ''} for i in alternative_titles]
-		if original_title not in aliases: aliases.append({'title': original_title, 'country': ''})
+		if alternative_titles: aliases = [{'title': i, 'country': ''} for i in alternative_titles]
+		if meta_title not in alternative_titles: aliases.append({'title': meta_title, 'country': ''})
+		if original_title not in alternative_titles: aliases.append({'title': original_title, 'country': ''})
 		if country_codes: aliases.extend([{'title': '%s %s' % (title, i), 'country': ''} for i in country_codes])
 		return aliases
 
@@ -499,12 +519,12 @@ class Sources():
 		debrid_files.sort(key=lambda k: k['filename'].lower())
 		if download: return debrid_files, debrid_function
 		icon = next((i[2] for i in debrid_list if i[0] == debrid_provider), 'pov.png')
-		default_debrid_icon = translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % icon)
+		icon = translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % icon)
 		list_items = [
-			{'line1': '%.2f GB | %s' % (float(item['size'])/1073741824, clean_file_name(item['filename']).upper()), 'icon': default_debrid_icon}
+			{'line1': clean_file_name(item['filename']), 'line2': '%s: %.2f GB' % (ls(32584), float(item['size'])/1073741824), 'icon': icon}
 			for item in debrid_files
 		]
-		kwargs = {'items': json.dumps(list_items), 'heading': name, 'highlight': highlight, 'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'false'}
+		kwargs = {'items': json.dumps(list_items), 'heading': name, 'highlight': highlight, 'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
 		chosen_result = select_dialog(debrid_files, **kwargs)
 		if chosen_result is None: return None
 		url_dl = chosen_result['link']
@@ -564,80 +584,21 @@ class Sources():
 				if meta['media_type'] == 'movie': title, season, episode = self._get_search_title(meta), None, None
 				else: title, season, episode = meta['ep_name'], meta.get('custom_season') or meta.get('season'), meta.get('custom_episode') or meta.get('episode')
 				if cache_provider in ('Real-Debrid', 'Premiumize.me', 'AllDebrid', 'Offcloud', 'TorBox', 'EasyDebrid'):
-					url = self.resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
+					url = resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
 					return url
 				if 'Uncached' in cache_provider:
 					if confirm_dialog(text=ls(32831) % item['debrid'].upper()):
 						if not 'package' in item: title, season, episode  = None, None, None
-						url = self.resolve_uncached_torrents(item['debrid'], item['url'], item['hash'], title, season, episode)
+						manual_add_magnet_to_cloud({'provider': item['debrid'], 'magnet_url': item['url']})
 					return 'uncached'
 			if item.get('scrape_provider', None) in default_internal_scrapers:
-				url = self.resolve_internal_sources(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False))
+				url = resolve_internal_sources(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False))
 				return url
 			if item.get('debrid') in ('Real-Debrid', 'Premiumize.me', 'AllDebrid') and not item['source'].lower() == 'torrent':
-				url = self.resolve_debrid(item['debrid'], item['provider'], item['url'])
+				url = resolve_debrid(item['debrid'], item['provider'], item['url'])
 				return url
 			else:
 				url = item['url']
 				return url
 		except: pass
-
-	def resolve_cached_torrents(self, debrid_provider, item_url, _hash, title, season, episode):
-		from modules.settings import store_resolved_torrent_to_cloud
-		url = None
-		debrid_function = import_debrid(debrid_provider)
-		store_to_cloud = store_resolved_torrent_to_cloud(debrid_provider)
-		try: url = debrid_function().resolve_magnet(item_url, _hash, store_to_cloud, title, season, episode)
-		except: pass
-		return url
-
-	def resolve_uncached_torrents(self, debrid_provider, item_url, _hash, title, season, episode):
-		debrid_function = import_debrid(debrid_provider)
-		if season: pack = True
-		else: pack = False
-		if debrid_function().add_uncached_torrent(item_url, pack):
-			return 'cache_pack_success' if pack else 'cache_success'
-		return None
-
-	def resolve_debrid(self, debrid_provider, item_provider, item_url):
-		url = None
-		debrid_function = import_debrid(debrid_provider)
-		try: url = debrid_function().unrestrict_link(item_url)
-		except: pass
-		return url
-
-	def resolve_internal_sources(self, scrape_provider, item_id, url_dl, direct_debrid_link=False):
-		url = None
-		try:
-			if scrape_provider == 'easynews':
-				from indexers.easynews import resolve_easynews
-				url = resolve_easynews({'url_dl': url_dl, 'play': 'false'})
-			elif scrape_provider == 'rd_cloud':
-				if direct_debrid_link: return url_dl
-				from apis.real_debrid_api import RealDebridAPI
-				url = RealDebridAPI().unrestrict_link(item_id)
-			elif scrape_provider == 'pm_cloud':
-				from apis.premiumize_api import PremiumizeAPI
-				details = PremiumizeAPI().get_item_details(item_id)
-				url = details['link']
-				if url.startswith('/'): url = 'https' + url
-			elif scrape_provider == 'ad_cloud':
-				from apis.alldebrid_api import AllDebridAPI
-				url = AllDebridAPI().unrestrict_link(item_id)
-			elif scrape_provider == 'oc_cloud':
-				url = url_dl
-			elif scrape_provider == 'tb_cloud':
-				from apis.torbox_api import TorBoxAPI
-				if direct_debrid_link == 'usenet':
-					url = TorBoxAPI().unrestrict_usenet(url_dl)
-				elif direct_debrid_link == 'webdl':
-					url = TorBoxAPI().unrestrict_webdl(url_dl)
-				else: url = TorBoxAPI().unrestrict_link(item_id)
-			elif scrape_provider == 'folders':
-				if url_dl.endswith('.strm'):
-					from modules.kodi_utils import open_file
-					with open_file(url_dl) as f: url = f.read()
-				else: url = url_dl
-		except: pass
-		return url
 

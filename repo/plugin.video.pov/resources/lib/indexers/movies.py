@@ -309,7 +309,7 @@ class Movies:
 	def worker(self):
 #		threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, Thread))
 		threads = TaskPool().tasks_enumerate(self.build_movie_content, self.list, Thread)
-		[i.join() for i in threads]
+		for i in threads: i.join()
 		self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
 		return self.items
 

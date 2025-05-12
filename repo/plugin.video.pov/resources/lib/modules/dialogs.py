@@ -79,8 +79,13 @@ def imdb_videos_choice(videos, poster):
 def random_choice(choice, meta):
 	tmdb_id = meta.get('tmdb_id')
 	if not tmdb_id: return
-	from modules.episode_tools import play_random
-	play_random(tmdb_id, True if choice == 'play_random_continual' else False)
+	from modules.episode_tools import get_random_episode
+	from modules.sources import Sources
+	meta, url_params = get_random_episode(tmdb_id, True if choice == 'play_random_continual' else False)
+	if not url_params: return {'pass': True}
+	url_params.update({'autoplay': 'True', 'background': 'false'})
+#	return kodi_utils.execute_builtin('RunPlugin(%s)' % build_url(url_params))
+	Sources().playback_prep(url_params)
 
 def trakt_manager_choice(params):
 	if not get_setting('trakt_user', ''): return notification(32760, 3500)
@@ -796,8 +801,8 @@ def torbox_usenet_query(meta, season, episode):
 			except: pass
 	query = meta.get('tvshowtitle') or '%s %s' % (meta['title'], meta['year'])
 	show_busy_dialog()
-#	files = TorBox().usenet_query(query, season, episode, meta.get('imdb_id', ''))
-	files = TorBox().usenet_query(query, season, episode, None)
+#	files = TorBox().usenet_search(query, season, episode, meta.get('imdb_id', ''))
+	files = TorBox().usenet_search(query, season, episode, None)
 	uncached = [i for i in files if not i['cached']]
 	files = [i for i in files if i['cached']] + uncached
 	hide_busy_dialog()

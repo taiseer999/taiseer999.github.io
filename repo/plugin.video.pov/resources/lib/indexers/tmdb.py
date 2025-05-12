@@ -15,8 +15,9 @@ build_url, make_listitem = kodi_utils.build_url, kodi_utils.make_listitem
 default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
 default_fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 item_jump = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/item_jump.png')
-add2menu_str, add2folder_str, nextpage_str, jump2_str = ls(32730), ls(32731), ls(32799), ls(32964)
-newlist_str, deletelist_str, editprop_str = ls(32780), ls(32781), '[B]Edit List Properties[/B]'
+add2menu_str, add2folder_str, jump2_str = ls(32730), ls(32731), ls(32964)
+newlist_str, deletelist_str, nextpage_str = ls(32780), ls(32781), ls(32799)
+editprop_str, clearprop_str = '[B]Edit List Properties[/B]', '[B]Clear List Cache[/B]'
 tmdb_image_base = tmdb_api.tmdb_image_base
 
 def get_tmdb_lists(params):
@@ -38,6 +39,8 @@ def get_tmdb_lists(params):
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': display, 'iconImage': 'tmdb.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': display, 'iconImage': 'tmdb.png'})))
 				cm_append((editprop_str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb.edit_tmdb_list', **edit_params})))
+				cm_append((deletelist_str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb.update_tmdb_list', 'action': 'delete', **edit_params})))
+				cm_append((clearprop_str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb.update_tmdb_list'})))
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': poster, 'poster': poster, 'thumb': poster, 'fanart': fanart, 'banner': poster})
@@ -97,6 +100,13 @@ def build_tmdb_list(params):
 	kodi_utils.end_directory(__handle__, False if is_widget else None)
 	kodi_utils.set_view_mode('view.%s' % content, content)
 
+def update_tmdb_list(params):
+	if params.get('action', '') == 'delete':
+		if not kodi_utils.confirm_dialog(): return
+		tmdb_api.list_delete(params['list_id'])
+	tmdb_api.clear_tmdbl_cache()
+	kodi_utils.container_refresh()
+
 def edit_tmdb_list(params):
 	image_resolution = get_resolution()
 	heading = ls(tmdb_api.list_heading).replace('[B]', '').replace('[/B]', '')
@@ -123,7 +133,7 @@ def edit_tmdb_list(params):
 		name = kodi_utils.dialog.input('New List Name', defaultt=params['name'])
 		params['name'] = name.strip() or params['name']
 	elif choice in ('poster', 'fanart'):
-		art = tmdb_list_artwork_choice(params['list_id'], choice, image_resolution, params['name'], icon)
+		art = artwork_choice_tmdb_list(params['list_id'], choice, image_resolution, params['name'], icon)
 		params[choice] = params[choice] if art is None else art
 	elif 'public' in choice:
 		text = 'Make %s Private?' % params['name']
@@ -143,13 +153,11 @@ def edit_tmdb_list(params):
 		else: return kodi_utils.notification(32574)
 	return edit_tmdb_list(params)
 
-def tmdb_list_artwork_choice(list_id, key, resolution, list_title, default_icon):
-	key = 'poster_path' if key == 'poster' else 'backdrop_path'
+def artwork_choice_tmdb_list(list_id, key, resolution, list_title, default_icon):
+	path = 'poster_path' if key == 'poster' else 'backdrop_path'
 	choices = [
-		(item[key], item['title'] if item['media_type'] == 'movie' else item['name'],
-		tmdb_image_base % (resolution['poster' if key == 'poster_path' else 'fanart'], item[key])
-		if item[key] else
-		default_icon)
+		(item[path], item['title'] if item['media_type'] == 'movie' else item['name'],
+		tmdb_image_base % (resolution[key], item[path]) if item[path] else default_icon)
 		for item in tmdb_api.all_items(tmdb_api.list_details, list_id)
 	]
 	choices += [('clear', 'Clear', default_icon)]

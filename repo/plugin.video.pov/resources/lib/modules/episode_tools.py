@@ -159,10 +159,3 @@ def get_random_episode(tmdb_id, continual=False):
 #	if not first_run: url_params['background'] = 'true'
 	return meta, url_params
 
-def play_random(tmdb_id, continual=False):
-	meta, url_params = get_random_episode(tmdb_id, continual)
-	if not url_params: return {'pass': True}
-	url_params.update({'autoplay': 'True', 'background': 'false'})
-#	return kodi_utils.execute_builtin('RunPlugin(%s)' % build_url(url_params))
-	Sources().playback_prep(url_params)
-

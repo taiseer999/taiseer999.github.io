@@ -269,10 +269,8 @@ class Episodes:
 			else: resformat, self.resinsert = '%Y-%m-%d %H:%M:%S', '2000-01-01 00:00:00'
 #		threads = list(make_thread_list_enumerate(self.build_episode_content, self.list, Thread))
 		threads = TaskPool().tasks_enumerate(self.build_episode_content, self.list, Thread)
-		[i.join() for i in threads]
-		if self.list_type.startswith('trakt_dict'):
-			pass
-		elif self.list_type.startswith('next_episode'):
+		for i in threads: i.join()
+		if self.list_type.startswith('next_episode'):
 			def func(function):
 				if sort_key == 'pov_name': return title_key_function(function, ignore_articles())
 				elif sort_key == 'pov_last_played': return jsondate_to_datetime_function(function, resformat)
@@ -293,12 +291,11 @@ class Episodes:
 				unaired = [i for i in self.items if i[1].getProperty('pov_unaired') == 'true']
 				aired = [i for i in self.items if not i in unaired]
 				self.items = aired + unaired
-		else:
-			if self.list_type in ('trakt_calendar', 'trakt_recently_aired'):
-				if self.list_type == 'trakt_calendar': reverse = calendar_sort_order() == 0
-				else: reverse = True
-				self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
-				self.items.sort(key=lambda k: k[1].getProperty('pov_first_aired'), reverse=reverse)
-			else: self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
+		elif self.list_type in ('trakt_calendar', 'trakt_recently_aired'):
+			if self.list_type == 'trakt_calendar': reverse = calendar_sort_order() == 0
+			else: reverse = True
+			self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
+			self.items.sort(key=lambda k: k[1].getProperty('pov_first_aired'), reverse=reverse)
+		else: self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
 		return self.items
 

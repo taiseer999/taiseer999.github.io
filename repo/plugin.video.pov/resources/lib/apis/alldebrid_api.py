@@ -1,13 +1,10 @@
-import json
-import re
 import requests
-from sys import exit as sysexit
 from threading import Thread
 from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
-ls, get_setting, set_setting = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.set_setting
+ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 base_url = 'https://api.alldebrid.com/v4/'
 user_agent = 'pov_for_kodi'
 timeout = 10.0
@@ -38,7 +35,6 @@ class AllDebridAPI:
 		except: pass
 		return result
 
-	@property
 	def days_remaining(self):
 		import datetime
 		try:
@@ -92,14 +88,13 @@ class AllDebridAPI:
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
 		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
 		try:
-			file_url, match = None, False
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
 			transfer_id = self.create_transfer(magnet_url)
-			for ended in (1, 2, 3):
+			for key in ['completionDate'] * 3:
 				kodi_utils.sleep(500)
 				transfer_info = self.list_transfer(transfer_id)
-				if transfer_info['completionDate']: break
+				if transfer_info[key]: break
 			else: raise Exception('uncached magnet:\n%s' % magnet_url)
 			torrent_files = transfer_info['links']
 			selected_files = [i for i in torrent_files if i['filename'].lower().endswith(tuple(extensions))]
@@ -124,10 +119,10 @@ class AllDebridAPI:
 		try:
 			extensions = supported_video_extensions()
 			transfer_id = self.create_transfer(magnet_url)
-			for ended in (1, 2, 3):
+			for key in ['completionDate'] * 3:
 				kodi_utils.sleep(500)
 				transfer_info = self.list_transfer(transfer_id)
-				if transfer_info['completionDate']: break
+				if transfer_info[key]: break
 			else: raise Exception('uncached magnet:\n%s' % magnet_url)
 			torrent_files = [
 				{'link': item['link'], 'filename': item['filename'], 'size': item['size']}
@@ -138,66 +133,6 @@ class AllDebridAPI:
 		except Exception:
 			if transfer_id: self.delete_transfer(transfer_id)
 			return None
-
-	def add_uncached_torrent(self, magnet_url, pack=False):
-		def _return_failed(message=32574, cancelled=False):
-			try: kodi_utils.progressDialog.close()
-			except Exception: pass
-			kodi_utils.hide_busy_dialog()
-			kodi_utils.sleep(500)
-			if cancelled:
-				if kodi_utils.confirm_dialog(text=32044, top_space=True): kodi_utils.ok_dialog(heading=32733, text=ls(32732) % ls(32063), top_space=True)
-				else: self.delete_transfer(transfer_id)
-			else: kodi_utils.ok_dialog(heading=32733, text=message)
-			return False
-		kodi_utils.show_busy_dialog()
-		transfer_id = self.create_transfer(magnet_url)
-		if not transfer_id: return _return_failed()
-		transfer_info = self.list_transfer(transfer_id)
-		if not transfer_info: return _return_failed()
-		if pack:
-			self.clear_cache()
-			kodi_utils.hide_busy_dialog()
-			kodi_utils.ok_dialog(text=ls(32732) % ls(32063))
-			return True
-		interval = 5
-		line = '%s[CR]%s[CR]%s'
-		line1 = '%s...' % (ls(32732) % ls(32063))
-		line2 = transfer_info['filename']
-		line3 = transfer_info['status']
-		kodi_utils.progressDialog.create(ls(32733), line % (line1, line2, line3))
-		while not transfer_info['statusCode'] == 4:
-			kodi_utils.sleep(1000 * interval)
-			transfer_info = self.list_transfer(transfer_id)
-			file_size = transfer_info['size']
-			line2 = transfer_info['filename']
-			if transfer_info['statusCode'] == 1:
-				download_speed = round(float(transfer_info['downloadSpeed']) / (1000**2), 2)
-				progress = int(float(transfer_info['downloaded']) / file_size * 100) if file_size > 0 else 0
-				line3 = ls(32734) % (download_speed, transfer_info['seeders'], progress, round(float(file_size) / (1000 ** 3), 2))
-			elif transfer_info['statusCode'] == 3:
-				upload_speed = round(float(transfer_info['uploadSpeed']) / (1000 ** 2), 2)
-				progress = int(float(transfer_info['uploaded']) / file_size * 100) if file_size > 0 else 0
-				line3 = ls(32735) % (upload_speed, progress, round(float(file_size) / (1000 ** 3), 2))
-			else:
-				line3 = transfer_info['status']
-				progress = 0
-			kodi_utils.progressDialog.update(progress, line % (line1, line2, line3))
-			if kodi_utils.monitor.abortRequested(): return sysexit()
-			try:
-				if kodi_utils.progressDialog.iscanceled():
-					return _return_failed(32736, cancelled=True)
-			except Exception:
-				pass
-			if 5 <= transfer_info['statusCode'] <= 10:
-				return _return_failed()
-		kodi_utils.sleep(1000 * interval)
-		try:
-			kodi_utils.progressDialog.close()
-		except Exception:
-			pass
-		kodi_utils.hide_busy_dialog()
-		return True
 
 	def get_hosts(self):
 		string = 'pov_ad_valid_hosts'
@@ -214,41 +149,6 @@ class AllDebridAPI:
 			hosts_dict['AllDebrid'] = hosts
 		except: pass
 		return hosts_dict
-
-	def authorize(self):
-		url = base_url + 'pin/get?agent=%s' % user_agent
-		response = requests.get(url, timeout=timeout)
-		result = response.json()['data']
-		try:
-			qr_url = '&bgcolor=ffd700&data=%s' % requests.utils.quote(result['user_url'])
-			qr_icon = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s' % qr_url
-		except: pass
-		line2 = '%s, %s' % (ls(32700) % result['base_url'], ls(32701) % result['pin'])
-		choices = [
-			('none', 'Use the QR Code to approve access at AllDebrid', 'Step 1: %s' % line2),
-			('approve', 'Access approved at AllDebrid', 'Step 2'), 
-			('cancel', 'Cancel', 'Cancel')
-		]
-		list_items = [{'line1': item[1], 'line2': item[2], 'icon': qr_icon} for item in choices]
-		kwargs = {'items': json.dumps(list_items), 'heading': 'AllDebrid', 'multi_line': 'true'}
-		choice = kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
-		if choice != 'approve': return
-		url = result['check_url']
-		response = requests.get(url, timeout=timeout)
-		result = response.json()['data']
-		self.token = result['apikey']
-		kodi_utils.sleep(500)
-		username = self.account_info()['user']['username']
-		set_setting('ad.account_id', str(username))
-		set_setting('ad.token', self.token)
-		kodi_utils.notification('%s %s' % (ls(32576), ls(32063)))
-		return True
-
-	def deauthorize(self):
-		if not kodi_utils.confirm_dialog(): return
-		set_setting('ad.account_id', '')
-		set_setting('ad.token', '')
-		kodi_utils.notification('%s %s' % (ls(32576), ls(32059)))
 
 	def user_cloud(self):
 		url = 'magnet/status'

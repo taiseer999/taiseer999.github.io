@@ -1,30 +1,27 @@
-import time
 from threading import Thread
-from caches.debrid_cache import DebridCache
 from apis import real_debrid_api, premiumize_api, alldebrid_api, offcloud_api, torbox_api, easydebrid_api
-from modules.utils import make_thread_list, chunks
-from modules.settings import display_sleep_time, enabled_debrids_check
+from caches.debrid_cache import DebridCache
+from modules.utils import make_thread_list
+from modules.settings import enabled_debrids_check, store_resolved_torrent_to_cloud
 from modules import kodi_utils
 # from modules.kodi_utils import logger
 
-get_setting, sleep, monitor, ls = kodi_utils.get_setting, kodi_utils.sleep, kodi_utils.monitor, kodi_utils.local_string
+ls, get_setting, ok_dialog = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.ok_dialog
 show_busy_dialog, hide_busy_dialog, notification = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification
-ok_dialog, progressDialogBG = kodi_utils.ok_dialog, kodi_utils.progressDialogBG
 plswait_str, checking_debrid_str, remaining_debrid_str = ls(32577), ls(32578), ls(32579)
 main_line = '%s[CR]%s[CR]%s'
 
 debrid_list = (
-	('Real-Debrid', 'rd','realdebrid.png'), ('Premiumize.me', 'pm', 'premiumize.png'),
-	('AllDebrid', 'ad', 'alldebrid.png'), ('EasyDebrid', 'ed', 'easydebrid.png'),
-	('TorBox', 'tb','torbox.png'), ('Offcloud', 'oc', 'offcloud.png')
+	('Real-Debrid', 'rd', 'realdebrid.png', real_debrid_api.RealDebridAPI),
+	('Premiumize.me', 'pm', 'premiumize.png', premiumize_api.PremiumizeAPI),
+	('AllDebrid', 'ad', 'alldebrid.png', alldebrid_api.AllDebridAPI),
+	('EasyDebrid', 'ed', 'easydebrid.png', easydebrid_api.EasyDebridAPI),
+	('TorBox', 'tb', 'torbox.png', torbox_api.TorBoxAPI),
+	('Offcloud', 'oc', 'offcloud.png', offcloud_api.OffcloudAPI)
 )
 
 def import_debrid(debrid_provider):
-	return {
-		'Real-Debrid': real_debrid_api.RealDebridAPI, 'Premiumize.me': premiumize_api.PremiumizeAPI,
-		'AllDebrid': alldebrid_api.AllDebridAPI, 'EasyDebrid': easydebrid_api.EasyDebridAPI,
-		'TorBox': torbox_api.TorBoxAPI, 'Offcloud': offcloud_api.OffcloudAPI
-	}.get(debrid_provider)
+	return next((i[3] for i in debrid_list if i[0] == debrid_provider), None)
 
 def debrid_enabled():
 	return [i[0] for i in debrid_list if enabled_debrids_check(i[1])]
@@ -60,204 +57,89 @@ def manual_add_nzb_to_cloud(params):
 	text = '%s...[CR][CR]%s' % (params['name'][:40], ls(32576) if result else ls(32575))
 	ok_dialog(heading=32733, text=text, top_space=True)
 
-class DebridCheck:
-	def __init__(self, hash_list, background, debrid_enabled, meta, progress_dialog):
-		self.hash_list = hash_list
-		self.background = background
-		self.debrid_enabled = debrid_enabled
-#		self.meta = meta
-		self.progress_dialog = progress_dialog
-		self.sleep_time = display_sleep_time()
-		self.timeout = int(get_setting('scrapers.timeout.1', '10'))
-		self.processing_hashes = False
-		self.ad_cached_hashes, self.pm_cached_hashes, self.rd_cached_hashes = [], [], []
-		self.oc_cached_hashes, self.tb_cached_hashes, self.ed_cached_hashes = [], [], []
-		self.hashes_to_cache = []
-		self.hashes_to_cache_append = self.hashes_to_cache.append
+def resolve_cached_torrents(debrid_provider, item_url, _hash, title, season, episode):
+	debrid_function = import_debrid(debrid_provider)
+	store_to_cloud = store_resolved_torrent_to_cloud(debrid_provider)
+	try: url = debrid_function().resolve_magnet(item_url, _hash, store_to_cloud, title, season, episode)
+	except: url = None
+	return url
 
-	def run(self):
-		def _background():
-			end_time = time.monotonic() + self.timeout
-			while time.monotonic() < end_time:
-				sleep(self.sleep_time)
-				alive_threads = [x for x in threads if x.is_alive()]
-				if not self.processing_hashes: continue
-				if not alive_threads: break
-		def _foreground():
-			end_time = time.monotonic() + self.timeout
-			while time.monotonic() < end_time:
-				if self.progress_dialog and self.progress_dialog.iscanceled(): break
-				elif monitor.abortRequested(): break
-				try:
-					len_threads = len(threads) if self.processing_hashes else len(self.debrid_enabled)
-					processing_hashes = self.processing_hashes
-					remaining_debrids = [x.name for x in threads if x.is_alive()]
-					current_time = time.monotonic()
-					insert_line = remaining_debrid_str % ', '.join(remaining_debrids).upper()
-					line = main_line % (plswait_str, checking_debrid_str, insert_line)
-					progress = int((len_threads-len(remaining_debrids))/len_threads*100)
-					if self.progress_dialog: self.progress_dialog.update(line, progress)
-					else: progressBG.update(progress, insert_line)
-					sleep(self.sleep_time)
-					if not processing_hashes: continue
-					if not remaining_debrids: break
-				except: pass
-		debrid_cache = DebridCache()
-		self.cached_hashes = debrid_cache.get_many(self.hash_list) or []
-		threads = []
-		threads_append = threads.append
-		if not self.background:
-			if not self.progress_dialog: progressBG = progressDialogBG
-			dialog = Thread(target=_foreground)
-		else: dialog = Thread(target=_background)
-		dialog.start()
-		debrid_runners = {
-			'Real-Debrid': self.RD_check, 'Premiumize.me': self.PM_check,
-			'AllDebrid': self.AD_check, 'EasyDebrid': self.ED_check,
-			'TorBox': self.TB_check, 'Offcloud': self.OC_check
-		}
-		for item in self.debrid_enabled:
-			thread = Thread(target=debrid_runners[item], name=item)
-			threads_append(thread)
-			thread.start()
-		dialog.join(self.timeout)
-		[debrid_cache.set_many(i[0], i[1]) for i in self.hashes_to_cache]
-		return {
-			'Real-Debrid': self.rd_cached_hashes, 'Premiumize.me': self.pm_cached_hashes,
-			'AllDebrid': self.ad_cached_hashes, 'EasyDebrid': self.ed_cached_hashes,
-			'TorBox': self.tb_cached_hashes, 'Offcloud': self.oc_cached_hashes
-		}
+def resolve_debrid(debrid_provider, item_provider, item_url):
+	debrid_function = import_debrid(debrid_provider)
+	try: url = debrid_function().unrestrict_link(item_url)
+	except: url = None
+	return url
 
-	def cached_check(self, debrid):
-		cached_list = [i[0] for i in self.cached_hashes if i[1] == debrid and i[2] == 'True']
-		unchecked_list = [i for i in self.hash_list if not any([h for h in self.cached_hashes if h[0] == i and h[1] == debrid])]
-		self.processing_hashes = True
-		return cached_list, unchecked_list
+def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_link=False):
+	try:
+		if scrape_provider == 'easynews':
+			from indexers.easynews import resolve_easynews
+			url = resolve_easynews({'url_dl': url_dl, 'play': 'false'})
+		elif scrape_provider == 'rd_cloud':
+			if direct_debrid_link: url = url_dl
+			else: url = real_debrid_api.RealDebridAPI().unrestrict_link(item_id)
+		elif scrape_provider == 'pm_cloud':
+			details = premiumize_api.PremiumizeAPI().get_item_details(item_id)
+			url = details['link']
+			if url.startswith('/'): url = 'https' + url
+		elif scrape_provider == 'ad_cloud':
+			url = alldebrid_api.AllDebridAPI().unrestrict_link(item_id)
+		elif scrape_provider == 'oc_cloud':
+			url = url_dl
+		elif scrape_provider == 'tb_cloud':
+			if direct_debrid_link == 'usenet':
+				url = torbox_api.TorBoxAPI().unrestrict_usenet(url_dl)
+			elif direct_debrid_link == 'webdl':
+				url = torbox_api.TorBoxAPI().unrestrict_webdl(url_dl)
+			else:
+				url = torbox_api.TorBoxAPI().unrestrict_link(item_id)
+		elif scrape_provider == 'folders':
+			if url_dl.endswith('.strm'):
+				with kodi_utils.open_file(url_dl) as f: url = f.read()
+			else: url = url_dl
+	except: url = None
+	return url
 
-	def RD_check(self):
-		self.rd_cached_hashes, unchecked_hashes = self.cached_check('rd')
-		if not unchecked_hashes: return
-		# RealDebrid = import_debrid('Real-Debrid')
-		rd_cache = None # RealDebrid().check_cache(unchecked_hashes)
-		if not rd_cache: return
-		cached_append = self.rd_cached_hashes.append
-		process_list = []
-		process_append = process_list.append
+class CacheCheck:
+	hash_list = []
+	cached_hashes = []
+
+	@classmethod
+	def set_cached_hashes(cls, hash_list):
+		cls.hash_list = hash_list
+		cls.cached_hashes = DebridCache().get_many(hash_list) or []
+
+	def __init__(self, *args):
+		self.completed = False
+		self.debrid, self.function = args[1], args[3]
+		self.cached_list, self.hashes_to_cache = [], []
+
+	def cache_write(self):
+		DebridCache().set_many(self.hashes_to_cache, self.debrid)
+
+	def cache_check(self):
 		try:
-			for h in unchecked_hashes:
-				cached = 'False'
-				if h in rd_cache:
-					info = rd_cache[h]
-					if isinstance(info, dict) and len(info.get('rd')) > 0:
+			self.cached_list = [
+				i[0] for i in self.cached_hashes if i[1] == self.debrid and i[2] == 'True'
+			]
+			unchecked_hashes = [
+				i for i in self.hash_list
+				if not any([h for h in self.cached_hashes if h[0] == i and h[1] == self.debrid])
+			]
+			if self.debrid in ('rd', 'ad') or not unchecked_hashes: return
+			checked_hashes = self.function().check_cache(unchecked_hashes)
+			if not checked_hashes: return
+			cached_append = self.cached_list.append
+			process_append = self.hashes_to_cache.append
+			try:
+				for h in unchecked_hashes:
+					cached = 'False'
+					if h in checked_hashes:
 						cached_append(h)
 						cached = 'True'
-				process_append((h, cached))
-		except:
-			for i in unchecked_hashes: process_append((i, 'False'))
-		self.hashes_to_cache_append((process_list, 'rd'))
-
-	def PM_check(self):
-		self.pm_cached_hashes, unchecked_hashes = self.cached_check('pm')
-		if not unchecked_hashes: return
-		Premiumize = import_debrid('Premiumize.me')
-		pm_cache = Premiumize().check_cache(unchecked_hashes)
-		if not pm_cache: return
-		cached_append = self.pm_cached_hashes.append
-		process_list = []
-		process_append = process_list.append
-		try:
-			pm_cache = pm_cache['response']
-			for c, h in enumerate(unchecked_hashes):
-				cached = 'False'
-				if pm_cache[c] is True:
-					cached_append(h)
-					cached = 'True'
-				process_append((h, cached))
-		except:
-			for i in unchecked_hashes: process_append((i, 'False'))
-		self.hashes_to_cache_append((process_list, 'pm'))
-
-	def AD_check(self):
-		self.ad_cached_hashes, unchecked_hashes = self.cached_check('ad')
-		if not unchecked_hashes: return
-		# AllDebrid = import_debrid('AllDebrid')
-		ad_cache = None # AllDebrid().check_cache(unchecked_hashes)
-		if not ad_cache: return
-		cached_append = self.ad_cached_hashes.append
-		process_list = []
-		process_append = process_list.append
-		try:
-			ad_cache = ad_cache['magnets']
-			for i in ad_cache:
-				cached = 'False'
-				if i['instant'] is True:
-					cached_append(i['hash'])
-					cached = 'True'
-				process_append((i['hash'], cached))
-		except:
-			for i in unchecked_hashes: process_append((i, 'False'))
-		self.hashes_to_cache_append((process_list, 'ad'))
-
-	def ED_check(self):
-		self.ed_cached_hashes, unchecked_hashes = self.cached_check('ed')
-		if not unchecked_hashes: return
-		EasyDebrid = import_debrid('EasyDebrid')
-		ed_cache = EasyDebrid().check_cache(unchecked_hashes)
-		if not ed_cache: return
-		cached_append = self.ed_cached_hashes.append
-		process_list = []
-		process_append = process_list.append
-		try:
-			ed_cache = ed_cache['cached']
-			for h, is_cached in zip(unchecked_hashes, ed_cache):
-				cached = 'False'
-				if is_cached:
-					cached_append(h)
-					cached = 'True'
-				process_append((h, cached))
-		except:
-			for i in unchecked_hashes: process_append((i, 'False'))
-		self.hashes_to_cache_append((process_list, 'ed'))
-
-	def TB_check(self):
-		self.tb_cached_hashes, unchecked_hashes = self.cached_check('tb')
-		if not unchecked_hashes: return
-		TorBox = import_debrid('TorBox')
-		tb_cache = TorBox().check_cache(unchecked_hashes)
-		if not tb_cache: return
-		cached_append = self.tb_cached_hashes.append
-		process_list = []
-		process_append = process_list.append
-		try:
-			tb_cache = [i['hash'] for i in tb_cache]
-			for h in unchecked_hashes:
-				cached = 'False'
-				if h in tb_cache:
-					cached_append(h)
-					cached = 'True'
-				process_append((h, cached))
-		except:
-			for i in unchecked_hashes: process_append((i, 'False'))
-		self.hashes_to_cache_append((process_list, 'tb'))
-
-	def OC_check(self):
-		self.oc_cached_hashes, unchecked_hashes = self.cached_check('oc')
-		if not unchecked_hashes: return
-		Offcloud = import_debrid('Offcloud')
-		oc_cache = Offcloud().check_cache(unchecked_hashes)
-		if not oc_cache: return
-		cached_append = self.oc_cached_hashes.append
-		process_list = []
-		process_append = process_list.append
-		try:
-			oc_cache = oc_cache['cachedItems']
-			for h in unchecked_hashes:
-				cached = 'False'
-				if h in oc_cache:
-					cached_append(h)
-					cached = 'True'
-				process_append((h, cached))
-		except:
-			for i in unchecked_hashes: process_append((i, 'False'))
-		self.hashes_to_cache_append((process_list, 'oc'))
+					process_append((h, cached))
+			except:
+				for i in unchecked_hashes: process_append((i, 'False'))
+			if self.hashes_to_cache: Thread(target=self.cache_write).start()
+		finally: self.completed = True
 

@@ -79,12 +79,6 @@ class Router:
 			if 'trakt_account_info' in mode:
 				from indexers.trakt import trakt_account_info
 				trakt_account_info()
-			elif 'trakt_auth' in mode:
-				from apis.trakt_api import authorize
-				authorize()
-			elif 'trakt_revoke' in mode:
-				from apis.trakt_api import deauthorize
-				deauthorize()
 			elif 'hide_unhide_trakt_items' in mode:
 				from apis.trakt_api import hide_unhide_trakt_items
 				hide_unhide_trakt_items(params['action'], params['media_type'], params['media_id'], params['section'])
@@ -93,15 +87,12 @@ class Router:
 				function = manual_function_import('apis.trakt_api', mode.split('.')[-1])
 				function(params)
 		elif 'tmdb.' in mode:
-			if 'tmdb_auth' in mode:
-				from apis.tmdb_api import authorize
-				authorize()
-			elif 'tmdb_revoke' in mode:
-				from apis.tmdb_api import deauthorize
-				deauthorize()
-			elif 'edit_tmdb_list' in mode:
+			if 'edit_tmdb_list' in mode:
 				from indexers.tmdb import edit_tmdb_list
 				edit_tmdb_list(params)
+			elif 'update_tmdb_list' in mode:
+				from indexers.tmdb import update_tmdb_list
+				update_tmdb_list(params)
 			else:
 				from modules.utils import manual_function_import
 				function = manual_function_import('apis.tmdb_api', mode.split('.')[-1])
@@ -204,56 +195,6 @@ class Router:
 			from modules.utils import manual_function_import
 			function = manual_function_import('indexers.easynews', mode.split('.')[-1])
 			function(params)
-		elif 'real_debrid' in mode:
-			if mode == 'real_debrid.rd_torrent_cloud':
-				from indexers.real_debrid import rd_torrent_cloud
-				rd_torrent_cloud()
-			if mode == 'real_debrid.rd_downloads':
-				from indexers.real_debrid import rd_downloads
-				rd_downloads()
-			elif mode == 'real_debrid.browse_rd_cloud':
-				from indexers.real_debrid import browse_rd_cloud
-				browse_rd_cloud(params['id'])
-			elif mode == 'real_debrid.resolve_rd':
-				from indexers.real_debrid import resolve_rd
-				resolve_rd(params)
-			elif mode == 'real_debrid.rd_account_info':
-				from indexers.real_debrid import rd_account_info
-				rd_account_info()
-			elif mode == 'real_debrid.delete':
-				from indexers.real_debrid import rd_delete
-				rd_delete(params_get('id'), params_get('cache_type'))
-			elif mode == 'real_debrid.delete_download_link':
-				from indexers.real_debrid import delete_download_link
-				delete_download_link(params['download_id'])
-			elif mode == 'real_debrid.rd_auth':
-				from apis.real_debrid_api import RealDebridAPI
-				RealDebridAPI().authorize()
-			elif mode == 'real_debrid.rd_revoke':
-				from apis.real_debrid_api import RealDebridAPI
-				RealDebridAPI().deauthorize()
-		elif 'premiumize' in mode:
-			if mode == 'premiumize.pm_torrent_cloud':
-				from indexers.premiumize import pm_torrent_cloud
-				pm_torrent_cloud(params_get('id'), params_get('folder_name'))
-			elif mode == 'premiumize.pm_transfers':
-				from indexers.premiumize import pm_transfers
-				pm_transfers()
-			elif mode == 'premiumize.pm_account_info':
-				from indexers.premiumize import pm_account_info
-				pm_account_info()
-			elif mode == 'premiumize.rename':
-				from indexers.premiumize import pm_rename
-				pm_rename(params_get('file_type'), params_get('id'), params_get('name'))
-			elif mode == 'premiumize.delete':
-				from indexers.premiumize import pm_delete
-				pm_delete(params_get('file_type'), params_get('id'))
-			elif mode == 'premiumize.pm_auth':
-				from apis.premiumize_api import PremiumizeAPI
-				PremiumizeAPI().authorize()
-			elif mode == 'premiumize.pm_revoke':
-				from apis.premiumize_api import PremiumizeAPI
-				PremiumizeAPI().deauthorize()
 		elif 'alldebrid' in mode:
 			if mode == 'alldebrid.ad_torrent_cloud':
 				from indexers.alldebrid import ad_torrent_cloud
@@ -264,75 +205,32 @@ class Router:
 			elif mode == 'alldebrid.resolve_ad':
 				from indexers.alldebrid import resolve_ad
 				resolve_ad(params)
-			elif mode == 'alldebrid.ad_account_info':
-				from indexers.alldebrid import ad_account_info
-				ad_account_info()
-			elif mode == 'alldebrid.ad_auth':
-				from apis.alldebrid_api import AllDebridAPI
-				AllDebridAPI().authorize()
-			elif mode == 'alldebrid.ad_revoke':
-				from apis.alldebrid_api import AllDebridAPI
-				AllDebridAPI().deauthorize()
-		elif 'offcloud' in mode:
-			if mode == 'offcloud.oc_torrent_cloud':
-				from indexers.offcloud import oc_torrent_cloud
-				oc_torrent_cloud()
-			elif mode == 'offcloud.browse_oc_cloud':
-				from indexers.offcloud import browse_oc_cloud
-				browse_oc_cloud(params_get('folder_id'))
-			elif mode == 'offcloud.resolve_oc':
-				from indexers.offcloud import resolve_oc
-				resolve_oc(params)
-			elif mode == 'offcloud.oc_account_info':
-				from indexers.offcloud import oc_account_info
-				oc_account_info()
-			elif mode == 'offcloud.delete':
-				from indexers.offcloud import oc_delete
-				oc_delete(params_get('folder_id'))
-			elif mode == 'offcloud.user_cloud_clear':
-				from apis.offcloud_api import OffcloudAPI
-				OffcloudAPI().user_cloud_clear()
-			elif mode == 'offcloud.oc_auth':
-				from apis.offcloud_api import OffcloudAPI
-				OffcloudAPI().auth()
-			elif mode == 'offcloud.oc_revoke':
-				from apis.offcloud_api import OffcloudAPI
-				OffcloudAPI().revoke_auth()
+			elif mode == 'alldebrid.show_account_info':
+				from indexers.alldebrid import show_account_info
+				show_account_info()
+			elif mode == 'alldebrid.get_auth':
+				from indexers.alldebrid import get_auth
+				get_auth()
+			elif mode == 'alldebrid.del_auth':
+				from indexers.alldebrid import del_auth
+				del_auth()
+		elif 'premiumize' in mode:
+			from indexers.premiumize import Indexer
+			Indexer().run(params)
+		elif 'real_debrid' in mode:
+			from indexers.real_debrid import Indexer, resolve_rd
+			if 'resolve_' in mode: resolve_rd(params)
+			else: Indexer().run(params)
 		elif 'torbox' in mode:
-			if mode == 'torbox.tb_torrent_cloud':
-				from indexers.torbox import tb_torrent_cloud
-				tb_torrent_cloud(params_get('media_type'))
-			elif mode == 'torbox.browse_tb_cloud':
-				from indexers.torbox import browse_tb_cloud
-				browse_tb_cloud(params_get('folder_id'), params_get('media_type'))
-			elif mode == 'torbox.resolve_tb':
-				from indexers.torbox import resolve_tb
-				resolve_tb(params)
-			elif mode == 'torbox.tb_usenet_query':
-				from indexers.torbox import tb_usenet_query
-				tb_usenet_query(params)
-			elif mode == 'torbox.tb_account_info':
-				from indexers.torbox import tb_account_info
-				tb_account_info()
-			elif mode == 'torbox.delete':
-				from indexers.torbox import tb_delete
-				tb_delete(params_get('folder_id'), params_get('media_type'))
-			elif mode == 'torbox.tb_auth':
-				from apis.torbox_api import TorBoxAPI
-				TorBoxAPI().auth()
-			elif mode == 'torbox.tb_revoke':
-				from apis.torbox_api import TorBoxAPI
-				TorBoxAPI().revoke_auth()
+			from indexers.torbox import Indexer, resolve_tb
+			if 'resolve_' in mode: resolve_tb(params)
+			else: Indexer().run(params)
+		elif 'offcloud' in mode:
+			from indexers.offcloud import Indexer
+			Indexer().run(params)
 		elif 'easydebrid' in mode:
-			if mode == 'easydebrid.ed_account_info':
-				from indexers.easydebrid import ed_account_info
-				ed_account_info()
-			elif mode == 'easydebrid.ed_auth':
-				from apis.easydebrid_api import EasyDebridAPI
-				EasyDebridAPI().auth()
-			elif mode == 'easydebrid.ed_revoke':
-				from apis.easydebrid_api import EasyDebridAPI
-				EasyDebridAPI().revoke_auth()
+			from indexers.easydebrid import Indexer
+			Indexer().run(params)
 		elif '_settings' in mode:
 			if mode == 'open_settings':
 				from modules.kodi_utils import open_settings
@@ -361,8 +259,13 @@ class Router:
 			Images().run(params)
 		elif '_text' in mode:
 			from modules.kodi_utils import show_text
-			show_text(params_get('heading'), params_get('text'), params_get('file'),
-								params_get('font_size', 'small'), params_get('kodi_log', 'false') == 'true')
+			show_text(
+				params_get('heading'),
+				params_get('text'),
+				params_get('file'),
+				params_get('font_size', 'small'),
+				params_get('kodi_log', 'false') == 'true'
+			)
 		elif '_view' in mode:
 			from modules import kodi_utils
 			if mode == 'choose_view':
@@ -399,9 +302,6 @@ class Router:
 		elif mode == 'upload_logfile':
 			from modules.kodi_utils import upload_logfile
 			upload_logfile()
-		elif mode == 'mdblist.clean_watchlist':
-			from apis.mdblist_api import mdb_clean_watchlist
-			mdb_clean_watchlist(params['list_id'])
 		##FENOM modes###
 		elif mode == 'undesirablesInput':
 			from caches.undesirables_cache import undesirablesInput

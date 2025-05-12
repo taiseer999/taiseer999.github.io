@@ -16,22 +16,15 @@ session = requests.Session()
 retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502, 503, 504))
 session.mount(base_url, requests.adapters.HTTPAdapter(pool_maxsize=100, max_retries=retry))
 
-def call_mdblist(path, params=None, json=None, method=None):
+def call_mdblist(url, params=None, json=None, method=None):
 	params = params or {}
 	params['apikey'] = kodi_utils.get_setting('mdblist.token')
 	try:
-		response = session.request(
-			method or 'get',
-			path,
-			params=params,
-			json=json,
-			timeout=timeout
-		)
-		if not response.ok: response.raise_for_status()
+		response = session.request(method or 'get', url, params=params, json=json, timeout=timeout)
 		result = response.json()
+		if not response.ok: response.raise_for_status()
 	except requests.exceptions.RequestException as e:
 		kodi_utils.logger('mdblist error', str(e))
-		result = []
 	return result
 
 def mdb_searchlists(query):

@@ -287,12 +287,12 @@ class TVShows:
 		if self.action in TVShows.personal_dict:
 			if self.watched_indicators == 1:
 				try:
-					hidden_data = set(map(str, trakt_get_hidden_items('dropped')))
-					self.list = [i for i in self.list if not i in hidden_data]
+					hidden_data = trakt_get_hidden_items('dropped')
+					self.list = [i for i in self.list if not int(i) in hidden_data]
 				except: pass
 #		threads = list(make_thread_list_enumerate(self.build_tvshow_content, self.list, Thread))
 		threads = TaskPool().tasks_enumerate(self.build_tvshow_content, self.list, Thread)
-		[i.join() for i in threads]
+		for i in threads: i.join()
 		self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
 		return self.items
 

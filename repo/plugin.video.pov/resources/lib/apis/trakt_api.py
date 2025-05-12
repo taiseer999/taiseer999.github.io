@@ -23,7 +23,7 @@ session.mount('https://api.trakt.tv', requests.adapters.HTTPAdapter(pool_maxsize
 
 def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagination=False, page=1):
 	headers = {'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': V2_API_KEY}
-	if with_auth is True and (token := get_setting('trakt.token')):
+	if with_auth is True and (token := settings.trakt_token()):
 		headers['Authorization'] = 'Bearer %s' % token
 	if pagination: params['page'] = page
 	try:
@@ -35,16 +35,26 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 			headers=headers,
 			timeout=timeout ** 2 if not method in ('get', None) else timeout
 		)
-		if not response.ok: response.raise_for_status()
 		result = response.json()
-		if 'X-Sort-By' in response.headers and 'X-Sort-How' in response.headers:
-			sort_by, sort_how = response.headers['X-Sort-By'], response.headers['X-Sort-How']
-			result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
+		if not response.ok: response.raise_for_status()
 	except requests.exceptions.RequestException as e:
 		logger('trakt error', str(e))
-		result = None
-	if pagination: return (result, response.headers.get('X-Pagination-Page-Count', page))
-	else: return result
+	if 'X-Sort-By' in response.headers and 'X-Sort-How' in response.headers:
+		sort_by, sort_how = response.headers['X-Sort-By'], response.headers['X-Sort-How']
+		result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
+	return (result, response.headers.get('X-Pagination-Page-Count', page)) if pagination else result
+
+def get_trakt(params):
+	result = call_trakt(
+		params['path'] % params.get('path_insert', ''),
+		params=params.get('params', {}),
+		data=params.get('data'),
+		with_auth=params.get('with_auth', False),
+		method=params.get('method'),
+		pagination=params.get('pagination', True),
+		page=params.get('page')
+	)
+	return result[0] if params.get('pagination', True) else result
 
 def trakt_refresh():
 	try:
@@ -466,11 +476,13 @@ def trakt_indicators_tv():
 		title = show['title']
 		tmdb_id = get_trakt_tvshow_id(show['ids'])
 		if not tmdb_id: return
+		reset_at = item.get('reset_at')
+		if reset_at: reset_at = js2date(reset_at, '%Y-%m-%dT%H:%M:%S.%fZ')
 		for s in seasons:
 			season_no, episodes = s['number'], s['episodes']
 			for e in episodes:
-				obj = ('episode', tmdb_id, season_no, e['number'], e['last_watched_at'], title)
-				insert_append(obj)
+				if reset_at and reset_at > js2date(e['last_watched_at'], '%Y-%m-%dT%H:%M:%S.%fZ'): continue
+				insert_append(('episode', tmdb_id, season_no, e['number'], e['last_watched_at'], title))
 	insert_list = []
 	insert_append = insert_list.append
 	url = {'path': 'users/me/watched/shows?extended=full%s', 'with_auth': True, 'pagination': False}
@@ -597,12 +609,6 @@ def trakt_calendar_days(recently_aired, current_date):
 		finish = str(previous_days + future_days)
 	return start, finish
 
-def get_trakt(params):
-	result = call_trakt(params['path'] % params.get('path_insert', ''), params=params.get('params', {}), data=params.get('data'),
-						with_auth=params.get('with_auth', False), method=params.get('method'),
-						pagination=params.get('pagination', True), page=params.get('page'))
-	return result[0] if params.get('pagination', True) else result
-
 def trakt_get_activity():
 	url = {'path': 'sync/last_activities%s', 'with_auth': True, 'pagination': False}
 	return get_trakt(url)
@@ -673,7 +679,7 @@ def trakt_sync_activities(force_update=False):
 	else: trakt_cache.clear_trakt_list_contents_data('liked_lists')
 	return 'success'
 
-def authorize():
+def get_auth(*args):
 	data = {'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET, 'code': ''}
 	response = call_trakt('oauth/device/code', data=data, with_auth=False)
 	data['code'] = response['device_code']
@@ -708,7 +714,7 @@ def authorize():
 	trakt_sync_activities(force_update=True)
 	return True
 
-def deauthorize():
+def del_auth(*args):
 	if not kodi_utils.confirm_dialog(): return
 	data = {'token': get_setting('trakt.token'), 'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET}
 	response = call_trakt('oauth/revoke', data=data, with_auth=False)

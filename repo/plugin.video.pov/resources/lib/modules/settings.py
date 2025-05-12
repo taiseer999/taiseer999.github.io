@@ -302,6 +302,9 @@ def rpdb_api_key():
 def get_fanart_data():
 	return get_setting('get_fanart_data') == 'true'
 
+def trakt_token():
+	return get_setting('trakt.token')
+
 def fanarttv_client_key():
 #	return get_setting('fanart_client_key', 'fe073550acf157bdb8a4217f215c0882')
 	return get_setting('fanart_client_key')

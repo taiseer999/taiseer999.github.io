@@ -119,31 +119,31 @@ def premAccntNotification():
 	if get_setting('ad.account_id') != '':
 		if limit := int(get_setting('ad.expires', '7')):
 			from apis.alldebrid_api import AllDebridAPI
-			days_remaining = AllDebridAPI().days_remaining
+			days_remaining = AllDebridAPI().days_remaining()
 			if not days_remaining is None and days_remaining <= limit:
 				kodi_utils.notification('AllDebrid expires in %s days' % days_remaining)
 	if get_setting('pm.account_id') != '':
 		if limit := int(get_setting('pm.expires', '7')):
 			from apis.premiumize_api import PremiumizeAPI
-			days_remaining = PremiumizeAPI().days_remaining
+			days_remaining = PremiumizeAPI().days_remaining()
 			if not days_remaining is None and days_remaining <= limit:
 				kodi_utils.notification('Premiumize.me expires in %s days' % days_remaining)
 	if get_setting('rd.username') != '':
 		if limit := int(get_setting('rd.expires', '7')):
 			from apis.real_debrid_api import RealDebridAPI
-			days_remaining = RealDebridAPI().days_remaining
+			days_remaining = RealDebridAPI().days_remaining()
 			if not days_remaining is None and days_remaining <= limit:
 				kodi_utils.notification('Real-Debrid expires in %s days' % days_remaining)
 	if get_setting('ed.account_id') != '':
 		if limit := int(get_setting('ed.expires', '7')):
 			from apis.easydebrid_api import EasyDebridAPI
-			days_remaining = EasyDebridAPI().days_remaining
+			days_remaining = EasyDebridAPI().days_remaining()
 			if not days_remaining is None and days_remaining <= limit:
 				kodi_utils.notification('EasyDebrid expires in %s days' % days_remaining)
 	if get_setting('tb.account_id') != '':
 		if limit := int(get_setting('tb.expires', '7')):
 			from apis.torbox_api import TorBoxAPI
-			days_remaining = TorBoxAPI().days_remaining
+			days_remaining = TorBoxAPI().days_remaining()
 			if not days_remaining is None and days_remaining <= limit:
 				kodi_utils.notification('TorBox expires in %s days' % days_remaining)
 	return logger('POV', 'Debrid Account Expiry Notification Service Finished')

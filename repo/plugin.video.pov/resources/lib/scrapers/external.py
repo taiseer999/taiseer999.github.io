@@ -1,17 +1,16 @@
 import json, time
-#from random import shuffle
 from threading import Thread
 from windows import create_window
 from caches.providers_cache import ExternalProvidersCache
 from modules import kodi_utils, source_utils
-from modules.debrid import DebridCheck
-from modules.utils import clean_file_name
+from modules.debrid import debrid_list, CacheCheck
+from modules.utils import clean_file_name, TaskPool
 from modules.settings import display_sleep_time, date_offset
 # logger = kodi_utils.logger
 
 ls, sleep, monitor, get_property, set_property = kodi_utils.local_string, kodi_utils.sleep, kodi_utils.monitor, kodi_utils.get_property, kodi_utils.set_property
 notification, hide_busy_dialog, clear_property, get_setting = kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.clear_property, kodi_utils.get_setting
-normalize, get_filename_match, get_file_info, pack_enable_check = source_utils.normalize, source_utils.get_filename_match, source_utils.get_file_info, source_utils.pack_enable_check
+normalize, get_filename_match, get_file_info = source_utils.normalize, source_utils.get_filename_match, source_utils.get_file_info
 pack_display, format_line, total_format = '%s (%s)', '%s[CR]%s[CR]%s', '[COLOR %s][B]%s[/B][/COLOR]'
 int_format, ext_format = '[COLOR %s][B]Int: [/B][/COLOR]%s', '[COLOR %s][B]Ext: [/B][/COLOR]%s'
 ext_scr_format, unfinshed_import_format = '[COLOR %s][B]%s[/B][/COLOR]', '[COLOR red]+%s[/COLOR]'
@@ -37,164 +36,117 @@ class source:
 		self.int_dialog_highlight, self.ext_dialog_highlight = get_setting('int_dialog_highlight', 'darkgoldenrod'), get_setting('ext_dialog_highlight', 'dodgerblue')
 		self.finish_early, self.load_action = get_setting('search.finish.early') == 'true', get_setting('load_action') == '1'
 		self.int_total, self.ext_total = total_format % (self.int_dialog_highlight, '%s'), total_format % (self.ext_dialog_highlight, '%s')
-		self.timeout = 60 if self.disabled_ignored else int(get_setting('scrapers.timeout.1', '30'))
+		self.timeout = 30 if self.disabled_ignored else int(get_setting('scrapers.timeout.1', '10'))
 		self.meta = json.loads(get_property('pov_playback_meta'))
 		self.background = self.meta.get('background', False)
-		self.internal_sources_total = self.internal_sources_4K = self.internal_sources_1080p = self.internal_sources_720p = self.internal_sources_sd = 0
-		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
+		self.internal_sources_total, self.internal_resolutions = 0, dict.fromkeys('4K 1080p 720p sd'.split(), 0)
+		self.sources_total, self.resolutions = {'total': 0}, dict.fromkeys('4K 1080p 720p sd'.split(), 0)
 
 	def results(self, info):
-		if not self.source_dict: return
-		self.media_type, self.tmdb_id, self.orig_title = info['media_type'], str(info['tmdb_id']), info['title']
-		self.season, self.episode, self.total_seasons = info['season'], info['episode'], info['total_seasons']
-		self.title, self.year = normalize(info['title']), info['year']
-		ep_name, aliases = normalize(info['ep_name']), info['aliases']
-		self.single_expiry, self.season_expiry, self.show_expiry = info['expiry_times']
-		if self.media_type == 'movie':
-			self.season_divider, self.show_divider = 1, 1
-			self.data = {'imdb': info['imdb_id'], 'title': self.title, 'aliases': aliases, 'year': self.year}
-		else:
-			self.season_divider = next((int(x['episode_count']) for x in self.meta['season_data'] if int(x['season_number']) == int(self.meta['season'])), 1)
-			self.show_divider = int(self.meta['total_aired_eps'])
-			self.data = {'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'aliases': aliases,'year': self.year,
-						'title': ep_name, 'season': str(self.season), 'episode': str(self.episode)}
-			season_packs, show_packs = pack_enable_check(self.meta, self.season, self.episode)
-			if season_packs:
-				self.source_dict = [(i[0], i[1], '') for i in self.source_dict]
-				pack_capable = [i for i in self.source_dict if i[1].pack_capable]
-				if pack_capable:
-					self.source_dict.extend([(i[0], i[1], ls(32537)) for i in pack_capable])
-				if pack_capable and show_packs:
-					self.source_dict.extend([(i[0], i[1], ls(32089)) for i in pack_capable])
-#				shuffle(self.source_dict)
-		return self.get_sources()
-
-	def get_sources(self):
-		def _background():
-			end_time = time.monotonic() + self.timeout
-			while time.monotonic() < end_time:
-				sleep(self.sleep_time)
-				alive_threads = [x for x in threads if x.is_alive()]
-				if not self.threads_completed: continue
-				if not alive_threads: break
-				if len(self.sources) >= 100 * len(alive_threads): break
-		def _foreground():
-			string1, string2 = ls(32676), ls(32677)
-			if self.internal_activated or self.internal_prescraped:
-				string3 = int_format % (self.int_dialog_highlight, '%s')
-				string4 = ext_format % (self.ext_dialog_highlight, '%s')
-			else: string4 = ext_scr_format % (self.ext_dialog_highlight, ls(32118))
-			line1 = line2 = line3 = ''
-			end_time = time.monotonic() + self.timeout
-			while time.monotonic() < end_time:
-				if self.progress_dialog and self.progress_dialog.iscanceled(): break
-				elif monitor.abortRequested(): break
-				try:
-					ext_4k, ext_1080 = self.ext_total % self.sources_4k, self.ext_total % self.sources_1080p
-					ext_720, ext_sd = self.ext_total % self.sources_720p, self.ext_total % self.sources_sd
-					source_total_label = self.ext_total % self.sources_total
-					threads_completed = self.threads_completed
-					len_threads = len(threads) if threads_completed else len(self.source_dict)
-					alive_threads = [x.name for x in threads if x.is_alive()]
-					len_alive_threads = len(alive_threads)
-					if not threads_completed:
-						line3 = string1 % unfinshed_import_format % str(len_threads-len_alive_threads)
-					elif len_alive_threads > 5: line3 = string1 % str(len_threads-len_alive_threads)
-					else: line3 = string1 % ', '.join(alive_threads).upper()
-					if self.internal_activated or self.internal_prescraped:
-						remaining_internal_scrapers = self.process_internal_results()
-						int_4k, int_1080 = self.int_total % self.internal_sources_4K, self.int_total % self.internal_sources_1080p
-						int_720, int_sd = self.int_total % self.internal_sources_720p, self.int_total % self.internal_sources_sd
-						internalSource_total_label = self.int_total % self.internal_sources_total
-						alive_threads.extend(remaining_internal_scrapers)
-						line1 = string3 % diag_format % (int_4k, int_1080, int_720, int_sd, string2, internalSource_total_label)
-						line2 = string4 % diag_format % (ext_4k, ext_1080, ext_720, ext_sd, string2, source_total_label)
-					else:
-						line1 = string4
-						line2 = diag_format % (ext_4k, ext_1080, ext_720, ext_sd, string2, source_total_label)
-					current_time = time.monotonic()
-					progress = int((len_threads-len_alive_threads)/len_threads*100)
-					if self.progress_dialog: self.progress_dialog.update(format_line % (line1, line2, line3), progress)
-					else: progressBG.update(progress, line3)
-					sleep(self.sleep_time)
-					if not threads_completed: continue
-					if not alive_threads: break
-					if self.sources and self.finish_early and progress > 50: break
-				except: pass
+		Sources.hostDict = self.hostDict
+		Sources.sources, Sources.cached_sources = self.sources, self.cached_sources
+		Sources.sources_total, Sources.resolutions = self.sources_total, self.resolutions
 		threads = []
-		threads_append = threads.append
+		for provider, module, *pack in self.source_dict:
+			if info['media_type'] == 'movie':
+				if not module.hasMovies: continue
+				args, name = (provider, module), provider
+			else:
+				if not module.hasEpisodes: continue
+				args = provider, module, pack[0] if pack else ''
+				name = pack_display % (provider, pack[0]) if pack and pack[0] else provider
+			obj = Sources(info, self.meta)
+			obj.thread = Thread(target=obj.get_source, args=args, name=name)
+			threads.append(obj)
+		self.wait(threads)
+		self.process_filters()
+		if not self.background and self.progress_dialog: self._kill_progress_dialog()
+		clear_property('fs_filterless_search')
+		return self.final_sources
+
+	def wait(self, threads, debrid_check=False):
 		if not self.background:
 			hide_busy_dialog()
 			if not self.progress_dialog and not self.load_action:
 				progressBG = kodi_utils.progressDialogBG
 				progressBG.create('POV', 'POV loading...')
 			else: self._make_progress_dialog()
-			dialog = Thread(target=_foreground)
-		else: dialog = Thread(target=_background)
-		dialog.start()
-		if self.media_type == 'movie':
-			for provider, module in self.source_dict:
-				if not module.hasMovies: continue
-				thread = Thread(target=self.get_movie_source, args=(provider, module), name=provider)
-				threads_append(thread)
-				thread.start()
-		else:
-			for provider, module, *pack in self.source_dict:
-				if not module.hasEpisodes: continue
-				name=pack_display % (provider, pack[0]) if pack and pack[0] else provider
-				thread = Thread(target=self.get_episode_source, args=(provider, module, pack[0] if pack else ''), name=name)
-				threads_append(thread)
-				thread.start()
-		self.threads_completed = True
-		dialog.join(self.timeout)
-		self.process_filters(self.sources, self.cached_sources)
+			string1, string2 = ls(32579) if debrid_check else ls(32676), ls(32677)
+			if self.internal_activated or self.internal_prescraped:
+				string3 = int_format % (self.int_dialog_highlight, '%s')
+				string4 = ext_format % (self.ext_dialog_highlight, '%s')
+			else: string4 = ext_scr_format % (self.ext_dialog_highlight, ls(32118))
+			line1 = line2 = line3 = ''
+		len_threads = len(threads)
+		end_time = time.monotonic() + self.timeout
+		list(TaskPool.process([i.thread for i in threads]))
+		while not all((i.completed for i in threads)):
+			if time.monotonic() > end_time or monitor.abortRequested(): break
+			sleep(self.sleep_time)
+			alive_threads = [x.thread.name for x in threads if not x.completed]
+			if not self.background:
+				try:
+					if self.progress_dialog and self.progress_dialog.iscanceled(): break
+					ext_totals = [self.ext_total % v for v in self.resolutions.values()]
+					source_total_label = self.ext_total % self.sources_total['total']
+					len_alive_threads = len(alive_threads)
+					if self.internal_activated or self.internal_prescraped:
+						remaining_internal_scrapers = self.process_internal_results()
+						int_totals = [self.int_total % v for v in self.internal_resolutions.values()]
+						internalSource_total_label = self.int_total % self.internal_sources_total
+						alive_threads.extend(remaining_internal_scrapers)
+						line1 = string3 % diag_format % (*int_totals, string2, internalSource_total_label)
+						line2 = string4 % diag_format % (*ext_totals, string2, source_total_label)
+					else:
+						line1 = string4
+						line2 = diag_format % (*ext_totals, string2, source_total_label)
+					if len_alive_threads > 5: line3 = string1 % str(len_threads-len_alive_threads)
+					else: line3 = string1 % ', '.join(alive_threads).upper()
+					progress = int((len_threads-len_alive_threads)/len_threads*100)
+					if self.progress_dialog: self.progress_dialog.update(format_line % (line1, line2, line3), progress)
+					else: progressBG.update(progress, line3)
+					finish_early = debrid_check is False and self.finish_early and len(self.sources) > len_threads // 0.1
+					if finish_early: break
+				except: pass
 		if not self.background:
-			if self.progress_dialog: self._kill_progress_dialog()
-			else: progressBG.close()
-		clear_property('fs_filterless_search')
-		return self.final_sources
+			if not self.progress_dialog and not self.load_action:
+				progressBG.close()
 
-	def get_movie_source(self, provider, module):
-		_cache = ExternalProvidersCache()
-		sources = _cache.get(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '')
-		if sources is None:
-			sources = module().sources(self.data, self.hostDict)
-			sources = self.process_sources(provider, sources)
-			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
-		if sources:
-			self.process_quality_count(sources)
-			if provider in cached_debrids: self.cached_sources.extend(sources)
-			else: self.sources.extend(sources)
+	def process_filters(self):
+		filter = []
+		try:
+			self.cached_sources = self.process_duplicates(self.cached_sources)
+			self.sources = self.process_duplicates(self.sources)
+			torrent_sources = [i for i in self.sources if 'hash' in i]
+			result_hashes = list({i['hash'] for i in torrent_sources})
+			CacheCheck.set_cached_hashes(result_hashes)
+			threads = []
+			for item in self.debrid_torrents:
+				if not (args := next((i for i in debrid_list if i[0] == item), None)): continue
+				obj = CacheCheck(*args)
+				obj.thread = Thread(target=obj.cache_check, name=item)
+				threads.append(obj)
+			self.wait(threads, debrid_check=True)
+			for item in threads:
+				item, hashes = item.thread.name, item.cached_list
+				if item in cached_debrids:
+					filter.extend([{**i, 'cache_provider': item, 'debrid': item} for i in self.cached_sources])
+				else:
+					filter.extend([{**i, 'cache_provider': item, 'debrid': item} for i in torrent_sources if i['hash'] in hashes])
+				if self.display_uncached_torrents: filter.extend(
+					[{**i, 'cache_provider': 'Uncached %s' % item, 'debrid': item} for i in torrent_sources if not i['hash'] in hashes]
+				)
+			hoster_sources = [i for i in self.sources if not 'hash' in i]
+			result_hosters = list({i['source'].lower() for i in hoster_sources})
+			for item in self.debrid_hosters:
+				for k, v in item.items():
+					valid_hosters = [i for i in result_hosters if i in v]
+					filter.extend([{**i, 'debrid': k} for i in hoster_sources if i['source'] in valid_hosters])
+		except: notification(32574)
+		self.final_sources = filter
 
-	def get_episode_source(self, provider, module, pack):
-		_cache = ExternalProvidersCache()
-		if pack in pack_check:
-			if pack == show_display: s_check = ''
-			else: s_check = self.season
-			e_check = ''
-		else: s_check, e_check = self.season, self.episode
-		sources = _cache.get(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check)
-		if sources is None:
-			if pack == show_display:
-				expiry_hours = self.show_expiry
-				sources = module().sources_packs(self.data, self.hostDict, search_series=True, total_seasons=self.total_seasons)
-			elif pack == season_display:
-				expiry_hours = self.season_expiry
-				sources = module().sources_packs(self.data, self.hostDict)
-			else:
-				expiry_hours = self.single_expiry
-				sources = module().sources(self.data, self.hostDict)
-			sources = self.process_sources(provider, sources)
-			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check, sources, expiry_hours)
-		if sources:
-			if pack == season_display: sources = [i for i in sources if not 'episode_start' in i or i['episode_start'] <= self.episode <= i['episode_end']]
-			elif pack == show_display: sources = [i for i in sources if i['last_season'] >= self.season]
-			self.process_quality_count(sources)
-			if provider in cached_debrids: self.cached_sources.extend(sources)
-			else: self.sources.extend(sources)
-
-	def process_filters(self, sources, cached_sources):
-		def _process_duplicates(_sources):
+	def process_duplicates(self, _sources):
+		def _process():
 			uniqueURLs, uniqueHashes = set(), set()
 			for provider in _sources:
 				try:
@@ -207,78 +159,16 @@ class source:
 								yield provider
 						else: yield provider
 				except: yield provider
-		def _process_torrents(item):
-			hashes = cached_hashes[item]
-			if item in cached_debrids:
-				filter.extend([{**i, 'cache_provider': item, 'debrid': item} for i in cached_sources])
-			else:
-				filter.extend([{**i, 'cache_provider': item, 'debrid': item} for i in torrent_sources if i['hash'] in hashes])
-			if self.display_uncached_torrents: filter.extend(
-				[{**i, 'cache_provider': 'Uncached %s' % item, 'debrid': item} for i in torrent_sources if not i['hash'] in hashes]
-			)
-		def _process_hosters(item):
-			for k, v in item.items():
-				valid_hosters = [i for i in result_hosters if i in v]
-				filter.extend([{**i, 'debrid': k} for i in hoster_sources if i['source'] in valid_hosters])
-		filter = []
-		try:
-			sources, cached_sources = list(_process_duplicates(sources)), list(_process_duplicates(cached_sources))
-			torrent_sources = [i for i in sources if 'hash' in i]
-			hash_list = list({i['hash'] for i in torrent_sources})
-			cached_hashes = DebridCheck(hash_list, self.background, self.debrid_torrents, self.meta, self.progress_dialog).run()
-			if self.debrid_torrents and (torrent_sources or cached_sources): [_process_torrents(i) for i in self.debrid_torrents]
-			hoster_sources = [i for i in sources if not 'hash' in i]
-			result_hosters = list({i['source'].lower() for i in hoster_sources})
-			if self.debrid_hosters and hoster_sources: [_process_hosters(i) for i in self.debrid_hosters]
-		except: notification(32574)
-		self.final_sources = filter
-
-	def process_sources(self, provider, sources):
-		try:
-			for i in sources:
-				try:
-					i_get = i.get
-					if 'hash' in i:
-						_hash = i_get('hash').lower()
-						i['hash'] = str(_hash)
-					size, size_label, divider = 0, None, None
-					if 'name' in i: URLName = clean_file_name(i_get('name')).replace('html', ' ').replace('+', ' ').replace('-', ' ')
-					else: URLName = get_filename_match(self.orig_title, i_get('url'), i_get('name', None))
-					if 'name_info' in i: quality, extraInfo = get_file_info(name_info=i_get('name_info'))
-					else: quality, extraInfo = get_file_info(url=i_get('url'))
-					try:
-						size = i_get('size')
-#						if 'package' in i and provider != 'torrentio':
-						if 'package' in i and provider not in ('torrentio', 'knightcrawler', 'mediafusion', 'tidebrid', 'mfdebrid'):
-							if i_get('package') == 'season': divider = self.season_divider
-							else: divider = self.show_divider
-							size = float(size) / divider
-							size_label = '%.2f GB' % size
-						else: size_label = '%.2f GB' % size
-					except: pass
-					i.update({'provider': provider, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
-								'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
-				except: pass
-		except: pass
-		return sources
-
-	def process_quality_count(self, sources):
-		for i in sources:
-			quality = i['quality']
-			if quality == '4K': self.sources_4k += 1
-			elif quality == '1080p': self.sources_1080p += 1
-			elif quality == '720p': self.sources_720p += 1
-			else: self.sources_sd += 1
-			self.sources_total += 1
+		return list(_process())
 
 	def process_internal_results(self):
 		def _process_quality_count(sources):
 			for i in sources:
 				quality = i['quality']
-				if quality == '4K': self.internal_sources_4K += 1
-				elif quality == '1080p': self.internal_sources_1080p += 1
-				elif quality == '720p': self.internal_sources_720p += 1
-				else: self.internal_sources_sd += 1
+				if quality == '4K': self.internal_resolutions[quality] += 1
+				elif quality == '1080p': self.internal_resolutions[quality] += 1
+				elif quality == '720p': self.internal_resolutions[quality] += 1
+				else: self.internal_resolutions['sd'] += 1
 				self.internal_sources_total += 1
 		if self.internal_prescraped and not self.processed_prescrape:
 			_process_quality_count(self.prescrape_sources)
@@ -311,4 +201,103 @@ class source:
 		try: del self.progress_dialog
 		except: pass
 		self.progress_dialog = None
+
+class Sources:
+	scrape_provider = 'external'
+	hostDict = {}
+	sources, cached_sources = [], []
+	sources_total, resolutions = 0, dict.fromkeys('4K 1080p 720p sd'.split(), 0)
+
+	def __init__(self, info, meta):
+		self.completed = False
+		self.media_type, self.tmdb_id, self.year = info['media_type'], str(info['tmdb_id']), info['year']
+		self.season, self.episode, self.total_seasons = info['season'], info['episode'], info['total_seasons']
+		self.title, self.orig_title, aliases = normalize(info['title']), info['title'], info['aliases']
+		self.single_expiry, self.season_expiry, self.show_expiry = info['expiry_times']
+		if self.media_type == 'movie':
+			self.get_source = self.get_movie_source
+			self.season_divider, self.show_divider = 1, 1
+			self.data = {'imdb': info['imdb_id'], 'title': self.title, 'aliases': aliases, 'year': self.year}
+		else:
+			self.get_source = self.get_episode_source
+			self.season_divider = int(next((x['episode_count'] for x in meta['season_data'] if int(x['season_number']) == int(meta['season'])), 1))
+			self.show_divider = int(meta['total_aired_eps'])
+			self.data = {'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'aliases': aliases, 'year': self.year,
+						'title': normalize(info['ep_name']), 'season': str(self.season), 'episode': str(self.episode)}
+
+	def get_movie_source(self, provider, module):
+		_cache = ExternalProvidersCache()
+		sources = _cache.get(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '')
+		if sources is None:
+			sources = module().sources(self.data, self.hostDict)
+			sources = self.process_sources(provider, sources)
+			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
+		if sources:
+			self.process_quality_count(sources)
+			if provider in cached_debrids: self.cached_sources.extend(sources)
+			else: self.sources.extend(sources)
+		self.completed = True
+
+	def get_episode_source(self, provider, module, pack):
+		if pack in pack_check:
+			s_check, e_check = '' if pack == show_display else self.season, ''
+		else: s_check, e_check = self.season, self.episode
+		_cache = ExternalProvidersCache()
+		sources = _cache.get(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check)
+		if sources is None:
+			if pack == show_display:
+				expiry_hours = self.show_expiry
+				sources = module().sources_packs(self.data, self.hostDict, search_series=True, total_seasons=self.total_seasons)
+			elif pack == season_display:
+				expiry_hours = self.season_expiry
+				sources = module().sources_packs(self.data, self.hostDict)
+			else:
+				expiry_hours = self.single_expiry
+				sources = module().sources(self.data, self.hostDict)
+			sources = self.process_sources(provider, sources)
+			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check, sources, expiry_hours)
+		if sources:
+			if pack == season_display: sources = [i for i in sources if not 'episode_start' in i or i['episode_start'] <= self.episode <= i['episode_end']]
+			elif pack == show_display: sources = [i for i in sources if i['last_season'] >= self.season]
+			self.process_quality_count(sources)
+			if provider in cached_debrids: self.cached_sources.extend(sources)
+			else: self.sources.extend(sources)
+		self.completed = True
+
+	def process_sources(self, provider, sources):
+		try:
+			for i in sources:
+				try:
+					i_get = i.get
+					if 'hash' in i:
+						_hash = i_get('hash').lower()
+						i['hash'] = str(_hash)
+					size, size_label, divider = 0, None, None
+					if 'name' in i: URLName = clean_file_name(i_get('name')).replace('html', ' ').replace('+', ' ').replace('-', ' ')
+					else: URLName = get_filename_match(self.orig_title, i_get('url'), i_get('name', None))
+					if 'name_info' in i: quality, extraInfo = get_file_info(name_info=i_get('name_info'))
+					else: quality, extraInfo = get_file_info(url=i_get('url'))
+					try:
+						size = i_get('size')
+						if 'package' in i and provider not in ('torrentio', 'knightcrawler', 'mediafusion', 'tidebrid', 'mfdebrid'):
+							if i_get('package') == 'season': divider = self.season_divider
+							else: divider = self.show_divider
+							size = float(size) / divider
+							size_label = '%.2f GB' % size
+						else: size_label = '%.2f GB' % size
+					except: pass
+					i.update({'provider': provider, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
+								'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
+				except: pass
+		except: pass
+		return sources
+
+	def process_quality_count(self, sources):
+		for i in sources:
+			quality = i['quality']
+			if quality == '4K': self.resolutions[quality] += 1
+			elif quality == '1080p': self.resolutions[quality] += 1
+			elif quality == '720p': self.resolutions[quality] += 1
+			else: self.resolutions['sd'] += 1
+			self.sources_total['total'] += 1
 

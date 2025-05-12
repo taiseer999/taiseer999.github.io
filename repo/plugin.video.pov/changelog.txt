@@ -4,6 +4,8 @@
 
 
   [COLOR dodgerblue][B]Version 5.04[/B][/COLOR]
+- Refactored apis/indexers/debrid/external modules.
+- Change for 'orginal_title' aliases, thanks Redditor!
 - Increased timeout for TMDB/Trakt non 'get' methods.
 - Added Toggle Dropped... to Trakt Lists Manager for tv shows.
 - Added Trakt Dropped TV Shows menu item to My Lists/Trakt Lists.
