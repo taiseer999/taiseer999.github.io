@@ -791,8 +791,7 @@
             <selected>Skin.HasSetting(SkinUserLogin.StartupLoginScreen)</selected>
             <visible>!Skin.HasSetting(SkinUserLogin.Disabled)</visible>
         </include>
-
-<include content="Settings_Label" description="Codec logos">
+        <include content="Settings_Label" description="Codec logos">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">018</param>
