@@ -105,6 +105,8 @@
                 <param name="mainlogo_visible">$PARAM[mainlogo_visible]</param>
                 <param name="mainlogo_texture">$PARAM[mainlogo_texture]</param>
                 <param name="is_player">$PARAM[is_player]</param>
+                <param name="adapative">true</param>
+                <param name="titleautoheight">true</param>
                 <param name="extended_include">$PARAM[extended_include]</param>
             </include>
             <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
