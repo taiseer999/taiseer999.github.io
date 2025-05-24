@@ -183,7 +183,7 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
-            <include content="Dolby_Atmos_Flag">
+            <include content="Dolby_TrueHD_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
@@ -199,7 +199,7 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
-            <include content="Dolby_Atmos1_Flag">
+            <include content="Dolby_Digital_Plus_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</param>
@@ -433,7 +433,7 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
-            <include content="Dolby_Atmos_Flag">
+            <include content="Dolby_TrueHD_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
@@ -449,7 +449,7 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
-            <include content="Dolby_Atmos1_Flag">
+            <include content="Dolby_Digital_Plus_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</param>
@@ -683,7 +683,7 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
-            <include content="Dolby_Atmos_Flag">
+            <include content="Dolby_TrueHD_Atmos_Flag">
                 <param name="groupId">82</param>
                 <param name="imageId">83</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
@@ -699,7 +699,7 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
-            <include content="Dolby_Atmos1_Flag">
+            <include content="Dolby_Digital_Plus_Atmos1_Flag">
                 <param name="groupId">86</param>
                 <param name="imageId">87</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)</param>
