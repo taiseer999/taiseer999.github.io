@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+                <param name="listitem_audiocodec">VideoPlayer.AudioCodec</param><?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
     <include name="OSD_UpNext_Buttons">
