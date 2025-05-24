@@ -59,7 +59,7 @@ info="http://your.info.url"
 description="بيلد خفيف للاجهزة المتوسطة."
 
 name="AH2 Arabic"
-version="1.1"
+version="1.2"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=QagbCztv7rcsDE5%2FEBh7ETDEDpdAqMS5afsxABuaxaSZtIJ5fQlTBBeu225sWTZm&expiry=oKeg1ic65Hpa9Q7Tu%2BIemA%3D%3D&mac=681636335db64eca04aa5ff395d8fa876b3f8762e5e477019d80379cf0522b11"
 minor="http://"
 gui="http://"
