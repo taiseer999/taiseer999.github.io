@@ -103,57 +103,6 @@
 			Rework for Seren 2.0
 		</news>
 	</extension>
-</addon><addon id="context.themoviedb.helper" version="1.1.1" name="TMDbHelper - Additional Context Menu Items" provider-name="jurialmunkey">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="plugin.video.themoviedb.helper" version="4.10.30" />
-    </requires>
-    <extension point="kodi.context.item">
-        <menu id="kodi.core.main">
-            <menu>
-                <label>$ADDON[plugin.video.themoviedb.helper 32145]</label>
-                <item library="context.py" args="play_using">
-                    <label>$ADDON[plugin.video.themoviedb.helper 32322]</label>
-                    <visible>[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,movie)]</visible>
-                </item>
-                <item library="context.py" args="related_lists">
-                    <label>$ADDON[plugin.video.themoviedb.helper 32235]</label>
-                    <visible>[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]</visible>
-                </item>
-                <item library="context.py" args="sync_trakt">
-                    <label>$ADDON[plugin.video.themoviedb.helper 32295]</label>
-                    <visible>[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]</visible>
-                </item>
-                <item library="context.py" args="refresh_details">
-                    <label>$ADDON[plugin.video.themoviedb.helper 32233]</label>
-                    <visible>[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]</visible>
-                </item>
-                <item library="context.py" args="manage_artwork">
-                    <label>$ADDON[plugin.video.themoviedb.helper 32222]</label>
-                    <visible>[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]</visible>
-                </item>
-                <item library="context.py" args="add_to_library">
-                    <label>$ADDON[plugin.video.themoviedb.helper 32151]</label>
-                    <visible>[String.IsEqual(ListItem.dbtype,episode) | String.IsEqual(ListItem.dbtype,tvshow) | String.IsEqual(ListItem.dbtype,movie)]</visible>
-                </item>
-            </menu>
-        </menu>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Additional context menu items for TMDbHelper</summary>
-        <description lang="en">Adds additional TMDbHelper context menu items
-        </description>
-        <platform>all</platform>
-        <license>GPL-3.0-or-later</license>
-        <website>https://github.com/jurialmunkey/plugin.video.themoviedb.helper</website>
-        <forum>https://forum.kodi.tv/showthread.php?tid=345847</forum>
-        <source />
-        <disclaimer lang="en" />
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
 </addon><addon id="game.controller.keyboard" name="IBM Model M Keyboard" version="1.1.30" provider-name="Team Kodi">
     <extension point="kodi.game.controller" library="resources/layout.xml" />
     <extension point="xbmc.addon.metadata">
@@ -1530,26 +1479,6 @@ updated YouTube addon URL
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.daddylive" name="DaddyLive" version="5.00" provider-name="FubuZ">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.requests" />
-        <import addon="script.module.inputstreamhelper" />
-        <import addon="script.module.six" />
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Live Sports and TV</summary>
-		<description lang="en">Free streming of Live Sports and TV.</description>
-        <license>GPL-3.0</license>
-        <website>https://daddylive.sx/</website>
-        <assets>
-            <icon>resources/icon.png</icon>
-            <fanart>resources/fanart.jpg</fanart>
-        </assets>
-    </extension>
 </addon><addon id="plugin.video.daddylivehd" name="DaddyLiveHD" version="5.01" provider-name="FubuZ">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -1602,7 +1531,7 @@ updated YouTube addon URL
     <extension point="xbmc.python.pluginsource" library="resources/lib/fenlight.py">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="resources/lib/service.py" />
+    
     <extension point="xbmc.python.module" library="resources/lib/" />
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
@@ -4244,7 +4173,7 @@ v.3.3.7
   <extension point="xbmc.python.pluginsource" library="default.py">
      <provides>executable</provides>
   </extension>
-  <extension point="xbmc.service" library="service.py" start="startup" />
+  
   <extension point="xbmc.addon.metadata">
 	<summary>A Streamlined Utility Tool for Kodi</summary>
 	<description>No Bloatware, no Nonsense! Just Keep your Kodi sharp and clean with this utility tool... Now with a Custom Wizard.</description>
