@@ -25,7 +25,7 @@
                 <param name="diffuse">diffuse/dialog_w1280_h740.png</param>
             </include>
             <include content="Object_MenuHeader">
-                <param name="label">[CAPITALIZE]Player process info[/CAPITALIZE]</param>
+                <param name="label">PLAYER PROCESS INFO</param>
                 <param name="icon">special://skin/extras/icons/chart-simple.png</param>
             </include>
             <control type="image">
