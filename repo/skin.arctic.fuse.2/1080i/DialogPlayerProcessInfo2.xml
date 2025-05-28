@@ -235,7 +235,7 @@
 				
                 <!-- More Icon -->
                 <control type="label">
-                    <label></label>
+                    <label>◐</label>
                     <top>-25</top>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_100</textcolor>
@@ -708,7 +708,7 @@
                     <left>240</left>
                     <top>80</top>
                     <label>$INFO[Player.Process(audiochannels)]</label>
-                    <font>size_light_hint</font>
+                    <font>font_hint_bold</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
 
