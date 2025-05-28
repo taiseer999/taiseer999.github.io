@@ -17,9 +17,9 @@
         <!-- Short background -->
         <control type="group">
             <visible>String.Contains(Player.Process(video.hdr.type),sdr)</visible>
-            <top>320</top>
+            <top>285</top>
             <width>1275</width>
-            <height>745</height>
+            <height>780</height>
             <left>10</left>
             <include content="OSD_Dialog_Background_Blur">
                 <param name="diffuse">diffuse/dialog_w1280_h740.png</param>
@@ -43,9 +43,9 @@
         <!-- Long background -->
         <control type="group">
             <visible>String.IsEqual(Player.Process(video.dovi.has.config),1) | String.Contains(Player.Process(video.hdr.type),hdr)</visible>
-            <top>320</top>
+            <top>285</top>
             <width>1900</width>
-            <height>745</height>
+            <height>780</height>
             <left>10</left>
             <include content="OSD_Dialog_Background_Blur">
                 <param name="diffuse">diffuse/dialog_w1280_h740.png</param>
@@ -68,7 +68,7 @@
 
         <!-- Group: Bottom screen -->
         <control type="group">
-            <top>505</top>
+             <top>470</top>
             <width>1920</width>
             <height>0</height>
 			
@@ -78,7 +78,7 @@
 				
                 <!-- Video Icon -->
                 <control type="label">
-                    <label></label>
+                    <label></label>
                     <top>-25</top>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_100</textcolor>
@@ -235,7 +235,7 @@
 				
                 <!-- More Icon -->
                 <control type="label">
-                    <label></label>
+                    <label></label>
                     <top>-25</top>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_100</textcolor>
@@ -279,10 +279,10 @@
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
 				
-                <!-- Color space -->
+                <!-- EOTF & Gamut -->
                 <control type="label">
                     <top>80</top>
-                    <label>Color space:</label>
+                    <label>EOTF & Gamut:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
@@ -294,16 +294,31 @@
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
 				
-                <!-- Media source -->
+               <!-- Color space -->
                 <control type="label">
                     <top>110</top>
-                    <label>Media source:</label>
+                    <label>Color space:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>210</left>
                     <top>110</top>
+                    <label>$INFO[Player.Process(video.hdr.colour.primaries)]</label>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                </control>
+				
+                <!-- Media source -->
+                <control type="label">
+                    <top>140</top>
+                    <label>Media source:</label>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                </control>
+                <control type="label">
+                    <left>210</left>
+                    <top>170</top>
                     <label>$INFO[Player.Process(video.source.hdr.type)]</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -311,14 +326,14 @@
 				
                 <!-- Playback time -->
                 <control type="label">
-                    <top>140</top>
+                    <top>170</top>
                     <label>Playback time:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>210</left>
-                    <top>140</top>
+                    <top>170</top>
                     <label>$INFO[Player.Time] $INFO[Player.Duration,/ ,] [COLOR dialog_fg_70]$INFO[Player.Progress, (,%)][/COLOR]</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -416,7 +431,7 @@
 				
                 <!-- System Icon -->
                 <control type="label">
-                    <label></label>
+                    <label></label>
                     <top>-25</top>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_100</textcolor>
@@ -653,7 +668,7 @@
 				
                 <!-- Audio Icon -->
                 <control type="label">
-                    <label></label>
+                    <label></label>
                     <top>-25</top>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_100</textcolor>
@@ -682,6 +697,21 @@
                     <font>font_tiny</font>
                 </control>
 				
+                <!-- Channels -->
+                <control type="label">
+                    <top>80</top>
+                    <label>Channels:</label>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                </control>
+                <control type="label">
+                    <left>240</left>
+                    <top>80</top>
+                    <label>$INFO[Player.Process(audiochannels)]</label>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                </control>
+
                 <!-- Sample rate -->
                 <control type="label">
                     <top>50</top>
@@ -699,14 +729,14 @@
 				
                 <!-- Bitrate -->
                 <control type="label">
-                    <top>80</top>
+                    <top>110</top>
                     <label>Bitrate:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>240</left>
-                    <top>80</top>
+                    <top>110</top>
                     <label>$INFO[Player.Process(audio.live.kibit.rate),, $LOCALIZE[32012]] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32012])[/COLOR]]</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -714,14 +744,14 @@
 				
                 <!-- Audio language -->
                 <control type="label">
-                    <top>110</top>
+                   <top>140</top>
                     <label>Audio language:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>240</left>
-                    <top>110</top>
+                   <top>140</top>
                     <width>320</width>
                     <label>[UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE]</label>
                     <font>font_tiny</font>
@@ -732,7 +762,7 @@
                 </control>
                 <control type="label">
                     <left>240</left>
-                    <top>110</top>
+                   <top>140</top>
                     <width>320</width>
                     <label>[UPPERCASE]$INFO[VideoPlayer.AudioLanguage][/UPPERCASE] | $INFO[VideoPlayer.AudioLanguageEx]</label>
                     <font>font_tiny</font>
@@ -744,7 +774,7 @@
                 <!-- N/A -->
                 <control type="label">
                     <left>240</left>
-                    <top>110</top>
+                   <top>140</top>
                     <label>N/A</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -753,14 +783,14 @@
 				
                 <!-- Subtitle language -->
                 <control type="label">
-                    <top>140</top>
+<top>170</top>
                     <label>Subtitle language:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>240</left>
-                    <top>140</top>
+<top>170</top>
                     <width>320</width>
                     <label>$VAR[SubtitleVar] $VAR[SubtitleNameVar]</label>
                     <font>font_tiny</font>
@@ -772,7 +802,7 @@
                 <!-- Disabled -->
                 <control type="label">
                     <left>240</left>
-                    <top>140</top>
+<top>170</top>
                     <label>Disabled</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -781,7 +811,7 @@
                 <!-- N/A -->
                 <control type="label">
                     <left>240</left>
-                    <top>140</top>
+<top>170</top>
                     <label>N/A</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -796,7 +826,7 @@
 				
                 <!-- DV Configuration Icon -->
                 <control type="label">
-                    <label></label>
+                    <label></label>
                     <top>-25</top>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_100</textcolor>
@@ -814,7 +844,7 @@
                 <!-- Metadata -->
                 <control type="label">
                     <top>20</top>
-                    <label> Metadata:</label>
+                    <label>Metadata:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
@@ -1028,14 +1058,14 @@
 				
                 <!-- HDR10 MaxCLL/FALL -->
                 <control type="label">
-                    <top>45</top>
+                    <top>50</top>
                     <label>HDR10 MaxCLL/FALL:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>45</top>
+                    <top>50</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.hdr.max.cll)] l $INFO[Player.Process(video.hdr.max.fall)]</label>
@@ -1045,7 +1075,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>45</top>
+                    <top>50</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1053,14 +1083,14 @@
 				
                 <!-- RPU MDL -->
                 <control type="label">
-                    <top>82</top>
+                    <top>95</top>
                     <label>RPU MDL:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>82</top>
+                    <top>95</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.source.min.nits)] l $INFO[Player.Process(video.dovi.source.max.nits)]</label>
@@ -1070,7 +1100,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>82</top>
+                    <top>95</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1078,14 +1108,14 @@
 				
                 <!-- RPU MaxCLL/FALL -->
                 <control type="label">
-                    <top>107</top>
+                    <top>125</top>
                     <label>RPU MaxCLL/FALL:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>107</top>
+                    <top>125</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.l6.max.cll)] l $INFO[Player.Process(video.dovi.l6.max.fall)]</label>
@@ -1095,7 +1125,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>107</top>
+                    <top>125</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1103,14 +1133,14 @@
 				
                 <!-- FLL MIN / MAX / Ø -->
                 <control type="label">
-                    <top>147</top>
+                    <top>170</top>
                     <label>FLL MIN / MAX / Ø:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>170</left>
-                    <top>147</top>
+                    <top>170</top>
                     <width>300</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.l1.min.nits)] l $INFO[Player.Process(video.dovi.l1.max.nits)] l $INFO[Player.Process(video.dovi.l1.avg.nits)]</label>
@@ -1120,7 +1150,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>147</top>
+                    <top>170</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1128,14 +1158,14 @@
 				
                 <!-- PQ  MIN / MAX / Ø -->
                 <control type="label">
-                    <top>172</top>
+                    <top>200</top>
                     <label>PQ  MIN / MAX / Ø:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>170</left>
-                    <top>172</top>
+                    <top>200</top>
                     <width>300</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.l1.min.pq)] l $INFO[Player.Process(video.dovi.l1.max.pq)] l $INFO[Player.Process(video.dovi.l1.avg.pq)]</label>
@@ -1145,7 +1175,7 @@
                 <!-- 12-bit -->
                 <control type="label">
                     <left>480</left>
-                    <top>172</top>
+                    <top>200</top>
                     <label>12-bit</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1156,7 +1186,7 @@
             <control type="group">
                 <visible>String.Contains(Player.Process(video.hdr.type),dolby vision)</visible>
                 <visible>String.IsEqual(Player.Process(video.dovi.has.l5),1)</visible>
-                <top>285</top>
+                 <top>285</top>
                 <left>1330</left>
 				
                 <!-- DV Levels Metadata Icon -->
@@ -1178,14 +1208,14 @@
 				
                 <!-- HDR10 MDL -->
                 <control type="label">
-                    <top>15</top>
+                    <top>19</top>
                     <label> HDR10 MDL:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>15</top>
+                    <top>19</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.hdr.min.lum)] l $INFO[Player.Process(video.hdr.max.lum)]</label>
@@ -1195,7 +1225,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>15</top>
+                    <top>19</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1203,14 +1233,14 @@
 				
                 <!-- HDR10 MaxCLL/FALL -->
                 <control type="label">
-                    <top>40</top>
+                     <top>46</top>
                     <label>HDR10 MaxCLL/FALL]:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>40</top>
+                     <top>46</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.hdr.max.cll)] l $INFO[Player.Process(video.hdr.max.fall)]</label>
@@ -1220,7 +1250,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>40</top>
+                     <top>46</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1228,14 +1258,14 @@
 				
                 <!-- RPU MDL -->
                 <control type="label">
-                    <top>70</top>
+                    <top>80</top>
                     <label>RPU MDL:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>70</top>
+                    <top>80</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.source.min.nits)] l $INFO[Player.Process(video.dovi.source.max.nits)]</label>
@@ -1245,7 +1275,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>70</top>
+                    <top>80</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1253,14 +1283,14 @@
 				
                 <!-- RPU MaxCLL/FALL -->
                 <control type="label">
-                    <top>97</top>
+                   <top>80</top>
                     <label>RPU MaxCLL/FALL:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>270</left>
-                    <top>97</top>
+                   <top>80</top>
                     <width>200</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.l6.max.cll)] l $INFO[Player.Process(video.dovi.l6.max.fall)]</label>
@@ -1270,7 +1300,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>97</top>
+                   <top>80</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1278,14 +1308,14 @@
 				
                 <!-- FLL MIN / MAX / Ø -->
                 <control type="label">
-                    <top>126</top>
+                    <top>142</top>
                     <label>FLL MIN / MAX / Ø:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>170</left>
-                    <top>126</top>
+                    <top>142</top>
                     <width>300</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.l1.min.nits)] l $INFO[Player.Process(video.dovi.l1.max.nits)] l $INFO[Player.Process(video.dovi.l1.avg.nits)]</label>
@@ -1295,7 +1325,7 @@
                 <!-- cd/m² -->
                 <control type="label">
                     <left>480</left>
-                    <top>126</top>
+                    <top>142</top>
                     <label>cd/m²</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1303,14 +1333,14 @@
 				
                 <!-- PQ  MIN / MAX / Ø -->
                 <control type="label">
-                    <top>153</top>
+                    <top>169</top>
                     <label>PQ  MIN / MAX / Ø:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
                 <control type="label">
                     <left>170</left>
-                    <top>153</top>
+                    <top>169</top>
                     <width>300</width>
                     <align>right</align>
                     <label>$INFO[Player.Process(video.dovi.l1.min.pq)] l $INFO[Player.Process(video.dovi.l1.max.pq)] l $INFO[Player.Process(video.dovi.l1.avg.pq)]</label>
@@ -1319,8 +1349,8 @@
                 </control>
                 <!-- 12-bit -->
                 <control type="label">
-                    <left>477</left>
-                    <top>153</top>
+                    <left>478</left>
+                    <top>169</top>
                     <label>12-bit</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1328,7 +1358,7 @@
 				
                 <!-- L5 Active Offsets -->
                 <control type="label">
-                    <top>185</top>
+                   <top>201</top>
                     <label>L5 Active Offsets:</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1337,7 +1367,7 @@
                     <left>170</left>
                     <width>300</width>
                     <align>right</align>
-                    <top>185</top>
+                   <top>201</top>
                     <label>$INFO[Player.Process(video.dovi.l5.left.offset)] l $INFO[Player.Process(video.dovi.l5.right.offset)] l $INFO[Player.Process(video.dovi.l5.top.offset)] l $INFO[Player.Process(video.dovi.l5.bottom.offset)]</label>
                     <font>font_tiny</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1345,7 +1375,7 @@
                 <!-- Arrows: Left to right with line icon -->
                 <control type="label">
                     <left>483</left>
-                    <top>185</top>
+                   <top>201</top>
                     <label></label>
                     <font>font_tiny_iconic</font>
                     <textcolor>dialog_fg_90</textcolor>
@@ -1353,7 +1383,7 @@
                 <!-- Arrows: Top to bottom with line icon -->
                 <control type="label">
                     <left>528</left>
-                    <top>199</top>
+                    <top>215</top>
                     <angle>90</angle>
                     <label></label>
                     <font>font_tiny_iconic</font>
