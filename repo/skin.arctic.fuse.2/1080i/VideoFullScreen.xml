@@ -35,8 +35,21 @@
             <visible>Skin.HasSetting(osd.useleftCodecStartupLogos)</visible>
             <visible>String.IsEqual(Player.Process(av.change),1)</visible>
             <left>35</left>
-            <animation type="Hidden">
-                <effect type="fade" start="100" end="0" time="500" tween="sine" />
+            <animation type="WindowOpen" condition="!Skin.HasSetting(osd.useFiveSecondsCodecLogos) + !Skin.HasSetting(osd.useSevenSecondsCodecLogos) + !Skin.HasSetting(osd.useTenSecondsCodecLogos)">
+                <effect type="fade" start="0" end="100" time="300" />
+                <effect type="fade" start="100" end="0" delay="5000" time="500" tween="sine" />
+            </animation>
+            <animation type="WindowOpen" condition="Skin.HasSetting(osd.useFiveSecondsCodecLogos)">
+                <effect type="fade" start="0" end="100" time="300" />
+                <effect type="fade" start="100" end="0" delay="7000" time="500" tween="sine" />
+            </animation>
+            <animation type="WindowOpen" condition="Skin.HasSetting(osd.useSevenSecondsCodecLogos)">
+                <effect type="fade" start="0" end="100" time="300" />
+                <effect type="fade" start="100" end="0" delay="9000" time="500" tween="sine" />
+            </animation>
+            <animation type="WindowOpen" condition="Skin.HasSetting(osd.useTenSecondsCodecLogos)">
+                <effect type="fade" start="0" end="100" time="300" />
+                <effect type="fade" start="100" end="0" delay="12000" time="500" tween="sine" />
             </animation>
 			
             <include content="Video_Audio_Background_Flag">

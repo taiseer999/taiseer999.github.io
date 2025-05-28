@@ -3119,3 +3119,7 @@ msgstr ""
 msgctxt "#32076"
 msgid "Audio codec"
 msgstr ""
+
+msgctxt "#32077"
+msgid "Duration of the codec logos when video starts"
+msgstr ""
