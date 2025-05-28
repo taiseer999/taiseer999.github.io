@@ -51,7 +51,7 @@
                 <param name="diffuse">diffuse/dialog_w1280_h740.png</param>
             </include>
             <include content="Object_MenuHeader">
-                <param name="label">Player process info[/CAPITALIZE]</param>
+                <param name="label">[CAPITALIZE]Player process info[/CAPITALIZE]</param>
                 <param name="icon">special://skin/extras/icons/chart-simple.png</param>
             </include>
             <control type="image">
@@ -708,7 +708,7 @@
                     <left>240</left>
                     <top>80</top>
                     <label>$INFO[Player.Process(audiochannels)]</label>
-                    <font>font_tiny</font>
+                    <font>size_light_hint</font>
                     <textcolor>dialog_fg_90</textcolor>
                 </control>
 
