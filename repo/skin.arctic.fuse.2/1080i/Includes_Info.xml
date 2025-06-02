@@ -771,6 +771,7 @@
             </control>
         </definition>
     </include>
+   
 
     <include name="Info_RatingsLine">
         <param name="is_player">false</param>
@@ -782,6 +783,8 @@
                     <param name="container">$PARAM[container]</param>
                     <param name="is_player">$PARAM[is_player]</param>
                 </include>
+
+
 
                 <include content="Info_RatingsLine_Item">
                     <param name="item">Item02</param>
@@ -833,14 +836,9 @@
                     <param name="container">$PARAM[container]</param>
                     <param name="is_player">$PARAM[is_player]</param>
                 </include>
-
-                <include content="Info_LineSpinner" condition="Skin.HasSetting(Furniture.EnableColourRatings)">
+                
+                <include content="Info_LineSpinner">
                     <param name="visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))]</param>
-                    <param name="colordiffuse">main_fg_70</param>
-                </include>
-                <include content="Info_LineSpinner" condition="!Skin.HasSetting(Furniture.EnableColourRatings)">
-                    <param name="visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))]</param>
-                    <param name="colordiffuse">main_fg_90</param>
                 </include>
 
                 <nested />
@@ -1056,8 +1054,6 @@
         <param name="visible">true</param>
         <param name="left">view_pad</param>
         <param name="right">view_pad</param>
-        <param name="use_spinner">false</param>
-        <param name="run_spinner">false</param>
         <definition>
 
             <control type="group">
@@ -1087,36 +1083,8 @@
                     </include>
                 </control>
 
-                <include content="Info_Viewline_Spinner" condition="$PARAM[use_spinner]">
-                    <param name="label">$PARAM[label]</param>
-                    <param name="align">$PARAM[align]</param>
-                    <param name="haspath">$PARAM[haspath]</param>
-                    <param name="textcolor">$PARAM[textcolor]</param>
-                    <param name="label_fallback">$PARAM[label_fallback]</param>
-                    <param name="visible">$PARAM[run_spinner]</param>
-                </include>
-
             </control>
         </definition>
-    </include>
-
-    <include name="Info_Viewline_Spinner">
-        <control type="grouplist">
-            <itemgap>20</itemgap>
-            <orientation>horizontal</orientation>
-            <control type="label">
-                <label fallback="$PARAM[label_fallback]">$PARAM[label]</label>
-                <align>$PARAM[align]</align>
-                <haspath>$PARAM[haspath]</haspath>
-                <textcolor>$PARAM[textcolor]</textcolor>
-                <include>Info_Viewline_Label_Def</include>
-                <animation effect="fade" start="0" end="0" condition="true">Conditional</animation>
-            </control>
-            <include content="Info_LineSpinner">
-                <param name="visible">[$PARAM[visible]]</param>
-                <param name="colordiffuse">$PARAM[textcolor]</param>
-            </include>
-        </control>
     </include>
 
     <include name="Info_Line_StarRating_Star">
@@ -1275,7 +1243,7 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">4K</param>
+                <param name="label">UHD</param>
                 <param name="visible">$PARAM[visible] + !$PARAM[is_8k] + $PARAM[is_4k]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1928,7 +1896,7 @@
             <control type="textbox">
                 <top>17</top>
                 <left>$PARAM[left]</left>
-
+                
                 <include content="Info_Panel_Textbox_Adaptive" condition="$PARAM[adapative]">
                     <param name="plotheight">$PARAM[plotheight]</param>
                 </include>
@@ -1938,6 +1906,7 @@
 
                 <width>$PARAM[plotwidth]</width>
                 <label>$PARAM[plotlabel]</label>
+                <aligny>top</aligny>
                 <textcolor>$PARAM[colordiffuse]_70</textcolor>
                 <font>font_main_plot</font>
                 <visible>$PARAM[visible]</visible>

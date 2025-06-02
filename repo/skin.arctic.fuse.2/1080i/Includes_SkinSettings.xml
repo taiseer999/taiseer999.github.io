@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -804,21 +803,6 @@
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">019</param>
             <param name="control">button</param>
-            <label>$LOCALIZE[32077]</label>
-            <label2>$VAR[OSDCodecLogosStartupTimerLabel]</label2>
-            <onclick condition="!Skin.HasSetting(osd.useFiveSecondsCodecLogos) + !Skin.HasSetting(osd.useSevenSecondsCodecLogos) + !Skin.HasSetting(osd.useTenSecondsCodecLogos)">Skin.ToggleSetting(osd.useFiveSecondsCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useFiveSecondsCodecLogos)">Skin.ToggleSetting(osd.useSevenSecondsCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useSevenSecondsCodecLogos)">Skin.ToggleSetting(osd.useTenSecondsCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useFiveSecondsCodecLogos)">Skin.Reset(osd.useFiveSecondsCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useTenSecondsCodecLogos)">Skin.Reset(osd.useTenSecondsCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useSevenSecondsCodecLogos)">Skin.Reset(osd.useSevenSecondsCodecLogos)</onclick>
-        </include>
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">020</param>
-            <param name="control">button</param>
             <label>$LOCALIZE[32062]</label>
             <label2>$VAR[OSDCodecLogosStartupLabel]</label2>
             <onclick condition="!Skin.HasSetting(osd.useleftCodecStartupLogos) + !Skin.HasSetting(osd.usecenterCodecStartupLogos) + !Skin.HasSetting(osd.userightCodecStartupLogos)">Skin.ToggleSetting(osd.useleftCodecStartupLogos)</onclick>
@@ -832,7 +816,7 @@
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">021</param>
+            <param name="id">020</param>
             <param name="control">button</param>
             <label>$LOCALIZE[32060]</label>
             <label2>$VAR[OSDCodecLogosLabel]</label2>
@@ -847,7 +831,7 @@
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">022</param>
+            <param name="id">021</param>
             <param name="control">button</param>
             <label>$LOCALIZE[32061]</label>
             <label2>$VAR[PPICodecLogosLabel]</label2>
@@ -858,22 +842,8 @@
             <onclick condition="Skin.HasSetting(ppi.userightCodecLogos)">Skin.Reset(ppi.userightCodecLogos)</onclick>
             <onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.Reset(ppi.usecenterCodecLogos)</onclick>
         </include>
-        <include content="Settings_Label" description="Alternative PPI">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">023</param>
-            <label>$LOCALIZE[32073]</label>
-        </include>
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">024</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[32074]</label>
-            <onclick>Skin.ToggleSetting(Classic.PPI)</onclick>
-            <selected>Skin.HasSetting(Classic.PPI)</selected>
-        </include>
+
+
         <include content="Settings_Label" description="Expert">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
