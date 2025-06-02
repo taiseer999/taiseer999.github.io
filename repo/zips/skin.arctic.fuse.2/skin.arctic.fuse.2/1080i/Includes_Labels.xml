@@ -1859,6 +1859,13 @@
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.biography))">$INFO[Window(Home).Property(TMDBHelper.ListItem.biography)]</value>
     </variable>
 	
+<variable name="OSDCodecLogosStartupTimerLabel">
+        <value condition="Skin.HasSetting(osd.useFiveSecondsCodecLogos)">5 $LOCALIZE[31130]</value>
+        <value condition="Skin.HasSetting(osd.useSevenSecondsCodecLogos)">7 $LOCALIZE[31130]</value>
+        <value condition="Skin.HasSetting(osd.useTenSecondsCodecLogos)">10 $LOCALIZE[31130]</value>
+        <value>3 $LOCALIZE[31130] ($LOCALIZE[32072])</value>
+    </variable>
+
     <variable name="OSDCodecLogosStartupLabel">
         <value condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">$LOCALIZE[32057]</value>
         <value condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">$LOCALIZE[32058]</value>

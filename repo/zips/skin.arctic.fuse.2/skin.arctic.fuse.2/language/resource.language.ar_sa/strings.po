@@ -3239,3 +3239,7 @@ msgstr "مسلسلاتي"
 msgctxt "#32076"
 msgid "Audio codec"
 msgstr "ترميز الصوت"
+
+msgctxt "#32077"
+msgid "Duration of the codec logos when video starts"
+msgstr "مدة ظهور شعارات الترميز عند بدء تشغيل الفيديو"
