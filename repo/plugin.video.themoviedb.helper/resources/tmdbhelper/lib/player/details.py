@@ -1,51 +1,91 @@
 from jurialmunkey.parser import try_int, del_empty_keys
-from tmdbhelper.lib.items.builder import ItemBuilder
+from tmdbhelper.lib.files.ftools import cached_property
 from tmdbhelper.lib.api.tmdb.api import TMDb
 
 
 EXTERNAL_ID_TYPES = ['tmdb', 'tvdb', 'imdb', 'slug', 'trakt']
 
 
-def get_next_episodes(tmdb_id, season, episode, player=None):
-    from tmdbhelper.lib.addon.thread import ParallelThread
-    tmdb_api = TMDb()
+class PlayerNextEpisodes:
+    def __init__(self, tmdb_id, season, episode, player=None):
+        self.tmdb_id = try_int(tmdb_id)
+        self.season = try_int(season)
+        self.episode = try_int(episode)
+        self.player = player
 
-    all_episodes = tmdb_api.get_flatseasons_list(tmdb_id)
-    if not all_episodes:
-        return
+    @cached_property
+    def lidc(self):
+        from tmdbhelper.lib.items.database.listitem import ListItemDetails
+        lidc = ListItemDetails()
+        lidc.cache_refresh = 'basic'
+        lidc.extendedinfo = False
+        return lidc
 
-    snum, enum = try_int(season), try_int(episode)
+    @cached_property
+    def parent_data(self):
+        from tmdbhelper.lib.items.database.baseitem_factories.factory import BaseItemFactory
+        sync = BaseItemFactory('tvshow')
+        sync.tmdb_id = self.tmdb_id
+        return sync.data
 
-    def _is_future_ep(i):
-        i_snum = try_int(i['infolabels'].get('season', -1))
-        i_enum = try_int(i['infolabels'].get('episode', -1))
-        if i_snum == snum and i_enum >= enum:
+    @cached_property
+    def all_episodes(self):
+        from tmdbhelper.lib.items.database.baseview_factories.factory import BaseViewFactory
+        sync = BaseViewFactory('flatseasons', 'tv', self.tmdb_id)
+        return sync.data
+
+    @cached_property
+    def next_episodes(self):
+        return [i for i in self.all_episodes if self.is_future_episode(i)]
+
+    @cached_property
+    def finalised_items(self):
+        return [self.finalise_item(li) for li in self.configured_items if li]
+
+    @cached_property
+    def configured_items(self):
+        return self.lidc.configure_listitems_threaded(self.next_episodes)
+
+    def is_future_episode(self, i):
+        s_number = try_int(i['infolabels'].get('season', -1))
+        e_number = try_int(i['infolabels'].get('episode', -1))
+        if s_number < self.season:
+            return False
+        if s_number > self.season:
             return True
-        if i_snum > snum:
-            return True
-        return False
+        if e_number < self.episode:
+            return False
+        return True
 
-    nxt_episodes = [i for i in all_episodes if _is_future_ep(i)]
-    if not nxt_episodes:
-        return
-
-    ib = ItemBuilder(tmdb_api=tmdb_api)
-    ib.get_parents(tmdb_type='tv', tmdb_id=tmdb_id)
-    ib.parent_params = {'tmdb_id': tmdb_id, 'tmdb_type': 'tv'}
-
-    def _make_listitem(i):
-        li = ib.get_listitem(i)
-        if not li:
-            return
-        li.set_params_reroute()  # Reroute details to proper end point
-        if player:
-            li.params['player'] = player
-            li.params['mode'] = 'play'
+    def finalise_item(self, li):
+        li.finalise()
+        if not self.player:
+            return li
+        li.params['player'] = self.player
+        li.params['mode'] = 'play'
         return li
 
-    with ParallelThread(nxt_episodes, _make_listitem) as pt:
-        item_queue = pt.queue
-    return [i for i in item_queue if i]
+    @cached_property
+    def listitems(self):
+        if not self.items:
+            return
+        return [li.get_listitem() for li in self.items if li]
+
+    @cached_property
+    def items(self):
+        if not self.parent_data:
+            return
+        if not self.all_episodes:
+            return
+        if not self.next_episodes:
+            return
+        if not self.configured_items:
+            return
+        return self.finalised_items
+
+
+def get_next_episodes(tmdb_id, season, episode, player=None):
+    return PlayerNextEpisodes(tmdb_id, season, episode, player).listitems
 
 
 def get_external_ids(tmdb_type, tmdb_id, season=None, episode=None):
@@ -77,20 +117,18 @@ def get_external_ids(tmdb_type, tmdb_id, season=None, episode=None):
 
 def get_item_details(tmdb_type, tmdb_id, season=None, episode=None, language=None):
     from tmdbhelper.lib.items.listitem import ListItem
-    tmdb_api = TMDb(language=language) if language else TMDb()
-    ib = ItemBuilder(tmdb_api=tmdb_api)
-    details = ib.get_item(tmdb_type, tmdb_id, season, episode)
-    try:
-        artwork = details['artwork']
-        details = details['listitem']
-    except (KeyError, TypeError):
-        return
+    from tmdbhelper.lib.items.database.listitem import ListItemDetails
+
+    lidc = ListItemDetails()
+    lidc.cache_refresh = None
+    lidc.extendedinfo = True
+
+    details = lidc.get_item(tmdb_type, tmdb_id, season, episode)
+
     if not details:
         return
-    details['art'] = ib.get_item_artwork(artwork, is_season=True if season else False)
-    details = ListItem(**details)
-    details.infolabels['mediatype'] == 'movie' if tmdb_type == 'movie' else 'episode'
-    return details
+
+    return ListItem(**details)
 
 
 def _get_language_details(tmdb_type, tmdb_id, season=None, episode=None, language=None):
@@ -101,7 +139,7 @@ def _get_language_details(tmdb_type, tmdb_id, season=None, episode=None, languag
             if episode is not None:
                 affix = f'{affix}episode/{episode}/'
     affix = f'{affix}translations'
-    details = TMDb().get_request_lc(tmdb_type, tmdb_id, affix)
+    details = TMDb().get_response_json(tmdb_type, tmdb_id, affix)
     if not details or not details.get('translations'):
         return
 
@@ -180,7 +218,7 @@ def set_detailed_item(tmdb_type, tmdb_id, season=None, episode=None, details=Non
     item['slug'] = details.unique_ids.get('slug')
     item['season'] = season
     item['episode'] = episode
-    item['originaltitle'] = details.infolabels.get('originaltitle')
+    item['originaltitle'] = details.infoproperties.get('tvshow.originaltitle') or details.infolabels.get('originaltitle')
     item['title'] = details.infolabels.get('tvshowtitle') or details.infolabels.get('title')
     item['showname'] = item['clearname'] = item['tvshowtitle'] = item.get('title')
     item['year'] = details.infolabels.get('year')

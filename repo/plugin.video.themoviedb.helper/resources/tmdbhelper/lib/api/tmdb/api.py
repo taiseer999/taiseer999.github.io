@@ -1,9 +1,8 @@
-from tmdbhelper.lib.addon.plugin import get_mpaa_prefix, get_language, get_setting
-from tmdbhelper.lib.addon.consts import CACHE_SHORT, CACHE_MEDIUM
+from tmdbhelper.lib.addon.plugin import get_language, get_setting
 from tmdbhelper.lib.api.request import RequestAPI
 from tmdbhelper.lib.api.tmdb.mapping import ItemMapper
-from tmdbhelper.lib.api.tmdb.content import TMDbMethods
 from tmdbhelper.lib.api.api_keys.tmdb import API_KEY
+from tmdbhelper.lib.files.ftools import cached_property
 
 
 API_URL = 'https://api.themoviedb.org/3' if not get_setting('use_alternate_api_url') else 'https://api.tmdb.org/3'
@@ -14,14 +13,13 @@ class TMDbAPI(RequestAPI):
     api_key = API_KEY
     api_url = API_URL
     append_to_response = ''
-    artlang_fallback = False
+    append_to_response_person = ''
     api_name = 'TMDbAPI'
 
     def __init__(
             self,
             api_key=None,
             language=get_language(),
-            mpaa_prefix=get_mpaa_prefix(),
             page_length=1):
         api_key = api_key or self.api_key
         api_url = self.api_url
@@ -32,15 +30,18 @@ class TMDbAPI(RequestAPI):
             req_api_url=api_url,
             req_api_key=f'api_key={api_key}')
         self.language = language
-        self.mpaa_prefix = mpaa_prefix
         self.page_length = max(get_setting('pagemulti_tmdb', 'int'), page_length)
         TMDb.api_key = api_key
 
     @property
     def req_strip(self):
         req_strip_add = [
-            (self.append_to_response, ''),
-            (self.req_language, f'{self.iso_language}{"_en" if self.artlang_fallback else ""}')
+            (self.append_to_response, 'standard'),
+            (self.append_to_response_person, 'person'),
+            (self.append_to_response_tvshow, 'tvshow'),
+            (self.append_to_response_tvshow_simple, 'tvshow_simple'),
+            (self.append_to_response_movies_simple, 'movies_simple'),
+            (self.req_language, f'{self.iso_language}_en')
         ]
         try:
             return self._req_strip + req_strip_add
@@ -78,7 +79,7 @@ class TMDbAPI(RequestAPI):
         try:
             return self._mapper
         except AttributeError:
-            self._mapper = ItemMapper(self.language, self.mpaa_prefix, self.genres)
+            self._mapper = ItemMapper(self.language, self.genres)
             return self._mapper
 
     @staticmethod
@@ -104,56 +105,38 @@ class TMDbAPI(RequestAPI):
             return paginated_items.items + paginated_items.next_page
         return items
 
-    @property
-    def special_cache(self):
-        try:
-            return self._special_cache
-        except AttributeError:
-            self._special_cache = {}
-            return self._special_cache
-
-    def get_special_cache(self, filename):
-        try:
-            return self.special_cache[filename]
-        except KeyError:
-            from tmdbhelper.lib.files.bcache import BasicCache
-            self.special_cache[filename] = BasicCache(filename=filename)
-            return self.special_cache[filename]
-
     def configure_request_kwargs(self, kwargs):
         kwargs['language'] = self.req_language
         return kwargs
 
     def get_response_json(self, *args, postdata=None, headers=None, method=None, **kwargs):
         kwargs = self.configure_request_kwargs(kwargs)
-        return self.get_api_request_json(self.get_request_url(*args, **kwargs), postdata=postdata, headers=headers, method=method)
-
-    def get_request_sc(self, *args, **kwargs):
-        """ Get API request using the short cache """
-        kwargs = self.configure_request_kwargs(kwargs)
-        kwargs['cache_days'] = CACHE_SHORT
-        return self.get_request(*args, **kwargs)
-
-    def get_request_lc(self, *args, **kwargs):
-        """ Get API request using the long cache """
-        kwargs = self.configure_request_kwargs(kwargs)
-        kwargs['cache_days'] = CACHE_MEDIUM
-        return self.get_request(*args, **kwargs)
+        requrl = self.get_request_url(*args, **kwargs)
+        return self.get_api_request_json(requrl, postdata=postdata, headers=headers, method=method)
 
 
-class TMDb(TMDbAPI, TMDbMethods):
-    append_to_response = 'credits,images,release_dates,content_ratings,external_ids,movie_credits,tv_credits,keywords,reviews,videos,watch/providers'
-    artlang_fallback = True if get_setting('fanarttv_enfallback') and not get_setting('fanarttv_secondpref') else False
+class TMDb(TMDbAPI):
+    append_to_response = 'credits,images,release_dates,external_ids,keywords,reviews,videos,watch/providers'
+    append_to_response_tvshow = 'aggregate_credits,images,content_ratings,external_ids,keywords,reviews,videos,watch/providers'
+    append_to_response_person = 'images,external_ids,movie_credits,tv_credits'
+    append_to_response_movies_simple = 'images,external_ids,release_dates'
+    append_to_response_tvshow_simple = 'images,external_ids,content_ratings'
     api_name = 'TMDb'
 
     @property
+    def tmdb_database(self):
+        from tmdbhelper.lib.api.tmdb.database import TMDbDatabase
+        tmdb_database = TMDbDatabase()
+        tmdb_database.tmdb_api = self
+        return tmdb_database
+
+    @property
+    def get_tmdb_id(self):
+        return self.tmdb_database.get_tmdb_id
+
+    @cached_property
     def genres(self):
-        try:
-            return self._genres
-        except AttributeError:
-            cache_name = f'GenreLookup.{self.language}'
-            self._genres = self.get_special_cache('TMDbGenres.db').use_cache(self.get_genres, cache_name=cache_name)
-            return self._genres
+        return self.tmdb_database.genres
 
     @property
     def iso_region(self):
@@ -170,7 +153,7 @@ class TMDb(TMDbAPI, TMDbMethods):
 
     @property
     def include_image_language(self):
-        return f'{self.iso_language},null{",en" if self.artlang_fallback else ""}'
+        return f'{self.iso_language},null,en'
 
     @property
     def include_video_language(self):

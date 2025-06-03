@@ -40,6 +40,8 @@ class ImagesMonitor(SafeThread, ListItemInfoGetter, ImageManipulations, Poller):
         self._allow_on_scroll = True  # Allow updating while scrolling
         self._parent = parent
 
+    # Unused method see update_artwork comments further below
+    """
     def is_this_refresh(self):
         # Some dbtypes are unlikely to have artwork so refresh immediately to clear
         if self.get_infolabel('dbtype') in self._dbtype_refresh:
@@ -58,8 +60,11 @@ class ImagesMonitor(SafeThread, ListItemInfoGetter, ImageManipulations, Poller):
             return True
 
         return False
+    """
 
     def is_next_refresh(self):
+        self.setup_current_item()
+
         # Always refresh our artwork if window changed
         if not self.is_same_window(update=True):
             return True
@@ -84,15 +89,22 @@ class ImagesMonitor(SafeThread, ListItemInfoGetter, ImageManipulations, Poller):
         with self._parent.mutex_lock:
             self.update_artwork()
 
-    def update_artwork(self):
+    def update_artwork(self, forced=False):
         self.setup_current_container()
+
+        # Unused method is_this_refresh for checking if listitem.art() is ready as Kodi delays adding until after directory loads listitems
+        # Causes more problems that it is worth to try to check so we skip this method and live with art occassionally being online instead of local
+        # FIXME: Possible alternative would be to only check once after window or folderpath change
+        """
         if not self.is_this_refresh():
             return
-        if not self.is_next_refresh():
+        """
+
+        if not forced and not self.is_next_refresh():
             return
         self._this_refresh = 0
         self._next_refresh = 0
-        self.get_image_manipulations(
+        return self.get_image_manipulations(
             use_winprops=True,
             built_artwork=self.remote_artwork.get(self._pre_item),
             allow_list=self._allow_list)

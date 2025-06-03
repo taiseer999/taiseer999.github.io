@@ -126,6 +126,7 @@ class ItemListSyncData(ItemListSyncDataProperties, ItemListSyncDataMethods):
         'released': ('premiered', True, '', ),
         'title': ('title', True, '', ),
         'watched': ('last_watched_at', True, '', ),
+        'paused': ('playback_paused_at', True, '', ),
         'votes': ('trakt_votes', True, 0, ),
         'plays': ('plays', True, 0, ),
         'runtime': ('runtime', True, 0, ),
@@ -209,6 +210,13 @@ class ItemListSyncDataFavorites(ItemListSyncData):
 
     def get_items(self):
         return self.make_list(self.trakt_syncdata.get_all_favorites_getter)
+
+
+class ItemListSyncDataDropped(ItemListSyncData):
+    """ Items in favourites """
+
+    def get_items(self):
+        return self.make_list(self.trakt_syncdata.get_all_dropped_shows_getter)
 
 
 class ItemListSyncDataUnwatchedPlayback(ItemListSyncData):
@@ -324,6 +332,7 @@ def ItemListSyncDataFactory(sync_type, *args, **kwargs):
         'watched': ItemListSyncDataWatched,
         'playback': ItemListSyncDataPlayback,
         'favorites': ItemListSyncDataFavorites,
+        'dropped': ItemListSyncDataDropped,
         'nextup': ItemListSyncDataNextUp,
         'upnext': ItemListSyncDataUpNext,
         'inprogress': ItemListSyncDataInProgress,
