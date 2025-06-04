@@ -5524,7 +5524,7 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
         <description lang="en_NZ">Nimbus Helper for the Nimbus Skin.</description>
         <description lang="en_US">Nimbus Helper for the Nimbus Skin.</description>
     </extension>
-</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta10.2" provider-name="pannal">
+</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta12.2" provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.27.1+matrix.1" />
@@ -5555,7 +5555,12 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- For changelog see changelog.txt
+- Home/Hubs: Use season thumbnail for episodes if possible
+Settings: Add setting to enable season thumbnails/posters for episodes in hubs (default: On)
+- Episodes: Use season art as background if available
+- Home: Fix wrong background loaded in certain circumstances after boot or section change (sort hubs by index internally to fetch the first correct background of the first visible item)
+- Home/Core: Store last background per user/account
+- README: Add powered by Jetbrains
         </news>
         <assets>
             <icon>icon2.png</icon>
