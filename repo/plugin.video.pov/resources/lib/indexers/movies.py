@@ -41,6 +41,7 @@ class Movies:
 		self.params = params
 		self.id_type, self.list, self.action = self.params.get('id_type', 'tmdb_id'), self.params.get('list', []), self.params.get('action', None)
 		self.items, self.new_page, self.total_pages, self.exit_list_params, self.is_widget = [], {}, None, None, 'unchecked'
+		self.append = self.items.append
 		self.set_constants()
 
 	def run(self):
@@ -304,7 +305,6 @@ class Movies:
 		if not self.exit_list_params: self.exit_list_params = get_infolabel('Container.FolderPath')
 		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
-		self.append = self.items.append
 
 	def worker(self):
 #		threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, Thread))

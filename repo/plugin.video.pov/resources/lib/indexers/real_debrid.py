@@ -1,7 +1,7 @@
 import sys
 from apis.real_debrid_api import RealDebridAPI as Debrid
 from modules import kodi_utils
-from modules.source_utils import supported_video_extensions
+from modules.source_utils import supported_video_extensions, source_warning
 from modules.utils import clean_file_name, clean_title, normalize, jsondate_to_datetime
 # from modules.kodi_utils import logger
 
@@ -129,6 +129,7 @@ class Indexer(Debrid):
 			return kodi_utils.show_text(ls(32054).upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
 
+	@source_warning
 	def get_auth(self):
 		import json, urllib.parse
 		from apis.real_debrid_api import base_url, auth_url, session, timeout

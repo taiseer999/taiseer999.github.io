@@ -1368,7 +1368,9 @@ msgstr ""
 
 # msgctxt "#32448"
 
-# msgctxt "#32449"
+msgctxt "#32449"
+msgid "Trending Recent"
+msgstr ""
 
 msgctxt "#32450"
 msgid "Search"

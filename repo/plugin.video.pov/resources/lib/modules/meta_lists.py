@@ -105,7 +105,6 @@ movie_genres = {
 	ls(32558): ['14', 'genre_fantasy.png'],          ls(32559): ['36', 'genre_history.png'],
 	ls(32560): ['27', 'genre_horror.png'],           ls(32561): ['10402', 'genre_music.png'],
 	ls(32557): ['9648', 'genre_mystery.png'],        ls(32562): ['10749', 'genre_romance.png'],
-#	ls(32563): ['878', 'genre_scifi.png'],           ls(32564): ['10770', 'genre_soap.png'],
 	ls(32563): ['878', 'genre_scifi.png'],           ls(32564): ['10770', 'genre_tv.png'],
 	ls(32565): ['53', 'genre_thriller.png'],         ls(32566): ['10752', 'genre_war.png'],
 	ls(32567): ['37', 'genre_western.png']
@@ -116,10 +115,9 @@ tvshow_genres = {
 	ls(32551): ['35', 'genre_comedy.png'],                                     ls(32552): ['80', 'genre_crime.png'],
 	ls(32553): ['99', 'genre_documentary.png'],                                ls(32554): ['18', 'genre_drama.png'],
 	ls(32555): ['10751', 'genre_family.png'],                                  ls(32556): ['10762', 'genre_kids.png'],
-	ls(32557): ['9648', 'genre_mystery.png'],                                  ls(32568):['10763', 'genre_news.png'],
+	ls(32557): ['9648', 'genre_mystery.png'],                                  ls(32568): ['10763', 'genre_news.png'],
 	ls(32569): ['10764', 'genre_reality.png'],                                 ls(33057): ['10765', 'genre_scifi.png'],
-#	ls(32570): ['10766', 'genre_soap.png'],                                    ls(32570): ['10767', 'genre_talk.png'],
-	ls(32570): ['10766', 'genre_soap.png'],                                    ls(32570): ['10767', 'genre_soap.png'],
+	ls(32570): ['10766', 'genre_soap.png'],                                    ls(32571): ['10767', 'genre_talk.png'],
 	ls(32572): ['10768', 'genre_war.png'],                                     ls(32567): ['37', 'genre_western.png']
 }
 
@@ -207,7 +205,6 @@ media_lists = (
 	"'simkl%'",
 	"'mdb%'",
 	"'imdb%'",
-	"'people%'",
 	"'pov%'",
 	"'POV%'",
 	"'https%'"

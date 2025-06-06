@@ -13,17 +13,17 @@ window_xml_selection_actions = (xbmcgui.ACTION_SELECT_ITEM, xbmcgui.ACTION_MOUSE
 window_xml_context_actions = (xbmcgui.ACTION_CONTEXT_MENU, xbmcgui.ACTION_MOUSE_RIGHT_CLICK, xbmcgui.ACTION_MOUSE_LONG_CLICK)
 window_xml_left_action, window_xml_right_action = xbmcgui.ACTION_MOVE_LEFT, xbmcgui.ACTION_MOVE_RIGHT
 window_xml_up_action, window_xml_down_action = xbmcgui.ACTION_MOVE_UP, xbmcgui.ACTION_MOVE_DOWN
-translatePath = xbmcvfs.translatePath
-navigator_db   = translatePath('special://profile/addon_data/plugin.video.pov/navigator.db')
-watched_db     = translatePath('special://profile/addon_data/plugin.video.pov/watched.db')
-favourites_db  = translatePath('special://profile/addon_data/plugin.video.pov/favourites.db')
-views_db       = translatePath('special://profile/addon_data/plugin.video.pov/views.db')
-trakt_db       = translatePath('special://profile/addon_data/plugin.video.pov/traktcache4.db')
-maincache_db   = translatePath('special://profile/addon_data/plugin.video.pov/maincache.db')
-metacache_db   = translatePath('special://profile/addon_data/plugin.video.pov/metacache.db')
-debridcache_db = translatePath('special://profile/addon_data/plugin.video.pov/debridcache.db')
-external_db    = translatePath('special://profile/addon_data/plugin.video.pov/providerscache2.db')
-databases_path = translatePath('special://profile/addon_data/plugin.video.pov/')
+
+navigator_db   = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/navigator.db')
+watched_db     = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/watched.db')
+favourites_db  = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/favourites.db')
+views_db       = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/views.db')
+trakt_db       = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/traktcache4.db')
+maincache_db   = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/maincache.db')
+metacache_db   = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/metacache.db')
+debridcache_db = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/debridcache.db')
+external_db    = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/providerscache2.db')
+databases_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.pov/')
 fanart_default = 'special://home/addons/plugin.video.pov/fanart.png'
 current_dbs    = ('debridcache.db', 'favourites.db', 'maincache.db', 'metacache.db', 'navigator.db', 'providerscache2.db',
 					'traktcache4.db', 'views.db', 'watched.db', 'fenomcache.db', 'fenomundesirables.db', 'settings.xml')
@@ -51,12 +51,6 @@ def clear_property(prop):
 
 def addon(addon_id='plugin.video.pov'):
 	return Addon(id=addon_id)
-
-def addon_fanart():
-	fanart = get_setting('fanart_image')
-	if 'special://' in fanart: fanart = translate_path(fanart)
-	elif 'fanart.png' == fanart: fanart = translate_path(fanart_default)
-	return fanart
 
 def addon_installed(addon_id):
 	return get_visibility('System.HasAddon(%s)' % addon_id)
@@ -131,7 +125,7 @@ def local_string(string):
 	return _string or string
 
 def translate_path(path):
-	return translatePath(path)
+	return xbmcvfs.translatePath(path)
 
 def sleep(time):
 	return xbmc.sleep(time)
@@ -541,7 +535,7 @@ def upload_logfile():
 	try:
 		import requests
 		with open_file(log_file) as f: text = f.read()
-		UserAgent = 'script.kodi.loguploader: 1.0' # 'POV %s' % Addon().getAddonInfo('version')
+		UserAgent = 'script.kodi.loguploader: 1.0' # 'POV %s' % get_addoninfo('version')
 		response = requests.post(''.join([url, 'documents']), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
 		if 'key' in response: ok_dialog(text=''.join([url, response['key']]), top_space=True)
 		else: ok_dialog(text='Error. Log Upload Failed')

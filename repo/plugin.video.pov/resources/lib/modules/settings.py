@@ -349,13 +349,19 @@ def make_global_list():
 
 def context_menu_sort():
 	return {
-		'options': int(get_setting('context.options', 1)),
-		'extras': int(get_setting('context.extras', 2)),
-		'trakt': int(get_setting('context.trakt', 3)),
-		'tmdblist': int(get_setting('context.tmdblist', 4)),
-		'mdblist': int(get_setting('context.mdblist', 4)),
-		'favourites': int(get_setting('context.favourites', 5)),
-		'mark': int(get_setting('context.mark', 6)),
-		'exit': int(get_setting('context.exit', 7))
+		'options': int(get_setting('context.options', '1')),
+		'extras': int(get_setting('context.extras', '2')),
+		'trakt': int(get_setting('context.trakt', '3')),
+		'tmdblist': int(get_setting('context.tmdblist', '4')),
+		'mdblist': int(get_setting('context.mdblist', '4')),
+		'favourites': int(get_setting('context.favourites', '5')),
+		'mark': int(get_setting('context.mark', '6')),
+		'exit': int(get_setting('context.exit', '7'))
 	}
+
+def addon_fanart(fallback='fanart.png'):
+	fanart = get_setting('fanart_image', fallback)
+	if 'fanart.png' == fanart: fanart = kodi_utils.get_addoninfo('fanart')
+	if 'special://' in fanart: fanart = translate_path(fanart)
+	return fanart
 

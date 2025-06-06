@@ -1,4 +1,3 @@
-import os
 import json
 from urllib.parse import unquote
 from apis.tmdb_api import tmdb_people_info
@@ -30,9 +29,9 @@ def person_search(query=None):
 				image = tmdb_image_url % item['profile_path'] if item['profile_path'] else translate_path(icon_directory % 'people.png')
 				yield {'line1': item['name'], 'line2': ', '.join(known_for_list) if known_for_list else '', 'icon': image}
 		list_items = list(_builder())
-		kwargs = {'items': json.dumps(list_items), 'heading': 'POV', 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
+		kwargs = {'items': json.dumps(list_items), 'heading': 'POV', 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'true'}
 		selection = select_dialog(actors, **kwargs)
-		if selection is None: return None, None, None
+		if selection is None: return
 	else: selection = actors[0]
 	actor_id = int(selection['id'])
 	actor_name = selection['name']

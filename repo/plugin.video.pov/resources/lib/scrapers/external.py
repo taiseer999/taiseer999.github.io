@@ -206,7 +206,7 @@ class Sources:
 	scrape_provider = 'external'
 	hostDict = {}
 	sources, cached_sources = [], []
-	sources_total, resolutions = 0, dict.fromkeys('4K 1080p 720p sd'.split(), 0)
+	sources_total, resolutions = {'total': 0}, dict.fromkeys('4K 1080p 720p sd'.split(), 0)
 
 	def __init__(self, info, meta):
 		self.completed = False
@@ -279,7 +279,7 @@ class Sources:
 					else: quality, extraInfo = get_file_info(url=i_get('url'))
 					try:
 						size = i_get('size')
-						if 'package' in i and provider not in ('torrentio', 'knightcrawler', 'mediafusion', 'tidebrid', 'mfdebrid'):
+						if 'package' in i and provider not in ('torrentio', 'mediafusion', 'tidebrid', 'mfdebrid'):
 							if i_get('package') == 'season': divider = self.season_divider
 							else: divider = self.show_divider
 							size = float(size) / divider

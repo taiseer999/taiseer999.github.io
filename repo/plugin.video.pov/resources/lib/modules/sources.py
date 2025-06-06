@@ -31,6 +31,10 @@ av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]A
 dialog_format, remaining_format = '[COLOR %s][B]%s[/B][/COLOR] 4K: %s | 1080p: %s | 720p: %s | SD: %s | Total: %s', ls(32676)
 
 class Sources():
+	@staticmethod
+	def jsloads(*args, **kwargs):
+		return json.loads(*args, **kwargs)
+
 	def __init__(self):
 		self.params = {}
 		self.clear_properties, self.filters_ignored, self.active_folders = True, False, False

@@ -1,5 +1,9 @@
 from modules.kodi_utils import parse_qsl, logger, get_property, get_infolabel, external_browse
 
+def runmode(cls, params, mode):
+	call = getattr(cls(params), mode, None)
+	return call() if callable(call) else None
+
 class Router:
 	def __enter__(self):
 		return self
@@ -17,18 +21,17 @@ class Router:
 		mode = params_get('mode', 'navigator.main')
 		if 'navigator.' in mode:
 			from indexers.navigator import Navigator
-			exec('Navigator(params).%s()' % mode.split('.')[1])
+			runmode(Navigator, params, mode.split('.')[1])
 		elif 'menu_editor.' in mode:
 			from modules.menu_editor import MenuEditor
-			exec('MenuEditor(params).%s()' % mode.split('.')[1])
+			runmode(MenuEditor, params, mode.split('.')[1])
 		elif 'discover.' in mode:
 			from indexers.discover import Discover
-			exec('Discover(params).%s()' % mode.split('.')[1])
+			runmode(Discover, params, mode.split('.')[1])
 		elif '_play' in mode or 'play_' in mode:
 			if mode == 'play_media':
-				import json
 				from modules.sources import Sources
-				if 'params' in params: params = json.loads(params['params'])
+				if 'params' in params: params = Sources.jsloads(params['params'])
 				Sources().playback_prep(params)
 			elif mode == 'media_play':
 				from modules.player import POVPlayer
@@ -238,49 +241,38 @@ class Router:
 			elif mode == 'clean_settings':
 				from modules.kodi_utils import clean_settings
 				clean_settings()
-			elif mode == 'erase_all_settings':
-				from modules.nav_utils import erase_all_settings
-				erase_all_settings()
-			elif mode == 'external_settings':
-				from modules.kodi_utils import open_settings
-				open_settings(params_get('query', '0.0'), params_get('ext_addon'))
 			elif mode == 'clean_settings_window_properties':
 				from modules.kodi_utils import clean_settings_window_properties
 				clean_settings_window_properties()
 		elif '_cache' in mode:
+			from modules import cache_utils
 			if mode == 'clear_all_cache':
-				from modules.cache_utils import clear_all_cache
-				clear_all_cache()
+				cache_utils.clear_all_cache()
 			else:
-				from modules.cache_utils import clear_cache
-				clear_cache(params_get('cache'))
+				cache_utils.clear_cache(params_get('cache'))
 		elif '_image' in mode:
 			from indexers.images import Images
 			Images().run(params)
 		elif '_text' in mode:
 			from modules.kodi_utils import show_text
-			show_text(
-				params_get('heading'),
-				params_get('text'),
-				params_get('file'),
-				params_get('font_size', 'small'),
-				params_get('kodi_log', 'false') == 'true'
-			)
+			show_text(params_get('heading'), params_get('text'), params_get('file'), params_get('font_size', 'small'), params_get('kodi_log', 'false') == 'true')
 		elif '_view' in mode:
-			from modules import kodi_utils
 			if mode == 'choose_view':
-				kodi_utils.choose_view(params['view_type'], params_get('content', ''))
+				from modules.kodi_utils import choose_view
+				choose_view(params['view_type'], params_get('content', ''))
 			elif mode == 'set_view':
-				kodi_utils.set_view(params['view_type'])
+				from modules.kodi_utils import set_view
+				set_view(params['view_type'])
 			elif mode == 'clear_view':
-				kodi_utils.clear_view(params['view_type'])
+				from modules.kodi_utils import clear_view
+				clear_view(params['view_type'])
 		##EXTRA modes##
 		elif mode == 'get_search_term':
 			from indexers.history import get_search_term
 			get_search_term(params)
 		elif mode == 'person_search':
 			from indexers.people import person_search
-			return person_search(params['query'])
+			person_search(params['query'])
 		elif 'person_data_dialog' in mode:
 			from indexers.people import person_data_dialog
 			person_data_dialog(params)

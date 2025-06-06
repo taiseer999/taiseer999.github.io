@@ -1,119 +1,95 @@
 import json
 import sys
-from modules import kodi_utils, settings, meta_lists
-from modules.utils import safe_string, remove_accents
+from apis.tmdb_api import base_url, tmdb_api_key
+from modules import kodi_utils, meta_lists
 # logger = kodi_utils.logger
 
 database = kodi_utils.database
-ls = kodi_utils.local_string
-build_url = kodi_utils.build_url
-make_listitem = kodi_utils.make_listitem
 urlencode = kodi_utils.urlencode
-base_url = 'https://api.themoviedb.org/3'
-icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/discover.png')
+ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
+poster = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
-listitem_position = {'similar': 0, 'recommended': 0, 'year_start': 3, 'year_end': 4, 'include_genres': 5, 'exclude_genres': 6, 'include_keywords': 7, 'exclude_keywords': 8,
-					'language': 9, 'region': 10, 'network': 10, 'companies': 11, 'rating': 11, 'certification': 12, 'rating_votes': 12, 'rating_movie': 13, 'sort_by': 13,
-					'rating_votes_movie': 14, 'cast': 15, 'sort_by_movie': 16, 'adult': 17}
+default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/discover.png')
+people_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/people.png')
+poster_url, profile_url = 'https://image.tmdb.org/t/p/w780%s', 'https://image.tmdb.org/t/p/h632/%s'
+icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
+base_str, heading_base = '[B]%s:[/B]  [I]%s[/I]', '%s %s - %s' % (ls(32036), ls(32451), '%s')
+include_base_str, exclude_base_str = '%s %s' % (ls(32188), '%s'), '%s %s' % (ls(32189), '%s')
+_ln_ins, menu_export_str, fold_export_str= '[B]%s %s:[/B]  [I]%s[/I]', 'MENU EXPORT', 'FOLDER EXPORT'
+listitem_position = {
+	'similar': 0, 'recommended': 0, 'year_start': 3, 'year_end': 4, 'include_genres': 5, 'exclude_genres': 6, 'include_keywords': 7,
+	'exclude_keywords': 8, 'language': 9, 'region': 10, 'network': 10, 'companies': 11, 'rating': 11, 'certification': 12,
+	'rating_votes': 12, 'rating_movie': 13, 'sort_by': 13, 'rating_votes_movie': 14, 'cast': 15, 'sort_by_movie': 16, 'adult': 17
+}
 
 class Discover:
 	def __init__(self, params):
 		self.view = 'view.main'
-		self.media_type = params.get('media_type', None)
-		self.key = params.get('key', None)
+		self.media_type, self.key = params.get('media_type', None), params.get('key', None)
 		if self.media_type: self.window_id = 'POV_%s_discover_params' % self.media_type.upper()
 		else: self.window_id = ''
 		try: self.discover_params = json.loads(kodi_utils.get_property(self.window_id))
 		except: self.discover_params = {}
-		self.base_str = '[B]%s:[/B]  [I]%s[/I]'
-		self.include_base_str = '%s %s' % (ls(32188), '%s')
-		self.exclude_base_str = '%s %s' % (ls(32189), '%s')
-		self.heading_base = '%s %s - %s' % (ls(32036), ls(32451), '%s')
-		self.tmdb_api = settings.tmdb_api_key()
+		self.tmdb_api = tmdb_api_key()
 
 	def movie(self):
-		self._set_default_params('movie')
+		if not 'media_type' in self.discover_params: self._set_default_params('movie')
 		names = self.discover_params['search_name']
 		self._add_dir({'mode': 'discover._clear_property', 'media_type': 'movie', 'list_name': '[B]%s[/B]' % ls(32656).upper()})
 		if not 'recommended' in names:
-			self._add_dir({
-				'mode': 'discover.similar_recommended', 'media_type': 'movie', 'key': 'similar', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32592), names.get('similar', ''))
-				})
+			self._add_dir({'mode': 'discover.similar_recommended', 'media_type': 'movie', 'key': 'similar', 'list_name': _ln_ins % (ls(32451), ls(32592), names.get('similar', ''))})
 		if not 'similar' in names:
-			self._add_dir({
-				'mode': 'discover.similar_recommended', 'media_type': 'movie', 'key': 'recommended', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32593), names.get('recommended', ''))
-				})
+			self._add_dir({'mode': 'discover.similar_recommended', 'media_type': 'movie', 'key': 'recommended', 'list_name': _ln_ins % (ls(32451), ls(32593), names.get('recommended', ''))})
 		if not any(i in names for i in ('similar', 'recommended')):
-			self._add_dir({'mode': 'discover.year_start', 'media_type': 'movie', 'list_name': self.base_str % ('%s %s' % (ls(32543), ls(32654)), names.get('year_start', ''))})
-			self._add_dir({'mode': 'discover.year_end', 'media_type': 'movie', 'list_name': self.base_str % ('%s %s' % (ls(32543), ls(32655)), names.get('year_end', ''))})
-			self._add_dir({
-				'mode': 'discover.include_genres', 'media_type': 'movie', 'list_name': self.base_str % (self.include_base_str % ls(32470), names.get('include_genres', ''))
-				})
-			self._add_dir({
-				'mode': 'discover.exclude_genres', 'media_type': 'movie', 'list_name': self.base_str % (self.exclude_base_str % ls(32470), names.get('exclude_genres', ''))
-				})
-			self._add_dir({
-				'mode': 'discover.include_keywords', 'media_type': 'movie', 'list_name': self.base_str % (self.include_base_str % ls(32657), names.get('include_keywords', ''))
-				})
-			self._add_dir({
-				'mode': 'discover.exclude_keywords', 'media_type': 'movie', 'list_name': self.base_str % (self.exclude_base_str % ls(32657), names.get('exclude_keywords', ''))
-				})
-			self._add_dir({'mode': 'discover.language', 'media_type': 'movie', 'list_name': self.base_str % (ls(32658), names.get('language', ''))})
-			self._add_dir({'mode': 'discover.region', 'media_type': 'movie', 'list_name': self.base_str % (ls(32659), names.get('region', ''))})
-			self._add_dir({'mode': 'discover.companies', 'media_type': 'movie', 'list_name': self.base_str % (ls(32660), names.get('companies', ''))})
-			self._add_dir({'mode': 'discover.certification', 'media_type': 'movie', 'list_name': self.base_str % (ls(32473), names.get('certification', ''))})
-			self._add_dir({'mode': 'discover.rating', 'media_type': 'movie', 'list_name': self.base_str % ('%s %s' % (ls(32661), ls(32621)), names.get('rating', ''))})
-			self._add_dir({'mode': 'discover.rating_votes', 'media_type': 'movie', 'list_name': self.base_str % ('%s %s' % (ls(32661), ls(32663)), names.get('rating_votes', ''))})
-			self._add_dir({'mode': 'discover.cast', 'media_type': 'movie', 'list_name': self.base_str % (self.include_base_str % ls(32664), names.get('cast', ''))})
-			self._add_dir({'mode': 'discover.sort_by', 'media_type': 'movie', 'list_name': self.base_str % (ls(32067), names.get('sort_by', ''))})
-			self._add_dir({'mode': 'discover.adult', 'media_type': 'movie', 'list_name': self.base_str % (self.include_base_str % ls(32665), names.get('adult', ls(32860)))})
+			self._add_dir({'mode': 'discover.year_start', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32654)), names.get('year_start', ''))})
+			self._add_dir({'mode': 'discover.year_end', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32655)), names.get('year_end', ''))})
+			self._add_dir({'mode': 'discover.include_genres', 'media_type': 'movie', 'list_name': base_str % (include_base_str % ls(32470), names.get('include_genres', ''))})
+			self._add_dir({'mode': 'discover.exclude_genres', 'media_type': 'movie', 'list_name': base_str % (exclude_base_str % ls(32470), names.get('exclude_genres', ''))})
+			self._add_dir({'mode': 'discover.include_keywords', 'media_type': 'movie', 'list_name': base_str % (include_base_str % ls(32657), names.get('include_keywords', ''))})
+			self._add_dir({'mode': 'discover.exclude_keywords', 'media_type': 'movie', 'list_name': base_str % (exclude_base_str % ls(32657), names.get('exclude_keywords', ''))})
+			self._add_dir({'mode': 'discover.language', 'media_type': 'movie', 'list_name': base_str % (ls(32658), names.get('language', ''))})
+			self._add_dir({'mode': 'discover.region', 'media_type': 'movie', 'list_name': base_str % (ls(32659), names.get('region', ''))})
+			self._add_dir({'mode': 'discover.companies', 'media_type': 'movie', 'list_name': base_str % (ls(32660), names.get('companies', ''))})
+			self._add_dir({'mode': 'discover.certification', 'media_type': 'movie', 'list_name': base_str % (ls(32473), names.get('certification', ''))})
+			self._add_dir({'mode': 'discover.rating', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32621)), names.get('rating', ''))})
+			self._add_dir({'mode': 'discover.rating_votes', 'media_type': 'movie', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), names.get('rating_votes', ''))})
+			self._add_dir({'mode': 'discover.cast', 'media_type': 'movie', 'list_name': base_str % (include_base_str % ls(32664), names.get('cast', ''))})
+			self._add_dir({'mode': 'discover.sort_by', 'media_type': 'movie', 'list_name': base_str % (ls(32067), names.get('sort_by', ''))})
+			self._add_dir({'mode': 'discover.adult', 'media_type': 'movie', 'list_name': base_str % (include_base_str % ls(32665), names.get('adult', ls(32860)))})
 		self._add_defaults()
 		self._end_directory()
 
 	def tvshow(self):
-		self._set_default_params('tvshow')
+		if not 'media_type' in self.discover_params: self._set_default_params('tvshow')
 		names = self.discover_params['search_name']
 		self._add_dir({'mode': 'discover._clear_property', 'media_type': 'tvshow', 'list_name': '[B]%s[/B]' % ls(32656).upper()})
 		if not 'recommended' in names:
-			self._add_dir({
-				'mode': 'discover.similar_recommended', 'media_type': 'tvshow', 'key': 'similar', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32592), names.get('similar', ''))
-				})
+			self._add_dir({'mode': 'discover.similar_recommended', 'media_type': 'tvshow', 'key': 'similar', 'list_name': _ln_ins % (ls(32451), ls(32592), names.get('similar', ''))})
 		if not 'similar' in names:
-			self._add_dir({
-				'mode': 'discover.similar_recommended', 'media_type': 'tvshow', 'key': 'recommended', 'list_name': '[B]%s %s:[/B]  [I]%s[/I]' % (ls(32451), ls(32593), names.get('recommended', ''))
-				})
+			self._add_dir({'mode': 'discover.similar_recommended', 'media_type': 'tvshow', 'key': 'recommended', 'list_name': _ln_ins % (ls(32451), ls(32593), names.get('recommended', ''))})
 		if not any(i in names for i in ['similar', 'recommended']):
-			self._add_dir({'mode': 'discover.year_start', 'media_type': 'tvshow', 'list_name': self.base_str % ('%s %s' % (ls(32543), ls(32654)), names.get('year_start', ''))})
-			self._add_dir({'mode': 'discover.year_end', 'media_type': 'tvshow', 'list_name': self.base_str % ('%s %s' % (ls(32543), ls(32655)), names.get('year_end', ''))})
-			self._add_dir({
-				'mode': 'discover.include_genres', 'media_type': 'tvshow', 'list_name': self.base_str % (self.include_base_str % ls(32470), names.get('include_genres', ''))
-				})
-			self._add_dir({
-				'mode': 'discover.exclude_genres', 'media_type': 'tvshow', 'list_name': self.base_str % (self.exclude_base_str % ls(32470), names.get('exclude_genres', ''))
-				})
-			self._add_dir({
-				'mode': 'discover.include_keywords', 'media_type': 'tvshow', 'list_name': self.base_str % (self.include_base_str % ls(32657), names.get('include_keywords', ''))
-				})
-			self._add_dir({
-				'mode': 'discover.exclude_keywords', 'media_type': 'tvshow', 'list_name': self.base_str % (self.exclude_base_str % ls(32657), names.get('exclude_keywords', ''))
-				})
-			self._add_dir({'mode': 'discover.language', 'media_type': 'tvshow', 'list_name': self.base_str % (ls(32658), names.get('language', ''))})
-			self._add_dir({'mode': 'discover.network', 'media_type': 'tvshow', 'list_name': self.base_str % (ls(32480), names.get('network', ''))})
-			self._add_dir({'mode': 'discover.rating', 'media_type': 'tvshow', 'list_name': self.base_str % ('%s %s' % (ls(32661), ls(32621)), names.get('rating', ''))})
-			self._add_dir({'mode': 'discover.rating_votes', 'media_type': 'tvshow', 'list_name': self.base_str % ('%s %s' % (ls(32661), ls(32663)), names.get('rating_votes', ''))})
-			self._add_dir({'mode': 'discover.sort_by', 'media_type': 'tvshow', 'list_name': self.base_str % (ls(32067), names.get('sort_by', ''))})
+			self._add_dir({'mode': 'discover.year_start', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32654)), names.get('year_start', ''))})
+			self._add_dir({'mode': 'discover.year_end', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32543), ls(32655)), names.get('year_end', ''))})
+			self._add_dir({'mode': 'discover.include_genres', 'media_type': 'tvshow', 'list_name': base_str % (include_base_str % ls(32470), names.get('include_genres', ''))})
+			self._add_dir({'mode': 'discover.exclude_genres', 'media_type': 'tvshow', 'list_name': base_str % (exclude_base_str % ls(32470), names.get('exclude_genres', ''))})
+			self._add_dir({'mode': 'discover.include_keywords', 'media_type': 'tvshow', 'list_name': base_str % (include_base_str % ls(32657), names.get('include_keywords', ''))})
+			self._add_dir({'mode': 'discover.exclude_keywords', 'media_type': 'tvshow', 'list_name': base_str % (exclude_base_str % ls(32657), names.get('exclude_keywords', ''))})
+			self._add_dir({'mode': 'discover.language', 'media_type': 'tvshow', 'list_name': base_str % (ls(32658), names.get('language', ''))})
+			self._add_dir({'mode': 'discover.network', 'media_type': 'tvshow', 'list_name': base_str % (ls(32480), names.get('network', ''))})
+			self._add_dir({'mode': 'discover.rating', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32621)), names.get('rating', ''))})
+			self._add_dir({'mode': 'discover.rating_votes', 'media_type': 'tvshow', 'list_name': base_str % ('%s %s' % (ls(32661), ls(32663)), names.get('rating_votes', ''))})
+			self._add_dir({'mode': 'discover.sort_by', 'media_type': 'tvshow', 'list_name': base_str % (ls(32067), names.get('sort_by', ''))})
 		self._add_defaults()
 		self._end_directory()
 
 	def similar_recommended(self):
 		key = self.key
 		if self._action(key) in ('clear', None): return
-		title = kodi_utils.dialog.input(self.heading_base % ls(32228))
+		title = kodi_utils.dialog.input(heading_base % ls(32228))
 		if not title: return
 		if self.media_type == 'movie': from apis.tmdb_api import tmdb_movies_title_year as function
 		else: from apis.tmdb_api import tmdb_tv_title_year as function
-		year = kodi_utils.dialog.input(self.heading_base % ('%s (%s)' % (ls(32543), ls(32669))), type=kodi_utils.numeric_input)
+		year = kodi_utils.dialog.input(heading_base % ('%s (%s)' % (ls(32543), ls(32669))), type=kodi_utils.numeric_input)
 		results = function(title, year)['results']
 		if len(results) == 0: return kodi_utils.notification(32575)
 		choice_list = []
@@ -124,10 +100,10 @@ class Discover:
 			except: year = ''
 			if year: rootname = '%s (%s)' % (title, year)
 			else: rootname = title
-			if item.get('poster_path'): icon = 'https://image.tmdb.org/t/p/w780%s' % item['poster_path']
-			else: icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
+			if item.get('poster_path'): icon = poster_url % item['poster_path']
+			else: icon = poster
 			append({'line1': rootname, 'line2': item['overview'], 'icon': icon, 'rootname': rootname, 'tmdb_id': str(item['id'])})
-		heading = self.heading_base % ('%s %s' % (ls(32193), ls(32228)))
+		heading = heading_base % ('%s %s' % (ls(32193), ls(32228)))
 		kwargs = {'items': json.dumps(choice_list), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'true'}
 		values = kodi_utils.select_dialog([(i['tmdb_id'], i['rootname']) for i in choice_list], **kwargs)
 		if values is None: return
@@ -138,18 +114,18 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		current_key_ids = self.discover_params['search_string'].get(key, [])
 		current_keywords = self.discover_params['search_name'].get(key, [])
-		key_ids_append = current_key_ids.append
-		key_words_append = current_keywords.append
 		if not isinstance(current_key_ids, list):
 			current_key_ids = current_key_ids.replace('&with_keywords=', '').split(', ')
 		if not isinstance(current_keywords, list):
 			current_keywords = current_keywords.split(', ')
-		keyword = kodi_utils.dialog.input(self.heading_base % (self.include_base_str % ls(32657)))
+		key_ids_append = current_key_ids.append
+		key_words_append = current_keywords.append
+		keyword = kodi_utils.dialog.input(heading_base % (include_base_str % ls(32657)))
 		if keyword:
 			from apis.tmdb_api import tmdb_keyword_id
 			try:
 				result = tmdb_keyword_id(keyword)['results']
-				keywords_choice = self._multiselect_dialog(self.heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
+				keywords_choice = self._multiselect_dialog(heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
 				if keywords_choice != None:
 					for i in keywords_choice:
 						key_ids_append(str(i['id']))
@@ -163,18 +139,18 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		current_key_ids = self.discover_params['search_string'].get(key, [])
 		current_keywords = self.discover_params['search_name'].get(key, [])
-		key_ids_append = current_key_ids.append
-		key_words_append = current_keywords.append
 		if not isinstance(current_key_ids, list):
 			current_key_ids = current_key_ids.split(', ')
 		if not isinstance(current_keywords, list):
 			current_keywords = current_keywords.split(', ')
-		keyword = kodi_utils.dialog.input(self.heading_base % (self.exclude_base_str % ls(32657)))
+		key_ids_append = current_key_ids.append
+		key_words_append = current_keywords.append
+		keyword = kodi_utils.dialog.input(heading_base % (exclude_base_str % ls(32657)))
 		if keyword:
 			from apis.tmdb_api import tmdb_keyword_id
 			try:
 				result = tmdb_keyword_id(keyword)['results']
-				keywords_choice = self._multiselect_dialog(self.heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
+				keywords_choice = self._multiselect_dialog(heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
 				if keywords_choice != None:
 					for i in keywords_choice:
 						key_ids_append(str(i['id']))
@@ -188,7 +164,7 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		years = meta_lists.years()
 		years_list = [str(i) for i in years]
-		year_start = self._selection_dialog(years_list, years, self.heading_base % ('%s %s' % (ls(32654), ls(32543))))
+		year_start = self._selection_dialog(years_list, years, heading_base % ('%s %s' % (ls(32654), ls(32543))))
 		if year_start != None:
 			if self.discover_params['media_type'] == 'movie':
 				value = 'primary_release_date.gte'
@@ -202,7 +178,7 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		years = meta_lists.years()
 		years_list = [str(i) for i in years]
-		year_end = self._selection_dialog(years_list, years, self.heading_base % ('%s %s' % (ls(32655), ls(32543))))
+		year_end = self._selection_dialog(years_list, years, heading_base % ('%s %s' % (ls(32655), ls(32543))))
 		if year_end != None:
 			if self.discover_params['media_type'] == 'movie':
 				value = 'primary_release_date.lte'
@@ -217,7 +193,7 @@ class Discover:
 		if self.discover_params['media_type'] == 'movie': genres = meta_lists.movie_genres
 		else: genres = meta_lists.tvshow_genres
 		genre_list = [(k, v[0]) for k,v in sorted(genres.items())]
-		genres_choice = self._multiselect_dialog(self.heading_base % (self.include_base_str % ls(32470)), [i[0] for i in genre_list], genre_list)
+		genres_choice = self._multiselect_dialog(heading_base % (include_base_str % ls(32470)), [i[0] for i in genre_list], genre_list)
 		if genres_choice != None:
 			genre_ids = ','.join([i[1] for i in genres_choice])
 			genre_names = ', '.join([i[0] for i in genres_choice])
@@ -230,7 +206,7 @@ class Discover:
 		if self.discover_params['media_type'] == 'movie': genres = meta_lists.movie_genres
 		else: genres = meta_lists.tvshow_genres
 		genre_list = [(k, v[0]) for k,v in sorted(genres.items())]
-		genres_choice = self._multiselect_dialog(self.heading_base % (self.exclude_base_str % ls(32470)), [i[0] for i in genre_list], genre_list)
+		genres_choice = self._multiselect_dialog(heading_base % (exclude_base_str % ls(32470)), [i[0] for i in genre_list], genre_list)
 		if genres_choice != None:
 			genre_ids = ','.join([i[1] for i in genres_choice])
 			genre_names = ', '.join([i[0] for i in genres_choice])
@@ -241,7 +217,7 @@ class Discover:
 		key = 'language'
 		if self._action(key) in ('clear', None): return
 		languages_list = meta_lists.languages
-		language = self._selection_dialog([i[0] for i in languages_list], languages_list, self.heading_base % ls(32658))
+		language = self._selection_dialog([i[0] for i in languages_list], languages_list, heading_base % ls(32658))
 		if language != None:
 			values = ('&with_original_language=%s' % str(language[1]), str(language[1]).upper())
 			self._process(key, values)
@@ -252,7 +228,7 @@ class Discover:
 		regions = meta_lists.regions
 		region_names = [i['name'] for i in regions]
 		region_codes = [i['code'] for i in regions]
-		region = self._selection_dialog(region_names, region_codes, self.heading_base % ls(32659))
+		region = self._selection_dialog(region_names, region_codes, heading_base % ls(32659))
 		if region != None:
 			region_name = [i['name'] for i in regions if i['code'] == region][0]
 			values = ('&region=%s' % region, region_name)
@@ -263,7 +239,7 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		ratings = [i for i in range(1,11)]
 		ratings_list = [str(float(i)) for i in ratings]
-		rating = self._selection_dialog(ratings_list, ratings, self.heading_base % ('%s %s' % (ls(32661), ls(32621))))
+		rating = self._selection_dialog(ratings_list, ratings, heading_base % ('%s %s' % (ls(32661), ls(32621))))
 		if rating != None:
 			values = ('&vote_average.gte=%s' % str(rating), str(float(rating)))
 			self._process(key, values)
@@ -275,7 +251,7 @@ class Discover:
 		rating_votes.pop(0)
 		rating_votes.insert(0, 1)
 		rating_votes_list = [str(i) for i in rating_votes]
-		rating_votes = self._selection_dialog(rating_votes_list, rating_votes, self.heading_base % ('%s %s' % (ls(32661), ls(32663))))
+		rating_votes = self._selection_dialog(rating_votes_list, rating_votes, heading_base % ('%s %s' % (ls(32661), ls(32663))))
 		if rating_votes != None:
 			values = ('&vote_count.gte=%s' % str(rating_votes), str(rating_votes))
 			self._process(key, values)
@@ -285,7 +261,7 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		certifications = meta_lists.movie_certifications
 		certifications_list = [i.upper() for i in certifications]
-		certification = self._selection_dialog(certifications_list, certifications, self.heading_base % ls(32473))
+		certification = self._selection_dialog(certifications_list, certifications, heading_base % ls(32473))
 		if certification != None:
 			values = ('&certification_country=US&certification=%s' % certification, certification.upper())
 			self._process(key, values)
@@ -293,30 +269,25 @@ class Discover:
 	def cast(self):
 		key = 'cast'
 		if self._action(key) in ('clear', None): return
-		from apis.tmdb_api import get_tmdb
-		from caches.main_cache import cache_object
-		result = None
-		actor_id = None
-		search_name = None
-		search_name = kodi_utils.dialog.input(self.heading_base % ls(32664))
-		if not search_name: return
-		string = '%s_%s' % ('tmdb_movies_people_search_actor_data', search_name)
-		url = '%s/search/person?api_key=%s&language=en-US&query=%s' % (base_url, self.tmdb_api, search_name)
-		result = cache_object(get_tmdb, string, url, 4)
-		result = result['results']
-		if not result: return
+		from apis.tmdb_api import tmdb_people_info
+		from modules.utils import safe_string, remove_accents
+		query = kodi_utils.dialog.input(heading_base % ls(32664))
+		if not query: return
+		try: actors = tmdb_people_info(query)
+		except: actors = None
+		if not actors: return
 		actor_list = []
 		append = actor_list.append
-		if len(result) > 1:
-			for item in result:
+		if len(actors) > 1:
+			for item in actors:
 				name = item['name']
 				known_for_list = [i.get('title', 'NA') for i in item['known_for']]
 				known_for_list = [i for i in known_for_list if not i == 'NA']
 				known_for = ', '.join(known_for_list) if known_for_list else ''
-				if item.get('profile_path'): icon = 'https://image.tmdb.org/t/p/h632/%s' % item['profile_path']
-				else: icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/people.png')
+				if item.get('profile_path'): icon = profile_url % item['profile_path']
+				else: icon = people_icon
 				append({'line1': name, 'line2': known_for, 'icon': icon, 'name': name, 'id': item['id']})
-			heading = self.heading_base % ls(32664)
+			heading = heading_base % ls(32664)
 			kwargs = {'items': json.dumps(actor_list), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'true'}
 			choice = kodi_utils.select_dialog(actor_list, **kwargs)
 			if choice is None: return self._set_property()
@@ -338,7 +309,7 @@ class Discover:
 		for item in networks:
 			name = item['name']
 			append({'line1': name, 'icon': item['logo'], 'name': name, 'id': item['id']})
-		heading = self.heading_base % ls(32480)
+		heading = heading_base % ls(32480)
 		kwargs = {'items': json.dumps(network_list), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
 		choice = kodi_utils.select_dialog(network_list, **kwargs)
 		if choice is None: return
@@ -356,7 +327,7 @@ class Discover:
 			current_company_ids = current_company_ids.replace('&with_companies=', '').split('|')
 		if not isinstance(current_companies, list):
 			current_companies = current_companies.split(', ')
-		company = kodi_utils.dialog.input(self.heading_base % ls(32660))
+		company = kodi_utils.dialog.input(heading_base % ls(32660))
 		if company:
 			from apis.tmdb_api import tmdb_company_id
 			company_choice = None
@@ -366,7 +337,7 @@ class Discover:
 				if results['total_results'] == 1: company_choice = results['results']
 				if not company_choice:
 					results = results['results']
-					company_choice = self._multiselect_dialog(self.heading_base % ls(32660), [i['name'].upper() for i in results], results)
+					company_choice = self._multiselect_dialog(heading_base % ls(32660), [i['name'].upper() for i in results], results)
 				if company_choice != None:
 					for i in company_choice:
 						company_ids_append(str(i['id']))
@@ -382,7 +353,7 @@ class Discover:
 			sort_by_list = self._movies_sort()
 		else:
 			sort_by_list = self._tvshows_sort()
-		sort_by_value = self._selection_dialog([i[0] for i in sort_by_list], [i[1] for i in sort_by_list], self.heading_base % ls(32067))
+		sort_by_value = self._selection_dialog([i[0] for i in sort_by_list], [i[1] for i in sort_by_list], heading_base % ls(32067))
 		if sort_by_value != None:
 			sort_by_name = [i[0] for i in sort_by_list if i[1] == sort_by_value][0]
 			values = (sort_by_value, sort_by_name)
@@ -390,7 +361,7 @@ class Discover:
 
 	def adult(self):
 		key = 'adult'
-		include_adult = self._selection_dialog((ls(32859), ls(32860)), ('true', 'false'), self.heading_base % self.include_base_str % ls(32665))
+		include_adult = self._selection_dialog((ls(32859), ls(32860)), ('true', 'false'), heading_base % include_base_str % ls(32665))
 		if include_adult != None:
 			values = ('&include_adult=%s' % include_adult, include_adult.capitalize())
 			self._process(key, values)
@@ -407,7 +378,7 @@ class Discover:
 			if self.key == 'folder': mode = 'menu_editor.shortcut_folder_add_item'
 			else: mode = 'menu_editor.add_external'
 			url_params = {'mode': mode, 'name': name, 'menu_item': json.dumps(final_params), 'iconImage': 'discover.png'}
-			kodi_utils.execute_builtin('RunPlugin(%s)' % self._build_url(url_params))
+			kodi_utils.execute_builtin('RunPlugin(%s)' % build_url(url_params))
 		except:
 			kodi_utils.notification(32574)
 
@@ -430,9 +401,9 @@ class Discover:
 					listitem = make_listitem()
 					listitem.setLabel(display)
 					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
-					cm_append(('[B]%s[/B]' % export_str, 'RunPlugin(%s)'% self._build_url(export_params)))
-					cm_append(('[B]%s[/B]' % remove_str, 'RunPlugin(%s)'% self._build_url(remove_single_params)))
-					cm_append(('[B]%s[/B]' % clear_str, 'RunPlugin(%s)'% self._build_url(remove_all_params)))
+					cm_append(('[B]%s[/B]' % export_str, 'RunPlugin(%s)'% build_url(export_params)))
+					cm_append(('[B]%s[/B]' % remove_str, 'RunPlugin(%s)'% build_url(remove_single_params)))
+					cm_append(('[B]%s[/B]' % clear_str, 'RunPlugin(%s)'% build_url(remove_all_params)))
 					listitem.addContextMenuItems(cm)
 					yield (url, listitem, True)
 				except: pass
@@ -455,28 +426,20 @@ class Discover:
 		self._end_directory()
 
 	def help(self):
-#		text_file = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/pov_discover.txt')
-#		return kodi_utils.show_text(self.heading_base % ls(32487), file=text_file)
-		return kodi_utils.show_text(self.heading_base % ls(32487), discover_help)
+		return kodi_utils.show_text(heading_base % ls(32487), discover_help)
 
 	def _set_default_params(self, media_type):
-		if not 'media_type' in self.discover_params:
-			self._clear_property()
-			url_media_type = 'movie' if media_type == 'movie' else 'tv'
-			param_media_type = 'Movies' if media_type == 'movie' else 'TV Shows'
-			self.discover_params['media_type'] = media_type
-			self.discover_params['search_string'] = {}
-			self.discover_params['search_string']['base'] = (
-				'%s/discover/%s?api_key=%s&language=en-US&page=%s' % (base_url, url_media_type, self.tmdb_api, '%s')
-				)
-			self.discover_params['search_string']['base_similar'] = (
-				'%s/%s/%s/similar?api_key=%s&language=en-US&page=%s' % (base_url, url_media_type, '%s', self.tmdb_api, '%s')
-				)
-			self.discover_params['search_string']['base_recommended'] = (
-				'%s/%s/%s/recommendations?api_key=%s&language=en-US&page=%s' % (base_url, url_media_type, '%s', self.tmdb_api, '%s')
-				)
-			self.discover_params['search_name'] = {'media_type': param_media_type}
-			self._set_property()
+		self._clear_property()
+		url_media_type = 'movie' if media_type == 'movie' else 'tv'
+		param_media_type = 'Movies' if media_type == 'movie' else 'TV Shows'
+		self.discover_params['media_type'] = media_type
+		self.discover_params['search_string'] = {
+			'base': '%s/discover/%s?api_key=%s&language=en-US&page=%s' % (base_url, url_media_type, self.tmdb_api, '%s'),
+			'base_similar': '%s/%s/%s/similar?api_key=%s&language=en-US&page=%s' % (base_url, url_media_type, '%s', self.tmdb_api, '%s'),
+			'base_recommended': '%s/%s/%s/recommendations?api_key=%s&language=en-US&page=%s' % (base_url, url_media_type, '%s', self.tmdb_api, '%s')
+		}
+		self.discover_params['search_name'] = {'media_type': param_media_type}
+		self._set_property()
 
 	def _add_defaults(self):
 		if self.discover_params['media_type'] == 'movie':
@@ -489,9 +452,9 @@ class Discover:
 		query = self.discover_params.get('final_string', '')
 		self._add_dir({'mode': mode, 'action': action, 'query': query, 'name': name, 'list_name': ls(32666) % name}, isFolder=True,
 					icon=kodi_utils.translate_path(icon_directory % 'search.png'))
-		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'list_name': '[B]MENU EXPORT:[/B]  [I]%s[/I]' % name},
+		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'list_name': base_str % (menu_export_str, name)},
 					icon=kodi_utils.translate_path(icon_directory % 'item_jump.png'))
-		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'list_name': '[B]FOLDER EXPORT:[/B]  [I]%s[/I]' % name, 'key': 'folder'},
+		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'list_name': base_str % (fold_export_str , name), 'key': 'folder'},
 					icon=kodi_utils.translate_path(icon_directory % 'folder.png'))
 
 	def _action(self, key):
@@ -499,7 +462,7 @@ class Discover:
 		add_to_list = ('keyword', 'companies')
 		action = ls(32602) if any(word in key for word in add_to_list) else ls(32668)
 		if key in dict_item['search_name']:
-			action = self._selection_dialog([action.capitalize(), ls(32671)], (action, 'clear'), self.heading_base % ls(32670))
+			action = self._selection_dialog([action.capitalize(), ls(32671)], (action, 'clear'), heading_base % ls(32670))
 		if action is None: return
 		if action == 'clear':
 			index = self._listitem_position(key)
@@ -530,7 +493,7 @@ class Discover:
 		__handle__ = int(sys.argv[1])
 		icon = icon or default_icon
 		list_name = params.get('list_name', '')
-		url = self._build_url(params)
+		url = build_url(params)
 		listitem = make_listitem()
 		listitem.setLabel(list_name)
 		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
@@ -541,9 +504,6 @@ class Discover:
 		kodi_utils.set_content(__handle__, '')
 		kodi_utils.end_directory(__handle__, cacheToDisc=False)
 		kodi_utils.set_view_mode(self.view, '')
-
-	def _build_url(self, query):
-		return ''.join(['plugin://plugin.video.pov/?', urlencode(query)])
 
 	def _selection_dialog(self, dialog_list, function_list, string):
 		list_items = [{'line1': item, 'icon': default_icon} for item in dialog_list]
@@ -638,7 +598,7 @@ class Discover:
 			('%s (%s)' % (rev_str, asc_str), '&sort_by=revenue.asc'),               ('%s (%s)' % (rev_str, desc_str), '&sort_by=revenue.desc'),
 			('%s (%s)' % (tit_str, asc_str), '&sort_by=original_title.asc'),        ('%s (%s)' % (tit_str, desc_str), '&sort_by=original_title.desc'),
 			('%s (%s)' % (rat_str, asc_str), '&sort_by=vote_average.asc'),          ('%s (%s)' % (rat_str, desc_str), '&sort_by=vote_average.desc')
-			]
+		]
 
 	def _tvshows_sort(self):
 		pop_str, prem_str, rat_str, asc_str, desc_str = ls(32218), ls(32620), ls(32621), ls(32224), ls(32225)
@@ -646,7 +606,7 @@ class Discover:
 			('%s (%s)' % (pop_str, asc_str), '&sort_by=popularity.asc'),       ('%s (%s)' % (pop_str, desc_str), '&sort_by=popularity.desc'),
 			('%s (%s)' % (prem_str, asc_str), '&sort_by=first_air_date.asc'),  ('%s (%s)' % (prem_str, desc_str), '&sort_by=first_air_date.desc'),
 			('%s (%s)' % (rat_str, asc_str), '&sort_by=vote_average.asc'),     ('%s (%s)' % (rat_str, desc_str), '&sort_by=vote_average.desc')
-			]
+		]
 
 def set_history(media_type, name, query):
 	from caches.main_cache import main_cache
@@ -681,10 +641,10 @@ def remove_all_history(params):
 	kodi_utils.notification(32576)
 
 discover_help = (
-'''
+"""
 [COLOR dodgerblue][B]POV Discover[/B][/COLOR]
 
-POV Discover is a feature that allows you to browse and/or export lists that you make yourself using the filter values you provide. Only the filters you wish to use need to be assigned a value, the rest can be left blank. Once you've set your desired filters, select 'Save & Browse Results' if you want to simply start looking through the list you have made, or 'Export Search' to place your new list in one of the POV Main Menus (Root, Movies or TV Shows). Clear your filters to start again by selecting 'CLEAR FILTERS'. Your lists are saved for 7 days, and can be re-viewed by navigating into 'DISCOVER: History'. There are many different lists you could make using different filters, below are 2 examples:
+POV Discover is a feature that allows you to browse and/or export lists that you make yourself using the filter values you provide. Only the filters you wish to use need to be assigned a value, the rest can be left blank. Once you've set your desired filters, select 'Save & Browse Results' if you want to simply start looking through the list you have made or 'Menu Export' to place your new list in one of the POV Main Menus (Root, Movies or TV Shows). Your lists are saved for 7 days, and can be re-viewed by navigating into 'DISCOVER: History'. There are many different lists you could make using different filters, below are 2 examples:
 
   [B]EXAMPLE 1:[/B]
   You want to search for Comedy/Action Movies made in the 1980's that are PG Rated:
@@ -692,18 +652,16 @@ POV Discover is a feature that allows you to browse and/or export lists that you
 - Assign a "[B]Year End[/B]" filter of "1989"
 - Assign a "[B]Include Genres[/B]" filter of "Action, Comedy"
 - Assign a "[B]Certification[/B]" filter of "PG"
-- Select "[B]Browse Results[/B]" to immediately see the results or "[B]Export List[/B]" to export the
-  list to POV Root Menu or POV Movies Menu etc"
-- Add a filter for 'Includes Cast Member' if you only want movies with a specific actor.
+- Select "[B]Browse Results[/B]" to immediately see the results or "[B]Menu Export[/B]" to export the
+  list to POV Root Menu or POV Movies Menu etc
 
   [B]EXAMPLE 2:[/B]
   You want to search for Movies Similar to Avengers Endgame.
-- Assign a "[B]Discover Recommended[/B]" [B]Title[/B] of "Avengers Endgame"
-- Assign a "[B]Discover Recommended[/B]" [B]Year[/B] of "2019" or leave blank
+- Assign a "[B]Discover Recommended[/B]" Title of "Avengers Endgame"
+- Assign a "[B]Discover Recommended[/B]" Year of "2019" or leave blank
 - Choose from the titles presented for the correct Movie/TV Show
-- You will notice the other filters have disappeared. Once a "Discover Recommended"
-  value has been set, the other filters are not available.
-- Select "[B]Browse Results[/B]" to immediately see the results or "[B]Export List[/B]" to export the
-  list to POV Root Menu or POV Movies Menu etc"'''
+- Once a "Discover Recommended" has been set, the other filters are not available.
+- Select "[B]Browse Results[/B]" to immediately see the results or "[B]Menu Export[/B]" to export the
+  list to POV Root Menu or POV Movies Menu etc"""
 )
 

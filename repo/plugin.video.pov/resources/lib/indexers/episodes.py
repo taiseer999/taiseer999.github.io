@@ -19,17 +19,17 @@ adjust_premiered_date_function, jsondate_to_datetime_function = adjust_premiered
 date_difference_function, make_day_function, title_key_function, get_datetime_function = date_difference, make_day, title_key, get_datetime
 get_watched_status, get_watched_info = get_watched_status_episode, get_watched_info_tv
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
-poster = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
+poster_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
+fanart_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 watched_str, unwatched_str, extras_str, options_str = ls(32642), ls(32643), ls(32645), ls(32646)
 clearprog_str, browse_str, browse_seas_str, traktmanager_str = ls(32651), ls(32652), ls(32544), ls(32198)
 
 class Episodes:
 	def __init__(self, params):
 		self.params = params
-		self.list_type = self.params.get('id_type', '')
-		self.list = self.params.get('list', [])
+		self.list_type, self.list = self.params.get('id_type', ''), self.params.get('list', [])
 		self.items = []
+		self.append = self.items.append
 		self.set_constants()
 
 	def run(self):
@@ -93,8 +93,8 @@ class Episodes:
 			cm_append = cm.append
 			tmdb_id, tvdb_id, imdb_id = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id')
 			title, year, rootname, show_status = meta_get('title'), meta_get('year'), meta_get('rootname'), meta_get('status')
-			show_poster = meta_get(self.poster_main) or meta_get(self.poster_backup) or poster
-			show_fanart = meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart
+			show_poster = meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
+			show_fanart = meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart_empty
 			clearlogo = meta_get('clearlogo') or meta_get('tmdblogo') or ''
 			if self.fanart_enabled: banner, clearart, landscape = meta_get('banner'), meta_get('clearart'), meta_get('landscape')
 			else: banner, clearart, landscape = '', '', ''
@@ -177,7 +177,7 @@ class Episodes:
 												'season': season, 'episode': episode, 'refresh': 'true'})
 					cm_append((clearprog_str, run_plugin % clearprog_params))
 				if playcount:
-					if self.hide_watched: return
+					if self.widget_hide_watched: return
 					unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_unwatched', 'tmdb_id': tmdb_id,
 												'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': title, 'year': year})
 					cm_append((unwatched_str % self.watched_title, run_plugin % unwatched_params))
@@ -232,24 +232,23 @@ class Episodes:
 		except: pass
 
 	def set_constants(self):
+		self.current_date = get_datetime_function()
+		self.adjust_hours = date_offset_info()
 		self.meta_user_info = settings.metadata_user_info()
 		self.watched_indicators = settings.watched_indicators()
 		self.watched_info = get_watched_info(self.watched_indicators)
-		self.show_unaired = settings.show_unaired()
-		self.thumb_fanart = thumb_fanart_info()
-		self.is_widget = kodi_utils.external_browse()
-		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
-		self.hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
-		self.current_date = get_datetime_function()
-		self.adjust_hours = date_offset_info()
 		self.bookmarks = get_bookmarks(self.watched_indicators, 'episode')
-		self.display_title, self.date_format = single_ep_display_title(), single_ep_format()
+		self.show_unaired = settings.show_unaired()
 		self.all_episodes = default_all_episodes()
 		self.show_all_episodes = self.all_episodes in (1, 2)
-		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
+		self.thumb_fanart = thumb_fanart_info()
+		self.display_title, self.date_format = single_ep_display_title(), single_ep_format()
+		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
+		self.is_widget = kodi_utils.external_browse()
+		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
 		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
+		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
 		self.container_update = 'ActivateWindow(Videos,%s,return)' if self.is_widget else 'Container.Update(%s)'
-		self.append = self.items.append
 
 	def worker(self):
 		if self.list_type.startswith('next_episode'):

@@ -4,6 +4,8 @@
 
 
   [COLOR dodgerblue][B]Version 5.04[/B][/COLOR]
+- Changed Real Debrid api url.
+- Fixed Add To for Discover keywords.
 - Refactored apis/indexers/debrid/external modules.
 - Change for 'orginal_title' aliases, thanks Redditor!
 - Increased timeout for TMDB/Trakt non 'get' methods.
@@ -81,13 +83,6 @@
 - Completed clear cache for Offcloud/TorBox.
 - Added "Premium Expires Notification (days)" for each debrid (0 disables check).
 - Minor refactoring for each debrid, report anything that I might have broke.
-- Changed Mediafusion Debrid+ Configure for easier set up.
-  Authorize your debrid service first, 3 modes are offered.
-  1. Select No to use Direct Torrent setting.  The cached status of direct torrents is unchecked.
-  2. Select Yes and enter the base url (or use the default), then be prompted for which
-  debrid service to use.  Only "cached" results will be returned.
-  3. Select Yes and enter the complete manifest url and the addon will parse the required
-  parts for configuration.
 - Changed Real Debrid/All Debrid integration.
   Only two sources that will return results, `torrentio debrid+` and `mediafusion debrid+`.
   This relies on the `torrentio` and `mediafusion` internal caches, so there is a little

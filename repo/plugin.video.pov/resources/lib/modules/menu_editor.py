@@ -5,11 +5,10 @@ from caches.navigator_cache import navigator_cache
 from modules import kodi_utils, menu_lists as default_menus
 # from modules.kodi_utils import logger
 
-tp = kodi_utils.translate_path
-ls = kodi_utils.local_string
-main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029)}
-pos_str, top_pos_str, top_str = ls(32707), ls(32708), ls(32709)
+ls, tp = kodi_utils.local_string, kodi_utils.translate_path
 icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
+main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029), 'AnimeList': 'Anime'}
+pos_str, top_pos_str, top_str = ls(32707), ls(32708), ls(32709)
 
 class MenuEditor:
 	def __init__(self, params):

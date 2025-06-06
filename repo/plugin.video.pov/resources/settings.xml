@@ -28,9 +28,6 @@
         <!-- Hidden -->
         <setting id="trakt.refresh" type="text" default="" visible="false" />
         <setting id="trakt.expires" type="text" default="" visible="false" />
-        <setting id="rd.refresh" type="text" default="" visible="false" />
-        <setting id="rd.client_id" type="text" default="" visible="false" />
-        <setting id="rd.secret" type="text" default="" visible="false" />
         <setting id="results.sort_order" type="text" default="0" visible="false" />
         <setting id="database.maintenance.due" type="text" default="0" visible="false" />
         <setting id="reuse_language_invoker" type="text" default="true" visible="false" />
@@ -196,7 +193,6 @@
         <setting label="32830" type="lsep" />
         <setting id="provider.aiostreams" label="aiostreams" type="bool" default="false" />
         <setting id="provider.comet" label="comet" type="bool" default="false" />
-        <setting id="provider.knightcrawler" label="knightcrawler (torrentio/dmm)" type="bool" default="false" />
         <setting id="provider.mediafusion" label="mediafusion" type="bool" default="false" />
             <setting id="mediafusion.packs" label="Include Show Packs" type="bool" default="false" subsetting="true" visible="eq(-1,true)" />
         <setting id="provider.zilean" label="zilean (dmm)" type="bool" default="false" />
@@ -238,7 +234,7 @@
         <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=premiumize.del_auth)" />
         <!-- EasyDebrid -->
         <setting label="EasyDebrid" type="lsep" />
-        <setting id="ed.token" label="key" type="text" default="" visible="false" />
+        <setting id="ed.token" label="ed token" type="text" default="" visible="false" />
         <setting id="ed.enabled" label="32055" type="bool" default="true" visible="!eq(-1,)" />
         <setting id="ed.account_id" label="32062" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
         <setting id="ed.torrent.enabled" label="Enable torrents" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
@@ -248,7 +244,7 @@
         <setting label="Revoke" type="action" visible="!eq(-7,)" action="RunPlugin(plugin://plugin.video.pov/?mode=easydebrid.del_auth)" />
         <!-- TorBox-->
         <setting label="TorBox" type="lsep" />
-        <setting id="tb.token" label="key" type="text" default="" visible="false" />
+        <setting id="tb.token" label="tb token" type="text" default="" visible="false" />
         <setting id="tb.enabled" label="32055" type="bool" default="true" visible="!eq(-1,)" />
         <setting id="tb.account_id" label="32062" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
         <setting id="tb.torrent.enabled" label="Enable torrents" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
@@ -264,7 +260,7 @@
         <setting label="Revoke" type="action" visible="!eq(-13,)" action="RunPlugin(plugin://plugin.video.pov/?mode=torbox.del_auth)" />
         <!-- Offcloud -->
         <setting label="Offcloud" type="lsep" />
-        <setting id="oc.token" label="key" type="text" default="" visible="false" />
+        <setting id="oc.token" label="oc token" type="text" default="" visible="false" />
         <setting id="oc.enabled" label="32055" type="bool" default="true" visible="!eq(-1,)" />
         <setting id="oc.account_id" label="32062" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
         <setting id="oc.torrent.enabled" label="Enable torrents" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
@@ -299,10 +295,11 @@
             <setting id="mfdebrid.packs" label="Include Show Packs" type="bool" default="false" subsetting="true" visible="eq(-2,true)" />
         <setting id="provider.cmdebrid" label="comet debrid+" type="bool" default="false" />
             <setting id="cmdebrid.debrid" label="Debrid Provider" type="enum" default="0" subsetting="true" values="Real Debrid|All Debrid|Direct" visible="eq(-1,true)" />
-        <setting label="[COLOR BFFD3DB5]Enable torrentio/mediafusion/comet debrid+ After RD/AD Authorization[/COLOR]" type="lsep" />
-        <setting id="amble.debrid" label="" type="text" visible="false" />
         <!-- Real Debrid -->
         <setting label="32054" type="lsep" />
+        <setting id="rd.refresh" type="text" default="" visible="false" />
+        <setting id="rd.client_id" type="text" default="" visible="false" />
+        <setting id="rd.secret" type="text" default="" visible="false" />
         <setting id="rd.token" label="rd token" type="text" default="" visible="false" />
         <setting id="rd.enabled" label="32055" type="bool" default="true" visible="!eq(-1,)" />
         <setting id="rd.username" label="32056" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />

@@ -2,7 +2,7 @@ import json
 from sys import argv
 from apis.alldebrid_api import AllDebridAPI
 from modules import kodi_utils
-from modules.source_utils import supported_video_extensions
+from modules.source_utils import supported_video_extensions, source_warning
 from modules.utils import clean_file_name, normalize
 # from modules.kodi_utils import logger
 
@@ -93,6 +93,7 @@ def show_account_info():
 		return kodi_utils.show_text(ls(32063).upper(), '\n\n'.join(body), font_size='large')
 	except: kodi_utils.hide_busy_dialog()
 
+@source_warning
 def get_auth():
 	import urllib.parse
 	from apis.alldebrid_api import base_url, user_agent, session, timeout

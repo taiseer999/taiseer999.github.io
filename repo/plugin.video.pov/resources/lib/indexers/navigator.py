@@ -1,48 +1,27 @@
 import sys
 from caches.navigator_cache import navigator_cache as nc
-from modules import kodi_utils as k, settings as s
-# logger = k.logger
+from modules import kodi_utils as ku, settings as ks
+# logger = ku.logger
 
-tp, ls, build_url, notification, list_dirs = k.translate_path, k.local_string, k.build_url, k.notification, k.list_dirs
-make_listitem, add_item, end_directory, add_items = k.make_listitem, k.add_item, k.end_directory, k.add_items
-set_content, set_view_mode, set_sort_method, set_category = k.set_content, k.set_view_mode, k.set_sort_method, k.set_category
-easynews_active, download_directory, source_folders_directory = s.easynews_active, s.download_directory, s.source_folders_directory
-get_shortcut_folders, get_shortcut_folder_contents, = nc.get_shortcut_folders, nc.get_shortcut_folder_contents
+tp, ls, build_url, notification, list_dirs = ku.translate_path, ku.local_string, ku.build_url, ku.notification, ku.list_dirs
+make_listitem, add_item, add_dir, end_directory, add_items = ku.make_listitem, ku.add_item, ku.add_dir, ku.end_directory, ku.add_items
+set_content, set_view_mode, set_sort_method, set_category = ku.set_content, ku.set_view_mode, ku.set_sort_method, ku.set_category
 icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
 _in_str, mov_str, tv_str, edit_str = ls(32484), ls(32028), ls(32029), ls(32705)
 browse_str, add_menu_str, s_folder_str = ls(32706), ls(32730), ls(32731)
 
 class Navigator:
 	def __init__(self, params):
+		params['handle'] = int(sys.argv[1])
+		params['fanart'] = ks.addon_fanart()
 		self.params = params
 		self.params_get = self.params.get
 		self.list_name = self.params_get('action', 'RootList')
 
-	def main(self):
-		def build_main_lists():
-			for item_position, item in enumerate(nc.currently_used_list(self.list_name)):
-				try:
-					cm = []
-					cm_append = cm.append
-					item_get = item.get
-					icon = item_get('iconImage') if item_get('network_id', '') != '' else tp(icon_directory % item_get('iconImage'))
-					isFolder = False if item_get('isFolder') == 'false' else True
-					cm_append((edit_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.edit_menu', 'active_list': self.list_name, 'position': item_position})))
-					cm_append((browse_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.browse', 'active_list': self.list_name})))
-					listitem = make_listitem()
-					listitem.setLabel(ls(item_get('name', '')))
-					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
-					listitem.addContextMenuItems(cm)
-					yield (build_url(item), listitem, isFolder)
-				except: pass
-		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
-		add_items(__handle__, list(build_main_lists()))
-		self._end_directory()
-
 	def downloads(self):
 		dl_str, pr_str, im_str = ls(32107), ls(32485), ls(32798)
-		mov_path, ep_path = download_directory('movie'), download_directory('episode')
-		prem_path, im_path = download_directory('premium'), download_directory('image')
+		mov_path, ep_path = ks.download_directory('movie'), ks.download_directory('episode')
+		prem_path, im_path = ks.download_directory('premium'), ks.download_directory('image')
 		n_ins = _in_str % (dl_str.upper(), '')
 		self._add_item({'mode': 'navigator.folder_navigator', 'folder_path': mov_path , 'name': mov_str}, 'movies.png' , n_ins)
 		self._add_item({'mode': 'navigator.folder_navigator', 'folder_path': ep_path  , 'name': tv_str }, 'tv.png'     , n_ins)
@@ -63,7 +42,7 @@ class Navigator:
 
 	def premium(self):
 		from modules.debrid import debrid_enabled
-		easynews, debrids = easynews_active(), debrid_enabled()
+		easynews, debrids = ks.easynews_active(), debrid_enabled()
 		if easynews: self.easynews()
 		if 'Real-Debrid' in debrids: self.real_debrid()
 		if 'Premiumize.me' in debrids: self.premiumize()
@@ -143,10 +122,10 @@ class Navigator:
 		tu_str, pu_str = '%s %s %s' % (ls(32458), user_str, l_str), '%s %s %s' % (ls(32459), user_str, l_str)
 		sea_str, n_ins = '%s %s' % (ls(32477), l_str), _in_str % (t_str.upper(), '')
 		mdb_m_str, mdb_t_str = 'My %s %s' % (wlist_str, mov_str), 'My %s %s' % (wlist_str, tv_str)
-		trakt_status = k.get_setting('trakt_user') not in ('', None)
-		tmdb_status = k.get_setting('tmdb.account_id') not in ('', None)
-		mdblist_status = k.get_setting('mdblist.token') not in ('', None)
-		imdb_status = k.get_setting('imdb_user') not in ('', None)
+		trakt_status = ku.get_setting('trakt_user') not in ('', None)
+		tmdb_status = ku.get_setting('tmdb.account_id') not in ('', None)
+		mdblist_status = ku.get_setting('mdblist.token') not in ('', None)
+		imdb_status = ku.get_setting('imdb_user') not in ('', None)
 		if trakt_status:
 			self._add_item({'mode': 'navigator.trakt_collections'                                           , 'name': coll_str }, 'trakt.png', t_n_ins)
 			self._add_item({'mode': 'navigator.trakt_watchlists'                                            , 'name': wlist_str}, 'trakt.png', t_n_ins)
@@ -195,7 +174,7 @@ class Navigator:
 		t_str, watchlist_str = ls(32037), ls(32500)
 		trakt_watchlist_str = '%s %s' % (t_str, watchlist_str)
 		n_ins = _in_str % (trakt_watchlist_str.upper(), '')
-		tmdb_status = k.get_setting('tmdb.account_id') not in ('', None)
+		tmdb_status = ku.get_setting('tmdb.account_id') not in ('', None)
 		self._add_item({'mode': 'build_movie_list', 'action': 'trakt_watchlist',  'name': mov_str}, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_tvshow_list', 'action': 'trakt_watchlist', 'name': tv_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'tmdb.import_trakt_watchlist',                    'name': 'Export to TMDB'}, 'trakt.png', n_ins, False) if tmdb_status else None
@@ -312,7 +291,7 @@ class Navigator:
 		self._end_directory()
 
 	def log_utils(self):
-		pov_vstr, log_path = k.addon().getAddonInfo('version'), 'special://home/addons/%s/changelog.txt'
+		pov_vstr, log_path = ku.addon().getAddonInfo('version'), 'special://home/addons/%s/changelog.txt'
 		kl_loc, mt_str = tp('special://logpath/kodi.log'), tp(log_path % 'plugin.video.pov')
 		pov_str, cl_str, lut_str, k_str, lv_str = ls(32036), ls(32508), ls(32777), ls(32538), ls(32509)
 		mh_str, klv_h, klu_h = '%s  [I](v.%s)[/I]' % (pov_str, pov_vstr), '%s %s' % (k_str, lv_str), ls(32853)
@@ -320,24 +299,6 @@ class Navigator:
 		self._add_item({'mode': 'show_text', 'heading': mh_str, 'file': mt_str, 'exclude_external': 'true',                    'name': mh_str}, 'lists.png', cl_n_ins, False)
 		self._add_item({'mode': 'show_text', 'heading': klv_h, 'file': kl_loc, 'kodi_log': 'true', 'exclude_external': 'true', 'name': klv_h }, 'lists.png', lu_n_ins, False)
 		self._add_item({'mode': 'upload_logfile', 'exclude_external': 'true',                                                  'name': klu_h }, 'lists.png', lu_n_ins, False)
-		self._end_directory()
-
-	def anime(self):
-		n_ins, t_ins = _in_str % ('SIMKL', ''), _in_str % ('TRAKT', '')
-		self._add_item({'mode': 'build_anime_calendar'                                     , 'name': 'Series Calendar'         }, 'trakt.png',    t_ins)
-		self._add_item({'mode': 'build_tvshow_list', 'action': 'simkl_tv_popular',           'name': 'Series Popular This Week'}, 'tv.png',       n_ins)
-		self._add_item({'mode': 'build_tvshow_list', 'action': 'simkl_tv_most_watched',      'name': 'Series Most Watched'     }, 'tv.png',       n_ins)
-		self._add_item({'mode': 'build_tvshow_list', 'action': 'simkl_tv_recent_release',    'name': 'Series Recent Released'  }, 'tv.png',       n_ins)
-		self._add_item({'mode': 'navigator.anime_genres', 'menu_type': 'tvshow',             'name': 'Series Genres'           }, 'genres.png',   n_ins)
-		self._add_item({'mode': 'navigator.anime_years', 'menu_type': 'tvshow',              'name': 'Series Years'            }, 'calender.png', n_ins)
-		self._add_item({'mode': 'build_tvshow_list', 'action': 'simkl_onas_popular',         'name': 'ONAs Popular This Week'  }, 'tv.png',       n_ins)
-		self._add_item({'mode': 'build_tvshow_list', 'action': 'simkl_onas_most_watched',    'name': 'ONAs Most Watched'       }, 'tv.png',       n_ins)
-		self._add_item({'mode': 'build_tvshow_list', 'action': 'simkl_onas_recent_release',  'name': 'ONAs Recent Released'    }, 'tv.png',       n_ins)
-		self._add_item({'mode': 'build_movie_list', 'action': 'simkl_movies_popular',        'name': 'Movies Popular This Week'}, 'movies.png',   n_ins)
-		self._add_item({'mode': 'build_movie_list', 'action': 'simkl_movies_most_watched',   'name': 'Movies Most Watched'     }, 'movies.png',   n_ins)
-		self._add_item({'mode': 'build_movie_list', 'action': 'simkl_movies_recent_release', 'name': 'Movies Recent Released'  }, 'movies.png',   n_ins)
-		self._add_item({'mode': 'navigator.anime_genres', 'menu_type': 'movie',              'name': 'Movies Genres'           }, 'genres.png',   n_ins)
-		self._add_item({'mode': 'navigator.anime_years', 'menu_type': 'movie',               'name': 'Movies Years'            }, 'calender.png', n_ins)
 		self._end_directory()
 
 	def certifications(self):
@@ -429,12 +390,12 @@ class Navigator:
 		genre_list = json.loads(genre_list)
 		list_items = list(_builder())
 		kwargs = {'items': json.dumps(list_items), 'heading': ls(32847), 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
-		genre_ids = k.select_dialog(function_list, **kwargs)
+		genre_ids = ku.select_dialog(function_list, **kwargs)
 		if genre_ids is None: return
 		genre_id = ','.join(genre_ids)
 		if menu_type == 'movie': url = {'mode': 'build_movie_list', 'action': 'tmdb_movies_genres', 'genre_id': genre_id}
 		else: url = {'mode': 'build_tvshow_list', 'action': 'tmdb_tv_genres', 'genre_id': genre_id}
-		return k.execute_builtin('Container.Update(%s)' % build_url(url))
+		return ku.execute_builtin('Container.Update(%s)' % build_url(url))
 
 	def networks(self):
 		from modules.meta_lists import networks
@@ -444,39 +405,6 @@ class Navigator:
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_networks', 'network_id': item['id'], 'name': item['name']}, item['logo'], list_name=list_name)
 		self._end_directory()
 
-	def folder_navigator(self):
-		import os
-		from modules.utils import clean_file_name, normalize
-		def _process():
-			for tup in items:
-				try:
-					item = tup[0]
-					url = os.path.join(folder_path, item)
-					listitem = make_listitem()
-					listitem.setLabel(clean_file_name(normalize(item)))
-					listitem.setArt({'fanart': fanart})
-					yield (url, listitem, tup[1])
-				except: pass
-		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
-		folder_path = self.params_get('folder_path')
-		sources_folders = self.params_get('sources_folders', None)
-		dirs, files = list_dirs(folder_path)
-		items = [(i, True) for i in dirs] + [(i, False) for i in files]
-		item_list = list(_process())
-		add_items(__handle__, item_list)
-		set_sort_method(__handle__, 'files')
-		self._end_directory()
-
-	def sources_folders(self):
-		name_str = '[B]%s (%s): %s[/B]\n     [I]%s[/I]'
-		for source in ('folder1', 'folder2', 'folder3', 'folder4', 'folder5'):
-			for media_type in ('movie', 'tvshow'):
-				folder_path = source_folders_directory(media_type, source)
-				if not folder_path: continue
-				name = name_str % (source.upper(), self.make_list_name(media_type).upper(), k.get_setting('%s.display_name' % source).upper(), folder_path)
-				self._add_item({'mode': 'navigator.folder_navigator','sources_folders': 'True', 'folder_path': folder_path, 'name': name}, 'most_collected.png')
-		self._end_directory()
-
 	def because_you_watched(self):
 		from caches.watched_cache import get_watched_info_movie, get_watched_info_tv
 		def _convert_pov_watched_episodes_info(watched_indicators):
@@ -484,7 +412,7 @@ class Navigator:
 			_watched = get_watched_info_tv(watched_indicators)
 			_watched.sort(key=lambda x: (x[0], x[1], x[2]), reverse=True)
 			return [(i[0], i[3], i[4], [(i[1], i[2])]) for i in _watched if not (i[0] in seen or seen.add(i[0]))]
-		watched_indicators = s.watched_indicators()
+		watched_indicators = ks.watched_indicators()
 		media_type = self.params_get('menu_type')
 		function = get_watched_info_movie if media_type == 'movie' else _convert_pov_watched_episodes_info
 		mode = 'build_movie_list' if media_type == 'movie' else 'build_tvshow_list'
@@ -501,22 +429,39 @@ class Navigator:
 			self._add_item({'mode': mode, 'action': action, 'tmdb_id': tmdb_id, 'exclude_external': 'true', 'name': name}, 'because_you_watched.png')
 		self._end_directory()
 
-	def make_list_name(self, menu_type):
-		return menu_type.replace('tvshow', tv_str).replace('movie', mov_str)
+	def folder_navigator(self):
+		import os
+		from modules.utils import clean_file_name, normalize
+		def _process():
+			for item, isFolder in items:
+				try:
+					url = os.path.join(folder_path, item)
+					listitem = make_listitem()
+					listitem.setLabel(clean_file_name(normalize(item)))
+					listitem.setArt({'fanart': fanart})
+					yield (url, listitem, isFolder)
+				except: pass
+		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		folder_path = self.params_get('folder_path')
+		sources_folders = self.params_get('sources_folders', None)
+		dirs, files = list_dirs(folder_path)
+		items = [(i, True) for i in dirs] + [(i, False) for i in files]
+		add_items(handle, list(_process()))
+		set_sort_method(handle, 'files')
+		self._end_directory()
+
+	def sources_folders(self):
+		name_str = '[B]%s (%s): %s[/B]\n     [I]%s[/I]'
+		for source in ('folder1', 'folder2', 'folder3', 'folder4', 'folder5'):
+			for media_type in ('movie', 'tvshow'):
+				folder_path = ks.source_folders_directory(media_type, source)
+				if not folder_path: continue
+				name = name_str % (source.upper(), self.make_list_name(media_type).upper(), ku.get_setting('%s.display_name' % source).upper(), folder_path)
+				self._add_item({'mode': 'navigator.folder_navigator','sources_folders': 'True', 'folder_path': folder_path, 'name': name}, 'most_collected.png')
+		self._end_directory()
 
 	def shortcut_folders(self):
-		def _make_new_item():
-			icon, art = tp(icon_directory % 'new.png'), tp(k.fanart_default)
-			display_name = '[I]%s...[/I]' % ls(32702)
-			url_params = {'mode': 'menu_editor.shortcut_folder_make'}
-			url = build_url(url_params)
-			listitem = make_listitem()
-			listitem.setLabel(display_name)
-			listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': art, 'banner': icon})
-			add_item(__handle__, url, listitem, False)
 		def _builder():
-			short_str, delete_str = ls(32514), ls(32703)
-			icon = tp(icon_directory % 'folder.png')
 			for i in folders:
 				try:
 					cm = []
@@ -534,10 +479,12 @@ class Navigator:
 					listitem.addContextMenuItems(cm)
 					yield (url, listitem, True)
 				except: pass
-		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
-		_make_new_item()
-		folders = get_shortcut_folders()
-		if folders: add_items(__handle__, list(_builder()))
+		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		short_str, delete_str, new_folder_str = ls(32514), ls(32703), '[B]%s...[/B]' % ls(32702)
+		icon = tp(icon_directory % 'folder.png')
+		add_dir(handle, {'mode': 'menu_editor.shortcut_folder_make'}, new_folder_str, tp(icon_directory % 'new.png'), isFolder=False)
+		folders = nc.get_shortcut_folders()
+		if folders: add_items(handle, list(_builder()))
 		self._end_directory()
 
 	def build_shortcut_folder_list(self):
@@ -558,34 +505,59 @@ class Navigator:
 					listitem.addContextMenuItems(cm)
 					yield (url, listitem, isFolder)
 				except: pass
-		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
+		handle, fanart = self.params_get('handle'), self.params_get('fanart')
 		list_name = self.params_get('name')
-		contents = get_shortcut_folder_contents(list_name)
-		add_items(__handle__, list(_process()))
+		contents = nc.get_shortcut_folder_contents(list_name)
+		add_items(handle, list(_process()))
 		self._end_directory()
 
+	def main(self):
+		def build_main_lists():
+			for item_position, item in enumerate(contents):
+				try:
+					cm = []
+					cm_append = cm.append
+					item_get = item.get
+					icon = item_get('iconImage') if item_get('network_id', '') != '' else tp(icon_directory % item_get('iconImage'))
+					isFolder = False if item_get('isFolder') == 'false' else True
+					cm_append((edit_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.edit_menu', 'active_list': self.list_name, 'position': item_position})))
+					cm_append((browse_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.browse', 'active_list': self.list_name})))
+					listitem = make_listitem()
+					listitem.setLabel(ls(item_get('name', '')))
+					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
+					listitem.addContextMenuItems(cm)
+					yield (build_url(item), listitem, isFolder)
+				except: pass
+		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		contents = nc.currently_used_list(self.list_name)
+		add_items(handle, list(build_main_lists()))
+		self._end_directory()
+
+	def make_list_name(self, menu_type):
+		return menu_type.replace('tvshow', tv_str).replace('movie', mov_str)
+
 	def _add_item(self, url_params, iconImage='DefaultFolder.png', prefix='', isFolder=True, list_name=''):
-		__handle__, fanart = int(sys.argv[1]), k.addon_fanart()
-		cm = []
-		cm_append = cm.append
+		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		if not isFolder: url_params['isFolder'] = 'false'
 		icon = iconImage if 'network_id' in url_params else tp(icon_directory % iconImage)
 		url_params['iconImage'] = icon
-		if not isFolder: url_params['isFolder'] = 'false'
 		url = build_url(url_params)
 		listitem = make_listitem()
 		listitem.setLabel(f"{prefix}{url_params['name']}")
 		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon})
 		if not 'exclude_external' in url_params:
-			list_name = list_name or f"{prefix}{url_params['name']}"
-			cm_append((add_menu_str, 'RunPlugin(%s)'% build_url({'mode': 'menu_editor.add_external', 'name': list_name, 'iconImage': iconImage})))
+			cm = []
+			cm_append = cm.append
+			if not list_name: list_name = f"{prefix}{url_params['name']}"
+			cm_append((add_menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': list_name, 'iconImage': iconImage})))
 			cm_append((s_folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': list_name, 'iconImage': iconImage})))
 			listitem.addContextMenuItems(cm)
-		add_item(__handle__, url, listitem, isFolder)
+		add_item(handle, url, listitem, isFolder)
 
 	def _end_directory(self):
-		__handle__ = int(sys.argv[1])
-		set_category(__handle__, ls(self.params_get('name')))
-		set_content(__handle__, '')
-		end_directory(__handle__)
+		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		set_category(handle, ls(self.params_get('name')))
+		set_content(handle, '')
+		end_directory(handle)
 		set_view_mode('view.main', '')
 

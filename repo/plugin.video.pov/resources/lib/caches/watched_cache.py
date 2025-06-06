@@ -14,7 +14,6 @@ TRAKT_DB = kodi_utils.trakt_db
 indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB}
 ls, sleep = kodi_utils.local_string, kodi_utils.sleep
 progressDialogBG, execute_JSON = kodi_utils.progressDialogBG, kodi_utils.execute_JSON
-metadata_user_info = settings.metadata_user_info
 get_datetime, adjust_premiered_date = utils.get_datetime, utils.adjust_premiered_date
 sort_for_article, make_thread_list = utils.sort_for_article, utils.make_thread_list
 clean_file_name, paginate_list = utils.clean_file_name, utils.paginate_list
@@ -441,7 +440,7 @@ def get_library_video(media_type, title, year, season=None, episode=None):
 	except: pass
 
 def set_bookmark_kodi_library(media_type, tmdb_id, curr_time, total_time, season='', episode=''):
-	meta_user_info = metadata_user_info()
+	meta_user_info = settings.metadata_user_info()
 	try:
 		if media_type == 'movie': info = metadata.movie_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
 		else: info = metadata.tvshow_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
@@ -472,7 +471,7 @@ def set_bookmark_kodi_library(media_type, tmdb_id, curr_time, total_time, season
 
 def get_bookmark_kodi_library(media_type, tmdb_id, season='', episode=''):
 	resume = '0'
-	meta_user_info = metadata_user_info()
+	meta_user_info = settings.metadata_user_info()
 	try:
 		if media_type == 'movie': info = metadata.movie_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())
 		else: info = metadata.tvshow_meta('tmdb_id', tmdb_id, meta_user_info, get_datetime())

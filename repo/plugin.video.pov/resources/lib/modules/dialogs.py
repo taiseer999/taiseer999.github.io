@@ -801,8 +801,8 @@ def torbox_usenet_query(meta, season, episode):
 			except: pass
 	query = meta.get('tvshowtitle') or '%s %s' % (meta['title'], meta['year'])
 	show_busy_dialog()
-#	files = TorBox().usenet_search(query, season, episode, meta.get('imdb_id', ''))
-	files = TorBox().usenet_search(query, season, episode, None)
+	files = TorBox().usenet_search(query, season, episode, meta.get('imdb_id', ''))
+#	files = TorBox().usenet_search(query, season, episode, None)
 	uncached = [i for i in files if not i['cached']]
 	files = [i for i in files if i['cached']] + uncached
 	hide_busy_dialog()

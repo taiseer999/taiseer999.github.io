@@ -157,9 +157,7 @@ def checkUndesirablesDatabase():
 
 class POVMonitor(kodi_utils.xbmc_monitor):
 	def __enter__(self):
-		self.startUpServices()
 		self.threads = (Thread(target=traktMonitor), Thread(target=premAccntNotification))
-		for i in self.threads: i.start()
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
@@ -172,13 +170,14 @@ class POVMonitor(kodi_utils.xbmc_monitor):
 		except: pass
 		try: databaseMaintenance()
 		except: pass
-		try: clearSubs()
-		except: pass
 		try: viewsSetWindowProperties()
 		except: pass
+		try: reuseLanguageInvokerCheck()
+		except: pass
+		for i in self.threads: i.start()
 		try: autoRun()
 		except: pass
-		try: reuseLanguageInvokerCheck()
+		try: clearSubs()
 		except: pass
 		try: checkUndesirablesDatabase()
 		except: pass
@@ -204,7 +203,9 @@ class POVMonitor(kodi_utils.xbmc_monitor):
 logger('POV', 'Main Monitor Service Starting')
 logger('POV', 'Settings Monitor Service Starting')
 
-with POVMonitor() as p: p.waitForAbort()
+with POVMonitor() as pov:
+	pov.startUpServices()
+	pov.waitForAbort()
 
 logger('POV', 'Settings Monitor Service Finished')
 logger('POV', 'Main Monitor Service Finished')
