@@ -8,7 +8,7 @@
 
 			<include content="Object_Control">
 				<param name="control">image</param>
-				<texture colordiffuse="panel_bg_70">background/floor.png</texture>
+				<texture colordiffuse="panel_bg_70">common/floor.png</texture>
 			</include>
 
 			<!-- Short background -->
@@ -80,7 +80,7 @@
 					
 					<!-- Video Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -237,7 +237,7 @@
 					
 					<!-- More Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -442,7 +442,7 @@
 					
 					<!-- System Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -679,7 +679,7 @@
 					
 					<!-- Audio Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -1437,7 +1437,7 @@
 					
 					<!-- Video Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -1594,7 +1594,7 @@
 					
 					<!-- More Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -1799,7 +1799,7 @@
 					
 					<!-- System Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
@@ -2036,7 +2036,7 @@
 					
 					<!-- Audio Icon -->
 					<control type="label">
-						<label></label>
+						<label></label>
 						<top>-25</top>
 						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
