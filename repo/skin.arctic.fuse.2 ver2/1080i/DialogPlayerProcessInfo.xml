@@ -22,7 +22,7 @@
 					<param name="diffuse">diffuse/dialog_w1280_h740.png</param>
 				</include>
 				<include content="Object_MenuHeader">
-					<param name="label">[CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE]</param>
+					<param name="label">[CAPITALIZE]Player Process Info[/CAPITALIZE]</param>
 					<param name="icon">special://skin/extras/icons/chart-simple.png</param>
 				</include>
 				<control type="image">
@@ -48,7 +48,7 @@
 					<param name="diffuse">diffuse/dialog_w1840_h1000.png</param>
 				</include>
 				<include content="Object_MenuHeader">
-					<param name="label">[CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE]</param>
+					<param name="label">[CAPITALIZE]Player Process Info[/CAPITALIZE]</param>
 					<param name="icon">special://skin/extras/icons/chart-simple.png</param>
 				</include>
 				<control type="image">
@@ -88,7 +88,7 @@
 					
 					<!-- Video -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32054][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]Video[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -98,7 +98,7 @@
 					<!-- Display mode -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32000]:</label>
+						<label>Display mode:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -113,7 +113,7 @@
 					<!-- Video mode -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32001]:</label>
+						<label>Video mode:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -128,7 +128,7 @@
 					<!-- Pixel format -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32023]:</label>
+						<label>Pixel format:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -142,7 +142,7 @@
 					<!-- Bit depth -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32004]:</label>
+						<label>Bit depth:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -157,7 +157,7 @@
 					<!-- Aspect ratio -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32024]:</label>
+						<label>Aspect ratio</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -172,7 +172,7 @@
 					<!-- Decoder -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32005]:</label>
+						<label>Decoder:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -187,7 +187,7 @@
 					<!-- Codec -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32046]:</label>
+						<label>Codec:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -202,7 +202,7 @@
 					<!-- Deinterlacing -->
 					<control type="label">
 						<top>230</top>
-						<label>$LOCALIZE[32031]:</label>
+						<label>Deinterlacing:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -217,14 +217,14 @@
 					<!-- Bitrate -->
 					<control type="label">
 						<top>260</top>
-						<label>$LOCALIZE[32047]:</label>
+						<label>Bitrate:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<control type="label">
 						<left>210</left>
 						<top>260</top>
-						<label>$INFO[Player.Process(video.live.mibit.rate),, $LOCALIZE[32003]] $INFO[VideoPlayer.VideoMibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32003])[/COLOR]]</label>
+						<label>$INFO[Player.Process(video.live.mibit.rate),, $Bitrate] $INFO[VideoPlayer.VideoMibitRate,- [COLOR dialog_fg_70](Ø , $Bitrate)[/COLOR]]</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -245,7 +245,7 @@
 					
 					<!-- More -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32007][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]More[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -255,7 +255,7 @@
 					<!-- VS10 engine -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32006]:</label>
+						<label>VS10 engine:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -269,7 +269,7 @@
 					<!-- VS10 status -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32048]:</label>
+						<label>VS10 status:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -284,7 +284,7 @@
 					<!-- EOTF & Gamut -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32070]:</label>
+						<label>EOTF & Gamut:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -299,7 +299,7 @@
 					<!-- Color space -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32002]:</label>
+						<label>Color space:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -314,7 +314,7 @@
 					<!-- Media source -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32027]:</label>
+						<label>Color space:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -329,7 +329,7 @@
 					<control type="label">
 						<left>210</left>
 						<top>110</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.IsEmpty(Player.Process(video.hdr.colour.primaries))</visible>
@@ -338,7 +338,7 @@
 					<!-- Playback time -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32013]:</label>
+						<label>Playback time:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -355,7 +355,7 @@
 					<control type="label">
 						<left>210</left>
 						<top>170</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.IsEmpty(Player.Duration) | PVR.IsPlayingTV</visible>
@@ -378,17 +378,17 @@
 					
 					<!-- HDR Static Metadata -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32039][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]HDR Static Metadata[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>35</left>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
-					<!-- HDR10 MDL -->
+					<!--  -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32025]:</label>
+						<label>HDR10 MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -405,7 +405,7 @@
 					<control type="label">
 						<left>400</left>
 						<top>20</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -413,7 +413,7 @@
 					<!-- HDR10 MaxCLL/FALL -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32026]:</label>
+						<label>HDR10 MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -430,7 +430,7 @@
 					<control type="label">
 						<left>400</left>
 						<top>50</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -450,7 +450,7 @@
 					
 					<!-- System -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32055][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]System[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>35</left>
 						<font>font_tiny</font>
@@ -460,7 +460,7 @@
 					<!-- Memory usage -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32034]:</label>
+						<label>Memory usage:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -475,7 +475,7 @@
 					<!-- Processor -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32014]:</label>
+						<label>Processor:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -490,7 +490,7 @@
 					<!-- AML FPS -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32036]:</label>
+						<label>AML FPS:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -519,7 +519,7 @@
 					<!-- System -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32055]:</label>
+						<label>System:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -534,7 +534,7 @@
 					<!-- Player cache -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32032]:</label>
+						<label>Player cache:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -562,7 +562,7 @@
 					<!-- Video queue -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32008]:</label>
+						<label>Video queue:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -590,7 +590,7 @@
 					<!-- Video queue data -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32009]:</label>
+						<label>Video queue data:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -618,7 +618,7 @@
 					<!-- Audio queue -->
 					<control type="label">
 						<top>230</top>
-						<label>$LOCALIZE[32010]:</label>
+						<label>Audio queue:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -646,7 +646,7 @@
 					<!-- Audio queue data -->
 					<control type="label">
 						<top>260</top>
-						<label>$LOCALIZE[32011]:</label>
+						<label>Audio queue data:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -687,7 +687,7 @@
 					
 					<!-- Audio -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32056][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]Audio[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -697,7 +697,7 @@
 					<!-- Codec -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32046]:</label>
+						<label>Codec:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -711,7 +711,7 @@
 					<!-- Bit depth -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32069]:</label>
+						<label>Bit depth:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -726,7 +726,7 @@
 					<!-- Sample rate -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32051]:</label>
+						<label>Sample rate:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -741,14 +741,14 @@
 					<!-- Bitrate -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32047]:</label>
+						<label>Bitrate:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<control type="label">
 						<left>240</left>
 						<top>110</top>
-						<label>$INFO[Player.Process(audio.live.kibit.rate),, $LOCALIZE[32012]] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32012])[/COLOR]]</label>
+						<label>$INFO[Player.Process(audio.live.kibit.rate),, Bitrate] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , Bitrate)[/COLOR]]</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -756,7 +756,7 @@
 					<!-- Audio language -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32052]:</label>
+						<label>Audio language:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -786,7 +786,7 @@
 					<control type="label">
 						<left>240</left>
 						<top>140</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
@@ -795,7 +795,7 @@
 					<!-- Subtitle language -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32053]:</label>
+						<label>Subtitle language:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -814,7 +814,7 @@
 					<control type="label">
 						<left>240</left>
 						<top>170</top>
-						<label>$LOCALIZE[1223]</label>
+						<label>Disabled</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>VideoPlayer.HasSubtitles + !VideoPlayer.SubtitlesEnabled</visible>
@@ -823,7 +823,7 @@
 					<control type="label">
 						<left>240</left>
 						<top>170</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>!VideoPlayer.HasSubtitles</visible>
@@ -845,7 +845,7 @@
 					
 					<!-- DV Configuration -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32037][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]DV Configuration[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -855,7 +855,7 @@
 					<!-- Metadata -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32015]:</label>
+						<label>Metadata:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -870,7 +870,7 @@
 					<control type="label">
 						<left>340</left>
 						<top>20</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>!String.Contains(Player.Process(video.dovi.meta.version),CM)</visible>
@@ -879,7 +879,7 @@
 					<!-- Version -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32068]:</label>
+						<label>Version:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -894,7 +894,7 @@
 					<!-- Profile -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32016]:</label>
+						<label>Profile:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -909,7 +909,7 @@
 					<!-- Level -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32017]:</label>
+						<label>Level:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -925,7 +925,7 @@
 					<control type="label">
 						<left>340</left>
 						<top>110</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.Contains(Player.Process(video.dovi.level),0)</visible>
@@ -934,7 +934,7 @@
 					<!-- RPU -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32018]:</label>
+						<label>RPU:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -949,7 +949,7 @@
 					<!-- Base Layer -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32019]:</label>
+						<label>Base Layer:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -964,7 +964,7 @@
 					<!-- Enhancement Layer -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32020]:</label>
+						<label>Enhancement Layer:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -988,7 +988,7 @@
 					<!-- Enhancement Layer Type -->
 					<control type="label">
 						<top>230</top>
-						<label>$LOCALIZE[32021]:</label>
+						<label>Enhancement Layer Type:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1035,7 +1035,7 @@
 					
 					<!-- DV Levels Metadata -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32038][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]DV Levels Metadata[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>40</left>
 						<font>font_tiny</font>
@@ -1045,7 +1045,7 @@
 					<!-- HDR10 MDL -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32025]:</label>
+						<label>HDR10 MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1062,7 +1062,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>20</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1070,7 +1070,7 @@
 					<!-- HDR10 MaxCLL/FALL -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32026]:</label>
+						<label>HDR10 MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1087,7 +1087,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>50</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1095,7 +1095,7 @@
 					<!-- RPU MDL -->
 					<control type="label">
 						<top>95</top>
-						<label>$LOCALIZE[32041]:</label>
+						<label>RPU MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1112,7 +1112,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>95</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1120,7 +1120,7 @@
 					<!-- RPU MaxCLL/FALL -->
 					<control type="label">
 						<top>125</top>
-						<label>$LOCALIZE[32042]:</label>
+						<label>RPU MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1137,7 +1137,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>125</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1145,7 +1145,7 @@
 					<!-- FLL MIN / MAX / Ø -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32043]:</label>
+						<label>FLL MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1162,7 +1162,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>170</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1170,7 +1170,7 @@
 					<!-- PQ  MIN / MAX / Ø -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32044]:</label>
+						<label>PQ  MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1187,7 +1187,7 @@
 					<control type="label">
 						<left>478</left>
 						<top>200</top>
-						<label>$LOCALIZE[32045]</label>
+						<label> 12-bit</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1210,7 +1210,7 @@
 					
 					<!-- DV Levels Metadata -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32038][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]DV Levels Metadata[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>40</left>
 						<font>font_tiny</font>
@@ -1220,7 +1220,7 @@
 					<!-- HDR10 MDL -->
 					<control type="label">
 						<top>19</top>
-						<label>$LOCALIZE[32025]:</label>
+						<label>HDR10 MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1237,7 +1237,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>19</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1245,7 +1245,7 @@
 					<!-- HDR10 MaxCLL/FALL -->
 					<control type="label">
 						<top>46</top>
-						<label>$LOCALIZE[32026]:</label>
+						<label>HDR10 MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1262,7 +1262,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>46</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1270,7 +1270,7 @@
 					<!-- RPU MDL -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32041]:</label>
+						<label>RPU MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1287,7 +1287,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>80</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1295,7 +1295,7 @@
 					<!-- RPU MaxCLL/FALL -->
 					<control type="label">
 						<top>107</top>
-						<label>$LOCALIZE[32042]:</label>
+						<label>RPU MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1312,7 +1312,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>107</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1320,7 +1320,7 @@
 					<!-- FLL MIN / MAX / Ø -->
 					<control type="label">
 						<top>142</top>
-						<label>$LOCALIZE[32043]:</label>
+						<label>FLL MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1337,7 +1337,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>142</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1345,7 +1345,7 @@
 					<!-- PQ  MIN / MAX / Ø -->
 					<control type="label">
 						<top>169</top>
-						<label>$LOCALIZE[32044]:</label>
+						<label>PQ  MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1362,7 +1362,7 @@
 					<control type="label">
 						<left>478</left>
 						<top>169</top>
-						<label>$LOCALIZE[32045]</label>
+						<label> 12-bit</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1370,7 +1370,7 @@
 					<!-- L5 Active Offsets -->
 					<control type="label">
 						<top>201</top>
-						<label>$LOCALIZE[32067]:</label>
+						<label>L5 Active Offsets:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1445,7 +1445,7 @@
 					
 					<!-- Video -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32054][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]Video[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -1455,7 +1455,7 @@
 					<!-- Display mode -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32000]:</label>
+						<label>Display mode:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1470,7 +1470,7 @@
 					<!-- Video mode -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32001]:</label>
+						<label>Video mode:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1485,7 +1485,7 @@
 					<!-- Pixel format -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32023]:</label>
+						<label>Pixel format:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1499,7 +1499,7 @@
 					<!-- Bit depth -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32004]:</label>
+						<label>Bit depth:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1514,7 +1514,7 @@
 					<!-- Aspect ratio -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32024]:</label>
+						<label>Aspect ratio</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1529,7 +1529,7 @@
 					<!-- Decoder -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32005]:</label>
+						<label>Decoder:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1544,7 +1544,7 @@
 					<!-- Codec -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32046]:</label>
+						<label>Codec:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1559,7 +1559,7 @@
 					<!-- Deinterlacing -->
 					<control type="label">
 						<top>230</top>
-						<label>$LOCALIZE[32031]:</label>
+						<label>Deinterlacing:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1574,14 +1574,14 @@
 					<!-- Bitrate -->
 					<control type="label">
 						<top>260</top>
-						<label>$LOCALIZE[32047]:</label>
+						<label>Bitrate:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<control type="label">
 						<left>210</left>
 						<top>260</top>
-						<label>$INFO[Player.Process(video.live.mibit.rate),, $LOCALIZE[32003]] $INFO[VideoPlayer.VideoMibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32003])[/COLOR]]</label>
+						<label>$INFO[Player.Process(video.live.mibit.rate),, $Bitrate] $INFO[VideoPlayer.VideoMibitRate,- [COLOR dialog_fg_70](Ø , $Bitrate)[/COLOR]]</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1602,7 +1602,7 @@
 					
 					<!-- More -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32007][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]More[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -1612,7 +1612,7 @@
 					<!-- VS10 engine -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32006]:</label>
+						<label>VS10 engine:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1626,7 +1626,7 @@
 					<!-- VS10 status -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32048]:</label>
+						<label>VS10 status:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1641,7 +1641,7 @@
 					<!-- EOTF & Gamut -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32070]:</label>
+						<label>EOTF & Gamut:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1656,7 +1656,7 @@
 					<!-- Color space -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32002]:</label>
+						<label>Color space:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1671,7 +1671,7 @@
 					<control type="label">
 						<left>210</left>
 						<top>110</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.IsEmpty(Player.Process(video.hdr.colour.primaries))</visible>
@@ -1680,7 +1680,7 @@
 					<!-- Media source -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32027]:</label>
+						<label>Color space:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1695,7 +1695,7 @@
 					<!-- Playback time -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32013]:</label>
+						<label>Playback time:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1712,7 +1712,7 @@
 					<control type="label">
 						<left>210</left>
 						<top>170</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.IsEmpty(Player.Duration) | PVR.IsPlayingTV</visible>
@@ -1735,7 +1735,7 @@
 					
 					<!-- HDR Static Metadata -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32039][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]HDR Static Metadata[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>35</left>
 						<font>font_tiny</font>
@@ -1745,7 +1745,7 @@
 					<!-- HDR10 MDL -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32025]:</label>
+						<label>HDR10 MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1762,7 +1762,7 @@
 					<control type="label">
 						<left>400</left>
 						<top>20</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1770,7 +1770,7 @@
 					<!-- HDR10 MaxCLL/FALL -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32026]:</label>
+						<label>HDR10 MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1787,7 +1787,7 @@
 					<control type="label">
 						<left>400</left>
 						<top>50</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1807,7 +1807,7 @@
 					
 					<!-- System -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32055][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]System[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>35</left>
 						<font>font_tiny</font>
@@ -1817,7 +1817,7 @@
 					<!-- Memory usage -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32034]:</label>
+						<label>Memory usage:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1832,7 +1832,7 @@
 					<!-- Processor -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32014]:</label>
+						<label>Processor:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1847,7 +1847,7 @@
 					<!-- AML FPS -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32036]:</label>
+						<label>AML FPS:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1876,7 +1876,7 @@
 					<!-- System -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32055]:</label>
+						<label>System:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1891,7 +1891,7 @@
 					<!-- Player cache -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32032]:</label>
+						<label>Player cache:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1919,7 +1919,7 @@
 					<!-- Video queue -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32008]:</label>
+						<label>Video queue:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1947,7 +1947,7 @@
 					<!-- Video queue data -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32009]:</label>
+						<label>Video queue data:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -1975,7 +1975,7 @@
 					<!-- Audio queue -->
 					<control type="label">
 						<top>230</top>
-						<label>$LOCALIZE[32010]:</label>
+						<label>Audio queue:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2003,7 +2003,7 @@
 					<!-- Audio queue data -->
 					<control type="label">
 						<top>260</top>
-						<label>$LOCALIZE[32011]:</label>
+						<label>Audio queue data:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2044,7 +2044,7 @@
 					
 					<!-- Audio -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32056][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]Audio[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -2054,7 +2054,7 @@
 					<!-- Codec -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32046]:</label>
+						<label>Codec:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2068,7 +2068,7 @@
 					<!-- Bit depth -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32069]:</label>
+						<label>Bit depth:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2083,7 +2083,7 @@
 					<!-- Sample rate -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32051]:</label>
+						<label>Sample rate:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2098,14 +2098,14 @@
 					<!-- Bitrate -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32047]:</label>
+						<label>Bitrate:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<control type="label">
 						<left>240</left>
 						<top>110</top>
-						<label>$INFO[Player.Process(audio.live.kibit.rate),, $LOCALIZE[32012]] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32012])[/COLOR]]</label>
+						<label>$INFO[Player.Process(audio.live.kibit.rate),, Bitrate] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , Bitrate)[/COLOR]]</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2113,7 +2113,7 @@
 					<!-- Audio language -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32052]:</label>
+						<label>Audio language:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2143,7 +2143,7 @@
 					<control type="label">
 						<left>240</left>
 						<top>140</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.IsEmpty(VideoPlayer.AudioLanguage)</visible>
@@ -2152,7 +2152,7 @@
 					<!-- Subtitle language -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32053]:</label>
+						<label>Subtitle language:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2171,7 +2171,7 @@
 					<control type="label">
 						<left>240</left>
 						<top>170</top>
-						<label>$LOCALIZE[1223]</label>
+						<label>Disabled</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>VideoPlayer.HasSubtitles + !VideoPlayer.SubtitlesEnabled</visible>
@@ -2180,7 +2180,7 @@
 					<control type="label">
 						<left>240</left>
 						<top>170</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>!VideoPlayer.HasSubtitles</visible>
@@ -2202,7 +2202,7 @@
 					
 					<!-- DV Configuration -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32037][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]DV Configuration[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>37</left>
 						<font>font_tiny</font>
@@ -2212,7 +2212,7 @@
 					<!-- Metadata -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32015]:</label>
+						<label>Metadata:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2227,7 +2227,7 @@
 					<control type="label">
 						<left>340</left>
 						<top>20</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>!String.Contains(Player.Process(video.dovi.meta.version),CM)</visible>
@@ -2236,7 +2236,7 @@
 					<!-- Version -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32068]:</label>
+						<label>Version:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2251,7 +2251,7 @@
 					<!-- Profile -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32016]:</label>
+						<label>Profile:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2266,7 +2266,7 @@
 					<!-- Level -->
 					<control type="label">
 						<top>110</top>
-						<label>$LOCALIZE[32017]:</label>
+						<label>Level:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2282,7 +2282,7 @@
 					<control type="label">
 						<left>340</left>
 						<top>110</top>
-						<label>$LOCALIZE[32033]</label>
+						<label>N/A</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>String.Contains(Player.Process(video.dovi.level),0)</visible>
@@ -2291,7 +2291,7 @@
 					<!-- RPU -->
 					<control type="label">
 						<top>140</top>
-						<label>$LOCALIZE[32018]:</label>
+						<label>RPU:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2306,7 +2306,7 @@
 					<!-- Base Layer -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32019]:</label>
+						<label>Base Layer:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2321,7 +2321,7 @@
 					<!-- Enhancement Layer -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32020]:</label>
+						<label>Enhancement Layer:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2345,7 +2345,7 @@
 					<!-- Enhancement Layer Type -->
 					<control type="label">
 						<top>230</top>
-						<label>$LOCALIZE[32021]:</label>
+						<label>Enhancement Layer Type:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2392,7 +2392,7 @@
 					
 					<!-- DV Levels Metadata -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32038][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]DV Levels Metadata[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>40</left>
 						<font>font_tiny</font>
@@ -2402,7 +2402,7 @@
 					<!-- HDR10 MDL -->
 					<control type="label">
 						<top>20</top>
-						<label>$LOCALIZE[32025]:</label>
+						<label>HDR10 MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2419,7 +2419,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>20</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2427,7 +2427,7 @@
 					<!-- HDR10 MaxCLL/FALL -->
 					<control type="label">
 						<top>50</top>
-						<label>$LOCALIZE[32026]:</label>
+						<label>HDR10 MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2444,7 +2444,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>50</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2452,7 +2452,7 @@
 					<!-- RPU MDL -->
 					<control type="label">
 						<top>95</top>
-						<label>$LOCALIZE[32041]:</label>
+						<label>RPU MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2469,7 +2469,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>95</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2477,7 +2477,7 @@
 					<!-- RPU MaxCLL/FALL -->
 					<control type="label">
 						<top>125</top>
-						<label>$LOCALIZE[32042]:</label>
+						<label>RPU MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2494,7 +2494,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>125</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2502,7 +2502,7 @@
 					<!-- FLL MIN / MAX / Ø -->
 					<control type="label">
 						<top>170</top>
-						<label>$LOCALIZE[32043]:</label>
+						<label>FLL MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2519,7 +2519,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>170</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2527,7 +2527,7 @@
 					<!-- PQ  MIN / MAX / Ø -->
 					<control type="label">
 						<top>200</top>
-						<label>$LOCALIZE[32044]:</label>
+						<label>PQ  MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2544,7 +2544,7 @@
 					<control type="label">
 						<left>478</left>
 						<top>200</top>
-						<label>$LOCALIZE[32045]</label>
+						<label> 12-bit</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2567,7 +2567,7 @@
 					
 					<!-- DV Levels Metadata -->
 					<control type="label">
-						<label>[B][UPPERCASE]$LOCALIZE[32038][/UPPERCASE][/B]</label>
+						<label>[B][UPPERCASE]DV Levels Metadata[/UPPERCASE][/B]</label>
 						<top>-25</top>
 						<left>40</left>
 						<font>font_tiny</font>
@@ -2577,7 +2577,7 @@
 					<!-- HDR10 MDL -->
 					<control type="label">
 						<top>19</top>
-						<label>$LOCALIZE[32025]:</label>
+						<label>HDR10 MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2594,7 +2594,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>19</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2602,7 +2602,7 @@
 					<!-- HDR10 MaxCLL/FALL -->
 					<control type="label">
 						<top>46</top>
-						<label>$LOCALIZE[32026]:</label>
+						<label>HDR10 MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2619,7 +2619,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>46</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2627,7 +2627,7 @@
 					<!-- RPU MDL -->
 					<control type="label">
 						<top>80</top>
-						<label>$LOCALIZE[32041]:</label>
+						<label>RPU MDL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2644,7 +2644,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>80</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2652,7 +2652,7 @@
 					<!-- RPU MaxCLL/FALL -->
 					<control type="label">
 						<top>107</top>
-						<label>$LOCALIZE[32042]:</label>
+						<label>RPU MaxCLL/FALL:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2669,7 +2669,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>107</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2677,7 +2677,7 @@
 					<!-- FLL MIN / MAX / Ø -->
 					<control type="label">
 						<top>142</top>
-						<label>$LOCALIZE[32043]:</label>
+						<label>FLL MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2694,7 +2694,7 @@
 					<control type="label">
 						<left>480</left>
 						<top>142</top>
-						<label>$LOCALIZE[32040]</label>
+						<label>cd/m²</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2702,7 +2702,7 @@
 					<!-- PQ  MIN / MAX / Ø -->
 					<control type="label">
 						<top>169</top>
-						<label>$LOCALIZE[32044]:</label>
+						<label>PQ  MIN / MAX / Ø:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2719,7 +2719,7 @@
 					<control type="label">
 						<left>478</left>
 						<top>169</top>
-						<label>$LOCALIZE[32045]</label>
+						<label> 12-bit</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
@@ -2727,7 +2727,7 @@
 					<!-- L5 Active Offsets -->
 					<control type="label">
 						<top>201</top>
-						<label>$LOCALIZE[32067]:</label>
+						<label>L5 Active Offsets:</label>
 						<font>font_tiny</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
