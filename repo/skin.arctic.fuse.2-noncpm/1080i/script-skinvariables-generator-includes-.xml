@@ -98,7 +98,7 @@
                 <include content="Widget_Row">
                     <param name="id">100603</param>
                     <param name="groupid">100703</param>
-                    <param name="label">اخر اصدرات</param>
+                    <param name="label">اصدرات حديثة</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
@@ -841,7 +841,7 @@
                 <include content="Widget_Row">
                     <param name="id">102602</param>
                     <param name="groupid">102702</param>
-                    <param name="label">افضل المسلسلات</param>
+                    <param name="label">Abukareem  افلام</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
@@ -863,7 +863,7 @@
                     <include content="Widget_NoResults">
                         <param name="id">102602</param>
                     </include>
-                    <content sortby="random" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=Korean%20Thriller&amp;list_slug=korean-thriller&amp;owner=true&amp;plugin_category=Korean%20Thriller&amp;user_slug=streetsecs&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;list_slug=abukareem-c3410a1c-62e2-4230-bd90-078f7f6e1ba9&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(102602) | System.IdleTime(3)]</param>
                     </include>
@@ -872,6 +872,84 @@
                     </include>
                     <include content="Action_View_Movement_OnRight">
                         <param name="id">102602</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-772a73c0,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,كوري,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">102603</param>
+                    <param name="groupid">102703</param>
+                    <param name="label">افضل المسلسلات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">102803</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">102603</param>
+                    </include>
+                    <content sortby="random" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=Korean%20Thriller&amp;list_slug=korean-thriller&amp;owner=true&amp;plugin_category=Korean%20Thriller&amp;user_slug=streetsecs&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102603) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102603</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102603</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-772a73c0,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,كوري,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">102604</param>
+                    <param name="groupid">102704</param>
+                    <param name="label">Abukareem مسلسلات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">102804</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">102604</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;list_slug=abukareem&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102604) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102604</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102604</param>
                     </include>
                     <onfocus>SetProperty(SideMenu.CurrentGUID,guid-772a73c0,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentName,كوري,Home)</onfocus>
@@ -898,7 +976,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">103801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">103601</param>
@@ -938,7 +1016,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104601</param>
@@ -977,7 +1055,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104802</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104602</param>
@@ -1016,7 +1094,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104803</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(28).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(30).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104603</param>
@@ -1055,7 +1133,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">104804</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(29).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(30).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(31).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">104604</param>
@@ -1107,14 +1185,14 @@
             <visible>!Control.IsVisible(100602)</visible>
         </item>
         <item>
-            <label>اخر اصدرات</label>
+            <label>اصدرات حديثة</label>
             <property name="id">100603</property>
             <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(100603)</visible>
         </item>
         <item>
-            <label>اخر اصدرات</label>
+            <label>اصدرات حديثة</label>
             <property name="id">100603</property>
             <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(100603)</visible>
@@ -1356,17 +1434,43 @@
             <visible>!Control.IsVisible(102601)</visible>
         </item>
         <item>
-            <label>افضل المسلسلات</label>
+            <label>Abukareem  افلام</label>
             <property name="id">102602</property>
             <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(102602)</visible>
         </item>
         <item>
-            <label>افضل المسلسلات</label>
+            <label>Abukareem  افلام</label>
             <property name="id">102602</property>
             <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(102602)</visible>
+        </item>
+        <item>
+            <label>افضل المسلسلات</label>
+            <property name="id">102603</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(102603)</visible>
+        </item>
+        <item>
+            <label>افضل المسلسلات</label>
+            <property name="id">102603</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(102603)</visible>
+        </item>
+        <item>
+            <label>Abukareem مسلسلات</label>
+            <property name="id">102604</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(102604)</visible>
+        </item>
+        <item>
+            <label>Abukareem مسلسلات</label>
+            <property name="id">102604</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(102604)</visible>
         </item>
         <!-- Sidemenu Widgets for sidemenu 3 بليكس -->
         <item>
@@ -1632,14 +1736,14 @@
                     <visible>True</visible>
                 </item>
                 <item>
-                    <label>اخر اصدرات</label>
+                    <label>اصدرات حديثة</label>
                     <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
                     <property name="path">plugin://plugin.video.themoviedb.helper/?list_name=Latest+Releases&amp;list_slug=latest-releases&amp;user_slug=giladg&amp;plugin_category=Latest+Releases&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=added&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
                     <property name="menu">sidemenu</property>
                     <property name="mode">widgets</property>
                     <property name="node">0</property>
                     <property name="item">$NUMBER[2]</property>
-                    <property name="guid">guid-282cc182</property>
+                    <property name="guid">guid-9bdd0f98</property>
                     <property name="target">videos</property>
                     <property name="fanart"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
@@ -2099,18 +2203,41 @@
                     <visible>True</visible>
                 </item>
                 <item>
+                    <label>Abukareem  افلام</label>
+                    <icon>image://special%3a%2f%2fskin%2fextras%2ficons%2fkdramaw.png/</icon>
+                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;list_slug=abukareem-c3410a1c-62e2-4230-bd90-078f7f6e1ba9&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+                    <property name="menu">sidemenu</property>
+                    <property name="mode">widgets</property>
+                    <property name="node">2</property>
+                    <property name="item">$NUMBER[1]</property>
+                    <property name="guid">guid-8a30383f</property>
+                    <property name="target">videos</property>
+                    <property name="fanart"/>
+                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+                    <property name="widget_id">$NUMBER[2602]</property>
+                    <property name="widget_style"/>
+                    <property name="widget_sortby"/>
+                    <property name="widget_sortorder"/>
+                    <property name="widget_limit"/>
+                    <property name="widget_path"/>
+                    <label2>$LOCALIZE[24000]</label2>
+                    <onclick>Dialog.Close(1170,true)</onclick>
+                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;list_slug=abukareem-c3410a1c-62e2-4230-bd90-078f7f6e1ba9&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</onclick>
+                    <visible>True</visible>
+                </item>
+                <item>
                     <label>افضل المسلسلات</label>
                     <icon>image://special%3a%2f%2fskin%2fextras%2ficons%2fkdramaw.png/</icon>
                     <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=Korean%20Thriller&amp;list_slug=korean-thriller&amp;owner=true&amp;plugin_category=Korean%20Thriller&amp;user_slug=streetsecs&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
                     <property name="menu">sidemenu</property>
                     <property name="mode">widgets</property>
                     <property name="node">2</property>
-                    <property name="item">$NUMBER[1]</property>
+                    <property name="item">$NUMBER[2]</property>
                     <property name="guid">guid-52f62cba</property>
                     <property name="target">videos</property>
                     <property name="fanart"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[2602]</property>
+                    <property name="widget_id">$NUMBER[2603]</property>
                     <property name="widget_style"/>
                     <property name="widget_sortby">random</property>
                     <property name="widget_sortorder"/>
@@ -2119,6 +2246,29 @@
                     <label2>$LOCALIZE[24000]</label2>
                     <onclick>Dialog.Close(1170,true)</onclick>
                     <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=Korean%20Thriller&amp;list_slug=korean-thriller&amp;owner=true&amp;plugin_category=Korean%20Thriller&amp;user_slug=streetsecs&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</onclick>
+                    <visible>True</visible>
+                </item>
+                <item>
+                    <label>Abukareem مسلسلات</label>
+                    <icon>image://special%3a%2f%2fskin%2fextras%2ficons%2fkdramaw.png/</icon>
+                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;list_slug=abukareem&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+                    <property name="menu">sidemenu</property>
+                    <property name="mode">widgets</property>
+                    <property name="node">2</property>
+                    <property name="item">$NUMBER[3]</property>
+                    <property name="guid">guid-e6099547</property>
+                    <property name="target">videos</property>
+                    <property name="fanart"/>
+                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+                    <property name="widget_id">$NUMBER[2604]</property>
+                    <property name="widget_style"/>
+                    <property name="widget_sortby"/>
+                    <property name="widget_sortorder"/>
+                    <property name="widget_limit"/>
+                    <property name="widget_path"/>
+                    <label2>$LOCALIZE[24000]</label2>
+                    <onclick>Dialog.Close(1170,true)</onclick>
+                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;list_slug=abukareem&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</onclick>
                     <visible>True</visible>
                 </item>
             </content>
@@ -2396,7 +2546,7 @@
                 <include content="Widget_Row">
                     <param name="id">603</param>
                     <param name="groupid">703</param>
-                    <param name="label">اخر اصدرات</param>
+                    <param name="label">اصدرات حديثة</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
@@ -3082,7 +3232,7 @@
                 <include content="Widget_Row">
                     <param name="id">2602</param>
                     <param name="groupid">2702</param>
-                    <param name="label">افضل المسلسلات</param>
+                    <param name="label">Abukareem  افلام</param>
                     <param name="usewidgetlabel">False</param>
                     <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
@@ -3104,7 +3254,7 @@
                     <include content="Widget_NoResults">
                         <param name="id">2602</param>
                     </include>
-                    <content sortby="random" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=Korean%20Thriller&amp;list_slug=korean-thriller&amp;owner=true&amp;plugin_category=Korean%20Thriller&amp;user_slug=streetsecs&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;list_slug=abukareem-c3410a1c-62e2-4230-bd90-078f7f6e1ba9&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d8%a3%d9%81%d9%84%d8%a7%d9%85%20%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(2602) | System.IdleTime(3)]</param>
                     </include>
@@ -3113,6 +3263,78 @@
                     </include>
                     <include content="Action_View_Movement_OnRight">
                         <param name="id">2602</param>
+                    </include>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">2603</param>
+                    <param name="groupid">2703</param>
+                    <param name="label">افضل المسلسلات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">2803</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">2603</param>
+                    </include>
+                    <content sortby="random" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=Korean%20Thriller&amp;list_slug=korean-thriller&amp;owner=true&amp;plugin_category=Korean%20Thriller&amp;user_slug=streetsecs&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(2603) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">2603</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">2603</param>
+                    </include>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">2604</param>
+                    <param name="groupid">2704</param>
+                    <param name="label">Abukareem مسلسلات</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">2804</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">2604</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;list_name=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;list_slug=abukareem&amp;owner=true&amp;plugin_category=%d9%83%d9%88%d8%b1%d9%8a%20%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa%20AbuKareem&amp;user_slug=taiseer999&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(2604) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">2604</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">2604</param>
                     </include>
                 </include>
                 <!-- Standard Widgets for Category sidemenu 3 بليكس -->
@@ -3136,7 +3358,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">3801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">3601</param>
@@ -3173,7 +3395,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(24).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4601</param>
@@ -3209,7 +3431,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4802</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(25).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4602</param>
@@ -3245,7 +3467,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4803</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(26).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(28).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(30).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4603</param>
@@ -3281,7 +3503,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">4804</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(27).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(28).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(29).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(29).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(30).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(31).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">4604</param>
@@ -3542,14 +3764,14 @@
             <visible>!Control.IsVisible(602)</visible>
         </item>
         <item>
-            <label>اخر اصدرات</label>
+            <label>اصدرات حديثة</label>
             <property name="id">603</property>
             <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(603)</visible>
         </item>
         <item>
-            <label>اخر اصدرات</label>
+            <label>اصدرات حديثة</label>
             <property name="id">603</property>
             <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(603)</visible>
@@ -3791,17 +4013,43 @@
             <visible>!Control.IsVisible(2601)</visible>
         </item>
         <item>
-            <label>افضل المسلسلات</label>
+            <label>Abukareem  افلام</label>
             <property name="id">2602</property>
             <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(2602)</visible>
         </item>
         <item>
-            <label>افضل المسلسلات</label>
+            <label>Abukareem  افلام</label>
             <property name="id">2602</property>
             <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(2602)</visible>
+        </item>
+        <item>
+            <label>افضل المسلسلات</label>
+            <property name="id">2603</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(2603)</visible>
+        </item>
+        <item>
+            <label>افضل المسلسلات</label>
+            <property name="id">2603</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(2603)</visible>
+        </item>
+        <item>
+            <label>Abukareem مسلسلات</label>
+            <property name="id">2604</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(2604)</visible>
+        </item>
+        <item>
+            <label>Abukareem مسلسلات</label>
+            <property name="id">2604</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(2604)</visible>
         </item>
         <!-- Standard Widgets for Category sidemenu 3 بليكس -->
         <item>
@@ -6518,6 +6766,8 @@
     <variable name="skinvariables-sidemenu-itemfocus-102">
         <value condition="Control.IsVisible(102601)">102601</value>
         <value condition="Control.IsVisible(102602)">102602</value>
+        <value condition="Control.IsVisible(102603)">102603</value>
+        <value condition="Control.IsVisible(102604)">102604</value>
         <value>400</value>
     </variable>
     <!-- Variables for Side Menu بليكس focus -->

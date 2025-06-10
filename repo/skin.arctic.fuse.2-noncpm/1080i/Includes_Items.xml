@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -15,6 +16,8 @@
         <value condition="Container.Content(tvshows) + String.IsEqual(Container.Property(param.info),episode_groups)">episode-groups-tvshows</value>
         <value condition="Container.Content(seasons) + String.IsEqual(Container.Property(param.info),episode_group_seasons)">episode-groups-seasons</value>
         <value condition="Container.Content() + String.IsEqual(Container.Property(param.info),watch_providers)">none-providers</value>
+        <value condition="Container.Content() + String.IsEqual(Container.Property(param.info),dir_calendar_library)">none-calendar</value>
+        <value condition="Container.Content() + String.IsEqual(Container.Property(param.info),dir_calendar_trakt)">none-calendar</value>
         <value condition="!String.IsEmpty(Container.Content)">$INFO[Container.Content]</value>
         <value condition="Window.IsVisible(MyGames.xml)">none-games</value>
         <value condition="Window.IsVisible(MyPVRRecordings.xml)">none-recordings</value>
@@ -1130,13 +1133,13 @@
     <include name="Items_DialogAddonInfo">
         <definition>
             <include content="Settings_ButtonImage" description="Enable">
-                 <param name="id">9107</param>
+                <param name="id">9107</param>
                 <param name="groupid">9307</param>
                 <param name="icon">$VAR[Image_AddonInfo_Enable]</param>
                 <visible>Control.IsEnabled(7)</visible>
-            </include>
-            <label>$VAR[Label_AddonInfo_Enable]</label>
+                <label>$VAR[Label_AddonInfo_Enable]</label>
                 <onclick>SendClick(7)</onclick>
+            </include>
             <include content="Settings_Button" description="Auto-Update">
                 <param name="id">13</param>
                 <param name="groupid">9313</param>

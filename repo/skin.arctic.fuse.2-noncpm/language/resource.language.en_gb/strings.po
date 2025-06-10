@@ -2995,7 +2995,7 @@ msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
 msgctxt "#31654"
-msgid "VS10 Mode"
+msgid "VS10"
 msgstr ""
 
 #: /xml/DialogPlayerProcessInfo.xml
@@ -3118,4 +3118,8 @@ msgstr ""
 
 msgctxt "#32076"
 msgid "Audio codec"
+msgstr ""
+
+msgctxt "#32077"
+msgid "Duration of the codec logos when video starts"
 msgstr ""
