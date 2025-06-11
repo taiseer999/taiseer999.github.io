@@ -805,7 +805,7 @@
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">019</param>
             <param name="control">button</param>
-            <label>$LOCALIZE[32071]</label>
+            <label>Duration of the codec logos when video starts</label>
             <label2>$VAR[OSDCodecLogosStartupTimerLabel]</label2>
             <onclick condition="!Skin.HasSetting(osd.useOneSecondCodecLogos) + !Skin.HasSetting(osd.useTwoSecondsCodecLogos) + !Skin.HasSetting(osd.useThreeSecondsCodecLogos) + !Skin.HasSetting(osd.useFourSecondsCodecLogos) + !Skin.HasSetting(osd.useFiveSecondsCodecLogos) + !Skin.HasSetting(osd.useSixSecondsCodecLogos) + !Skin.HasSetting(osd.useSevenSecondsCodecLogos) + !Skin.HasSetting(osd.useEightSecondsCodecLogos) + !Skin.HasSetting(osd.useNineSecondsCodecLogos) + !Skin.HasSetting(osd.useTenSecondsCodecLogos) + !Skin.HasSetting(osd.useElevenSecondsCodecLogos) + !Skin.HasSetting(osd.useTwelveSecondsCodecLogos) + !Skin.HasSetting(osd.useThirteenSecondsCodecLogos) + !Skin.HasSetting(osd.useFourteenSecondsCodecLogos) + !Skin.HasSetting(osd.useFifteenSecondsCodecLogos)">Skin.ToggleSetting(osd.useSixSecondsCodecLogos)</onclick>
             <onclick condition="Skin.HasSetting(osd.useFiveSecondsCodecLogos)">Skin.ToggleSetting(osd.useSixSecondsCodecLogos)</onclick>
