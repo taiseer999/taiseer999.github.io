@@ -895,7 +895,7 @@
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">024</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[32074]</label>
+            <label>Transparent PPI</label>
             <onclick>Skin.ToggleSetting(Classic.PPI)</onclick>
             <selected>Skin.HasSetting(Classic.PPI)</selected>
         </include>
