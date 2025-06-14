@@ -1,4 +1,4 @@
-<addon id="skin.arctic.fuse.2.ver2" name="Arctic Fuse 2 - ver2" provider-name="jurialmunkey . AK" version="2.10.7">
+<addon id="skin.arctic.fuse.2.ver2" name="Arctic Fuse 2 - ver2" provider-name="jurialmunkey . AK" version="2.10.7.1">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
