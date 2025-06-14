@@ -2817,6 +2817,11 @@ msgctxt "#31587"
 msgid "Flip"
 msgstr ""
 
+#: /1080i/Includes_Info.xml
+msgctxt "#31588"Add commentMore actions
+msgid "Updating ratings"
+msgstr ""
+
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the video codec name
 msgctxt "#31600"

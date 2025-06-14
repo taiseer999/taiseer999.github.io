@@ -2936,7 +2936,10 @@ msgstr "اظهار الصورة"
 msgctxt "#31587"
 msgid "Flip"
 msgstr "اقلب"
-
+#: /1080i/Includes_Info.xml
+msgctxt "#31588"
+msgid "Updating ratings"
+msgstr "تحديث التقيم"
 
 #: /xml/DialogPlayerProcessInfo.xml
 #. Label to show the video codec name
