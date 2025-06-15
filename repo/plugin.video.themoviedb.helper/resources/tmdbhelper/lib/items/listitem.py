@@ -221,7 +221,7 @@ class _ListItem(object):
 
         if self.infoproperties.get('is_sortable'):
             self.params['parent_info'] = self.params['info']
-            self.params['info'] = 'trakt_sortby'  # Reroute sortable lists to display options in skinshortcuts
+            self.params['info'] = 'mdblist_sortby' if self.infoproperties['is_sortable'] == 'mdblist' else 'trakt_sortby'  # Reroute sortable lists to display options in skinshortcuts
 
         if self.params.get('info') == 'search' and not self.params.get('query'):
             self.params['reload'] = 'forced'  # Add param to empty search to ensure reloads
@@ -430,10 +430,16 @@ class _Video(_ListItem):
         path = f'RunPlugin({self.url}&ignore_default=true)'
         return (head, path)
 
+    def get_context_menu_choosedefault_params(self):
+        return [
+            ('set_chosenplayer', self.title),
+            ('tmdb_type', self.tmdb_type),
+            ('tmdb_id', self.tmdb_id)
+        ]
+
     @property
     def context_menu_choosedefault_paramstring(self):
-        path = f'set_chosenplayer={self.title},tmdb_type={self.tmdb_type},tmdb_id={self.tmdb_id}'
-        return path
+        return ','.join([f'{k}={v}' for k, v in self.get_context_menu_choosedefault_params()])
 
     @property
     def context_menu_choosedefault(self):
@@ -528,6 +534,10 @@ class _Tvshow(_Video):
         self.params['info'] = global_setting['flatseasons_info_param']
         return self.params
 
+    def finalise_context_menu(self):
+        self.context_menu.append(self.context_menu_choosedefault)
+        return super().finalise_context_menu()
+
 
 class _Season(_Tvshow):
 
@@ -554,11 +564,12 @@ class _Season(_Tvshow):
     def season(self):
         return self.infolabels.get('season')
 
-    @property
-    def context_menu_choosedefault_paramstring(self):
-        path = f'set_chosenplayer={self.title},tmdb_type={self.tmdb_type},tmdb_id={self.tmdb_id}'
-        path = f'{path},season={self.season}'
-        return path
+    def get_context_menu_choosedefault_params(self):
+        params = super().get_context_menu_choosedefault_params()
+        params.extend([
+            ('season', self.season)
+        ])
+        return params
 
     def finalise_params_details(self):
         self.params['info'] = 'episodes'
@@ -634,11 +645,13 @@ class _Episode(_Video):
         self.label = super().finalise_label()
         return self.label
 
-    @property
-    def context_menu_choosedefault_paramstring(self):
-        path = f'set_chosenplayer={self.title},tmdb_type={self.tmdb_type},tmdb_id={self.tmdb_id}'
-        path = f'{path},season={self.season},episode={self.episode}'
-        return path
+    def get_context_menu_choosedefault_params(self):
+        params = super().get_context_menu_choosedefault_params()
+        params.extend([
+            ('season', self.season),
+            ('episode', self.episode)
+        ])
+        return params
 
         # if (self.parent_params.get('info') == 'library_nextaired'
         #         and global_setting['nextaired_linklibrary']
