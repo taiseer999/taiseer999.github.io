@@ -264,7 +264,7 @@
    <!-- Title fonts -->
         <font>
             <name>font_info_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>98</size>
         </font>
         <font>
@@ -274,7 +274,7 @@
         </font>
         <font>
             <name>font_info_black_doublerow</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
@@ -289,75 +289,75 @@
         <!-- Black Fonts -->
         <font>
             <name>font_huge_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>49</size>
         </font>
         <font>
             <name>font_head_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>42</size>
         </font>
         <font>
             <name>font_midi_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>37</size>
         </font>
         <font>
             <name>font_main_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>32</size>
         </font>
         <font>
             <name>font_mini_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>28</size>
         </font>
         <font>
             <name>font_tiny_black</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>24</size>
         </font>
         <font>
             <name>font_hint_black</name>
             <style>uppercase</style>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>18</size>
         </font>
 
         <!-- Bold Fonts -->
         <font>
             <name>font_huge_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>49</size>
         </font>
         <font>
             <name>font_head_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>42</size>
         </font>
         <font>
             <name>font_midi_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>37</size>
         </font>
         <font>
             <name>font_main_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>32</size>
         </font>
         <font>
             <name>font_mini_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>28</size>
         </font>
         <font>
             <name>font_tiny_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>24</size>
         </font>
         <font>
             <name>font_hint_bold</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>18</size>
         </font>
 
@@ -431,17 +431,17 @@
         <!-- Music visualisation scrolling text -->
         <font>
             <name>font_musicvis_biggest</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>230</size>
         </font>
         <font>
             <name>font_musicvis_bigger</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>130</size>
         </font>
         <font>
             <name>font_musicvis_big</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>80</size>
         </font>
 
@@ -467,12 +467,12 @@
         <!-- Required for system -->
         <font>
             <name>font13</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>23</size>
         </font>
         <font>
             <name>Clock</name>
-            <filename>GeezaPro-Bold</filename>
+            <filename>GeezaPro-Bold.ttf</filename>
             <size>130</size>
         </font>
 
@@ -502,12 +502,12 @@
         </font>
     </fontset>
   
-<fontset id="Hacan prometer" unicode="true">
+<fontset id="Hacen-Promoter -reg" unicode="true">
 
         <!-- Title fonts -->
           <font>
             <name>font_info_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <size>85</size>
         </font>
         <font>
@@ -517,13 +517,13 @@
         </font>
         <font>
             <name>font_info_black_doublerow</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_info_light_doublerow</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
@@ -532,44 +532,44 @@
         <!-- Black Fonts -->
         <font>
             <name>font_huge_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>49</size>
         </font>
         <font>
             <name>font_head_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>42</size>
         </font>
         <font>
             <name>font_midi_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>37</size>
         </font>
         <font>
             <name>font_main_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>32</size>
         </font>
         <font>
             <name>font_mini_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>28</size>
         </font>
         <font>
             <name>font_tiny_black</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>24</size>
         </font>
         <font>
             <name>font_hint_black</name>
             <style>uppercase</style>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>18</size>
         </font>
@@ -577,43 +577,43 @@
         <!-- Bold Fonts -->
         <font>
             <name>font_huge_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>49</size>
         </font>
         <font>
             <name>font_head_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>42</size>
         </font>
         <font>
             <name>font_midi_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>37</size>
         </font>
         <font>
             <name>font_main_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>32</size>
         </font>
         <font>
             <name>font_mini_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>28</size>
         </font>
         <font>
             <name>font_tiny_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>24</size>
         </font>
         <font>
             <name>font_hint_bold</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>18</size>
         </font>
@@ -724,19 +724,19 @@
         <!-- Music visualisation scrolling text -->
         <font>
             <name>font_musicvis_biggest</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>230</size>
         </font>
         <font>
             <name>font_musicvis_bigger</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>130</size>
         </font>
         <font>
             <name>font_musicvis_big</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>80</size>
         </font>
@@ -771,13 +771,13 @@
         <!-- Required for system -->
         <font>
             <name>font13</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>23</size>
         </font>
         <font>
             <name>Clock</name>
-            <filename>Hacan prometer.ttf</filename>
+            <filename>Hacen-Promoter -reg.ttf</filename>
             <aspect>0.89</aspect>
             <size>130</size>
         </font>
