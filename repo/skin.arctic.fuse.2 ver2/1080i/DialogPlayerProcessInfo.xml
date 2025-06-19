@@ -40,7 +40,7 @@
 			<!-- Long background -->
 			<control type="group">
 				<visible>String.IsEqual(Player.Process(video.dovi.has.config),1) | String.Contains(Player.Process(video.hdr.type),hdr)</visible>
-				<top>285</top>
+				<top>290</top>
 				<width>1900</width>
 				<height>780</height>
 				<left>10</left>
