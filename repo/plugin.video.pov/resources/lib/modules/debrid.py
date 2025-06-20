@@ -100,7 +100,7 @@ def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_lin
 	except: url = None
 	return url
 
-class CacheCheck:
+class DebridCheck:
 	hash_list = []
 	cached_hashes = []
 
@@ -111,8 +111,9 @@ class CacheCheck:
 
 	def __init__(self, *args):
 		self.completed = False
-		self.debrid, self.function = args[1], args[3]
 		self.cached_list, self.hashes_to_cache = [], []
+		self.name, self.debrid, self.function = args[0], args[1], args[3]
+		self.thread = Thread(target=self.cache_check, name=args[0])
 
 	def cache_write(self):
 		DebridCache().set_many(self.hashes_to_cache, self.debrid)
@@ -122,10 +123,8 @@ class CacheCheck:
 			self.cached_list = [
 				i[0] for i in self.cached_hashes if i[1] == self.debrid and i[2] == 'True'
 			]
-			unchecked_hashes = [
-				i for i in self.hash_list
-				if not any([h for h in self.cached_hashes if h[0] == i and h[1] == self.debrid])
-			]
+			unchecked_filter = {h[0] for h in self.cached_hashes if h[1] == self.debrid}
+			unchecked_hashes = [i for i in self.hash_list if not i in unchecked_filter]
 			if self.debrid in ('rd', 'ad') or not unchecked_hashes: return
 			checked_hashes = self.function().check_cache(unchecked_hashes)
 			if not checked_hashes: return

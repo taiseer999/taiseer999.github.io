@@ -41,7 +41,7 @@ class Indexer(Debrid):
 			return kodi_utils.show_text('EasyDebrid'.upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
 
-	def get_auth(self):
+	def set_auth(self):
 		api_key = kodi_utils.dialog.input('EasyDebrid API Key:')
 		if not api_key: return
 		from apis.easydebrid_api import base_url, session, timeout

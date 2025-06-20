@@ -561,7 +561,6 @@ def batch_mark_episodes_as_watched_unwatched_kodi_library(action, show_info, epi
 					action_append(query)
 				else: pass
 			except: pass
-		progressDialogBG.update(100, ls(32577), ls(32788))
 		r = execute_JSON(json.dumps(action_list))
 		progressDialogBG.close()
 		return r

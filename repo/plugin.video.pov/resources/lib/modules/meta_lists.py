@@ -116,7 +116,7 @@ tvshow_genres = {
 	ls(32553): ['99', 'genre_documentary.png'],                                ls(32554): ['18', 'genre_drama.png'],
 	ls(32555): ['10751', 'genre_family.png'],                                  ls(32556): ['10762', 'genre_kids.png'],
 	ls(32557): ['9648', 'genre_mystery.png'],                                  ls(32568): ['10763', 'genre_news.png'],
-	ls(32569): ['10764', 'genre_reality.png'],                                 ls(33057): ['10765', 'genre_scifi.png'],
+	ls(32569): ['10764', 'genre_reality.png'],                                 ls(32573): ['10765', 'genre_scifi.png'],
 	ls(32570): ['10766', 'genre_soap.png'],                                    ls(32571): ['10767', 'genre_talk.png'],
 	ls(32572): ['10768', 'genre_war.png'],                                     ls(32567): ['37', 'genre_western.png']
 }

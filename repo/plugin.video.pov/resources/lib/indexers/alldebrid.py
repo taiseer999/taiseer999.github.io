@@ -94,7 +94,7 @@ def show_account_info():
 	except: kodi_utils.hide_busy_dialog()
 
 @source_warning
-def get_auth():
+def set_auth():
 	import urllib.parse
 	from apis.alldebrid_api import base_url, user_agent, session, timeout
 	session.cookies.clear()

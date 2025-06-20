@@ -5,7 +5,7 @@ import hashlib
 import unicodedata
 import _strptime  # fix bug in python import
 from queue import SimpleQueue
-from html.parser import HTMLParser
+from html import unescape
 from importlib import import_module
 from datetime import datetime, timedelta, date
 from modules.kodi_utils import local_string as ls, get_setting, logger
@@ -212,7 +212,7 @@ def regex_get_all(text, start_with, end_with):
 
 def replace_html_codes(txt):
 	txt = re.sub(r"(&#[0-9]+)([^;^0-9]+)", "\\1;\\2", txt)
-	txt = HTMLParser().unescape(txt)
+	txt = unescape(txt)
 	txt = txt.replace("&quot;", "\"")
 	txt = txt.replace("&amp;", "&")
 	return txt

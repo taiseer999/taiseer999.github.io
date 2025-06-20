@@ -404,10 +404,10 @@ class Extras(BaseDialog):
 			remaining_time = ((100 - int(self.percent_watched))/100) * self.duration_data
 			finish_time = current_time + timedelta(minutes=remaining_time)
 			finished = finish_time.strftime(_format)
-		return '%s: %s' % (ls(33062), finished)
+		return '%s: %s' % (ls(32791), finished)
 
 	def get_duration(self):
-		return ls(33058) % self.duration_data
+		return ls(32788) % self.duration_data
 
 	def get_progress(self):
 		try: resume_point, curr_time, resume_id = ws.detect_bookmark(ws.get_bookmarks(self.watched_indicators, 'movie'), self.tmdb_id)
@@ -453,7 +453,7 @@ class Extras(BaseDialog):
 		except: return ''
 		if info['episode_count'] >= episode:
 			next_episode = 'S%.2dE%.2d' % (season, episode)
-			return '%s: %s' % (ls(33041), next_episode)
+			return '%s: %s' % (ls(32999), next_episode)
 		else: return ''
 
 	def make_tvshow_browse_params(self):

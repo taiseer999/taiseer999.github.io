@@ -3,13 +3,14 @@ from threading import Thread
 from windows import create_window
 from caches.providers_cache import ExternalProvidersCache
 from modules import kodi_utils, source_utils
-from modules.debrid import debrid_list, CacheCheck
+from modules.debrid import debrid_list, DebridCheck
 from modules.utils import clean_file_name, TaskPool
 from modules.settings import display_sleep_time, date_offset
 # logger = kodi_utils.logger
 
-ls, sleep, monitor, get_property, set_property = kodi_utils.local_string, kodi_utils.sleep, kodi_utils.monitor, kodi_utils.get_property, kodi_utils.set_property
-notification, hide_busy_dialog, clear_property, get_setting = kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.clear_property, kodi_utils.get_setting
+ls, sleep, monitor, get_setting = kodi_utils.local_string, kodi_utils.sleep, kodi_utils.monitor, kodi_utils.get_setting
+get_property, set_property, clear_property = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property
+notification, hide_busy_dialog, progressDialogBG = kodi_utils.notification, kodi_utils.hide_busy_dialog, kodi_utils.progressDialogBG
 normalize, get_filename_match, get_file_info = source_utils.normalize, source_utils.get_filename_match, source_utils.get_file_info
 pack_display, format_line, total_format = '%s (%s)', '%s[CR]%s[CR]%s', '[COLOR %s][B]%s[/B][/COLOR]'
 int_format, ext_format = '[COLOR %s][B]Int: [/B][/COLOR]%s', '[COLOR %s][B]Ext: [/B][/COLOR]%s'
@@ -43,9 +44,13 @@ class source:
 		self.sources_total, self.resolutions = {'total': 0}, dict.fromkeys('4K 1080p 720p sd'.split(), 0)
 
 	def results(self, info):
-		Sources.hostDict = self.hostDict
-		Sources.sources, Sources.cached_sources = self.sources, self.cached_sources
+		if not self.background:
+			hide_busy_dialog()
+			if not self.progress_dialog and not self.load_action:
+				progressDialogBG.create('POV', 'POV loading...')
+			else: self._make_progress_dialog()
 		Sources.sources_total, Sources.resolutions = self.sources_total, self.resolutions
+		Sources.hostDict, Sources.sources, Sources.cached_sources = self.hostDict, self.sources, self.cached_sources
 		threads = []
 		for provider, module, *pack in self.source_dict:
 			if info['media_type'] == 'movie':
@@ -59,18 +64,43 @@ class source:
 			obj.thread = Thread(target=obj.get_source, args=args, name=name)
 			threads.append(obj)
 		self.wait(threads)
-		self.process_filters()
-		if not self.background and self.progress_dialog: self._kill_progress_dialog()
+		try:
+			self.cached_sources = self.process_duplicates(self.cached_sources)
+			self.sources = self.process_duplicates(self.sources)
+			torrent_sources = [i for i in self.sources if 'hash' in i]
+			result_hashes = list({i['hash'] for i in torrent_sources})
+			DebridCheck.set_cached_hashes(result_hashes)
+			threads = []
+			for item in self.debrid_torrents:
+				if not (args := next((i for i in debrid_list if i[0] == item), None)): continue
+				obj = DebridCheck(*args)
+				obj.thread.start()
+				threads.append(obj)
+			self.wait(threads, debrid_check=True)
+			for item in threads:
+				name, hashes = item.name, item.cached_list
+				if name in cached_debrids:
+					self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in self.cached_sources])
+				else:
+					self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes])
+				if self.display_uncached_torrents:
+					self.final_sources.extend([{**i, 'cache_provider': 'Uncached %s' % name, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
+			hoster_sources = [i for i in self.sources if not 'hash' in i]
+			result_hosters = list({i['source'].lower() for i in hoster_sources})
+			for item in self.debrid_hosters:
+				for k, v in item.items():
+					valid_hosters = [i for i in result_hosters if i in v]
+					self.final_sources.extend([{**i, 'debrid': k} for i in hoster_sources if i['source'] in valid_hosters])
+		except: notification(32574)
+		if not self.background:
+			if not self.progress_dialog and not self.load_action:
+				progressDialogBG.close()
+			else: self._kill_progress_dialog()
 		clear_property('fs_filterless_search')
 		return self.final_sources
 
 	def wait(self, threads, debrid_check=False):
 		if not self.background:
-			hide_busy_dialog()
-			if not self.progress_dialog and not self.load_action:
-				progressBG = kodi_utils.progressDialogBG
-				progressBG.create('POV', 'POV loading...')
-			else: self._make_progress_dialog()
 			string1, string2 = ls(32579) if debrid_check else ls(32676), ls(32677)
 			if self.internal_activated or self.internal_prescraped:
 				string3 = int_format % (self.int_dialog_highlight, '%s')
@@ -79,7 +109,7 @@ class source:
 			line1 = line2 = line3 = ''
 		len_threads = len(threads)
 		end_time = time.monotonic() + self.timeout
-		list(TaskPool.process([i.thread for i in threads]))
+		if not debrid_check: list(TaskPool.process([i.thread for i in threads]))
 		while not all((i.completed for i in threads)):
 			if time.monotonic() > end_time or monitor.abortRequested(): break
 			sleep(self.sleep_time)
@@ -104,46 +134,10 @@ class source:
 					else: line3 = string1 % ', '.join(alive_threads).upper()
 					progress = int((len_threads-len_alive_threads)/len_threads*100)
 					if self.progress_dialog: self.progress_dialog.update(format_line % (line1, line2, line3), progress)
-					else: progressBG.update(progress, line3)
+					else: progressDialogBG.update(progress, line3)
 					finish_early = debrid_check is False and self.finish_early and len(self.sources) > len_threads // 0.1
 					if finish_early: break
 				except: pass
-		if not self.background:
-			if not self.progress_dialog and not self.load_action:
-				progressBG.close()
-
-	def process_filters(self):
-		filter = []
-		try:
-			self.cached_sources = self.process_duplicates(self.cached_sources)
-			self.sources = self.process_duplicates(self.sources)
-			torrent_sources = [i for i in self.sources if 'hash' in i]
-			result_hashes = list({i['hash'] for i in torrent_sources})
-			CacheCheck.set_cached_hashes(result_hashes)
-			threads = []
-			for item in self.debrid_torrents:
-				if not (args := next((i for i in debrid_list if i[0] == item), None)): continue
-				obj = CacheCheck(*args)
-				obj.thread = Thread(target=obj.cache_check, name=item)
-				threads.append(obj)
-			self.wait(threads, debrid_check=True)
-			for item in threads:
-				item, hashes = item.thread.name, item.cached_list
-				if item in cached_debrids:
-					filter.extend([{**i, 'cache_provider': item, 'debrid': item} for i in self.cached_sources])
-				else:
-					filter.extend([{**i, 'cache_provider': item, 'debrid': item} for i in torrent_sources if i['hash'] in hashes])
-				if self.display_uncached_torrents: filter.extend(
-					[{**i, 'cache_provider': 'Uncached %s' % item, 'debrid': item} for i in torrent_sources if not i['hash'] in hashes]
-				)
-			hoster_sources = [i for i in self.sources if not 'hash' in i]
-			result_hosters = list({i['source'].lower() for i in hoster_sources})
-			for item in self.debrid_hosters:
-				for k, v in item.items():
-					valid_hosters = [i for i in result_hosters if i in v]
-					filter.extend([{**i, 'debrid': k} for i in hoster_sources if i['source'] in valid_hosters])
-		except: notification(32574)
-		self.final_sources = filter
 
 	def process_duplicates(self, _sources):
 		def _process():
@@ -222,8 +216,8 @@ class Sources:
 			self.get_source = self.get_episode_source
 			self.season_divider = int(next((x['episode_count'] for x in meta['season_data'] if int(x['season_number']) == int(meta['season'])), 1))
 			self.show_divider = int(meta['total_aired_eps'])
-			self.data = {'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'aliases': aliases, 'year': self.year,
-						'title': normalize(info['ep_name']), 'season': str(self.season), 'episode': str(self.episode)}
+			self.data = {'imdb': info['imdb_id'], 'title': normalize(info['ep_name']), 'aliases': aliases, 'year': self.year,
+						'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'season': str(self.season), 'episode': str(self.episode)}
 
 	def get_movie_source(self, provider, module):
 		_cache = ExternalProvidersCache()

@@ -3,6 +3,13 @@
 - Fen, Venom, Mr-Kodi.
 
 
+  [COLOR dodgerblue][B]Version 5.06[/B][/COLOR]
+- Fixed aiostreams results.
+- Removed bitsearch, torrentquest.
+- Fixed remove from MDBList error.
+- Fixed mediafusion cached results.
+- Too many.
+
   [COLOR dodgerblue][B]Version 5.04[/B][/COLOR]
 - Changed Real Debrid api url.
 - Fixed Add To for Discover keywords.

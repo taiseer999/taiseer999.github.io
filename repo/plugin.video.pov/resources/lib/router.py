@@ -1,3 +1,4 @@
+import sys
 from modules.kodi_utils import parse_qsl, logger, get_property, get_infolabel, external_browse
 
 def runmode(cls, params, mode):
@@ -114,11 +115,11 @@ class Router:
 				function = manual_function_import('indexers.tmdb', mode.split('.')[-1])
 				function(params)
 			elif mode == 'build_movie_list':
-				from indexers.movies import Movies
-				Movies(params).run()
+				from indexers.movies import Indexer
+				Indexer(params).run()
 			elif mode == 'build_tvshow_list':
-				from indexers.tvshows import TVShows
-				TVShows(params).run()
+				from indexers.tvshows import Indexer
+				Indexer(params).run()
 			elif mode == 'build_season_list':
 				from indexers.seasons import Seasons
 				Seasons(params).run()
@@ -126,20 +127,20 @@ class Router:
 				from indexers.seasons import Seasons
 				Seasons(params).run()
 			elif mode == 'build_in_progress_episode':
-				from indexers.episodes import Episodes
-				Episodes(params).run()
+				from indexers.episodes import Indexer
+				Indexer(params).run()
 			elif mode == 'build_next_episode':
-				from indexers.episodes import Episodes
-				Episodes(params).run()
+				from indexers.episodes import Indexer
+				Indexer(params).run()
 			elif mode == 'build_my_calendar':
-				from indexers.episodes import Episodes
-				Episodes(params).run()
+				from indexers.episodes import Indexer
+				Indexer(params).run()
 			elif mode == 'build_my_anime_calendar':
-				from indexers.episodes import Episodes
-				Episodes(params).run()
+				from indexers.episodes import Indexer
+				Indexer(params).run()
 			elif mode == 'build_anime_calendar':
-				from indexers.episodes import Episodes
-				Episodes(params).run()
+				from indexers.episodes import Indexer
+				Indexer(params).run()
 			elif mode == 'build_navigate_to_page':
 				from modules.dialogs import build_navigate_to_page
 				build_navigate_to_page(params)
@@ -211,9 +212,9 @@ class Router:
 			elif mode == 'alldebrid.show_account_info':
 				from indexers.alldebrid import show_account_info
 				show_account_info()
-			elif mode == 'alldebrid.get_auth':
-				from indexers.alldebrid import get_auth
-				get_auth()
+			elif mode == 'alldebrid.set_auth':
+				from indexers.alldebrid import set_auth
+				set_auth()
 			elif mode == 'alldebrid.del_auth':
 				from indexers.alldebrid import del_auth
 				del_auth()
@@ -301,4 +302,8 @@ class Router:
 		elif mode == 'undesirablesUserRemove':
 			from caches.undesirables_cache import undesirablesUserRemove
 			undesirablesUserRemove()
+
+
+if __name__ == '__main__':
+	with Router() as r: r.routing(sys)
 

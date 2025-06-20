@@ -168,7 +168,7 @@
                         <onright>10</onright>
                         <onup>2053</onup>
                         <ondown>50</ondown>
-                        <label>$ADDON[plugin.video.pov 33045] $ADDON[plugin.video.pov 32798]</label>
+                        <label>$ADDON[plugin.video.pov 32744] $ADDON[plugin.video.pov 32798]</label>
                         <font>font14</font>
                         <textcolor>FFB7B4BB</textcolor>
                         <focusedcolor>FF302F2F</focusedcolor>
@@ -481,7 +481,7 @@
                         <height>20</height>
                         <font>font14</font>
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.pov 33032][/B] $INFO[Window.Property(tikiskins.person.imdb_videos.number)]</label>
+                        <label>[B]$ADDON[plugin.video.pov 32531][/B] $INFO[Window.Property(tikiskins.person.imdb_videos.number)]</label>
                         <visible>!Control.HasFocus(2052)</visible>
                     </control>
                     <control type="label">
@@ -489,7 +489,7 @@
                         <height>20</height>
                         <font>font14</font>
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.pov 33032][/B]  |  [I]$INFO[Container(2052).ListItem.Property(tikiskins.person.name)][/I]</label>
+                        <label>[B]$ADDON[plugin.video.pov 32531][/B]  |  [I]$INFO[Container(2052).ListItem.Property(tikiskins.person.name)][/I]</label>
                         <visible>Control.HasFocus(2052)</visible>
                     </control>
                     <control type="panel" id="2052">

@@ -9,6 +9,7 @@ from modules.kodi_utils import translate_path, show_busy_dialog, hide_busy_dialo
 icon = translate_path('special://home/addons/plugin.video.pov/icon.png')
 fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
 next_icon = translate_path('special://home/addons/plugin.video.pov/resources/media/item_next.png')
+nextpage_str, delete_str, down_str = ls(32799), ls(32785), ls(32747)
 
 class ThumbImageViewer(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -85,7 +86,7 @@ class ThumbImageViewer(BaseDialog):
 	def make_next_page(self):
 		try:
 			listitem = self.make_listitem()
-			listitem.setProperty('tikiskins.name', ls(32799))
+			listitem.setProperty('tikiskins.name', nextpage_str)
 			listitem.setProperty('tikiskins.thumb', next_icon)
 			listitem.setProperty('tikiskins.next_page_item', 'true')
 			self.list_items.append(listitem)
@@ -143,11 +144,11 @@ class ThumbContextMenu(BaseDialog):
 		if enable_delete:
 			folder_path = self.list_item.getProperty('tikiskins.folder_path')
 			delete_file_params = {'mode': 'delete_image', 'image_url': path, 'thumb_url': thumb_url, 'folder_path': folder_path, 'in_progress': 'true'}
-			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % ls(32785), 'RunPlugin(%s)', delete_file_params))
+			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % delete_str, 'RunPlugin(%s)', delete_file_params))
 		else:
 			name = self.list_item.getProperty('tikiskins.name')
 			down_file_params = {'mode': 'downloader', 'action': 'image', 'name': name, 'thumb_url': thumb_url, 'image_url': path, 'media_type': 'image', 'image': icon}
-			self.item_list.append(self.make_contextmenu_item(ls(32747), 'RunPlugin(%s)', down_file_params))
+			self.item_list.append(self.make_contextmenu_item(down_str, 'RunPlugin(%s)', down_file_params))
 
 class SlideShow(BaseDialog):
 	def __init__(self, *args, **kwargs):

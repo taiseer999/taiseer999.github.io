@@ -253,7 +253,7 @@ def set_quality_choice(quality_setting):
 
 def extras_lists_choice():
 	fl = [2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062]
-	dl = [ls(32664), ls(32503), ls(32607), ls(32984), ls(32986), ls(32989), ls(33032), ls(32616), ls(32617),
+	dl = [ls(32664), ls(32503), ls(32607), ls(32984), ls(32986), ls(32989), ls(32531), ls(32616), ls(32617),
 			'%s %s' % (ls(32612), ls(32543)), '%s %s' % (ls(32612), ls(32470)), '%s %s' % (ls(32612), ls(32480)), '%s %s' % (ls(32612), ls(32499))]
 	try: preselect = [fl.index(i) for i in settings.extras_enabled_menus()]
 	except: preselect = []
@@ -487,7 +487,7 @@ def external_scrapers_choice():
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png')
 	all_color, hosters_color, torrent_color = 'mediumvioletred', get_setting('hoster.identify'), get_setting('torrent.identify')
 	enable_string, disable_string, specific_string, all_string = ls(32055), ls(32024), ls(32536), ls(32525)
-	scrapers_string, hosters_string, torrent_string = ls(32533), ls(33031), ls(32535)
+	scrapers_string, hosters_string, torrent_string = ls(32533), ls(32532), ls(32535)
 	fs_default_string = ls(32137)
 	all_scrapers_string = '%s %s' % (all_string, scrapers_string)
 	hosters_scrapers_string = '%s %s' % (hosters_string, scrapers_string)

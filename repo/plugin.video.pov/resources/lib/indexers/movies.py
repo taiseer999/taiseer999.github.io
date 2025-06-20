@@ -21,159 +21,31 @@ hide_str, exit_str, clearprog_str, play_str = ls(32648), ls(32649), ls(32651), '
 nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
 
 class Movies:
-	tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
-	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
-	tmdb_special_key_dict = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_movies_certifications': 'certification'}
-	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
-	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
-	mdblist_personal = ('mdblist_watchlist',)
-	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
-	simkl_main = ('simkl_movies_popular', 'simkl_movies_most_watched', 'simkl_movies_recent_release')
-	simkl_special_key_dict = {'simkl_movies_genres': 'genre_id', 'simkl_movies_year': 'year'}
-	similar = ('tmdb_movies_similar', 'tmdb_movies_recommendations')
-	personal_dict = {
-		'in_progress_movies': ('caches.watched_cache', 'get_in_progress_movies'),
-		'favourites_movies': ('caches.favourites_cache', 'retrieve_favourites'),
-		'watched_movies': ('caches.watched_cache', 'get_watched_items')
-	}
-
 	def __init__(self, params):
 		self.params = params
-		self.id_type, self.list, self.action = self.params.get('id_type', 'tmdb_id'), self.params.get('list', []), self.params.get('action', None)
-		self.items, self.new_page, self.total_pages, self.exit_list_params, self.is_widget = [], {}, None, None, 'unchecked'
+		self.id_type, self.list, self.action, self.exit_list_params = (
+			self.params.get('id_type', 'tmdb_id'),
+			self.params.get('list', []),
+			self.params.get('action', None),
+			self.params.get('exit_list_params', None)
+		)
+		self.items, self.new_page, self.total_pages, self.is_widget = [], {}, None, 'unchecked'
 		self.append = self.items.append
-		self.set_constants()
-
-	def run(self):
-		try:
-			params_get = self.params.get
-			self.is_widget = kodi_utils.external_browse()
-			self.exit_list_params = params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
-			self.handle = int(sys.argv[1])
-			self.builder, view_type, content_type = self.worker, 'view.movies', 'movies'
-			mode = params_get('mode')
-			try: page_no = int(params_get('new_page', '1'))
-			except ValueError: page_no = params_get('new_page')
-			letter = params_get('new_letter', 'None')
-			if self.action in Movies.personal_dict: var_module, import_function = Movies.personal_dict[self.action]
-			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
-			try: function = manual_function_import(var_module, import_function)
-			except: pass
-			if self.action in Movies.tmdb_main:
-				data = function(page_no)
-				self.list = [i['id'] for i in data['results']]
-				total_pages = data['total_pages']
-				if total_pages > page_no: self.new_page = {'new_page': string(data['page'] + 1)}
-			elif self.action in Movies.trakt_main:
-				self.id_type = 'trakt_dict'
-				data = function(page_no)
-				self.list = [i['movie']['ids'] for i in data]
-				if self.action not in ('trakt_movies_top10_boxoffice'): self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action in Movies.tmdb_personal:
-				data, total_pages = function('movie', page_no, letter)
-				self.list = [i['id'] for i in data]
-				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
-			elif self.action in Movies.trakt_personal:
-				self.id_type = 'trakt_dict'
-				data, total_pages = function('movies', page_no, letter)
-				self.list = [i['media_ids'] for i in data]
-				if total_pages > 2: self.total_pages = total_pages
-				try:
-					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
-				except: pass
-			elif self.action in Movies.mdblist_personal:
-				self.id_type = 'trakt_dict'
-				data, total_pages = function('movies', page_no, letter)
-				self.list = [{'imdb': i['imdb_id'], 'tmdb': i['id']} for i in data]
-				if total_pages > 2: self.total_pages = total_pages
-				try:
-					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
-				except: pass
-			elif self.action in Movies.imdb_personal:
-				self.id_type = 'imdb_id'
-				list_id = params_get('list_id', None)
-				data, next_page = function('movie', list_id, page_no)
-				self.list = [i['imdb_id'] for i in data]
-				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1), 'new_letter': letter}
-			elif self.action in Movies.personal_dict:
-				data, total_pages = function('movie', page_no, letter)
-				self.list = [i['media_id'] for i in data]
-				if total_pages > 2: self.total_pages = total_pages
-				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
-			elif self.action in Movies.similar:
-				tmdb_id = params_get('tmdb_id')
-				data = function(tmdb_id, page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), 'tmdb_id': tmdb_id}
-			elif self.action in Movies.tmdb_special_key_dict:
-				key = Movies.tmdb_special_key_dict[self.action]
-				function_var = params_get(key, None)
-				if not function_var: return
-				data = function(function_var, page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), key: function_var}
-			elif self.action == 'tmdb_movies_discover':
-				from indexers.discover import set_history
-				name, query = params_get('name'), params_get('query')
-				if page_no == 1: set_history('movie', name, query)
-				data = function(query, page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
-			elif self.action == 'imdb_movies_oscar_winners':
-				from modules.meta_lists import oscar_winners
-				self.list = [i for i in chunks(oscar_winners, 20)][page_no-1]
-				if self.list[-1] != 631: self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action == 'tmdb_movies_genres':
-				genre_id = params_get('genre_id')
-				if not genre_id: return
-				data = function(genre_id, page_no)
-				self.list = [i['id'] for i in data['results']]
-				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), 'genre_id': genre_id}
-			elif self.action  == 'tmdb_movies_search':
-				query = params_get('query')
-				data = function(query, page_no)
-				self.list = [i['id'] for i in data['results']]
-				total_pages = data['total_pages']
-				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter, 'query': query}
-			elif self.action  == 'tmdb_movies_search_collections':
-				self.builder, view_type, content_type = self.build_collections_results, 'view.main', ''
-				query = params_get('query')
-				data = function(query, page_no)
-				self.list = data['results']
-				total_pages = data['total_pages']
-				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'query': query}
-			elif self.action  == 'tmdb_movies_collection':
-				data = sorted(function(params_get('collection_id'))['parts'], key=lambda k: k['release_date'] or '2050')
-				self.list = [i['id'] for i in data]
-			elif self.action == 'trakt_recommendations':
-				self.id_type = 'trakt_dict'
-				data = function('movies')
-				self.list = [i['ids'] for i in data]
-			elif self.action in Movies.simkl_main:
-				self.id_type = 'trakt_dict'
-				data = function(page_no)
-				self.list = data
-			elif self.action in Movies.simkl_special_key_dict:
-				key = Movies.simkl_special_key_dict[self.action]
-				function_var = params_get(key, None)
-				if not function_var: return
-				data = function(function_var)
-				self.id_type = 'trakt_dict'
-				self.list = data
-			if self.total_pages and not self.is_widget and settings.nav_jump_use_alphabet():
-				url_params = {'mode': 'build_navigate_to_page', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-							'transfer_action': self.action, 'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', '')}
-				kodi_utils.add_dir(self.handle, url_params, jumpto_str, item_jump, isFolder=False)
-			kodi_utils.add_items(self.handle, self.builder())
-			if self.new_page:
-				self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'name': ls(params_get('name'))})
-				kodi_utils.add_dir(self.handle, self.new_page, nextpage_str, item_next)
-		except: pass
-		kodi_utils.set_category(self.handle, ls(params_get('name')))
-		kodi_utils.set_sort_method(self.handle, content_type)
-		kodi_utils.set_content(self.handle, content_type)
-		kodi_utils.end_directory(self.handle, False if self.is_widget else None)
-		kodi_utils.set_view_mode(view_type, content_type)
+		self.current_date = get_datetime_function()
+		self.meta_user_info = settings.metadata_user_info()
+		self.watched_indicators = settings.watched_indicators()
+		self.watched_info = get_watched_info_function(self.watched_indicators)
+		self.bookmarks = get_bookmarks(self.watched_indicators, 'movie')
+		self.include_year_in_title = settings.include_year_in_title('movie')
+		self.open_extras = settings.extras_open_action('movie')
+		self.cm_sort = settings.context_menu_sort()
+		self.rpdb_enabled = self.meta_user_info['extra_rpdb_enabled']
+		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
+		if self.is_widget == 'unchecked': self.is_widget = kodi_utils.external_browse()
+		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
+		if not self.exit_list_params: self.exit_list_params = get_infolabel('Container.FolderPath')
+		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
+		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
 
 	def build_movie_content(self, _position, _id):
 		try:
@@ -270,6 +142,161 @@ class Movies:
 			self.append((url_params, listitem, False))
 		except: pass
 
+	def worker(self):
+#		threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, Thread))
+		threads = TaskPool().tasks_enumerate(self.build_movie_content, self.list, Thread)
+		for i in threads: i.join()
+		self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
+		return self.items
+
+class Indexer(Movies):
+	tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
+	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
+	tmdb_special_key_dict = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_movies_certifications': 'certification'}
+	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
+	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
+	mdblist_personal = ('mdblist_watchlist',)
+	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
+	simkl_main = ('simkl_movies_popular', 'simkl_movies_most_watched', 'simkl_movies_recent_release')
+	simkl_special_key_dict = {'simkl_movies_genres': 'genre_id', 'simkl_movies_year': 'year'}
+	similar = ('tmdb_movies_similar', 'tmdb_movies_recommendations')
+	personal_dict = {
+		'in_progress_movies': ('caches.watched_cache', 'get_in_progress_movies'),
+		'favourites_movies': ('caches.favourites_cache', 'retrieve_favourites'),
+		'watched_movies': ('caches.watched_cache', 'get_watched_items')
+	}
+
+	def run(self):
+		try:
+			params_get = self.params.get
+			self.is_widget = kodi_utils.external_browse()
+			self.exit_list_params = params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
+			self.handle, self.builder = int(sys.argv[1]), self.worker
+			view_type, content_type = 'view.movies', 'movies'
+			mode = params_get('mode')
+			try: page_no = int(params_get('new_page', '1'))
+			except ValueError: page_no = params_get('new_page')
+			letter = params_get('new_letter', 'None')
+			if self.action in Indexer.personal_dict: var_module, import_function = Indexer.personal_dict[self.action]
+			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
+			try: function = manual_function_import(var_module, import_function)
+			except: pass
+			if self.action in Indexer.tmdb_main:
+				data = function(page_no)
+				self.list = [i['id'] for i in data['results']]
+				total_pages = data['total_pages']
+				if total_pages > page_no: self.new_page = {'new_page': string(data['page'] + 1)}
+			elif self.action in Indexer.trakt_main:
+				self.id_type = 'trakt_dict'
+				data = function(page_no)
+				self.list = [i['movie']['ids'] for i in data]
+				if self.action not in ('trakt_movies_top10_boxoffice'): self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action in Indexer.tmdb_personal:
+				data, total_pages = function('movie', page_no, letter)
+				self.list = [i['id'] for i in data]
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
+			elif self.action in Indexer.trakt_personal:
+				self.id_type = 'trakt_dict'
+				data, total_pages = function('movies', page_no, letter)
+				self.list = [i['media_ids'] for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				try:
+					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
+				except: pass
+			elif self.action in Indexer.mdblist_personal:
+				self.id_type = 'trakt_dict'
+				data, total_pages = function('movies', page_no, letter)
+				self.list = [{'imdb': i['imdb_id'], 'tmdb': i['id']} for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				try:
+					if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
+				except: pass
+			elif self.action in Indexer.imdb_personal:
+				self.id_type = 'imdb_id'
+				list_id = params_get('list_id', None)
+				data, next_page = function('movie', list_id, page_no)
+				self.list = [i['imdb_id'] for i in data]
+				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1), 'new_letter': letter}
+			elif self.action in Indexer.personal_dict:
+				data, total_pages = function('movie', page_no, letter)
+				self.list = [i['media_id'] for i in data]
+				if total_pages > 2: self.total_pages = total_pages
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
+			elif self.action in Indexer.similar:
+				tmdb_id = params_get('tmdb_id')
+				data = function(tmdb_id, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), 'tmdb_id': tmdb_id}
+			elif self.action in Indexer.tmdb_special_key_dict:
+				key = Indexer.tmdb_special_key_dict[self.action]
+				function_var = params_get(key, None)
+				if not function_var: return
+				data = function(function_var, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), key: function_var}
+			elif self.action == 'tmdb_movies_discover':
+				from indexers.discover import set_history
+				name, query = params_get('name'), params_get('query')
+				if page_no == 1: set_history('movie', name, query)
+				data = function(query, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
+			elif self.action == 'imdb_movies_oscar_winners':
+				from modules.meta_lists import oscar_winners
+				self.list = [i for i in chunks(oscar_winners, 20)][page_no-1]
+				if self.list[-1] != 631: self.new_page = {'new_page': string(page_no + 1)}
+			elif self.action == 'tmdb_movies_genres':
+				genre_id = params_get('genre_id')
+				if not genre_id: return
+				data = function(genre_id, page_no)
+				self.list = [i['id'] for i in data['results']]
+				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), 'genre_id': genre_id}
+			elif self.action == 'tmdb_movies_search':
+				query = params_get('query')
+				data = function(query, page_no)
+				self.list = [i['id'] for i in data['results']]
+				total_pages = data['total_pages']
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter, 'query': query}
+			elif self.action == 'tmdb_movies_search_collections':
+				self.builder, view_type, content_type = self.build_collections_results, 'view.main', ''
+				query = params_get('query')
+				data = function(query, page_no)
+				self.list = data['results']
+				total_pages = data['total_pages']
+				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'query': query}
+			elif self.action == 'tmdb_movies_collection':
+				data = sorted(function(params_get('collection_id'))['parts'], key=lambda k: k['release_date'] or '2050')
+				self.list = [i['id'] for i in data]
+			elif self.action == 'trakt_recommendations':
+				self.id_type = 'trakt_dict'
+				data = function('movies')
+				self.list = [i['ids'] for i in data]
+			elif self.action in Indexer.simkl_main:
+				self.id_type = 'trakt_dict'
+				data = function(page_no)
+				self.list = data
+			elif self.action in Indexer.simkl_special_key_dict:
+				key = Indexer.simkl_special_key_dict[self.action]
+				function_var = params_get(key, None)
+				if not function_var: return
+				data = function(function_var)
+				self.id_type = 'trakt_dict'
+				self.list = data
+			if self.total_pages and not self.is_widget and settings.nav_jump_use_alphabet():
+				url_params = {'mode': 'build_navigate_to_page', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
+							'transfer_action': self.action, 'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', '')}
+				kodi_utils.add_dir(self.handle, url_params, jumpto_str, item_jump, isFolder=False)
+			kodi_utils.add_items(self.handle, self.builder())
+			if self.new_page:
+				self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'name': ls(params_get('name'))})
+				kodi_utils.add_dir(self.handle, self.new_page, nextpage_str, item_next)
+		except: pass
+		kodi_utils.set_category(self.handle, ls(params_get('name')))
+		kodi_utils.set_sort_method(self.handle, content_type)
+		kodi_utils.set_content(self.handle, content_type)
+		kodi_utils.end_directory(self.handle, False if self.is_widget else None)
+		kodi_utils.set_view_mode(view_type, content_type)
+
 	def build_collections_results(self):
 		def _process():
 			for item in self.list:
@@ -287,29 +314,5 @@ class Movies:
 		image_resolution = settings.get_resolution()
 		tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
 		self.items = list(_process())
-		return self.items
-
-	def set_constants(self):
-		self.current_date = get_datetime_function()
-		self.meta_user_info = settings.metadata_user_info()
-		self.watched_indicators = settings.watched_indicators()
-		self.watched_info = get_watched_info_function(self.watched_indicators)
-		self.bookmarks = get_bookmarks(self.watched_indicators, 'movie')
-		self.include_year_in_title = settings.include_year_in_title('movie')
-		self.open_extras = settings.extras_open_action('movie')
-		self.cm_sort = settings.context_menu_sort()
-		self.rpdb_enabled = self.meta_user_info['extra_rpdb_enabled']
-		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
-		if self.is_widget == 'unchecked': self.is_widget = kodi_utils.external_browse()
-		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
-		if not self.exit_list_params: self.exit_list_params = get_infolabel('Container.FolderPath')
-		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
-		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
-
-	def worker(self):
-#		threads = list(make_thread_list_enumerate(self.build_movie_content, self.list, Thread))
-		threads = TaskPool().tasks_enumerate(self.build_movie_content, self.list, Thread)
-		for i in threads: i.join()
-		self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
 		return self.items
 

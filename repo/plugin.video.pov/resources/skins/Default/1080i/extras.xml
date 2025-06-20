@@ -1159,7 +1159,7 @@
                         <height>20</height>
                         <font>font14</font>
                         <textcolor>FFCCCCCC</textcolor>
-                        <label>[B]$ADDON[plugin.video.pov 33032][/B] $INFO[Window.Property(tikiskins.extras.imdb_videos.number)]</label>
+                        <label>[B]$ADDON[plugin.video.pov 32531][/B] $INFO[Window.Property(tikiskins.extras.imdb_videos.number)]</label>
                     </control>
                     <control type="panel" id="2056">
                         <pagecontrol>4056</pagecontrol>

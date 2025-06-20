@@ -10,9 +10,9 @@ from modules.source_utils import internal_sources, internal_folders_import, scra
 from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime
 #from modules.kodi_utils import logger
 
-show_busy_dialog, hide_busy_dialog, get_setting = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.get_setting
+show_busy_dialog, hide_busy_dialog, progressDialogBG = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.progressDialogBG
 close_all_dialog, select_dialog, confirm_dialog = kodi_utils.close_all_dialog, kodi_utils.select_dialog, kodi_utils.confirm_dialog
-get_property, set_property, clear_property= kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property
+get_property, set_property, clear_property, get_setting = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_setting
 ls, monitor, translate_path, notification, sleep = kodi_utils.local_string, kodi_utils.monitor, kodi_utils.translate_path, kodi_utils.notification, kodi_utils.sleep
 auto_play, active_internal_scrapers, provider_sort_ranks,  = settings.auto_play, settings.active_internal_scrapers, settings.provider_sort_ranks
 display_sleep_time, scraping_settings, include_prerelease_results = settings.display_sleep_time, settings.scraping_settings, settings.include_prerelease_results
@@ -554,7 +554,7 @@ class Sources():
 						line1 = ' | '.join(i for i in line1 if i and i != 'external').upper()
 						line2 = ' | '.join(i for i in (item.get('size_label', ''), item.get('extraInfo', '')) if i)
 						if self.progress_dialog: self.progress_dialog.update(main_line % (line1, line2, name), percent)
-						else: progressBG.update(percent, name)
+						else: progressDialogBG.update(percent, name)
 					except: pass
 				link = self.resolve_sources(item, self.meta)
 				if link: yield None if link == 'uncached' else link
@@ -569,15 +569,14 @@ class Sources():
 				items = [source] + items[:40]
 			if not background: # self._make_progress_dialog()
 				if not self.load_action:
-					progressBG = kodi_utils.progressDialogBG
-					progressBG.create('POV', 'POV loading...')
+					progressDialogBG.create('POV', 'POV loading...')
 				else:
 					self._make_progress_dialog()
-					POVPlayer.kill_progress(self._kill_progress_dialog)
+					POVPlayer.add_callback(self._kill_progress_dialog)
 			url = next(_process(), None)
 			if not background: # self._kill_progress_dialog()
 				if not url: self._kill_progress_dialog()
-				if not self.load_action: progressBG.close()
+				if not self.load_action: progressDialogBG.close()
 			return url if background else POVPlayer().run(url)
 		except: pass
 

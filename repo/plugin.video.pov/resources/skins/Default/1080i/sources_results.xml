@@ -535,7 +535,7 @@
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
-                        <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(tikiskins.highlight)]][B]$ADDON[plugin.video.pov 33031]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(tikiskins.source_type)][/UPPERCASE]</label>
+                        <label>[UPPERCASE][COLOR $INFO[Container(2001).ListItem().Property(tikiskins.highlight)]][B]$ADDON[plugin.video.pov 32532]: [/B][/COLOR]$INFO[Container(2001).ListItem().Property(tikiskins.source_type)][/UPPERCASE]</label>
                     </control>
                     <control type="label">
                         <top>50</top>

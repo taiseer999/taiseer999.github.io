@@ -154,7 +154,7 @@ class Indexer(Debrid):
 			return kodi_utils.show_text(ls(32061).upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
 
-	def get_auth(self):
+	def set_auth(self):
 		import json, urllib.parse
 		from apis.premiumize_api import base_url, client_id, user_agent, session, timeout
 		session.cookies.clear()

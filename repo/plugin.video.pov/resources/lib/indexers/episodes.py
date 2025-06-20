@@ -27,57 +27,27 @@ clearprog_str, browse_str, browse_seas_str, traktmanager_str = ls(32651), ls(326
 class Episodes:
 	def __init__(self, params):
 		self.params = params
-		self.list_type, self.list = self.params.get('id_type', ''), self.params.get('list', [])
+		self.list_type = self.params.get('id_type', '')
+		self.list = self.params.get('list', [])
 		self.items = []
 		self.append = self.items.append
-		self.set_constants()
-
-	def run(self):
-		try:
-			params_get = self.params.get
-			__handle__ = int(sys.argv[1])
-			view_type, content_type = 'view.episodes', 'episodes'
-			sort_type, category = 'unsorted', ls(params_get('name'))
-			mode = params_get('mode')
-			if   'in_progress' in mode:
-				self.list_type = 'in_progress'
-				self.list = get_in_progress_episodes()
-			elif 'next_episode' in mode:
-				indicators = settings.watched_indicators()
-				watched_info = get_watched_info_tv(indicators)
-				if indicators == 1: self.list_type = 'next_episode_trakt'
-				else: self.list_type = 'next_episode_pov'
-				self.list = get_next_episodes(watched_info)
-			elif 'my_calendar' in mode:
-				recently_aired = params_get('recently_aired', None)
-				self.list = trakt_get_my_calendar(recently_aired, get_datetime())
-				if recently_aired:
-					self.list_type = 'trakt_recently_aired'
-					self.list = self.list[:20]
-				else:
-					self.list_type = 'trakt_calendar'
-					self.list = sorted(self.list, key=lambda k: k['sort_title'])
-			elif 'my_anime_calendar' in mode:
-				self.list = trakt_my_anime_calendar(get_datetime())
-				self.list_type = 'trakt_calendar'
-				self.list = sorted(self.list, key=lambda k: k['sort_title'])
-			elif 'anime_calendar' in mode:
-				self.list = trakt_anime_calendar(get_datetime())
-				self.list_type = 'trakt_calendar'
-				self.list = sorted(self.list, key=lambda k: k['sort_title'])
-			kodi_utils.add_items(__handle__, self.worker())
-		except: pass
-		kodi_utils.set_category(__handle__, category)
-		kodi_utils.set_sort_method(__handle__, sort_type)
-		kodi_utils.set_content(__handle__, content_type)
-		kodi_utils.end_directory(__handle__, False)
-		kodi_utils.set_view_mode(view_type, content_type)
-		if self.list_type == 'trakt_calendar' and calendar_focus_today():
-			today = '[%s]' % ls(32849).upper()
-			labels = enumerate([i[1].getLabel() for i in self.items], 1)
-			try: index = max([i for i, x in labels if today in x])
-			except: return
-			kodi_utils.focus_index(index)
+		self.current_date = get_datetime_function()
+		self.adjust_hours = date_offset_info()
+		self.meta_user_info = settings.metadata_user_info()
+		self.watched_indicators = settings.watched_indicators()
+		self.watched_info = get_watched_info(self.watched_indicators)
+		self.bookmarks = get_bookmarks(self.watched_indicators, 'episode')
+		self.show_unaired = settings.show_unaired()
+		self.all_episodes = default_all_episodes()
+		self.show_all_episodes = self.all_episodes in (1, 2)
+		self.thumb_fanart = thumb_fanart_info()
+		self.display_title, self.date_format = single_ep_display_title(), single_ep_format()
+		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
+		self.is_widget = kodi_utils.external_browse()
+		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
+		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
+		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
+		self.container_update = 'ActivateWindow(Videos,%s,return)' if self.is_widget else 'Container.Update(%s)'
 
 	def build_episode_content(self, _position, ep_data):
 		try:
@@ -231,25 +201,6 @@ class Episodes:
 			self.append((url_params, listitem, False))
 		except: pass
 
-	def set_constants(self):
-		self.current_date = get_datetime_function()
-		self.adjust_hours = date_offset_info()
-		self.meta_user_info = settings.metadata_user_info()
-		self.watched_indicators = settings.watched_indicators()
-		self.watched_info = get_watched_info(self.watched_indicators)
-		self.bookmarks = get_bookmarks(self.watched_indicators, 'episode')
-		self.show_unaired = settings.show_unaired()
-		self.all_episodes = default_all_episodes()
-		self.show_all_episodes = self.all_episodes in (1, 2)
-		self.thumb_fanart = thumb_fanart_info()
-		self.display_title, self.date_format = single_ep_display_title(), single_ep_format()
-		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
-		self.is_widget = kodi_utils.external_browse()
-		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
-		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
-		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
-		self.container_update = 'ActivateWindow(Videos,%s,return)' if self.is_widget else 'Container.Update(%s)'
-
 	def worker(self):
 		if self.list_type.startswith('next_episode'):
 			nextep_settings, nextep_disp_settings = nextep_content_settings(), nextep_display_settings()
@@ -297,4 +248,52 @@ class Episodes:
 			self.items.sort(key=lambda k: k[1].getProperty('pov_first_aired'), reverse=reverse)
 		else: self.items.sort(key=lambda k: int(k[1].getProperty('pov_sort_order')))
 		return self.items
+
+class Indexer(Episodes):
+	def run(self):
+		try:
+			params_get = self.params.get
+			__handle__ = int(sys.argv[1])
+			view_type, content_type = 'view.episodes', 'episodes'
+			sort_type, category = 'unsorted', ls(params_get('name'))
+			mode = params_get('mode')
+			if   'in_progress' in mode:
+				self.list_type = 'in_progress'
+				self.list = get_in_progress_episodes()
+			elif 'next_episode' in mode:
+				indicators = settings.watched_indicators()
+				watched_info = get_watched_info_tv(indicators)
+				if indicators == 1: self.list_type = 'next_episode_trakt'
+				else: self.list_type = 'next_episode_pov'
+				self.list = get_next_episodes(watched_info)
+			elif 'my_calendar' in mode:
+				recently_aired = params_get('recently_aired', None)
+				self.list = trakt_get_my_calendar(recently_aired, get_datetime())
+				if recently_aired:
+					self.list_type = 'trakt_recently_aired'
+					self.list = self.list[:20]
+				else:
+					self.list_type = 'trakt_calendar'
+					self.list = sorted(self.list, key=lambda k: k['sort_title'])
+			elif 'my_anime_calendar' in mode:
+				self.list = trakt_my_anime_calendar(get_datetime())
+				self.list_type = 'trakt_calendar'
+				self.list = sorted(self.list, key=lambda k: k['sort_title'])
+			elif 'anime_calendar' in mode:
+				self.list = trakt_anime_calendar(get_datetime())
+				self.list_type = 'trakt_calendar'
+				self.list = sorted(self.list, key=lambda k: k['sort_title'])
+			kodi_utils.add_items(__handle__, self.worker())
+		except: pass
+		kodi_utils.set_category(__handle__, category)
+		kodi_utils.set_sort_method(__handle__, sort_type)
+		kodi_utils.set_content(__handle__, content_type)
+		kodi_utils.end_directory(__handle__, False)
+		kodi_utils.set_view_mode(view_type, content_type)
+		if self.list_type == 'trakt_calendar' and calendar_focus_today():
+			today = '[%s]' % ls(32849).upper()
+			labels = enumerate([i[1].getLabel() for i in self.items], 1)
+			try: index = max([i for i, x in labels if today in x])
+			except: return
+			kodi_utils.focus_index(index)
 

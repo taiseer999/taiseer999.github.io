@@ -40,7 +40,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>[UPPERCASE]$ADDON[plugin.video.pov 33061][/UPPERCASE]</label>
+                <label>[UPPERCASE]$ADDON[plugin.video.pov 32970][/UPPERCASE]</label>
             </control>
         </control>
         <control type="group">

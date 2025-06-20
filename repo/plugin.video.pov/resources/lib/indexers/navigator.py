@@ -231,7 +231,7 @@ class Navigator:
 
 	def settings(self):
 		pov_str, manager_str, changelog_str, short_str, source_str = ls(32036), ls(32513), ls(32508), ls(32514), ls(32515)
-		log_utils, views_str, clean_str, lang_inv_str, ms_str = ls(32777), ls(32510), ls(32512), ls(33017), ls(32455)
+		log_utils, views_str, clean_str, lang_inv_str, ms_str = ls(32777), ls(32510), ls(32512), ls(32978), ls(32455)
 		settings_str, changelog_log_viewer_str = ls(32247), '%s & %s' % (changelog_str, log_utils)
 		shortcut_manager_str, source_manager_str = '%s %s' % (short_str, manager_str), '%s %s' % (source_str, manager_str)
 		n_ins = _in_str % (settings_str.upper(), '')

@@ -639,7 +639,7 @@ def convert_to_session_id(token=None):
 	set_setting('tmdb.session_account_id', session_account_id)
 	return session_account_id, session_id
 
-def get_auth(*args):
+def set_auth(*args):
 	read_token = get_setting('tmdb_read_token')
 	headers = {'Authorization': f"Bearer {read_token}"}
 	url = 'https://api.themoviedb.org/4/auth/request_token'

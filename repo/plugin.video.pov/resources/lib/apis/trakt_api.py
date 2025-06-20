@@ -679,7 +679,7 @@ def trakt_sync_activities(force_update=False):
 	else: trakt_cache.clear_trakt_list_contents_data('liked_lists')
 	return 'success'
 
-def get_auth(*args):
+def set_auth(*args):
 	data = {'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET, 'code': ''}
 	response = call_trakt('oauth/device/code', data=data, with_auth=False)
 	data['code'] = response['device_code']

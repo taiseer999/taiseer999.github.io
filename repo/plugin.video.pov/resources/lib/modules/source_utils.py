@@ -439,15 +439,15 @@ def source_warning(func):
   [COLOR dodgerblue][B]After Real Debrid/All Debrid Authorization[/B][/COLOR]
 - Enable one or more of torrentio debrid+/mediafusion debrid+/comet debrid+.
 
+  If you only have Real Debrid/All Debrid, disable all other sources OR enable
+  "Display Uncached Torrents" to manually add those to cloud to view from there.
+
 
   [COLOR dodgerblue][B]Real Debrid/All Debrid cached sources[/B][/COLOR]
 - Only the Sources in this settings category will return results, two modes are available.
   1. Select Real-Debrid/All Debrid setting.  The cached status of torrents rely on the source
   internal cache, so the chance of the result being cached is high.
   2. Select Direct Torrent setting.  The cached status of direct torrents is unchecked.
-
-  If you only have RD/AD debrid, disable all other sources OR enable
-  "Display Uncached Torrents" and manually add those to cloud to view from there.
 """
 		kodi_utils.show_text(kodi_utils.get_addoninfo('name').upper(), text=text)
 		return func(*args, **kwargs)

@@ -130,7 +130,7 @@ class Indexer(Debrid):
 		except: kodi_utils.hide_busy_dialog()
 
 	@source_warning
-	def get_auth(self):
+	def set_auth(self):
 		import json, urllib.parse
 		from apis.real_debrid_api import base_url, auth_url, session, timeout
 		session.cookies.clear()

@@ -70,7 +70,7 @@ class source:
 			try:
 				if 'url' in file:
 					path = file['url'].split('/')
-					hash = path[path.index('stream') + 1]
+					hash = path[path.index('playback') + 1]
 				else: hash = file['infoHash']
 				file_title = file['behaviorHints']['filename'].split('\n')
 				file_info = [x for x in file['description'].split('\n') if _INFO.match(x)][0]
@@ -117,7 +117,6 @@ class source:
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
 		sources = []
 		if not data: return sources
-		if not getSetting('mfdebrid.packs') == 'true': return sources
 		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -139,7 +138,7 @@ class source:
 			try:
 				if 'url' in file:
 					path = file['url'].split('/')
-					hash = path[path.index('stream') + 1]
+					hash = path[path.index('playback') + 1]
 				else: hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]

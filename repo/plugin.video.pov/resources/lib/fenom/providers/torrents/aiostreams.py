@@ -16,9 +16,9 @@ class source:
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
-		params = 'E2-AL4WGqDrj2M0MPdlx8ttOA%3D%3D-RpXaUvTCgu6DtWci%2FJWqVg5S4ZmxAALYaEbE80%2Br%2FdxY1eeZrJr7L7dIiWMeyB%2BzucFEILtMsP49bezJXGFsV%2FrN5S7Zpik1qcsaePN108DTqiskzTyNIblAawM7eAmh06I6SVs4VYm891OlzagAkeMEvchsYhrczGWfi6cEO3t6cO5QC2HRKPRe6GpoXZXXzDMqVeaDbRzmEJuyXGovv1MLxnEbGWjdQJggLU8EkmXtUo1j%2F7o21Y8%2FpVQdjxnipw6DwKxyIyQ255vXoQvXtaK8dqaLbHhbmaldpNfz9xIgJC5I1441OtlEd9ysqygbHg7W%2FYsLs%2F1E%2BJrZFqzss5bm28viMuT8WIWUOE8xHP%2B99%2FlKdADRMQtT0GdvxTyjq%2F2r8AsOuGvbBk1%2Ffo%2FcIN%2Fk9KDelLfiaOY4j7qCVjQzbkQKPLiCMMMJxu57xvpNlqwKzqbAp5UN8jXEQCwuu%2FXbpAGERFYLHINBAzdZZE9lV4PnFrATX5YYBwWHDawdI4XxOjJ4gtoMDUTdJYYzbtlL6clHzHIpKZ1s%2Bb0drhr3VGGKyxD%2F%2FaZVskykGRriwVM1gIHR00BK4kNTi6Gb4cnMrliy7SyaBKk2Xq3b29uB4uqusdpOCdI7vhBme1Jg'
+		params = '3f39d482-ed3f-4d91-a8c0-aa8cf7713f38/eyJpdiI6IktaSlRJNkRlbllYUnhGNTBtbjlIbXc9PSIsImVuY3J5cHRlZCI6ImZWRGlEaUxnZzVJWExaYlBlR2lMK1E9PSIsInR5cGUiOiJhaW9FbmNyeXB0In0'
 		self.language = ['en']
-		self.base_link = f"https://aiostreams.elfhosted.com/{params}"
+		self.base_link = f"https://aiostreams.elfhosted.com/stremio/{params}"
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0
@@ -49,7 +49,7 @@ class source:
 			except: files = []
 			self._queue.put_nowait(files) # if seasons
 			self._queue.put_nowait(files) # if shows
-			_INFO = re.compile(r'👤|💾.*')
+			_INFO = re.compile(r'📦.*')
 		except:
 			source_utils.scraper_error('AIOSTREAMS')
 			return sources
@@ -66,7 +66,7 @@ class source:
 					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
 				# except: pass
 
-				name = source_utils.clean_name(file_title[1])
+				name = source_utils.clean_name(file_title[-1])
 
 				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
@@ -78,7 +78,7 @@ class source:
 					# if any(re.search(item, name_lower) for item in ep_strings): continue
 
 				try:
-					seeders = int(re.search(r'👤 (\d+)', file_info).group(1))
+					seeders = int(re.search(r'👥 (\d+)', file_info).group(0)[2:])
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
@@ -109,7 +109,7 @@ class source:
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
 #			results = requests.get(url, timeout=7) # client.request(url, timeout=7)
 			files = self._queue.get(timeout=8) # jsloads(results)['streams']
-			_INFO = re.compile(r'👤|💾.*')
+			_INFO = re.compile(r'📦.*')
 		except:
 			source_utils.scraper_error('AIOSTREAMS')
 			return sources
@@ -126,7 +126,7 @@ class source:
 					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
 				# except: pass
 
-				name = source_utils.clean_name(file_title[1])
+				name = source_utils.clean_name(file_title[-1])
 
 				episode_start, episode_end = 0, 0
 				if not search_series:
@@ -146,7 +146,7 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				try:
-					seeders = int(re.search(r'👤 (\d+)', file_info).group(1))
+					seeders = int(re.search(r'👥 (\d+)', file_info).group(0)[2:])
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 

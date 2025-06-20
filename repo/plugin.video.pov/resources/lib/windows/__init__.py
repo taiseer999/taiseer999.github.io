@@ -26,10 +26,8 @@ def create_window(import_info, skin_xml, **kwargs):
 		xml_window = function(*args, **kwargs)
 		return xml_window
 	except Exception as e:
-		from modules.kodi_utils import notification
-		from modules.kodi_utils import logger
-		logger('error in open_window', str(e))
-		return notification(32574)
+		kodi_utils.logger('error in open_window', str(e))
+		return kodi_utils.notification(32574)
 
 class BaseDialog(kodi_utils.window_xml_dialog):
 	def __init__(self, *args):

@@ -49,7 +49,7 @@
                         <aligny>bottom</aligny>
                         <align>left</align>
                         <font>font14</font>
-                        <label>[B]$ADDON[plugin.video.pov 33041].... $INFO[Player.TimeRemaining()][/B]</label>
+                        <label>[B]$ADDON[plugin.video.pov 32999].... $INFO[Player.TimeRemaining()][/B]</label>
                     </control>
                     <control type="textbox">
                         <left>160</left>

@@ -35,18 +35,6 @@ class Seasons:
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
 
-	def run(self):
-		__handle__, is_widget = int(sys.argv[1]), kodi_utils.external_browse()
-		mode = self.params.get('mode', 'build_season_list')
-		if 'episode' in mode: content_type, view_type = 'episodes', 'view.episodes'
-		else: content_type, view_type = 'seasons', 'view.seasons'
-		kodi_utils.add_items(__handle__, self.build_season_list(self.params))
-		kodi_utils.set_category(__handle__, self.params.get('show_title'))
-		kodi_utils.set_sort_method(__handle__, content_type)
-		kodi_utils.set_content(__handle__, content_type)
-		kodi_utils.end_directory(__handle__, False if is_widget else None)
-		kodi_utils.set_view_mode(view_type, content_type)
-
 	def build_season_list(self, params):
 		def _process_season_list():
 			use_season_title = settings.use_season_title()
@@ -258,4 +246,16 @@ class Seasons:
 		else: _process_season_list()
 		self.params['show_title'] = show_title
 		return self.items
+
+	def run(self):
+		__handle__, is_widget = int(sys.argv[1]), kodi_utils.external_browse()
+		mode = self.params.get('mode', 'build_season_list')
+		if 'episode' in mode: content_type, view_type = 'episodes', 'view.episodes'
+		else: content_type, view_type = 'seasons', 'view.seasons'
+		kodi_utils.add_items(__handle__, self.build_season_list(self.params))
+		kodi_utils.set_category(__handle__, self.params.get('show_title'))
+		kodi_utils.set_sort_method(__handle__, content_type)
+		kodi_utils.set_content(__handle__, content_type)
+		kodi_utils.end_directory(__handle__, False if is_widget else None)
+		kodi_utils.set_view_mode(view_type, content_type)
 

@@ -398,8 +398,8 @@ def toggle_language_invoker():
 	addon_xml = translate_path('special://home/addons/plugin.video.pov/addon.xml')
 	current_addon_setting = get_setting('reuse_language_invoker', 'true')
 	new_value = 'false' if current_addon_setting == 'true' else 'true'
-	if not confirm_dialog(text=local_string(33018) % (current_addon_setting.upper(), new_value.upper())): return
-	if new_value == 'true' and not confirm_dialog(text=33019, top_space=True): return
+	if not confirm_dialog(text=local_string(32979) % (current_addon_setting.upper(), new_value.upper())): return
+	if new_value == 'true' and not confirm_dialog(text=32980, top_space=True): return
 	tree = ET.parse(addon_xml)
 	root = tree.getroot()
 	for item in root.iter('reuselanguageinvoker'):
@@ -407,7 +407,7 @@ def toggle_language_invoker():
 		tree.write(addon_xml)
 		break
 	set_setting('reuse_language_invoker', new_value)
-	ok_dialog(text=33020, top_space=True)
+	ok_dialog(text=32981, top_space=True)
 	execute_builtin('LoadProfile(%s)' % get_infolabel('system.profilename'))
 
 def open_settings(query, addon='plugin.video.pov'):

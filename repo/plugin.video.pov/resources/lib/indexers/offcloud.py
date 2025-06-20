@@ -121,7 +121,7 @@ class Indexer(Debrid):
 			return kodi_utils.show_text('Offcloud'.upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
 
-	def get_auth(self):
+	def set_auth(self):
 		username = kodi_utils.dialog.input('Offcloud Email:')
 		password = kodi_utils.dialog.input('Offcloud Password:', option=2)
 		if not all((username, password)): return

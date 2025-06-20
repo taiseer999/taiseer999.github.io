@@ -144,7 +144,7 @@ class Indexer(Debrid):
 			return kodi_utils.show_text('TorBox'.upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
 
-	def get_auth(self):
+	def set_auth(self):
 		api_key = kodi_utils.dialog.input('TorBox API Key:')
 		if not api_key: return
 		from apis.torbox_api import base_url, session, timeout

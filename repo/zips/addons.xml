@@ -2251,12 +2251,12 @@ version 2.0.1
 - Fix widget navigating to entire TV show not working
 </news>
     </extension>
-</addon><addon id="plugin.video.pov" version="5.04.35" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.06.03" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
     </requires>
-    <extension point="xbmc.python.pluginsource" library="resources/lib/pov.py">
+    <extension point="xbmc.python.pluginsource" library="resources/lib/router.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.service" library="resources/lib/service.py" />

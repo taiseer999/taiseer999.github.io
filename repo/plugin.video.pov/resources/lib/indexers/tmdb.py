@@ -110,7 +110,6 @@ def update_tmdb_list(params):
 def edit_tmdb_list(params):
 	image_resolution = get_resolution()
 	heading = ls(tmdb_api.list_heading).replace('[B]', '').replace('[/B]', '')
-	icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
 	choices = [
 		('name', params['name']),
 		('poster', params['poster']),
@@ -123,7 +122,7 @@ def edit_tmdb_list(params):
 		{'line1': i[1], 'line2': i[0], 'icon':
 		tmdb_image_base % (image_resolution['poster' if i[0] == 'poster' else 'fanart'], i[1])
 		if i[0] in ('poster', 'fanart') and not i[1] in ('clear', 'None') else
-		icon}
+		default_icon}
 		for i in choices
 	]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
@@ -133,7 +132,7 @@ def edit_tmdb_list(params):
 		name = kodi_utils.dialog.input('New List Name', defaultt=params['name'])
 		params['name'] = name.strip() or params['name']
 	elif choice in ('poster', 'fanart'):
-		art = artwork_choice_tmdb_list(params['list_id'], choice, image_resolution, params['name'], icon)
+		art = artwork_choice_tmdb_list(choice, params['list_id'], params['name'], image_resolution, default_icon)
 		params[choice] = params[choice] if art is None else art
 	elif 'public' in choice:
 		text = 'Make %s Private?' % params['name']
@@ -153,14 +152,14 @@ def edit_tmdb_list(params):
 		else: return kodi_utils.notification(32574)
 	return edit_tmdb_list(params)
 
-def artwork_choice_tmdb_list(list_id, key, resolution, list_title, default_icon):
+def artwork_choice_tmdb_list(key, list_id, list_title, resolution, icon):
 	path = 'poster_path' if key == 'poster' else 'backdrop_path'
 	choices = [
 		(item[path], item['title'] if item['media_type'] == 'movie' else item['name'],
-		tmdb_image_base % (resolution[key], item[path]) if item[path] else default_icon)
+		tmdb_image_base % (resolution[key], item[path]) if item[path] else icon)
 		for item in tmdb_api.all_items(tmdb_api.list_details, list_id)
 	]
-	choices += [('clear', 'Clear', default_icon)]
+	choices += [('clear', 'Clear', icon)]
 	list_items = [{'line1': item[1], 'line2': item[0], 'icon': item[2]} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': list_title, 'enumerate': 'true', 'multi_line': 'true'}
 	return kodi_utils.select_dialog([i[0] for i in choices], **kwargs)

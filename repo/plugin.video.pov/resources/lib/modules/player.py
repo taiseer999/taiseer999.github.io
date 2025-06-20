@@ -16,12 +16,12 @@ poster_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov
 fanart_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
 
 class POVPlayer(kodi_utils.xbmc_player):
-	progress_is_alive = []
+	progress_callback = []
 
 	@classmethod
-	def kill_progress(cls, function):
+	def add_callback(cls, function):
 		if not callable(function): return
-		cls.progress_is_alive.append(function)
+		cls.progress_callback.append(function)
 
 	def __init__ (self):
 		kodi_utils.xbmc_player.__init__(self)
@@ -153,7 +153,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			if not self.play_random_continual and self.autoplay_nextep: self.autoplay_next_episode = 'random' not in self.meta
 			if self.autoplay_nextep and self.autoscrape_nextep: self.autoscrape_next_episode = False
 		while not self.playback_event: kodi_utils.sleep(100)
-		while self.progress_is_alive: self.progress_is_alive.pop()()
+		while self.progress_callback: self.progress_callback.pop()()
 		kodi_utils.close_all_dialog()
 		if self.volume_check: kodi_utils.volume_checker(get_setting('volumecheck.percent', '100'))
 		kodi_utils.sleep(1000)

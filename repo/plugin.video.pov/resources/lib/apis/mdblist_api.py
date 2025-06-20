@@ -66,8 +66,9 @@ def mdb_modify_list(list_id, data, action='add'):
 	else: url = '%s/watchlist/items/%s' % (base_url, action)
 	results = call_mdblist(url, json=data, method='post')
 	if 'detail' in results: kodi_utils.notification(results['detail'])
-	success = 'added' in results and any(results['added'][i] for i in ('movies', 'shows'))
-	return True if success else False
+	key = 'added' if action == 'add' else 'removed'
+	success = key in results and any(results[key][i] for i in ('movies', 'shows'))
+	return success
 
 def mdb_list_items(list_id, list_type):
 	sort_index = settings.lists_sort_order('mdblist')
