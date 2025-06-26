@@ -124,7 +124,8 @@ class Trakt():
 
 			traktToken = response["access_token"]
 			traktRefresh = response["refresh_token"]
-			traktExpires = time.time() + 7776000
+			#traktExpires = time.time() + 7776000
+			traktExpires = time.time() + 86400 #24hr token
 			control.setSetting('trakt.token', traktToken)
 			control.setSetting('trakt.refresh', traktRefresh)
 			control.setSetting('trakt.expires', str(traktExpires))
@@ -135,7 +136,8 @@ class Trakt():
 			code = self.get_device_code()
 			token = self.get_device_token(code)
 			if token:
-				expires_at = time.time() + 7776000
+				#expires_at = time.time() + 7776000
+				expires_at = time.time() + 86400 #24hr token
 				control.setSetting('trakt.expires', str(expires_at))
 				control.setSetting('trakt.token', token["access_token"])
 				control.setSetting('trakt.refresh', token["refresh_token"])

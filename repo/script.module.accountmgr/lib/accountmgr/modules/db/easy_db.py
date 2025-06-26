@@ -56,7 +56,7 @@ def auth_fenlt_easy():
         # Create database connection
         conn = create_conn(var.fenlt_settings_db)
         with conn:
-            connect_easy(conn, ('true', 'provider_easynews'))
+            connect_easy(conn, ('true', 'provider.easynews'))
             connect_easy(conn, (your_easy_user, 'easynews_user'))
             connect_easy(conn, (your_easy_pass, 'easynews_password'))
     except:
@@ -65,7 +65,7 @@ def auth_fenlt_easy():
 
 
 
-################### Auth afFENity Easynews ##################
+'''################### Auth afFENity Easynews ##################
 def auth_affen_easy():
     try:
         # Create database connection
@@ -76,4 +76,4 @@ def auth_affen_easy():
             connect_easy(conn, (your_easy_pass, 'easynews_password'))
     except:
         xbmc.log('%s: Easy_db afFENity Failed!' % var.amgr, xbmc.LOGINFO)
-        pass
+        pass'''

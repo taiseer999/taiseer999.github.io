@@ -1,10 +1,10 @@
 <settings version="2">
     <setting id="appearance.1" default="true">Exuary</setting>
     <setting id="skin.packicons" default="true">Infinity</setting>
-    <setting id="skin.pack" default="true" />
+    <setting id="skin.pack" default="true"></setting>
     <setting id="icon.logos" default="true">Traditional</setting>
     <setting id="index.labels" default="true">true</setting>
-    <setting id="trakt.isauthed" default="true" />
+    <setting id="trakt.isauthed" default="true"></setting>
     <setting id="indicators.alt" default="true">1</setting>
     <setting id="indicators" default="true">0</setting>
     <setting id="localnotify" default="true">0</setting>
@@ -12,7 +12,7 @@
     <setting id="highlight.color" default="true">FFE68B00</setting>
     <setting id="api.language" default="true">English</setting>
     <setting id="mpa.country" default="true">United States</setting>
-    <setting id="mpa.prefix" default="true" />
+    <setting id="mpa.prefix" default="true"></setting>
     <setting id="searchmovie.indexer" default="true">0</setting>
     <setting id="searchtv.indexer" default="true">0</setting>
     <setting id="page.item.limit" default="true">20</setting>
@@ -40,16 +40,15 @@
     <setting id="dialogs.button.color" default="true">FF37B6FF</setting>
     <setting id="reuse.languageinvoker" default="true">true</setting>
     <setting id="mylists.widget" default="true">true</setting>
+    <setting id="navi.searchMovies" default="true">true</setting>
+    <setting id="navi.searchTVShows" default="true">true</setting>
     <setting id="navi.anime" default="true">true</setting>
     <setting id="navi.youtube" default="true">false</setting>
     <setting id="navi.prem.services" default="true">true</setting>
     <setting id="navi.alldebrid" default="true">true</setting>
     <setting id="navi.easynews" default="true">true</setting>
-    <setting id="navi.offcloud" default="true">true</setting>
     <setting id="navi.premiumize" default="true">true</setting>
     <setting id="navi.realdebrid" default="true">true</setting>
-    <setting id="navi.torbox" default="true">true</setting>
-    <setting id="navi.news" default="true">true</setting>
     <setting id="navi.changelog" default="true">true</setting>
     <setting id="navi.movie.trakt.trending" default="true">true</setting>
     <setting id="navi.movie.trakt.trendingrecent" default="true">true</setting>
@@ -71,6 +70,8 @@
     <setting id="navi.movie.trakt.boxoffice" default="true">true</setting>
     <setting id="navi.movie.imdb.mostvoted" default="true">true</setting>
     <setting id="navi.movie.tmdb.toprated" default="true">true</setting>
+    <setting id="navi.movie.lib.recommended" default="true">true</setting>
+    <setting id="navi.movie.lib.similar" default="true">true</setting>
     <setting id="navi.movie.trakt.recommended" default="true">true</setting>
     <setting id="navi.movie.trakt.recentlywatched" default="true">true</setting>
     <setting id="navi.movie.trakt.traktsimilar" default="true">true</setting>
@@ -259,7 +260,7 @@
     <setting id="preemptive.limit.tv" default="true">25</setting>
     <setting id="preemptive.res.tv" default="true">2</setting>
     <setting id="sources.highlightmethod" default="true">0</setting>
-    <setting id="sources.select.fanartBG" default="true">false</setting>
+    <setting id="sources.select.fanartBG" default="true">true</setting>
     <setting id="sources.highlight.color.display" default="true">[COLOR FFE68B00]FFE68B00[/COLOR]</setting>
     <setting id="sources.highlight.color" default="true">FFE68B00</setting>
     <setting id="sources.real-debrid.color.display" default="true">[COLOR FFFF3334]FFFF3334[/COLOR]</setting>
@@ -284,100 +285,13 @@
     <setting id="autoplay.sd" default="true">false</setting>
     <setting id="sources.useonlyone" default="true">false</setting>
     <setting id="sources.backbutton" default="true">false</setting>
-    <setting id="external_provider.name" default="true" />
-    <setting id="external_provider.module" default="true" />
-    <setting id="provider.external.enabled" default="true">false</setting>
-    <setting id="comet.enable" default="true">false</setting>
-    <setting id="comet.url" default="true">https://comet.elfhosted.com</setting>
-    <setting id="comet.indexers" default="true" />
-    <setting id="comet.langs" default="true">All</setting>
-    <setting id="comet.debrid" default="true">0</setting>
-    <setting id="knightcrawler.enable" default="true">false</setting>
-    <setting id="mediafusion.enable" default="true">false</setting>
-    <setting id="mediafusion.packs" default="true">0</setting>
-    <setting id="zilean.enable" default="true">false</setting>
-    <setting id="torrentio.enable" default="true">false</setting>
-    <setting id="plexsharetoken" default="true" />
-    <setting id="plexshare.enable" default="true">false</setting>
-    <setting id="plexshare.priority" default="true">10</setting>
-    <setting id="plex.client_id" default="true" />
-    <setting id="plex.device_id" default="true" />
-    <setting id="plexshare.sourceTitle" default="true" />
-    <setting id="plexshare.accessToken" default="true" />
-    <setting id="plexshare.url" default="true" />
-    <setting id="easynews.enable" default="true">false</setting>
-    <setting id="easynews.user" default="true" />
-    <setting id="easynews.password" default="true" />
-    <setting id="easynews_moderation" default="true">false</setting>
-    <setting id="easynews.title.chk" default="true">true</setting>
-    <setting id="easynews.priority" default="true">10</setting>
-    <setting id="filepursuit.enable" default="true">false</setting>
-    <setting id="filepursuittoken" default="true" />
-    <setting id="filepursuit.priority" default="true">10</setting>
-    <setting id="gdrive.enable" default="true">false</setting>
-    <setting id="gdrive.title.chk" default="true">true</setting>
-    <setting id="gdrivetoken" default="true" />
-    <setting id="gdrive.priority" default="true">10</setting>
-    <setting id="alldebrid.enable" default="true">true</setting>
-    <setting id="alldebridtoken" default="true" />
-    <setting id="alldebridusername" default="true" />
-    <setting id="alldebridexpirynotice" default="true">true</setting>
-    <setting id="alldebrid.priority" default="true">10</setting>
-    <setting id="alldebrid.saveToCloud" default="true">false</setting>
-    <setting id="ad_cloud.enabled" default="true">false</setting>
-    <setting id="ad_cloud.ignore.m2ts" default="true">true</setting>
-    <setting id="alldebrid.server.notifications" default="true">true</setting>
-    <setting id="easydebrid.enable" default="true">true</setting>
-    <setting id="easydebrid.token" default="true" />
-    <setting id="easydebrid.username" default="true" />
-    <setting id="easydebrid.priority" default="true">10</setting>
-    <setting id="ed_cloud.enabled" default="true">false</setting>
-    <setting id="offcloud.enable" default="true">true</setting>
-    <setting id="offcloudtoken" default="true" />
-    <setting id="offcloud.username" default="true" />
-    <setting id="offcloud.priority" default="true">10</setting>
-    <setting id="oc_cloud.enabled" default="true">false</setting>
-    <setting id="premiumize.enable" default="true">true</setting>
-    <setting id="premiumizetoken" default="true" />
-    <setting id="premiumizeusername" default="true" />
-    <setting id="premiumizeexpirynotice" default="true">true</setting>
-    <setting id="premiumize.priority" default="true">10</setting>
-    <setting id="premiumize.saveToCloud" default="true">false</setting>
-    <setting id="pm_cloud.enabled" default="true">false</setting>
-    <setting id="pm_cloud.ignore.m2ts" default="true">true</setting>
-    <setting id="premiumize.server.notifications" default="true">true</setting>
-    <setting id="realdebrid.enable" default="true">true</setting>
-    <setting id="realdebridtoken" default="true" />
-    <setting id="realdebridexpirynotice" default="true">true</setting>
-    <setting id="realdebridusername" default="true" />
-    <setting id="realdebrid.clientid" default="true" />
-    <setting id="realdebridrefresh" default="true" />
-    <setting id="realdebridsecret" default="true" />
-    <setting id="realdebrid.priority" default="true">10</setting>
-    <setting id="realdebrid.saveToCloud" default="true">false</setting>
-    <setting id="rd_cloud.enabled" default="true">false</setting>
-    <setting id="rd_cloud.ignore.m2ts" default="true">true</setting>
-    <setting id="realdebrid.server.notifications" default="true">true</setting>
-    <setting id="torbox.enable" default="true">true</setting>
-    <setting id="torboxtoken" default="true" />
-    <setting id="torbox.username" default="true" />
-    <setting id="torbox.priority" default="true">10</setting>
-    <setting id="torbox.saveToCloud" default="true">false</setting>
-    <setting id="tb_cloud.enabled" default="true">false</setting>
-    <setting id="fanart_tv.api_key" default="true">1ba8a00b5855afd7d7e48f3cd4b50807</setting>
-    <setting id="tmdb.apikey" default="true">7b2b174744f774ba48145e2859bb2e2c</setting>
-    <setting id="tmdbusername" default="true" />
-    <setting id="tmdbpassword" default="true" />
-    <setting id="tmdb.sessionid" default="true" />
-    <setting id="imdbuser" default="true" />
-    <setting id="mdblist.api" default="true" />
     <setting id="traktuserkey.customenabled" default="true">false</setting>
     <setting id="trakt.clientid" default="true">19d4a08f6601d2c5d791d041a9ffadd3ce26c038500070397eb315b74b5a7550</setting>
     <setting id="trakt.clientsecret" default="true">3ee868bacbf9edba9dd11a1b26b1abe4f5b81d0f0d90bd30ac53e127af08be39</setting>
-    <setting id="trakt.user.token" default="true" />
-    <setting id="trakt.user.name" default="true" />
-    <setting id="trakt.token.expires" default="true" />
-    <setting id="trakt.refreshtoken" default="true" />
+    <setting id="trakt.user.token" default="true"></setting>
+    <setting id="trakt.user.name" default="true"></setting>
+    <setting id="trakt.token.expires" default="true"></setting>
+    <setting id="trakt.refreshtoken" default="true"></setting>
     <setting id="trakt.service.syncInterval" default="true">15</setting>
     <setting id="trakt.server.notifications" default="true">true</setting>
     <setting id="trakt.general.notifications" default="true">true</setting>
@@ -394,10 +308,71 @@
     <setting id="trakt.HiddenManager.hideWatched" default="true">false</setting>
     <setting id="autoTraktOnStart" default="true">false</setting>
     <setting id="schedTraktTime" default="true">0</setting>
-    <setting id="trakt.message2" default="true" />
-    <setting id="simkltoken" default="true" />
-    <setting id="simklusername" default="true" />
-    <setting id="simkl.apikey" default="true" />
+    <setting id="trakt.message2" default="true"></setting>
+    <setting id="simkltoken" default="true"></setting>
+    <setting id="simklusername" default="true"></setting>
+    <setting id="simkl.apikey" default="true"></setting>
+    <setting id="alldebrid.enable" default="true">true</setting>
+    <setting id="alldebridtoken" default="true"></setting>
+    <setting id="alldebridusername" default="true"></setting>
+    <setting id="alldebridexpirynotice" default="true">true</setting>
+    <setting id="alldebrid.priority" default="true">10</setting>
+    <setting id="alldebrid.saveToCloud" default="true">false</setting>
+    <setting id="ad_cloud.enabled" default="true">false</setting>
+    <setting id="ad_cloud.ignore.m2ts" default="true">true</setting>
+    <setting id="alldebrid.server.notifications" default="true">true</setting>
+    <setting id="premiumize.enable" default="true">true</setting>
+    <setting id="premiumizetoken" default="true"></setting>
+    <setting id="premiumizeusername" default="true"></setting>
+    <setting id="premiumizeexpirynotice" default="true">true</setting>
+    <setting id="premiumize.priority" default="true">10</setting>
+    <setting id="premiumize.saveToCloud" default="true">false</setting>
+    <setting id="pm_cloud.enabled" default="true">false</setting>
+    <setting id="pm_cloud.ignore.m2ts" default="true">true</setting>
+    <setting id="premiumize.server.notifications" default="true">true</setting>
+    <setting id="realdebrid.enable" default="true">true</setting>
+    <setting id="realdebridtoken" default="true"></setting>
+    <setting id="realdebridexpirynotice" default="true">true</setting>
+    <setting id="realdebridusername" default="true"></setting>
+    <setting id="realdebrid.clientid" default="true"></setting>
+    <setting id="realdebridrefresh" default="true"></setting>
+    <setting id="realdebridsecret" default="true"></setting>
+    <setting id="realdebrid.priority" default="true">10</setting>
+    <setting id="realdebrid.saveToCloud" default="true">false</setting>
+    <setting id="rd_cloud.enabled" default="true">false</setting>
+    <setting id="rd_cloud.ignore.m2ts" default="true">true</setting>
+    <setting id="realdebrid.server.notifications" default="true">true</setting>
+    <setting id="external_provider.name" default="true"></setting>
+    <setting id="external_provider.module" default="true"></setting>
+    <setting id="provider.external.enabled" default="true">false</setting>
+    <setting id="plexsharetoken" default="true"></setting>
+    <setting id="plexshare.enable" default="true">false</setting>
+    <setting id="plexshare.priority" default="true">10</setting>
+    <setting id="plex.client_id" default="true"></setting>
+    <setting id="plex.device_id" default="true"></setting>
+    <setting id="plexshare.sourceTitle" default="true"></setting>
+    <setting id="plexshare.accessToken" default="true"></setting>
+    <setting id="plexshare.url" default="true"></setting>
+    <setting id="easynews.enable" default="true">false</setting>
+    <setting id="easynews.user" default="true"></setting>
+    <setting id="easynews.password" default="true"></setting>
+    <setting id="easynews.moderation" default="true">false</setting>
+    <setting id="easynews.title.chk" default="true">true</setting>
+    <setting id="easynews.priority" default="true">10</setting>
+    <setting id="filepursuit.enable" default="true">false</setting>
+    <setting id="filepursuittoken" default="true"></setting>
+    <setting id="filepursuit.priority" default="true">10</setting>
+    <setting id="gdrive.enable" default="true">false</setting>
+    <setting id="gdrive.title.chk" default="true">true</setting>
+    <setting id="gdrivetoken" default="true"></setting>
+    <setting id="gdrive.priority" default="true">10</setting>
+    <setting id="fanart_tv.api_key" default="true">1ba8a00b5855afd7d7e48f3cd4b50807</setting>
+    <setting id="tmdb.apikey" default="true">7b2b174744f774ba48145e2859bb2e2c</setting>
+    <setting id="tmdbusername" default="true"></setting>
+    <setting id="tmdbpassword" default="true"></setting>
+    <setting id="tmdb.sessionid" default="true"></setting>
+    <setting id="imdbuser" default="true"></setting>
+    <setting id="mdblist.api" default="true"></setting>
     <setting id="library.movie" default="true">special://userdata/addon_data/plugin.video.infinity/Movies</setting>
     <setting id="library.tv" default="true">special://userdata/addon_data/plugin.video.infinity/TVShows</setting>
     <setting id="library.general.notification" default="true">false</setting>
@@ -407,9 +382,9 @@
     <setting id="library.autoimportlists" default="true">false</setting>
     <setting id="library.autoimportlists_last" default="true">Never</setting>
     <setting id="library.autoimportlists.number" default="true">0</setting>
-    <setting id="library.autoimportlists.select" default="true" />
-    <setting id="library.autoimportlists.importListNow" default="true" />
-    <setting id="library.autoimportlists.selectimportNow" default="true" />
+    <setting id="library.autoimportlists.select" default="true"></setting>
+    <setting id="library.autoimportlists.importListNow" default="true"></setting>
+    <setting id="library.autoimportlists.selectimportNow" default="true"></setting>
     <setting id="library.update" default="true">true</setting>
     <setting id="library.check" default="true">true</setting>
     <setting id="library.importdelay" default="true">false</setting>
@@ -424,11 +399,12 @@
     <setting id="tv.download.path" default="true">special://userdata/addon_data/plugin.video.infinity/TVShows</setting>
     <setting id="subtitles" default="true">false</setting>
     <setting id="subtitles.notification" default="true">true</setting>
+    <setting id="opensubsusername" default="true"></setting>
+    <setting id="opensubspassword" default="true"></setting>
+    <setting id="opensubstoken" default="true"></setting>
     <setting id="subtitles.utf" default="true">false</setting>
     <setting id="subtitles.lang.1" default="true">English</setting>
     <setting id="subtitles.lang.2" default="true">English</setting>
-    <setting id="opensubstoken" default="true" />
-    <setting id="opensubs.apikey" default="true">cQBWQwPugvGVDrpdU9MDRlvdfcu4WNTx</setting>
     <setting id="cache.imdblist" default="true">168</setting>
     <setting id="cache.tmdblist" default="true">96</setting>
     <setting id="cache.tmdbcollection" default="true">96</setting>
@@ -444,11 +420,9 @@
     <setting id="cache.mdblist" default="true">24</setting>
     <setting id="cache.simkl" default="true">24</setting>
     <setting id="cache.providers" default="true">48</setting>
-    <setting id="enable.infinitywidgetcontext" default="true">false</setting>
-    <setting id="context.useInfinityContext" default="true">true</setting>
     <setting id="context.infinity.addtoLibrary" default="true">true</setting>
-    <setting id="context.infinity.addLibtoFavourite" default="true">true</setting>
     <setting id="context.infinity.addtoFavourite" default="true">true</setting>
+    <setting id="context.infinity.addLibtoFavourite" default="true">true</setting>
     <setting id="context.infinity.playTrailer" default="true">true</setting>
     <setting id="context.infinity.playTrailerSelect" default="true">false</setting>
     <setting id="context.infinity.traktManager" default="true">true</setting>
@@ -463,12 +437,14 @@
     <setting id="context.infinity.findSimilar" default="true">true</setting>
     <setting id="context.infinity.browseSeries" default="true">true</setting>
     <setting id="context.infinity.browseEpisodes" default="true">true</setting>
+    <setting id="enable.infinitywidgetcontext" default="true">false</setting>
+    <setting id="context.useInfinityContext" default="true">true</setting>
     <setting id="debug.enabled" default="true">false</setting>
     <setting id="debug.level" default="true">0</setting>
     <setting id="debug.location" default="true">1</setting>
     <setting id="debug.reversed" default="true">false</setting>
     <setting id="dev.mode.enable" default="true">false</setting>
-    <setting id="user_fanart" default="true" />
+    <setting id="user_background" default="true"></setting>
     <setting id="use.playeronly" default="true">false</setting>
     <setting id="dev.disable.single" default="true">false</setting>
     <setting id="dev.disable.single.filter" default="true">false</setting>

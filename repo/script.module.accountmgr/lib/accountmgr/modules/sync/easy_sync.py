@@ -39,7 +39,7 @@ class Auth:
                         if xbmcvfs.exists(var.chk_fenlt) and xbmcvfs.exists(var.chkset_fenlt): #Check that the addon is installed and settings.db exists
                             
                             #Create database connection
-                            from accountmgr.modules import easy_db
+                            from accountmgr.modules.db import easy_db
                             conn = easy_db.create_conn(var.fenlt_settings_db)
                             
                             #Get add-on settings to compare
@@ -48,6 +48,7 @@ class Auth:
                                 cursor.execute('''SELECT setting_value FROM settings WHERE setting_id = ?''', ('easynews_user',))
                                 auth_easy = cursor.fetchone()
                                 chk_auth_fenlt = str(auth_easy)
+                                cursor.close()
                                 
                                 #Clean up database results
                                 for char in char_remov:
@@ -56,37 +57,38 @@ class Auth:
                                 if not str(var.chk_accountmgr_easy) == chk_auth_fenlt: #Compare Account Mananger data to Add-on data. If they match, authorization is skipped
                                     
                                     #Write settings to database
-                                    from accountmgr.modules import easy_db
+                                    from accountmgr.modules.db import easy_db
                                     easy_db.auth_fenlt_easy()
-                                cursor.close()
+                                    var.remake_settings()
                 except:
                         xbmc.log('%s: Fen Light Easynews Failed!' % var.amgr, xbmc.LOGINFO)
                         pass
 
         #afFENity
-                try:
+                '''try:
                         if xbmcvfs.exists(var.chk_affen) and xbmcvfs.exists(var.chkset_affen): #Check that the addon is installed and settings.db exists
                             
-                            from accountmgr.modules import easy_db
+                            from accountmgr.modules.db import easy_db
                             conn = easy_db.create_conn(var.affen_settings_db)
                             
                             with conn:
                                 cursor = conn.cursor()
-                                cursor.execute('''SELECT setting_value FROM settings WHERE setting_id = ?''', ('easynews_user',))
+                                cursor.execute(''''''SELECT setting_value FROM settings WHERE setting_id = ?'''''', ('easynews_user',))
                                 auth_easy = cursor.fetchone()
                                 chk_auth_affen = str(auth_easy)
+                                cursor.close()
                                 
                                 for char in char_remov:
                                     chk_auth_affen = chk_auth_affen.replace(char, "")
                                     
                                 if not str(var.chk_accountmgr_easy) == chk_auth_affen: #Compare Account Mananger data to Add-on data. If they match, authorization is skipped
                                     
-                                    from accountmgr.modules import easy_db
+                                    from accountmgr.modules.db import easy_db
                                     easy_db.auth_affen_easy()
-                                cursor.close()
+                                    var.remake_settings()
                 except:
                         xbmc.log('%s: afFENity Easynews Failed!' % var.amgr, xbmc.LOGINFO)
-                        pass
+                        pass'''
 
         #Coalition
                 try:
@@ -144,7 +146,7 @@ class Auth:
                                 enable_easy = ("true")
                                      
                                 if not str(var.chk_accountmgr_easy) == str(chk_easy) or str(chk_easy) == '':
-                                        addon = xbmcaddon.Addon("plugin.video.infinityity")
+                                        addon = xbmcaddon.Addon("plugin.video.infinity")
                                         addon.setSetting("easynews.enable", enable_easy)
                                         addon.setSetting("easynews.user", your_easy_user)
                                         addon.setSetting("easynews.password", your_easy_pass)

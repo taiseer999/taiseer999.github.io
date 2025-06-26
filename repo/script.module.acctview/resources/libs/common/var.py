@@ -8,12 +8,10 @@ addon = xbmcaddon.Addon(addon_id)
 setting = addon.getSetting
 
 translatePath = xbmcvfs.translatePath
-home = translatePath('special://home/')
 xmls = translatePath('special://home/addons/script.module.accountmgr/resources/xmls/')
 addons = translatePath('special://home/addons/')
-addon_data = translatePath('special://userdata/addon_data/')
-
-user_path = os.path.join(home, 'userdata/')
+addon_data = translatePath('special://profile/addon_data/')
+user_path = translatePath('special://profile/')
 backup_path = setting('backupfolder')
 
 #Account Manager Custom Trakt API Check
@@ -33,25 +31,61 @@ def traktSecret():
                 traktSecret = str(setting('dev.client.secret'))
         return traktSecret
 
-def rm_traktcache():
-        if setting('rm_traktcache')=='true':
-                if os.path.exists(os.path.join(fenlt_trakt_db)):
-                        try:
-                                os.unlink(os.path.join(fenlt_trakt_db))
-                        except OSError:
-                                pass
-                if os.path.exists(os.path.join(affen_trakt_db)):
-                        try:
-                                os.unlink(os.path.join(affen_trakt_db))
-                        except OSError:
-                                pass
-                addon.setSetting("rm_traktcache", 'false')
+#Trakt Sync List Paths
+synclist_file = os.path.join(user_path, 'addon_data/script.module.accountmgr/trakt_sync_list.json')
+synclist_backup = translatePath(backup_path + 'trakt/trakt_sync_list.json')
 
+#Backup Trakt Sync List
+def backup_synclist():
+    if os.path.exists(os.path.join(synclist_file)) and os.path.exists(os.path.join(trakt_backup)):
+        try:
+                xbmcvfs.copy(synclist_file, synclist_backup)
+        except:
+            pass
+
+#Restore Trakt Sync List
+def restore_synclist():
+    if os.path.exists(os.path.join(synclist_backup)):
+        try:
+                xbmcvfs.copy(synclist_backup, synclist_file)
+        except:
+            pass
+
+#Delete Trakt Sync List
+def delete_synclist():
+    if os.path.exists(os.path.join(synclist_file)):
+        try:
+                os.unlink(synclist_file)
+        except:
+            pass
+
+#Acctview Open Add-on Settings
+def open_settings(who):
+    addonid = tools.get_addon_by_id(script.module.accountmgr)
+    addonid.openSettings()
+    xbmc.executebuiltin('Container.Refresh()')
+    
+def open_settings_fenlt():
+    xbmc.executebuiltin('PlayMedia(plugin://plugin.video.fenlight/?mode=open_settings)')
+    
+#Remake Settings Cache
+def remake_settings():
+        if not xbmcvfs.exists(chk_fenlt):
+        #if not xbmcvfs.exists(chk_fenlt) or xbmcvfs.exists(chk_affen):
+                pass
+        else:
+                if xbmcvfs.exists(chk_fenlt):
+                        xbmc.executebuiltin('PlayMedia(plugin://plugin.video.fenlight/?mode=sync_settings&silent=true)')
+                        xbmc.sleep(1000)
+                #if xbmcvfs.exists(chk_affen):
+                        #xbmc.executebuiltin('PlayMedia(plugin://plugin.video.affenity/?mode=sync_settings&silent=true)')
+                        #xbmc.sleep(1000)
+        
 #Account Mananger Trakt API Keys
 client_am = traktID()
 secret_am = traktSecret()
 
-#Account Mananger Trakt/Simkl/Debrid Check
+#Account Mananger Trakt/Debrid Check
 chk_api = traktID()
 chk_accountmgr_tk = setting("trakt.token")
 chk_accountmgr_tk_rd = setting("realdebrid.token")
@@ -71,25 +105,32 @@ chk_accountmgr_tvdb = setting("tvdb.api.key")
 chk_accountmgr_trakt = setting("trakt.api.key")
 
 #Account Manager Non-Debrid Check
+chk_accountmgr_tb = setting("torbox.token")
+chk_accountmgr_ed = setting("easydebrid.token")
 chk_accountmgr_offc = setting("offcloud.token")
 chk_accountmgr_easy = setting("easynews.password")
 chk_accountmgr_file = setting("filepursuit.api.key")
+
+#Account Manager External Provider Check
+chk_accountmgr_ext = setting("ext.provider")
 
 #Account Manager Backup Paths
 rd_backup = translatePath(backup_path) + 'realdebrid/'
 pm_backup = translatePath(backup_path) + 'premiumize/'
 ad_backup = translatePath(backup_path) + 'alldebrid/'
 trakt_backup = translatePath(backup_path) + 'trakt/'
-simkl_backup = translatePath(backup_path) + 'simkl/'
+tb_backup = translatePath(backup_path) + 'torbox/'
+ed_backup = translatePath(backup_path) + 'easydebrid/'
 offc_backup = translatePath(backup_path) + 'offcloud/'
 easy_backup = translatePath(backup_path) + 'easynews/'
 file_backup = translatePath(backup_path) + 'filepursuit/'
 meta_backup = translatePath(backup_path) + 'meta/'
+ext_backup = translatePath(backup_path) + 'extproviders/'
 
 #Fen Light Database Paths
-fen_lt_path = os.path.join(user_path, 'addon_data/plugin.video.fenlight/databases')
+fen_lt_path = os.path.join(user_path, 'addon_data/plugin.video.fenlight/databases/')
 fenlt_settings_db = os.path.join(fen_lt_path,'settings.db')
-fenlt_traktcache = os.path.join(user_path, 'addon_data/plugin.video.fenlight/databases')
+fenlt_traktcache = os.path.join(user_path, 'addon_data/plugin.video.fenlight/databases/')
 fenlt_trakt_db = os.path.join(fenlt_traktcache,'traktcache.db')
 
 #Fen Light Backup Paths
@@ -97,22 +138,26 @@ rd_backup_fenlt = os.path.join(rd_backup,'fenlt_rd.db')
 pm_backup_fenlt = os.path.join(pm_backup,'fenlt_pm.db')
 ad_backup_fenlt = os.path.join(ad_backup,'fenlt_ad.db')
 trakt_backup_fenlt = os.path.join(trakt_backup,'fenlt_trakt.db')
-meta_backup_fenlt = os.path.join(meta_backup,'fenlt_meta.db')
+tb_backup_fenlt = os.path.join(tb_backup,'fenlt_tb.db')
+ed_backup_fenlt = os.path.join(ed_backup,'fenlt_ed.db')
+offc_backup_fenlt = os.path.join(offc_backup,'fenlt_offc.db')
 easy_backup_fenlt = os.path.join(easy_backup,'fenlt_easy.db')
+ext_backup_fenlt = os.path.join(ext_backup,'fenlt_ext.db')
+meta_backup_fenlt = os.path.join(meta_backup,'fenlt_meta.db')
 
 #afFEnity Database Paths
-affen_lt_path = os.path.join(user_path, 'addon_data/plugin.video.affenity/databases')
-affen_settings_db = os.path.join(affen_lt_path,'settings.db')
-affen_traktcache = addon_data + translatePath('plugin.video.affenity/databases')
-affen_trakt_db = os.path.join(affen_traktcache,'traktcache.db')
+#affen_lt_path = os.path.join(user_path, 'addon_data/plugin.video.affenity/databases')
+#affen_settings_db = os.path.join(affen_lt_path,'settings.db')
+#affen_traktcache = addon_data + translatePath('plugin.video.affenity/databases')
+#affen_trakt_db = os.path.join(affen_traktcache,'traktcache.db')
 
 #afFENity Backup Paths
-rd_backup_affen = os.path.join(rd_backup,'affen_rd.db')
-pm_backup_affen = os.path.join(pm_backup,'affen_pm.db')
-ad_backup_affen = os.path.join(ad_backup,'affen_ad.db')
-trakt_backup_affen = os.path.join(trakt_backup,'affen_trakt.db')
-meta_backup_affen = os.path.join(meta_backup,'affen_meta.db')
-easy_backup_affen = os.path.join(easy_backup,'affen_easy.db')
+#rd_backup_affen = os.path.join(rd_backup,'affen_rd.db')
+#pm_backup_affen = os.path.join(pm_backup,'affen_pm.db')
+#ad_backup_affen = os.path.join(ad_backup,'affen_ad.db')
+#trakt_backup_affen = os.path.join(trakt_backup,'affen_trakt.db')
+#easy_backup_affen = os.path.join(easy_backup,'affen_easy.db')
+#meta_backup_affen = os.path.join(meta_backup,'affen_meta.db')
 
 #Realizer Paths
 realx_path = os.path.join(user_path, 'addon_data/plugin.video.realizerx')
@@ -168,7 +213,7 @@ pvr = xmls + translatePath('script.module.pvr.artwork/settings.xml')
 chk_seren = addons + translatePath('plugin.video.seren/')
 chk_fen = addons + translatePath('plugin.video.fen/')
 chk_fenlt = addons + translatePath('plugin.video.fenlight/')
-chk_affen = addons + translatePath('plugin.video.affenity/')
+#chk_affen = addons + translatePath('plugin.video.affenity/')
 chk_coal = addons + translatePath('plugin.video.coalition/')
 chk_pov = addons + translatePath('plugin.video.pov/')
 chk_umb = addons + translatePath('plugin.video.umbrella/')
@@ -207,6 +252,7 @@ chk_simkl = addons + translatePath('script.simkl/')
 chk_embuary = addons + translatePath('script.embuary.info/')
 chk_meta = addons + translatePath('script.module.metahandler/')
 chk_pvr = addons + translatePath('script.module.pvr.artwork/')
+chk_coco = addons + translatePath('script.module.cocoscrapers/')
 chk_fentastic = addons + translatePath('skin.fentastic/')
 chk_nimbus = addons + translatePath('skin.nimbus/')
 
@@ -256,7 +302,7 @@ pvr_ud = addon_data + translatePath('script.module.pvr.artwork/')
 chkset_seren = addon_data + translatePath('plugin.video.seren/settings.xml')
 chkset_fen = addon_data + translatePath('plugin.video.fen/settings.xml')
 chkset_fenlt = addon_data + translatePath('plugin.video.fenlight/databases/settings.db')
-chkset_affen = addon_data + translatePath('plugin.video.affenity/databases/settings.db')
+#chkset_affen = addon_data + translatePath('plugin.video.affenity/databases/settings.db')
 chkset_coal = addon_data + translatePath('plugin.video.coalition/settings.xml')
 chkset_pov = addon_data + translatePath('plugin.video.pov/settings.xml')
 chkset_umb = addon_data + translatePath('plugin.video.umbrella/settings.xml')
@@ -303,10 +349,14 @@ chkset_nimbus = addon_data + translatePath('skin.nimbus/settings.xml')
 path_fentastic = addon_data + translatePath('skin.fentastic/settings.xml')
 path_nimbus = addon_data + translatePath('skin.nimbus/settings.xml')
 
+#Skin Setting OS Paths
+nimbus = os.path.join(addon_data, 'skin.nimbus/settings.xml')
+fentastic = os.path.join(addon_data, 'skin.fentastic/settings.xml')
+
 #Trakt API Key Paths
 path_seren = addons + translatePath('plugin.video.seren/resources/lib/indexers/trakt.py')
 path_fen = addons + translatePath('plugin.video.fen/resources/lib/apis/trakt_api.py')
-path_affen = addons + translatePath('plugin.video.affenity/resources/lib/apis/trakt_api.py')
+#path_affen = addons + translatePath('plugin.video.affenity/resources/lib/apis/trakt_api.py')
 path_coal = addons + translatePath('plugin.video.coalition/resources/lib/apis/trakt_api.py')
 path_shadow = addons + translatePath('plugin.video.shadow/resources/modules/general.py')
 path_ghost = addons + translatePath('plugin.video.ghost/resources/modules/general.py')
@@ -332,8 +382,8 @@ fen_client = '645b0f46df29d27e63c4a8d5fff158edd0bef0a6a5d32fc12c1b82388be351af'
 fen_secret = '422a282ef5fe4b5c47bc60425c009ac3047ebd10a7f6af790303875419f18f98'
 fenlt_client = '1038ef327e86e7f6d39d80d2eb5479bff66dd8394e813c5e0e387af0f84d89fb'
 fenlt_secret = '8d27a92e1d17334dae4a0590083a4f26401cb8f721f477a79fd3f218f8534fd1'
-affen_client = 'd4161a7a106424551add171e5470112e4afdaf2438e6ef2fe0548edc75924868'
-affen_secret = 'b5fcd7cb5d9bb963784d11bbf8535bc0d25d46225016191eb48e50792d2155c0'
+#affen_client = 'd4161a7a106424551add171e5470112e4afdaf2438e6ef2fe0548edc75924868'
+#affen_secret = 'b5fcd7cb5d9bb963784d11bbf8535bc0d25d46225016191eb48e50792d2155c0'
 coal_client = '19849909a0f8c9dc632bc5f5c7ccafd19f3e452e2e44fee05b83fd5dc1e77675'
 coal_secret = 'b5fcd7cb5d9bb963784d11bbf8535bc0d25d46225016191eb48e50792d2155c0'
 pov_client = '6bc29124c3d9466e06a3ed19a7b5976fcb28311008401e1ce04cf08196f8b16a'
@@ -385,4 +435,5 @@ home_fan = 'c3469c1cc9465b9f1a1a862feea8b76b'
 home_tmdb = 'fb981e5ab89415bba616409d5eb5f05e'
 crew_fan = '27bef29779bbffe947232dc310a91f0c'
 crew_tmdb = '0049795edb57568b95240bc9e61a9dfc'
+dradis_fan = 'fe073550acf157bdb8a4217f215c0882'
 dradis_tmdb = '7b2b174744f774ba48145e2859bb2e2c'

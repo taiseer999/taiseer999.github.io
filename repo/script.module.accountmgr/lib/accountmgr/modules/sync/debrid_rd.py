@@ -101,7 +101,7 @@ class Auth:
                 if xbmcvfs.exists(var.chk_fenlt) and xbmcvfs.exists(var.chkset_fenlt): #Check that the addon is installed and settings.db exists
                     
                     #Create database connection
-                    from accountmgr.modules import debrid_db
+                    from accountmgr.modules.db import debrid_db
                     conn = debrid_db.create_conn(var.fenlt_settings_db)
                     
                     #Get add-on settings to compare
@@ -118,6 +118,7 @@ class Auth:
                         cursor.execute('''SELECT setting_value FROM settings WHERE setting_id = ?''', ('ad.token',))
                         auth_ad = cursor.fetchone()
                         chk_auth_fenlt_ad = str(auth_ad)
+                        cursor.close()
                         
                         #Clean up database results
                         for char in char_remov:
@@ -126,7 +127,7 @@ class Auth:
                         if not str(var.chk_accountmgr_tk_rd) == chk_auth_fenlt: #Compare Account Mananger token to Add-on token. If they match, authorization is skipped
                             
                             #Write settings to database
-                            from accountmgr.modules import debrid_db
+                            from accountmgr.modules.db import debrid_db
                             debrid_db.auth_fenlt_rd()
                             
                             #Enable authorized debrid services
@@ -134,78 +135,79 @@ class Auth:
                                 chk_auth_fenlt_pm = chk_auth_fenlt_pm.replace(char, "")
                             
                             if chk_auth_fenlt_pm != 'empty_setting' or chk_auth_fenlt_pm != '' or chk_auth_fenlt_pm != None:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.enable_fenlt_pm()
                             else:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.disable_fenlt_pm()
                                 
                             for char in char_remov:
                                 chk_auth_fenlt_ad = chk_auth_fenlt_ad.replace(char, "")
 
                             if chk_auth_fenlt_ad != 'empty_setting' or chk_auth_fenlt_ad != '' or chk_auth_fenlt_ad != None:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.enable_fenlt_ad()
                             else:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.disable_fenlt_ad()
-                        cursor.close()
+                            var.remake_settings()
         except:
                 xbmc.log('%s: Fen Light Real-Debrid Failed!' % var.amgr, xbmc.LOGINFO)
                 pass
 
     #afFENity RD        
-        try:
+        '''try:
                 if xbmcvfs.exists(var.chk_affen) and xbmcvfs.exists(var.chkset_affen):
                     
-                    from accountmgr.modules import debrid_db
+                    from accountmgr.modules.db import debrid_db
                     conn = debrid_db.create_conn(var.affen_settings_db)
                     
                     with conn:
                         cursor = conn.cursor()
-                        cursor.execute('''SELECT setting_value FROM settings WHERE setting_id = ?''', ('rd.token',))
+                        cursor.execute(''''''SELECT setting_value FROM settings WHERE setting_id = ?'''''', ('rd.token',))
                         auth_rd = cursor.fetchone()
                         chk_auth_affen = str(auth_rd)
 
-                        cursor.execute('''SELECT setting_value FROM settings WHERE setting_id = ?''', ('pm.token',))
+                        cursor.execute(''''''SELECT setting_value FROM settings WHERE setting_id = ?'''''', ('pm.token',))
                         auth_pm = cursor.fetchone()
                         chk_auth_affen_pm = str(auth_pm)
 
-                        cursor.execute('''SELECT setting_value FROM settings WHERE setting_id = ?''', ('ad.token',))
+                        cursor.execute(''''''SELECT setting_value FROM settings WHERE setting_id = ?'''''', ('ad.token',))
                         auth_ad = cursor.fetchone()
                         chk_auth_affen_ad = str(auth_ad)
+                        cursor.close()
                         
                         for char in char_remov:
                             chk_auth_affen = chk_auth_affen.replace(char, "")
                         
                         if not str(var.chk_accountmgr_tk_rd) == chk_auth_affen:
                             
-                            from accountmgr.modules import debrid_db
+                            from accountmgr.modules.db import debrid_db
                             debrid_db.auth_affen_rd()
                             
                             for char in char_remov:
                                 chk_auth_affen_pm = chk_auth_affen_pm.replace(char, "")
                             
                             if chk_auth_affen_pm != 'empty_setting' or chk_auth_affen_pm != '' or chk_auth_affen_pm != None:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.enable_affen_pm()
                             else:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.disable_affen_pm()
                                 
                             for char in char_remov:
                                 chk_auth_affen_ad = chk_auth_affen_ad.replace(char, "")
 
                             if chk_auth_affen_ad != 'empty_setting' or chk_auth_affen_ad != '' or chk_auth_affen_ad != None:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.enable_affen_ad()
                             else:
-                                from accountmgr.modules import debrid_db
+                                from accountmgr.modules.db import debrid_db
                                 debrid_db.disable_affen_ad()
-                        cursor.close()
+                            var.remake_settings()
         except:
                 xbmc.log('%s: afFENity Real-Debrid Failed!' % var.amgr, xbmc.LOGINFO)
-                pass
+                pass'''
 
     #Coalition RD
         try:

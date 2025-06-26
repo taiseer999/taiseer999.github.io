@@ -74,28 +74,28 @@ def connect_trakt_fenlt(conn, setting):
         pass
 
 
-######################### Affenity Trakt #########################
+'''######################### Affenity Trakt #########################
 def connect_trakt_affen(conn, setting):
     try:
         # Update settings database
-        trakt_token = ''' UPDATE settings
+        trakt_token = '''''' UPDATE settings
                   SET setting_value = ?
-                  WHERE setting_id = ?'''
-        trakt_user = ''' UPDATE settings
+                  WHERE setting_id = ?''''''
+        trakt_user = '''''' UPDATE settings
                   SET setting_value = ?
-                  WHERE setting_id = ?'''
-        trakt_refresh = ''' UPDATE settings
+                  WHERE setting_id = ?''''''
+        trakt_refresh = '''''' UPDATE settings
                   SET setting_value = ?
-                  WHERE setting_id = ?'''
-        trakt_expires = ''' UPDATE settings
+                  WHERE setting_id = ?''''''
+        trakt_expires = '''''' UPDATE settings
                   SET setting_value = ?
-                  WHERE setting_id = ?'''
-        trakt_watched_indicators = ''' UPDATE settings
+                  WHERE setting_id = ?''''''
+        trakt_watched_indicators = '''''' UPDATE settings
                   SET setting_value = ?
-                  WHERE setting_id = ?'''
-        trakt_watched_indicators_name = ''' UPDATE settings
+                  WHERE setting_id = ?''''''
+        trakt_watched_indicators_name = '''''' UPDATE settings
                   SET setting_value = ?
-                  WHERE setting_id = ?'''
+                  WHERE setting_id = ?''''''
 
         cur = conn.cursor()
         cur.execute(trakt_token, setting)
@@ -108,7 +108,7 @@ def connect_trakt_affen(conn, setting):
         cur.close()
     except:
         xbmc.log('%s: Trakt_db Failed!' % var.amgr, xbmc.LOGINFO)
-        pass
+        pass'''
     
     
 #################### Auth Fen Light Trakt ###################
@@ -131,7 +131,7 @@ def auth_fenlt_trakt():
 
 
 
-#################### Auth afFENity Trakt ###################
+'''#################### Auth afFENity Trakt ###################
 def auth_affen_trakt():
     try:
         # Create database connection
@@ -145,4 +145,4 @@ def auth_affen_trakt():
             connect_trakt_affen(conn, ('Trakt', 'watched_indicators_name'))
     except:
         xbmc.log('%s: Trakt_db afFENity Failed!' % var.amgr, xbmc.LOGINFO)
-        pass
+        pass'''
