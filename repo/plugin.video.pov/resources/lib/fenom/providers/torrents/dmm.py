@@ -9,6 +9,7 @@ from fenom import source_utils
 
 
 class source:
+	timeout = 7
 	priority = 3
 	pack_capable = True
 	hasMovies = True
@@ -56,7 +57,7 @@ class source:
 
 	def get_sources(self, url):
 		try:
-			results = requests.get(url, params=self.params, timeout=5)
+			results = requests.get(url, params=self.params, timeout=self.timeout)
 			files = results.json()['results']
 			self.files += files
 		except:
@@ -118,7 +119,7 @@ class source:
 
 	def get_sources_packs(self, link):
 		try:
-			results = self._queue.get(timeout=6)
+			results = self._queue.get(timeout=self.timeout + 1)
 			if not results: return
 			files = results
 		except:

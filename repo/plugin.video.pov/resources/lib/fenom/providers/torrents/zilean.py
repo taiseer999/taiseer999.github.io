@@ -10,6 +10,7 @@ from fenom import source_utils
 
 
 class source:
+	timeout = 5
 	priority = 1
 	pack_capable = True
 	hasMovies = True
@@ -43,7 +44,7 @@ class source:
 				hdlr = year
 			# log_utils.log('url = %s' % url)
 			try:
-				results = requests.get(url, timeout=5) # client.request(url, timeout=5)
+				results = requests.get(url, timeout=self.timeout) # client.request(url, timeout=5)
 				files = results.json() # jsloads(results)
 			except: files = []
 			self._queue.put_nowait(files) # if seasons
@@ -90,7 +91,7 @@ class source:
 			season = data['season']
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
 #			results = requests.get(url, timeout=5) # client.request(url, timeout=5)
-			files = self._queue.get(timeout=6) # jsloads(results)
+			files = self._queue.get(timeout=self.timeout + 1) # jsloads(results)
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:

@@ -15,6 +15,7 @@ headers = {'User-Agent': 'Mozilla/5.0'}
 
 
 class source:
+	timeout = 5
 	priority = 1
 	pack_capable = True
 	hasMovies = True
@@ -56,7 +57,7 @@ class source:
 				hdlr = year
 			# log_utils.log('url = %s' % url)
 			try:
-				results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
+				results = requests.get(url, headers=headers, timeout=self.timeout) # client.request(url, timeout=5)
 #				if not results or any(value in results for value in SERVER_ERROR): return sources
 				files = results.json()['streams'] # jsloads(results)['streams']
 			except: files = []
@@ -128,7 +129,7 @@ class source:
 			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
 #			results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
 #			if not results or any(value in results for value in SERVER_ERROR): return sources
-			files = self._queue.get(timeout=6) # jsloads(results)['streams']
+			files = self._queue.get(timeout=self.timeout + 1) # jsloads(results)['streams']
 			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()

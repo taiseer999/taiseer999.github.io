@@ -192,7 +192,12 @@ class _ListItem(object):
         return self.context_menu
 
     def finalise_art(self):
-        self.art['icon'] = self.art.get('icon') or f'{ADDONPATH}/resources/icons/themoviedb/default.png'
+        self.art['icon'] = (
+            self.art.get('icon')
+            or self.art.get('poster')
+            or self.art.get('thumb')
+            or f'{ADDONPATH}/resources/icons/themoviedb/default.png'
+        )
         return self.art
 
     def finalise_label(self):
@@ -255,13 +260,13 @@ class _ListItem(object):
     def title(self):
         return self.label
 
-    def set_details(self, details=None, reverse=False, override=False):
+    def set_details(self, details=None, reverse=False, override=False, reverse_artwork=False):
         if not details:
             return
         self.stream_details = merge_two_dicts(details.get('stream_details', {}), self.stream_details, reverse=reverse)
         self.infolabels = merge_two_dicts(details.get('infolabels', {}), self.infolabels, reverse=reverse)
         self.infoproperties = merge_two_dicts(details.get('infoproperties', {}), self.infoproperties, reverse=reverse)
-        self.art = merge_two_dicts(details.get('art', {}), self.art, reverse=reverse)
+        self.art = merge_two_dicts(details.get('art', {}), self.art, reverse=bool(reverse or reverse_artwork))
         self.unique_ids = merge_two_dicts(details.get('unique_ids', {}), self.unique_ids, reverse=reverse)
         self.cast = self.cast or details.get('cast', [])
         if not override:
@@ -274,7 +279,8 @@ class _ListItem(object):
     def url(self):
         return BuildURL(self.path, **self.params).url
 
-    def get_listitem(self, offscreen=True):
+    def get_listitem(self, offscreen=True, finalise=False):
+        self.finalise() if finalise else None
         listitem = KodiListItem(label=self.label, label2=self.label2, path=self.url, offscreen=offscreen)
         return self.set_listitem(listitem)
 

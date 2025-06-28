@@ -26,6 +26,7 @@ from tmdbhelper.lib.items.database.tabledef import (
     SERVICE_COLUMNS,
     ART_COLUMNS,
     FANART_TV_COLUMNS,
+    USER_ART_COLUMNS,
     UNIQUE_ID_COLUMNS,
     SIMPLECACHE_COLUMNS,
     LACTIVITIES_COLUMNS,
@@ -39,7 +40,7 @@ class ItemDetailsDatabase(Database):
         super().__init__(filename=self.cache_filename)
 
     # DB version must be max of table_version
-    database_version = 31
+    database_version = 33
 
     database_changes = {
         21: (
@@ -88,7 +89,13 @@ class ItemDetailsDatabase(Database):
         31: (
             'DROP TABLE IF EXISTS simplecache',
             'DROP TABLE IF EXISTS lactivities',
-        )
+        ),
+        32: (
+            'ALTER TABLE baseitem ADD fanart_tv INTEGER DEFAULT 0 NOT NULL',
+        ),
+        33: (
+            'ALTER TABLE baseitem ADD language TEXT',
+        ),
     }
 
     baseitem_columns = BASEITEM_COLUMNS
@@ -115,6 +122,7 @@ class ItemDetailsDatabase(Database):
     service_columns = SERVICE_COLUMNS
     art_columns = ART_COLUMNS
     fanart_tv_columns = FANART_TV_COLUMNS
+    user_art_columns = USER_ART_COLUMNS
     unique_id_columns = UNIQUE_ID_COLUMNS
     simplecache_columns = SIMPLECACHE_COLUMNS
     lactivities_columns = LACTIVITIES_COLUMNS
@@ -146,6 +154,7 @@ class ItemDetailsDatabase(Database):
             'custom': self.custom_columns,
             'art': self.art_columns,
             'fanart_tv': self.fanart_tv_columns,
+            'user_art': self.user_art_columns,
             'unique_id': self.unique_id_columns,
             'simplecache': self.simplecache_columns,
             'lactivities': self.lactivities_columns,

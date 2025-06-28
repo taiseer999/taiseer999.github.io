@@ -406,6 +406,16 @@ msgctxt "#32060"
 msgid "files extracted"
 msgstr ""
 
+#: /resources/settings.xml
+msgctxt "#32082"
+msgid "Page multiplier (Other basic lists)"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32083"
+msgid "Page multiplier (Database sync lists)"
+msgstr ""
+
 #: /resources/lib/player.py
 msgctxt "#32061"
 msgid "Play with"
@@ -419,6 +429,11 @@ msgstr ""
 #: /resources/settings.xml
 msgctxt "#32070"
 msgid "Male"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/modify_identifier.py
+msgctxt "#32087"
+msgid "Search for TMDb ID or input manually?"
 msgstr ""
 
 #: /resources/lib/tmdb.py
@@ -451,6 +466,11 @@ msgctxt "#32077"
 msgid "Ignore folder creation checks"
 msgstr ""
 
+#: /resources/tmdbhelper/lib/script/method/modify_identifier.py
+msgctxt "#32094"
+msgid "Select TMDb type"
+msgstr ""
+
 #: /resources/lib/container/basedir.py
 msgctxt "#32078"
 msgid "Still to Watch"
@@ -464,6 +484,11 @@ msgstr ""
 #: /resources/settings.xml
 msgctxt "#32081"
 msgid "Next page item"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/modify_identifier.py
+msgctxt "#32098"
+msgid "Updated"
 msgstr ""
 
 #: /resources/settings.xml
@@ -494,6 +519,16 @@ msgstr ""
 #: /resources/settings.xml
 msgctxt "#32090"
 msgid "Content"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/modify_artwork.py
+msgctxt "#32105"
+msgid "leave blank to delete"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/modify_artwork.py
+msgctxt "#32106"
+msgid "Enter {} URL"
 msgstr ""
 
 #: /resources/settings.xml
@@ -536,9 +571,24 @@ msgctxt "#32100"
 msgid "Do you wish to clear the existing items or add more?"
 msgstr ""
 
+#: /resources/tmdbhelper/lib/script/method/modify_artwork.py
+msgctxt "#32115"
+msgid "Reset {} artwork to default?"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/script/method/modify_artwork.py
+msgctxt "#32116"
+msgid "Remove user artwork override and reset artwork to default artwork selection as defined in the settings."
+msgstr ""
+
 #: /resources/lib/container.py
 msgctxt "#32101"
 msgid "Clear Items"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/items/context.py
+msgctxt "#32118"
+msgid "Modify artwork"
 msgstr ""
 
 #: /resources/lib/container.py
@@ -568,6 +618,11 @@ msgctxt "#32108"
 msgid "Choose matching method for parameters with multiple values."
 msgstr ""
 
+#: /resources/settings.xml
+msgctxt "#32124"
+msgid "RatingPosterDB API"
+msgstr ""
+
 #: /resources/lib/container.py
 msgctxt "#32109"
 msgid "Match ANY Value"
@@ -576,6 +631,21 @@ msgstr ""
 #: /resources/lib/container.py
 msgctxt "#32110"
 msgid "Match ALL Values"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32127"
+msgid "RatingPosterDB API key"
+msgstr ""
+
+#: /resources/tmdbhelper/lib/items/database/baseview_factories/concrete_classes/ftv_fanart.py
+msgctxt "#32128"
+msgid "Likes"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32129"
+msgid "Override player monitor clearlogo with artwork from TMDbHelper"
 msgstr ""
 
 #: /resources/lib/container.py

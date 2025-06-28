@@ -302,6 +302,9 @@ class Router:
 		elif mode == 'undesirablesUserRemove':
 			from caches.undesirables_cache import undesirablesUserRemove
 			undesirablesUserRemove()
+		elif mode == 'speedTest':
+			from fenom.speedtest import Magneto
+			Magneto().speedtest()
 
 
 if __name__ == '__main__':

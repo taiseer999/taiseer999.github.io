@@ -18,6 +18,13 @@ BASEITEM_COLUMNS = {
         'data': 'INTEGER DEFAULT 0 NOT NULL',
         'indexed': True
     },
+    'fanart_tv': {
+        'data': 'INTEGER DEFAULT 0 NOT NULL',
+        'indexed': True
+    },
+    'language': {
+        'data': 'TEXT',
+    },
 }
 
 MOVIE_COLUMNS = {
@@ -232,7 +239,6 @@ EPISODE_COLUMNS = {
     },
 }
 
-
 BELONGS_COLUMNS = {
     'id': {
         'data': 'TEXT',
@@ -247,7 +253,6 @@ BELONGS_COLUMNS = {
         'unique': True,
     },
 }
-
 
 COLLECTION_COLUMNS = {
     'id': {
@@ -727,6 +732,22 @@ FANART_TV_COLUMNS = {
         'unique': True,
     },
     'extension': {
+        'data': 'TEXT',
+    },
+    'parent_id': {
+        'data': 'TEXT',
+        'foreign_key': 'baseitem(id)',
+        'indexed': True,
+        'unique': True,
+    },
+}
+
+USER_ART_COLUMNS = {
+    'type': {
+        'data': 'TEXT',
+        'unique': True,
+    },
+    'icon': {
         'data': 'TEXT',
     },
     'parent_id': {

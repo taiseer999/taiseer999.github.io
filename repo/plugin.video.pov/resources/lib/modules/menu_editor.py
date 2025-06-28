@@ -295,7 +295,7 @@ class MenuEditor:
 		chosen_folder = {'mode': 'navigator.build_shortcut_folder_list', 'name': name, 'iconImage': 'folder.png', 'shortcut_folder': 'True', 'external_list_item': 'True'}
 		active_list = self.params_get('active_list')
 		list_items = navigator_cache.currently_used_list(active_list)
-		position = self._menu_select(list_items, self.params_get('menu_name_translated'), multi_line='true', position_list=True)
+		position = self._menu_select(list_items, name, multi_line='true', position_list=True)
 		if position is None: return kodi_utils.notification(32736, 1500)
 		list_items.insert(position, chosen_folder)
 		self._db_execute('set', active_list, list_items)

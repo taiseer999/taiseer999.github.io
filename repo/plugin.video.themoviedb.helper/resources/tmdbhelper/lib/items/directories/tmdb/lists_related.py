@@ -1,5 +1,5 @@
 from tmdbhelper.lib.items.directories.tmdb.lists_standard import ListStandard, ListStandardProperties
-from tmdbhelper.lib.items.directories.tmdb.lists_view import ItemKeywords, ItemReviews
+from tmdbhelper.lib.items.directories.tmdb.lists_allitems import ItemKeywords, ItemReviews
 from tmdbhelper.lib.files.ftools import cached_property
 
 
@@ -15,7 +15,7 @@ class ListRelatedProperties(ListStandardProperties):
             self.tmdb_type,
             self.tmdb_id,
             self.page,
-            self.length
+            self.pmax
         )
 
 
@@ -35,7 +35,8 @@ class ListRecommendations(ListRelated):
         list_properties.dbid_sorted = True
         list_properties.request_url = '{tmdb_type}/{tmdb_id}/recommendations'
         list_properties.localize = 32223
-        list_properties.length = 2  # Recommendations only have 2 pages
+        list_properties.page_length = 2  # Recommendations only have 2 pages
+        list_properties.length = 2
         return list_properties
 
 
