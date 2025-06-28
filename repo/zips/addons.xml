@@ -2251,7 +2251,7 @@ version 2.0.1
 - Fix widget navigating to entire TV show not working
 </news>
     </extension>
-</addon><addon id="plugin.video.pov" version="5.06.03" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.06.05" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -2881,7 +2881,7 @@ version 2.0.1
 			<fanart>fanart.jpg</fanart>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.themoviedb.helper" version="6.9.2" name="TMDb Helper" provider-name="jurialmunkey">
+</addon><addon id="plugin.video.themoviedb.helper" version="6.9.8" name="TMDb Helper" provider-name="jurialmunkey">
 <requires>
   <import addon="xbmc.python" version="3.0.1" />
   <import addon="script.module.requests" version="2.9.1" />
@@ -7676,7 +7676,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.10.9">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey" version="2.10.10">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -7709,7 +7709,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.6.5">
+</addon><addon id="skin.arctic.fuse.2.noncpm" name="Arctic Fuse 2 noncpm" provider-name="jurialmunkey/Abukareem" version="4.6.6">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -7740,7 +7740,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.ver2" name="Arctic Fuse 2 - ver2" provider-name="jurialmunkey . AK" version="2.10.7.3">
+</addon><addon id="skin.arctic.fuse.2.ver2" name="Arctic Fuse 2 - ver2" provider-name="jurialmunkey . AK" version="2.10.7.4">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
