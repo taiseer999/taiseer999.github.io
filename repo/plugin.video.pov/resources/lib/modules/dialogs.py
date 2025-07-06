@@ -101,7 +101,7 @@ def trakt_manager_choice(params):
 	add_str, rem_str = 'Add to %s?' % choice, 'Remove from %s?' % choice
 	if   choice == 'Collection':
 		data = trakt_api.trakt_fetch_collection_watchlist('collection', params['media_type'])
-		action = 'remove' if params['tmdb_id'] in {str(i['media_ids']['tmdb']) for i in data} else 'add'
+		action = 'remove' if str(params['tmdb_id']) in {str(i['media_ids']['tmdb']) for i in data} else 'add'
 		data = {
 			i[0]: i[1] if i[0] == 'imdb' else int(i[1])
 			for i in (('imdb', params.get('imdb_id')), ('tmdb', params.get('tmdb_id')), ('tvdb', params.get('tvdb_id')))
@@ -114,7 +114,7 @@ def trakt_manager_choice(params):
 		else: trakt_api.add_to_collection(data)
 	elif choice == 'Watchlist':
 		data = trakt_api.trakt_fetch_collection_watchlist('watchlist', params['media_type'])
-		action = 'remove' if params['tmdb_id'] in {str(i['media_ids']['tmdb']) for i in data} else 'add'
+		action = 'remove' if str(params['tmdb_id']) in {str(i['media_ids']['tmdb']) for i in data} else 'add'
 		data = {
 			i[0]: i[1] if i[0] == 'imdb' else int(i[1])
 			for i in (('imdb', params.get('imdb_id')), ('tmdb', params.get('tmdb_id')), ('tvdb', params.get('tvdb_id')))

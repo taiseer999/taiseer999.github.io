@@ -1392,7 +1392,7 @@ updated YouTube addon URL
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.pov" version="5.06.05" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.07.02" name="POV" provider-name="kodifitzwell">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -1400,7 +1400,7 @@ updated YouTube addon URL
     <extension point="xbmc.python.pluginsource" library="resources/lib/router.py">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="resources/lib/service.py" />
+    
     <extension point="xbmc.addon.metadata">
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>

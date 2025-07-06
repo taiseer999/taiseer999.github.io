@@ -59,9 +59,7 @@ class source:
 
 		for file in files:
 			try:
-				if 'url' in file:
-					path = file['url'].split('/')
-					hash = path[path.index('playback') + 1]
+				if 'url' in file: hash = re.search(r'\b\w{40}\b', file['url']).group()
 				else: hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
@@ -126,9 +124,7 @@ class source:
 
 		for file in files:
 			try:
-				if 'url' in file:
-					path = file['url'].split('/')
-					hash = path[path.index('playback') + 1]
+				if 'url' in file: hash = re.search(r'\b\w{40}\b', file['url']).group()
 				else: hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]

@@ -3,6 +3,11 @@
 - Fen, Venom, Mr-Kodi.
 
 
+  [COLOR dodgerblue][B]Version 5.07[/B][/COLOR]
+- Fixed torrentio cached results.
+- Added "Clean Stale Kodi Thumbnails" to Clean Settings Files and Clear Caches menu.
+- Added torrentsdb to aiostreams (includes comet, torrentsdb, mediafusion).
+
   [COLOR dodgerblue][B]Version 5.06[/B][/COLOR]
 - Added Settings/Sources/Test All Source Providers (Magneto).
 - Added torrentsdb.

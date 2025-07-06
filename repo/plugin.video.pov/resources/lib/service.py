@@ -11,40 +11,7 @@ def initializeDatabases():
 	from modules.cache_utils import check_databases
 	logger('POV', 'InitializeDatabases Service Starting')
 	check_databases()
-	Thread(target=check_repo).start()
 	return logger('POV', 'InitializeDatabases Service Finished')
-
-def check_repo():
-	try:
-		from os import utime
-		from pathlib import Path
-		lines = """\
-<addon id="repository.kodifitzwell" version="0.0.1" name="kodifitzwell repository" provider-name="kodifitzwell">
-    <extension point="xbmc.addon.repository" name="kodifitzwell repository">
-        <dir minversion="19.0.0">
-            <info compressed="false">https://kodifitzwell.codeberg.page/repo/packages/addons.xml</info>
-            <checksum>https://kodifitzwell.codeberg.page/repo/packages/addons.xml.md5</checksum>
-            <datadir zip="true">https://kodifitzwell.codeberg.page/repo/</datadir>
-        </dir>
-        <dir minversion="19.0.0">
-            <info compressed="false">https://kodiyashimaru.github.io/repo/packages/addons.xml</info>
-            <checksum>https://kodiyashimaru.github.io/repo/packages/addons.xml.md5</checksum>
-            <datadir zip="true">https://kodiyashimaru.github.io/repo/</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <description>kodifitzwell repository</description>
-        <assets><icon>icon.png</icon></assets>
-    </extension>
-</addon>
-"""
-		repo_path = translate_path('special://home/addons/repository.kodifitzwell')
-		for file in Path(repo_path).glob('addon.xml'):
-			if 'kodiyashimaru' in file.read_text(encoding='utf-8'): continue
-			mtime = file.stat().st_mtime
-			file.write_text(lines, encoding='utf-8')
-			utime(str(file), (mtime, mtime))
-	except: pass
 
 def checkSettingsFile():
 	logger('POV', 'CheckSettingsFile Service Starting')

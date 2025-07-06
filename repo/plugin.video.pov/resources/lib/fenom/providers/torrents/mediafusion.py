@@ -62,9 +62,7 @@ class source:
 
 		for file in files:
 			try:
-				if 'url' in file:
-					path = file['url'].split('/')
-					hash = path[path.index('playback') + 1]
+				if 'url' in file: hash = re.search(r'\b\w{40}\b', file['url']).group()
 				else: hash = file['infoHash']
 				file_title = file['behaviorHints']['filename'].split('\n')
 				file_info = [x for x in file['description'].split('\n') if _INFO.match(x)][0]
@@ -89,7 +87,7 @@ class source:
 					# if any(re.search(item, name_lower) for item in ep_strings): continue
 
 				try:
-					seeders = int(re.search(r'(\d+)', file_info).group(1))
+					seeders = int(re.search(r'👤 (\d+)', file_info).group(1))
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
@@ -129,9 +127,7 @@ class source:
 
 		for file in files:
 			try:
-				if 'url' in file:
-					path = file['url'].split('/')
-					hash = path[path.index('playback') + 1]
+				if 'url' in file: hash = re.search(r'\b\w{40}\b', file['url']).group()
 				else: hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
@@ -142,7 +138,7 @@ class source:
 					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
 				# except: pass
 
-				name = source_utils.clean_name(file_title[0])
+				name = source_utils.clean_name(file_title[0].split('┈➤')[0])
 
 				episode_start, episode_end = 0, 0
 				if not search_series:
@@ -164,7 +160,7 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				try:
-					seeders = int(re.search(r'(\d+)', file_info).group(1))
+					seeders = int(re.search(r'👤 (\d+)', file_info).group(1))
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 

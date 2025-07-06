@@ -40,7 +40,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <align>left</align>
                 <aligny>center</aligny>
-                <label>[UPPERCASE]$ADDON[plugin.video.pov 32970][/UPPERCASE]</label>
+                <label>[UPPERCASE]Press BACK to Exit[/UPPERCASE]</label>
             </control>
         </control>
         <control type="group">

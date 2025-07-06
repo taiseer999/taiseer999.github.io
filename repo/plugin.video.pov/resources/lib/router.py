@@ -283,6 +283,9 @@ class Router:
 		elif mode == 'clean_databases':
 			from modules.cache_utils import clean_databases
 			clean_databases()
+		elif mode == 'clean_thumbnails':
+			from modules.thumbnails import thumb_cleaner
+			thumb_cleaner()
 		elif mode == 'manual_add_magnet_to_cloud':
 			from modules.debrid import manual_add_magnet_to_cloud
 			manual_add_magnet_to_cloud(params)
@@ -303,8 +306,8 @@ class Router:
 			from caches.undesirables_cache import undesirablesUserRemove
 			undesirablesUserRemove()
 		elif mode == 'speedTest':
-			from fenom.speedtest import Magneto
-			Magneto().speedtest()
+			from fenom.speedtest import magneto
+			magneto()
 
 
 if __name__ == '__main__':
