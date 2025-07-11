@@ -95,7 +95,7 @@ class source:
 					# if any(re.search(item, name_lower) for item in ep_strings): continue
 
 				try:
-					seeders = int(re.search(r'👤 (\d+)', file_info).group(1))
+					seeders = int(re.search(r'👤\s*(\d+)', file_info).group(1))
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
@@ -169,7 +169,7 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				try:
-					seeders = int(re.search(r'👤 (\d+)', file_info).group(1))
+					seeders = int(re.search(r'👤\s*(\d+)', file_info).group(1))
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 

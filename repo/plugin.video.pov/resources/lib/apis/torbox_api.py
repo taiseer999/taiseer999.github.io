@@ -38,7 +38,7 @@ class TorBoxAPI:
 		url = '%s/%s' % (base_url, path) if not path.startswith('http') else path
 		try:
 			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
-			result = response.json()
+			result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 			if not response.ok: response.raise_for_status()
 		except requests.exceptions.RequestException as e:
 			kodi_utils.logger('torbox error', str(e))

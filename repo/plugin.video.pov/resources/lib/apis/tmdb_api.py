@@ -23,10 +23,11 @@ session.mount('https://api.themoviedb.org', requests.adapters.HTTPAdapter(pool_m
 def get_tmdb(url, errors=True):
 	try:
 		response = session.get(url, timeout=timeout)
+		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
 	except requests.exceptions.RequestException as e:
 		if errors: logger('tmdb error', str(e))
-	return response
+	return result
 
 def tmdb_keyword_id(query):
 	string = 'tmdb_keyword_id_%s' % query
@@ -54,7 +55,7 @@ def tmdb_media_videos(media_type, tmdb_id):
 def tmdb_movies_discover(query, page_no):
 	string = query % page_no
 	url = query % page_no
-	return cache_object(get_tmdb, string, url)
+	return cache_object(get_tmdb, string, url, json=False)
 
 def tmdb_movies_collection(collection_id):
 	string = 'tmdb_movies_collection_%s' % collection_id
@@ -156,7 +157,7 @@ def tmdb_movies_search_collections(query, page_no):
 
 def tmdb_tv_discover(query, page_no):
 	string = url = query % page_no
-	return cache_object(get_tmdb, string, url)
+	return cache_object(get_tmdb, string, url, json=False)
 
 def tmdb_tv_title_year(title, year=None):
 	if year:
@@ -245,7 +246,7 @@ def tmdb_tv_search(query, page_no):
 def tmdb_popular_people(page_no):
 	string = 'tmdb_popular_people_%s' % page_no
 	url = '%s/person/popular?api_key=%s&language=en-US&page=%s' % (base_url, tmdb_api_key(), page_no)
-	return cache_object(get_tmdb, string, url)
+	return cache_object(get_tmdb, string, url, False)
 
 def tmdb_people_full_info(actor_id, language=None):
 	if not language: language = get_language()
@@ -268,19 +269,19 @@ def get_dates(days, reverse=True):
 def movie_details(tmdb_id, language, tmdb_api=None):
 	try:
 		url = '%s/movie/%s?api_key=%s&language=%s&append_to_response=%s' % (base_url, tmdb_id, get_tmdb_api(tmdb_api), language, movies_append)
-		return get_tmdb(url).json()
+		return get_tmdb(url)
 	except: return None
 
 def tvshow_details(tmdb_id, language, tmdb_api=None):
 	try:
 		url = '%s/tv/%s?api_key=%s&language=%s&append_to_response=%s' % (base_url, tmdb_id, get_tmdb_api(tmdb_api), language, tvshows_append)
-		return get_tmdb(url).json()
+		return get_tmdb(url)
 	except: return None
 
 def season_episodes_details(tmdb_id, season_no, language, tmdb_api=None):
 	try:
 		url = '%s/tv/%s/season/%s?api_key=%s&language=%s&append_to_response=credits' % (base_url, tmdb_id, season_no, get_tmdb_api(tmdb_api), language)
-		return get_tmdb(url, False).json()
+		return get_tmdb(url, False)
 	except: return None
 
 def movie_external_id(external_source, external_id, tmdb_api=None):
@@ -327,7 +328,7 @@ def english_translation(media_type, tmdb_id, tmdb_api=None):
 	try:
 		string = 'english_translation_%s_%s' % (media_type, tmdb_id)
 		url = '%s/%s/%s/translations?api_key=%s' % (base_url, media_type, tmdb_id, get_tmdb_api(tmdb_api))
-		result = cache_function(get_tmdb, string, url, 8760)['']
+		result = cache_function(get_tmdb, string, url, EXPIRES_1_WEEK * 52)
 		try: result = result['translations']
 		except: result = None
 		return result
@@ -426,16 +427,11 @@ list_heading = 'TMDB Lists'
 def list_request(url, params=None, data=None, method=None):
 	access_token = get_setting('tmdb.token')
 	headers = {'Authorization': f"Bearer {access_token}"}
+	method = method or 'get'
+	list_timeout=timeout ** 2 if not method in ('get',) else timeout
 	try:
-		response = session.request(
-			method or 'get',
-			url,
-			params=params,
-			json=data,
-			headers=headers,
-			timeout=timeout ** 2 if not method in ('get', None) else timeout
-		)
-		result = response.json()
+		response = session.request(method, url, params=params, json=data, headers=headers, timeout=list_timeout)
+		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
 	except requests.exceptions.RequestException as e:
 		logger('tmdb error', str(e))

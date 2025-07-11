@@ -4,6 +4,7 @@
 
 
   [COLOR dodgerblue][B]Version 5.07[/B][/COLOR]
+- Fixed Options... menu from widget.
 - Fixed torrentio cached results.
 - Added "Clean Stale Kodi Thumbnails" to Clean Settings Files and Clear Caches menu.
 - Added torrentsdb to aiostreams (includes comet, torrentsdb, mediafusion).

@@ -557,7 +557,7 @@ def options_menu(params, meta=None):
 		('clear_trakt_cache', ls(32497) % ls(32037), '') if watched_indicators == 1 else None,
 		('clear_media_cache', ls(32604) % (ls(32028) if meta['mediatype'] == 'movie' else ls(32029)), '', meta['poster']) if content in ('movie', 'tvshow') and meta else None,
 		('open_pov_settings', '%s %s %s' % (open_str, ls(32036), settings_str), ''),
-		('reload_widgets', ls(40001).replace('[B]', '').replace('[/B]', ''), '') if is_widget else None
+		('reload_widgets', 'POV: Refresh Widgets', '') if is_widget else None
 	)
 	listing = [item for item in listing if item]
 	list_items = list(_builder())

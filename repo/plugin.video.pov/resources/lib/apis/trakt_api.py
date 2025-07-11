@@ -26,16 +26,17 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 	if with_auth is True and (token := settings.trakt_token()):
 		headers['Authorization'] = 'Bearer %s' % token
 	if pagination: params['page'] = page
+	method = 'post' if data is not None else method or 'get'
 	try:
 		response = session.request(
-			'post' if data is not None else method or 'get',
+			method,
 			base_url % path,
 			params=None if data is not None else params,
 			data=json.dumps(data) if data else None,
 			headers=headers,
-			timeout=timeout ** 2 if not method in ('get', None) else timeout
+			timeout=timeout ** 2 if not method in ('get',) else timeout
 		)
-		result = response.json()
+		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
 	except requests.exceptions.RequestException as e:
 		logger('trakt error', str(e))
@@ -67,7 +68,7 @@ def trakt_refresh():
 		set_setting('trakt.refresh', refresh)
 		set_setting('trakt.expires', str(expires))
 		return True
-	except Exception as e: logger('error in trakt_refresh', str(e))
+	except Exception as e: logger('trakt_refresh error', str(e))
 	return False
 
 def trakt_movies_trending(page_no):
@@ -312,7 +313,7 @@ def trakt_trending_popular_lists(list_type):
 	string = 'trakt_%s_user_lists' % list_type
 	path = 'lists/%s/%s' % (list_type, '%s')
 	url = {'path': path, 'params': {'limit': 100}}
-	return cache_object(get_trakt, string, url, False)
+	return cache_object(get_trakt, string, url, json=False)
 
 def trakt_get_lists(list_type):
 	if list_type == 'my_lists':
@@ -615,9 +616,9 @@ def trakt_get_activity():
 
 def trakt_expires(func):
 	def wrapper(*args, **kwargs):
-		if get_setting('trakt_user', ''):
+		if get_setting('trakt.refresh', ''):
 			expires = float(get_setting('trakt.expires', '0'))
-			refresh = (expires - time.time())//3600 < 8
+			refresh = (expires - time.time()) // 3600 < 8
 			if refresh and trakt_refresh(): kodi_utils.sleep(3000)
 		return func(*args, **kwargs)
 	return wrapper

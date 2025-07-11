@@ -32,7 +32,6 @@ class Router:
 		elif '_play' in mode or 'play_' in mode:
 			if mode == 'play_media':
 				from modules.sources import Sources
-				if 'params' in params: params = Sources.jsloads(params['params'])
 				Sources().playback_prep(params)
 			elif mode == 'media_play':
 				from modules.player import POVPlayer
@@ -78,7 +77,7 @@ class Router:
 			elif mode == 'extras_lists_choice':
 				dialogs.extras_lists_choice()
 			elif mode == 'random_choice':
-				dialogs.random_choice(params['tmdb_id'], params['poster'])
+				dialogs.random_choice(params['mode'], params)
 		elif 'trakt.' in mode:
 			if 'trakt_account_info' in mode:
 				from indexers.trakt import trakt_account_info

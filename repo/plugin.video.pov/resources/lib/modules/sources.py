@@ -31,10 +31,6 @@ av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]A
 dialog_format, remaining_format = '[COLOR %s][B]%s[/B][/COLOR] 4K: %s | 1080p: %s | 720p: %s | SD: %s | Total: %s', ls(32676)
 
 class Sources():
-	@staticmethod
-	def jsloads(*args, **kwargs):
-		return json.loads(*args, **kwargs)
-
 	def __init__(self):
 		self.params = {}
 		self.clear_properties, self.filters_ignored, self.active_folders = True, False, False
@@ -550,7 +546,7 @@ class Sources():
 						elif self.progress_dialog and self.progress_dialog.iscanceled(): break
 						percent = int(((total_items := len(items))-count)/total_items*100)
 						name = item['name'].replace('.', ' ').replace('-', ' ').upper()
-						line1 = (item.get('scrape_provider'), item.get('cache_provider'), item.get('provider'))
+						line1 = item.get('scrape_provider'), item.get('cache_provider'), item.get('provider')
 						line1 = ' | '.join(i for i in line1 if i and i != 'external').upper()
 						line2 = ' | '.join(i for i in (item.get('size_label', ''), item.get('extraInfo', '')) if i)
 						if self.progress_dialog: self.progress_dialog.update(main_line % (line1, line2, name), percent)
