@@ -4,15 +4,6 @@
 from tmdbhelper.lib.script.method.decorators import get_tmdb_id, map_kwargs
 
 
-@map_kwargs({'play': 'tmdb_type'})
-@get_tmdb_id
-def play_external(**kwargs):
-    from tmdbhelper.lib.addon.logger import kodi_log
-    from tmdbhelper.lib.player.players import Players
-    kodi_log(['lib.script.router - attempting to play\n', kwargs], 1)
-    Players(**kwargs).play()
-
-
 def play_using(play_using, mode='play', **kwargs):
     from tmdbhelper.lib.addon.plugin import get_infolabel
     from tmdbhelper.lib.files.futils import read_file
@@ -51,6 +42,7 @@ def play_using(play_using, mode='play', **kwargs):
         return
     kwargs['mode'] = mode
     kwargs['player'] = play_using
+    from tmdbhelper.lib.player.method.play import play_external
     play_external(**kwargs)
 
 
@@ -74,11 +66,11 @@ def update_players():
 
 
 def set_defaultplayer(**kwargs):
-    from tmdbhelper.lib.player.players import Players
+    from tmdbhelper.lib.player.players import PlayersFactory
     from tmdbhelper.lib.addon.plugin import set_setting
     tmdb_type = kwargs.get('set_defaultplayer')
     setting_name = 'default_player_movies' if tmdb_type == 'movie' else 'default_player_episodes'
-    default_player = Players(tmdb_type).select_player(detailed=True, clear_player=True)
+    default_player = PlayersFactory(tmdb_type).select_player(detailed=True, clear_player=True)
     if not default_player:
         return
     if not default_player.get('file') or not default_player.get('mode'):
@@ -91,7 +83,7 @@ def set_chosenplayer(tmdb_type, tmdb_id, season=None, episode=None, **kwargs):
     Prompts user to select (or clear) a default player for a single movie or tvshow
     """
     from xbmcgui import Dialog
-    from tmdbhelper.lib.player.players import Players
+    from tmdbhelper.lib.player.players import PlayersFactory
     from tmdbhelper.lib.addon.consts import PLAYERS_CHOSEN_DEFAULTS_FILENAME
     from tmdbhelper.lib.files.futils import get_json_filecache, set_json_filecache
     from tmdbhelper.lib.addon.plugin import get_localized
@@ -128,7 +120,7 @@ def set_chosenplayer(tmdb_type, tmdb_id, season=None, episode=None, **kwargs):
             lvl = itm.setdefault('episode', {})
             itm = lvl.setdefault(f'{episode}', {})
 
-    chosen_player = Players(tmdb_type).select_player(detailed=True, clear_player=True)
+    chosen_player = PlayersFactory(tmdb_type).select_player(detailed=True, clear_player=True)
     if not chosen_player:
         return
 
