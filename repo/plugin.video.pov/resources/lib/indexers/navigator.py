@@ -137,11 +137,11 @@ class Navigator:
 		if tmdb_status:
 			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_watchlist'          , 'name': 'Movie Watchlist'        }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_watchlist'         , 'name': 'TV Show Watchlist'      }, 'tmdb.png', '[B]TMDB:[/B] ')
+			self._add_item({'mode': 'build_tmdb_list.get_tmdb_lists'                        , 'name': 'My Lists'               }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_favorite'           , 'name': 'Movie Favorite'         }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_favorite'          , 'name': 'TV Show Favorite'       }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_recommendations'    , 'name': 'Movie Recommendations'  }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_recommendations'   , 'name': 'TV Show Recommendations'}, 'tmdb.png', '[B]TMDB:[/B] ')
-			self._add_item({'mode': 'build_tmdb_list.get_tmdb_lists'                        , 'name': 'My Lists'               }, 'tmdb.png', '[B]TMDB:[/B] ')
 		if mdblist_status:
 			self._add_item({'mode': 'build_movie_list', 'action': 'mdblist_watchlist'       , 'name': mdb_m_str }, 'mdblist.png', m_n_ins)
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'mdblist_watchlist'      , 'name': mdb_t_str }, 'mdblist.png', m_n_ins)

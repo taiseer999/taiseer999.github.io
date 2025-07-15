@@ -445,8 +445,8 @@ class ProgressMedia(BaseDialog):
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
 		self.title = self.meta['title']
 		self.year = str(self.meta['year'])
-		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-		self.fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or ''
+		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or backup_poster
+		self.fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or backup_fanart
 		self.clearlogo = self.meta['clearlogo'] if get_fanart_data() else self.meta['tmdblogo'] or ''
 
 	def set_properties(self):

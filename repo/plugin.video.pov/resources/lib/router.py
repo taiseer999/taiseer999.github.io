@@ -211,12 +211,6 @@ class Router:
 			elif mode == 'alldebrid.show_account_info':
 				from indexers.alldebrid import show_account_info
 				show_account_info()
-			elif mode == 'alldebrid.set_auth':
-				from indexers.alldebrid import set_auth
-				set_auth()
-			elif mode == 'alldebrid.del_auth':
-				from indexers.alldebrid import del_auth
-				del_auth()
 		elif 'premiumize' in mode:
 			from indexers.premiumize import Indexer
 			Indexer().run(params)
@@ -297,6 +291,9 @@ class Router:
 		elif mode == 'upload_logfile':
 			from modules.kodi_utils import upload_logfile
 			upload_logfile()
+		elif mode == 'myservices':
+			from modules.myservices import authorize
+			authorize(params['action'])
 		##FENOM modes###
 		elif mode == 'undesirablesInput':
 			from caches.undesirables_cache import undesirablesInput

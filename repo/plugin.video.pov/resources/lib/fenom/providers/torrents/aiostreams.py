@@ -17,7 +17,7 @@ class source:
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
-		params = 'b5f15439-a016-4879-92d4-a78f212981ad/eyJpdiI6IkllajhXUWdPZVJ6aXpHWDY1NGhhaWc9PSIsImVuY3J5cHRlZCI6IndFUnJaWTVsNHNSeHBQcERCenJoMXc9PSIsInR5cGUiOiJhaW9FbmNyeXB0In0'
+		params = '4ec23e77-bdff-4c55-81b9-d3c1044d81ff/eyJpdiI6IlAzeGQ1cFJXZHRWb1hMY3E3cGtHT2c9PSIsImVuY3J5cHRlZCI6IkVENE9LUGVqUVRqNWtVTjQzSE1YUWw4SjRhTHhyWXFuWnpBc3grL0E5Q1U9IiwidHlwZSI6ImFpb0VuY3J5cHQifQ'
 		self.language = ['en']
 		self.base_link = "https://aiostreams.elfhosted.com/stremio"
 		self.movieSearch_link = f"/{params}/stream/movie/%s.json"
