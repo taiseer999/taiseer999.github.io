@@ -10,106 +10,6 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#16001"
-msgid "Video Info"
-msgstr ""
-
-msgctxt "#90003"
-msgid "deintmethod"
-msgstr ""
-
-msgctxt "#90004"
-msgid "Display Mode"
-msgstr ""
-
-msgctxt "#90005"
-msgid "Video Resolution"
-msgstr ""
-
-msgctxt "#90006"
-msgid "Video Bit Depth"
-msgstr ""
-
-msgctxt "#90007"
-msgid "Video Aspect"
-msgstr ""
-
-msgctxt "#90008"
-msgid "Video Codec"
-msgstr ""
-
-msgctxt "#90009"
-msgid "More"
-msgstr ""
-
-msgctxt "#90010"
-msgid "Dolby Vision Codec"
-msgstr ""
-
-msgctxt "#90011"
-msgid "EOTF & Gamut"
-msgstr ""
-
-msgctxt "#90012"
-msgid "VS10"
-msgstr ""
-
-msgctxt "#90013"
-msgid "Video Source"
-msgstr ""
-
-msgctxt "#90014"
-msgid "Subtitle Language"
-msgstr ""
-
-msgctxt "#90015"
-msgid "Audio"
-msgstr ""
-
-msgctxt "#90016"
-msgid "Audio Codec"
-msgstr ""
-
-msgctxt "#90017"
-msgid "Audio Channels"
-msgstr ""
-
-msgctxt "#90018"
-msgid "BIT / Samples"
-msgstr ""
-
-msgctxt "#90019"
-msgid "Sample Rate"
-msgstr ""
-
-msgctxt "#90020"
-msgid "Audio Language"
-msgstr ""
-
-msgctxt "#90021"
-msgid "System"
-msgstr ""
-
-msgctxt "#90022"
-msgid "Build"
-msgstr ""
-
-msgctxt "#90023"
-msgid "System Uptime"
-msgstr ""
-
-msgctxt "#90025"
-msgid "CPU Temperature"
-msgstr ""
-
-msgctxt "#90026"
-msgid "CPU Speed"
-msgstr ""
-
-msgctxt "#90027"
-msgid "Player-Cache"
-msgstr ""
-
 #: /1080i/SettingsSystemInfo.xml
 msgctxt "#31000"
 msgid "Live TV / PVR"
@@ -2065,210 +1965,224 @@ msgctxt "#31390"
 msgid "Game menu"
 msgstr "Game menu"
 
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the video codec name
-msgctxt "#31600"
-msgid "Video codec"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the video resolution
-msgctxt "#31601"
-msgid "Video resolution"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the video aspect
-msgctxt "#31602"
-msgid "Video aspect"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the video bitrate
-msgctxt "#31603"
-msgid "Video bitrate"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the audio codec name
-msgctxt "#31604"
-msgid "Audio codec"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the number of audio channels
-msgctxt "#31605"
-msgid "Audio channels"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the audio bitrate
-msgctxt "#31606"
-msgid "Audio bitrate"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the screen resolution
-msgctxt "#31607"
-msgid "Screen resolution"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the system rendering speed
-msgctxt "#31608"
-msgid "System rendering speed"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the system CPU usage
-msgctxt "#31609"
-msgid "System CPU usage"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the media (metadata) info page
-msgctxt "#31610"
-msgid "Media"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-#. Label to show the system info page
-msgctxt "#31611"
-msgid "System"
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31630"
-msgid "System FPS"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31631"
-msgid "CPU frequency"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31632"
-msgid "SoC temp"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31633"
-msgid "Video stream cache"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31634"
-msgid "Player"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31635"
-msgid "Video source type"
-msgstr ""
-
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32100"
+msgctxt "#32000"
 msgid "Display mode"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#32101"
-msgid "EOTF & Gamut"
+msgctxt "#32001"
+msgid "Video mode"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31641"
-msgid "Kodi fps"
+msgctxt "#32002"
+msgid "Color space"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31642"
-msgid "Video decoder|deint"
+msgctxt "#32003"
+msgid "Mb/s"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31643"
-msgid "A|V bit rate Mbps"
+msgctxt "#32004"
+msgid "Bit depth"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31644"
-msgid "Cache"
+msgctxt "#32005"
+msgid "Decoder"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31645"
-msgid "Memory"
+msgctxt "#32006"
+msgid "VS10 engine"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31646"
-msgid "CPU"
+msgctxt "#32007"
+msgid "More"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31647"
-msgid "Video source type"
+msgctxt "#32008"
+msgid "Video queue"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31648"
-msgid "Video encoding"
+msgctxt "#32009"
+msgid "Video queue data"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31649"
-msgid "Video colour"
+msgctxt "#32010"
+msgid "Audio queue"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31650"
-msgid "Audio encoding"
+msgctxt "#32011"
+msgid "Audio queue data"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31651"
-msgid "Audio sampling"
+msgctxt "#32012"
+msgid "Kb/s"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31652"
-msgid "Audio language"
+msgctxt "#32013"
+msgid "Playback time"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31653"
-msgid "Dolby Vision Profile"
+msgctxt "#32014"
+msgid "Processor"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31654"
-msgid "VS10 mode"
+msgctxt "#32015"
+msgid "Metadata"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31655"
-msgid "AML fps"
+msgctxt "#32016"
+msgid "Profile"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31656"
-msgid "Dolby Vision Metadata"
+msgctxt "#32017"
+msgid "Level"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31657"
-msgid "Subtitle name"
+msgctxt "#32018"
+msgid "RPU"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31658"
+msgctxt "#32019"
+msgid "Base Layer"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Enhancement Layer"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Enhancement Layer Type"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#32023"
 msgid "Pixel format"
 msgstr ""
 
-#: /xml/DialogPlayerProcessInfo.xml
-msgctxt "#31659"
+msgctxt "#32024"
+msgid "Aspect ratio"
+msgstr ""
+
+msgctxt "#32025"
+msgid "HDR10 MDL"
+msgstr ""
+
+msgctxt "#32026"
+msgid "HDR10 MaxCLL/FALL"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Media source"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Unknown"
+msgstr ""
+
+msgctxt "#32029"
+msgid "On"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Off"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Deinterlacing"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Player cache"
+msgstr ""
+
+msgctxt "#32033"
+msgid "N/A"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Memory usage"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Bit depth"
+msgstr ""
+
+msgctxt "#32036"
+msgid "AML FPS"
+msgstr ""
+
+msgctxt "#32037"
+msgid "DV Configuration"
+msgstr ""
+
+msgctxt "#32038"
+msgid "DV Levels Metadata"
+msgstr ""
+
+msgctxt "#32039"
+msgid "HDR Static Metadata"
+msgstr ""
+
+msgctxt "#32040"
+msgid "cd/m²"
+msgstr ""
+
+msgctxt "#32041"
+msgid "RPU MDL"
+msgstr ""
+
+msgctxt "#32042"
+msgid "RPU MaxCLL/FALL"
+msgstr ""
+
+msgctxt "#32043"
+msgid "FLL MIN / MAX / Ø"
+msgstr ""
+
+msgctxt "#32044"
+msgid "PQ  MIN / MAX / Ø"
+msgstr ""
+
+msgctxt "#32045"
+msgid "12-bit"
+msgstr ""
+
+msgctxt "#32046"
+msgid "Codec"
+msgstr ""
+
+msgctxt "#32047"
+msgid "Bitrate"
+msgstr ""
+
+msgctxt "#32048"
+msgid "VS10 status"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Sample rate"
+msgstr ""
+
+msgctxt "#32052"
+msgid "Audio language"
+msgstr ""
+
+msgctxt "#32053"
 msgid "Subtitle language"
+msgstr ""
+
+msgctxt "#32054"
+msgid "Video"
+msgstr ""
+
+msgctxt "#32055"
+msgid "System"
+msgstr ""
+
+msgctxt "#32056"
+msgid "Audio"
 msgstr ""
 
 msgctxt "#32057"
@@ -2292,7 +2206,7 @@ msgid "Position of the codec logos in the PlayerProcessInfo"
 msgstr ""
 
 msgctxt "#32062"
-msgid "Show codec logos when video starts"
+msgid "Position of the codec logos when video starts"
 msgstr ""
 
 msgctxt "#32063"
@@ -2307,6 +2221,34 @@ msgctxt "#32065"
 msgid "VS10 mode"
 msgstr ""
 
-msgctxt "#32066"
-msgid "Coloured title lines in PlayerProcessInfo"
+msgctxt "#32067"
+msgid "L5 Active Offsets"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Version"
+msgstr ""
+
+msgctxt "#32069"
+msgid "Bit depth"
+msgstr ""
+
+msgctxt "#32070"
+msgid "EOTF & Gamut"
+msgstr ""
+
+msgctxt "#32071"
+msgid "Duration of the codec logos when video starts"
+msgstr ""
+
+msgctxt "#32072"
+msgid "Standard"
+msgstr ""
+
+msgctxt "#32075"
+msgid "second"
+msgstr ""
+
+msgctxt "#32076"
+msgid "seconds"
 msgstr ""
