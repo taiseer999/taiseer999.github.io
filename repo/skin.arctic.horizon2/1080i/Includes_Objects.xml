@@ -802,8 +802,8 @@
         <definition>
             <control type="group">
                 <nested />
-                <centerbottom>0</centerbottom>
-                <right>25</right>
+                <centerbottom>10</centerbottom>
+                <right>15</right>
                 <width>64</width>
                 <height>64</height>
                 <include content="Object_Control" condition="$PARAM[selected]">

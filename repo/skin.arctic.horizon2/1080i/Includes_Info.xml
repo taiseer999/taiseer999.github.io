@@ -370,6 +370,10 @@
                         <param name="textcolor" value="$PARAM[colordiffuse]_90" />
                     </include>
                 </control>
+                <control type="label" id="78600">
+                    <visible>false</visible>
+                    <label fallback="EMPTY">$VAR[Label_Director]</label>
+                </control>
                 <control type="grouplist" id="$PARAM[id]">
                     <hitrect x="0" y="0" w="0" h="0" />
                     <orientation>horizontal</orientation>
@@ -508,14 +512,8 @@
                     <!-- Director = Director (movie / episode) -->
                     <include content="Info_Line_Label" condition="!$PARAM[player] + Skin.HasSetting(Infoline.EnableDirector)">
                         <param name="controltype" value="$PARAM[controltype]" />
-                        <param name="label" value="$INFO[$PARAM[container]ListItem.Property(Director.1.Name)]" />
-                        <param name="visible" value="!String.IsEmpty($PARAM[container]ListItem.Property(Director.1.Name)) + [String.IsEqual($PARAM[container]ListItem.DBType,episode) | String.IsEqual($PARAM[container]ListItem.DBType,movie)]" />
-                        <param name="textcolor" value="$PARAM[colordiffuse]_90" />
-                    </include>
-                    <include content="Info_Line_Label" condition="!$PARAM[player] + Skin.HasSetting(Infoline.EnableDirector)">
-                        <param name="controltype" value="$PARAM[controltype]" />
-                        <param name="label" value="$INFO[Container(99950).ListItem.Property(Director.1.Name)]" />
-                        <param name="visible" value="String.IsEmpty($PARAM[container]ListItem.Property(Director.1.Name)) + !String.IsEmpty(Container(99950).ListItem.Property(Director.1.Name)) + [String.IsEqual($PARAM[container]ListItem.DBType,episode) | String.IsEqual($PARAM[container]ListItem.DBType,movie)]" />
+                        <param name="label" value="$VAR[Label_Director]" />
+                        <param name="visible" value="!String.IsEqual(Control.GetLabel(78600),EMPTY) + [String.IsEqual($PARAM[container]ListItem.DBType,episode) | String.IsEqual($PARAM[container]ListItem.DBType,movie)]" />
                         <param name="textcolor" value="$PARAM[colordiffuse]_90" />
                     </include>
 
