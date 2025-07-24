@@ -17,15 +17,105 @@ msgstr ""
 "X-Poedit-Basepath: ../resource.language.en_gb\n"
 "X-Poedit-SearchPath-0: strings.po\n"
 
-#: 1080i/SettingsSystemInfo.xml
-msgctxt "#31000"
-msgid "Live TV / PVR"
-msgstr "البث المباشر / PVR"
+msgctxt "#16001"
+msgid "Video Info"
+msgstr ""
 
-#: 1080i/Custom_Colors_1101.xml
-msgctxt "#31001"
-msgid "Select colours"
-msgstr "اختيار الألوان"
+msgctxt "#90003"
+msgid "deintmethod"
+msgstr ""
+
+msgctxt "#90004"
+msgid "Display Mode"
+msgstr ""
+
+msgctxt "#90005"
+msgid "Video Resolution"
+msgstr ""
+
+msgctxt "#90006"
+msgid "Video Bit Depth"
+msgstr ""
+
+msgctxt "#90007"
+msgid "Video Aspect"
+msgstr ""
+
+msgctxt "#90008"
+msgid "Video Codec"
+msgstr ""
+
+msgctxt "#90009"
+msgid "More"
+msgstr ""
+
+msgctxt "#90010"
+msgid "Dolby Vision Codec"
+msgstr ""
+
+msgctxt "#90011"
+msgid "EOTF & Gamut"
+msgstr ""
+
+msgctxt "#90012"
+msgid "VS10"
+msgstr ""
+
+msgctxt "#90013"
+msgid "Video Source"
+msgstr ""
+
+msgctxt "#90014"
+msgid "Subtitle Language"
+msgstr ""
+
+msgctxt "#90015"
+msgid "Audio"
+msgstr ""
+
+msgctxt "#90016"
+msgid "Audio Codec"
+msgstr ""
+
+msgctxt "#90017"
+msgid "Audio Channels"
+msgstr ""
+
+msgctxt "#90018"
+msgid "BIT / Samples"
+msgstr ""
+
+msgctxt "#90019"
+msgid "Sample Rate"
+msgstr ""
+
+msgctxt "#90020"
+msgid "Audio Language"
+msgstr ""
+
+msgctxt "#90021"
+msgid "System"
+msgstr ""
+
+msgctxt "#90022"
+msgid "Build"
+msgstr ""
+
+msgctxt "#90023"
+msgid "System Uptime"
+msgstr ""
+
+msgctxt "#90025"
+msgid "CPU Temperature"
+msgstr ""
+
+msgctxt "#90026"
+msgid "CPU Speed"
+msgstr ""
+
+msgctxt "#90027"
+msgid "Player-Cache"
+msgstr ""
 
 #: 1080i/Items.xml
 msgctxt "#31002"
@@ -455,7 +545,7 @@ msgstr "البث المباشر"
 #: 1080i/SkinSettings.xml
 msgctxt "#31086"
 msgid "Customise power menu"
-msgstr "تخصيص قائمة الطاقة"
+msgstr "تخصيص قائمة الخيارات"
 
 #: 1080i/SkinSettings.xml
 msgctxt "#31087"
@@ -1111,17 +1201,17 @@ msgstr "المراجعات"
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31216"
 msgid "Video decoder"
-msgstr "وحدة فك ترميز الفيديو"
+msgstr ""
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31217"
 msgid "Pixel format"
-msgstr "تنسيق البيكسل"
+msgstr ""
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31218"
 msgid "Memory usage"
-msgstr "استخدام الذاكرة"
+msgstr ""
 
 #: shortcuts/videos-1.DATA.xml
 msgctxt "#31219"
@@ -1311,17 +1401,17 @@ msgstr "تخصيص خلفية بدء التشغيل"
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31256"
 msgid "Resource Usage"
-msgstr "استخدام موارد الجهاز"
+msgstr ""
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31257"
 msgid "Memory"
-msgstr "الذاكرة"
+msgstr ""
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31258"
 msgid "CPU"
-msgstr "المعالج"
+msgstr ""
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31259"
@@ -1331,22 +1421,22 @@ msgstr ""
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31260"
 msgid "AR"
-msgstr ""
+msgstr "AR"
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31261"
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31262"
 msgid "Hz"
-msgstr ""
+msgstr "Hz"
 
 #: 1080i/DialogPlayerProcessInfo.xml
 msgctxt "#31263"
 msgid "bits"
-msgstr ""
+msgstr "bits"
 
 #: 1080i/Dialogs.xml
 msgctxt "#31264"
@@ -1426,7 +1516,7 @@ msgstr "عرض الساعة"
 #: 1080i/SkinSettings.xml
 msgctxt "#31279"
 msgid "Studio icons"
-msgstr "عرض أيقونة الاستوديو"
+msgstr "ايقونات الاستوديو"
 
 #: 1080i/SkinSettings.xml
 msgctxt "#31280"
@@ -1962,3 +2052,250 @@ msgstr "مجلد مخصص لأيقونات الأصناف"
 msgctxt "#31386"
 msgid "Unwatched only"
 msgstr "لم يتم مشاهدتها فقط"
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video codec name
+msgctxt "#31600"
+msgid "Video codec"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video resolution
+msgctxt "#31601"
+msgid "Video resolution"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video aspect
+msgctxt "#31602"
+msgid "Video aspect"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the video bitrate
+msgctxt "#31603"
+msgid "Video bitrate"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the audio codec name
+msgctxt "#31604"
+msgid "Audio codec"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the number of audio channels
+msgctxt "#31605"
+msgid "Audio channels"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the audio bitrate
+msgctxt "#31606"
+msgid "Audio bitrate"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the screen resolution
+msgctxt "#31607"
+msgid "Screen resolution"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the system rendering speed
+msgctxt "#31608"
+msgid "System rendering speed"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the system CPU usage
+msgctxt "#31609"
+msgid "System CPU usage"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the media (metadata) info page
+msgctxt "#31610"
+msgid "Media"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+#. Label to show the system info page
+msgctxt "#31611"
+msgid "System"
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31630"
+msgid "System FPS"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31631"
+msgid "CPU frequency"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31632"
+msgid "SoC temp"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31633"
+msgid "Video stream cache"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31634"
+msgid "Player"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31635"
+msgid "Video source type"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#32100"
+msgid "Display mode"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#32101"
+msgid "EOTF & Gamut"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31641"
+msgid "Kodi fps"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31642"
+msgid "Video decoder|deint"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31643"
+msgid "A|V bit rate Mbps"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31644"
+msgid "Cache"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31645"
+msgid "Memory"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31646"
+msgid "CPU"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31647"
+msgid "Video source type"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31648"
+msgid "Video encoding"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31649"
+msgid "Video colour"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31650"
+msgid "Audio encoding"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31651"
+msgid "Audio sampling"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31652"
+msgid "Audio language"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31653"
+msgid "Dolby Vision Profile"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31654"
+msgid "VS10 mode"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31655"
+msgid "AML fps"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31656"
+msgid "Dolby Vision Metadata"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31657"
+msgid "Subtitle name"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31658"
+msgid "Pixel format"
+msgstr ""
+
+#: /xml/DialogPlayerProcessInfo.xml
+msgctxt "#31659"
+msgid "Subtitle language"
+msgstr ""
+
+
+msgctxt "#32057"
+msgid "Top left"
+msgstr "اعلى يسار الشاشة"
+
+msgctxt "#32058"
+msgid "Top center"
+msgstr "وسط الشاشة بالاعلى"
+
+msgctxt "#32059"
+msgid "Top right"
+msgstr "اعلى يمين الشاشة"
+
+msgctxt "#32060"
+msgid "Position of the codec logos in the OSD"
+msgstr "موقع ايقونات الترميز في شاشة شريط الOSD"
+
+msgctxt "#32061"
+msgid "Position of the codec logos in the PlayerProcessInfo"
+msgstr "موقع ايقونات الترميز في شاشة المشغل"
+
+msgctxt "#32062"
+msgid "Show codec logos when video starts"
+msgstr "اظهار ايقونات الترميز عند بداية تشغيل الفيديو"
+
+msgctxt "#32063"
+msgid "Codec logos"
+msgstr "ايقونات الترميز"
+
+msgctxt "#32064"
+msgid "Original"
+msgstr "الاصلية"
+
+msgctxt "#32065"
+msgid "VS10 mode"
+msgstr "VS10 mode"
+
+msgctxt "#32066"
+msgid "Coloured title lines in PlayerProcessInfo"
+msgstr ""
