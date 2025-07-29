@@ -765,7 +765,7 @@
                 <bordersize>-16</bordersize>
                 <texture colordiffuse="$PARAM[colordiffuse]">special://skin/extras/icons/update.png</texture>
                 <animation effect="rotate" start="0" end="-180" time="1200" delay="1200" loop="true" center="auto" tween="back" condition="true">Conditional</animation>
-                 <nested />
+                <nested />
             </control>
         </definition>
     </include>
@@ -773,7 +773,7 @@
     <include name="Info_RatingsLine">
         <param name="is_player">false</param>
         <definition>
-        <control type="grouplist">
+            <control type="grouplist">
 
                 <visible>[!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))]</visible>
 
@@ -810,14 +810,15 @@
 
                 <orientation>horizontal</orientation>
                 <top>520</top>
-                <height>40</height>Add commentMore actions
+                <height>40</height>
                 <left>view_pad</left>
                 <itemgap>12</itemgap>
             </control>
             <control type="grouplist" id="$PARAM[id]">
-             <visible>![!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))]</visible>
 
-                <animation effect="fade" start="0" end="100" delay="400" time="1" reversible="true">Visible</animation>Add commentMore actions
+                <visible>![!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))]</visible>
+
+                <animation effect="fade" start="0" end="100" delay="400" time="1" reversible="true">Visible</animation>
                 <animation effect="fade" start="100" end="0" delay="1200" time="1" reversible="true">Hidden</animation>
 
                 <include content="Info_RatingsLine_Item">
@@ -1147,8 +1148,10 @@
                 <animation effect="fade" start="0" end="0" condition="true">Conditional</animation>
             </control>
             <include content="Info_LineSpinner">
-                <param name="visible">[$PARAM[visible]]</param>
                 <param name="colordiffuse">$PARAM[textcolor]</param>
+                <visible>$PARAM[visible]</visible>
+                <animation effect="fade" start="0" end="100" delay="1600" time="1" reversible="true">Visible</animation>
+                <animation effect="fade" start="100" end="0" delay="400" time="1" reversible="true">Hidden</animation>
             </include>
         </control>
     </include>

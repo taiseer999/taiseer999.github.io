@@ -409,7 +409,7 @@
                                 </include>
                                 <include content="Object_Keyboard_Button" description="Symbols">
                                     <param name="id">304</param>
-                                    <label>@#!*</label>
+                                    <label>@%#^!*</label>
                                     <width>keyboard_done_w</width>
                                     <onup>303</onup>
                                     <ondown>301</ondown>

@@ -12,6 +12,7 @@
             <!-- Group for Original, SDR, HDR10 & Dolby Vision (Large layout) -->
             <control type="group">
                 <visible>Control.IsVisible(8490) | Control.IsVisible(8491)</visible>
+                <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
 				
                 <include content="OSD_Dialog_Background_Blur">
                     <param name="diffuse">diffuse/dialog_w520_h480.png</param>
@@ -168,6 +169,7 @@
             <!-- Group for Original & SDR (Small layout) -->
             <control type="group">
                 <visible>!Control.IsVisible(8490) + !Control.IsVisible(8491)</visible>
+                <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
 				
                 <include content="OSD_Dialog_Background_Blur">
                     <param name="diffuse">diffuse/dialog_w520_h480.png</param>
