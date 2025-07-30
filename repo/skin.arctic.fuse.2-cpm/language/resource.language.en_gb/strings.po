@@ -3102,7 +3102,7 @@ msgid "TMDB Helper Settings"
 msgstr ""
 
 msgctxt "#32071"
-msgid "CoreELEC Settings"
+msgid "Duration of the codec logos when video starts"
 msgstr ""
 
 msgctxt "#32072"
@@ -3127,4 +3127,16 @@ msgstr ""
 
 msgctxt "#32077"
 msgid "Duration of the codec logos when video starts"
+msgstr ""
+
+msgctxt "#32078"
+msgid "Position of codec logos"
+msgstr ""
+
+msgctxt "#32081"
+msgid "Show file name and path in the version selection"
+msgstr ""
+
+msgctxt "#32082"
+msgid "Time for codec logos"
 msgstr ""

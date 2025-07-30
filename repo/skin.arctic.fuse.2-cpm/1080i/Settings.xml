@@ -159,7 +159,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$INFO[system.memory(used.percent),Used memory: ,]</label>
+                                                <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[32034]: ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -188,7 +188,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$INFO[System.CPUUsage,$LOCALIZE[13271] ,]</label>
+                                                <label fallback="19055">$LOCALIZE[32014]: $INFO[System.CPUTemperature] | $INFO[System.CpuAltUsage]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -282,7 +282,16 @@
                                         <label2>service.coreelec.settings</label2>
                                         <icon>special://skin/extras/icons/coreelec.png</icon>
                                         <onclick>RunAddon(service.coreelec.settings)</onclick>
-                                        <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
+                                        <visible></visible>
+                                    </item>
+                                    <item>
+                                        <label>CPM</label>
+                                        <label2>skin.arctic.fuse.2</label2>
+                                        <icon>special://skin/extras/icons/configure.png</icon>
+                                        <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_CPM,Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,CPM,Home)</onclick>
+                                        <onclick>ActivateWindow(1125)</onclick>
+                                        <visible></visible>
                                     </item>
                                     <item>
                                         <label>TMDbHelper</label>
@@ -313,19 +322,19 @@
                                         <visible>System.AddonIsEnabled(screensaver.arctic.mirage)</visible>
                                     </item>
                                     <item>
-                                        <label>[CAPITALIZE]$LOCALIZE[31449][/CAPITALIZE]</label>
+                                        <label>$LOCALIZE[31449]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/hat-wizard.png</icon>
                                         <onclick>ActivateWindow(1180)</onclick>
                                     </item>
                                     <item>
-                                        <label>[CAPITALIZE]$LOCALIZE[31496][/CAPITALIZE]</label>
+                                        <label>$LOCALIZE[31496]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/screwdriver-wrench.png</icon>
                                         <onclick>ActivateWindow(1115)</onclick>
                                     </item>
                                     <item>
-                                        <label>[CAPITALIZE]$LOCALIZE[31275][/CAPITALIZE]</label>
+                                        <label>$LOCALIZE[31275]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/search.png</icon>
                                         <onclick>SetProperty(Shortcuts.EditMenu,menu=searchmenu,Home)</onclick>
@@ -334,14 +343,14 @@
                                         <onclick>ActivateWindow(1116)</onclick>
                                     </item>
                                     <item>
-                                        <label>[CAPITALIZE]$LOCALIZE[31086][/CAPITALIZE]</label>
+                                        <label>$LOCALIZE[31086]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/bars.png</icon>
-                                        <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31086][/CAPITALIZE],Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31086],Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_PowerMenuConfigure,Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
-                                    <item>
+                                     <item>
                                         <label>$LOCALIZE[31203] $LOCALIZE[31434]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/gauge.png</icon>
@@ -358,17 +367,17 @@
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                     <item>
-                                        <label>[CAPITALIZE]$LOCALIZE[31321][/CAPITALIZE]</label>
+                                        <label>$LOCALIZE[31321]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/table.png</icon>
                                         <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
                                     </item>
                                     <item>
-                                        <label>[CAPITALIZE]$LOCALIZE[31234][/CAPITALIZE]</label>
+                                        <label>$LOCALIZE[31234]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/cube.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_Indicators,Home)</onclick>
-                                        <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31235],Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31234],Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                 </content>
