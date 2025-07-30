@@ -2769,7 +2769,7 @@
             <label>$LOCALIZE[32076]</label>
             <onclick>Skin.ToggleSetting(Filename.PPI)</onclick>
             <selected>Skin.HasSetting(Filename.PPI)</selected>
-            <visible>Skin.HasSetting(ppi.modernMode)</visible>
+            <visible></visible>
         </include>
         <include content="Settings_Label">
             <param name="id">8010</param>
