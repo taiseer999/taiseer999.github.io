@@ -2059,5 +2059,7 @@
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
     </variable>
-
+<variable name="ColourVar">
+		<value>$VAR[ColourRangeVar] $VAR[|] $VAR[ColourSpaceVar] $VAR[|] $VAR[ColourPrimariesVar] $VAR[|] $VAR[ColourTransferCharacteristicVar]</value>
+	</variable>
 </includes>
