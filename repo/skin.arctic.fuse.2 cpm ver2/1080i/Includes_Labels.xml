@@ -1900,8 +1900,8 @@
     </variable>
 	
     <variable name="PPIMode">
-        <value condition="Skin.HasSetting(ppi.classicMode)">$LOCALIZE[32078]</value>
-        <value condition="Skin.HasSetting(ppi.modernMode)">$LOCALIZE[32077]</value>
+        <value condition="Skin.HasSetting(ppi.classicMode)">classic</value>
+        <value condition="Skin.HasSetting(ppi.modernMode)">modern</value>
         <value>$LOCALIZE[32079]</value>
     </variable>
 	

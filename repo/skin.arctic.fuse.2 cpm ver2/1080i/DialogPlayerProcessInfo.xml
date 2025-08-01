@@ -1324,7 +1324,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[ColourVar]</label>
+						<label>$INFO[Player.Process(video.hdr.colour.primaries)]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1607,7 +1607,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[DVVS10Var]</label>
+						<label>$VAR[VS10ModeVar]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
