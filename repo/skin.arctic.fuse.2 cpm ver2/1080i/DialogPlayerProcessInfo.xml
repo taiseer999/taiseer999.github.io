@@ -217,7 +217,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[DVProfileExtVar]</label>
+						<label>$INFO[Player.Process(video.dovi.profile)]$INFO[Player.Process(video.dovi.bl.signal.compatibility),.]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -227,7 +227,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR dimgrey]$VAR[DVSourceProfileExtVar][/COLOR]</label>
+						<label>$INFO[Player.Process(video.dovi.version.major)]$INFO[Player.Process(video.dovi.version.minor),.]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),Player.Process(video.dovi.profile))</visible>
@@ -356,7 +356,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[DVELVar]</label>
+						<label>Enhancement Layer Type</label>
 						<font>font_debug</font>
 					</control>
 					<control type="label">
@@ -1555,7 +1555,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[DVProfileExtVar]$VAR[DVELVar, ] $INFO[Player.Process(video.dovi.codec.string),[COLOR dimgrey][,][/COLOR]]</label>
+						<label>$INFO[Player.Process(video.dovi.profile)]$INFO[Player.Process(video.dovi.bl.signal.compatibility),.]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1607,7 +1607,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[VS10ModeVar]</label>
+						<label>$INFO[Player.Process(video.source.hdr.type)] $VAR[DVProfileVar]$VAR[DVELVar]$VAR[VideoConvVar]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
