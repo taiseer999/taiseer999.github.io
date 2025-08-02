@@ -1340,7 +1340,7 @@ updated YouTube addon URL
             <fanart>resources/fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.fenlight" name="FenLightAM" provider-name="Tikipeter/AnonyMouse" version="2.1.29.1">
+</addon><addon id="plugin.video.fenlight" name="FenLightAM" provider-name="Tikipeter/AnonyMouse" version="2.1.29.2">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.pil" version="1.1.7" />
@@ -6629,7 +6629,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.10.9.7">
+</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.10.9.8">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
