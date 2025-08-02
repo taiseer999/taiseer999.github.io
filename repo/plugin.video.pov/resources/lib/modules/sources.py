@@ -22,8 +22,9 @@ metadata_user_info, quality_filter, sort_to_top  = settings.metadata_user_info, 
 results_xml_style, results_xml_window_number = settings.results_xml_style, settings.results_xml_window_number
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
 debrid_list, import_debrid, main_line = debrid.debrid_list, debrid.import_debrid, debrid.main_line
-resolve_cached_torrents, resolve_debrid = debrid.resolve_cached_torrents, debrid.resolve_debrid
-resolve_internal_sources, manual_add_magnet_to_cloud = debrid.resolve_internal_sources, debrid.manual_add_magnet_to_cloud
+resolve_debrid, resolve_internal_sources = debrid.resolve_debrid, debrid.resolve_internal_sources
+resolve_cached_torrents, resolve_cached_nzbs = debrid.resolve_cached_torrents, debrid.resolve_cached_nzbs
+manual_add_magnet_to_cloud, manual_add_nzb_to_cloud = debrid.manual_add_magnet_to_cloud, debrid.manual_add_nzb_to_cloud
 quality_ranks = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}
 cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
 default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'folders')
@@ -583,12 +584,18 @@ class Sources():
 				if meta['media_type'] == 'movie': title, season, episode = self._get_search_title(meta), None, None
 				else: title, season, episode = meta['ep_name'], meta.get('custom_season') or meta.get('season'), meta.get('custom_episode') or meta.get('episode')
 				if cache_provider in ('Real-Debrid', 'Premiumize.me', 'AllDebrid', 'Offcloud', 'TorBox', 'EasyDebrid'):
-					url = resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
+					if item['url'].startswith('magnet'):
+						url = resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
+					else:
+						url = resolve_cached_nzbs(cache_provider, item['url'], item['hash'], title, season, episode)
 					return url
 				if 'Uncached' in cache_provider:
 					if confirm_dialog(text=ls(32831) % item['debrid'].upper()):
-						if not 'package' in item: title, season, episode  = None, None, None
-						manual_add_magnet_to_cloud({'provider': item['debrid'], 'magnet_url': item['url']})
+#						if not 'package' in item: title, season, episode  = None, None, None
+						if item['url'].startswith('magnet'):
+							manual_add_magnet_to_cloud({'provider': item['debrid'], 'magnet_url': item['url']})
+						else:
+							manual_add_nzb_to_cloud({'provider': item['debrid'], 'url': item['url'], 'name': item['name']})
 					return 'uncached'
 			if item.get('scrape_provider', None) in default_internal_scrapers:
 				url = resolve_internal_sources(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False))

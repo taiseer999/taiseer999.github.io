@@ -17,11 +17,11 @@ class source:
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
-		params = '4ec23e77-bdff-4c55-81b9-d3c1044d81ff/eyJpdiI6IlAzeGQ1cFJXZHRWb1hMY3E3cGtHT2c9PSIsImVuY3J5cHRlZCI6IkVENE9LUGVqUVRqNWtVTjQzSE1YUWw4SjRhTHhyWXFuWnpBc3grL0E5Q1U9IiwidHlwZSI6ImFpb0VuY3J5cHQifQ'
+		params = '/4ec23e77-bdff-4c55-81b9-d3c1044d81ff/eyJpdiI6IlAzeGQ1cFJXZHRWb1hMY3E3cGtHT2c9PSIsImVuY3J5cHRlZCI6IkVENE9LUGVqUVRqNWtVTjQzSE1YUWw4SjRhTHhyWXFuWnpBc3grL0E5Q1U9IiwidHlwZSI6ImFpb0VuY3J5cHQifQ'
 		self.language = ['en']
 		self.base_link = "https://aiostreams.elfhosted.com/stremio"
-		self.movieSearch_link = f"/{params}/stream/movie/%s.json"
-		self.tvSearch_link = f"/{params}/stream/series/%s:%s:%s.json"
+		self.movieSearch_link = f"{params}/stream/movie/%s.json"
+		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -62,12 +62,6 @@ class source:
 				hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
-				# try:
-					# index = file_title.index(file_info)
-					# if index == 1: combo = file_title[0].replace(' ', '.')
-					# else: combo = ''.join(file_title[0:2]).replace(' ', '.')
-					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
-				# except: pass
 
 				name = source_utils.clean_name(file_title[0])
 
@@ -77,10 +71,6 @@ class source:
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
-				# if not episode_title: #filter for eps returned in movie query (rare but movie and show exists for Run in 2020)
-					# ep_strings = [r'(?:\.|\-)s\d{2}e\d{2}(?:\.|\-|$)', r'(?:\.|\-)s\d{2}(?:\.|\-|$)', r'(?:\.|\-)season(?:\.|\-)\d{1,2}(?:\.|\-|$)']
-					# name_lower = name.lower()
-					# if any(re.search(item, name_lower) for item in ep_strings): continue
 
 				try:
 					seeders = int(re.search(r'👤\s*(\d+)', file_info).group(1))
@@ -126,12 +116,6 @@ class source:
 				hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
-				# try:
-					# index = file_title.index(file_info)
-					# if index == 1: combo = file_title[0].replace(' ', '.')
-					# else: combo = ''.join(file_title[0:2]).replace(' ', '.')
-					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
-				# except: pass
 
 				name = source_utils.clean_name(file_title[0])
 

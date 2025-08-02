@@ -71,6 +71,15 @@ def trakt_refresh():
 	except Exception as e: logger('trakt_refresh error', str(e))
 	return False
 
+def trakt_expires(func):
+	def wrapper(*args, **kwargs):
+		if get_setting('trakt.refresh', ''):
+			expires = float(get_setting('trakt.expires', '0'))
+			refresh = (expires - time.time()) // 3600 < 8
+			if refresh and trakt_refresh(): kodi_utils.sleep(1000)
+		return func(*args, **kwargs)
+	return wrapper
+
 def trakt_movies_trending(page_no):
 	string = 'trakt_movies_trending_%s' % page_no
 	url = {'path': 'movies/trending/%s', 'params': {'limit': 20}, 'page': page_no}
@@ -613,15 +622,6 @@ def trakt_calendar_days(recently_aired, current_date):
 def trakt_get_activity():
 	url = {'path': 'sync/last_activities%s', 'with_auth': True, 'pagination': False}
 	return get_trakt(url)
-
-def trakt_expires(func):
-	def wrapper(*args, **kwargs):
-		if get_setting('trakt.refresh', ''):
-			expires = float(get_setting('trakt.expires', '0'))
-			refresh = (expires - time.time()) // 3600 < 8
-			if refresh and trakt_refresh(): kodi_utils.sleep(3000)
-		return func(*args, **kwargs)
-	return wrapper
 
 @trakt_expires
 def trakt_sync_activities(force_update=False):

@@ -9,6 +9,7 @@ quote, clear_cache = requests.utils.quote, cache_utils.clear_cache
 get_setting, set_setting, sleep = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.sleep
 notification, confirm_dialog = kodi_utils.notification, kodi_utils.confirm_dialog
 qr_str = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s'
+meta_keys = 'title year poster fanart clearlogo tmdblogo'
 code_str, nav2_str = 'PIN CODE: [B]%s[/B]', 'LOCATION: [B]%s[/B]'
 await_str = 'REMAINING: [B]%02d:%02d[/B]'
 timeout = 3.05
@@ -48,7 +49,7 @@ class RealDebrid:
 
 	@source_warning
 	def set_auth(self):
-		cls_name = self.__class__.__name__.replace('Debrid', ' Debrid')
+		cls_name = 'Real Debrid'
 		if self.token:
 			if not confirm_dialog(): return
 			set_setting('rd.username', '')
@@ -66,8 +67,7 @@ class RealDebrid:
 		expires_in, expires_at = result['expires_in'], result['expires_in'] + time.monotonic()
 		try: qr_icon = qr_str % '&data=%s' % quote(result['direct_verification_url'])
 		except: qr_icon = ''
-		meta = dict.fromkeys('title year poster fanart clearlogo tmdblogo'.split(), '')
-		meta.update({'poster': qr_icon})
+		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
 		detail = code_str % result['user_code'], nav2_str % result['verification_url']
 		progress_dialog = _make_progress_dialog(meta=meta)
 		timer = RepeatTimer(result['interval'], self.poll_auth, args=(data,))
@@ -116,7 +116,7 @@ class Premiumize:
 		self.token = data['access_token']
 
 	def set_auth(self):
-		cls_name = self.__class__.__name__ + '.me'
+		cls_name = 'Premiumize.me'
 		if self.token:
 			if not confirm_dialog(): return
 			set_setting('pm.account_id', '')
@@ -131,8 +131,7 @@ class Premiumize:
 		expires_in, expires_at = result['expires_in'], result['expires_in'] + time.monotonic()
 		try: qr_icon = qr_str % '&data=%s' % quote(result['verification_uri'])
 		except: qr_icon = ''
-		meta = dict.fromkeys('title year poster fanart clearlogo tmdblogo'.split(), '')
-		meta.update({'poster': qr_icon})
+		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
 		detail = code_str % result['user_code'], nav2_str % result['verification_uri']
 		progress_dialog = _make_progress_dialog(meta=meta)
 		timer = RepeatTimer(result['interval'], self.poll_auth, args=(data,))
@@ -182,13 +181,13 @@ class AllDebrid:
 			clear_cache('ad_cloud', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
 
-		response = requests.get(self.base_url('v4/pin/get'), params={'agent': self.user_agent}, timeout=timeout)
+		params = {'agent': self.user_agent}
+		response = requests.get(self.base_url('v4/pin/get'), params=params, timeout=timeout)
 		result = response.json()['data']
 		expires_in, expires_at = result['expires_in'], result['expires_in'] + time.monotonic()
 		try: qr_icon = qr_str % '&bgcolor=ffd700&data=%s' % quote(result['user_url'])
 		except: qr_icon = ''
-		meta = dict.fromkeys('title year poster fanart clearlogo tmdblogo'.split(), '')
-		meta.update({'poster': qr_icon})
+		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
 		detail = code_str % result['pin'], nav2_str % result['base_url']
 		progress_dialog = _make_progress_dialog(meta=meta)
 		timer = RepeatTimer(5, self.poll_auth, args=(result['check_url'],))
@@ -206,7 +205,7 @@ class AllDebrid:
 		sleep(500)
 		headers = {}
 		headers.update({'Authorization': 'Bearer %s' % self.token})
-		response = requests.get(self.base_url('v4/user'), params={'agent': self.user_agent}, headers=headers, timeout=timeout)
+		response = requests.get(self.base_url('v4/user'), params=params, headers=headers, timeout=timeout)
 		result = response.json()['data']
 		username = result['user']['username']
 		set_setting('ad.account_id', str(username))
@@ -329,8 +328,7 @@ class Trakt:
 		expires_in, expires_at = result['expires_in'], result['expires_in'] + time.monotonic()
 		try: qr_icon = qr_str % '&color=f00&data=%s' % quote('%s/%s' % (result['verification_url'], result['user_code']))
 		except: qr_icon = ''
-		meta = dict.fromkeys('title year poster fanart clearlogo tmdblogo'.split(), '')
-		meta.update({'poster': qr_icon})
+		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
 		detail = code_str % result['user_code'], nav2_str % result['verification_url']
 		progress_dialog = _make_progress_dialog(meta=meta)
 		timer = RepeatTimer(result['interval'], self.poll_auth, args=(data,))
@@ -368,7 +366,7 @@ class MDBList:
 		return 'https://api.mdblist.com/%s' % path
 
 	def set_auth(self):
-		name = self.__class__.__name__
+		cls_name = self.__class__.__name__
 		if get_setting('mdblist.token'):
 			if not confirm_dialog(): return
 			set_setting('mdblist_user', '')
@@ -435,8 +433,7 @@ class TMDbList:
 		except: tiny_url = url
 		qr_icon = qr_str % '&data=%s' % quote(tiny_url)
 		kodi_utils.logger('tmdblist', '%s\n%s' % (tiny_url, url))
-		meta = dict.fromkeys('title year poster fanart clearlogo tmdblogo'.split(), '')
-		meta.update({'poster': qr_icon})
+		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
 		detail = nav2_str % tiny_url, ''
 		progress_dialog = _make_progress_dialog(meta=meta)
 		timer = RepeatTimer(5, self.poll_auth, args=(data,))

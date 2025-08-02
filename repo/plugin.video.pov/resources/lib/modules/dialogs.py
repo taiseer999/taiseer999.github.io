@@ -84,7 +84,7 @@ def random_choice(choice, meta):
 	meta, url_params = get_random_episode(tmdb_id, True if choice == 'play_random_continual' else False)
 	if not url_params: return {'pass': True}
 	url_params.update({'autoplay': 'True', 'background': 'false'})
-#	return kodi_utils.execute_builtin('RunPlugin(%s)' % build_url(url_params))
+#	return execute_builtin('RunPlugin(%s)' % build_url(url_params))
 	Sources().playback_prep(url_params)
 
 def trakt_manager_choice(params):
