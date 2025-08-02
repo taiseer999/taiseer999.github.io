@@ -1,28 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-from windows.base_window import BaseDialog, select_dialog, ok_dialog
+from windows.base_window import BaseDialog
 from modules.source_utils import source_filters
-from modules.settings import provider_sort_ranks
-from modules import kodi_utils
-# logger = kodi_utils.logger
-
-kodi_dialog = kodi_utils.kodi_dialog
-hide_busy_dialog, addon_fanart, empty_poster = kodi_utils.hide_busy_dialog, kodi_utils.addon_fanart(), kodi_utils.empty_poster
-get_icon, img_url = kodi_utils.get_icon, kodi_utils.img_url
-
-resume_dict = {10: 'resume', 11: 'start_over', 12: 'cancel'}
-info_icons_dict = {'easynews': get_icon('easynews'), 'alldebrid': get_icon('alldebrid'), 'real-debrid': get_icon('realdebrid'), 'premiumize': get_icon('premiumize'),
-'offcloud': get_icon('offcloud'), 'easydebrid': get_icon('easydebrid'), 'torbox': get_icon('torbox'), 'ad_cloud': get_icon('alldebrid'), 'rd_cloud': get_icon('realdebrid'),
-'pm_cloud': get_icon('premiumize'), 'oc_cloud': get_icon('offcloud'), 'tb_cloud': get_icon('torbox')}
-info_quality_dict = {'4k': get_icon('flag_4k'), '1080p': get_icon('flag_1080p'), '720p': get_icon('flag_720p'), 'sd': get_icon('flag_sd')}
-quality_choices = ('4K', '1080P', '720P', 'SD', 'CAM/SCR/TELE')
-prerelease_values, prerelease_key = ('CAM', 'SCR', 'TELE'), 'CAM/SCR/TELE'
-poster_lists, pack_check = ('list', 'medialist'), ('true', 'show', 'season')
-xml_choices = [('List', img_url % 'rcgKRWk'), ('Rows', img_url % 'wHvaixs'), ('WideList', img_url % '4UwfSLy')]
-run_plugin_str = 'RunPlugin(%s)'
-string = str
-upper, lower = string.upper, string.lower
-resume_timeout = 10000
+from modules.settings import provider_sort_ranks, external_cache_check
+from modules.kodi_utils import get_icon, kodi_dialog, hide_busy_dialog, addon_fanart, select_dialog, ok_dialog
+# from modules.kodi_utils import logger
 
 class SourcesResults(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -38,8 +20,16 @@ class SourcesResults(BaseDialog):
 		self.meta = kwargs.get('meta')
 		self.filters_ignored = kwargs.get('filters_ignored', False)
 		self.meta_get = self.meta.get
-		self.make_poster = self.window_format in poster_lists
-		self.poster = self.meta_get('poster') or empty_poster
+		self.make_poster = self.window_format in ('list', 'medialist')
+		self.empty_poster = get_icon('box_office')
+		self.addon_fanart = addon_fanart()
+		self.poster = self.meta_get('poster') or self.empty_poster
+		self.prerelease_values, self.prerelease_key = ('CAM', 'SCR', 'TELE'), 'CAM/SCR/TELE'
+		self.info_icons_dict = {'easynews': get_icon('easynews'), 'alldebrid': get_icon('alldebrid'), 'real-debrid': get_icon('realdebrid'), 'premiumize': get_icon('premiumize'),
+		'offcloud': get_icon('offcloud'), 'easydebrid': get_icon('easydebrid'), 'torbox': get_icon('torbox'), 'ad_cloud': get_icon('alldebrid'), 'rd_cloud': get_icon('realdebrid'),
+		'pm_cloud': get_icon('premiumize'), 'oc_cloud': get_icon('offcloud'), 'tb_cloud': get_icon('torbox')}
+		self.info_quality_dict = {'4k': get_icon('flag_4k', 'flags'), '1080p': get_icon('flag_1080p', 'flags'), '720p': get_icon('flag_720p', 'flags'),
+		'sd': get_icon('flag_sd', 'flags'), 'cam': get_icon('flag_sd', 'flags'), 'tele': get_icon('flag_sd', 'flags'), 'scr': get_icon('flag_sd', 'flags')}
 		self.make_items()
 		self.make_filter_items()
 		self.set_properties()
@@ -58,11 +48,11 @@ class SourcesResults(BaseDialog):
 		return self.selected
 
 	def get_provider_and_path(self, provider):
-		try: return provider, info_icons_dict[provider]
-		except: return 'folders', get_icon('provider_folder')
+		try: return provider, self.info_icons_dict[provider]
+		except: return 'folders', get_icon('folder')
 
 	def get_quality_and_path(self, quality):
-		try: return quality, info_quality_dict[quality]
+		try: return quality, self.info_quality_dict[quality]
 		except: return 'sd', get_icon('flag_sd')
 
 	def filter_action(self, action):
@@ -73,7 +63,7 @@ class SourcesResults(BaseDialog):
 			chosen_listitem = self.get_listitem(self.filter_window_id)
 			filter_type, filter_value = chosen_listitem.getProperty('filter_type'), chosen_listitem.getProperty('filter_value')
 			if filter_type in ('quality', 'provider'):
-				if filter_value == prerelease_key: filtered_list = [i for i in self.item_list if i.getProperty(filter_type) in filter_value.split('/')]
+				if filter_value == self.prerelease_key: filtered_list = [i for i in self.item_list if i.getProperty(filter_type) in filter_value.split('/')]
 				else: filtered_list = [i for i in self.item_list if i.getProperty(filter_type) == filter_value]
 			elif filter_type == 'special':
 				if filter_value == 'title':
@@ -81,12 +71,13 @@ class SourcesResults(BaseDialog):
 					if not keywords: return
 					keywords.replace(' ', '')
 					keywords = keywords.split(',')
-					choice = [upper(i) for i in keywords]
+					choice = [i.upper() for i in keywords]
 					filtered_list = [i for i in self.item_list if all(x in i.getProperty('name') for x in choice)]
 				elif filter_value == 'extraInfo':
-					list_items = [{'line1': item[0], 'icon': self.poster} for item in source_filters]
+					filters = source_filters()
+					list_items = [{'line1': item[0], 'icon': self.poster} for item in filters]
 					kwargs = {'items': json.dumps(list_items), 'heading': 'Filter Results', 'multi_choice': 'true'}
-					choice = select_dialog(source_filters, **kwargs)
+					choice = select_dialog(filters, **kwargs)
 					if choice == None: return
 					choice = [i[1] for i in choice]
 					filtered_list = [i for i in self.item_list if all(x in i.getProperty('extraInfo') for x in choice)]
@@ -117,7 +108,7 @@ class SourcesResults(BaseDialog):
 			source = json.loads(chosen_listitem.getProperty('source'))
 			choice = self.context_menu(source)
 			if choice:
-				if isinstance(choice, dict): return self.execute_code(run_plugin_str % self.build_url(choice))
+				if isinstance(choice, dict): return self.execute_code('RunPlugin(%s)' % self.build_url(choice))
 				if choice == 'results_info': return self.open_window(('windows.sources', 'SourcesInfo'), 'sources_info.xml', item=chosen_listitem)
 
 	def make_items(self, filtered_list=None):
@@ -128,24 +119,27 @@ class SourcesResults(BaseDialog):
 					listitem = self.make_listitem()
 					set_properties = listitem.setProperties
 					scrape_provider, source, quality, name = get('scrape_provider'), get('source'), get('quality', 'SD'), get('display_name')
-					basic_quality, quality_icon = self.get_quality_and_path(lower(quality))
-					pack = get('package', 'false') in pack_check
+					basic_quality, quality_icon = self.get_quality_and_path(quality.lower())
+					pack = get('package', 'false') in ('true', 'show', 'season')
 					extraInfo = get('extraInfo', '')
 					extraInfo = extraInfo.rstrip('| ')
 					if pack: extraInfo = '[B]%s PACK[/B] | %s' % (get('package'), extraInfo)
 					if self.episode_group_label: extraInfo = '%s | %s' % (self.episode_group_label, extraInfo)
 					if not extraInfo: extraInfo = 'N/A'
 					if scrape_provider == 'external':
-						source_site = upper(get('provider'))
-						provider = upper(get('debrid', source_site).replace('.me', ''))
-						provider_lower = lower(provider)
+						source_site = get('provider').upper()
+						provider = get('debrid', source_site).replace('.me', '').upper()
+						provider_lower = provider.lower()
 						provider_icon = self.get_provider_and_path(provider_lower)[1]
 						if 'Uncached' in item['cache_provider']:
 							if 'seeders' in item: set_properties({'source_type': 'UNCACHED (%d SEEDERS)' % get('seeders', 0)})
 							else: set_properties({'source_type': 'UNCACHED'})
 							set_properties({'highlight': 'FF7C7C7C'})
 						else:
-							cache_flag = 'UNCHECKED' if provider in ('REAL-DEBRID', 'ALLDEBRID') else '[B]CACHED[/B]'
+							if provider in ('REAL-DEBRID', 'ALLDEBRID'):
+								if external_cache: cache_flag = '[B]CACHED[/B]'
+								else: cache_flag = 'UNCHECKED'
+							else: cache_flag = '[B]CACHED[/B]'
 							if highlight_type == 0: key = provider_lower
 							else: key = basic_quality
 							set_properties({'highlight': self.info_highlights_dict[key]})
@@ -153,23 +147,24 @@ class SourcesResults(BaseDialog):
 							else: set_properties({'source_type': '%s' % cache_flag})
 						set_properties({'provider': provider})
 					else:
-						source_site = upper(source)
-						provider, provider_icon = self.get_provider_and_path(lower(source))
+						source_site = source.upper()
+						provider, provider_icon = self.get_provider_and_path(source.lower())
 						if highlight_type == 0: key = provider
 						else: key = basic_quality
-						set_properties({'highlight': self.info_highlights_dict[key], 'source_type': 'DIRECT', 'provider': upper(provider)})
-					set_properties({'name': upper(name), 'source_site': source_site, 'provider_icon': provider_icon, 'quality_icon': quality_icon, 'count': '%02d.' % count,
-								'size_label': get('size_label', 'N/A'), 'extraInfo': extraInfo, 'quality': upper(quality), 'hash': get('hash', 'N/A'), 'source': json.dumps(item)})	
+						set_properties({'highlight': self.info_highlights_dict[key], 'source_type': 'DIRECT', 'provider': provider.upper()})
+					set_properties({'name': name.upper(), 'source_site': source_site, 'provider_icon': provider_icon, 'quality_icon': quality_icon, 'count': '%02d.' % count,
+							'size_label': get('size_label', 'N/A'), 'extraInfo': extraInfo, 'quality': quality.upper(), 'hash': get('hash', 'N/A'), 'source': json.dumps(item)})	
 					yield listitem
 				except: pass
 		try:
+			external_cache = external_cache_check()
 			highlight_type = self.info_highlights_dict['highlight_type']
 			if filtered_list: return list(builder(filtered_list))
 			self.item_list = list(builder(self.results))
 			if self.prescrape:
 				prescrape_listitem = self.make_listitem()
 				prescrape_listitem.setProperty('perform_full_search', 'true')
-			self.total_results = string(len(self.item_list))
+			self.total_results = str(len(self.item_list))
 			if self.prescrape: self.item_list.append(prescrape_listitem)
 		except: pass
 
@@ -183,8 +178,8 @@ class SourcesResults(BaseDialog):
 		qualities = [i.getProperty('quality') for i in self.item_list \
 							if not (i.getProperty('quality') in duplicates or duplicates.add(i.getProperty('quality'))) \
 							and not i.getProperty('quality') == '']
-		if any(i in prerelease_values for i in qualities): qualities = [i for i in qualities if not i in prerelease_values] + [prerelease_key]
-		qualities.sort(key=quality_choices.index)
+		if any(i in self.prerelease_values for i in qualities): qualities = [i for i in qualities if not i in self.prerelease_values] + [self.prerelease_key]
+		qualities.sort(key=('4K', '1080P', '720P', 'SD', 'CAM/SCR/TELE').index)
 		duplicates = set()
 		providers = [i.getProperty('provider') for i in self.item_list \
 							if not (i.getProperty('provider') in duplicates or duplicates.add(i.getProperty('provider'))) \
@@ -192,7 +187,7 @@ class SourcesResults(BaseDialog):
 		sort_ranks = provider_sort_ranks()
 		sort_ranks['premiumize'] = sort_ranks.pop('premiumize.me')
 		provider_choices = sorted(sort_ranks.keys(), key=sort_ranks.get)
-		provider_choices = [upper(i) for i in provider_choices]
+		provider_choices = [i.upper() for i in provider_choices]
 		providers.sort(key=provider_choices.index)
 		qualities = [('Show [B]%s[/B] Only' % i, 'quality', i) for i in qualities]
 		providers = [('Show [B]%s[/B] Only' % i, 'provider', i) for i in providers]
@@ -203,7 +198,7 @@ class SourcesResults(BaseDialog):
 
 	def set_properties(self):
 		self.setProperty('window_format', self.window_format)
-		self.setProperty('fanart', self.meta_get('fanart') or addon_fanart)
+		self.setProperty('fanart', self.meta_get('fanart') or self.addon_fanart)
 		self.setProperty('clearlogo', self.meta_get('clearlogo') or '')
 		self.setProperty('title', self.meta_get('title'))
 		self.setProperty('total_results', self.total_results)
@@ -213,7 +208,7 @@ class SourcesResults(BaseDialog):
 		if self.window_id == 2000: self.set_image(200, self.poster)
 
 	def context_menu(self, item):
-		down_file_params, down_pack_params, browse_pack_params, add_magnet_to_cloud_params = None, None, None, None
+		down_file_params, down_pack_params, browse_pack_params, add_magnet_to_cloud_params, uncached_download = None, None, None, None, None
 		item_get = item.get
 		item_id, name, magnet_url, info_hash = item_get('id', None), item_get('name'), item_get('url', 'None'), item_get('hash', 'None')
 		provider_source, scrape_provider, cache_provider = item_get('source'), item_get('scrape_provider'), item_get('cache_provider', 'None')
@@ -231,11 +226,13 @@ class SourcesResults(BaseDialog):
 			browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'name': name,
 								'magnet_url': magnet_url, 'info_hash': info_hash}
 			if cache_provider != 'EasyDebrid': add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'magnet_url': magnet_url}
+		# if provider_source == 'torrent' and 'Uncached' in cache_provider: uncached_download = {'mode': None}
 		choices_append(('Info', 'results_info'))
 		if add_magnet_to_cloud_params: choices_append(('Add to Cloud', add_magnet_to_cloud_params))
 		if browse_pack_params: choices_append(('Browse', browse_pack_params))
 		if down_pack_params: choices_append(('Download Pack', down_pack_params))
 		if down_file_params: choices_append(('Download File', down_file_params))
+		# if uncached_download: choices_append(('Attempt File Download', uncached_download))
 		list_items = [{'line1': i[0], 'icon': self.poster} for i in choices]
 		kwargs = {'items': json.dumps(list_items)}
 		choice = select_dialog([i[1] for i in choices], **kwargs)
@@ -246,7 +243,7 @@ class SourcesResults(BaseDialog):
 		self.reset_window(self.window_id)
 		self.add_items(self.window_id, filtered_list)
 		self.setFocusId(self.window_id)
-		self.setProperty('total_results', string(len(filtered_list)))
+		self.setProperty('total_results', str(len(filtered_list)))
 		self.setProperty('filter_applied', 'true')
 		self.setProperty('filter_info', '| Press [B]BACK[/B] to Cancel')
 
@@ -266,6 +263,7 @@ class SourcesPlayback(BaseDialog):
 		self.meta = kwargs.get('meta')
 		self.is_canceled, self.skip_resolve, self.resume_choice = False, False, None
 		self.meta_get = self.meta.get
+		self.addon_fanart = addon_fanart()
 		self.enable_scraper()
 
 	def run(self):
@@ -274,7 +272,7 @@ class SourcesPlayback(BaseDialog):
 		self.clear_modals()
 
 	def onClick(self, controlID):
-		self.resume_choice = resume_dict[controlID]
+		self.resume_choice = {10: 'resume', 11: 'start_over', 12: 'cancel'}[controlID]
 
 	def onAction(self, action):
 		if action in self.closing_actions: self.is_canceled = True
@@ -307,16 +305,12 @@ class SourcesPlayback(BaseDialog):
 		self.setProperty('enable_busy_spinner', toggle)
 
 	def set_scraper_properties(self):
-		title, year, genre = self.meta_get('title'), string(self.meta_get('year')), self.meta_get('genre', '')
-		poster = self.meta_get('poster') or empty_poster
-		fanart = self.meta_get('fanart') or addon_fanart
-		clearlogo = self.meta_get('clearlogo') or ''
+		title, genre = self.meta_get('title'), self.meta_get('genre', '')
+		fanart, clearlogo = self.meta_get('fanart') or self.addon_fanart, self.meta_get('clearlogo') or ''
 		self.setProperty('window_mode', self.window_mode)
-		self.setProperty('title', title)
 		self.setProperty('fanart', fanart)
 		self.setProperty('clearlogo', clearlogo)
-		self.setProperty('year', year)
-		self.setProperty('poster', poster)
+		self.setProperty('title', title)
 		self.setProperty('genre', ', '.join(genre))
 
 	def set_resolver_properties(self):
@@ -333,25 +327,25 @@ class SourcesPlayback(BaseDialog):
 		self.update_resumer()
 
 	def update_scraper(self, results_sd, results_720p, results_1080p, results_4k, results_total, content='', percent=0):
-		self.setProperty('results_4k', string(results_4k))
-		self.setProperty('results_1080p', string(results_1080p))
-		self.setProperty('results_720p', string(results_720p))
-		self.setProperty('results_sd', string(results_sd))
-		self.setProperty('results_total', string(results_total))
-		self.setProperty('percent', string(percent))
+		self.setProperty('results_4k', str(results_4k))
+		self.setProperty('results_1080p', str(results_1080p))
+		self.setProperty('results_720p', str(results_720p))
+		self.setProperty('results_sd', str(results_sd))
+		self.setProperty('results_total', str(results_total))
+		self.setProperty('percent', str(percent))
 		self.set_text(2001, content)
 
 	def update_resolver(self, text='', percent=0):
-		try: self.setProperty('percent', string(percent))
+		try: self.setProperty('percent', str(percent))
 		except: pass
 		if text: self.set_text(2002, text)
 
 	def update_resumer(self):
 		count = 0
 		while self.resume_choice is None:
-			percent = int((float(count)/resume_timeout)*100)
+			percent = int((float(count)/10000)*100)
 			if percent >= 100: self.resume_choice = 'resume'
-			self.setProperty('percent', string(percent))
+			self.setProperty('percent', str(percent))
 			count += 100
 			self.sleep(100)
 
@@ -368,21 +362,7 @@ class SourcesInfo(BaseDialog):
 	def onAction(self, action):
 		self.close()
 
-	def get_provider_and_path(self):
-		try:
-			provider = lower(self.item_get_property('provider'))
-			icon_path = info_icons_dict[provider]
-		except: provider, icon_path = 'folders', get_icon('provider_folder')
-		return provider, icon_path
-
-	def get_quality_and_path(self):
-		quality = lower(self.item_get_property('quality'))
-		icon_path = info_quality_dict[quality]
-		return quality, icon_path
-
 	def set_properties(self):
-		provider, provider_path = self.get_provider_and_path()
-		quality, quality_path = self.get_quality_and_path()
 		self.setProperty('name', self.item_get_property('name'))
 		self.setProperty('source_type', self.item_get_property('source_type'))
 		self.setProperty('source_site', self.item_get_property('source_site'))
@@ -390,10 +370,10 @@ class SourcesInfo(BaseDialog):
 		self.setProperty('extraInfo', self.item_get_property('extraInfo'))
 		self.setProperty('highlight', self.item_get_property('highlight'))
 		self.setProperty('hash', self.item_get_property('hash'))
-		self.setProperty('provider', provider)
-		self.setProperty('quality', quality)
-		self.setProperty('provider_icon', provider_path)
-		self.setProperty('quality_icon', quality_path)
+		self.setProperty('provider', self.item_get_property('provider').lower())
+		self.setProperty('quality', self.item_get_property('quality').lower())
+		self.setProperty('provider_icon', self.item_get_property('provider_icon'))
+		self.setProperty('quality_icon', self.item_get_property('quality_icon'))
 
 class SourcesChoice(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -421,7 +401,7 @@ class SourcesChoice(BaseDialog):
 
 	def make_items(self):
 		append = self.item_list.append
-		for item in xml_choices:
+		for item in [('List', get_icon('results_list', 'results')), ('Rows', get_icon('results_row', 'results')), ('WideList', get_icon('results_widelist', 'results'))]:
 			listitem = self.make_listitem()
 			listitem.setProperties({'name': item[0], 'image': item[1]})
 			append(listitem)
