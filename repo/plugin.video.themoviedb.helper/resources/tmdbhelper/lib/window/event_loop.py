@@ -2,7 +2,7 @@ from xbmcgui import Window
 import jurialmunkey.window as window
 from tmdbhelper.lib.addon.plugin import executebuiltin, get_condvisibility
 from tmdbhelper.lib.addon.logger import kodi_log
-from tmdbhelper.lib.files.ftools import cached_property
+from jurialmunkey.ftools import cached_property
 from tmdbhelper.lib.window.direct_call_auto import DirectCallAutoInfoDialog
 from tmdbhelper.lib.window.constants import (
     ID_VIDEOINFO,
@@ -166,41 +166,36 @@ class EventLoop():
         self.current_path = self.added_path
         self.first_run = False
 
-    def event_loop_action(self):
-        # Path added so let's put it in the queue
-        if window.get_property(PREFIX_ADDPATH):
-            self._on_add()
-            return
-
-        # Exit called so let's exit
-        if window.get_property(PREFIX_COMMAND) == 'exit':
-            self._call_exit()
-            return
-
-        # Path changed so let's update
-        if self.current_path != self.added_path:
-            self._on_change()
-            self.xbmc_monitor.waitForAbort(0.3)
-            return
-
-        # User force quit so let's exit
-        if not window.is_visible(self.window_id):
-            self._call_exit()
-            return
-
-        # User pressed back and closed video info window
-        if not window.is_visible(ID_VIDEOINFO):
-            self._on_back()
-            self.xbmc_monitor.waitForAbort(0.3)
-            return
-
-        # Nothing happened this round so let's loop and wait
-        self.xbmc_monitor.waitForAbort(0.3)
-
     def event_poll(self):
-        if not self.exit and not self.xbmc_monitor.abortRequested():
-            self.event_loop_action()
-            return self.event_poll()
+        while not self.exit and not self.xbmc_monitor.abortRequested():
+            # Path added so let's put it in the queue
+            if window.get_property(PREFIX_ADDPATH):
+                self._on_add()
+                continue
+
+            # Exit called so let's exit
+            if window.get_property(PREFIX_COMMAND) == 'exit':
+                self._call_exit()
+                break
+
+            # Path changed so let's update
+            if self.current_path != self.added_path:
+                self._on_change()
+                continue
+
+            # User force quit so let's exit
+            if not window.is_visible(self.window_id):
+                self._call_exit()
+                break
+
+            # User pressed back and closed video info window
+            if not window.is_visible(ID_VIDEOINFO):
+                self._on_back()
+                continue
+
+            # Nothing happened this round so let's loop and wait
+            self.xbmc_monitor.waitForAbort(0.3)
+
         return self._on_exit()
 
     def event_loop(self):
