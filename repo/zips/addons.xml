@@ -5651,7 +5651,7 @@ Second Test Release:
 			<icon>resources/icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.21.1.1" provider-name="Unknown">
+</addon><addon id="service.subtitles.a4ksubtitles" name="a4kSubtitles" version="3.21.2" provider-name="Unknown">
     <requires>
       <import addon="script.module.requests" />
       <import addon="vfs.libarchive" optional="true" />
@@ -5676,6 +5676,9 @@ Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, SubDL, Addic7ed
             <screenshot>screenshot-03.png</screenshot>
         </assets>
     <news>
+[v3.21.2]:
+  * SubSource: Fix and update API
+
 [v3.21.1]:
   * Dynamic AI subtitles translation from English to the selected Preferred Language in KODI's settings
     * Requires API Key
