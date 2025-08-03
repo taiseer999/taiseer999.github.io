@@ -276,7 +276,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[RPUPresentVar]</label>
-						<font>font_debug</font>
+						<font>font_tiny_iconic_regular</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -299,7 +299,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR lightgreen]$VAR[BLPresentVar][/COLOR]</label>
-						<font>font_debug</font>
+						<font>font_tiny_iconic_regular</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -322,7 +322,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[ELPresentVar]</label>
-						<font>font_debug</font>
+						<font>font_tiny_iconic_regular</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -332,7 +332,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[ELSourcePresentVar]</label>
-						<font>font_debug</font>
+						<font>font_tiny_iconic_regular</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.el.present),Player.Process(video.dovi.el.present))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
@@ -356,7 +356,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>Enhancement Layer Type</label>
+						<label>$VAR[DVELVar]</label>
 						<font>font_debug</font>
 					</control>
 					<control type="label">
@@ -366,7 +366,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$VAR[DVSourceELVar]</label>
-						<font>font_debug</font>
+						<font>font_tiny_iconic_regular</font>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.el.type),Player.Process(video.dovi.el.type))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
 					</control>
@@ -1348,7 +1348,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[AudioCodecVar]$VAR[AudioChannels1Var, ]$VAR[ObjectAudio, ]</label>
+						<label>[COLOR dialog_fg_90]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR dialog_fg_70]$VAR[AudioCodecSpatialVar][/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1372,7 +1372,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit]</label>
+						<label>$INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit] </label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
