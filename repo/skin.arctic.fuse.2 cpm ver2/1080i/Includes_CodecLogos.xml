@@ -307,7 +307,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>45</height>
-                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                    <texture colordiffuse="dialog_fg_90">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -623,7 +623,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>45</height>
-                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                    <texture colordiffuse="dialog_fg_90">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -936,7 +936,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>45</height>
-                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                    <texture colordiffuse="dialog_fg_90">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -1252,7 +1252,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>45</height>
-                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                    <texture colordiffuse="dialog_fg_90">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -1565,7 +1565,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>45</height>
-                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                    <texture colordiffuse="dialog_fg_90">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -1881,7 +1881,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>45</height>
-                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                    <texture colordiffuse="dialog_fg_90">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
