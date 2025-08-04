@@ -300,6 +300,16 @@
                     <texture colordiffuse="dialog_fg_90">codecs/OPUS.png</texture>
                 </control>
             </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                </control>
+            </control>
         </control>
     </include>
 
@@ -606,6 +616,16 @@
                     <texture colordiffuse="dialog_fg_90">codecs/OPUS.png</texture>
                 </control>
             </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                </control>
+            </control>
         </control>
     </include>
 
@@ -907,6 +927,16 @@
                     <width>150</width>
                     <height>45</height>
                     <texture colordiffuse="dialog_fg_90">codecs/OPUS.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -1215,6 +1245,16 @@
                     <texture colordiffuse="dialog_fg_90">codecs/OPUS.png</texture>
                 </control>
             </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
+                </control>
+            </control>
         </control>
     </include>
 
@@ -1516,6 +1556,16 @@
                     <width>150</width>
                     <height>45</height>
                     <texture colordiffuse="dialog_fg_90">codecs/OPUS.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -1822,6 +1872,16 @@
                     <width>150</width>
                     <height>45</height>
                     <texture colordiffuse="dialog_fg_90">codecs/OPUS.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(VideoPlayer.AudioCodec,mp2)</visible>
+                <top>140</top>
+                <left>30</left>
+                <control type="image">
+                    <width>150</width>
+                    <height>45</height>
+                    <texture colordiffuse="FFffffff">codecs/MP2.png</texture>
                 </control>
             </control>
         </control>
@@ -2444,6 +2504,27 @@
                 <control type="image" id="$PARAM[imageId]">
                     <top>140</top>
                     <left>30</left>
+                    <width>150</width>
+                    <height>45</height>
+                    <visible>$PARAM[visible]</visible>
+                    <texture>$PARAM[texture]</texture>
+                    <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="MP2_Flag">
+        <param name="groupId" />
+        <param name="imageId" />
+        <param name="visible" />
+        <param name="texture" />
+        <param name="colordiffuse" />
+        <definition>
+            <control type="group" id="$PARAM[groupId]">
+                <control type="image" id="$PARAM[imageId]">
+                    <top>240</top>
+                    <left>975</left>
                     <width>150</width>
                     <height>45</height>
                     <visible>$PARAM[visible]</visible>

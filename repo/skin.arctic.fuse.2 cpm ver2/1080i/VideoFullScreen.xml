@@ -332,6 +332,14 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
+            <include content="MP2_Flag">
+                <param name="groupId">106</param>
+                <param name="imageId">107</param>
+                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp2)</param>
+                <param name="texture">codecs/MP2.png</param>
+                <param name="colordiffuse">FFffffff</param>
+            </include>
+
             <include content="VS10_Indicator_Flag">
                 <param name="groupId">104</param>
                 <param name="imageId">105</param>
@@ -643,6 +651,14 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
+            <include content="MP2_Flag">
+                <param name="groupId">106</param>
+                <param name="imageId">107</param>
+                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp2)</param>
+                <param name="texture">codecs/MP2.png</param>
+                <param name="colordiffuse">FFffffff</param>
+            </include>
+
             <include content="VS10_Indicator_Flag">
                 <param name="groupId">104</param>
                 <param name="imageId">105</param>
@@ -954,6 +970,14 @@
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
 			
+            <include content="MP2_Flag">
+                <param name="groupId">106</param>
+                <param name="imageId">107</param>
+                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp2)</param>
+                <param name="texture">codecs/MP2.png</param>
+                <param name="colordiffuse">FFffffff</param>
+            </include>
+
             <include content="VS10_Indicator_Flag">
                 <param name="groupId">104</param>
                 <param name="imageId">105</param>
