@@ -7,10 +7,10 @@
         <include content="Object_Control">
             <param name="control">group</param>
             <visible>!Window.IsVisible(seekbar)</visible>
-            <visible>Window.IsVisible(fullscreenvideo) | Window.IsVisible(visualisation)</visible>
+            <visible>$EXP[Exp_WindowVisible_FullscreenVideo] | Window.IsVisible(visualisation)</visible>
             <include content="Object_ShadowSpot">
                 <include>Dimension_ClockShadow</include>
-                <visible>!Player.Muted</visible>
+                <visible>!$EXP[Exp_PlayerMuted]</visible>
             </include>
             <include content="Furniture_Topbar_Group">
                 <include content="Furniture_Gutters">
@@ -19,13 +19,13 @@
                         <height>60</height>
                         <centertop>50%</centertop>
                         <centerright>30</centerright>
-                        <visible>Player.Muted</visible>
+                        <visible>$EXP[Exp_PlayerMuted]</visible>
                     </include>
                 </include>
             </include>
             <include content="Furniture_MenuButton">
                 <param name="hasclock">false</param>
-                <visible>Player.Muted</visible>
+                <visible>$EXP[Exp_PlayerMuted]</visible>
             </include>
         </include>
 
@@ -37,7 +37,7 @@
             <param name="icon" value="special://skin/extras/icons/volume.png" />
             <param name="mainlabel" value="$LOCALIZE[13376]$INFO[Control.GetLabel(933), ,%]" />
             <param name="minilabel" value="$INFO[Player.Volume]" />
-            <visible>!Player.Muted</visible>
+            <visible>!$EXP[Exp_PlayerMuted]</visible>
         </include>
 
         <control type="label" id="31">

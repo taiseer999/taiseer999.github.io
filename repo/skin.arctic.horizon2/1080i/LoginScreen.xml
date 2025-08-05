@@ -27,7 +27,7 @@
                         <textcolor>main_fg_70</textcolor>
                         <label>$INFO[Container(52).ListItem.Label2]</label>
                         <animation effect="fade" reversible="false" start="0" end="100" time="300" delay="200">Visible</animation>
-                        <visible>!Container(52).OnNext + !Container(52).OnPrevious</visible>
+                        <visible>!Container(52).OnNext + !$EXP[Exp_Container52_OnPrevious]</visible>
                     </control>
                 </control>
                 <control type="image">
@@ -88,9 +88,9 @@
 
                             <animation condition="Container(52).OnNext" effect="slide" start="0" end="0,-80" delay="0" time="500" tween="sine" easing="out" reversible="false">UnFocus</animation>
 
-                            <animation condition="Container(52).OnPrevious" effect="slide" start="0,-80" end="0" delay="0" time="500" tween="sine" easing="out" reversible="false">Focus</animation>
+                            <animation condition="$EXP[Exp_Container52_OnPrevious]" effect="slide" start="0,-80" end="0" delay="0" time="500" tween="sine" easing="out" reversible="false">Focus</animation>
 
-                            <animation condition="Container(52).OnPrevious" effect="slide" start="0" end="0,-80" delay="0" time="500" tween="sine" easing="out" reversible="false">UnFocus</animation>
+                            <animation condition="$EXP[Exp_Container52_OnPrevious]" effect="slide" start="0" end="0,-80" delay="0" time="500" tween="sine" easing="out" reversible="false">UnFocus</animation>
 
                             <top>120</top>
                             <centerleft>50%</centerleft>

@@ -28,7 +28,7 @@
             <left>grid_x04</left>
             <right>grid_x04</right>
             <control type="group">
-                <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
+                <visible>[$EXP[Exp_IsMovieType] | $EXP[Exp_StringIsEqual_ListItemDBType_TVShow] | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | $EXP[Exp_StringIsEqual_ListItemDBType_Set] | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
                 <height>grid_x02</height>
                 <control type="label">
                     <font>font_tiny</font>
@@ -51,7 +51,7 @@
                     <align>left</align>
                     <left>grid_x68</left>
                     <visible>$PARAM[detailed]</visible>
-                    <visible>[String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,artist)]</visible>
+                    <visible>[String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album) | $EXP[Exp_StringIsEqual_ListItemDBType_Artist]]</visible>
                 </control>
                 <control type="label">
                     <font>font_tiny</font>
@@ -71,7 +71,7 @@
 
             <control type="group">
                 <height>grid_x02</height>
-                <visible>![String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
+                <visible>![$EXP[Exp_IsMovieType] | $EXP[Exp_StringIsEqual_ListItemDBType_TVShow] | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | $EXP[Exp_StringIsEqual_ListItemDBType_Set] | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
                 <control type="label">
                     <font>font_tiny</font>
                     <textcolor>main_fg_30</textcolor>

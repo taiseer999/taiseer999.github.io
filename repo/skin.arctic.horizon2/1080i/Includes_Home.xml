@@ -14,14 +14,14 @@
     </include>
     <include name="Home_Horz_Furniture_TopLeft">
         <include content="Home_Base_Furniture_TopLeft">
-            <visible>!$EXP[Exp_HomeBarVisible]</visible>
-            <visible>!Skin.HasSetting(Home.CleanWidgets) | Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) | String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full) | !Control.IsVisible(398)</visible>
+            <visible>!$EXP[Exp_HomeBarVisible_Complete]</visible>
+            <visible>!Skin.HasSetting(Home.CleanWidgets) | $EXP[Exp_TMDBWidget_Container301] | String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full) | !Control.IsVisible(398)</visible>
         </include>
     </include>
     <include name="Home_Vert_Furniture_TopLeft">
         <include content="Home_Base_Furniture_TopLeft">
-            <visible>![Control.HasFocus(300) | Control.HasFocus(399) | ControlGroup(303).HasFocus() | Control.HasFocus(302) | Control.HasFocus(304) | Control.HasFocus(305) | Window.Next(1114)] | Skin.HasSetting(Home.DisableSearchMenu)</visible>
-            <visible>!Skin.HasSetting(Home.CleanWidgets) | Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) | String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full) | !Control.IsVisible(398)</visible>
+            <visible>![$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399] | $EXP[Exp_ControlGroupHasFocus_303] | $EXP[Exp_Control302_HasFocus] | Control.HasFocus(304) | Control.HasFocus(305) | $EXP[Exp_WindowNext1114]] | Skin.HasSetting(Home.DisableSearchMenu)</visible>
+            <visible>!Skin.HasSetting(Home.CleanWidgets) | $EXP[Exp_TMDBWidget_Container301] | String.IsEqual(Window.Property(Slide.WidgetInfoStyle),Full) | !Control.IsVisible(398)</visible>
         </include>
     </include>
 
@@ -48,7 +48,7 @@
                 <height>140</height>
                 <visible>!$EXP[Exp_InfoDialogs]</visible>
                 <visible>!$EXP[Exp_RecommendationDialogs]</visible>
-                <visible>!Control.HasFocus(399) + !Control.HasFocus(300) + !Control.HasFocus(302)</visible>
+                <visible>!$EXP[Exp_ControlHasFocus_399] + !$EXP[Exp_ControlHasFocus_300] + !$EXP[Exp_Control302_HasFocus]</visible>
                 <animation effect="fade" reversible="false" start="0" end="100" time="400">Visible</animation>
                 <animation effect="fade" reversible="false" start="100" end="0" time="400">Hidden</animation>
                 <include content="Object_NavButton">
@@ -93,9 +93,9 @@
             <param name="backing">False</param>
             <left>40</left>
             <visible>!$EXP[Exp_InfoDialogs]</visible>
-            <visible>$EXP[Exp_HomeBarVisible]</visible>
+            <visible>$EXP[Exp_HomeBarVisible_Complete]</visible>
             <visible>!$EXP[Exp_RecommendationDialogs]</visible>
-            <animation effect="fade" start="100" end="0" condition="Window.Next(1114)">Conditional</animation>
+            <animation effect="fade" start="100" end="0" condition="$EXP[Exp_WindowNext1114]">Conditional</animation>
             <include content="Object_Hidden_Button">
                 <param name="id" value="399" />
                 <onleft condition="!Skin.HasSetting(Home.DisableSearchMenu) + String.IsEmpty(Container(300).ListItemNoWrap(-1).Label)">ClearProperty(AnimationDirection)</onleft>
@@ -124,7 +124,7 @@
                 <onup condition="String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction)) + Skin.String(HomeMenu.OnUp,PowerMenu)">SetFocus(303)</onup>
 
                 <onup condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">SetProperty(CustomHubHeader,$INFO[Container(300).ListItem.Label],Home)</onup>
-                <onup condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">SetProperty(submenuVisibility,$INFO[Container(300).ListItem.Property(submenuVisibility)],Home)</onup>
+                <onup condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">SetProperty(submenuVisibility,$INFO[Container(300).$EXP[Exp_HasSubmenuVisibility]],Home)</onup>
                 <onup condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">$INFO[Container(300).ListItem.Property(menuOnUpAction)]</onup>
 
                 <oninfo condition="!Integer.IsEqual(Container(302).NumItems,0)">SetFocus(302,0,absolute)</oninfo>
@@ -147,8 +147,8 @@
             <include content="Object_MenuBar_List" condition="!Skin.HasSetting(Home.TextMenu)">
                 <param name="id" value="300" />
                 <param name="color_nf" value="main_fg" />
-                <param name="altfocus" value="Control.HasFocus(399)" />
-                <param name="solidfocus">Control.HasFocus(302)</param>
+                <param name="altfocus" value="$EXP[Exp_ControlHasFocus_399]" />
+                <param name="solidfocus">$EXP[Exp_Control302_HasFocus]</param>
                 <onfocus condition="String.IsEmpty(Window.Property(MenuSelect))">SetFocus(399)</onfocus>
                 <onfocus condition="String.IsEmpty(Window.Property(MenuSelect))">SetProperty(TMDbHelper.WidgetContainer,301,Home)</onfocus>
                 <include content="Object_Left" condition="!Skin.HasSetting(Home.DisableSearchMenu)">
@@ -179,7 +179,7 @@
             <aspectratio>keep</aspectratio>
             <bordersize>0</bordersize>
             <texture colordiffuse="main_fg_70">special://skin/extras/icons/home.png</texture>
-            <visible>Skin.HasSetting(Home.DisableSearchMenu) + !Control.HasFocus(302)</visible>
+            <visible>Skin.HasSetting(Home.DisableSearchMenu) + !$EXP[Exp_Control302_HasFocus]</visible>
         </control>
         <control type="image">
             <left>20</left>
@@ -189,7 +189,7 @@
             <aspectratio>keep</aspectratio>
             <bordersize>4</bordersize>
             <texture colordiffuse="main_fg_70">special://skin/extras/icons/search.png</texture>
-            <visible>!Skin.HasSetting(Home.DisableSearchMenu) + !Control.HasFocus(302)</visible>
+            <visible>!Skin.HasSetting(Home.DisableSearchMenu) + !$EXP[Exp_Control302_HasFocus]</visible>
         </control>
         <control type="image">
             <left>20</left>
@@ -199,7 +199,7 @@
             <aspectratio>keep</aspectratio>
             <bordersize>4</bordersize>
             <texture colordiffuse="main_fg_70">$INFO[Container(300).ListITem.Icon]</texture>
-            <visible>Control.HasFocus(302)</visible>
+            <visible>$EXP[Exp_Control302_HasFocus]</visible>
         </control>
 
         <control type="grouplist">
@@ -220,8 +220,8 @@
             <texturenofocus />
             <alttexturefocus border="80">special://profile/addon_data/script.texturemaker/ArcticHorizon/menumain_h.png</alttexturefocus>
             <alttexturenofocus border="80">special://profile/addon_data/script.texturemaker/ArcticHorizon/menumain_h.png</alttexturenofocus>
-            <usealttexture>String.IsEqual(Container(300).ListItem.Label,$PARAM[label]) + !Control.HasFocus(302)</usealttexture>
-            <visible>Control.HasFocus(300) | Control.HasFocus(399)</visible>
+            <usealttexture>String.IsEqual(Container(300).ListItem.Label,$PARAM[label]) + !$EXP[Exp_Control302_HasFocus]</usealttexture>
+            <visible>$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]</visible>
             <height>256</height>
             <width>auto</width>
             <label>$PARAM[label]</label>
@@ -236,8 +236,8 @@
             <texturenofocus />
             <alttexturefocus border="80" colordiffuse="dialog_bg_100">common/menumain.png</alttexturefocus>
             <alttexturenofocus border="80" colordiffuse="dialog_bg_100">common/menumain.png</alttexturenofocus>
-            <usealttexture>String.IsEqual(Container(300).ListItem.Label,$PARAM[label]) + !Control.HasFocus(302)</usealttexture>
-            <visible>![Control.HasFocus(300) | Control.HasFocus(399)]</visible>
+            <usealttexture>String.IsEqual(Container(300).ListItem.Label,$PARAM[label]) + !$EXP[Exp_Control302_HasFocus]</usealttexture>
+            <visible>![$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]]</visible>
             <height>256</height>
             <width>auto</width>
             <label>$PARAM[label]</label>
@@ -253,12 +253,12 @@
     <!-- Menubar Vert -->
     <include name="Home_Vert_Menubar">
         <control type="group">
-            <visible>[Control.HasFocus(300) | Control.HasFocus(399) | ControlGroup(303).HasFocus() | Control.HasFocus(302) | Control.HasFocus(304) | Control.HasFocus(305) | Window.Next(1114)]</visible>
+            <visible>[$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399] | $EXP[Exp_ControlGroupHasFocus_303] | $EXP[Exp_Control302_HasFocus] | Control.HasFocus(304) | Control.HasFocus(305) | $EXP[Exp_WindowNext1114]]</visible>
             <visible>!$EXP[Exp_InfoDialogs]</visible>
             <visible>!$EXP[Exp_RecommendationDialogs]</visible>
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
-            <animation effect="fade" start="100" end="0" condition="Window.Next(1114)">Conditional</animation>
+            <animation effect="fade" start="100" end="0" condition="$EXP[Exp_WindowNext1114]">Conditional</animation>
 
             <include content="Object_Hidden_Button">
                 <param name="id" value="399" />
@@ -285,7 +285,7 @@
                 <onleft condition="String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction)) + Skin.String(HomeMenu.OnUp,PowerMenu)">SetFocus(303)</onleft>
 
                 <onleft condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">SetProperty(CustomHubHeader,$INFO[Container(300).ListItem.Label],Home)</onleft>
-                <onleft condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">SetProperty(submenuVisibility,$INFO[Container(300).ListItem.Property(submenuVisibility)],Home)</onleft>
+                <onleft condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">SetProperty(submenuVisibility,$INFO[Container(300).$EXP[Exp_HasSubmenuVisibility]],Home)</onleft>
                 <onleft condition="!String.IsEmpty(Container(300).ListItem.Property(menuOnUpAction))">$INFO[Container(300).ListItem.Property(menuOnUpAction)]</onleft>
 
                 <!-- <onright>320</onright> -->
@@ -305,8 +305,8 @@
                 <texture border="0,0,400,0">common/dim-side.png</texture>
             </control>
             <control type="group">
-                <animation effect="slide" start="0" end="80" time="400" tween="quadratic" easing="out" condition="Control.HasFocus(302)" reversible="false">Conditional</animation>
-                <animation effect="slide" start="80" end="0" time="400" tween="quadratic" easing="out" condition="!Control.HasFocus(302)" reversible="false">Conditional</animation>
+                <animation effect="slide" start="0" end="80" time="400" tween="quadratic" easing="out" condition="$EXP[Exp_Control302_HasFocus]" reversible="false">Conditional</animation>
+                <animation effect="slide" start="80" end="0" time="400" tween="quadratic" easing="out" condition="!$EXP[Exp_Control302_HasFocus]" reversible="false">Conditional</animation>
 
                 <control type="fixedlist" id="302">
                     <left>40</left>
@@ -320,8 +320,8 @@
                     <onright>399</onright>
                     <oninfo>SetFocus(399)</oninfo>
                     <onback>399</onback>
-                    <animation effect="fade" start="0" end="100" delay="100" time="300" reversible="false" condition="Control.HasFocus(302)">Conditional</animation>
-                    <animation effect="fade" start="100" end="0" delay="100" time="300" reversible="false" condition="!Control.HasFocus(302)">Conditional</animation>
+                    <animation effect="fade" start="0" end="100" delay="100" time="300" reversible="false" condition="$EXP[Exp_Control302_HasFocus]">Conditional</animation>
+                    <animation effect="fade" start="100" end="0" delay="100" time="300" reversible="false" condition="!$EXP[Exp_Control302_HasFocus]">Conditional</animation>
                     <scrolltime tween="quadratic">400</scrolltime>
                     <itemlayout height="100" width="400">
                         <control type="group">
@@ -349,7 +349,7 @@
                             <top>40</top>
                             <bottom>-40</bottom>
                             <control type="group">
-                                <visible>![Control.HasFocus(302)]</visible>
+                                <visible>![$EXP[Exp_Control302_HasFocus]]</visible>
                                 <control type="image">
                                     <left>30</left>
                                     <width>60</width>
@@ -364,11 +364,11 @@
                                     <font>font_main_bold</font>
                                     <textcolor>panel_fg_70</textcolor>
                                     <label>$INFO[ListItem.Label]</label>
-                                    <visible>!Control.HasFocus(302)</visible>
+                                    <visible>!$EXP[Exp_Control302_HasFocus]</visible>
                                 </control>
                             </control>
                             <control type="group">
-                                <visible>Control.HasFocus(302)</visible>
+                                <visible>$EXP[Exp_Control302_HasFocus]</visible>
                                 <control type="group">
                                     <left>30</left>
                                     <width>60</width>
@@ -427,7 +427,7 @@
                             <font>font_main_bold</font>
                             <textcolor>panel_fg_70</textcolor>
                             <label>$INFO[ListItem.Label]</label>
-                            <visible>![Control.HasFocus(302)]</visible>
+                            <visible>![$EXP[Exp_Control302_HasFocus]]</visible>
                             <animation effect="fade" start="0" end="100" delay="200" time="200">Visible</animation>
                         </control>
                     </control>
@@ -437,7 +437,7 @@
                         <top>40</top>
                         <bottom>-40</bottom>
                         <control type="group">
-                            <visible>![Control.HasFocus(300) | Control.HasFocus(399)]</visible>
+                            <visible>![$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]]</visible>
                             <control type="image">
                                 <texture flipy="true">special://profile/addon_data/script.texturemaker/ArcticHorizon/circle_v.png</texture>
                                 <aspectratio>keep</aspectratio>
@@ -456,7 +456,7 @@
                             </control>
                         </control>
                         <control type="group">
-                            <visible>Control.HasFocus(300) | Control.HasFocus(399)</visible>
+                            <visible>$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]</visible>
                             <control type="group">
                                 <left>30</left>
                                 <width>60</width>
@@ -474,7 +474,7 @@
                             </control>
                         </control>
                         <control type="group">
-                            <visible>![Control.HasFocus(302)]</visible>
+                            <visible>![$EXP[Exp_Control302_HasFocus]]</visible>
                             <animation effect="fade" start="0" end="100" delay="200" time="200">Visible</animation>
                             <control type="label">
                                 <left>120</left>
@@ -482,7 +482,7 @@
                                 <font>font_main_bold</font>
                                 <textcolor>panel_fg_70</textcolor>
                                 <label>$INFO[ListItem.Label]</label>
-                                <visible>![Control.HasFocus(300) | Control.HasFocus(399)]</visible>
+                                <visible>![$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]]</visible>
                             </control>
                             <control type="label">
                                 <left>120</left>
@@ -490,7 +490,7 @@
                                 <font>font_main_bold</font>
                                 <textcolor>panel_fg_100</textcolor>
                                 <label>$INFO[ListItem.Label]</label>
-                                <visible>[Control.HasFocus(300) | Control.HasFocus(399)]</visible>
+                                <visible>[$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]]</visible>
                             </control>
                         </control>
                     </control>
@@ -620,7 +620,7 @@
     <include name="Home_Horz_Submenu">
         <!-- Submenu -->
         <include content="Object_Options_Menu">
-            <param name="visible" value="!Window.IsVisible(DialogSelect.xml) + !Window.IsVisible(favourites)" />
+            <param name="visible" value="!Window.IsVisible(DialogSelect.xml) + !$EXP[Exp_WindowVisible_Favourites]" />
             <param name="onback" value="300" />
             <param name="id" value="302" />
             <param name="has_button_overlay" value="false" />
@@ -643,14 +643,14 @@
             <animation effect="slide" start="0" end="800" condition="Container(300).Position(8)">Conditional</animation>
             <animation effect="slide" start="0" end="900" condition="Container(300).Position(9)">Conditional</animation>
             <animation effect="slide" start="0" end="1000" condition="Container(300).Position(10)">Conditional</animation>
-            <animation type="Conditional" reversible="false" condition="Control.HasFocus(302)">
+            <animation type="Conditional" reversible="false" condition="$EXP[Exp_Control302_HasFocus]">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="slide" start="0,-48" end="0" center="auto" tween="back" easing="out" time="400" />
             </animation>
-            <animation type="Conditional" reversible="false" condition="!Control.HasFocus(302)">
+            <animation type="Conditional" reversible="false" condition="!$EXP[Exp_Control302_HasFocus]">
                 <effect type="fade" start="100" end="0" time="0" />
             </animation>
-            <animation type="WindowOpen" reversible="true" condition="Control.HasFocus(302)">
+            <animation type="WindowOpen" reversible="true" condition="$EXP[Exp_Control302_HasFocus]">
                 <effect type="fade" start="0" end="100" time="300" />
                 <effect type="slide" start="0,-48" end="0" center="auto" tween="back" easing="out" time="400" />
             </animation>
@@ -669,7 +669,7 @@
                 <bottom>grid_x02</bottom>
                 <content><include>skinshortcuts-submenu</include></content>
                 <include>Animation_SlideIn_Dialog</include>
-                <animation effect="slide" start="0" end="0,-1080" condition="!Control.HasFocus(302)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,-1080" condition="!$EXP[Exp_Control302_HasFocus]">Conditional</animation>
             </include>
         </include>
     </include>

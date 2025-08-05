@@ -1340,10 +1340,9 @@ updated YouTube addon URL
             <fanart>resources/fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.fenlight" name="FenLightAM" provider-name="Tikipeter/AnonyMouse" version="2.1.30">
+</addon><addon id="plugin.video.fenlight" name="Fen Light" provider-name="Tikipeter" version="2.1.31">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.pil" version="1.1.7" />
         <import addon="script.module.requests" version="2.19.1" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="resources/lib/fenlight.py">
@@ -1359,8 +1358,8 @@ updated YouTube addon URL
 		<disclaimer lang="en">The author of this addon does not host any of the content which is found and has no affiliation with any of the content providers.</disclaimer>
         <license />
         <assets>
-            <icon>resources/media/addon_icons/fenlight_icon_01.png</icon>
-            <fanart>resources/media/fenlight_fanart_01.jpg</fanart>
+            <icon>resources/media/fenlight_icon.png</icon>
+            <fanart>resources/media/fenlight_fanart2.jpg</fanart>
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
@@ -6608,7 +6607,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.horizon.2" name="Arctic Horizon 2" provider-name="jurialmunkey" version="2.8.19">
+</addon><addon id="skin.arctic.horizon.2" name="Arctic Horizon 2" provider-name="jurialmunkey" version="2.8.20">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinshortcuts" version="0.4.0" />

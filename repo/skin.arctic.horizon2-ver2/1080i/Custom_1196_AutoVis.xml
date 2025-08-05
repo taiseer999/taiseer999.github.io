@@ -3,6 +3,6 @@
 <window type="dialog" id="1196">
 
     <onload>FullScreen</onload>
-    <visible>!Window.IsActive(visualisation) + !Window.IsActive(fullscreenvideo) + !String.IsEmpty(Window(Home).Property(OSDRelaunchFullscreen)) + Player.HasAudio + [System.IdleTime(2) | Integer.IsGreater(MusicPlayer.Time,0)]</visible>
+    <visible>!Window.IsActive(visualisation) + !Window.IsActive(fullscreenvideo) + !String.IsEmpty(Window(Home).Property(OSDRelaunchFullscreen)) + $EXP[Exp_PlayerHasAudio] + [System.IdleTime(2) | Integer.IsGreater(MusicPlayer.Time,0)]</visible>
     <controls></controls>
 </window>

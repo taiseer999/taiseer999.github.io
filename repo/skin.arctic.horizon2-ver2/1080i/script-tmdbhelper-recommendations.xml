@@ -12,7 +12,7 @@
                 <param name="id">6000</param>
                 <onup>Close</onup>
                 <ondown>330</ondown>
-                <animation type="Conditional" condition="Control.IsVisible(330)" reversible="false">
+                <animation type="Conditional" condition="$EXP[Exp_Control330_Visible]" reversible="false">
                     <effect type="slide" end="0,-20" time="60" tween="sine" />
                     <effect type="slide" end="0,20" time="180" tween="sine" delay="80" />
                 </animation>
@@ -226,7 +226,7 @@
                 <param name="id">6000</param>
                 <onup>Close</onup>
                 <ondown>330</ondown>
-                <animation type="Conditional" condition="Control.IsVisible(330)" reversible="false">
+                <animation type="Conditional" condition="$EXP[Exp_Control330_Visible]" reversible="false">
                     <effect type="slide" end="0,-20" time="60" tween="sine" />
                     <effect type="slide" end="0,20" time="180" tween="sine" delay="80" />
                 </animation>
@@ -314,7 +314,7 @@
         <include content="Object_Control">
             <param name="control">group</param>
             <visible>Control.HasFocus(7001)</visible>
-            <visible>Player.HasVideo</visible>
+            <visible>$EXP[Exp_PlayerHasVideo]</visible>
             <include>Animation_FadeIn_Delay</include>
             <control type="image">
                 <include>Texture_Shadow_40</include>

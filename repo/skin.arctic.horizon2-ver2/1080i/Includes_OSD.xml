@@ -438,7 +438,7 @@
             <lefttexture colordiffuse="panel_fg_12">progress/progress-left.png</lefttexture>
             <midtexture colordiffuse="panel_fg_12">progress/progress-end.png</midtexture>
             <righttexture colordiffuse="panel_fg_12">progress/progress-right.png</righttexture>
-            <visible>Player.Playing | Player.Paused | Player.Caching</visible>
+            <visible>Player.Playing | $EXP[Exp_PlayerPaused] | $EXP[Exp_PlayerCaching]</visible>
             <visible>!Player.Seeking</visible>
             <visible>Player.HasMedia</visible>
         </control>
@@ -803,17 +803,17 @@
                     <animation effect="slide" end="312" condition="$PARAM[istempo] + String.IsEqual(Player.PlaySpeed,1.40)">Conditional</animation>
                     <animation effect="slide" end="364" condition="$PARAM[istempo] + String.IsEqual(Player.PlaySpeed,1.50)">Conditional</animation>
 
-                    <animation effect="slide" end="-8" condition="!$PARAM[istempo] + Player.Rewinding32x">Conditional</animation>
-                    <animation effect="slide" end="30" condition="!$PARAM[istempo] + Player.Rewinding16x">Conditional</animation>
-                    <animation effect="slide" end="68" condition="!$PARAM[istempo] + Player.Rewinding8x">Conditional</animation>
-                    <animation effect="slide" end="106" condition="!$PARAM[istempo] + Player.Rewinding4x">Conditional</animation>
-                    <animation effect="slide" end="144" condition="!$PARAM[istempo] + Player.Rewinding2x">Conditional</animation>
-                    <animation effect="slide" end="182" condition="!$PARAM[istempo] + !Player.Rewinding + !Player.Forwarding">Conditional</animation>
-                    <animation effect="slide" end="220" condition="!$PARAM[istempo] + Player.Forwarding2x">Conditional</animation>
-                    <animation effect="slide" end="258" condition="!$PARAM[istempo] + Player.Forwarding4x">Conditional</animation>
-                    <animation effect="slide" end="296" condition="!$PARAM[istempo] + Player.Forwarding8x">Conditional</animation>
-                    <animation effect="slide" end="334" condition="!$PARAM[istempo] + Player.Forwarding16x">Conditional</animation>
-                    <animation effect="slide" end="372" condition="!$PARAM[istempo] + Player.Forwarding32x">Conditional</animation>
+                    <animation effect="slide" end="-8" condition="!$PARAM[istempo] + $EXP[Exp_PlayerRewinding]32x">Conditional</animation>
+                    <animation effect="slide" end="30" condition="!$PARAM[istempo] + $EXP[Exp_PlayerRewinding]16x">Conditional</animation>
+                    <animation effect="slide" end="68" condition="!$PARAM[istempo] + $EXP[Exp_PlayerRewinding]8x">Conditional</animation>
+                    <animation effect="slide" end="106" condition="!$PARAM[istempo] + $EXP[Exp_PlayerRewinding]4x">Conditional</animation>
+                    <animation effect="slide" end="144" condition="!$PARAM[istempo] + $EXP[Exp_PlayerRewinding]2x">Conditional</animation>
+                    <animation effect="slide" end="182" condition="!$PARAM[istempo] + !$EXP[Exp_PlayerRewinding] + !$EXP[Exp_PlayerForwarding]">Conditional</animation>
+                    <animation effect="slide" end="220" condition="!$PARAM[istempo] + $EXP[Exp_PlayerForwarding]2x">Conditional</animation>
+                    <animation effect="slide" end="258" condition="!$PARAM[istempo] + $EXP[Exp_PlayerForwarding]4x">Conditional</animation>
+                    <animation effect="slide" end="296" condition="!$PARAM[istempo] + $EXP[Exp_PlayerForwarding]8x">Conditional</animation>
+                    <animation effect="slide" end="334" condition="!$PARAM[istempo] + $EXP[Exp_PlayerForwarding]16x">Conditional</animation>
+                    <animation effect="slide" end="372" condition="!$PARAM[istempo] + $EXP[Exp_PlayerForwarding]32x">Conditional</animation>
                     <control type="image">
                         <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
                             <param name="colordiffuse">$VAR[ColorSelected]</param>
@@ -839,8 +839,8 @@
 
     <include name="OSD_PVRChannelSwitch">
         <control type="group">
-            <visible>Player.ShowInfo | Window.IsVisible(DialogFullScreenInfo.xml)</visible>
-            <visible>!Window.IsVisible(videoosd)</visible>
+            <visible>$EXP[Exp_PlayerShowInfo] | Window.IsVisible(DialogFullScreenInfo.xml)</visible>
+            <visible>!$EXP[Exp_WindowVisible_VideoOSD]</visible>
             <animation type="Visible" reversible="false">
                 <effect type="fade" start="0" end="100" time="300" delay="300"/>
             </animation>
@@ -935,10 +935,6 @@
 
     <include name="OSD_VideoSeekBar">
         <control type="group">
-		
-            <include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
-            <include condition="Skin.HasSetting(osd.usecenterCodecLogos)">CodecLogosCenterOSD</include>
-            <include condition="Skin.HasSetting(osd.userightCodecLogos)">CodecLogosRightOSD</include>
 
             <!-- Progress Bar Group -->
             <control type="group">
@@ -953,8 +949,7 @@
 
             <!-- Top Left Label -->
             <control type="group">
-                <visible>!Skin.HasSetting(osd.useleftCodecLogos)</visible>
-                <visible>[VideoPlayer.Content(episodes) + !String.IsEmpty(VideoPlayer.Title)] | [VideoPlayer.Content(movies) + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00)] | [VideoPlayer.Content(livetv) + !String.IsEmpty(VideoPlayer.ChannelNumberLabel)] | [VideoPlayer.Content(files) + !String.IsEmpty(VideoPlayer.Studio)]</visible>
+                <visible>[$EXP[Exp_VideoPlayerContentEpisodes] + !String.IsEmpty(VideoPlayer.Title)] | [$EXP[Exp_VideoPlayerContentMovies] + !String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00)] | [$EXP[Exp_VideoPlayerContentLiveTV] + !String.IsEmpty(VideoPlayer.ChannelNumberLabel)] | [VideoPlayer.Content(files) + !String.IsEmpty(VideoPlayer.Studio)]</visible>
                 <include content="Object_ShadowSpot">
                     <include>Dimension_HeaderTitleShadow</include>
                 </include>
@@ -992,7 +987,7 @@
                             <height>320</height>
                             <bordersize>20</bordersize>
                             <texture background="true">$INFO[Player.Art(album.discart)]</texture>
-                            <animation effect="rotate" condition="!Player.Paused + ![Window.IsVisible(script-cu-lrclyrics-main.xml) | [!String.IsEmpty(Window(Home).Property(OSDArtistDetails)) + !Window.IsVisible(1142)]]" start="0" end="360" loop="true" time="50000" center="auto" reversible="false">Conditional</animation>
+                            <animation effect="rotate" condition="!$EXP[Exp_PlayerPaused] + ![Window.IsVisible(script-cu-lrclyrics-main.xml) | [!String.IsEmpty(Window(Home).Property(OSDArtistDetails)) + !Window.IsVisible(1142)]]" start="0" end="360" loop="true" time="50000" center="auto" reversible="false">Conditional</animation>
                             <visible>![Window.IsVisible(script-cu-lrclyrics-main.xml) | [!String.IsEmpty(Window(Home).Property(OSDArtistDetails)) + !Window.IsVisible(1142)]]</visible>
                             <animation effect="slide" start="0" end="0,160" time="400" tween="cubic" easing="out" reversible="false">Hidden</animation>
                             <animation effect="slide" end="0" start="0,160" time="400" tween="cubic" easing="out" reversible="false">Visible</animation>
@@ -1012,10 +1007,10 @@
                             <height>137</height>
                             <bottom>40</bottom>
                             <align>bottom</align>
-                            <include content="OSD_Music_Title" condition="!Skin.HasSetting(UseLightFont)">
+                            <include content="OSD_Music_Title" condition="!$EXP[Exp_SkinSetting_UseLightFont]">
                                 <param name="font">font_info_black</param>
                             </include>
-                            <include content="OSD_Music_Title" condition="Skin.HasSetting(UseLightFont)">
+                            <include content="OSD_Music_Title" condition="$EXP[Exp_SkinSetting_UseLightFont]">
                                 <param name="font">font_info_light</param>
                             </include>
                         </control>

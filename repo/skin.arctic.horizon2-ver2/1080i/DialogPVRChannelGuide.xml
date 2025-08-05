@@ -2,10 +2,10 @@
 <window>
     <defaultcontrol>11</defaultcontrol>
     <onload>CancelAlarm(osd_timeout,true)</onload>
-    <include condition="Window.IsVisible(fullscreenvideo)">Animation_WindowTransition_FadeInOut</include>
+    <include condition="$EXP[Exp_WindowVisible_FullscreenVideo]">Animation_WindowTransition_FadeInOut</include>
     <controls>
 
-        <include content="Object_Control" condition="!Window.IsVisible(fullscreenvideo)">
+        <include content="Object_Control" condition="!$EXP[Exp_WindowVisible_FullscreenVideo]">
             <param name="control">group</param>
             <include>Animation_FadeIn_Delay</include>
             <include>Animation_FadeOut</include>
@@ -21,12 +21,12 @@
         <control type="group">
             <visible>!$EXP[Exp_InfoDialogs]</visible>
             <include>Animation_Common</include>
-            <include condition="!Window.IsVisible(fullscreenvideo)" content="Animation_Foreground_SlideUp">
+            <include condition="!$EXP[Exp_WindowVisible_FullscreenVideo]" content="Animation_Foreground_SlideUp">
                 <param name="delay">400</param>
             </include>
             <include content="OSD_CastInfo_ExpandGroup">
 
-                <include content="Object_Control" condition="!Window.IsVisible(fullscreenvideo)">
+                <include content="Object_Control" condition="!$EXP[Exp_WindowVisible_FullscreenVideo]">
                     <param name="control">label</param>
                     <font>font_main_black</font>
                     <height>40</height>

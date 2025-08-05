@@ -16,7 +16,7 @@
             <param name="enabled" value="VideoPlayer.SubtitlesEnabled" />
             <param name="toggle" value="true" />
             <include>OSD_Stream_Selector_Loading</include>
-            <visible>Window.IsVisible(videoosd)</visible>
+            <visible>$EXP[Exp_WindowVisible_VideoOSD]</visible>
         </include>
     </controls>
 </window>

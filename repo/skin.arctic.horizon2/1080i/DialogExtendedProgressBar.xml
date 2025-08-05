@@ -7,10 +7,10 @@
             <param name="hasprogress" value="true" />
             <param name="mainlabel_id" value="30" />
             <param name="minilabel" value="$INFO[Control.GetLabel(31)]$INFO[Control.GetLabel(32), - ,%]" />
-            <param name="spinprogress" value="Window.IsVisible(DialogBusy.xml)" />
-            <visible>!Window.IsVisible(DialogNotification.xml)</visible>
-            <visible>!Window.IsVisible(DialogVolumeBar.xml) | Player.Muted</visible>
-            <visible>!Window.IsVisible(fullscreenvideo)</visible>
+            <param name="spinprogress" value="$EXP[Exp_WindowVisible_DialogBusy]" />
+            <visible>!$EXP[Exp_WindowVisible_DialogNotification]</visible>
+            <visible>!Window.IsVisible(DialogVolumeBar.xml) | $EXP[Exp_PlayerMuted]</visible>
+            <visible>!$EXP[Exp_WindowVisible_FullscreenVideo]</visible>
             <visible>!Window.IsVisible(visualisation)</visible>
         </include>
 

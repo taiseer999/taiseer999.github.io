@@ -58,7 +58,7 @@
     </include>
 
     <variable name="View_Combined_SortBy">
-        <value condition="Container.Content(seasons)">episode</value>
+        <value condition="$EXP[Exp_ContainerSeasons]">episode</value>
         <value condition="Container.Content(sets) | Container.Content(artists)">year</value>
     </variable>
 

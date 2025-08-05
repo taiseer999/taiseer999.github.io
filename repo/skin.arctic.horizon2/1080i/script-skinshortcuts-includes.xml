@@ -469,6 +469,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">1</property>
+			<label>عشوائي الشائع مجتمعة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shwyylshy-mjtm</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml)</visible>
+			<property name="group">tkml.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">1</property>
 			<label>تكملة</label>
 			<label2>Video Add-On</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -485,8 +504,8 @@
 			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">1</property>
 			<label>تكملة</label>
 			<label2>Custom item</label2>
@@ -494,7 +513,7 @@
 			<thumb />
 			<property name="labelID">tkml--0</property>
 			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
+			<property name="widgetAspect">Landscape</property>
 			<property name="widgetInfo">Full</property>
 			<property name="widgetSortby">lastplayed</property>
 			<property name="widgetSortorder">descending</property>
@@ -507,6 +526,25 @@
 		</item>
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
+			<property name="mainmenuid">2</property>
+			<label>أفضل 10 أفلام في شباك التذاكر</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">fdl10flmfyshbkltdhkr</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">2</property>
 			<label>تقسيم الافلام</label>
 			<label2>Custom item</label2>
@@ -524,8 +562,8 @@
 			<property name="group">movies.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">2</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -542,8 +580,8 @@
 			<property name="group">movies.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">2</property>
 			<label>المحتوى</label>
 			<label2>Custom item</label2>
@@ -565,6 +603,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">3</property>
+			<label>عشوائي الشائع المسلسلات</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shwyylshy-lmslslt</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">3</property>
 			<label>تقسيم المسلسلات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -581,8 +638,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">3</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -599,8 +656,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">3</property>
 			<label>.</label>
 			<label2>Custom item</label2>
@@ -619,8 +676,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
 			<label>الموسم</label>
 			<label2>Custom item</label2>
@@ -637,8 +694,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">3</property>
 			<label>الحلقات</label>
 			<label2>Custom item</label2>
@@ -658,6 +715,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">4</property>
+			<label>Korean Dramas - فرز حسب: Highest الرتبة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">koreandramas-frzhsb-highestlrtb</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry)</visible>
+			<property name="group">kwry.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">4</property>
 			<label>اعمال كوريه</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -674,8 +750,8 @@
 			<property name="group">kwry.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">4</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -693,8 +769,8 @@
 			<property name="group">kwry.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">4</property>
 			<label>&lt;None&gt;</label>
 			<label2>Custom item</label2>
@@ -702,7 +778,7 @@
 			<thumb />
 			<property name="labelID">none</property>
 			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
+			<property name="widgetAspect">Landscape</property>
 			<property name="widgetInfo">Full</property>
 			<property name="widgetSortby">random</property>
 			<onclick>Stacked</onclick>
@@ -851,6 +927,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">1</property>
+			<label>عشوائي الشائع مجتمعة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shwyylshy-mjtm</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">tkml.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">1</property>
 			<label>تكملة</label>
 			<label2>Video Add-On</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -867,8 +962,8 @@
 			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">1</property>
 			<label>تكملة</label>
 			<label2>Custom item</label2>
@@ -876,7 +971,7 @@
 			<thumb />
 			<property name="labelID">tkml--0</property>
 			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
+			<property name="widgetAspect">Landscape</property>
 			<property name="widgetInfo">Full</property>
 			<property name="widgetSortby">lastplayed</property>
 			<property name="widgetSortorder">descending</property>
@@ -891,6 +986,25 @@
 	<include name="skinshortcuts-group-alt-tkml-1">
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
+			<property name="mainmenuid">1</property>
+			<label>عشوائي الشائع مجتمعة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shwyylshy-mjtm</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tkml)</visible>
+			<property name="group">tkml.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">1</property>
 			<label>تكملة</label>
 			<label2>Video Add-On</label2>
@@ -908,8 +1022,8 @@
 			<property name="group">tkml.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">1</property>
 			<label>تكملة</label>
 			<label2>Custom item</label2>
@@ -917,7 +1031,7 @@
 			<thumb />
 			<property name="labelID">tkml--0</property>
 			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
+			<property name="widgetAspect">Landscape</property>
 			<property name="widgetInfo">Full</property>
 			<property name="widgetSortby">lastplayed</property>
 			<property name="widgetSortorder">descending</property>
@@ -1116,20 +1230,87 @@
 						<onback condition="Integer.IsEqual(Container(301).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 						<animation effect="fade" start="100" end="0" condition="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]">Conditional</animation>
 					</include>
-					<include content="Widget_Submenu">
+					<include content="Widget_Lovefilm">
 						<param name="groupid" value="1701" />
 						<param name="id" value="1601" />
 						<param name="spacerid" value="1801" />
 						<param name="buttonid" value="100100" />
-						<param name="label" value="تكملة" />
+						<param name="label" value="عشوائي الشائع مجتمعة" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(1600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
+						<param name="include" value="List_SmallLandscape_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![False] | [!Integer.IsEqual(Container(1600).NumItems,0) + Container(1600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(1601).NumItems,0) | [False + Container(1601).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(1600).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(1601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=both&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="visible">Integer.IsEqual(Container(1601).NumItems,) | Integer.IsEqual(Container(1601).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="False + !False">
+							<param name="visible">Integer.IsEqual(Container(1600).NumItems,0) | String.IsEmpty(Container(1600).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tkml</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1601,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,عشوائي الشائع مجتمعة,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,1601,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Lovefilm,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Lovefilm,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1601,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1601)</onback>
+						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
+						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Submenu">
+						<param name="groupid" value="1702" />
+						<param name="id" value="1602" />
+						<param name="spacerid" value="1802" />
+						<param name="buttonid" value="100200" />
+						<param name="label" value="تكملة" />
+						<param name="usealtlabel" value="False" />
+						<param name="altlabel">$INFO[Container(1601).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Button_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![False] | [!Integer.IsEqual(Container(1601).NumItems,0) + Container(1601).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(1602).NumItems,0) | [False + Container(1602).IsUpdating]" />
 						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !False">
@@ -1148,73 +1329,6 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(1600).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(1601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
-							<param name="visible">Integer.IsEqual(Container(1601).NumItems,) | Integer.IsEqual(Container(1601).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="False + !False">
-							<param name="visible">Integer.IsEqual(Container(1600).NumItems,0) | String.IsEmpty(Container(1600).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tkml</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1601,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,1601,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1601,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1601)</onback>
-						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
-						<onback condition="Integer.IsEqual(Container(1601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="1702" />
-						<param name="id" value="1602" />
-						<param name="spacerid" value="1802" />
-						<param name="buttonid" value="100200" />
-						<param name="label" value="تكملة" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(1601).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Poster_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![True] | [!Integer.IsEqual(Container(1601).NumItems,0) + Container(1601).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="True" />
-						<param name="infowidget_full" value="True" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(1602).NumItems,0) | [True + Container(1602).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby">lastplayed</param>
-							<param name="sortorder">descending</param>
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby">lastplayed</param>
-							<param name="sortorder">descending</param>
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
 							<param name="content">$INFO[Container(1601).ListItem.FolderPath]</param>
 						</include>
 						<include content="Defs_AutoScroll" condition="False + !False">
@@ -1223,32 +1337,99 @@
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
 							<param name="visible">Integer.IsEqual(Container(1602).NumItems,) | Integer.IsEqual(Container(1602).NumItems,100000)</param>
 						</include>
-						<include content="Object_ContentItem" condition="True + !False">
+						<include content="Object_ContentItem" condition="False + !False">
 							<param name="visible">Integer.IsEqual(Container(1601).NumItems,0) | String.IsEmpty(Container(1601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
 							<param name="include">skinshortcuts-group-tkml</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1602,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
-						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="True">SetProperty(Slide.WidgetContainer,1602,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Poster,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,1602,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
 						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
 						<onback condition="!Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(1602,0,absolute)</onback>
 						<onback condition="Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(1601)</onback>
 						<onback condition="Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(301)</onback>
 						<onback condition="Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
 						<onback condition="Integer.IsEqual(Container(1602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="1703" />
+						<param name="id" value="1603" />
+						<param name="spacerid" value="1803" />
+						<param name="buttonid" value="100300" />
+						<param name="label" value="تكملة" />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(1602).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tkml) + [![True] | [!Integer.IsEqual(Container(1602).NumItems,0) + Container(1602).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="True" />
+						<param name="infowidget_full" value="True" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(1603).NumItems,0) | [True + Container(1603).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby">lastplayed</param>
+							<param name="sortorder">descending</param>
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby">lastplayed</param>
+							<param name="sortorder">descending</param>
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(1602).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(1603) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(1603).NumItems,) | Integer.IsEqual(Container(1603).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(1602).NumItems,0) | String.IsEmpty(Container(1602).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tkml</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,1603,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تكملة,Home)</onfocus>
+						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(1603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="True">SetProperty(Slide.WidgetContainer,1603,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(1603,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(1601)</onback>
+						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(1599)</onback>
+						<onback condition="Integer.IsEqual(Container(1603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="1798" />
@@ -1510,20 +1691,87 @@
 						<onback condition="Integer.IsEqual(Container(301).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 						<animation effect="fade" start="100" end="0" condition="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]">Conditional</animation>
 					</include>
-					<include content="Widget_Submenu">
+					<include content="Widget_Lovefilm">
 						<param name="groupid" value="2701" />
 						<param name="id" value="2601" />
 						<param name="spacerid" value="2801" />
 						<param name="buttonid" value="200100" />
-						<param name="label" value="تقسيم الافلام" />
+						<param name="label" value="أفضل 10 أفلام في شباك التذاكر" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(2600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
+						<param name="include" value="List_SmallLandscape_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![False] | [!Integer.IsEqual(Container(2600).NumItems,0) + Container(2600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(2601).NumItems,0) | [False + Container(2601).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(2600).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(2601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="visible">Integer.IsEqual(Container(2601).NumItems,) | Integer.IsEqual(Container(2601).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="False + !False">
+							<param name="visible">Integer.IsEqual(Container(2600).NumItems,0) | String.IsEmpty(Container(2600).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-movies</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2601,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,أفضل 10 أفلام في شباك التذاكر,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2601,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Lovefilm,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Lovefilm,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(2601,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
+						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
+						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Submenu">
+						<param name="groupid" value="2702" />
+						<param name="id" value="2602" />
+						<param name="spacerid" value="2802" />
+						<param name="buttonid" value="200200" />
+						<param name="label" value="تقسيم الافلام" />
+						<param name="usealtlabel" value="False" />
+						<param name="altlabel">$INFO[Container(2601).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Button_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![False] | [!Integer.IsEqual(Container(2601).NumItems,0) + Container(2601).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(2602).NumItems,0) | [False + Container(2602).IsUpdating]" />
 						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !False">
@@ -1542,27 +1790,27 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(2600).ListItem.FolderPath]</param>
+							<param name="content">$INFO[Container(2601).ListItem.FolderPath]</param>
 						</include>
 						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(2601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+							<param name="condition" value="!Control.HasFocus(2602) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
 						</include>
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
 							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
-							<param name="visible">Integer.IsEqual(Container(2601).NumItems,) | Integer.IsEqual(Container(2601).NumItems,100000)</param>
+							<param name="visible">Integer.IsEqual(Container(2602).NumItems,) | Integer.IsEqual(Container(2602).NumItems,100000)</param>
 						</include>
 						<include content="Object_ContentItem" condition="False + !False">
-							<param name="visible">Integer.IsEqual(Container(2600).NumItems,0) | String.IsEmpty(Container(2600).ListItem.FolderPath)</param>
+							<param name="visible">Integer.IsEqual(Container(2601).NumItems,0) | String.IsEmpty(Container(2601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
 							<param name="include">skinshortcuts-group-movies</param>
 						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2601,Home)</onfocus>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2602,Home)</onfocus>
 						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تقسيم الافلام,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2601,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2602,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
@@ -1571,26 +1819,26 @@
 						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
 						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
 						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(2601,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
-						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
-						<onback condition="Integer.IsEqual(Container(2601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+						<onback condition="!Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(2602,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
+						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
+						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
 					<include content="Widget_Submenu">
-						<param name="groupid" value="2702" />
-						<param name="id" value="2602" />
-						<param name="spacerid" value="2802" />
-						<param name="buttonid" value="200200" />
+						<param name="groupid" value="2703" />
+						<param name="id" value="2603" />
+						<param name="spacerid" value="2803" />
+						<param name="buttonid" value="200300" />
 						<param name="label" value="القسم" />
 						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(2601).ListItem.Label]</param>
+						<param name="altlabel">$INFO[Container(2602).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(2601).NumItems,0) + Container(2601).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(2602).NumItems,0) + Container(2602).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(2602).NumItems,0) | [True + Container(2602).IsUpdating]" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(2603).NumItems,0) | [True + Container(2603).IsUpdating]" />
 						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !True">
@@ -1608,73 +1856,6 @@
 							<param name="target">videos</param>
 							<param name="limit" />
 							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(2601).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(2602) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
-							<param name="visible">Integer.IsEqual(Container(2602).NumItems,) | Integer.IsEqual(Container(2602).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="True + !False">
-							<param name="visible">Integer.IsEqual(Container(2601).NumItems,0) | String.IsEmpty(Container(2601).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-movies</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2602,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2602,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(2602,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
-						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
-						<onback condition="Integer.IsEqual(Container(2602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="2703" />
-						<param name="id" value="2603" />
-						<param name="spacerid" value="2803" />
-						<param name="buttonid" value="200300" />
-						<param name="label" value="المحتوى" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(2602).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Landscape_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(2602).NumItems,0) + Container(2602).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="True" />
-						<param name="infowidget_full" value="True" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(2603).NumItems,0) | [True + Container(2603).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby">random</param>
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby">random</param>
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
 							<param name="is_autolimit">false</param>
 							<param name="content">$INFO[Container(2602).ListItem.FolderPath]</param>
 						</include>
@@ -1694,11 +1875,11 @@
 							<param name="include">skinshortcuts-group-movies</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2603,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,المحتوى,Home)</onfocus>
-						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="True">SetProperty(Slide.WidgetContainer,2603,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,2603,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -1710,6 +1891,73 @@
 						<onback condition="Integer.IsEqual(Container(2603).ListItem.CurrentItem,1)">SetFocus(301)</onback>
 						<onback condition="Integer.IsEqual(Container(2603).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
 						<onback condition="Integer.IsEqual(Container(2603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="2704" />
+						<param name="id" value="2604" />
+						<param name="spacerid" value="2804" />
+						<param name="buttonid" value="200400" />
+						<param name="label" value="المحتوى" />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(2603).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),movies) + [![True] | [!Integer.IsEqual(Container(2603).NumItems,0) + Container(2603).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="True" />
+						<param name="infowidget_full" value="True" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(2604).NumItems,0) | [True + Container(2604).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby">random</param>
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby">random</param>
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(2603).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(2604) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(2604).NumItems,) | Integer.IsEqual(Container(2604).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(2603).NumItems,0) | String.IsEmpty(Container(2603).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-movies</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,2604,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,المحتوى,Home)</onfocus>
+						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(2604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="True">SetProperty(Slide.WidgetContainer,2604,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(2604,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(2601)</onback>
+						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(2599)</onback>
+						<onback condition="Integer.IsEqual(Container(2604).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="2798" />
@@ -1971,20 +2219,87 @@
 						<onback condition="Integer.IsEqual(Container(301).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 						<animation effect="fade" start="100" end="0" condition="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]">Conditional</animation>
 					</include>
-					<include content="Widget_Submenu">
+					<include content="Widget_Lovefilm">
 						<param name="groupid" value="3701" />
 						<param name="id" value="3601" />
 						<param name="spacerid" value="3801" />
 						<param name="buttonid" value="300100" />
-						<param name="label" value="تقسيم المسلسلات" />
+						<param name="label" value="عشوائي الشائع المسلسلات" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(3600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
+						<param name="include" value="List_SmallLandscape_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![False] | [!Integer.IsEqual(Container(3600).NumItems,0) + Container(3600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(3601).NumItems,0) | [False + Container(3601).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(3600).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(3601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="visible">Integer.IsEqual(Container(3601).NumItems,) | Integer.IsEqual(Container(3601).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="False + !False">
+							<param name="visible">Integer.IsEqual(Container(3600).NumItems,0) | String.IsEmpty(Container(3600).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tvshows</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3601,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,عشوائي الشائع المسلسلات,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3601,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Lovefilm,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Lovefilm,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3601,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
+						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
+						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Submenu">
+						<param name="groupid" value="3702" />
+						<param name="id" value="3602" />
+						<param name="spacerid" value="3802" />
+						<param name="buttonid" value="300200" />
+						<param name="label" value="تقسيم المسلسلات" />
+						<param name="usealtlabel" value="False" />
+						<param name="altlabel">$INFO[Container(3601).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Button_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![False] | [!Integer.IsEqual(Container(3601).NumItems,0) + Container(3601).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(3602).NumItems,0) | [False + Container(3602).IsUpdating]" />
 						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !False">
@@ -2003,27 +2318,27 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(3600).ListItem.FolderPath]</param>
+							<param name="content">$INFO[Container(3601).ListItem.FolderPath]</param>
 						</include>
 						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(3601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+							<param name="condition" value="!Control.HasFocus(3602) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
 						</include>
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
 							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsections.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
-							<param name="visible">Integer.IsEqual(Container(3601).NumItems,) | Integer.IsEqual(Container(3601).NumItems,100000)</param>
+							<param name="visible">Integer.IsEqual(Container(3602).NumItems,) | Integer.IsEqual(Container(3602).NumItems,100000)</param>
 						</include>
 						<include content="Object_ContentItem" condition="False + !False">
-							<param name="visible">Integer.IsEqual(Container(3600).NumItems,0) | String.IsEmpty(Container(3600).ListItem.FolderPath)</param>
+							<param name="visible">Integer.IsEqual(Container(3601).NumItems,0) | String.IsEmpty(Container(3601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
 							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3601,Home)</onfocus>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3602,Home)</onfocus>
 						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,تقسيم المسلسلات,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3601,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3602,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
@@ -2032,26 +2347,26 @@
 						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
 						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
 						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3601,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
-						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
-						<onback condition="Integer.IsEqual(Container(3601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+						<onback condition="!Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3602,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
+						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
+						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
 					<include content="Widget_Submenu">
-						<param name="groupid" value="3702" />
-						<param name="id" value="3602" />
-						<param name="spacerid" value="3802" />
-						<param name="buttonid" value="300200" />
+						<param name="groupid" value="3703" />
+						<param name="id" value="3603" />
+						<param name="spacerid" value="3803" />
+						<param name="buttonid" value="300300" />
 						<param name="label" value="القسم" />
 						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(3601).ListItem.Label]</param>
+						<param name="altlabel">$INFO[Container(3602).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3601).NumItems,0) + Container(3601).ListItem.IsFolder]]]" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3602).NumItems,0) + Container(3602).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(3602).NumItems,0) | [True + Container(3602).IsUpdating]" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(3603).NumItems,0) | [True + Container(3603).IsUpdating]" />
 						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !True">
@@ -2069,73 +2384,6 @@
 							<param name="target">videos</param>
 							<param name="limit" />
 							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(3601).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(3602) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
-							<param name="visible">Integer.IsEqual(Container(3602).NumItems,) | Integer.IsEqual(Container(3602).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="True + !False">
-							<param name="visible">Integer.IsEqual(Container(3601).NumItems,0) | String.IsEmpty(Container(3601).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-tvshows</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3602,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3602,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3602,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
-						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
-						<onback condition="Integer.IsEqual(Container(3602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
-					<include content="Widget_Poster">
-						<param name="groupid" value="3703" />
-						<param name="id" value="3603" />
-						<param name="spacerid" value="3803" />
-						<param name="buttonid" value="300300" />
-						<param name="label" value="." />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(3602).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Landscape_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3602).NumItems,0) + Container(3602).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="True" />
-						<param name="infowidget_full" value="True" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(3603).NumItems,0) | [True + Container(3603).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby">random</param>
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby">random</param>
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">4</param>
 							<param name="is_autolimit">false</param>
 							<param name="content">$INFO[Container(3602).ListItem.FolderPath]</param>
 						</include>
@@ -2155,11 +2403,11 @@
 							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3603,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,.,Home)</onfocus>
-						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="True">SetProperty(Slide.WidgetContainer,3603,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3603,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -2177,19 +2425,19 @@
 						<param name="id" value="3604" />
 						<param name="spacerid" value="3804" />
 						<param name="buttonid" value="300400" />
-						<param name="label" value="الموسم" />
+						<param name="label" value="." />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(3603).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
 						<param name="include" value="List_Landscape_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3603).NumItems,0) + Container(3603).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
+						<param name="infowidget" value="True" />
+						<param name="infowidget_full" value="True" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(3604).NumItems,0) | [True + Container(3604).IsUpdating]" />
 						<param name="detailed">false</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby" />
+							<param name="sortby">random</param>
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
@@ -2198,7 +2446,7 @@
 							<param name="content">Stacked</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby" />
+							<param name="sortby">random</param>
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
@@ -2222,10 +2470,10 @@
 							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3604,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الموسم,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3604,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,.,Home)</onfocus>
+						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="True">SetProperty(Slide.WidgetContainer,3604,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
@@ -2244,7 +2492,7 @@
 						<param name="id" value="3605" />
 						<param name="spacerid" value="3805" />
 						<param name="buttonid" value="300500" />
-						<param name="label" value="الحلقات" />
+						<param name="label" value="الموسم" />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(3604).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
@@ -2289,7 +2537,7 @@
 							<param name="include">skinshortcuts-group-tvshows</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3605,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الحلقات,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الموسم,Home)</onfocus>
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3605).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3605,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
@@ -2305,6 +2553,73 @@
 						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(301)</onback>
 						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
 						<onback condition="Integer.IsEqual(Container(3605).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="3706" />
+						<param name="id" value="3606" />
+						<param name="spacerid" value="3806" />
+						<param name="buttonid" value="300600" />
+						<param name="label" value="الحلقات" />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(3605).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),tvshows) + [![True] | [!Integer.IsEqual(Container(3605).NumItems,0) + Container(3605).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(3606).NumItems,0) | [True + Container(3606).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(3605).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(3606) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(3606).NumItems,) | Integer.IsEqual(Container(3606).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(3605).NumItems,0) | String.IsEmpty(Container(3605).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-tvshows</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3606,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,الحلقات,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3606).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3606,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(3606).ListItem.CurrentItem,1)">SetFocus(3606,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(3606).ListItem.CurrentItem,1)">SetFocus(3601)</onback>
+						<onback condition="Integer.IsEqual(Container(3606).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(3606).ListItem.CurrentItem,1)">SetFocus(3599)</onback>
+						<onback condition="Integer.IsEqual(Container(3606).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="3798" />
@@ -2566,20 +2881,87 @@
 						<onback condition="Integer.IsEqual(Container(301).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 						<animation effect="fade" start="100" end="0" condition="[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + !String.IsEmpty(Container(301).ListItemAbsolute(0).Property(blankitem))]]">Conditional</animation>
 					</include>
-					<include content="Widget_Submenu">
+					<include content="Widget_Lovefilm">
 						<param name="groupid" value="4701" />
 						<param name="id" value="4601" />
 						<param name="spacerid" value="4801" />
 						<param name="buttonid" value="400100" />
-						<param name="label" value="اعمال كوريه" />
+						<param name="label" value="Korean Dramas - فرز حسب: Highest الرتبة" />
 						<param name="usealtlabel" value="False" />
 						<param name="altlabel">$INFO[Container(4600).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
+						<param name="include" value="List_SmallLandscape_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + [![False] | [!Integer.IsEqual(Container(4600).NumItems,0) + Container(4600).ListItem.IsFolder]]]" />
 						<param name="infowidget" value="False" />
 						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(4601).NumItems,0) | [False + Container(4601).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + False">
+							<param name="sortby" />
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">5</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(4600).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(4601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
+							<param name="visible">Integer.IsEqual(Container(4601).NumItems,) | Integer.IsEqual(Container(4601).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="False + !False">
+							<param name="visible">Integer.IsEqual(Container(4600).NumItems,0) | String.IsEmpty(Container(4600).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-kwry</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,4601,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,Korean Dramas - فرز حسب: Highest الرتبة,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(4601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,4601,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Lovefilm,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Lovefilm,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(4601,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(4601)</onback>
+						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(4599)</onback>
+						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Submenu">
+						<param name="groupid" value="4702" />
+						<param name="id" value="4602" />
+						<param name="spacerid" value="4802" />
+						<param name="buttonid" value="400200" />
+						<param name="label" value="اعمال كوريه" />
+						<param name="usealtlabel" value="False" />
+						<param name="altlabel">$INFO[Container(4601).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Button_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + [![False] | [!Integer.IsEqual(Container(4601).NumItems,0) + Container(4601).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(4602).NumItems,0) | [False + Container(4602).IsUpdating]" />
 						<param name="detailed">true</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !False">
@@ -2598,73 +2980,6 @@
 							<param name="limit" />
 							<param name="autolimit">7</param>
 							<param name="is_autolimit">false</param>
-							<param name="content">$INFO[Container(4600).ListItem.FolderPath]</param>
-						</include>
-						<include content="Defs_AutoScroll" condition="False + !False">
-							<param name="condition" value="!Control.HasFocus(4601) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
-						</include>
-						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
-							<param name="label">$LOCALIZE[31253]...</param>
-							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=koren.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
-							<param name="visible">Integer.IsEqual(Container(4601).NumItems,) | Integer.IsEqual(Container(4601).NumItems,100000)</param>
-						</include>
-						<include content="Object_ContentItem" condition="False + !False">
-							<param name="visible">Integer.IsEqual(Container(4600).NumItems,0) | String.IsEmpty(Container(4600).ListItem.FolderPath)</param>
-						</include>
-						<include content="Object_ContentInclude" condition="False">
-							<param name="include">skinshortcuts-group-kwry</param>
-						</include>
-						<onfocus>SetProperty(TMDbHelper.WidgetContainer,4601,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,اعمال كوريه,Home)</onfocus>
-						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(4601).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="False">SetProperty(Slide.WidgetContainer,4601,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
-						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
-						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
-						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
-						<onback condition="!Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(4601,0,absolute)</onback>
-						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(4601)</onback>
-						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(301)</onback>
-						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(4599)</onback>
-						<onback condition="Integer.IsEqual(Container(4601).ListItem.CurrentItem,1)">SetFocus(300)</onback>
-					</include>
-					<include content="Widget_Submenu">
-						<param name="groupid" value="4702" />
-						<param name="id" value="4602" />
-						<param name="spacerid" value="4802" />
-						<param name="buttonid" value="400200" />
-						<param name="label" value="القسم" />
-						<param name="usealtlabel" value="True" />
-						<param name="altlabel">$INFO[Container(4601).ListItem.Label]</param>
-						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Button_Row" />
-						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + [![True] | [!Integer.IsEqual(Container(4601).NumItems,0) + Container(4601).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="False" />
-						<param name="infowidget_full" value="False" />
-						<param name="busy_visible" value="Integer.IsEqual(Container(4602).NumItems,0) | [True + Container(4602).IsUpdating]" />
-						<param name="detailed">false</param>
-						<param name="oversized">False</param>
-						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
-							<param name="content">Stacked</param>
-						</include>
-						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby" />
-							<param name="sortorder" />
-							<param name="target">videos</param>
-							<param name="limit" />
-							<param name="autolimit">7</param>
-							<param name="is_autolimit">false</param>
 							<param name="content">$INFO[Container(4601).ListItem.FolderPath]</param>
 						</include>
 						<include content="Defs_AutoScroll" condition="False + !False">
@@ -2673,26 +2988,26 @@
 						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
 							<param name="label">$LOCALIZE[31253]...</param>
 							<param name="icon">fallback/more-items.png</param>
-							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="onclick">ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=koren.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)],return)</param>
 							<param name="visible">Integer.IsEqual(Container(4602).NumItems,) | Integer.IsEqual(Container(4602).NumItems,100000)</param>
 						</include>
-						<include content="Object_ContentItem" condition="True + !False">
+						<include content="Object_ContentItem" condition="False + !False">
 							<param name="visible">Integer.IsEqual(Container(4601).NumItems,0) | String.IsEmpty(Container(4601).ListItem.FolderPath)</param>
 						</include>
 						<include content="Object_ContentInclude" condition="False">
 							<param name="include">skinshortcuts-group-kwry</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,4602,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,اعمال كوريه,Home)</onfocus>
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(4602).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,4602,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Text,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Button,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Button,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
-						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onfocus condition="False">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
 						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
 						<onback condition="!Integer.IsEqual(Container(4602).ListItem.CurrentItem,1)">SetFocus(4602,0,absolute)</onback>
 						<onback condition="Integer.IsEqual(Container(4602).ListItem.CurrentItem,1)">SetFocus(4601)</onback>
@@ -2700,24 +3015,24 @@
 						<onback condition="Integer.IsEqual(Container(4602).ListItem.CurrentItem,1)">SetFocus(4599)</onback>
 						<onback condition="Integer.IsEqual(Container(4602).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
-					<include content="Widget_Poster">
+					<include content="Widget_Submenu">
 						<param name="groupid" value="4703" />
 						<param name="id" value="4603" />
 						<param name="spacerid" value="4803" />
 						<param name="buttonid" value="400300" />
-						<param name="label" value="&lt;None&gt;" />
+						<param name="label" value="القسم" />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(4602).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
-						<param name="include" value="List_Poster_Row" />
+						<param name="include" value="List_Button_Row" />
 						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + [![True] | [!Integer.IsEqual(Container(4602).NumItems,0) + Container(4602).ListItem.IsFolder]]]" />
-						<param name="infowidget" value="True" />
-						<param name="infowidget_full" value="True" />
+						<param name="infowidget" value="False" />
+						<param name="infowidget_full" value="False" />
 						<param name="busy_visible" value="Integer.IsEqual(Container(4603).NumItems,0) | [True + Container(4603).IsUpdating]" />
 						<param name="detailed">false</param>
 						<param name="oversized">False</param>
 						<include content="Widget_ContentDynamic" condition="!False + !True">
-							<param name="sortby">random</param>
+							<param name="sortby" />
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
@@ -2726,7 +3041,7 @@
 							<param name="content">Stacked</param>
 						</include>
 						<include content="Widget_ContentDynamic" condition="!False + True">
-							<param name="sortby">random</param>
+							<param name="sortby" />
 							<param name="sortorder" />
 							<param name="target">videos</param>
 							<param name="limit" />
@@ -2750,11 +3065,11 @@
 							<param name="include">skinshortcuts-group-kwry</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,4603,Home)</onfocus>
-						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,&lt;None&gt;,Home)</onfocus>
-						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(4603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
-						<onfocus condition="True">SetProperty(Slide.WidgetContainer,4603,Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,القسم,Home)</onfocus>
+						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(4603).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="False">SetProperty(Slide.WidgetContainer,4603,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
-						<onfocus>SetProperty(Slide.WidgetAspect,Poster,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Text,Home)</onfocus>
 						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
 						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
@@ -2766,6 +3081,73 @@
 						<onback condition="Integer.IsEqual(Container(4603).ListItem.CurrentItem,1)">SetFocus(301)</onback>
 						<onback condition="Integer.IsEqual(Container(4603).ListItem.CurrentItem,1)">SetFocus(4599)</onback>
 						<onback condition="Integer.IsEqual(Container(4603).ListItem.CurrentItem,1)">SetFocus(300)</onback>
+					</include>
+					<include content="Widget_Poster">
+						<param name="groupid" value="4704" />
+						<param name="id" value="4604" />
+						<param name="spacerid" value="4804" />
+						<param name="buttonid" value="400400" />
+						<param name="label" value="&lt;None&gt;" />
+						<param name="usealtlabel" value="True" />
+						<param name="altlabel">$INFO[Container(4603).ListItem.Label]</param>
+						<param name="usewidgetlabel" value="False" />
+						<param name="include" value="List_Landscape_Row" />
+						<param name="visible" value="[[True] + String.IsEqual(Container(300).ListItem.Property(submenuVisibility),kwry) + [![True] | [!Integer.IsEqual(Container(4603).NumItems,0) + Container(4603).ListItem.IsFolder]]]" />
+						<param name="infowidget" value="True" />
+						<param name="infowidget_full" value="True" />
+						<param name="busy_visible" value="Integer.IsEqual(Container(4604).NumItems,0) | [True + Container(4604).IsUpdating]" />
+						<param name="detailed">false</param>
+						<param name="oversized">False</param>
+						<include content="Widget_ContentDynamic" condition="!False + !True">
+							<param name="sortby">random</param>
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">Stacked</param>
+						</include>
+						<include content="Widget_ContentDynamic" condition="!False + True">
+							<param name="sortby">random</param>
+							<param name="sortorder" />
+							<param name="target">videos</param>
+							<param name="limit" />
+							<param name="autolimit">4</param>
+							<param name="is_autolimit">false</param>
+							<param name="content">$INFO[Container(4603).ListItem.FolderPath]</param>
+						</include>
+						<include content="Defs_AutoScroll" condition="False + !False">
+							<param name="condition" value="!Control.HasFocus(4604) + !System.ScreenSaverActive + String.IsEmpty(Window(Home).Property(Widgets.BlockAutoscroll))" />
+						</include>
+						<include content="Object_ContentItem" condition="Skin.HasSetting(Home.EnableShowMoreWidget) + false + !false + !False">
+							<param name="label">$LOCALIZE[31253]...</param>
+							<param name="icon">fallback/more-items.png</param>
+							<param name="onclick">ActivateWindow(videos,Stacked,return)</param>
+							<param name="visible">Integer.IsEqual(Container(4604).NumItems,) | Integer.IsEqual(Container(4604).NumItems,100000)</param>
+						</include>
+						<include content="Object_ContentItem" condition="True + !False">
+							<param name="visible">Integer.IsEqual(Container(4603).NumItems,0) | String.IsEmpty(Container(4603).ListItem.FolderPath)</param>
+						</include>
+						<include content="Object_ContentInclude" condition="False">
+							<param name="include">skinshortcuts-group-kwry</param>
+						</include>
+						<onfocus>SetProperty(TMDbHelper.WidgetContainer,4604,Home)</onfocus>
+						<onfocus condition="True + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,&lt;None&gt;,Home)</onfocus>
+						<onfocus condition="True + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(4604).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
+						<onfocus condition="True">SetProperty(Slide.WidgetContainer,4604,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetInfoStyle,Full,Home)</onfocus>
+						<onfocus>SetProperty(Slide.WidgetAspect,Landscape,Home)</onfocus>
+						<onunfocus>ClearProperty(Slide.WidgetAspect,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetInfoStyle,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetContainer,Home)</onunfocus>
+						<onunfocus>ClearProperty(Slide.WidgetTitle,Home)</onunfocus>
+						<onfocus condition="True">SetProperty(Widgets.BlockAutoscroll,1,Home)</onfocus>
+						<onunfocus>ClearProperty(Widgets.BlockAutoscroll,Home)</onunfocus>
+						<onback condition="!Integer.IsEqual(Container(4604).ListItem.CurrentItem,1)">SetFocus(4604,0,absolute)</onback>
+						<onback condition="Integer.IsEqual(Container(4604).ListItem.CurrentItem,1)">SetFocus(4601)</onback>
+						<onback condition="Integer.IsEqual(Container(4604).ListItem.CurrentItem,1)">SetFocus(301)</onback>
+						<onback condition="Integer.IsEqual(Container(4604).ListItem.CurrentItem,1)">SetFocus(4599)</onback>
+						<onback condition="Integer.IsEqual(Container(4604).ListItem.CurrentItem,1)">SetFocus(300)</onback>
 					</include>
 					<include content="Widget_Submenu" condition="False">
 						<param name="groupid" value="4798" />
@@ -3868,6 +4250,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">2</property>
+			<label>أفضل 10 أفلام في شباك التذاكر</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">fdl10flmfyshbkltdhkr</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">2</property>
 			<label>تقسيم الافلام</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -3884,8 +4285,8 @@
 			<property name="group">movies.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">2</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -3902,8 +4303,8 @@
 			<property name="group">movies.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">2</property>
 			<label>المحتوى</label>
 			<label2>Custom item</label2>
@@ -3927,6 +4328,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">2</property>
+			<label>أفضل 10 أفلام في شباك التذاكر</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">fdl10flmfyshbkltdhkr</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=trakt_boxoffice&amp;tmdb_type=movie&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),movies)</visible>
+			<property name="group">movies.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">2</property>
 			<label>تقسيم الافلام</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -3943,8 +4363,8 @@
 			<property name="group">movies.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">2</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -3961,8 +4381,8 @@
 			<property name="group">movies.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">2</property>
 			<label>المحتوى</label>
 			<label2>Custom item</label2>
@@ -4016,6 +4436,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">3</property>
+			<label>عشوائي الشائع المسلسلات</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shwyylshy-lmslslt</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">tvshows.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">3</property>
 			<label>تقسيم المسلسلات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4032,8 +4471,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">3</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -4050,8 +4489,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">3</property>
 			<label>.</label>
 			<label2>Custom item</label2>
@@ -4070,8 +4509,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
 			<label>الموسم</label>
 			<label2>Custom item</label2>
@@ -4088,8 +4527,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">3</property>
 			<label>الحلقات</label>
 			<label2>Custom item</label2>
@@ -4111,6 +4550,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">3</property>
+			<label>عشوائي الشائع المسلسلات</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">shwyylshy-lmslslt</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?info=random_trending&amp;tmdb_type=tv&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),tvshows)</visible>
+			<property name="group">tvshows.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">3</property>
 			<label>تقسيم المسلسلات</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4127,8 +4585,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">3</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -4145,8 +4603,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">3</property>
 			<label>.</label>
 			<label2>Custom item</label2>
@@ -4165,8 +4623,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="4">
-			<property name="id">$NUMBER[4]</property>
+		<item id="5">
+			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
 			<label>الموسم</label>
 			<label2>Custom item</label2>
@@ -4183,8 +4641,8 @@
 			<property name="group">tvshows.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="5">
-			<property name="id">$NUMBER[5]</property>
+		<item id="6">
+			<property name="id">$NUMBER[6]</property>
 			<property name="mainmenuid">3</property>
 			<label>الحلقات</label>
 			<label2>Custom item</label2>
@@ -4236,6 +4694,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">4</property>
+			<label>Korean Dramas - فرز حسب: Highest الرتبة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">koreandramas-frzhsb-highestlrtb</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>String.IsEqual(System.ProfileName,Master user)</visible>
+			<property name="group">kwry.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">4</property>
 			<label>اعمال كوريه</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4252,8 +4729,8 @@
 			<property name="group">kwry.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">4</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -4271,8 +4748,8 @@
 			<property name="group">kwry.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">4</property>
 			<label>&lt;None&gt;</label>
 			<label2>Custom item</label2>
@@ -4280,7 +4757,7 @@
 			<thumb />
 			<property name="labelID">none</property>
 			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
+			<property name="widgetAspect">Landscape</property>
 			<property name="widgetInfo">Full</property>
 			<property name="widgetSortby">random</property>
 			<onclick>Stacked</onclick>
@@ -4295,6 +4772,25 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">4</property>
+			<label>Korean Dramas - فرز حسب: Highest الرتبة</label>
+			<label2>Video Add-On</label2>
+			<icon>special://skin/extras/icons/shortcut.png</icon>
+			<thumb>thumb</thumb>
+			<property name="labelID">koreandramas-frzhsb-highestlrtb</property>
+			<property name="defaultID" />
+			<property name="translatedPath">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="widgetTarget">videos</property>
+			<property name="widgetAspect">Lovefilm</property>
+			<onclick>ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</onclick>
+			<property name="path">ActivateWindow(Videos,"plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]",return)</property>
+			<property name="list">plugin://plugin.video.themoviedb.helper/?list_name=Korean+Dramas&amp;list_slug=korean-dramas&amp;user_slug=xscaredycat&amp;plugin_category=Korean+Dramas&amp;tmdb_id=None&amp;info=trakt_userlist&amp;sort_by=rank&amp;sort_how=desc&amp;widget=true&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]&amp;reload=$INFO[Window(Home).Property(TMDbHelper.Widgets.Reload)]</property>
+			<visible>[String.IsEqual(System.ProfileName,Master user)] + String.IsEqual(Window(10000).Property(submenuVisibility),kwry)</visible>
+			<property name="group">kwry.1</property>
+			<property name="isSubmenu">True</property>
+		</item>
+		<item id="2">
+			<property name="id">$NUMBER[2]</property>
+			<property name="mainmenuid">4</property>
 			<label>اعمال كوريه</label>
 			<label2>Custom item</label2>
 			<icon>special://skin/extras/icons/shortcut.png</icon>
@@ -4311,8 +4807,8 @@
 			<property name="group">kwry.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="2">
-			<property name="id">$NUMBER[2]</property>
+		<item id="3">
+			<property name="id">$NUMBER[3]</property>
 			<property name="mainmenuid">4</property>
 			<label>القسم</label>
 			<label2>Custom item</label2>
@@ -4330,8 +4826,8 @@
 			<property name="group">kwry.1</property>
 			<property name="isSubmenu">True</property>
 		</item>
-		<item id="3">
-			<property name="id">$NUMBER[3]</property>
+		<item id="4">
+			<property name="id">$NUMBER[4]</property>
 			<property name="mainmenuid">4</property>
 			<label>&lt;None&gt;</label>
 			<label2>Custom item</label2>
@@ -4339,7 +4835,7 @@
 			<thumb />
 			<property name="labelID">none</property>
 			<property name="defaultID" />
-			<property name="widgetAspect">Poster</property>
+			<property name="widgetAspect">Landscape</property>
 			<property name="widgetInfo">Full</property>
 			<property name="widgetSortby">random</property>
 			<onclick>Stacked</onclick>
