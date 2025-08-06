@@ -108,7 +108,7 @@
                           <property name="setting_label">المحتوى</property>
                       </item>
                       <item id="40">
-                          <property name="setting_label">قوائم المحقلات المفردة</property>
+                          <property name="setting_label">قوائم الحلقات المفردة</property>
                       </item>
                       <item id="50">
                           <property name="setting_label">الحسابات</property>
@@ -542,7 +542,7 @@
                           <property name="setting_label">تحديث الأدوات بعد مزامنة Trakt</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(fenlight.trakt.refresh_widgets)]</property>
-                          <property name="setting_description">قم بتمكين هذا وسوف يقوم Fen Light بتحديث عناصر واجهة المستخدم بعد إجراء Trakt Sync إذا كان هناك أي تغييرs</property>
+                          <property name="setting_description">قم بتمكين هذا وسوف يقوم Fen Light بتحديث عناصر واجهة المستخدم بعد إجراء Trakt Sync إذا كان هناك أي تغيير</property>
                           <onclick>RunPlugin(plugin://plugin.video.fenlight/?mode=settings_manager.set_boolean&amp;setting_id=trakt.refresh_widgets)</onclick>
                       </item>
         <!-- UTC Time Offset -->
@@ -2476,7 +2476,7 @@
                     <height>20</height>
                     <font>font_mini</font> <!-- FENLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
-                    <label>المعلومات</label>
+                    <label>معلومة</label>
                     <align>left</align>
                     <aligny>center</aligny>
                 </control>
