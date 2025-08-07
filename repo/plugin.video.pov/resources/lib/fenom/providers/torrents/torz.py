@@ -12,13 +12,13 @@ from fenom import source_utils
 class source:
 	timeout = 7
 	priority = 1
-	pack_capable = False # packs parsed in sources function
+	pack_capable = False
 	hasMovies = True
 	hasEpisodes = True
 	def __init__(self):
-		params = '/4ec23e77-bdff-4c55-81b9-d3c1044d81ff/eyJpdiI6IlAzeGQ1cFJXZHRWb1hMY3E3cGtHT2c9PSIsImVuY3J5cHRlZCI6IkVENE9LUGVqUVRqNWtVTjQzSE1YUWw4SjRhTHhyWXFuWnpBc3grL0E5Q1U9IiwidHlwZSI6ImFpb0VuY3J5cHQifQ'
+		params = '/eyJzdG9yZXMiOlt7ImMiOiJwMnAiLCJ0IjoiIn1dfQ=='
 		self.language = ['en']
-		self.base_link = "https://aiostreams.elfhosted.com/stremio"
+		self.base_link = "https://stremthru.elfhosted.com/stremio/torz"
 		self.movieSearch_link = f"{params}/stream/movie/%s.json"
 		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0
@@ -32,7 +32,6 @@ class source:
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
 			aliases = data['aliases']
 			episode_title = data['title'] if 'tvshowtitle' in data else None
-			total_seasons = data['total_seasons'] if 'tvshowtitle' in data else None
 			year = data['year']
 			imdb = data['imdb']
 			if 'tvshowtitle' in data:
@@ -46,59 +45,52 @@ class source:
 			# log_utils.log('url = %s' % url)
 			results = requests.get(url, timeout=self.timeout) # client.request(url, timeout=7)
 			files = results.json()['streams'] # jsloads(results)['streams']
-			_INFO = re.compile(r'💾.*')
+			_INFO = re.compile(r'(?:💾|📦).*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			source_utils.scraper_error('AIOSTREAMS')
+			source_utils.scraper_error('TORZ')
 			return sources
 
 		for file in files:
 			try:
 				package, episode_start = None, 0
 				hash = file['infoHash']
-				file_title = file['description'].replace('┈➤', '\n').split('\n')
-				file_info = [x for x in file_title if _INFO.search(x)][0]
+				file_title = file['description'].splitlines()
+				file_info = next((i for i in file_title if _INFO.search(i)), '')
 
-				name = source_utils.clean_name(file_title[0])
+				name = source_utils.clean_name(file_title[-1])
 
-				if not source_utils.check_title(title, aliases, name, hdlr, year):
-					if total_seasons is None: continue
-					valid, last_season = source_utils.filter_show_pack(title, aliases, imdb, year, season, name, total_seasons)
-					if not valid:
-						valid, episode_start, episode_end = source_utils.filter_season_pack(title, aliases, year, season, name)
-						if not valid: continue
-						else: package = 'season'
-					else: package = 'show'
+				if not source_utils.check_title(title, aliases, name, hdlr, year): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
-
-				try:
-					seeders = int(re.search(r'👤\s*(\d+)', file_info).group(1))
-					if self.min_seeders > seeders: continue
-				except: seeders = 0
+				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = re.findall(r'((?:\d+\,\d+\.\d+|\d+\.\d+|\d+\,\d+|\d+)\s*(?:GB|GiB|Gb|MB|MiB|Mb))', file_info)[-1]
+					size = re.findall(r'((?:\d+\,\d+\.\d+|\d+\.\d+|\d+\,\d+|\d+)\s*(?:GB|GiB|Gb|MB|MiB|Mb))', file_info)
+					package = 'season' if not episode_title is None and len(size) > 1 else None
+					size = size[0]
 					dsize, isize = source_utils._size(size)
 					info.insert(0, isize)
-				except: dsize = 0
+				except:
+					size = f"{float(file['behaviorHints']['videoSize']) / 1073741824:.2f} GB"
+					package = None
+					dsize = 0
 				info = ' | '.join(info)
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'aiostreams', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
-					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
+					'provider': 'torz', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': 0
 				}
 				if package: item['package'] = package
-				if package == 'show': item.update({'last_season': last_season})
-				if episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
+				# if package == 'show': item.update({'last_season': last_season})
+				# if episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				append(item)
 			except:
-				source_utils.scraper_error('AIOSTREAMS')
+				source_utils.scraper_error('TORZ')
 		return sources
 

@@ -202,6 +202,7 @@
         <setting id="provider.aiostreams" label="aiostreams" type="bool" default="false" />
         <setting id="provider.comet" label="comet" type="bool" default="false" />
         <setting id="provider.mediafusion" label="mediafusion" type="bool" default="false" />
+        <setting id="provider.torz" label="stremthru torz" type="bool" default="false" />
         <setting id="provider.zilean" label="zilean" type="bool" default="false" />
         <setting id="provider.library" label="library" type="bool" default="false" visible="false" />
         <!-- Folders 1-5 -->

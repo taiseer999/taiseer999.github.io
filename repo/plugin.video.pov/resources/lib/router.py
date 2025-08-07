@@ -294,6 +294,9 @@ class Router:
 		elif mode == 'myservices':
 			from modules.myservices import authorize
 			authorize(params['action'])
+		elif 'refer_link' in mode:
+			from modules.myservices import refer_link
+			refer_link(params['query'])
 		##FENOM modes###
 		elif mode == 'undesirablesInput':
 			from caches.undesirables_cache import undesirablesInput

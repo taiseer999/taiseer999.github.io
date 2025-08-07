@@ -711,6 +711,7 @@ def scrape_with_filters_ignored(media_type, meta, season=None, episode=None):
 	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'ignore_scrape_filters': 'true'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
+	set_property('fs_filterless_search', 'true')
 	Sources().playback_prep(play_params)
 
 def scrape_with_custom_values(media_type, meta, season=None, episode=None):

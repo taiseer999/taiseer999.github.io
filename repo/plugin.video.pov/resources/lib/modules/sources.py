@@ -197,7 +197,9 @@ class Sources():
 		for item in results: _add_keys(item)
 		results.sort(key=self.sort_function)
 		if self.priority_language: results = self._sort_language_to_top(results)
-		if self.display_uncached_torrents: results = self._sort_uncached_torrents(results)
+		if self.display_uncached_torrents or get_property('fs_filterless_search') == 'true':
+			results = self._sort_uncached_torrents(results)
+		clear_property('fs_filterless_search')
 		return results
 
 	def prepare_internal_scrapers(self):

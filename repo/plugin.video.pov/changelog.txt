@@ -3,6 +3,9 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
+- RECOMMENDED: Clear External Scrapers Cache.
+- Added stremthru torz.
+- Change to automatically include uncached results when Scrape With All Filters Ignored.
 - Added During/After/Dual Credit Scene to Extras Plot label (if available).
 - Added Playback settings, Enable Credit Scene Notification (Movie Stingers).
 - Added TorBox settings, Filter User Search Services Only.

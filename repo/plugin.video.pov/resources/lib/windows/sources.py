@@ -126,7 +126,6 @@ class SourceResults(BaseDialog):
 					extra_info = extra_info.rstrip('| ')
 					if scrape_provider == 'external':
 						if 'usenet' in source: source_site = get('tracker')
-						elif 'cache' in item: source_site = get('cache')
 						else: source_site = get('provider')
 						source_site = upper(source_site)
 						provider = upper(get('debrid', source_site).replace('.me', ''))
@@ -144,7 +143,7 @@ class SourceResults(BaseDialog):
 								if highlight_type == 0: key = 'torrent_highlight'
 								elif highlight_type == 1: key = provider_lower
 								else: key = basic_quality
-								status = 'UNCHECKED' if get('cache') in ('TI', 'MF', 'CM') else 'CACHED'
+								status = 'UNCHECKED' if source_site.endswith('DEBRID') else 'CACHED'
 								set_property('tikiskins.source_type',
 									'%s [B]%s[/B]' % (status, upper(get('package')))
 									if pack else

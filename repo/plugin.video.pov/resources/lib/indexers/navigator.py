@@ -78,7 +78,7 @@ class Navigator:
 		ad_str, acc_str, cloud_str = ls(32063), ls(32494), ls(32496)
 		clca_str, n_ins = ls(32497) % ad_str, _in_str % (ad_str.upper(), '')
 		self._add_item({'mode': 'alldebrid.ad_torrent_cloud',       'name': cloud_str}, 'alldebrid.png', n_ins)
-		self._add_item({'mode': 'alldebrid.show_account_info',        'name': acc_str  }, 'alldebrid.png', n_ins, False)
+		self._add_item({'mode': 'alldebrid.show_account_info',      'name': acc_str  }, 'alldebrid.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'ad_cloud', 'name': clca_str }, 'alldebrid.png', n_ins, False)
 
 	def offcloud(self):
@@ -234,7 +234,7 @@ class Navigator:
 		log_utils, views_str, clean_str, lang_inv_str, ms_str = ls(32777), ls(32510), ls(32512), ls(32978), ls(32455)
 		settings_str, changelog_log_viewer_str = ls(32247), '%s & %s' % (changelog_str, log_utils)
 		shortcut_manager_str, source_manager_str = '%s %s' % (short_str, manager_str), '%s %s' % (source_str, manager_str)
-		n_ins = _in_str % (settings_str.upper(), '')
+		n_ins, l_str = _in_str % (settings_str.upper(), ''), _in_str % ('LINKS', '')
 		self._add_item({'mode': 'open_settings',                 'name': pov_str                 }, 'pov.png', n_ins, False)
 		self._add_item({'mode': 'open_settings', 'query': '6.0', 'name': ms_str                  }, 'settings.png', n_ins, False)
 		self._add_item({'mode': 'navigator.clear_info',          'name': clean_str               }, 'settings.png', n_ins)
@@ -243,6 +243,8 @@ class Navigator:
 		self._add_item({'mode': 'navigator.shortcut_folders',    'name': shortcut_manager_str    }, 'settings.png', n_ins)
 		self._add_item({'mode': 'navigator.sources_folders',     'name': source_manager_str      }, 'settings.png', n_ins)
 		self._add_item({'mode': 'toggle_language_invoker',       'name': lang_inv_str            }, 'settings.png', n_ins, False)
+		self._add_item({'mode': 'refer_link', 'query': 'realdebrid',  'name': 'Real Debrid Referral Link'}, 'realdebrid.png', l_str, False)
+		self._add_item({'mode': 'refer_link', 'query': 'torbox',      'name': 'TorBox Referral Link'     }, 'torbox.png',     l_str, False)
 		self._end_directory()
 
 	def clear_info(self):

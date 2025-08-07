@@ -65,6 +65,7 @@ class source:
 			threads.append(obj)
 		self.wait(threads)
 		try:
+			self.cached_sources.sort(key=lambda k: '+' in k.get('cache', ''), reverse=True)
 			self.cached_sources = self.process_duplicates(self.cached_sources)
 			self.sources = self.process_duplicates(self.sources)
 			torrent_sources = [i for i in self.sources if 'hash' in i]
@@ -83,7 +84,7 @@ class source:
 					self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in self.cached_sources])
 				else:
 					self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes])
-				if self.display_uncached_torrents:
+				if self.display_uncached_torrents or get_property('fs_filterless_search') == 'true':
 					self.final_sources.extend([{**i, 'cache_provider': 'Uncached %s' % name, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
 			hoster_sources = [i for i in self.sources if not 'hash' in i]
 			result_hosters = list({i['source'].lower() for i in hoster_sources})
@@ -96,7 +97,6 @@ class source:
 			if not self.progress_dialog and not self.load_action:
 				progressDialogBG.close()
 			else: self._kill_progress_dialog()
-		clear_property('fs_filterless_search')
 		return self.final_sources
 
 	def wait(self, threads, debrid_check=False):
@@ -211,13 +211,18 @@ class Sources:
 		if self.media_type == 'movie':
 			self.get_source = self.get_movie_source
 			self.season_divider, self.show_divider = 1, 1
-			self.data = {'imdb': info['imdb_id'], 'title': self.title, 'aliases': aliases, 'year': self.year}
+			self.data = {
+				'imdb': info['imdb_id'], 'aliases': aliases, 'title': self.title, 'year': self.year
+			}
 		else:
 			self.get_source = self.get_episode_source
 			self.season_divider = int(next((x['episode_count'] for x in meta['season_data'] if int(x['season_number']) == int(meta['season'])), 1))
 			self.show_divider = int(meta['total_aired_eps'])
-			self.data = {'imdb': info['imdb_id'], 'title': normalize(info['ep_name']), 'aliases': aliases, 'year': self.year,
-						'tvdb': info['tvdb_id'], 'tvshowtitle': self.title, 'season': str(self.season), 'episode': str(self.episode)}
+			self.data = {
+				'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'aliases': aliases,
+				'title': normalize(info['ep_name']), 'tvshowtitle': self.title, 'year': self.year,
+				'season': str(self.season), 'episode': str(self.episode), 'total_seasons': self.total_seasons
+			}
 
 	def get_movie_source(self, provider, module):
 		_cache = ExternalProvidersCache()
@@ -225,7 +230,8 @@ class Sources:
 		if sources is None:
 			sources = module().sources(self.data, self.hostDict)
 			sources = self.process_sources(provider, sources)
-			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
+			if not provider in cached_debrids:
+				_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
 		if sources:
 			self.process_quality_count(sources)
 			if provider in cached_debrids: self.cached_sources.extend(sources)
@@ -249,7 +255,8 @@ class Sources:
 				expiry_hours = self.single_expiry
 				sources = module().sources(self.data, self.hostDict)
 			sources = self.process_sources(provider, sources)
-			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check, sources, expiry_hours)
+			if not provider in cached_debrids:
+				_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check, sources, expiry_hours)
 		if sources:
 			if pack == season_display: sources = [i for i in sources if not 'episode_start' in i or i['episode_start'] <= self.episode <= i['episode_end']]
 			elif pack == show_display: sources = [i for i in sources if i['last_season'] >= self.season]
@@ -273,13 +280,14 @@ class Sources:
 					else: quality, extraInfo = get_file_info(url=i_get('url'))
 					try:
 						size = i_get('size')
-						if 'package' in i and provider not in ('torrentio', 'mediafusion', 'tidebrid', 'mfdebrid'):
+						if 'package' in i and provider not in ('torrentio', 'tidebrid', 'torrentsdb', 'torz'):
 							if i_get('package') == 'season': divider = self.season_divider
 							else: divider = self.show_divider
 							size = float(size) / divider
 							size_label = '%.2f GB' % size
 						else: size_label = '%.2f GB' % size
 					except: pass
+					if '+' in i_get('provider', ''): provider = i['provider']
 					i.update({'provider': provider, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
 								'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
 				except: pass

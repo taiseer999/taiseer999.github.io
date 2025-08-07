@@ -4,20 +4,19 @@
 """
 
 #from json import loads as jsloads
-import re, requests, queue
+import re, requests
 #from fenom import client
 from fenom import source_utils
 
-headers = {'User-Agent': 'Mozilla/5.0'}
+headers = {'User-Agent': 'curl/7.55.1', 'Accept': 'application/json'}
 
 
 class source:
 	timeout = 5
 	priority = 1
-	pack_capable = True
+	pack_capable = False # packs parsed in sources function
 	hasMovies = True
 	hasEpisodes = True
-	_queue = queue.SimpleQueue()
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = "https://torrentio.strem.fun"
@@ -35,6 +34,7 @@ class source:
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
 			aliases = data['aliases']
 			episode_title = data['title'] if 'tvshowtitle' in data else None
+			total_seasons = data['total_seasons'] if 'tvshowtitle' in data else None
 			year = data['year']
 			imdb = data['imdb']
 			if 'tvshowtitle' in data:
@@ -46,12 +46,8 @@ class source:
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 				hdlr = year
 			# log_utils.log('url = %s' % url)
-			try:
-				results = requests.get(url, headers=headers, timeout=self.timeout) # client.request(url, timeout=5)
-				files = results.json()['streams'] # jsloads(results)['streams']
-			except: files = []
-			self._queue.put_nowait(files) # if seasons
-			self._queue.put_nowait(files) # if shows
+			results = requests.get(url, headers=headers, timeout=self.timeout) # client.request(url, timeout=5)
+			files = results.json()['streams'] # jsloads(results)['streams']
 			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
@@ -61,6 +57,7 @@ class source:
 
 		for file in files:
 			try:
+				package, episode_start = None, 0
 				hash = file['infoHash']
 				file_title = file['title'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
@@ -73,7 +70,14 @@ class source:
 
 				name = source_utils.clean_name(file_title[0])
 
-				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
+				if not source_utils.check_title(title, aliases, name, hdlr, year):
+					if total_seasons is None: continue
+					valid, last_season = source_utils.filter_show_pack(title, aliases, imdb, year, season, name, total_seasons)
+					if not valid:
+						valid, episode_start, episode_end = source_utils.filter_season_pack(title, aliases, year, season, name)
+						if not valid: continue
+						else: package = 'season'
+					else: package = 'show'
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
@@ -97,83 +101,15 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': 'torrentio', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
-			except:
-				source_utils.scraper_error('TORRENTIO')
-		return sources
-
-	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
-		sources = []
-		if not data: return sources
-		sources_append = sources.append
-		try:
-			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
-			aliases = data['aliases']
-			imdb = data['imdb']
-			year = data['year']
-			season = data['season']
-			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
-#			results = requests.get(url, headers=headers, timeout=5) # client.request(url, timeout=5)
-			files = self._queue.get(timeout=self.timeout + 1) # jsloads(results)['streams']
-			_INFO = re.compile(r'👤.*')
-			undesirables = source_utils.get_undesirables()
-			check_foreign_audio = source_utils.check_foreign_audio()
-		except:
-			source_utils.scraper_error('TORRENTIO')
-			return sources
-
-		for file in files:
-			try:
-				hash = file['infoHash']
-				file_title = file['title'].split('\n')
-				file_info = [x for x in file_title if _INFO.match(x)][0]
-				# try:
-					# index = file_title.index(file_info)
-					# if index == 1: combo = file_title[0].replace(' ', '.')
-					# else: combo = ''.join(file_title[0:2]).replace(' ', '.')
-					# if '🇷🇺' in file_title[index+1] and not any(value in combo for value in ('.en.', '.eng.', 'english')): continue
-				# except: pass
-
-				name = source_utils.clean_name(file_title[0])
-
-				episode_start, episode_end = 0, 0
-				if not search_series:
-					if not bypass_filter:
-						valid, episode_start, episode_end = source_utils.filter_season_pack(title, aliases, year, season, name.replace('.(Archie.Bunker', ''))
-						if not valid: continue
-					package = 'season'
-
-				elif search_series:
-					if not bypass_filter:
-						valid, last_season = source_utils.filter_show_pack(title, aliases, imdb, year, season, name.replace('.(Archie.Bunker', ''), total_seasons)
-						if not valid: continue
-					else: last_season = total_seasons
-					package = 'show'
-
-				name_info = source_utils.info_from_name(name, title, year, season=season, pack=package)
-				if source_utils.remove_lang(name_info, check_foreign_audio): continue
-				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
-
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
-				try:
-					seeders = int(re.search(r'(\d+)', file_info).group(1))
-					if self.min_seeders > seeders: continue
-				except: seeders = 0
-
-				quality, info = source_utils.get_release_quality(name_info, url)
-				try:
-					size = re.search(r'((?:\d+\,\d+\.\d+|\d+\.\d+|\d+\,\d+|\d+)\s*(?:GB|GiB|Gb|MB|MiB|Mb))', file_info).group(0)
-					dsize, isize = source_utils._size(size)
-					info.insert(0, isize)
-				except: dsize = 0
-				info = ' | '.join(info)
-
-				item = {'provider': 'torrentio', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
-				if search_series: item.update({'last_season': last_season})
-				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
-				sources_append(item)
+				item = {
+					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
+					'provider': 'torrentio', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
+				}
+				if package: item['package'] = package
+				if package == 'show': item.update({'last_season': last_season})
+				if episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
+				append(item)
 			except:
 				source_utils.scraper_error('TORRENTIO')
 		return sources
