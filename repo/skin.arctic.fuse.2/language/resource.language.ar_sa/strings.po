@@ -2108,7 +2108,7 @@ msgstr "شعار كودي"
 #: /1080i/Custom_1180_Wizard.xml
 msgctxt "#31449"
 msgid "Setup wizard"
-msgstr "الاختيار من تجهيزات للمظهر معدة مسبقا"
+msgstr "مساعد اعداد المظهر"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31450"
@@ -2778,3 +2778,60 @@ msgstr "تخصيص الاختصارات"
 msgctxt "#31587"
 msgid "Flip"
 msgstr "اقلب"
+
+msgctxt "#32071"
+msgid "Duration of the codec logos when video starts"
+msgstr "مدة بقاء شعارات الترميز عند بدء تشغيل الفيديو"
+
+msgctxt "#32072"
+msgid "Time for codec logos"
+msgstr "وقت شعارات الترميز"
+
+msgctxt "#32073"
+msgid "PlayerProcessInfo"
+msgstr "معلومات المشغل"
+
+msgctxt "#32074"
+msgid "PlayerProcessInfo mode"
+msgstr " تصميم معلومات المشغل"
+
+msgctxt "#32075"
+msgid "second"
+msgstr ""
+
+msgctxt "#32076"
+msgid "Show file name in PlayerProcessInfo"
+msgstr " إظهار اسم الملف في معلومات المشغل"
+
+msgctxt "#32077"
+msgid "Modern"
+msgstr "حديث"
+
+msgctxt "#32078"
+msgid "Classic"
+msgstr "كلاسيكي"
+
+msgctxt "#32079"
+msgid "Original"
+msgstr "أصلي"
+
+msgctxt "#32080"
+msgid "Version selection"
+msgstr "اختيار الإصدار"
+
+msgctxt "#32081"
+msgid "Show file name and path in the version selection"
+msgstr "عرض اسم الملف والمسار في اختيار الإصدار"
+
+msgctxt "#32082"
+msgid "Customise video osd"
+msgstr "تخصيص شاشة عرض الفيديو"
+
+msgctxt "#32083"
+msgid "Customise video info"
+msgstr "تخصيص معلومات الفيديو"
+
+msgctxt "#32084"
+msgid "Codecs & PPI"
+msgstr "شاشة المشغل والترميزات"
+

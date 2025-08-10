@@ -3151,3 +3151,7 @@ msgstr ""
 msgctxt "#32083"
 msgid "Customise video info"
 msgstr ""
+
+msgctxt "#32084"
+msgid "Codecs & PPI"
+msgstr ""

@@ -285,7 +285,7 @@
                                         <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
                                     </item>
                                     <item>
-                                        <label>Codecs & PPI</label>
+                                        <label>$LOCALIZE[32084]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/configure.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_CPM,Home)</onclick>
