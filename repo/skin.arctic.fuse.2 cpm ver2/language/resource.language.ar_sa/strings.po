@@ -2779,6 +2779,35 @@ msgctxt "#31587"
 msgid "Flip"
 msgstr "اقلب"
 
+msgctxt "#32057"
+msgid "Top left"
+msgstr "أعلى اليسار"
+
+msgctxt "#32058"
+msgid "Top center"
+msgstr "بالوسط"
+
+msgctxt "#32059"
+msgid "Top right"
+msgstr "أعلى اليمين"
+
+msgctxt "#32060"
+msgid "Position of the codec logos in the OSD"
+msgstr "موضع شعارات الترميز في شاشة الفيديو"
+
+msgctxt "#32061"
+msgid "Position of the codec logos in the PlayerProcessInfo"
+msgstr "موضع شعارات الترميز في شاشة معلومات التشغيل"
+
+msgctxt "#32062"
+msgid "Position of the codec logos when video starts"
+msgstr "موضع شعارات الترميز عند بدء تشغيل الفيديو"
+
+msgctxt "#32063"
+msgid "Position of codec logos"
+msgstr "موضع شعارات الترميز"
+
+
 msgctxt "#32071"
 msgid "Duration of the codec logos when video starts"
 msgstr "مدة بقاء شعارات الترميز عند بدء تشغيل الفيديو"
