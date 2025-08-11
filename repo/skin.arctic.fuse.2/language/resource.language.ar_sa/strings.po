@@ -429,7 +429,7 @@ msgstr "بث مباشر"
 
 msgctxt "#31086"
 msgid "Customise options"
-msgstr "تعديل عناصر قائمة الخيارات"
+msgstr "قائمة الخيارات"
 
 #: /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31087"
