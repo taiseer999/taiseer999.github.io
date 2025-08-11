@@ -8140,7 +8140,7 @@ msgstr "تحذير!"
 #. service label in pvr info dialog
 msgctxt "#19099"
 msgid "Service"
-msgstr "خدمة"
+msgstr "الخدمات"
 
 #. mux label in pvr info dialog
 msgctxt "#19100"
