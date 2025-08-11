@@ -2781,7 +2781,7 @@ msgstr "اقلب"
 
 msgctxt "#32057"
 msgid "Top left"
-msgstr "اليسار"
+msgstr "أعلى اليسار"
 
 msgctxt "#32058"
 msgid "Top center"
@@ -2789,23 +2789,23 @@ msgstr "بالوسط"
 
 msgctxt "#32059"
 msgid "Top right"
-msgstr "اليمين"
+msgstr "أعلى اليمين"
 
 msgctxt "#32060"
 msgid "Position of the codec logos in the OSD"
-msgstr "شاشة الفيديو"
+msgstr "موضع شعارات الترميز في شاشة الفيديو"
 
 msgctxt "#32061"
 msgid "Position of the codec logos in the PlayerProcessInfo"
-msgstr "  PPI عند فتح شاشة معلومات التشغيل"
+msgstr "موضع شعارات الترميز في شاشة معلومات التشغيل"
 
 msgctxt "#32062"
 msgid "Position of the codec logos when video starts"
-msgstr "عند بدء تشغيل الفيديو"
+msgstr "موضع شعارات الترميز عند بدء تشغيل الفيديو"
 
 msgctxt "#32063"
 msgid "Position of codec logos"
-msgstr "موضع شعارات الترميز بآعلى الشاشة"
+msgstr "موضع شعارات الترميز"
 
 
 msgctxt "#32071"
@@ -2818,11 +2818,11 @@ msgstr "وقت شعارات الترميز"
 
 msgctxt "#32073"
 msgid "PlayerProcessInfo"
-msgstr "معلومات المشغل PPI"
+msgstr "معلومات المشغل"
 
 msgctxt "#32074"
 msgid "PlayerProcessInfo mode"
-msgstr "PPI تصميم معلومات المشغل"
+msgstr " تصميم معلومات المشغل"
 
 msgctxt "#32075"
 msgid "second"
@@ -2842,7 +2842,7 @@ msgstr "كلاسيكي"
 
 msgctxt "#32079"
 msgid "Original"
-msgstr "مطورة"
+msgstr "أصلي"
 
 msgctxt "#32080"
 msgid "Version selection"
@@ -2854,14 +2854,13 @@ msgstr "عرض اسم الملف والمسار في اختيار الإصدار
 
 msgctxt "#32082"
 msgid "Customise video osd"
-msgstr "شاشة عرض الفيديو"
+msgstr "تخصيص شاشة عرض الفيديو"
 
 msgctxt "#32083"
 msgid "Customise video info"
-msgstr "معلومات الفيديو"
+msgstr "تخصيص معلومات الفيديو"
 
 msgctxt "#32084"
 msgid "Codecs & PPI"
-msgstr "شاشة PPI 
-معلومات المشغل والترميزات"
+msgstr "شاشة المشغل والترميزات"
 
