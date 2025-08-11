@@ -1362,7 +1362,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR white]Audio sampling:[/COLOR]</label>
+						<label>[COLOR white]Bitrate/sampling:[/COLOR]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1372,7 +1372,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit] </label>
+						<label>$INFO[Player.Process(audio.live.kibit.rate),, $LOCALIZE[32012]] $INFO[Player.Process(audio.sample.rate),, kHz] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32012])[/COLOR]]</label>
 						<font>font_debug</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
