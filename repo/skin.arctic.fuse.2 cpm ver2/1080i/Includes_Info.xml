@@ -68,6 +68,7 @@
                 <width>$PARAM[width]</width>
                 <visible>$PARAM[mainlogo_visible]</visible>
                 <control type="image">
+                    <top>-20</top>
                     <height>info_title_logo_h</height>
                     <aspectratio align="left" aligny="center">keep</aspectratio>
                     <fadetime>0</fadetime>
@@ -1312,12 +1313,12 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">4K</param>
+                <param name="label">4K Ultra HD</param>
                 <param name="visible">$PARAM[visible] + !$PARAM[is_8k] + $PARAM[is_4k]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">FHD</param>
+                <param name="label">Full HD</param>
                 <param name="visible">$PARAM[visible] + !$PARAM[is_8k] + !$PARAM[is_4k] + $PARAM[is_fhd]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1348,8 +1349,8 @@
         <definition>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">DV</param>
-                <param name="visible">$PARAM[visible] + $PARAM[is_dolbyvision]</param>
+                <param name="label">Dolby Vision</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_dolbyvision] + !String.IsEqual($PARAM[listitem_audiocodec],ac3) + !String.IsEqual($PARAM[listitem_audiocodec],dolbydigital) + !String.IsEqual($PARAM[listitem_audiocodec],eac3) + !String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos) + !String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1360,6 +1361,31 @@
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">HLG</param>
                 <param name="visible">$PARAM[visible] + $PARAM[is_hlg]</param>
+            </include>
+            <include content="Info_Line_VideoQuality_Object">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">SDR</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_sdr]</param>
+            </include>
+            <include content="Info_Line_VideoQuality_Object">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">Dolby Vision • TrueHD (Atmos)</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_dolbyvision] + String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos)</param>
+            </include>
+            <include content="Info_Line_VideoQuality_Object">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">Dolby Vision • Digital</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_dolbyvision] + String.IsEqual($PARAM[listitem_audiocodec],ac3) + String.IsEqual($PARAM[listitem_audiocodec],dolbydigital)</param>
+            </include>
+            <include content="Info_Line_VideoQuality_Object">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">Dolby Vision • Digital Plus</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_dolbyvision] + String.IsEqual($PARAM[listitem_audiocodec],eac3)</param>
+            </include>
+            <include content="Info_Line_VideoQuality_Object">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">Dolby Vision • DD+ (Atmos)</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_dolbyvision] + String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos)</param>
             </include>
         </definition>
     </include>
@@ -1374,7 +1400,7 @@
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">Dolby Digital</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],ac3) | String.IsEqual($PARAM[listitem_audiocodec],dolbydigital)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],ac3) | String.IsEqual($PARAM[listitem_audiocodec],dolbydigital) + !$PARAM[is_dolbyvision]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1393,7 +1419,7 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">DTS-HD MA</param>
+                <param name="label">DTS-HD Master Audio</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],dtshd_ma)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1403,7 +1429,7 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">DTS:X MA</param>
+                <param name="label">DTS:X</param>
                 <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],dtshd_ma_x)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1413,13 +1439,13 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">Dolby Digital+</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],eac3)</param>
+                <param name="label">Dolby Digital Plus</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],eac3) + !$PARAM[is_dolbyvision]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">Dolby Atmos</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos)</param>
+                <param name="label">Dolby DD+ (Atmos)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos) + !$PARAM[is_dolbyvision]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1449,12 +1475,12 @@
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">Dolby TrueHD</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],truehd)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],truehd) + !$PARAM[is_dolbyvision]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">Dolby Atmos</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos)</param>
+                <param name="label">Dolby TrueHD (Atmos)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos) + !$PARAM[is_dolbyvision]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1541,10 +1567,13 @@
                 <param name="is_dolbyvision">[String.IsEqual($PARAM[listitem_hdrtype],dolbyvision)]</param>
                 <param name="is_hdr">[String.IsEqual($PARAM[listitem_hdrtype],hdr10)]</param>
                 <param name="is_hlg">[String.IsEqual($PARAM[listitem_hdrtype],hlg)]</param>
+                <param name="is_sdr">[String.IsEmpty($PARAM[listitem_hdrtype])] + !Integer.IsLess(ListItem.VideoResolution,1080)</param>
+                <param name="listitem_audiocodec">$PARAM[listitem_audiocodec]</param>
             </include>
             <include content="Info_Line_AudioCodec" condition="!Skin.HasSetting(Infoline.DisableAudioCodec)">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="listitem_audiocodec">$PARAM[listitem_audiocodec]</param>
+                <param name="is_dolbyvision">[String.IsEqual($PARAM[listitem_hdrtype],dolbyvision)]</param>
                 <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[listitem_audiocodec])</param>
             </include>
             <include content="Info_Line_AudioChannels" condition="!Skin.HasSetting(Infoline.DisableAudioChannels)">
@@ -1572,13 +1601,12 @@
         <param name="starrating">false</param>
         <param name="grouplistid">99951</param>
         <definition>
-
-            <control type="grouplist" id="$PARAM[grouplistid]">
+            <control type="grouplist">
                 <hitrect x="0" y="0" w="0" h="0" />
                 <height>80</height>
                 <orientation>horizontal</orientation>
                 <itemgap>10</itemgap>
-                <centertop>40</centertop>
+                <centertop>30</centertop>
                 <visible>$PARAM[visible]</visible>
 
                 <include content="Info_Line_VideoQuality">
@@ -1605,6 +1633,15 @@
                     <param name="listitem_audiochannels">Window(Home).Property(TMDbHelper.ListItem.base_audiochannels)</param>
                     <param name="visible">!Integer.IsEqual(Container($PARAM[grouplistid]).NumItems,0) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),System.CurrentControlID)</param>
                 </include>
+            </control>
+
+            <control type="grouplist" id="$PARAM[grouplistid]">
+                <hitrect x="0" y="0" w="0" h="0" />
+                <height>80</height>
+                <orientation>horizontal</orientation>
+                <itemgap>10</itemgap>
+                <centertop>70</centertop>
+                <visible>$PARAM[visible]</visible>
 
                 <!-- Star Rating -->
                 <include content="Info_Line_StarRating" condition="$PARAM[starrating]">
@@ -1985,7 +2022,7 @@
     </include>
 
     <include name="Info_Panel_Dimensions_FullSize">
-        <height>420</height>
+        <height>520</height>
         <top>view_pad</top>
     </include>
 
@@ -2003,7 +2040,7 @@
     <include name="Info_Panel">
         <param name="container" />
         <param name="adapative">false</param>
-        <param name="plotheight">160</param>
+        <param name="plotheight">140</param>
         <param name="plotwidth">info_plot_w</param>
         <param name="colordiffuse">main_fg</param>
         <param name="ratings">true</param>
@@ -2048,7 +2085,7 @@
                     <!-- InfoLine -->
                     <control type="group">
                         <left>40</left>
-                        <height>50</height>
+                        <height>75</height>
                         <visible>$PARAM[details]</visible>
                         <include>$PARAM[details_include]</include>
                         <include content="Info_Line">
@@ -2074,7 +2111,7 @@
 
                     <control type="group">
                         <left>40</left>
-                        <top>12</top>
+                        <top>10</top>
                         <left>0</left>
                         <height>40</height>
                         <visible>$PARAM[ratings]</visible>
