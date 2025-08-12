@@ -3155,3 +3155,11 @@ msgstr ""
 msgctxt "#32084"
 msgid "Codecs & PPI"
 msgstr ""
+
+msgctxt "#32085"
+msgid "Optional"
+msgstr ""
+
+msgctxt "#32086"
+msgid "Two-row information bar"
+msgstr ""

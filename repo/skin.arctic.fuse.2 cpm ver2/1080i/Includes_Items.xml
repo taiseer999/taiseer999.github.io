@@ -2769,12 +2769,12 @@
             <label>$LOCALIZE[32076]</label>
             <onclick>Skin.ToggleSetting(Filename.PPI)</onclick>
             <selected>Skin.HasSetting(Filename.PPI)</selected>
-            <visible></visible>
+            <visible>Skin.HasSetting(ppi.modernMode)</visible>
         </include>
         <include content="Settings_Label">
             <param name="id">8010</param>
             <param name="dialog">true</param>
-            <label>$LOCALIZE[32080]</label>
+            <label>$LOCALIZE[32085]</label>
         </include>
         <include content="Settings_Button">
             <param name="dialog">true</param>
@@ -2783,6 +2783,14 @@
             <label>$LOCALIZE[32081]</label>
             <onclick>Skin.ToggleSetting(Filename.DialogSelect)</onclick>
             <selected>Skin.HasSetting(Filename.DialogSelect)</selected>
+        </include>
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">8012</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[32086]</label>
+            <onclick>Skin.ToggleSetting(InfoBar.TwoRow)</onclick>
+            <selected>Skin.HasSetting(InfoBar.TwoRow)</selected>
         </include>
     </include>
 
