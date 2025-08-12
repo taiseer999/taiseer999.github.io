@@ -2040,7 +2040,7 @@
     <include name="Info_Panel">
         <param name="container" />
         <param name="adapative">false</param>
-        <param name="plotheight">140</param>
+        <param name="plotheight">135</param>
         <param name="plotwidth">info_plot_w</param>
         <param name="colordiffuse">main_fg</param>
         <param name="ratings">true</param>
@@ -2085,7 +2085,7 @@
                     <!-- InfoLine -->
                     <control type="group">
                         <left>40</left>
-                        <height>75</height>
+                        <height>80</height>
                         <visible>$PARAM[details]</visible>
                         <include>$PARAM[details_include]</include>
                         <include content="Info_Line">

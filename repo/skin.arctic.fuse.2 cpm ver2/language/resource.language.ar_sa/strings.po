@@ -232,7 +232,7 @@ msgstr "لون واحد"
 #: /1080i/SkinSettings.xml
 msgctxt "#31044"
 msgid "Viewtypes"
-msgstr "طرق العرض"
+msgstr "طريقة عرض القوائم"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31045"
@@ -566,7 +566,7 @@ msgstr "مربعة-أفقية"
 #: /1080i/SkinSettings.xml
 msgctxt "#31114"
 msgid "Hubs"
-msgstr  "الفئات"
+msgstr  "الصفحات"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31115"
@@ -1517,8 +1517,8 @@ msgstr "مربع"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31321"
-msgid "Configure viewtypes"
-msgstr "ضبط طريقة عرض الاقسام"
+msgid "Select viewtypes"
+msgstr "ضبط طريقة عرض القوائم"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31322"
@@ -1784,7 +1784,7 @@ msgstr "تثبيت من zip"
 #: /1080i/SkinSettings.xml
 msgctxt "#31376"
 msgid "Reset discover search history"
-msgstr "مسح سجل البخث"		 
+msgstr "مسح سجل البحث"		 
 
 #: /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31377"
@@ -1793,7 +1793,7 @@ msgstr "النافذة القادمة"
 
 msgctxt "#31378"
 msgid "Foreign"
-msgstr "غير معروف"
+msgstr "اجنبي"
 
 #: /1080i/Custom_1116_Dialog_Shortcuts.xml
 msgctxt "#31379"
