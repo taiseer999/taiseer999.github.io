@@ -44,7 +44,3 @@ def enabledCheck(module_name):
 		log_utils.error()
 		return True
 
-def dmm_cache():
-	from .providers.torrents.dmm import DMMCache
-	return DMMCache()
-

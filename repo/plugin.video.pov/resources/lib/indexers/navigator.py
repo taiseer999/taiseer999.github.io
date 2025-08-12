@@ -49,6 +49,7 @@ class Navigator:
 		if 'AllDebrid' in debrids: self.alldebrid()
 		if 'TorBox' in debrids: self.torbox()
 		if 'Offcloud' in debrids: self.offcloud()
+		if 'Debrider' in debrids: self.debrider()
 		if 'EasyDebrid' in debrids: self.easydebrid()
 		self._end_directory()
 
@@ -105,6 +106,13 @@ class Navigator:
 		ed_str, cloud_str, ai_str = 'EasyDebrid', ls(32496), ls(32494)
 		n_ins = _in_str % (ed_str.upper(), '')
 		self._add_item({'mode': 'easydebrid.show_account_info',                    'name': ai_str    }, 'easydebrid.png', n_ins, False)
+
+	def debrider(self):
+		db_str, cloud_str, ai_str = 'Debrider', ls(32496), ls(32494)
+		clca_str, n_ins = ls(32497) % db_str, _in_str % (db_str.upper(), '')
+		self._add_item({'mode': 'debrider.db_torrent_cloud',        'name': cloud_str}, 'debrider.png', n_ins)
+		self._add_item({'mode': 'debrider.show_account_info',       'name': ai_str   }, 'debrider.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'db_cloud', 'name': clca_str }, 'debrider.png', n_ins, False)
 
 	def favourites(self):
 		fav_str = ls(32453)
@@ -235,8 +243,8 @@ class Navigator:
 		settings_str, changelog_log_viewer_str = ls(32247), '%s & %s' % (changelog_str, log_utils)
 		shortcut_manager_str, source_manager_str = '%s %s' % (short_str, manager_str), '%s %s' % (source_str, manager_str)
 		n_ins, l_str = _in_str % (settings_str.upper(), ''), _in_str % ('LINKS', '')
-		self._add_item({'mode': 'open_settings',                 'name': pov_str                 }, 'pov.png', n_ins, False)
-		self._add_item({'mode': 'open_settings', 'query': '6.0', 'name': ms_str                  }, 'settings.png', n_ins, False)
+		self._add_item({'mode': 'open_settings', 'query': '4.0', 'name': pov_str                 }, 'pov.png', n_ins, False)
+		self._add_item({'mode': 'open_settings', 'query': '0.0', 'name': ms_str                  }, 'settings.png', n_ins, False)
 		self._add_item({'mode': 'navigator.clear_info',          'name': clean_str               }, 'settings.png', n_ins)
 		self._add_item({'mode': 'navigator.log_utils',           'name': changelog_log_viewer_str}, 'settings.png', n_ins)
 		self._add_item({'mode': 'navigator.set_view_modes',      'name': views_str               }, 'settings.png', n_ins)
@@ -257,7 +265,7 @@ class Navigator:
 		clear_list_str, clear_trakt_str = clca_str % ls(32501), clca_str % ls(32037)
 		clear_imdb_str, clint_str, clext_str = clca_str % ls(32064), clca_str % ls(32096), clca_str % ls(32118)
 		clear_rd_str, clear_pm_str, clear_ad_str = clca_str % ls(32054), clca_str % ls(32061), clca_str % ls(32063)
-		clear_oc_str, clear_tb_str, clear_ed_str = clca_str % 'Offcloud', clca_str % 'TorBox', clca_str % 'EasyDebrid'
+		clear_oc_str, clear_tb_str, clear_db_str = clca_str % 'Offcloud', clca_str % 'TorBox', clca_str % 'Debrider'
 		clear_all_upper = '[B]%s[/B]' % clear_all_str.upper()
 		n_ins, clean_ins = _in_str % (cache_str.upper(), ''), _in_str % (clean_str.upper(), '')
 		self._add_item({'mode': 'clean_settings',                            'name': clean_all_str      }, 'tools.png', clean_ins, False)
@@ -276,7 +284,7 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'ad_cloud',          'name': clear_ad_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud',          'name': clear_oc_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',          'name': clear_tb_str       }, 'tools.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'ed_cloud',          'name': clear_ed_str       }, 'tools.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'db_cloud',          'name': clear_db_str       }, 'tools.png', n_ins, False)
 		self._end_directory()
 
 	def set_view_modes(self):

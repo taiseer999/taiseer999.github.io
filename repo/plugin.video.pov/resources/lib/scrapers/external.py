@@ -16,7 +16,6 @@ pack_display, format_line, total_format = '%s (%s)', '%s[CR]%s[CR]%s', '[COLOR %
 int_format, ext_format = '[COLOR %s][B]Int: [/B][/COLOR]%s', '[COLOR %s][B]Ext: [/B][/COLOR]%s'
 ext_scr_format, unfinshed_import_format = '[COLOR %s][B]%s[/B][/COLOR]', '[COLOR red]+%s[/COLOR]'
 diag_format, resolutions = '4K: %s | 1080p: %s | 720p: %s | SD: %s | %s: %s', '4K 1080p 720p SD'
-cached_debrids = {'Real-Debrid', 'AllDebrid', 'tidebrid', 'mfdebrid', 'cmdebrid'}
 season_display, show_display = ls(32537), ls(32089)
 pack_check = (season_display, show_display)
 
@@ -30,7 +29,7 @@ class source:
 		self.disabled_ignored, self.progress_dialog = disabled_ignored, progress_dialog
 		self.internal_activated, self.internal_prescraped = len(self.internal_scrapers) > 0, len(self.prescrape_sources) > 0
 		self.processed_prescrape, self.threads_completed = False, False
-		self.sources, self.cached_sources = [], []
+		self.sources = []
 		self.processed_internal_scrapers, self.final_sources = [], []
 		self.processed_internal_scrapers_append = self.processed_internal_scrapers.append
 		self.sleep_time = display_sleep_time()
@@ -50,7 +49,7 @@ class source:
 				progressDialogBG.create('POV', 'POV loading...')
 			else: self._make_progress_dialog()
 		Sources.sources_total, Sources.resolutions = self.sources_total, self.resolutions
-		Sources.hostDict, Sources.sources, Sources.cached_sources = self.hostDict, self.sources, self.cached_sources
+		Sources.hostDict, Sources.sources = self.hostDict, self.sources
 		threads = []
 		for provider, module, *pack in self.source_dict:
 			if info['media_type'] == 'movie':
@@ -65,8 +64,6 @@ class source:
 			threads.append(obj)
 		self.wait(threads)
 		try:
-			self.cached_sources.sort(key=lambda k: '+' in k.get('cache', ''), reverse=True)
-			self.cached_sources = self.process_duplicates(self.cached_sources)
 			self.sources = self.process_duplicates(self.sources)
 			torrent_sources = [i for i in self.sources if 'hash' in i]
 			result_hashes = list({i['hash'] for i in torrent_sources})
@@ -74,17 +71,16 @@ class source:
 			threads = []
 			for item in self.debrid_torrents:
 				if not (args := next((i for i in debrid_list if i[0] == item), None)): continue
-				obj = DebridCheck(*args)
+				obj = DebridCheck(*args, meta=self.meta)
 				obj.thread.start()
 				threads.append(obj)
 			self.wait(threads, debrid_check=True)
 			for item in threads:
 				name, hashes = item.name, item.cached_list
-				if name in cached_debrids:
-					self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in self.cached_sources])
+				self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes])
+				if name in ('Real-Debrid', 'AllDebrid'):
+					self.final_sources.extend([{**i, 'cache_provider': 'Unchecked %s' % name, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
 				else:
-					self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes])
-				if self.display_uncached_torrents or get_property('fs_filterless_search') == 'true':
 					self.final_sources.extend([{**i, 'cache_provider': 'Uncached %s' % name, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
 			hoster_sources = [i for i in self.sources if not 'hash' in i]
 			result_hosters = list({i['source'].lower() for i in hoster_sources})
@@ -199,7 +195,7 @@ class source:
 class Sources:
 	scrape_provider = 'external'
 	hostDict = {}
-	sources, cached_sources = [], []
+	sources = []
 	sources_total, resolutions = {'total': 0}, dict.fromkeys(resolutions.split(), 0)
 
 	def __init__(self, info, meta):
@@ -230,12 +226,10 @@ class Sources:
 		if sources is None:
 			sources = module().sources(self.data, self.hostDict)
 			sources = self.process_sources(provider, sources)
-			if not provider in cached_debrids:
-				_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
+			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
 		if sources:
 			self.process_quality_count(sources)
-			if provider in cached_debrids: self.cached_sources.extend(sources)
-			else: self.sources.extend(sources)
+			self.sources.extend(sources)
 		self.completed = True
 
 	def get_episode_source(self, provider, module, pack):
@@ -255,14 +249,12 @@ class Sources:
 				expiry_hours = self.single_expiry
 				sources = module().sources(self.data, self.hostDict)
 			sources = self.process_sources(provider, sources)
-			if not provider in cached_debrids:
-				_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check, sources, expiry_hours)
+			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, s_check, e_check, sources, expiry_hours)
 		if sources:
 			if pack == season_display: sources = [i for i in sources if not 'episode_start' in i or i['episode_start'] <= self.episode <= i['episode_end']]
 			elif pack == show_display: sources = [i for i in sources if i['last_season'] >= self.season]
 			self.process_quality_count(sources)
-			if provider in cached_debrids: self.cached_sources.extend(sources)
-			else: self.sources.extend(sources)
+			self.sources.extend(sources)
 		self.completed = True
 
 	def process_sources(self, provider, sources):
@@ -280,14 +272,13 @@ class Sources:
 					else: quality, extraInfo = get_file_info(url=i_get('url'))
 					try:
 						size = i_get('size')
-						if 'package' in i and provider not in ('torrentio', 'tidebrid', 'torrentsdb', 'torz'):
+						if 'package' in i and provider not in ('torrentio', 'torrentsdb', 'torz'):
 							if i_get('package') == 'season': divider = self.season_divider
 							else: divider = self.show_divider
 							size = float(size) / divider
 							size_label = '%.2f GB' % size
 						else: size_label = '%.2f GB' % size
 					except: pass
-					if '+' in i_get('provider', ''): provider = i['provider']
 					i.update({'provider': provider, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
 								'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
 				except: pass

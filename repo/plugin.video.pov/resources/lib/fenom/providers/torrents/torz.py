@@ -26,7 +26,7 @@ class source:
 	def sources(self, data, hostDict):
 		sources = []
 		if not data: return sources
-		append = sources.append
+		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -72,13 +72,10 @@ class source:
 				try:
 					size = re.findall(r'((?:\d+\,\d+\.\d+|\d+\.\d+|\d+\,\d+|\d+)\s*(?:GB|GiB|Gb|MB|MiB|Mb))', file_info)
 					package = 'season' if not episode_title is None and len(size) > 1 else None
-					size = size[0]
+					size = size[0] if size else f"{float(file['behaviorHints']['videoSize']) / 1073741824:.2f} GB"
 					dsize, isize = source_utils._size(size)
 					info.insert(0, isize)
-				except:
-					size = f"{float(file['behaviorHints']['videoSize']) / 1073741824:.2f} GB"
-					package = None
-					dsize = 0
+				except: dsize = 0
 				info = ' | '.join(info)
 
 				item = {
@@ -89,7 +86,7 @@ class source:
 				if package: item['package'] = package
 				# if package == 'show': item.update({'last_season': last_season})
 				# if episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
-				append(item)
+				sources_append(item)
 			except:
 				source_utils.scraper_error('TORZ')
 		return sources

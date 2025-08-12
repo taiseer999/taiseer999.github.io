@@ -1,5 +1,5 @@
 from threading import Thread
-from apis.torbox_api import TorBoxAPI
+from apis.torbox_api import TorBoxAPI as Debrid
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
 from modules.settings import enabled_debrids_check, filter_by_name
@@ -8,15 +8,12 @@ from modules.settings import enabled_debrids_check, filter_by_name
 internal_results, check_title, clean_title = source_utils.internal_results, source_utils.check_title, source_utils.clean_title
 get_file_info, release_info_format, seas_ep_filter = source_utils.get_file_info, source_utils.release_info_format, source_utils.seas_ep_filter
 extensions = source_utils.supported_video_extensions()
-TorBox = TorBoxAPI()
 
-class source:
-	def __init__(self):
-		self.scrape_provider = 'tb_cloud'
-		self.sources = []
-
+class source(Debrid):
+	scrape_provider = 'tb_cloud'
 	def results(self, info):
 		try:
+			self.sources = []
 			if not enabled_debrids_check('tb'): return internal_results(self.scrape_provider, self.sources)
 			self.scrape_results = []
 			title_filter = filter_by_name(self.scrape_provider)
@@ -25,9 +22,9 @@ class source:
 			if self.media_type == 'episode': self.seas_ep_query_list = source_utils.seas_ep_query_list(self.season, self.episode)
 			self.folder_query, self.year_query_list = clean_title(normalize(title)), tuple(map(str, range(self.year - 1, self.year + 2)))
 			threads = (
-				Thread(target=self._scrape_cloud, args=(TorBox.user_cloud, 'torent')),
-				Thread(target=self._scrape_cloud, args=(TorBox.user_cloud_usenet, 'usenet')),
-				Thread(target=self._scrape_cloud, args=(TorBox.user_cloud_webdl, 'webdl'))
+				Thread(target=self._scrape_cloud, args=(self.user_cloud, 'torent')),
+				Thread(target=self._scrape_cloud, args=(self.user_cloud_usenet, 'usenet')),
+				Thread(target=self._scrape_cloud, args=(self.user_cloud_webdl, 'webdl'))
 			)
 			[i.start() for i in threads]
 			[i.join() for i in threads]
@@ -38,8 +35,8 @@ class source:
 					try:
 						file_name = item['short_name']
 						if title_filter and not check_title(title, file_name, self.aliases, self.year, self.season, self.episode): continue
-						file_dl, size = item['url'], round(float(int(item['size']))/1073741824, 2)
 						direct_debrid_link, URLName = item['mediatype'], clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
+						file_dl, size = item['url'], round(float(item['size'])/1073741824, 2)
 						video_quality, details = get_file_info(name_info=release_info_format(file_name))
 						source_item = {'name': file_name, 'title': file_name, 'URLName': URLName, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size,
 									'extraInfo': details, 'url_dl': file_dl, 'id': file_dl, 'downloads': False, 'direct': True, 'source': self.scrape_provider,
@@ -60,21 +57,16 @@ class source:
 			try: files = [
 				{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': mediatype}
 				for i in function(check_cache=False) if i['download_finished'] and i['files']
-				for file in i['files'] if file['short_name'].lower().endswith(tuple(extensions))
+				for file in i['files']
 			]
-			except: pass
-			if not files: return
+			except: return files
 			for file in files:
 				try:
+					if not file['short_name'].lower().endswith(tuple(extensions)): continue
 					formalized = normalize(file['folder_name'])
 					foldername = clean_title(formalized)
 					normalized = normalize(file['short_name'])
 					filename = clean_title(normalized)
-					if not (
-						self.folder_query in filename
-						or # because usenet obfuscation
-						self.folder_query in foldername
-					): continue
 					if self.media_type == 'movie':
 						if not (
 							any(x in filename for x in self.year_query_list)
@@ -86,6 +78,7 @@ class source:
 						or # because usenet obfuscation
 						seas_ep_filter(self.season, self.episode, formalized)
 					): continue
+					if not (self.folder_query in filename or self.folder_query in foldername): continue
 					results_append(file)
 				except: pass
 		except: pass

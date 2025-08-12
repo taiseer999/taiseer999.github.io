@@ -34,7 +34,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.autoscrape_next_episode = False
 		self.autoscrape_nextep = settings.autoscrape_next_episode()
 		self.volume_check = get_setting('volumecheck.enabled', 'false') == 'true'
-		self.stinger_check = int(get_setting('stingers.threshold', '10')) * 60
+		self.stinger_check = int(get_setting('stingers.threshold', '30'))
 
 	def run(self, url=None, media_type=None):
 		if not url: return
@@ -164,9 +164,8 @@ class POVPlayer(kodi_utils.xbmc_player):
 				kodi_utils.sleep(1000)
 				self.total_time, self.curr_time = self.getTotalTime(), self.getTime()
 				self.current_point = round(float(self.curr_time/self.total_time * 100), 1)
-				self.is_last_chapter = int(kodi_utils.get_infolabel('Player.Chapter')) == int(kodi_utils.get_infolabel('Player.ChapterCount'))
-				if self.media_type == 'movie' and self.is_last_chapter and not self.stingers_checked:
-					if self.curr_time > (self.total_time - self.stinger_check): self.run_stingers()
+				if self.media_type == 'movie' and not self.stingers_checked:
+					if self.curr_time > self.stinger_check: self.run_stingers()
 				if self.current_point >= self.set_watched and not self.media_marked:
 					self.media_watched_marker()
 				if self.play_random_continual:

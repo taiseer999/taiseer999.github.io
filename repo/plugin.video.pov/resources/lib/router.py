@@ -228,6 +228,9 @@ class Router:
 		elif 'easydebrid' in mode:
 			from indexers.easydebrid import Indexer
 			Indexer().run(params)
+		elif 'debrider' in mode:
+			from indexers.debrider import Indexer
+			Indexer().run(params)
 		elif '_settings' in mode:
 			if mode == 'open_settings':
 				from modules.kodi_utils import open_settings

@@ -172,7 +172,7 @@ def extras_enabled_menus():
 	return [int(i) for i in setting.split(',')]
 
 def check_prescrape_sources(scraper):
-	if scraper in ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud'): return get_setting('check.%s' % scraper) == 'true'
+	if scraper in ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud'): return get_setting('check.%s' % scraper) == 'true'
 	if get_setting('check.%s' % scraper) == 'true' and get_setting('auto_play') != 'true': return True
 	else: return False
 
@@ -197,7 +197,7 @@ def results_sort_order():
 			)[int(get_setting('results.sort_order', '1'))]
 
 def active_internal_scrapers():
-	clouds = [('rd', 'provider.rd_cloud'), ('pm', 'provider.pm_cloud'), ('ad', 'provider.ad_cloud'), ('oc', 'provider.oc_cloud'), ('tb', 'provider.tb_cloud')]
+	clouds = [('rd', 'provider.rd_cloud'), ('pm', 'provider.pm_cloud'), ('ad', 'provider.ad_cloud'), ('oc', 'provider.oc_cloud'), ('tb', 'provider.tb_cloud'), ('db', 'provider.db_cloud')]
 	settings = ['provider.external', 'provider.easynews', 'provider.folders']
 	settings_append = settings.append
 	for item in clouds:
@@ -212,14 +212,18 @@ def provider_sort_ranks():
 	ad_priority = int(get_setting('ad.priority', '9'))
 	oc_priority = int(get_setting('oc.priority', '9'))
 	tb_priority = int(get_setting('tb.priority', '9'))
+	db_priority = int(get_setting('db.priority', '9'))
 	ed_priority = int(get_setting('ed.priority', '9'))
 	rd_priority = int(get_setting('rd.priority', '10'))
-	return {'real-debrid': rd_priority, 'premiumize.me': pm_priority, 'alldebrid': ad_priority, 'offcloud': oc_priority, 'torbox': tb_priority, 'easydebrid': ed_priority,
-			'easynews': en_priority, 'rd_cloud': rd_priority, 'pm_cloud': pm_priority, 'ad_cloud': ad_priority, 'oc_cloud': oc_priority, 'tb_cloud': tb_priority, 'folders': 0}
+	return {'real-debrid': rd_priority, 'rd_cloud': rd_priority, 'premiumize.me': pm_priority, 'pm_cloud': pm_priority,
+			'alldebrid': ad_priority, 'ad_cloud': ad_priority, 'offcloud': oc_priority, 'oc_cloud': oc_priority,
+			'torbox': tb_priority, 'tb_cloud': tb_priority, 'debrider': db_priority, 'db_cloud': db_priority,
+			'easydebrid': ed_priority, 'easynews': en_priority, 'folders': 0}
 
 def sort_to_top(provider):
-	return get_setting({'folders': 'results.sort_folders_first', 'rd_cloud': 'results.sort_rdcloud_first', 'pm_cloud': 'results.sort_pmcloud_first',
-						'ad_cloud': 'results.sort_adcloud_first', 'oc_cloud': 'results.sort_occloud_first', 'tb_cloud': 'results.sort_tbcloud_first'}[provider]) == 'true'
+	return get_setting({'rd_cloud': 'results.sort_rdcloud_first', 'pm_cloud': 'results.sort_pmcloud_first', 'ad_cloud': 'results.sort_adcloud_first', 
+						'oc_cloud': 'results.sort_occloud_first', 'tb_cloud': 'results.sort_tbcloud_first', 'db_cloud': 'results.sort_dbcloud_first',
+						'folders': 'results.sort_folders_first'}[provider]) == 'true'
 
 def auto_resume(media_type):
 	auto_resume = get_setting('auto_resume_%s' % media_type)
@@ -270,7 +274,8 @@ def scraping_settings():
 	highlight_type = int(get_setting('highlight.type', '0'))
 	hoster_highlight, torrent_highlight = '', ''
 	easynews_highlight, debrid_cloud_highlight, folders_highlight = '', '', ''
-	rd_highlight, pm_highlight, ad_highlight, oc_highlight, tb_highlight, ed_highlight = '', '', '', '', '', ''
+	rd_highlight, pm_highlight, ad_highlight, oc_highlight = '', '', '', ''
+	tb_highlight, ed_highlight, db_highlight = '', '', ''
 	highlight_4K, highlight_1080P, highlight_720P, highlight_SD = '', '', '', ''
 	if highlight_type in (0, 1):
 		easynews_highlight = provider_color('easynews', 'limegreen')
@@ -285,16 +290,19 @@ def scraping_settings():
 			ad_highlight = provider_color('ad', 'goldenrod')
 			oc_highlight = provider_color('oc', 'dodgerblue')
 			tb_highlight = provider_color('tb', 'darkseagreen')
+			db_highlight = provider_color('db', 'gold')
 			ed_highlight = provider_color('ed', 'cornflowerblue')
 	else:
 		highlight_4K = get_setting('scraper_4k_highlight', 'fuchsia')
 		highlight_1080P = get_setting('scraper_1080p_highlight', 'lawngreen')
 		highlight_720P = get_setting('scraper_720p_highlight', 'gold')
 		highlight_SD = get_setting('scraper_SD_highlight', 'lightsaltegray')
-	return {'uncached': 'dimgray', 'highlight_type': highlight_type, 'hoster_highlight': hoster_highlight, 'torrent_highlight': torrent_highlight, 'folders': folders_highlight,
-			'real-debrid': rd_highlight, 'premiumize': pm_highlight, 'alldebrid': ad_highlight, 'offcloud': oc_highlight, 'torbox': tb_highlight, 'easydebrid': ed_highlight,
-			'rd_cloud': debrid_cloud_highlight, 'pm_cloud': debrid_cloud_highlight, 'ad_cloud': debrid_cloud_highlight, 'oc_cloud': debrid_cloud_highlight, 'tb_cloud': debrid_cloud_highlight,
-			'easynews': easynews_highlight, '4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD, 'cam': highlight_SD, 'tele': highlight_SD, 'scr': highlight_SD}
+	return {'uncached': 'dimgray', 'highlight_type': highlight_type, 'hoster_highlight': hoster_highlight, 'torrent_highlight': torrent_highlight,
+			'real-debrid': rd_highlight, 'rd_cloud': debrid_cloud_highlight, 'premiumize': pm_highlight, 'pm_cloud': debrid_cloud_highlight,
+			'alldebrid': ad_highlight, 'ad_cloud': debrid_cloud_highlight, 'offcloud': oc_highlight, 'oc_cloud': debrid_cloud_highlight,
+			'torbox': tb_highlight, 'tb_cloud': debrid_cloud_highlight, 'debrider': db_highlight, 'db_cloud': debrid_cloud_highlight,
+			'easydebrid': ed_highlight, 'easynews': easynews_highlight, '4k': highlight_4K, '1080p': highlight_1080P,
+			'720p': highlight_720P, 'sd': highlight_SD, 'cam': highlight_SD, 'tele': highlight_SD, 'scr': highlight_SD, 'folders': folders_highlight}
 
 def get_rpdb_data():
 	return get_setting('get_rpdb_data') == 'true', get_setting('get_rpdb_data_series') == 'true'
@@ -317,8 +325,7 @@ def tmdb_api_key():
 	return get_setting('tmdb_api')
 
 def get_resolution():
-	return (
-			{'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profile': 'w185'},
+	return ({'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profile': 'w185'},
 			{'poster': 'w342', 'fanart': 'w780', 'still': 'w300', 'profile': 'w342'},
 			{'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632'},
 			{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original'}

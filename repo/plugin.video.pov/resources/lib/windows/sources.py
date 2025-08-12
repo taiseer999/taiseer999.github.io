@@ -15,12 +15,14 @@ info_icons_dict, info_quality_dict = {
 	'premiumize': translate_path(media_folder % 'media/premiumize.png'),
 	'offcloud': translate_path(media_folder % 'media/offcloud.png'),
 	'torbox': translate_path(media_folder % 'media/torbox.png'),
+	'debrider': translate_path(media_folder % 'media/debrider.png'),
 	'easydebrid': translate_path(media_folder % 'media/easydebrid.png'),
 	'ad_cloud': translate_path(media_folder % 'media/alldebrid.png'),
 	'rd_cloud': translate_path(media_folder % 'media/realdebrid.png'),
 	'pm_cloud': translate_path(media_folder % 'media/premiumize.png'),
 	'oc_cloud': translate_path(media_folder % 'media/offcloud.png'),
-	'tb_cloud': translate_path(media_folder % 'media/torbox.png')
+	'tb_cloud': translate_path(media_folder % 'media/torbox.png'),
+	'db_cloud': translate_path(media_folder % 'media/debrider.png')
 }, {
 	'4k': translate_path(media_folder % 'skins/Default/media/flags/4k.png'),
 	'1080p': translate_path(media_folder % 'skins/Default/media/flags/1080p.png'),
@@ -143,7 +145,7 @@ class SourceResults(BaseDialog):
 								if highlight_type == 0: key = 'torrent_highlight'
 								elif highlight_type == 1: key = provider_lower
 								else: key = basic_quality
-								status = 'UNCHECKED' if source_site.endswith('DEBRID') else 'CACHED'
+								status = 'UNCHECKED' if 'Unchecked' in item['cache_provider'] else 'CACHED'
 								set_property('tikiskins.source_type',
 									'%s [B]%s[/B]' % (status, upper(get('package')))
 									if pack else

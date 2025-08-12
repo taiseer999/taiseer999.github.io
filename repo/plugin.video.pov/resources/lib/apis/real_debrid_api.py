@@ -209,12 +209,12 @@ class RealDebridAPI:
 
 	def downloads(self):
 		string = 'pov_rd_downloads'
-		url = 'downloads'
+		url = 'downloads?limit=500'
 		return cache_object(self._get, string, url, False, 0.5)
 
 	def user_cloud(self):
 		string = 'pov_rd_user_cloud'
-		url = 'torrents'
+		url = 'torrents?limit=500'
 		return cache_object(self._get, string, url, False, 0.5)
 
 	def user_cloud_info(self, file_id):

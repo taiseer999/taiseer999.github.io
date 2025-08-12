@@ -104,22 +104,6 @@ class source:
 				source_utils.scraper_error('DMM')
 
 
-class DMMCache:
-	def __init__(self):
-		self.availability_check_link = 'https://debridmediamanager.com/api/availability/check'
-
-	def check_cache(self, unchecked_hashes_chunk, imdb): # DMM API Allows max 100 hashes per request.
-		dmmProblemKey, solution = get_secret()
-		data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb}
-		data.update({'hashes': [i for i in unchecked_hashes_chunk if len(i) == 40]})
-		try:
-			results = requests.post(self.availability_check_link, json=data, timeout=6)
-			available_hashes = results.json()['available']
-			files = {file['hash']: file['files'] for file in available_hashes if 'hash' in file}
-		except: files = {}
-		return files
-
-
 def get_secret():
 	def calc_value_alg(t, n, const):
 		temp = t ^ n

@@ -433,23 +433,3 @@ def get_cache_expiry(media_type, meta, season):
 	except: single_expiry, season_expiry, show_expiry = 24*3, 24*3, 24*10
 	return single_expiry, season_expiry, show_expiry
 
-def source_warning(func):
-	def wrapper(*args, **kwargs):
-		text = """
-  [COLOR dodgerblue][B]After Real Debrid/All Debrid Authorization[/B][/COLOR]
-- Enable one or more of torrentio debrid+/mediafusion debrid+/comet debrid+.
-
-  If you only have Real Debrid/All Debrid, disable all other sources OR enable
-  "Display Uncached Torrents" to manually add those to cloud to view from there.
-
-
-  [COLOR dodgerblue][B]Real Debrid/All Debrid cached sources[/B][/COLOR]
-- Only the Sources in this settings category will return results, two modes are available.
-  1. Select Real-Debrid/All Debrid setting.  The cached status of torrents rely on the source
-  internal cache, so the chance of the result being cached is high.
-  2. Select Direct Torrent setting.  The cached status of direct torrents is unchecked.
-"""
-		kodi_utils.show_text(kodi_utils.get_addoninfo('name').upper(), text=text)
-		return func(*args, **kwargs)
-	return wrapper
-

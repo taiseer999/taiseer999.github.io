@@ -26,8 +26,8 @@ resolve_debrid, resolve_internal_sources = debrid.resolve_debrid, debrid.resolve
 resolve_cached_torrents, resolve_cached_nzbs = debrid.resolve_cached_torrents, debrid.resolve_cached_nzbs
 manual_add_magnet_to_cloud, manual_add_nzb_to_cloud = debrid.manual_add_magnet_to_cloud, debrid.manual_add_nzb_to_cloud
 quality_ranks = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}
-cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
-default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'folders')
+cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
+default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud', 'folders')
 av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]AV1[/B]', '[B]HEVC[/B]', '[B]HDR[/B]', '[B]D/VISION[/B]'
 dialog_format, remaining_format = '[COLOR %s][B]%s[/B][/COLOR] 4K: %s | 1080p: %s | 720p: %s | SD: %s | Total: %s', ls(32676)
 
@@ -197,8 +197,7 @@ class Sources():
 		for item in results: _add_keys(item)
 		results.sort(key=self.sort_function)
 		if self.priority_language: results = self._sort_language_to_top(results)
-		if self.display_uncached_torrents or get_property('fs_filterless_search') == 'true':
-			results = self._sort_uncached_torrents(results)
+		results = self._sort_uncached_torrents(results)
 		clear_property('fs_filterless_search')
 		return results
 
@@ -462,9 +461,14 @@ class Sources():
 		return results
 
 	def _sort_uncached_torrents(self, results):
-		uncached = [i for i in results if 'Uncached' in i.get('cache_provider', '')]
-		cached = [i for i in results if not i in uncached]
-		return cached + uncached
+		results.sort(key=lambda k: 'Unchecked' in k.get('cache_provider', ''), reverse=False)
+		results.sort(key=lambda k: 'Uncached' in k.get('cache_provider', ''), reverse=False)
+		if self.display_uncached_torrents or get_property('fs_filterless_search') == 'true':
+			return results
+#		uncached = [i for i in results if 'Uncached' in i.get('cache_provider', '')]
+#		cached = [i for i in results if not i in uncached]
+#		return cached + uncached
+		return [i for i in results if not 'Uncached' in i.get('cache_provider', '')]
 
 	def _special_filter(self, results, key, enable_setting):
 		if enable_setting == 1:
@@ -514,6 +518,7 @@ class Sources():
 
 	def debridPacks(self, debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
 		show_busy_dialog()
+		debrid_provider = debrid_provider.replace('Unchecked ', '')
 		debrid_function = import_debrid(debrid_provider)
 		try: debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
 		except: debrid_files = None
@@ -535,7 +540,7 @@ class Sources():
 			link = debrid_function().unrestrict_link(url_dl)
 		elif debrid_provider == 'Premiumize.me':
 			link = debrid_function().add_headers_to_url(url_dl)
-		elif debrid_provider in ('Offcloud', 'EasyDebrid'):
+		elif debrid_provider in ('Offcloud', 'EasyDebrid', 'Debrider'):
 			link = url_dl
 		name = chosen_result['filename']
 		return POVPlayer().run(link, 'video')
@@ -585,15 +590,14 @@ class Sources():
 				cache_provider = item['cache_provider']
 				if meta['media_type'] == 'movie': title, season, episode = self._get_search_title(meta), None, None
 				else: title, season, episode = meta['ep_name'], meta.get('custom_season') or meta.get('season'), meta.get('custom_episode') or meta.get('episode')
-				if cache_provider in ('Real-Debrid', 'Premiumize.me', 'AllDebrid', 'Offcloud', 'TorBox', 'EasyDebrid'):
+				if next((True for i in debrid_list if cache_provider in (i[0], f"Unchecked {i[0]}")), False):
 					if item['url'].startswith('magnet'):
-						url = resolve_cached_torrents(cache_provider, item['url'], item['hash'], title, season, episode)
+						url = resolve_cached_torrents(item['debrid'], item['url'], item['hash'], title, season, episode)
 					else:
-						url = resolve_cached_nzbs(cache_provider, item['url'], item['hash'], title, season, episode)
+						url = resolve_cached_nzbs(item['debrid'], item['url'], item['hash'], title, season, episode)
 					return url
 				if 'Uncached' in cache_provider:
 					if confirm_dialog(text=ls(32831) % item['debrid'].upper()):
-#						if not 'package' in item: title, season, episode  = None, None, None
 						if item['url'].startswith('magnet'):
 							manual_add_magnet_to_cloud({'provider': item['debrid'], 'magnet_url': item['url']})
 						else:

@@ -3,14 +3,13 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
-- RECOMMENDED: Clear External Scrapers Cache.
+- Minor fixes.
 - Added stremthru torz.
 - Change to automatically include uncached results when Scrape With All Filters Ignored.
 - Added During/After/Dual Credit Scene to Extras Plot label (if available).
 - Added Playback settings, Enable Credit Scene Notification (Movie Stingers).
 - Added TorBox settings, Filter User Search Services Only.
 - Added TorBox settings, Use Usenet Services/Add Resolved Usenet to Cloud.
-- Minor fixes.
 
   [COLOR dodgerblue][B]Version 5.07[/B][/COLOR]
 - Changed aiostreams to include comet, mediafusion, torrentsdb, stremthru torz p2p.

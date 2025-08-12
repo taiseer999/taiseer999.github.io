@@ -2,7 +2,6 @@ import requests, time
 from threading import Thread, Timer
 from windows import create_window
 from modules import kodi_utils, cache_utils
-from modules.source_utils import source_warning
 # logger = kodi_utils.logger
 
 quote, clear_cache = requests.utils.quote, cache_utils.clear_cache
@@ -22,7 +21,7 @@ def _make_progress_dialog(**kwargs):
 def authorize(service):
 	return {
 		'realdebrid': RealDebrid, 'premiumize': Premiumize, 'alldebrid': AllDebrid,
-		'easydebrid': EasyDebrid, 'torbox': TorBox, 'offcloud': Offcloud,
+		'easydebrid': EasyDebrid, 'debrider': Debrider, 'torbox': TorBox, 'offcloud': Offcloud,
 		'trakt': Trakt, 'mdblist': MDBList, 'tmdblist': TMDbList
 	}[service]().set_auth()
 
@@ -47,7 +46,6 @@ class RealDebrid:
 		data.update(response.json())
 		self.secret = data['client_secret']
 
-	@source_warning
 	def set_auth(self):
 		cls_name = 'Real Debrid'
 		if self.token:
@@ -171,7 +169,6 @@ class AllDebrid:
 		result = response.json()['data']
 		self.token = result.get('apikey', '')
 
-	@source_warning
 	def set_auth(self):
 		cls_name = self.__class__.__name__
 		if self.token:
@@ -223,7 +220,6 @@ class EasyDebrid:
 			if not confirm_dialog(): return
 			set_setting('ed.token', '')
 			set_setting('ed.account_id', '')
-			clear_cache('ed_cloud', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
 
 		api_key = kodi_utils.dialog.input('EasyDebrid API Key:')
@@ -234,6 +230,30 @@ class EasyDebrid:
 		customer = result['id']
 		set_setting('ed.account_id', str(customer))
 		set_setting('ed.token', api_key)
+		notification('Set %s Authorization' % cls_name)
+		return True
+
+class Debrider:
+	def base_url(self, path):
+		return 'https://debrider.app/api/v1/%s' % path
+
+	def set_auth(self):
+		cls_name = self.__class__.__name__
+		if get_setting('db.token'):
+			if not confirm_dialog(): return
+			set_setting('db.token', '')
+			set_setting('db.account_id', '')
+			clear_cache('db_cloud', silent=True)
+			return notification('Removed %s Authorization' % cls_name)
+
+		api_key = kodi_utils.dialog.input('Debrider API Key:')
+		if not api_key: return
+		headers = {'Authorization': 'Bearer %s' % api_key}
+		response = requests.get(self.base_url('account'), headers=headers, timeout=timeout)
+		result = response.json()
+		customer = result['id']
+		set_setting('db.account_id', str(customer))
+		set_setting('db.token', api_key)
 		notification('Set %s Authorization' % cls_name)
 		return True
 
