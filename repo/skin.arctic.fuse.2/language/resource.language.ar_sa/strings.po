@@ -678,11 +678,11 @@ msgstr "مفصل"
 
 msgctxt "#31138"
 msgid "Aqua Classic"
-msgstr "أزرق مائي"
+msgstr "أكوا كلاسيك"
 
 msgctxt "#31139"
 msgid "Tropical Sunset"
-msgstr "الغروب الاستوائي"
+msgstr "غروب الشمس الاستوائي"
 
 msgctxt "#31140"
 msgid "Miami Vaporwave"
@@ -1054,12 +1054,12 @@ msgstr "أرجواني"
 #: /1080i/Includes_Items.xml
 msgctxt "#31221"
 msgid "Slate"
-msgstr "أزرق رمادي"
+msgstr "قرميد"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31222"
 msgid "Coal"
-msgstr "رمادي"
+msgstr "فحم"
 
 msgctxt "#31223"
 msgid "Gridlines"
@@ -1068,7 +1068,7 @@ msgstr "خطوط الشبكة"
 #: /1080i/Includes_Items.xml
 msgctxt "#31224"
 msgid "Pink"
-msgstr "قرنفلي"
+msgstr "وردي"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31225"
@@ -1078,7 +1078,7 @@ msgstr "لون الطباشير"
 #: /1080i/Includes_Items.xml
 msgctxt "#31226"
 msgid "Blush"
-msgstr "محمر"
+msgstr "احمر"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31227"
@@ -1088,7 +1088,7 @@ msgstr "العرض الآول"
 #: /1080i/Custom_1115_Dialog_ColourPresets.xml
 msgctxt "#31228"
 msgid "Aqua"
-msgstr "أزرق مائي"
+msgstr "أكوا"
 
 #: /1080i/Custom_1115_Dialog_ColourPresets.xml
 msgctxt "#31229"
