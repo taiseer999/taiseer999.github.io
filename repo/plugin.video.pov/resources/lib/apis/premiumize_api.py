@@ -78,9 +78,9 @@ class PremiumizeAPI:
 		response = self._post(url, data)
 		return [h for h, cached in zip(hashes, response['response']) if cached]
 
-	def instant_transfer(self, magnet_url):
+	def instant_transfer(self, magnet):
 		url = 'transfer/directdl'
-		data = {'src': magnet_url}
+		data = {'src': magnet}
 		return self._post(url, data)
 
 	def create_transfer(self, magnet):

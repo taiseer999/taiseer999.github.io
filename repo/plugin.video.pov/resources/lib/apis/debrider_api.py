@@ -42,25 +42,28 @@ class DebriderAPI:
 	def account_info(self):
 		return self._get(self.stats)
 
-	def torrent_info(self, request_id=''):
+	def torrent_info(self, request_id):
 		url = '%s/%s' % (self.cloud, request_id)
 		return self._get(url)
 
-	def delete_torrent(self, request_id=''):
+	def delete_torrent(self, request_id):
 		session.headers['Authorization'] = 'Bearer %s' % self.token
 		url = '%s/%s/%s' % (base_url, self.cloud, request_id)
 		result = session.delete(url, timeout=timeout)
 		return 'success' if result.ok else ''
 
-	def check_cache_single(self, hash):
-		data = {'data': [hash]}
-		result = self._post(self.cache, json=data)
-		return [{h: i['files']} for h, i in zip([hash], result['result']) if i['cached']]
+	def unrestrict_link(self, link):
+		return link
 
-	def check_cache(self, hashlist):
-		data = {'data': hashlist}
+	def check_single_magnet(self, hash_string):
+		data = {'data': [hash_string]}
 		result = self._post(self.cache, json=data)
-		return [h for h, i in zip(hashlist, result['result']) if i['cached']]
+		return [{h: i['files']} for h, i in zip([hash_string], result['result']) if i['cached']]
+
+	def check_cache(self, hashes):
+		data = {'data': hashes}
+		result = self._post(self.cache, json=data)
+		return [h for h, i in zip(hashes, result['result']) if i['cached']]
 
 	def add_magnet(self, magnet):
 		data = {'type': 'magnet', 'data': magnet}
@@ -71,8 +74,7 @@ class DebriderAPI:
 		return self._post(self.download, json=data)
 
 	def create_transfer(self, magnet):
-		data = {'type': 'magnet', 'data': magnet}
-		result = self._post(self.cloud, json=data)
+		result = self.add_magnet(magnet)
 		return result.get('data', {}).get('id', '')
 
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
@@ -80,7 +82,7 @@ class DebriderAPI:
 		try:
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			cached = self.check_cache_single(info_hash)
+			cached = self.check_single_magnet(info_hash)
 			if not cached: return None
 			torrent_files = cached[0][info_hash]
 			selected_files = []
@@ -106,8 +108,8 @@ class DebriderAPI:
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
-			torrent = self.check_cache_single(info_hash)
-			torrent_files = torrent[0][info_hash]
+			cached = self.check_single_magnet(info_hash)
+			torrent_files = cached[0][info_hash]
 			torrent_files = [
 				{'link': item['download_link'], 'filename': item['name'].split('/')[-1], 'size': item['size']}
 				for item in torrent_files if item['name'].lower().endswith(tuple(extensions))

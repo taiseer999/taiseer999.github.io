@@ -47,20 +47,23 @@ class EasyDebridAPI:
 	def account_info(self):
 		return self._get(self.stats)
 
-	def check_cache_single(self, hash_string):
+	def unrestrict_link(self, link):
+		return link
+
+	def check_single_magnet(self, hash_string):
 		cached_info = self.check_cache([hash_string])
 		return hash_string in cached_info
 
-	def check_cache(self, hashlist):
-		data = {'urls': hashlist}
+	def check_cache(self, hashes):
+		data = {'urls': hashes}
 		result = self._post(self.cache, json=data)
-		return [h for h, cached in zip(hashlist, result['cached']) if cached]
+		return [h for h, cached in zip(hashes, result['cached']) if cached]
 
-	def instant_transfer(self, magnet_url):
+	def instant_transfer(self, magnet):
 		try: user_ip = requests.get(ip_url, timeout=2.0).text
 		except: user_ip = ''
 		if user_ip: session.headers['X-Forwarded-For'] = user_ip
-		data = {'url': magnet_url}
+		data = {'url': magnet}
 		return self._post(self.download, json=data)
 
 	def create_transfer(self, magnet):
@@ -73,7 +76,7 @@ class EasyDebridAPI:
 		try:
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_cache_single(info_hash): return None
+			if not self.check_single_magnet(info_hash): return None
 			torrent = self.instant_transfer(magnet_url)
 			torrent_files = torrent['files']
 			selected_files = []

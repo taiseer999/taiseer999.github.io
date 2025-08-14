@@ -344,57 +344,55 @@ class Sources():
 	def _search_info(self):
 		title = self._get_search_title(self.meta)
 		year = self._get_search_year(self.meta)
-		ep_name = self._get_ep_name()
-		aliases = self._make_alias_dict(title)
+		ep_name = self._get_ep_name(self.meta)
+		aliases = self._make_alias_dict(title, self.meta)
 		expiry_times = get_cache_expiry(self.media_type, self.meta, self.season)
-		self.search_info = {'media_type': self.media_type, 'tmdb_id': self.tmdb_id, 'imdb_id': self.meta.get('imdb_id'), 'tvdb_id': self.meta.get('tvdb_id'),
-							'title': title, 'year': year, 'season': self.custom_season or self.season, 'episode': self.custom_episode or self.episode,
-							'ep_name': ep_name, 'aliases': aliases, 'expiry_times': expiry_times, 'total_seasons': self.meta.get('total_seasons', 1)}
+		self.search_info = {
+			'media_type': self.media_type, 'tmdb_id': self.tmdb_id, 'imdb_id': self.meta.get('imdb_id'), 'tvdb_id': self.meta.get('tvdb_id'),
+			'title': title, 'year': year, 'season': self.custom_season or self.season, 'episode': self.custom_episode or self.episode,
+			'ep_name': ep_name, 'aliases': aliases, 'expiry_times': expiry_times, 'total_seasons': self.meta.get('total_seasons', 1)
+		}
 
 	def _get_search_title(self, meta):
-		if 'custom_title' in meta: search_title = meta['custom_title']
-		else:
-			if self.language == 'en': search_title = meta['title']
-			else:
-				search_title = None
-				if 'english_title' in meta: search_title = meta['english_title']
-				else:
-					try:
-						media_type = 'movie' if self.media_type == 'movie' else 'tv'
-						meta_user_info = metadata_user_info()
-						english_title = metadata.english_translation(media_type, meta['tmdb_id'], meta_user_info)
-						if english_title: search_title = english_title
-						else: search_title = meta['original_title']
-					except: pass
-				if not search_title: search_title = meta['original_title']
-			if '(' in search_title: search_title = search_title.split('(')[0]
-			if '/' in search_title: search_title = search_title.replace('/', ' ')
+		if 'custom_title' in meta: return meta['custom_title']
+		if self.language == 'en': search_title = meta['title']
+		else: search_title = meta.get('english_title')
+		if not search_title:
+			try:
+				media_type = 'movie' if self.media_type == 'movie' else 'tv'
+				meta_user_info = metadata_user_info()
+				english_title = metadata.english_translation(media_type, meta['tmdb_id'], meta_user_info)
+				if english_title: search_title = english_title
+				else: search_title = meta['original_title']
+			except: pass
+		if not search_title: search_title = meta['original_title']
+		if '(' in search_title: search_title = search_title.split('(')[0]
+		if '/' in search_title: search_title = search_title.replace('/', ' ')
 		return search_title
 
 	def _get_search_year(self, meta):
-		if 'custom_year' in meta: year = meta['custom_year']
-		else:
-			year = meta.get('year')
-			if self.active_external and get_setting('search.enable.yearcheck', 'false') == 'true':
-				from apis.imdb_api import imdb_movie_year
-				try: year = str(imdb_movie_year(meta.get('imdb_id')) or year)
-				except: pass
+		if 'custom_year' in meta: return meta['custom_year']
+		year = meta.get('year') or '0'
+		if self.active_external and get_setting('search.enable.yearcheck', 'false') == 'true':
+			from apis.imdb_api import imdb_movie_year
+			try: year = str(imdb_movie_year(meta.get('imdb_id')) or year)
+			except: pass
 		return year
 
-	def _get_ep_name(self):
-		ep_name = None
+	def _get_ep_name(self, meta):
 		if self.media_type == 'episode':
-			ep_name = self.meta.get('ep_name')
+			ep_name = meta.get('ep_name')
 			try: ep_name = safe_string(remove_accents(ep_name))
 			except: ep_name = safe_string(ep_name)
+		else: ep_name = None
 		return ep_name
 
-	def _make_alias_dict(self, title):
+	def _make_alias_dict(self, title, meta):
 		aliases = []
-		meta_title = self.meta['title']
-		original_title = self.meta['original_title']
-		alternative_titles = self.meta.get('alternative_titles', [])
-		country_codes = set([i.replace('GB', 'UK') for i in self.meta.get('country_codes', [])])
+		meta_title = meta['title']
+		original_title = meta['original_title']
+		alternative_titles = meta.get('alternative_titles', [])
+		country_codes = set([i.replace('GB', 'UK') for i in meta.get('country_codes', [])])
 		if alternative_titles: aliases = [{'title': i, 'country': ''} for i in alternative_titles]
 		if meta_title not in alternative_titles: aliases.append({'title': meta_title, 'country': ''})
 		if original_title not in alternative_titles: aliases.append({'title': original_title, 'country': ''})
@@ -485,15 +483,17 @@ class Sources():
 		meta_user_info = metadata_user_info()
 		if self.media_type == 'movie':
 			self.meta = metadata.movie_meta('tmdb_id', self.tmdb_id, meta_user_info, get_datetime())
-		else:
-			self.meta = metadata.tvshow_meta('tmdb_id', self.tmdb_id, meta_user_info, get_datetime())
+			return
+		else: self.meta = metadata.tvshow_meta('tmdb_id', self.tmdb_id, meta_user_info, get_datetime())
+		try:
 			episodes_data = metadata.season_episodes_meta(self.season, self.meta, meta_user_info)
-			try:
-				episode_data = [i for i in episodes_data if i['episode'] == int(self.episode)][0]
-				self.meta.update({'media_type': 'episode', 'season': episode_data['season'], 'episode': episode_data['episode'],
-								'premiered': episode_data['premiered'], 'ep_name': episode_data['title'], 'plot': episode_data['plot']})
-				if self.custom_season and self.custom_episode: self.meta.update({'custom_season': self.custom_season, 'custom_episode': self.custom_episode})
-			except: pass
+			episode_data = [i for i in episodes_data if i['episode'] == int(self.episode)][0]
+			self.meta.update({
+				'media_type': 'episode', 'season': episode_data['season'], 'episode': episode_data['episode'],
+				'premiered': episode_data['premiered'], 'ep_name': episode_data['title'], 'plot': episode_data['plot']
+			})
+			if self.custom_season and self.custom_episode: self.meta.update({'custom_season': self.custom_season, 'custom_episode': self.custom_episode})
+		except: pass
 
 	def _get_module(self, module_type, function):
 		if module_type == 'external': module = function.source(*self.external_args)
@@ -520,8 +520,7 @@ class Sources():
 		show_busy_dialog()
 		debrid_provider = debrid_provider.replace('Unchecked ', '')
 		debrid_function = import_debrid(debrid_provider)
-		try: debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
-		except: debrid_files = None
+		debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
 		hide_busy_dialog()
 		if not debrid_files: return notification(32574)
 		debrid_files.sort(key=lambda k: k['filename'].lower())
@@ -529,20 +528,18 @@ class Sources():
 		icon = next((i[2] for i in debrid_list if i[0] == debrid_provider), 'pov.png')
 		icon = translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % icon)
 		list_items = [
-			{'line1': clean_file_name(item['filename']), 'line2': '%s: %.2f GB' % (ls(32584), float(item['size'])/1073741824), 'icon': icon}
+			{'line1': clean_file_name(item['filename']),
+			 'line2': '%s: %.2f GB' % (ls(32584), float(item['size'])/1073741824),
+			 'icon': icon}
 			for item in debrid_files
 		]
-		kwargs = {'items': json.dumps(list_items), 'heading': name, 'highlight': highlight, 'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
+		kwargs = {'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
+		kwargs.update({'items': json.dumps(list_items), 'heading': name, 'highlight': highlight})
 		chosen_result = select_dialog(debrid_files, **kwargs)
 		if chosen_result is None: return None
-		url_dl = chosen_result['link']
-		if debrid_provider in ('Real-Debrid', 'AllDebrid', 'TorBox'):
-			link = debrid_function().unrestrict_link(url_dl)
-		elif debrid_provider == 'Premiumize.me':
-			link = debrid_function().add_headers_to_url(url_dl)
-		elif debrid_provider in ('Offcloud', 'EasyDebrid', 'Debrider'):
-			link = url_dl
-		name = chosen_result['filename']
+		url_dl, name = chosen_result['link'], chosen_result['filename']
+		if debrid_provider == 'Premiumize.me': link = debrid_function().add_headers_to_url(url_dl)
+		else: link = debrid_function().unrestrict_link(url_dl)
 		return POVPlayer().run(link, 'video')
 
 	def play_file(self, results, source={}, autoplay=False, background=False):

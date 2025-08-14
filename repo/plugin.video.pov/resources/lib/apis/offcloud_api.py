@@ -62,21 +62,24 @@ class OffcloudAPI:
 	def account_info(self):
 		return self._get(self.stats)
 
-	def torrent_info(self, request_id=''):
+	def torrent_info(self, request_id):
 		url = self.explore % request_id
 		return self._get(url)
 
-	def delete_torrent(self, request_id=''):
+	def delete_torrent(self, request_id):
 		params = {'key': self.token}
 		url = self.remove % request_id
 		return self._get(url, params=params)
 
-	def check_cache_single(self, hash):
-		result = self.check_cache([hash])
-		return hash in result
+	def unrestrict_link(self, link):
+		return link
 
-	def check_cache(self, hashlist):
-		data = {'hashes': hashlist}
+	def check_single_magnet(self, hash_string):
+		result = self.check_cache([hash_string])
+		return hash_string in result
+
+	def check_cache(self, hashes):
+		data = {'hashes': hashes}
 		result = self._post(self.cache, data=data)
 		return result['cachedItems']
 
@@ -84,8 +87,8 @@ class OffcloudAPI:
 		data = {'url': magnet}
 		return self._post(self.cloud, data=data)
 
-	def create_transfer(self, magnet_url):
-		result = self.add_magnet(magnet_url)
+	def create_transfer(self, magnet):
+		result = self.add_magnet(magnet)
 		return result.get('requestId', '')
 
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
@@ -93,13 +96,12 @@ class OffcloudAPI:
 		try:
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_cache_single(info_hash): return None
+			if not self.check_single_magnet(info_hash): return None
 			torrent = self.add_magnet(magnet_url)
-			if not torrent['status'] == 'downloaded': return None
-			single_file_torrent = '%s/%s' % (torrent['url'], torrent['fileName'])
+			single_file_torrent_list = ['%s/%s' % (torrent['url'], torrent['fileName'])]
 			torrent_id = torrent['requestId']
 			torrent_files = self.torrent_info(torrent_id)
-			if not isinstance(torrent_files, list): torrent_files = [single_file_torrent]
+			torrent_files = single_file_torrent_list if not isinstance(torrent_files, list) else torrent_files
 			selected_files = []
 			for i in torrent_files:
 				link, filename, size = i, i.split('/')[-1].lower(), 0

@@ -78,23 +78,23 @@ class TorBoxAPI:
 	def account_info(self):
 		return self._get(self.stats)
 
-	def torrent_info(self, request_id=''):
+	def torrent_info(self, request_id):
 		url = self.explore % request_id
 		return self._get(url)
 
-	def nzb_info(self, request_id=''):
+	def nzb_info(self, request_id):
 		url = self.explore_usenet % request_id
 		return self._get(url)
 
-	def delete_torrent(self, request_id=''):
+	def delete_torrent(self, request_id):
 		data = {'torrent_id': request_id, 'operation': 'delete'}
 		return self._post(self.remove, json=data)
 
-	def delete_usenet(self, request_id=''):
+	def delete_usenet(self, request_id):
 		data = {'usenet_id': request_id, 'operation': 'delete'}
 		return self._post(self.remove_usenet, json=data)
 
-	def delete_webdl(self, request_id=''):
+	def delete_webdl(self, request_id):
 		data = {'webdl_id': request_id, 'operation': 'delete'}
 		return self._post(self.remove_webdl, json=data)
 
@@ -122,23 +122,23 @@ class TorBoxAPI:
 		params.update({'token': self.token, 'web_id': webdl_id, 'file_id': file_id})
 		return self._get(self.download_webdl, params=params)
 
-	def check_cache_single(self, hash):
-		result = self._get(self.cache, params={'hash': hash, 'format': 'list'})
-		return hash in [i['hash'] for i in result]
+	def check_single_magnet(self, hash_string):
+		result = self._get(self.cache, params={'hash': hash_string, 'format': 'list'})
+		return hash_string in [i['hash'] for i in result]
 
-	def check_cache(self, hashlist):
-		data = {'hashes': hashlist}
+	def check_cache(self, hashes):
+		data = {'hashes': hashes}
 		result = self._post(self.cache, params={'format': 'list'}, json=data)
 		return [i['hash'] for i in result]
+
+	def add_magnet(self, magnet):
+		data = {'magnet': magnet, 'seed': 3, 'allow_zip': 'false'}
+		return self._post(self.cloud, data=data)
 
 	def add_nzb(self, nzb, name=''):
 		data = {'link': nzb}
 		if name: data['name'] = name
 		return self._post(self.cloud_usenet, data=data)
-
-	def add_magnet(self, magnet):
-		data = {'magnet': magnet, 'seed': 3, 'allow_zip': 'false'}
-		return self._post(self.cloud, data=data)
 
 	def create_transfer(self, link, name=''):
 		if link.startswith('magnet'): key, result = 'torrent_id', self.add_magnet(link)
@@ -150,7 +150,7 @@ class TorBoxAPI:
 		try:
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_cache_single(info_hash): return None
+			if not self.check_single_magnet(info_hash): return None
 			torrent_id = self.create_transfer(magnet_url)
 			torrent_files = self.torrent_info(torrent_id)
 			selected_files = []
@@ -183,7 +183,7 @@ class TorBoxAPI:
 				{'link': '%d,%d' % (torrent_id, item['id']), 'filename': item['short_name'], 'size': item['size']}
 				for item in torrent_files['files'] if item['short_name'].lower().endswith(tuple(extensions))
 			]
-			self.delete_torrent(torrent_id)
+#			self.delete_torrent(torrent_id) # cannot delete the torrent, play link will not persist, will return 500
 			return torrent_files
 		except Exception:
 			if torrent_id: self.delete_torrent(torrent_id)
@@ -194,7 +194,7 @@ class TorBoxAPI:
 		try:
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_cache_single(info_hash): return None
+			if not self.check_single_magnet(info_hash): return None
 			nzb_id = self.create_transfer(nzb_url)
 			nzb_files = self.nzb_info(nzb_id)
 			selected_files = []

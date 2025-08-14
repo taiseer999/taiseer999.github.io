@@ -75,24 +75,6 @@ class RealDebridAPI:
 		url = 'user'
 		return self._get(url)
 
-	def check_single_magnet(self, hash_string):
-		cache_info = self.check_hash(hash_string)
-		cached = False
-		if hash_string in cache_info:
-			info = cache_info[hash_string]
-			if isinstance(info, dict) and len(info.get('rd')) > 0:
-				cached = True
-		return cached
-
-	def check_hash(self, hash_string):
-		url = 'torrents/instantAvailability/%s' % hash_string
-		return self._get(url)
-
-	def check_cache(self, hashes):
-		hash_string = '/'.join(hashes)
-		url = 'torrents/instantAvailability/%s' % hash_string
-		return self._get(url)
-
 	def torrent_info(self, file_id):
 		url = 'torrents/info/%s' % file_id
 		return self._get(url)
@@ -116,6 +98,21 @@ class RealDebridAPI:
 		try: return response['download']
 		except: return None
 
+	def check_single_magnet(self, hash_string):
+		cache_info = self.check_hash(hash_string)
+		if not hash_string in cache_info: return False
+		info = cache_info[hash_string]
+		return True if isinstance(info, dict) and len(info.get('rd')) > 0 else False
+
+	def check_hash(self, hash_string):
+		url = 'torrents/instantAvailability/%s' % hash_string
+		return self._get(url)
+
+	def check_cache(self, hashes):
+		hash_string = '/'.join(hashes)
+		url = 'torrents/instantAvailability/%s' % hash_string
+		return self._get(url)
+
 	def add_torrent_select(self, torrent_id, file_ids):
 		self.clear_cache()
 		url = 'torrents/selectFiles/%s' % torrent_id
@@ -127,11 +124,11 @@ class RealDebridAPI:
 		url = 'torrents/addMagnet'
 		return self._post(url, post_data)
 
-	def create_transfer(self, magnet_url):
+	def create_transfer(self, magnet):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
-			torrent = self.add_magnet(magnet_url)
+			torrent = self.add_magnet(magnet)
 			torrent_id = torrent['id']
 #			info = self.torrent_info(torrent_id)
 #			files = info['files']
@@ -180,21 +177,22 @@ class RealDebridAPI:
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
-			transfer_id = self.create_transfer(magnet_url)
+			torrent_id = self.create_transfer(magnet_url)
 			for key in ['ended'] * 3:
 				kodi_utils.sleep(500)
-				torrent_info = self.torrent_info(transfer_id)
+				torrent_info = self.torrent_info(torrent_id)
 				if key in torrent_info: break
 			else: raise Exception('uncached magnet:\n%s' % magnet_url)
 			torrent_files = (i for i in torrent_info['files'] if i['selected'])
 			torrent_files = [
 				{'link': link, 'filename': item['path'].replace('/', ''), 'size': item['bytes']}
 				for item, link in zip(torrent_files, torrent_info['links'])
+				if item['path'].lower().endswith(tuple(extensions))
 			]
-			self.delete_torrent(transfer_id)
+			self.delete_torrent(torrent_id)
 			return torrent_files
 		except Exception:
-			if transfer_id: self.delete_torrent(transfer_id)
+			if torrent_id: self.delete_torrent(torrent_id)
 			return None
 
 	def get_hosts(self):

@@ -163,7 +163,7 @@ class DebridCheck:
 def tio_check_cache(token, imdb, season, episode, collector):
 	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
 	else: url = 'movie/%s.json' % (imdb)
-	url = 'https://torrentio.strem.fun/%s/stream/' % token + url
+	url = 'https://torrentio.strem.fun/%s/stream/%s' % (token, url)
 	headers = {'User-Agent': 'curl/7.55.1', 'Accept': 'application/json'}
 	pattern = re.compile(r'\b\w{40}\b')
 	try:
