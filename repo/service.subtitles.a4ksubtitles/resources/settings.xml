@@ -29,11 +29,11 @@
         <!-- OpenSubtitles -->
         <setting type="lsep" label="33201"/>
         <setting type="sep"/>
-        <setting id="opensubtitles.username" label="33301" type="text" default=""/>
-        <setting id="opensubtitles.password" label="33302" type="text" default="" option="hidden"/>
+        <setting id="opensubtitles.username" label="33301" type="text" default="test4321"/>
+        <setting id="opensubtitles.password" label="33302" type="text" default="qwerasdf" option="hidden"/>
         <!-- SubDL -->
         <setting type="lsep" label="33205"/>
         <setting type="sep"/>
-        <setting id="subdl.apikey" label="33303" type="text" default=""/>
+        <setting id="subdl.apikey" label="33303" type="text" default="P6U3iReD0glAFxqhtsqRjGViTlmm14LO"/>
     </category>
 </settings>
