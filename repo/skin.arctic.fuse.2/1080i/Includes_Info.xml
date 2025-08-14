@@ -1408,7 +1408,7 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">Dolby Vision • DD+ (Atmos)</param>
+                <param name="label">Dolby Vision • Digital Plus (Atmos)</param>
                 <param name="visible">$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow) + $PARAM[is_dolbyvision] + String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos)</param>
             </include>
         </definition>
@@ -1488,7 +1488,7 @@
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">Dolby DD+ (Atmos)</param>
+                <param name="label">Dolby Digital Plus (Atmos)</param>
                 <param name="visible">$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow) + String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos) + !$PARAM[is_dolbyvision]</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
@@ -1621,7 +1621,7 @@
                 <param name="is_dolbyvision">[String.IsEqual($PARAM[listitem_hdrtype],dolbyvision)]</param>
                 <param name="is_hdr">[String.IsEqual($PARAM[listitem_hdrtype],hdr10)]</param>
                 <param name="is_hlg">[String.IsEqual($PARAM[listitem_hdrtype],hlg)]</param>
-                <param name="is_sdr">[String.IsEmpty($PARAM[listitem_hdrtype])] + !Integer.IsLess(ListItem.VideoResolution,1080)</param>
+                <param name="is_sdr">[String.IsEmpty($PARAM[listitem_hdrtype]) + [[!String.IsEmpty($PARAM[listitem_videoresolution])] | [Integer.IsEqual($PARAM[listitem_videoresolution],720)] | [Integer.IsGreater($PARAM[listitem_videoresolution],720)] | Integer.IsGreater($PARAM[listitem_videoresolution],1080) | String.IsEqual($PARAM[listitem_videoresolution],4K)]]</param>
                 <param name="listitem_audiocodec">$PARAM[listitem_audiocodec]</param>
             </include>
             <include content="Info_Line_AudioCodec" condition="!Skin.HasSetting(Infoline.DisableAudioCodec)">
@@ -1896,6 +1896,25 @@
                     <param name="label_02">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),$LOCALIZE[31184] ,]</param>                    
                     <param name="visible_01">!String.IsEmpty($PARAM[container]ListItem.EndTimeResume) + !String.IsEqual($PARAM[container]ListItem.EndTimeResume,System.Time)</param>
                     <param name="visible_02">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),System.Time)</param>                    
+                    <param name="textcolor">$PARAM[colordiffuse]_70</param>
+                </include>
+				
+                <!-- Studio -->
+                <include content="Info_Line_Items" condition="Skin.String(InfoLine.Optional,Studio)">
+                    <include content="Info_Line_Visible_05">
+                        <param name="altvisible">[!String.IsEmpty($PARAM[container]ListItem.ChannelNumberLabel) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_channelnumberlabel))]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="dbtype_01">movie</param>
+                        <param name="dbtype_02">tvshow</param>
+                        <param name="dbtype_03">season</param>
+                    </include>
+                    <param name="items_03">true</param>
+                    <param name="label_01">$INFO[$PARAM[container]ListItem.Property(Studio.1.Name)]</param>
+                    <param name="label_02">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_studio)]</param>
+                    <param name="label_03">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name)]</param>
+                    <param name="visible_01">!String.IsEmpty($PARAM[container]ListItem.Property(Studio.1.Name))</param>
+                    <param name="visible_02">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_studio))</param>
+                    <param name="visible_03">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name))</param>
                     <param name="textcolor">$PARAM[colordiffuse]_70</param>
                 </include>
 
@@ -2221,6 +2240,25 @@
                     <param name="label_02">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),$LOCALIZE[31184] ,]</param>                    
                     <param name="visible_01">!String.IsEmpty($PARAM[container]ListItem.EndTimeResume) + !String.IsEqual($PARAM[container]ListItem.EndTimeResume,System.Time)</param>
                     <param name="visible_02">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_endtimeresume),System.Time)</param>                    
+                    <param name="textcolor">$PARAM[colordiffuse]_70</param>
+                </include>
+				
+                <!-- Studio -->
+                <include content="Info_Line_Items" condition="Skin.String(InfoLine.Optional,Studio)">
+                    <include content="Info_Line_Visible_05">
+                        <param name="altvisible">[!String.IsEmpty($PARAM[container]ListItem.ChannelNumberLabel) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_channelnumberlabel))]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="dbtype_01">movie</param>
+                        <param name="dbtype_02">tvshow</param>
+                        <param name="dbtype_03">season</param>
+                    </include>
+                    <param name="items_03">true</param>
+                    <param name="label_01">$INFO[$PARAM[container]ListItem.Property(Studio.1.Name)]</param>
+                    <param name="label_02">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_studio)]</param>
+                    <param name="label_03">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name)]</param>
+                    <param name="visible_01">!String.IsEmpty($PARAM[container]ListItem.Property(Studio.1.Name))</param>
+                    <param name="visible_02">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_studio))</param>
+                    <param name="visible_03">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name))</param>
                     <param name="textcolor">$PARAM[colordiffuse]_70</param>
                 </include>
 

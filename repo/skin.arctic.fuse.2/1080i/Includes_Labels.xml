@@ -463,6 +463,7 @@
 
     <variable name="Label_Setting_OptionalInfoLine">
         <value condition="Skin.String(InfoLine.Optional,Ends)">$LOCALIZE[31192]</value>
+        <value condition="Skin.String(InfoLine.Optional,Studio)">$LOCALIZE[572]</value>
         <value condition="Skin.String(InfoLine.Optional,Genre)">$LOCALIZE[515]</value>
         <value>$LOCALIZE[231]</value>
     </variable>
@@ -2059,7 +2060,5 @@
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
         <value condition="Integer.IsEqual(VideoPlayer.AudioChannels,10)">9.1</value>
     </variable>
-<variable name="ColourVar">
-		<value>$VAR[ColourRangeVar] $VAR[|] $VAR[ColourSpaceVar] $VAR[|] $VAR[ColourPrimariesVar] $VAR[|] $VAR[ColourTransferCharacteristicVar]</value>
-	</variable>
+
 </includes>
