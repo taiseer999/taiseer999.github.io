@@ -18,9 +18,6 @@ internal_scrapers_clouds_list = [('rd', 'provider.rd_cloud'), ('pm', 'provider.p
 
 def tmdb_api_key():
 	return get_setting('fenlight.tmdb_api', '')
-	
-def tmdb_user_active():
-	return get_setting('fenlight.tmdb.access_token', 'empty_setting') not in ('empty_setting', '')
 
 def trakt_client():
 	return get_setting('fenlight.trakt.client', '')

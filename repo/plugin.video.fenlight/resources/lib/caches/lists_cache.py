@@ -26,20 +26,6 @@ class ListsCache(BaseCache):
 			dbcon.execute('VACUUM')
 			return True
 		except: return False
-	
-	def delete_tmdb_list(self, list_id):
-		try:
-			# Delete cache for all pages of this list
-			dbcon = self.manual_connect('lists_db')
-			search_pattern = f'tmdb_list_{list_id}_%'
-			# Find and delete from memory cache first
-			for i in dbcon.execute("SELECT id FROM lists WHERE id LIKE ?", (search_pattern,)):
-				self.delete_memory_cache(str(i[0]))
-			# Delete from database
-			dbcon.execute("DELETE FROM lists WHERE id LIKE ?", (search_pattern,))
-			return True
-		except:
-			return False
 
 lists_cache = ListsCache()
 
@@ -52,4 +38,3 @@ def lists_cache_object(function, string, args, json=False, expiration=48):
 	else: result = function(*args)
 	lists_cache.set(string, result, expiration=expiration)
 	return result
-	

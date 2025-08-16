@@ -28,7 +28,7 @@ empty_setting_check = (None, 'empty_setting', '')
 standby_date = '2050-01-01T01:00:00.000Z'
 res_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 API_ENDPOINT = 'https://api.trakt.tv/%s'
-timeout = 60
+timeout = 20
 EXPIRY_1_DAY, EXPIRY_1_WEEK = 24, 168
 
 def no_client_key():
@@ -113,16 +113,10 @@ def trakt_get_device_token(device_codes):
 		expires_in = device_codes['expires_in']
 		sleep_interval = device_codes['interval']
 		user_code = str(device_codes['user_code'])
-		verification_url = str(device_codes['verification_url'])
 		try: copy2clip(user_code)
-		except Exception as e:
-			kodi_utils.logger('TRAKT ERROR 1', e)
-		t_o = 5
-		content = '[CR]Scan the QR Code or navigate to: [B]%s[/B][CR]Enter the following code: [B]%s[/B]' % (str(device_codes['verification_url']), user_code)
-		direct_url = f"{verification_url}/{user_code}"
-		tiny_url = requests.get('http://tinyurl.com/api-create.php', params={'url': direct_url}, timeout=t_o).text
-		qr_icon = 'https://qrcode.tec-it.com/API/QRCode?data=%s&backcolor=%%23ffffff&size=small&quietzone=1&errorcorrection=H' % tiny_url
-		progressDialog = progress_dialog('Trakt Authorize', qr_icon)
+		except: pass
+		content = '[CR]Navigate to: [B]%s[/B][CR]Enter the following code: [B]%s[/B]' % (str(device_codes['verification_url']), user_code)
+		progressDialog = progress_dialog('Trakt Authorize', get_icon('trakt_qrcode'))
 		progressDialog.update(content, 0)
 		try:
 			time_passed = 0
@@ -138,13 +132,10 @@ def trakt_get_device_token(device_codes):
 					progress = int(100 * time_passed/expires_in)
 					progressDialog.update(content, progress)
 				else: break
-		except Exception as e:
-			kodi_utils.logger('TRAKT ERROR 2', e)
+		except: pass
 		try: progressDialog.close()
-		except Exception as e:
-			kodi_utils.logger('TRAKT ERROR 3', e)
-	except Exception as e:
-			kodi_utils.logger('TRAKT ERROR 4', e)
+		except: pass
+	except: pass
 	return result
 
 def trakt_refresh_token():
@@ -159,7 +150,7 @@ def trakt_refresh_token():
 	if response:
 		set_setting('trakt.token', response["access_token"])
 		set_setting('trakt.refresh', response["refresh_token"])
-		set_setting('trakt.expires', str(time.time() + 86400))
+		set_setting('trakt.expires', str(time.time() + 7776000))
 
 def trakt_authenticate(dummy=''):
 	code = trakt_get_device_code()
@@ -167,7 +158,7 @@ def trakt_authenticate(dummy=''):
 	if token:
 		set_setting('trakt.token', token["access_token"])
 		set_setting('trakt.refresh', token["refresh_token"])
-		set_setting('trakt.expires', str(time.time() + 86400))
+		set_setting('trakt.expires', str(time.time() + 7776000))
 		set_setting('watched_indicators', '1')
 		sleep(1000)
 		try:
@@ -206,18 +197,6 @@ def trakt_movies_trending_recent(page_no):
 	string = 'trakt_movies_trending_recent_%s' % page_no
 	params = {'path': 'movies/trending/%s', 'params': {'limit': 20, 'years': years}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params)
-	
-def trakt_movies_trending_uk(page_no):
-	string = 'trakt_movies_trending_uk_%s' % page_no
-	params = {'path': 'movies/trending/%s', 'params': {'limit': 20, 'countries': 'gb'}, 'page_no': page_no}
-	return lists_cache_object(get_trakt, string, params)
-
-def trakt_movies_trending_recent_uk(page_no):
-	current_year = get_datetime().year
-	years = '%s-%s' % (str(current_year-1), str(current_year))
-	string = 'trakt_movies_trending_recent_uk_%s' % page_no
-	params = {'path': 'movies/trending/%s', 'params': {'limit': 20, 'years': years, 'countries': 'gb'}, 'page_no': page_no}
-	return lists_cache_object(get_trakt, string, params)
 
 def trakt_movies_top10_boxoffice(page_no):
 	string = 'trakt_movies_top10_boxoffice'
@@ -250,18 +229,6 @@ def trakt_tv_trending_recent(page_no):
 	years = '%s-%s' % (str(current_year-1), str(current_year))
 	string = 'trakt_tv_trending_recent_%s' % page_no
 	params = {'path': 'shows/trending/%s', 'params': {'limit': 20, 'years': years}, 'page_no': page_no}
-	return lists_cache_object(get_trakt, string, params)
-	
-def trakt_tv_trending_uk(page_no):
-	string = 'trakt_tv_trending_uk_%s' % page_no
-	params = {'path': 'shows/trending/%s', 'params': {'limit': 20, 'countries': 'gb'}, 'page_no': page_no}
-	return lists_cache_object(get_trakt, string, params)
-
-def trakt_tv_trending_recent_uk(page_no):
-	current_year = get_datetime().year
-	years = '%s-%s' % (str(current_year-1), str(current_year))
-	string = 'trakt_tv_trending_recent_uk_%s' % page_no
-	params = {'path': 'shows/trending/%s', 'params': {'limit': 20, 'years': years, 'countries': 'gb'}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params)
 
 def trakt_tv_most_watched(page_no):

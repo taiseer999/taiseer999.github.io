@@ -11,17 +11,10 @@ from modules.source_utils import supported_video_extensions, seas_ep_filter, EXT
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
-
 sleep, confirm_dialog, ok_dialog, xbmc_monitor = kodi_utils.sleep, kodi_utils.confirm_dialog, kodi_utils.ok_dialog, kodi_utils.xbmc_monitor
 progress_dialog, get_icon, notification = kodi_utils.progress_dialog, kodi_utils.get_icon, kodi_utils.notification
-alt_api = get_setting('rd.alt_api', 'false')
-if alt_api == 'true':
-	base_url = 'https://app.real-debrid.com/rest/1.0/'
-	auth_url = 'https://app.real-debrid.com/oauth/v2/'
-else:
-	base_url = 'https://api.real-debrid.com/rest/1.0/'
-	auth_url = 'https://api.real-debrid.com/oauth/v2/'
-
+base_url = 'https://api.real-debrid.com/rest/1.0/'
+auth_url = 'https://api.real-debrid.com/oauth/v2/'
 device_url = 'device/code?%s'
 credentials_url = 'device/credentials?%s'
 icon = get_icon('realdebrid')
@@ -44,14 +37,10 @@ class RealDebridAPI:
 		url = auth_url + device_url % 'client_id=%s&new_credentials=yes' % self.client_ID
 		response = requests.get(url, timeout=timeout).json()
 		user_code = response['user_code']
-		direct_url = response['direct_verification_url']
 		try: copy2clip(user_code)
 		except: pass
-		t_o = 5
-		content = 'Scan the QR Code or navigate to: [B]https://real-debrid.com/device[/B][CR]Enter the following code: [B]%s[/B]' % user_code
-		tiny_url = requests.get('http://tinyurl.com/api-create.php', params={'url': direct_url}, timeout=t_o).text
-		qr_icon = 'https://qrcode.tec-it.com/API/QRCode?data=%s&backcolor=%%23ffffff&size=small&quietzone=1&errorcorrection=H' % tiny_url
-		progressDialog = progress_dialog('Real Debrid Authorize', qr_icon)
+		content = 'Authorize Debrid Services[CR]Navigate to: [B]https://real-debrid.com/device[/B][CR]Enter the following code: [B]%s[/B]' % user_code
+		progressDialog = progress_dialog('Real Debrid Authorize', get_icon('rd_qrcode'))
 		progressDialog.update(content, 0)
 		expires_in = int(response['expires_in'])
 		sleep_interval = int(response['interval'])

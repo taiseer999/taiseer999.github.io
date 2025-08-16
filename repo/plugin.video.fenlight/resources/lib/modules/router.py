@@ -68,9 +68,6 @@ def routing(sys):
 		if mode == 'build_tmdb_people':
 			from indexers.people import tmdb_people
 			return tmdb_people(params)
-		if mode == 'tmdb.list.build_tmdb_list':
-			from indexers.tmdb import build_tmdb_list
-			build_tmdb_list(params)
 		if 'random.' in mode:
 			from indexers.random_lists import RandomLists
 			return RandomLists(params).run_random()
@@ -253,34 +250,6 @@ def routing(sys):
 		from modules import updater
 		return exec('updater.%s()' % mode.split('.')[1])
 	##EXTRA modes##
-	if 'tmdb.' in mode:
-		if mode == 'tmdb.clear_tmdb_list_cache':
-			from apis.tmdb_api import clear_list_cache
-			return clear_list_cache(params.get('list_id'), params.get('list_name'))
-		if mode == 'tmdb.rename_tmdb_list':
-			from apis.tmdb_api import rename_list
-			return rename_list(_get('list_id', None))
-		if mode == 'tmdb.authenticate':
-			from apis.tmdb_api import auth
-			return auth()
-		if mode == 'tmdb.deauth':
-			from apis.tmdb_api import unauth
-			return unauth()
-		if mode == 'tmdb.list.get_tmdb_lists':
-			from indexers.tmdb import get_tmdb_lists
-			return get_tmdb_lists(params)
-		if mode == 'tmdb.make_new_tmdb_list':
-			from apis.tmdb_api import new_tmdb_list
-			return new_tmdb_list()	
-		if mode == 'tmdb.delete_tmdb_list':
-			from apis.tmdb_api import del_tmdb_list
-			return del_tmdb_list(_get('list_id', None))
-		if mode == 'tmdb.clear_tmdb_list':
-			from apis.tmdb_api import clear_tmdb_list
-			return clear_tmdb_list(_get('list_id', None), _get('list_name', None))
-		if mode == 'tmdb.set_backdrop':
-			from apis.tmdb_api import set_list_backdrop
-			return set_list_backdrop(_get('list_id', None), _get('backdrop_url', None))
 	if mode == 'set_view':
 		from modules.kodi_utils import set_view
 		return kodi_utils.set_view(_get('view_type'))

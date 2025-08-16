@@ -25,25 +25,25 @@ addon_dir = 'plugin.video.fenlight'
 zipfile_name = 'plugin.video.fenlight-%s.zip'
 heading_str = 'Fen Light Updater'
 error_str = 'Error'
-notification_occuring_str = 'Fen Light+ Update Occuring'
-notification_available_str = 'Fen Light+ Update Available'
-notification_updating_str = 'Fen Light+ Performing Update'
-notification_rollback_str = 'Fen Light+ Performing Rollback'
+notification_occuring_str = 'Fen Light Update Occuring'
+notification_available_str = 'Fen Light Update Available'
+notification_updating_str = 'Fen Light Performing Update'
+notification_rollback_str = 'Fen Light Performing Rollback'
 result_str = 'Installed Version: [B]%s[/B][CR]Online Version: [B]%s[/B][CR][CR] %s'
 no_update_str = '[B]No Update Available[/B]'
 update_available_str = '[B]An Update is Available[/B][CR]Perform Update?'
 continue_confirm_str = 'Continue with Update After Viewing Changes?'
-success_str = '[CR]Success.[CR]Fen Light+ updated to version [B]%s[/B]'
+success_str = '[CR]Success.[CR]Fen Light updated to version [B]%s[/B]'
 rollback_heading_str = 'Choose Rollback Version'
-success_rollback_str = '[CR]Success.[CR]Fen Light+ rolled back to version [B]%s[/B]'
+success_rollback_str = '[CR]Success.[CR]Fen Light rolled back to version [B]%s[/B]'
 confirm_rollback_str = 'Are you sure?[CR]Version [B]%s[/B] will overwrite your current installed version.' \
-						'[CR]Fen Light+ will set your update action to [B]OFF[/B] if rollback is successful'
+						'[CR]Fen Light will set your update action to [B]OFF[/B] if rollback is successful'
 no_rollback_str = 'No previous versions found.[CR]Please install rollback manually'
 error_update_str = 'Error Updating.[CR]Please install new update manually'
 error_rollback_str = 'Error rolling back.[CR]Please install rollback manually'
 changes_heading_str = 'New Online Release (v.%s) Changelog'
 view_changes_str = 'Do you want to view the changelog for the new release before installing?'
-no_changes_str = 'You are running the current version of Fen Light+.[CR][CR]There is no new version changelog to view.'
+no_changes_str = 'You are running the current version of Fen Light.[CR][CR]There is no new version changelog to view.'
 
 def get_location(insert=''):
 	return 'https://github.com/%s/%s/raw/main/packages/%s' % (get_setting('fenlight.update.username'), get_setting('update.location'), insert)
@@ -93,14 +93,13 @@ def update_check(action=4):
 
 def rollback_check():
 	current_version = get_versions()[0]
-	url = 'https://api.github.com/repos/%s/%s/contents/packages' % (get_setting('fenlight.update.username'), get_setting('update.location'))
+	url = 'https://api.github.com/repos/%s/%s/contents/packages' % ('Tikipeter', 'tikipeter.github.io')#(get_setting('update.username'), get_setting('update.location'))
 	show_busy_dialog()
 	results = requests.get(url)
 	hide_busy_dialog()
 	if results.status_code != 200: return ok_dialog(heading=heading_str, text=error_rollback_str)
 	results = [i['name'].split('-')[1].replace('.zip', '') for i in results.json() if 'plugin.video.fenlight' in i['name'] \
-#				and not i['name'].split('-')[1].replace('.zip', '') == current_version
-	]
+				and not i['name'].split('-')[1].replace('.zip', '') == current_version]
 	if not results: return ok_dialog(heading=heading_str, text=no_rollback_str)
 	results.sort(reverse=True)
 	list_items = [{'line1': item, 'icon': downloads_icon} for item in results]

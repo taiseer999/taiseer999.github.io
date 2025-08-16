@@ -11,7 +11,6 @@ from modules.source_utils import clear_scrapers_cache, get_aliases_titles, make_
 from modules.utils import get_datetime, title_key, adjust_premiered_date, append_module_to_syspath, manual_module_import
 # logger = kodi_utils.logger
 
-tmdb_active = settings.tmdb_user_active()
 ok_dialog, container_content, close_all_dialog, external = kodi_utils.ok_dialog, kodi_utils.container_content, kodi_utils.close_all_dialog, kodi_utils.external
 set_property, get_icon, kodi_dialog, open_settings = kodi_utils.set_property, kodi_utils.get_icon, kodi_utils.kodi_dialog, kodi_utils.open_settings
 show_busy_dialog, hide_busy_dialog, notification, confirm_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification, kodi_utils.confirm_dialog
@@ -181,163 +180,6 @@ def trakt_manager_choice(params):
 	if choice == 'Add': trakt_api.trakt_add_to_list(params)
 	else: trakt_api.trakt_remove_from_list(params)
 
-def trakt_trakt_to_tmdb_choice(params, choices = []):
-	
-	if not trakt_user_active(): return notification('No Active Trakt Account', 3000)
-	icon = params.get('icon', None) or get_icon('trakt')
-	
-	# Convert page_number to integer if it exists
-	page_number = int(params.get('page_number', 1))
-	
-	if choices == []:
-		from apis.tmdb_api import get_lists
-		data = get_lists('my_lists', page_number)
-		lists = data.get('results')
-		page, total_pages = data.get('page'), data.get('total_pages')
-			
-		choices = []  # Reset choices to avoid duplicates when recursing
-		
-		if page > 1:
-			choices.append(('<< Previous Page (%s)' % (page - 1), 'newpage_prev'))
-		else:
-			choices.append(('New TMDB List...', 'new'))		
-		
-		for i in lists:
-			choices.append((i['name'], { 'id': i['id'], 'name': i['name'] }))
-		
-		if total_pages > page:
-			choices.append(('Next Page (%s) >>' % (page + 1), 'newpage_next'))
-			
-	list_items = [{'line1': item[0], 'icon': icon} for item in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': 'Import Trakt to TMDB'}
-	choice = select_dialog([i[1] for i in choices], **kwargs)
-	
-	if choice == None: 
-		return
-	elif choice == 'new':
-		from apis.tmdb_api import new_tmdb_list
-		new_list = new_tmdb_list(default_text = params.get('list_name'))
-		tmdb_name, tmdb_id = new_list.get('list_title'), new_list.get('list_id')
-	elif choice == 'newpage_next':
-		new_params = params.copy()
-		new_params['page_number'] = page + 1
-		return trakt_trakt_to_tmdb_choice(new_params)
-	elif choice == 'newpage_prev':
-		new_params = params.copy()
-		new_params['page_number'] = page - 1
-		return trakt_trakt_to_tmdb_choice(new_params)
-	else:
-		tmdb_name, tmdb_id = choice.get('name'), choice.get('id')
-	
-	trakt_list_slug, trakt_list_type, trakt_list_user = params.get('list_slug'), params.get('list_type'), params.get('user')
-	trakt_params = { 'list_type': trakt_list_type, 'user': trakt_list_user, 'ids': { 'slug': trakt_list_slug } }
-	from apis.tmdb_api import trakt_to_tmdb
-	return trakt_to_tmdb(trakt_params, tmdb_id, tmdb_name, confirm = False)
-
-def tmdb_trakt_to_tmdb_choice(params, choices = []):
-	if not trakt_user_active(): return notification('No Active Trakt Account', 3000)
-	icon = params.get('icon', None) or get_icon('trakt')
-	if choices == []:
-		choices = [
-		('Trakt Collection', 'collection'),
-		('Trakt Watchlist', 'watchlist'),
-		('Trakt My Lists', 'my_lists'),
-		('Trakt Liked Lists', 'liked_lists'),
-		('Trakt Favorites', 'favorites')
-		]
-	list_items = [{'line1': item[0], 'icon': icon} for item in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': 'Import Trakt to TMDB'}
-	choice = select_dialog([i[1] for i in choices], **kwargs)
-	if choice == None: return
-	if choice == 'collection':
-		choices = [
-		('Collection - Movies', '_collection_movies'),
-		('Collection - TV Shows', '_collection_tv')
-		]
-	elif choice == 'watchlist':
-		choices = [
-		('Watchlist - Movies', '_watchlist_movies'),
-		('Watchlist - TV Shows', '_watchlist_tv')
-		]
-	elif '_lists' in choice:
-		choices = []
-		list_type = choice
-		from apis.trakt_api import trakt_get_lists
-		lists = trakt_get_lists(choice)
-		if list_type == 'liked_lists':
-			for i in lists:
-				choices.append((i['list']['name'], {'user': i['list']['user']['username'], 'list_type': list_type, 'ids': i['list']['ids'] }))	
-		else:
-			for i in lists:
-				choices.append((i['name'], {'user': i['user']['username'], 'list_type': list_type, 'ids': i['ids'] }))
-	elif choice == 'favorites':
-		choices = [
-		('Favorites - Movies', '_favorites_movies'),
-		('Favorites - TV Shows', '_favorites_tv')
-		]
-	if not isinstance(choice, str):
-		from apis.tmdb_api import trakt_to_tmdb
-		return trakt_to_tmdb(choice, params.get('list_id'), params.get('list_name'))
-	elif not choice.startswith('_'):
-		return tmdb_trakt_to_tmdb_choice(params, choices)
-	else:
-		from apis.tmdb_api import trakt_to_tmdb
-		return trakt_to_tmdb(choice, params.get('list_id'), params.get('list_name'))
-
-def tmdb_manager_choice(params):
-	from apis import tmdb_api
-	
-	page_number = int(params.get('page_number', 1))	# Convert page_number to integer if it exists
-	data = tmdb_api.get_lists('my_lists', page_number)
-	lists = data.get('results')
-	page, total_pages = data.get('page'), data.get('total_pages')
-	icon = params.get('icon', None) or get_icon('tmdb')
-	
-	choices = []
-	
-	# Set previous page or new list option
-	if page > 1:
-		choices.append(('<< Previous Page (%s)' % (page - 1), 'newpage_prev'))
-	else:
-		choices.append(('New TMDB List...', 'new'))		
-	
-	# Set list items
-	for i in lists:
-		choices.append((i['name'], {'list_id': i['id'], 'list_name': i['name']}))
-	
-	# Set next page option
-	if total_pages > page:
-			choices.append(('Next Page (%s) >>' % (page + 1), 'newpage_next'))
-	
-	list_items = [{'line1': item[0], 'icon': icon} for item in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': 'Add/Remove from TMDB List'}
-	choice = select_dialog([i[1] for i in choices], **kwargs)
-	if choice == None: return
-	if choice == 'new': 
-		new_list = tmdb_api.new_tmdb_list(False, params)
-		items = [{'media_type': params.get('media_type'), 'media_id': params.get('tmdb_id')}]
-		return tmdb_api.add_remove('add', items, new_list.get('list_id'))
-	elif choice == 'newpage_next':
-		new_params = params.copy()
-		new_params['page_number'] = page + 1
-		return tmdb_manager_choice(new_params)
-	elif choice == 'newpage_prev':
-		new_params = params.copy()
-		new_params['page_number'] = page - 1
-		return tmdb_manager_choice(new_params)
-	elif tmdb_api.check_item_exists(params, choice):
-		if not kodi_utils.confirm_dialog(text='Remove \'%s\' from the list \'%s\'?' % (params.get('title'), choice.get('list_name'))): 
-			return notification('Cancelled', 1500)
-		else:
-			items = [{'media_type': params.get('media_type'), 'media_id': params.get('tmdb_id')}]
-			return tmdb_api.add_remove('remove', items, choice.get('list_id'))
-	else:
-		if not kodi_utils.confirm_dialog(text='Add \'%s\' to the list \'%s\'?' % (params.get('title'), choice.get('list_name'))): 
-			return notification('Cancelled', 1500)
-		else:
-			items = [{'media_type': params.get('media_type'), 'media_id': params.get('tmdb_id')}]
-			return tmdb_api.add_remove('add', items, choice.get('list_id'))
-		
 def episode_groups_choice(params):
 	episode_group_types = {1: 'Original Air Date', 2: 'Absolute', 3: 'DVD', 4: 'Digital', 5: 'Story Arc', 6: 'Production', 7: 'TV'}
 	meta = params.get('meta')
@@ -379,13 +221,11 @@ def playback_choice(params):
 		meta = function('tmdb_id', meta, tmdb_api_key(), mpaa_region(), get_datetime())
 	poster = meta.get('poster') or empty_poster
 	aliases = get_aliases_titles(make_alias_dict(meta, meta['title']))
-	items = []
-	if media_type == 'episode': items.append({'line': 'Play # Episodes', 'function': 'play_number_eps'})
-	items.extend([{'line': 'Select Source', 'function': 'scrape'},
+	items = [{'line': 'Select Source', 'function': 'scrape'},
 			{'line': 'Rescrape & Select Source', 'function': 'clear_and_rescrape'},
 			{'line': 'Scrape with DEFAULT External Scrapers', 'function': 'scrape_with_default'},
 			{'line': 'Scrape with ALL External Scrapers', 'function': 'scrape_with_disabled'},
-			{'line': 'Scrape With All Filters Ignored', 'function': 'scrape_with_filters_ignored'}])
+			{'line': 'Scrape With All Filters Ignored', 'function': 'scrape_with_filters_ignored'}]
 	if media_type == 'episode': items.append({'line': 'Scrape with Custom Episode Groups Value', 'function': 'scrape_with_episode_group'})
 	if aliases: items.append({'line': 'Scrape with an Alias', 'function': 'scrape_with_aliases'})
 	items.append({'line': 'Scrape with Custom Values', 'function': 'scrape_with_custom_values'})
@@ -400,13 +240,7 @@ def playback_choice(params):
 		clear_cache('internal_scrapers', silent=True)
 		ExternalCache().delete_cache_single(media_type, str(meta['tmdb_id']))
 		hide_busy_dialog()
-	if choice == 'play_number_eps':
-		num_episodes = kodi_dialog().input('Number of episodes', type=numeric_input)
-		if num_episodes == '':
-			return notification('Cancelled', 2500)
-		else:
-			play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'num_episodes': num_episodes}
-	elif choice == 'scrape':
+	if choice == 'scrape':
 		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
 		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'autoplay': 'false'}
 	elif choice == 'clear_and_rescrape':

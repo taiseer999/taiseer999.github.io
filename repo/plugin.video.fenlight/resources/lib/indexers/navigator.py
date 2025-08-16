@@ -119,9 +119,6 @@ class Navigator:
 			self.add({'mode': 'navigator.trakt_favorites', 'category_name': 'Favorites'}, 'Trakt Favorites', 'trakt')
 			self.add({'mode': 'navigator.trakt_recommendations', 'category_name': 'Recommended'}, 'Trakt Recommended', 'trakt')
 			self.add({'mode': 'build_my_calendar'}, 'Trakt Calendar', 'trakt')
-		if s.tmdb_user_active():
-			self.add({'mode': 'tmdb.list.get_tmdb_lists', 'list_type': 'my_lists', 'category_name': 'My TMDB Lists'}, 'TMDB My Lists', 'tmdb')
-			
 		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'category_name': 'Trending User Lists'}, 'Trending User Lists', 'trakt')
 		self.add({'mode': 'trakt.list.get_trakt_trending_popular_lists', 'list_type': 'popular', 'category_name': 'Popular User Lists'}, 'Popular User Lists', 'trakt')
 		self.add({'mode': 'navigator.search_history', 'action': 'trakt_lists'}, 'Search User Lists', 'search')
@@ -238,7 +235,7 @@ class Navigator:
 
 	def update_utils(self):
 		self.add({'mode': 'updater.update_check', 'isFolder': 'false'}, 'Check For Updates', 'github')
-		self.add({'mode': 'updater.rollback_check', 'isFolder': 'false'}, 'Rollback to a Previous Version', 'github')
+		# self.add({'mode': 'updater.rollback_check', 'isFolder': 'false'}, 'Rollback to a Previous Version', 'github')
 		self.add({'mode': 'updater.get_changes', 'isFolder': 'false'}, 'Check Online Version Changelog', 'github')
 		self.end_directory()
 
@@ -300,19 +297,8 @@ class Navigator:
 		if menu_type == 'movie': mode, action, providers = 'build_movie_list', 'tmdb_movies_providers', ml.watch_providers_movies
 		else:
 			mode, providers = 'build_tvshow_list', ml.watch_providers_tvshows
-			if menu_type == 'tvshow': 
-				action = 'tmdb_tv_providers'
-			else: 
-				action = 'tmdb_anime_providers'
-		for i in providers: self.add({'mode': mode, 'action': action, 'key_id': i['id'], 'name': i['name']}, i['name'], image_insert % i['icon'], original_image=True)
-		self.end_directory()
-		
-	def providersuk(self):
-		menu_type = self.params_get('menu_type')
-		image_insert = 'https://image.tmdb.org/t/p/original/%s'
-		if menu_type == 'movie': mode, action, providers = 'build_movie_list', 'tmdb_movies_providers_uk', ml.watch_providers_movies_uk
-		else:
-			action, mode, providers = 'tmdb_tv_providers_uk', 'build_tvshow_list', ml.watch_providers_tvshows_uk
+			if menu_type == 'tvshow': action = 'tmdb_tv_providers'
+			else: action = 'tmdb_anime_providers'
 		for i in providers: self.add({'mode': mode, 'action': action, 'key_id': i['id'], 'name': i['name']}, i['name'], image_insert % i['icon'], original_image=True)
 		self.end_directory()
 

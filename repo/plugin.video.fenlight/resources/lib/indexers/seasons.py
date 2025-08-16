@@ -81,39 +81,34 @@ def build_season_list(params):
 				listitem.addContextMenuItems(cm)
 				yield (url_params, listitem, True)
 			except: pass
-	try:
-		handle, is_external, is_home, category_name = int(sys.argv[1]), external(), home(), 'Season'
-		watched_indicators, adjust_hours, hide_watched = watched_indicators_info(), date_offset_info(), is_home and widget_hide_watched()
-		current_date = get_datetime()
-		watched_title = 'Trakt' if watched_indicators == 1 else 'Fen Light'
-		meta = tvshow_meta('tmdb_id', params['tmdb_id'], tmdb_api_key(), mpaa_region(), current_date)
-		meta_get = meta.get
-		tmdb_id, tvdb_id, imdb_id, show_title, show_year = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id'), meta_get('title'), meta_get('year') or '2050'
-		orig_title, status, show_plot = meta_get('original_title', ''), meta_get('status'), meta_get('plot')
-		str_tmdb_id, str_tvdb_id, rating, genre = string(tmdb_id), string(tvdb_id), meta_get('rating'), meta_get('genre')
-		cast, mpaa, votes, trailer, studio, country = meta_get('cast', []), meta_get('mpaa'), meta_get('votes'), string(meta_get('trailer')), meta_get('studio'), meta_get('country')
-		episode_run_time, season_data, total_seasons = meta_get('duration'), meta_get('season_data'), meta_get('total_seasons')
-		show_poster, show_fanart = meta_get('poster') or poster_empty, meta_get('fanart') or fanart_empty
-		show_clearlogo, show_landscape = meta_get('clearlogo') or '', meta_get('landscape') or ''
-		custom_order = params.get('custom_order', None)
-		if show_specials(): season_data.sort(key=lambda i: (i['season_number'] == 0, i['season_number']))
-		elif custom_order is not None: season_data = [i for i in season_data if i['season_number'] == params['season']]
-		else:
-			season_data = [i for i in season_data if not i['season_number'] == 0]
-			season_data.sort(key=lambda k: k['season_number'])
-		watched_info = watched_info_season(tmdb_id, get_database(watched_indicators))
-		list_items = list(list(_process()))
-		if custom_order is not None: return (list_items[0], custom_order)
-		add_items(handle, list_items)
-		category_name = show_title
-		set_content(handle, content_type)
-		set_category(handle, category_name)
-		end_directory(handle, cacheToDisc=False if is_external else True)
-		set_view_mode(view_mode, content_type, is_external)
-	except Exception as e:
-		kodi_utils.notification('BROWSE ERROR', 3000)
-		kodi_utils.logger('Browse Error', f'Exception in build_tmdb_list: {type(e).__name__}: {str(e)}')
-
+	handle, is_external, is_home, category_name = int(sys.argv[1]), external(), home(), 'Season'
+	watched_indicators, adjust_hours, hide_watched = watched_indicators_info(), date_offset_info(), is_home and widget_hide_watched()
+	current_date = get_datetime()
+	watched_title = 'Trakt' if watched_indicators == 1 else 'Fen Light'
+	meta = tvshow_meta('tmdb_id', params['tmdb_id'], tmdb_api_key(), mpaa_region(), current_date)
+	meta_get = meta.get
+	tmdb_id, tvdb_id, imdb_id, show_title, show_year = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id'), meta_get('title'), meta_get('year') or '2050'
+	orig_title, status, show_plot = meta_get('original_title', ''), meta_get('status'), meta_get('plot')
+	str_tmdb_id, str_tvdb_id, rating, genre = string(tmdb_id), string(tvdb_id), meta_get('rating'), meta_get('genre')
+	cast, mpaa, votes, trailer, studio, country = meta_get('cast', []), meta_get('mpaa'), meta_get('votes'), string(meta_get('trailer')), meta_get('studio'), meta_get('country')
+	episode_run_time, season_data, total_seasons = meta_get('duration'), meta_get('season_data'), meta_get('total_seasons')
+	show_poster, show_fanart = meta_get('poster') or poster_empty, meta_get('fanart') or fanart_empty
+	show_clearlogo, show_landscape = meta_get('clearlogo') or '', meta_get('landscape') or ''
+	custom_order = params.get('custom_order', None)
+	if show_specials(): season_data.sort(key=lambda i: (i['season_number'] == 0, i['season_number']))
+	elif custom_order is not None: season_data = [i for i in season_data if i['season_number'] == params['season']]
+	else:
+		season_data = [i for i in season_data if not i['season_number'] == 0]
+		season_data.sort(key=lambda k: k['season_number'])
+	watched_info = watched_info_season(tmdb_id, get_database(watched_indicators))
+	list_items = list(list(_process()))
+	if custom_order is not None: return (list_items[0], custom_order)
+	add_items(handle, list_items)
+	category_name = show_title
+	set_content(handle, content_type)
+	set_category(handle, category_name)
+	end_directory(handle, cacheToDisc=False if is_external else True)
+	set_view_mode(view_mode, content_type, is_external)
 
 def single_seasons(seasons_list):
 	def _process(item): season_results_append(build_season_list(item))

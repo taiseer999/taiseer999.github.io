@@ -202,8 +202,8 @@ default_settings = [
 #==================== Manage Updates
 {'setting_id': 'update.action', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Prompt', '1': 'Automatic', '2': 'Notification', '3': 'Off'}},
 {'setting_id': 'update.delay', 'setting_type': 'action', 'setting_default': '10', 'min_value': '10', 'max_value': '300'},
-{'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'thejason40'},
-{'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'thejason40.github.io'},
+{'setting_id': 'update.username', 'setting_type': 'string', 'setting_default': 'Tikipeter'},
+{'setting_id': 'update.location', 'setting_type': 'string', 'setting_default': 'tikipeter.github.io'},
 #==================== Watched Indicators
 {'setting_id': 'watched_indicators', 'setting_type': 'action', 'setting_default': '0', 'settings_options': {'0': 'Fen Light', '1': 'Trakt'}},
 #======+============= Trakt Cache
@@ -297,9 +297,6 @@ default_settings = [
 {'setting_id': 'trakt.secret', 'setting_type': 'string', 'setting_default': trakt_default_secret},
 #==================== TMDb
 {'setting_id': 'tmdb_api', 'setting_type': 'string', 'setting_default': tmdb_default_api},
-{'setting_id': 'tmdb_read_access_token', 'setting_type': 'string', 'setting_default': 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZTRkNDhlNjhhYmI5YTRmMmM4NmExY2MxNDNjZDhiNSIsIm5iZiI6MTY5OTAwNzUyNy42OTQwMDAyLCJzdWIiOiI2NTQ0Y2MyNzQxYTU2MTMzNjkzOTkwMjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.qsT2zyh3yRDVSyu2aboWEq4rxuz5WjZsABxJ7lb2-po'},
-{'setting_id': 'tmdb.access_token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
-{'setting_id': 'tmdb.account_id', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== OMDb
 {'setting_id': 'omdb_api', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 #==================== External
@@ -315,7 +312,6 @@ default_settings = [
 {'setting_id': 'check.rd_cloud', 'setting_type': 'boolean', 'setting_default': 'false'},
 {'setting_id': 'results.sort_rdcloud_first', 'setting_type': 'boolean', 'setting_default': 'true'},
 {'setting_id': 'rd.priority', 'setting_type': 'action', 'setting_default': '10', 'min_value': '1', 'max_value': '10'},
-{'setting_id': 'rd.alt_api', 'setting_type': 'boolean', 'setting_default': 'false'},
 #==================== Premiumize
 {'setting_id': 'pm.token', 'setting_type': 'string', 'setting_default': 'empty_setting'},
 {'setting_id': 'pm.enabled', 'setting_type': 'boolean', 'setting_default': 'false'},
