@@ -12,6 +12,8 @@ session = requests.Session()
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class AllDebridAPI:
+	icon = 'alldebrid.png'
+
 	def __init__(self):
 		self.token = get_setting('ad.token')
 
@@ -40,9 +42,9 @@ class AllDebridAPI:
 		try:
 			account_info = self.account_info()['user']
 			expires = datetime.datetime.fromtimestamp(account_info['premiumUntil'])
-			days_remaining = (expires - datetime.datetime.today()).days
-		except: days_remaining = None
-		return days_remaining
+			days = (expires - datetime.datetime.today()).days
+		except: days = None
+		return days
 
 	def account_info(self):
 		response = self._get('user')

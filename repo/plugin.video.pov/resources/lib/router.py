@@ -289,8 +289,8 @@ class Router:
 			from modules.debrid import manual_add_nzb_to_cloud
 			manual_add_nzb_to_cloud(params)
 		elif mode == 'debrid.browse_packs':
-			from modules.sources import Sources
-			Sources().debridPacks(params['provider'], params['name'], params['magnet_url'], params['info_hash'], params['highlight'])
+			from modules.debrid import debrid_packs
+			debrid_packs(params['provider'], params['name'], params['magnet_url'], params['info_hash'], params['highlight'])
 		elif mode == 'upload_logfile':
 			from modules.kodi_utils import upload_logfile
 			upload_logfile()

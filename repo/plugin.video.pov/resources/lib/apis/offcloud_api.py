@@ -11,16 +11,7 @@ session = requests.Session()
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class OffcloudAPI:
-	download = 'https://%s.offcloud.com/cloud/download/%s/%s'
-	zip = 'https://%s.offcloud.com/cloud/zip/%s/%s.zip'
-	remove = 'https://offcloud.com/cloud/remove/%s' # undocumented
-	stats = 'account/stats' # undocumented
-	history = 'cloud/history' # undocumented
-	explore = 'cloud/explore/%s'
-	files = 'cloud/list/%s'
-	status = 'cloud/status'
-	cache = 'cache'
-	cloud = 'cloud'
+	icon = 'offcloud.png'
 
 	@staticmethod
 	def requote_uri(url):
@@ -48,10 +39,10 @@ class OffcloudAPI:
 		return self._request('post', url, data=data)
 
 	def build_url(self, server, request_id, file_name):
-		return self.download % (server, request_id, file_name)
+		return 'https://%s.offcloud.com/cloud/download/%s/%s' % (server, request_id, file_name)
 
 	def build_zip(self, server, request_id, file_name):
-		return self.zip % (server, request_id, file_name)
+		return 'https://%s.offcloud.com/cloud/zip/%s/%s.zip' % (server, request_id, file_name)
 
 	def requestid_from_url(self, url):
 		match = re.search(r'download/[A-Za-z0-9]+/', url)
@@ -60,15 +51,16 @@ class OffcloudAPI:
 		return request_id
 
 	def account_info(self):
-		return self._get(self.stats)
+		url = 'account/stats'
+		return self._get(url)
 
 	def torrent_info(self, request_id):
-		url = self.explore % request_id
+		url = 'cloud/explore/%s' % request_id
 		return self._get(url)
 
 	def delete_torrent(self, request_id):
 		params = {'key': self.token}
-		url = self.remove % request_id
+		url = 'https://offcloud.com/cloud/remove/%s' % request_id
 		return self._get(url, params=params)
 
 	def unrestrict_link(self, link):
@@ -80,12 +72,14 @@ class OffcloudAPI:
 
 	def check_cache(self, hashes):
 		data = {'hashes': hashes}
-		result = self._post(self.cache, data=data)
+		url = 'cache'
+		result = self._post(url, data=data)
 		return result['cachedItems']
 
 	def add_magnet(self, magnet):
 		data = {'url': magnet}
-		return self._post(self.cloud, data=data)
+		url = 'cloud'
+		return self._post(url, data=data)
 
 	def create_transfer(self, magnet):
 		result = self.add_magnet(magnet)
@@ -138,7 +132,7 @@ class OffcloudAPI:
 
 	def user_cloud(self, request_id=None, check_cache=True):
 		string = 'pov_oc_user_cloud_info_%s' % request_id if request_id else 'pov_oc_user_cloud'
-		url = self.explore % request_id if request_id else self.history
+		url = 'cloud/explore/%s' % request_id if request_id else 'cloud/history'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
 		return result

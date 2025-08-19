@@ -10,10 +10,7 @@ session = requests.Session()
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class EasyDebridAPI:
-	download = 'link/generate'
-	stats = 'user/details'
-	cache = 'link/lookup'
-	cloud = 'link/request'
+	icon = 'easydebrid.png'
 
 	def __init__(self):
 		self.token = get_setting('ed.token')
@@ -40,23 +37,25 @@ class EasyDebridAPI:
 		try:
 			account_info = self.account_info()
 			expires = datetime.fromtimestamp(account_info['paid_until'])
-			days_remaining = (expires - datetime.today()).days
-		except: days_remaining = None
-		return days_remaining
+			days = (expires - datetime.today()).days
+		except: days = None
+		return days
 
 	def account_info(self):
-		return self._get(self.stats)
+		url = 'user/details'
+		return self._get(url)
 
 	def unrestrict_link(self, link):
 		return link
 
 	def check_single_magnet(self, hash_string):
-		cached_info = self.check_cache([hash_string])
-		return hash_string in cached_info
+		result = self.check_cache([hash_string])
+		return hash_string in result
 
 	def check_cache(self, hashes):
 		data = {'urls': hashes}
-		result = self._post(self.cache, json=data)
+		url = 'link/lookup'
+		result = self._post(url, json=data)
 		return [h for h, cached in zip(hashes, result['cached']) if cached]
 
 	def instant_transfer(self, magnet):
@@ -64,11 +63,13 @@ class EasyDebridAPI:
 		except: user_ip = ''
 		if user_ip: session.headers['X-Forwarded-For'] = user_ip
 		data = {'url': magnet}
-		return self._post(self.download, json=data)
+		url = 'link/generate'
+		return self._post(url, json=data)
 
 	def create_transfer(self, magnet):
 		data = {'url': magnet}
-		result = self._post(self.cloud, json=data)
+		url = 'link/request'
+		result = self._post(url, json=data)
 		return result.get('success', '')
 
 	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):

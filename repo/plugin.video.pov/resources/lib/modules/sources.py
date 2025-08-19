@@ -7,25 +7,21 @@ from scrapers import external, folders
 from modules import debrid, kodi_utils, settings
 from modules.player import POVPlayer
 from modules.source_utils import internal_sources, internal_folders_import, scraper_names, get_cache_expiry, pack_enable_check
-from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime
+from modules.utils import string_to_float, safe_string, remove_accents, get_datetime
 #from modules.kodi_utils import logger
 
-show_busy_dialog, hide_busy_dialog, progressDialogBG = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.progressDialogBG
-close_all_dialog, select_dialog, confirm_dialog = kodi_utils.close_all_dialog, kodi_utils.select_dialog, kodi_utils.confirm_dialog
-get_property, set_property, clear_property, get_setting = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_setting
-ls, monitor, translate_path, notification, sleep = kodi_utils.local_string, kodi_utils.monitor, kodi_utils.translate_path, kodi_utils.notification, kodi_utils.sleep
-auto_play, active_internal_scrapers, provider_sort_ranks,  = settings.auto_play, settings.active_internal_scrapers, settings.provider_sort_ranks
+show_busy_dialog, hide_busy_dialog, close_all_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.close_all_dialog
+progressDialogBG, notification = kodi_utils.progressDialogBG, kodi_utils.notification
+get_property, set_property, clear_property = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property
+ls, monitor, sleep, get_setting = kodi_utils.local_string, kodi_utils.monitor, kodi_utils.sleep, kodi_utils.get_setting
+auto_play, active_internal_scrapers, provider_sort_ranks = settings.auto_play, settings.active_internal_scrapers, settings.provider_sort_ranks
 display_sleep_time, scraping_settings, include_prerelease_results = settings.display_sleep_time, settings.scraping_settings, settings.include_prerelease_results
 ignore_results_filter, filter_status, results_sort_order = settings.ignore_results_filter, settings.filter_status, settings.results_sort_order
 display_uncached_torrents, check_prescrape_sources = settings.display_uncached_torrents, settings.check_prescrape_sources
 metadata_user_info, quality_filter, sort_to_top  = settings.metadata_user_info, settings.quality_filter, settings.sort_to_top
-results_xml_style, results_xml_window_number = settings.results_xml_style, settings.results_xml_window_number
+results_xml_style, results_xml_window_number, get_language = settings.results_xml_style, settings.results_xml_window_number, settings.get_language
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
-debrid_list, import_debrid, main_line = debrid.debrid_list, debrid.import_debrid, debrid.main_line
-resolve_debrid, resolve_internal_sources = debrid.resolve_debrid, debrid.resolve_internal_sources
-resolve_cached_torrents, resolve_cached_nzbs = debrid.resolve_cached_torrents, debrid.resolve_cached_nzbs
-manual_add_magnet_to_cloud, manual_add_nzb_to_cloud = debrid.manual_add_magnet_to_cloud, debrid.manual_add_nzb_to_cloud
-quality_ranks = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}
+quality_ranks, main_line = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}, '%s[CR]%s[CR]%s'
 cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
 default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud', 'folders')
 av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]AV1[/B]', '[B]HEVC[/B]', '[B]HDR[/B]', '[B]D/VISION[/B]'
@@ -41,7 +37,7 @@ class Sources():
 		self.exclude_list = ['easynews', 'library']# needs to be mutable so leave as list.
 		self.sourcesTotal = self.sources4K = self.sources1080p = self.sources720p = self.sourcesSD = 0
 		self.prescrape, self.disabled_ignored = 'true', 'false'
-		self.language = get_setting('meta_language')
+		self.language = get_language()
 		self.progress_dialog = None
 
 	def playback_prep(self, params=None):
@@ -342,7 +338,7 @@ class Sources():
 		if self.custom_year: self.meta['custom_year'] = self.custom_year
 
 	def _search_info(self):
-		title = self._get_search_title(self.meta)
+		title = metadata.get_title(self.meta, self.language)
 		year = self._get_search_year(self.meta)
 		ep_name = self._get_ep_name(self.meta)
 		aliases = self._make_alias_dict(title, self.meta)
@@ -352,23 +348,6 @@ class Sources():
 			'title': title, 'year': year, 'season': self.custom_season or self.season, 'episode': self.custom_episode or self.episode,
 			'ep_name': ep_name, 'aliases': aliases, 'expiry_times': expiry_times, 'total_seasons': self.meta.get('total_seasons', 1)
 		}
-
-	def _get_search_title(self, meta):
-		if 'custom_title' in meta: return meta['custom_title']
-		if self.language == 'en': search_title = meta['title']
-		else: search_title = meta.get('english_title')
-		if not search_title:
-			try:
-				media_type = 'movie' if self.media_type == 'movie' else 'tv'
-				meta_user_info = metadata_user_info()
-				english_title = metadata.english_translation(media_type, meta['tmdb_id'], meta_user_info)
-				if english_title: search_title = english_title
-				else: search_title = meta['original_title']
-			except: pass
-		if not search_title: search_title = meta['original_title']
-		if '(' in search_title: search_title = search_title.split('(')[0]
-		if '/' in search_title: search_title = search_title.replace('/', ' ')
-		return search_title
 
 	def _get_search_year(self, meta):
 		if 'custom_year' in meta: return meta['custom_year']
@@ -480,11 +459,11 @@ class Sources():
 		return results
 
 	def _grab_meta(self):
-		meta_user_info = metadata_user_info()
+		meta_user_info, datetime = metadata_user_info(), get_datetime()
 		if self.media_type == 'movie':
-			self.meta = metadata.movie_meta('tmdb_id', self.tmdb_id, meta_user_info, get_datetime())
+			self.meta = metadata.movie_meta('tmdb_id', self.tmdb_id, meta_user_info, datetime)
 			return
-		else: self.meta = metadata.tvshow_meta('tmdb_id', self.tmdb_id, meta_user_info, get_datetime())
+		else: self.meta = metadata.tvshow_meta('tmdb_id', self.tmdb_id, meta_user_info, datetime)
 		try:
 			episodes_data = metadata.season_episodes_meta(self.season, self.meta, meta_user_info)
 			episode_data = [i for i in episodes_data if i['episode'] == int(self.episode)][0]
@@ -496,7 +475,7 @@ class Sources():
 		except: pass
 
 	def _get_module(self, module_type, function):
-		if module_type == 'external': module = function.source(*self.external_args)
+		if module_type == 'external': module = function.External(*self.external_args)
 		elif module_type == 'folders': module = function[0](*function[1])
 		else: module = function()
 		return module
@@ -515,32 +494,6 @@ class Sources():
 		try: del self.progress_dialog
 		except: pass
 		self.progress_dialog = None
-
-	def debridPacks(self, debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
-		show_busy_dialog()
-		debrid_provider = debrid_provider.replace('Unchecked ', '')
-		debrid_function = import_debrid(debrid_provider)
-		debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
-		hide_busy_dialog()
-		if not debrid_files: return notification(32574)
-		debrid_files.sort(key=lambda k: k['filename'].lower())
-		if download: return debrid_files, debrid_function
-		icon = next((i[2] for i in debrid_list if i[0] == debrid_provider), 'pov.png')
-		icon = translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % icon)
-		list_items = [
-			{'line1': clean_file_name(item['filename']),
-			 'line2': '%s: %.2f GB' % (ls(32584), float(item['size'])/1073741824),
-			 'icon': icon}
-			for item in debrid_files
-		]
-		kwargs = {'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
-		kwargs.update({'items': json.dumps(list_items), 'heading': name, 'highlight': highlight})
-		chosen_result = select_dialog(debrid_files, **kwargs)
-		if chosen_result is None: return None
-		url_dl, name = chosen_result['link'], chosen_result['filename']
-		if debrid_provider == 'Premiumize.me': link = debrid_function().add_headers_to_url(url_dl)
-		else: link = debrid_function().unrestrict_link(url_dl)
-		return POVPlayer().run(link, 'video')
 
 	def play_file(self, results, source={}, autoplay=False, background=False):
 		def _process():
@@ -583,31 +536,32 @@ class Sources():
 
 	def resolve_sources(self, item, meta):
 		try:
-			if 'cache_provider' in item:
-				cache_provider = item['cache_provider']
-				if meta['media_type'] == 'movie': title, season, episode = self._get_search_title(meta), None, None
-				else: title, season, episode = meta['ep_name'], meta.get('custom_season') or meta.get('season'), meta.get('custom_episode') or meta.get('episode')
-				if next((True for i in debrid_list if cache_provider in (i[0], f"Unchecked {i[0]}")), False):
-					if item['url'].startswith('magnet'):
-						url = resolve_cached_torrents(item['debrid'], item['url'], item['hash'], title, season, episode)
-					else:
-						url = resolve_cached_nzbs(item['debrid'], item['url'], item['hash'], title, season, episode)
-					return url
-				if 'Uncached' in cache_provider:
-					if confirm_dialog(text=ls(32831) % item['debrid'].upper()):
-						if item['url'].startswith('magnet'):
-							manual_add_magnet_to_cloud({'provider': item['debrid'], 'magnet_url': item['url']})
-						else:
-							manual_add_nzb_to_cloud({'provider': item['debrid'], 'url': item['url'], 'name': item['name']})
-					return 'uncached'
-			if item.get('scrape_provider', None) in default_internal_scrapers:
-				url = resolve_internal_sources(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False))
-				return url
+			if item.get('cache_provider') and not 'Uncached' in item['cache_provider']:
+				if meta['media_type'] == 'episode':
+					title = meta['ep_name']
+					season = meta.get('custom_season') or meta.get('season')
+					episode = meta.get('custom_episode') or meta.get('episode')
+				else: title, season, episode = metadata.get_title(meta, self.language), None, None
+				api = debrid.import_debrid(item['debrid'])
+				if item['url'].startswith('magnet'):
+					store_to_cloud = settings.store_resolved_torrent_to_cloud(item['debrid'])
+					function = api().resolve_magnet
+				else:
+					store_to_cloud = settings.store_resolved_usenet_to_cloud(item['debrid'])
+					function = api().resolve_nzb
+				return function(item['url'], item['hash'], store_to_cloud, title, season, episode)
+			if item.get('cache_provider') and 'Uncached' in item['cache_provider']:
+				if item['url'].startswith('magnet'): function = debrid.manual_add_magnet_to_cloud
+				else: function = debrid.manual_add_nzb_to_cloud
+				function({'provider': item['debrid'], 'url': item['url'], 'name': item['name']})
+				return 'uncached'
+			if item.get('scrape_provider') in default_internal_scrapers:
+				return debrid.resolve_internal_sources(
+					item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False)
+				)
 			if item.get('debrid') in ('Real-Debrid', 'Premiumize.me', 'AllDebrid') and not item['source'].lower() == 'torrent':
-				url = resolve_debrid(item['debrid'], item['provider'], item['url'])
-				return url
-			else:
-				url = item['url']
-				return url
+				api = debrid.import_debrid(item['debrid'])
+				return api().unrestrict_link(item['url'])
+			return item['url']
 		except: pass
 

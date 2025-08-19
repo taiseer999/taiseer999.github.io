@@ -4,15 +4,15 @@ import ssl
 from threading import Thread
 from urllib.parse import unquote, parse_qsl, urlparse
 from urllib.request import Request, urlopen
-from indexers.metadata import english_translation
+from indexers.metadata import get_title
 from windows import open_window
 from modules import kodi_utils
 from modules.sources import Sources
-from modules.settings import download_directory, get_art_provider, metadata_user_info
+from modules.settings import download_directory, get_art_provider, get_language
 from modules.utils import clean_file_name, clean_title, safe_string, remove_accents
 # from modules.kodi_utils import logger
 
-ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
+ls = kodi_utils.local_string
 ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 levels =['../../../..', '../../..', '../..', '..']
 poster_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
@@ -24,32 +24,27 @@ image_extensions = ('jpg', 'jpeg', 'jpe', 'jif', 'jfif', 'jfi', 'bmp', 'dib', 'p
 					'psd', 'raw', 'arw', 'cr2', 'nrw', 'k25', 'jp2', 'j2k', 'jpf', 'jpx', 'jpm', 'mj2')
 
 def runner(params):
-	threads = []
-	append = threads.append
 	action = params.get('action')
-	if action == 'meta.single': Downloader(params).run()
-	elif action == 'image':
-		for item in ('thumb_url', 'image_url'):
-			image_params = params
-			image_params['url'] = params.pop(item)
-			image_params['media_type'] = item
-			Downloader(image_params).run()
-	elif action.startswith('cloud'): Downloader(params).run()
+	if action.startswith('cloud'): Downloader(params).run()
+	elif action == 'meta.single': Downloader(params).run()
 	elif action == 'meta.pack':
+		from modules.debrid import debrid_packs
 		from modules.source_utils import find_season_in_release_title
-		provider = params['provider']
-		try:
-			debrid_files, debrid_function = Sources().debridPacks(provider, params['name'], params['magnet_url'], params['info_hash'], download=True)
-			pack_choices = [dict(params, **{'pack_files':item}) for item in debrid_files]
-			icon = {'Real-Debrid': 'realdebrid.png', 'Premiumize.me': 'premiumize.png', 'AllDebrid': 'alldebrid.png', 'Offcloud': 'offcloud.png', 'TorBox': 'torbox.png', 'EasyDebrid': 'easydebrid.png'}[provider]
-		except: return kodi_utils.notification(32692)
-		default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % icon)
-		chosen_list = select_pack_item(pack_choices, params['highlight'], default_icon)
+		threads = []
+		append = threads.append
+		provider, highlight = params['provider'], params['highlight']
+		pack_choices = debrid_packs(provider, params['name'], params['magnet_url'], params['info_hash'], download=True)
+		if not pack_choices: return kodi_utils.notification(32692)
+		heading = clean_file_name(json.loads(params['source']).get('name'))
+		kwargs = {'enumerate': 'true', 'multi_choice': 'true', 'multi_line': 'true'}
+		kwargs.update({'items': json.dumps(pack_choices), 'heading': heading, 'highlight': highlight})
+		chosen_list = kodi_utils.select_dialog(pack_choices, **kwargs)
 		if not chosen_list: return
 		show_package = json.loads(params['source']).get('package') == 'show'
-		meta  = json.loads(chosen_list[0].get('meta'))
-		default_name = '%s (%s)' % (clean_file_name(get_title(meta)), meta.get('year'))
+		meta  = json.loads(params.get('meta'))
+		default_name = '%s (%s)' % (clean_file_name(get_title(meta, get_language())), meta.get('year'))
 		default_foldername = kodi_utils.dialog.input(ls(32228), defaultt=default_name)
+		chosen_list = [{**params, 'pack_files': item} for item in chosen_list]
 		for item in chosen_list:
 			if show_package:
 				season = find_season_in_release_title(item['pack_files']['filename'])
@@ -60,35 +55,12 @@ def runner(params):
 				else: pass
 			append(Thread(target=Downloader(item).run))
 		[i.start() for i in threads]
-
-def select_pack_item(pack_choices, highlight, icon):
-	list_items = [
-		{'line1': '%.2f GB | %s' % (float(item['pack_files']['size'])/1073741824, clean_file_name(item['pack_files']['filename']).upper()), 'icon': icon}
-		for item in pack_choices
-	]
-	heading = '%s - %s' % (ls(32031), clean_file_name(json.loads(pack_choices[0].get('source')).get('name')))
-	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'highlight': highlight, 'enumerate': 'true', 'multi_choice': 'true', 'multi_line': 'false'}
-	return kodi_utils.select_dialog(pack_choices, **kwargs)
-
-def get_title(meta):
-	language = get_setting('meta_language')
-	if 'custom_title' in meta: title = meta['custom_title']
-	else:
-		if language == 'en': title = meta['title']
-		else:
-			title = None
-			if 'english_title' in meta: title = meta['english_title']
-			else:
-				try:
-					media_type = 'movie' if meta['media_type'] == 'movie' else 'tv'
-					english_title = english_translation(media_type, meta['tmdb_id'], metadata_user_info())
-					if english_title: title = english_title
-					else: title = meta['original_title']
-				except: pass
-			if not title: title = meta['original_title']
-		if '(' in title: title = title.split('(')[0]
-		if '/' in title: title = title.replace('/', ' ')
-	return title
+	elif action == 'image':
+		for item in ('thumb_url', 'image_url'):
+			image_params = params
+			image_params['url'] = params.pop(item)
+			image_params['media_type'] = item
+			Downloader(image_params).run()
 
 class Downloader:
 	def __init__(self, params):
@@ -113,7 +85,7 @@ class Downloader:
 			art_provider = get_art_provider()
 			self.meta = json.loads(self.params_get('meta'))
 			self.meta_get = self.meta.get
-			title = get_title(self.meta)
+			title = get_title(self.meta, get_language())
 			self.media_type = self.meta_get('media_type')
 			self.year = self.meta_get('year')
 			self.image = self.meta_get('poster')

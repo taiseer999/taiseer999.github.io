@@ -14,22 +14,7 @@ session.headers['User-Agent'] = user_agent
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class TorBoxAPI:
-	download = 'torrents/requestdl'
-	download_usenet = 'usenet/requestdl'
-	download_webdl = 'webdl/requestdl'
-	remove = 'torrents/controltorrent'
-	remove_usenet = 'usenet/controlusenetdownload'
-	remove_webdl = 'webdl/controlwebdownload'
-	stats = 'user/me'
-	history = 'torrents/mylist'
-	history_usenet = 'usenet/mylist'
-	history_webdl = 'webdl/mylist'
-	explore = 'torrents/mylist?id=%s'
-	explore_usenet = 'usenet/mylist?id=%s'
-	explore_webdl = 'webdl/mylist?id=%s'
-	cache = 'torrents/checkcached'
-	cloud = 'torrents/createtorrent'
-	cloud_usenet = 'usenet/createusenetdownload'
+	icon = 'torbox.png'
 
 	def __init__(self):
 		self.token = get_setting('tb.token')
@@ -71,32 +56,36 @@ class TorBoxAPI:
 			FormatDateTime = '%Y-%m-%dT%H:%M:%SZ'
 			try: expires = datetime.datetime.strptime(account_info['premium_expires_at'], FormatDateTime)
 			except: expires = datetime.datetime(*(time.strptime(account_info['premium_expires_at'], FormatDateTime)[0:6]))
-			days_remaining = (expires - datetime.datetime.today()).days
-		except: days_remaining = None
-		return days_remaining
+			days = (expires - datetime.datetime.today()).days
+		except: days = None
+		return days
 
 	def account_info(self):
-		return self._get(self.stats)
+		url = 'user/me'
+		return self._get(url)
 
 	def torrent_info(self, request_id):
-		url = self.explore % request_id
+		url = 'torrents/mylist?id=%s' % request_id
 		return self._get(url)
 
 	def nzb_info(self, request_id):
-		url = self.explore_usenet % request_id
+		url = 'usenet/mylist?id=%s' % request_id
 		return self._get(url)
 
 	def delete_torrent(self, request_id):
 		data = {'torrent_id': request_id, 'operation': 'delete'}
-		return self._post(self.remove, json=data)
+		url = 'torrents/controltorrent'
+		return self._post(url, json=data)
 
 	def delete_usenet(self, request_id):
 		data = {'usenet_id': request_id, 'operation': 'delete'}
-		return self._post(self.remove_usenet, json=data)
+		url = 'usenet/controlusenetdownload'
+		return self._post(url, json=data)
 
 	def delete_webdl(self, request_id):
 		data = {'webdl_id': request_id, 'operation': 'delete'}
-		return self._post(self.remove_webdl, json=data)
+		url = 'webdl/controlwebdownload'
+		return self._post(url, json=data)
 
 	def unrestrict_link(self, file_id):
 		try: user_ip = requests.get(ip_url, timeout=2.0).text
@@ -104,7 +93,8 @@ class TorBoxAPI:
 		params = {'user_ip': user_ip} if user_ip else {}
 		torrent_id, file_id = file_id.split(',')
 		params.update({'token': self.token, 'torrent_id': torrent_id, 'file_id': file_id})
-		return self._get(self.download, params=params)
+		url = 'torrents/requestdl'
+		return self._get(url, params=params)
 
 	def unrestrict_usenet(self, file_id):
 		try: user_ip = requests.get(ip_url, timeout=2.0).text
@@ -112,7 +102,8 @@ class TorBoxAPI:
 		params = {'user_ip': user_ip} if user_ip else {}
 		usenet_id, file_id = file_id.split(',')
 		params.update({'token': self.token, 'usenet_id': usenet_id, 'file_id': file_id})
-		return self._get(self.download_usenet, params=params)
+		url = 'usenet/requestdl'
+		return self._get(url, params=params)
 
 	def unrestrict_webdl(self, file_id):
 		try: user_ip = requests.get(ip_url, timeout=2.0).text
@@ -120,25 +111,29 @@ class TorBoxAPI:
 		params = {'user_ip': user_ip} if user_ip else {}
 		webdl_id, file_id = file_id.split(',')
 		params.update({'token': self.token, 'web_id': webdl_id, 'file_id': file_id})
-		return self._get(self.download_webdl, params=params)
+		url = 'webdl/requestdl'
+		return self._get(url, params=params)
 
 	def check_single_magnet(self, hash_string):
-		result = self._get(self.cache, params={'hash': hash_string, 'format': 'list'})
-		return hash_string in [i['hash'] for i in result]
+		result = self.check_cache([hash_string])
+		return hash_string in result
 
 	def check_cache(self, hashes):
 		data = {'hashes': hashes}
-		result = self._post(self.cache, params={'format': 'list'}, json=data)
+		url = 'torrents/checkcached'
+		result = self._post(url, params={'format': 'list'}, json=data)
 		return [i['hash'] for i in result]
 
 	def add_magnet(self, magnet):
 		data = {'magnet': magnet, 'seed': 3, 'allow_zip': 'false'}
-		return self._post(self.cloud, data=data)
+		url = 'torrents/createtorrent'
+		return self._post(url, data=data)
 
 	def add_nzb(self, nzb, name=''):
 		data = {'link': nzb}
 		if name: data['name'] = name
-		return self._post(self.cloud_usenet, data=data)
+		url = 'usenet/createusenetdownload'
+		return self._post(url, data=data)
 
 	def create_transfer(self, link, name=''):
 		if link.startswith('magnet'): key, result = 'torrent_id', self.add_magnet(link)
@@ -214,7 +209,7 @@ class TorBoxAPI:
 			return file_url
 		except Exception as e:
 			kodi_utils.logger('main exception', str(e))
-			if torrent_id: Thread(target=self.delete_usenet, args=(nzb_id,)).start()
+			if nzb_id: Thread(target=self.delete_usenet, args=(nzb_id,)).start()
 			return None
 
 	def usenet_search(self, query, season='', episode='', imdb=''):
@@ -234,21 +229,21 @@ class TorBoxAPI:
 
 	def user_cloud(self, request_id=None, check_cache=True):
 		string = 'pov_tb_user_cloud_info_%s' % request_id if request_id else 'pov_tb_user_cloud'
-		url = self.explore % request_id if request_id else self.history
+		url = 'torrents/mylist?id=%s' % request_id if request_id else 'torrents/mylist'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
 		return result
 
 	def user_cloud_usenet(self, request_id=None, check_cache=True):
 		string = 'pov_tb_user_cloud_usenet_info_%s' % request_id if request_id else 'pov_tb_user_cloud_usenet'
-		url = self.explore_usenet % request_id if request_id else self.history_usenet
+		url = 'usenet/mylist?id=%s' % request_id if request_id else 'usenet/mylist'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
 		return result
 
 	def user_cloud_webdl(self, request_id=None, check_cache=True):
 		string = 'pov_tb_user_cloud_webdl_info_%s' % request_id if request_id else 'pov_tb_user_cloud_webdl'
-		url = self.explore_webdl % request_id if request_id else self.history_webdl
+		url = 'webdl/mylist?id=%s' % request_id if request_id else 'webdl/mylist'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
 		return result
@@ -262,7 +257,7 @@ class TorBoxAPI:
 			dbcur = dbcon.cursor()
 			try:
 				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('torbox_usenet_queries',))
-				kodi_utils.clear_property(str(i))
+				kodi_utils.clear_property('torbox_usenet_queries')
 			except: pass
 			# USER CLOUD
 			try:

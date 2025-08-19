@@ -11,10 +11,7 @@ session = requests.Session()
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class DebriderAPI:
-	download = 'link/generate'
-	stats = 'account'
-	cache = 'link/lookup'
-	cloud = 'tasks'
+	icon = 'debrider.png'
 
 	def __init__(self):
 		self.token = get_setting('db.token')
@@ -40,15 +37,16 @@ class DebriderAPI:
 		pass
 
 	def account_info(self):
-		return self._get(self.stats)
+		url = 'account'
+		return self._get(url)
 
 	def torrent_info(self, request_id):
-		url = '%s/%s' % (self.cloud, request_id)
+		url = '%s/%s' % ('tasks', request_id)
 		return self._get(url)
 
 	def delete_torrent(self, request_id):
 		session.headers['Authorization'] = 'Bearer %s' % self.token
-		url = '%s/%s/%s' % (base_url, self.cloud, request_id)
+		url = '%s/%s/%s' % (base_url, 'tasks', request_id)
 		result = session.delete(url, timeout=timeout)
 		return 'success' if result.ok else ''
 
@@ -57,21 +55,25 @@ class DebriderAPI:
 
 	def check_single_magnet(self, hash_string):
 		data = {'data': [hash_string]}
-		result = self._post(self.cache, json=data)
+		url = 'link/lookup'
+		result = self._post(url, json=data)
 		return [{h: i['files']} for h, i in zip([hash_string], result['result']) if i['cached']]
 
 	def check_cache(self, hashes):
 		data = {'data': hashes}
-		result = self._post(self.cache, json=data)
+		url = 'link/lookup'
+		result = self._post(url, json=data)
 		return [h for h, i in zip(hashes, result['result']) if i['cached']]
 
 	def add_magnet(self, magnet):
 		data = {'type': 'magnet', 'data': magnet}
-		return self._post(self.cloud, json=data)
+		url = 'tasks'
+		return self._post(url, json=data)
 
 	def instant_transfer(self, hash):
 		data = {'data': hash}
-		return self._post(self.download, json=data)
+		url = 'link/generate'
+		return self._post(url, json=data)
 
 	def create_transfer(self, magnet):
 		result = self.add_magnet(magnet)
@@ -120,7 +122,7 @@ class DebriderAPI:
 
 	def user_cloud(self, request_id=None, check_cache=True):
 		string = 'pov_db_user_cloud_info_%s' % request_id if request_id else 'pov_db_user_cloud'
-		url = '%s/%s' % (self.cloud, request_id) if request_id else self.cloud
+		url = '%s/%s' % ('tasks', request_id) if request_id else 'tasks'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
 		return result

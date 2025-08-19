@@ -397,6 +397,24 @@ def build_tvshow_meta(data, user_info, fanarttv_data=None):
 	else: meta_dict.update(default_fanarttv_data)
 	return meta_dict
 
+def get_title(meta, language):
+	if 'custom_title' in meta: return meta['custom_title']
+	if language == 'en': title = meta['title']
+	else: title = meta.get('english_title')
+	if not title:
+		try:
+			from settings import metadata_user_info
+			meta_user_info = metadata_user_info()
+			media_type = 'movie' if meta['media_type'] == 'movie' else 'tv'
+			english_title = tmdb_english_translation(media_type, meta['tmdb_id'], meta_user_info)
+			if english_title: title = english_title
+			else: title = meta['original_title']
+		except: pass
+	if not title: title = meta['original_title']
+	if '(' in title: title = title.split('(')[0]
+	if '/' in title: title = title.replace('/', ' ')
+	return title
+
 def rpdb_get(media_type, media_id, api_key):
 	if api_key and media_id:
 		if media_id.startswith('tt'): id_type = 'imdb'

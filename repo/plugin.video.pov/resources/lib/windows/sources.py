@@ -95,13 +95,14 @@ class SourceResults(BaseDialog):
 		elif action in self.context_actions:
 			highlight = chosen_listitem.getProperty('tikiskins.highlight')
 			source = json.loads(chosen_listitem.getProperty('source'))
-			choice = self.open_window(('windows.sources', 'ResultsContextMenu'), 'contextmenu.xml',
-									item=source, highlight=highlight, meta=self.meta, filter_applied=self.filter_applied)
-			if choice:
-				if 'results_info' in choice: self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem)
-				elif 'clear_results_filter' in choice: return self.clear_filter()
-				elif 'results_filter' in choice: return self.filter_results()
-				else: self.execute_code(choice)
+			kwargs = dict(item=source, highlight=highlight, meta=self.meta, filter_applied=self.filter_applied)
+			choice = self.open_window(('windows.sources', 'ResultsContextMenu'), 'contextmenu.xml', **kwargs)
+			if choice is None: return
+			if 'results_info' in choice:
+				self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem, fanart=self.original_fanart())
+			elif 'clear_results_filter' in choice: return self.clear_filter()
+			elif 'results_filter' in choice: return self.filter_results()
+			else: self.execute_code(choice)
 		elif action in self.closing_actions:
 			if self.filter_applied: return self.clear_filter()
 			self.selected = (None, '')
@@ -359,7 +360,7 @@ class ResultsContextMenu(BaseDialog):
 				down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'highlight': self.highlight, 'name': self.meta.get('rootname', ''), 'source': source, 'url': None,
 									'provider': cache_provider, 'meta': meta_json, 'magnet_url': magnet_url, 'info_hash': info_hash}
 		if provider_source == 'torrent' and not uncached_torrent:
-			add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'magnet_url': magnet_url}
+			add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'url': magnet_url}
 		if down_pack_params: self.item_list.append(self.make_contextmenu_item(down_pack_str, run_plugin_str, down_pack_params))
 		if browse_pack_params: self.item_list.append(self.make_contextmenu_item(browse_pack_str, run_plugin_str, browse_pack_params))
 		if add_magnet_to_cloud_params: self.item_list.append(self.make_contextmenu_item(cloud_str, run_plugin_str, add_magnet_to_cloud_params))

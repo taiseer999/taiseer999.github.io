@@ -1,4 +1,3 @@
-import json
 import requests
 from threading import Thread
 from caches.main_cache import cache_object

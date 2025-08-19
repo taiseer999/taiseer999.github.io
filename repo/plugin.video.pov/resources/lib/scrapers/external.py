@@ -19,7 +19,7 @@ diag_format, resolutions = '4K: %s | 1080p: %s | 720p: %s | SD: %s | %s: %s', '4
 season_display, show_display = ls(32537), ls(32089)
 pack_check = (season_display, show_display)
 
-class source:
+class External:
 	def __init__(self, source_dict, debrid_torrents, debrid_hosters, internal_scrapers, prescrape_sources, display_uncached_torrents, progress_dialog, disabled_ignored=False):
 		self.scrape_provider = 'external'
 		self.debrid_torrents, self.debrid_hosters = debrid_torrents, debrid_hosters
@@ -48,8 +48,8 @@ class source:
 			if not self.progress_dialog and not self.load_action:
 				progressDialogBG.create('POV', 'POV loading...')
 			else: self._make_progress_dialog()
-		Sources.sources_total, Sources.resolutions = self.sources_total, self.resolutions
-		Sources.hostDict, Sources.sources = self.hostDict, self.sources
+		Source.sources_total, Source.resolutions = self.sources_total, self.resolutions
+		Source.hostDict, Source.sources = self.hostDict, self.sources
 		threads = []
 		for provider, module, *pack in self.source_dict:
 			if info['media_type'] == 'movie':
@@ -59,8 +59,8 @@ class source:
 				if not module.hasEpisodes: continue
 				args = provider, module, pack[0] if pack else ''
 				name = pack_display % (provider, pack[0]) if pack and pack[0] else provider
-			obj = Sources(info, self.meta)
-			obj.thread = Thread(target=obj.get_source, args=args, name=name)
+			obj = Source(info, self.meta, args=args, name=name)
+			obj.thread.start()
 			threads.append(obj)
 		self.wait(threads)
 		try:
@@ -76,12 +76,9 @@ class source:
 				threads.append(obj)
 			self.wait(threads, debrid_check=True)
 			for item in threads:
-				name, hashes = item.name, item.cached_list
-				self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes])
-				if name in ('Real-Debrid', 'AllDebrid'):
-					self.final_sources.extend([{**i, 'cache_provider': 'Unchecked %s' % name, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
-				else:
-					self.final_sources.extend([{**i, 'cache_provider': 'Uncached %s' % name, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
+				hashes, status = item.cached_list, ('Unchecked %s' if item.name in ('Real-Debrid', 'AllDebrid') else 'Uncached %s') % item.name
+				self.final_sources.extend([{**i, 'cache_provider': item.name, 'debrid': item.name} for i in torrent_sources if i['hash'] in hashes])
+				self.final_sources.extend([{**i, 'cache_provider': status, 'debrid': item.name} for i in torrent_sources if not i['hash'] in hashes])
 			hoster_sources = [i for i in self.sources if not 'hash' in i]
 			result_hosters = list({i['source'].lower() for i in hoster_sources})
 			for item in self.debrid_hosters:
@@ -105,7 +102,6 @@ class source:
 			line1 = line2 = line3 = ''
 		len_threads = len(threads)
 		end_time = time.monotonic() + self.timeout
-		if not debrid_check: list(TaskPool.process([i.thread for i in threads]))
 		while not all((i.completed for i in threads)):
 			if time.monotonic() > end_time or monitor.abortRequested(): break
 			sleep(self.sleep_time)
@@ -192,13 +188,13 @@ class source:
 		except: pass
 		self.progress_dialog = None
 
-class Sources:
+class Source:
 	scrape_provider = 'external'
 	hostDict = {}
 	sources = []
 	sources_total, resolutions = {'total': 0}, dict.fromkeys(resolutions.split(), 0)
 
-	def __init__(self, info, meta):
+	def __init__(self, info, meta, args, name):
 		self.completed = False
 		self.media_type, self.tmdb_id, self.year = info['media_type'], str(info['tmdb_id']), info['year']
 		self.season, self.episode, self.total_seasons = info['season'], info['episode'], info['total_seasons']
@@ -219,6 +215,7 @@ class Sources:
 				'title': normalize(info['ep_name']), 'tvshowtitle': self.title, 'year': self.year,
 				'season': str(self.season), 'episode': str(self.episode), 'total_seasons': self.total_seasons
 			}
+		self.thread = Thread(target=self.get_source, args=args, name=name)
 
 	def get_movie_source(self, provider, module):
 		_cache = ExternalProvidersCache()

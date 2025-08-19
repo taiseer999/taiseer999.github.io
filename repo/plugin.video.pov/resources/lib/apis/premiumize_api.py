@@ -13,6 +13,8 @@ session = requests.Session()
 session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
 
 class PremiumizeAPI:
+	icon = 'premiumize.png'
+
 	def __init__(self):
 		self.token = get_setting('pm.token')
 
@@ -43,9 +45,9 @@ class PremiumizeAPI:
 		try:
 			account_info = self.account_info()
 			expires = datetime.datetime.fromtimestamp(account_info['premium_until'])
-			days_remaining = (expires - datetime.datetime.today()).days
-		except: days_remaining = None
-		return days_remaining
+			days = (expires - datetime.datetime.today()).days
+		except: days = None
+		return days
 
 	def account_info(self):
 		url = 'account/info'
@@ -73,14 +75,14 @@ class PremiumizeAPI:
 		return hash_string in cache_info
 
 	def check_cache(self, hashes):
-		url = 'cache/check'
 		data = {'items[]': hashes}
+		url = 'cache/check'
 		response = self._post(url, data)
 		return [h for h, cached in zip(hashes, response['response']) if cached]
 
 	def instant_transfer(self, magnet):
-		url = 'transfer/directdl'
 		data = {'src': magnet}
+		url = 'transfer/directdl'
 		return self._post(url, data)
 
 	def create_transfer(self, magnet):

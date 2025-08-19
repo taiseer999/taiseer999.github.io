@@ -1,29 +1,29 @@
-import re, random, requests
+import json, re, random, requests
 from threading import Thread
 from apis import real_debrid_api, premiumize_api, alldebrid_api, offcloud_api, torbox_api, easydebrid_api, debrider_api
 from caches.debrid_cache import DebridCache
-from modules.utils import make_thread_list
-from modules.settings import enabled_debrids_check, store_resolved_torrent_to_cloud, store_resolved_usenet_to_cloud
+from modules.utils import clean_file_name, make_thread_list
+from modules.settings import enabled_debrids_check
 from modules import kodi_utils
 # from modules.kodi_utils import logger
 
 ls, get_setting, notification = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.notification
 show_busy_dialog, hide_busy_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog
+confirm_dialog, select_dialog = kodi_utils.confirm_dialog, kodi_utils.select_dialog
 plswait_str, checking_debrid_str, remaining_debrid_str = ls(32577), ls(32578), ls(32579)
-main_line = '%s[CR]%s[CR]%s'
 
 debrid_list = (
-	('Real-Debrid', 'rd', 'realdebrid.png', real_debrid_api.RealDebridAPI),
-	('Premiumize.me', 'pm', 'premiumize.png', premiumize_api.PremiumizeAPI),
-	('AllDebrid', 'ad', 'alldebrid.png', alldebrid_api.AllDebridAPI),
-	('Debrider', 'db', 'debrider.png', debrider_api.DebriderAPI),
-	('EasyDebrid', 'ed', 'easydebrid.png', easydebrid_api.EasyDebridAPI),
-	('TorBox', 'tb', 'torbox.png', torbox_api.TorBoxAPI),
-	('Offcloud', 'oc', 'offcloud.png', offcloud_api.OffcloudAPI)
+	('Real-Debrid', 'rd', real_debrid_api.RealDebridAPI),
+	('Premiumize.me', 'pm', premiumize_api.PremiumizeAPI),
+	('AllDebrid', 'ad', alldebrid_api.AllDebridAPI),
+	('Debrider', 'db', debrider_api.DebriderAPI),
+	('EasyDebrid', 'ed', easydebrid_api.EasyDebridAPI),
+	('TorBox', 'tb', torbox_api.TorBoxAPI),
+	('Offcloud', 'oc', offcloud_api.OffcloudAPI)
 )
 
 def import_debrid(debrid_provider):
-	return next((i[3] for i in debrid_list if i[0] == debrid_provider), None)
+	return next((i[2] for i in debrid_list if i[0] == debrid_provider), None)
 
 def debrid_enabled():
 	return [i[0] for i in debrid_list if enabled_debrids_check(i[1])]
@@ -42,15 +42,17 @@ def debrid_valid_hosts(enabled_debrids):
 	return debrid_hosts
 
 def manual_add_magnet_to_cloud(params):
+	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	function = import_debrid(params['provider'])
-	result = function().create_transfer(params['magnet_url'])
+	result = function().create_transfer(params['url'])
 	function().clear_cache()
 	hide_busy_dialog()
 	if result: notification(32576)
 	else: notification(32575)
 
 def manual_add_nzb_to_cloud(params):
+	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	function = import_debrid(params['provider'])
 	result = function().create_transfer(params['url'], params['name'])
@@ -58,26 +60,6 @@ def manual_add_nzb_to_cloud(params):
 	hide_busy_dialog()
 	if result: notification(32576)
 	else: notification(32575)
-
-def resolve_cached_torrents(debrid_provider, item_url, _hash, title, season, episode):
-	debrid_function = import_debrid(debrid_provider)
-	store_to_cloud = store_resolved_torrent_to_cloud(debrid_provider)
-	try: url = debrid_function().resolve_magnet(item_url, _hash, store_to_cloud, title, season, episode)
-	except: url = None
-	return url
-
-def resolve_cached_nzbs(debrid_provider, item_url, _hash, title, season, episode):
-	debrid_function = import_debrid(debrid_provider)
-	store_to_cloud = store_resolved_usenet_to_cloud(debrid_provider)
-	try: url = debrid_function().resolve_nzb(item_url, _hash, store_to_cloud, title, season, episode)
-	except: url = None
-	return url
-
-def resolve_debrid(debrid_provider, item_provider, item_url):
-	debrid_function = import_debrid(debrid_provider)
-	try: url = debrid_function().unrestrict_link(item_url)
-	except: url = None
-	return url
 
 def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_link=False):
 	try:
@@ -94,12 +76,11 @@ def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_lin
 		elif scrape_provider == 'ad_cloud':
 			url = alldebrid_api.AllDebridAPI().unrestrict_link(item_id)
 		elif scrape_provider == 'tb_cloud':
-			if direct_debrid_link == 'usenet':
-				url = torbox_api.TorBoxAPI().unrestrict_usenet(item_id)
-			elif direct_debrid_link == 'webdl':
-				url = torbox_api.TorBoxAPI().unrestrict_webdl(item_id)
-			else:
-				url = torbox_api.TorBoxAPI().unrestrict_link(item_id)
+			if direct_debrid_link == 'usenet': function = 'unrestrict_usenet'
+			elif direct_debrid_link == 'webdl': function = 'unrestrict_webdl'
+			else: function = 'unrestrict_link'
+			function = getattr(torbox_api.TorBoxAPI(), function)
+			url = function(item_id)
 		elif scrape_provider == 'folders':
 			if url_dl.endswith('.strm'):
 				with kodi_utils.open_file(url_dl) as f: url = f.read()
@@ -107,6 +88,62 @@ def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_lin
 		else: url = url_dl
 	except: url = None
 	return url
+
+def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
+	show_busy_dialog()
+	debrid_provider = debrid_provider.replace('Unchecked ', '')
+	api = import_debrid(debrid_provider)
+	pack_choices = api().display_magnet_pack(magnet_url, info_hash)
+	hide_busy_dialog()
+	if not pack_choices: return None if download else notification(32574)
+	pack_choices.sort(key=lambda k: k['filename'].lower())
+	icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % api.icon)
+	for item in pack_choices: item.update({
+		'icon': icon,
+		'line1': clean_file_name(item['filename']),
+		'line2': '%s: %.2f GB' % (ls(32584), float(item['size'])/1073741824)
+	})
+	if download: return pack_choices
+	kwargs = {'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
+	kwargs.update({'items': json.dumps(pack_choices), 'heading': name, 'highlight': highlight})
+	chosen_result = select_dialog(pack_choices, **kwargs)
+	if chosen_result is None: return
+	url_dl, name = chosen_result['link'], chosen_result['filename']
+	if debrid_provider == 'Premiumize.me': link = api().add_headers_to_url(url_dl)
+	else: link = api().unrestrict_link(url_dl)
+	url_params = {'mode': 'media_play', 'url': link, 'media_type': 'video'}
+	return kodi_utils.execute_builtin('RunPlugin(%s)' % kodi_utils.build_url(url_params))
+
+def tio_check_cache(token, imdb, season, episode, collector):
+	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
+	else: url = 'movie/%s.json' % (imdb)
+	url = 'https://torrentio.strem.fun/%s/stream/%s' % (token, url)
+	headers = {'User-Agent': 'curl/7.55.1', 'Accept': 'application/json'}
+	pattern = re.compile(r'\b\w{40}\b')
+	try:
+		results = requests.get(url, headers=headers, timeout=3.05)
+		files = results.json()['streams'] if results.ok else []
+		files = [pattern.findall(file['url'])[-1] for file in files if '+' in file['name'] and 'url' in file]
+		collector += files
+	except: pass
+
+def dmm_check_cache(unchecked_hashes_chunk, imdb, collector): # DMM API Allows max 100 hashes per request.
+	""" do not thread multiple calls, abusing the api will get it turned off
+		100 sample size should be enough """
+	from fenom import client
+	from fenom.providers.torrents.dmm import get_secret
+	if len(unchecked_hashes_chunk) > 100: unchecked_hashes_chunk = random.sample(unchecked_hashes_chunk, 100)
+	availability_check_link = 'https://debridmediamanager.com/api/availability/check'
+	headers = {'User-Agent': client.randomagent(), 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*'}
+	dmmProblemKey, solution = get_secret()
+	data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb}
+	data.update({'hashes': [i for i in unchecked_hashes_chunk if len(i) == 40]})
+	try:
+		results = requests.post(availability_check_link, headers=headers, json=data, timeout=5.05)
+		files = results.json()['available'] if results.ok else []
+		files = [file['hash'] for file in files if 'hash' in file]
+		collector += files
+	except: pass
 
 class DebridCheck:
 	hash_list = []
@@ -121,11 +158,21 @@ class DebridCheck:
 		self.completed = False
 		self.cached_list, self.hashes_to_cache = [], []
 		self.imdb, self.season, self.episode = meta.get('imdb_id'), meta.get('season'), meta.get('episode')
-		self.name, self.debrid, self.function = args[0], args[1], args[3]
+		self.name, self.debrid, self.function = args
 		self.thread = Thread(target=self.cache_check, name=args[0])
 
 	def cache_write(self):
 		DebridCache().set_many(self.hashes_to_cache, self.debrid)
+
+	def external_check_cache(self, unchecked_hashes):
+		checked_hashes = []
+		token = {'rd': 'realdebrid=%s', 'ad': 'alldebrid=%s'}[self.debrid] % self.function().token
+		for i in (threads := (
+			Thread(target=tio_check_cache, args=(token, self.imdb, self.season, self.episode, checked_hashes)),
+			Thread(target=dmm_check_cache, args=(unchecked_hashes, self.imdb, checked_hashes))
+		)): i.start()
+		for i in threads: i.join()
+		return list(set(checked_hashes))
 
 	def cache_check(self):
 		try:
@@ -135,15 +182,7 @@ class DebridCheck:
 			unchecked_filter = {h[0] for h in self.cached_hashes if h[1] == self.debrid}
 			unchecked_hashes = [i for i in self.hash_list if not i in unchecked_filter]
 			if not unchecked_hashes: return
-			if self.debrid in ('rd', 'ad'):
-				checked_hashes = []
-				token = {'rd': 'realdebrid=%s', 'ad': 'alldebrid=%s'}[self.debrid] % self.function().token
-				for i in (threads := (
-					Thread(target=tio_check_cache, args=(token, self.imdb, self.season, self.episode, checked_hashes)),
-					Thread(target=dmm_check_cache, args=(unchecked_hashes, self.imdb, checked_hashes))
-				)): i.start()
-				for i in threads: i.join()
-				checked_hashes = list(set(checked_hashes))
+			if self.debrid in ('rd', 'ad'): checked_hashes = self.external_check_cache(unchecked_hashes)
 			else: checked_hashes = self.function().check_cache(unchecked_hashes)
 			if not checked_hashes: return
 			cached_append = self.cached_list.append
@@ -159,33 +198,4 @@ class DebridCheck:
 				for i in unchecked_hashes: process_append((i, 'False'))
 			if self.hashes_to_cache: Thread(target=self.cache_write).start()
 		finally: self.completed = True
-
-def tio_check_cache(token, imdb, season, episode, collector):
-	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
-	else: url = 'movie/%s.json' % (imdb)
-	url = 'https://torrentio.strem.fun/%s/stream/%s' % (token, url)
-	headers = {'User-Agent': 'curl/7.55.1', 'Accept': 'application/json'}
-	pattern = re.compile(r'\b\w{40}\b')
-	try:
-		results = requests.get(url, headers=headers, timeout=3.05)
-		files = results.json()['streams'] if results.ok else []
-		files = [pattern.findall(file['url'])[-1] for file in files if '+' in file['name'] and 'url' in file]
-		collector += files
-	except: files = []
-	return files
-
-def dmm_check_cache(unchecked_hashes_chunk, imdb, collector): # DMM API Allows max 100 hashes per request.
-	from fenom.providers.torrents.dmm import get_secret
-	if len(unchecked_hashes_chunk) > 100: unchecked_hashes_chunk = random.sample(unchecked_hashes_chunk, 100)
-	availability_check_link = 'https://debridmediamanager.com/api/availability/check'
-	dmmProblemKey, solution = get_secret()
-	data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb}
-	data.update({'hashes': [i for i in unchecked_hashes_chunk if len(i) == 40]})
-	try:
-		results = requests.post(availability_check_link, json=data, timeout=5.05)
-		files = results.json()['available'] if results.ok else []
-		files = [file['hash'] for file in files if 'hash' in file]
-		collector += files
-	except: files = []
-	return files
 

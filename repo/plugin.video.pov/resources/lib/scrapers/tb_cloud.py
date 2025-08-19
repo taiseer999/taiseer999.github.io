@@ -21,12 +21,11 @@ class source(Debrid):
 			self.year, self.season, self.episode = int(info.get('year')), info.get('season'), info.get('episode')
 			if self.media_type == 'episode': self.seas_ep_query_list = source_utils.seas_ep_query_list(self.season, self.episode)
 			self.folder_query, self.year_query_list = clean_title(normalize(title)), tuple(map(str, range(self.year - 1, self.year + 2)))
-			threads = (
+			for i in (threads := (
 				Thread(target=self._scrape_cloud, args=(self.user_cloud, 'torent')),
 				Thread(target=self._scrape_cloud, args=(self.user_cloud_usenet, 'usenet')),
 				Thread(target=self._scrape_cloud, args=(self.user_cloud_webdl, 'webdl'))
-			)
-			[i.start() for i in threads]
+			)): i.start()
 			[i.join() for i in threads]
 			if not self.scrape_results: return internal_results(self.scrape_provider, self.sources)
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))

@@ -5,7 +5,7 @@
 
 import ctypes, random, time
 import re, requests
-from fenom import source_utils
+from fenom import client, source_utils
 
 
 class source:
@@ -56,8 +56,9 @@ class source:
 	def get_sources(self, url):
 		try:
 			dmmProblemKey, solution = get_secret()
+			headers = {'User-Agent': client.randomagent(), 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*'}
 			params = {'dmmProblemKey': dmmProblemKey, 'solution': solution}
-			results = requests.get(url, params=params, timeout=self.timeout)
+			results = requests.get(url, params=params, headers=headers, timeout=self.timeout)
 			files = results.json()['results']
 		except:
 			source_utils.scraper_error('DMM')

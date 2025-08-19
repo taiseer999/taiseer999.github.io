@@ -67,8 +67,8 @@ def trakt_refresh():
 		set_setting('trakt.token', token)
 		set_setting('trakt.refresh', refresh)
 		set_setting('trakt.expires', str(expires))
-		return True
 	except Exception as e: logger('trakt_refresh error', str(e))
+	else: return True
 	return False
 
 def trakt_expires(func):

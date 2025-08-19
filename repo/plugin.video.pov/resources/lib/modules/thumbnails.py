@@ -21,9 +21,6 @@ def thumb_cleaner():
 	)
 	if not days: return notification('No Days Set')
 	back_date = (current_date - timedelta(days=int(days))).strftime('%Y-%m-%d %H:%M:%S')
-	progress_dialog = xbmcgui.DialogProgress()
-	progress_dialog.create('Thumbnails Remover', '')
-	progress_dialog.update(0, 'Gathering Thumbnail Info...')
 	dbcon = database.connect(str(dbfile), isolation_level=None)
 	dbcur = dbcon.cursor()
 	dbcur.execute('''PRAGMA synchronous = OFF''')
@@ -36,6 +33,9 @@ def thumb_cleaner():
 	result = dbcur.fetchall()
 	result_length = len(result)
 	if not result_length > 0: return notification('No Thumbnails to Clear')
+	progress_dialog = xbmcgui.DialogProgress()
+	progress_dialog.create('Thumbnails Remover', '')
+	progress_dialog.update(0, 'Gathering Thumbnail Info...')
 	for count, item in enumerate(result):
 		if progress_dialog.iscanceled(): break
 		_id = item[0]
@@ -48,7 +48,7 @@ def thumb_cleaner():
 		line = '[B]Total To Remove:[/B] %s[CR][B]Removing:[/B] %02d - %s[CR][B]Path: [/B]%s'
 		line = line % (result_length, count, str(path.name), str(path.parent))
 		progress_dialog.update(max(1, percent), line)
-	line = 'Removing Database Entries...[CR]Please Wait...[CR]%s'
+	line = 'Removing %d Database Entries...[CR]Please Wait...[CR]%s' % (result_length, '%s')
 	progress_dialog.update(33, line % 'Removing Sizes IDS...')
 	dbcur.executemany("DELETE FROM sizes WHERE idtexture = ?", item_list)
 	progress_dialog.update(66, line % 'Removing Texture IDS...')

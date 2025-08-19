@@ -12,18 +12,20 @@ session = requests.Session()
 session.mount('https://app.real-debrid.com', requests.adapters.HTTPAdapter(max_retries=1))
 
 class RealDebridAPI:
+	icon = 'realdebrid.png'
+
 	def __init__(self):
 		self.token = get_setting('rd.token')
 
 	def _get(self, url):
 		original_url = url
 		url = base_url + url
-		if self.token == '': return None
+		if self.token == '': return kodi_utils.logger(self.__class__.__name__, str(vars(self)))
 #		if '?' not in url: url += '?auth_token=%s' % self.token
 #		else: url += '&auth_token=%s' % self.token
 		session.headers['Authorization'] = f"Bearer {self.token}"
 		response = session.get(url, timeout=timeout)
-		if any(value in response.text for value in ('bad_token', 'Bad Request')):
+		if not response.ok and any(value in response.text for value in ('bad_token', 'Bad Request')):
 			if self.refresh_token(): response = self._get(original_url)
 			else: return None
 		try: return response.json()
@@ -32,12 +34,12 @@ class RealDebridAPI:
 	def _post(self, url, post_data):
 		original_url = url
 		url = base_url + url
-		if self.token == '': return None
+		if self.token == '': return kodi_utils.logger(self.__class__.__name__, str(vars(self)))
 #		if '?' not in url: url += '?auth_token=%s' % self.token
 #		else: url += '&auth_token=%s' % self.token
 		session.headers['Authorization'] = f"Bearer {self.token}"
 		response = session.post(url, data=post_data, timeout=timeout)
-		if any(value in response.text for value in ('bad_token', 'Bad Request')):
+		if not response.ok and any(value in response.text for value in ('bad_token', 'Bad Request')):
 			if self.refresh_token(): response = self._post(original_url, post_data)
 			else: return None
 		try: return response.json()
@@ -48,12 +50,13 @@ class RealDebridAPI:
 			client_id, secret, refresh = get_setting('rd.client_id'), get_setting('rd.secret'), get_setting('rd.refresh')
 			data = {'client_id': client_id, 'client_secret': secret, 'code': refresh, 'grant_type': 'http://oauth.net/grant_type/device/1.0'}
 			url = auth_url + 'token'
-			response = session.post(url, data=data).json()
+			response = requests.post(url, data=data).json()
 			self.token, refresh = response['access_token'], response['refresh_token']
 			set_setting('rd.token', self.token)
 			set_setting('rd.refresh', refresh)
-		except: return False
+		except Exception as e: kodi_utils.logger('refresh_token error', str(e))
 		else: return True
+		return False
 
 	def torrents_activeCount(self):
 		url = 'torrents/activeCount'
@@ -66,10 +69,10 @@ class RealDebridAPI:
 #			FormatDateTime = "%Y-%m-%dT%H:%M:%S.%fZ"
 #			try: expires = datetime.datetime.strptime(account_info['expiration'], FormatDateTime)
 #			except: expires = datetime.datetime(*(time.strptime(account_info['expiration'], FormatDateTime)[0:6]))
-#			days_remaining = (expires - datetime.datetime.today()).days
-			days_remaining = int(account_info['premium']/86400)
-		except: days_remaining = None
-		return days_remaining
+#			days = (expires - datetime.datetime.today()).days
+			days = int(account_info['premium']/86400)
+		except: days = None
+		return days
 
 	def account_info(self):
 		url = 'user'
