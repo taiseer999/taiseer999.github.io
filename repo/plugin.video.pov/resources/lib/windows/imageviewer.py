@@ -1,6 +1,6 @@
 import json
-from apis.tmdb_api import tmdb_popular_people
 from windows import BaseDialog
+from indexers.tmdb_api import tmdb_popular_people
 from indexers.people import person_data_dialog
 from modules.settings import download_directory
 from modules.kodi_utils import translate_path, show_busy_dialog, hide_busy_dialog, local_string as ls

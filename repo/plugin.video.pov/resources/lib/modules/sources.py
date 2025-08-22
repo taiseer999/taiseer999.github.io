@@ -27,7 +27,7 @@ default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc
 av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]AV1[/B]', '[B]HEVC[/B]', '[B]HDR[/B]', '[B]D/VISION[/B]'
 dialog_format, remaining_format = '[COLOR %s][B]%s[/B][/COLOR] 4K: %s | 1080p: %s | 720p: %s | SD: %s | Total: %s', ls(32676)
 
-class Sources():
+class SourceSelect():
 	def __init__(self):
 		self.params = {}
 		self.clear_properties, self.filters_ignored, self.active_folders = True, False, False
@@ -353,7 +353,7 @@ class Sources():
 		if 'custom_year' in meta: return meta['custom_year']
 		year = meta.get('year') or '0'
 		if self.active_external and get_setting('search.enable.yearcheck', 'false') == 'true':
-			from apis.imdb_api import imdb_movie_year
+			from indexers.imdb_api import imdb_movie_year
 			try: year = str(imdb_movie_year(meta.get('imdb_id')) or year)
 			except: pass
 		return year

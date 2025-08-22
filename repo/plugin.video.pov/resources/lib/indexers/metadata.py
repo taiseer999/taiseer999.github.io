@@ -1,4 +1,4 @@
-from apis import tmdb_api as tmdb, fanarttv_api as fanarttv
+from indexers import tmdb_api as tmdb, fanarttv_api as fanarttv
 from caches.meta_cache import MetaCache
 from modules.utils import jsondate_to_datetime, subtract_dates, make_thread_list
 # from modules.kodi_utils import logger

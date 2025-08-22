@@ -227,11 +227,11 @@ msgid "Set Language"
 msgstr ""
 
 msgctxt "#32152"
-msgid "Filter Results"
+msgid "[B]Filter Results[/B]"
 msgstr ""
 
 msgctxt "#32153"
-msgid "Clear Filter"
+msgid "[B]Clear Filter[/B]"
 msgstr ""
 
 msgctxt "#32154"
@@ -687,7 +687,7 @@ msgid "RE-CACHE %s INFO"
 msgstr ""
 
 msgctxt "#32605"
-msgid "Extra Info"
+msgid "[B]Extra Info[/B]"
 msgstr ""
 
 msgctxt "#32606"

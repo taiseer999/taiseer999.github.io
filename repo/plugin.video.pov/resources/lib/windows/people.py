@@ -1,10 +1,10 @@
 import json
 from threading import Thread
 from windows import BaseDialog
-from apis.tmdb_api import tmdb_people_info, tmdb_people_full_info
-from apis.imdb_api import imdb_videos
-from modules import dialogs
+from indexers.tmdb_api import tmdb_people_info, tmdb_people_full_info
+from indexers.imdb_api import imdb_videos
 from indexers.images import Images
+from modules import dialogs
 from modules.utils import calculate_age
 from modules.kodi_utils import translate_path, notification, show_text, local_string as ls
 from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution

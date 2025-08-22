@@ -2,12 +2,11 @@ import json
 from threading import Thread
 from datetime import datetime, timedelta
 from windows import BaseDialog
-from apis import tmdb_api, imdb_api, mdblist_api
 from caches import watched_cache as ws
-from indexers import people, metadata
+from indexers import people, metadata, tmdb_api, imdb_api, mdblist_api
 from indexers.images import Images
 from modules import settings, dialogs
-from modules.sources import Sources
+from modules.sources import SourceSelect
 from modules.downloader import runner
 from modules.meta_lists import networks
 from modules.utils import get_datetime
@@ -59,7 +58,7 @@ class Extras(BaseDialog):
 			if controlID == playbrowse_id:
 				if self.media_type == 'movie':
 					url_params = {'mode': 'play_media', 'media_type': 'movie', 'query': self.rootname, 'tmdb_id': self.tmdb_id}
-					Sources().playback_prep(url_params)
+					SourceSelect().playback_prep(url_params)
 				else:
 					close_all_dialog()
 					url_params = self.make_tvshow_browse_params()

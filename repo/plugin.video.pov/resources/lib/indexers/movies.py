@@ -178,7 +178,7 @@ class Indexer(Movies):
 			except ValueError: page_no = params_get('new_page')
 			letter = params_get('new_letter', 'None')
 			if self.action in Indexer.personal_dict: var_module, import_function = Indexer.personal_dict[self.action]
-			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
+			else: var_module, import_function = 'indexers.%s_api' % self.action.split('_')[0], self.action
 			try: function = manual_function_import(var_module, import_function)
 			except: pass
 			if self.action in Indexer.tmdb_main:

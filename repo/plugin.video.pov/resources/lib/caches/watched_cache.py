@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from threading import Thread
 from indexers import metadata
-from apis.trakt_api import trakt_watched_unwatched, trakt_official_status, trakt_progress
+from indexers.trakt_api import trakt_watched_unwatched, trakt_official_status, trakt_progress
 from caches.trakt_cache import clear_trakt_collection_watchlist_data
 from modules import kodi_utils, settings, utils
 # logger = kodi_utils.logger

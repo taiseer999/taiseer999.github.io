@@ -2,7 +2,7 @@ import json
 import os, re
 from sys import argv
 from threading import Thread
-from apis.opensubtitles_api import OpenSubtitlesAPI
+from indexers.opensubtitles_api import OpenSubtitlesAPI
 from caches import watched_cache as ws
 from windows import open_window
 from modules import kodi_utils, settings
@@ -394,7 +394,7 @@ class Stingers:
 
 	def run(self, tmdb_id, poster):
 		if not tmdb_id: return
-		from apis.tmdb_api import movie_keywords
+		from indexers.tmdb_api import movie_keywords
 		keywords = movie_keywords(tmdb_id) or []
 		keywords = [str(i['name']) for i in keywords]
 		if all((i in keywords for i in self.stingers.keys())): message = 'Dual Credit Scenes'

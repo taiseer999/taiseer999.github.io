@@ -31,8 +31,8 @@ class Router:
 			runmode(Discover, params, mode.split('.')[1])
 		elif '_play' in mode or 'play_' in mode:
 			if mode == 'play_media':
-				from modules.sources import Sources
-				Sources().playback_prep(params)
+				from modules.sources import SourceSelect
+				SourceSelect().playback_prep(params)
 			elif mode == 'media_play':
 				from modules.player import POVPlayer
 				POVPlayer().run(params_get('url'), params_get('media_type'))
@@ -83,11 +83,11 @@ class Router:
 				from indexers.trakt import trakt_account_info
 				trakt_account_info()
 			elif 'hide_unhide_trakt_items' in mode:
-				from apis.trakt_api import hide_unhide_trakt_items
+				from indexers.trakt_api import hide_unhide_trakt_items
 				hide_unhide_trakt_items(params['action'], params['media_type'], params['media_id'], params['section'])
 			else:
 				from modules.utils import manual_function_import
-				function = manual_function_import('apis.trakt_api', mode.split('.')[-1])
+				function = manual_function_import('indexers.trakt_api', mode.split('.')[-1])
 				function(params)
 		elif 'tmdb.' in mode:
 			if 'edit_tmdb_list' in mode:
@@ -98,7 +98,7 @@ class Router:
 				update_tmdb_list(params)
 			else:
 				from modules.utils import manual_function_import
-				function = manual_function_import('apis.tmdb_api', mode.split('.')[-1])
+				function = manual_function_import('indexers.tmdb_api', mode.split('.')[-1])
 				function(params)
 		elif 'build' in mode:
 			if 'build_trakt_list' in mode:
@@ -144,13 +144,13 @@ class Router:
 				from modules.dialogs import build_navigate_to_page
 				build_navigate_to_page(params)
 			elif mode == 'imdb_build_user_lists':
-				from apis.imdb_api import imdb_build_user_lists
+				from indexers.imdb_api import imdb_build_user_lists
 				imdb_build_user_lists(params_get('media_type'))
 			elif mode == 'build_popular_people':
 				from indexers.people import popular_people
 				popular_people()
 			elif mode == 'imdb_build_keyword_results':
-				from apis.imdb_api import imdb_build_keyword_results
+				from indexers.imdb_api import imdb_build_keyword_results
 				imdb_build_keyword_results(params['media_type'], params['query'])
 		elif 'watched_unwatched' in mode:
 			if mode == 'mark_as_watched_unwatched_episode':
@@ -196,40 +196,40 @@ class Router:
 				remove_all_history(params)
 		elif 'easynews.' in mode:
 			from modules.utils import manual_function_import
-			function = manual_function_import('indexers.easynews', mode.split('.')[-1])
+			function = manual_function_import('debrids.easynews', mode.split('.')[-1])
 			function(params)
 		elif 'alldebrid' in mode:
 			if mode == 'alldebrid.ad_torrent_cloud':
-				from indexers.alldebrid import ad_torrent_cloud
+				from debrids.alldebrid import ad_torrent_cloud
 				ad_torrent_cloud(params_get('id'))
 			elif mode == 'alldebrid.browse_ad_cloud':
-				from indexers.alldebrid import browse_ad_cloud
+				from debrids.alldebrid import browse_ad_cloud
 				browse_ad_cloud(params['folder'])
 			elif mode == 'alldebrid.resolve_ad':
-				from indexers.alldebrid import resolve_ad
+				from debrids.alldebrid import resolve_ad
 				resolve_ad(params)
 			elif mode == 'alldebrid.show_account_info':
-				from indexers.alldebrid import show_account_info
+				from debrids.alldebrid import show_account_info
 				show_account_info()
 		elif 'premiumize' in mode:
-			from indexers.premiumize import Indexer
+			from debrids.premiumize import Indexer
 			Indexer().run(params)
 		elif 'real_debrid' in mode:
-			from indexers.real_debrid import Indexer, resolve_rd
+			from debrids.real_debrid import Indexer, resolve_rd
 			if 'resolve_' in mode: resolve_rd(params)
 			else: Indexer().run(params)
 		elif 'torbox' in mode:
-			from indexers.torbox import Indexer, resolve_tb
+			from debrids.torbox import Indexer, resolve_tb
 			if 'resolve_' in mode: resolve_tb(params)
 			else: Indexer().run(params)
 		elif 'offcloud' in mode:
-			from indexers.offcloud import Indexer
+			from debrids.offcloud import Indexer
 			Indexer().run(params)
 		elif 'easydebrid' in mode:
-			from indexers.easydebrid import Indexer
+			from debrids.easydebrid import Indexer
 			Indexer().run(params)
 		elif 'debrider' in mode:
-			from indexers.debrider import Indexer
+			from debrids.debrider import Indexer
 			Indexer().run(params)
 		elif '_settings' in mode:
 			if mode == 'open_settings':
@@ -242,11 +242,9 @@ class Router:
 				from modules.kodi_utils import clean_settings_window_properties
 				clean_settings_window_properties()
 		elif '_cache' in mode:
-			from modules import cache_utils
-			if mode == 'clear_all_cache':
-				cache_utils.clear_all_cache()
-			else:
-				cache_utils.clear_cache(params_get('cache'))
+			from modules.cache import clear_all_cache, clear_cache
+			if mode == 'clear_all_cache': clear_all_cache()
+			else: clear_cache(params_get('cache'))
 		elif '_image' in mode:
 			from indexers.images import Images
 			Images().run(params)
@@ -277,7 +275,7 @@ class Router:
 			from modules.downloader import runner
 			runner(params)
 		elif mode == 'clean_databases':
-			from modules.cache_utils import clean_databases
+			from modules.cache import clean_databases
 			clean_databases()
 		elif mode == 'clean_thumbnails':
 			from modules.thumbnails import thumb_cleaner
@@ -288,7 +286,7 @@ class Router:
 		elif mode == 'manual_add_nzb_to_cloud':
 			from modules.debrid import manual_add_nzb_to_cloud
 			manual_add_nzb_to_cloud(params)
-		elif mode == 'debrid.browse_packs':
+		elif mode == 'browse_packs':
 			from modules.debrid import debrid_packs
 			debrid_packs(params['provider'], params['name'], params['magnet_url'], params['info_hash'], params['highlight'])
 		elif mode == 'upload_logfile':

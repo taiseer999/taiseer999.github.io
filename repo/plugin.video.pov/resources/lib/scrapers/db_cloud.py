@@ -1,4 +1,4 @@
-from apis.debrider_api import DebriderAPI as Debrid
+from debrids.debrider_api import DebriderAPI as Debrid
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
 from modules.settings import enabled_debrids_check, filter_by_name

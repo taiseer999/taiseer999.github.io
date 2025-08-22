@@ -1,6 +1,6 @@
 import sys
 from threading import Thread
-from apis.trakt_api import trakt_get_hidden_items
+from indexers.trakt_api import trakt_get_hidden_items
 from indexers.metadata import tvshow_meta, rpdb_get
 from caches.watched_cache import get_watched_info_tv, get_watched_status_tvshow
 from modules import kodi_utils, settings
@@ -182,7 +182,7 @@ class Indexer(TVShows):
 			except ValueError: page_no = params_get('new_page')
 			letter = params_get('new_letter', 'None')
 			if self.action in Indexer.personal_dict: var_module, import_function = Indexer.personal_dict[self.action]
-			else: var_module, import_function = 'apis.%s_api' % self.action.split('_')[0], self.action
+			else: var_module, import_function = 'indexers.%s_api' % self.action.split('_')[0], self.action
 			try: function = manual_function_import(var_module, import_function)
 			except: pass
 			if self.action in Indexer.tmdb_main:

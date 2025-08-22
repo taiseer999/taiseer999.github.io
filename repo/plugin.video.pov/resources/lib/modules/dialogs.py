@@ -1,7 +1,7 @@
 import json
 from indexers import metadata
 from modules import kodi_utils, source_utils, settings
-from modules.cache_utils import clear_cache
+from modules.cache import clear_cache
 from modules.utils import get_datetime, clean_file_name
 # logger = kodi_utils.logger
 
@@ -13,7 +13,7 @@ get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
 
 def trailer_choice(media_type, poster, tmdb_id, trailer_url, all_trailers=[]):
 	if settings.get_language() != 'en' and not trailer_url and not all_trailers:
-		from apis.tmdb_api import tmdb_media_videos
+		from indexers.tmdb_api import tmdb_media_videos
 		try: all_trailers = tmdb_media_videos(media_type, tmdb_id)['results']
 		except: pass
 	if all_trailers:
@@ -51,7 +51,7 @@ def genres_choice(media_type, genres, poster, return_genres=False):
 	return select_dialog([{'mode': mode, 'action': action, 'genre_id': i['value'][0]} for i in genre_list], **kwargs)
 
 def imdb_keywords_choice(media_type, imdb_id, poster):
-	from apis.imdb_api import imdb_keywords
+	from indexers.imdb_api import imdb_keywords
 	from indexers.history import add_to_search_history
 	show_busy_dialog()
 	keywords_info = imdb_keywords(imdb_id)
@@ -80,12 +80,12 @@ def random_choice(choice, meta):
 	tmdb_id = meta.get('tmdb_id')
 	if not tmdb_id: return
 	from modules.episode_tools import get_random_episode
-	from modules.sources import Sources
+	from modules.sources import SourceSelect
 	meta, url_params = get_random_episode(tmdb_id, True if choice == 'play_random_continual' else False)
 	if not url_params: return {'pass': True}
 	url_params.update({'autoplay': 'True', 'background': 'false'})
 #	return execute_builtin('RunPlugin(%s)' % build_url(url_params))
-	Sources().playback_prep(url_params)
+	SourceSelect().playback_prep(url_params)
 
 def trakt_manager_choice(params):
 	if not get_setting('trakt_user', ''): return notification(32760, 3500)
@@ -97,7 +97,7 @@ def trakt_manager_choice(params):
 	kwargs = {'items': json.dumps(list_items), 'heading': ls(32198).replace('[B]', '').replace('[/B]', '')}
 	choice = select_dialog([i[1] for i in choices], **kwargs)
 	if choice is None: return
-	from apis import trakt_api
+	from indexers import trakt_api
 	add_str, rem_str = 'Add to %s?' % choice, 'Remove from %s?' % choice
 	if   choice == 'Collection':
 		data = trakt_api.trakt_fetch_collection_watchlist('collection', params['media_type'])
@@ -131,7 +131,7 @@ def trakt_manager_choice(params):
 
 def tmdb_manager_choice(params):
 	if not get_setting('tmdb.token', ''): return notification(32760, 3500)
-	from apis import tmdb_api
+	from indexers import tmdb_api
 	image_resolution = settings.get_resolution()
 	heading = ls(tmdb_api.list_heading).replace('[B]', '').replace('[/B]', '')
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
@@ -198,7 +198,7 @@ def tmdb_manager_choice(params):
 
 def mdb_manager_choice(params):
 	if not get_setting('mdblist.token', ''): return notification(32760, 3500)
-	from apis.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list, watchlist_obj, clear_mdbl_cache
+	from indexers.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list, watchlist_obj, clear_mdbl_cache
 	heading = ls(32200).replace('[B]', '').replace('[/B]', '')
 	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
 	choices = [(str(item['id']), item['name'], '%s items' % item['items']) for item in mdb_userlists() if not item['dynamic']]
@@ -689,7 +689,7 @@ def clear_scrapers_cache(silent=False):
 
 def clear_and_rescrape(media_type, meta, season=None, episode=None):
 	from caches.providers_cache import ExternalProvidersCache
-	from modules.sources import Sources
+	from modules.sources import SourceSelect
 	show_busy_dialog()
 	deleted = ExternalProvidersCache().delete_cache_single(media_type, str(meta['tmdb_id']))
 	hide_busy_dialog()
@@ -697,26 +697,26 @@ def clear_and_rescrape(media_type, meta, season=None, episode=None):
 	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'False'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
-	Sources().playback_prep(play_params)
+	SourceSelect().playback_prep(play_params)
 
 def rescrape_with_disabled(media_type, meta, season=None, episode=None):
-	from modules.sources import Sources
+	from modules.sources import SourceSelect
 	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'disabled_ignored': 'true', 'prescrape': 'false'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
-	Sources().playback_prep(play_params)
+	SourceSelect().playback_prep(play_params)
 
 def scrape_with_filters_ignored(media_type, meta, season=None, episode=None):
-	from modules.sources import Sources
+	from modules.sources import SourceSelect
 	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'ignore_scrape_filters': 'true'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
 	set_property('fs_filterless_search', 'true')
-	Sources().playback_prep(play_params)
+	SourceSelect().playback_prep(play_params)
 
 def scrape_with_custom_values(media_type, meta, season=None, episode=None):
 	from windows import open_window
-	from modules.sources import Sources
+	from modules.sources import SourceSelect
 	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id']}
 	if media_type in ('movie', 'movies'): play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
@@ -739,11 +739,11 @@ def scrape_with_custom_values(media_type, meta, season=None, episode=None):
 	if choice:
 		play_params['ignore_scrape_filters'] = 'true'
 		set_property('fs_filterless_search', 'true')
-	Sources().playback_prep(play_params)
+	SourceSelect().playback_prep(play_params)
 
 def scrape_from_episode_group(meta, season=None, episode=None):
-	from apis.tmdb_api import episode_groups, episode_group_details
-	from modules.sources import Sources
+	from indexers.tmdb_api import episode_groups, episode_group_details
+	from modules.sources import SourceSelect
 	user_info = settings.metadata_user_info()
 	tmdb_id, heading, poster = meta['tmdb_id'], meta['tvshowtitle'], meta['poster']
 	groups = episode_groups(tmdb_id, user_info['tmdb_api'])
@@ -784,10 +784,10 @@ def scrape_from_episode_group(meta, season=None, episode=None):
 	if choice is None: return
 	play_params = {'mode': 'play_media', 'tmdb_id': tmdb_id, 'media_type': 'episode', 'season': season, 'episode': episode}
 	play_params.update({'custom_season': choice[0], 'custom_episode': choice[1]})
-	Sources().playback_prep(play_params)
+	SourceSelect().playback_prep(play_params)
 
 def torbox_usenet_query(meta, season, episode):
-	from apis.torbox_api import TorBoxAPI as TorBox
+	from debrids.torbox_api import TorBoxAPI as TorBox
 	def _builder():
 		for item in files:
 			try:
@@ -801,12 +801,12 @@ def torbox_usenet_query(meta, season, episode):
 				yield (url_params, name, line2)
 			except: pass
 	query = meta.get('tvshowtitle') or '%s %s' % (meta['title'], meta['year'])
-	show_busy_dialog()
+	kodi_utils.progressDialogBG.create(query, 'POV Working...')
 	files = TorBox().usenet_search(query, season, episode, meta.get('imdb_id', ''))
 #	files = TorBox().usenet_search(query, season, episode, None)
 	uncached = [i for i in files if not i['cached']]
 	files = [i for i in files if i['cached']] + uncached
-	hide_busy_dialog()
+	kodi_utils.progressDialogBG.close()
 	if not files: return notification(32760)
 	choices = list(_builder())
 	if not choices: return

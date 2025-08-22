@@ -2,8 +2,8 @@ import os
 import json
 from threading import Thread
 from windows import open_window
-from apis.tmdb_api import tmdb_people_full_info, tmdb_popular_people
-from apis.imdb_api import imdb_images, people_get_imdb_id, imdb_people_images
+from indexers.tmdb_api import tmdb_people_full_info, tmdb_popular_people
+from indexers.imdb_api import imdb_images, people_get_imdb_id, imdb_people_images
 from modules.kodi_utils import translate_path, notification, set_property, make_listitem, list_dirs, delete_file
 # from modules.kodi_utils import logger
 

@@ -113,7 +113,7 @@ class MenuEditor:
 		self._db_execute('set', choice_name, list_items, refresh=False)
 
 	def add_trakt(self):
-		from apis.trakt_api import get_trakt_list_selection
+		from indexers.trakt_api import get_trakt_list_selection
 		trakt_selection = get_trakt_list_selection(list_choice='nav_edit')
 		if trakt_selection is None: return kodi_utils.notification(32736, 1500)
 		active_list = self.params_get('active_list')

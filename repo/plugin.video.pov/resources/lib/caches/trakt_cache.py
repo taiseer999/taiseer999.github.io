@@ -174,7 +174,7 @@ def clear_all_trakt_cache_data(refresh=True):
 		dbcur.execute("""VACUUM""")
 		if not refresh: return True
 		from threading import Thread
-		from apis.trakt_api import trakt_sync_activities
+		from indexers.trakt_api import trakt_sync_activities
 		Thread(target=trakt_sync_activities).start()
 		return True
 	except: return False

@@ -1,7 +1,7 @@
 import sys
 from queue import SimpleQueue
 from threading import Thread
-from apis import mdblist_api
+from indexers import mdblist_api
 from indexers.movies import Movies
 from indexers.tvshows import TVShows
 from modules import kodi_utils

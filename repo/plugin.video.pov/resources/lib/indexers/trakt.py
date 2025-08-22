@@ -1,11 +1,11 @@
 import sys
 from queue import SimpleQueue
 from threading import Thread
-from apis import trakt_api
+from indexers import trakt_api
 from indexers.episodes import Episodes
 from indexers.movies import Movies
-from indexers.tvshows import TVShows
 from indexers.seasons import Seasons
+from indexers.tvshows import TVShows
 from modules import kodi_utils
 from modules.utils import paginate_list, jsondate_to_datetime, TaskPool
 from modules.settings import paginate, page_limit, nav_jump_use_alphabet

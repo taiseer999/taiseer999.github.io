@@ -3,6 +3,8 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
+- Fix for TorBox usenet results as unchecked, thanks Redditor!
+- Added Debrider as a debrid provider.
 - Minor fixes.
 - Added stremthru torz.
 - Change to automatically include uncached results when Scrape With All Filters Ignored.

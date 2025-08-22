@@ -7,7 +7,7 @@ from urllib.request import Request, urlopen
 from indexers.metadata import get_title
 from windows import open_window
 from modules import kodi_utils
-from modules.sources import Sources
+from modules.sources import SourceSelect
 from modules.settings import download_directory, get_art_provider, get_language
 from modules.utils import clean_file_name, clean_title, safe_string, remove_accents
 # from modules.kodi_utils import logger
@@ -113,19 +113,19 @@ class Downloader:
 		if url in (None, 'None', ''):
 			if self.action == 'meta.single':
 				source = json.loads(self.source)
-				url = Sources().resolve_sources(source, self.meta)
+				url = SourceSelect().resolve_sources(source, self.meta)
 				if 'torbox' in url:
-					from apis.torbox_api import TorBoxAPI
+					from debrids.torbox_api import TorBoxAPI
 					url = TorBoxAPI().add_headers_to_url(url)
 			elif self.action == 'meta.pack':
 				if self.provider == 'Real-Debrid':
-					from apis.real_debrid_api import RealDebridAPI as debrid_function
+					from debrids.real_debrid_api import RealDebridAPI as debrid_function
 				elif self.provider == 'Premiumize.me':
-					from apis.premiumize_api import PremiumizeAPI as debrid_function
+					from debrids.premiumize_api import PremiumizeAPI as debrid_function
 				elif self.provider == 'AllDebrid':
-					from apis.alldebrid_api import AllDebridAPI as debrid_function
+					from debrids.alldebrid_api import AllDebridAPI as debrid_function
 				elif self.provider == 'TorBox':
-					from apis.torbox_api import TorBoxAPI as debrid_function
+					from debrids.torbox_api import TorBoxAPI as debrid_function
 				url = self.params_get('pack_files')['link']
 				if self.provider in ('Real-Debrid', 'AllDebrid'):
 					url = debrid_function().unrestrict_link(url)
@@ -139,21 +139,21 @@ class Downloader:
 				if '_direct' in self.action:
 					url = self.params_get('url')
 				elif 'realdebrid' in self.action:
-					from indexers.real_debrid import resolve_rd
+					from debrids.real_debrid import resolve_rd
 					url = resolve_rd(self.params)
 				elif 'alldebrid' in self.action:
-					from indexers.alldebrid import resolve_ad
+					from debrids.alldebrid import resolve_ad
 					url = resolve_ad(self.params)
 				elif 'torbox' in self.action:
-					from apis.torbox_api import TorBoxAPI
-					from indexers.torbox import resolve_tb
+					from debrids.torbox_api import TorBoxAPI
+					from debrids.torbox import resolve_tb
 					url = resolve_tb(self.params)
 					url = TorBoxAPI().add_headers_to_url(url)
 				elif 'premiumize' in self.action:
-					from apis.premiumize_api import PremiumizeAPI
+					from debrids.premiumize_api import PremiumizeAPI
 					url = PremiumizeAPI().add_headers_to_url(url)
 				elif 'easynews' in self.action:
-					from indexers.easynews import resolve_easynews
+					from debrids.easynews import resolve_easynews
 					url = resolve_easynews(self.params)
 		try: headers = dict(parse_qsl(url.rsplit('|', 1)[1]))
 		except: headers = dict('')

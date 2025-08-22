@@ -1,5 +1,5 @@
 from threading import Thread
-from apis.real_debrid_api import RealDebridAPI as Debrid
+from debrids.real_debrid_api import RealDebridAPI as Debrid
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
 from modules.settings import enabled_debrids_check, filter_by_name

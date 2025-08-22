@@ -1,5 +1,5 @@
 from threading import Thread
-from apis.torbox_api import TorBoxAPI as Debrid
+from debrids.torbox_api import TorBoxAPI as Debrid
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
 from modules.settings import enabled_debrids_check, filter_by_name

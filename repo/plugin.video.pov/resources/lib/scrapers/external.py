@@ -79,6 +79,7 @@ class External:
 				hashes, status = item.cached_list, ('Unchecked %s' if item.name in ('Real-Debrid', 'AllDebrid') else 'Uncached %s') % item.name
 				self.final_sources.extend([{**i, 'cache_provider': item.name, 'debrid': item.name} for i in torrent_sources if i['hash'] in hashes])
 				self.final_sources.extend([{**i, 'cache_provider': status, 'debrid': item.name} for i in torrent_sources if not i['hash'] in hashes])
+			self.final_sources = [i for i in self.final_sources if not (i['source'] == 'usenet' and 'Unchecked' in i['cache_provider'])]
 			hoster_sources = [i for i in self.sources if not 'hash' in i]
 			result_hosters = list({i['source'].lower() for i in hoster_sources})
 			for item in self.debrid_hosters:
@@ -225,7 +226,6 @@ class Source:
 			sources = self.process_sources(provider, sources)
 			_cache.set(provider, self.media_type, self.tmdb_id, self.title, self.year, '', '', sources, self.single_expiry)
 		if sources:
-			self.process_quality_count(sources)
 			self.sources.extend(sources)
 		self.completed = True
 
@@ -250,7 +250,6 @@ class Source:
 		if sources:
 			if pack == season_display: sources = [i for i in sources if not 'episode_start' in i or i['episode_start'] <= self.episode <= i['episode_end']]
 			elif pack == show_display: sources = [i for i in sources if i['last_season'] >= self.season]
-			self.process_quality_count(sources)
 			self.sources.extend(sources)
 		self.completed = True
 
@@ -259,9 +258,7 @@ class Source:
 			for i in sources:
 				try:
 					i_get = i.get
-					if 'hash' in i:
-						_hash = i_get('hash').lower()
-						i['hash'] = str(_hash)
+					if 'hash' in i: i['hash'] = str(i['hash']).lower()
 					size, size_label, divider = 0, None, None
 					if 'name' in i: URLName = clean_file_name(i_get('name')).replace('html', ' ').replace('+', ' ').replace('-', ' ')
 					else: URLName = get_filename_match(self.orig_title, i_get('url'), i_get('name', None))
@@ -276,18 +273,14 @@ class Source:
 							size_label = '%.2f GB' % size
 						else: size_label = '%.2f GB' % size
 					except: pass
-					i.update({'provider': provider, 'external': True, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
-								'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)})
+					i.update({
+						'external': True, 'provider': provider, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
+						'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)
+					})
+					if not quality in self.resolutions: self.resolutions['SD'] += 1
+					else: self.resolutions[quality] += 1
+					self.sources_total['total'] += 1
 				except: pass
 		except: pass
 		return sources
-
-	def process_quality_count(self, sources):
-		for i in sources:
-			quality = i['quality']
-			if quality == '4K': self.resolutions[quality] += 1
-			elif quality == '1080p': self.resolutions[quality] += 1
-			elif quality == '720p': self.resolutions[quality] += 1
-			else: self.resolutions['SD'] += 1
-			self.sources_total['total'] += 1
 

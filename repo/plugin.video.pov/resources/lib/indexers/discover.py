@@ -1,6 +1,6 @@
 import json
 import sys
-from apis.tmdb_api import base_url, tmdb_api_key
+from indexers.tmdb_api import base_url, tmdb_api_key, tmdb_keyword_id, tmdb_people_info, tmdb_company_id, tmdb_movies_title_year, tmdb_tv_title_year
 from modules import kodi_utils, meta_lists
 # logger = kodi_utils.logger
 
@@ -87,8 +87,8 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		title = kodi_utils.dialog.input(heading_base % ls(32228))
 		if not title: return
-		if self.media_type == 'movie': from apis.tmdb_api import tmdb_movies_title_year as function
-		else: from apis.tmdb_api import tmdb_tv_title_year as function
+		if self.media_type == 'movie': function = tmdb_movies_title_year
+		else: function = tmdb_tv_title_year
 		year = kodi_utils.dialog.input(heading_base % ('%s (%s)' % (ls(32543), ls(32669))), type=kodi_utils.numeric_input)
 		results = function(title, year)['results']
 		if len(results) == 0: return kodi_utils.notification(32575)
@@ -122,7 +122,6 @@ class Discover:
 		key_words_append = current_keywords.append
 		keyword = kodi_utils.dialog.input(heading_base % (include_base_str % ls(32657)))
 		if keyword:
-			from apis.tmdb_api import tmdb_keyword_id
 			try:
 				result = tmdb_keyword_id(keyword)['results']
 				keywords_choice = self._multiselect_dialog(heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
@@ -147,7 +146,6 @@ class Discover:
 		key_words_append = current_keywords.append
 		keyword = kodi_utils.dialog.input(heading_base % (exclude_base_str % ls(32657)))
 		if keyword:
-			from apis.tmdb_api import tmdb_keyword_id
 			try:
 				result = tmdb_keyword_id(keyword)['results']
 				keywords_choice = self._multiselect_dialog(heading_base % ('%s %s' % (ls(32193), ls(32657))), [i['name'].upper() for i in result], result)
@@ -269,7 +267,6 @@ class Discover:
 	def cast(self):
 		key = 'cast'
 		if self._action(key) in ('clear', None): return
-		from apis.tmdb_api import tmdb_people_info
 		from modules.utils import safe_string, remove_accents
 		query = kodi_utils.dialog.input(heading_base % ls(32664))
 		if not query: return
@@ -329,7 +326,6 @@ class Discover:
 			current_companies = current_companies.split(', ')
 		company = kodi_utils.dialog.input(heading_base % ls(32660))
 		if company:
-			from apis.tmdb_api import tmdb_company_id
 			company_choice = None
 			try:
 				results = tmdb_company_id(company)

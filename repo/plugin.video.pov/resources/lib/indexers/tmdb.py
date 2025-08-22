@@ -2,7 +2,7 @@ import json
 import sys
 from queue import SimpleQueue
 from threading import Thread
-from apis import tmdb_api
+from indexers import tmdb_api
 from indexers.movies import Movies
 from indexers.tvshows import TVShows
 from modules import kodi_utils

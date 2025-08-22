@@ -6,7 +6,7 @@ import _strptime  # fix bug in python import
 from windows import open_window
 from indexers.metadata import tvshow_meta, season_episodes_meta, all_episodes_meta
 from modules import kodi_utils, settings
-from modules.sources import Sources
+from modules.sources import SourceSelect
 from modules.player import POVPlayer
 from modules.utils import get_datetime, adjust_premiered_date
 # from modules.kodi_utils import logger
@@ -48,9 +48,9 @@ def execute_scrape_nextep(meta):
 	if nextep_params == 'error': return kodi_utils.notification(32574)
 	elif nextep_params == 'no_next_episode': return
 	player = POVPlayer()
-	Sources().playback_prep(nextep_params)
+	SourceSelect().playback_prep(nextep_params)
 	while player.isPlayingVideo(): kodi_utils.sleep(100)
-	Sources().playback_prep({**nextep_params, 'background': 'false'})
+	SourceSelect().playback_prep({**nextep_params, 'background': 'false'})
 
 def execute_nextep(meta, nextep_settings):
 	def _get_nextep_params():
@@ -58,7 +58,7 @@ def execute_nextep(meta, nextep_settings):
 		else: nextep_params = nextep_playback_info(meta)
 		return nextep_params
 	def _get_nextep_url():
-		Sources().playback_prep(nextep_params)
+		SourceSelect().playback_prep(nextep_params)
 		return kodi_utils.get_property('pov_background_url')
 	def _confirm_threshold():
 		nextep_threshold = nextep_settings['threshold']

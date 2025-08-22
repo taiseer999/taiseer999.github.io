@@ -1,5 +1,5 @@
 import sys
-from apis.easynews_api import import_easynews
+from debrids.easynews_api import import_easynews
 from modules import source_utils
 from modules.utils import clean_file_name, normalize
 from modules.settings import filter_by_name, easynews_language_filter

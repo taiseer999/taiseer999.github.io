@@ -336,34 +336,36 @@ class ResultsContextMenu(BaseDialog):
 
 	def make_menu(self):
 		meta_json = json.dumps(self.meta)
-		item_id = self.item.get('id', None)
+		source = json.dumps(self.item)
 		name = self.item.get('name')
-		down_pack_params, browse_pack_params, add_magnet_to_cloud_params = None, None, None
 		provider_source = self.item.get('source')
 		scrape_provider = self.item.get('scrape_provider')
 		cache_provider = self.item.get('cache_provider', 'None')
 		magnet_url = self.item.get('url', 'None')
 		info_hash = self.item.get('hash', 'None')
-		uncached_torrent = 'Uncached' in cache_provider
-		source = json.dumps(self.item)
-		if self.filter_applied: self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
-		else: self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % filter_str, run_plugin_str, {'mode': 'results_filter'}))
-		self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % extra_info_str, run_plugin_str, {'mode': 'results_info'}))
-		if not uncached_torrent and scrape_provider != 'folders':
-			down_file_params = {'mode': 'downloader', 'action': 'meta.single', 'name': self.meta.get('rootname', ''), 'source': source,
-								'url': None, 'provider': scrape_provider, 'meta': meta_json}
-			self.item_list.append(self.make_contextmenu_item(down_file_str, run_plugin_str, down_file_params))
+		if self.filter_applied: self.item_list.append(self.make_contextmenu_item(clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
+		else: self.item_list.append(self.make_contextmenu_item(filter_str, run_plugin_str, {'mode': 'results_filter'}))
+		self.item_list.append(self.make_contextmenu_item(extra_info_str, run_plugin_str, {'mode': 'results_info'}))
+		if 'Uncached' in cache_provider: return
 		if 'package' in self.item:
-			if not uncached_torrent:
-				browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'highlight': self.highlight, 'name': name,
-									'magnet_url': magnet_url, 'info_hash': info_hash}
-				down_pack_params = {'mode': 'downloader', 'action': 'meta.pack', 'highlight': self.highlight, 'name': self.meta.get('rootname', ''), 'source': source, 'url': None,
-									'provider': cache_provider, 'meta': meta_json, 'magnet_url': magnet_url, 'info_hash': info_hash}
-		if provider_source == 'torrent' and not uncached_torrent:
-			add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'url': magnet_url}
-		if down_pack_params: self.item_list.append(self.make_contextmenu_item(down_pack_str, run_plugin_str, down_pack_params))
-		if browse_pack_params: self.item_list.append(self.make_contextmenu_item(browse_pack_str, run_plugin_str, browse_pack_params))
-		if add_magnet_to_cloud_params: self.item_list.append(self.make_contextmenu_item(cloud_str, run_plugin_str, add_magnet_to_cloud_params))
+			self.item_list.append(self.make_contextmenu_item(browse_pack_str, run_plugin_str, {
+				'mode': 'browse_packs', 'highlight': self.highlight, 'name': name, 'provider': cache_provider,
+				'magnet_url': magnet_url, 'info_hash': info_hash
+			}))
+			self.item_list.append(self.make_contextmenu_item(down_pack_str, run_plugin_str, {
+				'mode': 'downloader', 'action': 'meta.pack', 'source': source, 'meta': meta_json,
+				'name': self.meta.get('rootname', ''), 'provider': cache_provider, 'url': None,
+				'magnet_url': magnet_url, 'info_hash': info_hash, 'highlight': self.highlight
+			}))
+		if not scrape_provider == 'folders':
+			self.item_list.append(self.make_contextmenu_item(down_file_str, run_plugin_str, {
+				'mode': 'downloader', 'action': 'meta.single', 'source': source, 'meta': meta_json,
+				'name': self.meta.get('rootname', ''), 'provider': scrape_provider, 'url': None
+			}))
+		if provider_source == 'torrent':
+			self.item_list.append(self.make_contextmenu_item(cloud_str, run_plugin_str, {
+				'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'url': magnet_url
+			}))
 
 	def set_properties(self):
 		self.setProperty('tikiskins.context.highlight', self.highlight)

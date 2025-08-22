@@ -1,6 +1,6 @@
 import json, re, random, requests
 from threading import Thread
-from apis import real_debrid_api, premiumize_api, alldebrid_api, offcloud_api, torbox_api, easydebrid_api, debrider_api
+from debrids import real_debrid_api, premiumize_api, alldebrid_api, offcloud_api, torbox_api, easydebrid_api, debrider_api
 from caches.debrid_cache import DebridCache
 from modules.utils import clean_file_name, make_thread_list
 from modules.settings import enabled_debrids_check
@@ -42,6 +42,7 @@ def debrid_valid_hosts(enabled_debrids):
 	return debrid_hosts
 
 def manual_add_magnet_to_cloud(params):
+	params['provider'] = params['provider'].replace('Unchecked ', '')
 	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	function = import_debrid(params['provider'])
@@ -52,6 +53,7 @@ def manual_add_magnet_to_cloud(params):
 	else: notification(32575)
 
 def manual_add_nzb_to_cloud(params):
+	params['provider'] = params['provider'].replace('Unchecked ', '')
 	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	function = import_debrid(params['provider'])
@@ -64,7 +66,7 @@ def manual_add_nzb_to_cloud(params):
 def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_link=False):
 	try:
 		if scrape_provider == 'easynews':
-			from indexers.easynews import resolve_easynews
+			from debrids.easynews import resolve_easynews
 			url = resolve_easynews({'url_dl': url_dl, 'play': 'false'})
 		elif scrape_provider == 'rd_cloud':
 			if direct_debrid_link: url = url_dl
