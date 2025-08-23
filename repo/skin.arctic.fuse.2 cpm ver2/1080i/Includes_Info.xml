@@ -1374,7 +1374,7 @@
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">Dolby Vision</param>
-                <param name="visible">$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow) + $PARAM[is_dolbyvision] + !String.IsEqual($PARAM[listitem_audiocodec],ac3) + !String.IsEqual($PARAM[listitem_audiocodec],dolbydigital) + !String.IsEqual($PARAM[listitem_audiocodec],eac3) + !String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos) + !String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos)</param>
+                <param name="visible">$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow) + $PARAM[is_dolbyvision] + !String.IsEqual($PARAM[listitem_audiocodec],ac3) + !String.IsEqual($PARAM[listitem_audiocodec],dolbydigital) + !String.IsEqual($PARAM[listitem_audiocodec],eac3) + !String.IsEqual($PARAM[listitem_audiocodec],eac3_ddp_atmos) + !String.IsEqual($PARAM[listitem_audiocodec],truehd) + !String.IsEqual($PARAM[listitem_audiocodec],truehd_atmos)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1390,6 +1390,11 @@
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">SDR</param>
                 <param name="visible">$PARAM[visible] + $PARAM[is_sdr]</param>
+            </include>
+            <include content="Info_Line_VideoQuality_Object">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">Dolby Vision • TrueHD</param>
+                <param name="visible">$PARAM[visible] + Skin.HasSetting(InfoBar.TwoRow) + $PARAM[is_dolbyvision] + String.IsEqual($PARAM[listitem_audiocodec],truehd)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
