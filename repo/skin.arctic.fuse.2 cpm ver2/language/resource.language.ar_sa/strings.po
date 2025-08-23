@@ -2866,7 +2866,7 @@ msgstr "معلومات المشغل PPI والترميز"
 
 msgctxt "#32085"
 msgid "DiscArt"
-msgstr ""
+msgstr "DiscArt"
 
 msgctxt "#32086"
 msgid "Two-row information bar"

@@ -286,9 +286,18 @@
             <onclick>Skin.ToggleSetting(OSD.DisablePlotRatingsOnInfo)</onclick>
             <visible>Skin.HasSetting(OSD.DisplayInfoOnControls)</visible>
         </include>
+		
+        <include content="Settings_Button" description="CD">
+            <param name="dialog">true</param>
+            <param name="id">8004</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[32085]</label>
+            <selected>!Skin.HasSetting(OSD.DiscArt)</selected>
+            <onclick>Skin.ToggleSetting(OSD.DiscArt)</onclick>
+        </include>
 
         <include content="Settings_Label">
-            <param name="id">8004</param>
+            <param name="id">8005</param>
             <param name="dialog">true</param>
             <param name="slevel">2</param>
             <label>$LOCALIZE[31585]</label>
@@ -296,7 +305,7 @@
 
         <include content="Settings_Button" description="Expanded info landscape art">
             <param name="dialog">true</param>
-            <param name="id">8005</param>
+            <param name="id">8006</param>
             <param name="control">radiobutton</param>
             <param name="slevel">2</param>
             <label>$LOCALIZE[31045]</label>
@@ -306,7 +315,7 @@
 
         <include content="Settings_Button" description="Expanded info plot and ratings">
             <param name="dialog">true</param>
-            <param name="id">8006</param>
+            <param name="id">8007</param>
             <param name="control">radiobutton</param>
             <param name="slevel">2</param>
             <label>$LOCALIZE[207] + $LOCALIZE[31202]</label>
@@ -2127,6 +2136,21 @@
             <param name="dialog">true</param>
             <label>$LOCALIZE[31441]</label>
         </include>
+		
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">8011</param>
+            <param name="control">radiobutton</param>
+            <selected>Skin.String(Skin.FlixArt.Size,Small)</selected>
+            <enable>!Skin.String(Background.ArtworkStyle,Fanart)</enable>
+            <label>$LOCALIZE[1438]</label>
+            <label2>       1120x630       </label2>
+            <onclick>Skin.SetString(Skin.FlixArt.Size,Small)</onclick>
+            <onclick>ReloadSkin()</onclick>
+            <onclick>AlarmClock(refocusblura,SetFocus(3,1,absolute),00:00,silent)</onclick>
+            <onclick>AlarmClock(refocusblurb,SetFocus(2012),00:00,silent)</onclick>
+            <onclick>AlarmClock(refocusblurc,ActivateWindow(1118),00:00,silent)</onclick>
+        </include>
 
         <include content="Settings_Button">
             <param name="dialog">true</param>
@@ -2774,7 +2798,7 @@
         <include content="Settings_Label">
             <param name="id">8010</param>
             <param name="dialog">true</param>
-            <label>$LOCALIZE[32085]</label>
+            <label>$LOCALIZE[32080]</label>
         </include>
         <include content="Settings_Button">
             <param name="dialog">true</param>
@@ -2788,7 +2812,7 @@
             <param name="dialog">true</param>
             <param name="id">8012</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[32086]</label>
+            <label>$LOCALIZE[32084]</label>
             <onclick>Skin.ToggleSetting(InfoBar.TwoRow)</onclick>
             <selected>Skin.HasSetting(InfoBar.TwoRow)</selected>
         </include>
