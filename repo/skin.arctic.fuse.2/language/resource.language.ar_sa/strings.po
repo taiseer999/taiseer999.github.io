@@ -2865,8 +2865,8 @@ msgid "Codecs & PPI"
 msgstr "معلومات المشغل PPI والترميز"
 
 msgctxt "#32085"
-msgid "Optional"
-msgstr "اختياري"
+msgid "DiscArt"
+msgstr ""
 
 msgctxt "#32086"
 msgid "Two-row information bar"

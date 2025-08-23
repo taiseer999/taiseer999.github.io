@@ -13,6 +13,7 @@
     <include file="Includes_Constants_HomeStyle_Dialog.xml" condition="Skin.String(Home.MenuStyle,Dialog)" />
     <include file="Includes_Constants_HomeStyle_Ribbon.xml" condition="Skin.String(Home.MenuStyle,Ribbon)" />
     <include file="Includes_Constants_MouseTouch.xml" condition="Skin.HasSetting(MouseTouchMode)" />
+    <include file="Includes_Constants_FlixArt_Small.xml" condition="Skin.String(Skin.FlixArt.Size,Small)" />
     <include file="Includes_Constants_FlixArt_Large.xml" condition="Skin.String(Skin.FlixArt.Size,Large)" />
     <include file="Includes_Constants_FlixArt_ExtraLarge.xml" condition="Skin.String(Skin.FlixArt.Size,ExtraLarge)" />
     <include file="Includes_Constants_4x3.xml" condition="String.IsEqual(Skin.AspectRatio,4:3)" />

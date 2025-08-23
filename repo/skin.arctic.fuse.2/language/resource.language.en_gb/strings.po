@@ -3157,7 +3157,7 @@ msgid "Codecs & PPI"
 msgstr ""
 
 msgctxt "#32085"
-msgid "Optional"
+msgid "DiscArt"
 msgstr ""
 
 msgctxt "#32086"
