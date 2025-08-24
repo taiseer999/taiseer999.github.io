@@ -4,7 +4,7 @@
     <default type="label">
         <align>left</align>
         <aligny>center</aligny>
-        <font>font_main</font>
+        <font>font_mini</font>
         <textcolor>main_fg_70</textcolor>
         <selectedcolor>main_fg_70</selectedcolor>
         <include content="Object_Scroll" condition="Skin.HasSetting(Labels.Autoscroll)">
