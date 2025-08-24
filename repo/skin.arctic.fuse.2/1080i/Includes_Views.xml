@@ -98,7 +98,7 @@
                         <param name="visible">String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer))</param>
                         <param name="grouplistid">99954</param>
                         <param name="plotheight">120</param>
-                        <param name="plotwidth">1070</param>
+                        <param name="plotwidth">1040</param>
                         <param name="title">false</param>
                     </include>
                 </control>

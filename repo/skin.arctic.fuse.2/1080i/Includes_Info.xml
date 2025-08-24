@@ -2426,7 +2426,7 @@
                 <width>$PARAM[plotwidth]</width>
                 <label>$PARAM[plotlabel]</label>
                 <textcolor>$PARAM[colordiffuse]_70</textcolor>
-                <font>font_mini_plot</font>
+                <font>font_main_plot</font>
                 <visible>$PARAM[visible]</visible>
                 <visible>$PARAM[details]</visible>
                 <include>$PARAM[details_include]</include>
