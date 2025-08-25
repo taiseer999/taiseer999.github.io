@@ -33,11 +33,11 @@
     </include>
 
     <include name="Info_Title_Label_Hidden">
-        <include content="_Info_Title_Label_Hidden" condition="!Skin.HasSetting(UseLightFont) + Skin.HasSetting(Titles.EnableWrapping)">
+        <include content="_Info_Title_Label_Hidden" condition="!$EXP[Exp_SkinSetting_UseLightFont] + Skin.HasSetting(Titles.EnableWrapping)">
             <param name="font">font_info_black</param>
             <param name="label">$PARAM[label]</param>
         </include>
-        <include content="_Info_Title_Label_Hidden" condition="Skin.HasSetting(UseLightFont) + Skin.HasSetting(Titles.EnableWrapping)">
+        <include content="_Info_Title_Label_Hidden" condition="$EXP[Exp_SkinSetting_UseLightFont] + Skin.HasSetting(Titles.EnableWrapping)">
             <param name="font">font_info_light</param>
             <param name="label">$PARAM[label]</param>
         </include>
@@ -120,25 +120,25 @@
     </include>
 
     <include name="Info_Title_Label">
-        <include content="_Info_Title_Label" condition="!Skin.HasSetting(UseLightFont) + Skin.HasSetting(Titles.EnableWrapping)">
+        <include content="_Info_Title_Label" condition="!$EXP[Exp_SkinSetting_UseLightFont] + Skin.HasSetting(Titles.EnableWrapping)">
             <param name="font">font_info_black</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
             <param name="label">$PARAM[label]</param>
             <nested />
         </include>
-        <include content="_Info_Title_Label" condition="Skin.HasSetting(UseLightFont) + Skin.HasSetting(Titles.EnableWrapping)">
+        <include content="_Info_Title_Label" condition="$EXP[Exp_SkinSetting_UseLightFont] + Skin.HasSetting(Titles.EnableWrapping)">
             <param name="font">font_info_light</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
             <param name="label">$PARAM[label]</param>
             <nested />
         </include>
-        <include content="_Info_Title_Label_NoWrap" condition="!Skin.HasSetting(UseLightFont) + !Skin.HasSetting(Titles.EnableWrapping)">
+        <include content="_Info_Title_Label_NoWrap" condition="!$EXP[Exp_SkinSetting_UseLightFont] + !Skin.HasSetting(Titles.EnableWrapping)">
             <param name="font">font_info_black</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
             <param name="label">$PARAM[label]</param>
             <nested />
         </include>
-        <include content="_Info_Title_Label_NoWrap" condition="Skin.HasSetting(UseLightFont) + !Skin.HasSetting(Titles.EnableWrapping)">
+        <include content="_Info_Title_Label_NoWrap" condition="$EXP[Exp_SkinSetting_UseLightFont] + !Skin.HasSetting(Titles.EnableWrapping)">
             <param name="font">font_info_light</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
             <param name="label">$PARAM[label]</param>
@@ -332,7 +332,7 @@
                     <height>80</height>
                     <itemgap>10</itemgap>
                     <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,0)</visible>
-                    <visible>Window.IsMedia</visible>
+                    <visible>$EXP[Exp_WindowIsMedia]</visible>
                     <include content="Info_Line_Label">
                         <param name="controltype" value="$PARAM[controltype]" />
                         <param name="label" value="$LOCALIZE[14022]" />
@@ -839,7 +839,7 @@
         <param name="icon_colordiffuse">ffffffff</param>
         <param name="back_colordiffuse">ffffffff</param>
         <param name="backing">false</param>
-        <param name="is_updating">[!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRating))]</param>
+        <param name="is_updating">[$EXP[Exp_WindowHomeProperty_TMDBHelperIsUpdatingRating]]</param>
         <param name="is_varlabel">false</param>
         <param name="is_autohide">false</param>
         <definition>
@@ -1569,7 +1569,7 @@
                 <!-- Providers -->
                 <include content="Info_Codec_LabelIcon" condition="!Skin.HasSetting(Codecs.DisableMediaProviderIcons)">
                     <param name="icon" value="special://skin/extras/icons/justwatch.png" />
-                    <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)]</visible>
+                    <visible>[$EXP[Exp_IsMovieType] | String.IsEqual(ListItem.DBType,episode)]</visible>
                 </include>
                 <include content="Info_Provider"><param name="pos" value="1" /></include>
                 <include content="Info_Provider"><param name="pos" value="2" /></include>
@@ -1603,7 +1603,7 @@
                 <include content="Info_Codec_Label">
                     <param name="icon" value="special://skin/extras/icons/share-nodes.png" />
                     <param name="label" value="$INFO[ListItem.Property(TotalSeasons),[B],[/B] $LOCALIZE[33054]]" />
-                    <visible>String.IsEqual(ListItem.DBType,tvshow)</visible>
+                    <visible>$EXP[Exp_StringIsEqual_ListItemDBType_TVShow]</visible>
                     <visible>!String.IsEmpty(ListItem.Property(TotalSeasons))</visible>
                 </include>
 
@@ -1611,7 +1611,7 @@
                 <include content="Info_Codec_Label">
                     <param name="icon" value="special://skin/extras/icons/square-poll-horizontal.png" />
                     <param name="label" value="$INFO[ListItem.Property(TotalEpisodes),[B],[/B] $LOCALIZE[20360]   ]$INFO[ListItem.Property(WatchedEpisodes),[B],[/B] $LOCALIZE[16102]]" />
-                    <visible>String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)</visible>
+                    <visible>$EXP[Exp_StringIsEqual_ListItemDBType_TVShow] | $EXP[Exp_StringIsEqual_ListItemDBType_Season]</visible>
                     <visible>!String.IsEmpty(ListItem.Property(TotalEpisodes))</visible>
                 </include>
 
@@ -1620,14 +1620,14 @@
                     <param name="icon" value="special://skin/extras/icons/songs.png" />
                     <param name="label" value="$INFO[Container.NumNonFolderItems,[B],[/B] $LOCALIZE[134]]" />
                     <visible>!String.IsEmpty(Container.NumNonFolderItems)</visible>
-                    <visible>Container.Content(songs)</visible>
+                    <visible>$EXP[Exp_ContainerSongs]</visible>
                     <visible>!$EXP[Exp_InfoDialogs] | Window.IsVisible(DialogMusicInfo.xml)</visible>
                 </include>
                 <include content="Info_Codec_Label">
                     <param name="icon" value="special://skin/extras/icons/clock.png" />
                     <param name="label" value="$INFO[Container.Totaltime,[B],[/B] $LOCALIZE[31142]]" />
                     <visible>!String.IsEmpty(Container.Totaltime)</visible>
-                    <visible>Container.Content(songs)</visible>
+                    <visible>$EXP[Exp_ContainerSongs]</visible>
                     <visible>!$EXP[Exp_InfoDialogs] | Window.IsVisible(DialogMusicInfo.xml)</visible>
                 </include>
 
@@ -1664,14 +1664,14 @@
                     <param name="label" value="$INFO[Container(50).NumItems,[B],[/B] $LOCALIZE[132]]" />
                     <visible>Window.IsVisible(DialogMusicInfo.xml)</visible>
                     <visible>!String.IsEmpty(Container(50).NumItems)</visible>
-                    <visible>String.IsEqual(ListItem.DBType,artist)</visible>
+                    <visible>$EXP[Exp_StringIsEqual_ListItemDBType_Artist]</visible>
                 </include>
                 <include content="Info_Codec_Label">
                     <param name="icon" value="special://skin/extras/icons/songs.png" />
                     <param name="label" value="$INFO[Container(5050).NumNonFolderItems,[B],[/B] $LOCALIZE[134]]" />
                     <visible>Window.IsVisible(DialogMusicInfo.xml)</visible>
                     <visible>!String.IsEmpty(Container(5050).NumNonFolderItems)</visible>
-                    <visible>String.IsEqual(ListItem.DBType,artist)</visible>
+                    <visible>$EXP[Exp_StringIsEqual_ListItemDBType_Artist]</visible>
                 </include>
 
                 <!-- Addon Origin -->
@@ -1730,7 +1730,7 @@
                 <texture background="true" diffuse="diffuse/provider_circle.png">$INFO[Container(99950).ListItem.Property(Provider.$PARAM[pos].Icon)]</texture>
             </control>
             <visible>!String.IsEmpty(Container(99950).ListItem.Property(Provider.$PARAM[pos].Icon))</visible>
-            <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)]</visible>
+            <visible>[$EXP[Exp_IsMovieType] | String.IsEqual(ListItem.DBType,episode)]</visible>
         </include>
     </include>
 

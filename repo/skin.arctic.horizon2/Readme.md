@@ -1,8 +1,12 @@
 
-# Arctic Horizon 2 [![License](https://img.shields.io/badge/License-GPLv3-blue)](https://github.com/jurialmunkey/skin.arctic.horizon.2/blob/master/LICENSE.txt) [![License](https://img.shields.io/badge/license-CC--NC--SA%204.0-green)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+# Arctic Horizon 2.1 [![License](https://img.shields.io/badge/License-GPLv3-blue)](https://github.com/DeFiNiek/skin.arctic.horizon.2/blob/main/LICENSE.txt) [![License](https://img.shields.io/badge/license-CC--NC--SA%204.0-green)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 This work is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/
 or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+
+# Jurial Munkey
+
+He is the creator of the skin, I'm just optimizing and mainting the awesome skin that was sadly archived in 2024.
 
 Icon images from iconmonstr.com see website for license terms
 

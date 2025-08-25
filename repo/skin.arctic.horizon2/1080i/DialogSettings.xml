@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
     <controls>
-        <include condition="!Window.IsVisible(videoosd) + !String.IsEqual(Window(Home).Property(DialogSettings.Style),mediafilter)">Object_Overlay</include>
+        <include condition="!$EXP[Exp_WindowVisible_VideoOSD] + !String.IsEqual(Window(Home).Property(DialogSettings.Style),mediafilter)">Object_Overlay</include>
 
         <!-- Standard -->
         <include content="Dialog_Background" condition="!String.IsEqual(Window(Home).Property(DialogSettings.Style),mediafilter)">
             <visible>!Window.IsVisible(DialogSubtitles.xml)</visible>
             <visible>!Window.IsVisible(DialogSlider.xml)</visible>
             <include>Animation_SlideIn_Dialog</include>
-            <include condition="Window.IsVisible(videoosd)">Dimension_DialogSelect_OSD</include>
-            <include condition="!Window.IsVisible(videoosd)">Dimension_DialogSelect</include>
+            <include condition="$EXP[Exp_WindowVisible_VideoOSD]">Dimension_DialogSelect_OSD</include>
+            <include condition="!$EXP[Exp_WindowVisible_VideoOSD]">Dimension_DialogSelect</include>
             <include>Dialog_Overlay_Buttons</include>
             <include content="Dialog_Header">
                 <param name="id" value="2" />
-                <include content="Object_Align" condition="Window.IsVisible(videoosd)">
+                <include content="Object_Align" condition="$EXP[Exp_WindowVisible_VideoOSD]">
                     <param name="align">left</param>
                 </include>
             </include>

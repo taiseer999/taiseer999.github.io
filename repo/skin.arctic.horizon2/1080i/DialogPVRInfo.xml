@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog">
-    <include content="Object_DefaultControl" condition="!Skin.HasSetting(DialogInfo.FocusButtons)">
+    <include content="Object_DefaultControl" condition="!$EXP[Exp_DialogInfoFocusButtons]">
         <param name="always">true</param>
         <param name="defaultcontrol">5000</param>
     </include>
-    <include content="Object_DefaultControl" condition="Skin.HasSetting(DialogInfo.FocusButtons)">
+    <include content="Object_DefaultControl" condition="$EXP[Exp_DialogInfoFocusButtons]">
         <param name="always">true</param>
         <param name="defaultcontrol">4000</param>
     </include>
@@ -12,7 +12,7 @@
     <onunload>ClearProperty(HasTrailer,Home)</onunload>
     <controls>
         <include>Defs_TMDbHelper_Loader</include>
-        <include condition="Window.IsVisible(fullscreenvideo)">Background_Main</include>
+        <include condition="$EXP[Exp_WindowVisible_FullscreenVideo]">Background_Main</include>
 
         <include content="DialogInfo_MainGroup">
             <include content="DialogInfo_ButtonGroup">
@@ -22,7 +22,7 @@
             <include content="DialogInfo_SlideGroup">
                 <include content="DialogInfo_LeftGroup">
                     <param name="icon">$VAR[Image_PVRPoster]</param>
-                    <param name="poster_visible">!String.IsEmpty(Container(99950).ListItem.Art(poster)) | !String.IsEmpty(ListItem.Art(tvshow.poster)) | !String.IsEmpty(ListItem.Art(poster))</param>
+                    <param name="poster_visible">!String.IsEmpty(Container(99950).ListItem.Art(poster)) | !String.IsEmpty(ListItem.Art(tvshow.poster)) | $EXP[Exp_HasPosterArt]</param>
 
 
                     <include content="DialogInfo_PullTab">
@@ -43,7 +43,7 @@
                 <include content="DialogInfo_RightGroup">
                     <!-- Info -->
                     <control type="group">
-                        <visible>!Control.HasFocus(7001) | !Player.HasVideo</visible>
+                        <visible>!Control.HasFocus(7001) | !$EXP[Exp_PlayerHasVideo]</visible>
                         <visible>!Control.HasFocus(7003)</visible>
 
                         <animation effect="fade" start="0" end="100" time="400" delay="400" reversible="false">Visible</animation>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog">
-    <include content="Object_DefaultControl" condition="!Skin.HasSetting(DialogInfo.FocusButtons)">
+    <include content="Object_DefaultControl" condition="!$EXP[Exp_DialogInfoFocusButtons]">
         <param name="always">true</param>
         <param name="defaultcontrol">5000</param>
     </include>
-    <include content="Object_DefaultControl" condition="Skin.HasSetting(DialogInfo.FocusButtons)">
+    <include content="Object_DefaultControl" condition="$EXP[Exp_DialogInfoFocusButtons]">
         <param name="always">true</param>
         <param name="defaultcontrol">4000</param>
     </include>
@@ -30,7 +30,7 @@
                 <include content="DialogInfo_RightGroup">
                     <!-- Info -->
                     <control type="group">
-                        <visible>!Control.HasFocus(7001) | !Player.HasVideo</visible>
+                        <visible>!Control.HasFocus(7001) | !$EXP[Exp_PlayerHasVideo]</visible>
                         <visible>!Control.HasFocus(7003)</visible>
 
                         <animation effect="fade" start="0" end="100" time="400" delay="400" reversible="false">Visible</animation>
@@ -51,7 +51,7 @@
                                 <param name="id">50</param>
                                 <visible>![Control.HasFocus(9801) | Control.HasFocus(9802)]</visible>
                             </include>
-                            <include content="DialogInfo_MusicTracks" condition="String.IsEqual(ListItem.DBType,artist)">
+                            <include content="DialogInfo_MusicTracks" condition="$EXP[Exp_StringIsEqual_ListItemDBType_Artist]">
                                 <param name="id">5050</param>
                                 <param name="detailed">true</param>
                                 <content target="music" sortby="playcount" sortorder="descending">$INFO[ListItem.Artist,musicdb://songs/?xsp=%7B%22order%22%3A%7B%22direction%22%3A%22ascending%22%2C%22ignorefolders%22%3A0%2C%22method%22%3A%22sorttitle%22%7D%2C%22rules%22%3A%7B%22and%22%3A%5B%7B%22field%22%3A%22artist%22%2C%22operator%22%3A%22is%22%2C%22value%22%3A%5B%22,%22%5D%7D%5D%7D%2C%22type%22%3A%22songs%22%7D]</content>
