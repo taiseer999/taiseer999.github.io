@@ -5,7 +5,7 @@
         <include content="Object_WallFade">
             <param name="id" value="6000" />
             <param name="direction_buttons">true</param>
-            <param name="visible_top">!$EXP[Exp_ControlHasFocus_399] + !Control.HasFocus(4900) + !$EXP[Exp_TMDBWidget_Container301]</param>
+            <param name="visible_top">!Control.HasFocus(399) + !Control.HasFocus(4900) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)</param>
             <visible>!$EXP[Exp_InfoDialogs]</visible>
             <visible>String.IsEmpty(Window(Home).Property(TMDbHelper.HideView))</visible>
             <include>Animation_FadeIn</include>
@@ -91,7 +91,7 @@
 
             <!-- Fullscreen Widget -->
             <control type="group">
-                <visible>$EXP[Exp_TMDBWidget_Container301]</visible>
+                <visible>Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)</visible>
                 <visible>!$EXP[Exp_InfoDialogs]</visible>
                 <visible>!$EXP[Exp_RecommendationDialogs]</visible>
                 <animation effect="fade" start="0" end="100" time="400" reversible="false">Visible</animation>
@@ -154,7 +154,7 @@
                     <effect type="slide" end="0,20" time="60" tween="sine" />
                     <effect type="slide" end="0,-20" time="180" tween="sine" delay="80" />
                 </animation>
-                <animation type="Conditional" condition="$EXP[Exp_Control330_Visible]" reversible="false">
+                <animation type="Conditional" condition="Control.IsVisible(330)" reversible="false">
                     <effect type="slide" end="0,-20" time="60" tween="sine" />
                     <effect type="slide" end="0,20" time="180" tween="sine" delay="80" />
                 </animation>
@@ -163,7 +163,7 @@
                 <animation type="WindowOpen" reversible="false" condition="!Window.Previous(1122) + !Window.Previous(1121) + !Window.Previous(1120) + !Window.Previous(1114)">
                     <effect type="fade" start="0" end="100" time="400" delay="400" tween="sine" easing="out"/>
                 </animation>
-                <animation type="WindowClose" reversible="false" condition="!Window.Next(1122) + !Window.Next(1121) + !Window.Next(1120) + !$EXP[Exp_WindowNext1114]">
+                <animation type="WindowClose" reversible="false" condition="!Window.Next(1122) + !Window.Next(1121) + !Window.Next(1120) + !Window.Next(1114)">
                     <effect type="fade" start="100" end="0" time="400" delay="0" tween="sine" easing="out"/>
                 </animation>
 
@@ -193,8 +193,8 @@
                     <top>fullscreenwidget_buttongroup_t</top>
                     <height>fullscreenwidget_buttongroup_h</height>
 
-                    <animation effect="fade" start="0" end="100" time="400" delay="400" reversible="false" condition="[$EXP[Exp_TMDBWidget_Container301] + !Integer.IsEqual(Container(301).NumItems,0)]">Conditional</animation>
-                    <animation effect="fade" start="100" end="0" time="0" reversible="false" condition="![$EXP[Exp_TMDBWidget_Container301] + !Integer.IsEqual(Container(301).NumItems,0)]">Conditional</animation>
+                    <animation effect="fade" start="0" end="100" time="400" delay="400" reversible="false" condition="[Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + !Integer.IsEqual(Container(301).NumItems,0)]">Conditional</animation>
+                    <animation effect="fade" start="100" end="0" time="0" reversible="false" condition="![Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + !Integer.IsEqual(Container(301).NumItems,0)]">Conditional</animation>
 
                     <include content="Info_Panel">
                         <param name="plotheight" value="info_plot_h" />
@@ -307,7 +307,7 @@
                 <param name="windowopen_condition" value="!Window.Previous(1114) + !Window.Previous(1120) + !Window.Previous(1121) + !Window.Previous(1122)" />
             </include>
             <include content="Animation_FadeOut">
-                <param name="windowclose_condition" value="!$EXP[Exp_WindowNext1114] + !Window.Next(1120) + !Window.Next(1121) + !Window.Next(1122)" />
+                <param name="windowclose_condition" value="!Window.Next(1114) + !Window.Next(1120) + !Window.Next(1121) + !Window.Next(1122)" />
             </include>
 
             <include content="Object_Control">
@@ -323,7 +323,7 @@
             <include content="Object_MenuBar_List">
                 <param name="id" value="300" />
                 <param name="color_nf" value="main_fg" />
-                <param name="altfocus" value="$EXP[Exp_ControlHasFocus_399]" />
+                <param name="altfocus" value="Control.HasFocus(399)" />
                 <left>80</left>
                 <onfocus>SetFocus(399)</onfocus>
                 <content>

@@ -7,7 +7,7 @@
     </include>
 
     <variable name="ColorMainItem">
-        <value condition="$EXP[Exp_ForegroundStyle_FlixArt]">ff3d3543</value>
+        <value condition="Skin.String(ForegroundStyle,FlixArt)">ff3d3543</value>
         <value>ff34353b</value>
     </variable>
 

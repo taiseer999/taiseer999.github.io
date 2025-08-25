@@ -456,7 +456,7 @@
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <texture>$PARAM[icon]</texture>
                     <colordiffuse>$PARAM[colordiffuse]_70</colordiffuse>
-                    <visible>!$EXP[Exp_ContainerScrollingAlphabet]</visible>
+                    <visible>![Container.Scrolling + $EXP[Exp_AlphabetTypes_Only]]</visible>
                     <animation effect="fade" start="0" end="100" time="200" delay="1200" reversible="true">Visible</animation>
                     <animation effect="fade" start="100" end="0" time="200" delay="400" reversible="true">Hidden</animation>
                 </control>
@@ -530,7 +530,7 @@
                     <texture diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
                     <visible>$PARAM[icon_visible]</visible>
                 </include>
-                <include content="Object_Control" condition="$EXP[Exp_SkinSetting_GlassBorderOutline]">
+                <include content="Object_Control" condition="Skin.HasSetting(Glass.BorderOutline)">
                     <param name="control" value="image" />
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -552,7 +552,7 @@
                     <texture colordiffuse="$PARAM[colordiffuse]" border="12">$PARAM[texture]</texture>
                 </include>
                 <nested />
-                <include content="Object_Control" condition="$EXP[Exp_SkinSetting_GlassBorderOutline] + $PARAM[condition]">
+                <include content="Object_Control" condition="Skin.HasSetting(Glass.BorderOutline) + $PARAM[condition]">
                     <param name="control" value="image" />
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -766,7 +766,7 @@
                     <aspectratio>keep</aspectratio>
                     <bordersize>$PARAM[bordersize]</bordersize>
                     <texture colordiffuse="dialog_fg_70" flipy="$PARAM[flipy]">$PARAM[icon]</texture>
-                    <visible>!$EXP[Exp_ContainerScrollingAlphabet]</visible>
+                    <visible>![Container.Scrolling + $EXP[Exp_AlphabetTypes_Only]]</visible>
                     <animation effect="fade" start="0" end="100" time="200" delay="1200" reversible="true">Visible</animation>
                     <animation effect="fade" start="100" end="0" time="200" delay="400" reversible="true">Hidden</animation>
                 </include>
@@ -777,7 +777,7 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <font>font_main_black</font>
-                    <visible>$EXP[Exp_ContainerScrollingAlphabet]</visible>
+                    <visible>Container.Scrolling + $EXP[Exp_AlphabetTypes_Only]</visible>
                     <animation effect="fade" start="0" end="100" time="200" delay="400" reversible="true">Visible</animation>
                     <animation effect="fade" start="100" end="0" time="200" delay="1200" reversible="true">Hidden</animation>
                 </include>
@@ -825,7 +825,7 @@
                 <control type="image">
                     <texture colordiffuse="ff333333">$VAR[Image_Overlay_Backing$PARAM[affix],,-bg.png]</texture>
                 </control>
-                <include content="Object_Control" condition="!$EXP[Exp_SkinSetting_IndicatorDisableProgress]">
+                <include content="Object_Control" condition="!Skin.HasSetting(Indicator.DisableProgress)">
                     <param name="control">image</param>
                     <include content="Dimension_Padding"><param name="pad" value="0" /></include>
                     <texture colordiffuse="$VAR[ColorWatchedProgress]">$VAR[Defs_PercentPlayed$PARAM[affix],progress/circle/p,.png]</texture>
@@ -846,7 +846,7 @@
                     <visible>String.IsEqual($PARAM[listitem].Overlay,OverlayWatched.png) | [!String.IsEmpty($PARAM[listitem].PlayCount) + !Integer.IsEqual($PARAM[listitem].PlayCount,0) + !String.IsEqual($PARAM[listitem].DBType,song) + !String.IsEqual($PARAM[listitem].DBType,album) + !String.IsEqual($PARAM[listitem].DBType,artist) + !String.IsEqual($PARAM[listitem].DBType,image) + !String.IsEqual($PARAM[listitem].DBType,addon)]</visible>
                     <visible>Integer.IsEqual($PARAM[listitem].Property(UnWatchedEpisodes),0)  | Skin.HasSetting(Indicator.DisableEpisodes)</visible>
                     <visible>!$PARAM[listitem].IsRecording + !$PARAM[listitem].HasTimer</visible>
-                    <visible>!$PARAM[listitem].IsResumable | $EXP[Exp_SkinSetting_IndicatorDisableProgress]</visible>
+                    <visible>!$PARAM[listitem].IsResumable | Skin.HasSetting(Indicator.DisableProgress)</visible>
                     <visible>![!String.IsEmpty($PARAM[listitem].Property(role)) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season)] + !Skin.HasSetting(Indicator.DisableEpisodes)]</visible>
                 </control>
                 <control type="label">
@@ -856,7 +856,7 @@
                     <textcolor>panel_fg_100</textcolor>
                     <label>$INFO[$PARAM[listitem].Property(UnWatchedEpisodes)]</label>
                     <visible>[!Integer.IsEqual($PARAM[listitem].Property(UnWatchedEpisodes),0) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season) | String.IsEqual($PARAM[listitem].DBType,episode)] + !Skin.HasSetting(Indicator.DisableEpisodes)]</visible>
-                    <visible>!$PARAM[listitem].IsResumable | $EXP[Exp_SkinSetting_IndicatorDisableProgress]</visible>
+                    <visible>!$PARAM[listitem].IsResumable | Skin.HasSetting(Indicator.DisableProgress)</visible>
                     <visible>![!String.IsEmpty($PARAM[listitem].Property(role)) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[listitem].DBType,season)] + !Skin.HasSetting(Indicator.DisableEpisodes)]</visible>
                 </control>
                 <control type="label">
@@ -1308,10 +1308,10 @@
                 </include>
                 <include content="Furniture_MenuButton" condition="$PARAM[has_button_overlay] + ![$PARAM[use_side_nib]]">
                     <param name="icon" value="$PARAM[menuicon]" />
-                    <visible>!$EXP[Exp_WindowVisible_DialogBusy]</visible>
-                    <visible>!$EXP[Exp_WindowVisible_DialogExtendedProgressBar]</visible>
-                    <visible>!$EXP[Exp_WindowVisible_DialogNotification]</visible>
-                    <visible>!Window.IsVisible(DialogVolumeBar.xml) | $EXP[Exp_PlayerMuted]</visible>
+                    <visible>!Window.IsVisible(DialogBusy.xml)</visible>
+                    <visible>!Window.IsVisible(DialogExtendedProgressBar.xml)</visible>
+                    <visible>!Window.IsVisible(DialogNotification.xml)</visible>
+                    <visible>!Window.IsVisible(DialogVolumeBar.xml) | Player.Muted</visible>
                 </include>
                 <include content="Object_MenuButton" condition="$PARAM[has_button_overlay] + $PARAM[use_side_nib]">
                     <param name="profileimage">$EXP[Exp_HasProfileImage]</param>
@@ -1451,7 +1451,7 @@
                             <width>80</width>
                             <visible>![Control.HasFocus($PARAM[id]) | $PARAM[altfocus]]</visible>
                             <control type="group">
-                                <visible>!$EXP[Exp_Control302_HasFocus]</visible>
+                                <visible>!Control.HasFocus(302)</visible>
                                 <control type="image">
                                     <aspectratio>keep</aspectratio>
                                     <bordersize>4</bordersize>
@@ -1467,7 +1467,7 @@
                                 </control>
                             </control>
                             <control type="group">
-                                <visible>$EXP[Exp_Control302_HasFocus]</visible>
+                                <visible>Control.HasFocus(302)</visible>
                                 <control type="group">
                                     <width>60</width>
                                     <centerleft>50%</centerleft>
@@ -1688,7 +1688,7 @@
                     <param name="windowopen_condition" value="!Window.Previous(1114)" />
                 </include>
                 <include content="Animation_FadeOut" condition="$PARAM[animations]">
-                    <param name="windowclose_condition" value="!$EXP[Exp_WindowNext1114]" />
+                    <param name="windowclose_condition" value="!Window.Next(1114)" />
                 </include>
                 <include content="Object_Width" condition="$PARAM[altwidth_condition]">
                     <param name="width">$PARAM[altwidth]</param>

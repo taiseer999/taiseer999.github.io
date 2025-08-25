@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog">
-    <include content="Object_DefaultControl" condition="!$EXP[Exp_DialogInfoFocusButtons]">
+    <include content="Object_DefaultControl" condition="!Skin.HasSetting(DialogInfo.FocusButtons)">
         <param name="always">true</param>
         <param name="defaultcontrol">5000</param>
     </include>
-    <include content="Object_DefaultControl" condition="$EXP[Exp_DialogInfoFocusButtons]">
+    <include content="Object_DefaultControl" condition="Skin.HasSetting(DialogInfo.FocusButtons)">
         <param name="always">true</param>
         <param name="defaultcontrol">4000</param>
     </include>
@@ -28,7 +28,7 @@
                 <include content="DialogInfo_RightGroup">
                     <!-- Info -->
                     <control type="group">
-                        <visible>!Control.HasFocus(7001) | !$EXP[Exp_PlayerHasVideo]</visible>
+                        <visible>!Control.HasFocus(7001) | !Player.HasVideo</visible>
                         <visible>!Control.HasFocus(7003)</visible>
 
                         <animation effect="fade" start="0" end="100" time="400" delay="400" reversible="false">Visible</animation>

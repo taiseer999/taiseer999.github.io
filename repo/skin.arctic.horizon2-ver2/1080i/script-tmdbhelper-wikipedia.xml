@@ -4,7 +4,7 @@
     <onload>SetProperty(TMDbHelper.ServicePause,1)</onload>
     <controls>
 
-        <include condition="$EXP[Exp_WindowVisible_FullscreenVideo]">Background_Main</include>
+        <include condition="Window.IsVisible(fullscreenvideo)">Background_Main</include>
 
         <control type="group">
             <include>Animation_Right_Delay</include>
