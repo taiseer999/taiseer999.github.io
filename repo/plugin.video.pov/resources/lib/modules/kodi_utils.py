@@ -84,8 +84,8 @@ def set_resolvedurl(handle, item):
 def make_playlist(_type='video'):
 	return xbmc.PlayList(xbmc.PLAYLIST_VIDEO) if _type == 'video' else xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
 
-def convert_language(lang):
-	return xbmc.convertLanguage(lang, xbmc.ISO_639_2)
+def convert_language(lang, format='long'):
+	return xbmc.convertLanguage(lang, xbmc.ISO_639_2 if format == 'long' else xbmc.ISO_639_1)
 
 def supported_media():
 	return xbmc.getSupportedMedia('video')

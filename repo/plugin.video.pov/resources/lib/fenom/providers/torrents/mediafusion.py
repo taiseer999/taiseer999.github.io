@@ -7,6 +7,7 @@
 import re, requests
 #from fenom import client
 from fenom import source_utils
+from fenom.control import setting as getSetting
 
 
 class source:
@@ -17,7 +18,10 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://mediafusion.elfhosted.com"
+		self.base_link = (
+			"https://mediafusion.elfhosted.com",
+			"https://mediafusionfortheweebs.midnightignite.me"
+		)[int(getSetting('mediafusion.url', '0'))]
 		self.movieSearch_link = '/stream/movie/%s.json'
 		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0

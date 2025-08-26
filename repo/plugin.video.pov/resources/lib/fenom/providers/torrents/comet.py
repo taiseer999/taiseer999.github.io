@@ -5,8 +5,9 @@
 
 #from json import loads as jsloads
 import re, requests
-#from resources.lib.fenom import client
+#from fenom import client
 from fenom import source_utils
+from fenom.control import setting as getSetting
 
 
 class source:
@@ -18,7 +19,10 @@ class source:
 	def __init__(self):
 		params = '/eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2UsInJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUiLCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJkZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhjbHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3ZlX3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxzZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
 		self.language = ['en']
-		self.base_link = "https://comet.elfhosted.com"
+		self.base_link = (
+			"https://comet.elfhosted.com",
+			"https://cometfortheweebs.midnightignite.me",
+		)[int(getSetting('comet.url', '0'))]
 		self.movieSearch_link = f"{params}/stream/movie/%s.json"
 		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0

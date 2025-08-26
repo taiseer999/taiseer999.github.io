@@ -5,8 +5,9 @@
 
 #from json import loads as jsloads
 import re, requests
-#from resources.lib.fenom import client
+#from fenom import client
 from fenom import source_utils
+from fenom.control import setting as getSetting
 
 
 class source:
@@ -18,7 +19,10 @@ class source:
 	def __init__(self):
 		params = '/eyJzdG9yZXMiOlt7ImMiOiJwMnAiLCJ0IjoiIn1dfQ=='
 		self.language = ['en']
-		self.base_link = "https://stremthru.elfhosted.com/stremio/torz"
+		self.base_link = (
+			"https://stremthru.elfhosted.com/stremio/torz",
+			"https://stremthrufortheweebs.midnightignite.me/stremio/torz"
+		)[int(getSetting('torz.url', '0'))]
 		self.movieSearch_link = f"{params}/stream/movie/%s.json"
 		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0

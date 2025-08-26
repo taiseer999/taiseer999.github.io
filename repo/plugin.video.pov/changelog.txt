@@ -3,6 +3,10 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
+- Changed subtitles, removed utf-8 filter.
+- Changed TorBox authorization process.
+- Added setting to change instance preference for comet, mediafusion, torz.
+  Recommended to clear External Scrapers Cache after switch.
 - Fix for TorBox usenet results as unchecked, thanks Redditor!
 - Added Debrider as a debrid provider.
 - Minor fixes.

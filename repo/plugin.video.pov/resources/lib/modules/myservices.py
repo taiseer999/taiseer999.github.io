@@ -286,26 +286,57 @@ class EasyDebrid:
 		return True
 
 class TorBox:
+	user_agent = 'POV for Kodi'
+
+	def __init__(self):
+		self.token = get_setting('tb.token')
+
 	def base_url(self, path):
 		return 'https://api.torbox.app/v1/api/%s' % path
 
+	def poll_auth(self, data):
+		response = requests.post(self.base_url('user/auth/device/token'), json=data, timeout=timeout)
+		if not response.ok: return
+		data.update(response.json())
+		self.token = data
+
 	def set_auth(self):
 		cls_name = self.__class__.__name__
-		if get_setting('tb.token'):
+		if self.token:
 			if not confirm_dialog(): return
 			set_setting('tb.token', '')
 			set_setting('tb.account_id', '')
 			clear_cache('tb_cloud', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
 
-		api_key = kodi_utils.dialog.input('TorBox API Key:')
-		if not api_key: return
-		headers = {'Authorization': 'Bearer %s' % api_key}
+		params = {'app': self.user_agent}
+		response = requests.get(self.base_url('user/auth/device/start'), params=params, timeout=timeout)
+		result = response.json()['data']
+		data = {'device_code': result['device_code']}
+		expires_in, expires_at = 600, 600 + time.monotonic()
+		try: qr_icon = qr_str % '&bgcolor=04bf8a&data=%s' % quote(result['verification_url'])
+		except: qr_icon = ''
+		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
+		detail = code_str % result['code'], nav2_str % result['friendly_verification_url']
+		progress_dialog = _make_progress_dialog(meta=meta)
+		timer = RepeatTimer(result['interval'], self.poll_auth, args=(data,))
+		timer.start()
+		for i in range(1, expires_in + 1):
+			if self.token or progress_dialog.iscanceled(): break
+			lines = await_str % divmod(expires_at - time.monotonic(), 60), *detail
+			progress = 100 - int(100 * i / expires_in)
+			progress_dialog.update('[CR]'.join(lines), progress)
+			sleep(1000)
+		timer.cancel()
+		progress_dialog.close()
+		if progress_dialog.iscanceled(): return False
+		self.token = data['data']['access_token']
+		headers = {'Authorization': 'Bearer %s' % self.token}
 		response = requests.get(self.base_url('user/me'), headers=headers, timeout=timeout)
 		result = response.json()
 		customer = result['data']['customer']
 		set_setting('tb.account_id', str(customer))
-		set_setting('tb.token', api_key)
+		set_setting('tb.token', self.token)
 		notification('Set %s Authorization' % cls_name)
 		return True
 

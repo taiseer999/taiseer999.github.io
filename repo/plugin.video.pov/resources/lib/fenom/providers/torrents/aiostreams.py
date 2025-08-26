@@ -5,7 +5,7 @@
 
 #from json import loads as jsloads
 import re, requests
-#from resources.lib.fenom import client
+#from fenom import client
 from fenom import source_utils
 
 
