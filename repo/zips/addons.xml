@@ -6128,7 +6128,7 @@ v5.2.14 (2017-01-23)
 	</assets>
     <source>https://github.com/peno64/service.subtitles.opensubtitles_by_opensubtitles_dualsub</source>
   </extension>
-</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.7" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.7.2" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
