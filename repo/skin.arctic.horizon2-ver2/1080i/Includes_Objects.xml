@@ -434,7 +434,7 @@
         <param name="hasprogress" default="false" />
         <param name="texture" default="dialog/loading-back.png" />
         <param name="size" default="100" />
-        <param name="icon" default="special://skin/extras/icons/kodi.png" />
+        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
         <param name="progress" default="Control.GetLabel(32)" />
         <param name="progress_id" default="32" />
         <param name="spinprogress" default="false" />
@@ -674,12 +674,12 @@
                 <height>96</height>
                 <centerleft>50%</centerleft>
                 <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
+                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/coreelec.png</texture>
             </control>
             <control type="label">
                 <height>32</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>KODI</label>
+                <label>coreelec</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
@@ -1159,7 +1159,7 @@
     </include>
 
     <include name="Object_Options_Menu_Popup">
-        <param name="icon" default="special://skin/extras/icons/kodi.png" />
+        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
         <param name="header" default="$LOCALIZE[33063]" />
         <param name="id" default="9000" />
         <param name="groupid" default="89000" />
@@ -1282,7 +1282,7 @@
     </include>
 
     <include name="Object_Options_Menu">
-        <param name="icon" default="special://skin/extras/icons/kodi.png" />
+        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
         <param name="header" default="$LOCALIZE[33063]" />
         <param name="id" default="9000" />
         <param name="groupid" default="89000" />
@@ -1755,7 +1755,7 @@
     </include>
 
     <include name="Object_MenuHeader">
-        <param name="icon" default="special://skin/extras/icons/kodi.png" />
+        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
         <param name="label" default="$LOCALIZE[33063]" />
         <param name="has_icon" default="true" />
         <param name="colordiffuse" default="$VAR[ColorHighlight]" />
