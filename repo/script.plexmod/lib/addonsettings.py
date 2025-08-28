@@ -69,6 +69,7 @@ class AddonSettings(object):
         ("osd_hide_delay", 4.0),
         ("requests_cache_expiry", 168),
         ("playlist_max_size", 500),
+        ("max_shutdown_wait", 5),
     )
 
     def __init__(self):

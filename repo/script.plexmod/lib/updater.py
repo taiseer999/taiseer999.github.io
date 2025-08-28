@@ -80,6 +80,7 @@ class Updater(object):
     branch = None
     remote_version = None
     remote_changelog = None
+    remote_ref = None
     is_downgrade = False
     headers = {
         'User-Agent': xbmc.getUserAgent()
@@ -102,7 +103,13 @@ class Updater(object):
         return 'https://raw.githubusercontent.com/{}/{}/addon.xml'.format(self.repo, self.branch)
 
     @property
+    def ref_url(self):
+        return 'https://github.com/{}/commits/{}/addon.xml'.format(self.repo, self.branch)
+
+    @property
     def download_url(self):
+        if self.remote_ref:
+            return "https://github.com/{}/archive/{}.zip".format(self.repo, self.remote_ref)
         return "https://github.com/{}/archive/refs/heads/{}.zip".format(self.repo, self.branch)
 
     @property
@@ -133,6 +140,17 @@ class Updater(object):
             return new_version if vc > 0 or (allow_downgrade and vc != 0) else False
 
         raise UpdateCheckFailed('Update check failed: No data returned')
+
+    def get_ref(self):
+        try:
+            r = requests.get(self.ref_url, timeout=10, headers=self.headers)
+            res = re.findall(r'"oid":"([a-f0-9]+)".+?"{}"'.format(self.remote_version), r.text,
+                             re.MULTILINE | re.DOTALL)
+            if res:
+                self.remote_ref = res[0]
+                return res[0]
+        except:
+            return None
 
     def download(self):
         archive_url = self.download_url

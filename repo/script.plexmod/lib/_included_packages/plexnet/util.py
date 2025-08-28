@@ -11,6 +11,7 @@ import uuid
 import threading
 import six
 import math
+import socket
 from copy import copy
 from kodi_six import xbmcaddon
 
@@ -44,6 +45,7 @@ def resetBaseHeaders():
         'X-Plex-Version': ADDON.getAddonInfo('version'),
         'X-Plex-Device': X_PLEX_DEVICE,
         'X-Plex-Client-Identifier': X_PLEX_IDENTIFIER,
+        'X-Plex-Language': LANGUAGE_CODE,
         'Accept-Encoding': 'gzip,deflate',
         'Accept-Language': ACCEPT_LANGUAGE,
         'User-Agent': '{0}/{1}'.format("PM4K", ADDON.getAddonInfo('version'))
@@ -70,6 +72,7 @@ REQUESTS_CACHE_EXPIRY = 168
 X_PLEX_CONTAINER_SIZE = 50                          # max results to return in a single search page
 
 ACCEPT_LANGUAGE = 'en-US,en'
+LANGUAGE_CODE = 'en'
 
 # Plex Header Configuation
 X_PLEX_PROVIDES = 'player,controller'          # one or more of [player, controller, server]
@@ -81,6 +84,9 @@ USER_AGENT = '{0}/{1}'.format(PROJECT, VERSION)
 TEMP_PATH = None
 
 USE_CERT_BUNDLE = False
+
+SKIP_HOST_CHECK = {}
+NO_HOST_CHECK = False
 
 INTERFACE = None
 TIMER = None
@@ -257,6 +263,7 @@ def getPlexHeaders():
             "X-Plex-Device": INTERFACE.getGlobal("device"),
             "X-Plex-Model": INTERFACE.getGlobal("model"),
             "X-Plex-Device-Name": INTERFACE.getGlobal("friendlyName"),
+            "X-Plex-Language": LANGUAGE_CODE,
             'Accept-Encoding': 'gzip,deflate',
             'Accept-Language': ACCEPT_LANGUAGE,
             'User-Agent': '{0}/{1}'.format("PM4K", ADDON.getAddonInfo('version'))
@@ -315,6 +322,55 @@ def parsePlexDirectHost(hostname):
     v6 = hostname.count("-") > 3
     base = hostname.split(".", 1)[0]
     return v6 and base.replace("-", ":") or base.replace("-", ".")
+
+
+# stolen from icmplib
+def resolve(name, family=None, use_orig=False):
+    '''
+    Resolve a hostname or FQDN to an IP address. Depending on the name
+    specified in parameters, several IP addresses may be returned.
+
+    This function relies on the DNS name server configured on your
+    operating system.
+
+    :type name: str
+    :param name: A hostname or a Fully Qualified Domain Name (FQDN).
+
+    :type family: int, optional
+    :param family: The address family. Can be set to `4` for IPv4 or `6`
+        for IPv6 addresses. By default, this function searches for IPv4
+        addresses first for compatibility reasons (A DNS lookup) before
+        searching for IPv6 addresses (AAAA DNS lookup).
+
+    :rtype: list[str]
+    :returns: A list of IP addresses corresponding to the name passed as
+        a parameter.
+
+    :raises NameLookupError: If the requested name does not exist or
+        cannot be resolved.
+
+    '''
+    try:
+        if family == 6:
+            _family = socket.AF_INET6
+        else:
+            _family = socket.AF_INET
+
+        func = socket.getaddrinfo if not use_orig else socket.getaddrinfo_orig
+
+        lookup = func(
+            host=name,
+            port=None,
+            family=_family,
+            type=socket.SOCK_DGRAM)
+
+        return [address[4][0] for address in lookup]
+
+    except OSError:
+        if not family:
+            return resolve(name, 6)
+
+    raise Exception(name)
 
 
 class CompatEvent(Event):

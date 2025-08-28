@@ -2643,3 +2643,118 @@ msgstr ""
 msgctxt "#33741"
 msgid "Use season thumbnails/posters when displaying episodes in hubs instead of the TV show's."
 msgstr ""
+
+msgctxt "#34000"
+msgid "Watchlist"
+msgstr ""
+
+msgctxt "#34001"
+msgid "Released"
+msgstr ""
+
+msgctxt "#34002"
+msgid "Movies & Shows"
+msgstr ""
+
+#: e.g.: 8 seasons
+msgctxt "#34003"
+msgid "{} seasons"
+msgstr ""
+
+msgctxt "#34004"
+msgid "Choose server"
+msgstr ""
+
+msgctxt "#34005"
+msgid "Availability"
+msgstr ""
+
+#: e.g.: 1 season
+msgctxt "#34006"
+msgid "{} season"
+msgstr ""
+
+msgctxt "#34007"
+msgid "Use Watchlist"
+msgstr ""
+
+msgctxt "#34008"
+msgid "Activates the current user's Plex watchlist as a section item. Adds watchlist functionality to certain media screens. Per-user setting. Default: On"
+msgstr ""
+
+msgctxt "#34009"
+msgid "Watchlist auto-remove"
+msgstr ""
+
+msgctxt "#34010"
+msgid "Automatically remove fully watched items from watchlist. Default: On"
+msgstr ""
+
+msgctxt "#34011"
+msgid "Remove from watchlist"
+msgstr ""
+
+msgctxt "#34012"
+msgid "Fast pause/resume"
+msgstr ""
+
+msgctxt "#34013"
+msgid "when paused"
+msgstr ""
+
+msgctxt "#34014"
+msgid "when playing"
+msgstr ""
+
+msgctxt "#34015"
+msgid "User-specific. Use OK/ENTER button to pause instead of showing the OSD (which can then only be accessed using DOWN), or resume when paused. Only works with 'Behave like official Plex clients' enabled."
+msgstr ""
+
+msgctxt "#34016"
+msgid "Max shutdown wait"
+msgstr ""
+
+msgctxt "#34017"
+msgid "The plugin will try to hard exit once this time limit is reached (default: 5 seconds)"
+msgstr ""
+
+msgctxt "#34018"
+msgid "Related Media"
+msgstr ""
+
+#: watchlist discover hub title prefix
+msgctxt "#34019"
+msgid "Discover: {}"
+msgstr ""
+
+msgctxt "#34020"
+msgid "Loading external hubs"
+msgstr ""
+
+msgctxt "#34021"
+msgid "Please wait ..."
+msgstr ""
+
+msgctxt "#34022"
+msgid "Video play completion behaviour"
+msgstr ""
+
+msgctxt "#34023"
+msgid "Decide whether to use end credits markers to determine the 'watched' state of video items. When markers are not available the selected threshold percentage will be used."
+msgstr ""
+
+msgctxt "#34024"
+msgid "at selected threshold percentage"
+msgstr ""
+
+msgctxt "#34025"
+msgid "at final credits marker position"
+msgstr ""
+
+msgctxt "#34026"
+msgid "at first credits marker position"
+msgstr ""
+
+msgctxt "#34027"
+msgid "earliest between threshold percent and first credits marker"
+msgstr ""

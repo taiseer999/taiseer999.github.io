@@ -24,7 +24,9 @@ def open(obj, **kwargs):
         key = obj
         if not obj.startswith('/'):
             key = '/library/metadata/{0}'.format(obj)
-        return open(plexapp.SERVERMANAGER.selectedServer.getObject(key), **kwargs)
+
+        server = kwargs.pop("server", None) or plexapp.SERVERMANAGER.selectedServer
+        return open(server.getObject(key), **kwargs)
     elif obj.TYPE == 'episode':
         return episodeClicked(obj, **kwargs)
     elif obj.TYPE == 'movie':
@@ -93,7 +95,11 @@ def handleOpen(winclass, **kwargs):
 
 def playableClicked(playable, **kwargs):
     from . import preplay
-    return handleOpen(preplay.PrePlayWindow, video=playable, **kwargs)
+    if kwargs.get('from_watchlist', False):
+        win = preplay.PrePlayWindowWL
+    else:
+        win = preplay.PrePlayWindow
+    return handleOpen(win, video=playable, **kwargs)
 
 
 def episodeClicked(episode, **kwargs):

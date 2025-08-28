@@ -20,6 +20,7 @@ from . import plexresource
 from . import plexlibrary
 from . import asyncadapter
 from six.moves import range
+
 # from plexapi.client import Client
 # from plexapi.playqueue import PlayQueue
 
@@ -32,6 +33,7 @@ CACHE_MAP = {}
 
 class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
     TYPE = 'PLEXSERVER'
+    DEFER_HUBS = False
 
     def __init__(self, data=None):
         signalsmixin.SignalsMixin.__init__(self)
@@ -71,6 +73,7 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
         self.transcodeSupport = False
         self.currentHubs = None
         self.dnsRebindingProtection = False
+        self.prefs = {}
 
         if data is None:
             return
@@ -83,7 +86,8 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
         self.name = data.attrib.get('name')
         self.platform = data.attrib.get('platform')
         self.rawVersion = data.attrib.get('productVersion')
-        self.versionNorm = util.normalizedVersion(self.rawVersion)
+        if self.rawVersion:
+            self.versionNorm = util.normalizedVersion(self.rawVersion)
         self.transcodeSupport = data.attrib.get('transcodeSupport') == '1'
         self.dnsRebindingProtection = data.attrib.get('dnsRebindingProtection') == '1'
 
@@ -125,9 +129,20 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
     def anyLANConnection(self):
         return any(c.localVerified for c in self.connections)
 
-    def getObject(self, key):
+    @property
+    def anyPDHostNotResolvable(self):
+        return any(".plex.direct:" in c.address and not c.pdHostnameResolved for c in self.connections)
+
+    def getObject(self, key, assume_container=False):
         data = self.query(key)
-        return plexobjects.buildItem(self, data[0], key, container=self)
+
+        container = self
+        if not assume_container:
+            container = plexobjects.PlexContainer(data, initpath=key, server=self, address=key)
+        return plexobjects.buildItem(self, data[0], key, container=container)
+
+    def getPrefs(self):
+        return plexobjects.listItems(self, "/:/prefs", bytag=True, cachable=False, not_cachable=True)
 
     def hubs(self, section=None, count=None, search_query=None, section_ids=None, ignore_hubs=None):
         hubs = []
@@ -181,19 +196,20 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             self.currentHubs[cdata[0].attrib.get('hubIdentifier')] = cdata[0].attrib.get('title')
             hubs.append(plexlibrary.Hub(cdata[0], server=self, container=ccontainer))
 
-        for elem in data:
-            hubIdent = elem.attrib.get('hubIdentifier')
-            self.currentHubs["{}:{}".format(section, hubIdent)] = elem.attrib.get('title')
+        if data:
+            for elem in data:
+                hubIdent = elem.attrib.get('hubIdentifier')
+                self.currentHubs["{}:{}".format(section, hubIdent)] = elem.attrib.get('title')
 
-            # if we've added continueWatching, which combines continue and ondeck, skip those two hubs
-            if newCW and hubIdent and \
-                    (hubIdent.startswith('home.continue') or hubIdent.startswith('home.ondeck')):
-                continue
+                # if we've added continueWatching, which combines continue and ondeck, skip those two hubs
+                if newCW and hubIdent and \
+                        (hubIdent.startswith('home.continue') or hubIdent.startswith('home.ondeck')):
+                    continue
 
-            if ignore_hubs and "{}:{}".format(section, hubIdent) in ignore_hubs:
-                continue
+                if ignore_hubs and "{}:{}".format(section, hubIdent) in ignore_hubs:
+                    continue
 
-            hubs.append(plexlibrary.Hub(elem, server=self, container=container))
+                hubs.append(plexlibrary.Hub(elem, server=self, container=container))
 
         if section_ids:
             # when we have hidden sections, apply the filter to the hubs keys for subsequent queries
@@ -234,7 +250,7 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             util.WARN_LOG("Server connection is None, returning an empty url")
             return ""
 
-    def query(self, path, method=None, **kwargs):
+    def query(self, path, method=None, raw=False, **kwargs):
         if method and isinstance(method, six.string_types):
             method = getattr(self.session, method)
         else:
@@ -314,6 +330,8 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
         except asyncadapter.CanceledException:
             return None
 
+        if raw:
+            return data
         return ElementTree.fromstring(data) if data else None
 
     def getImageTranscodeURL(self, path, width, height, **extraOpts):

@@ -256,7 +256,7 @@
     <texturefocus>-</texturefocus>
     <texturenofocus>-</texturenofocus>
     <label> </label>
-    <onclick condition="String.IsEmpty(Window.Property(button.seek)) + String.IsEmpty(Window.Property(marker.countdown))">SetProperty(show.OSD,1)</onclick>
+    <onclick condition="String.IsEmpty(Window.Property(button.seek)) + String.IsEmpty(Window.Property(marker.countdown)) + !String.IsEmpty(Window.Property(mouse.mode))">SetProperty(show.OSD,1)</onclick>
 </control>
 
 <!-- PPI -->

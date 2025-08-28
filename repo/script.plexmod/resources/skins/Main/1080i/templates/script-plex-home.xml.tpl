@@ -133,7 +133,7 @@
         <height>{{ vscale(200) }}</height>
         <control type="fixedlist" id="101">
             <animation effect="slide" end="-110,0" time="200" tween="sine" easing="inout" condition="Integer.IsGreater(Container(101).Position,3)">Conditional</animation>
-            <animation effect="slide" end="-110,0" time="200" tween="sine" easing="inout" condition="Integer.IsGreater(Container(101).Position,4)">Conditional</animation>-->
+            <animation effect="slide" end="-110,0" time="200" tween="sine" easing="inout" condition="Integer.IsGreater(Container(101).Position,4)">Conditional</animation>
             <posx>-300</posx>
             <posy>0</posy>
             <width>2430</width>
@@ -7260,6 +7260,15 @@
                     <label>[B]$INFO[Window.Property(user.avatar.letter)][/B]</label>
                 </control>
                 <control type="image">
+                    <visible>!String.IsEmpty(Window(10000).Property(script.plex.update_available))</visible>
+                    <posx>-8</posx>
+                    <posy>{{ vscale(38) }}</posy>
+                    <width>16</width>
+                    <height>{{ vscale(14) }}</height>
+                    <texture>script.plex/home/device/update_small.png</texture>
+                    <colordiffuse>FF00CC00</colordiffuse>
+                </control>
+                <control type="image">
                     <visible>!Control.HasFocus(202)</visible>
                     <posx>53</posx>
                     <posy>{{ vscale(27) }}</posy>
@@ -7301,7 +7310,7 @@
                         <posx>0</posx>
                         <posy>0</posy>
                         <width>300</width>
-                        <height>{{ vscale(198) }}</height>
+                        <height>{{ vscale(264) }}</height>
                         <onleft>201</onleft>
                         <onunfocus>SetProperty(show.options,)</onunfocus>
                         <scrolltime>200</scrolltime>
@@ -7466,6 +7475,34 @@
         <align>center</align>
         <textcolor>FFCCCCCC</textcolor>
         <label>$ADDON[script.plexmod 32453]</label>
+    </control>
+</control>
+
+<control type="group">
+    <visible>String.IsEmpty(Window.Property(busy)) + !String.IsEmpty(Window.Property(loading.content))</visible>
+    <posx>0</posx>
+    <posy>{{ vscale(465) }}</posy>
+    <control type="label">
+        <scroll>false</scroll>
+        <posx>60</posx>
+        <posy>0</posy>
+        <width>1800</width>
+        <height>{{ vscale(35) }}</height>
+        <font>font13</font>
+        <align>center</align>
+        <textcolor>FFFFFFFF</textcolor>
+        <label>[B]$ADDON[script.plexmod 34020][/B]</label>
+    </control>
+    <control type="label">
+        <scroll>false</scroll>
+        <posx>60</posx>
+        <posy>{{ vscale(60) }}</posy>
+        <width>1800</width>
+        <height>{{ vscale(35) }}</height>
+        <font>font13</font>
+        <align>center</align>
+        <textcolor>FFCCCCCC</textcolor>
+        <label>[B]$ADDON[script.plexmod 34021][/B]</label>
     </control>
 </control>
 

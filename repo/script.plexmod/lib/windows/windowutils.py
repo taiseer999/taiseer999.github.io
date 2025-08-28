@@ -24,8 +24,8 @@ class UtilMixin(GoHomeMixin):
     def __init__(self):
         self.exitCommand = None
 
-    def openItem(self, obj):
-        self.processCommand(opener.open(obj))
+    def openItem(self, obj, **kwargs):
+        self.processCommand(opener.open(obj, **kwargs))
 
     def openWindow(self, window_class, **kwargs):
         self.processCommand(opener.handleOpen(window_class, **kwargs))

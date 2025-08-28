@@ -16,7 +16,8 @@ SEARCHTYPES = {
     'artist': 8,
     'album': 9,
     'track': 10,
-    'collection': 18
+    'collection': 18,
+    'movies_shows': 99,
 }
 
 LIBRARY_TYPES = {}
@@ -127,7 +128,10 @@ class Checks(object):
         return self.isChannelItem() or self.isMyPlexItem() or self.isVevoItem() or self.isIvaItem()
 
     def isMyPlexItem(self):
-        return self.container.server.TYPE == 'MYPLEXSERVER' or self.container.identifier == 'com.plexapp.plugins.myplex'
+        try:
+            return self.container.server.TYPE == 'MYPLEXSERVER' or self.container.identifier == 'com.plexapp.plugins.myplex'
+        except AttributeError:
+            return
 
     def isChannelItem(self):
         identifier = self.getIdentifier() or "com.plexapp.plugins.library"
@@ -162,11 +166,13 @@ class Checks(object):
 
 
 class PlexObject(Checks):
-    __slots__ = ("initpath", "key", "server", "container", "mediaChoice", "titleSort", "deleted", "_reloaded", "data")
+    __slots__ = ("initpath", "key", "server", "container", "mediaChoice", "titleSort", "deleted", "_reloaded", "data",
+                 "_not_cachable")
     TYPE = None
     cachable = False
+    is_watchlist = False
 
-    def __init__(self, data, initpath=None, server=None, container=None):
+    def __init__(self, data, initpath=None, server=None, container=None, **kwargs):
         self.initpath = initpath
         self.key = None
         self.server = server
@@ -175,6 +181,10 @@ class PlexObject(Checks):
         self.titleSort = PlexValue('')
         self.deleted = False
         self._reloaded = False
+
+        # items initialized by containers that shouldn't be cached get this special attribute set, which overrides
+        # cachable
+        self._not_cachable = kwargs.get('not_cachable', False)
         self.data = data
 
         if data is None:
@@ -316,7 +326,7 @@ class PlexObject(Checks):
         self.server.query('%s/refresh' % self.key, method="put")
         self.clearCache()
 
-    def reload(self, _soft=False, **kwargs):
+    def reload(self, _soft=False, skip_cache=False, **kwargs):
         """ Reload the data for this object from PlexServer XML. """
         if _soft and self._reloaded:
             return self
@@ -324,7 +334,7 @@ class PlexObject(Checks):
         try:
             if self.get('ratingKey'):
                 data = self.server.query('/library/metadata/{0}'.format(self.ratingKey),
-                                         cachable=self.cachable,
+                                         cachable=self.cachable and not skip_cache,
                                          cache_ref=self.cacheRef,
                                          params=kwargs)
             else:
@@ -439,7 +449,13 @@ class PlexObject(Checks):
         if path is None:
             return None
         else:
-            return self.container._getAbsolutePath(path)
+            try:
+                return self.container._getAbsolutePath(path)
+            except AttributeError:
+                try:
+                    return self._getAbsolutePath(path)
+                except AttributeError:
+                    raise
 
     def _getAbsolutePath(self, path):
         if path.startswith('/'):
@@ -622,14 +638,14 @@ def findItem(server, path, title):
     raise exceptions.NotFound('Unable to find item: {0}'.format(title))
 
 
-def buildItem(server, elem, initpath, bytag=False, container=None, tag_fallback=False):
+def buildItem(server, elem, initpath, bytag=False, container=None, tag_fallback=False, not_cachable=False):
     libtype = elem.tag if bytag else elem.attrib.get('type')
     if not libtype and tag_fallback:
         libtype = elem.tag
 
     if libtype in LIBRARY_TYPES:
         cls = LIBRARY_TYPES[libtype]
-        return cls(elem, initpath=initpath, server=server, container=container)
+        return cls(elem, initpath=initpath, server=server, container=container, not_cachable=not_cachable)
     raise exceptions.UnknownType('Unknown library type: {0}'.format(libtype))
 
 
@@ -646,6 +662,7 @@ class ItemContainer(list):
 
 def listItems(server, path, libtype=None, watched=None, bytag=False, data=None, container=None, offset=None,
               limit=None, tag_fallback=False, **kwargs):
+    not_cachable = kwargs.pop('not_cachable', False)
     data = data if data is not None else server.query(path, offset=offset, limit=limit, **kwargs)
     container = container or PlexContainer(data, path, server, path)
     items = ItemContainer().init(container)
@@ -659,7 +676,7 @@ def listItems(server, path, libtype=None, watched=None, bytag=False, data=None, 
             if watched is False and PlexValue(elem.attrib.get('viewCount', "0")).asInt() >= 1:
                 continue
             try:
-                items.append(buildItem(server, elem, path, bytag, container, tag_fallback))
+                items.append(buildItem(server, elem, path, bytag, container, tag_fallback, not_cachable=not_cachable))
             except exceptions.UnknownType:
                 pass
 
@@ -667,9 +684,6 @@ def listItems(server, path, libtype=None, watched=None, bytag=False, data=None, 
 
 
 def searchType(libtype):
-    searchtypesstrs = [str(k) for k in SEARCHTYPES.keys()]
-    if libtype in SEARCHTYPES + searchtypesstrs:
-        return libtype
     stype = SEARCHTYPES.get(libtype.lower())
     if not stype:
         raise exceptions.NotFound('Unknown libtype: %s' % libtype)

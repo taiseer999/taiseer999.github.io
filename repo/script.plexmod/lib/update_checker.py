@@ -47,6 +47,7 @@ def update_loop():
     check_immediate = getSetting('update_check_startup', True)
     branch = getSetting('update_branch', "develop_kodi21")
     mode = getSetting('update_source', 'repository')
+    setGlobalProperty("update_available", '')
 
     updater = get_updater(mode)(branch=branch if KODI_VERSION_MAJOR > 18 else 'addon_kodi18')
 
@@ -62,16 +63,19 @@ def update_loop():
         # try consuming an update mode change
         mode_change = getGlobalProperty('update_source_changed', consume=True)
         allow_downgrade = False
+        ui_trigger_update = False
         if mode_change and mode_change != mode:
             updater = get_updater(mode_change)(branch=branch if KODI_VERSION_MAJOR > 18 else 'addon_kodi18')
             mode = mode_change
             allow_downgrade = True
             check_immediate = True
+        else:
+            ui_trigger_update = getGlobalProperty('update_requested', consume=True, timeout=600)
 
         if getSetting('last_update_check', datetime.datetime.fromtimestamp(0)) != last_update_check:
             setSetting('last_update_check', last_update_check)
 
-        if (last_update_check + check_interval <= now or check_immediate) and not MONITOR.device_sleeping:
+        if (last_update_check + check_interval <= now or check_immediate or ui_trigger_update) and not MONITOR.device_sleeping:
             if not any([
                     xbmc.Player().isPlaying(),
                     getGlobalProperty('running') != '1',
@@ -85,11 +89,14 @@ def update_loop():
                     if check_immediate:
                         check_immediate = False
 
-                    log('Checking for updates')
-                    update_version = updater.check(addon_version, allow_downgrade=allow_downgrade)
-                    log('Current: {}, Latest: {}, Update/Sidegrade/Downgrade: {}'.format(addon_version,
-                                                                                         updater.remote_version,
-                                                                                         update_version))
+                    if not ui_trigger_update or not updater.remote_version:
+                        log('Checking for updates')
+                        update_version = updater.check(addon_version, allow_downgrade=allow_downgrade)
+                        log('Current: {}, Latest: {}, Update/Sidegrade/Downgrade: {}'.format(addon_version,
+                                                                                             updater.remote_version,
+                                                                                             update_version))
+                    else:
+                        update_version = updater.remote_version if addon_version != updater.remote_version else None
 
                     last_update_check = datetime.datetime.now()
                     setSetting('last_update_check', last_update_check)
@@ -97,9 +104,16 @@ def update_loop():
 
                     if update_version:
                         log("Update found: {}".format(update_version))
+                        # get github ref for update
+                        if not ui_trigger_update and not updater.remote_ref:
+                            ref = updater.get_ref()
+                            if ref:
+                                log('Found remote ref for {}: {}'.format(update_version, ref))
+
                         # notify user in main app and wait for response
                         setGlobalProperty('update_is_downgrade', updater.is_downgrade and '1' or '', wait=True)
                         setGlobalProperty('update_available', update_version, wait=True)
+                        setGlobalProperty('notify_update', update_version, wait=True)
                         setGlobalProperty('update_changelog', updater.remote_changelog, wait=True)
 
                         try:
@@ -115,6 +129,7 @@ def update_loop():
                             waitForSecs = (addonSettings.requestsTimeoutConnect * addonSettings.maxRetries1
                                            + addonSettings.requestsTimeoutRead + 2)
                             log("Waiting for UI to close for: {}s".format(waitForSecs))
+                            setGlobalProperty("update_available", '', wait=True)
                             try:
                                 waitForGPEmpty('running', timeout=waitForSecs * 10)
                             except IPCTimeoutException:
@@ -131,7 +146,7 @@ def update_loop():
                         pd.create("Update", message="Downloading")
                         had_already = os.path.exists(updater.archive_path)
                         if not had_already:
-                            log("Update found: {}, downloading".format(update_version))
+                            log("Update found: {}, downloading (ref: {})".format(update_version, ref))
                             zip_loc = updater.download()
 
                             if zip_loc:
@@ -161,7 +176,7 @@ def update_loop():
                                     break
 
                                 do_start = True
-                                if "service" in major_changes or "language" in major_changes:
+                                if "service" in major_changes or "updater" in major_changes or "language" in major_changes:
                                     log("Major changes detected, prompting the user: {}".format(major_changes))
 
                                     kw = {}
@@ -215,8 +230,8 @@ def update_loop():
                                                                                ICON_PATH))
 
                 finally:
-                    setGlobalProperty('update_available', '')
                     setGlobalProperty('update_response', '')
+                    setGlobalProperty('notify_update', '')
                     setGlobalProperty('update_source_changed', '')
                     setGlobalProperty('update_is_downgrade', '')
                     # lel

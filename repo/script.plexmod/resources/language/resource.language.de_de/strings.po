@@ -3230,3 +3230,118 @@ msgstr "Start: Staffelposter verwenden"
 msgctxt "#33741"
 msgid "Use season thumbnails/posters when displaying episodes in hubs instead of the TV show's."
 msgstr "Staffel-Thumbnails/Poster für Episoden in Hubs anstatt die der TV Serie verwenden."
+
+msgctxt "#34000"
+msgid "Watchlist"
+msgstr "Merkliste"
+
+msgctxt "#34001"
+msgid "Released"
+msgstr "Veröffentlicht"
+
+msgctxt "#34002"
+msgid "Movies & Shows"
+msgstr "Filme & Serien"
+
+#: e.g.: 8 seasons
+msgctxt "#34003"
+msgid "{} seasons"
+msgstr "{} Staffeln"
+
+msgctxt "#34004"
+msgid "Choose server"
+msgstr "Server auswählen"
+
+msgctxt "#34005"
+msgid "Availability"
+msgstr "Verfügbarkeit"
+
+#: e.g.: 1 season
+msgctxt "#34006"
+msgid "{} season"
+msgstr "{} Staffel"
+
+msgctxt "#34007"
+msgid "Use Watchlist"
+msgstr "Merkliste verwenden"
+
+msgctxt "#34008"
+msgid "Activates the current user's Plex watchlist as a section item. Adds watchlist functionality to certain media screens. Per-user setting. Default: On"
+msgstr "Aktiviert die Plex Merkliste des aktuellen Nutzers. Fügt Merklistenfunktionalität zu bestimmten Ansichten hinzu. Pro-Nutzer Einstellung. Standard: An"
+
+msgctxt "#34009"
+msgid "Watchlist auto-remove"
+msgstr "Merkliste Auto-Löschen"
+
+msgctxt "#34010"
+msgid "Automatically remove fully watched items from watchlist. Default: On"
+msgstr "Automatisch vollständig geschaute Medien von der Merkliste entfernen. Standard: An"
+
+msgctxt "#34011"
+msgid "Remove from watchlist"
+msgstr "Von Merkliste entfernen"
+
+msgctxt "#34012"
+msgid "Fast pause/resume"
+msgstr "Schnelles Pausieren/Fortsetzen"
+
+msgctxt "#34013"
+msgid "when paused"
+msgstr "wenn pausiert"
+
+msgctxt "#34014"
+msgid "when playing"
+msgstr "beim Abspielen"
+
+msgctxt "#34015"
+msgid "User-specific. Use OK/ENTER button to pause instead of showing the OSD (which can then only be accessed using DOWN), or resume when paused. Only works with 'Behave like official Plex clients' enabled."
+msgstr "Benutzerspezifisch. OK/ENTER Knopf zum schnellen Pausieren verwenden anstatt das OSD anzuzeigen (welches dann nur noch über den RUNTER Knopf erreichbar ist), oder zum Fortsetzen, wenn pausiert. Funktioniert nur, wenn 'Verhalten wie Plex Clients' aktiviert ist."
+
+msgctxt "#34016"
+msgid "Max shutdown wait"
+msgstr "Max. Herunterfahrzeit"
+
+msgctxt "#34017"
+msgid "The plugin will try to hard exit once this time limit is reached (default: 5 seconds)"
+msgstr "Das Plugin versucht sich nach dem Ablauf dieser Zeit hart zu beenden"
+
+msgctxt "#34018"
+msgid "Related Media"
+msgstr "Ähnliche Medien"
+
+#: watchlist discover hub title prefix
+msgctxt "#34019"
+msgid "Discover: {}"
+msgstr ""
+
+msgctxt "#34020"
+msgid "Loading external hubs"
+msgstr "Lade externe Hubs"
+
+msgctxt "#34021"
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
+
+msgctxt "#34022"
+msgid "Video play completion behaviour"
+msgstr "Verhalten für \"Video zuende abgespielt\""
+
+msgctxt "#34023"
+msgid "Decide whether to use end credits markers to determine the 'watched' state of video items. When markers are not available the selected threshold percentage will be used."
+msgstr "Wähle, ob das Video bei Erreichen der Abpann-Position als komplett \"gesehen\" betrachtet wird. Wenn keine Abspann-Position bekannt ist, wird statt dessen der gewählte Abspielfortschritt als Schwelle benutzt."
+
+msgctxt "#34024"
+msgid "at selected threshold percentage"
+msgstr "beim Erreichen der Fortschrittsgrenze"
+
+msgctxt "#34025"
+msgid "at final credits marker position"
+msgstr "an der finalen Abspannmarkierung"
+
+msgctxt "#34026"
+msgid "at first credits marker position"
+msgstr "an der ersten Abspannmarkierung"
+
+msgctxt "#34027"
+msgid "earliest between threshold percent and first credits marker"
+msgstr "frühester Wert zwischen Fortschrittsgrenze und erster Abspannmarkierung"

@@ -4570,7 +4570,7 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
         <description lang="en_NZ">Nimbus Helper for the Nimbus Skin.</description>
         <description lang="en_US">Nimbus Helper for the Nimbus Skin.</description>
     </extension>
-</addon><addon id="script.plexmod" name="Plex" version="0.8.0-beta12.2" provider-name="pannal">
+</addon><addon id="script.plexmod" name="Plex" version="0.8.0-prerelease6b" provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.27.1+matrix.1" />
@@ -4601,12 +4601,16 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Home/Hubs: Use season thumbnail for episodes if possible
-Settings: Add setting to enable season thumbnails/posters for episodes in hubs (default: On)
-- Episodes: Use season art as background if available
-- Home: Fix wrong background loaded in certain circumstances after boot or section change (sort hubs by index internally to fetch the first correct background of the first visible item)
-- Home/Core: Store last background per user/account
-- README: Add powered by Jetbrains
+- Core: Remove memory optimization for MultiWindow (library view); has no effect on performance but resolves certain rare crashes
+- Kodigui: Only check for XML validity on first init of a window, not on reinit
+- Windows: Unify roles click into mixin; reduce visual disturbance when clicking a role
+- TV Shows: fix positioning of roles section dropdown
+- SeekDialog/Player: Further fix postplay behaviour when a video was ended "manually" via final credits marker
+- Home/Movies/Shows/Episodes/Libraries: Implement generic watched toggle; toggle watched via keyboard mapping "w" (buttonCode: 61527)
+- Home/Movies/Shows/Episodes/Libraries: Generic watched toggle: if wanted, ask before toggling watched status for seasons and TV shows
+- Shows: Generic watched toggle: allow toggling full show watched/unwatched
+- Ensure python 2.7 compat (Kodi 18)
+- Episodes: Generic watched toggle: allow toggling watched/unwatched from main button area for current episode
         </news>
         <assets>
             <icon>icon2.png</icon>

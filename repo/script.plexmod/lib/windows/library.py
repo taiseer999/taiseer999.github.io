@@ -14,6 +14,7 @@ from kodi_six import xbmc
 from kodi_six import xbmcgui
 from plexnet import playqueue
 from plexnet import plexobjects
+from plexnet import util as pnUtil
 from six.moves import range
 
 from lib import backgroundthread
@@ -29,8 +30,9 @@ from . import preplay
 from . import search
 from . import subitems
 from . import windowutils
-from . import mixins
-from .mixins import PlaybackBtnMixin
+from .mixins.playbackbtn import PlaybackBtnMixin
+from .mixins.watchlist import removeFromWatchlistBlind
+from .mixins.common import CommonMixin
 
 KEYS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -111,6 +113,8 @@ TYPE_PLURAL = {
     'collection': T(32490, 'Collections'),
     'folder': T(32491, 'Folders'),
     'track': T(33644, 'Tracks'),
+    # watchlist
+    'movies_shows': T(34002, "Movies & Shows"),
 }
 
 SORT_KEYS = {
@@ -169,7 +173,17 @@ SORT_KEYS = {
                                   'defSortDesc': True}
     },
     'photodirectory': {},
-    'collection': {}
+    'collection': {},
+    # watchlist
+    'movies_shows': {
+        'watchlistedAt': {'title': T(32351, 'By Date Added'), 'display': T(32352, 'Date Added'), 'defSortDesc': True},
+        'titleSort': {'title': T(32357, 'By Title'), 'display': T(32358, 'Title'), 'defSortDesc': False},
+        'firstAvailableAt': {'title': T(32353, 'By Release Date'), 'display': T(32354, 'Release Date'),
+                                          'defSortDesc': True},
+        'rating': {'title': T(33107, 'By Critic Rating'), 'display': T(33108, ' Critic Rating'), 'defSortDesc': True},
+        'audienceRating': {'title': T(33101, 'By Audience Rating'), 'display': T(33102, 'Audience Rating'),
+                           'defSortDesc': True},
+    }
 }
 
 ITEM_TYPE = None
@@ -357,7 +371,7 @@ class LibrarySettings(object):
         self._saveSettings()
 
 
-class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.UtilMixin):
+class LibraryWindow(PlaybackBtnMixin, kodigui.MultiWindow, windowutils.UtilMixin, CommonMixin):
     bgXML = 'script-plex-blank.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -405,13 +419,16 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         PlaybackBtnMixin.reset(self)
         util.setGlobalProperty('sort', '')
         self.filterUnwatched = self.librarySettings.getSetting('filter.unwatched', False)
-        self.sort = self.librarySettings.getSetting('sort', 'titleSort')
-        self.sortDesc = self.librarySettings.getSetting('sort.desc', False)
+        self.sort = self.librarySettings.getSetting('sort', self.section.DEFAULT_SORT)
+        self.sortDesc = self.librarySettings.getSetting('sort.desc', self.section.DEFAULT_SORT_DESC)
 
         self.alreadyFetchedChunkList = set()
         self.finalChunkPosition = 0
 
-        self.CHUNK_SIZE = util.addonSettings.libraryChunkSize
+        if self.section.TYPE == 'movies_shows':
+            self.CHUNK_SIZE = min(300, util.addonSettings.libraryChunkSize)
+        else:
+            self.CHUNK_SIZE = util.addonSettings.libraryChunkSize
 
         key = self.section.key
         if not key.isdigit():
@@ -425,12 +442,19 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             self.setWindows(VIEWS_POSTER.get('all'))
             self.setDefault(VIEWS_POSTER.get(viewtype))
 
+    def setWatchlistDirty(self, *args, **kwargs):
+        if self.section.TYPE == 'movies_shows':
+            util.DEBUG_LOG("Library: Watchlist item state changed, setting dirty")
+            self.refill = True
+
     @busy.dialog()
     def doClose(self):
+        pnUtil.APP.off("watchlist:modified", self.setWatchlistDirty)
         self.tasks.kill()
         kodigui.MultiWindow.doClose(self)
 
     def onFirstInit(self):
+        pnUtil.APP.on("watchlist:modified", self.setWatchlistDirty)
         if self.showPanelControl and not self.refill:
             self.showPanelControl.newControl(self)
             self.keyListControl.newControl(self)
@@ -438,30 +462,41 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             self.setFocusId(self.VIEWTYPE_BUTTON_ID)
             self.setBoolProperty("initialized", True)
         else:
-            self.showPanelControl = kodigui.ManagedControlList(self, self.POSTERS_PANEL_ID, 5)
+            self.doRefill()
 
-            hideFilterOptions = self.section.TYPE == 'photodirectory' or self.section.TYPE == 'collection'
+    def doRefill(self):
+        self.showPanelControl = kodigui.ManagedControlList(self, self.POSTERS_PANEL_ID, 5)
 
-            self.keyListControl = kodigui.ManagedControlList(self, self.KEY_LIST_ID, 27)
-            self.setProperty('subDir', self.subDir and '1' or '')
-            self.setProperty('no.options', self.section.TYPE != 'photodirectory' and '1' or '')
-            self.setProperty('unwatched.hascount', self.section.TYPE == 'show' and '1' or '')
-            util.setGlobalProperty('sort', self.sort)
-            self.setProperty('filter1.display', self.filterUnwatched and T(32368, 'UNPLAYED') or T(32345, 'All'))
-            self.setProperty('sort.display', SORT_KEYS[self.section.TYPE].get(self.sort, SORT_KEYS['movie'].get(self.sort))['title'])
-            self.setProperty('media.itemType', ITEM_TYPE or self.section.TYPE)
-            self.setProperty('media.type', TYPE_PLURAL.get(ITEM_TYPE or self.section.TYPE, self.section.TYPE))
-            self.setProperty('media', self.section.TYPE)
-            self.setProperty('hide.filteroptions', hideFilterOptions and '1' or '')
+        hideFilterOptions = self.section.TYPE == 'photodirectory' or self.section.TYPE == 'collection'
 
-            self.setTitle()
-            self.setBoolProperty("initialized", True)
-            self.fill()
-            self.refill = False
-            if self.getProperty('no.content') or self.getProperty('no.content.filtered'):
-                self.setFocusId(self.HOME_BUTTON_ID)
-            else:
-                self.setFocusId(self.POSTERS_PANEL_ID)
+        self.keyListControl = kodigui.ManagedControlList(self, self.KEY_LIST_ID, 27)
+        self.setProperty('disable_playback', self.section.TYPE == 'movies_shows' and '1' or '')
+        self.setProperty('subDir', self.subDir and '1' or '')
+        self.setProperty('no.options', self.section.TYPE != 'photodirectory' and '1' or '')
+        self.setProperty('unwatched.hascount', self.section.TYPE == 'show' and '1' or '')
+        util.setGlobalProperty('sort', self.sort)
+        self.setProperty('filter1.display', self.filterUnwatched and T(32368, 'UNPLAYED') or T(32345, 'All'))
+        self.setProperty('sort.display',
+                         SORT_KEYS[self.section.TYPE].get(self.sort, SORT_KEYS['movie'].get(self.sort))['title'])
+        self.setProperty('media.itemType', ITEM_TYPE or self.section.TYPE)
+        self.setProperty('media.type', TYPE_PLURAL.get(ITEM_TYPE or self.section.TYPE, self.section.TYPE))
+        self.setProperty('media', self.section.TYPE)
+        self.setProperty('hide.filteroptions', hideFilterOptions and '1' or '')
+
+        self.setTitle()
+        self.setBoolProperty("initialized", True)
+        self.fill()
+        self.refill = False
+        if self.getProperty('no.content') or self.getProperty('no.content.filtered'):
+            self.setFocusId(self.HOME_BUTTON_ID)
+        else:
+            self.setFocusId(self.POSTERS_PANEL_ID)
+
+    def onReInit(self):
+        if self.refill:
+            self.doRefill()
+        if player.PLAYER.bgmPlaying:
+            player.PLAYER.stopAndWait()
 
     def onAction(self, action):
         try:
@@ -499,6 +534,12 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                             return
                 else:
                     return
+            elif self.isWatchedAction(action):
+                mli = self.showPanelControl.getSelectedItem()
+                if not mli or not mli.dataSource:
+                    return
+                self.toggleWatched(mli)
+                return
 
             elif action in (xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_CONTEXT_MENU):
                 if not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)) and \
@@ -546,9 +587,6 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         if controlID == self.KEY_LIST_ID:
             self.selectKey()
 
-        if player.PLAYER.bgmPlaying:
-            player.PLAYER.stopAndWait()
-
     def onItemChanged(self, mli):
         if not mli:
             return
@@ -557,6 +595,17 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             return
 
         self.showPhotoItemProperties(mli.dataSource)
+
+    def toggleWatched(self, mli, state=None, **kw):
+        item = mli.dataSource
+        guid = item.show().guid if item.TYPE in ('episode', 'season') else item.guid
+        watched = super(LibraryWindow, self).toggleWatched(item)
+        if watched is None:
+            return
+
+        if watched:
+            removeFromWatchlistBlind(guid)
+        self.updateUnwatchedAndProgress(mli)
 
     def itemOptions(self):
         mli = self.showPanelControl.getSelectedItem()
@@ -569,12 +618,18 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         if mli.dataSource.TYPE in ('episode', 'season', 'movie', 'show'):
             options = []
             ds = mli.dataSource
-            if not mli.getProperty('watched'):
-                options.append({'key': 'mark_watched', 'display': T(32319, "Mark Played")})
+            guid = mli.dataSource.show().guid if ds.TYPE in ('episode', 'season') else ds.guid
 
-            if (ds.isFullyWatched or ds.isWatched or
-                    (ds.TYPE in ("show", "season") and 0 < ds.unViewedLeafCount < ds.leafCount)):
-                options.append({'key': 'mark_unwatched', 'display': T(32318, "Mark Unplayed")})
+            if self.section.TYPE != "movies_shows":
+                # we don't want mark watched for watchlist items
+                if not mli.getProperty('watched'):
+                    options.append({'key': 'mark_watched', 'display': T(32319, "Mark Played")})
+
+                if (ds.isFullyWatched or ds.isWatched or
+                        (ds.TYPE in ("show", "season") and 0 < ds.unViewedLeafCount < ds.leafCount)):
+                    options.append({'key': 'mark_unwatched', 'display': T(32318, "Mark Unplayed")})
+            else:
+                options.append({'key': 'remove_from_watchlist', 'display': T(34011, "Remove from watchlist")})
 
             title = mli.label
             secondary = mli.label2
@@ -595,10 +650,12 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                 align_items="left",
             )
 
-            if choice and choice["key"] in ("mark_watched", "mark_unwatched"):
+            if choice and choice["key"] in ("mark_watched", "mark_unwatched", "remove_from_watchlist"):
                 if util.getSetting('home_confirm_actions'):
                     button = optionsdialog.show(
-                        T(32319, "Mark Played") if choice["key"] == "mark_watched" else T(32318, "Mark Unplayed"),
+                        T(32319, "Mark Played") if choice["key"] == "mark_watched"
+                        else T(34011,"Remove from watchlist")
+                        if choice["key"] == "remove_from_watchlist" else T(32318, "Mark Unplayed"),
                         label,
                         T(32328, 'Yes'),
                         T(32329, 'No'),
@@ -608,12 +665,14 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                         return True
 
                 if choice["key"] == "mark_watched":
-                    mli.dataSource.markWatched()
-                    self.updateUnwatchedAndProgress(mli)
+                    self.toggleWatched(mli, state=True)
 
                 elif choice["key"] == "mark_unwatched":
-                    mli.dataSource.markUnwatched()
-                    self.updateUnwatchedAndProgress(mli)
+                    self.toggleWatched(mli, state=False)
+
+                elif choice["key"] == "remove_from_watchlist":
+                    removeFromWatchlistBlind(guid)
+                    self.doRefill()
             return True
 
 
@@ -733,6 +792,9 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         elif self.section.TYPE == 'artist':
             for t in ('artist', 'album', 'collection', 'track'):
                 options.append({'type': t, 'display': TYPE_PLURAL.get(t, t)})
+        elif self.section.TYPE == 'movies_shows':
+            for t in ('movies_shows', 'movie', 'show'):
+                options.append({'type': t, 'display': TYPE_PLURAL.get(t, t)})
         else:
             return
 
@@ -770,7 +832,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         self.reset()
 
         self.clearFilters()
-        self.resetSort()
+        if self.section.TYPE != 'movies_shows':
+            self.resetSort()
 
         if not self.nextWindow(False):
             self.setProperty('media.type', TYPE_PLURAL.get(ITEM_TYPE or self.section.TYPE, self.section.TYPE))
@@ -835,6 +898,14 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             searchTypes = ['titleSort', 'addedAt', 'originallyAvailableAt', 'rating']
             for stype in searchTypes:
                 option = SORT_KEYS['photo'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
+                option['type'] = stype
+                option['indicator'] = self.sort == stype and ind or ''
+                defSortByOption[stype] = option.get('defSortDesc')
+                options.append(option)
+        elif self.section.TYPE == 'movies_shows':
+            searchTypes = self.section.ALLOWED_SORT
+            for stype in searchTypes:
+                option = SORT_KEYS['movies_shows'].get(stype, SORT_KEYS['movie'].get(stype)).copy()
                 option['type'] = stype
                 option['indicator'] = self.sort == stype and ind or ''
                 defSortByOption[stype] = option.get('defSortDesc')
@@ -942,7 +1013,9 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             'year', 'decade', 'genre', 'contentRating', 'collection', 'director', 'actor', 'country', 'studio', 'resolution', 'label',
             'make', 'model', 'aperture', 'exposure', 'iso', 'lens'
         ):
-            options = [{'val': o.key, 'display': o.title, 'indicator': o.key == subKey and check or ''} for o in self.section.listChoices(option['type'])]
+            options = [{'val': o.key, 'display': o.title, 'indicator': o.key == subKey and check or ''} for o in
+                       self.section.listChoices(option['type'],
+                                                libtype=self.librarySettings.getItemType() or self.section.TYPE)]
             if not options:
                 options = [{'val': None, 'display': T(32375, 'No filters available'), 'ignore': True}]
 
@@ -981,6 +1054,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             'studio': {'type': 'studio', 'display': T(32386, 'Studio'), 'indicator': self.hasFilter('studio') and check or ''},
             'resolution': {'type': 'resolution', 'display': T(32362, 'Resolution'), 'indicator': self.hasFilter('resolution') and check or ''},
             'label': {'type': 'label', 'display': T(32387, 'Labels'), 'indicator': self.hasFilter('label') and check or ''},
+            'released': {'type': 'released', 'display': T(34001, 'Released'),
+                      'indicator': self.hasFilter('released') and check or ''},
 
             'make': {'type': 'make', 'display': T(32388, 'Camera Make'), 'indicator': self.hasFilter('make') and check or ''},
             'model': {'type': 'model', 'display': T(32389, 'Camera Model'), 'indicator': self.hasFilter('model') and check or ''},
@@ -1011,6 +1086,9 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                 options.append(optionsMap[k])
         elif self.section.TYPE == 'photo':
             for k in ('year', 'make', 'model', 'aperture', 'exposure', 'iso', 'lens', 'label'):
+                options.append(optionsMap[k])
+        elif self.section.TYPE == 'movies_shows':
+            for k in self.section.ALLOWED_FILTERS:
                 options.append(optionsMap[k])
 
         result = dropdown.showDropdown(options, (980, 106), with_indicator=True, suboption_callback=self.subOptionCallback)
@@ -1068,6 +1146,14 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
 
         updateUnwatchedAndProgress = False
 
+        extra_kwargs = {}
+
+        # watchlist
+        if sectionType == 'movies_shows':
+            extra_kwargs['from_watchlist'] = True
+            extra_kwargs['directly_from_watchlist'] = True
+            extra_kwargs['external_item'] = True
+
         if mli.dataSource.TYPE == 'collection':
             prevItemType = self.librarySettings.getItemType() or ITEM_TYPE
             self.processCommand(opener.open(mli.dataSource))
@@ -1076,7 +1162,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             if ITEM_TYPE == 'episode' or mli.dataSource.TYPE == 'episode' or mli.dataSource.TYPE == 'season':
                 self.openItem(mli.dataSource)
             else:
-                self.processCommand(opener.handleOpen(subitems.ShowWindow, media_item=mli.dataSource, parent_list=self.showPanelControl))
+                self.processCommand(opener.handleOpen(subitems.ShowWindow, media_item=mli.dataSource, parent_list=self.showPanelControl, **extra_kwargs))
             if mli.dataSource.TYPE != 'season': # NOTE: A collection with Seasons doesn't have the leafCount/viewedLeafCount until you actually go into the season so we can't update the unwatched count here
                 updateUnwatchedAndProgress = True
         elif self.section.TYPE == 'movie' or mli.dataSource.TYPE == 'movie':
@@ -1095,7 +1181,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
                 self.processCommand(opener.handleOpen(LibraryWindow, windows=self._windows, default_window=self._next, section=section, filter_=self.filter, subDir=True))
                 self.librarySettings.setItemType(self.librarySettings.getItemType() or ITEM_TYPE)
             else:
-                self.processCommand(opener.handleOpen(preplay.PrePlayWindow, video=datasource, parent_list=self.showPanelControl))
+                self.processCommand(opener.handleOpen(preplay.PrePlayWindow if not sectionType == 'movies_shows' else preplay.PrePlayWindowWL, video=datasource, parent_list=self.showPanelControl, **extra_kwargs))
                 updateUnwatchedAndProgress = True
         elif self.section.TYPE == 'artist' or mli.dataSource.TYPE == 'artist' or mli.dataSource.TYPE == 'album' or mli.dataSource.TYPE == 'track':
             if ITEM_TYPE == 'album' or mli.dataSource.TYPE == 'album' or mli.dataSource.TYPE == 'track':
@@ -1139,14 +1225,7 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         mli.setProperty('progress', util.getProgressImage(mli.dataSource))
 
     def setTitle(self):
-        if self.section.TYPE == 'artist':
-            self.setProperty('screen.title', T(32394, 'MUSIC').upper())
-        elif self.section.TYPE in ('photo', 'photodirectory'):
-            self.setProperty('screen.title', T(32349, 'photos').upper())
-        elif self.section.TYPE == 'collection':
-            self.setProperty('screen.title', T(32382, 'COLLECTION').upper())
-        else:
-            self.setProperty('screen.title', self.section.TYPE == 'show' and T(32393, 'TV SHOWS').upper() or T(32348, 'movies').upper())
+        self.setProperty('screen.title', self.section.title.upper())
 
         self.updateFilterDisplay()
 
@@ -1192,7 +1271,9 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
             util.DEBUG_LOG('Filter missing sub-filter data')
             return None
 
-        return (self.filter['type'], six.moves.urllib.parse.unquote_plus(self.filter['sub']['val']))
+        if isinstance(self.filter['sub']['val'], six.string_types) and self.filter['sub']['val'].startswith("/"):
+            return self.filter['type'], self.filter['sub']['val']
+        return self.filter['type'], six.moves.urllib.parse.unquote_plus(self.filter['sub']['val'])
 
     def getSortOpts(self):
         if not self.sort:
@@ -1225,7 +1306,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
 
         tasks = []
 
-        if self.sort != 'titleSort' or ITEM_TYPE in ('folder', 'episode') or self.subDir or self.section.TYPE == "collection":
+        if self.sort != 'titleSort' or ITEM_TYPE in ('folder', 'episode') or self.subDir \
+            or self.section.TYPE in ("collection", "movies_shows"):
             if ITEM_TYPE == 'folder':
                 sectionAll = self.section.folder(0, 0, self.subDir)
             else:
@@ -1302,7 +1384,8 @@ class LibraryWindow(mixins.PlaybackBtnMixin, kodigui.MultiWindow, windowutils.Ut
         while backgroundthread.BGThreader.working() and not util.MONITOR.abortRequested():
             util.MONITOR.waitForAbort(0.1)
 
-        self.keyListControl.addItems(jitems)
+        if jitems:
+            self.keyListControl.addItems(jitems)
 
         self.showPanelControl.selectItem(0)
         self.setFocusId(self.POSTERS_PANEL_ID)

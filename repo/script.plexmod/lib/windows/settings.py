@@ -37,9 +37,13 @@ class Setting(object):
     userAware = False
     isThemeRelevant = False
     backport_from = None
+    show_cb = None
 
     def translate(self, val):
         return str(val)
+
+    def should_show(self):
+        return self.show_cb() if self.show_cb else True
 
     def get(self, *args, **kwargs):
         _id = kwargs.pop("_id", UNDEF)
@@ -91,13 +95,15 @@ class Setting(object):
 
 
 class BasicSetting(Setting):
-    def __init__(self, ID, label, default, desc='', theme_relevant=False, backport_from=None):
+    def __init__(self, ID, label, default, desc='', theme_relevant=False, backport_from=None, show_cb=None):
         self.ID = ID
         self.label = label
         self.default = default
         self.desc = desc
         self.isThemeRelevant = theme_relevant
         self.backport_from = backport_from
+        if show_cb:
+            self.show_cb = show_cb
         util.DEFAULT_SETTINGS[ID] = default
 
     def description(self, desc):
@@ -445,13 +451,30 @@ class Settings(object):
                 BoolSetting(
                     'theme_music_loop', T(33737, 'Loop theme music'), True
                 ),
-                PlayedThresholdSetting('played_threshold', T(33501, 'Video played threshold'), 1).description(
+                PlayedThresholdSetting('played_threshold', T(33501, 'Video played threshold'), 1,
+                                       show_cb=lambda: plexnet.plexapp.SERVERMANAGER.selectedServer.prefs.get("LibraryVideoPlayedThreshold", None) is None
+                                       ).description(
                     T(
                         33502,
                         "Set this to the same value as your Plex server (Settings>Library>Video played threshold) to av"
                         "oid certain pitfalls, Default: 90 %"
                     )
                 ),
+                OptionsSetting(
+                    'played_threshold_behaviour',
+                    T(34022, 'Video play completion behaviour'),
+                    3,
+                    (
+                        (0, T(34024, 'at selected threshold percentage')),
+                        (1, T(34025, 'at final credits marker position')),
+                        (2, T(34025, 'at first credits marker position')),
+                        (3, T(34026, 'earliest between threshold percent and first credits marker')),
+                    ),
+                    show_cb=lambda: plexnet.plexapp.SERVERMANAGER.selectedServer.prefs.get(
+                        "LibraryVideoPlayedAtBehaviour", None) is None
+                ).description(T(34023, "Decide whether to use end credits markers to determine the 'watched' "
+                                       "state of video items. When markers are not available the selected threshold "
+                                       "percentage will be used.")),
                 BoolSetting('use_alternate_seek2', T(33667, 'Use alternate seek'), util.altSeekRecommended).description(
                     T(33668, 'ATTENTION: Only enable this if you have reproducible audio issues after '
                              'seeking/resuming.\n\nUse an alternative seek method in videos, which can help in '
@@ -655,6 +678,17 @@ class Settings(object):
                 ).description(
                     T(33078, "")
                 ),
+                BoolUserSetting(
+                    'use_watchlist', T(34007, 'Use Watchlist'), True
+                ).description(
+                    T(34008, "Activates the current user's Plex watchlist as a section item. Adds watchlist "
+                             "functionality to certain media screens. Per-user setting. Default: On")
+                ),
+                BoolUserSetting(
+                    'watchlist_auto_remove', T(34009, 'Watchlist auto-remove'), True
+                ).description(
+                    T(34010, "Automatically remove fully watched items from watchlist. Default: On")
+                ),
                 MultiOptionsSetting(
                     'show_ratings', T(33709, 'Show ratings for'),
                     ["series", "movies"],
@@ -743,6 +777,16 @@ class Settings(object):
                         ('skip_credits', T(32496, 'Skip Credits')),
                     )
                 ).description(T(32939, 'Only applies to video player UI')),
+                MultiUAOptionsSetting(
+                    'fast_pause_resume', T(34012, 'Fast pause/resume'),
+                    [],
+                    (
+                        ('paused', T(34013, 'when paused')),
+                        ('playing', T(34014, 'when playing')),
+                    )
+                ).description(T(34015, 'User-specific. Use OK/ENTER button to pause instead of showing the OSD'
+                                       ' (which can then only be accessed using DOWN), or resume when paused. '
+                                       'Only works with \'Behave like official Plex clients\' enabled.')),
                 OptionsSetting(
                     'video_show_playlist', T(32936, 'Show playlist button'), 'eponly',
                     (
@@ -1055,7 +1099,8 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
                 #     return
             elif action == xbmcgui.ACTION_MOVE_RIGHT:
                 if self.lastFocusID == self.SECTION_LIST_ID:
-                    self.setFocusId(self.SETTINGS_LIST_ID)
+                    if self.lastSection != 'about':
+                        self.setFocusId(self.SETTINGS_LIST_ID)
                     return
                 elif self.lastFocusID == self.SETTINGS_LIST_ID:
                     self.editSetting(from_right=True)
@@ -1067,7 +1112,8 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
 
     def onClick(self, controlID):
         if controlID == self.SECTION_LIST_ID:
-            self.setFocusId(self.SETTINGS_LIST_ID)
+            if self.lastSection != 'about':
+                self.setFocusId(self.SETTINGS_LIST_ID)
         elif controlID == self.SETTINGS_LIST_ID:
             self.editSetting()
         elif controlID == self.OPTIONS_LIST_ID:
@@ -1110,7 +1156,7 @@ class SettingsWindow(kodigui.BaseWindow, windowutils.UtilMixin):
 
         items = []
         for setting in settings:
-            if setting is None:
+            if setting is None or not setting.should_show():
                 continue
 
             item = kodigui.ManagedListItem(setting.label, setting.type != 'BOOL' and setting.valueLabel() or '',
@@ -1301,6 +1347,9 @@ class SchnorchelDialog(xbmcgui.WindowXMLDialog):
             xbmcgui.WindowXML.setProperty(self, key, value)
         except RuntimeError:
             xbmc.log('kodigui.BaseWindow.setProperty: Missing window', xbmc.LOGDEBUG)
+        except TypeError:
+            # python 2.7
+            pass
 
     def onAction(self, action):
         code = action.getButtonCode()

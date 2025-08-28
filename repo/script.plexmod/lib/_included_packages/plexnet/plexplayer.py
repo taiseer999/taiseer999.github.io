@@ -579,7 +579,7 @@ class PlexPlayer(BasePlayer):
         if self.media.protocol == "hls":
             obj.streamFormat = "hls"
             obj.switchingStrategy = "full-adaptation"
-            obj.live = self.isLiveHLS(obj.streamUrls[0], self.media.indirectHeaders)
+            #obj.live = self.isLiveHls(obj.streamUrls[0], self.media.indirectHeaders)
         else:
             obj.streamFormat = self.media.get('container', 'mp4')
             if obj.streamFormat == "mov" or obj.streamFormat == "m4v":

@@ -38,6 +38,7 @@ class BasePlayerHandler(object):
         self.playQueue = None
         self.sessionID = session_id
         self.isMapped = False
+        self.currentlyPlaying = None
 
     def onAVChange(self):
         pass
@@ -175,7 +176,7 @@ class BasePlayerHandler(object):
 
         new_time_stored = plexapp.util.APP.nowplayingmanager.updatePlaybackState(
             self.timelineType, data, state, _time, self.playQueue, duration=self.currentDuration(),
-            force=overrideChecks, force_time=force_time
+            force=overrideChecks, force_time=force_time, server=item.server
         )
 
         if new_time_stored:
@@ -226,6 +227,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.waitingForSOS = False
         self.chapters = None
         self.stoppedManually = False
+        self.endedManually = False
         self.inBingeMode = False
         self.skipPostPlay = False
         self.prePlayWitnessed = False
@@ -248,11 +250,13 @@ class SeekPlayerHandler(BasePlayerHandler):
         self._subtitleStreamOffset = None
         self.mode = self.MODE_RELATIVE
         self.ended = False
+        self.endedManually = False
         self.stoppedManually = False
         self.prePlayWitnessed = False
         self.queuingNext = False
         self.queuingSpecific = False
         self.isMapped = False
+        self.creditMarkerHit = None
 
     def setup(self, duration, meta, offset, bif_url, title='', title2='', seeking=NO_SEEK, chapters=None,
               is_mapped=False):
@@ -266,7 +270,7 @@ class SeekPlayerHandler(BasePlayerHandler):
         self.title = title
         self.title2 = title2
         self.chapters = chapters or []
-        self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue()
+        self.playedThreshold = plexapp.util.INTERFACE.getPlayedThresholdValue() # percentage
         self.stoppedManually = False
         self.inBingeMode = False
         self.skipPostPlay = False
@@ -307,10 +311,13 @@ class SeekPlayerHandler(BasePlayerHandler):
         if util.getUserSetting('post_play_never', False):
             return False
 
+        if self.player.video and self.player.video.isExtra:
+            return False
+
         if self.playlist and self.playlist.TYPE == 'playlist':
             return False
 
-        if not self.stoppedManually and self.skipPostPlay:
+        if not (self.stoppedManually or self.endedManually) and self.skipPostPlay:
             return False
 
         if (not util.addonSettings.postplayAlways and self._lastDuration <= FIVE_MINUTES_MILLIS)\
@@ -351,7 +358,7 @@ class SeekPlayerHandler(BasePlayerHandler):
             if self.showPostPlay():
                 return True
 
-        if not self.playlist or self.stoppedManually or (self.playlist and not hasNext):
+        if not self.playlist or self.stoppedManually or self.endedManually or (self.playlist and not hasNext):
             return False
 
         self.player.playVideoPlaylist(self.playlist, handler=self, resume=False)
@@ -545,8 +552,39 @@ class SeekPlayerHandler(BasePlayerHandler):
     def videoPlayedFac(self):
         return self.getVideoPlayedFac()
 
+    @property
+    def playedThresholdPerc(self):
+        server_thres = self.player.video.server.prefs.get("LibraryVideoPlayedThreshold", None)
+        if server_thres is None:
+            return int(self.playedThreshold)
+        return int(server_thres)
+
     def getVideoWatched(self, ref=None):
-        return self.getVideoPlayedFac(ref=ref) >= self.playedThreshold or self.player.isExternal
+        """
+        0:at selected threshold percentage|1:at final credits marker position|2:at first credits marker position|3:earliest between threshold percent and first credits marker
+        :param ref:
+        :return: bool
+        """
+        playedAtBH = self.player.video.server.prefs.get("LibraryVideoPlayedAtBehaviour", None)
+        if playedAtBH is None:
+            playedAtBH = util.getSetting("played_threshold_behaviour")
+        playedAtBH = int(playedAtBH)
+
+        watchedByPerc = self.getVideoPlayedFac(ref=ref) >= self.playedThresholdPerc / 100.0 or self.player.isExternal
+
+        if playedAtBH == 0 or not self.player.video.has_credit_markers:
+            util.DEBUG_LOG("SeekPlayerHandler: Watched item due to percentage: {}", watchedByPerc)
+            return watchedByPerc
+        elif playedAtBH == 1 and self.creditMarkerHit == "final":
+            util.DEBUG_LOG("SeekPlayerHandler: Watched item due to final credits marker")
+            return True
+        elif playedAtBH == 2 and self.creditMarkerHit == "first":
+            util.DEBUG_LOG("SeekPlayerHandler: Watched item due to first credits marker")
+            return True
+        elif playedAtBH == 3 and (watchedByPerc or self.creditMarkerHit):
+            util.DEBUG_LOG("SeekPlayerHandler: Watched item due to percentage or credits marker")
+            return True
+        return False
 
     @property
     def videoWatched(self):
@@ -596,13 +634,13 @@ class SeekPlayerHandler(BasePlayerHandler):
             if not self.queuingSpecific:
                 # show post play if possible, if an item has been watched (90% by Plex standards)
                 if self.seeking != self.SEEK_PLAYLIST and self.duration:
-                    playedFac = self.videoPlayedFac
-                    util.DEBUG_LOG("Player - played-threshold: {}/{}", playedFac, self.playedThreshold)
-                    if playedFac >= self.playedThreshold and self.next(on_end=True):
+                    util.DEBUG_LOG("Player - played-threshold: {}%/{}%",
+                                   int(self.videoPlayedFac * 100), int(self.playedThresholdPerc))
+                    if self.videoWatched and self.next(on_end=True):
                         return
 
         if (self.seeking not in (self.SEEK_IN_PROGRESS, self.SEEK_PLAYLIST) or
-                (self.seeking == self.SEEK_PLAYLIST and self.stoppedManually)):
+                (self.seeking == self.SEEK_PLAYLIST and (self.stoppedManually or self.endedManually))):
             self.hideOSD(delete=True)
             self.sessionEnded()
 
@@ -681,8 +719,8 @@ class SeekPlayerHandler(BasePlayerHandler):
                     util.MONITOR.waitForAbort(util.addonSettings.coreelecResumeSeekWait / 1000.0)
 
                     util.DEBUG_LOG("OnPlayBackSeek: SeekOnStart: "
-                                   "Expecting to be within 5 seconds of {}, currently at: {}", self.seekOnStart,
-                                   p_time)
+                                   "Expecting to be within 5 seconds of {}, currently at: {}, CoreELEC resume seek wait: {}ms", self.seekOnStart,
+                                   p_time, util.addonSettings.coreelecResumeSeekWait)
 
                     tries = 0
                     max_tries = int(5000 / util.addonSettings.coreelecResumeSeekWait)
@@ -831,22 +869,24 @@ class SeekPlayerHandler(BasePlayerHandler):
         if self.isDirectPlay and self.player.video:
             track = self.player.video.selectedAudioStream()
             if track:
-                # only try finding the current audio stream when the BG music isn't playing and wasn't the last
-                # thing played, because currentaudiostream doesn't populate for audio-only items; in that case,
-                # always select the proper audio stream
-                if not self.player.lastPlayWasBGM:
+                currIdx = None
+                tries = 0
+                while currIdx != track.typeIndex and tries < 40:
                     try:
                         playerID = kodijsonrpc.rpc.Player.GetActivePlayers()[0]["playerid"]
-                        currIdx = kodijsonrpc.rpc.Player.GetProperties(playerid=playerID, properties=['currentaudiostream'])['currentaudiostream']['index']
-                        if currIdx == track.typeIndex:
-                            util.DEBUG_LOG('Audio track is correct index: {0}', track.typeIndex)
-                            return
+                        currIdx = \
+                        kodijsonrpc.rpc.Player.GetProperties(playerid=playerID, properties=['currentaudiostream'])[
+                            'currentaudiostream']['index']
                     except:
-                        util.ERROR()
+                        pass
+                    if currIdx == track.typeIndex:
+                        util.DEBUG_LOG('Audio track is correct index: {0}', track.typeIndex)
+                        return
+                    util.DEBUG_LOG('Switching audio track - index: {0} (try: {1})', track.typeIndex, tries + 1)
+                    util.MONITOR.waitForAbort(0.1)
+                    self.player.setAudioStream(track.typeIndex)
+                    tries += 1
 
-                util.MONITOR.waitForAbort(0.1)
-                util.DEBUG_LOG('Switching audio track - index: {0}', track.typeIndex)
-                self.player.setAudioStream(track.typeIndex)
 
     def updateOffset(self):
         try:
@@ -905,6 +945,7 @@ class SeekPlayerHandler(BasePlayerHandler):
 
             if not self.playlist or not self.playlist.hasNext():
                 if not self.shouldShowPostPlay():
+                    util.DEBUG_LOG("SeekHandler: Not showing post-play (VideoWindowClosed)")
                     self.sessionEnded()
 
     def onVideoOSD(self):
@@ -1395,6 +1436,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
 
         self.started = False
         self.bgmStarting = True
+        self.dontRequeueBGM = False
         self.handler = BGMPlayerHandler(self, [source, volume, rating_key])
 
         # store current volume if it's different from the BGM volume
@@ -1950,6 +1992,7 @@ class PlexPlayer(xbmc.Player, signalsmixin.SignalsMixin):
     def stopAndWait(self):
         if self.isPlaying():
             util.DEBUG_LOG('Player: Stopping and waiting...')
+            self.dontRequeueBGM = True
             self.stop()
             if not util.MONITOR.abortRequested():
                 while not util.MONITOR.waitForAbort(0.1) and self.isPlaying():

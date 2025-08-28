@@ -21,7 +21,8 @@ from . import opener
 from . import pagination
 from . import search
 from . import windowutils
-from .mixins import SpoilersMixin
+from .mixins.spoilers import SpoilersMixin
+from .mixins.roles import RolesMixin
 
 PASSOUT_PROTECTION_DURATION_SECONDS = 7200
 PASSOUT_LAST_VIDEO_DURATION_MILLIS = 1200000
@@ -80,7 +81,7 @@ class OnDeckPaginator(pagination.MCLPaginator):
         return data
 
 
-class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SpoilersMixin):
+class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMixin, SpoilersMixin):
     xmlFile = 'script-plex-video_player.xml'
     path = util.ADDON.getAddonInfo('path')
     theme = 'Main'
@@ -115,6 +116,9 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         self.playQueue = kwargs.get('play_queue')
         self.video = kwargs.get('video')
         self.resume = bool(kwargs.get('resume'))
+
+        if util.platformFlavor == "CoreELEC":
+            self.defer_init = True
 
         self.postPlayMode = False
         self.prev = None
@@ -276,7 +280,8 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         elif controlID == self.RELATED_LIST_ID:
             self.openItem(self.relatedListControl)
         elif controlID == self.ROLES_LIST_ID:
-            self.roleClicked()
+            if not self.roleClicked():
+                return
         elif controlID == self.PREV_BUTTON_ID:
             self.playVideo(prev=True)
         elif controlID == self.NEXT_BUTTON_ID:
@@ -306,33 +311,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
     def searchButtonClicked(self):
         self.processCommand(search.dialog(self, section_id=self.prev.getLibrarySectionId() or None))
 
-    def roleClicked(self):
-        mli = self.rolesListControl.getSelectedItem()
-        if not mli:
-            return
-
-        sectionRoles = busy.widthDialog(mli.dataSource.sectionRoles, '')
-
-        if not sectionRoles:
-            util.DEBUG_LOG('No sections found for actor')
-            return
-
-        if len(sectionRoles) > 1:
-            x, y = self.getRoleItemDDPosition()
-
-            options = [{'role': r, 'display': r.reasonTitle} for r in sectionRoles]
-            choice = dropdown.showDropdown(options, (x, y), pos_is_bottom=True)
-
-            if not choice:
-                return
-
-            role = choice['role']
-        else:
-            role = sectionRoles[0]
-
-        self.processCommand(opener.open(role))
-
-    def getRoleItemDDPosition(self):
+    def getRoleItemDDPosition(self, *args, **kwargs):
         y = 1000
         if xbmc.getCondVisibility('Control.IsVisible(500)'):
             y += 360
@@ -345,17 +324,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
         if xbmc.getCondVisibility('Integer.IsGreater(Window.Property(hub.focus),1) + Control.IsVisible(501)'):
             y -= 500
 
-        tries = 0
-        focus = xbmc.getInfoLabel('Container(403).Position')
-        while tries < 2 and focus == '':
-            focus = xbmc.getInfoLabel('Container(403).Position')
-            xbmc.sleep(250)
-            tries += 1
-
-        focus = int(focus)
-
-        x = ((focus + 1) * 304) - 100
-        return x, y
+        return super(VideoPlayerWindow, self).getRoleItemDDPosition(y=y, container_id="403")
 
     def setBackground(self):
         video = self.video if self.video else self.playQueue.current()
@@ -677,8 +646,6 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
 
         if not items:
             return False
-
-        self.setProperty('divider.{0}'.format(self.RELATED_LIST_ID), has_prev and '1' or '')
         return True
 
     def fillRoles(self, has_prev=False):
@@ -699,8 +666,6 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, Spoiler
 
         if not items:
             return False
-
-        self.setProperty('divider.{0}'.format(self.ROLES_LIST_ID), has_prev and '1' or '')
 
         self.rolesListControl.reset()
         self.rolesListControl.addItems(items)

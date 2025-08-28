@@ -29,7 +29,7 @@ from . import colors
 from .exceptions import NoDataException
 from .logging import log, log_error
 # noinspection PyUnresolvedReferences
-from .i18n import T
+from .i18n import T, TRANSLATED_ROLES
 from . import aspectratio
 # noinspection PyUnresolvedReferences
 from .kodi_util import (ADDON, xbmc, xbmcvfs, xbmcaddon, xbmcgui, translatePath, KODI_VERSION_MAJOR, KODI_VERSION_MINOR,
@@ -49,7 +49,7 @@ PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
 
 DEF_THEME = "modern-colored"
-THEME_VERSION = 46
+THEME_VERSION = 54
 
 xbmc.log('script.plexmod: Kodi {0}.{1} (build {2})'.format(KODI_VERSION_MAJOR, KODI_VERSION_MINOR, KODI_BUILD_NUMBER),
          xbmc.LOGINFO)
@@ -74,16 +74,16 @@ def getLanguageCode(add_def=None):
         base, variant = data.split("_")
         lang += "{}-{},{}".format(base, variant.upper(), base)
     else:
-        lang = data
+        lang = base = data
     if add_def and lang not in add_def:
         lang += ",{}".format(add_def)
-    return lang
+    return lang, base
 
 
 try:
-    ACCEPT_LANGUAGE_CODE = getLanguageCode(add_def='en-US,en')
+    ACCEPT_LANGUAGE_CODE, LANGUAGE_CODE = getLanguageCode(add_def='en-US,en')
 except:
-    ACCEPT_LANGUAGE_CODE = 'en-US,en'
+    ACCEPT_LANGUAGE_CODE, LANGUAGE_CODE = ('en-US,en', 'en')
 
 
 try:
@@ -213,7 +213,7 @@ def durationToText(seconds):
     return '0 seconds'
 
 
-def durationToShortText(ms, shortHourMins=False):
+def durationToShortText(ms, shortHourMins=False, shortSeconds=False):
     """
     Converts seconds to a short user friendly string
     Example: 143 -> 2m 23s
@@ -238,7 +238,7 @@ def durationToShortText(ms, shortHourMins=False):
     secs = int(left % 60000)
     if secs:
         secs /= 1000
-        return '{0} s'.format(secs)
+        return '{0} s'.format(round(secs) if shortSeconds and round(secs) == int(secs) else secs)
     return '0 s'
 
 

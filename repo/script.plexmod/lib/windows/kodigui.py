@@ -99,58 +99,86 @@ class BaseFunctions(object):
     def setBoolProperty(self, key, boolean):
         self.setProperty(key, boolean and '1' or '')
 
+    def getBoolProperty(self, key):
+        return self.getProperty(key) == '1'
+
+    def waitForVisibility(self, control):
+        return waitForVisibility(control)
+
+    def waitAndSetFocus(self, control):
+        self.waitForVisibility(control)
+        self.setFocusId(control)
+
 
 LAST_BG_URL = None
 BG_NA = "script.plex/home/background-fallback_black.png"
 
 
 class XMLBase(object):
-    def onInit(self, count=0):
-        try:
-            self.getControl(666)
-        except RuntimeError as e:
-            if e.args and "Non-Existent Control" in e.args[0]:
-                if count < 8:
-                    # retry
-                    xbmc.sleep(250)
-                    return self.onInit(count=count+1)
+    defer_init = False
+    defer_init_time = 0.25
 
-                util.ERROR("Possibly broken XML file: {}, triggering recompilation.".format(self.xmlFile))
-                util.showNotification("Recompiling templates", time_ms=1000,
-                                      header="Possibly broken XML file(s)")
-                if xbmc.Player().isPlaying():
+    def onInit(self, count=0):
+        if not self.started:
+            if self.defer_init:
+                util.DEBUG_LOG("Kodigui: Deferring init of {} for {}s", self, self.defer_init_time)
+                util.MONITOR.waitForAbort(self.defer_init_time)
+            try:
+                self.getControl(666)
+            except RuntimeError as e:
+                if e.args and "Non-Existent Control" in e.args[0]:
+                    if count < 8:
+                        # retry
+                        xbmc.sleep(250)
+                        return self.onInit(count=count+1)
+
+                    util.ERROR("Possibly broken XML file: {}, triggering recompilation.".format(self.xmlFile))
+                    util.showNotification("Recompiling templates", time_ms=1000,
+                                          header="Possibly broken XML file(s)")
+
                     try:
-                        xbmc.Player().stop()
+                        if xbmc.Player().isPlaying():
+                            try:
+                                xbmc.Player().stop()
+                            except:
+                                pass
+
+                        tries = 0
+                        while xbmc.Player().isPlaying() and tries < 50:
+                            util.MONITOR.waitForAbort(0.1)
+                            tries += 1
                     except:
                         pass
-                xbmc.sleep(1000)
 
-                if self.__class__.__name__ == "HomeWindow":
-                    try:
-                        self._errored = True
-                        self.closeWRecompileTpls()
-                    finally:
-                        return
-                elif self.__class__.__name__ == "BackgroundWindow":
+                    xbmc.sleep(1000)
+
+                    if self.__class__.__name__ == "HomeWindow":
+                        try:
+                            self._errored = True
+                            self.closeWRecompileTpls()
+                        finally:
+                            return
+                    elif self.__class__.__name__ == "BackgroundWindow":
+                        try:
+                            self._errored = True
+                            self.doClose()
+                        finally:
+                            return
+
                     try:
                         self._errored = True
                         self.doClose()
                     finally:
+                        from . import windowutils
+                        windowutils.HOME.closeWRecompileTpls()
                         return
-
-                try:
-                    self._errored = True
-                    self.doClose()
-                finally:
-                    from . import windowutils
-                    windowutils.HOME.closeWRecompileTpls()
-                    return
-            raise
+                raise
         self._onInit()
 
     def goHomeAction(self, action):
         if (util.HOME_BUTTON_MAPPED is not None
                 and action.getButtonCode() == int(util.HOME_BUTTON_MAPPED) and hasattr(self, "goHome")):
+            util.DEBUG_LOG("Kodigui: Going home action")
             self.goHome(with_root=True)
             return True
         return
@@ -262,7 +290,7 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
 
     def updateBackgroundFrom(self, ds):
         if util.addonSettings.dynamicBackgrounds:
-            return self.windowSetBackground(util.backgroundFromArt(ds.art, width=self.width, height=self.height))
+            return self.windowSetBackground(util.backgroundFromArt(ds.get('art', ds.get('parentArt', ds.get('grandparentArt', None))), width=self.width, height=self.height))
 
     def windowSetBackground(self, value):
         if not util.addonSettings.dbgCrossfade:
@@ -778,7 +806,11 @@ class ManagedControlList(object):
             self.control.selectItem(pos)
 
     def setSelectedItemByDataSource(self, data_source):
-        self.setSelectedItem(self.getListItemByDataSource(data_source))
+        mli = self.getListItemByDataSource(data_source)
+        if mli:
+            self.setSelectedItem(mli)
+            return True
+        return False
 
     def removeItem(self, index):
         old = self.items.pop(index)
@@ -950,9 +982,6 @@ class _MWBackground(ControlledWindow):
 
 
 class MultiWindow(object):
-    __slots__ = ("_windows", "_next", "_properties", "_current", "_allClosed", "exitCommand", "_currentOnAction",
-                 "_closeSignalled")
-
     def __init__(self, windows=None, default_window=None, **kwargs):
         self._windows = windows
         self._next = default_window or self._windows[0]
@@ -963,7 +992,8 @@ class MultiWindow(object):
         self.exitCommand = None
 
     def __getattr__(self, name):
-        return getattr(self._current, name)
+        if self._current:
+            return getattr(self._current, name)
 
     def onCloseSignal(self, *args, **kwargs):
         self._closeSignalled = True
@@ -1048,6 +1078,14 @@ class MultiWindow(object):
         self._allClosed = True
         self._current.doClose()
 
+    def goHomeAction(self, action):
+        if (util.HOME_BUTTON_MAPPED is not None
+                and action.getButtonCode() == int(util.HOME_BUTTON_MAPPED) and hasattr(self, "goHome")):
+            util.DEBUG_LOG("MultiWindow: Going home action")
+            self.goHome(with_root=True)
+            return True
+        return
+
     def onFirstInit(self):
         pass
 
@@ -1057,7 +1095,7 @@ class MultiWindow(object):
     def onAction(self, action):
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.doClose()
-        elif XMLBase.goHomeAction(self, action):
+        elif self.goHomeAction(action):
             return
         self._currentOnAction(action)
 
@@ -1303,3 +1341,10 @@ class GlobalProperty():
 
     def __exit__(self, exc_type, exc_value, traceback):
         xbmcgui.Window(10000).setProperty('script.plex.{}'.format(self.prop), self.end or self.old)
+
+
+def waitForVisibility(control):
+    tries = 0
+    while not xbmc.getCondVisibility('Control.IsVisible({0})'.format(control)) and tries < 50:
+        util.MONITOR.waitForAbort(0.1)
+        tries += 1

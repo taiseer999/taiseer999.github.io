@@ -455,6 +455,18 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="max_shutdown_wait" type="number" label="34016" help="34017">
+                    <level>0</level>
+                    <default>5</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>360</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
                 <setting id="honor_plextv_dnsrebind" type="boolean" label="33645" help="33646">
                     <level>0</level>
                     <default>true</default>
