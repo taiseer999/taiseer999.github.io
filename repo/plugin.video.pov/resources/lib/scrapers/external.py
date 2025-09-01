@@ -266,7 +266,7 @@ class Source:
 					else: quality, extraInfo = get_file_info(url=i_get('url'))
 					try:
 						size = i_get('size')
-						if 'package' in i and provider not in ('torrentio', 'torrentsdb', 'torz'):
+						if 'package' in i and not i_get('true_size', False):
 							if i_get('package') == 'season': divider = self.season_divider
 							else: divider = self.show_divider
 							size = float(size) / divider
@@ -274,8 +274,8 @@ class Source:
 						else: size_label = '%.2f GB' % size
 					except: pass
 					i.update({
-						'external': True, 'provider': provider, 'scrape_provider': self.scrape_provider, 'extraInfo': extraInfo,
-						'URLName': URLName, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)
+						'external': True, 'provider': provider, 'scrape_provider': self.scrape_provider, 'URLName': URLName,
+						'extraInfo': extraInfo, 'quality': quality, 'size_label': size_label, 'size': round(size, 2)
 					})
 					if not quality in self.resolutions: self.resolutions['SD'] += 1
 					else: self.resolutions[quality] += 1

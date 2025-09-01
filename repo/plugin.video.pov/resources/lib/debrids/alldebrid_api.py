@@ -87,53 +87,28 @@ class AllDebridAPI:
 		result = result['magnets'][0]
 		return result.get('id', '')
 
-	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
-		try:
-			extensions = supported_video_extensions()
-			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			transfer_id = self.create_transfer(magnet_url)
-			for key in ['completionDate'] * 3:
-				kodi_utils.sleep(500)
-				transfer_info = self.list_transfer(transfer_id)
-				if transfer_info[key]: break
-			else: raise Exception('uncached magnet:\n%s' % magnet_url)
-			torrent_files = transfer_info['links']
-			selected_files = [i for i in torrent_files if i['filename'].lower().endswith(tuple(extensions))]
-			if not selected_files: return None
-			if season:
-				selected_files = [i for i in selected_files if seas_ep_filter(season, episode, i['filename'])]
-			else:
-				selected_files = [i for i in selected_files if not any(x in i['filename'].lower() for x in extras_filtering_list)]
-				selected_files.sort(key=lambda k: k['size'], reverse=True)
-			if not selected_files: return None
-			file_key = selected_files[0]['link']
-			file_url = self.unrestrict_link(file_key)
-			if not store_to_cloud: Thread(target=self.delete_transfer, args=(transfer_id,)).start()
-			return file_url
-		except Exception as e:
-			kodi_utils.logger('main exception', str(e))
-			if transfer_id: Thread(target=self.delete_transfer, args=(transfer_id,)).start()
-			return None
-
-	def display_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
-			transfer_id = self.create_transfer(magnet_url)
+			torrent_id = self.create_transfer(magnet_url)
 			for key in ['completionDate'] * 3:
 				kodi_utils.sleep(500)
-				transfer_info = self.list_transfer(transfer_id)
+				transfer_info = self.list_transfer(torrent_id)
 				if transfer_info[key]: break
 			else: raise Exception('uncached magnet:\n%s' % magnet_url)
 			torrent_files = [
-				{'link': item['link'], 'filename': item['filename'], 'size': item['size']}
-				for item in transfer_info['links'] if item['filename'].lower().endswith(tuple(extensions))
+				{'link': item['link'],
+				 'size': item['size'],
+				 'torrent_id': torrent_id,
+				 'filename': item['filename']}
+				for item in transfer_info['links']
+				if item['filename'].lower().endswith(tuple(extensions))
 			]
-			self.delete_transfer(transfer_id)
 			return torrent_files
-		except Exception:
-			if transfer_id: self.delete_transfer(transfer_id)
+		except Exception as e:
+			kodi_utils.logger('alldebrid exception', str(e))
+			if torrent_id: self.delete_transfer(torrent_id)
 			return None
 
 	def get_hosts(self):

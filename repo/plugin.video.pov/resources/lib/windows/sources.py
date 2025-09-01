@@ -83,15 +83,15 @@ class SourceResults(BaseDialog):
 
 	def onAction(self, action):
 		chosen_listitem = self.get_listitem(self.window_id)
-		if action == self.info_actions:
-			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem, fanart=self.original_fanart())
-		elif action in self.selection_actions:
+		if action in self.selection_actions:
 			if self.prescrape:
 				if chosen_listitem.getProperty('tikiskins.perform_full_search') == 'true':
 					self.selected = ('perform_full_search', '')
 					return self.close()
 			self.selected = ('play', json.loads(chosen_listitem.getProperty('source')))
 			return self.close()
+		if action == self.info_actions:
+			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem, fanart=self.original_fanart())
 		elif action in self.context_actions:
 			highlight = chosen_listitem.getProperty('tikiskins.highlight')
 			source = json.loads(chosen_listitem.getProperty('source'))
@@ -214,7 +214,8 @@ class SourceResults(BaseDialog):
 	def filter_results(self):
 		choices = [(filter_quality, 'quality'), (filter_provider, 'provider'), (filter_title, 'keyword_title'), (filter_extraInfo, 'extra_info')]
 		list_items = [{'line1': item[0]} for item in choices]
-		kwargs = {'items': json.dumps(list_items), 'heading': filter_str, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
+		heading = filter_str.replace('[B]', '').replace('[/B]', '')
+		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
 		main_choice = select_dialog([i[1] for i in choices], **kwargs)
 		if main_choice is None: return
 		if main_choice in ('quality', 'provider'):
@@ -234,7 +235,7 @@ class SourceResults(BaseDialog):
 			]
 			provider_choices.sort(key=choice_sorter.index)
 			list_items = [{'line1': item} for item in provider_choices]
-			kwargs = {'items': json.dumps(list_items), 'heading': filter_str, 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
+			kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
 			choice = select_dialog(provider_choices, **kwargs)
 			if choice is None: return
 			filtered_list = [i for i in self.item_list if any(x in i.getProperty(filter_property) for x in choice)]
@@ -247,7 +248,7 @@ class SourceResults(BaseDialog):
 			filtered_list = [i for i in self.item_list if all(x in i.getProperty('tikiskins.name') for x in choice)]
 		else:# extra_info
 			list_items = [{'line1': item[0]} for item in extra_info_choices]
-			kwargs = {'items': json.dumps(list_items), 'heading': filter_str, 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
+			kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
 			choice = select_dialog(extra_info_choices, **kwargs)
 			if choice is None: return
 			choice = [i[1] for i in choice]

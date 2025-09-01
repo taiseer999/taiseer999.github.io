@@ -91,11 +91,41 @@ def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_lin
 	except: url = None
 	return url
 
+def resolve_external_sources(source, store_to_cloud, title, season, episode):
+	from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
+	try:
+		extensions = supported_video_extensions()
+		extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
+		api = import_debrid(source['debrid'])()
+		files = api.parse_magnet_pack(source['url'], source['hash'])
+		selected_files = []
+		for i in files or selected_files:
+			torrent_id, filename = i.get('torrent_id'), i['filename'].lower()
+			if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
+			if not filename.endswith(tuple(extensions)): continue
+			if season and not seas_ep_filter(season, episode, filename): continue
+			elif any(x in filename for x in extras_filtering_list): continue
+			selected_files.append(i)
+		if not selected_files: raise Exception('selected_files failed')
+		if not season: selected_files.sort(key=lambda k: k['size'], reverse=True)
+		file_key = next((i['link'] for i in selected_files), None)
+		if source['debrid'] in ('Premiumize.me',): file_url = api.add_headers_to_url(file_key)
+		else: file_url = api.unrestrict_link(file_key)
+		if source['debrid'] in ('Premiumize.me', 'Debrider', 'EasyDebrid'):
+			if store_to_cloud: Thread(target=api.create_transfer, args=(source['url'],)).start()
+		if source['debrid'] in ('Real-Debrid', 'AllDebrid', 'TorBox'):
+			if not store_to_cloud: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
+		return file_url
+	except Exception as e:
+		kodi_utils.logger('resolve_external_sources exception', f"{e}\n{source}")
+		if files and torrent_id: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
+		return None
+
 def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
 	show_busy_dialog()
 	debrid_provider = debrid_provider.replace('Unchecked ', '')
-	api = import_debrid(debrid_provider)
-	pack_choices = api().display_magnet_pack(magnet_url, info_hash)
+	api = import_debrid(debrid_provider)()
+	pack_choices = api.parse_magnet_pack(magnet_url, info_hash)
 	hide_busy_dialog()
 	if not pack_choices: return None if download else notification(32574)
 	pack_choices.sort(key=lambda k: k['filename'].lower())
@@ -110,9 +140,9 @@ def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, d
 	kwargs.update({'items': json.dumps(pack_choices), 'heading': name, 'highlight': highlight})
 	chosen_result = select_dialog(pack_choices, **kwargs)
 	if chosen_result is None: return
-	url_dl, name = chosen_result['link'], chosen_result['filename']
-	if debrid_provider == 'Premiumize.me': link = api().add_headers_to_url(url_dl)
-	else: link = api().unrestrict_link(url_dl)
+	url_dl = chosen_result['link']
+	if debrid_provider == 'Premiumize.me': link = api.add_headers_to_url(url_dl)
+	else: link = api.unrestrict_link(url_dl)
 	url_params = {'mode': 'media_play', 'url': link, 'media_type': 'video'}
 	return kodi_utils.execute_builtin('RunPlugin(%s)' % kodi_utils.build_url(url_params))
 

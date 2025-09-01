@@ -43,7 +43,8 @@ meta_languages = (
 	{'name': 'Polish', 'iso': 'pl'},                    {'name': 'Portuguese', 'iso': 'pt'},
 	{'name': 'Portuguese (Brazil)', 'iso': 'pt-BR'},    {'name': 'Russian', 'iso': 'ru'},
 	{'name': 'Slovenian', 'iso': 'sl'},                 {'name': 'Swedish', 'iso': 'sv'},
-	{'name': 'Turkish', 'iso': 'tr'},                   {'name': 'Chinese', 'iso': 'zh'}
+	{'name': 'Turkish', 'iso': 'tr'},                   {'name': 'Vietnamese', 'iso': 'vi'},
+	{'name': 'Chinese', 'iso': 'zh'}
 )
 
 language_choices =  {

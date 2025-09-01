@@ -495,7 +495,7 @@ class SourceSelect():
 		except: pass
 		self.progress_dialog = None
 
-	def play_file(self, results, source={}, autoplay=False, background=False):
+	def play_file(self, results, source=None, autoplay=False, background=False):
 		def _process():
 			for count, item in enumerate(items, 1):
 				if not background:
@@ -536,29 +536,28 @@ class SourceSelect():
 
 	def resolve_sources(self, item, meta):
 		try:
+			if item.get('scrape_provider') in default_internal_scrapers:
+				return debrid.resolve_internal_sources(
+					item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False)
+				)
 			if item.get('cache_provider') and not 'Uncached' in item['cache_provider']:
 				if meta['media_type'] == 'episode':
 					title = meta['ep_name']
 					season = meta.get('custom_season') or meta.get('season')
 					episode = meta.get('custom_episode') or meta.get('episode')
 				else: title, season, episode = metadata.get_title(meta, self.language), None, None
-				api = debrid.import_debrid(item['debrid'])
 				if item['url'].startswith('magnet'):
 					store_to_cloud = settings.store_resolved_torrent_to_cloud(item['debrid'])
-					function = api().resolve_magnet
+					return debrid.resolve_external_sources(item, store_to_cloud, title, season, episode)
 				else:
 					store_to_cloud = settings.store_resolved_usenet_to_cloud(item['debrid'])
-					function = api().resolve_nzb
-				return function(item['url'], item['hash'], store_to_cloud, title, season, episode)
+					api = debrid.import_debrid(item['debrid'])
+					return api().resolve_nzb(item['url'], item['hash'], store_to_cloud, title, season, episode)
 			if item.get('cache_provider') and 'Uncached' in item['cache_provider']:
 				if item['url'].startswith('magnet'): function = debrid.manual_add_magnet_to_cloud
 				else: function = debrid.manual_add_nzb_to_cloud
 				function({'provider': item['debrid'], 'url': item['url'], 'name': item['name']})
 				return 'uncached'
-			if item.get('scrape_provider') in default_internal_scrapers:
-				return debrid.resolve_internal_sources(
-					item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False)
-				)
 			if item.get('debrid') in ('Real-Debrid', 'Premiumize.me', 'AllDebrid') and not item['source'].lower() == 'torrent':
 				api = debrid.import_debrid(item['debrid'])
 				return api().unrestrict_link(item['url'])

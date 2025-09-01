@@ -91,42 +91,18 @@ class PremiumizeAPI:
 		response = self._post(url, data)
 		return response.get('id', '')
 
-	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
-		try:
-			extensions = supported_video_extensions()
-			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			torrent = self.instant_transfer(magnet_url)
-			if not 'status' in torrent and not torrent['status'] == 'success': return None
-			torrent_files = torrent['content']
-			selected_files = []
-			for i in torrent_files:
-				link, filename, size = i['link'], i['path'].split('/')[-1], i['size']
-				if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
-				if not filename.endswith(tuple(extensions)): continue
-				if (seas_ep_filter(season, episode, filename)
-					if season else
-					not any(x in filename for x in extras_filtering_list)
-				): selected_files += [i]
-			if not selected_files: return None
-			if not season: selected_files.sort(key=lambda k: k['size'], reverse=True)
-			file_key = next((i['link'] for i in selected_files), None)
-			file_url = self.add_headers_to_url(file_key)
-			if store_to_cloud: Thread(target=self.create_transfer, args=(magnet_url,)).start()
-			return file_url
-		except Exception as e:
-			kodi_utils.logger('main exception', str(e))
-			return None
-
-	def display_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
 			torrent = self.instant_transfer(magnet_url)
-			if not 'status' in torrent and not torrent['status'] == 'success': return None
+			torrent_files = torrent['content']
 			torrent_files = [
-				{'link': item['link'], 'filename': item['path'].split('/')[-1], 'size': item['size']}
-				for item in torrent['content'] if item['path'].lower().endswith(tuple(extensions))
+				{'link': item['link'],
+				 'size': item['size'],
+				 'filename': item['path'].split('/')[-1]}
+				for item in torrent_files
+				if item['path'].lower().endswith(tuple(extensions))
 			]
 			return torrent_files
 		except Exception:

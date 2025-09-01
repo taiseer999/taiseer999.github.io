@@ -380,12 +380,9 @@ def build_tvshow_meta(data, user_info, fanarttv_data=None):
 	else: ei_created_by = 'N/A'
 	ei_next_ep = data_get('next_episode_to_air', None)
 	ei_last_ep = data_get('last_episode_to_air', None)
-	if ei_last_ep and not status in finished_show_check:
-		total_aired_eps = sum([
-			i['episode_count']
-			for i in season_data
-			if i['season_number'] < ei_last_ep['season_number'] and i['season_number'] != 0
-		]) + ei_last_ep['episode_number']
+	if ei_last_ep and not status in finished_show_check: total_aired_eps = ei_last_ep['episode_number'] + sum([
+			i['episode_count'] for i in season_data if 0 < i['season_number'] < ei_last_ep['season_number']
+		])
 	extra_info = {'status': status, 'type': _type, 'homepage': homepage, 'created_by': ei_created_by, 'next_episode_to_air': ei_next_ep, 'last_episode_to_air': ei_last_ep}
 	meta_dict = {'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'imdb_id': imdb_id, 'rating': rating, 'plot': plot, 'tagline': tagline, 'votes': votes, 'premiered': premiered, 'year': year,
 				'poster': poster, 'fanart': fanart, 'genre': genre, 'title': title, 'original_title': original_title, 'english_title': english_title, 'season_data': season_data,

@@ -140,45 +140,20 @@ class TorBoxAPI:
 		else: key, result = 'usenetdownload_id', self.add_nzb(link, name)
 		return result.get(key, '')
 
-	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
-		try:
-			extensions = supported_video_extensions()
-			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_single_magnet(info_hash): return None
-			torrent_id = self.create_transfer(magnet_url)
-			torrent_files = self.torrent_info(torrent_id)
-			selected_files = []
-			for i in torrent_files['files']:
-				link, filename, size = '%d,%d' % (torrent_id, i['id']), i['short_name'].lower(), i['size']
-				if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
-				if not filename.endswith(tuple(extensions)): continue
-				if (seas_ep_filter(season, episode, filename)
-					if season else
-					not any(x in filename for x in extras_filtering_list)
-				): selected_files += [{'link': link, 'size': size}]
-			if not selected_files: return None
-			if not season: selected_files.sort(key=lambda k: k['size'], reverse=True)
-			file_key = next((i['link'] for i in selected_files), None)
-			file_url = self.unrestrict_link(file_key)
-			if not store_to_cloud: Thread(target=self.delete_torrent, args=(torrent_id,)).start()
-			return file_url
-		except Exception as e:
-			kodi_utils.logger('main exception', str(e))
-			if torrent_id: Thread(target=self.delete_torrent, args=(torrent_id,)).start()
-			return None
-
-	def display_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
 			torrent_id = self.create_transfer(magnet_url)
 			torrent_files = self.torrent_info(torrent_id)
 			torrent_files = [
-				{'link': '%d,%d' % (torrent_id, item['id']), 'filename': item['short_name'], 'size': item['size']}
-				for item in torrent_files['files'] if item['short_name'].lower().endswith(tuple(extensions))
+				{'link': '%d,%d' % (torrent_id, item['id']),
+				 'size': item['size'],
+				 'torrent_id': torrent_id,
+				 'filename': item['short_name']}
+				for item in torrent_files['files']
+				if item['short_name'].lower().endswith(tuple(extensions))
 			]
-#			self.delete_torrent(torrent_id) # cannot delete the torrent, play link will not persist, will return 500
 			return torrent_files
 		except Exception:
 			if torrent_id: self.delete_torrent(torrent_id)

@@ -41,8 +41,8 @@ class source:
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
 				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
 			else:
-				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 				hdlr = year
+				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
 			results = requests.get(url, timeout=self.timeout) # client.request(url, timeout=5)
 			files = results.json()['streams'] # jsloads(results)['streams']
@@ -94,7 +94,7 @@ class source:
 					'provider': 'torrentsdb', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
 				}
-				if package: item['package'] = package
+				if package: item.update({'package': package, 'true_size': True})
 				if package == 'show': item.update({'last_season': last_season})
 				if episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)

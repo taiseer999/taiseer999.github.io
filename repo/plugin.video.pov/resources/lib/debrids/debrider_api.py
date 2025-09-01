@@ -79,42 +79,18 @@ class DebriderAPI:
 		result = self.add_magnet(magnet)
 		return result.get('data', {}).get('id', '')
 
-	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
-		try:
-			extensions = supported_video_extensions()
-			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			cached = self.check_single_magnet(info_hash)
-			if not cached: return None
-			torrent_files = cached[0][info_hash]
-			selected_files = []
-			for i in torrent_files:
-				link, filename, size = i['download_link'], i['name'].lower().split('/')[-1], i['size']
-				if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
-				if not filename.endswith(tuple(extensions)): continue
-				if (seas_ep_filter(season, episode, filename)
-					if season else
-					not any(x in filename for x in extras_filtering_list)
-				): selected_files += [{'link': link, 'size': size}]
-			if not selected_files: return None
-			if not season: selected_files.sort(key=lambda k: k['size'], reverse=True)
-			file_key = next((i['link'] for i in selected_files), None)
-			file_url = file_key
-			if store_to_cloud: Thread(target=self.add_magnet, args=(magnet_url,)).start()
-			return file_url
-		except Exception as e:
-			kodi_utils.logger('main exception', str(e))
-			return None
-
-	def display_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
 			cached = self.check_single_magnet(info_hash)
 			torrent_files = cached[0][info_hash]
 			torrent_files = [
-				{'link': item['download_link'], 'filename': item['name'].split('/')[-1], 'size': item['size']}
-				for item in torrent_files if item['name'].lower().endswith(tuple(extensions))
+				{'link': item['download_link'],
+				 'size': item['size'],
+				 'filename': item['name'].split('/')[-1]}
+				for item in torrent_files
+				if item['name'].lower().endswith(tuple(extensions))
 			]
 			return torrent_files
 		except Exception:

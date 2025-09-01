@@ -27,8 +27,11 @@ class source:
 		self.min_seeders = 0
 
 	def _headers(self):
-		headers = {'encoded_user_data': 'eyJlbmFibGVfY2F0YWxvZ3MiOiBmYWxzZSwgIm1heF9zdHJlYW1zX3Blcl9yZXNvbHV0aW9uIjogOTksICJ0b3JyZW50X3NvcnRpbmdfcHJpb3JpdHkiOiBbXSwgImNlcnRpZmljYXRpb25fZmlsdGVyIjogWyJEaXNhYmxlIl0sICJudWRpdHlfZmlsdGVyIjogWyJEaXNhYmxlIl19'}
-		return headers
+		return {'encoded_user_data': (
+			'eyJlbmFibGVfY2F0YWxvZ3MiOiBmYWxzZSwgIm1heF9zdHJlYW1zX3Blcl9yZXNvbHV0aW9uIjogOTks'
+			'ICJ0b3JyZW50X3NvcnRpbmdfcHJpb3JpdHkiOiBbXSwgImNlcnRpZmljYXRpb25fZmlsdGVyIjogWyJE'
+			'aXNhYmxlIl0sICJudWRpdHlfZmlsdGVyIjogWyJEaXNhYmxlIl19'
+		)}
 
 	def sources(self, data, hostDict):
 		sources = []
@@ -48,8 +51,8 @@ class source:
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
 				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
 			else:
-				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 				hdlr = year
+				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
 			results = requests.get(url, headers=self._headers(), timeout=self.timeout) # client.request(url, timeout=7)
 			files = results.json()['streams'] # jsloads(results)['streams']

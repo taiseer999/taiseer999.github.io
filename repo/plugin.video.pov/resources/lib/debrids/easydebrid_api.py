@@ -72,40 +72,18 @@ class EasyDebridAPI:
 		result = self._post(url, json=data)
 		return result.get('success', '')
 
-	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
-		try:
-			extensions = supported_video_extensions()
-			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_single_magnet(info_hash): return None
-			torrent = self.instant_transfer(magnet_url)
-			torrent_files = torrent['files']
-			selected_files = []
-			for i in torrent_files:
-				link, filename, size = i['url'], i['filename'].lower(), i['size']
-				if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
-				if not filename.endswith(tuple(extensions)): continue
-				if (seas_ep_filter(season, episode, filename)
-					if season else
-					not any(x in filename for x in extras_filtering_list)
-				): selected_files += [i]
-			if not selected_files: return None
-			if not season: selected_files.sort(key=lambda k: k['size'], reverse=True)
-			file_url = next((i['url'] for i in selected_files), None)
-			return file_url
-		except Exception as e:
-			kodi_utils.logger('main exception', str(e))
-			return None
-
-	def display_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
 			torrent = self.instant_transfer(magnet_url)
 			torrent_files = torrent['files']
 			torrent_files = [
-				{'link': item['url'], 'filename': item['filename'], 'size': item['size']}
-				for item in torrent_files if item['filename'].lower().endswith(tuple(extensions))
+				{'link': item['url'],
+				 'size': item['size'],
+				 'filename': item['filename']}
+				for item in torrent_files
+				if item['filename'].lower().endswith(tuple(extensions))
 			]
 			return torrent_files
 		except Exception:

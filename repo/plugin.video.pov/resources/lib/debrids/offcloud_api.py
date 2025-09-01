@@ -85,46 +85,20 @@ class OffcloudAPI:
 		result = self.add_magnet(magnet)
 		return result.get('requestId', '')
 
-	def resolve_magnet(self, magnet_url, info_hash, store_to_cloud, title, season, episode):
-		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
-		try:
-			extensions = supported_video_extensions()
-			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_single_magnet(info_hash): return None
-			torrent = self.add_magnet(magnet_url)
-			single_file_torrent_list = ['%s/%s' % (torrent['url'], torrent['fileName'])]
-			torrent_id = torrent['requestId']
-			torrent_files = self.torrent_info(torrent_id)
-			torrent_files = single_file_torrent_list if not isinstance(torrent_files, list) else torrent_files
-			selected_files = []
-			for i in torrent_files:
-				link, filename, size = i, i.split('/')[-1].lower(), 0
-				if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
-				if not filename.endswith(tuple(extensions)): continue
-				if (seas_ep_filter(season, episode, filename)
-					if season else
-					not any(x in filename for x in extras_filtering_list)
-				): selected_files += [i]
-			if not selected_files: return None
-			file_key = next(iter(selected_files), None)
-			file_url = self.requote_uri(file_key) # requote, oc why give us a list of urls that may have spaces in name
-			return file_url
-		except Exception as e:
-			kodi_utils.logger('main exception', str(e))
-			if torrent_id: self.delete_torrent(torrent_id)
-			return None
-
-	def display_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
 			torrent_id = self.create_transfer(magnet_url)
 			torrent_files = self.torrent_info(torrent_id)
 			torrent_files = [
-				{'link': self.requote_uri(item), 'filename': item.split('/')[-1], 'size': 0}
-				for item in torrent_files if item.lower().endswith(tuple(extensions))
+				{'link': self.requote_uri(item),
+				 'size': 0,
+				 'torrent_id': torrent_id,
+				 'filename': item.split('/')[-1]}
+				for item in torrent_files
+				if item.lower().endswith(tuple(extensions))
 			]
-#			self.delete_torrent(torrent_id) # cannot delete the torrent, play link will not persist, will return 502
 			return torrent_files
 		except Exception:
 			if torrent_id: self.delete_torrent(torrent_id)
