@@ -3,6 +3,8 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
+- Probable fix for All Debrid.
+- Probable fix for Easynews, thanks Redditor POVAnonyMouse!
 - Added Vietnamese to meta language choices.
 - Added setting to change instance preference for aiostreams, comet, mediafusion, torz.
 - Rewrite aiostreams.

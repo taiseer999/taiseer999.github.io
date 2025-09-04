@@ -1,6 +1,5 @@
-import os
 import json
-import ssl
+import os, ssl
 from threading import Thread
 from urllib.parse import unquote, parse_qsl, urlparse
 from urllib.request import Request, urlopen
@@ -13,8 +12,8 @@ from modules.utils import clean_file_name, clean_title, safe_string, remove_acce
 # from modules.kodi_utils import logger
 
 ls = kodi_utils.local_string
-ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-levels =['../../../..', '../../..', '../..', '..']
+ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
+levels = ['../../../..', '../../..', '../..', '..']
 poster_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
 video_extensions = ('m4v', '3g2', '3gp', 'nsv', 'tp', 'ts', 'ty', 'pls', 'rm', 'rmvb', 'mpd', 'ifo', 'mov', 'qt', 'divx', 'xvid', 'bivx', 'vob', 'nrg', 'img', 'iso', 'udf', 'pva',
 					'wmv', 'asf', 'asx', 'ogm', 'm2v', 'avi', 'bin', 'dat', 'mpg', 'mpeg', 'mp4', 'mkv', 'mk3d', 'avc', 'vp3', 'svq3', 'nuv', 'viv', 'dv', 'fli', 'flv', 'wpl',
@@ -25,8 +24,12 @@ image_extensions = ('jpg', 'jpeg', 'jpe', 'jif', 'jfif', 'jfi', 'bmp', 'dib', 'p
 
 def runner(params):
 	action = params.get('action')
-	if action.startswith('cloud'): Downloader(params).run()
-	elif action == 'meta.single': Downloader(params).run()
+	if action == 'image':
+		for item in ('thumb_url', 'image_url'):
+			image_params = params
+			image_params['url'] = params.pop(item)
+			image_params['media_type'] = item
+			Downloader(image_params).run()
 	elif action == 'meta.pack':
 		from modules.debrid import debrid_packs
 		from modules.source_utils import find_season_in_release_title
@@ -55,12 +58,7 @@ def runner(params):
 				else: pass
 			append(Thread(target=Downloader(item).run))
 		[i.start() for i in threads]
-	elif action == 'image':
-		for item in ('thumb_url', 'image_url'):
-			image_params = params
-			image_params['url'] = params.pop(item)
-			image_params['media_type'] = item
-			Downloader(image_params).run()
+	else: Downloader(params).run()
 
 class Downloader:
 	def __init__(self, params):
@@ -114,30 +112,27 @@ class Downloader:
 			if self.action == 'meta.single':
 				source = json.loads(self.source)
 				url = SourceSelect().resolve_sources(source, self.meta)
-				if 'torbox' in url:
-					from debrids.torbox_api import TorBoxAPI
-					url = TorBoxAPI().add_headers_to_url(url)
 			elif self.action == 'meta.pack':
-				if self.provider == 'Real-Debrid':
-					from debrids.real_debrid_api import RealDebridAPI as debrid_function
-				elif self.provider == 'Premiumize.me':
+				if self.provider == 'Premiumize.me':
 					from debrids.premiumize_api import PremiumizeAPI as debrid_function
+				elif self.provider == 'Real-Debrid':
+					from debrids.real_debrid_api import RealDebridAPI as debrid_function
 				elif self.provider == 'AllDebrid':
 					from debrids.alldebrid_api import AllDebridAPI as debrid_function
 				elif self.provider == 'TorBox':
 					from debrids.torbox_api import TorBoxAPI as debrid_function
 				url = self.params_get('pack_files')['link']
-				if self.provider in ('Real-Debrid', 'AllDebrid'):
-					url = debrid_function().unrestrict_link(url)
-				elif self.provider == 'Premiumize.me':
+				if self.provider == 'Premiumize.me':
 					url = debrid_function().add_headers_to_url(url)
-				elif self.provider == 'TorBox':
+				if self.provider in ('Real-Debrid', 'AllDebrid', 'TorBox'):
 					url = debrid_function().unrestrict_link(url)
-					url = debrid_function().add_headers_to_url(url)
 		else:
 			if self.action.startswith('cloud'):
 				if '_direct' in self.action:
 					url = self.params_get('url')
+				elif 'premiumize' in self.action:
+					from debrids.premiumize_api import PremiumizeAPI
+					url = PremiumizeAPI().add_headers_to_url(url)
 				elif 'realdebrid' in self.action:
 					from debrids.real_debrid import resolve_rd
 					url = resolve_rd(self.params)
@@ -145,22 +140,17 @@ class Downloader:
 					from debrids.alldebrid import resolve_ad
 					url = resolve_ad(self.params)
 				elif 'torbox' in self.action:
-					from debrids.torbox_api import TorBoxAPI
 					from debrids.torbox import resolve_tb
 					url = resolve_tb(self.params)
-					url = TorBoxAPI().add_headers_to_url(url)
-				elif 'premiumize' in self.action:
-					from debrids.premiumize_api import PremiumizeAPI
-					url = PremiumizeAPI().add_headers_to_url(url)
 				elif 'easynews' in self.action:
 					from debrids.easynews import resolve_easynews
 					url = resolve_easynews(self.params)
 		try: headers = dict(parse_qsl(url.rsplit('|', 1)[1]))
 		except: headers = dict('')
+		self.headers = headers
 		try: url = url.split('|')[0]
 		except: pass
 		self.url = url
-		self.headers = headers
 
 	def get_download_folder(self):
 		self.down_folder = download_directory(self.media_type)
@@ -189,11 +179,11 @@ class Downloader:
 
 	def get_filename(self):
 		if self.final_name: final_name = self.final_name
+		elif self.action == 'image':
+			final_name = self.title
 		elif self.action == 'meta.pack':
 			name = self.params_get('pack_files')['filename']
 			final_name = os.path.splitext(urlparse(name).path)[0].split('/')[-1]
-		elif self.action == 'image':
-			final_name = self.title
 		else:
 			name_url = unquote(self.url)
 			file_name = clean_title(name_url.split('/')[-1])
@@ -325,17 +315,17 @@ class Downloader:
 			else: kodi_utils.notification('[I]%s[/I]' % ls(32691), 3000, image)
 		else:
 			playing = kodi_utils.player.isPlaying()
-			if downloaded: text = '[B]%s[/B] : %s' % (title, '[COLOR forestgreen]%s %s[/COLOR]' % (ls(32107), ls(32576)))
-			else: text = '[B]%s[/B] : %s' % (title, '[COLOR red]%s %s[/COLOR]' % (ls(32107), ls(32575)))
-			if not downloaded or not playing:
-				kodi_utils.ok_dialog(text=text)
+			if downloaded: text = '[COLOR forestgreen]%s %s[/COLOR]:[CR][B]%s[/B]' % (ls(32107), ls(32576), title)
+			else: text = '[COLOR red]%s %s[/COLOR]:[CR][B]%s[/B]' % (ls(32107), ls(32575), title)
+			if not downloaded or not playing: kodi_utils.ok_dialog(text=text)
 
 	def confirm_download(self):
 		choice = True
 		if self.action not in ('image', 'meta.pack'):
 			text = '%s[CR]%s' % (ls(32688) % self.mb, ls(32689))
-			if self.action == 'meta.single': choice = open_window(('windows.sources', 'ProgressMedia'), 'progress_media.xml',
-																	meta=self.meta, text=text, enable_buttons=True, true_button=ls(32824), false_button=ls(32828), focus_button=10)
+			if self.action == 'meta.single': 
+				kwargs = dict(meta=self.meta, text=text, enable_buttons=True, true_button=ls(32824), false_button=ls(32828), focus_button=10)
+				choice = open_window(('windows.sources', 'ProgressMedia'), 'progress_media.xml', **kwargs)
 			else: choice = kodi_utils.confirm_dialog(text=text)
 		return choice
 

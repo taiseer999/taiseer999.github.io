@@ -22,8 +22,8 @@ class source:
 			"https://aiostreams.viren070.me",
 			"https://aiostreamsfortheweebs.midnightignite.me"
 		)[int(getSetting('aiostreams.url', '0'))]
-		self.movieSearch_link = f"/api/v1/search"
-		self.tvSearch_link = f"/api/v1/search"
+		self.movieSearch_link = '/api/v1/search'
+		self.tvSearch_link = '/api/v1/search'
 		self.min_seeders = 0
 
 	def _headers(self):

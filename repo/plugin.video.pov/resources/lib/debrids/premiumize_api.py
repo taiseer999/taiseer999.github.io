@@ -58,7 +58,7 @@ class PremiumizeAPI:
 		url = 'transfer/list'
 		return self._get(url)
 
-	def delete_transfer(self, transfer_id):
+	def delete_torrent(self, transfer_id):
 		data = {'id': transfer_id}
 		url = 'transfer/delete'
 		return self._post(url, data)

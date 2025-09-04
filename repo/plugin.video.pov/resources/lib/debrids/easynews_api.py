@@ -33,9 +33,6 @@ class EasyNewsAPI:
 		self.password = get_setting('easynews_password')
 		self.moderation = 1 if get_setting('easynews_moderation') == 'true' else 0
 		self.auth = self._get_auth()
-		self.base_get = self._get
-		self.base_process = self._process_files
-		self.base_resolver = self.resolver
 
 	def _get_auth(self):
 		user_info = '%s:%s' % (self.username, self.password)
@@ -74,13 +71,12 @@ class EasyNewsAPI:
 					if 'type' in item and item['type'].upper() != 'VIDEO': continue
 					elif 'virus' in item and item['virus']: continue
 					elif re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): continue
-					stream_url = down_url + quote('/%s/%s/%s%s/%s%s' % (dl_farm, dl_port, post_hash, ext, post_title, ext))
-					file_dl = stream_url + '|Authorization=%s' % (quote(self.auth))
+					url_dl = down_url + quote('/%s/%s/%s%s/%s%s' % (dl_farm, dl_port, post_hash, ext, post_title, ext))
 					thumbnail = 'https://th.easynews.com/thumbnails-%s/pr-%s.jpg' % (post_hash[0:3], post_hash)
 					result = {'name': post_title,
 							  'size': size,
 							  'rawSize': item['rawSize'],
-							  'url_dl': file_dl,
+							  'url_dl': url_dl,
 							  'version': 'version2',
 							  'full_item': item,
 							  'language': language,
@@ -96,7 +92,42 @@ class EasyNewsAPI:
 		results = list(_process())
 		return results
 
-	def _process_files_v3(self, results):
+	def _translate_search(self, query):
+		params = SEARCH_PARAMS
+		params['safeO'] = self.moderation
+		params['gps'] = query
+		url = self.base_url + self.search_link
+		return url, params
+
+	def _process_search(self, url):
+		results = self._get(url, self.params)
+		files = self._process_files(results)
+		return files
+
+	def _get(self, url, params=None):
+		headers = {'Authorization': self.auth}
+		response = session.get(url, params=params, headers=headers, timeout=timeout).text
+		try: return json.loads(response)
+		except: return response
+
+	def resolve_easynews(self, url_dl):
+		headers = {'Authorization': self.auth}
+		response = session.get(url_dl, headers=headers, stream=True, timeout=timeout*3)
+		if not response.ok: return None
+		chunk = next(response.iter_content(chunk_size=1048576), b'')
+		if len(chunk): resolved_link = url_dl + '|Authorization=%s&seekable=0' % (quote(self.auth))
+		else: resolved_link = None
+		return resolved_link
+
+class EasyNewsAPIv3(EasyNewsAPI):
+	def __init__(self):
+		EasyNewsAPI.__init__(self)
+		self.base_url = 'https://members-beta.easynews.com/3.0/index/basic'
+		self.stream_url = 'https://members-beta.easynews.com/os/3.0/auto/443/%s%s/%s?sid=%s&sig=%s'
+		self.search_link = ''
+		self.regex = 'var INIT_RES = (.+?)};'
+
+	def _process_files(self, results):
 		def _process():
 			for item in files:
 				try:
@@ -125,25 +156,7 @@ class EasyNewsAPI:
 		results = list(_process())
 		return results
 
-	def _translate_search(self, query):
-		params = SEARCH_PARAMS
-		params['safeO'] = self.moderation
-		params['gps'] = query
-		url = self.base_url + self.search_link
-		return url, params
-
-	def _process_search(self, url):
-		results = self.base_get(url, self.params)
-		files = self.base_process(results)
-		return files
-
-	def _get(self, url, params={}):
-		headers = {'Authorization': self.auth}
-		response = session.get(url, params=params, headers=headers, timeout=timeout).text
-		try: return json.loads(response)
-		except: return response
-
-	def _get_v3(self, url, params={}):
+	def _get(self, url, params=None):
 		headers = {'Authorization': self.auth}
 		response = session.get(url, params=params, headers=headers, timeout=timeout).content
 		response = re.compile(self.regex,re.DOTALL).findall(response)[0]
@@ -152,28 +165,11 @@ class EasyNewsAPI:
 		except: return response
 
 	def resolve_easynews(self, url_dl):
-		return self.base_resolver(url_dl)
-
-	def resolver(self, url_dl):
-		return url_dl
-
-	def resolver_v3(self, url_dl):
 		headers = {'Authorization': self.auth}
 		response = session.get(url_dl, headers=headers, stream=True, timeout=timeout)
 		stream_url = response.url
 		resolved_link = stream_url + '|Authorization=%s' % (quote(self.auth))
 		return resolved_link
-
-class EasyNewsAPIv3(EasyNewsAPI):
-	def __init__(self):
-		EasyNewsAPI.__init__(self)
-		self.base_url = 'https://members-beta.easynews.com/3.0/index/basic'
-		self.stream_url = 'https://members-beta.easynews.com/os/3.0/auto/443/%s%s/%s?sid=%s&sig=%s'
-		self.search_link = ''
-		self.regex = 'var INIT_RES = (.+?)};'
-		self.base_get = self._get_v3
-		self.base_process = self._process_files_v3
-		self.base_resolver = self.resolver_v3
 
 def clear_media_results_database():
 	from modules.kodi_utils import clear_property, database, maincache_db

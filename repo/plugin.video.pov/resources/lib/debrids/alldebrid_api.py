@@ -57,7 +57,7 @@ class AllDebridAPI:
 		result = result['magnets']
 		return result
 
-	def delete_transfer(self, transfer_id):
+	def delete_torrent(self, transfer_id):
 		url = 'magnet/delete'
 		url_append = '&id=%s' % transfer_id
 		result = self._get(url, url_append)
@@ -108,7 +108,7 @@ class AllDebridAPI:
 			return torrent_files
 		except Exception as e:
 			kodi_utils.logger('alldebrid exception', str(e))
-			if torrent_id: self.delete_transfer(torrent_id)
+			if torrent_id: self.delete_torrent(torrent_id)
 			return None
 
 	def get_hosts(self):
