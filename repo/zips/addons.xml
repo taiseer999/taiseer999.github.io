@@ -6144,7 +6144,7 @@ v5.2.14 (2017-01-23)
 	</assets>
     <source>https://github.com/peno64/service.subtitles.opensubtitles_by_opensubtitles_dualsub</source>
   </extension>
-</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.7.2" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.opensubtitles-com" name="OpenSubtitles.com" version="1.0.8" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
@@ -6193,6 +6193,8 @@ v5.2.14 (2017-01-23)
 		<description lang="zh_CN">多语种的电影及剧集字幕，每日更新千余条翻译好的字幕。免费下载，提供API接口，已拥有上百万的用户。</description>
 		<disclaimer lang="en_GB">Users need to provide OpenSubtitles.com username and password in add-on configuration. This is our new extension, old opensubtitles.org will not work on this, but the account can be easily imported on opensubtitles.com.</disclaimer>
 		<news>
+v1.0.8 (2025-09-04)
+- performs a query to kodi library if imdb or tmdb ID is missing (thanks you cvanderkam)
 
 v1.0.7 (2025-08-26)
 - added IMDB and TMDB collection on files for more accurate search to the API
