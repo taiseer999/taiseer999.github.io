@@ -5,48 +5,39 @@ from modules import kodi_utils
 from modules.utils import clean_file_name
 # from modules.kodi_utils import logger
 
-ls = kodi_utils.local_string
-build_url = kodi_utils.build_url
-default_easynews_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/easynews.png')
+ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
+down_str = ls(32747)
+default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/easynews.png')
 fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
-
 EasyNews = import_easynews()
 
 def search_easynews(params):
-	__handle__ = int(argv[1])
-	search_name = clean_file_name(unquote(params.get('query')))
-	try:
-		files = EasyNews.search(search_name)
-		easynews_file_browser(files, __handle__)
-	except: pass
-	kodi_utils.set_content(__handle__, 'files')
-	kodi_utils.end_directory(__handle__)
-	kodi_utils.set_view_mode('view.premium')
-
-def easynews_file_browser(files, __handle__):
 	def _builder():
 		for count, item in enumerate(files, 1):
 			try:
 				cm = []
 				item_get = item.get
-				name = clean_file_name(item_get('name')).upper()
 				url_dl = item_get('url_dl')
-				size = str(round(float(int(item_get('rawSize')))/1048576000, 1))
+				thumbnail = item_get('thumbnail', default_icon)
+				name = clean_file_name(item_get('name')).upper()
+				size = str(round(float(int(item_get('rawSize')))/1073741824, 1))
 				display = '%02d | [B]%s GB[/B] | [I]%s [/I]' % (count, size, name)
-				url_params = {'mode': 'easynews.resolve_easynews', 'url_dl': url_dl, 'play': 'true'}
-				url = build_url(url_params)
-				down_file_params = {'mode': 'downloader', 'name': item_get('name'), 'url': url_dl, 'action': 'cloud.easynews_direct', 'image': default_easynews_icon}
+				url = build_url({'mode': 'easynews.resolve_easynews', 'url_dl': url_dl, 'play': 'true'})
+				down_file_params = {'mode': 'downloader', 'action': 'cloud.easynews_direct', 'name': item_get('name'), 'url': url_dl, 'image': default_icon}
 				cm.append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
-				thumbnail = item.get('thumbnail', default_easynews_icon)
-				listitem.setArt({'icon': thumbnail, 'poster': thumbnail, 'thumb': thumbnail, 'fanart': fanart, 'banner': default_easynews_icon})
+				listitem.setArt({'icon': thumbnail, 'poster': thumbnail, 'thumb': thumbnail, 'fanart': fanart, 'banner': default_icon})
 				yield (url, listitem, False)
 			except: pass
-	down_str = ls(32747)
-	make_listitem = kodi_utils.make_listitem
+	search_name = clean_file_name(unquote(params.get('query')))
+	files = EasyNews.search(search_name)
+	__handle__ = int(argv[1])
 	kodi_utils.add_items(__handle__, list(_builder()))
+	kodi_utils.set_content(__handle__, 'files')
+	kodi_utils.end_directory(__handle__)
+	kodi_utils.set_view_mode('view.premium')
 
 def resolve_easynews(params):
 	url_dl = params['url_dl']

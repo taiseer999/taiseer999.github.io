@@ -66,22 +66,16 @@ class EasyNewsAPI:
 			for item in files:
 				try:
 					post_hash, size, post_title, ext, duration = item['0'], item['4'], item['10'], item['11'], item['14']
-					if 'alangs' in item and item['alangs']: language = item['alangs']
-					else: language = ''
+					language = item['alangs'] if 'alangs' in item and item['alangs'] else ''
 					if 'type' in item and item['type'].upper() != 'VIDEO': continue
-					elif 'virus' in item and item['virus']: continue
-					elif re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): continue
+					if 'virus' in item and item['virus']: continue
+					if re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): continue
 					url_dl = down_url + quote('/%s/%s/%s%s/%s%s' % (dl_farm, dl_port, post_hash, ext, post_title, ext))
 					thumbnail = 'https://th.easynews.com/thumbnails-%s/pr-%s.jpg' % (post_hash[0:3], post_hash)
-					result = {'name': post_title,
-							  'size': size,
-							  'rawSize': item['rawSize'],
-							  'url_dl': url_dl,
-							  'version': 'version2',
-							  'full_item': item,
-							  'language': language,
-							  'thumbnail': thumbnail}
-					yield result
+					yield {
+						'version': 'version2', 'full_item': item, 'thumbnail': thumbnail, 'url_dl': url_dl,
+						'name': post_title, 'size': size, 'rawSize': item['rawSize'], 'language': language
+					}
 				except Exception as e:
 					from modules.kodi_utils import logger
 					logger('POV easynews API Exception', str(e))
@@ -115,7 +109,8 @@ class EasyNewsAPI:
 		response = session.get(url_dl, headers=headers, stream=True, timeout=timeout*3)
 		if not response.ok: return None
 		chunk = next(response.iter_content(chunk_size=1048576), b'')
-		if len(chunk): resolved_link = url_dl + '|Authorization=%s&seekable=0' % (quote(self.auth))
+#		if len(chunk): resolved_link = url_dl + '|seekable=0&Authorization=%s' % (quote(self.auth))
+		if len(chunk): resolved_link = response.url + '|seekable=0' # unrestricted/direct link
 		else: resolved_link = None
 		return resolved_link
 
@@ -132,22 +127,16 @@ class EasyNewsAPIv3(EasyNewsAPI):
 			for item in files:
 				try:
 					post_hash, size, post_title, ext, duration, sig = item['hash'], item['bytes'], item['filename'], item['extension'], item['runtime'], item['sig']
-					if 'alangs' in item and item['alangs']: language = item['alangs']
-					else: language = ''
+					language = item['alangs'] if 'alangs' in item and item['alangs'] else ''
 					if 'type' in item and item['type'].upper() != 'VIDEO': continue
-					elif 'virus' in item and item['virus']: continue
-					elif re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): continue
+					if 'virus' in item and item['virus']: continue
+					if re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): continue
 					url_dl = self.stream_url % (post_hash, ext, post_title, sid, sig)
 					thumbnail = 'https://th.easynews.com/thumbnails-%s/pr-%s.jpg' % (post_hash[0:3], post_hash)
-					result = {'name': post_title,
-							  'size': size,
-							  'rawSize': size,
-							  'url_dl': url_dl,
-							  'version': 'version3',
-							  'full_item': item,
-							  'language': language,
-							  'thumbnail': thumbnail}
-					yield result
+					yield {
+						'version': 'version3', 'full_item': item, 'thumbnail': thumbnail, 'url_dl': url_dl,
+						'name': post_title, 'size': size, 'rawSize': size, 'language': language
+					}
 				except Exception as e:
 					from modules.kodi_utils import logger
 					logger('POV easynews API Exception', str(e))

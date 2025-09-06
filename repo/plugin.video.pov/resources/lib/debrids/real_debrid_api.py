@@ -20,7 +20,7 @@ class RealDebridAPI:
 	def _get(self, url):
 		original_url = url
 		url = base_url + url
-		if self.token == '': return kodi_utils.logger(self.__class__.__name__, str(vars(self)))
+		if self.token == '': return None
 #		if '?' not in url: url += '?auth_token=%s' % self.token
 #		else: url += '&auth_token=%s' % self.token
 		session.headers['Authorization'] = f"Bearer {self.token}"
@@ -34,7 +34,7 @@ class RealDebridAPI:
 	def _post(self, url, post_data):
 		original_url = url
 		url = base_url + url
-		if self.token == '': return kodi_utils.logger(self.__class__.__name__, str(vars(self)))
+		if self.token == '': return None
 #		if '?' not in url: url += '?auth_token=%s' % self.token
 #		else: url += '&auth_token=%s' % self.token
 		session.headers['Authorization'] = f"Bearer {self.token}"

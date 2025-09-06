@@ -1,4 +1,5 @@
-import json, re, random, requests
+import json
+import re, random, requests
 from threading import Thread
 from debrids import real_debrid_api, premiumize_api, alldebrid_api, offcloud_api, torbox_api, easydebrid_api, debrider_api
 from caches.debrid_cache import DebridCache
@@ -23,7 +24,8 @@ debrid_list = (
 )
 
 def import_debrid(debrid_provider):
-	return next((i[2] for i in debrid_list if i[0] == debrid_provider), None)
+	cls = next((i[2] for i in debrid_list if i[0] == debrid_provider), None)
+	return cls() if cls else cls
 
 def debrid_enabled():
 	return [i[0] for i in debrid_list if enabled_debrids_check(i[1])]
@@ -32,12 +34,13 @@ def debrid_type_enabled(debrid_type, enabled_debrids):
 	return [i[0] for i in debrid_list if i[0] in enabled_debrids and get_setting('%s.%s.enabled' % (i[1], debrid_type)) == 'true']
 
 def debrid_valid_hosts(enabled_debrids):
-	def _get_hosts(function):
-		debrid_hosts_append(function().get_hosts())
+	def _get_hosts(api):
+		debrid_hosts_append(api.get_hosts())
 	if not enabled_debrids: return []
 	debrid_hosts = []
 	debrid_hosts_append = debrid_hosts.append
-	threads = list(make_thread_list(_get_hosts, [import_debrid(i[0]) for i in debrid_list if i[0] in enabled_debrids], Thread))
+	debrids = (import_debrid(i[0]) for i in debrid_list if i[0] in enabled_debrids)
+	threads = list(make_thread_list(_get_hosts, debrids, Thread))
 	[i.join() for i in threads]
 	return debrid_hosts
 
@@ -45,9 +48,9 @@ def manual_add_magnet_to_cloud(params):
 	params['provider'] = params['provider'].replace('Unchecked ', '')
 	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
-	function = import_debrid(params['provider'])
-	result = function().create_transfer(params['url'])
-	function().clear_cache()
+	api = import_debrid(params['provider'])
+	api.clear_cache()
+	result = api.create_transfer(params['url'])
 	hide_busy_dialog()
 	if result: notification(32576)
 	else: notification(32575)
@@ -56,9 +59,9 @@ def manual_add_nzb_to_cloud(params):
 	params['provider'] = params['provider'].replace('Unchecked ', '')
 	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
-	function = import_debrid(params['provider'])
-	result = function().create_transfer(params['url'], params['name'])
-	function().clear_cache()
+	api = import_debrid(params['provider'])
+	api.clear_cache()
+	result = api.create_transfer(params['url'], params['name'])
 	hide_busy_dialog()
 	if result: notification(32576)
 	else: notification(32575)
@@ -96,7 +99,7 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 	try:
 		extensions = supported_video_extensions()
 		extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-		api = import_debrid(source['debrid'])()
+		api = import_debrid(source['debrid'])
 		files = api.parse_magnet_pack(source['url'], source['hash'])
 		selected_files = []
 		for i in files or selected_files:
@@ -124,7 +127,7 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
 	show_busy_dialog()
 	debrid_provider = debrid_provider.replace('Unchecked ', '')
-	api = import_debrid(debrid_provider)()
+	api = import_debrid(debrid_provider)
 	pack_choices = api.parse_magnet_pack(magnet_url, info_hash)
 	hide_busy_dialog()
 	if not pack_choices: return None if download else notification(32574)
@@ -147,10 +150,11 @@ def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, d
 	return kodi_utils.execute_builtin('RunPlugin(%s)' % kodi_utils.build_url(url_params))
 
 def tio_check_cache(token, imdb, season, episode, collector):
+	from fenom import client
 	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
 	else: url = 'movie/%s.json' % (imdb)
 	url = 'https://torrentio.strem.fun/%s/stream/%s' % (token, url)
-	headers = {'User-Agent': 'curl/7.55.1', 'Accept': 'application/json'}
+	headers = {'User-Agent': client.randomagent(), 'Accept': 'application/json'}
 	pattern = re.compile(r'\b\w{40}\b')
 	try:
 		results = requests.get(url, headers=headers, timeout=3.05)

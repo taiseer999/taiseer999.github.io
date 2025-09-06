@@ -439,8 +439,8 @@ class SourceSelect():
 
 	def _sort_uncached_torrents(self, results):
 		results.sort(key=lambda k: 'Unchecked' in k.get('cache_provider', ''), reverse=False)
-		results.sort(key=lambda k: 'Uncached' in k.get('cache_provider', ''), reverse=False)
 		if self.display_uncached_torrents or get_property('fs_filterless_search') == 'true':
+			results.sort(key=lambda k: 'Uncached' in k.get('cache_provider', ''), reverse=False)
 			return results
 #		uncached = [i for i in results if 'Uncached' in i.get('cache_provider', '')]
 #		cached = [i for i in results if not i in uncached]
@@ -552,7 +552,7 @@ class SourceSelect():
 				else:
 					store_to_cloud = settings.store_resolved_usenet_to_cloud(item['debrid'])
 					api = debrid.import_debrid(item['debrid'])
-					return api().resolve_nzb(item['url'], item['hash'], store_to_cloud, title, season, episode)
+					return api.resolve_nzb(item['url'], item['hash'], store_to_cloud, title, season, episode)
 			if item.get('cache_provider') and 'Uncached' in item['cache_provider']:
 				if item['url'].startswith('magnet'): function = debrid.manual_add_magnet_to_cloud
 				else: function = debrid.manual_add_nzb_to_cloud
@@ -560,7 +560,7 @@ class SourceSelect():
 				return 'uncached'
 			if item.get('debrid') in ('Real-Debrid', 'Premiumize.me', 'AllDebrid') and not item['source'].lower() == 'torrent':
 				api = debrid.import_debrid(item['debrid'])
-				return api().unrestrict_link(item['url'])
+				return api.unrestrict_link(item['url'])
 			return item['url']
 		except: pass
 

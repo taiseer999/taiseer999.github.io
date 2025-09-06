@@ -5,7 +5,7 @@
 
 #from json import loads as jsloads
 import re, requests
-#from fenom import client
+from fenom import client
 from fenom import source_utils
 
 
@@ -45,7 +45,7 @@ class source:
 				hdlr = year
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
-			headers = {'User-Agent': 'curl/7.55.1', 'Accept': 'application/json'}
+			headers = {'User-Agent': client.randomagent(), 'Accept': 'application/json'}
 			results = requests.get(url, headers=headers, timeout=self.timeout) # client.request(url, timeout=5)
 			files = results.json()['streams'] # jsloads(results)['streams']
 			_INFO = re.compile(r'👤.*')
