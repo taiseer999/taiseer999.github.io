@@ -94,7 +94,7 @@
         </include>
     </include>
 
-    <include name="Dialog_Background_BlurDimension_DialogMainMenu">
+    <include name="Dialog_Background_BlurDimension_DialogminiMenu">
         <include content="Dialog_Background_Blur">
             <param name="shadow">$PARAM[shadow]</param>
             <param name="transparency">$PARAM[transparency]</param>
@@ -348,7 +348,7 @@
                 <visible>$PARAM[visible]</visible>
                 <control type="group">
                     <include>Dimension_Furniture_Gutters</include>
-                    <include content="Furniture_MainLabel">
+                    <include content="Furniture_miniLabel">
                         <param name="id">$PARAM[id]</param>
                         <param name="textcolor">$PARAM[textcolor]</param>
                         <param name="label">$PARAM[label]</param>
@@ -655,7 +655,7 @@
                     <height>40</height>
                     <centertop>60</centertop>
                     <textcolor>dialog_fg_90</textcolor>
-                    <font>font_main_bold</font>
+                    <font>font_mini_bold</font>
                     <label>$PARAM[header]</label>
                 </control>
                 <control type="image">
@@ -683,7 +683,7 @@
                     <centertop>50%</centertop>
                     <height>80</height>
                     <control type="label">
-                        <font>font_main_bold</font>
+                        <font>font_mini_bold</font>
                         <height>40</height>
                         <include content="Object_Left" condition="$PARAM[icon_withtext]">
                             <param name="left">100</param>
@@ -698,7 +698,7 @@
                         <label>$PARAM[toplabel]</label>
                     </control>
                     <control type="label">
-                        <font>font_main</font>
+                        <font>font_mini</font>
                         <height>40</height>
                         <include content="Object_Right" condition="![$PARAM[icon_withtext]]">
                             <param name="right">100</param>
@@ -884,7 +884,7 @@
                 <include content="Dialog_Background_Blur">
                 </include>
                 <control type="image">
-                    <texture colordiffuse="main_fg_12" border="20">common/dialog.png</texture>
+                    <texture colordiffuse="mini_fg_12" border="20">common/dialog.png</texture>
                 </control>
                 <control type="group">
                     <include>Dialog_Group</include>
@@ -948,7 +948,7 @@
                         <textcolor>dialog_fg_90</textcolor>
                         <label>$INFO[Container($PARAM[id]).ListItem.Label]</label>
                         <align>center</align>
-                        <font>font_main_bold</font>
+                        <font>font_mini_bold</font>
                     </control>
                     <control type="label">
                         <aligny>center</aligny>
