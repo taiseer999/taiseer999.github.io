@@ -17,12 +17,6 @@ timeout = 10.0
 session = requests.Session()
 session.mount('https://', requests.adapters.HTTPAdapter(max_retries=1))
 
-def import_easynews():
-	''' API version setting currently disabled '''
-	# if get_setting('easynews.api_version') == '0': return EasyNewsAPI()
-	# else: return EasyNewsAPIv3()
-	return EasyNewsAPI()
-
 class EasyNewsAPI:
 	def __init__(self):
 		self.base_url = 'https://members.easynews.com'
@@ -104,60 +98,15 @@ class EasyNewsAPI:
 		try: return json.loads(response)
 		except: return response
 
-	def resolve_easynews(self, url_dl):
+	def resolve_easynews(self, url_dl, spool=False):
 		headers = {'Authorization': self.auth}
 		response = session.get(url_dl, headers=headers, stream=True, timeout=timeout*3)
 		if not response.ok: return None
+		if spool: return response
 		chunk = next(response.iter_content(chunk_size=1048576), b'')
 #		if len(chunk): resolved_link = url_dl + '|seekable=0&Authorization=%s' % (quote(self.auth))
 		if len(chunk): resolved_link = response.url + '|seekable=0' # unrestricted/direct link
 		else: resolved_link = None
-		return resolved_link
-
-class EasyNewsAPIv3(EasyNewsAPI):
-	def __init__(self):
-		EasyNewsAPI.__init__(self)
-		self.base_url = 'https://members-beta.easynews.com/3.0/index/basic'
-		self.stream_url = 'https://members-beta.easynews.com/os/3.0/auto/443/%s%s/%s?sid=%s&sig=%s'
-		self.search_link = ''
-		self.regex = 'var INIT_RES = (.+?)};'
-
-	def _process_files(self, results):
-		def _process():
-			for item in files:
-				try:
-					post_hash, size, post_title, ext, duration, sig = item['hash'], item['bytes'], item['filename'], item['extension'], item['runtime'], item['sig']
-					language = item['alangs'] if 'alangs' in item and item['alangs'] else ''
-					if 'type' in item and item['type'].upper() != 'VIDEO': continue
-					if 'virus' in item and item['virus']: continue
-					if re.match(r'^\d+s', duration) or re.match(r'^[0-5]m', duration): continue
-					url_dl = self.stream_url % (post_hash, ext, post_title, sid, sig)
-					thumbnail = 'https://th.easynews.com/thumbnails-%s/pr-%s.jpg' % (post_hash[0:3], post_hash)
-					yield {
-						'version': 'version3', 'full_item': item, 'thumbnail': thumbnail, 'url_dl': url_dl,
-						'name': post_title, 'size': size, 'rawSize': size, 'language': language
-					}
-				except Exception as e:
-					from modules.kodi_utils import logger
-					logger('POV easynews API Exception', str(e))
-		files = results.get('data', [])
-		sid = results.get('sid')
-		results = list(_process())
-		return results
-
-	def _get(self, url, params=None):
-		headers = {'Authorization': self.auth}
-		response = session.get(url, params=params, headers=headers, timeout=timeout).content
-		response = re.compile(self.regex,re.DOTALL).findall(response)[0]
-		response = response + '}'
-		try: return json.loads(response)
-		except: return response
-
-	def resolve_easynews(self, url_dl):
-		headers = {'Authorization': self.auth}
-		response = session.get(url_dl, headers=headers, stream=True, timeout=timeout)
-		stream_url = response.url
-		resolved_link = stream_url + '|Authorization=%s' % (quote(self.auth))
 		return resolved_link
 
 def clear_media_results_database():

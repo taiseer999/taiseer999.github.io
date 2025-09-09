@@ -254,7 +254,7 @@ class Indexer(Episodes):
 		try:
 			params_get = self.params.get
 			__handle__ = int(sys.argv[1])
-			view_type, content_type = 'view.episodes', 'episodes'
+			view_type, content_type = 'view.episodes_lists', 'episodes'
 			sort_type, category = 'unsorted', ls(params_get('name'))
 			mode = params_get('mode')
 			if   'in_progress' in mode:

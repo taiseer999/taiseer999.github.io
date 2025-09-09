@@ -292,14 +292,14 @@ class Navigator:
 		tvshows_str, season_str, episode_str = ls(32029), ls(32537), ls(32506)
 		premium_files_str, ep_lists_str = ls(32485), '%s %s' % (episode_str, lists_str)
 		n_ins, reset_str = _in_str % (set_views_str.upper(), ''), 'Reset All Views'
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.main', 'content': '', 'exclude_external': 'true'                , 'name': root_str         }, 'settings.png', n_ins)
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.movies', 'content': 'movies', 'exclude_external': 'true'        , 'name': movies_str       }, 'settings.png', n_ins)
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.tvshows', 'content': 'tvshows', 'exclude_external': 'true'      , 'name': tvshows_str      }, 'settings.png', n_ins)
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.seasons', 'content': 'seasons', 'exclude_external': 'true'      , 'name': season_str       }, 'settings.png', n_ins)
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.episodes', 'content': 'episodes', 'exclude_external': 'true'    , 'name': episode_str      }, 'settings.png', n_ins)
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.episode_lists', 'content': 'episodes','exclude_external': 'true', 'name': ep_lists_str     }, 'settings.png', n_ins)
-		self._add_item({'mode': 'choose_view', 'view_type': 'view.premium', 'content': 'files', 'exclude_external': 'true'        , 'name': premium_files_str}, 'settings.png', n_ins)
-		self._add_item({'mode': 'clear_view', 'view_type': 'all'                                                                  , 'name': reset_str        }, 'settings.png', n_ins, False)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.main', 'content': '', 'exclude_external': 'true'                  , 'name': root_str         }, 'settings.png', n_ins)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.movies', 'content': 'movies', 'exclude_external': 'true'          , 'name': movies_str       }, 'settings.png', n_ins)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.tvshows', 'content': 'tvshows', 'exclude_external': 'true'        , 'name': tvshows_str      }, 'settings.png', n_ins)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.seasons', 'content': 'seasons', 'exclude_external': 'true'        , 'name': season_str       }, 'settings.png', n_ins)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.episodes', 'content': 'episodes', 'exclude_external': 'true'      , 'name': episode_str      }, 'settings.png', n_ins)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.episodes_lists', 'content': 'episodes', 'exclude_external': 'true', 'name': ep_lists_str     }, 'settings.png', n_ins)
+		self._add_item({'mode': 'choose_view', 'view_type': 'view.premium', 'content': 'files', 'exclude_external': 'true'          , 'name': premium_files_str}, 'settings.png', n_ins)
+		self._add_item({'mode': 'clear_view', 'view_type': 'all'                                                                    , 'name': reset_str        }, 'settings.png', n_ins, False)
 		self._end_directory()
 
 	def log_utils(self):

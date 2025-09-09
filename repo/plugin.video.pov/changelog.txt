@@ -2,9 +2,14 @@
   [COLOR dodgerblue][B]CREDITS[/B][/COLOR]
 - Fen, Venom, Mr-Kodi.
 
+  [COLOR dodgerblue][B]Version 5.09[/B][/COLOR]
+- Fixed Next Episodes to respect SET VIEWS: Episodes Lists setting.
+- Added Play (Seek Enabled) to Easynews results context menu.
+- Added Play (From Download) to Easynews results context menu.
+
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
-- Probable fix for All Debrid.
 - Probable fix for Easynews, thanks Redditor POVAnonyMouse!
+- Probable fix for All Debrid.
 - Added Vietnamese to meta language choices.
 - Added setting to change instance preference for aiostreams, comet, mediafusion, torz.
 - Rewrite aiostreams.

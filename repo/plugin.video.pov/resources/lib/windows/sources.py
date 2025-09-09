@@ -44,6 +44,7 @@ extra_info_str, down_file_str, browse_pack_str, down_pack_str, cloud_str = ls(32
 filter_str, clr_filter_str, filters_ignored, start_full_scrape = ls(32152), ls(32153), ls(32686), ls(32529)
 filter_quality, filter_provider, filter_title, filter_extraInfo = ls(32154), ls(32157), ls(32679), ls(32169)
 run_plugin_str, ignored_str = 'RunPlugin(%s)', '[B][COLOR dodgerblue](%s)[/COLOR][/B]'
+en_seek_str, en_dl_str = '[B]PLAY (SEEK ENABLED)[/B]', '[B]PLAY (FROM DOWNLOAD)[/B]'
 string, upper, lower = str, str.upper, str.lower
 
 class SourceResults(BaseDialog):
@@ -344,6 +345,13 @@ class ResultsContextMenu(BaseDialog):
 		cache_provider = self.item.get('cache_provider', 'None')
 		magnet_url = self.item.get('url', 'None')
 		info_hash = self.item.get('hash', 'None')
+		if 'easynews' in scrape_provider:
+			self.item_list.append(self.make_contextmenu_item(en_seek_str, run_plugin_str, {
+				'mode': 'easynews.seekable_easynews', 'source': source, 'meta': meta_json, 'name': name, 'url_dl': self.item['url_dl']
+			}))
+			self.item_list.append(self.make_contextmenu_item(en_dl_str, run_plugin_str, {
+				'mode': 'easynews.spool_easynews', 'source': source, 'meta': meta_json, 'name': name
+			}))
 		if self.filter_applied: self.item_list.append(self.make_contextmenu_item(clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
 		else: self.item_list.append(self.make_contextmenu_item(filter_str, run_plugin_str, {'mode': 'results_filter'}))
 		self.item_list.append(self.make_contextmenu_item(extra_info_str, run_plugin_str, {'mode': 'results_info'}))

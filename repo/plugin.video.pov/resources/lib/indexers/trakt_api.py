@@ -627,21 +627,19 @@ def trakt_get_activity():
 def trakt_sync_activities(force_update=False):
 	def _get_timestamp(date_time):
 		return int(time.mktime(date_time.timetuple()))
-	def _compare(latest, cached):
+	def _compare(latest, cached, res_format='%Y-%m-%dT%H:%M:%S.%fZ'):
 		try: result = _get_timestamp(js2date(latest, res_format)) > _get_timestamp(js2date(cached, res_format))
-		except Exception as e:
-			result = True
-			logger('error in trakt _compare', str(e))
-			logger('error in trakt _compare - latest info', latest)
+		except: result = True
 		return result
 	if not get_setting('trakt_user', ''): return 'no account'
 	if force_update:
 		check_databases()
 		trakt_cache.clear_all_trakt_cache_data(refresh=False)
-	res_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 	trakt_cache.clear_trakt_calendar()
-	try: latest = trakt_get_activity()
-	except: return 'failed'
+	latest = trakt_get_activity()
+	if not latest:
+		trakt_cache.clear_all_trakt_cache_data(refresh=False)
+		return 'failed'
 	cached = trakt_cache.reset_activity(latest)
 	if not _compare(latest['all'], cached['all']):
 		trakt_cache.clear_trakt_list_contents_data('liked_lists')
