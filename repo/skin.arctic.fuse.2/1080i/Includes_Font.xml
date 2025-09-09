@@ -143,11 +143,11 @@
 
         <!-- Hint -->
         <param name="size_heavy_hint">17</param>
-        <param name="size_light_hint">14</param>
+        <param name="size_light_hint">17</param>
 
         <!-- Tiny -->
         <param name="size_heavy_tiny">23</param>
-        <param name="size_light_tiny">20</param>
+        <param name="size_light_tiny">21</param>
 
         <!-- Mini -->
         <param name="size_heavy_mini">26</param>
