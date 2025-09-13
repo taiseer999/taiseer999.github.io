@@ -47,13 +47,13 @@
                             <orientation>vertical</orientation>
                             <itemgap>20</itemgap>
                             <control type="label">
-                                <font>font_midi_bold</font>
+                                <font>font_main_bold</font>
                                 <height>40</height>
                                 <textcolor>main_fg_90</textcolor>
                                 <label>$LOCALIZE[20037]</label>
                             </control>
                             <control type="label">
-                                <font>font_midi_plot</font>
+                                <font>font_main_plot</font>
                                 <height>40</height>
                                 <label fallback="19055">$INFO[ListItem.AddonSummary]</label>
                             </control>
@@ -69,7 +69,7 @@
                                 </control>
                                 <control type="label">
                                     <left>60</left>
-                                    <font>font_midi</font>
+                                    <font>font_main</font>
                                     <label>$INFO[ListItem.AddonCreator]</label>
                                 </control>
                             </control>
@@ -85,7 +85,7 @@
                                 </control>
                                 <control type="label">
                                     <left>60</left>
-                                    <font>font_midi</font>
+                                    <font>font_main</font>
                                     <label>$INFO[ListItem.AddonType]</label>
                                 </control>
                             </control>
@@ -101,7 +101,7 @@
                                 </control>
                                 <control type="label">
                                     <left>60</left>
-                                    <font>font_midi</font>
+                                    <font>font_main</font>
                                     <label>$INFO[ListItem.AddonVersion,v,]</label>
                                 </control>
                             </control>
@@ -117,14 +117,14 @@
                                 </control>
                                 <control type="label">
                                     <left>60</left>
-                                    <font>font_midi</font>
+                                    <font>font_main</font>
                                     <label>$VAR[Label_AddonInfo_LastUpdated]</label>
                                 </control>
                             </control>
 
                             <control type="textbox">
                                 <top>40</top>
-                                <font>font_midi_plot</font>
+                                <font>font_main_plot</font>
                                 <height>160</height>
                                 <autoscroll>false</autoscroll>
                                 <pagecontrol>61</pagecontrol>
