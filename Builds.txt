@@ -101,7 +101,20 @@ fanart="https://i.postimg.cc/pXdPTFGm/Screenshot-2025-04-24-at-2-46-58-PM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="بيلد بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
+description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
+name="estuary.modv2 CoreELEC Arabic/English"
+version="1.0"
+url="hhttps://abukarimbuilds.tashouri.workers.dev/download.aspx?file=ejXJbnI2ULg0ijgzVzgvyfsPEnbIcJpaxRyUtYkSt4RnFIg9RD4p9fdl7z5aHeGv&expiry=kEuK1kNjuaIvCqJ%2F%2Bx%2F%2F5A%3D%3D&mac=cc364dfc19c496aab09e268150f514bcde8b94747f9ee1d8ed3701a35090a56f"
+minor="http://"
+gui="http://"
+kodi="21"
+theme="http://your.themes.url"
+icon="https://i.postimg.cc/FHw5RNN1/Screenshot-2025-09-15-at-12-43-01-PM.png"
+fanart="https://i.postimg.cc/FHw5RNN1/Screenshot-2025-09-15-at-12-43-01-PM.png"
+preview="http://"
+adult="no"
+info="http://your.info.url"
+description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
 
