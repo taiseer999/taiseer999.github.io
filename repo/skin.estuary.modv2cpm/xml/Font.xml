@@ -57,7 +57,7 @@
 		<font>
 			<name>font25_narrow</name>
 			<filename>NotoSans-Regular.ttf</filename>
-			<size>25</size>
+			<size>23</size>
 			<style>lighten</style>
 			<linespacing>0.8</linespacing>
 		</font>
