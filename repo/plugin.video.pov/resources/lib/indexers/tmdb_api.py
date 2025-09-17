@@ -24,9 +24,9 @@ def get_tmdb(url, errors=True):
 		response = session.get(url, timeout=timeout)
 		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
+		return result
 	except requests.exceptions.RequestException as e:
 		if errors: logger('tmdb error', str(e))
-	return result
 
 def tmdb_keyword_id(query):
 	string = 'tmdb_keyword_id_%s' % query
@@ -440,9 +440,9 @@ def list_request(url, params=None, data=None, method=None):
 		response = session.request(method, url, params=params, json=data, headers=headers, timeout=list_timeout)
 		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
+		return result
 	except requests.exceptions.RequestException as e:
 		logger('tmdb error', str(e))
-	return result
 
 def list_details(list_id, page=1):
 	string = 'tmdblist_detail_%s_%s' % (list_id, page)

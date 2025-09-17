@@ -89,7 +89,7 @@ class Discover:
 		if not title: return
 		if self.media_type == 'movie': function = tmdb_movies_title_year
 		else: function = tmdb_tv_title_year
-		year = kodi_utils.dialog.input(heading_base % ('%s (%s)' % (ls(32543), ls(32669))), type=kodi_utils.numeric_input)
+		year = kodi_utils.dialog.numeric(0, heading_base % ('%s (%s)' % (ls(32543), ls(32669))))
 		results = function(title, year)['results']
 		if len(results) == 0: return kodi_utils.notification(32575)
 		choice_list = []

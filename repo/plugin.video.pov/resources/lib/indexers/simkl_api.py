@@ -18,9 +18,9 @@ def call_simkl(url):
 		response = session.get(url, params=params, timeout=timeout)
 		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
+		return result
 	except requests.exceptions.RequestException as e:
 		kodi_utils.logger('simkl error', str(e))
-	return result
 
 def simkl_list(url):
 	try:

@@ -28,9 +28,9 @@ class OffcloudAPI:
 			response = session.request(method, url, params=params, json=data, timeout=timeout)
 			result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 			if not response.ok: response.raise_for_status()
+			return result
 		except requests.exceptions.RequestException as e:
 			kodi_utils.logger('offcloud error', str(e))
-		return result
 
 	def _get(self, url, params=None):
 		return self._request('get', url, params=params)

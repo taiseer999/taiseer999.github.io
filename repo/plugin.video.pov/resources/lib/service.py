@@ -1,10 +1,10 @@
-import datetime, time
+import time
 from threading import Thread
 from modules import kodi_utils, settings
 
-logger = kodi_utils.logger
-ls, monitor, path_exists, translate_path, is_playing = kodi_utils.local_string, kodi_utils.monitor, kodi_utils.path_exists, kodi_utils.translate_path, kodi_utils.player.isPlaying
-get_property, set_property, clear_property, get_visibility = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.get_visibility
+logger, ls, path_exists, translate_path = kodi_utils.logger, kodi_utils.local_string, kodi_utils.path_exists, kodi_utils.translate_path
+monitor, is_playing, get_visibility = kodi_utils.monitor, kodi_utils.player.isPlaying, kodi_utils.get_visibility
+get_property, set_property, clear_property = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property
 get_setting, set_setting, make_settings_dict = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.make_settings_dict
 
 def initializeDatabases():
@@ -16,19 +16,55 @@ def initializeDatabases():
 def checkSettingsFile():
 	logger('POV', 'CheckSettingsFile Service Starting')
 	clear_property('pov_settings')
-	profile_dir = translate_path('special://profile/addon_data/plugin.video.pov/')
-	if not path_exists(profile_dir): kodi_utils.make_directorys(profile_dir)
-	settings_xml = translate_path('special://profile/addon_data/plugin.video.pov/settings.xml')
+	path = kodi_utils.get_addoninfo('profile')
+	profile_dir, settings_xml = translate_path(path), translate_path(path + 'settings.xml')
+	if not path_exists(profile_dir):
+		kodi_utils.make_directorys(profile_dir)
 	if not path_exists(settings_xml):
-		__addon__ = kodi_utils.addon()
-#		addon_version = __addon__.getAddonInfo('version')
-#		__addon__.setSetting('version_number', addon_version)
-		__addon__.setSetting('kodi_menu_cache', 'true')
+		kodi_utils.addon().setSetting('kodi_menu_cache', 'true')
 		kodi_utils.sleep(500)
 	make_settings_dict()
 	set_property('pov_kodi_menu_cache', get_setting('kodi_menu_cache'))
 	set_property('pov_rli_fix', get_setting('rli_fix'))
 	return logger('POV', 'CheckSettingsFile Service Finished')
+
+def databaseMaintenance():
+	from modules.cache import clean_databases
+	current_time = int(time.time())
+	next_clean = current_time + 259200 # 3 days
+	due_clean = int(get_setting('database.maintenance.due', '0'))
+	if current_time < due_clean: return
+	logger('POV', 'Database Maintenance Service Starting')
+	clean_databases(current_time, database_check=False, silent=True)
+	set_setting('database.maintenance.due', str(next_clean))
+	return logger('POV', 'Database Maintenance Service Finished')
+
+def viewsSetWindowProperties():
+	logger('POV', 'ViewsSetWindowProperties Service Starting')
+	kodi_utils.set_view_properties()
+	return logger('POV', 'ViewsSetWindowProperties Service Finished')
+
+def reuseLanguageInvokerCheck():
+	import xml.etree.ElementTree as ET
+	logger('POV', 'ReuseLanguageInvokerCheck Service Starting')
+	addon_xml = translate_path('special://home/addons/plugin.video.pov/addon.xml')
+	tree = ET.parse(addon_xml)
+	root = tree.getroot()
+	current_addon_setting = get_setting('reuse_language_invoker', 'true')
+	text = '%s[CR]%s' % ('[B]Reuse Language Invoker[/B] SETTING/XML mismatch', 'POV will reload your profile to refresh the addon.xml')
+	item, refresh = next(root.iter('reuselanguageinvoker'), None), False
+	if item is None: kodi_utils.notification(text.split('[CR]')[0])
+	if not item is None and not item.text == current_addon_setting:
+		item.text = current_addon_setting
+		tree.write(addon_xml)
+		refresh = True
+	if refresh and kodi_utils.confirm_dialog(text=text): kodi_utils.execute_builtin('LoadProfile(%s)' % kodi_utils.get_infolabel('system.profilename'))
+	return logger('POV', 'ReuseLanguageInvokerCheck Service Finished')
+
+def autoRun():
+	logger('POV', 'AutoRun Service Starting')
+	if settings.auto_start_pov(): kodi_utils.execute_builtin('RunAddon(plugin.video.pov)')
+	return logger('POV', 'AutoRun Service Finished')
 
 def clearSubs():
 	logger('POV', 'Clear Subtitles Service Starting')
@@ -38,47 +74,6 @@ def clearSubs():
 	for i in files:
 		if i.startswith('POVSubs_') or i.endswith(sub_formats): kodi_utils.delete_file(translate_path(subtitle_path % i))
 	return logger('POV', 'Clear Subtitles Service Finished')
-
-def reuseLanguageInvokerCheck():
-	import xml.etree.ElementTree as ET
-	logger('POV', 'ReuseLanguageInvokerCheck Service Starting')
-	addon_xml = translate_path('special://home/addons/plugin.video.pov/addon.xml')
-	tree = ET.parse(addon_xml)
-	root = tree.getroot()
-	current_addon_setting = get_setting('reuse_language_invoker', 'true')
-	refresh, text = True, '%s\n%s' % ('[B]Reuse Language Invoker[/B] SETTING/XML mismatch', 'POV will reload your profile to refresh the addon.xml')
-	for item in root.iter('reuselanguageinvoker'):
-		if item.text == current_addon_setting: refresh = False; break
-		item.text = current_addon_setting
-		tree.write(addon_xml)
-		break
-	if refresh and kodi_utils.confirm_dialog(text=text): kodi_utils.execute_builtin('LoadProfile(%s)' % kodi_utils.get_infolabel('system.profilename'))
-	return logger('POV', 'ReuseLanguageInvokerCheck Service Finished')
-
-def viewsSetWindowProperties():
-	logger('POV', 'ViewsSetWindowProperties Service Starting')
-	kodi_utils.set_view_properties()
-	return logger('POV', 'ViewsSetWindowProperties Service Finished')
-
-def autoRun():
-	logger('POV', 'AutoRun Service Starting')
-	if settings.auto_start_pov(): kodi_utils.execute_builtin('RunAddon(plugin.video.pov)')
-	return logger('POV', 'AutoRun Service Finished')
-
-def databaseMaintenance():
-	def _get_timestamp(date_time):
-		return int(time.mktime(date_time.timetuple()))
-	from modules.cache import clean_databases
-	time = datetime.datetime.now()
-	current_time = _get_timestamp(time)
-	due_clean = int(get_setting('database.maintenance.due', '0'))
-	if current_time >= due_clean:
-		logger('POV', 'Database Maintenance Service Starting')
-		monitor.waitForAbort(10)
-		clean_databases(current_time, database_check=False, silent=True)
-		next_clean = str(int(_get_timestamp(time + datetime.timedelta(days=3))))
-		set_setting('database.maintenance.due', next_clean)
-		return logger('POV', 'Database Maintenance Service Finished')
 
 def traktMonitor():
 	from caches.trakt_cache import clear_trakt_list_contents_data

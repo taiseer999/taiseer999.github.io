@@ -245,7 +245,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.stingers_checked = True
 		try:
 			poster = self.meta.get('poster') or poster_empty
-			if not Stingers.stingers_enabled(): return
+			if not self.meta.get('stingers', '') == 'true': return
 			Thread(target=Stingers().run, args=(self.tmdb_id, poster)).start()
 		except: pass
 
@@ -350,10 +350,6 @@ class Stingers:
 		'duringcreditsstinger': 'During Credit Scene',
 		'aftercreditsstinger': 'After Credit Scene'
 	}
-
-	@staticmethod
-	def stingers_enabled():
-		return get_setting('stingers.enable') == 'true'
 
 	def run(self, tmdb_id, poster):
 		if not tmdb_id: return

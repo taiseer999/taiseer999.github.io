@@ -23,9 +23,9 @@ def call_mdblist(url, params=None, json=None, method=None):
 		response = session.request(method or 'get', url, params=params, json=json, timeout=timeout)
 		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
+		return result
 	except requests.exceptions.RequestException as e:
 		kodi_utils.logger('mdblist error', str(e))
-	return result
 
 def mdb_searchlists(query):
 	query = requests.utils.quote(query)

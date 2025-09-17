@@ -6,8 +6,8 @@ from urllib.parse import urlencode, parse_qsl
 
 window, dialog, progressDialog, progressDialogBG = xbmcgui.Window(10000), xbmcgui.Dialog(), xbmcgui.DialogProgress(), xbmcgui.DialogProgressBG()
 player, xbmc_player, monitor, xbmc_monitor, execute_JSON = xbmc.Player(), xbmc.Player, xbmc.Monitor(), xbmc.Monitor, xbmc.executeJSONRPC
-get_infolabel, get_addoninfo, get_visibility, window_xml_dialog = xbmc.getInfoLabel, Addon().getAddonInfo, xbmc.getCondVisibility, xbmcgui.WindowXMLDialog
-window_xml_info_action, numeric_input = xbmcgui.ACTION_SHOW_INFO, xbmcgui.INPUT_NUMERIC
+get_infolabel, get_addoninfo, get_visibility = xbmc.getInfoLabel, Addon().getAddonInfo, xbmc.getCondVisibility
+window_xml_info_action, window_xml_dialog = xbmcgui.ACTION_SHOW_INFO, xbmcgui.WindowXMLDialog
 window_xml_closing_actions = (xbmcgui.ACTION_PARENT_DIR, xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_STOP, xbmcgui.ACTION_NAV_BACK)
 window_xml_selection_actions = (xbmcgui.ACTION_SELECT_ITEM, xbmcgui.ACTION_MOUSE_START)
 window_xml_context_actions = (xbmcgui.ACTION_CONTEXT_MENU, xbmcgui.ACTION_MOUSE_RIGHT_CLICK, xbmcgui.ACTION_MOUSE_LONG_CLICK)

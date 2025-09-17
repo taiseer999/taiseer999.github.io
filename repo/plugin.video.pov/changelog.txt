@@ -12,11 +12,11 @@
 - Probable fix for All Debrid.
 - Added Vietnamese to meta language choices.
 - Added setting to change instance preference for aiostreams, comet, mediafusion, torz.
+  Recommended to clear External Scrapers Cache after switch.
 - Rewrite aiostreams.
 - Rewrite stremthru torz p2p, improved season/show pack detection.
 - Changed subtitles, removed utf-8 filter.
 - Changed TorBox authorization process.
-  Recommended to clear External Scrapers Cache after switch.
 - Fix for TorBox usenet results as unchecked, thanks Redditor!
 - Added Debrider as a debrid provider.
 - Minor fixes.

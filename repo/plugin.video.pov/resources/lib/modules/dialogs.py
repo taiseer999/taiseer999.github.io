@@ -724,11 +724,11 @@ def scrape_with_custom_values(media_type, meta, season=None, episode=None):
 	if not custom_title: return
 	play_params['custom_title'] = custom_title
 	if media_type in ('movie', 'movies'):
-		custom_year = kodi_utils.dialog.input('%s (%s)' % (ls(32543), ls(32669)), type=kodi_utils.numeric_input, defaultt=str(meta['year']))
+		custom_year = kodi_utils.dialog.numeric(0, '%s (%s)' % (ls(32543), ls(32669)), defaultt=str(meta['year']))
 		if custom_year: play_params.update({'custom_year': custom_year})
 	else:
-		custom_season = kodi_utils.dialog.input('%s (%s)' % (ls(32537).title(), ls(32669)), type=kodi_utils.numeric_input, defaultt=str(season))
-		custom_episode = kodi_utils.dialog.input('%s (%s)' % (ls(32203).title(), ls(32669)), type=kodi_utils.numeric_input, defaultt=str(episode))
+		custom_season = kodi_utils.dialog.numeric(0, '%s (%s)' % (ls(32537).title(), ls(32669)), defaultt=str(season))
+		custom_episode = kodi_utils.dialog.numeric(0, '%s (%s)' % (ls(32203).title(), ls(32669)), defaultt=str(episode))
 		if custom_season and custom_episode: play_params.update({'custom_season': custom_season, 'custom_episode': custom_episode})
 	kwargs = {'meta': meta, 'enable_buttons': True, 'true_button': ls(32824), 'false_button': ls(32828), 'focus_button': 11}
 	choice = open_window(('windows.sources', 'ProgressMedia'), 'progress_media.xml', text='%s?' % ls(32006), **kwargs)

@@ -65,8 +65,8 @@ def spool_easynews(params):
 	*_, free_space = shutil.disk_usage(kodi_utils.databases_path)
 	free_space = free_space / 1073741824
 	if not free_space > size * 1.05: return kodi_utils.notification('Insufficient Free Space')
-	path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'easynews_spool')
-	file_path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'easynews_spool/' + name)
+	path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'spool')
+	file_path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'spool' + '/%s' % name)
 	if not kodi_utils.path_exists(path): kodi_utils.make_directory(path)
 	kodi_utils.progressDialogBG.create('EasyNews Spooling File', 'POV Working...')
 	response = EasyNews().resolve_easynews(url_dl, spool=True)

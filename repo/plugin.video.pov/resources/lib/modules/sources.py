@@ -86,6 +86,7 @@ class SourceSelect():
 		self.size_filter = int(get_setting('results.size_filter', '0'))
 		self.include_unknown_size = get_setting('results.include.unknown.size') == 'true'
 		self.include_3D_results = get_setting('include_3d_results') == 'true'
+		self.stingers = 'true' if get_setting('stingers.enable') == 'true' else 'false'
 		if get_setting('results.language_filter') == 'true': self.priority_language = get_setting('results.language')
 		else: self.priority_language = None
 		self._update_meta()
@@ -333,7 +334,7 @@ class SourceSelect():
 
 	def _update_meta(self):
 		if self.from_library: self.meta.update({'plot': self.plot if self.plot else self.meta.get('plot'), 'from_library': self.from_library, 'ep_name': self.ep_name})
-		self.meta.update({'media_type': self.media_type, 'season': self.season, 'episode': self.episode, 'background': self.background})
+		self.meta.update({'media_type': self.media_type, 'stingers': self.stingers, 'season': self.season, 'episode': self.episode, 'background': self.background})
 		if self.custom_title: self.meta['custom_title'] = self.custom_title
 		if self.custom_year: self.meta['custom_year'] = self.custom_year
 

@@ -38,12 +38,13 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 		)
 		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()
+		if 'X-Sort-By' in response.headers and 'X-Sort-How' in response.headers:
+			sort_by, sort_how = response.headers['X-Sort-By'], response.headers['X-Sort-How']
+			result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
+		if pagination: result = result, response.headers.get('X-Pagination-Page-Count', page)
+		return result
 	except requests.exceptions.RequestException as e:
 		logger('trakt error', str(e))
-	if 'X-Sort-By' in response.headers and 'X-Sort-How' in response.headers:
-		sort_by, sort_how = response.headers['X-Sort-By'], response.headers['X-Sort-How']
-		result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
-	return (result, response.headers.get('X-Pagination-Page-Count', page)) if pagination else result
 
 def get_trakt(params):
 	result = call_trakt(

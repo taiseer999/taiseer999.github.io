@@ -17,22 +17,13 @@ class source:
 	hasMovies = True
 	hasEpisodes = True
 	def __init__(self):
-		params = (
-			'eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2Us'
-			'InJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUi'
-			'LCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJk'
-			'ZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhj'
-			'bHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3Zl'
-			'X3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxz'
-			'ZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
-		)
 		self.language = ['en']
 		self.base_link = (
 			"https://comet.elfhosted.com",
 			"https://cometfortheweebs.midnightignite.me"
 		)[int(getSetting('comet.url', '0'))]
-		self.movieSearch_link = f"/{params}/stream/movie/%s.json"
-		self.tvSearch_link = f"/{params}/stream/series/%s:%s:%s.json"
+		self.movieSearch_link = '/stream/movie/%s.json'
+		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -51,10 +42,10 @@ class source:
 				season = data['season']
 				episode = data['episode']
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
-				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
+				url = '%s/%s%s' % (self.base_link, self._params(), self.tvSearch_link % (imdb, season, episode))
 			else:
 				hdlr = year
-				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
+				url = '%s/%s%s' % (self.base_link, self._params(), self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
 			results = requests.get(url, timeout=self.timeout) # client.request(url, timeout=7)
 			files = results.json()['streams'] # jsloads(results)['streams']
@@ -114,4 +105,15 @@ class source:
 			except:
 				source_utils.scraper_error('COMET')
 		return sources
+
+	def _params(self):
+		return (
+			'eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2Us'
+			'InJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUi'
+			'LCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJk'
+			'ZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhj'
+			'bHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3Zl'
+			'X3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxz'
+			'ZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
+		)
 

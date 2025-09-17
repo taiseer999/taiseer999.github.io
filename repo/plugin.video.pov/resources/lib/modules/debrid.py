@@ -91,8 +91,9 @@ def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_lin
 				with kodi_utils.open_file(url_dl) as f: url = f.read()
 			else: url = url_dl
 		else: url = url_dl
-	except: url = None
-	return url
+		return url
+	except Exception as e:
+		kodi_utils.logger('resolve_internal_sources exception', str(e))
 
 def resolve_external_sources(source, store_to_cloud, title, season, episode):
 	from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
@@ -122,7 +123,6 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 	except Exception as e:
 		kodi_utils.logger('resolve_external_sources exception', f"{e}\n{source}")
 		if files and torrent_id: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
-		return None
 
 def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
 	show_busy_dialog()
@@ -153,15 +153,14 @@ def tio_check_cache(token, imdb, season, episode, collector):
 	from fenom import client
 	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
 	else: url = 'movie/%s.json' % (imdb)
-	url = 'https://torrentio.strem.fun/%s/stream/%s' % (token, url)
+	url = 'https://torrentio.strem.fun/debridoptions=nocatalog|%s/stream/%s' % (token, url)
 	headers = {'User-Agent': client.randomagent(), 'Accept': 'application/json'}
 	pattern = re.compile(r'\b\w{40}\b')
 	try:
-		results = requests.get(url, headers=headers, timeout=3.05)
-		files = results.json()['streams'] if results.ok else []
-		files = [pattern.findall(file['url'])[-1] for file in files if '+' in file['name'] and 'url' in file]
-		collector += files
-	except: pass
+		results = requests.get(url, headers=headers, timeout=5.05)
+		files = results.json()['streams']
+		collector.extend(pattern.findall(file['url'])[-1] for file in files if '+' in file['name'] and 'url' in file)
+	except Exception as e: kodi_utils.logger('tio error', str(e))
 
 def dmm_check_cache(unchecked_hashes_chunk, imdb, collector): # DMM API Allows max 100 hashes per request.
 	""" do not thread multiple calls, abusing the api will get it turned off
@@ -169,17 +168,16 @@ def dmm_check_cache(unchecked_hashes_chunk, imdb, collector): # DMM API Allows m
 	from fenom import client
 	from fenom.providers.torrents.dmm import get_secret
 	if len(unchecked_hashes_chunk) > 100: unchecked_hashes_chunk = random.sample(unchecked_hashes_chunk, 100)
-	availability_check_link = 'https://debridmediamanager.com/api/availability/check'
+	hashes = [i for i in unchecked_hashes_chunk if len(i) == 40]
+	url = 'https://debridmediamanager.com/api/availability/check'
 	headers = {'User-Agent': client.randomagent(), 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*'}
 	dmmProblemKey, solution = get_secret()
-	data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb}
-	data.update({'hashes': [i for i in unchecked_hashes_chunk if len(i) == 40]})
+	data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb, 'hashes': hashes}
 	try:
-		results = requests.post(availability_check_link, headers=headers, json=data, timeout=5.05)
-		files = results.json()['available'] if results.ok else []
-		files = [file['hash'] for file in files if 'hash' in file]
-		collector += files
-	except: pass
+		results = requests.post(url, headers=headers, json=data, timeout=5.05)
+		files = results.json()['available']
+		collector.extend(file['hash'] for file in files if 'hash' in file)
+	except Exception as e: kodi_utils.logger('dmm error', str(e))
 
 class DebridCheck:
 	hash_list = []
