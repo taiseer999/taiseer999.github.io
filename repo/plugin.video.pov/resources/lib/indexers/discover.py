@@ -1,18 +1,16 @@
-import json
 import sys
+import json
 from indexers.tmdb_api import base_url, tmdb_api_key, tmdb_keyword_id, tmdb_people_info, tmdb_company_id, tmdb_movies_title_year, tmdb_tv_title_year
 from modules import kodi_utils, meta_lists
 # logger = kodi_utils.logger
 
-database = kodi_utils.database
-urlencode = kodi_utils.urlencode
+maincache_db = kodi_utils.maincache_db
 ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
-poster = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/discover.png')
-people_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/people.png')
+fanart = kodi_utils.get_addoninfo('fanart')
+poster = kodi_utils.media_path('box_office.png')
+default_icon = kodi_utils.media_path('discover.png')
+people_icon = kodi_utils.media_path('people.png')
 poster_url, profile_url = 'https://image.tmdb.org/t/p/w780%s', 'https://image.tmdb.org/t/p/h632/%s'
-icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
 base_str, heading_base = '[B]%s:[/B]  [I]%s[/I]', '%s %s - %s' % (ls(32036), ls(32451), '%s')
 include_base_str, exclude_base_str = '%s %s' % (ls(32188), '%s'), '%s %s' % (ls(32189), '%s')
 _ln_ins, menu_export_str, fold_export_str= '[B]%s %s:[/B]  [I]%s[/I]', 'MENU EXPORT', 'FOLDER EXPORT'
@@ -273,26 +271,19 @@ class Discover:
 		try: actors = tmdb_people_info(query)
 		except: actors = None
 		if not actors: return
-		actor_list = []
-		append = actor_list.append
+		for item in actors:
+			known_for_list = [i.get('title', 'NA') for i in item['known_for']]
+			known_for_list = [i for i in known_for_list if not i == 'NA']
+			item['icon'] = icon = profile_url % item['profile_path'] if item.get('profile_path') else people_icon
+			item['line1'] = item['name']
+			item['line2'] = ', '.join(known_for_list) if known_for_list else ''
 		if len(actors) > 1:
-			for item in actors:
-				name = item['name']
-				known_for_list = [i.get('title', 'NA') for i in item['known_for']]
-				known_for_list = [i for i in known_for_list if not i == 'NA']
-				known_for = ', '.join(known_for_list) if known_for_list else ''
-				if item.get('profile_path'): icon = profile_url % item['profile_path']
-				else: icon = people_icon
-				append({'line1': name, 'line2': known_for, 'icon': icon, 'name': name, 'id': item['id']})
-			heading = heading_base % ls(32664)
-			kwargs = {'items': json.dumps(actor_list), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'true'}
-			choice = kodi_utils.select_dialog(actor_list, **kwargs)
+			kwargs = {'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'true'}
+			kwargs = {'items': json.dumps(actors), 'heading': heading_base % ls(32664)}
+			choice = kodi_utils.select_dialog(actors, **kwargs)
 			if choice is None: return self._set_property()
-			actor_id = choice['id']
-			actor_name = choice['name']
-		else:
-			actor_id = [item['id'] for item in result][0]
-			actor_name = [item['name'] for item in result][0]
+			actor_id, actor_name = choice['id'], choice['name']
+		else: actor_id, actor_name = [item['id'] for item in actors][0], [item['name'] for item in actors][0]
 		if actor_id:
 			values = ('&with_cast=%s' % str(actor_id), safe_string(remove_accents(actor_name)))
 			self._process(key, values)
@@ -406,7 +397,7 @@ class Discover:
 		__handle__ = int(sys.argv[1])
 		media_type = media_type if media_type else self.media_type
 		string = 'pov_discover_%s_%%' % media_type
-		dbcon = database.connect(kodi_utils.maincache_db, timeout=40.0, isolation_level=None)
+		dbcon = kodi_utils.database_connect(maincache_db, isolation_level=None)
 		dbcur = dbcon.cursor()
 		dbcur.execute("""PRAGMA synchronous = OFF""")
 		dbcur.execute("""PRAGMA journal_mode = OFF""")
@@ -447,11 +438,11 @@ class Discover:
 		name = self.discover_params.get('name', '...')
 		query = self.discover_params.get('final_string', '')
 		self._add_dir({'mode': mode, 'action': action, 'query': query, 'name': name, 'list_name': ls(32666) % name}, isFolder=True,
-					icon=kodi_utils.translate_path(icon_directory % 'search.png'))
+					icon=kodi_utils.media_path('search.png'))
 		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'list_name': base_str % (menu_export_str, name)},
-					icon=kodi_utils.translate_path(icon_directory % 'item_jump.png'))
+					icon=kodi_utils.media_path('item_jump.png'))
 		self._add_dir({'mode': 'discover.export', 'media_type': self.media_type, 'list_name': base_str % (fold_export_str , name), 'key': 'folder'},
-					icon=kodi_utils.translate_path(icon_directory % 'folder.png'))
+					icon=kodi_utils.media_path('folder.png'))
 
 	def _action(self, key):
 		dict_item = self.discover_params
@@ -620,7 +611,7 @@ def set_history(media_type, name, query):
 	main_cache.set(string, data, expiration=timedelta(days=7))
 
 def remove_from_history(params):
-	dbcon = database.connect(kodi_utils.maincache_db)
+	dbcon = kodi_utils.database_connect(maincache_db, isolation_level=None)
 	dbcur = dbcon.cursor()
 	dbcur.execute("""DELETE FROM maincache WHERE id = ?""", (params['data_id'],))
 	dbcon.commit()

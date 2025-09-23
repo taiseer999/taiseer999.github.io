@@ -1,5 +1,4 @@
-import json
-from sys import argv
+import json, sys
 from threading import Thread
 from caches import watched_cache as ws
 from windows import open_window
@@ -10,8 +9,8 @@ from modules.utils import sec2time, clean_file_name, make_title_slug
 
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
 ls, get_setting, notification = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.notification
-poster_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-fanart_empty = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
+fanart_empty = kodi_utils.get_addoninfo('fanart')
+poster_empty = kodi_utils.media_path('box_office.png')
 
 class POVPlayer(kodi_utils.xbmc_player):
 	progress_callback = []
@@ -75,10 +74,9 @@ class POVPlayer(kodi_utils.xbmc_player):
 							'rating': rating, 'premiered': premiered, 'studio': studio, 'year': self.year, 'genre': genre, 'tagline': self.meta_get('tagline'), 'code': self.imdb_id,
 							'imdbnumber': self.imdb_id, 'director': self.meta_get('director'), 'writer': self.meta_get('writer'), 'votes': votes})
 					else:
-						videoinfo = listitem.getVideoInfoTag(offscreen=True)
+						videoinfo = infoTagger(listitem, self.meta)
 						videoinfo.setCast(make_cast_list(self.meta_get('cast', [])))
 						videoinfo.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
-						kodi_utils.infoTagger(videoinfo, self.meta)
 						videoinfo.setMediaType('movie')
 				else:
 					if KODI_VERSION < 20:
@@ -88,10 +86,9 @@ class POVPlayer(kodi_utils.xbmc_player):
 							'tvshowtitle': self.title, 'size': '0', 'plot': plot, 'year': self.year, 'votes': votes, 'premiered': premiered, 'studio': studio, 'genre': genre,
 							'season': self.season, 'episode': self.episode, 'duration': duration, 'rating': rating, 'FileNameAndPath': url})
 					else:
-						videoinfo = listitem.getVideoInfoTag(offscreen=True)
+						videoinfo = infoTagger(listitem, self.meta)
 						videoinfo.setCast(make_cast_list(self.meta_get('cast', [])))
 						videoinfo.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-						kodi_utils.infoTagger(videoinfo, self.meta)
 						videoinfo.setMediaType('episode')
 				if settings.get_fanart_data():
 					banner, clearart, landscape = self.meta_get('banner'), self.meta_get('clearart'), self.meta_get('landscape')
@@ -109,7 +106,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			self.playback_event = False
 			if library_item and not background:
 				listitem.setProperty('IsPlayable', 'true')
-				kodi_utils.set_resolvedurl(int(argv[1]), listitem)
+				kodi_utils.set_resolvedurl(int(sys.argv[1]), listitem)
 			else: self.play(url, listitem)
 			self.monitor()
 		except: return
@@ -246,7 +243,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 		try:
 			poster = self.meta.get('poster') or poster_empty
 			if not self.meta.get('stingers', '') == 'true': return
-			Thread(target=Stingers().run, args=(self.tmdb_id, poster)).start()
+			Thread(target=get_stingers, args=(self.tmdb_id, poster)).start()
 		except: pass
 
 	def info_next_ep(self):
@@ -291,21 +288,19 @@ class Subtitles(kodi_utils.xbmc_player):
 			except: available_sub_language = ''
 			if not available_sub_language == self.language1: return False
 			if self.auto_enable == 'true': self.showSubtitles(True)
-			notification(32852)
+			notification(32852, icon=poster)
 			return True
 		def _downloaded_subs():
 			files = kodi_utils.list_dirs(subtitle_path)[1]
 			final_match = next((i for i in files if i == search_filename), None)
 			if not final_match: return False
-			subtitle = os.path.join(subtitle_path, final_match)
-			notification(32792)
+			subtitle = '%s%s' % (subtitle_path, final_match)
+			notification(32792, icon=poster)
 			return subtitle
 		def _searched_subs():
 			search_language = kodi_utils.convert_language(self.language1, format='short')
 			result = subtitles.search(imdb_id, search_language, season, episode)
-			if not result:
-				notification(32793)
-				return False
+			if not result: return notification(32793, icon=poster)
 			result.sort(key=lambda k: k['isHearingImpaired'], reverse=False)
 			if self.subs_action == 'select' and len(result) > 1:
 				try: video_path = self.getPlayingFile()
@@ -321,13 +316,11 @@ class Subtitles(kodi_utils.xbmc_player):
 				chosen_sub = kodi_utils.select_dialog(result, **kwargs)
 				self.pause()
 			else: chosen_sub = next(iter(result), None)
-			if not chosen_sub:
-				notification(32736)
-				return False
+			if not chosen_sub: return notification(32736, icon=poster)
 			try: lang = kodi_utils.convert_language(chosen_sub['language'])
 			except: lang = chosen_sub['language']
 			final_filename = sub_filename + '_%s.%s' % (lang, chosen_sub['format'])
-			final_path = os.path.join(subtitle_path, final_filename)
+			final_path = '%s%s' % (subtitle_path, final_filename)
 			subtitle = subtitles.download(chosen_sub['url'], final_path)
 			kodi_utils.sleep(1000)
 			return subtitle
@@ -335,7 +328,7 @@ class Subtitles(kodi_utils.xbmc_player):
 		import os
 		from indexers import subtitles
 		kodi_utils.sleep(2500)
-		subtitle_path = kodi_utils.translate_path('special://temp/')
+		subtitle_path = 'special://temp/'
 		sub_filename = 'POVSubs_%s_%s_%s' % (imdb_id, season, episode) if season else 'POVSubs_%s' % imdb_id
 		search_filename = sub_filename + '_%s.srt' % self.language1
 		subtitle = _video_file_subs()
@@ -345,18 +338,41 @@ class Subtitles(kodi_utils.xbmc_player):
 		subtitle = _searched_subs()
 		if subtitle: return self.setSubtitles(subtitle)
 
-class Stingers:
-	stingers = {
-		'duringcreditsstinger': 'During Credit Scene',
-		'aftercreditsstinger': 'After Credit Scene'
-	}
+def get_stingers(tmdb_id, poster):
+	if not tmdb_id: return
+	from indexers.tmdb_api import movie_keywords
+	stingers = {'duringcreditsstinger': 'During Credit Scene', 'aftercreditsstinger': 'After Credit Scene'}
+	keywords = movie_keywords(tmdb_id) or []
+	keywords = [str(i['name']) for i in keywords]
+	if all((i in keywords for i in stingers.keys())): message = 'Dual Credit Scenes'
+	else: stinger = next((v for k, v in stingers.items() if k in keywords), None)
+	if stinger: notification(stinger, time=6000, icon=poster)
 
-	def run(self, tmdb_id, poster):
-		if not tmdb_id: return
-		from indexers.tmdb_api import movie_keywords
-		keywords = movie_keywords(tmdb_id) or []
-		keywords = [str(i['name']) for i in keywords]
-		if all((i in keywords for i in self.stingers.keys())): message = 'Dual Credit Scenes'
-		else: message = next((v for k, v in self.stingers.items() if k in keywords), None)
-		if message: notification(message, time=6000, icon=poster)
+def infoTagger(listitem, meta=None):
+	infotag = listitem.getVideoInfoTag(offscreen=True)
+	if not meta: return infotag
+	for key, val in (
+		('country', 'setCountries'), ('director', 'setDirectors'),
+		('duration', 'setDuration'), ('genre', 'setGenres'),
+		('imdbnumber', 'setIMDBNumber'), ('mediatype', 'setMediaType'),
+		('mpaa', 'setMpaa'), ('original_title', 'setOriginalTitle'),
+		('playcount', 'setPlaycount'), ('plot', 'setPlot'),
+		('premiered', 'setFirstAired' if 'episode' in meta else 'setPremiered'),
+		('rating', 'setRating'), ('studio', 'setStudios'),
+		('tagline', 'setTagLine'), ('title', 'setTitle'),
+		('trailer', 'setTrailer'), ('votes', 'setVotes'),
+		('writer', 'setWriters'), ('year', 'setYear'),
+		# tvshow exclusive
+		('air_date', 'setPremiered'), ('aired', 'setFirstAired'),
+		('ep_name', 'setTitle'), ('episode', 'setEpisode'), ('season', 'setSeason'),
+		('status', 'setTvShowStatus'), ('tvshowtitle', 'setTvShowTitle')
+	):
+		try:
+			if not key in meta or not (arg := meta[key]): continue
+			if   key in {'director', 'genre', 'studio', 'writer'}: arg = arg.split(', ')
+			elif key in {'episode', 'season', 'year'}: arg = int(arg)
+			func = getattr(infotag, val)
+			func(arg)
+		except: pass
+	return infotag
 

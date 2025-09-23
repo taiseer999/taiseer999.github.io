@@ -1,7 +1,7 @@
 import json
 from threading import Thread
 from datetime import datetime, timedelta
-from windows import BaseDialog
+from windows import BaseDialog, icon as basedialog_icon, fanart as basedialog_fanart
 from caches import watched_cache as ws
 from indexers import people, metadata, tmdb_api, imdb_api, mdblist_api
 from indexers.images import Images
@@ -10,24 +10,26 @@ from modules.sources import SourceSelect
 from modules.downloader import runner
 from modules.meta_lists import networks
 from modules.utils import get_datetime
-from modules.kodi_utils import translate_path, close_all_dialog, hide_busy_dialog, ok_dialog, fetch_kodi_imagecache, local_string as ls
+from modules.kodi_utils import media_path, close_all_dialog, hide_busy_dialog, ok_dialog, fetch_kodi_imagecache, local_string as ls
 # from modules.kodi_utils import logger
 
-backup_poster = translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-backup_fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
-backup_thumbnail = translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-backup_cast_thumbnail = translate_path('special://home/addons/plugin.video.pov/resources/media/people.png')
-tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
-button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
+fanart_empty = basedialog_fanart
+poster_empty = media_path('box_office.png')
+backup_thumbnail = media_path('box_office.png')
+backup_cast_thumbnail = media_path('people.png')
+tmdb_image_base = tmdb_api.tmdb_image_base
+button_ids = 10, 11, 12, 13, 14, 15, 16, 17, 50
 cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2050, 2051, 2052, 2053, 2054, 2055
 videos_id, posters_id, backdrops_id, year_id, genres_id, networks_id, collection_id = 2056, 2057, 2058, 2059, 2060, 2061, 2062
-playbrowse_id, trailer_id, keywords_id, images_id, extrainfo_id, genre_id, directorrandom_id, trakt_id, plot_id = button_ids
+playbrowse_id, trailer_id, keywords_id, images_id, extrainfo_id, genre_id, director_id, trakt_id, plot_id = button_ids
 tmdb_list_ids = (recommended_id, year_id, genres_id, networks_id, collection_id)
 imdb_list_ids = (reviews_id, trivia_id, blunders_id, parentsguide_id)
 art_ids = (posters_id, backdrops_id)
-parentsguide_levels = {'mild': ls(32996), 'moderate': ls(32997), 'severe': ls(32998)}
-parentsguide_inputs = {'Sex & Nudity': (ls(32990), 'porn.png'), 'Violence & Gore': (ls(32991), 'war.png'), 'Profanity': (ls(32992), 'bad_language.png'),
-						'Alcohol, Drugs & Smoking': (ls(32993), 'drugs_alcohol.png'), 'Frightening & Intense Scenes': (ls(32994), 'horror.png')}
+parentsguide_dict = {
+	'Sex & Nudity': (ls(32990), 'porn.png'), 'Violence & Gore': (ls(32991), 'war.png'), 'Profanity': (ls(32992), 'bad_language.png'),
+	'Alcohol, Drugs & Smoking': (ls(32993), 'drugs_alcohol.png'), 'Frightening & Intense Scenes': (ls(32994), 'horror.png'),
+	'mild': ls(32996), 'moderate': ls(32997), 'severe': ls(32998)
+}
 
 class Extras(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -38,11 +40,12 @@ class Extras(BaseDialog):
 
 	def onInit(self):
 		for i in (
-			self.set_poster, self.make_cast, self.make_recommended, self.make_reviews,
-			self.make_trivia, self.make_blunders, self.make_parentsguide,
-			self.make_videos, self.make_year, self.make_genres, self.make_network
-		): Thread(target=i).start()
-		for i in ('posters', 'backdrops'): Thread(target=self.make_artwork, args=(i,)).start()
+			Thread(target=self.set_poster), Thread(target=self.make_cast), Thread(target=self.make_recommended),
+			Thread(target=self.make_reviews), Thread(target=self.make_trivia), Thread(target=self.make_blunders),
+			Thread(target=self.make_parentsguide), Thread(target=self.make_videos), Thread(target=self.make_year),
+			Thread(target=self.make_genres), Thread(target=self.make_network),
+			Thread(target=self.make_artwork, args=('posters',)), Thread(target=self.make_artwork, args=('backdrops',))
+		): i.start()
 		if self.media_type == 'movie': Thread(target=self.make_collection).start()
 		else: self.setProperty('tikiskins.extras.make.collection', 'false')
 
@@ -96,7 +99,7 @@ class Extras(BaseDialog):
 				close_all_dialog()
 				self.selected = self.folder_runner % self.build_url(genre_params)
 				self.close()
-			elif controlID == directorrandom_id:
+			elif controlID == director_id:
 				if self.media_type == 'movie':
 					director = self.meta.get('director', None)
 					if not director: return
@@ -122,9 +125,12 @@ class Extras(BaseDialog):
 			elif focus_id in (posters_id, backdrops_id):
 				chosen_listitem = self.get_listitem(focus_id)
 				image = chosen_listitem.getProperty('tikiskins.extras.thumbnail')
-				params = {'action': 'image', 'name': '%s %s' % (self.rootname, chosen_listitem.getProperty('tikiskins.extras.name')),
-						'thumb_url': image.replace('w780', {posters_id: 'w185', backdrops_id: 'w300'}[focus_id]), 'image_url': image.replace('w780', 'original'),
-						'media_type': 'image', 'image': translate_path('special://home/addons/plugin.video.pov/icon.png')}
+				params = {
+					'action': 'image', 'media_type': 'image', 'image': basedialog_icon,
+					'name': '%s %s' % (self.rootname, chosen_listitem.getProperty('tikiskins.extras.name')),
+					'thumb_url': image.replace('w780', {posters_id: 'w185', backdrops_id: 'w300'}[focus_id]),
+					'image_url': image.replace('w780', 'original')
+				}
 				return runner(params)
 		if not self.control_id: return
 		if action in self.selection_actions:
@@ -158,9 +164,9 @@ class Extras(BaseDialog):
 		def builder():
 			for item in self.meta['cast']:
 				try:
-					listitem = self.make_listitem()
 					thumbnail = item['thumbnail']
 					if not thumbnail: thumbnail = backup_cast_thumbnail
+					listitem = self.make_listitem()
 					listitem.setProperty('tikiskins.extras.name', item['name'])
 					listitem.setProperty('tikiskins.extras.role', item['role'])
 					listitem.setProperty('tikiskins.extras.thumbnail', thumbnail)
@@ -189,18 +195,17 @@ class Extras(BaseDialog):
 		def builder():
 			for count, item in enumerate(reviews, 1):
 				try:
-					listitem = self.make_listitem()
 					provider = mdblist_api.review_provider_id[item['provider_id']].upper()
 					updated_at = item['updated_at'] or 'NA'
 					rating = item['rating'] or 'NA'
-					if 'spoiler' in item and item['spoiler']: content = (
+					content = (
 						'[B][COLOR red][%s][/COLOR][CR][I]%02d. %s - %s - %s[/I][/B]\n\n%s'
 						% (spoiler, count, provider, rating, updated_at, item['content'])
-					)
-					else: content = (
+					) if 'spoiler' in item and item['spoiler'] else (
 						'[B][I]%02d. %s - %s - %s[/I][/B]\n\n%s'
 						% (count, provider, rating, updated_at, item['content'])
 					)
+					listitem = self.make_listitem()
 					listitem.setProperty('tikiskins.extras.text', content)
 					yield listitem
 				except: pass
@@ -208,15 +213,15 @@ class Extras(BaseDialog):
 			spoiler = ls(32985).upper()
 			data = mdblist_api.mdb_media_info(self.imdb_id, self.media_type)
 			ratings, reviews = data['ratings'], data['reviews']
-			sources = ('imdb', 'metacritic', 'tomatoes', 'trakt', 'tmdb')
-			ratings = {i['source']: str(i['value']) for i in ratings if i['value'] and i['source'] in sources}
-			ratings['mdblist'] = str(data['score'] or '')
-			for k, v in ratings.items(): self.setProperty('tikiskins.extras.rating.%s' % k, v)
 			reviews.sort(key=lambda k: k['updated_at'] or '', reverse=True)
 			item_list = list(builder())
 			self.setProperty('tikiskins.extras.imdb_reviews.number', '(x%02d)' % len(item_list))
 			self.item_action_dict[reviews_id] = 'tikiskins.extras.text'
 			self.add_items(reviews_id, item_list)
+			sources = ('imdb', 'metacritic', 'mdblist', 'tomatoes', 'trakt', 'tmdb')
+			if 'score' in data: ratings.append({'source': 'mdblist', 'value': data['score']})
+			ratings = ((i['source'], str(i['value'])) for i in ratings if i['source'] in sources and i['value'])
+			for k, v in ratings: self.setProperty('tikiskins.extras.rating.%s' % k, v)
 		except: pass
 
 	def make_trivia(self):
@@ -260,12 +265,11 @@ class Extras(BaseDialog):
 		def builder():
 			for item in data:
 				try:
+					name, icon = parentsguide_dict[item['title']]
+					icon = media_path(icon)
+					ranking = parentsguide_dict[item['ranking']].upper()
+					if item['listings']: ranking += ' (x%02d)' % len(item['listings'])
 					listitem = self.make_listitem()
-					name = parentsguide_inputs[item['title']][0]
-					ranking = parentsguide_levels[item['ranking'].lower()].upper()
-					if item['listings']:
-						ranking += ' (x%02d)' % len(item['listings'])
-					icon = translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % parentsguide_inputs[item['title']][1])
 					listitem.setProperty('tikiskins.extras.name', name)
 					listitem.setProperty('tikiskins.extras.ranking', ranking)
 					listitem.setProperty('tikiskins.extras.thumbnail', icon)
@@ -309,9 +313,9 @@ class Extras(BaseDialog):
 		def builder():
 			for count, item in enumerate(data, 1):
 				try:
-					listitem = self.make_listitem()
 					thumb_url = tmdb_image_base % ('w780', item['file_path'])
 					name = '%sx%s' % (item['height'], item['width'])
+					listitem = self.make_listitem()
 					listitem.setProperty('tikiskins.extras.name', '%01d. %s' % (count, name))
 					listitem.setProperty('tikiskins.extras.thumbnail', thumb_url)
 					listitem.setProperty('tikiskins.extras.all_images', json_all_images)
@@ -375,7 +379,7 @@ class Extras(BaseDialog):
 			data = tmdb_api.tmdb_movies_collection(coll_id)
 			poster_path = data['poster_path']
 			if poster_path: poster = tmdb_image_base % (self.poster_resolution, poster_path)
-			else: poster = backup_poster
+			else: poster = poster_empty
 			self.setProperty('tikiskins.extras.more_from_collection.name', data['name'])
 			self.setProperty('tikiskins.extras.more_from_collection.overview', data['overview'])
 			self.setProperty('tikiskins.extras.more_from_collection.poster', poster)
@@ -456,11 +460,8 @@ class Extras(BaseDialog):
 		else: return ''
 
 	def get_stingers(self):
-		stingers = {
-			'duringcreditsstinger': 'During Credit Scene',
-			'aftercreditsstinger': 'After Credit Scene'
-		}
 		if not self.tmdb_id: return ''
+		stingers = {'duringcreditsstinger': 'During Credit Scene', 'aftercreditsstinger': 'After Credit Scene'}
 		keywords = tmdb_api.movie_keywords(self.tmdb_id) or []
 		keywords = [str(i['name']) for i in keywords]
 		if all((i in keywords for i in stingers.keys())): stinger = 'Dual Credit Scenes'
@@ -489,7 +490,7 @@ class Extras(BaseDialog):
 		return poster
 
 	def original_fanart(self):
-		fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or backup_fanart
+		fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or fanart_empty
 		return fanart
 
 	def remove_current_tmdb_mediaitem(self, data):
@@ -500,11 +501,11 @@ class Extras(BaseDialog):
 		release_key = 'release_date' if self.media_type == 'movie' else 'first_air_date'
 		for item in data:
 			try:
-				listitem = self.make_listitem()
 				poster_path = item['poster_path']
 				if poster_path: thumbnail = tmdb_image_base % (self.poster_resolution, poster_path)
-				else: thumbnail = backup_poster
+				else: thumbnail = poster_empty
 				year = self.get_release_year(item[release_key])
+				listitem = self.make_listitem()
 				listitem.setProperty('tikiskins.extras.name', item[name_key])
 				listitem.setProperty('tikiskins.extras.release_date', year)
 				listitem.setProperty('tikiskins.extras.vote_average', '%.1f' % item['vote_average'])

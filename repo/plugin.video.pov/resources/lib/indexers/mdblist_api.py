@@ -5,12 +5,12 @@ from caches.meta_cache import cache_function
 from modules import kodi_utils, settings, utils
 # logger = kodi_utils.logger
 
-EXPIRES_1_HOURS = 1
-base_url = 'https://api.mdblist.com'
 review_provider_id = {1: 'Trakt', 2: 'TMDb', 3: 'RT', 4: 'Metacritics'}
 rank_map = {'0': 'mild', '1': 'mild', '2': 'moderate', '3': 'moderate', '4': 'severe', '5': 'severe'}
 guide_map = {'Nudity': 'Sex & Nudity', 'Violence': 'Violence & Gore', 'Profanity': 'Profanity', 'Alcohol': 'Alcohol, Drugs & Smoking'}
 watchlist_obj = {'name': 'Watchlist', 'slug': 'watchlist', 'id': '', 'user_name': '', 'likes': None, 'items': None}
+EXPIRES_1_HOURS = 1
+base_url = 'https://api.mdblist.com'
 timeout = 3.05
 session = requests.Session()
 retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502, 503, 504))
@@ -138,10 +138,10 @@ def get_mdb(params):
 	return results
 
 def clear_mdbl_cache(silent=False):
-	maincache_db = kodi_utils.maincache_db
+	from modules.kodi_utils import path_exists, clear_property, database_connect, maincache_db
 	try:
-		if not kodi_utils.path_exists(maincache_db): return True
-		dbcon = kodi_utils.database.connect(maincache_db, timeout=40.0, isolation_level=None)
+		if not path_exists(maincache_db): return True
+		dbcon = database_connect(maincache_db, isolation_level=None)
 		dbcur = dbcon.cursor()
 		dbcur.execute("""PRAGMA synchronous = OFF""")
 		dbcur.execute("""PRAGMA journal_mode = OFF""")
@@ -149,7 +149,7 @@ def clear_mdbl_cache(silent=False):
 		mdb_results = [str(i[0]) for i in dbcur.fetchall()]
 		if not mdb_results: return True
 		dbcur.execute("""DELETE FROM maincache WHERE id LIKE ?""", ('mdb_%',))
-		for i in mdb_results: kodi_utils.clear_property(i)
+		for i in mdb_results: clear_property(i)
 		return True
 	except: return False
 

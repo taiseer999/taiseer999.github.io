@@ -336,22 +336,27 @@ def trakt_get_lists(list_type):
 	return trakt_cache.cache_trakt_object(get_trakt, string, url)
 
 def get_trakt_list_selection(list_choice=None, highlight=None):
-	default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/trakt.png')
 	my_lists = [
 		{'name': item['name'], 'display': ls(32778) % item['name'].upper(), 'user': item['user']['ids']['slug'], 'slug': item['ids']['slug']}
 		for item in trakt_get_lists('my_lists')
 	]
 	my_lists.sort(key=lambda k: k['name'])
 	if list_choice == 'nav_edit':
-		liked_lists = [{'name': item['list']['name'], 'display': ls(32779) % item['list']['name'].upper(), 'user': item['list']['user']['ids']['slug'],
-								'slug': item['list']['ids']['slug']} for item in trakt_get_lists('liked_lists')]
+		liked_lists = [
+			{'name': item['list']['name'],
+			 'display': ls(32779) % item['list']['name'].upper(),
+			 'user': item['list']['user']['ids']['slug'],
+			 'slug': item['list']['ids']['slug']}
+			for item in trakt_get_lists('liked_lists')
+		]
 		liked_lists.sort(key=lambda k: (k['display']))
 		my_lists.extend(liked_lists)
 #	else:
 #		my_lists.insert(0, {'name': 'Collection', 'display': '[B][I]%s [/I][/B]' % ls(32499).upper(), 'user': 'Collection', 'slug': 'Collection'})
 #		my_lists.insert(0, {'name': 'Watchlist', 'display': '[B][I]%s [/I][/B]' % ls(32500).upper(),  'user': 'Watchlist', 'slug': 'Watchlist'})
 	if not my_lists: return kodi_utils.notification(32760)
-	list_items = [{'line1': item['display'], 'icon': default_icon} for item in my_lists]
+	icon = kodi_utils.media_path('trakt.png')
+	list_items = [{'line1': item['display'], 'icon': icon} for item in my_lists]
 	kwargs = {'items': json.dumps(list_items), 'heading': 'Select list', 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
 	if highlight: kwargs['highlight'] = highlight
 	selection = kodi_utils.select_dialog(my_lists, **kwargs)

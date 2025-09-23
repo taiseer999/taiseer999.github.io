@@ -11,11 +11,13 @@ from modules.utils import manual_function_import, get_datetime, TaskPool
 meta_function, get_datetime_function = tvshow_meta, get_datetime
 get_watched_function, get_watched_info_function = get_watched_status_tvshow, get_watched_info_tv
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
-string, ls, tp, get_infolabel = str, kodi_utils.local_string, kodi_utils.translate_path, kodi_utils.get_infolabel
-build_url, remove_meta_keys, dict_removals = kodi_utils.build_url, kodi_utils.remove_meta_keys, kodi_utils.tvshow_dict_removals
+string, ls, build_url, get_infolabel = str, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.get_infolabel
+remove_meta_keys, dict_removals = kodi_utils.remove_meta_keys, kodi_utils.tvshow_dict_removals
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
-item_jump, item_next = tp('special://home/addons/plugin.video.pov/resources/media/item_jump.png'), tp('special://home/addons/plugin.video.pov/resources/media/item_next.png')
-poster_empty, fanart_empty = tp('special://home/addons/plugin.video.pov/resources/media/box_office.png'), tp('special://home/addons/plugin.video.pov/fanart.png')
+fanart_empty = kodi_utils.get_addoninfo('fanart')
+poster_empty = kodi_utils.media_path('box_office.png')
+item_jump = kodi_utils.media_path('item_jump.png')
+item_next = kodi_utils.media_path('item_next.png')
 watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDB Lists Manager[/B]', ls(32200)
 favmanager_str, extras_str, options_str, recomm_str = ls(32197), ls(32645), ls(32646), '[B]%s...[/B]' % ls(32503)
 random_str, exit_str, browse_str = ls(32611), ls(32650), ls(32652)
@@ -55,12 +57,13 @@ class TVShows:
 			meta_get = meta.get
 			if not meta or meta_get('blank_entry', False): return
 			playcount, overlay, total_watched, total_unwatched = get_watched_function(self.watched_info, string(meta['tmdb_id']), meta.get('total_aired_eps'))
+			if self.widget_hide_watched and playcount: return
 			meta.update({'playcount': playcount, 'overlay': overlay})
 			sort = _id.get('sort', _position) if self.id_type == 'trakt_dict' else _position
 			props = {'pov_sort_order': string(sort)}
 			cm = []
 			cm_append = cm.append
-			rootname, title, year, trailer = meta_get('rootname'), meta_get('title'), meta_get('year'), meta_get('trailer')
+			rootname, title, year = meta_get('rootname'), meta_get('title'), meta_get('year')
 			tmdb_id, tvdb_id, imdb_id = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id')
 			total_seasons, total_aired_eps = meta_get('total_seasons'), meta_get('total_aired_eps')
 			poster = meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
@@ -92,16 +95,17 @@ class TVShows:
 			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['mdblist'], mdbmanager_str, run_plugin % mdb_manager_params))
 			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
-			if not playcount:
-				watched_params = build_url({'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_watched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
-				cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % watched_params))
-			elif self.widget_hide_watched: return
-			if total_watched:
-				unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_unwatched', 'title': title, 'year': year, 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
-				cm_append((self.cm_sort['mark'], unwatched_str % self.watched_title, run_plugin % unwatched_params))
+			if not playcount: cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % build_url({
+				'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_watched', 'year': year,
+				'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'title': title
+			})))
+			if total_watched: cm_append((self.cm_sort['mark'], unwatched_str % self.watched_title, run_plugin % build_url({
+				'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_unwatched', 'year': year,
+				'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'title': title
+			})))
 			cm_append((self.cm_sort['exit'], exit_str, container_refresh % self.exit_list_params))
 			cm.sort(key=lambda k: k[0])
-			cm = [(i[1], i[2]) for i in cm if i[0]]
+			cm = [v for k, *v in cm if k]
 			props['unwatchedepisodes'] = string(total_unwatched)
 			props['totalepisodes'] = string(total_aired_eps)
 			props['totalseasons'] = string(total_seasons)
@@ -166,7 +170,7 @@ class Indexer(TVShows):
 	similar = ('tmdb_tv_similar', 'tmdb_tv_recommendations')
 	personal_dict = {
 		'in_progress_tvshows': ('caches.watched_cache', 'get_in_progress_tvshows'),
-		'favourites_tvshows': ('caches.favourites_cache', 'retrieve_favourites'),
+		'favourites_tvshows': ('caches.favourites_cache', 'get_favourites'),
 		'watched_tvshows': ('caches.watched_cache', 'get_watched_items')
 	}
 

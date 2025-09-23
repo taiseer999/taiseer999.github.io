@@ -9,7 +9,7 @@ default_fanarttv_data, fanarttv_get, fanarttv_add = fanarttv.default_fanart_nome
 subtract_dates_function, jsondate_to_datetime_function = subtract_dates, jsondate_to_datetime
 backup_resolutions, writer_credits = {'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632'}, ('Author', 'Writer', 'Screenplay', 'Characters')
 alt_titles_test, trailers_test, finished_show_check, empty_value_check = ('US', 'GB', 'UK', ''), ('Trailer', 'Teaser'), ('Ended', 'Canceled'), ('', 'None', None)
-tmdb_image_base, youtube_url, date_format = 'https://image.tmdb.org/t/p/%s%s', 'plugin://plugin.video.youtube/play/?video_id=%s', '%Y-%m-%d'
+tmdb_image_base, youtube_url, date_format = tmdb.tmdb_image_base, 'plugin://plugin.video.youtube/play/?video_id=%s', '%Y-%m-%d'
 EXPIRES_2_DAYS, EXPIRES_4_DAYS, EXPIRES_7_DAYS, EXPIRES_14_DAYS, EXPIRES_182_DAYS = 2, 4, 7, 14, 182
 
 def movie_meta(id_type, media_id, user_info, current_date):

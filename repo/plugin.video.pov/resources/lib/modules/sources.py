@@ -187,8 +187,7 @@ class SourceSelect():
 	def sort_results(self, results):
 		def _add_keys(item):
 			provider = item['scrape_provider']
-			if provider == 'external': account_type = item['debrid'].lower()
-			else: account_type = provider.lower()
+			account_type = item['debrid'].lower() if provider == 'external' else provider.lower()
 			item['provider_rank'] = self._get_provider_rank(account_type)
 			item['quality_rank'] = self._get_quality_rank(item.get('quality', 'SD'))
 		for item in results: _add_keys(item)
@@ -346,8 +345,8 @@ class SourceSelect():
 		expiry_times = get_cache_expiry(self.media_type, self.meta, self.season)
 		self.search_info = {
 			'media_type': self.media_type, 'tmdb_id': self.tmdb_id, 'imdb_id': self.meta.get('imdb_id'), 'tvdb_id': self.meta.get('tvdb_id'),
-			'title': title, 'year': year, 'season': self.custom_season or self.season, 'episode': self.custom_episode or self.episode,
-			'ep_name': ep_name, 'aliases': aliases, 'expiry_times': expiry_times, 'total_seasons': self.meta.get('total_seasons', 1)
+			'title': title, 'year': year, 'aliases': aliases, 'expiry_times': expiry_times, 'total_seasons': self.meta.get('total_seasons', ''),
+			'ep_name': ep_name, 'season': self.custom_season or self.season, 'episode': self.custom_episode or self.episode
 		}
 
 	def _get_search_year(self, meta):

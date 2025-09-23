@@ -3,9 +3,12 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.09[/B][/COLOR]
-- Fixed Next Episodes to respect SET VIEWS: Episodes Lists setting.
+- Added Clear Cloud Storage to Offcloud results context menu.
+- Fixed Offcloud resolve magnet.
+- Refactored Easynews.
 - Added Play (Seek Enabled) to Easynews results context menu.
 - Added Play (From Download) to Easynews results context menu.
+- Fixed Next Episodes to respect SET VIEWS: Episodes Lists setting.
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
 - Probable fix for Easynews, thanks Redditor POVAnonyMouse!
@@ -19,7 +22,6 @@
 - Changed TorBox authorization process.
 - Fix for TorBox usenet results as unchecked, thanks Redditor!
 - Added Debrider as a debrid provider.
-- Minor fixes.
 - Added stremthru torz.
 - Change to automatically include uncached results when Scrape With All Filters Ignored.
 - Added During/After/Dual Credit Scene to Extras Plot label (if available).
@@ -121,7 +123,7 @@
 - Refactored Offcloud/TorBox cloud scrapers.
 - Completed clear cache for Offcloud/TorBox.
 - Added "Premium Expires Notification (days)" for each debrid (0 disables check).
-- Minor refactoring for each debrid, report anything that I might have broke.
+- Refactored each debrid.
 - Changed Real Debrid/All Debrid integration.
   Only two sources that will return results, `torrentio debrid+` and `mediafusion debrid+`.
   This relies on the `torrentio` and `mediafusion` internal caches, so there is a little
@@ -329,7 +331,7 @@
   [COLOR dodgerblue][B]Version 2.11.0[/B][/COLOR]
 - Changed TMDb search for certain tv categories, will filter by English as the
   original language.
-- Changed code (minor) to Trakt/Real Debrid authorization.
+- Changed code to Trakt/Real Debrid authorization.
 - New media icons.
 
   [COLOR dodgerblue][B]Version 2.9.0[/B][/COLOR]

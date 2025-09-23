@@ -1,7 +1,7 @@
-from modules.kodi_utils import sleep, confirm_dialog, close_all_dialog, trakt_db, database
+from modules.kodi_utils import sleep, confirm_dialog, close_all_dialog, trakt_db, database_connect
 # from modules.kodi_utils import logger
 
-timeout = 60
+timeout = 20
 SELECT = 'SELECT id FROM trakt_data'
 DELETE = 'DELETE FROM trakt_data WHERE id = ?'
 DELETE_LIKE = 'DELETE FROM trakt_data WHERE id LIKE "%s"'
@@ -43,7 +43,7 @@ class TraktWatched:
 		self.dbcur.execute("""VACUUM""")
 
 	def _connect_database(self):
-		self.dbcon = database.connect(trakt_db, timeout=timeout, isolation_level=None)
+		self.dbcon = database_connect(trakt_db, timeout=timeout, isolation_level=None)
 
 	def _set_PRAGMAS(self):
 		self.dbcur = self.dbcon.cursor()
@@ -77,7 +77,7 @@ class TraktCache:
 		except: pass
 
 	def connect_database(self):
-		return database.connect(trakt_db, timeout=timeout, isolation_level=None)
+		return database_connect(trakt_db, timeout=timeout, isolation_level=None)
 
 	def set_PRAGMAS(self, dbcon):
 		dbcur = dbcon.cursor()

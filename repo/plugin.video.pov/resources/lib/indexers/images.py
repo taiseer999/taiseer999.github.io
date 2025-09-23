@@ -2,16 +2,10 @@ import os
 import json
 from threading import Thread
 from windows import open_window
-from indexers.tmdb_api import tmdb_people_full_info, tmdb_popular_people
+from indexers.tmdb_api import tmdb_people_full_info, tmdb_popular_people, tmdb_image_base
 from indexers.imdb_api import imdb_images, people_get_imdb_id, imdb_people_images
-from modules.kodi_utils import translate_path, notification, set_property, make_listitem, list_dirs, delete_file
+from modules.kodi_utils import media_path, notification, set_property, make_listitem, list_dirs, delete_file
 # from modules.kodi_utils import logger
-
-icon_directory = translate_path('special://home/addons/plugin.video.pov/resources/media')
-
-icon = translate_path('special://home/addons/plugin.video.pov/icon.png')
-fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
-tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
 
 class Images():
 	def run(self, params):
@@ -23,9 +17,9 @@ class Images():
 		elif self.mode == 'popular_people_image_results': self.popular_people_image_results()
 		elif self.mode == 'browser_image': self.browser_image(params['folder_path'])
 		elif self.mode == 'slideshow_image': return self.slideshow_image()
-		elif self.mode == 'delete_image':
-			return self.delete_image()
-		if len(self.list_items) == 0: return notification(32490)
+		elif self.mode == 'delete_image': return self.delete_image()
+		if len(self.list_items) == 0 and not self.params.get('in_progress') == 'true':
+			return notification(32490)
 		if not 'in_progress' in params: self.open_window_xml()
 		else: return self.list_items, self.next_page_params
 
@@ -39,11 +33,11 @@ class Images():
 		def builder():
 			for item in image_info['results']:
 				if item['profile_path']:
-					actor_poster = 'https://image.tmdb.org/t/p/w185%s' % item['profile_path']
-					actor_image = 'https://image.tmdb.org/t/p/h632%s' % item['profile_path']
+					actor_poster = tmdb_image_base % ('w185', item['profile_path'])
+					actor_image = tmdb_image_base % ('h632', item['profile_path'])
 				else:
-					actor_poster = os.path.join(icon_directory, 'people.png')
-					actor_image = os.path.join(icon_directory, 'people.png')
+					actor_poster = media_path('people.png')
+					actor_image = media_path('people.png')
 				url_params = {'mode': 'person_data_dialog', 'actor_name': item['name'], 'actor_id': item['id'], 'actor_image': actor_image}
 				listitem = make_listitem()
 				listitem.setProperty('tikiskins.thumb', actor_poster)

@@ -1,6 +1,6 @@
 import sys
 from threading import Thread
-from indexers.metadata import movie_meta, rpdb_get
+from indexers.metadata import movie_meta, rpdb_get, tmdb_image_base
 from caches.watched_cache import get_watched_info_movie, get_watched_status_movie, get_resumetime, get_bookmarks
 from modules import kodi_utils, settings
 #from modules.utils import manual_function_import, get_datetime, make_thread_list_enumerate, chunks
@@ -10,11 +10,13 @@ from modules.utils import manual_function_import, get_datetime, TaskPool, chunks
 meta_function, get_datetime_function = movie_meta, get_datetime
 get_watched_function, get_watched_info_function = get_watched_status_movie, get_watched_info_movie
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
-string, ls, tp, get_infolabel = str, kodi_utils.local_string, kodi_utils.translate_path, kodi_utils.get_infolabel
-build_url, remove_meta_keys, dict_removals = kodi_utils.build_url, kodi_utils.remove_meta_keys, kodi_utils.movie_dict_removals
+string, ls, build_url, get_infolabel = str, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.get_infolabel
+remove_meta_keys, dict_removals = kodi_utils.remove_meta_keys, kodi_utils.movie_dict_removals
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
-item_jump, item_next = tp('special://home/addons/plugin.video.pov/resources/media/item_jump.png'), tp('special://home/addons/plugin.video.pov/resources/media/item_next.png')
-poster_empty, fanart_empty = tp('special://home/addons/plugin.video.pov/resources/media/box_office.png'), tp('special://home/addons/plugin.video.pov/fanart.png')
+fanart_empty = kodi_utils.get_addoninfo('fanart')
+poster_empty = kodi_utils.media_path('box_office.png')
+item_jump = kodi_utils.media_path('item_jump.png')
+item_next = kodi_utils.media_path('item_next.png')
 watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDB Lists Manager[/B]', ls(32200)
 favmanager_str, extras_str, options_str, recomm_str = ls(32197), ls(32645), ls(32646), '[B]%s...[/B]' % ls(32503)
 hide_str, exit_str, clearprog_str, play_str = ls(32648), ls(32649), ls(32651), '[B]%s...[/B]' % ls(32174)
@@ -53,6 +55,7 @@ class Movies:
 			meta_get = meta.get
 			if not meta or meta_get('blank_entry', False): return
 			playcount, overlay = get_watched_function(self.watched_info, string(meta['tmdb_id']))
+			if self.widget_hide_watched and playcount: return
 			meta.update({'playcount': playcount, 'overlay': overlay})
 			resumetime, progress = get_resumetime(self.bookmarks, string(meta['tmdb_id']))
 			sort = _id.get('sort', _position) if self.id_type == 'trakt_dict' else _position
@@ -90,19 +93,18 @@ class Movies:
 			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['mdblist'], mdbmanager_str, run_plugin % mdb_manager_params))
 			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
-			if progress != '0' or resumetime != '0':
-				clearprog_params = build_url({'mode': 'watched_unwatched_erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'})
-				cm_append((self.cm_sort['mark'], clearprog_str, run_plugin % clearprog_params))
-			if playcount:
-				if self.widget_hide_watched: return
-				unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_unwatched', 'tmdb_id': tmdb_id, 'title': title, 'year': year})
-				cm_append((self.cm_sort['mark'], unwatched_str % self.watched_title, run_plugin % unwatched_params))
-			else:
-				watched_params = build_url({'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_watched', 'tmdb_id': tmdb_id, 'title': title, 'year': year})
-				cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % watched_params))
+			if progress != '0' or resumetime != '0': cm_append((self.cm_sort['mark'], clearprog_str, run_plugin % build_url({
+				'mode': 'watched_unwatched_erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'
+			})))
+			if playcount: cm_append((self.cm_sort['mark'], unwatched_str % self.watched_title, run_plugin % build_url({
+				'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_unwatched', 'tmdb_id': tmdb_id, 'title': title, 'year': year
+			})))
+			else: cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % build_url({
+				'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_watched', 'tmdb_id': tmdb_id, 'title': title, 'year': year
+			})))
 			cm_append((self.cm_sort['exit'], exit_str, container_refresh % self.exit_list_params))
 			cm.sort(key=lambda k: k[0])
-			cm = [(i[1], i[2]) for i in cm if i[0]]
+			cm = [v for k, *v in cm if k]
 			listitem = kodi_utils.make_listitem()
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)
@@ -162,7 +164,7 @@ class Indexer(Movies):
 	similar = ('tmdb_movies_similar', 'tmdb_movies_recommendations')
 	personal_dict = {
 		'in_progress_movies': ('caches.watched_cache', 'get_in_progress_movies'),
-		'favourites_movies': ('caches.favourites_cache', 'retrieve_favourites'),
+		'favourites_movies': ('caches.favourites_cache', 'get_favourites'),
 		'watched_movies': ('caches.watched_cache', 'get_watched_items')
 	}
 
@@ -312,7 +314,6 @@ class Indexer(Movies):
 				listitem.setArt({'icon': poster, 'fanart': fanart})
 				yield (url_params, listitem, True)
 		image_resolution = settings.get_resolution()
-		tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
 		self.items = list(_process())
 		return self.items
 

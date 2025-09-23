@@ -1,23 +1,22 @@
 import sys
 from threading import Thread
-from indexers.metadata import tvshow_meta, season_episodes_meta, all_episodes_meta
-from caches.watched_cache import get_watched_info_tv, get_watched_status_season
-from caches.watched_cache import get_bookmarks, get_resumetime, get_watched_status_episode
+from indexers.metadata import tvshow_meta, season_episodes_meta, all_episodes_meta, tmdb_image_base
+from caches.watched_cache import get_watched_info_tv, get_watched_status_season, get_bookmarks, get_resumetime, get_watched_status_episode
 from modules import kodi_utils, settings
 from modules.utils import adjust_premiered_date, get_datetime
 # from modules.kodi_utils import logger
 
+tv_meta_function, season_meta_function = tvshow_meta, season_episodes_meta
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
-make_listitem, build_url, ls, tp = kodi_utils.make_listitem, kodi_utils.build_url, kodi_utils.local_string, kodi_utils.translate_path
+string, ls, build_url = str, kodi_utils.local_string, kodi_utils.build_url
 remove_meta_keys, dict_removals = kodi_utils.remove_meta_keys, kodi_utils.episode_dict_removals
 get_art_provider, show_specials = settings.get_art_provider, settings.show_specials
-thumb_fanart_info, date_offset_info, = settings.thumb_fanart, settings.date_offset
-tv_meta_function, season_meta_function, all_episodes_meta_function = tvshow_meta, season_episodes_meta, all_episodes_meta
 adjust_premiered_date_function, get_datetime_function = adjust_premiered_date, get_datetime
-poster_empty, fanart_empty = tp('special://home/addons/plugin.video.pov/resources/media/box_office.png'), tp('special://home/addons/plugin.video.pov/fanart.png')
-run_plugin, unaired_label, tmdb_image_url = 'RunPlugin(%s)', '[COLOR cyan]%s[/COLOR]', 'https://image.tmdb.org/t/p/'
-season_str, watched_str, unwatched_str, extras_str, options_str = ls(32537), ls(32642), ls(32643), ls(32645), ls(32646)
-string, clearprog_str = str, ls(32651)
+run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
+fanart_empty = kodi_utils.get_addoninfo('fanart')
+poster_empty = kodi_utils.media_path('box_office.png')
+watched_str, unwatched_str, extras_str, options_str = ls(32642), ls(32643), ls(32645), ls(32646)
+clearprog_str, season_str, unaired_label = ls(32651), ls(32537), '[COLOR cyan]%s[/COLOR]'
 
 class Seasons:
 	def __init__(self, params):
@@ -55,7 +54,8 @@ class Seasons:
 					name, overview, rating = item_get('name'), item_get('overview'), item_get('vote_average')
 					season_number, episode_count = item_get('season_number'), item_get('episode_count')
 					poster_path, air_date = item_get('poster_path'), item_get('air_date')
-					poster =  ''.join([tmdb_image_url, image_resolution, poster_path]) if poster_path is not None else show_poster
+					if not poster_path is None: poster = tmdb_image_base % (image_resolution, poster_path)
+					else: show_poster
 					if season_number == 0: unaired = False
 					elif episode_count == 0: unaired = True
 					elif season_number != total_seasons: unaired = False
@@ -76,24 +76,24 @@ class Seasons:
 					if 'season' in params: title = '%s: %s' % (show_title, title)
 					if unaired: title = '[I]%s[/I]' % (unaired_label % title)
 					playcount, overlay, watched, unwatched = get_watched_status_season(self.watched_info, string(tmdb_id), season_number, episode_count)
+					if self.widget_hide_watched and watched: continue
 					url_params = build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': season_number})
 					extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
 					options_params = build_url({'mode': 'options_menu_choice', 'content': 'season', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
 					cm_append((options_str, run_plugin % options_params))
 					cm_append((extras_str, run_plugin % extras_params))
-					if not playcount:
-						watched_params = build_url({'mode': 'mark_as_watched_unwatched_season', 'action': 'mark_as_watched', 'title': show_title, 'year': show_year,
-															'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number})
-						cm_append((watched_str % self.watched_title, run_plugin % watched_params))
-					if watched:
-						if self.widget_hide_watched: continue
-						unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_season', 'action': 'mark_as_unwatched', 'title': show_title, 'year': show_year,
-																'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number})
-						cm_append((unwatched_str % self.watched_title, run_plugin % unwatched_params))
+					if not playcount: cm_append((watched_str % self.watched_title, run_plugin % build_url({
+						'mode': 'mark_as_watched_unwatched_season', 'action': 'mark_as_watched', 'year': show_year,
+						'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number, 'title': show_title
+					})))
+					if watched: cm_append((unwatched_str % self.watched_title, run_plugin % build_url({
+						'mode': 'mark_as_watched_unwatched_season', 'action': 'mark_as_unwatched', 'year': show_year,
+						'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season_number, 'title': show_title
+					})))
 					props['unwatchedepisodes'] = string(unwatched)
 					props['totalepisodes'] = string(episode_count)
 					props['pov_sort_order'] = string(params.get('sort', ''))
-					listitem = make_listitem()
+					listitem = kodi_utils.make_listitem()
 					listitem.addContextMenuItems(cm)
 					listitem.setProperties(props)
 					listitem.setLabel(title)
@@ -132,12 +132,12 @@ class Seasons:
 					self.append((url_params, listitem, True))
 				except: pass
 		def _process_episode_list():
-			thumb_fanart = thumb_fanart_info()
-			adjust_hours = date_offset_info()
+			thumb_fanart = settings.thumb_fanart()
+			adjust_hours = settings.date_offset()
 			bookmarks = get_bookmarks(self.watched_indicators, 'episode')
 			all_episodes = True if params.get('season') == 'all' else False
 			if all_episodes:
-				episodes_data = all_episodes_meta_function(meta, self.meta_user_info, Thread)
+				episodes_data = all_episodes_meta(meta, self.meta_user_info, Thread)
 				if not show_specials(): episodes_data = [i for i in episodes_data if not i['season'] == 0]
 			else: episodes_data = season_meta_function(params['season'], meta, self.meta_user_info)
 			for item in episodes_data:
@@ -148,7 +148,6 @@ class Seasons:
 					item_get = item.get
 					season, episode, ep_name = item_get('season'), item_get('episode'), item_get('title')
 					premiered, cast = item_get('premiered'), show_cast + item_get('guest_stars', [])
-					props['episode_type'] = item_get('episode_type')
 					episode_date, premiered = adjust_premiered_date_function(premiered, adjust_hours)
 					playcount, overlay = get_watched_status_episode(self.watched_info, string(tmdb_id), season, episode)
 					resumetime, progress = get_resumetime(bookmarks, tmdb_id, season, episode)
@@ -168,26 +167,27 @@ class Seasons:
 							unaired = True
 							display = '[I]%s[/I]' % (unaired_label % ep_name)
 							item['title'] = display
+					if self.widget_hide_watched and playcount and not unaired: continue
 					try: year = premiered.split('-')[0]
 					except: year = show_year
 					cm_append((options_str, run_plugin % options_params))
 					cm_append((extras_str, run_plugin % extras_params))
 					clearprog_params, unwatched_params, watched_params = '', '', ''
 					if not unaired:
-						if progress != '0' or resumetime != '0':
-							clearprog_params = build_url({'mode': 'watched_unwatched_erase_bookmark', 'media_type': 'episode', 'tmdb_id': tmdb_id,
-														'season': season, 'episode': episode, 'refresh': 'true'})
-							cm_append((clearprog_str, run_plugin % clearprog_params))
-						if playcount:
-							if self.widget_hide_watched: continue
-							unwatched_params = build_url({'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_unwatched', 'tmdb_id': tmdb_id,
-														'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': show_title, 'year': show_year})
-							cm_append((unwatched_str % self.watched_title, run_plugin % unwatched_params))
-						else:
-							watched_params = build_url({'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'tmdb_id': tmdb_id,
-														'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': show_title, 'year': show_year})
-							cm_append((watched_str % self.watched_title, run_plugin % watched_params))
-					listitem = make_listitem()
+						if progress != '0' or resumetime != '0': cm_append((clearprog_str, run_plugin % build_url({
+							'mode': 'watched_unwatched_erase_bookmark', 'media_type': 'episode',
+							'tmdb_id': tmdb_id, 'season': season, 'episode': episode, 'refresh': 'true'
+						})))
+						if playcount: cm_append((unwatched_str % self.watched_title, run_plugin % build_url({
+							'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_unwatched', 'year': show_year,
+							'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season, 'episode': episode, 'title': show_title
+						})))
+						else: cm_append((watched_str % self.watched_title, run_plugin % build_url({
+							'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'year': show_year,
+							'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season, 'episode': episode, 'title': show_title
+						})))
+					props['episode_type'] = item_get('episode_type')
+					listitem = kodi_utils.make_listitem()
 					listitem.addContextMenuItems(cm)
 					listitem.setProperties(props)
 					listitem.setLabel(display)

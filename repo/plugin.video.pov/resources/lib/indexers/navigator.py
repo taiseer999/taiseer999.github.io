@@ -3,10 +3,9 @@ from caches.navigator_cache import navigator_cache as nc
 from modules import kodi_utils as ku, settings as ks
 # logger = ku.logger
 
-tp, ls, build_url, notification, list_dirs = ku.translate_path, ku.local_string, ku.build_url, ku.notification, ku.list_dirs
+media_path, ls, build_url, notification, list_dirs = ku.media_path, ku.local_string, ku.build_url, ku.notification, ku.list_dirs
 make_listitem, add_item, add_dir, end_directory, add_items = ku.make_listitem, ku.add_item, ku.add_dir, ku.end_directory, ku.add_items
 set_content, set_view_mode, set_sort_method, set_category = ku.set_content, ku.set_view_mode, ku.set_sort_method, ku.set_category
-icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
 _in_str, mov_str, tv_str, edit_str = ls(32484), ls(32028), ls(32029), ls(32705)
 browse_str, add_menu_str, s_folder_str = ls(32706), ls(32730), ls(32731)
 
@@ -303,8 +302,8 @@ class Navigator:
 		self._end_directory()
 
 	def log_utils(self):
-		pov_vstr, log_path = ku.addon().getAddonInfo('version'), 'special://home/addons/%s/changelog.txt'
-		kl_loc, mt_str = tp('special://logpath/kodi.log'), tp(log_path % 'plugin.video.pov')
+		pov_vstr, log_path = ku.get_addoninfo('version'), 'special://home/addons/%s/changelog.txt'
+		kl_loc, mt_str = 'special://logpath/kodi.log', log_path % 'plugin.video.pov'
 		pov_str, cl_str, lut_str, k_str, lv_str = ls(32036), ls(32508), ls(32777), ls(32538), ls(32509)
 		mh_str, klv_h, klu_h = '%s  [I](v.%s)[/I]' % (pov_str, pov_vstr), '%s %s' % (k_str, lv_str), ls(32853)
 		cl_n_ins, lu_n_ins = _in_str % (cl_str.upper(), ''), _in_str % (lut_str.upper(), '')
@@ -393,12 +392,10 @@ class Navigator:
 		def _builder():
 			for genre, value in sorted(genre_list.items()):
 				function_list_append(value[0])
-#				yield {'line1': genre, 'icon': tp(''.join([icon_directory, 'genres.png']))}
-				yield {'line1': genre, 'icon': tp(icon_directory % 'genres.png')}
+				yield {'line1': genre, 'icon': media_path('genres.png')}
 		menu_type, genre_list = self.params['menu_type'], self.params['genre_list']
 		function_list = []
 		function_list_append = function_list.append
-#		icon_directory = 'special://home/addons/plugin.video.pov/resources/media/'
 		genre_list = json.loads(genre_list)
 		list_items = list(_builder())
 		kwargs = {'items': json.dumps(list_items), 'heading': ls(32847), 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
@@ -493,8 +490,8 @@ class Navigator:
 				except: pass
 		handle, fanart = self.params_get('handle'), self.params_get('fanart')
 		short_str, delete_str, new_folder_str = ls(32514), ls(32703), '[B]%s...[/B]' % ls(32702)
-		icon = tp(icon_directory % 'folder.png')
-		add_dir(handle, {'mode': 'menu_editor.shortcut_folder_make'}, new_folder_str, tp(icon_directory % 'new.png'), isFolder=False)
+		icon = media_path('folder.png')
+		add_dir(handle, {'mode': 'menu_editor.shortcut_folder_make'}, new_folder_str, media_path('new.png'), isFolder=False)
 		folders = nc.get_shortcut_folders()
 		if folders: add_items(handle, list(_builder()))
 		self._end_directory()
@@ -506,7 +503,7 @@ class Navigator:
 					cm = []
 					item_get = item.get
 					name = item_get('name', 'Error: No Name')
-					icon = item_get('iconImage') if item_get('network_id', '') != '' else tp(icon_directory % item_get('iconImage'))
+					icon = item_get('iconImage') if item_get('network_id', '') != '' else media_path(item_get('iconImage'))
 					isFolder = False if item_get('isFolder', '') == 'false' else True
 					url = build_url(item)
 					cm.append((ls(32705),'RunPlugin(%s)' % build_url(
@@ -530,7 +527,10 @@ class Navigator:
 					cm = []
 					cm_append = cm.append
 					item_get = item.get
-					icon = item_get('iconImage') if item_get('network_id', '') != '' else tp(icon_directory % item_get('iconImage'))
+					if item_get('iconImage') in ('', 'None', None): icon = 'DefaultFolder.png'
+					elif item_get('iconImage') == 'pov.png': icon = ku.get_addoninfo('icon')
+					elif item_get('network_id', '') != '': icon = item_get('iconImage')
+					else: icon = media_path(item_get('iconImage', ''))
 					isFolder = False if item_get('isFolder') == 'false' else True
 					cm_append((edit_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.edit_menu', 'active_list': self.list_name, 'position': item_position})))
 					cm_append((browse_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.browse', 'active_list': self.list_name})))
@@ -548,10 +548,13 @@ class Navigator:
 	def make_list_name(self, menu_type):
 		return menu_type.replace('tvshow', tv_str).replace('movie', mov_str)
 
-	def _add_item(self, url_params, iconImage='DefaultFolder.png', prefix='', isFolder=True, list_name=''):
+	def _add_item(self, url_params, iconImage='', prefix='', isFolder=True, list_name=''):
 		handle, fanart = self.params_get('handle'), self.params_get('fanart')
 		if not isFolder: url_params['isFolder'] = 'false'
-		icon = iconImage if 'network_id' in url_params else tp(icon_directory % iconImage)
+		if iconImage in ('', 'None', None): icon = 'DefaultFolder.png'
+		elif iconImage == 'pov.png': icon = ku.get_addoninfo('icon')
+		elif 'network_id' in url_params: icon = iconImage
+		else: icon = media_path(iconImage)
 		url_params['iconImage'] = icon
 		url = build_url(url_params)
 		listitem = make_listitem()

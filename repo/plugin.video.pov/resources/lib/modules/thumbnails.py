@@ -10,7 +10,7 @@ def notification(line1, time=3000, sound=False):
 def thumb_cleaner():
 	current_date = datetime.date(datetime.utcnow())
 	thumbs_folder = Path(xbmcvfs.translatePath('special://thumbnails'))
-	dbfile = Path(xbmcvfs.translatePath('special://database')) / 'Textures13.db'
+	dbfile = Path(xbmcvfs.translatePath('special://database'), 'Textures13.db')
 	if not dbfile.exists(): return notification('Failed')
 	item_list = []
 	minimum_uses = 30
@@ -41,7 +41,7 @@ def thumb_cleaner():
 		_id = item[0]
 		dbcur.execute("SELECT cachedurl FROM texture WHERE id = ?", (_id, ))
 		url = dbcur.fetchall()[0][0]
-		path = thumbs_folder / url
+		path = thumbs_folder.joinpath(url)
 		path.unlink(missing_ok=True)
 		item_list.append((_id,))
 		percent = int(count / result_length * 100)

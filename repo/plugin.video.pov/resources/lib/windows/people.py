@@ -1,21 +1,20 @@
 import json
 from threading import Thread
-from windows import BaseDialog
-from indexers.tmdb_api import tmdb_people_info, tmdb_people_full_info
+from windows import BaseDialog, fanart as basedialog_fanart
+from indexers.tmdb_api import tmdb_people_info, tmdb_people_full_info, tmdb_image_base
 from indexers.imdb_api import imdb_videos
 from indexers.images import Images
 from modules import dialogs
 from modules.utils import calculate_age
-from modules.kodi_utils import translate_path, notification, show_text, local_string as ls
+from modules.kodi_utils import media_path, notification, show_text, local_string as ls
 from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution
 # from modules.kodi_utils import logger
 
-tmdb_image_base = 'https://image.tmdb.org/t/p/%s%s'
-fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
-backup_thumbnail = translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-backup_cast_thumbnail = translate_path('special://home/addons/plugin.video.pov/resources/media/people.png')
+fanart = basedialog_fanart
+backup_thumbnail = media_path('box_office.png')
+backup_cast_thumbnail = media_path('people.png')
 roles_exclude = ('himself', 'herself', 'self', 'narrator', 'voice (voice)')
-button_ids = [10, 11, 50]
+button_ids = (10, 11, 50)
 genres_exclude = (10763, 10764, 10767)
 gender_dict = {0: '', 1: ls(32844), 2: ls(32843), 3: ls(32466)}
 more_from_movies_id, more_from_tvshows_id, imdb_videos_id, more_from_director_id = 2050, 2051, 2052, 2053

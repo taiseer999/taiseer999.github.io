@@ -7,8 +7,8 @@ from modules.utils import clean_file_name
 
 ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
 down_str = ls(32747)
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/easynews.png')
-fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
+fanart = kodi_utils.get_addoninfo('fanart')
+default_icon = kodi_utils.media_path('easynews.png')
 
 def search_easynews(params):
 	def _builder():
@@ -40,21 +40,21 @@ def search_easynews(params):
 
 def resolve_easynews(params):
 	url_dl = params['url_dl']
-	resolved_link = EasyNews().resolve_easynews(url_dl)
-	if resolved_link: resolved_link = resolved_link.split('|')[0]
-	if params.get('play', 'false') != 'true' : return resolved_link
+	resolved_link = EasyNews().unrestrict_link(url_dl)
+	if resolved_link: resolved_link += '|seekable=0'
+	if not params.get('play', 'false') == 'true': return resolved_link
 	from modules.player import POVPlayer
 	POVPlayer().run(resolved_link, 'video')
 
 def seekable_easynews(params):
 	url_dl = params['url_dl']
 	kodi_utils.show_busy_dialog()
-	resolved_link = EasyNews().resolve_easynews(url_dl)
+	resolved_link = EasyNews().unrestrict_link(url_dl)
 	kodi_utils.hide_busy_dialog()
 	if not resolved_link: return kodi_utils.notification(32574)
 	kodi_utils.set_property('pov_playback_meta', params.get('meta', ''))
 	from modules.player import POVPlayer
-	POVPlayer().run(resolved_link.split('|')[0])
+	POVPlayer().run(resolved_link)
 
 def spool_easynews(params):
 	import json, shutil
@@ -69,7 +69,7 @@ def spool_easynews(params):
 	file_path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'spool' + '/%s' % name)
 	if not kodi_utils.path_exists(path): kodi_utils.make_directory(path)
 	kodi_utils.progressDialogBG.create('EasyNews Spooling File', 'POV Working...')
-	response = EasyNews().resolve_easynews(url_dl, spool=True)
+	response = EasyNews().unrestrict_link(url_dl, spool=True)
 	if response is None:
 		kodi_utils.progressDialogBG.close()
 		return kodi_utils.notification(32574)

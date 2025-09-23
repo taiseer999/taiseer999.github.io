@@ -7,8 +7,8 @@ from modules import kodi_utils, settings
 # from modules.kodi_utils import logger
 
 ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
-search_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/search_history.png')
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/search.png')
+search_icon = kodi_utils.media_path('search_history.png')
+default_icon = kodi_utils.media_path('search.png')
 four_insert_string, five_insert_string = '%s %s %s %s', '%s %s %s %s %s'
 remove_str, delete_str, search_str, hist_str, key_str = ls(32786), ls(32785), ls(32450), ls(32486), ls(32092)
 mov_str, tv_str, peop_str, tmdb_str, coll_str = ls(32028), ls(32029), ls(32507), ls(32068), ls(32499)

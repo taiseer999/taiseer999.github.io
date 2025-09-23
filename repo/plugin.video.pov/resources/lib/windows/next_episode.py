@@ -1,12 +1,11 @@
 from windows import BaseDialog
-from modules.kodi_utils import translate_path
+from modules.kodi_utils import media_path
 from modules.settings import get_art_provider
 # from modules.kodi_utils import logger
 
+poster_empty = media_path('box_office.png')
 click_actions = {10: 'close', 11: 'play', 12: 'cancel'}
 confirm_actions = {10: True, 11: False}
-
-backup_poster = translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
 
 class NextEpisode(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -52,7 +51,7 @@ class NextEpisode(BaseDialog):
 			self.setProperty('tikiskins.title', self.meta['title'])
 
 	def original_poster(self):
-		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or backup_poster
+		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or poster_empty
 		return self.poster
 
 	def original_fanart(self):

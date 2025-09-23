@@ -16,14 +16,15 @@ def initializeDatabases():
 def checkSettingsFile():
 	logger('POV', 'CheckSettingsFile Service Starting')
 	clear_property('pov_settings')
-	path = kodi_utils.get_addoninfo('profile')
-	profile_dir, settings_xml = translate_path(path), translate_path(path + 'settings.xml')
+	profile_dir = kodi_utils.get_addoninfo('profile')
+	settings_xml = profile_dir + 'settings.xml'
 	if not path_exists(profile_dir):
 		kodi_utils.make_directorys(profile_dir)
 	if not path_exists(settings_xml):
 		kodi_utils.addon().setSetting('kodi_menu_cache', 'true')
 		kodi_utils.sleep(500)
 	make_settings_dict()
+	if get_setting('fanart_image') == 'fanart.png': set_setting('fanart_image', 'pov_fanart.png')
 	set_property('pov_kodi_menu_cache', get_setting('kodi_menu_cache'))
 	set_property('pov_rli_fix', get_setting('rli_fix'))
 	return logger('POV', 'CheckSettingsFile Service Finished')
@@ -69,10 +70,10 @@ def autoRun():
 def clearSubs():
 	logger('POV', 'Clear Subtitles Service Starting')
 	sub_formats = ('.srt', '.ssa', '.smi', '.sub', '.idx')
-	subtitle_path = 'special://temp/%s'
-	files = kodi_utils.list_dirs(translate_path('special://temp/'))[1]
-	for i in files:
-		if i.startswith('POVSubs_') or i.endswith(sub_formats): kodi_utils.delete_file(translate_path(subtitle_path % i))
+	subtitle_path = 'special://temp/'
+	for i in kodi_utils.list_dirs(subtitle_path)[1]:
+		if i.startswith('POVSubs_') or i.endswith(sub_formats):
+			kodi_utils.delete_file(subtitle_path + i)
 	return logger('POV', 'Clear Subtitles Service Finished')
 
 def traktMonitor():

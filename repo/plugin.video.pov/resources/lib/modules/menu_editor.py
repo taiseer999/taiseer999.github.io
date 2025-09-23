@@ -1,12 +1,10 @@
 import json
 from urllib.parse import parse_qsl
-from indexers import navigator
 from caches.navigator_cache import navigator_cache
 from modules import kodi_utils, menu_lists as default_menus
 # from modules.kodi_utils import logger
 
-ls, tp = kodi_utils.local_string, kodi_utils.translate_path
-icon_directory = 'special://home/addons/plugin.video.pov/resources/media/%s'
+ls, media_path = kodi_utils.local_string, kodi_utils.media_path
 main_list_name_dict = {'RootList': ls(32457), 'MovieList': ls(32028), 'TVShowList': ls(32029), 'AnimeList': 'Anime'}
 pos_str, top_pos_str, top_str = ls(32707), ls(32708), ls(32709)
 
@@ -100,15 +98,15 @@ class MenuEditor:
 
 	def add_original_external(self):
 		active_list = self.params_get('active_list')
-		menu_name_translated = self.params_get('menu_name_translated')
-		menu_name = self._get_external_name_input(menu_name_translated)
 		choice_items = self._get_main_menu_items(active_list)
 		choice = self._menu_select([i[1] for i in choice_items], '')
 		if choice is None: return kodi_utils.notification(32736, 1500)
 		choice_name, choice_list = choice_items[choice]
 		list_items = navigator_cache.currently_used_list(choice_list['action'])
-		position = self._menu_select(list_items, menu_name or menu_name_translated, multi_line='true', position_list=True)
+		menu_name_translated = self.params_get('menu_name_translated')
+		position = self._menu_select(list_items, menu_name_translated, multi_line='true', position_list=True)
 		if position is None: return kodi_utils.notification(32736, 1500)
+		menu_name = self._get_external_name_input(menu_name_translated)
 		list_items.insert(position, self._add_external_info_to_item(self.menu_item, menu_name, False))
 		self._db_execute('set', choice_name, list_items, refresh=False)
 
@@ -118,9 +116,10 @@ class MenuEditor:
 		if trakt_selection is None: return kodi_utils.notification(32736, 1500)
 		active_list = self.params_get('active_list')
 		list_items = navigator_cache.currently_used_list(active_list)
-		menu_name = self._get_external_name_input(trakt_selection['name'])
-		position = self._menu_select(list_items, menu_name or trakt_selection['name'], multi_line='true', position_list=True)
+		menu_name = trakt_selection['name']
+		position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True)
 		if position is None: return kodi_utils.notification(32736, 1500)
+		menu_name = self._get_external_name_input(menu_name)
 		trakt_selection.update({'mode': 'build_trakt_list', 'iconImage': 'trakt.png'})
 		list_items.insert(position, self._add_external_info_to_item(trakt_selection, menu_name, False))
 		self._db_execute('set', active_list, list_items)
@@ -160,15 +159,15 @@ class MenuEditor:
 		if list_type == 'edited': self._db_execute('set', active_list, new_contents, 'default')
 
 	def add_external(self):
-		name = self.params_get('name')
-		menu_name = self._get_external_name_input(name) or name
 		choice_items = self._get_main_menu_items([])
 		choice = self._menu_select([i[1] for i in choice_items], '')
 		if choice is None: return kodi_utils.notification(32736, 1500)
 		choice_name, choice_list = choice_items[choice]
 		list_items = navigator_cache.currently_used_list(choice_list['action'])
+		menu_name = self.params_get('name')
 		position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True)
 		if position is None: return kodi_utils.notification(32736, 1500)
+		menu_name = self._get_external_name_input(menu_name)
 		list_items.insert(position, self._add_external_info_to_item(self.menu_item, menu_name))
 		self._db_execute('set', choice_name, list_items, refresh=False)
 
@@ -178,12 +177,13 @@ class MenuEditor:
 				item_get = item.get
 				line1 = ls(item_get('name', '')).replace('[B]', '').replace('[/B]', '')
 				line2 = pos_str % (menu_name, line1 or ls(item_get('list_name')) if position_list else '')
-				try: icon = item_get('iconImage', 'discover.png') if item_get('network_id', None) else tp(icon_directory % item_get('iconImage'))
-				except: icon = tp(icon_directory % 'discover.png')
-				yield {'line1': line1, 'line2': line2, 'icon':icon}
+				if item_get('iconImage') == 'pov.png': icon = kodi_utils.get_addoninfo('icon')
+				elif item_get('network_id', None): icon = item_get('iconImage', 'discover.png')
+				else: icon = media_path(item_get('iconImage', 'discover.png'))
+				yield {'line1': line1, 'line2': line2, 'icon': icon}
 		menu_name = menu_name.replace('[B]', '').replace('[/B]', '')
 		list_items = list(_builder())
-		if position_list: list_items.insert(0, {'line1': top_str, 'line2': top_pos_str % menu_name, 'icon': tp(icon_directory % 'top.png')})
+		if position_list: list_items.insert(0, {'line1': top_str, 'line2': top_pos_str % menu_name, 'icon': media_path('top.png')})
 		index_list = [list_items.index(i) for i in list_items]
 		kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': multi_line}
 		return kodi_utils.select_dialog(index_list, **kwargs)
@@ -272,10 +272,8 @@ class MenuEditor:
 		name = self.params_get('name') or self.params_get('menu_name_translated')
 		menu_name = self._get_external_name_input(name) or name
 		self.menu_item.update({'name': menu_name, 'iconImage': self.params_get('iconImage', None) or self.menu_item_get('iconImage')})
-		if list_items:
-			position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True)
-			if position is None: return kodi_utils.notification(32736, 1500)
-		else: position = 0
+		position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True) if list_items else 0
+		if position is None: return kodi_utils.notification(32736, 1500)
 		list_items.insert(position, self.menu_item)
 		self._db_execute('set', choice_name, list_items, 'shortcut_folder', False)
 

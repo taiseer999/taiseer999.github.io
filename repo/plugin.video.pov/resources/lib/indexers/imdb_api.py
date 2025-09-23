@@ -10,8 +10,8 @@ from modules.utils import remove_accents, replace_html_codes, string_alphanum_to
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 build_url = kodi_utils.build_url
 make_listitem = kodi_utils.make_listitem
-default_imdb_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/imdb.png')
-fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
+fanart = kodi_utils.get_addoninfo('fanart')
+default_imdb_icon = kodi_utils.media_path('imdb.png')
 base_url = 'https://www.imdb.com/%s'
 watchlist_url = 'user/ur%s/watchlist'
 user_list_movies_url = 'list/%s/?view=detail&sort=%s&title_type=movie,short,video,tvShort,tvMovie,tvSpecial&start=1&page=%s'
@@ -31,7 +31,7 @@ people_images_url = 'name/%s/mediaindex?page=%s'
 people_search_url_backup = 'search/name/?name=%s'
 people_search_url = 'https://sg.media-imdb.com/suggests/%s/%s.json'
 movie_year_check_url = 'https://v2.sg.media-imdb.com/suggestion/t/%s.json'
-timeout = 6.05
+timeout = 10.0
 session = requests.Session()
 session.mount('https://', requests.adapters.HTTPAdapter(pool_maxsize=100))
 
@@ -304,7 +304,7 @@ def get_imdb(params):
 			name = params['name']
 			result = session.get(url, timeout=timeout).content
 			result = json.loads(result.replace('imdb$%s(' % name.replace(' ', '_'), '')[:-1])['d']
-			imdb_list = [i['id'] for i in results if i['id'].startswith('nm') and i['l'].lower() == name][0]
+			imdb_list = [i['id'] for i in result if i['id'].startswith('nm') and i['l'].lower() == name][0]
 		except: pass
 		if not imdb_list:
 			result = session.get(params['url_backup'], timeout=timeout)
@@ -410,10 +410,10 @@ def get_imdb(params):
 	return (imdb_list, next_page)
 
 def clear_imdb_cache(silent=False):
-	from modules.kodi_utils import path_exists, clear_property, database, maincache_db
+	from modules.kodi_utils import path_exists, clear_property, database_connect, maincache_db
 	try:
 		if not path_exists(maincache_db): return True
-		dbcon = database.connect(maincache_db, timeout=40.0, isolation_level=None)
+		dbcon = database_connect(maincache_db, isolation_level=None)
 		dbcur = dbcon.cursor()
 		dbcur.execute("""PRAGMA synchronous = OFF""")
 		dbcur.execute("""PRAGMA journal_mode = OFF""")

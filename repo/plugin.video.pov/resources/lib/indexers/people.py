@@ -2,12 +2,11 @@ import json
 from urllib.parse import unquote
 from windows import open_window
 from indexers.images import Images
-from indexers.tmdb_api import tmdb_people_info
-from modules.kodi_utils import translate_path, select_dialog, dialog, notification
+from indexers.tmdb_api import tmdb_people_info, tmdb_image_base
+from modules.kodi_utils import media_path, select_dialog, dialog, notification
 # from modules.kodi_utils import logger
 
-poster_empty = translate_path('special://home/addons/plugin.video.pov/resources/media/people.png')
-tmdb_image_url = 'https://image.tmdb.org/t/p/h632/%s'
+poster_empty = media_path('people.png')
 
 def popular_people():
 	Images().run({'mode': 'popular_people_image_results', 'page_no': 1})
@@ -25,7 +24,7 @@ def person_search(query=None):
 	for item in actors:
 		known_for_list = [i.get('title', 'NA') for i in item['known_for']]
 		known_for_list = [i for i in known_for_list if not i == 'NA']
-		item['icon'] = tmdb_image_url % item['profile_path'] if item['profile_path'] else poster_empty
+		item['icon'] = tmdb_image_base % ('h632', item['profile_path']) if item['profile_path'] else poster_empty
 		item['line1'] = item['name']
 		item['line2'] = ', '.join(known_for_list) if known_for_list else ''
 	if len(actors) > 1:

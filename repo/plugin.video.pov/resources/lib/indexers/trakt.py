@@ -13,9 +13,9 @@ from modules.settings import paginate, page_limit, nav_jump_use_alphabet
 
 KODI_VERSION, ls = kodi_utils.get_kodi_version(), kodi_utils.local_string
 build_url, make_listitem = kodi_utils.build_url, kodi_utils.make_listitem
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/trakt.png')
-fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
-item_jump = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/item_jump.png')
+fanart = kodi_utils.get_addoninfo('fanart')
+default_icon = kodi_utils.media_path('trakt.png')
+item_jump = kodi_utils.media_path('item_jump.png')
 add2menu_str, add2folder_str, copy2str = ls(32730), ls(32731), '[B]Export to TMDB[/B]'
 newlist_str, deletelist_str, nextpage_str, jump2_str = ls(32780), ls(32781), ls(32799), ls(32964)
 likelist_str, unlikelist_str = ls(32776), ls(32783)

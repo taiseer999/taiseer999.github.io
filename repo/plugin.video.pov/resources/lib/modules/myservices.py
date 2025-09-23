@@ -550,13 +550,10 @@ class TMDbList:
 		return True
 
 def refer_link(service):
-	icon, url = 'special://home/addons/plugin.video.pov/resources/media/%s.png', {
-		'realdebrid': 'https://tinyurl.com/2db65q28',
-		'torbox': 'https://tinyurl.com/2d2ra6jq'
-	}[service]
+	url = {'realdebrid': 'https://tinyurl.com/2db65q28', 'torbox': 'https://tinyurl.com/2d2ra6jq'}[service]
 	expires_in, expires_at = 20, 20 + time.monotonic()
 	try: qr_icon = qr_str % '&data=%s' % quote(url)
-	except: qr_icon = kodi_utils.translate_path(icon % service)
+	except: qr_icon = kodi_utils.media_path(service)
 	meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
 	detail = nav2_str % url, ''
 	progress_dialog = _make_progress_dialog(meta=meta)

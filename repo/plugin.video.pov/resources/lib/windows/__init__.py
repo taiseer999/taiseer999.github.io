@@ -1,9 +1,10 @@
 from modules import kodi_utils
-from modules.settings import skin_location
 from modules.utils import manual_function_import
 # from modules.kodi_utils import logger
 
-location = skin_location()
+location = kodi_utils.skin_location()
+icon = kodi_utils.get_addoninfo('icon')
+fanart = kodi_utils.get_addoninfo('fanart')
 
 def open_window(import_info, skin_xml, **kwargs):
 	'''
@@ -21,9 +22,8 @@ def create_window(import_info, skin_xml, **kwargs):
 	import_info: tuple with ('module', 'function')
 	'''
 	try:
-		function = manual_function_import(import_info[0], import_info[1])
-		args = (skin_xml, location)
-		xml_window = function(*args, **kwargs)
+		function = manual_function_import(*import_info)
+		xml_window = function(skin_xml, location, **kwargs)
 		return xml_window
 	except Exception as e:
 		kodi_utils.logger('error in open_window', str(e))
@@ -41,6 +41,7 @@ class BaseDialog(kodi_utils.window_xml_dialog):
 		self.up_actions = kodi_utils.window_xml_up_action
 		self.down_actions = kodi_utils.window_xml_down_action
 		self.player = kodi_utils.player
+		self.setProperty('tikiskins.pov_icon', icon)
 
 	def make_listitem(self):
 		return kodi_utils.make_listitem()

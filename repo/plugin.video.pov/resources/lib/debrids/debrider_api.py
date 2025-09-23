@@ -108,7 +108,7 @@ class DebriderAPI:
 			if not kodi_utils.path_exists(kodi_utils.maincache_db): return True
 			from caches.debrid_cache import DebridCache
 			user_cloud_success = False
-			dbcon = kodi_utils.database.connect(kodi_utils.maincache_db)
+			dbcon = kodi_utils.database_connect(kodi_utils.maincache_db)
 			dbcur = dbcon.cursor()
 			# USER CLOUD
 			try:

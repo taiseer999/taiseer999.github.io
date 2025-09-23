@@ -9,7 +9,6 @@ from fenom import client
 from fenom import source_utils
 
 
-
 class source:
 	timeout = 5
 	priority = 1

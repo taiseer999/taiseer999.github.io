@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
-from caches import BaseCache
-from modules.kodi_utils import get_property, set_property, clear_property, metacache_db
+from caches import BaseCache, metacache_db, get_property, set_property, clear_property
 # from modules.kodi_utils import logger
 
 all_tables = ('metadata', 'season_metadata', 'function_cache')

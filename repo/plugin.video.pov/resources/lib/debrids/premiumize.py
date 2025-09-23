@@ -8,8 +8,8 @@ from modules.utils import clean_file_name, normalize
 get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
 ls, build_url, make_listitem = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.make_listitem
 folder_str, file_str, down_str, archive_str, rename_str, delete_str = ls(32742).upper(), ls(32743).upper(), ls(32747), ls(32982), ls(32748), ls(32785)
-fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % Debrid.icon)
+fanart = kodi_utils.get_addoninfo('fanart')
+default_icon = kodi_utils.media_path(Debrid.icon)
 default_art = {'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon}
 extensions = supported_video_extensions()
 

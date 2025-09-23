@@ -1,12 +1,10 @@
 from datetime import datetime, timedelta
-from caches import BaseCache
-from modules.kodi_utils import get_property, set_property, clear_property, maincache_db
+from caches import BaseCache, maincache_db, get_property, set_property, clear_property
 # from modules.kodi_utils import logger
 
-table = 'maincache'
-BASE_GET = 'SELECT expires, data FROM %s WHERE id = ?'
-BASE_SET = 'INSERT OR REPLACE INTO %s(id, data, expires) VALUES (?, ?, ?)'
-BASE_DELETE = 'DELETE FROM %s WHERE id = ?'
+BASE_GET = 'SELECT expires, data FROM maincache WHERE id = ?'
+BASE_SET = 'INSERT OR REPLACE INTO maincache (id, data, expires) VALUES (?, ?, ?)'
+BASE_DELETE = 'DELETE FROM maincache WHERE id = ?'
 LIKE_SELECT = 'SELECT id from maincache where id LIKE %s'
 LIKE_DELETE = 'DELETE FROM maincache WHERE id LIKE %s'
 DELETE = 'DELETE FROM maincache WHERE id = ?'
@@ -21,7 +19,7 @@ class MainCache(BaseCache):
 			current_time = self._get_timestamp(datetime.now())
 			result = self.get_memory_cache(string, current_time)
 			if result is None:
-				self.dbcur.execute(BASE_GET % table, (string,))
+				self.dbcur.execute(BASE_GET, (string,))
 				cache_data = self.dbcur.fetchone()
 				if cache_data:
 					if cache_data[0] > current_time:
@@ -35,7 +33,7 @@ class MainCache(BaseCache):
 	def set(self, string, data, expiration=timedelta(days=30)):
 		try:
 			expires = self._get_timestamp(datetime.now() + expiration)
-			self.dbcur.execute(BASE_SET % table, (string, repr(data), int(expires)))
+			self.dbcur.execute(BASE_SET, (string, repr(data), int(expires)))
 			self.set_memory_cache(data, string, int(expires))
 		except: return None
 
@@ -60,7 +58,7 @@ class MainCache(BaseCache):
 
 	def delete(self, string, dbcon=None):
 		try:
-			self.dbcur.execute(BASE_DELETE % table, (string,))
+			self.dbcur.execute(BASE_DELETE, (string,))
 			self.delete_memory_cache(string)
 		except: pass
 

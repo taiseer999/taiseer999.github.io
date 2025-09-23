@@ -606,10 +606,10 @@ def import_mdbl_list(params):
 	finally: progressBG.close()
 
 def clear_tmdbl_cache(silent=False):
-	maincache_db = kodi_utils.maincache_db
+	from modules.kodi_utils import path_exists, clear_property, database_connect, maincache_db
 	try:
-		if not kodi_utils.path_exists(maincache_db): return True
-		dbcon = kodi_utils.database.connect(maincache_db, timeout=40.0, isolation_level=None)
+		if not path_exists(maincache_db): return True
+		dbcon = database_connect(maincache_db, isolation_level=None)
 		dbcur = dbcon.cursor()
 		dbcur.execute("""PRAGMA synchronous = OFF""")
 		dbcur.execute("""PRAGMA journal_mode = OFF""")
@@ -617,7 +617,7 @@ def clear_tmdbl_cache(silent=False):
 		tmdb_results = [str(i[0]) for i in dbcur.fetchall()]
 		if not tmdb_results: return True
 		dbcur.execute("""DELETE FROM maincache WHERE id LIKE ?""", ('tmdblist_%',))
-		for i in tmdb_results: kodi_utils.clear_property(i)
+		for i in tmdb_results: clear_property(i)
 		return True
 	except: return False
 

@@ -1,7 +1,7 @@
 root_list = [
 	{'name': 32028, 'iconImage': 'movies.png', 'mode': 'navigator.main', 'action': 'MovieList'},
 	{'name': 32029, 'iconImage': 'tv.png', 'mode': 'navigator.main', 'action': 'TVShowList'},
-	{'name': 'Anime', 'iconImage': 'genres.png', 'mode': 'navigator.main', 'action': 'AnimeList'},
+	{'name': 'Anime', 'iconImage': '', 'mode': 'navigator.main', 'action': 'AnimeList'},
 	{'name': 32452, 'iconImage': 'people.png', 'mode': 'build_popular_people', 'isFolder': 'false'},
 	{'name': 32451, 'iconImage': 'discover.png', 'mode': 'navigator.discover_main'},
 	{'name': 32450, 'iconImage': 'search.png', 'mode': 'navigator.search'},

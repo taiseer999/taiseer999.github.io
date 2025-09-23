@@ -12,9 +12,9 @@ from modules.utils import paginate_list, TaskPool
 
 KODI_VERSION, ls = kodi_utils.get_kodi_version(), kodi_utils.local_string
 build_url, make_listitem = kodi_utils.build_url, kodi_utils.make_listitem
-default_icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
-default_fanart = kodi_utils.translate_path('special://home/addons/plugin.video.pov/fanart.png')
-item_jump = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/item_jump.png')
+default_fanart = kodi_utils.get_addoninfo('fanart')
+default_icon = kodi_utils.media_path('tmdb.png')
+item_jump = kodi_utils.media_path('item_jump.png')
 add2menu_str, add2folder_str, jump2_str = ls(32730), ls(32731), ls(32964)
 newlist_str, deletelist_str, nextpage_str = ls(32780), ls(32781), ls(32799)
 editprop_str, clearprop_str = '[B]Edit List Properties[/B]', '[B]Clear List Cache[/B]'

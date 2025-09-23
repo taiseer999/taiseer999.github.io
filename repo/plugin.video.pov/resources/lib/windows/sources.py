@@ -1,37 +1,17 @@
 import json
-from windows import BaseDialog
-from modules.kodi_utils import translate_path, hide_busy_dialog, dialog, select_dialog, close_all_dialog, ok_dialog, local_string as ls
+from windows import BaseDialog, fanart as basedialog_fanart
+from modules.kodi_utils import media_path, hide_busy_dialog, dialog, select_dialog, ok_dialog, local_string as ls
 from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_data
 # from modules.kodi_utils import logger
 
-backup_poster = translate_path('special://home/addons/plugin.video.pov/resources/media/box_office.png')
-backup_fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
-media_folder = 'special://home/addons/plugin.video.pov/resources/%s'
-info_icons_dict, info_quality_dict = {
-	'folders': translate_path(media_folder % 'media/folder.png'),
-	'easynews': translate_path(media_folder % 'media/easynews.png'),
-	'alldebrid': translate_path(media_folder % 'media/alldebrid.png'),
-	'real-debrid': translate_path(media_folder % 'media/realdebrid.png'),
-	'premiumize': translate_path(media_folder % 'media/premiumize.png'),
-	'offcloud': translate_path(media_folder % 'media/offcloud.png'),
-	'torbox': translate_path(media_folder % 'media/torbox.png'),
-	'debrider': translate_path(media_folder % 'media/debrider.png'),
-	'easydebrid': translate_path(media_folder % 'media/easydebrid.png'),
-	'ad_cloud': translate_path(media_folder % 'media/alldebrid.png'),
-	'rd_cloud': translate_path(media_folder % 'media/realdebrid.png'),
-	'pm_cloud': translate_path(media_folder % 'media/premiumize.png'),
-	'oc_cloud': translate_path(media_folder % 'media/offcloud.png'),
-	'tb_cloud': translate_path(media_folder % 'media/torbox.png'),
-	'db_cloud': translate_path(media_folder % 'media/debrider.png')
-}, {
-	'4k': translate_path(media_folder % 'skins/Default/media/flags/4k.png'),
-	'1080p': translate_path(media_folder % 'skins/Default/media/flags/1080p.png'),
-	'720p': translate_path(media_folder % 'skins/Default/media/flags/720p.png'),
-	'sd': translate_path(media_folder % 'skins/Default/media/flags/sd.png'),
-	'cam': translate_path(media_folder % 'skins/Default/media/flags/sd.png'),
-	'tele': translate_path(media_folder % 'skins/Default/media/flags/sd.png'),
-	'scr': translate_path(media_folder % 'skins/Default/media/flags/sd.png')
-}
+fanart_empty = basedialog_fanart
+poster_empty, info_icons_dict = media_path('box_office.png'), {k: media_path(v) for k, v in (
+	('real-debrid', 'realdebrid.png'), ('rd_cloud', 'realdebrid.png'), ('premiumize', 'premiumize.png'), ('pm_cloud', 'premiumize.png'),
+	('alldebrid', 'alldebrid.png'), ('ad_cloud', 'alldebrid.png'), ('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'),
+	('torbox', 'torbox.png'), ('tb_cloud', 'torbox.png'), ('debrider', 'debrider.png'), ('db_cloud', 'debrider.png'),
+	('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'), ('cam', 'flagSD.png'),
+	('tele', 'flagSD.png'), ('scr', 'flagSD.png'), ('sd', 'flagSD.png'), ('720p', 'flag720p.png'), ('1080p', 'flag1080p.png'),  ('4k', 'flag4k.png')
+)}
 extra_info_choices = (
 	('PACK', '[B]PACK[/B]'), ('DOLBY VISION', '[B]D/VISION[/B]'), ('HIGH DYNAMIC RANGE (HDR)', '[B]HDR[/B]'), ('HYBRID', '[B]HYBRID[/B]'), ('AV1', '[B]AV1[/B]'),
 	('HEVC (X265)', '[B]HEVC[/B]'), ('REMUX', 'REMUX'), ('BLURAY', 'BLURAY'), ('SDR', 'SDR'), ('3D', '3D'), ('DOLBY ATMOS', 'ATMOS'), ('DOLBY TRUEHD', 'TRUEHD'),
@@ -43,8 +23,8 @@ quality_choices, pack_check = ('4K', '1080P', '720P', 'SD', 'TELE', 'CAM', 'SCR'
 extra_info_str, down_file_str, browse_pack_str, down_pack_str, cloud_str = ls(32605), ls(32747), ls(32746), ls(32007), ls(32016)
 filter_str, clr_filter_str, filters_ignored, start_full_scrape = ls(32152), ls(32153), ls(32686), ls(32529)
 filter_quality, filter_provider, filter_title, filter_extraInfo = ls(32154), ls(32157), ls(32679), ls(32169)
+en_seek_str, en_dl_str, oc_clr_str = '[B]EN: PLAY (SEEK ENABLED)[/B]', '[B]EN: PLAY (FROM DOWNLOAD)[/B]', '[B]OC: CLEAR CLOUD STORAGE[/B]'
 run_plugin_str, ignored_str = 'RunPlugin(%s)', '[B][COLOR dodgerblue](%s)[/COLOR][/B]'
-en_seek_str, en_dl_str = '[B]PLAY (SEEK ENABLED)[/B]', '[B]PLAY (FROM DOWNLOAD)[/B]'
 string, upper, lower = str, str.upper, str.lower
 
 class SourceResults(BaseDialog):
@@ -79,7 +59,7 @@ class SourceResults(BaseDialog):
 		return provider, provider_path
 
 	def get_quality_and_path(self, quality):
-		quality_path = info_quality_dict[quality]
+		quality_path = info_icons_dict[quality]
 		return quality, quality_path
 
 	def onAction(self, action):
@@ -205,11 +185,11 @@ class SourceResults(BaseDialog):
 		self.setProperty('tikiskins.scrape_time', '%.2f' % self.meta['scrape_time'])
 
 	def original_poster(self):
-		poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or backup_poster
+		poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or poster_empty
 		return poster
 
 	def original_fanart(self):
-		fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or backup_fanart
+		fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or fanart_empty
 		return fanart
 
 	def filter_results(self):
@@ -287,7 +267,7 @@ class ResultsInfo(BaseDialog):
 
 	def get_quality_and_path(self):
 		quality = lower(self.item.getProperty('tikiskins.quality'))
-		quality_path = info_quality_dict[quality]
+		quality_path = info_icons_dict[quality]
 		return quality, quality_path
 
 	def set_properties(self):
@@ -351,6 +331,10 @@ class ResultsContextMenu(BaseDialog):
 			}))
 			self.item_list.append(self.make_contextmenu_item(en_dl_str, run_plugin_str, {
 				'mode': 'easynews.spool_easynews', 'source': source, 'meta': meta_json, 'name': name
+			}))
+		if 'Offcloud' in cache_provider:
+			self.item_list.append(self.make_contextmenu_item(oc_clr_str, run_plugin_str, {
+				'mode': 'offcloud.user_cloud_clear'
 			}))
 		if self.filter_applied: self.item_list.append(self.make_contextmenu_item(clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
 		else: self.item_list.append(self.make_contextmenu_item(filter_str, run_plugin_str, {'mode': 'results_filter'}))
@@ -460,8 +444,8 @@ class ProgressMedia(BaseDialog):
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = get_art_provider()
 		self.title = self.meta['title']
 		self.year = str(self.meta['year'])
-		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or backup_poster
-		self.fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or backup_fanart
+		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or poster_empty
+		self.fanart = self.meta.get(self.fanart_main) or self.meta.get(self.fanart_backup) or fanart_empty
 		self.clearlogo = self.meta['clearlogo'] if get_fanart_data() else self.meta['tmdblogo'] or ''
 
 	def set_properties(self):

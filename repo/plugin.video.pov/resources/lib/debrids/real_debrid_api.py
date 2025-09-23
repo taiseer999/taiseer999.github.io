@@ -196,11 +196,11 @@ class RealDebridAPI:
 
 	def clear_cache(*args):
 		try:
-			from modules.kodi_utils import clear_property, path_exists, database, maincache_db
+			from modules.kodi_utils import clear_property, path_exists, database_connect, maincache_db
 			if not path_exists(maincache_db): return True
 			from caches.debrid_cache import DebridCache
 			user_cloud_success = False
-			dbcon = database.connect(maincache_db)
+			dbcon = database_connect(maincache_db)
 			dbcur = dbcon.cursor()
 			# USER CLOUD
 			try:

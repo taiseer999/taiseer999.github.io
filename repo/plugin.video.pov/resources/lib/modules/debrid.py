@@ -132,7 +132,7 @@ def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, d
 	hide_busy_dialog()
 	if not pack_choices: return None if download else notification(32574)
 	pack_choices.sort(key=lambda k: k['filename'].lower())
-	icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/media/%s' % api.icon)
+	icon = kodi_utils.media_path(api.icon)
 	for item in pack_choices: item.update({
 		'icon': icon,
 		'line1': clean_file_name(item['filename']),

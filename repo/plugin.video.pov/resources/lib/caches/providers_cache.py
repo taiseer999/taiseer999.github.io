@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
-from caches import BaseCache
-from modules.kodi_utils import external_db
+from caches import BaseCache, external_db
 # from modules.kodi_utils import logger
 
 SELECT_RESULTS = 'SELECT results, expires FROM results_data WHERE provider = ? AND db_type = ? AND tmdb_id = ? AND title = ? AND year = ? AND season = ? AND episode = ?'

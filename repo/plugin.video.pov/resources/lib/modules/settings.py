@@ -3,8 +3,22 @@ from modules import kodi_utils
 
 ls, translate_path, get_setting = kodi_utils.local_string, kodi_utils.translate_path, kodi_utils.get_setting
 
-def skin_location():
-	return translate_path('special://home/addons/plugin.video.pov')
+def addon_fanart(fallback='pov_fanart.png'):
+	fanart = get_setting('fanart_image', fallback)
+	if fanart == 'pov_fanart.png': return kodi_utils.get_addoninfo('fanart')
+	return translate_path(fanart)
+
+def context_menu_sort():
+	return {
+		'options': int(get_setting('context.options', '1')),
+		'extras': int(get_setting('context.extras', '2')),
+		'trakt': int(get_setting('context.trakt', '3')),
+		'tmdblist': int(get_setting('context.tmdblist', '4')),
+		'mdblist': int(get_setting('context.mdblist', '4')),
+		'favourites': int(get_setting('context.favourites', '5')),
+		'mark': int(get_setting('context.mark', '6')),
+		'exit': int(get_setting('context.exit', '7'))
+	}
 
 def date_offset():
 	return int(get_setting('datetime.offset', '0')) + 5
@@ -56,7 +70,7 @@ def download_directory(media_type):
 
 def source_folders_directory(media_type, source):
 	setting = '%s.movies_directory' % source if media_type == 'movie' else '%s.tv_shows_directory' % source
-	if get_setting(setting) not in ('', 'None', None): return translate_path( get_setting(setting))
+	if get_setting(setting) not in ('', 'None', None): return translate_path(get_setting(setting))
 	else: return False
 
 def paginate():
@@ -356,22 +370,4 @@ def metadata_user_info():
 def make_global_list():
 	global global_list
 	global_list = []
-
-def context_menu_sort():
-	return {
-		'options': int(get_setting('context.options', '1')),
-		'extras': int(get_setting('context.extras', '2')),
-		'trakt': int(get_setting('context.trakt', '3')),
-		'tmdblist': int(get_setting('context.tmdblist', '4')),
-		'mdblist': int(get_setting('context.mdblist', '4')),
-		'favourites': int(get_setting('context.favourites', '5')),
-		'mark': int(get_setting('context.mark', '6')),
-		'exit': int(get_setting('context.exit', '7'))
-	}
-
-def addon_fanart(fallback='fanart.png'):
-	fanart = get_setting('fanart_image', fallback)
-	if 'fanart.png' == fanart: fanart = kodi_utils.get_addoninfo('fanart')
-	if 'special://' in fanart: fanart = translate_path(fanart)
-	return fanart
 

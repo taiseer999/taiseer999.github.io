@@ -59,7 +59,7 @@ UNWANTED_TAGS = ('tamilrockers.com', 'www.tamilrockers.com', 'www.tamilrockers.w
 
 def internal_sources(active_sources, prescrape=False):
 	def import_info():
-		files = kodi_utils.list_dirs(kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/lib/scrapers'))[1]
+		files = kodi_utils.list_dirs('special://home/addons/plugin.video.pov/resources/lib/scrapers')[1]
 		for item in files:
 			try:
 				module_name = item.split('.')[0]
@@ -113,8 +113,8 @@ def toggle_all(folder, setting, silent=False):
 
 def enable_disable(folder):
 	try:
-#		icon = kodi_utils.translate_path('special://home/addons/script.module.fenomscrapers/icon.png')
-		icon = kodi_utils.translate_path('special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png')
+#		icon = 'special://home/addons/script.module.fenomscrapers/icon.png'
+		icon = 'special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png'
 		enabled, disabled = scrapers_status(folder)
 		all_sources = sorted(enabled + disabled)
 		preselect = [all_sources.index(i) for i in enabled]
@@ -149,7 +149,7 @@ def scraper_names(folder):
 	sourceSubFolders = ('hosters', 'torrents')
 	if folder != 'all': sourceSubFolders = [i for i in sourceSubFolders if i == folder]
 	for item in sourceSubFolders:
-		files = kodi_utils.list_dirs(kodi_utils.translate_path(source_folder_location % item))[1]
+		files = kodi_utils.list_dirs(source_folder_location % item)[1]
 		for m in files:
 			module_name = m.split('.')[0]
 			if module_name == '__init__': continue
@@ -192,7 +192,7 @@ def get_filename_match(title, url, name=None):
 
 def supported_video_extensions():
 	supported_video_extensions = kodi_utils.supported_media().split('|')
-	return [i for i in supported_video_extensions if not i in ('','.zip')]
+	return [i for i in supported_video_extensions if not i in ('','iso','.zip')]
 
 def seas_ep_query_list(season, episode):
 	season = int(season)

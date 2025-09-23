@@ -5,7 +5,7 @@ from modules.cache import clear_cache
 from modules.utils import get_datetime, clean_file_name
 # logger = kodi_utils.logger
 
-ls, build_url, translate_path, select_dialog = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.translate_path, kodi_utils.select_dialog
+ls, build_url, media_path, select_dialog = kodi_utils.local_string, kodi_utils.build_url, kodi_utils.media_path, kodi_utils.select_dialog
 show_busy_dialog, hide_busy_dialog, notification, ok_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.notification, kodi_utils.ok_dialog
 get_property, set_property, clear_property, container_refresh = kodi_utils.get_property, kodi_utils.set_property, kodi_utils.clear_property, kodi_utils.container_refresh
 execute_builtin, confirm_dialog, container_content, sleep = kodi_utils.execute_builtin, kodi_utils.confirm_dialog, kodi_utils.container_content, kodi_utils.sleep
@@ -89,7 +89,7 @@ def random_choice(choice, meta):
 
 def trakt_manager_choice(params):
 	if not get_setting('trakt_user', ''): return notification(32760, 3500)
-	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/trakt.png')
+	icon = media_path('trakt.png')
 	choices = [('[B][I]%s [/I][/B]' % ls(32499), 'Collection'), ('[B][I]%s [/I][/B]' % ls(32500), 'Watchlist')]
 	choices += [('%s %s...' % (ls(32602), ls(32199)), 'Add'), ('%s %s...' % (ls(32603), ls(32199)), 'Remove')]
 	choices += [('%s %s...' % ('Toggle', 'Dropped'), 'Drop')] if params['media_type'] == 'tvshow' else []
@@ -134,7 +134,7 @@ def tmdb_manager_choice(params):
 	from indexers import tmdb_api
 	image_resolution = settings.get_resolution()
 	heading = ls(tmdb_api.list_heading).replace('[B]', '').replace('[/B]', '')
-	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/tmdb.png')
+	icon = media_path('tmdb.png')
 	list_name = params.get('trakt_list_name') or params.get('mdbl_list_name') or ''
 	choices = []
 	choices += [
@@ -200,7 +200,7 @@ def mdb_manager_choice(params):
 	if not get_setting('mdblist.token', ''): return notification(32760, 3500)
 	from indexers.mdblist_api import mdb_userlists, mdb_list_items, mdb_modify_list, watchlist_obj, clear_mdbl_cache
 	heading = ls(32200).replace('[B]', '').replace('[/B]', '')
-	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/mdblist.png')
+	icon = media_path('mdblist.png')
 	choices = [(str(item['id']), item['name'], '%s items' % item['items']) for item in mdb_userlists() if not item['dynamic']]
 	choices += [(str(watchlist_obj['id']), watchlist_obj['name'], ''), ('clear', 'Clear list cache', '')]
 	if not choices: return
@@ -463,7 +463,7 @@ def meta_language_choice():
 	clear_cache('meta', silent=True)
 
 def favourites_choice(params):
-	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/favourites.png')
+	icon = media_path('favourites.png')
 	if params.get('cache'):
 		from caches.favourites_cache import favourites_cache
 		list = [('%s %s' % (ls(32028), ls(32453)), 'movie'), ('%s %s' % (ls(32029), ls(32453)), 'tvshow')]
@@ -483,8 +483,8 @@ def favourites_choice(params):
 		else: notification(32574)
 
 def external_scrapers_choice():
-#	icon = translate_path('special://home/addons/script.module.fenomscrapers/icon.png')
-	icon = translate_path('special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png')
+#	icon = 'special://home/addons/script.module.fenomscrapers/icon.png'
+	icon = 'special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png'
 	all_color, hosters_color, torrent_color = 'mediumvioletred', get_setting('hoster.identify'), get_setting('torrent.identify')
 	enable_string, disable_string, specific_string, all_string = ls(32055), ls(32024), ls(32536), ls(32525)
 	scrapers_string, hosters_string, torrent_string = ls(32533), ls(32532), ls(32535)
@@ -658,8 +658,7 @@ def refresh_cached_meta(meta):
 
 def build_navigate_to_page(params):
 	use_alphabet = settings.nav_jump_use_alphabet() == 2
-	icon = translate_path('special://home/addons/plugin.video.pov/resources/media/item_jump.png')
-	fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
+	icon = media_path('item_jump.png')
 	media_type = params.get('media_type')
 	def _builder(use_alphabet):
 		for i in start_list:

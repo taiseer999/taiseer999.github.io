@@ -1,14 +1,13 @@
 import json
-from windows import BaseDialog
+from windows import BaseDialog, icon as basedialog_icon, fanart as basedialog_fanart
 from indexers.tmdb_api import tmdb_popular_people
 from indexers.people import person_data_dialog
 from modules.settings import download_directory
-from modules.kodi_utils import translate_path, show_busy_dialog, hide_busy_dialog, local_string as ls
+from modules.kodi_utils import media_path, show_busy_dialog, hide_busy_dialog, local_string as ls
 # from modules.kodi_utils import logger
 
-icon = translate_path('special://home/addons/plugin.video.pov/icon.png')
-fanart = translate_path('special://home/addons/plugin.video.pov/fanart.png')
-next_icon = translate_path('special://home/addons/plugin.video.pov/resources/media/item_next.png')
+fanart = basedialog_fanart
+next_icon = media_path('item_next.png')
 nextpage_str, delete_str, down_str = ls(32799), ls(32785), ls(32747)
 
 class ThumbImageViewer(BaseDialog):
@@ -147,7 +146,10 @@ class ThumbContextMenu(BaseDialog):
 			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % delete_str, 'RunPlugin(%s)', delete_file_params))
 		else:
 			name = self.list_item.getProperty('tikiskins.name')
-			down_file_params = {'mode': 'downloader', 'action': 'image', 'name': name, 'thumb_url': thumb_url, 'image_url': path, 'media_type': 'image', 'image': icon}
+			down_file_params = {
+				'action': 'image', 'media_type': 'image', 'image': basedialog_icon,
+				'name': name, 'thumb_url': thumb_url, 'image_url': path, 'mode': 'downloader'
+			}
 			self.item_list.append(self.make_contextmenu_item(down_str, 'RunPlugin(%s)', down_file_params))
 
 class SlideShow(BaseDialog):
