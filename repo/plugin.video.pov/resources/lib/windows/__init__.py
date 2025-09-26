@@ -3,8 +3,6 @@ from modules.utils import manual_function_import
 # from modules.kodi_utils import logger
 
 location = kodi_utils.skin_location()
-icon = kodi_utils.get_addoninfo('icon')
-fanart = kodi_utils.get_addoninfo('fanart')
 
 def open_window(import_info, skin_xml, **kwargs):
 	'''
@@ -30,6 +28,8 @@ def create_window(import_info, skin_xml, **kwargs):
 		return kodi_utils.notification(32574)
 
 class BaseDialog(kodi_utils.window_xml_dialog):
+	fanart = kodi_utils.get_addoninfo('fanart')
+	icon = kodi_utils.get_addoninfo('icon')
 	def __init__(self, *args):
 		kodi_utils.window_xml_dialog.__init__(self, args)
 		self.closing_actions = kodi_utils.window_xml_closing_actions
@@ -41,7 +41,7 @@ class BaseDialog(kodi_utils.window_xml_dialog):
 		self.up_actions = kodi_utils.window_xml_up_action
 		self.down_actions = kodi_utils.window_xml_down_action
 		self.player = kodi_utils.player
-		self.setProperty('tikiskins.pov_icon', icon)
+		self.setProperty('tikiskins.pov.icon', self.icon)
 
 	def make_listitem(self):
 		return kodi_utils.make_listitem()

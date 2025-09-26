@@ -1,6 +1,6 @@
 import json
 from threading import Thread
-from windows import BaseDialog, fanart as basedialog_fanart
+from windows import BaseDialog
 from indexers.tmdb_api import tmdb_people_info, tmdb_people_full_info, tmdb_image_base
 from indexers.imdb_api import imdb_videos
 from indexers.images import Images
@@ -10,7 +10,7 @@ from modules.kodi_utils import media_path, notification, show_text, local_string
 from modules.settings import extras_enable_scrollbars, extras_exclude_non_acting, get_resolution
 # from modules.kodi_utils import logger
 
-fanart = basedialog_fanart
+fanart = BaseDialog.fanart
 backup_thumbnail = media_path('box_office.png')
 backup_cast_thumbnail = media_path('people.png')
 roles_exclude = ('himself', 'herself', 'self', 'narrator', 'voice (voice)')

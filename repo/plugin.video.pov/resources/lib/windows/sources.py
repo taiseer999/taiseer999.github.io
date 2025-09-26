@@ -1,18 +1,18 @@
 import json
-from windows import BaseDialog, fanart as basedialog_fanart
+from windows import BaseDialog
 from modules.kodi_utils import media_path, hide_busy_dialog, dialog, select_dialog, ok_dialog, local_string as ls
 from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_data
 # from modules.kodi_utils import logger
 
-fanart_empty = basedialog_fanart
-poster_empty, info_icons_dict = media_path('box_office.png'), {k: media_path(v) for k, v in (
+fanart_empty = BaseDialog.fanart
+poster_empty = media_path('box_office.png')
+info_icons_dict, extra_info_choices = {k: media_path(v) for k, v in (
 	('real-debrid', 'realdebrid.png'), ('rd_cloud', 'realdebrid.png'), ('premiumize', 'premiumize.png'), ('pm_cloud', 'premiumize.png'),
 	('alldebrid', 'alldebrid.png'), ('ad_cloud', 'alldebrid.png'), ('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'),
 	('torbox', 'torbox.png'), ('tb_cloud', 'torbox.png'), ('debrider', 'debrider.png'), ('db_cloud', 'debrider.png'),
 	('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'), ('cam', 'flagSD.png'),
 	('tele', 'flagSD.png'), ('scr', 'flagSD.png'), ('sd', 'flagSD.png'), ('720p', 'flag720p.png'), ('1080p', 'flag1080p.png'),  ('4k', 'flag4k.png')
-)}
-extra_info_choices = (
+)}, (
 	('PACK', '[B]PACK[/B]'), ('DOLBY VISION', '[B]D/VISION[/B]'), ('HIGH DYNAMIC RANGE (HDR)', '[B]HDR[/B]'), ('HYBRID', '[B]HYBRID[/B]'), ('AV1', '[B]AV1[/B]'),
 	('HEVC (X265)', '[B]HEVC[/B]'), ('REMUX', 'REMUX'), ('BLURAY', 'BLURAY'), ('SDR', 'SDR'), ('3D', '3D'), ('DOLBY ATMOS', 'ATMOS'), ('DOLBY TRUEHD', 'TRUEHD'),
 	('DOLBY DIGITAL EX', 'DD-EX'), ('DOLBY DIGITAL PLUS', 'DD+'), ('DOLBY DIGITAL', 'DD'), ('DTS-HD MASTER AUDIO', 'DTS-HD MA'), ('DTS-X', 'DTS-X'),
@@ -64,14 +64,25 @@ class SourceResults(BaseDialog):
 
 	def onAction(self, action):
 		chosen_listitem = self.get_listitem(self.window_id)
+		if action in self.closing_actions:
+			if self.filter_applied: return self.clear_filter()
+			self.selected = (None, '')
+			return self.close()
 		if action in self.selection_actions:
 			if self.prescrape:
 				if chosen_listitem.getProperty('tikiskins.perform_full_search') == 'true':
 					self.selected = ('perform_full_search', '')
 					return self.close()
-			self.selected = ('play', json.loads(chosen_listitem.getProperty('source')))
-			return self.close()
-		if action == self.info_actions:
+			if not 'UNCACHED' in chosen_listitem.getProperty('tikiskins.source_type'):
+				self.selected = ('play', json.loads(chosen_listitem.getProperty('source')))
+				return self.close()
+			source = json.loads(chosen_listitem.getProperty('source'))
+			cache_provider = source.get('cache_provider', 'None')
+			magnet_url = source.get('url', 'None')
+			params = {'provider': cache_provider, 'url': magnet_url}
+			params['mode'] = 'manual_add_magnet_to_cloud' if magnet_url.startswith('magnet') else 'manual_add_nzb_to_cloud'
+			self.execute_code(run_plugin_str % self.build_url(params))
+		elif action == self.info_actions:
 			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem, fanart=self.original_fanart())
 		elif action in self.context_actions:
 			highlight = chosen_listitem.getProperty('tikiskins.highlight')
@@ -84,10 +95,6 @@ class SourceResults(BaseDialog):
 			elif 'clear_results_filter' in choice: return self.clear_filter()
 			elif 'results_filter' in choice: return self.filter_results()
 			else: self.execute_code(choice)
-		elif action in self.closing_actions:
-			if self.filter_applied: return self.clear_filter()
-			self.selected = (None, '')
-			return self.close()
 
 	def make_items(self):
 		def builder():
@@ -309,12 +316,12 @@ class ResultsContextMenu(BaseDialog):
 		return self.selected
 
 	def onAction(self, action):
+		if action in self.closing_actions: return self.close()
 		if action in self.selection_actions:
 			chosen_listitem = self.get_listitem(self.window_id)
 			self.selected = chosen_listitem.getProperty('tikiskins.context.action')
 			return self.close()
 		elif action in self.context_actions: return self.close()
-		elif action in self.closing_actions: return self.close()
 
 	def make_menu(self):
 		meta_json = json.dumps(self.meta)
@@ -326,12 +333,11 @@ class ResultsContextMenu(BaseDialog):
 		magnet_url = self.item.get('url', 'None')
 		info_hash = self.item.get('hash', 'None')
 		if 'easynews' in scrape_provider:
-			self.item_list.append(self.make_contextmenu_item(en_seek_str, run_plugin_str, {
-				'mode': 'easynews.seekable_easynews', 'source': source, 'meta': meta_json, 'name': name, 'url_dl': self.item['url_dl']
-			}))
-			self.item_list.append(self.make_contextmenu_item(en_dl_str, run_plugin_str, {
-				'mode': 'easynews.spool_easynews', 'source': source, 'meta': meta_json, 'name': name
-			}))
+			params = {'meta': meta_json, 'name': name, 'url_dl': self.item['url_dl'], 'size': self.item['size']}
+			seek_params = {'mode': 'easynews.seekable_easynews', **params}
+			spool_params = {'mode': 'easynews.spool_easynews', **params}
+			self.item_list.append(self.make_contextmenu_item(en_seek_str, run_plugin_str, seek_params))
+			self.item_list.append(self.make_contextmenu_item(en_dl_str, run_plugin_str, spool_params))
 		if 'Offcloud' in cache_provider:
 			self.item_list.append(self.make_contextmenu_item(oc_clr_str, run_plugin_str, {
 				'mode': 'offcloud.user_cloud_clear'

@@ -19,7 +19,7 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = (
-			"https://aio.atbphosting.com",
+			"https://aiostreams.stremio.ru",
 			"https://aiostreamsfortheweebs.midnightignite.me"
 		)[int(getSetting('aiostreams.url', '0'))]
 		self.movieSearch_link = '/api/v1/search'

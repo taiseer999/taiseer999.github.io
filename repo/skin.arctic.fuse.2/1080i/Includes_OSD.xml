@@ -707,7 +707,7 @@
                 <centertop>50%</centertop>
                 <info>Player.ProgressCache</info>
                 <texturebg colordiffuse="00ffffff" border="12,0,12,0">progress/progress-nib.png</texturebg>
-                <midtexture colordiffuse="main_back" border="12,0,12,0">progress/progress-nib.png</midtexture>
+                <midtexture colordiffuse="ffff6666" border="12,0,12,0">progress/progress-nib.png</midtexture>
                 <visible>Player.Playing | Player.Paused | Player.Caching</visible>
                 <visible>!Player.Seeking</visible>
                 <visible>Player.HasMedia</visible>

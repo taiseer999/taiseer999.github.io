@@ -344,7 +344,7 @@ def get_stingers(tmdb_id, poster):
 	stingers = {'duringcreditsstinger': 'During Credit Scene', 'aftercreditsstinger': 'After Credit Scene'}
 	keywords = movie_keywords(tmdb_id) or []
 	keywords = [str(i['name']) for i in keywords]
-	if all((i in keywords for i in stingers.keys())): message = 'Dual Credit Scenes'
+	if all((i in keywords for i in stingers.keys())): stinger = 'Dual Credit Scenes'
 	else: stinger = next((v for k, v in stingers.items() if k in keywords), None)
 	if stinger: notification(stinger, time=6000, icon=poster)
 

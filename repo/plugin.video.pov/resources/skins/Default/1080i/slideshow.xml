@@ -42,7 +42,7 @@
 			<onright>5000</onright>
 			<animation effect="fade" start="0" end="100" time="300" tween="sine">WindowOpen</animation>
 			<scrolltime tween="sine">400</scrolltime>
-			<orientation>Horizontal</orientation>
+			<orientation>horizontal</orientation>
 			<itemlayout height="1080" width="1920">
 				<control type="image">
 					<left>90</left>
@@ -74,7 +74,7 @@
 				<width>60</width>
 				<height>60</height>
 				<aspectratio aligny="top">keep</aspectratio>
-				<texture background="true">$INFO[Window.Property(tikiskins.pov_icon)]</texture>
+				<texture background="true">$INFO[Window.Property(tikiskins.pov.icon)]</texture>
 			</control>
 			<control type="label">
 				<left>85</left>

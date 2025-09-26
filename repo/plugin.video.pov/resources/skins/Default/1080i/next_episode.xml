@@ -30,7 +30,7 @@
 					<width>45</width>
 					<height>45</height>
 					<aspectratio aligny="top">keep</aspectratio>
-					<texture>$INFO[Window.Property(tikiskins.pov_icon)]</texture>
+					<texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
 				</control>
 				<control type="image">
 					<height>230</height>

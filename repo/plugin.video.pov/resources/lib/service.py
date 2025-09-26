@@ -24,7 +24,6 @@ def checkSettingsFile():
 		kodi_utils.addon().setSetting('kodi_menu_cache', 'true')
 		kodi_utils.sleep(500)
 	make_settings_dict()
-	if get_setting('fanart_image') == 'fanart.png': set_setting('fanart_image', 'pov_fanart.png')
 	set_property('pov_kodi_menu_cache', get_setting('kodi_menu_cache'))
 	set_property('pov_rli_fix', get_setting('rli_fix'))
 	return logger('POV', 'CheckSettingsFile Service Finished')

@@ -177,11 +177,12 @@ class MenuEditor:
 				item_get = item.get
 				line1 = ls(item_get('name', '')).replace('[B]', '').replace('[/B]', '')
 				line2 = pos_str % (menu_name, line1 or ls(item_get('list_name')) if position_list else '')
-				if item_get('iconImage') == 'pov.png': icon = kodi_utils.get_addoninfo('icon')
+				if item_get('iconImage') in ('', 'None', None, 'DefaultFolder.png'): icon = 'DefaultFolder.png'
+				elif item_get('iconImage') == 'pov.png': icon = kodi_utils.get_addoninfo('icon')
 				elif item_get('network_id', None): icon = item_get('iconImage', 'discover.png')
-				else: icon = media_path(item_get('iconImage', 'discover.png'))
+				else: icon = '%s%s' % (icon_path, item_get('iconImage', 'discover.png'))
 				yield {'line1': line1, 'line2': line2, 'icon': icon}
-		menu_name = menu_name.replace('[B]', '').replace('[/B]', '')
+		menu_name, icon_path = menu_name.replace('[B]', '').replace('[/B]', ''), media_path()
 		list_items = list(_builder())
 		if position_list: list_items.insert(0, {'line1': top_str, 'line2': top_pos_str % menu_name, 'icon': media_path('top.png')})
 		index_list = [list_items.index(i) for i in list_items]

@@ -192,7 +192,7 @@ def get_filename_match(title, url, name=None):
 
 def supported_video_extensions():
 	supported_video_extensions = kodi_utils.supported_media().split('|')
-	return [i for i in supported_video_extensions if not i in ('','iso','.zip')]
+	return [i for i in supported_video_extensions if not i in ('','.iso','.zip')]
 
 def seas_ep_query_list(season, episode):
 	season = int(season)
@@ -403,22 +403,17 @@ def get_cache_expiry(media_type, meta, season):
 			premiered = jsondate_to_datetime(meta['premiered'], '%Y-%m-%d', remove_time=True)
 			difference = subtract_dates(current_date, premiered)
 			if difference == 0: single_expiry = int(24*0.125)
-			elif difference <= 7: single_expiry = 24*1
-			elif difference <= 14: single_expiry = 24*2
-			elif difference <= 21: single_expiry = 24*3
-			elif difference <= 30: single_expiry = 24*4
-			elif difference <= 60: single_expiry = 24*7
-			else: single_expiry = 24*14
+			elif difference <= 90: single_expiry = int(24*0.334)
+			else: single_expiry = 24*3
 			season_expiry, show_expiry = 0, 0
 		else:
-			recently_ended = False
 			extra_info = meta['extra_info']
 			ended = extra_info['status'] in ('Ended', 'Canceled')
 			premiered = adjust_premiered_date(meta['premiered'], date_offset())[0]
 			difference = subtract_dates(current_date, premiered)
 			last_episode_to_air = jsondate_to_datetime(extra_info['last_episode_to_air']['air_date'], '%Y-%m-%d', remove_time=True)
 			last_ep_difference = subtract_dates(current_date, last_episode_to_air)
-			if ended and last_ep_difference <= 14: recently_ended = True
+			recently_ended = True if ended and last_ep_difference <= 14 else False
 			if not ended or recently_ended:
 				if difference == 0: single_expiry = int(24*0.125)
 				elif difference <= 3: single_expiry = 24*1

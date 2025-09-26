@@ -1,12 +1,12 @@
 import json
-from windows import BaseDialog, icon as basedialog_icon, fanart as basedialog_fanart
+from windows import BaseDialog
 from indexers.tmdb_api import tmdb_popular_people
 from indexers.people import person_data_dialog
 from modules.settings import download_directory
 from modules.kodi_utils import media_path, show_busy_dialog, hide_busy_dialog, local_string as ls
 # from modules.kodi_utils import logger
 
-fanart = basedialog_fanart
+fanart = BaseDialog.fanart
 next_icon = media_path('item_next.png')
 nextpage_str, delete_str, down_str = ls(32799), ls(32785), ls(32747)
 
@@ -147,7 +147,7 @@ class ThumbContextMenu(BaseDialog):
 		else:
 			name = self.list_item.getProperty('tikiskins.name')
 			down_file_params = {
-				'action': 'image', 'media_type': 'image', 'image': basedialog_icon,
+				'action': 'image', 'media_type': 'image', 'image': BaseDialog.icon,
 				'name': name, 'thumb_url': thumb_url, 'image_url': path, 'mode': 'downloader'
 			}
 			self.item_list.append(self.make_contextmenu_item(down_str, 'RunPlugin(%s)', down_file_params))

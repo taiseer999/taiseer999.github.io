@@ -45,7 +45,7 @@ def debrid_valid_hosts(enabled_debrids):
 	return debrid_hosts
 
 def manual_add_magnet_to_cloud(params):
-	params['provider'] = params['provider'].replace('Unchecked ', '')
+	params['provider'] = params['provider'].replace('Unchecked ', '').replace('Uncached ', '')
 	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	api = import_debrid(params['provider'])
@@ -56,7 +56,7 @@ def manual_add_magnet_to_cloud(params):
 	else: notification(32575)
 
 def manual_add_nzb_to_cloud(params):
-	params['provider'] = params['provider'].replace('Unchecked ', '')
+	params['provider'] = params['provider'].replace('Unchecked ', '').replace('Uncached ', '')
 	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	api = import_debrid(params['provider'])
@@ -103,13 +103,14 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 		api = import_debrid(source['debrid'])
 		files = api.parse_magnet_pack(source['url'], source['hash'])
 		selected_files = []
+		selected_files_append = selected_files.append
 		for i in files or selected_files:
 			torrent_id, filename = i.get('torrent_id'), i['filename'].lower()
 			if filename.endswith('.m2ts'): raise Exception('_m2ts_check failed')
 			if not filename.endswith(tuple(extensions)): continue
 			if season and not seas_ep_filter(season, episode, filename): continue
 			elif any(x in filename for x in extras_filtering_list): continue
-			selected_files.append(i)
+			selected_files_append(i)
 		if not selected_files: raise Exception('selected_files failed')
 		if not season: selected_files.sort(key=lambda k: k['size'], reverse=True)
 		file_key = next((i['link'] for i in selected_files), None)

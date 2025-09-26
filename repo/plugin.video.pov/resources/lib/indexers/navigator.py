@@ -390,13 +390,13 @@ class Navigator:
 	def multiselect_genres(self):
 		import json
 		def _builder():
-			for genre, value in sorted(genre_list.items()):
+			for genre, value in genre_list.items():
 				function_list_append(value[0])
-				yield {'line1': genre, 'icon': media_path('genres.png')}
-		menu_type, genre_list = self.params['menu_type'], self.params['genre_list']
+				yield {'line1': genre, 'icon': '%s%s' % (icon_path, 'genres.png')}
+		menu_type, genre_list, icon_path = self.params['menu_type'], self.params['genre_list'], media_path()
 		function_list = []
 		function_list_append = function_list.append
-		genre_list = json.loads(genre_list)
+		genre_list = dict(sorted(json.loads(genre_list).items()))
 		list_items = list(_builder())
 		kwargs = {'items': json.dumps(list_items), 'heading': ls(32847), 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false'}
 		genre_ids = ku.select_dialog(function_list, **kwargs)
@@ -475,22 +475,20 @@ class Navigator:
 				try:
 					cm = []
 					cm_append = cm.append
-					name = i[0]
-					display_name = '[B]%s : [/B] %s ' % (short_str.upper(), i[0])
 					contents = eval(i[1])
-					url_params = {'mode': 'navigator.build_shortcut_folder_list', 'name': name, 'iconImage': 'folder.png',
-								'shortcut_folder': 'True', 'external_list_item': 'True'}
-					url = build_url(url_params)
+					name, icon = i[0], '%s%s' % (icon_path, 'folder.png')
+					display_name = '[B]%s : [/B] %s ' % (short_str.upper(), name)
+					url_params = {'name': name, 'iconImage': 'folder.png', 'external_list_item': 'True'}
+					url = build_url({'mode': 'navigator.build_shortcut_folder_list', 'shortcut_folder': 'True', **url_params})
+					cm_append((delete_str, 'RunPlugin(%s)'% build_url({'mode': 'menu_editor.shortcut_folder_delete', 'list_name': name})))
 					listitem = make_listitem()
 					listitem.setLabel(display_name)
-					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
-					cm_append((delete_str, 'RunPlugin(%s)'% build_url({'mode': 'menu_editor.shortcut_folder_delete', 'list_name': name})))
 					listitem.addContextMenuItems(cm)
+					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					yield (url, listitem, True)
 				except: pass
-		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		handle, fanart, icon_path = self.params_get('handle'), self.params_get('fanart'), media_path()
 		short_str, delete_str, new_folder_str = ls(32514), ls(32703), '[B]%s...[/B]' % ls(32702)
-		icon = media_path('folder.png')
 		add_dir(handle, {'mode': 'menu_editor.shortcut_folder_make'}, new_folder_str, media_path('new.png'), isFolder=False)
 		folders = nc.get_shortcut_folders()
 		if folders: add_items(handle, list(_builder()))
@@ -501,20 +499,21 @@ class Navigator:
 			for item_position, item in enumerate(contents):
 				try:
 					cm = []
+					cm_append = cm.append
 					item_get = item.get
 					name = item_get('name', 'Error: No Name')
-					icon = item_get('iconImage') if item_get('network_id', '') != '' else media_path(item_get('iconImage'))
+					icon = item_get('iconImage') if item_get('network_id', '') != '' else '%s%s' % (icon_path, item_get('iconImage'))
 					isFolder = False if item_get('isFolder', '') == 'false' else True
 					url = build_url(item)
-					cm.append((ls(32705),'RunPlugin(%s)' % build_url(
-						{'mode': 'menu_editor.edit_menu_shortcut_folder', 'active_list': list_name, 'position': item_position})))
+					edit_params = {'mode': 'menu_editor.edit_menu_shortcut_folder', 'active_list': list_name, 'position': item_position}
+					cm_append((edit_str,'RunPlugin(%s)' % build_url(edit_params)))
 					listitem = make_listitem()
 					listitem.setLabel(name)
-					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					listitem.addContextMenuItems(cm)
+					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					yield (url, listitem, isFolder)
 				except: pass
-		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		handle, fanart, icon_path = self.params_get('handle'), self.params_get('fanart'), media_path()
 		list_name = self.params_get('name')
 		contents = nc.get_shortcut_folder_contents(list_name)
 		add_items(handle, list(_process()))
@@ -527,20 +526,20 @@ class Navigator:
 					cm = []
 					cm_append = cm.append
 					item_get = item.get
-					if item_get('iconImage') in ('', 'None', None): icon = 'DefaultFolder.png'
+					if item_get('iconImage') in ('', 'None', None, 'DefaultFolder.png'): icon = 'DefaultFolder.png'
 					elif item_get('iconImage') == 'pov.png': icon = ku.get_addoninfo('icon')
 					elif item_get('network_id', '') != '': icon = item_get('iconImage')
-					else: icon = media_path(item_get('iconImage', ''))
+					else: icon = '%s%s' % (icon_path, item_get('iconImage'))
 					isFolder = False if item_get('isFolder') == 'false' else True
 					cm_append((edit_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.edit_menu', 'active_list': self.list_name, 'position': item_position})))
 					cm_append((browse_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.browse', 'active_list': self.list_name})))
 					listitem = make_listitem()
 					listitem.setLabel(ls(item_get('name', '')))
-					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					listitem.addContextMenuItems(cm)
+					listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
 					yield (build_url(item), listitem, isFolder)
 				except: pass
-		handle, fanart = self.params_get('handle'), self.params_get('fanart')
+		handle, fanart, icon_path = self.params_get('handle'), self.params_get('fanart'), media_path()
 		contents = nc.currently_used_list(self.list_name)
 		add_items(handle, list(build_main_lists()))
 		self._end_directory()
@@ -551,7 +550,7 @@ class Navigator:
 	def _add_item(self, url_params, iconImage='', prefix='', isFolder=True, list_name=''):
 		handle, fanart = self.params_get('handle'), self.params_get('fanart')
 		if not isFolder: url_params['isFolder'] = 'false'
-		if iconImage in ('', 'None', None): icon = 'DefaultFolder.png'
+		if iconImage in ('', 'None', None, 'DefaultFolder.png'): icon = 'DefaultFolder.png'
 		elif iconImage == 'pov.png': icon = ku.get_addoninfo('icon')
 		elif 'network_id' in url_params: icon = iconImage
 		else: icon = media_path(iconImage)

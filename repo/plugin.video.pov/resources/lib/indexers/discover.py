@@ -378,20 +378,20 @@ class Discover:
 					data_id = history[count][0]
 					name = item['name']
 					url_params = {'mode': item['mode'], 'action': item['action'], 'query': item['query'],
-								  'name': name, 'iconImage': default_icon}
+									'name': name, 'iconImage': default_icon}
 					display = '%s | %s' % (count+1, name)
 					url = build_url(url_params)
 					remove_single_params = {'mode': 'discover_remove_from_history', 'data_id': data_id, 'silent': False}
 					remove_all_params = {'mode': 'discover_remove_all_history', 'media_type': media_type, 'silent': True}
-					export_params = {'mode': 'navigator.adjust_main_lists', 'method': 'add_external',
-									'list_name': name, 'menu_item': json.dumps(url_params)}
-					listitem = make_listitem()
-					listitem.setLabel(display)
-					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
-					cm_append(('[B]%s[/B]' % export_str, 'RunPlugin(%s)'% build_url(export_params)))
+#					export_params = {'mode': 'navigator.adjust_main_lists', 'method': 'add_external',
+#										'list_name': name, 'menu_item': json.dumps(url_params)}
 					cm_append(('[B]%s[/B]' % remove_str, 'RunPlugin(%s)'% build_url(remove_single_params)))
 					cm_append(('[B]%s[/B]' % clear_str, 'RunPlugin(%s)'% build_url(remove_all_params)))
+#					cm_append(('[B]%s[/B]' % export_str, 'RunPlugin(%s)'% build_url(export_params)))
+					listitem = make_listitem()
+					listitem.setLabel(display)
 					listitem.addContextMenuItems(cm)
+					listitem.setArt({'icon': default_icon, 'poster': default_icon, 'thumb': default_icon, 'fanart': fanart, 'banner': default_icon})
 					yield (url, listitem, True)
 				except: pass
 		__handle__ = int(sys.argv[1])
@@ -405,9 +405,7 @@ class Discover:
 		history = dbcur.fetchall()
 		if not display: return [i[0] for i in history]
 		data = [eval(i[1]) for i in history]
-		export_str = ls(32697)
-		remove_str = ls(32698)
-		clear_str = ls(32699)
+		export_str, remove_str, clear_str = ls(32697), ls(32698), ls(32699)
 		item_list = list(_builder())
 		kodi_utils.add_items(__handle__, item_list)
 		self._end_directory()

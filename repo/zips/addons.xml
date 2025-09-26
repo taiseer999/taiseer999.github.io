@@ -1415,7 +1415,7 @@ updated YouTube addon URL
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.pov" version="5.09.21" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.10.01" name="POV" provider-name="kodifitzwell">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -6629,7 +6629,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.10.2">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.10.3">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />
@@ -6660,7 +6660,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.10.12">
+</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.10.13">
  <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.14" />

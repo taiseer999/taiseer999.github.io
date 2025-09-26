@@ -35,7 +35,7 @@
 					<align>left</align>
 					<aligny>top</aligny>
 					<aspectratio aligny="top">keep</aspectratio>
-					<texture>$INFO[Window.Property(tikiskins.pov_icon)]</texture>
+					<texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
 				</control>
 				<control type="label">
 					<centerleft>50%</centerleft>
@@ -79,7 +79,7 @@
 						<height>240</height>
 						<width>240</width>
 						<aspectratio aligny="top">keep</aspectratio>
-						<texture>$INFO[Window.Property(tikiskins.pov_icon)]</texture>
+						<texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
 					</control>
 				</control>
 			</control>

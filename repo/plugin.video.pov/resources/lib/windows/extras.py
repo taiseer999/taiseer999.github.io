@@ -1,27 +1,26 @@
 import json
 from threading import Thread
 from datetime import datetime, timedelta
-from windows import BaseDialog, icon as basedialog_icon, fanart as basedialog_fanart
+from windows import BaseDialog
 from caches import watched_cache as ws
 from indexers import people, metadata, tmdb_api, imdb_api, mdblist_api
 from indexers.images import Images
 from modules import settings, dialogs
-from modules.sources import SourceSelect
 from modules.downloader import runner
 from modules.meta_lists import networks
 from modules.utils import get_datetime
 from modules.kodi_utils import media_path, close_all_dialog, hide_busy_dialog, ok_dialog, fetch_kodi_imagecache, local_string as ls
 # from modules.kodi_utils import logger
 
-fanart_empty = basedialog_fanart
+fanart_empty = BaseDialog.fanart
 poster_empty = media_path('box_office.png')
 backup_thumbnail = media_path('box_office.png')
 backup_cast_thumbnail = media_path('people.png')
 tmdb_image_base = tmdb_api.tmdb_image_base
-button_ids = 10, 11, 12, 13, 14, 15, 16, 17, 50
-cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2050, 2051, 2052, 2053, 2054, 2055
+button_ids = 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+playbrowse_id, trailer_id, keywords_id, images_id, extrainfo_id, genre_id, director_id, trakt_id, mdbl_id, tmdbl_id = button_ids
+actions_id, cast_id, recommended_id, reviews_id, trivia_id, blunders_id, parentsguide_id = 2049, 2050, 2051, 2052, 2053, 2054, 2055
 videos_id, posters_id, backdrops_id, year_id, genres_id, networks_id, collection_id = 2056, 2057, 2058, 2059, 2060, 2061, 2062
-playbrowse_id, trailer_id, keywords_id, images_id, extrainfo_id, genre_id, director_id, trakt_id, plot_id = button_ids
 tmdb_list_ids = (recommended_id, year_id, genres_id, networks_id, collection_id)
 imdb_list_ids = (reviews_id, trivia_id, blunders_id, parentsguide_id)
 art_ids = (posters_id, backdrops_id)
@@ -48,6 +47,7 @@ class Extras(BaseDialog):
 		): i.start()
 		if self.media_type == 'movie': Thread(target=self.make_collection).start()
 		else: self.setProperty('tikiskins.extras.make.collection', 'false')
+		self.make_options()
 
 	def run(self):
 		self.doModal()
@@ -56,18 +56,43 @@ class Extras(BaseDialog):
 		if self.selected: self.execute_code(self.selected)
 
 	def onClick(self, controlID):
-		self.control_id = None
-		if controlID in button_ids:
-			if controlID == playbrowse_id:
+		self.control_id = controlID
+
+	def onAction(self, action):
+		if action in self.closing_actions: self.close()
+		if action in self.context_actions:
+			focus_id = self.getFocusId()
+			if focus_id == actions_id and self.media_type == 'movie':
+				chosen_listitem = self.get_listitem(focus_id)
+				params = int(chosen_listitem.getProperty('tikiskins.extras.actions'))
+				if not params == playbrowse_id: return
+				dialogs.playback_choice('movie', self.poster, self.meta)
+			elif focus_id in (posters_id, backdrops_id):
+				chosen_listitem = self.get_listitem(focus_id)
+				image = chosen_listitem.getProperty('tikiskins.extras.thumbnail')
+				params = {
+					'action': 'image', 'media_type': 'image', 'image': BaseDialog.icon,
+					'name': '%s %s' % (self.rootname, chosen_listitem.getProperty('tikiskins.extras.name')),
+					'thumb_url': image.replace('w780', {posters_id: 'w185', backdrops_id: 'w300'}[focus_id]),
+					'image_url': image.replace('w780', 'original')
+				}
+				return runner(params)
+		if not self.control_id or not action in self.selection_actions: return
+		if self.control_id == actions_id:
+			try: chosen_var = int(self.get_listitem(self.control_id).getProperty('tikiskins.extras.actions'))
+			except: return
+			if chosen_var == playbrowse_id:
 				if self.media_type == 'movie':
-					url_params = {'mode': 'play_media', 'media_type': 'movie', 'query': self.rootname, 'tmdb_id': self.tmdb_id}
-					SourceSelect().playback_prep(url_params)
+					close_all_dialog()
+					url_params = {'mode': 'play_media', 'media_type': 'movie', 'tmdb_id': self.tmdb_id}
+					self.selected = self.plugin_runner % self.build_url(url_params)
+					self.close()
 				else:
 					close_all_dialog()
 					url_params = self.make_tvshow_browse_params()
 					self.selected = self.folder_runner % self.build_url(url_params)
 					self.close()
-			elif controlID == trailer_id:
+			elif chosen_var == trailer_id:
 				chosen = dialogs.trailer_choice(self.media_type, self.poster, self.tmdb_id, self.meta['trailer'], self.meta['all_trailers'])
 				if not chosen: return ok_dialog()
 				elif chosen == 'canceled': return
@@ -78,20 +103,10 @@ class Extras(BaseDialog):
 				else:
 					params = {'import_info': json.dumps(['windows.videoplayer', 'VideoPlayer']), 'skin_xml': 'videoplayer.xml', 'kwargs': json.dumps({'video': chosen})}
 					return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
-			elif controlID == keywords_id:
-				base_media = 'movies' if self.media_type == 'movie' else 'tv'
-				keyword_params = dialogs.imdb_keywords_choice(base_media, self.imdb_id, self.poster)
-				if not keyword_params: return
-				close_all_dialog()
-				self.selected = self.folder_runner % self.build_url(keyword_params)
-				self.close()
-			elif controlID == images_id:
-				params = {'mode': 'imdb_image_results', 'imdb_id': self.imdb_id, 'media_title': self.rootname, 'page_no': 1, 'rolling_count': 0}
-				return Images().run(params)
-			elif controlID == extrainfo_id:
+			elif chosen_var == extrainfo_id:
 				text = dialogs.media_extra_info(self.media_type, self.meta)
 				self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=self.poster)
-			elif controlID == genre_id:
+			elif chosen_var == genre_id:
 				if not self.genre: return
 				base_media = 'movies' if self.media_type == 'movie' else 'tv'
 				genre_params = dialogs.genres_choice(base_media, self.genre, self.poster)
@@ -99,7 +114,7 @@ class Extras(BaseDialog):
 				close_all_dialog()
 				self.selected = self.folder_runner % self.build_url(genre_params)
 				self.close()
-			elif controlID == director_id:
+			elif chosen_var == director_id:
 				if self.media_type == 'movie':
 					director = self.meta.get('director', None)
 					if not director: return
@@ -108,32 +123,19 @@ class Extras(BaseDialog):
 					close_all_dialog()
 					self.selected = self.plugin_runner % self.build_url({'mode': 'random_choice', 'tmdb_id': self.tmdb_id, 'poster': self.poster})
 					self.close()
-			elif controlID == trakt_id:
-				params = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id, 'tvdb_id': self.meta['tvdb_id'], 'media_type': self.media_type,
-						'icon': self.poster}
+			elif chosen_var == trakt_id:
+				params = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id, 'tvdb_id': self.meta['tvdb_id'],
+						'media_type': self.media_type, 'icon': self.poster}
 				return dialogs.trakt_manager_choice(params)
-			elif controlID == plot_id:
-				self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=self.plot, poster=self.poster)
-		else: self.control_id = controlID
-
-	def onAction(self, action):
-		if action in self.closing_actions: self.close()
-		if action in self.context_actions:
-			focus_id = self.getFocusId()
-			if focus_id == playbrowse_id and self.media_type == 'movie':
-				dialogs.playback_choice('movie', self.poster, self.meta)
-			elif focus_id in (posters_id, backdrops_id):
-				chosen_listitem = self.get_listitem(focus_id)
-				image = chosen_listitem.getProperty('tikiskins.extras.thumbnail')
-				params = {
-					'action': 'image', 'media_type': 'image', 'image': basedialog_icon,
-					'name': '%s %s' % (self.rootname, chosen_listitem.getProperty('tikiskins.extras.name')),
-					'thumb_url': image.replace('w780', {posters_id: 'w185', backdrops_id: 'w300'}[focus_id]),
-					'image_url': image.replace('w780', 'original')
-				}
-				return runner(params)
-		if not self.control_id: return
-		if action in self.selection_actions:
+			elif chosen_var == mdbl_id:
+				params = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id, 'tvdb_id': self.meta['tvdb_id'],
+						'media_type': self.media_type, 'icon': self.poster}
+				return dialogs.mdb_manager_choice(params)
+			elif chosen_var == tmdbl_id:
+				params = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id, 'tvdb_id': self.meta['tvdb_id'],
+						'media_type': self.media_type, 'icon': self.poster}
+				return dialogs.tmdb_manager_choice(params)
+		else:
 			try: chosen_var = self.get_listitem(self.control_id).getProperty(self.item_action_dict[self.control_id])
 			except: return
 			if self.control_id == cast_id:
@@ -158,6 +160,37 @@ class Extras(BaseDialog):
 				slideshow_params = {'mode': 'slideshow_image', 'all_images': chosen_var, 'current_index': self.get_position(self.control_id)}
 				ending_position = Images().run(slideshow_params)
 				self.getControl(self.control_id).selectItem(ending_position)
+
+	def make_options(self):
+		def builder():
+			for i in (
+				(playbrowse_id, 'playback', 'player.png')
+				if self.media_type == 'movie' else
+				(playbrowse_id, 'browse', 'in_progress_tvshow.png'),
+				(extrainfo_id, 'extra info', 'information.png'),
+				(trailer_id, 'trailer', 'watched.png'),
+				(genre_id, 'genres', 'genres.png'),
+				(director_id, 'director', 'movies.png')
+				if self.media_type == 'movie' else
+				(director_id, 'play random', 'library.png'),
+				(trakt_id, 'trakt', 'trakt.png'),
+				(mdbl_id, 'mdblist', 'mdblist.png'),
+				(tmdbl_id, 'tmdblist', 'tmdb.png')
+			):
+				try:
+					name, icon = '[B]%s[/B]' % i[1].upper(), '%s%s' % (icon_path, i[2])
+					listitem = self.make_listitem()
+					listitem.setProperty('tikiskins.extras.name', name)
+					listitem.setProperty('tikiskins.extras.actions', str(i[0]))
+					listitem.setProperty('tikiskins.extras.thumbnail', icon)
+					yield listitem
+				except: pass
+		try:
+			icon_path = media_path()
+			item_list = list(builder())
+#			self.setProperty('tikiskins.extras.actions.number', '(x%02d)' % len(item_list))
+			self.add_items(actions_id, item_list)
+		except: pass
 
 	def make_cast(self):
 		if not cast_id in self.enabled_lists: return
@@ -266,7 +299,7 @@ class Extras(BaseDialog):
 			for item in data:
 				try:
 					name, icon = parentsguide_dict[item['title']]
-					icon = media_path(icon)
+					icon = '%s%s' % (icon_path, icon)
 					ranking = parentsguide_dict[item['ranking']].upper()
 					if item['listings']: ranking += ' (x%02d)' % len(item['listings'])
 					listitem = self.make_listitem()
@@ -277,6 +310,7 @@ class Extras(BaseDialog):
 					yield listitem
 				except: pass
 		try:
+			icon_path = media_path()
 			data = mdblist_api.mdb_parentsguide(self.imdb_id, self.media_type)
 			item_list = list(builder())
 			self.setProperty('tikiskins.extras.imdb_parentsguide.number', '(x%02d)' % len(item_list))
@@ -466,8 +500,7 @@ class Extras(BaseDialog):
 		keywords = [str(i['name']) for i in keywords]
 		if all((i in keywords for i in stingers.keys())): stinger = 'Dual Credit Scenes'
 		else: stinger = next((v for k, v in stingers.items() if k in keywords), None)
-		if stinger: stinger = '| [I]%s[/I]' % stinger
-		return stinger or ''
+		return stinger if stinger else ''
 
 	def make_tvshow_browse_params(self):
 		total_seasons = self.meta['total_seasons']
@@ -564,7 +597,7 @@ class Extras(BaseDialog):
 		self.clearlogo = self.meta['clearlogo'] if settings.get_fanart_data() else self.meta['tmdblogo'] or ''
 		self.plot = self.meta['tvshow_plot'] if 'tvshow_plot' in self.meta else self.meta['plot']
 		if not self.plot: self.plot = ''
-		self.rating = str(self.meta['rating'])
+		self.rating = '%.2f' % self.meta['rating']
 		self.mpaa = self.meta['mpaa']
 		self.status = self.meta['extra_info'].get('status', '').replace('Series', '')
 		self.genre = self.meta['genre']

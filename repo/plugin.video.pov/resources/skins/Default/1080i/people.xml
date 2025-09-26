@@ -24,7 +24,7 @@
 				<width>60</width>
 				<height>60</height>
 				<aspectratio aligny="top">keep</aspectratio>
-				<texture>$INFO[Window.Property(tikiskins.pov_icon)]</texture>
+				<texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
 			</control>
 			<control type="label">
 				<animation type="WindowOpen" reversible="false">
@@ -337,7 +337,7 @@
 						<texturesliderbar colordiffuse="FF555556">white.png</texturesliderbar>
 						<texturesliderbarfocus colordiffuse="FFB7B4BB">white.png</texturesliderbarfocus>
 						<showonepage>false</showonepage>
-						<orientation>Horizontal</orientation>
+						<orientation>horizontal</orientation>
 						<visible>Control.IsVisible(2050) + String.IsEqual(Window.Property(tikiskins.person.enable_scrollbars),true)</visible>
 					</control>
 					<control type="image">
@@ -458,7 +458,7 @@
 						<texturesliderbar colordiffuse="FF555556">white.png</texturesliderbar>
 						<texturesliderbarfocus colordiffuse="FFB7B4BB">white.png</texturesliderbarfocus>
 						<showonepage>false</showonepage>
-						<orientation>Horizontal</orientation>
+						<orientation>horizontal</orientation>
 						<visible>Control.IsVisible(2051) + String.IsEqual(Window.Property(tikiskins.person.enable_scrollbars),true)</visible>
 					</control>
 					<control type="image">
@@ -579,7 +579,7 @@
 						<texturesliderbar colordiffuse="FF555556">white.png</texturesliderbar>
 						<texturesliderbarfocus colordiffuse="FFB7B4BB">white.png</texturesliderbarfocus>
 						<showonepage>false</showonepage>
-						<orientation>Horizontal</orientation>
+						<orientation>horizontal</orientation>
 						<visible>Control.IsVisible(2052) + String.IsEqual(Window.Property(tikiskins.person.enable_scrollbars),true)</visible>
 					</control>
 					<control type="image">
@@ -700,7 +700,7 @@
 						<texturesliderbar colordiffuse="FF555556">white.png</texturesliderbar>
 						<texturesliderbarfocus colordiffuse="FFB7B4BB">white.png</texturesliderbarfocus>
 						<showonepage>false</showonepage>
-						<orientation>Horizontal</orientation>
+						<orientation>horizontal</orientation>
 						<visible>Control.IsVisible(2053) + String.IsEqual(Window.Property(tikiskins.person.enable_scrollbars),true)</visible>
 					</control>
 					<control type="image">

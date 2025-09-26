@@ -57,13 +57,12 @@ def seekable_easynews(params):
 	POVPlayer().run(resolved_link)
 
 def spool_easynews(params):
-	import json, shutil
+	import shutil
 	from threading import Thread, Event
 	from modules.player import POVPlayer
-	source = json.loads(params['source'])
-	name, url_dl, size = source['url_dl'].split('/')[-1], source['url_dl'], source['size']
-	*_, free_space = shutil.disk_usage(kodi_utils.databases_path)
-	free_space = free_space / 1073741824
+	name, url_dl, size = params['url_dl'].split('/')[-1], params['url_dl'], float(params['size'])
+	*_, free_space = shutil.disk_usage(kodi_utils.translate_path(kodi_utils.databases_path))
+	free_space /= 1073741824
 	if not free_space > size * 1.05: return kodi_utils.notification('Insufficient Free Space')
 	path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'spool')
 	file_path = kodi_utils.translate_path(kodi_utils.get_addoninfo('profile') + 'spool' + '/%s' % name)

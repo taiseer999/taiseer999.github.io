@@ -24,6 +24,7 @@ debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled,
 quality_ranks, main_line = {'4K': 1, '1080p': 2, '720p': 3, 'SD': 4, 'SCR': 5, 'CAM': 5, 'TELE': 5}, '%s[CR]%s[CR]%s'
 cloud_scrapers, folder_scrapers = ('rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud'), ('folder1', 'folder2', 'folder3', 'folder4', 'folder5')
 default_internal_scrapers = ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud', 'folders')
+default_hosters_providers = ('Real-Debrid', 'Premiumize.me', 'AllDebrid')
 av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]AV1[/B]', '[B]HEVC[/B]', '[B]HDR[/B]', '[B]D/VISION[/B]'
 dialog_format, remaining_format = '[COLOR %s][B]%s[/B][/COLOR] 4K: %s | 1080p: %s | 720p: %s | SD: %s | Total: %s', ls(32676)
 
@@ -511,7 +512,7 @@ class SourceSelect():
 						else: progressDialogBG.update(percent, name)
 					except: pass
 				link = self.resolve_sources(item, self.meta)
-				if link: yield None if link == 'uncached' else link
+				if not link is None: yield link
 		try:
 			self._kill_progress_dialog()
 			if autoplay:
@@ -519,8 +520,8 @@ class SourceSelect():
 				if self.filters_ignored: notification(32686)
 			else:
 				source_index = results.index(source) if source in results else -1
-				items = [i for i in results[source_index + 1:] if not 'Uncached' in i.get('cache_provider', '')]
-				items = [source] + items[:40]
+				items = [i for i in results[source_index + 1:] if not 'Uncached' in i.get('cache_provider', '')][:40]
+				items.insert(0, source)
 			if not background: # self._make_progress_dialog()
 				if not self.load_action:
 					progressDialogBG.create('POV', 'POV loading...')
@@ -536,29 +537,23 @@ class SourceSelect():
 
 	def resolve_sources(self, item, meta):
 		try:
-			if item.get('scrape_provider') in default_internal_scrapers:
-				return debrid.resolve_internal_sources(
-					item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False)
-				)
-			if item.get('cache_provider') and not 'Uncached' in item['cache_provider']:
+			if item.get('scrape_provider') in ('external',):
 				if meta['media_type'] == 'episode':
 					title = meta['ep_name']
 					season = meta.get('custom_season') or meta.get('season')
 					episode = meta.get('custom_episode') or meta.get('episode')
 				else: title, season, episode = metadata.get_title(meta, self.language), None, None
-				if item['url'].startswith('magnet'):
-					store_to_cloud = settings.store_resolved_torrent_to_cloud(item['debrid'])
-					return debrid.resolve_external_sources(item, store_to_cloud, title, season, episode)
-				else:
+				if not item['url'].startswith('magnet'):
 					store_to_cloud = settings.store_resolved_usenet_to_cloud(item['debrid'])
 					api = debrid.import_debrid(item['debrid'])
 					return api.resolve_nzb(item['url'], item['hash'], store_to_cloud, title, season, episode)
-			if item.get('cache_provider') and 'Uncached' in item['cache_provider']:
-				if item['url'].startswith('magnet'): function = debrid.manual_add_magnet_to_cloud
-				else: function = debrid.manual_add_nzb_to_cloud
-				function({'provider': item['debrid'], 'url': item['url'], 'name': item['name']})
-				return 'uncached'
-			if item.get('debrid') in ('Real-Debrid', 'Premiumize.me', 'AllDebrid') and not item['source'].lower() == 'torrent':
+				store_to_cloud = settings.store_resolved_torrent_to_cloud(item['debrid'])
+				return debrid.resolve_external_sources(item, store_to_cloud, title, season, episode)
+			if item.get('scrape_provider') in default_internal_scrapers:
+				return debrid.resolve_internal_sources(
+					item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False)
+				)
+			if item.get('debrid') in default_hosters_providers and not item['source'].lower() == 'torrent':
 				api = debrid.import_debrid(item['debrid'])
 				return api.unrestrict_link(item['url'])
 			return item['url']
