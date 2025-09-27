@@ -102,6 +102,20 @@ adult="no"
 info="http://your.info.url"
 description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
+name="AF2 CoreELEC LITE"
+version="1.0"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=fykipvdhBpj92hivW%2FAReERFPBAKfs%2BVOVqFdnjahvVf7gwIS%2FcJh7NxOIIplENk&expiry=pwJNoCgXXxkk8csqqwRaRQ%3D%3D&mac=d7ab93d84bd72d536c4ef509a0b0f557d4e1d236e933085a7937280cc619d09c"
+minor="http://"
+gui="http://"
+kodi="21"
+theme="http://your.themes.url"
+icon="https://i.postimg.cc/zfQ9dX68/Screenshot-2025-09-27-at-3-15-53-PM.jpg"
+fanart="https://i.postimg.cc/zfQ9dX68/Screenshot-2025-09-27-at-3-15-53-PM.jpg"
+preview="http://"
+adult="no"
+info="http://your.info.url"
+description="بيلد مخفف وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
+
 name="estuary.modv2 CoreELEC Arabic/English"
 version="1.0"
 url="hhttps://abukarimbuilds.tashouri.workers.dev/download.aspx?file=ejXJbnI2ULg0ijgzVzgvyfsPEnbIcJpaxRyUtYkSt4RnFIg9RD4p9fdl7z5aHeGv&expiry=kEuK1kNjuaIvCqJ%2F%2Bx%2F%2F5A%3D%3D&mac=cc364dfc19c496aab09e268150f514bcde8b94747f9ee1d8ed3701a35090a56f"
