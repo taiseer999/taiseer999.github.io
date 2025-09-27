@@ -29,6 +29,9 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver, PlexSubtitleDow
         self.viaOSD = kwargs.get('via_osd')
         self.nonPlayback = kwargs.get('non_playback')
         self.parent = kwargs.get('parent')
+        self.sessionID = None
+        if self.parent and self.parent.player:
+            self.sessionID = self.parent.player.handler.sessionID
         self.roundRobin = kwargs.get('round_robin', True)
         self.lastSelectedItem = 0
 
@@ -190,9 +193,9 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver, PlexSubtitleDow
         result = mli.dataSource
 
         if result == 'audio':
-            showAudioDialog(self.video, non_playback=self.nonPlayback)
+            showAudioDialog(self.video, non_playback=self.nonPlayback, session_id=self.sessionID)
         elif result == 'subs':
-            showSubtitlesDialog(self.video, non_playback=self.nonPlayback)
+            showSubtitlesDialog(self.video, non_playback=self.nonPlayback, session_id=self.sessionID)
         elif result == 'download_subs':
             downloaded = self.downloadPlexSubtitles(self.video, non_playback=self.nonPlayback)
             if downloaded:
@@ -227,22 +230,23 @@ class VideoSettingsDialog(kodigui.BaseDialog, util.CronReceiver, PlexSubtitleDow
         self.showSettings()
 
 
-def showAudioDialog(video, non_playback=False):
+def showAudioDialog(video, non_playback=False, session_id=None):
     options = []
     idx = None
     for i, s in enumerate(video.audioStreams):
         if s.isSelected():
             idx = i
         options.append((s, (s.getTitle(metadata.apiTranslate), s.title)))
-    choice = showOptionsDialog(T(32395, 'Audio'), options, non_playback=non_playback, selected_idx=idx)
+    choice = showOptionsDialog(T(32395, 'Audio'), options, non_playback=non_playback, selected_idx=idx,
+                               trim=False)
     if choice is None:
         return
 
-    video.selectStream(choice, from_session=not non_playback)
+    video.selectStream(choice, from_session=not non_playback, session_id=session_id)
     video.clearCache()
 
 
-def showSubtitlesDialog(video, non_playback=False):
+def showSubtitlesDialog(video, non_playback=False, session_id=None):
     options = [(plexnet.plexstream.NoneStream(), 'None')]
     idx = None
     sss = video.selectedSubtitleStream(
@@ -260,7 +264,7 @@ def showSubtitlesDialog(video, non_playback=False):
     if choice is None:
         return
 
-    video.selectStream(choice, from_session=not non_playback)
+    video.selectStream(choice, from_session=not non_playback, session_id=session_id)
     video.clearCache()
     video.manually_selected_sub_stream = choice.id
 

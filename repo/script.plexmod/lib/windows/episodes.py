@@ -29,7 +29,7 @@ from .mixins.seasons import SeasonsMixin
 from .mixins.spoilers import SpoilersMixin
 from .mixins.playbackbtn import PlaybackBtnMixin
 from .mixins.thememusic import ThemeMusicMixin
-from .mixins.watchlist import WatchlistUtilsMixin
+from .mixins.watchlist import WatchlistUtilsMixin, removeFromWatchlistBlind
 from .mixins.ratings import RatingsMixin
 from .mixins.roles import RolesMixin
 from .mixins.common import CommonMixin
@@ -206,6 +206,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
     width = 1920
     height = 1080
 
+    supportsAutoPlay = True
+
     THUMB_AR16X9_DIM = util.scaleResolution(657, 393)
     POSTER_DIM = util.scaleResolution(420, 630)
     RELATED_DIM = util.scaleResolution(268, 402)
@@ -250,6 +252,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.parentList = kwargs.get('parentList')
         self.cameFrom = kwargs.get('came_from')
         self.fromWatchlist = kwargs.get('from_watchlist')
+        self.startOver = kwargs.get('start_over')
         self.tasks = backgroundthread.Tasks()
 
     def reset(self, episode, season=None, show=None):
@@ -279,7 +282,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.useBGM = False
         PlaybackBtnMixin.reset(self)
 
-    def doClose(self):
+    def doClose(self, **kw):
         self.closing = True
         self.episodesPaginator = None
         self.relatedPaginator = None
@@ -292,6 +295,18 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             player.PLAYER.off('video.progress', self.onVideoProgress)
         except KeyError:
             pass
+
+    def onBlindClose(self):
+        if self.openedWithAutoPlay and not self.started:
+            vp = None
+            if self.show_.ratingKey in VIDEO_PROGRESS:
+                # access progress data for current show only
+                vp = copy.deepcopy(VIDEO_PROGRESS[self.show_.ratingKey]).get(self.season.ratingKey, {})
+
+            if vp:
+                self.show_.reload(checkFiles=1, **VIDEO_RELOAD_KW)
+                if self.show_.isFullyWatched:
+                    removeFromWatchlistBlind(self.show_.guid)
 
     @busy.dialog()
     def _onFirstInit(self):
@@ -311,14 +326,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self._setup()
         self.postSetup()
 
-    def doAutoPlay(self):
+    def doAutoPlay(self, blind=False):
         # First reload the video to get all the other info
         self.initialEpisode.reload(checkFiles=1, **VIDEO_RELOAD_KW)
 
         # We're not hitting onFirstInit when autoplaying from home, setup hooks here, so we can grab video progress
-        #self._setup_hooks()
+        self._setup_hooks()
         self.openedWithAutoPlay = True
-        return self.playButtonClicked(force_episode=self.initialEpisode, from_auto_play=True)
+        return self.playButtonClicked(force_episode=self.initialEpisode, from_auto_play=True, start_over=self.startOver)
 
     def onFirstInit(self):
         self._onFirstInit()
@@ -724,7 +739,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         VIDEO_PROGRESS[gprk][prk][rk] = state
 
     def onBGMStarted(self, **kwargs):
-        self.playBtnClicked = True
+        #self.playBtnClicked = True
+        pass
 
     def checkOptionsAction(self, action):
         if action == xbmcgui.ACTION_MOVE_UP:
@@ -937,7 +953,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         section_id = self.show_.getLibrarySectionId()
         self.processCommand(search.dialog(self, section_id=section_id or None))
 
-    def playButtonClicked(self, shuffle=False, force_episode=None, from_auto_play=False, force_resume_menu=False):
+    def playButtonClicked(self, shuffle=False, force_episode=None, from_auto_play=False, force_resume_menu=False,
+                          start_over=False):
         if shuffle:
             seasonOrShow = self.season or self.show_
             items = seasonOrShow.all()
@@ -949,7 +966,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         else:
             return self.episodeListClicked(force_episode=force_episode, from_auto_play=from_auto_play,
-                                           force_resume_menu=force_resume_menu)
+                                           force_resume_menu=force_resume_menu, start_over=start_over)
 
     def shuffleButtonClicked(self):
         self.playButtonClicked(shuffle=True)
@@ -997,12 +1014,23 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.cameFrom = "info"
 
     def episodeListClicked(self, force_episode=None, from_auto_play=False, force_resume_menu=False,
-                           force_startover=False):
-        if (not self.currentItemLoaded or self.playBtnClicked) and not from_auto_play:
+                           start_over=False):
+        if self.playBtnClicked and not from_auto_play:
             util.DEBUG_LOG("Not honoring play action: currentItemLoaded: {0}, "
                            "playBtnClicked: {1}, from_auto_play: {2}",
                            self.currentItemLoaded, self.playBtnClicked, from_auto_play)
             return
+
+        # wait for current item to be loaded
+        if not from_auto_play:
+            amount = 0
+            while not self.currentItemLoaded and amount < 50:
+                util.MONITOR.waitForAbort(0.1)
+                amount += 1
+
+            if not self.currentItemLoaded:
+                util.DEBUG_LOG("Not honoring play action: currentItemLoaded: False")
+                return
 
         if not force_episode:
             mli = self.episodeListControl.getSelectedItem()
@@ -1018,7 +1046,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             return
 
         resume = False
-        if episode.viewOffset.asInt() and not force_startover:
+        if episode.viewOffset.asInt() and not start_over:
             if not util.getSetting('assume_resume') or force_resume_menu:
                 choice = dropdown.showDropdown(
                     options=[
@@ -1053,12 +1081,14 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
                 pl.setCurrent(episode)
                 self.processCommand(videoplayer.play(play_queue=pl, resume=resume, bgm=self.useBGM))
+                self.playBtnClicked = False
                 return True
 
             self.processCommand(videoplayer.play(video=episode, resume=resume, bgm=self.useBGM))
+            self.playBtnClicked = False
             return True
         except util.NoDataException:
-            util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
+            util.ERROR("No data - deleted or server disconnected?", notify=True, time_ms=5000)
             self.doClose()
 
     def optionsButtonClicked(self, from_item=False):
@@ -1160,7 +1190,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             mli.dataSource.refresh()
             self.updateItems(mli)
         elif choice['key'] == 'play_startover':
-            self.episodeListClicked(force_startover=True)
+            self.episodeListClicked(start_over=True)
         elif choice["key"] == "cache_reset":
             try:
                 util.DEBUG_LOG('Clearing requests cache for {}...', mli.dataSource)
@@ -1482,7 +1512,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             self.tasks.add(task)
             tasks.append(task)
 
-        backgroundthread.BGThreader.addTasks(tasks)
+        backgroundthread.BGThreader.addTasksToFront(tasks)
 
     def getPlayButtonID(self, mli, base=None):
         return (base and base or self.PLAY_BUTTON_ID) + (mli.getProperty('media.multiple') and 1000 or 0)
@@ -1506,7 +1536,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                     if set_item_info:
                         self.setUserItemInfo(mli)
                 except:
-                    util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
+                    util.ERROR("No data - deleted or server disconnected?", notify=True, time_ms=5000)
                     self.doClose()
 
                 if with_progress:

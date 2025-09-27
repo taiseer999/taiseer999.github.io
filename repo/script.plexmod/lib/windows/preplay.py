@@ -23,7 +23,7 @@ from . import windowutils
 from .mixins.ratings import RatingsMixin
 from .mixins.playbackbtn import PlaybackBtnMixin
 from .mixins.thememusic import ThemeMusicMixin
-from .mixins.watchlist import WatchlistUtilsMixin
+from .mixins.watchlist import WatchlistUtilsMixin, removeFromWatchlistBlind
 from .mixins.roles import RolesMixin
 from .mixins.common import CommonMixin
 
@@ -43,6 +43,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
     res = '1080i'
     width = 1920
     height = 1080
+
+    supportsAutoPlay = True
 
     THUMB_POSTER_DIM = util.scaleResolution(347, 518)
     RELATED_DIM = util.scaleResolution(268, 402)
@@ -83,6 +85,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         self.isExternal = kwargs.get('external_item', False)
         self.directlyFromWatchlist = kwargs.get('directly_from_watchlist')
         self.is_watchlisted = kwargs.get('is_watchlisted', False)
+        self.startOver = kwargs.get('start_over')
         self.videos = None
         self.exitCommand = None
         self.trailer = None
@@ -95,7 +98,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         self.fromPlayback = False
         self.useBGM = False
 
-    def doClose(self):
+    def doClose(self, **kw):
         self.relatedPaginator = None
         kodigui.ControlledWindow.doClose(self)
 
@@ -113,7 +116,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
         if not util.getSetting("slow_connection") and not self.openedWithAutoPlay:
             self.themeMusicInit(self.video, locations=[os.path.dirname(s.part.file) for s in self.video.videoStreams])
 
-    def doAutoPlay(self):
+    def doAutoPlay(self, blind=False):
         # First reload the video to get all the other info
         self.video.reload(checkFiles=1, **VIDEO_RELOAD_KW)
         self.openedWithAutoPlay = True
@@ -138,18 +141,26 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             self.checkIsWatchlisted(self.video)
         self.initialized = True
 
+    def onBlindClose(self):
+        if self.fromPlayback and self.openedWithAutoPlay and not self.started:
+            self.video.reload(checkFiles=1, fromMediaChoice=self.video.mediaChoice is not None, **VIDEO_RELOAD_KW)
+            if self.video.isFullyWatched:
+                removeFromWatchlistBlind(self.video.guid)
+
     def refreshInfo(self, from_reinit=False):
         oldFocusId = self.getFocusId()
 
         util.setGlobalProperty('hide.resume', '' if self.video.viewOffset.asInt() else '1')
         # skip setting background when coming from reinit (other window) if we've focused something other than main
         self.setInfo(skip_bg=from_reinit and not (self.PLAY_BUTTON_ID <= oldFocusId <= self.MEDIA_BUTTON_ID))
-        show_reviews = util.getSetting('show_reviews1')
-        if show_reviews:
-            if "watched" in show_reviews and "unwatched" not in show_reviews:
-                self.fillReviews()
 
-        self.fillRelated(self.needs_related_divider)
+        if not from_reinit:
+            show_reviews = util.getSetting('show_reviews1')
+            if show_reviews:
+                if "watched" in show_reviews and "unwatched" not in show_reviews:
+                    self.fillReviews()
+
+            self.fillRelated(self.needs_related_divider)
         xbmc.sleep(100)
 
         if oldFocusId == self.PLAY_BUTTON_ID:
@@ -163,6 +174,10 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
                 self.setFocusId(self.lastFocusID)
 
             if action == xbmcgui.ACTION_CONTEXT_MENU:
+                if controlID == self.PLAY_BUTTON_ID:
+                    self.playVideo(force_resume_menu=True)
+                    return
+
                 if not xbmc.getCondVisibility('ControlGroup({0}).HasFocus(0)'.format(self.OPTIONS_GROUP_ID)):
                     self.lastNonOptionsFocusID = self.lastFocusID
                     self.setFocusId(self.OPTIONS_GROUP_ID)
@@ -483,7 +498,7 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
 
         return True
 
-    def playVideo(self, from_auto_play=False):
+    def playVideo(self, from_auto_play=False, force_resume_menu=False):
         if self.playBtnClicked:
             return
 
@@ -492,8 +507,8 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             return
 
         resume = False
-        if self.video.viewOffset.asInt():
-            if not util.getSetting('assume_resume'):
+        if self.video.viewOffset.asInt() and not self.startOver:
+            if not util.getSetting('assume_resume') or force_resume_menu:
                 choice = dropdown.showDropdown(
                     options=[
                         {'key': 'resume', 'display': T(32429, 'Resume from {0}').format(util.timeDisplay(self.video.viewOffset.asInt()).lstrip('0').lstrip(':'))},

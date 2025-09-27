@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.8.0-prerelease6b"
+       version="0.8.0-rc4"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -15,6 +15,7 @@
     <extension point="xbmc.python.pluginsource" library="plugin.py">
         <provides>executable</provides>
     </extension>
+    <extension point="xbmc.ui.screensaver" library="screensaver.py"/>
     <extension point="xbmc.service" library="service.py" />
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">PlexMod for Kodi</summary>
@@ -33,16 +34,16 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Core: Remove memory optimization for MultiWindow (library view); has no effect on performance but resolves certain rare crashes
-- Kodigui: Only check for XML validity on first init of a window, not on reinit
-- Windows: Unify roles click into mixin; reduce visual disturbance when clicking a role
-- TV Shows: fix positioning of roles section dropdown
-- SeekDialog/Player: Further fix postplay behaviour when a video was ended "manually" via final credits marker
-- Home/Movies/Shows/Episodes/Libraries: Implement generic watched toggle; toggle watched via keyboard mapping "w" (buttonCode: 61527)
-- Home/Movies/Shows/Episodes/Libraries: Generic watched toggle: if wanted, ask before toggling watched status for seasons and TV shows
-- Shows: Generic watched toggle: allow toggling full show watched/unwatched
-- Ensure python 2.7 compat (Kodi 18)
-- Episodes: Generic watched toggle: allow toggling watched/unwatched from main button area for current episode
+- Core/Signals: Don't re-register signal callbacks twice
+- Watchlist: Add logging to removeFromWatchlistBlind
+- Watchlist/Episodes/Movies/Home: Re-jig window-less watchlist handling; when resuming/watching an item directly from home without visiting the item view itself, try blindly removing items from watchlist if fully watched (didn't work before)
+- Core/KodiGUI: Less implicit checks for a window's autoplay capability
+- Opener: Implement/trigger window.onBlindClose if the window was only used for immediate playback, not for display
+- CE/LG/Player: Be less strict with alternate seek
+- CE/LG/Player: Clamp seek fix to +/- 10 seconds to fix edge cases (thanks @peaceoutt32)
+- CE/LG/Player: Dynamically increasse "area of effect"/leeway for alternate seek
+- CE/LG/Player: Fix seek state not necessarily being reflected in the UI when using alternate seek
+- i18n: Update Hungiarian translation
         </news>
         <assets>
             <icon>icon2.png</icon>

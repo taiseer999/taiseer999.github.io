@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import threading
 import time
 import traceback
+import os
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -41,13 +42,21 @@ class BaseFunctions(object):
 
     @classmethod
     def open(cls, **kwargs):
-        window = cls(cls.xmlFile, cls.path, cls.theme, cls.res, **kwargs)
+        path = cls.path
+        if os.getenv("INSTALLATION_DIR_AVOID_WRITE"):
+            path = util.PROFILE
+        window = cls(cls.xmlFile, path, cls.theme, cls.res, **kwargs)
         window.modal()
         return window
 
     @classmethod
     def create(cls, show=True, **kwargs):
-        window = cls(cls.xmlFile, cls.path, cls.theme, cls.res, **kwargs)
+        # Use the user addon data directory in installations where the extension installation directory is not writable
+        path = cls.path
+        if os.getenv("INSTALLATION_DIR_AVOID_WRITE"):
+            path = util.PROFILE
+        window = cls(cls.xmlFile, path, cls.theme, cls.res, **kwargs)
+
         if show:
             window.show()
             if xbmcgui.getCurrentWindowId() < 13000:
@@ -187,6 +196,7 @@ class XMLBase(object):
 class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
     __slots__ = ("_closing", "_winID", "started", "finishedInit", "dialogProps", "isOpen", "_errored",
                  "_closeSignalled")
+    supportsAutoPlay = False
 
     def __init__(self, *args, **kwargs):
         BaseFunctions.__init__(self)
@@ -205,7 +215,7 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
 
     def onCloseSignal(self, *args, **kwargs):
         self._closeSignalled = True
-        self.doClose()
+        self.doClose(force=True)
 
     def _onInit(self):
         global LAST_BG_URL
@@ -257,6 +267,12 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
     def onReInit(self):
         pass
 
+    def doAutoPlay(self, blind=False):
+        pass
+
+    def onBlindClose(self):
+        pass
+
     def waitForOpen(self, base_win_id=None):
         tries = 0
         while ((not base_win_id and not self.isOpen) or
@@ -289,7 +305,7 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
             self.setFocusId(focus)
 
     def updateBackgroundFrom(self, ds):
-        if util.addonSettings.dynamicBackgrounds:
+        if util.addonSettings.dynamicBackgrounds and ds:
             return self.windowSetBackground(util.backgroundFromArt(ds.get('art', ds.get('parentArt', ds.get('grandparentArt', None))), width=self.width, height=self.height))
 
     def windowSetBackground(self, value):
@@ -320,9 +336,11 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
         LAST_BG_URL = value
         return value
 
-    def doClose(self):
+    def doClose(self, **kw):
+        force = kw.get('force', True)
         plexapp.util.APP.off('close.windows', self.onCloseSignal)
-        if not self.isOpen:
+        util.DEBUG_LOG("{}: doClose called, force: {}", self.__class__.__name__, force)
+        if not self.isOpen and not force:
             return
         self._closing = True
         self.isOpen = False
@@ -330,8 +348,31 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
 
     def show(self):
         self._closing = False
+        # can we activate?
+        ct = 0
+        while xbmcgui.getCurrentWindowDialogId() > 9999 and ct < 20:
+            util.MONITOR.waitForAbort(0.1)
+            ct += 1
+
+        lastWinID = BaseFunctions.lastWinID
+
         #self.isOpen = True
         xbmcgui.WindowXML.show(self)
+
+        # our current window ID _has_ to be different to the last one, if it isn't, handle.
+        # kodi doesn't throw an exception in case of a still active modal dialog, but instead just logs:
+        # Activate of window 'xxxxxx' refused because there are active modal dialogs
+        if xbmcgui.getCurrentWindowId() == lastWinID:
+            util.DEBUG_LOG('{} not yet active, retrying', self.__class__.__name__)
+
+        ct = 0
+        while xbmcgui.getCurrentWindowId() == lastWinID and ct < 20:
+            util.MONITOR.waitForAbort(0.1)
+            ct += 1
+            # we might have run into an active dialog, which happens sometimes, so we didn't really activate the window
+            # retry
+            xbmcgui.WindowXML.show(self)
+
         self.isOpen = xbmcgui.getCurrentWindowId() >= 13000
 
     @property
@@ -400,7 +441,7 @@ class BaseDialog(XMLBase, xbmcgui.WindowXMLDialog, BaseFunctions):
         except RuntimeError:
             xbmc.log('kodigui.BaseDialog.setProperty: Missing window', xbmc.LOGDEBUG)
 
-    def doClose(self):
+    def doClose(self, **kw):
         plexapp.util.APP.off('close.dialogs', self.onCloseSignal)
         self._closing = True
         self.close()
@@ -1073,7 +1114,7 @@ class MultiWindow(object):
         plexapp.util.APP.on('close.windows', self.onCloseSignal)
         self.onFirstInit()
 
-    def doClose(self):
+    def doClose(self, **kw):
         plexapp.util.APP.off('close.windows', self.onCloseSignal)
         self._allClosed = True
         self._current.doClose()

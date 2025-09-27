@@ -86,7 +86,7 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
         self.name = data.attrib.get('name')
         self.platform = data.attrib.get('platform')
         self.rawVersion = data.attrib.get('productVersion')
-        if self.rawVersion:
+        if self.rawVersion and "server" in data.attrib.get('provides', 'server'):
             self.versionNorm = util.normalizedVersion(self.rawVersion)
         self.transcodeSupport = data.attrib.get('transcodeSupport') == '1'
         self.dnsRebindingProtection = data.attrib.get('dnsRebindingProtection') == '1'
@@ -238,9 +238,9 @@ class PlexServer(plexresource.PlexResource, signalsmixin.SignalsMixin):
             return plexobjects.listItems(self, '/status/sessions')
         raise exceptions.ServerNotOwned
 
-    def findVideoSession(self, client_id, rating_key):
+    def findVideoSession(self, session_id, rating_key):
         for item in self.sessions:
-            if item.session and item.session.id == client_id and item.ratingKey == rating_key:
+            if item.session and item.session.id == session_id and item.ratingKey == rating_key:
                 return item
 
     def buildUrl(self, path, includeToken=False):

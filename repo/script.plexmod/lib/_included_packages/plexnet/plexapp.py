@@ -186,7 +186,7 @@ class AppInterface(object):
             if quality.index is not None and quality.index >= 9:
                 quality.update(maxQuality)
 
-    def getPreference(self, pref, default=None):
+    def getPreference(self, pref, default=None, **kw):
         raise NotImplementedError
 
     def setPreference(self, pref, value):
@@ -286,11 +286,11 @@ class PlayerSettingsInterface(object):
         else:
             return self.getPreference("remote_quality2", 16)
 
-    def getPreference(self, key, default=None):
+    def getPreference(self, key, default=None, **kw):
         if key in self.prefOverrides:
             return self.prefOverrides[key]
         else:
-            return util.INTERFACE.getPreference(key, default)
+            return util.INTERFACE.getPreference(key, default, **kw)
 
     def getPlaybackFeatures(self):
         return util.INTERFACE.getPlaybackFeatures()
@@ -339,7 +339,7 @@ class DumbInterface(AppInterface):
         'deviceInfo': DeviceInfo()
     }
 
-    def getPreference(self, pref, default=None):
+    def getPreference(self, pref, default=None, **kw):
         return self._prefs.get(pref, default)
 
     def setPreference(self, pref, value):

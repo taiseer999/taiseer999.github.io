@@ -201,9 +201,13 @@ def _main():
 
                         if not selectedServer:
                             background.setBusy()
-                            util.DEBUG_LOG('Main: Waiting for selected server...')
+                            base_timeout = max(
+                                util.addonSettings.plextvTimeoutConnect * util.addonSettings.maxRetries1 +
+                                util.addonSettings.plextvTimeoutRead * util.addonSettings.maxRetries1,
+                                util.addonSettings.connCheckTimeout * util.addonSettings.maxRetries1)
+                            util.DEBUG_LOG('Main: Waiting for selected server... (max timeout: {})', base_timeout)
                             try:
-                                for timeout, skip_preferred, skip_owned in ((10, False, False), (10, True, True)):
+                                for timeout, skip_preferred, skip_owned in ((base_timeout, True, False), (base_timeout, True, True)):
                                     plex.CallbackEvent(plexapp.util.APP, 'change:selectedServer', timeout=timeout).wait()
 
                                     selectedServer = plexapp.SERVERMANAGER.checkSelectedServerSearch(
@@ -260,14 +264,23 @@ def _main():
                             restart = True
                             return
                     finally:
-                        if closeOption in ("quit", "exit", "restart"):
-                            util.DEBUG_LOG("Main: Starting hard exit timer of {} seconds...", util.addonSettings.maxShutdownWait)
-                            exit_timer.start()
+                        try:
+                            kodiExiting = closeOption == "kodi_exit" or windowutils.HOME.closeOption == "kodi_exit"
+                        except:
+                            kodiExiting = False
+
+                        if closeOption in ("quit", "exit", "restart") and not kodiExiting:
+                            if not exit_timer.is_alive():
+                                util.DEBUG_LOG("Main: Starting hard exit timer of {} seconds...", util.addonSettings.maxShutdownWait)
+                                exit_timer.start()
                             exit_timer_started = True
                         windowutils.shutdownHome()
                         BACKGROUND.activate()
                         background.setShutdown()
                         gc.collect(2)
+
+                        if kodiExiting:
+                            return
 
             else:
                 break

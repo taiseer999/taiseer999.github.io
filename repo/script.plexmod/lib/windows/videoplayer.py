@@ -4,6 +4,7 @@ import math
 import threading
 import time
 import traceback
+import uuid
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
@@ -139,6 +140,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
         self.handleBGM = kwargs.get('bgm')
         self.lastItem = None
         self.earlyAbortRequested = False
+        self.sessionID = None
 
     def doClose(self, force=False):
         util.DEBUG_LOG('VideoPlayerWindow: Closing')
@@ -169,11 +171,13 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
         player.PLAYER.on('post.play', self.postPlay)
         player.PLAYER.on('change.background', self.changeBackground)
 
+        self.sessionID = str(uuid.uuid4())
+
         self.onDeckListControl = kodigui.ManagedControlList(self, self.ONDECK_LIST_ID, 5)
         self.relatedListControl = kodigui.ManagedControlList(self, self.RELATED_LIST_ID, 5)
         self.rolesListControl = kodigui.ManagedControlList(self, self.ROLES_LIST_ID, 5)
 
-        util.DEBUG_LOG('VideoPlayerWindow: Starting session (ID: {0})', id(self))
+        util.DEBUG_LOG('VideoPlayerWindow: Starting session (ID: {0})', self.sessionID)
         self.resetPassoutProtection()
         self.play(resume=self.resume)
 
@@ -251,7 +255,6 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
                 if action in(xbmcgui.ACTION_NAV_BACK, xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_STOP):
                     util.DEBUG_LOG('VideoPlayerWindow: Abort requested, setting flag')
                     self.earlyAbortRequested = True
-                    return
         except:
             util.ERROR()
 
@@ -335,20 +338,21 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
         self.windowSetBackground(url)
 
     def sessionEnded(self, session_id=None, **kwargs):
-        if session_id != id(self):
-            util.DEBUG_LOG('VideoPlayerWindow: Ignoring session end (ID: {0} - SessionID: {1})', id(self), session_id)
+        if session_id != self.sessionID:
+            util.DEBUG_LOG('VideoPlayerWindow: Ignoring session end (ID: {0} - SessionID: {1})', self.sessionID, session_id)
             return
 
-        util.DEBUG_LOG('VideoPlayerWindow: Session ended - closing (ID: {0})', id(self))
+        util.DEBUG_LOG('VideoPlayerWindow: Session ended - closing (ID: {0})', self.sessionID)
         self.doClose()
 
     def videoWindowClosed(self, session_id=None, video=None, **kwargs):
-        if session_id != id(self):
+        if session_id != self.sessionID:
             return
 
         video.clearCache()
 
     def play(self, resume=False, handler=None):
+        util.DEBUG_LOG("VideoPlayerWindow: play() called")
         self.hidePostPlay()
 
         player.PLAYER.dontRequeueBGM = True
@@ -376,25 +380,36 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
 
         # wait for BGM to end if it's playing or queued
         if self.handleBGM:
-            while not player.PLAYER.bgmPlaying and player.PLAYER.bgmStarting:
+            util.DEBUG_LOG("Checking BGM")
+            ct = 0
+            while not player.PLAYER.bgmPlaying and player.PLAYER.bgmStarting and ct < 20:
                 util.DEBUG_LOG("Waiting for BGM to start as it has been queued")
                 util.MONITOR.waitForAbort(0.1)
+                ct += 1
 
             if player.PLAYER.bgmPlaying:
                 util.DEBUG_LOG("Stopping BGM before starting playback")
                 player.PLAYER.stopAndWait()
 
-            while player.PLAYER.bgmPlaying or player.PLAYER.isPlayingAudio():
+            if player.PLAYER.isPlayingAudio():
+                player.PLAYER.stopAndWait()
+
+            ct = 0
+            while (player.PLAYER.bgmPlaying or player.PLAYER.isPlayingAudio()) and ct < 20:
                 util.MONITOR.waitForAbort(0.1)
+                ct += 1
+            util.DEBUG_LOG("BGM check done")
 
         self.setBackground()
 
+        self.sessionID = self.sessionID or str(uuid.uuid4())
+
         try:
             if self.playQueue:
-                player.PLAYER.playVideoPlaylist(self.playQueue, resume=resume or self.resume, session_id=id(self),
+                player.PLAYER.playVideoPlaylist(self.playQueue, resume=resume or self.resume, session_id=self.sessionID,
                                                 handler=handler)
             elif self.video:
-                player.PLAYER.playVideo(self.video, resume=resume or self.resume, force_update=True, session_id=id(self),
+                player.PLAYER.playVideo(self.video, resume=resume or self.resume, force_update=True, session_id=self.sessionID,
                                         handler=handler)
         except DecisionFailure:
             util.LOG("Can't play this media.")
@@ -537,7 +552,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
         try:
             self.hubs = self.prev.postPlay()
         except:
-            util.ERROR("No data - disconnected?", notify=True, time_ms=5000)
+            util.ERROR("No data - deleted or server disconnected?", notify=True, time_ms=5000)
             self.doClose()
             return
 
