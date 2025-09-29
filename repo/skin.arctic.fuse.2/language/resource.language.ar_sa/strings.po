@@ -484,7 +484,7 @@ msgstr "استخدم spotlight"
 #: /1080i/SkinSettings.xml
 msgctxt "#31097"
 msgid "Customise ratings"
-msgstr "تخصيص معلومات التقيمات لل"
+msgstr "تخصيص تقيمات"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31098"
