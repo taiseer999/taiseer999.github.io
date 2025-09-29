@@ -170,14 +170,16 @@ class POVPlayer(kodi_utils.xbmc_player):
 					if self.remaining_time <= self.start_prep:
 						if not self.nextep_started:
 							self.run_random_continual()
-				if self.autoplay_next_episode or self.autoscrape_next_episode:
+				if self.autoplay_next_episode:
 					if not self.nextep_info_gathered: self.info_next_ep()
 					self.remaining_time = round(self.total_time - self.curr_time)
 					if self.remaining_time <= self.start_prep:
-						if not self.nextep_started and self.autoplay_nextep:
-							self.run_next_ep()
-						if not self.nextep_started and self.autoscrape_nextep:
-							self.run_scrape_next_ep()
+						if not self.nextep_started and self.autoplay_nextep: self.run_next_ep()
+				if self.autoscrape_next_episode:
+					if not self.nextep_info_gathered: self.info_next_ep()
+					self.remaining_time = round(self.total_time - self.curr_time)
+					if self.remaining_time <= self.autoscrape_next_window_time:
+						if not self.nextep_started and self.autoscrape_nextep: self.run_scrape_next_ep()
 			except: pass
 			if not self.subs_searched: self.run_subtitles()
 		if not self.media_marked: self.media_watched_marker()
@@ -263,6 +265,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			threshold_check = window_time + 21
 			self.start_prep = self.nextep_settings['scraper_time'] + threshold_check
 			self.nextep_settings.update({'threshold_check': threshold_check, 'start_prep': self.start_prep})
+			self.autoscrape_next_window_time = self.nextep_settings['autoscrape_next_window_time']
 		except: pass
 
 	def onAVStarted(self):

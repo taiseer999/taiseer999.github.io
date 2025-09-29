@@ -216,7 +216,7 @@ def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
 	if isinstance(heading, int): heading = local_string(heading)
 	heading = heading.replace('[B]', '').replace('[/B]', '')
 	if file:
-		with open_file(file) as f: text = f.read()
+		with open_file(file) as f: text = f.read().splitlines(keepends=True)
 	if kodi_log and confirm_dialog(text=local_string(32855), ok_label=local_string(32824), cancel_label=local_string(32828), top_space=True):
 		text = [i for i in text if any(x in i.lower() for x in ('exception', 'error'))]
 	text = ''.join(text)

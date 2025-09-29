@@ -123,8 +123,9 @@ def autoplay_next_settings():
 	timer_method = autoplay_next_window_timer_method()
 	window_time = autoplay_next_window_time() + 1
 	window_percentage = 100 - autoplay_next_window_percentage()
+	autoscrape_time = int(get_setting('autoscrape_next_window_time', '20'))
 	return {'scraper_time': scraper_time, 'threshold': threshold, 'run_popup': run_popup, 'timer_method': timer_method,
-			'window_time': window_time, 'window_percentage': window_percentage}
+			'window_time': window_time, 'window_percentage': window_percentage, 'autoscrape_next_window_time': autoscrape_time}
 
 def filter_status(filter_type):
 	return int(get_setting('filter_%s' % filter_type, '0'))

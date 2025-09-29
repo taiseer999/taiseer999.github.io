@@ -134,7 +134,7 @@ class ThumbContextMenu(BaseDialog):
 			return self.close()
 
 	def set_properties(self):
-		self.setProperty('tikiskins.context.highlight', 'royalblue')
+		self.setProperty('tikiskins.context.highlight', 'dodgerblue')
 
 	def make_context_menu(self):
 		enable_delete = self.list_item.getProperty('tikiskins.delete') == 'true'

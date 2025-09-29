@@ -700,14 +700,14 @@ def clear_and_rescrape(media_type, meta, season=None, episode=None):
 
 def rescrape_with_disabled(media_type, meta, season=None, episode=None):
 	from modules.sources import SourceSelect
-	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'disabled_ignored': 'true', 'prescrape': 'false'}
+	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false', 'disabled_ignored': 'true', 'prescrape': 'false'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
 	SourceSelect().playback_prep(play_params)
 
 def scrape_with_filters_ignored(media_type, meta, season=None, episode=None):
 	from modules.sources import SourceSelect
-	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'ignore_scrape_filters': 'true'}
+	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false', 'ignore_scrape_filters': 'true'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
 	set_property('fs_filterless_search', 'true')
@@ -716,7 +716,7 @@ def scrape_with_filters_ignored(media_type, meta, season=None, episode=None):
 def scrape_with_custom_values(media_type, meta, season=None, episode=None):
 	from windows import open_window
 	from modules.sources import SourceSelect
-	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id']}
+	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
 	if media_type in ('movie', 'movies'): play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
 	custom_title = kodi_utils.dialog.input(ls(32228), defaultt=meta['title'])

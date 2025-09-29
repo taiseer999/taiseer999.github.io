@@ -7,7 +7,7 @@ from scrapers import external, folders
 from modules import debrid, kodi_utils, settings
 from modules.player import POVPlayer
 from modules.source_utils import internal_sources, internal_folders_import, scraper_names, get_cache_expiry, pack_enable_check
-from modules.utils import string_to_float, safe_string, remove_accents, get_datetime
+from modules.utils import string_to_float, safe_string, remove_accents, get_datetime, adjust_premiered_date
 #from modules.kodi_utils import logger
 
 show_busy_dialog, hide_busy_dialog, close_all_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog, kodi_utils.close_all_dialog
@@ -17,7 +17,7 @@ ls, monitor, sleep, get_setting = kodi_utils.local_string, kodi_utils.monitor, k
 auto_play, active_internal_scrapers, provider_sort_ranks = settings.auto_play, settings.active_internal_scrapers, settings.provider_sort_ranks
 display_sleep_time, scraping_settings, include_prerelease_results = settings.display_sleep_time, settings.scraping_settings, settings.include_prerelease_results
 ignore_results_filter, filter_status, results_sort_order = settings.ignore_results_filter, settings.filter_status, settings.results_sort_order
-display_uncached_torrents, check_prescrape_sources = settings.display_uncached_torrents, settings.check_prescrape_sources
+display_uncached_torrents, check_prescrape_sources, date_offset = settings.display_uncached_torrents, settings.check_prescrape_sources, settings.date_offset
 metadata_user_info, quality_filter, sort_to_top  = settings.metadata_user_info, settings.quality_filter, settings.sort_to_top
 results_xml_style, results_xml_window_number, get_language = settings.results_xml_style, settings.results_xml_window_number, settings.get_language
 debrid_enabled, debrid_type_enabled, debrid_valid_hosts = debrid.debrid_enabled, debrid.debrid_type_enabled, debrid.debrid_valid_hosts
@@ -44,7 +44,6 @@ class SourceSelect():
 				if not instance.scrape_next_ep: return
 				scrape_func, scrape_args = instance.scrape_next_ep.pop()
 				scrape_func(scrape_args)
-				kodi_utils.sleep(500)
 			except: pass
 		return wrapper
 
@@ -81,6 +80,9 @@ class SourceSelect():
 		self.custom_episode = int(params_get('custom_episode')) if 'custom_episode' in self.params else None
 		if 'autoplay' in self.params: self.autoplay = self.params.get('autoplay', 'false') == 'true'
 		else: self.autoplay = auto_play(self.media_type)
+		if self.media_type == 'episode' and self.autoplay:
+			self.autoplay_exclude_premieres = get_setting('autoplay_exclude_premieres') == 'true'
+		else: self.autoplay_exclude_premieres = False
 		if 'season' in self.params: self.season = int(params_get('season'))
 		else: self.season = ''
 		if 'episode' in self.params: self.episode = int(params_get('episode'))
@@ -480,19 +482,24 @@ class SourceSelect():
 		return results
 
 	def _grab_meta(self):
-		meta_user_info, datetime = metadata_user_info(), get_datetime()
+		meta_user_info, datetime, date_offset_info = metadata_user_info(), get_datetime(), date_offset()
 		if self.media_type == 'movie':
 			self.meta = metadata.movie_meta('tmdb_id', self.tmdb_id, meta_user_info, datetime)
 			return
 		else: self.meta = metadata.tvshow_meta('tmdb_id', self.tmdb_id, meta_user_info, datetime)
 		try:
 			episodes_data = metadata.season_episodes_meta(self.season, self.meta, meta_user_info)
-			episode_data = [i for i in episodes_data if i['episode'] == int(self.episode)][0]
+			ep_data = [i for i in episodes_data if i['episode'] == int(self.episode)][0]
 			self.meta.update({
-				'media_type': 'episode', 'season': episode_data['season'], 'episode': episode_data['episode'],
-				'premiered': episode_data['premiered'], 'ep_name': episode_data['title'], 'plot': episode_data['plot']
+				'media_type': 'episode', 'season': ep_data['season'], 'episode': ep_data['episode'],
+				'premiered': ep_data['premiered'], 'ep_name': ep_data['title'], 'plot': ep_data['plot']
 			})
 			if self.custom_season and self.custom_episode: self.meta.update({'custom_season': self.custom_season, 'custom_episode': self.custom_episode})
+			if self.background or any(i in self.meta for i in ('random', 'random_continual')): return
+			if self.autoplay_exclude_premieres and int(self.episode) == 1 and all(
+				datetime >= adjust_premiered_date(i['premiered'], date_offset_info)[0] if 'premiered' in i and i['premiered'] else False
+				for i in episodes_data
+			): self.autoplay = False
 		except: pass
 
 	def _get_module(self, module_type, function):
@@ -542,17 +549,16 @@ class SourceSelect():
 				source_index = results.index(source) if source in results else -1
 				items = [i for i in results[source_index + 1:] if not 'Uncached' in i.get('cache_provider', '')][:40]
 				items.insert(0, source)
-			if not background: # self._make_progress_dialog()
-				if not self.load_action:
-					progressDialogBG.create('POV', 'POV loading...')
-				else:
-					self._make_progress_dialog()
-					POVPlayer.add_callback('progress_dialog', self._kill_progress_dialog)
+			if background: return 'true' if items else 'false'
+			if not self.load_action:
+				progressDialogBG.create('POV', 'POV loading...')
+			else:
+				self._make_progress_dialog()
+				POVPlayer.add_callback('progress_dialog', self._kill_progress_dialog)
 			url = next(_process(), None)
-			if not background: # self._kill_progress_dialog()
-				if not url: self._kill_progress_dialog()
-				if not self.load_action: progressDialogBG.close()
-			return url if background else POVPlayer().run(url)
+			if not self.load_action: progressDialogBG.close()
+			if not url: self._kill_progress_dialog()
+			return POVPlayer().run(url)
 		except: pass
 
 	def resolve_sources(self, item, meta):

@@ -34,6 +34,7 @@ class Extras(BaseDialog):
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, args)
 		self.control_id = None
+		self.focus_id = 2049
 		self.set_starting_constants(kwargs)
 		self.set_properties()
 
@@ -48,6 +49,7 @@ class Extras(BaseDialog):
 		if self.media_type == 'movie': Thread(target=self.make_collection).start()
 		else: self.setProperty('tikiskins.extras.make.collection', 'false')
 		self.make_options()
+		self.setFocusId(self.focus_id)
 
 	def run(self):
 		self.doModal()
@@ -164,10 +166,10 @@ class Extras(BaseDialog):
 	def make_options(self):
 		def builder():
 			for i in (
+				(extrainfo_id, 'extra info', 'information.png'),
 				(playbrowse_id, 'playback', 'player.png')
 				if self.media_type == 'movie' else
 				(playbrowse_id, 'browse', 'in_progress_tvshow.png'),
-				(extrainfo_id, 'extra info', 'information.png'),
 				(trailer_id, 'trailer', 'watched.png'),
 				(genre_id, 'genres', 'genres.png'),
 				(director_id, 'director', 'movies.png')
@@ -228,7 +230,7 @@ class Extras(BaseDialog):
 		def builder():
 			for count, item in enumerate(reviews, 1):
 				try:
-					provider = mdblist_api.review_provider_id[item['provider_id']].upper()
+					provider = mdblist_api.review_provider_id.get(item['provider_id'], 'mdblist').upper()
 					updated_at = item['updated_at'] or 'NA'
 					rating = item['rating'] or 'NA'
 					content = (
@@ -245,16 +247,18 @@ class Extras(BaseDialog):
 		try:
 			spoiler = ls(32985).upper()
 			data = mdblist_api.mdb_media_info(self.imdb_id, self.media_type)
-			ratings, reviews = data['ratings'], data['reviews']
-			reviews.sort(key=lambda k: k['updated_at'] or '', reverse=True)
+			if not data is None:
+				ratings, reviews = data['ratings'], data['reviews']
+				reviews.sort(key=lambda k: k['updated_at'] or '', reverse=True)
+				sources = ('imdb', 'metacritic', 'mdblist', 'tomatoes', 'trakt', 'tmdb')
+				if 'score' in data: ratings.append({'source': 'mdblist', 'value': data['score']})
+				ratings = ((i['source'], str(i['value'])) for i in ratings if i['source'] in sources and i['value'])
+				for k, v in ratings: self.setProperty('tikiskins.extras.rating.%s' % k, v)
+			else: reviews = [{'content': 'Authorize MDBList for Ratings & Reviews.', 'provider_id': '', 'updated_at': '', 'rating': ''}]
 			item_list = list(builder())
 			self.setProperty('tikiskins.extras.imdb_reviews.number', '(x%02d)' % len(item_list))
 			self.item_action_dict[reviews_id] = 'tikiskins.extras.text'
 			self.add_items(reviews_id, item_list)
-			sources = ('imdb', 'metacritic', 'mdblist', 'tomatoes', 'trakt', 'tmdb')
-			if 'score' in data: ratings.append({'source': 'mdblist', 'value': data['score']})
-			ratings = ((i['source'], str(i['value'])) for i in ratings if i['source'] in sources and i['value'])
-			for k, v in ratings: self.setProperty('tikiskins.extras.rating.%s' % k, v)
 		except: pass
 
 	def make_trivia(self):

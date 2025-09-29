@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
 	<defaultcontrol always="true">11</defaultcontrol>
-	<animation type="WindowOpen" reversible="false">
-		<effect type="slide" start="0,-260" end="0,0" time="350" />
-	</animation>
 	<controls>
+		<control type="image">
+			<animation effect="fade" start="0" end="100" delay="400" time="500">WindowOpen</animation>
+			<left>35</left>
+			<top>20</top>
+			<width>60</width>
+			<height>60</height>
+			<aspectratio aligny="top">keep</aspectratio>
+			<texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
+		</control>
 		<control type="group">
-			<left>1320</left>
+			<animation type="WindowOpen" reversible="false">
+				<effect type="slide" start="0,264" end="0,0" time="350" />
+			</animation>
+			<left>16</left>
+			<top>804</top>
 			<control type="group">
 				<left>5</left>
 				<top>5</top>
@@ -25,14 +35,6 @@
 					<animation effect="fade" start="100" end="20" time="0" tween="sine">WindowOpen</animation>
 				</control>
 				<control type="image">
-					<left>538</left>
-					<top>6</top>
-					<width>45</width>
-					<height>45</height>
-					<aspectratio aligny="top">keep</aspectratio>
-					<texture>$INFO[Window.Property(tikiskins.pov.icon)]</texture>
-				</control>
-				<control type="image">
 					<height>230</height>
 					<width>145</width>
 					<aspectratio aligny="left">scale</aspectratio>
@@ -41,27 +43,28 @@
 				<!-- Next Episode -->
 				<control type="group">
 					<visible>String.IsEqual(Window.Property(tikiskins.nextep_function),next_ep)</visible>
-					<control type="label">
+					<control type="textbox">
 						<top>5</top>
 						<left>160</left>
-						<width>380</width>
-						<height>20</height>
-						<aligny>bottom</aligny>
-						<align>left</align>
-						<font>font14</font>
-						<label>[B]Next Episode... $INFO[Player.TimeRemaining()][/B]</label>
-					</control>
-					<control type="textbox">
-						<left>160</left>
-						<top>70</top>
 						<width>420</width>
 						<height>96</height>
-						<font>font10</font>
+						<font>font12</font>
 						<align>left</align>
-						<aligny>top</aligny>
+						<aligny>bottom</aligny>
 						<label>$INFO[Window.Property(tikiskins.next_episode)]</label>
 						<textcolor>FFB7B4BB</textcolor>
 						<autoscroll>true</autoscroll>
+					</control>
+					<control type="label">
+						<top>130</top>
+						<left>160</left>
+						<width>380</width>
+						<height>20</height>
+						<font>font14</font>
+						<align>left</align>
+						<aligny>bottom</aligny>
+						<label>[B]Next Episode... $INFO[Player.TimeRemaining()][/B]</label>
+						<textcolor>FFB7B4BB</textcolor>
 					</control>
 					<control type="grouplist">
 						<orientation>horizontal</orientation>
@@ -126,19 +129,9 @@
 				<!-- Confirm -->
 				<control type="group">
 					<visible>String.IsEqual(Window.Property(tikiskins.nextep_function),confirm)</visible>
-					<control type="label">
+					<control type="textbox">
 						<top>5</top>
 						<left>160</left>
-						<width>380</width>
-						<height>20</height>
-						<aligny>bottom</aligny>
-						<align>left</align>
-						<font>font14</font>
-						<label>[B]Still watching?[/B]</label>
-					</control>
-					<control type="textbox">
-						<left>160</left>
-						<top>70</top>
 						<width>420</width>
 						<height>96</height>
 						<font>font12</font>
@@ -147,6 +140,17 @@
 						<label>$INFO[Window.Property(tikiskins.title)]</label>
 						<textcolor>FFB7B4BB</textcolor>
 						<autoscroll>true</autoscroll>
+					</control>
+					<control type="label">
+						<top>130</top>
+						<left>160</left>
+						<width>380</width>
+						<height>20</height>
+						<font>font14</font>
+						<align>left</align>
+						<aligny>bottom</aligny>
+						<label>[B]Still watching?[/B]</label>
+						<textcolor>FFB7B4BB</textcolor>
 					</control>
 					<control type="grouplist">
 						<orientation>horizontal</orientation>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-	<defaultcontrol always="true">202</defaultcontrol>
 	<controls>
 		<!-- Background -->
 		<control type="group">
@@ -2107,23 +2106,6 @@
 			<top>-1000</top>
 			<width>630</width>
 			<aspectratio aligny="top">keep</aspectratio>
-		</control>
-		<control type="button" id="202">
-			<onfocus>SetFocus(2049)</onfocus>
-			<description>Dummy button to set panel focus</description>
-			<animation effect="zoom" start="100" end="102" time="100" tween="sine" easing="inout" center="187,35">Focus</animation>
-			<animation effect="zoom" start="102" end="100" time="100" tween="sine" easing="inout" center="187,35">Unfocus</animation>
-			<left>-1000</left>
-			<top>-1000</top>
-			<width>275</width>
-			<height>70</height>
-			<label>Focus</label>
-			<font>font14</font>
-			<textcolor>FFB7B4BB</textcolor>
-			<focusedcolor>FF302F2F</focusedcolor>
-			<texturefocus colordiffuse="FFB7B4BB">white.png</texturefocus>
-			<texturenofocus colordiffuse="FF302F2F">white.png</texturenofocus>
-			<align>center</align>
 		</control>
 	</controls>
 </window>
