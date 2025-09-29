@@ -13,6 +13,41 @@ from modules.utils import get_datetime, adjust_premiered_date
 
 ls, build_url = kodi_utils.local_string, kodi_utils.build_url
 
+def get_random_episode(tmdb_id, continual=False):
+	meta_user_info, adjust_hours, current_date = settings.metadata_user_info(), settings.date_offset(), get_datetime()
+	tmdb_key = str(tmdb_id)
+	meta = tvshow_meta('tmdb_id', tmdb_id, meta_user_info, current_date)
+	try:
+		episodes_data = [i for i in all_episodes_meta(meta, meta_user_info, Thread) if i['premiered']]
+		episodes_data = [i for i in episodes_data if not i['season'] == 0 and adjust_premiered_date(i['premiered'], adjust_hours)[0] <= current_date]
+	except: episodes_data = []
+	if not episodes_data: return None
+	if continual:
+		episode_history = {}
+		episode_list = []
+		try:
+			episode_history = json.loads(kodi_utils.get_property('pov_random_episode_history'))
+			if tmdb_key in episode_history: episode_list = episode_history[tmdb_key]
+		except: pass
+		episodes_data = [i for i in episodes_data if not i in episode_list] or episodes_data
+	chosen_episode = choice(episodes_data)
+	if continual:
+		episode_list.append(chosen_episode)
+		episode_history[tmdb_key] = episode_list
+		kodi_utils.set_property('pov_random_episode_history', json.dumps(episode_history))
+	title, season, episode = meta['title'], int(chosen_episode['season']), int(chosen_episode['episode'])
+	query = title + ' S%.2dE%.2d' % (season, episode)
+	display_name = '%s - %dx%.2d' % (title, season, episode)
+	ep_name, plot = chosen_episode['title'], chosen_episode['plot']
+	try: premiered = adjust_premiered_date(chosen_episode['premiered'], adjust_hours)[1]
+	except: premiered = chosen_episode['premiered']
+	meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'episode': episode, 'premiered': premiered, 'ep_name': ep_name, 'plot': plot})
+	if continual: meta['random_continual'] = 'true'
+	else: meta['random'] = 'true'
+	url_params = {'mode': 'play_media', 'media_type': 'episode', 'autoplay': 'true', 'tmdb_id': meta['tmdb_id'], 'query': query,
+					'tvshowtitle': meta['rootname'], 'season': season, 'episode': episode, 'background': 'true', 'meta': json.dumps(meta)}
+	return meta, url_params
+
 def nextep_playback_info(meta):
 	def _build_next_episode_play():
 		ep_data = season_episodes_meta(season, meta, settings.metadata_user_info())
@@ -47,10 +82,10 @@ def execute_scrape_nextep(meta):
 	nextep_meta, nextep_params = nextep_playback_info(meta)
 	if nextep_params == 'error': return kodi_utils.notification(32574)
 	elif nextep_params == 'no_next_episode': return
-	player = POVPlayer()
-	SourceSelect().playback_prep(nextep_params)
-	while player.isPlayingVideo(): kodi_utils.sleep(100)
-	SourceSelect().playback_prep({**nextep_params, 'background': 'false'})
+	source = SourceSelect()
+	source.playback_prep(nextep_params)
+	nextep_params['background'] = 'false'
+	SourceSelect.add_callback('scrape_next_ep', SourceSelect().playback_prep, nextep_params)
 
 def execute_nextep(meta, nextep_settings):
 	def _get_nextep_params():
@@ -65,18 +100,17 @@ def execute_nextep(meta, nextep_settings):
 		if nextep_threshold == 0: return True
 		try: current_number = int(kodi_utils.get_property('pov_total_autoplays'))
 		except: current_number = 1
-		if current_number == nextep_threshold:
-			current_number = 1
-			kodi_utils.set_property('pov_total_autoplays', str(current_number))
-			if open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml', meta=nextep_meta, function='confirm'):
-				return True
-			else:
-				kodi_utils.notification(32736, 1500)
-				return False
-		else:
+		if current_number < nextep_threshold:
 			current_number += 1
 			kodi_utils.set_property('pov_total_autoplays', str(current_number))
 			return True
+		if open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml', meta=nextep_meta, function='confirm'):
+			current_number = 1
+			kodi_utils.set_property('pov_total_autoplays', str(current_number))
+			return True
+		kodi_utils.clear_property('pov_total_autoplays')
+		kodi_utils.notification(32736, 1500)
+		return False
 	def _continue_action():
 		if run_popup: action = open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml', meta=nextep_meta, function='next_ep')
 		else: action = 'close'
@@ -111,52 +145,13 @@ def execute_nextep(meta, nextep_settings):
 	nextep_url = _get_nextep_url()
 	if not nextep_url: return kodi_utils.notification(32760)
 	action = _control()
-	if action == 'cancel': return kodi_utils.notification(32736)
-	elif action == 'play': player.stop()
-	elif action == 'close':
+	if action == 'cancel':
+		kodi_utils.clear_property('pov_total_autoplays')
+		return kodi_utils.notification(32736)
+	nextep_params['background'] = 'false'
+	SourceSelect.add_callback('scrape_next_ep', SourceSelect().playback_prep, nextep_params)
+	if action == 'close':
 		if not run_popup: kodi_utils.notification('%s %s S%02dE%02d' % (ls(32801), nextep_meta['title'], nextep_meta['season'], nextep_meta['episode']), 6500, nextep_meta['poster'])
-		while player.isPlayingVideo(): kodi_utils.sleep(100)
-	kodi_utils.sleep(1000)
-	player.run(nextep_url)
-
-def get_random_episode(tmdb_id, continual=False):
-	meta_user_info, adjust_hours, current_date = settings.metadata_user_info(), settings.date_offset(), get_datetime()
-	tmdb_key = str(tmdb_id)
-	meta = tvshow_meta('tmdb_id', tmdb_id, meta_user_info, current_date)
-	try:
-		episodes_data = [i for i in all_episodes_meta(meta, meta_user_info, Thread) if i['premiered']]
-		episodes_data = [i for i in episodes_data if not i['season']  == 0 and adjust_premiered_date(i['premiered'], adjust_hours)[0] <= current_date]
-	except: episodes_data = []
-	if not episodes_data: return None
-	if continual:
-		episode_list = []
-		try:
-			episode_history = json.loads(kodi_utils.get_property('pov_random_episode_history'))
-			if tmdb_key in episode_history: episode_list = episode_history[tmdb_key]
-			else: kodi_utils.set_property('pov_random_episode_history', '')
-		except: pass
-#		first_run = len(episode_list) == 0
-		episodes_data = [i for i in episodes_data if not i in episode_list]
-		if not episodes_data:
-			kodi_utils.set_property('pov_random_episode_history', '')
-			return get_random_episode(tmdb_id, continual=True)
-#	else: first_run = True
-	chosen_episode = choice(episodes_data)
-	if continual:
-		episode_list.append(chosen_episode)
-		episode_history = {str(tmdb_id): episode_list}
-		kodi_utils.set_property('pov_random_episode_history', json.dumps(episode_history))
-	title, season, episode = meta['title'], int(chosen_episode['season']), int(chosen_episode['episode'])
-	query = title + ' S%.2dE%.2d' % (season, episode)
-	display_name = '%s - %dx%.2d' % (title, season, episode)
-	ep_name, plot = chosen_episode['title'], chosen_episode['plot']
-	try: premiered = adjust_premiered_date(chosen_episode['premiered'], adjust_hours)[1]
-	except: premiered = chosen_episode['premiered']
-	meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'episode': episode, 'premiered': premiered, 'ep_name': ep_name, 'plot': plot})
-	if continual: meta['random_continual'] = 'true'
-	else: meta['random'] = 'true'
-	url_params = {'mode': 'play_media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'query': query,
-					'tvshowtitle': meta['rootname'], 'season': season, 'episode': episode, 'background': 'true', 'meta': json.dumps(meta)}
-#	if not first_run: url_params['background'] = 'true'
-	return meta, url_params
+	if action == 'play': player.stop()
+	while player.isPlayingVideo(): kodi_utils.sleep(100)
 

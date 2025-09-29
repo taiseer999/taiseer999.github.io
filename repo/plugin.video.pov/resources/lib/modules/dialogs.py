@@ -82,8 +82,8 @@ def random_choice(choice, meta):
 	from modules.episode_tools import get_random_episode
 	from modules.sources import SourceSelect
 	meta, url_params = get_random_episode(tmdb_id, True if choice == 'play_random_continual' else False)
-	if not url_params: return {'pass': True}
-	url_params.update({'autoplay': 'True', 'background': 'false'})
+	if not url_params: return notification(32760)
+	url_params['background'] = 'false'
 #	return execute_builtin('RunPlugin(%s)' % build_url(url_params))
 	SourceSelect().playback_prep(url_params)
 
@@ -693,7 +693,7 @@ def clear_and_rescrape(media_type, meta, season=None, episode=None):
 	deleted = ExternalProvidersCache().delete_cache_single(media_type, str(meta['tmdb_id']))
 	hide_busy_dialog()
 	if not deleted: return notification(32574)
-	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'False'}
+	play_params = {'mode': 'play_media', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
 	if media_type == 'movie': play_params.update({'media_type': 'movie'})
 	else: play_params.update({'media_type': 'episode', 'season': season, 'episode': episode})
 	SourceSelect().playback_prep(play_params)

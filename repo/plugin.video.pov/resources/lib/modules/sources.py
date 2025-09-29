@@ -29,6 +29,25 @@ av1_filter_key, hevc_filter_key, hdr_filter_key, dolby_vision_filter_key = '[B]A
 dialog_format, remaining_format = '[COLOR %s][B]%s[/B][/COLOR] 4K: %s | 1080p: %s | 720p: %s | SD: %s | Total: %s', ls(32676)
 
 class SourceSelect():
+	scrape_next_ep = []
+
+	@classmethod
+	def add_callback(cls, callback, function, *args):
+		attr = getattr(cls, callback, False)
+		if attr is False or not callable(function): return
+		attr.append((function, *args) if args else function)
+
+	def next_ep_hook(function):
+		def wrapper(instance, *args, **kwargs):
+			try:
+				function(instance, *args, **kwargs)
+				if not instance.scrape_next_ep: return
+				scrape_func, scrape_args = instance.scrape_next_ep.pop()
+				scrape_func(scrape_args)
+				kodi_utils.sleep(500)
+			except: pass
+		return wrapper
+
 	def __init__(self):
 		self.params = {}
 		self.clear_properties, self.filters_ignored, self.active_folders = True, False, False
@@ -41,6 +60,7 @@ class SourceSelect():
 		self.language = get_language()
 		self.progress_dialog = None
 
+	@next_ep_hook
 	def playback_prep(self, params=None):
 		if self.clear_properties: self._clear_properties()
 		if params: self.params = params
@@ -59,7 +79,7 @@ class SourceSelect():
 		self.custom_year = params_get('custom_year', None)
 		self.custom_season = int(params_get('custom_season')) if 'custom_season' in self.params else None
 		self.custom_episode = int(params_get('custom_episode')) if 'custom_episode' in self.params else None
-		if 'autoplay' in self.params: self.autoplay = self.params.get('autoplay', 'False') == 'True'
+		if 'autoplay' in self.params: self.autoplay = self.params.get('autoplay', 'false') == 'true'
 		else: self.autoplay = auto_play(self.media_type)
 		if 'season' in self.params: self.season = int(params_get('season'))
 		else: self.season = ''
@@ -527,7 +547,7 @@ class SourceSelect():
 					progressDialogBG.create('POV', 'POV loading...')
 				else:
 					self._make_progress_dialog()
-					POVPlayer.add_callback(self._kill_progress_dialog)
+					POVPlayer.add_callback('progress_dialog', self._kill_progress_dialog)
 			url = next(_process(), None)
 			if not background: # self._kill_progress_dialog()
 				if not url: self._kill_progress_dialog()

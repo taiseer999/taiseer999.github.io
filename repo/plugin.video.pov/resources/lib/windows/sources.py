@@ -79,7 +79,7 @@ class SourceResults(BaseDialog):
 			source = json.loads(chosen_listitem.getProperty('source'))
 			cache_provider = source.get('cache_provider', 'None')
 			magnet_url = source.get('url', 'None')
-			params = {'provider': cache_provider, 'url': magnet_url}
+			params = {'provider': cache_provider, 'url': magnet_url, 'name': source.get('name', '')}
 			params['mode'] = 'manual_add_magnet_to_cloud' if magnet_url.startswith('magnet') else 'manual_add_nzb_to_cloud'
 			self.execute_code(run_plugin_str % self.build_url(params))
 		elif action == self.info_actions:

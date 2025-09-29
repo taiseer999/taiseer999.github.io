@@ -1467,6 +1467,6 @@ msgid "Severe"
 msgstr ""
 
 msgctxt "#32999"
-msgid "On Deck"
+msgid "Next Episode"
 msgstr ""
 

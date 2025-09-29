@@ -3,7 +3,8 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.10[/B][/COLOR]
-- Minor fixes.
+- Changed Autoplay Next Episode, Continual Random Play functions.
+- Fixed TorBox uncached usenet error.
 
   [COLOR dodgerblue][B]Version 5.09[/B][/COLOR]
 - Added Clear Cloud Storage to Offcloud results context menu.

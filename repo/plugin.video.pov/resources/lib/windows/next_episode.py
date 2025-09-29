@@ -5,7 +5,7 @@ from modules.settings import get_art_provider
 
 poster_empty = media_path('box_office.png')
 click_actions = {10: 'close', 11: 'play', 12: 'cancel'}
-confirm_actions = {10: True, 11: False}
+confirm_actions = {10: False, 11: True}
 
 class NextEpisode(BaseDialog):
 	def __init__(self, *args, **kwargs):
@@ -46,7 +46,7 @@ class NextEpisode(BaseDialog):
 		self.setProperty('tikiskins.fanart', self.original_fanart())
 		self.setProperty('tikiskins.nextep_function', self.function)
 		if self.function == 'next_ep':
-			self.setProperty('tikiskins.next_episode', '[B]%s - %02dx%02d[/B] - %s' % (self.meta['title'], self.meta['season'], self.meta['episode'], self.meta['ep_name']))
+			self.setProperty('tikiskins.next_episode', '[B]%s[/B][CR][B]%02dx%02d[/B] - %s' % (self.meta['title'], self.meta['season'], self.meta['episode'], self.meta['ep_name']))
 		else:
 			self.setProperty('tikiskins.title', self.meta['title'])
 

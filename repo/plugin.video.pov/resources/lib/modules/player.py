@@ -13,14 +13,15 @@ fanart_empty = kodi_utils.get_addoninfo('fanart')
 poster_empty = kodi_utils.media_path('box_office.png')
 
 class POVPlayer(kodi_utils.xbmc_player):
-	progress_callback = []
+	progress_dialog = []
 
 	@classmethod
-	def add_callback(cls, function):
-		if not callable(function): return
-		cls.progress_callback.append(function)
+	def add_callback(cls, callback, function, *args):
+		attr = getattr(cls, callback, False)
+		if attr is False or not callable(function): return
+		attr.append((function, *args) if args else function)
 
-	def __init__ (self):
+	def __init__(self):
 		kodi_utils.xbmc_player.__init__(self)
 		self.set_resume, self.set_watched, self.playback_event = 5, 90, None
 		self.media_marked, self.nextep_info_gathered = False, False
@@ -150,7 +151,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			if not self.play_random_continual and self.autoplay_nextep: self.autoplay_next_episode = 'random' not in self.meta
 			if self.autoplay_nextep and self.autoscrape_nextep: self.autoscrape_next_episode = False
 		while not self.playback_event: kodi_utils.sleep(100)
-		while self.progress_callback: self.progress_callback.pop()()
+		while self.progress_dialog: self.progress_dialog.pop()()
 		kodi_utils.close_all_dialog()
 		if self.volume_check: kodi_utils.volume_checker(get_setting('volumecheck.percent', '100'))
 		kodi_utils.sleep(1000)
@@ -196,10 +197,10 @@ class POVPlayer(kodi_utils.xbmc_player):
 									'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year, 'tvdb_id': self.tvdb_id, 'refresh': 'false', 'from_playback': 'true'}
 				Thread(target=self.run_media_watched, args=(watched_function, watched_params)).start()
 			else:
-				kodi_utils.clear_property('pov_nextep_autoplays')
-				kodi_utils.clear_property('pov_random_episode_history')
-				if self.current_point >= self.set_resume:
-					ws.set_bookmark(self.media_type, self.tmdb_id, self.curr_time, self.total_time, self.title, self.season, self.episode)
+#				kodi_utils.clear_property('pov_total_autoplays')
+#				kodi_utils.clear_property('pov_random_episode_history')
+				if not self.current_point >= self.set_resume: return
+				ws.set_bookmark(self.media_type, self.tmdb_id, self.curr_time, self.total_time, self.title, self.season, self.episode)
 		except: pass
 
 	def run_media_watched(self, function, params):

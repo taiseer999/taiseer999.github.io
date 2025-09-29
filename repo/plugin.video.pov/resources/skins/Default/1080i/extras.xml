@@ -11,14 +11,14 @@
 				<texture>black.png</texture>
 			</control>
 			<control type="image">
-				<left>981</left>
+				<left>780</left>
 				<top>10</top>
-				<width max="889">auto</width>
-				<height>500</height>
-				<aspectratio>keep</aspectratio>
-				<texture>$INFO[Window.Property(tikiskins.extras.fanart)]</texture>
+				<width max="1090">auto</width>
+				<height>680</height>
+				<aspectratio>scale</aspectratio>
+				<texture diffuse="gradient-diffuse-horizontal.png">$INFO[Window.Property(tikiskins.extras.fanart)]</texture>
 				<animation type="WindowOpen" reversible="false">
-					<effect type="fade" start="0" end="80" time="1000" tween="sine" />
+					<effect type="fade" start="0" end="100" time="1000" tween="sine" />
 					<effect type="slide" start="0,-550" end="0" time="600" center="auto" delay="200" tween="quadratic" easing="out" />
 				</animation>
 			</control>
@@ -131,7 +131,7 @@
 				<height>50</height>
 				<width>60</width>
 				<aspectratio>keep</aspectratio>
-				<texture>special://home/addons/plugin.video.pov/resources/media/imdb_small.png</texture>
+				<texture>imdb_small.png</texture>
 				<visible>!String.IsEmpty(Window.Property(tikiskins.extras.rating.imdb))</visible>
 			</control>
 			<control type="label">
@@ -148,7 +148,7 @@
 				<height>40</height>
 				<width>60</width>
 				<aspectratio>keep</aspectratio>
-				<texture>special://home/addons/plugin.video.pov/resources/media/metacritic.png</texture>
+				<texture>metacritic.png</texture>
 				<visible>!String.IsEmpty(Window.Property(tikiskins.extras.rating.metacritic))</visible>
 			</control>
 			<control type="label">
@@ -165,7 +165,7 @@
 				<height>40</height>
 				<width>60</width>
 				<aspectratio>keep</aspectratio>
-				<texture>special://home/addons/plugin.video.pov/resources/media/tomatoes.png</texture>
+				<texture>tomatoes.png</texture>
 				<visible>!String.IsEmpty(Window.Property(tikiskins.extras.rating.tomatoes))</visible>
 			</control>
 			<control type="label">
@@ -182,7 +182,7 @@
 				<height>40</height>
 				<width>60</width>
 				<aspectratio>keep</aspectratio>
-				<texture>special://home/addons/plugin.video.pov/resources/media/mdblist.png</texture>
+				<texture>mdblist.png</texture>
 				<visible>!String.IsEmpty(Window.Property(tikiskins.extras.rating.mdblist))</visible>
 			</control>
 			<control type="label">
@@ -199,7 +199,7 @@
 				<height>40</height>
 				<width>60</width>
 				<aspectratio>keep</aspectratio>
-				<texture>special://home/addons/plugin.video.pov/resources/media/trakt.png</texture>
+				<texture>trakt.png</texture>
 				<visible>!String.IsEmpty(Window.Property(tikiskins.extras.rating.trakt))</visible>
 			</control>
 			<control type="label">
@@ -216,7 +216,7 @@
 				<height>40</height>
 				<width>60</width>
 				<aspectratio>keep</aspectratio>
-				<texture>special://home/addons/plugin.video.pov/resources/media/tmdb_small.png</texture>
+				<texture>tmdb_small.png</texture>
 				<visible>!String.IsEmpty(Window.Property(tikiskins.extras.rating.tmdb))</visible>
 			</control>
 			<control type="label">
@@ -245,10 +245,16 @@
 				<textcolor>FFCCCCCC</textcolor>
 				<align>center</align>
 				<label>[I]$INFO[Window.Property(tikiskins.extras.genre)][/I]</label>
-				<visible>String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),EXTRA)</visible>
+				<visible>
+					!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),PLAYBACK) +
+					!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),BROWSE)
+				</visible>
 			</control>
 			<control type="grouplist">
-				<visible>String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),EXTRA)</visible>
+				<visible>
+					!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),PLAYBACK) +
+					!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),BROWSE)
+				</visible>
 				<top>43</top>
 				<itemgap>0</itemgap>
 				<align>center</align>
@@ -298,7 +304,7 @@
 			<control type="grouplist">
 				<visible>
 					String.IsEqual(Window.Property(tikiskins.extras.media_type),movie) +
-					String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),EXTRA)
+					!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),PLAYBACK)
 				</visible>
 				<top>88</top>
 				<itemgap>0</itemgap>
@@ -325,7 +331,7 @@
 			<control type="grouplist">
 				<visible>
 					String.IsEqual(Window.Property(tikiskins.extras.media_type),tvshow) +
-					String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),EXTRA)
+					!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),BROWSE)
 				</visible>
 				<top>88</top>
 				<itemgap>0</itemgap>
@@ -376,7 +382,10 @@
 				<align>justify</align>
 				<label>$INFO[Window.Property(tikiskins.extras.plot)]</label>
 				<autoscroll delay="5000" time="2000" repeat="10000">true</autoscroll>
-				<visible>!String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),EXTRA)</visible>
+				<visible>
+					String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),PLAYBACK) |
+					String.Contains(Container(2049).ListItem.Property(tikiskins.extras.name),BROWSE)
+				</visible>
 			</control>
 		</control>
 		<!-- Body -->

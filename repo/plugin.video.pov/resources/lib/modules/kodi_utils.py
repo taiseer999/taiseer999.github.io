@@ -45,7 +45,7 @@ def database_connect(file, **kwargs):
 	return database.connect(translate_path(file), **kwargs)
 
 def media_path(*args):
-	path = 'special://home/addons/plugin.video.pov/resources/media/'
+	path = 'special://home/addons/plugin.video.pov/resources/skins/Default/media/'
 	return '%s%s' % (path, '/'.join(args)) if args else path
 
 def get_property(prop):
