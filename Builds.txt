@@ -103,7 +103,7 @@ info="http://your.info.url"
 description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
 name="AF2 CoreELEC LITE"
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=fykipvdhBpj92hivW%2FAReERFPBAKfs%2BVOVqFdnjahvVf7gwIS%2FcJh7NxOIIplENk&expiry=pwJNoCgXXxkk8csqqwRaRQ%3D%3D&mac=d7ab93d84bd72d536c4ef509a0b0f557d4e1d236e933085a7937280cc619d09c"
 minor="http://"
 gui="http://"
