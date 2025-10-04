@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="TVShowWidgets">
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32458&amp;action=trakt_tv_trending&amp;iconImage=trending&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="الشائعة"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22011"/>
+        </include>
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32459&amp;action=tmdb_tv_popular&amp;iconImage=popular&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="المشهورة"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22012"/>
+        </include>
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fenlight/?name=Premieres&amp;action=tmdb_tv_premieres&amp;iconImage=https%3A%2F%2Fi.imgur.com%2FO2bqOfI.png&amp;mode=build_tvshow_list&amp;random_support=true"/>
+            <param name="widget_header" value="العرض الاول"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22013"/>
+        </include>
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32043&amp;iconImage=most_watched&amp;mode=build_tvshow_list&amp;action=trakt_tv_most_watched"/>
+            <param name="widget_header" value="الأكثر مشاهدة"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22014"/>
+        </include>
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=trakt.list.build_trakt_list&amp;user=taiseer999&amp;slug=abukareem&amp;list_type=liked_lists&amp;list_name=%D9%83%D9%88%D8%B1%D9%8A+%D9%85%D8%B3%D9%84%D8%B3%D9%84%D8%A7%D8%AA+AbuKareem"/>
+            <param name="widget_header" value="توصيات كوري"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22015"/>
+        </include>
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32483&amp;iconImage=next_episodes&amp;mode=build_next_episode"/>
+            <param name="widget_header" value="تكملة المشاهدة (الحلقات)"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22016"/>
+        </include>
+        <include content="WidgetListBigLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32481&amp;action=in_progress_tvshows&amp;iconImage=in_progress_tvshow&amp;mode=build_tvshow_list"/>
+            <param name="widget_header" value="مسلسلات لم تنتهي من مشاهدتها"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22017"/>
+        </include>
+        <include content="WidgetListLandscape">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32475&amp;iconImage=watched_1&amp;mode=build_tvshow_list&amp;action=watched_tvshows"/>
+            <param name="widget_header" value="تم مشاهدتُها"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22018"/>
+        </include>
+        <include content="WidgetListEpisodes">
+            <param name="content_path" value="plugin://plugin.video.fen/?name=32470&amp;iconImage=genres&amp;mode=navigator.genres&amp;menu_type=tvshow"/>
+            <param name="widget_header" value="الأصناف"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22019"/>
+        </include>
+        <include content="WidgetListEpisodes">
+            <param name="content_path" value="plugin://plugin.video.fen/?mode=navigator.build_shortcut_folder_list&amp;name=TV+Show+Networks&amp;iconImage=folder&amp;shortcut_folder=True&amp;external_list_item=True"/>
+            <param name="widget_header" value="شبكات البث"/>
+            <param name="widget_target" value="videos"/>
+            <param name="list_id" value="22020"/>
+        </include>
+    </include>
+</includes>

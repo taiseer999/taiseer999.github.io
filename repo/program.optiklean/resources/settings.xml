@@ -1,0 +1,38 @@
+<settings>
+    <category label="Settings">
+
+		<setting type="label" visible="false" />
+
+        <setting type="lsep" label="Automatic Cleaning Settings" />
+        
+        <!-- Cache and Temp -->
+        <setting id="clear_cache_and_temp_enable" type="bool" label="Enable clear cache/temp" default="false" />
+        <setting id="clear_cache_and_temp_interval" type="number" label="Days between cache/temp cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        
+        <!-- Thumbnails -->
+        <setting id="clear_unused_thumbnails_enable" type="bool" label="Enable clear unused thumbnails" default="false" />
+        <setting id="clear_unused_thumbnails_interval" type="number" label="Days between unused thumbnails cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        
+        <!-- Addon Leftovers -->
+        <setting id="clear_addon_leftovers_enable" type="bool" label="Enable clear addon leftovers" default="false" />
+        <setting id="clear_addon_leftovers_interval" type="number" label="Days between addon leftovers cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        
+        <!-- Packages -->
+        <setting id="clear_kodi_packages_enable" type="bool" label="Enable clear packages" default="false" />
+        <setting id="clear_kodi_packages_interval" type="number" label="Days between packages cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        
+        <!-- Databases -->
+        <setting id="optimize_databases_enable" type="bool" label="Enable databases optimization" default="false" />
+        <setting id="optimize_databases_interval" type="number" label="Days between databases optimization" default="7" minimum="1" maximum="30" subsetting="true" />
+        
+        <!-- Help Text -->
+        <setting type="lsep" label="Interval Help" />
+        <setting type="label" label="All interval values must be between 1-30 days." />
+        <setting type="label" label="Values outside this range will be automatically adjusted." />
+		
+        <!-- Auto update -->
+        <setting type="lsep" label="Auto Updates" />
+        <setting id="enable_auto_updates" type="bool" label="Auto-update" default="true" />
+        <setting id="update_check_interval" type="number" label="Update check interval (hours)" default="24" min="1" max="168" step="1" />
+    </category>
+</settings>

@@ -1173,7 +1173,7 @@ updated YouTube addon URL
             <clearlogo>resources/media/clearlogo.png</clearlogo>
         </assets>
     </extension>
-</addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.13" provider-name="drinfernoo, slamious">
+</addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.14" provider-name="drinfernoo, slamious">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -1387,34 +1387,6 @@ updated YouTube addon URL
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
-</addon><addon id="plugin.video.last_played" name="Last Played" version="6.4.0" provider-name="Luis Rodrigues">
-	<extension point="xbmc.python.pluginsource" library="addon.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.service" library="default.py" />
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">Last Played</summary>
-		<summary lang="en_US">Last Played</summary>
-		<summary lang="en_AU">Last Played</summary>
-		<summary lang="en_NZ">Last Played</summary>
-		<summary lang="pt_PT">Ultimos Vistos</summary>
-		<summary lang="pt_BR">Ultimos Vistos</summary>
-		<summary lang="sk_sk">Last Played (naposledy videné)</summary>
-		<description lang="en_GB">List of the last movies, episodes and music played, including streaming sources from any addon</description>
-		<description lang="en_US">List of the last movies, episodes and music played, including streaming sources from any addon</description>
-		<description lang="en_AU">List of the last movies, episodes and music played, including streaming sources from any addon</description>
-		<description lang="en_NZ">List of the last movies, episodes and music played, including streaming sources from any addon</description>
-		<description lang="pt_PT">Ultimos filmes, episodios e musicas tocadas, incluindo fontes de streaming de qualquer addon</description>
-		<description lang="pt_BR">Ultimos filmes, episodios e musicas tocadas, incluindo fontes de streaming de qualquer addon</description>
-		<description lang="sk_SK">Naposledy prehrávané filmy, seriály a hudba, vrátane streamov z ľubovoľného doplnku</description>
-		<disclaimer lang="en_GB" />
-		<platform>all</platform>
-		<license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
-		<source>https://github.com/5-star/plugin.video.last_played</source>
-		<assets>
-			<icon>icon.png</icon>
-		</assets>
-	</extension>
 </addon><addon id="plugin.video.pov" version="5.10.03" name="POV" provider-name="kodifitzwell">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -2301,142 +2273,6 @@ updated YouTube addon URL
         <summary>CocoScrapers Repository</summary>
         <description>Unofficial add-ons repository</description>
     </extension>
-</addon><addon id="repository.cywteow" name="cywteow Add-ons" version="1.1.1" provider-name="cywteow">
-	<extension point="xbmc.addon.repository" name="cywteow Add-ons">
-    		<dir>
-		        <info compressed="false">https://raw.githubusercontent.com/cywteow/cywteow.github.io/master/addons.xml</info>
-		        <checksum>https://raw.githubusercontent.com/cywteow/cywteow.github.io/master/addons.xml.md5</checksum>
-		        <datadir zip="true">https://raw.githubusercontent.com/cywteow/cywteow.github.io/master</datadir>
-	        </dir>
-		<dir>
-			<info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
-		</dir>
-		<dir>
-			<info compressed="false">https://raw.githubusercontent.com/groggyegg/lime/master/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/groggyegg/lime/master/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/groggyegg/lime/master</datadir>
-		</dir>
-		<dir>
-			<info compressed="false">https://aznhusband.github.io/addons.xml</info>
-			<checksum>https://aznhusband.github.io/addons.xml.md5</checksum>
-			<datadir zip="true">https://aznhusband.github.io/</datadir>
-		</dir>
-	</extension>
-</addon><addon id="repository.dendygh" name="DenDyGH Repository" version="1.1" provider-name="DenDyGH">
-    <extension point="xbmc.addon.repository" name="DenDyGH Repository">
-        <dir minversion="19.9.1" maxversion="20.9.0">
-            <info compressed="false">https://raw.githubusercontent.com/DenDyGH/dendygh.github.io/main/nexus/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/DenDyGH/dendygh.github.io/main/nexus/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/DenDyGH/dendygh.github.io/main/nexus/zips/</datadir>
-        </dir>
-        <dir minversion="20.9.1">
-            <info compressed="false">https://raw.githubusercontent.com/DenDyGH/dendygh.github.io/main/omega/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/DenDyGH/dendygh.github.io/main/omega/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/DenDyGH/dendygh.github.io/main/omega/zips/</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary>DenDyGH Repository</summary>
-        <description>A DenDyGH Repository</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon />
-            <fanart />
-        </assets>
-    </extension>
-</addon><addon id="repository.funstersplace" name="funstersplace Repository" version="0.3" provider-name="funstersplace">
-	<extension point="xbmc.addon.repository" name="funstersplace">
-		<dir>
-			<info compressed="false">http://funstersplace.net/19repo/addons.xml</info>
-			<checksum>http://funstersplace.net/19repo/addonsmd5.txt</checksum>
-			<datadir zip="true">http://funstersplace.net/19repo/</datadir>
-		</dir>
-		<dir>
-        <info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
-        <checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
-        <datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
-	</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en" />
-		<description lang="en">funstersplace Repo</description>
-		<genre>fun</genre>
-		<assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-	</extension>
-</addon><addon id="repository.hooty" name="Hooty's Repository" version="1.0" provider-name="Goldenfreddy0703">
-    <extension point="xbmc.addon.repository" name="Hooty's Repository">
-        <dir>
-            <info compressed="false">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/repo/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/repo/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/repo/zips/</datadir>
-        </dir>
-        <dir minversion="18.0.0" maxversion="18.9.9">
-            <info compressed="false">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/leia/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/leia/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/leia/zips/</datadir>
-        </dir>
-        <dir minversion="19.0.0">
-            <info compressed="false">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/matrix/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/matrix/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/matrix/zips/</datadir>
-        </dir>
-        <dir minversion="20.0.0">
-            <info compressed="false">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/nexus/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/nexus/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/Goldenfreddy0703/repository.hooty/master/nexus/zips/</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary>Hooty's Repository</summary>
-        <description>A repository for maintained releases of addons</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
-</addon><addon id="repository.ivarbrandt" name="ivarbrandt's Repository" version="1.0.1" provider-name="Ivar Brandt">
-    <extension point="xbmc.addon.repository" name="ivarbrandt's Repository">
-        <dir>
-            <info compressed="false">https://raw.githubusercontent.com/ivarbrandt/repository.ivarbrandt/master/repo/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/ivarbrandt/repository.ivarbrandt/master/repo/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/ivarbrandt/repository.ivarbrandt/master/repo/zips/</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary>ivarbrandt's Repository</summary>
-        <description>Kodi repository for the FENtastic skin and other projects</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
-</addon><addon id="repository.jamal2362" name="Jamal2362 Repository for CPM" version="1.0" provider-name="jamal2362">
-    <extension point="xbmc.addon.repository" name="Jamal2362 Repository for CPM">
-        <dir minversion="20.9.1">
-            <info compressed="false">https://raw.githubusercontent.com/jamal2362/repository.jamal2362/main/addons/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/jamal2362/repository.jamal2362/main/addons/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/jamal2362/repository.jamal2362/main/addons/zips/</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <summary>Jamal2362 Repository for CPM</summary>
-        <description>Official repository of jamal2362's edited CPM skins.</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>resources/icon.png</icon>
-        </assets>
-    </extension>
 </addon><addon id="repository.jurialmunkey" name="jurialmunkey Alpha Repository" version="3.4" provider-name="jurialmunkey">
     <extension point="xbmc.addon.repository" name="jurialmunkey Alpha Repository">
         <dir>
@@ -2710,19 +2546,6 @@ updated YouTube addon URL
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
         </assets>
-    </extension>
-</addon><addon id="repository.tikipeter" name="Tikipeter's Repository" version="1.0.3" provider-name="Tikipeter">
-    <extension point="xbmc.addon.repository" name="Tikipeter's Repository">
-        <dir minversion="20.0">
-            <info compressed="false">https://raw.githubusercontent.com/Tikipeter/repository.tikipeter/master/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/Tikipeter/repository.tikipeter/master/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/Tikipeter/repository.tikipeter/master/zips</datadir>
-        </dir>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <summary>Tikipeter's Repository</summary>
-        <description>Unofficial add-ons repository</description>
     </extension>
 </addon><addon id="repository.titan.bingie.mod" name="Titan BINGIE MOD Repository" provider-name="AchillesPunks, Matke" version="2.0.1">
 	<extension point="xbmc.addon.repository" name="Titan BINGIE MOD Repository">
@@ -5452,53 +5275,6 @@ New properties:
 			<icon>resources/icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="service.homatics-leds" name="Homatics LEDs" version="22.0.2.2" provider-name="Team CoreELEC">
-  <requires>
-    <import addon="xbmc.python" version="3.0.0" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>executable</provides>
-  </extension>
-  <extension point="xbmc.service" library="service.py">
-    <provides />
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="de_DE">Homatics LED Kit Modus</summary>
-    <summary lang="en_GB">Homatics LED Kit mode</summary>
-    <summary lang="hu_HU">Homatics LED Kit üzemmód</summary>
-    <description lang="de_DE">
-Mit diesem Addon können die LEDs in den Knight-Rider-Modus gesetzt werden, oder ihre Farbe kann einfach angepasst werden...
-Danke an vpeter und FoLeY für die Unterstützung...
-hex grün 122e04, blau 101010, lila 800080, gelb ff4600, tiefblau 0d00bf,
-magenta d8007a, orange f50e00, ff0000 rot, 00000 keine Farbe
-    </description>
-    <description lang="en_GB">
-With this addon, the LEDs can be set to knight rider mode, or their color can be simply customized...
-Thanks to vpeter and FoLeY for the support...
-hex green 122e04, blue 101010, purple 800080, yellow ff4600, deepblue 0d00bf,
-magenta d8007a, orange f50e00, ff0000 red, 00000 no color
-    </description>
-    <description lang="hu_HU">
-A kiegészítővel beállíthatóak a ledek knight Rider módba, vagy simán testreszabható a színük ...
-Köszönet vpeter-nek, és FoLeY-nak a támogatásért...
-hex green 122e04, blue 101010, purple 800080, yellow ff4600,
-deepblue 0d00bf, magenta d8007a, orange f50e00, ff0000 red,
-00000 no color
-    </description>
-    <disclaimer>
-    </disclaimer>
-    <platform>all</platform>
-    <news>
-21.0.2
-- added german translation
-21.0.1
-- added language strings
-    </news>
-    <assets>
-      <icon>resources/icon.png</icon>
-      <fanart>resources/fanart.jpg</fanart>
-    </assets>
-  </extension>
 </addon><addon id="service.library.data.provider.lite" name="Library Data Provider Lite (KODI 19+20) (axbmcuser)" provider-name="BigNoid, SiLVO, axbmcuser" version="1.4.0">
 	<requires>
 		<import addon="xbmc.json" version="11.2.0" />
@@ -7320,27 +7096,6 @@ For a complete view of changes visit https://github.com/b-jesch/skin.estuary.mod
 		<assets>
 			<icon>icon.png</icon>
 		</assets>
-	</extension>
-</addon><addon id="weather.multi2" name="Multi Weather 2" version="420" provider-name="ronie">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.openweathermap.maps" version="1.0.4" />
-		<import addon="script.module.requests" version="2.22.0+matrix.1" />
-		<import addon="script.module.dateutil" version="2.8.1+matrix.1" />
-	</requires>
-	<extension point="xbmc.python.weather" library="default.py" />
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">Weather forecast from several providers</summary>
-		<description lang="en_GB">Weather forecast provided by Yahoo, Weatherbit and Openweathermap</description>
-		<platform>all</platform>
-		<license>GPL-2.0-only</license>
-		<forum>https://forum.kodi.tv/showthread.php?tid=352028</forum>
-		<source>https://gitlab.com/ronie/weather.multi2/</source>
-		<assets>
-			<icon>resources/icon.png</icon>
-			<fanart>resources/fanart.jpg</fanart>
-		</assets>
-		<news>- fix yahoo weather again</news>
 	</extension>
 </addon><addon id="weather.openmeteo" name="Open-Meteo" version="1.0.14" provider-name="OpenHT">
 	<requires>

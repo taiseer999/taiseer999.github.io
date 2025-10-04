@@ -1,0 +1,39 @@
+{
+    "infolabels": {
+        "listitem_trailer": "Container.ListItem.Trailer",
+        "tmdbhelper_trailer": "Container(99950).ListItem.Trailer",
+		"listitem_title": "Container.ListItem.Title",
+        "tmdbhelper_title": "Container(99950).ListItem.Title",
+        "listitem_tvshowtitle": "Container.ListItem.TVShowTitle",
+        "tmdbhelper_tvshowtitle": "Container(99950).ListItem.TVShowTitle"
+    },
+    "values": {
+        "trailer": [
+            {
+                "rules": ["!String.IsEmpty(Container.ListItem.Trailer)"],
+                "value": "{listitem_trailer}"
+            },
+            "{tmdbhelper_trailer}"
+        ],
+		"title": [
+            {
+                "rules": ["!String.IsEmpty(Container.ListItem.TVShowtitle)"],
+                "value": "{listitem_tvshowtitle}"
+            },
+            {
+                "rules": ["!String.IsEmpty(Container.ListItem.Title)"],
+                "value": "{listitem_title}"
+            },
+            {
+                "rules": ["!String.IsEmpty(Container(99950).ListItem.TVShowTitle)"],
+                "value": "{tmdbhelper_tvshowtitle}"
+            },
+            "{tmdbhelper_title}"
+        ]
+    },
+    "actions": [
+        "SetProperty(PlayTrailerTitle,\"{title}\",Home)",
+		"SetProperty(PlayTrailer,\"{trailer}\",Home)",
+        "ActivateWindow(1123)"
+    ]
+}
