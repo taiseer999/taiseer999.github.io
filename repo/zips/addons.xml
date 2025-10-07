@@ -6703,7 +6703,7 @@ Added arabic fonts
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.zephyr.martian" version="3.17.0,1" name="Arctic: Zephyr (martian)" provider-name="jurialmunkey, beatmasterrs, martian89">
+</addon><addon id="skin.arctic.zephyr.martian" version="3.17.0.1" name="Arctic: Zephyr (martian)" provider-name="jurialmunkey, beatmasterrs, martian89">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinshortcuts" version="2.0.0" />
