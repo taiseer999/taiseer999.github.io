@@ -1,7 +1,7 @@
 # Kodi Media Center language file
-# Addon Name: Arctic: Zephyr - Reloaded
-# Addon id: skin.arctic.zephyr.mod
-# Addon Provider: jurialmunkey, beatmasterrs
+# Addon Name: Arctic: Zephyr - Martian
+# Addon id: skin.arctic.zephyr.martian
+# Addon Provider: jurialmunkey, beatmasterrs, martian89
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Skins\n"
@@ -21,10 +21,6 @@ msgctxt "#31000"
 msgid "Limit number of items in widget"
 msgstr "Ograniczenie liczby elementów w widżecie"
 
-msgctxt "#31001"
-msgid "Backup / Restore"
-msgstr "Kopia zapasowa / Przywracanie"
-
 msgctxt "#31002"
 msgid "Animated posters"
 msgstr "Animowane plakaty"
@@ -40,10 +36,6 @@ msgstr "Pokaż discart (widok fanart)"
 msgctxt "#31005"
 msgid "Alternate case (fanart views)"
 msgstr "Alternatywne etui (widok fanart)"
-
-msgctxt "#31006"
-msgid "Alternate status-overlays (fanart views)"
-msgstr "Alternatywne nakładki na status (widoki fanart)"
 
 msgctxt "#31007"
 msgid "Title-overlays (symbols-view, deprecated)"
@@ -65,10 +57,6 @@ msgctxt "#31011"
 msgid "Show CD and case"
 msgstr "Pokaż CD i pudełko"
 
-msgctxt "#31012"
-msgid "Hide border"
-msgstr "Ukryj obramowania"
-
 msgctxt "#31013"
 msgid "Feature ends at"
 msgstr "Koniec o"
@@ -77,21 +65,9 @@ msgctxt "#31014"
 msgid "Netflix"
 msgstr "Netflix"
 
-msgctxt "#31015"
-msgid "Modern Fanart"
-msgstr "Nowoczesny fanart"
-
-msgctxt "#31016"
-msgid "Old view selector"
-msgstr "Stary wybór widoku"
-
 msgctxt "#31017"
 msgid "Colored icon media flags"
 msgstr "Kolorowe ikony oznaczeń multimedialnych"
-
-msgctxt "#31018"
-msgid "Arctic: Zephyr - Reloaded"
-msgstr "Arctic: Zephyr - Reloaded"
 
 msgctxt "#31019"
 msgid "Supported Addons"
@@ -113,10 +89,6 @@ msgctxt "#31023"
 msgid "Awards"
 msgstr "Nagrody"
 
-msgctxt "#31024"
-msgid "Show clearlogo left bottom position (classic view only)"
-msgstr "Pokaż clearlogo w dolnym lewym rogu (tylko widok klasyczny)"
-
 msgctxt "#31025"
 msgid "Show clearLogo"
 msgstr "Pokaż clearlogo"
@@ -133,29 +105,9 @@ msgctxt "#31028"
 msgid "Widgets fade animation"
 msgstr "Animacja zanikania widgetów"
 
-msgctxt "#31029"
-msgid "Autoscrolling widget plot"
-msgstr "Autoprzewijanie widgetu fabuły"
-
 msgctxt "#31030"
 msgid "movies in the library"
 msgstr "filmy w bibliotece"
-
-msgctxt "#31031"
-msgid "Use fanart instead of landscape on tvshows"
-msgstr "Użyj fanart zamiast zdjęcia z opisem w serialach"
-
-msgctxt "#31032"
-msgid "Use fanart instead of landscape on movies"
-msgstr "Użyj fanart zamiast zdjęcia z opisem w filmach"
-
-msgctxt "#31033"
-msgid "Use fanart instead of landscape on seasons"
-msgstr "Użyj fanart zamiast zdjęcia z opisem w odcinkach"
-
-msgctxt "#31034"
-msgid "Hide bar/CD on lyrics"
-msgstr "Ukryj pasek/CD na tekstach piosenek"
 
 msgctxt "#31035"
 msgid "Show PVR technical info"
@@ -168,10 +120,6 @@ msgstr "Pełnoekranowy Fanart"
 msgctxt "#31037"
 msgid "Extended Info"
 msgstr "Rozszerzone informacje:"
-
-msgctxt "#31038"
-msgid "Hide filename and path"
-msgstr "Ukryj nazwę pliku i ścieżkę"
 
 msgctxt "#31039"
 msgid "IPTV Recorder"
@@ -305,10 +253,6 @@ msgctxt "#31074"
 msgid "Enable blur"
 msgstr "Włącz rozmycie"
 
-msgctxt "#31075"
-msgid "Effect also on home"
-msgstr "Wpływ również na ekran główny"
-
 msgctxt "#31076"
 msgid "This view"
 msgstr "Ten widok"
@@ -324,10 +268,6 @@ msgstr "Opcje globalne"
 msgctxt "#31079"
 msgid "Show discart"
 msgstr "Pokaż odrzucone"
-
-msgctxt "#31080"
-msgid "Fullsize fanart"
-msgstr "Pełnowymiarowy fanart"
 
 msgctxt "#31081"
 msgid "Double-Flix"
@@ -481,10 +421,6 @@ msgctxt "#31118"
 msgid "Show artist slideshow"
 msgstr "Wizualizuj odtwarzanie muzyki pokazem slajdów wykonawcy"
 
-msgctxt "#31119"
-msgid "Show visualisation behind slideshow"
-msgstr "Pokazuj wizualizację w tle pokazu slajdów"
-
 msgctxt "#31120"
 msgid "Animate artist slideshow"
 msgstr "Animuj wizualizację pokazu slajdów wykonawcy"
@@ -501,10 +437,6 @@ msgctxt "#31123"
 msgid "Change image"
 msgstr "Zmień obraz"
 
-msgctxt "#31124"
-msgid "Blur radius"
-msgstr "Promień rozmycia"
-
 msgctxt "#31125"
 msgid "Set your favourite settings"
 msgstr "Skonfiguruj swoje ulubione ustawienia"
@@ -513,49 +445,17 @@ msgctxt "#31126"
 msgid "Accent colors"
 msgstr "Kolory akcentów"
 
-msgctxt "#31127"
-msgid "default"
-msgstr "domyślne"
-
-msgctxt "#31128"
-msgid "Rating stars (media flags section)"
-msgstr "Ocena gwiazdkowa (sekcja flag medialnych)"
-
-msgctxt "#31129"
-msgid "MPAA rating (media flags section)"
-msgstr "Ocena MPAA (sekcja flag medialnych)"
-
-msgctxt "#31130"
-msgid "Focus squares"
-msgstr ""
-
-msgctxt "#31131"
-msgid "Accents, highlights, focusbuttons"
-msgstr "Akcenty, podkreślenia, przyciski ostrości"
-
-msgctxt "#31132"
-msgid "Userrating (media flags section)"
-msgstr "Ocena użytkownika (sekcja flag medialnych)"
-
 msgctxt "#31133"
 msgid "Hide watched"
 msgstr "Ukrywaj obejrzane"
-
-msgctxt "#31134"
-msgid "reset colors?"
-msgstr "Zresetować kolory?"
 
 msgctxt "#31135"
 msgid "Hide scrolling text"
 msgstr "Ukryj przewijany tekst"
 
-msgctxt "#31136"
-msgid "All colors are reset to their default values"
-msgstr "Wszystkie kolory zostaną przywrócone do wartości domyślnych"
-
 msgctxt "#31137"
-msgid "[CR]Arctic: Zephyr - Reloaded is based on the third iteration of the Arctic skin created by jurialmunkey. [CR]Arctic focuses on being simple, clean and minimalistic with a light spin.[CR]If you have any thoughts on this Skin, feel free to let me know at [CR][CR]https://forum.kodi.tv/showthread.php?tid=337862"
-msgstr "Arctic: Zephyr - Reloaded oparty jest na trzeciej iteracji skórki Arctic stworzonej przez jurialmunkey. [CR]Arctic skupia się na prostocie z czystym, minimalistycznym i lekkim sznytem.[CR]Jeśli macie jakieś przemyślenia na temat tej skórki, nie krępujcie się dać mi znać na [CR][CR]https://forum.kodi.tv/showthread.php?tid=337862"
+msgid "[CR]Arctic: Zephyr - Martian is based on the third iteration of the Arctic skin created by jurialmunkey[CR]and it's extension by beatmasterRS.[CR]and it's extension by beatmasterRS.[CR]Arctic focuses on being simple, clean and minimalistic with a light spin."
+msgstr ""
 
 msgctxt "#31138"
 msgid "Content Loading"
@@ -564,10 +464,6 @@ msgstr "Wczytywanie zawartości"
 msgctxt "#31139"
 msgid "Play trailer in windowed mode"
 msgstr "Odtwarzanie zwiastuna w trybie okienkowym"
-
-msgctxt "#31140"
-msgid "Kodi logo"
-msgstr "Logo Kodi"
 
 msgctxt "#31141"
 msgid "Youtube"
@@ -629,10 +525,6 @@ msgctxt "#31155"
 msgid "Show now playing info"
 msgstr "Pokazuj odtwarzane wideo w tle interfejsu"
 
-msgctxt "#31156"
-msgid "[COLOR=$VAR[ColorHighlight]]Reloaded[/COLOR] Skin-Settings"
-msgstr "[COLOR=$VAR[ColorHighlight]] Reloaded[/COLOR] Ustawienia skóry"
-
 msgctxt "#31157"
 msgid "Extended info of"
 msgstr "Rozszerzone informacje"
@@ -643,11 +535,11 @@ msgstr "Zwiastun z"
 
 msgctxt "#31159"
 msgid "Movies by"
-msgstr "Filmy autorstwa"
+msgstr "Filmy z"
 
 msgctxt "#31160"
 msgid "Tv Shows by"
-msgstr "Seriale autorstwa"
+msgstr "Seriale z"
 
 msgctxt "#31161"
 msgid "[B]Configure System Settings[/B][CR][CR] •     Setup and calibrate displays[CR] •     Configure audio output[CR] •     Setup remote controls[CR] •     Set power saving options[CR] •     Enable debugging[CR] •     Setup master lock"
@@ -691,7 +583,7 @@ msgstr "Dodatek Cinema Experience"
 
 msgctxt "#31171"
 msgid "Movies by"
-msgstr "Filmy autorstwa"
+msgstr "Filmy z"
 
 msgctxt "#31172"
 msgid "Show music visualisation in background"
@@ -870,8 +762,8 @@ msgid "Tracklist of"
 msgstr "Ścieżka dźwiękowa z"
 
 msgctxt "#31217"
-msgid "Show clearart with video information"
-msgstr "Pokazuj przezrocze razem z informacjami"
+msgid "Show clearart with seekbar"
+msgstr ""
 
 msgctxt "#31218"
 msgid "Show numeric rating"
@@ -987,7 +879,7 @@ msgstr "Obraz startowy"
 
 msgctxt "#31246"
 msgid "Show icon media flags"
-msgstr "Pokazuj etykiety mediów z ikonami"
+msgstr "Pokazuj etykiety mediów"
 
 msgctxt "#31247"
 msgid "Home menu style"
@@ -1013,13 +905,9 @@ msgctxt "#31252"
 msgid "Collections of"
 msgstr "Zbiory"
 
-msgctxt "#31253"
-msgid "Always display info and osd controls on music visualisation"
-msgstr "Umożliwia stałe wyświetlanie informacji i przycisków menu ekranowego podczas wizualizacji muzyki"
-
 msgctxt "#31254"
-msgid "Show plot overlay after 3 second delay"
-msgstr "Pokazuj fabułę z 3 sekundowym opóźnieniem"
+msgid "Display plot overlay after delay"
+msgstr ""
 
 msgctxt "#31255"
 msgid "Collections"
@@ -1038,8 +926,8 @@ msgid "Fanart Thumbs"
 msgstr "Miniatury fototapet"
 
 msgctxt "#31259"
-msgid "Extra fanart"
-msgstr "Dodatkowa fototapeta"
+msgid "Show extra fanart"
+msgstr ""
 
 msgctxt "#31260"
 msgid "Set weather icons"
@@ -1106,8 +994,8 @@ msgid "[B]Configure Interface Settings[/B][CR][CR] •     Skin[CR] •     Regi
 msgstr "[B]Konfiguracja ustawień interfejsu[/B][CR] •     Skórka[CR] •     Region[CR] •     Sterowanie[CR] •     Wygaszacz ekranu[CR] •     Master Lock[CR]"
 
 msgctxt "#31276"
-msgid "[B]Configure Library Settings[/B][CR][CR] •     Display[CR] •     Navigation[CR] •     Media Database[CR]"
-msgstr "[B]Skonfiguruj ustawienia biblioteki [/B][CR][CR] •     Biblioteki audio/wideo/muzyka[CR] •     Zarządzanie źródłami i grafikami[CR] •     Baza danych[CR]"
+msgid "[B]Configure Media Settings[/B][CR][CR] •     Display[CR] •     Navigation[CR] •     Media Database[CR]"
+msgstr "[B]Skonfiguruj ustawienia media[/B][CR][CR] •     Biblioteki audio/wideo/muzyka[CR] •     Zarządzanie źródłami i grafikami[CR] •     Baza danych[CR]"
 
 msgctxt "#31277"
 msgid "[B]Configure Player Settings[/B][CR][CR] •     Playback Actions[CR] •     How Content is Played[CR]"
@@ -1173,17 +1061,9 @@ msgctxt "#31292"
 msgid "Channel List"
 msgstr "Lista kanałów"
 
-msgctxt "#31293"
-msgid "Reloaded"
-msgstr "Reloaded"
-
 msgctxt "#31294"
 msgid "Side"
 msgstr "Z Boku"
-
-msgctxt "#31295"
-msgid "OSD view mode:"
-msgstr "Tryb wyświetlania OSD:"
 
 msgctxt "#31296"
 msgid "This is your personal rating and will not be published."
@@ -1192,10 +1072,6 @@ msgstr "To jest Twoja osobista ocena i nie będzie publikowana."
 msgctxt "#31297"
 msgid "       "
 msgstr "       "
-
-msgctxt "#31298"
-msgid "Video / Music Infodialog"
-msgstr "Okno dialogowe wideo / muzyka"
 
 msgctxt "#31299"
 msgid "Show plot on HUB"
@@ -1222,7 +1098,7 @@ msgid "Views"
 msgstr "Widoki"
 
 msgctxt "#31305"
-msgid "HUBs"
+msgid "Hubs"
 msgstr "Huby"
 
 msgctxt "#31307"
@@ -1235,15 +1111,11 @@ msgstr "Rozmycie - Ustawienia"
 
 msgctxt "#31309"
 msgid "Media-Flags"
-msgstr "Flagi multimediów"
+msgstr "Flagi medialne"
 
 msgctxt "#31310"
 msgid "Enable grid"
 msgstr "Włącz siatkę"
-
-msgctxt "#31311"
-msgid "Hide play/pause info"
-msgstr "Ukryj informacje o odtwarzaniu/pauzie"
 
 msgctxt "#31312"
 msgid "Auto close OSD after delay (in seconds)"
@@ -1274,8 +1146,8 @@ msgid "Reset skin settings to defaults?"
 msgstr "Przywrócić ustawienia domyślne skóry?"
 
 msgctxt "#31319"
-msgid "Reset skin settings to defaults? WARNING: This will also reset your home menu to skin defaults!"
-msgstr "Przywrócić ustawienia domyślne skóry? UWAGA: Spowoduje to również zresetowanie menu głównego do ustawień domyślnych skórki!"
+msgid "Reset skin settings to defaults"
+msgstr "Przywrócić ustawienia domyślne skóry"
 
 msgctxt "#31320"
 msgid "Random Actors ordered by movies"
@@ -1308,10 +1180,6 @@ msgstr "Pokaż temperaturę i ikonę"
 msgctxt "#31327"
 msgid "Seasons Info"
 msgstr "Informacje o Sezonach"
-
-msgctxt "#31328"
-msgid "Deeper shadows"
-msgstr "Głębsze cienie"
 
 msgctxt "#31330"
 msgid "ClearLogo"
@@ -1349,17 +1217,13 @@ msgctxt "#31338"
 msgid "25"
 msgstr "25"
 
-msgctxt "#31339"
-msgid "Auto-scrolling widgets (seconds)"
-msgstr "Automatycznie przewijanie widżetów (sekundy)"
-
 msgctxt "#31340"
 msgid "Auto-scrolling"
 msgstr "Automatyczne przewijanie"
 
 msgctxt "#31341"
 msgid "Widget-listtype"
-msgstr "Typ listy widgetów"
+msgstr ""
 
 msgctxt "#31342"
 msgid "List"
@@ -1368,18 +1232,6 @@ msgstr "Lista"
 msgctxt "#31343"
 msgid "Fixed list"
 msgstr "Niezmienna lista"
-
-msgctxt "#31345"
-msgid "Texture/Icon on infopage"
-msgstr "Tekstura/Ikona na stronie informacyjnej"
-
-msgctxt "#31346"
-msgid "Studio logo"
-msgstr "Ikony studia"
-
-msgctxt "#31347"
-msgid "Rating flag"
-msgstr "Flaga oceny"
 
 msgctxt "#31348"
 msgid "Movie Genre Icons"
@@ -1392,10 +1244,6 @@ msgstr "Ikony studia"
 msgctxt "#31350"
 msgid "Record Label Icons"
 msgstr "Ikony wytwórni"
-
-msgctxt "#31352"
-msgid "Switch to full screen mode when music starts playing"
-msgstr "Przełączanie do trybu pełnoekranowego po rozpoczęciu odtwarzania muzyki"
 
 msgctxt "#31354"
 msgid "Animate fanart/slideshow"
@@ -1442,16 +1290,12 @@ msgid "Shutdown in: [B]$INFO[System.Alarmpos][/B]"
 msgstr "Zamknięcie za: [B]$INFO[System.Alarmpos][/B]"
 
 msgctxt "#31365"
-msgid "Use IMDB trailers (requires plugin.video.imdb.trailers)"
-msgstr "Użyj zwiastunów IMDB (wymagany plugin.video.imdb.trailers)"
+msgid "Use IMDb trailers"
+msgstr "Użyj zwiastunów IMDb"
 
 msgctxt "#31366"
 msgid "Show Filenames"
 msgstr "Pokaż nazwy plików"
-
-msgctxt "#31367"
-msgid "Focus Bars (List Views)"
-msgstr "Paski fokusu (widoki listy)"
 
 msgctxt "#31368"
 msgid "Show unwatched episodes count"
@@ -1569,17 +1413,9 @@ msgctxt "#31396"
 msgid "Gradient"
 msgstr "Gradient"
 
-msgctxt "#31397"
-msgid "Focus Bars (Settings, Homemenu Shortcuts)"
-msgstr "Focus Bars (Ustawienia, Skróty menu głównego)"
-
 msgctxt "#31398"
 msgid "RAM"
 msgstr "RAM"
-
-msgctxt "#31399"
-msgid "Skin-Version:"
-msgstr "Wersja skóry:"
 
 msgctxt "#31400"
 msgid "Scroll behavior"
@@ -1612,14 +1448,6 @@ msgstr "Kwadraty małe"
 msgctxt "#31407"
 msgid "Square medium"
 msgstr "Kwadraty średnie"
-
-msgctxt "#31408"
-msgid "Alternative"
-msgstr "Alternatywa"
-
-msgctxt "#31409"
-msgid "Bigger"
-msgstr "Większe"
 
 msgctxt "#31410"
 msgid "Home menu bar"
@@ -1730,16 +1558,12 @@ msgid "Most played Songs"
 msgstr "Najczęściej grane utwory"
 
 msgctxt "#31437"
-msgid "Use old jumpbar"
-msgstr "Użyj starego jumpbara"
+msgid "Use old jumpbar (requires script.embuary.helper)"
+msgstr "Użyj starego jumpbara (wymagany script.embuary.helper)"
 
 msgctxt "#31438"
 msgid "Genre Poster"
 msgstr "Plakat gatunkowy"
-
-msgctxt "#31439"
-msgid "Chapter markers"
-msgstr "Znaczniki rozdziałów"
 
 msgctxt "#31441"
 msgid "RottenTomatoes & Metacritic"
@@ -1747,7 +1571,7 @@ msgstr "RottenTomatoes i Metacritic"
 
 msgctxt "#31442"
 msgid "Select media flags"
-msgstr "Wybierz flagi multimediów"
+msgstr "Wybierz flagi mediów"
 
 msgctxt "#31443"
 msgid "Subtitle icon"
@@ -1772,14 +1596,6 @@ msgstr "Oferta niemieckiej transmisji"
 msgctxt "#31448"
 msgid "Debugging"
 msgstr "Debugowanie"
-
-msgctxt "#31449"
-msgid "Extended debugging information"
-msgstr "Rozszerzone informacje o debugowaniu"
-
-msgctxt "#31450"
-msgid "Extended grid"
-msgstr "Rozbudowana siatka"
 
 msgctxt "#31451"
 msgid "Play next episode"
@@ -1879,7 +1695,7 @@ msgstr "Skonfiguruj niestandardowy widget"
 
 msgctxt "#31475"
 msgid "Netflix fanart window"
-msgstr "Okno fanartów Netflixa"
+msgstr ""
 
 msgctxt "#31476"
 msgid "Boxed Set"
@@ -1893,21 +1709,17 @@ msgctxt "#31478"
 msgid "Indicators"
 msgstr "Wskaźniki"
 
-msgctxt "#31479"
-msgid "Clear home menu bar"
-msgstr "Wyczyść pasek menu głównego"
-
 msgctxt "#31480"
 msgid "HDR"
 msgstr "HDR"
 
 msgctxt "#31481"
-msgid "Blu-ray / HD DVD / DVD / WEB-DL"
-msgstr "Blu-ray / HD DVD / DVD / WEB-DL"
+msgid "Blu-ray / HD DVD / DVD / WEB-DL / TV"
+msgstr "Blu-ray / HD DVD / DVD / WEB-DL / TV"
 
 msgctxt "#31482"
-msgid "IMDB Top 250"
-msgstr "IMDB Top 250"
+msgid "IMDb Top 250"
+msgstr "IMDb Top 250"
 
 msgctxt "#31483"
 msgid "Audio Channels"
@@ -1929,21 +1741,9 @@ msgctxt "#31487"
 msgid "CPU"
 msgstr "Procesor"
 
-msgctxt "#31488"
-msgid "On focus don't slide left"
-msgstr "Na ekranie głównym nie przesuwaj w lewo"
-
 msgctxt "#31489"
 msgid "Underlined homemenu items"
 msgstr "Podkreślaj pozycje menu głównego"
-
-msgctxt "#31490"
-msgid "Auto scrolling widget title"
-msgstr "Automatycznie przewijający się tytuł widgetu"
-
-msgctxt "#31491"
-msgid "Poster Flix v2"
-msgstr "Plakat Flix v2"
 
 msgctxt "#31492"
 msgid "Paused"
@@ -1973,10 +1773,6 @@ msgctxt "#31498"
 msgid "Collection"
 msgstr "Kolekcje"
 
-msgctxt "#31499"
-msgid "Auto scrolling titles"
-msgstr "Automatyczne przewijanie tytułów"
-
 msgctxt "#31500"
 msgid "Prefer percentage"
 msgstr "Preferuj procentowo"
@@ -2000,14 +1796,6 @@ msgstr "Na dół, kiedy jest ostatni widżet, widżety nie wracają do pozycji p
 msgctxt "#31505"
 msgid "On up/down at first/last widget, go to last/first widget"
 msgstr "W górę/w dół na pierwszym/ostatnim widżecie, przejdź do ostatniego/pierwszego widżetu"
-
-msgctxt "#31506"
-msgid "More clean & minimal"
-msgstr "Bardziej czysty i minimalny"
-
-msgctxt "#31507"
-msgid "Layout options"
-msgstr "Opcje układu"
 
 msgctxt "#31508"
 msgid "Global"
@@ -2033,14 +1821,6 @@ msgctxt "#31513"
 msgid "Override play function with TMDB helper play function"
 msgstr "Zastąp funkcję odtwarzania funkcją odtwarzania pomocniczą TMDB"
 
-msgctxt "#31514"
-msgid "Show, if not empty"
-msgstr "Pokaż, jeśli nie jest pusty"
-
-msgctxt "#31515"
-msgid "Hide"
-msgstr "Ukrywaj"
-
 msgctxt "#31516"
 msgid "Last Played Radio Channels"
 msgstr "Ostatnio odtwarzane kanały radiowe"
@@ -2053,10 +1833,6 @@ msgctxt "#31518"
 msgid "Unwatched Tv Shows"
 msgstr "Nieobejrzane programy telewizyjne"
 
-msgctxt "#31519"
-msgid "Hide background of channel icon"
-msgstr "Ukryj tło ikony kanału"
-
 msgctxt "#31520"
 msgid "for"
 msgstr "dla"
@@ -2065,21 +1841,13 @@ msgctxt "#31521"
 msgid "Poster Wall"
 msgstr "Ściana plakatów"
 
-msgctxt "#31522"
-msgid "Fanart Flix v2"
-msgstr ""
-
 msgctxt "#31523"
 msgid "Fanart Flix"
 msgstr ""
 
 msgctxt "#31524"
-msgid "IMDB Position"
-msgstr "Pozycja w IMDB"
-
-msgctxt "#31525"
-msgid "Use default MPAA rating icons"
-msgstr "Użyj domyślnych ikon klasyfikacji MPAA"
+msgid "IMDb Position"
+msgstr "Pozycja w IMDb"
 
 msgctxt "#31526"
 msgid "Use default selectbox"
@@ -2101,14 +1869,6 @@ msgctxt "#31530"
 msgid "Seasons Info v2"
 msgstr ""
 
-msgctxt "#31531"
-msgid "Up Next Addon"
-msgstr "Dodatek Up Next"
-
-msgctxt "#31532"
-msgid "Use thumbnail instead of fanart"
-msgstr "Użyj miniaturki zamiast fototapety"
-
 msgctxt "#31533"
 msgid "Clean and minimal"
 msgstr "Czysty i minimalny"
@@ -2129,37 +1889,9 @@ msgctxt "#31538"
 msgid "Blur radius"
 msgstr "Promień rozmycia"
 
-msgctxt "#31539"
-msgid "Blend (0-100%)"
-msgstr "Wtapianie (0-100%)"
-
-msgctxt "#31540"
-msgid "Image quality"
-msgstr "Jakość obrazu"
-
-msgctxt "#31541"
-msgid "Bitsize"
-msgstr ""
-
-msgctxt "#31542"
-msgid "Blur quality"
-msgstr "Jakość rozmycia"
-
-msgctxt "#31543"
-msgid "Use colorbox script"
-msgstr "Użyj skryptu colorbox"
-
 msgctxt "#31550"
 msgid "Additional fanart"
 msgstr "Dodatkowa fototapeta"
-
-msgctxt "#31551"
-msgid "Try to lock skin colors/theme/fonts"
-msgstr "Spróbuj zablokować kolory skórki/motywu/czcionki"
-
-msgctxt "#31553"
-msgid "Show logo AZR in settings"
-msgstr "Pokaż logo Arctic Zephyr w ustawieniach"
 
 msgctxt "#31554"
 msgid "HD Movies"
@@ -2169,33 +1901,13 @@ msgctxt "#31555"
 msgid "Hide, when not focused"
 msgstr "Ukryj, gdy nie jest skupiony"
 
-msgctxt "#31556"
-msgid "Hide, when not focused/used"
-msgstr "Ukryj, gdy nie jest skupiony/używany"
-
-msgctxt "#31557"
-msgid "Hide seekbar"
-msgstr "Ukryj pasek szukania"
-
-msgctxt "#31558"
-msgid "Hide OSD"
-msgstr "Ukryj OSD"
-
 msgctxt "#31559"
 msgid "Scrolling text"
 msgstr "Przewijanie tekstu"
 
-msgctxt "#31560"
-msgid "Numeric rating"
-msgstr "Ocena numeryczna"
-
 msgctxt "#31561"
 msgid "Artist slideshow"
 msgstr "Pokaz slajdów o artystach"
-
-msgctxt "#31562"
-msgid "Reflections"
-msgstr "Odbicia"
 
 msgctxt "#31563"
 msgid "Borders"
@@ -2209,10 +1921,6 @@ msgctxt "#31565"
 msgid "Filenames"
 msgstr "Nazwy plików"
 
-msgctxt "#31566"
-msgid "CD and case"
-msgstr "Płyta CD i etui"
-
 msgctxt "#31567"
 msgid "Fallback image"
 msgstr "Obraz zastępczy"
@@ -2224,26 +1932,6 @@ msgstr ""
 msgctxt "#31569"
 msgid "Clearlogo instead of title"
 msgstr "Clearlogo zamiast tytułu"
-
-msgctxt "#31570"
-msgid "Icon media flags"
-msgstr "Ikony flag medialnych"
-
-msgctxt "#31571"
-msgid "Media flags"
-msgstr "Flagi multimediów"
-
-msgctxt "#31572"
-msgid "Play/pause info"
-msgstr "Informacja o odtwarzaniu/pauzie"
-
-msgctxt "#31573"
-msgid "Clock"
-msgstr "Zegar"
-
-msgctxt "#31574"
-msgid "PVR technical info"
-msgstr "Informacje techniczne PVR"
 
 msgctxt "#31575"
 msgid "Default selectbox"
@@ -2257,57 +1945,13 @@ msgctxt "#31577"
 msgid "Progress graphic"
 msgstr "Grafika postępu"
 
-msgctxt "#31578"
-msgid "Hide widget label"
-msgstr "Ukryj etykiete widgetu"
-
-msgctxt "#31579"
-msgid "Pixelsize"
-msgstr "Rozmiar pikseli"
-
 msgctxt "#31580"
 msgid "Effect settings"
 msgstr "Ustawienia efektów"
 
-msgctxt "#31581"
-msgid "Enable blur / twotone / pixelate"
-msgstr "Włącz rozmycie / dwukolorowość / pikselizację"
-
-msgctxt "#31582"
-msgid "Effect"
-msgstr "Skutek"
-
-msgctxt "#31583"
-msgid "Show behind slideshow"
-msgstr "Pokaż za pokazem slajdów"
-
-msgctxt "#31584"
-msgid "Make focused items glow"
-msgstr "Spraw, aby skoncentrowane elementy świeciły"
-
-msgctxt "#31585"
-msgid "Zoom focused items"
-msgstr "Powiększanie skoncentrowanych elementów"
-
-msgctxt "#31586"
-msgid "low"
-msgstr "nisko"
-
-msgctxt "#31587"
-msgid "medium"
-msgstr "średnio"
-
-msgctxt "#31588"
-msgid "high"
-msgstr "wysoko"
-
 msgctxt "#31589"
 msgid "Enable auto scrolling for titles"
 msgstr "Włącz automatyczne przewijanie dla tytułów"
-
-msgctxt "#31590"
-msgid "Glow intensity of focused items"
-msgstr "Intensywność świecenia skupionych przedmiotów"
 
 msgctxt "#31591"
 msgid "V2"
@@ -2345,10 +1989,6 @@ msgctxt "#31599"
 msgid "Auto start delay"
 msgstr "Opóźnienie autostartu"
 
-msgctxt "#31600"
-msgid "Use old widget movement"
-msgstr "Użyj starego ruchu widżetu"
-
 msgctxt "#31603"
 msgid "Auto playing trailers"
 msgstr "Automatyczne odtwarzanie zwiastunów"
@@ -2381,18 +2021,6 @@ msgctxt "#31625"
 msgid "Disable addons fanart"
 msgstr "Wyłączenie dodatków fototapety"
 
-msgctxt "#31626"
-msgid "Only, when widget is focused"
-msgstr "Tylko wtedy, gdy widżet jest skupiony"
-
-msgctxt "#31628"
-msgid "Hide mouse warning"
-msgstr "Ukryj ostrzeżenie o myszce"
-
-msgctxt "#31629"
-msgid "EDL markers"
-msgstr "Znaczniki EDL"
-
 msgctxt "#31630"
 msgid "Hub widget content type"
 msgstr "Typ zawartości widgetu Hub"
@@ -2417,29 +2045,9 @@ msgctxt "#31651"
 msgid "Icon"
 msgstr "Ikony"
 
-msgctxt "#31652"
-msgid "Use embuary helper instead of litebox"
-msgstr "Użyj embuary helper zamiast liteboxa"
-
 msgctxt "#31653"
 msgid "blur"
 msgstr "rozmycie"
-
-msgctxt "#31654"
-msgid "Disable reflections"
-msgstr "Wyłączenie odbić"
-
-msgctxt "#31655"
-msgid "For lower cpu's"
-msgstr "Dla słabszych procesorów"
-
-msgctxt "#31656"
-msgid "Disable borders"
-msgstr "Wyłączenie granic"
-
-msgctxt "#31657"
-msgid "Theme background image"
-msgstr "Obraz tła motywu"
 
 msgctxt "#31658"
 msgid "Now playing"
@@ -2448,14 +2056,6 @@ msgstr "Teraz odtwarzane"
 msgctxt "#31663"
 msgid "Now playing..."
 msgstr "Teraz odtwarzane..."
-
-msgctxt "#31664"
-msgid "User rating overrides"
-msgstr "Nadpisywanie ocen przez użytkownika"
-
-msgctxt "#31666"
-msgid "Star rating and value"
-msgstr "Ocena gwiazdkowa i wartość"
 
 msgctxt "#31667"
 msgid "Animated artwork"
@@ -2481,14 +2081,6 @@ msgctxt "#31673"
 msgid "Show clearart"
 msgstr "Pokaż clearart"
 
-msgctxt "#31674"
-msgid "Critics consensus"
-msgstr "Zgodność krytyków"
-
-msgctxt "#31675"
-msgid "Use artwork module for PVR artwork"
-msgstr "Użyj modułu graficznego dla grafiki PVR"
-
 msgctxt "#31676"
 msgid "Ratings"
 msgstr "Oceny"
@@ -2497,10 +2089,6 @@ msgctxt "#31677"
 msgid "Show detailed info when video starts (in seconds)"
 msgstr "Pokaż szczegółowe informacje, gdy uruchomi się wideo (w sekundach)"
 
-msgctxt "#31678"
-msgid "Customized"
-msgstr "Niestandardowe"
-
 msgctxt "#31679"
 msgid "Color presets"
 msgstr "Ustawienia kolorów"
@@ -2508,38 +2096,6 @@ msgstr "Ustawienia kolorów"
 msgctxt "#31680"
 msgid "Preset"
 msgstr "Szablon"
-
-msgctxt "#31681"
-msgid "Sunny pink"
-msgstr "Słoneczny róż"
-
-msgctxt "#31682"
-msgid "Sky blue"
-msgstr "Niebiański błękit"
-
-msgctxt "#31683"
-msgid "Fruity orange"
-msgstr "Owocowa pomarańcza"
-
-msgctxt "#31684"
-msgid "Aqua blue"
-msgstr "Wodny błękit"
-
-msgctxt "#31685"
-msgid "Light green"
-msgstr "Jasnozielony"
-
-msgctxt "#31686"
-msgid "Steel gray"
-msgstr "Stalowoszary"
-
-msgctxt "#31687"
-msgid "Save color configuration"
-msgstr "Zapisz konfigurację kolorów"
-
-msgctxt "#31688"
-msgid "Overwrite existing color configuration?"
-msgstr "Nadpisz istniejącą konfigurację kolorów?"
 
 msgctxt "#31689"
 msgid "Hide PVR recording dialog"
@@ -2573,14 +2129,6 @@ msgctxt "#31700"
 msgid "Set color"
 msgstr "Ustaw kolor"
 
-msgctxt "#31701"
-msgid "Color palette"
-msgstr "Paleta kolorów"
-
-msgctxt "#31702"
-msgid "Use thumb for episodes background"
-msgstr "Użyj miniatury dla tła epizodów"
-
 msgctxt "#31703"
 msgid "Small landscape"
 msgstr "Małe zdjęcie z opisem"
@@ -2593,10 +2141,6 @@ msgctxt "#31705"
 msgid "Small poster fanart"
 msgstr "Mały plakat fotapety"
 
-msgctxt "#31706"
-msgid "Use keyart instead of poster"
-msgstr ""
-
 msgctxt "#31707"
 msgid "Rating stars"
 msgstr "Gwiazdki oceniające"
@@ -2605,17 +2149,85 @@ msgctxt "#31708"
 msgid "Auto show now playing info after 5 seconds delay if hidden"
 msgstr "Automatyczne wyświetlanie informacji o odtwarzaniu po 5 sekundach opóźnienia, jeśli są ukryte"
 
-msgctxt "#31709"
-msgid "Only hide menu items"
-msgstr "Ukryj tylko pozycje menu"
-
 msgctxt "#31711"
 msgid "Wikipedia"
 msgstr "Wikipedia"
 
-msgctxt "#31718"
-msgid "Sandy yellow"
-msgstr "Piaskowy żółty"
+msgctxt "#31905"
+msgid "Nodes"
+msgstr "Węzły"
+
+msgctxt "#31939"
+msgid "Ended"
+msgstr "Zakończono"
+
+msgctxt "#31940"
+msgid "Rumored"
+msgstr "Ciekawostki"
+
+msgctxt "#31941"
+msgid "Planned"
+msgstr "W planach"
+
+msgctxt "#31942"
+msgid "In Production"
+msgstr ""
+
+msgctxt "#31943"
+msgid "Post Production"
+msgstr ""
+
+msgctxt "#31944"
+msgid "Released"
+msgstr "Po premierze"
+
+msgctxt "#31945"
+msgid "Canceled"
+msgstr "Anulowano"
+
+msgctxt "#31946"
+msgid "Returning Series"
+msgstr ""
+
+msgctxt "#31947"
+msgid "Acting"
+msgstr ""
+
+msgctxt "#31948"
+msgid "Directing"
+msgstr ""
+
+msgctxt "#31949"
+msgid "Writing"
+msgstr ""
+
+msgctxt "#31950"
+msgid "Production"
+msgstr ""
+
+msgctxt "#31951"
+msgid "Sound"
+msgstr ""
+
+msgctxt "#31952"
+msgid "Creator"
+msgstr "Twórca"
+
+msgctxt "#31976"
+msgid "Use dark theme"
+msgstr "Używaj ciemnego motywu"
+
+msgctxt "#31977"
+msgid "Visualisation settings"
+msgstr "Ustawienia wizualizacji"
+
+msgctxt "#31978"
+msgid "Visualisation presets"
+msgstr "Motywy wizualizacji"
+
+msgctxt "#31980"
+msgid "Pause video when opening info"
+msgstr "Pauzuj wideo podczas otwierania okna informacji"
 
 #~ msgctxt "#31719"
 #~ msgid "Add version"
@@ -2640,303 +2252,3 @@ msgstr "Piaskowy żółty"
 #~ msgctxt "#31149"
 #~ msgid "Replace widget fanart with home background slideshow"
 #~ msgstr "Zastępuj fototapetę gadżetu pokazem slajdów"
-
-msgctxt "#32000"
-msgid "Display mode"
-msgstr "Tryb wyświetlania"
-
-msgctxt "#32001"
-msgid "Video mode"
-msgstr "Tryb wideo"
-
-msgctxt "#32002"
-msgid "Color space"
-msgstr "Przestrzeń kolorów"
-
-msgctxt "#32003"
-msgid "Mb/s"
-msgstr "Mb/s"
-
-msgctxt "#32004"
-msgid "Bit depth"
-msgstr "Głębia bitowa"
-
-msgctxt "#32005"
-msgid "Decoder"
-msgstr "Dekoder"
-
-msgctxt "#32006"
-msgid "VS10 engine"
-msgstr "Silnik VS10"
-
-msgctxt "#32007"
-msgid "More"
-msgstr "Więcej"
-
-msgctxt "#32008"
-msgid "Video queue"
-msgstr "Kolejka wideo"
-
-msgctxt "#32009"
-msgid "Video queue data"
-msgstr "Dane kolejki wideo"
-
-msgctxt "#32010"
-msgid "Audio queue"
-msgstr "Kolejka audio"
-
-msgctxt "#32011"
-msgid "Audio queue data"
-msgstr "Dane kolejki audio"
-
-msgctxt "#32012"
-msgid "Kb/s"
-msgstr "Kb/s"
-
-msgctxt "#32013"
-msgid "Playback time"
-msgstr "Czas odtwarzania"
-
-msgctxt "#32014"
-msgid "Processor"
-msgstr "Procesor"
-
-msgctxt "#32015"
-msgid "Metadata"
-msgstr "Metadane"
-
-msgctxt "#32016"
-msgid "Profile"
-msgstr "Profil"
-
-msgctxt "#32017"
-msgid "Level"
-msgstr "Poziom"
-
-msgctxt "#32018"
-msgid "RPU"
-msgstr "RPU"
-
-msgctxt "#32019"
-msgid "Base Layer"
-msgstr "Warstwa podstawowa"
-
-msgctxt "#32020"
-msgid "Enhancement Layer"
-msgstr "Warstwa ulepszeń"
-
-msgctxt "#32021"
-msgid "Enhancement Layer Type"
-msgstr "Typ warstwy ulepszeń"
-
-msgctxt "#32022"
-msgid "Metadata"
-msgstr "Metadane"
-
-msgctxt "#32023"
-msgid "Pixel format"
-msgstr "Format pikseli"
-
-msgctxt "#32024"
-msgid "Aspect ratio"
-msgstr "Proporcje obrazu"
-
-msgctxt "#32025"
-msgid "HDR10 MDL"
-msgstr "HDR10 MDL"
-
-msgctxt "#32026"
-msgid "HDR10 MaxCLL/FALL"
-msgstr "HDR10 MaxCLL/FALL"
-
-msgctxt "#32027"
-msgid "Media source"
-msgstr "Źródło mediów"
-
-msgctxt "#32028"
-msgid "Unknown"
-msgstr "Nieznany"
-
-msgctxt "#32029"
-msgid "On"
-msgstr "Włączone"
-
-msgctxt "#32030"
-msgid "Off"
-msgstr "Wyłączone"
-
-msgctxt "#32031"
-msgid "Deinterlacing"
-msgstr "Usuwanie przeplotu"
-
-msgctxt "#32032"
-msgid "Player cache"
-msgstr "Pamięć podręczna"
-
-msgctxt "#32033"
-msgid "N/A"
-msgstr "N/A"
-
-msgctxt "#32034"
-msgid "Memory usage"
-msgstr "Użycie pamięci"
-
-msgctxt "#32035"
-msgid "Bit depth"
-msgstr "Głębia bitowa"
-
-msgctxt "#32036"
-msgid "AML FPS"
-msgstr "AML FPS"
-
-msgctxt "#32037"
-msgid "DV Configuration"
-msgstr "Konfiguracja DV"
-
-msgctxt "#32038"
-msgid "DV Levels Metadata"
-msgstr "Metadane poziomów DV"
-
-msgctxt "#32039"
-msgid "HDR Static Metadata"
-msgstr "Metadane statyczne HDR"
-
-msgctxt "#32040"
-msgid "cd/m²"
-msgstr "cd/m²"
-
-msgctxt "#32041"
-msgid "RPU MDL"
-msgstr "RPU MDL"
-
-msgctxt "#32042"
-msgid "RPU MaxCLL/FALL"
-msgstr "PU MaxCLL/FALL"
-
-msgctxt "#32043"
-msgid "FLL MIN / MAX / Ø"
-msgstr "FLL MIN / MAX / Ø"
-
-msgctxt "#32044"
-msgid "PQ  MIN / MAX / Ø"
-msgstr "PQ  MIN / MAX / Ø"
-
-msgctxt "#32045"
-msgid "12-bit"
-msgstr "12-bit"
-
-msgctxt "#32046"
-msgid "Codec"
-msgstr "Kodek"
-
-msgctxt "#32047"
-msgid "Bitrate"
-msgstr "Szybkość transmisji"
-
-msgctxt "#32048"
-msgid "VS10 status"
-msgstr "Stan VS10"
-
-msgctxt "#32051"
-msgid "Sample rate"
-msgstr "Próbkowanie"
-
-msgctxt "#32052"
-msgid "Audio language"
-msgstr "Język audio"
-
-msgctxt "#32053"
-msgid "Subtitle language"
-msgstr "Język napisów"
-
-msgctxt "#32054"
-msgid "Video"
-msgstr "Obraz"
-
-msgctxt "#32055"
-msgid "System"
-msgstr "System"
-
-msgctxt "#32056"
-msgid "Audio"
-msgstr "Dźwięk"
-
-msgctxt "#32057"
-msgid "Top left"
-msgstr "U góry po lewej"
-
-msgctxt "#32058"
-msgid "Top center"
-msgstr "Na górze po środku"
-
-msgctxt "#32059"
-msgid "Top right"
-msgstr "U góry po prawej"
-
-msgctxt "#32060"
-msgid "Position of the codec logos in the OSD"
-msgstr "Pozycja logo kodeków w OSD"
-
-msgctxt "#32061"
-msgid "Position of the codec logos in the PlayerProcessInfo"
-msgstr "Pozycja logo kodeków w pliku PlayerProcessInfo"
-
-msgctxt "#32062"
-msgid "Position of the codec logos when video starts"
-msgstr "Pozycja logo kodeków, gdy zaczyna się wideo"
-
-msgctxt "#32063"
-msgid "Codec logos"
-msgstr "Logo kodeków"
-
-msgctxt "#32064"
-msgid "Original"
-msgstr "Oryginalny"
-
-msgctxt "#32065"
-msgid "VS10 mode"
-msgstr "Tryb VS10"
-
-msgctxt "#32067"
-msgid "L5 Active Offsets"
-msgstr "L5 Aktywne Korekty"
-
-msgctxt "#32068"
-msgid "Version"
-msgstr "Wersja"
-
-msgctxt "#32069"
-msgid "Bit depth"
-msgstr "Głębia bitu"
-
-msgctxt "#32070"
-msgid "EOTF & Gamut"
-msgstr "EOTF & Gamut"
-
-msgctxt "#32071"
-msgid "Duration of the codec logos when video starts"
-msgstr "Czas trwania logo kodeków, gdy zaczyna się wideo"
-
-msgctxt "#32072"
-msgid "Standard"
-msgstr "Standard"
-
-msgctxt "#32073"
-msgid "PlayerProcessInfo"
-msgstr "PlayerProcessInfo"
-
-msgctxt "#32074"
-msgid "Show file name in PlayerProcessInfo"
-msgstr "Pokaż nazwę pliku w PlayerProcessinfo"
-
-msgctxt "#32075"
-msgid "second"
-msgstr "sekunda"
-
-msgctxt "#32076"
-msgid "seconds"
-msgstr "sekundy"
-
-msgctxt "#32077"
-msgid "seconds"
-msgstr "sekund"

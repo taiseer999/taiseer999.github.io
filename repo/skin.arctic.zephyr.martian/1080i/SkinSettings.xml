@@ -1009,7 +1009,7 @@
                             <onclick condition="Skin.HasSetting(ppi.userightCodecLogos)">Skin.Reset(ppi.userightCodecLogos)</onclick>
                             <onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.Reset(ppi.usecenterCodecLogos)</onclick>
                         </control>
-						
+
                         <!-- PlayerProcessInfo -->
                         <control type="grouplist" id="2370">
                             <visible>ControlGroup(9100).HasFocus(9103)</visible>
@@ -1035,6 +1035,7 @@
                             <onclick>Skin.ToggleSetting(Filename.PPI)</onclick>
                             <selected>Skin.HasSetting(Filename.PPI)</selected>
                         </control>
+
 
                         <!-- Video -->
                         <control type="grouplist" id="9208">
