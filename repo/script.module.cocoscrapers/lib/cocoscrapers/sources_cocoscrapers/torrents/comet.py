@@ -1,44 +1,34 @@
-# created by Venom for Fenomscrapers (updated 3-02-2022) modified by kodifitzwell
+# created by Venom for Fenomscrapers (updated 3-02-2022)
 """
 	Cocoscrapers Project
 """
 
-from json import dumps as jsdumps
-import base64, re, requests
-from cocoscrapers.modules import source_utils, cache
-from cocoscrapers.modules.control import homeWindow, sleep
-from cocoscrapers.modules import log_utils
-session = requests.Session()
+from json import loads as jsloads, dumps as jsdumps
+import re, queue
+from cocoscrapers.modules import client
+from cocoscrapers.modules import source_utils
 
-debrid_dict = {'Real-Debrid': 'realdebrid' , 'Premiumize.me': 'premiumize' , 'AllDebrid': 'alldebrid'}
+timeout = 10
+
 
 class source:
 	priority = 2
 	pack_capable = True
 	hasMovies = True
 	hasEpisodes = True
+	_queue = queue.SimpleQueue()
 	def __init__(self):
+		params = '/eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2UsInJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUiLCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJkZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhjbHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3ZlX3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxzZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
 		self.language = ['en']
-		self.base_link = 'https://comet.elfhosted.com'
-		self.movieSearch_link = '/%s/stream/movie/%s.json'
-		self.tvSearch_link = '/%s/stream/series/%s:%s:%s.json'
+		self.base_link = "https://comet.elfhosted.com"
+		self.movieSearch_link = f"{params}/stream/movie/%s.json"
+		self.tvSearch_link = f"{params}/stream/series/%s:%s:%s.json"
 		self.min_seeders = 0
-# Currently supports BITSEARCH(+), EZTV(+), ThePirateBay(+), TheRARBG(+), YTS(+)
-
-	def _get_files(self, url):
-		if self.get_pack_files: return []
-		results = session.get(url, timeout=10)
-		files = results.json()['streams']
-		return files
 
 	def sources(self, data, hostDict):
-		self.get_pack_files = False
 		sources = []
-		if not data:
-			homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
-			return sources
+		if not data: return sources
 		append = sources.append
-		self.pack_get = False
 		try:
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -46,36 +36,34 @@ class source:
 			episode_title = data['title'] if 'tvshowtitle' in data else None
 			year = data['year']
 			imdb = data['imdb']
-			debrid_service = debrid_dict[data['debrid_service']]
-			debrid_token = data['debrid_token']
-			params = {'indexers':[],'maxResults':0,'maxSize':0,'resultFormat':['All'],'resolutions':['All'],'languages':['All'],
-					'debridService':debrid_service,'debridApiKey':debrid_token,'debridStreamProxyPassword':''}
-			params = base64.b64encode(jsdumps(params, separators=(',', ':')).encode('utf-8')).decode('utf-8')
 			if 'tvshowtitle' in data:
-				homeWindow.setProperty('cocoscrapers.comet.performing_single_scrape', 'true')
 				season = data['season']
 				episode = data['episode']
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
-				url = '%s%s' % (self.base_link, self.tvSearch_link % (params, imdb, season, episode))
-				files = cache.get(self._get_files, 10, url)
+				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
 			else:
-				url = '%s%s' % (self.base_link, self.movieSearch_link % (params, imdb))
+				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 				hdlr = year
-				files = self._get_files(url)
-			log_utils.log('comet sources url = %s' % url)
-			homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
+			# log_utils.log('url = %s' % url)
+			try:
+				results = client.request(url, timeout=10)
+				files = jsloads(results)['streams']
+			except: files = []
+			self._queue.put_nowait(files) # if seasons
+			self._queue.put_nowait(files) # if shows
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
-			homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
 			source_utils.scraper_error('COMET')
 			return sources
+
 		for file in files:
 			try:
-				hash = file['behaviorHints']['bingeGroup'].replace('comet|', '')
+				hash = file['infoHash']
 				file_title = file['description'].split('\n')
 				file_info = [x for x in file_title if _INFO.match(x)][0]
+
 				name = source_utils.clean_name(file_title[0])
 
 				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
@@ -85,6 +73,11 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
 
+				try:
+					seeders = 0 # int(re.search(r'(\d+)', file_info).group(1))
+					if self.min_seeders > seeders: continue
+				except: seeders = 0
+
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
 					size = re.search(r'((?:\d+\,\d+\.\d+|\d+\.\d+|\d+\,\d+|\d+)\s*(?:GB|GiB|Gb|MB|MiB|Mb))', file_info).group(0)
@@ -93,25 +86,15 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': 'comet', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				append({'provider': 'comet', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
 			except:
-				homeWindow.clearProperty('cocoscrapers.comet.performing_single_scrape')
 				source_utils.scraper_error('COMET')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
-		self.get_pack_files = True
 		sources = []
 		if not data: return sources
-		count, finished_single_scrape = 0, False
-		sleep(2000)
-		while count < 10000 and not finished_single_scrape:
-			finished_single_scrape = homeWindow.getProperty('cocoscrapers.comet.performing_single_scrape') != 'true'
-			sleep(100)
-			count += 100
-		if not finished_single_scrape: return sources
-		sleep(1000)
 		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -119,25 +102,20 @@ class source:
 			imdb = data['imdb']
 			year = data['year']
 			season = data['season']
-			debrid_service = debrid_dict[data['debrid_service']]
-			debrid_token = data['debrid_token']
-			params = {'indexers':['bitsearch','eztv','thepiratebay','therarbg','yts'],'maxResults':0,'maxSize':0,'resultFormat':['All'],'resolutions':['All'],'languages':['All'],
-					'debridService':debrid_service,'debridApiKey':debrid_token,'debridStreamProxyPassword':''}
-			params = base64.b64encode(jsdumps(params, separators=(',', ':')).encode('utf-8')).decode('utf-8')
-			url = '%s%s' % (self.base_link, self.tvSearch_link % (params, imdb, season, data['episode']))
-			files = cache.get(self._get_files, 10, url)
+			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
+			files = self._queue.get(timeout=11)
 			_INFO = re.compile(r'💾.*') # _INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
 			source_utils.scraper_error('COMET')
 			return sources
-		log_title = 'Series' if search_series else 'Season'
+
 		for file in files:
 			try:
-				hash = file['behaviorHints']['bingeGroup'].replace('comet|', '')
-				file_title = file['torrentTitle'].split('\n')
-				file_info = [x for x in file['title'].split('\n') if _INFO.match(x)][0]
+				hash = file['infoHash']
+				file_title = file['description'].split('\n')
+				file_info = [x for x in file_title if _INFO.match(x)][0]
 
 				name = source_utils.clean_name(file_title[0])
 
@@ -160,6 +138,11 @@ class source:
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
+				try:
+					seeders = 0 # int(re.search(r'(\d+)', file_info).group(1))
+					if self.min_seeders > seeders: continue
+				except: seeders = 0
+
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
 					size = re.search(r'((?:\d+\,\d+\.\d+|\d+\.\d+|\d+\,\d+|\d+)\s*(?:GB|GiB|Gb|MB|MiB|Mb))', file_info).group(0)
@@ -168,7 +151,7 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'comet', 'source': 'torrent', 'seeders': 0, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
+				item = {'provider': 'comet', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
 							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
@@ -176,4 +159,3 @@ class source:
 			except:
 				source_utils.scraper_error('COMET')
 		return sources
-

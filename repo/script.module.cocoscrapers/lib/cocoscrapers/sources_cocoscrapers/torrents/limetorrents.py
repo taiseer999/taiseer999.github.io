@@ -6,11 +6,11 @@
 
 import re
 from urllib.parse import quote_plus
-from cocoscrapers.modules import cfscrape
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
-from cocoscrapers.modules import workers
-
+# from cocoscrapers.modules.Thread_pool import run_and_wait
+from functools import partial
+from time import time
 
 class source:
 	priority = 5
@@ -19,7 +19,14 @@ class source:
 	hasEpisodes = True
 	def __init__(self):
 		self.language = ['en']
-		self.base_link = "https://www.limetorrents.pro"
+		self.item_totals = {
+			'4K': 0,
+			'1080p': 0,
+			'720p': 0,
+			'SD': 0,
+			'CAM': 0 
+			}
+		self.base_link = "https://www.limetorrents.lol"
 		# self.base_link = "https://limetorrents.proxyninja.org" # if ever needed
 		self.tvsearch = '/search/tv/{0}/1/'
 		self.moviesearch = '/search/movies/{0}/1/'
@@ -30,7 +37,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
-			self.scraper = cfscrape.create_scraper()
+			startTime = time()
 			self.aliases = data['aliases']
 			self.year = data['year']
 			urls = []
@@ -38,18 +45,20 @@ class source:
 				self.title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ').replace('$', 's')
 				self.episode_title = data['title']
 				self.hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode']))
-				url = self.tvsearch
+				url = (self.base_link + self.tvsearch)
 			else:
 				self.title = data['title'].replace('&', 'and').replace('/', ' ').replace('$', 's')
 				self.episode_title = None
 				self.hdlr = self.year
-				url = self.moviesearch
+				url = (self.base_link + self.moviesearch)
 			query = '%s %s' % (re.sub(r'[^A-Za-z0-9\s\.-]+', '', self.title), self.hdlr)
 			url = url.format(quote_plus(query))
 			urls.append(url)
 			urls.append(url.replace('/1/', '/2/'))
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
+			# bound_get_sources = partial(self.get_sources)
+			# run_and_wait(bound_get_sources,urls)
 			threads = []
 			append = threads.append
 			for url in urls:
@@ -57,6 +66,14 @@ class source:
 				append(workers.Thread(self.get_sources, link))
 			[i.start() for i in threads]
 			[i.join() for i in threads]
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - Limetorrents found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - Limetorrents found nothing')
+			endTime = time()
+			log_utils.log('#STATS - Limetorrents took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('LIMETORRENTS')
@@ -65,7 +82,7 @@ class source:
 	def get_sources(self, link):
 		# log_utils.log('link = %s' % link)
 		try:
-			results = self.scraper.get(link, timeout=10).text
+			results = client.request(link, timeout=7)
 			if '503 Service Temporarily Unavailable' in results:
 				from cocoscrapers.modules import log_utils
 				log_utils.log('LIMETORRENTS (Single request failure): 503 Service Temporarily Unavailable')
@@ -112,6 +129,7 @@ class source:
 
 				self.sources_append({'provider': 'limetorrents', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 												'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('LIMETORRENTS')
 
@@ -120,7 +138,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
-			self.scraper = cfscrape.create_scraper()
+			startTime = time()
 			self.search_series = search_series
 			self.total_seasons = total_seasons
 			self.bypass_filter = bypass_filter
@@ -143,6 +161,12 @@ class source:
 				queries = [
 							self.tvsearch.format(quote_plus(query + ' S%s' % self.season_xx)),
 							self.tvsearch.format(quote_plus(query + ' Season %s' % self.season_x))]
+			# links = []
+			# for url in queries:
+			# 	link = ('%s%s' % (self.base_link, url)).replace('+', '-')
+			# 	links.append(link)
+			# bound_get_sources_packs = partial(self.get_sources_packs)
+			# run_and_wait(bound_get_sources_packs,links)
 			threads = []
 			append = threads.append
 			for url in queries:
@@ -150,6 +174,14 @@ class source:
 				append(workers.Thread(self.get_sources_packs, link))
 			[i.start() for i in threads]
 			[i.join() for i in threads]
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - Limetorrents(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - Limetorrents(pack) found nothing')
+			endTime = time()
+			log_utils.log('#STATS - Limetorrents(pack) took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('LIMETORRENTS')
@@ -157,7 +189,7 @@ class source:
 
 	def get_sources_packs(self, link):
 		try:
-			results = self.scraper.get(link, timeout=10).text
+			results = client.request(link, timeout=7)
 			if '503 Service Temporarily Unavailable' in results:
 				from cocoscrapers.modules import log_utils
 				req_type = 'SHOW' if self.search_series else 'SEASON'
@@ -179,7 +211,6 @@ class source:
 				hash = re.search(r'/torrent/(.+?).torrent', columns[0], re.I).group(1)
 				name = re.search(r'title\s*=\s*(.+?)["\']', columns[0], re.I).group(1)
 				name = source_utils.clean_name(name)
-
 				episode_start, episode_end = 0, 0
 				if not self.search_series:
 					if not self.bypass_filter:
@@ -216,5 +247,6 @@ class source:
 				if self.search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				self.sources_append(item)
+				self.item_totals[quality]+=1
 			except:
 				source_utils.scraper_error('LIMETORRENTS')

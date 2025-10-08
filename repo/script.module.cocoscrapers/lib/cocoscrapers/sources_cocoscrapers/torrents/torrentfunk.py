@@ -9,6 +9,8 @@ from urllib.parse import quote_plus
 from cocoscrapers.modules import client
 from cocoscrapers.modules import source_utils
 from cocoscrapers.modules import workers
+from cocoscrapers.modules import log_utils
+from time import time
 
 
 class source:
@@ -21,6 +23,7 @@ class source:
 		self.base_link = "https://www.torrentfunk.com"
 		self.tvsearch_link = '/television/torrents/%s.html?v=on&smi=0&sma=0&i=75&sort=size&o=desc'
 		self.msearch_link = '/movie/torrents/%s.html?v=on&smi=0&sma=0&i=75&sort=size&o=desc'
+		self.item_totals = {'4K': 0, '1080p': 0, '720p': 0, 'SD': 0, 'CAM': 0}
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -28,6 +31,7 @@ class source:
 		if not data: return self.sources
 		self.sources_append = self.sources.append
 		try:
+			startTime = time()
 			self.aliases = data['aliases']
 			self.year = data['year']
 			if 'tvshowtitle' in data:
@@ -49,12 +53,24 @@ class source:
 			links = re.findall(r'<a\s*href\s*=\s*["\'](/torrent/.+?)["\']>(.+?)</a>', table, re.DOTALL | re.I)
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
+			# from cocoscrapers.modules.Thread_pool import run_and_wait
+			# from functools import partial
+			# bound_get_sources = partial(self.get_sources)
+			# run_and_wait(bound_get_sources, links)
 			threads = []
 			append = threads.append
 			for link in links:
 				append(workers.Thread(self.get_sources, link))
 			[i.start() for i in threads]
 			[i.join() for i in threads]
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS -TORRENTFUNK found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - TORRENTFUNK found nothing')
+			endTime = time()
+			log_utils.log('TORRENTFUNK took %0.1f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('TORRENTFUNK')
@@ -102,6 +118,7 @@ class source:
 
 			self.sources_append({'provider': 'torrentfunk', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info,
 												'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+			self.item_totals[quality] += 1
 		except:
 			source_utils.scraper_error('TORRENTFUNK')
 
@@ -112,6 +129,7 @@ class source:
 		self.items = []
 		self.items_append = self.items.append
 		try:
+			startTime = time()
 			self.search_series = search_series
 			self.total_seasons = total_seasons
 			self.bypass_filter = bypass_filter
@@ -134,6 +152,15 @@ class source:
 				queries = [
 						self.tvsearch_link % quote_plus(query + ' S%s' % self.season_xx),
 						self.tvsearch_link % quote_plus(query + ' Season %s' % self.season_x)]
+			# from cocoscrapers.modules.Thread_pool import run_and_wait
+			# from functools import partial
+			# bound_get_pack_items = partial(self.get_pack_items)
+			# links = []
+			# for url in queries:
+			# 	links.append('%s%s' % (self.base_link, url))
+			# run_and_wait(bound_get_pack_items,links)
+			# bound_get_pack_sources = partial(self.get_pack_sources)
+			# run_and_wait(bound_get_pack_sources, self.items)
 			threads = []
 			append = threads.append
 			for url in queries:
@@ -148,6 +175,14 @@ class source:
 				append2(workers.Thread(self.get_pack_sources, i))
 			[i.start() for i in threads2]
 			[i.join() for i in threads2]
+			logged = False
+			for quality in self.item_totals:
+				if self.item_totals[quality] > 0:
+					log_utils.log('#STATS - TORRENTFUNK(pack) found {0:2.0f} {1}'.format(self.item_totals[quality],quality) )
+					logged = True
+			if not logged: log_utils.log('#STATS - TORRENTFUNK(pack) found nothing')
+			endTime = time()
+			log_utils.log('#STATS - TORRENTFUNK(pack) took %.2f seconds' % (endTime - startTime))
 			return self.sources
 		except:
 			source_utils.scraper_error('TORRENTFUNK')
@@ -223,5 +258,6 @@ class source:
 			if self.search_series: item.update({'last_season': items[4]})
 			elif self.episode_start: item.update({'episode_start': self.episode_start, 'episode_end': self.episode_end}) # for partial season packs
 			self.sources_append(item)
+			self.item_totals[quality] += 1
 		except:
 			source_utils.scraper_error('TORRENTFUNK')
