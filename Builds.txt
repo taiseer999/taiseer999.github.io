@@ -101,8 +101,8 @@ adult="no"
 info="http://your.info.url"
 description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
-name="AF2 CoreELEC LITE"
-version="1.1"
+name="AF2/ AZR CoreELEC LITE"
+version="1.2"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=WqGdo%2FJ0kxmPIRieptJERoJOzpwwPyQd1AKQPW47Zs94XsVOAz7LYnTy7U6NV0z2&expiry=7YBrePECkZQVVPFFLoISaQ%3D%3D&mac=73c867282ef85faa849af5bd2c49b16484e70b58ae5cf62eb6f669af4c2691ff"
 minor="http://"
 gui="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=F0j5ClezmqyCPukhsdSmDKgTWoW8PrM0SZIqxbJwJggfOdEERITJ6SEkErCuznVO&expiry=5Heg54ry%2BNSyye1PNzdMKg%3D%3D&mac=c538f1a28125d03192acc02c04b70c80e320b1ccf117b3b6520ab8903c713b71"
