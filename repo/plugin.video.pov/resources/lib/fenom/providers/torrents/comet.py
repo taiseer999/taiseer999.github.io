@@ -19,6 +19,7 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = (
+			"https://comet.matrixnode.ru",
 			"https://comet.elfhosted.com",
 			"https://cometfortheweebs.midnightignite.me"
 		)[int(getSetting('comet.url', '0'))]

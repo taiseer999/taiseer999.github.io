@@ -3,6 +3,7 @@
 - Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 5.10[/B][/COLOR]
+- Increased Trakt api timeout to 10s.
 - Added Exclude Completed Season Premieres subsetting for Auto Play.
 - Disabled Auto Play for all Rescrape with... context menu options.
 - Added Show Notification Before End (secs) subsetting for

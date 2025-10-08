@@ -1,4 +1,5 @@
-import requests, time
+import time
+import requests
 from threading import Thread, Timer
 from windows import create_window
 from modules import kodi_utils, cache
@@ -11,7 +12,7 @@ qr_str = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s'
 meta_keys = 'title year poster fanart clearlogo tmdblogo'
 code_str, nav2_str = 'PIN CODE: [B]%s[/B]', 'LOCATION: [B]%s[/B]'
 await_str = 'REMAINING: [B]%02d:%02d[/B]'
-timeout = 5.05
+timeout = 10.05
 
 def _make_progress_dialog(**kwargs):
 	progress_dialog = create_window(('windows.sources', 'ProgressMedia'), 'progress_media.xml', **kwargs)
@@ -19,11 +20,14 @@ def _make_progress_dialog(**kwargs):
 	return progress_dialog
 
 def authorize(service):
-	return {
+	try: success = {
 		'realdebrid': RealDebrid, 'premiumize': Premiumize, 'alldebrid': AllDebrid,
 		'easydebrid': EasyDebrid, 'debrider': Debrider, 'torbox': TorBox, 'offcloud': Offcloud,
 		'trakt': Trakt, 'mdblist': MDBList, 'tmdblist': TMDbList
 	}[service]().set_auth()
+	except Exception as e: kodi_utils.logger('myservices error', str(e))
+	else: return success
+	return notification(32574)
 
 class RepeatTimer(Timer):
 	def run(self):

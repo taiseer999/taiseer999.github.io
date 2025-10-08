@@ -16,7 +16,7 @@ V2_API_KEY = get_setting('trakt.client_id')
 CLIENT_SECRET = get_setting('trakt.client_secret')
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 base_url = 'https://api.trakt.tv/%s'
-timeout = 3.05
+timeout = 10.05
 session = requests.Session()
 retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502, 503, 504))
 session.mount('https://api.trakt.tv', requests.adapters.HTTPAdapter(pool_maxsize=100, max_retries=retry))
@@ -26,15 +26,14 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 	if with_auth is True and (token := settings.trakt_token()):
 		headers['Authorization'] = 'Bearer %s' % token
 	if pagination: params['page'] = page
-	method = 'post' if data is not None else method or 'get'
 	try:
 		response = session.request(
-			method,
+			'post' if data is not None else method or 'get',
 			base_url % path,
 			params=None if data is not None else params,
 			data=json.dumps(data) if data else None,
 			headers=headers,
-			timeout=timeout ** 2 if not method in ('get',) else timeout
+			timeout=timeout
 		)
 		result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
 		if not response.ok: response.raise_for_status()

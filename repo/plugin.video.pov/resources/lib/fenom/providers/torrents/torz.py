@@ -20,8 +20,9 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = (
+			"https://stremthru.matrixnode.ru",
 			"https://stremthru.elfhosted.com",
-			"https://stremthru.13377001.xyz"
+			"https://stremthrufortheweebs.midnightignite.me"
 		)[int(getSetting('torz.url', '0'))]
 		self.movieSearch_link = '/v0/torznab/api'
 		self.tvSearch_link = '/v0/torznab/api'

@@ -1,4 +1,5 @@
-import json, time
+import json
+import time
 from threading import Thread
 from windows import create_window
 from caches.providers_cache import ExternalProvidersCache

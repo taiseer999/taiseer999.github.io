@@ -1,5 +1,7 @@
 import re
 import json
+import unicodedata
+from string import printable
 from urllib.parse import unquote, unquote_plus
 from fenom.control import getSettingDefault as fenom_default_settings, setting as fenom_getSetting, setSetting as fenom_setSetting
 from indexers.metadata import season_episodes_meta
@@ -93,7 +95,6 @@ def internal_results(provider, sources):
 	kodi_utils.set_property('%s.internal_results' % provider, json.dumps(sources))
 
 def normalize(title):
-	import unicodedata
 	try:
 		title = ''.join(c for c in unicodedata.normalize('NFKD', title) if unicodedata.category(c) != 'Mn')
 		return string(title)

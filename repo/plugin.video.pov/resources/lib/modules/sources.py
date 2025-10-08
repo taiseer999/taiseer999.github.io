@@ -1,4 +1,6 @@
-import json, re, time
+import re
+import json
+import time
 from threading import Thread
 from indexers import metadata
 from fenom import sources as fenom_sources
@@ -6,7 +8,7 @@ from windows import open_window, create_window
 from scrapers import external, folders
 from modules import debrid, kodi_utils, settings
 from modules.player import POVPlayer
-from modules.source_utils import internal_sources, internal_folders_import, scraper_names, get_cache_expiry, pack_enable_check
+from modules.source_utils import internal_sources, internal_folders_import, scraper_names, get_cache_expiry, pack_enable_check, normalize
 from modules.utils import string_to_float, safe_string, remove_accents, get_datetime, adjust_premiered_date
 #from modules.kodi_utils import logger
 
@@ -395,10 +397,12 @@ class SourceSelect():
 		original_title = meta['original_title']
 		alternative_titles = meta.get('alternative_titles', [])
 		country_codes = set([i.replace('GB', 'UK') for i in meta.get('country_codes', [])])
+		if meta_title not in alternative_titles: alternative_titles.append(meta_title)
+		if original_title not in alternative_titles: alternative_titles.append(original_title)
 		if alternative_titles: aliases = [{'title': i, 'country': ''} for i in alternative_titles]
-		if meta_title not in alternative_titles: aliases.append({'title': meta_title, 'country': ''})
-		if original_title not in alternative_titles: aliases.append({'title': original_title, 'country': ''})
 		if country_codes: aliases.extend([{'title': '%s %s' % (title, i), 'country': ''} for i in country_codes])
+		normalized = ({'title': normalize(i['title']), 'country': i['country']} for i in aliases)
+		aliases.extend(i for i in normalized if not i in aliases)
 		return aliases
 
 	def _process_internal_results(self):

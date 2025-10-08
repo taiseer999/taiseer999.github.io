@@ -216,10 +216,9 @@ def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
 	if isinstance(heading, int): heading = local_string(heading)
 	heading = heading.replace('[B]', '').replace('[/B]', '')
 	if file:
-		with open_file(file) as f: text = f.read().splitlines(keepends=True)
+		with open_file(file) as f: text = f.read()
 	if kodi_log and confirm_dialog(text=local_string(32855), ok_label=local_string(32824), cancel_label=local_string(32828), top_space=True):
-		text = [i for i in text if any(x in i.lower() for x in ('exception', 'error'))]
-	text = ''.join(text)
+		text = ''.join(i for i in text.splitlines(keepends=True) if any(x in i.lower() for x in ('exception', 'error')))
 	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
 
 def notification(line1, time=3000, icon=None, sound=False):
@@ -384,8 +383,8 @@ def make_settings_dict():
 	try:
 		profile_dir = 'special://profile/addon_data/plugin.video.pov/'
 		if not path_exists(profile_dir): make_directorys(profile_dir)
-		settings_xml = translate_path(profile_dir + 'settings.xml')
-		root = ET.parse(settings_xml).getroot()
+		settings_xml = profile_dir + 'settings.xml'
+		root = ET.parse(translate_path(settings_xml)).getroot()
 		settings_dict = {}
 		for item in root:
 			setting_id = item.get('id')
@@ -412,8 +411,8 @@ def toggle_language_invoker():
 	new_value = 'false' if current_addon_setting == 'true' else 'true'
 	if not confirm_dialog(text=local_string(32979) % (current_addon_setting.upper(), new_value.upper())): return
 	if new_value == 'true' and not confirm_dialog(text=32980, top_space=True): return
-	addon_xml = translate_path('special://home/addons/plugin.video.pov/addon.xml')
-	tree = ET.parse(addon_xml)
+	addon_xml = 'special://home/addons/plugin.video.pov/addon.xml'
+	tree = ET.parse(translate_path(addon_xml))
 	root = tree.getroot()
 	item = next(root.iter('reuselanguageinvoker'), None)
 	if item is None: return notification(32574, 1500)
@@ -454,8 +453,8 @@ def clean_settings():
 	addon_settings = 'special://home/addons/%s/resources/settings.xml'
 	addon_data_settings = 'special://profile/addon_data/%s/settings.xml'
 	addon_names = ['POV']
-	addon_data_settings_xmls = [translate_path(addon_data_settings % i) for i in addon_ids]
-	addon_settings_xmls = [translate_path(addon_settings % i) for i in addon_ids]
+	addon_data_settings_xmls = [addon_data_settings % i for i in addon_ids]
+	addon_settings_xmls = [addon_settings % i for i in addon_ids]
 	params = list(zip(addon_names, addon_data_settings_xmls, addon_settings_xmls))
 	for count, (name, profile_xml, default_xml) in enumerate(params, 1):
 		try:
@@ -466,12 +465,12 @@ def clean_settings():
 			removed_append = removed_settings.append
 			active_append = active_settings.append
 			current_append = current_user_settings.append
-			root = ET.parse(default_xml).getroot()
+			root = ET.parse(translate_path(default_xml)).getroot()
 			for item in root.findall('./category/setting'):
 				setting_id = item.get('id')
 				if setting_id: active_append(setting_id)
 			settings_xml = profile_xml
-			root = ET.parse(settings_xml).getroot()
+			root = ET.parse(translate_path(settings_xml)).getroot()
 			for item in root:
 				dict_item = {}
 				setting_id = item.get('id')
@@ -494,16 +493,14 @@ def clean_settings():
 
 def upload_logfile():
 	# Thanks 123Venom
-	log_file = 'special://logpath/kodi.log'
+	log_file, url = 'special://logpath/kodi.log', 'https://paste.kodi.tv/'
 	if not path_exists(log_file): return ok_dialog(text='Error. Log File Not Found.', top_space=True)
 	if not confirm_dialog(): return
+	import requests
 	show_busy_dialog()
-	url = 'https://paste.kodi.tv/'
-	user_agent = 'script.kodi.loguploader: 1.0' # 'POV %s' % get_addoninfo('version')
 	try:
 		with open_file(log_file) as f: text = f.read().encode('utf-8', errors='ignore')
-		import requests
-		response = requests.post((url + 'documents'), data=text, headers={'User-Agent': user_agent}).json()
+		response = requests.post('%s%s' % (url, 'documents'), data=text, timeout=10.0).json()
 		if 'key' in response: ok_dialog(text=url + response['key'], top_space=True)
 		else: ok_dialog(text='Error. Log Upload Failed')
 	except: notification(32574, 1500)

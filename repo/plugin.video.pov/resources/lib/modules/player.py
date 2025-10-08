@@ -1,4 +1,5 @@
-import json, sys
+import sys
+import json
 from threading import Thread
 from caches import watched_cache as ws
 from windows import open_window

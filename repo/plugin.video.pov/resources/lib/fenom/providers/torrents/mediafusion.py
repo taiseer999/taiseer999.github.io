@@ -19,6 +19,7 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = (
+			"https://mediafusion.matrixnode.ru",
 			"https://mediafusion.elfhosted.com",
 			"https://mediafusionfortheweebs.midnightignite.me"
 		)[int(getSetting('mediafusion.url', '0'))]

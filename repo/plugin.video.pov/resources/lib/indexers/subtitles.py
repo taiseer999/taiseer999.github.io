@@ -1,4 +1,5 @@
-import codecs, requests
+import codecs
+import requests
 from datetime import timedelta
 from caches.main_cache import main_cache
 from modules.kodi_utils import notification, sleep, open_file
