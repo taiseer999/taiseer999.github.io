@@ -34,14 +34,14 @@
                     <align>left</align>
                     <aligny>top</aligny>
                     <aspectratio aligny="top">keep</aspectratio>
-                    <texture colordiffuse="FFCCCCCC">fenlight_common/fenlight.png</texture>
+                    <texture colordiffuse="FFCCCCCC">$INFO[Window(10000).Property(fenlight.addon_icon_mini)]</texture>
                 </control>
                 <control type="label">
                     <top>40</top>
                     <left>105</left>
                     <width max="1115">auto</width>
                     <height>20</height>
-                    <font>font_midi</font> <!-- FENLIGHT_33 -->
+                    <font>Name1</font> <!-- FENLIGHT_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <shadowcolor>FF000000</shadowcolor>
                     <align>center</align>
@@ -54,7 +54,7 @@
                     <top>114</top>
                     <width>1254</width>
                     <height>816</height>
-                    <font>font_mini</font> <!-- FENLIGHT_26 -->
+                    <font>ChannelInfo</font> <!-- FENLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>$INFO[Window.Property(text)]</label>
                     <pagecontrol>2060</pagecontrol>
@@ -66,7 +66,7 @@
                     <top>114</top>
                     <width>1254</width>
                     <height>826</height>
-                    <font>font_midi</font> <!-- FENLIGHT_33 -->
+                    <font>Name1</font> <!-- FENLIGHT_33 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>$INFO[Window.Property(text)]</label>
                     <pagecontrol>2061</pagecontrol>

@@ -41,12 +41,11 @@ def cached_check(hash_list, cached_hashes, debrid):
 	unchecked_list = [i for i in hash_list if not any([h for h in cached_hashes if h[0] == i and h[1] == debrid])]
 	return cached_list, unchecked_list
 
-def RD_check(data, hash_list, cached_hashes, external_cache_check):
-	if not external_cache_check: return hash_list
+def RD_check(hash_list, cached_hashes, data, active_debrid):
 	expires = 24
 	cached_hashes, unchecked_hashes = cached_check(hash_list, cached_hashes, 'rd')
 	if unchecked_hashes:
-		results = get_external_cache_status(data, 'realdebrid', 'rd.token', ['torrentio', 'mediafusion'], unchecked_hashes)
+		results = get_external_cache_status('Real-Debrid', unchecked_hashes, data, active_debrid)
 		if results:
 			cached_append = cached_hashes.append
 			process_list = []
@@ -64,12 +63,11 @@ def RD_check(data, hash_list, cached_hashes, external_cache_check):
 		add_to_local_cache(process_list, 'rd', expires)
 	return cached_hashes
 
-def AD_check(data, hash_list, cached_hashes, external_cache_check):
-	if not external_cache_check: return hash_list
+def AD_check(hash_list, cached_hashes, data, active_debrid):
 	expires = 24
 	cached_hashes, unchecked_hashes = cached_check(hash_list, cached_hashes, 'ad')
 	if unchecked_hashes:
-		results = get_external_cache_status(data, 'alldebrid', 'ad.token', ['comet', 'mediafusion'], unchecked_hashes)
+		results = get_external_cache_status('AllDebrid', unchecked_hashes, data, active_debrid)
 		if results:
 			cached_append = cached_hashes.append
 			process_list = []
@@ -87,7 +85,8 @@ def AD_check(data, hash_list, cached_hashes, external_cache_check):
 		add_to_local_cache(process_list, 'ad', expires)
 	return cached_hashes
 
-def PM_check(data, hash_list, cached_hashes, external_cache_check):
+def PM_check(hash_list, cached_hashes):
+	expires = 24
 	cached_hashes, unchecked_hashes = cached_check(hash_list, cached_hashes, 'pm')
 	if unchecked_hashes:
 		results = PremiumizeAPI().check_cache(unchecked_hashes)
@@ -107,10 +106,12 @@ def PM_check(data, hash_list, cached_hashes, external_cache_check):
 					process_append((h, cached))
 			except:
 				for i in unchecked_hashes: process_append((i, 'False'))
-			add_to_local_cache(process_list, 'pm')
+		else: process_list, expires  = [(h, 'False') for h in unchecked_hashes], 2
+		add_to_local_cache(process_list, 'pm', expires)
 	return cached_hashes
 
-def OC_check(data, hash_list, cached_hashes, external_cache_check):
+def OC_check(hash_list, cached_hashes):
+	expires = 24
 	cached_hashes, unchecked_hashes = cached_check(hash_list, cached_hashes, 'oc')
 	if unchecked_hashes:
 		results = OffcloudAPI().check_cache(unchecked_hashes)
@@ -128,10 +129,12 @@ def OC_check(data, hash_list, cached_hashes, external_cache_check):
 					process_append((h, cached))
 			except:
 				for i in unchecked_hashes: process_append((i, 'False'))
-			add_to_local_cache(process_list, 'oc')
+		else: process_list, expires  = [(h, 'False') for h in unchecked_hashes], 2
+		add_to_local_cache(process_list, 'oc', expires)
 	return cached_hashes
 
-def ED_check(data, hash_list, cached_hashes, external_cache_check):
+def ED_check(hash_list, cached_hashes):
+	expires = 24
 	cached_hashes, unchecked_hashes = cached_check(hash_list, cached_hashes, 'ed')
 	if unchecked_hashes:
 		results = EasyDebridAPI().check_cache(unchecked_hashes)
@@ -150,10 +153,12 @@ def ED_check(data, hash_list, cached_hashes, external_cache_check):
 					process_append((h, cached))
 			except:
 				for i in unchecked_hashes: process_append((i, 'False'))
-			add_to_local_cache(process_list, 'ed')
+		else: process_list, expires  = [(h, 'False') for h in unchecked_hashes], 2
+		add_to_local_cache(process_list, 'ed', expires)
 	return cached_hashes
 
-def TB_check(results, hash_list, cached_hashes, external_cache_check):
+def TB_check(hash_list, cached_hashes):
+	expires = 24
 	cached_hashes, unchecked_hashes = cached_check(hash_list, cached_hashes, 'tb')
 	if unchecked_hashes:
 		results = TorBoxAPI().check_cache(unchecked_hashes)
@@ -172,5 +177,6 @@ def TB_check(results, hash_list, cached_hashes, external_cache_check):
 					process_append((h, cached))
 			except:
 				for i in unchecked_hashes: process_append((i, 'False'))
-			add_to_local_cache(process_list, 'tb')
+		else: process_list, expires  = [(h, 'False') for h in unchecked_hashes], 2
+		add_to_local_cache(process_list, 'tb', expires)
 	return cached_hashes

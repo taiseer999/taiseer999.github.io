@@ -68,6 +68,9 @@ def source_folders_directory(media_type, source):
 	if get_setting(setting) not in ('', 'None', None): return translate_path( get_setting(setting))
 	else: return False
 
+def avoid_episode_spoilers():
+	return get_setting('fenlight.avoid_episode_spoilers', 'false') == 'true'
+
 def paginate(is_home):
 	paginate_lists = int(get_setting('fenlight.paginate.lists', '0'))
 	if is_home: return paginate_lists in (2, 3)
@@ -95,6 +98,9 @@ def preferred_filters():
 def include_prerelease_results():
 	return int(get_setting('fenlight.filter.include_prerelease', '0')) == 0
 
+def auto_enable_subs():
+	return get_setting('fenlight.playback.auto_enable_subs', 'false') == 'true'
+
 def stingers_show():
 	return get_setting('fenlight.stinger_alert.show', 'false') == 'true'
 
@@ -116,10 +122,16 @@ def autoscrape_next_episode():
 	else: return False
 
 def auto_rescrape_cache_ignored():
-	return int(get_setting('fenlight.results.auto_rescrape_cache_ignored', '0'))
+	return int(get_setting('fenlight.results.auto_rescrape_cache_ignored', '1'))
+
+def auto_rescrape_imdb_year():
+	return int(get_setting('fenlight.results.auto_rescrape_imdb_year', '0'))
 
 def auto_rescrape_with_all():
 	return int(get_setting('fenlight.results.auto_rescrape_with_all', '0'))
+
+def autoplay_prescrape(scrape_provider):
+	return get_setting('fenlight.autoplay.%s' % scrape_provider, 'false') == 'true'
 
 def auto_episode_group():
 	return int(get_setting('fenlight.results.auto_episode_group', '0'))
@@ -137,6 +149,12 @@ def auto_nextep_settings(play_type):
 
 def filter_status(filter_type):
 	return int(get_setting('fenlight.filter.%s' % filter_type, '0'))
+
+def limit_number_quality():
+	return int(get_setting('fenlight.results.limit_number_quality', '0'))
+
+def limit_number_total():
+	return int(get_setting('fenlight.results.limit_number_total', '0'))
 
 def ignore_results_filter():
 	return int(get_setting('fenlight.results.ignore_filter', '0'))
@@ -174,6 +192,13 @@ def easynews_active():
 	if get_setting('fenlight.provider.easynews', 'false') == 'true': easynews_status = easynews_authorized()
 	else: easynews_status = False
 	return easynews_status
+
+def easynews_playback_method(query):
+	method = int(get_setting('fenlight.easynews.playback_method', '0'))
+	queries = {'retry': lambda: method in (1, 3), 'non_seek': lambda: method in (2, 3),
+				'direct_play': lambda: method in (2, 3) and get_setting('fenlight.easynews.playback_method_limited', 'false') != 'true'}
+	setting = queries[query]()
+	return setting
 
 def easynews_authorized():
 	easynews_user = get_setting('fenlight.easynews_user', 'empty_setting')
@@ -223,15 +248,18 @@ def easynews_language_filter():
 	else: filters = []
 	return enabled, filters
 
+def size_sort_weighted():
+	return get_setting('fenlight.results.size_sort_weighted', 'false') == 'true'
+
 def results_sort_order():
 	sort_direction = -1 if get_setting('fenlight.results.size_sort_direction') == '0' else 1
 	return (
-			lambda k: (k['quality_rank'], k['provider_rank'], sort_direction*k['size']), #Quality, Provider, Size
-			lambda k: (k['quality_rank'], sort_direction*k['size'], k['provider_rank']), #Quality, Size, Provider
-			lambda k: (k['provider_rank'], k['quality_rank'], sort_direction*k['size']), #Provider, Quality, Size
-			lambda k: (k['provider_rank'], sort_direction*k['size'], k['quality_rank']), #Provider, Size, Quality
-			lambda k: (sort_direction*k['size'], k['quality_rank'], k['provider_rank']), #Size, Quality, Provider
-			lambda k: (sort_direction*k['size'], k['provider_rank'], k['quality_rank'])  #Size, Provider, Quality
+			lambda k: (k['quality_rank'], k['provider_rank'], sort_direction*k['size_rank']), #Quality, Provider, Size
+			lambda k: (k['quality_rank'], sort_direction*k['size_rank'], k['provider_rank']), #Quality, Size, Provider
+			lambda k: (k['provider_rank'], k['quality_rank'], sort_direction*k['size_rank']), #Provider, Quality, Size
+			lambda k: (k['provider_rank'], sort_direction*k['size_rank'], k['quality_rank']), #Provider, Size, Quality
+			lambda k: (sort_direction*k['size_rank'], k['quality_rank'], k['provider_rank']), #Size, Quality, Provider
+			lambda k: (sort_direction*k['size_rank'], k['provider_rank'], k['quality_rank'])  #Size, Provider, Quality
 			)[int(get_setting('fenlight.results.sort_order', '1'))]
 
 def active_internal_scrapers():
@@ -259,11 +287,8 @@ def sort_to_top(provider):
 						'ad_cloud': 'fenlight.results.sort_adcloud_first', 'oc_cloud': 'fenlight.results.sort_occloud_first', 'tb_cloud': 'fenlight.results.sort_tbcloud_first'}
 	return get_setting(sort_to_top_dict[provider]) == 'true'
 
-def auto_resume(media_type):
-	auto_resume = get_setting('fenlight.auto_resume_%s' % media_type)
-	if auto_resume == '1': return True
-	if auto_resume == '2' and auto_play(media_type): return True
-	else: return False
+def auto_resume(media_type, autoplay_status):
+	return {0: False, 1: True, 2: autoplay_status}[int(get_setting('fenlight.auto_resume_%s' % media_type))]
 
 def scraping_settings():
 	highlight_type = int(get_setting('fenlight.highlight.type', '0'))

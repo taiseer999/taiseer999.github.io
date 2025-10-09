@@ -7,7 +7,7 @@ from indexers import dialogs
 from indexers.images import Images
 from modules.kodi_utils import addon_fanart, execute_builtin, notification, show_busy_dialog, hide_busy_dialog, get_icon
 from modules.settings import extras_enable_scrollbars, tmdb_api_key, easynews_authorized, mpaa_region
-from modules.utils import calculate_age, get_datetime
+from modules.utils import calculate_age, get_datetime, remove_accents
 # from modules.kodi_utils import logger
 
 
@@ -59,7 +59,7 @@ class People(BaseDialog):
 			elif controlID == 13:
 				title = '%s|%s|%s' % (self.person_name, self.person_thumb, self.person_image)
 				dialogs.favorites_manager_choice({'media_type': 'people', 'tmdb_id': str(self.person_id), 'title': title, 'refresh': 'false'})
-			else:#controlID
+			else:
 				self.show_text_media(text=self.person_biography)
 		else: self.control_id = controlID
 
@@ -107,23 +107,26 @@ class People(BaseDialog):
 
 	def show_extrainfo(self, meta):
 		text = '[B]  •  [/B]'.join([i for i in (meta.get('year'), str(round(meta.get('rating'), 1)) if meta.get('rating') not in (0, 0.0, None) else None,
-								meta.get('mpaa'), meta.get('spoken_language')) if i]) + '[CR][CR]%s' % meta.get('plot')
+								meta.get('mpaa')) if i]) + '[CR][CR]%s' % meta.get('plot')
 		poster = meta.get('poster', self.empty_poster)
 		return self.show_text_media(text=text, poster=poster)
 
 	def make_person_data(self):
+		compare_name = remove_accents(self.key_id)
 		if self.key_id not in (None, 'None', ''):
 			try:
 				data = tmdb_people_info(self.key_id)['results']
+				data = [i for i in data if remove_accents(i['name']) == compare_name]
 				data = sorted(data, key=lambda k: k.get('popularity', 0.0), reverse=True)
-				if len(data) > 1 and self.reference_tmdb_id not in (None, 'None', ''):
+				if len(data) > 1:
 					for item in data:
-						known_for = item.get('known_for', [])
-						if known_for:
-							known_for_tmdb_ids = [str(i['id']) for i in known_for]
-							if self.reference_tmdb_id in known_for_tmdb_ids:
-								self.person_id = item['id']
-								break
+						if self.reference_tmdb_id not in (None, 'None', ''):
+							known_for = item.get('known_for', [])
+							if known_for:
+								known_for_tmdb_ids = [str(i['id']) for i in known_for]
+								if self.reference_tmdb_id in known_for_tmdb_ids:
+									self.person_id = item['id']
+									break
 				if not self.person_id:
 					try: self.person_id = data[0]['id']
 					except: pass

@@ -165,17 +165,20 @@ class EasyNewsAPI:
 		return self.base_process(results)
 
 	def _get(self, url, params={}):
-		headers = {'Authorization': self.auth}
+		headers = {'Authorization': self.auth,
+					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edge/101.0.1210.53',
+					'Accept-Language':'en-us,en;q=0.5'}
 		try: response = session.get(url, params=params, headers=headers, timeout=20).text
 		except: return None
 		try: return json.loads(response)
 		except: return response
 
-	def resolve_easynews(self, url_dl):
-		try:
-			headers = {'Authorization': self.auth}
-			resolved_link = session.get(url_dl, headers=headers, stream=True, timeout=20).url
-		except: resolved_link = url_dl
+	def resolve_easynews(self, url_dl, use_non_seekable=False):
+		headers = {'Authorization': self.auth}
+		response = session.get(url_dl, headers=headers, stream=True, timeout=20)
+		if not response.ok: return None
+		if use_non_seekable: resolved_link = response.url + '|seekable=0'
+		else: resolved_link = response.url
 		return resolved_link
 
 EasyNews = EasyNewsAPI()

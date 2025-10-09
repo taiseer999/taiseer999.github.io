@@ -4,7 +4,7 @@ from windows.base_window import BaseDialog
 from caches.settings_cache import set_setting
 from modules.debrid import debrid_for_ext_cache_check
 from modules.source_utils import source_filters
-from modules.settings import provider_sort_ranks
+from modules.settings import provider_sort_ranks, avoid_episode_spoilers
 from modules.kodi_utils import get_icon, kodi_dialog, hide_busy_dialog, addon_fanart, select_dialog, ok_dialog, notification
 # from modules.kodi_utils import logger
 
@@ -340,8 +340,10 @@ class SourcesPlayback(BaseDialog):
 
 	def set_resolver_properties(self):
 		if self.meta_get('media_type') == 'movie': self.text = self.meta_get('plot')
-		else: self.text = '[B]%02dx%02d - %s[/B][CR][CR]%s' % (self.meta_get('season'), self.meta_get('episode'), self.meta_get('ep_name', 'N/A').upper(), self.meta_get('plot', '') 
-															or self.meta_get('tvshow_plot', ''))
+		else:
+			if avoid_episode_spoilers(): plot = self.meta_get('tvshow_plot') or '* Hidden to Prevent Spoilers *'
+			else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
+			self.text = '[B]%02dx%02d - %s[/B][CR][CR]%s' % (self.meta_get('season'), self.meta_get('episode'), self.meta_get('ep_name', 'N/A').upper(), plot)
 		self.setProperty('window_mode', self.window_mode)
 		self.setProperty('text', self.text)
 

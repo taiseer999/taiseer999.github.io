@@ -20,9 +20,11 @@ class Movies:
 		self.params_get = self.params.get
 		self.category_name = self.params_get('category_name', None) or self.params_get('name', None) or 'Movies'
 		self.id_type, self.list, self.action = self.params_get('id_type', 'tmdb_id'), self.params_get('list', []), self.params_get('action', None)
-		self.items, self.new_page, self.total_pages, self.is_external, self.is_home = [], {}, None, kodi_utils.external(), kodi_utils.home()
-		self.widget_hide_next_page = self.is_home and settings.widget_hide_next_page()
-		self.widget_hide_watched = self.is_home and settings.widget_hide_watched()
+		self.items, self.new_page, self.total_pages, self.is_external = [], {}, None, kodi_utils.external()
+		if self.is_external:
+			self.widget_hide_next_page = settings.widget_hide_next_page()
+			self.widget_hide_watched = self.action not in ('watched_movies', 'recent_watched_movies') and settings.widget_hide_watched()
+		else: self.widget_hide_next_page, self.widget_hide_watched = False, False
 		self.custom_order = self.params_get('custom_order', 'false') == 'true'
 		self.paginate_start = int(self.params_get('paginate_start', '0'))
 		self.tmdb_api_key = settings.tmdb_api_key()
@@ -55,8 +57,7 @@ class Movies:
 				if data['total_pages'] > page_no: self.new_page = {'new_page': str(data['page'] + 1), 'key_id': key_id}
 			elif self.action in self.personal:
 				data = function('movie', page_no)
-				if self.action == 'recent_watched_movies': total_pages = 1
-				else: data, total_pages = self.paginate_list(data, page_no)
+				data, total_pages = self.paginate_list(data, page_no)
 				self.list = [i['media_id'] for i in data]
 				if total_pages > 2: self.total_pages = total_pages
 				if total_pages > page_no: self.new_page = {'new_page': str(page_no + 1), 'paginate_start': self.paginate_start}
@@ -137,6 +138,7 @@ class Movies:
 			thumb = poster or landscape or fanart
 			movieset_id, movieset_name = meta_get('extra_info').get('collection_id', None), meta_get('extra_info').get('collection_name', None)
 			first_airdate = jsondate_to_datetime(premiered, '%Y-%m-%d', True)
+			duration = meta_get('duration')
 			if not first_airdate or self.current_date < first_airdate: unaired = True
 			else: unaired = False
 			progress = watched_status.get_progress_status_movie(self.bookmarks, str_tmdb_id)
@@ -196,9 +198,9 @@ class Movies:
 				cm.extend([['refresh', ('[B]Refresh Widgets[/B]', 'RunPlugin(%s)' % self.build_url({'mode': 'refresh_widgets'}))],
 						['reload', ('[B]Reload Widgets[/B]', 'RunPlugin(%s)' % self.build_url({'mode': 'kodi_refresh'}))]])
 			cm = self.sort_context_menu(cm)
-			info_tag = listitem.getVideoInfoTag()
+			info_tag = listitem.getVideoInfoTag(True)
 			info_tag.setMediaType('movie'), info_tag.setTitle(title), info_tag.setOriginalTitle(meta_get('original_title')), info_tag.setGenres(meta_get('genre'))
-			info_tag.setDuration(meta_get('duration')), info_tag.setPlaycount(playcount), info_tag.setPlot(meta_get('plot'))
+			info_tag.setDuration(duration), info_tag.setPlaycount(playcount), info_tag.setPlot(meta_get('plot'))
 			info_tag.setUniqueIDs({'imdb': imdb_id, 'tmdb': str_tmdb_id}), info_tag.setIMDBNumber(imdb_id), info_tag.setPremiered(premiered)
 			info_tag.setYear(int(year)), info_tag.setRating(meta_get('rating')), info_tag.setVotes(meta_get('votes')), info_tag.setMpaa(meta_get('mpaa'))
 			info_tag.setCountries(meta_get('country')), info_tag.setTrailer(meta_get('trailer'))
@@ -207,7 +209,7 @@ class Movies:
 			cast = meta_get('short_cast', []) or meta_get('cast', []) or []
 			info_tag.setCast([self.kodi_actor(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in cast])
 			if progress:
-				info_tag.setResumePoint(float(progress))
+				info_tag.setResumePoint(watched_status.get_resume_seconds(progress, duration))
 				set_properties({'WatchedProgress': progress})
 			listitem.setLabel(title)
 			listitem.addContextMenuItems(cm)
@@ -235,7 +237,7 @@ class Movies:
 		self.current_date, self.current_time, self.watched_indicators = get_datetime(), get_current_timestamp(), settings.watched_indicators()
 		self.cm_sort_order = settings.cm_sort_order()
 		self.perform_cm_sort = self.cm_sort_order != settings.cm_default_order()
-		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'Fen Light'
+		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'FENLAM'
 		watched_db = watched_status.get_database(self.watched_indicators)
 		self.watched_info, self.bookmarks = watched_status.watched_info_movie(watched_db), watched_status.get_bookmarks_movie(watched_db)
 		self.window_command = 'ActivateWindow(Videos,%s,return)' if self.is_external else 'Container.Update(%s)'
@@ -258,11 +260,10 @@ class Movies:
 			except: pass
 		return [i[1] for i in context_menu_items]
 
-
 	def paginate_list(self, data, page_no):
-		if settings.paginate(self.is_home):
-			limit = settings.page_limit(self.is_home)
+		if settings.paginate(self.is_external):
+			limit = settings.page_limit(self.is_external)
 			data, total_pages = paginate_list(data, page_no, limit, self.paginate_start)
-			if self.is_home: self.paginate_start = limit
+			if self.is_external: self.paginate_start = limit
 		else: total_pages = 1
 		return data, total_pages

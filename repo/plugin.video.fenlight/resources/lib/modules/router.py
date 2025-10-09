@@ -281,7 +281,7 @@ def routing(sys):
 		kodi_refresh()
 	elif mode == 'refresh_widgets':
 		from indexers.random_lists import refresh_widgets
-		refresh_widgets(_get('show_notification', 'false'))
+		refresh_widgets()
 	elif mode == 'person_data_dialog':
 		from indexers.people import person_data_dialog
 		person_data_dialog(params)

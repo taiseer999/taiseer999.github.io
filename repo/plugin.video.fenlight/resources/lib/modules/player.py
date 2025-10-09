@@ -34,7 +34,6 @@ class FenLightPlayer(xbmc.Player):
 			except: pass
 
 	def check_playback_start(self):
-		import xbmc
 		resolve_percent = 0
 		while self.playback_successful is None:
 			ku.hide_busy_dialog()
@@ -77,6 +76,7 @@ class FenLightPlayer(xbmc.Player):
 				total_check_time += 0.10
 			ku.hide_busy_dialog()
 			ku.sleep(1000)
+			if st.auto_enable_subs(): self.showSubtitles(True)
 			while self.isPlayingVideo():
 				try:
 					if not ensure_dialog_dead:
@@ -93,9 +93,9 @@ class FenLightPlayer(xbmc.Player):
 						if self.autoplay_nextep or self.autoscrape_nextep:
 							if not self.nextep_info_gathered: self.info_next_ep()
 							if round(self.total_time - self.curr_time) <= self.start_prep: self.run_next_ep(); break
-					elif show_stinger: 
+					elif show_stinger and not self.movie_stingers_run: 
 						final_chapter = (self.final_chapter(75) or stingers_percentage_fallback) if stinger_use_chapters else stingers_percentage_fallback
-						if self.current_point >= final_chapter and not self.movie_stingers_run: self.run_movie_stingers()
+						if self.current_point >= final_chapter: self.run_movie_stingers()
 				except: pass
 			ku.hide_busy_dialog()
 			if not self.media_marked: self.media_watched_marker()
@@ -112,14 +112,13 @@ class FenLightPlayer(xbmc.Player):
 		listitem.setPath(self.url)
 		listitem.setContentLookup(False)
 		if self.is_generic:
-			info_tag = listitem.getVideoInfoTag()
+			info_tag = listitem.getVideoInfoTag(True)
 			info_tag.setMediaType('video')
 			info_tag.setFilenameAndPath(self.url)
 		else:
 			self.tmdb_id, self.imdb_id, self.tvdb_id = self.meta_get('tmdb_id', ''), self.meta_get('imdb_id', ''), self.meta_get('tvdb_id', '')
 			self.media_type, self.title, self.year = self.meta_get('media_type'), self.meta_get('title'), self.meta_get('year')
 			self.season, self.episode = self.meta_get('season', ''), self.meta_get('episode', '')
-			self.auto_resume = st.auto_resume(self.media_type)
 			poster = self.meta_get('poster') or ku.get_icon('box_office')
 			fanart = self.meta_get('fanart') or ku.get_addon_fanart()
 			clearlogo = self.meta_get('clearlogo') or ''
@@ -131,7 +130,7 @@ class FenLightPlayer(xbmc.Player):
 			listitem.setLabel(self.title)
 			if self.media_type == 'movie':
 				listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'clearlogo': clearlogo})
-				info_tag = listitem.getVideoInfoTag()
+				info_tag = listitem.getVideoInfoTag(True)
 				info_tag.setMediaType('movie'), info_tag.setTitle(self.title), info_tag.setOriginalTitle(self.meta_get('original_title')), info_tag.setPlot(plot)
 				info_tag.setYear(int(self.year)), info_tag.setRating(rating), info_tag.setVotes(votes), info_tag.setMpaa(mpaa)
 				info_tag.setDuration(duration), info_tag.setCountries(country), info_tag.setTrailer(trailer), info_tag.setPremiered(premiered)
@@ -140,7 +139,7 @@ class FenLightPlayer(xbmc.Player):
 				info_tag.setCast([ku.kodi_actor()(name=item['name'], role=item['role'], thumbnail=item['thumbnail']) for item in cast])
 			else:
 				listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'clearlogo': clearlogo, 'tvshow.poster': poster, 'tvshow.clearlogo': clearlogo})
-				info_tag = listitem.getVideoInfoTag()
+				info_tag = listitem.getVideoInfoTag(True)
 				info_tag.setMediaType('episode'), info_tag.setTitle(self.meta_get('ep_name')), info_tag.setOriginalTitle(self.meta_get('original_title'))
 				info_tag.setTvShowTitle(self.title), info_tag.setTvShowStatus(self.meta_get('status')), info_tag.setSeason(self.season), info_tag.setEpisode(self.episode)
 				info_tag.setPlot(plot), info_tag.setYear(int(self.year)), info_tag.setRating(rating), info_tag.setVotes(votes)
@@ -185,14 +184,16 @@ class FenLightPlayer(xbmc.Player):
 
 	def run_movie_stingers(self):
 		self.movie_stingers_run = True
-		try:
-			keywords = self.meta.get('keywords', [])
-			valid_keys = [i['name'] for i in keywords['keywords'] if i['name'] in ('duringcreditsstinger', 'aftercreditsstinger')]
-			self.meta['stinger_keys'] = valid_keys
-			if valid_keys:
-				from indexers.dialogs import movies_stingers_choice
-				Thread(target=movies_stingers_choice, args=(self.meta,)).start()
-		except: pass
+		stinger_keys = self.meta.get('stinger_keys', None)
+		if not stinger_keys:
+			try:
+				keywords = self.meta.get('keywords', [])
+				stinger_keys = [i['name'] for i in keywords['keywords'] if i['name'] in ('duringcreditsstinger', 'aftercreditsstinger')]
+				self.meta['stinger_keys'] = stinger_keys
+			except: pass
+		if stinger_keys:
+			from windows.base_window import open_window
+			Thread(target=lambda: open_window(('windows.playback_notifications', 'StingersNotification'), 'playback_notifications.xml', meta=self.meta)).start()
 
 	def set_resume_point(self, listitem):
 		if self.playback_percent > 0.0: listitem.setProperty('StartPercent', str(self.playback_percent))

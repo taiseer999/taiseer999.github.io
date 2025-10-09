@@ -77,8 +77,8 @@ class EpisodeTools:
 			except: premiered = chosen_episode['premiered']
 			self.meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_name, 'ep_thumb': ep_thumb,
 							'episode': episode, 'premiered': premiered, 'plot': plot})
-			url_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': tmdb_id, 'tvshowtitle': self.meta_get('rootname'), 'season': season, 'episode': episode,
-						'autoplay': 'true'}
+			url_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': tmdb_id, 'tvshowtitle': self.meta_get('rootname'),
+						'season': season, 'episode': episode, 'autoplay': 'true'}
 			if continual: url_params['random_continual'] = 'true'
 			else: url_params['random'] = 'true'
 			if not first_run:
@@ -114,7 +114,7 @@ def build_next_episode_manager():
 			url = build_url(url_params)
 			listitem.setLabel(display)
 			listitem.setArt({'poster': icon, 'fanart': addon_fanart, 'icon': icon})
-			info_tag = listitem.getVideoInfoTag()
+			info_tag = listitem.getVideoInfoTag(True)
 			info_tag.setPlot(' ')
 			append({'listitem': (url, listitem, False), 'sort_title': title})
 		except: pass
@@ -135,3 +135,10 @@ def build_next_episode_manager():
 	kodi_utils.set_content(handle, '')
 	kodi_utils.end_directory(handle, cacheToDisc=False)
 	kodi_utils.set_view_mode('view.main', '')
+
+def single_last_watched_episodes(data):
+	seen = set()
+	seen_add = seen.add
+	return sorted([i for i in sorted(data, key=lambda x: (x['last_played'], x['media_ids']['tmdb'], x['season'], x['episode']), reverse=True)
+				if not (i['media_ids']['tmdb'] in seen or seen_add(i['media_ids']['tmdb']))],
+				key=lambda x: (x['last_played'], x['media_ids']['tmdb'], x['season'], x['episode']), reverse=True)

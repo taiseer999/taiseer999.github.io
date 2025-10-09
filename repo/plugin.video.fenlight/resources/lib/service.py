@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from xbmc import Monitor
-import inspect
+import os
 import json
+import inspect
+from time import time
+from threading import Thread
 from caches.settings_cache import get_setting, set_setting, sync_settings
 from modules import kodi_utils
-from threading import Thread
 
 pause_services_prop = 'fenlight.pause_services'
 firstrun_update_prop = 'fenlight.firstrun_update'
@@ -16,12 +18,13 @@ update_string = 'Next Update in %s minutes...'
 class SetAddonConstants:
 	def run(self):
 		kodi_utils.logger('Fen Light', 'SetAddonConstants Service Starting')
-		_info = kodi_utils.addon().getAddonInfo
-		addon_items = [('fenlight.addon_version', _info('version')),
-					('fenlight.addon_path', _info('path')),
-					('fenlight.addon_profile', kodi_utils.translate_path(_info('profile'))),
-					('fenlight.addon_icon', kodi_utils.translate_path(_info('icon'))),
-					('fenlight.addon_fanart', kodi_utils.translate_path(_info('fanart')))]
+		addon_items = [('fenlight.addon_version', kodi_utils.addon_info('version')),
+					('fenlight.addon_path', kodi_utils.addon_info('path')),
+					('fenlight.addon_profile', kodi_utils.translate_path(kodi_utils.addon_info('profile'))),
+					('fenlight.addon_icon', kodi_utils.translate_path(kodi_utils.addon_info('icon'))),
+					('fenlight.addon_icon_mini', os.path.join(kodi_utils.addon_info('path'), 'resources', 'media', 'addon_icons', 'minis',
+													os.path.basename(kodi_utils.translate_path(kodi_utils.addon_info('icon'))))),
+					('fenlight.addon_fanart', kodi_utils.translate_path(kodi_utils.addon_info('fanart')))]
 		for item in addon_items: kodi_utils.set_property(*item)
 		return kodi_utils.logger('Fen Light', 'SetAddonConstants Service Finished')
 
@@ -48,63 +51,6 @@ class OnUpdateChanges:
 					set_setting('updatechecks.%s' % method[0], 'true')
 		except: pass
 		return kodi_utils.logger('Fen Light', 'OnUpdateChanges Service Finished')
-
-	def personal_lists_01(self):
-		##########################################################################
-		# New schema for the 'personal_lists' database. Changes introduced 2.1.32.
-		##########################################################################
-		import sqlite3 as database
-		from caches.base_cache import check_and_insert_new_columns, database_locations
-		from caches.personal_lists_cache import PersonalListsCache
-		try:
-			for item in (('personal_lists_db', 'personal_lists', 'description', 'text'), ('personal_lists_db', 'personal_lists', 'seen', 'text'),
-						('personal_lists_db', 'personal_lists', 'poster', 'text'), ('personal_lists_db', 'personal_lists', 'fanart', 'text'),
-						('personal_lists_db', 'personal_lists', 'author', 'text'), ('personal_lists_db', 'personal_lists', 'updated', 'text')):
-				check_and_insert_new_columns(*item)
-			p_cache = PersonalListsCache()
-			try:
-				dbcon = database.connect(database_locations('personal_lists_db'))
-				dbcur = dbcon.cursor()
-				dbcur.execute('PRAGMA foreign_keys = OFF;')
-				dbcur.execute('BEGIN TRANSACTION;')
-				dbcur.execute('CREATE TABLE personal_lists_new \
-					(name text, contents text, total integer, created text, sort_order integer, description text, seen text, poster text, \
-					fanart text, author text, updated text, unique (name, author))',)
-				dbcur.execute('INSERT INTO personal_lists_new \
-					(name, contents, total, created, sort_order, description, seen, poster, fanart, author, updated) \
-					SELECT name, contents, total, created, sort_order, description, seen, poster, fanart, author, updated FROM personal_lists')
-				dbcur.execute('DROP TABLE personal_lists')
-				dbcur.execute('ALTER TABLE personal_lists_new RENAME TO personal_lists')
-				dbcon.commit()
-			except database.Error as e:
-				kodi_utils.logger('Error changing schema', str(e))
-				dbcon.rollback()
-			finally:
-				dbcur.execute("PRAGMA foreign_keys = ON;")
-				dbcon.close()
-		except Exception as e: kodi_utils.logger('Fen Light', 'OnUpdateChanges Service (personal_lists_01) Changes Failed: %s' % str(e))
-
-	def personal_lists_02(self):
-		################################################
-		# Default values added for 2.1.33 to fix errors.
-		################################################
-		import sqlite3 as database
-		from caches.base_cache import database_locations
-		from caches.personal_lists_cache import PersonalListsCache
-		try:
-			p_cache = PersonalListsCache()
-			current_lists = p_cache.get_list_names_and_authors()
-			affected_lists = [i[0] for i in current_lists if not i[1]]
-			try:
-				dbcon = database.connect(database_locations('personal_lists_db'))
-				dbcur = dbcon.cursor()
-				for item in affected_lists: dbcur.execute('UPDATE personal_lists SET author=?, seen=? WHERE name=?', ('Unknown', 'true', item))
-				dbcon.commit()
-			except database.Error as e:
-				kodi_utils.logger('Error adding defaults', str(e))
-				dbcon.rollback()
-			finally: dbcon.close()
-		except Exception as e: kodi_utils.logger('Fen Light', 'OnUpdateChanges Service (personal_lists_02) Changes Failed: %s' % str(e))
 
 class CustomFonts:
 	def run(self):
@@ -154,7 +100,6 @@ class UpdateCheck:
 	def run(self):
 		if kodi_utils.get_property(firstrun_update_prop) == 'true': return
 		kodi_utils.logger('Fen Light', 'UpdateCheck Service Starting')
-		from time import time
 		from modules.updater import update_check
 		from modules.settings import update_action, update_delay
 		end_pause = time() + update_delay()
@@ -177,7 +122,6 @@ class WidgetRefresher:
 		kodi_utils.logger('Fen Light', 'WidgetRefresher Service Starting')
 		from time import time
 		from indexers.random_lists import refresh_widgets
-		from modules.kodi_utils import home
 		monitor, player = kodi_utils.kodi_monitor(), kodi_utils.kodi_player()
 		wait_for_abort, self.is_playing = monitor.waitForAbort, player.isPlayingVideo
 		wait_for_abort(10)
@@ -192,7 +136,7 @@ class WidgetRefresher:
 				if self.condition_check(): continue
 				if self.next_refresh < time():
 					kodi_utils.logger('Fen Light', 'WidgetRefresher Service - Widgets Refreshed')
-					refresh_widgets(show_notification='true')
+					refresh_widgets()
 					self.set_next_refresh(time())
 			except: pass
 		try: del monitor
@@ -202,7 +146,8 @@ class WidgetRefresher:
 		return kodi_utils.logger('Fen Light', 'WidgetRefresher Service Finished')
 
 	def condition_check(self):
-		if not kodi_utils.home(): return True
+		if not self.external(): return True
+
 		if self.next_refresh == None or self.is_playing() or kodi_utils.get_property(pause_services_prop) == 'true': return True
 		if kodi_utils.get_property('fenlight.window_loaded') == 'true': return True 
 		try:
@@ -215,6 +160,9 @@ class WidgetRefresher:
 		self.offset = int(get_setting('fenlight.widget_refresh_timer', '60'))
 		if self.offset: self.next_refresh = _time + (self.offset*60)
 		else: self.next_refresh = None
+
+	def external(self):
+		return 'plugin' not in kodi_utils.get_infolabel('Container.PluginName')
 
 class AutoStart:
 	def run(self):

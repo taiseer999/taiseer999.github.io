@@ -11,7 +11,7 @@ from modules import kodi_utils, settings
 from modules.metadata import movie_meta_external_id, tvshow_meta_external_id
 from modules.utils import sort_list, sort_for_article, get_datetime, timedelta, replace_html_codes, copy2clip, make_qrcode, make_tinyurl, \
 							make_thread_list, jsondate_to_datetime as js2date
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 def no_client_key():
 	kodi_utils.notification('Please set a valid Trakt Client ID Key')
@@ -219,30 +219,36 @@ def trakt_recommendations(media_type):
 
 def trakt_tv_trending(page_no):
 	string = 'trakt_tv_trending_%s' % page_no
-	params = {'path': 'shows/trending/%s', 'params': {'limit': 20}, 'page_no': page_no}
+	params = {'path': 'shows/trending/%s', 'params': {'genres': '-anime', 'limit': 20}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params)
 
 def trakt_tv_trending_recent(page_no):
 	current_year = get_datetime().year
 	years = '%s-%s' % (str(current_year-1), str(current_year))
 	string = 'trakt_tv_trending_recent_%s' % page_no
-	params = {'path': 'shows/trending/%s', 'params': {'limit': 20, 'years': years}, 'page_no': page_no}
+	params = {'path': 'shows/trending/%s', 'params': {'genres': '-anime', 'years': years, 'limit': 20}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params)
 
 def trakt_tv_most_watched(page_no):
 	string = 'trakt_tv_most_watched_%s' % page_no
-	params = {'path': 'shows/watched/daily/%s', 'params': {'limit': 20}, 'page_no': page_no}
+	params = {'path': 'shows/watched/daily/%s', 'params': {'genres': '-anime', 'limit': 20}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params)
 
 def trakt_tv_most_favorited(page_no):
 	string = 'trakt_tv_most_favorited_%s' % page_no
-	params = {'path': 'shows/favorited/daily/%s', 'params': {'limit': 20}, 'page_no': page_no}
+	params = {'path': 'shows/favorited/daily/%s', 'params': {'genres': '-anime', 'limit': 20}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params)
 
 def trakt_tv_certifications(certification, page_no):
 	string = 'trakt_tv_certifications_%s_%s' % (certification, page_no)
-	params = {'path': 'shows/collected/all%s', 'params': {'certifications': certification, 'limit': 20}, 'page_no': page_no}
+	params = {'path': 'shows/collected/all%s', 'params': {'genres': '-anime', 'certifications': certification, 'limit': 20}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params, expiration= 168)
+
+def trakt_tv_search(query, page_no):
+	def _process(dummy_arg):
+		return call_trakt('search/show', params={'genres': '-anime', 'query': query, 'limit': 20}, with_auth=False, pagination=True, page_no=page_no)
+	string = 'trakt_tv_search_%s_%s' % (query, page_no)
+	return cache_object(_process, string, 'dummy_arg', False, 168)
 
 def trakt_anime_trending(page_no):
 	string = 'trakt_anime_trending_%s' % page_no
@@ -270,6 +276,12 @@ def trakt_anime_certifications(certification, page_no):
 	string = 'trakt_anime_certifications_%s_%s' % (certification, page_no)
 	params = {'path': 'shows/collected/all%s', 'params': {'certifications': certification, 'genres': 'anime', 'limit': 20}, 'page_no': page_no}
 	return lists_cache_object(get_trakt, string, params, expiration= 168)
+
+def trakt_anime_search(query, page_no):
+	def _process(dummy_arg):
+		return call_trakt('search/show', params={'genres': 'anime', 'query': query, 'limit': 20}, with_auth=False, pagination=True, page_no=page_no)
+	string = 'trakt_anime_search_%s_%s' % (query, page_no)
+	return cache_object(_process, string, 'dummy_arg', False, 168)
 
 def trakt_get_hidden_items(list_type):
 	def _get_trakt_ids(item):
@@ -421,7 +433,7 @@ def hide_unhide_progress_items(params):
 
 def trakt_search_lists(search_title, page_no):
 	def _process(dummy_arg):
-		return call_trakt('search', params={'type': 'list', 'fields': 'name,description', 'query': search_title, 'limit': 50}, pagination=True, page_no=page_no)
+		return call_trakt('search', params={'type': 'list', 'fields': 'name,description', 'query': search_title, 'limit': 50}, page_no=page_no)
 	string = 'trakt_search_lists_%s_%s' % (search_title, page_no)
 	return cache_object(_process, string, 'dummy_arg', False, 4)
 

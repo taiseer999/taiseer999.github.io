@@ -2,7 +2,7 @@
 import json
 from caches.settings_cache import get_setting, set_setting, set_default, default_setting_values
 from modules import kodi_utils, settings
-logger = kodi_utils.logger
+# logger = kodi_utils.logger
 
 def list_display_order_choice(params):
 	from modules.meta_lists import list_display_choices
@@ -189,7 +189,7 @@ def favorites_manager_choice(params):
 	if current_favorite:
 		function, text = favorites_cache.delete_favourite, 'Remove From Favorites?'
 		param_refresh = params.get('refresh', None)
-		if param_refresh == None: refresh = any(i in kodi_utils.folder_path() for i in ('action=favorites_movies', 'action=favorites_tvshows'))
+		if param_refresh == None: refresh = any(i in kodi_utils.folder_path() for i in ('action=favorites_movies', 'action=favorites_tvshows', 'action=favorites_anime'))
 		else: refresh = param_refresh == 'true'
 	else: function, text, refresh = favorites_cache.set_favourite, 'Add To Favorites?', False
 	heading = title.split('|')[0] if people_favorite else title
@@ -274,6 +274,28 @@ def widget_refresh_timer_choice(params):
 	if choice == None: return
 	set_setting('widget_refresh_timer', choice['value'])
 	set_setting('widget_refresh_timer_name', choice['name'])
+
+def limit_number_quality_choice(params):
+	choices = [{'name': 'OFF', 'value': '0'}]
+	choices.extend([{'name': '%sx Per Quality' % i, 'value': str(i)} for i in range(1,5)])
+	choices.extend([{'name': '%sx Per Quality' % i, 'value': str(i)} for i in range(5,205,5)])
+	list_items = [{'line1': i['name']} for i in choices]
+	kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
+	choice = kodi_utils.select_dialog(choices, **kwargs)
+	if choice == None: return
+	set_setting('results.limit_number_quality', choice['value'])
+	set_setting('results.limit_number_quality_name', choice['name'])
+
+def limit_number_total_choice(params):
+	choices = [{'name': 'OFF', 'value': '0'}]
+	choices.extend([{'name': '%sx Total Results' % i, 'value': str(i)} for i in range(1,10)])
+	choices.extend([{'name': '%sx Total Results' % i, 'value': str(i)} for i in range(10,1000,5)])
+	list_items = [{'line1': i['name']} for i in choices]
+	kwargs = {'items': json.dumps(list_items), 'narrow_window': 'true'}
+	choice = kodi_utils.select_dialog(choices, **kwargs)
+	if choice == None: return
+	set_setting('results.limit_number_total', choice['value'])
+	set_setting('results.limit_number_total_name', choice['name'])
 
 def external_scraper_choice(params):
 	from modules.utils import append_module_to_syspath, manual_function_import
@@ -457,21 +479,25 @@ def playback_choice(params):
 		ExternalCache().delete_cache_single(media_type, str(meta['tmdb_id']))
 		kodi_utils.hide_busy_dialog()
 	if choice == 'scrape':
-		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
-		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'autoplay': 'false'}
+		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false', 'prescrape': 'false'}
+		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'],
+							'season': season, 'episode': episode, 'autoplay': 'false', 'prescrape': 'false'}
 	elif choice == 'clear_and_rescrape':
-		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
-		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'autoplay': 'false'}
+		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false', 'prescrape': 'false'}
+		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'],
+							'season': season, 'episode': episode, 'autoplay': 'false', 'prescrape': 'false'}
 	elif choice == 'rescrape_external_cache_check':
-		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'external_cache_check': check_cache_toggle}
+		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'],
+												'external_cache_check': check_cache_toggle, 'prescrape': 'false'}
 		else:
 			play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode,
-							'external_cache_check': check_cache_toggle}
+							'external_cache_check': check_cache_toggle, 'prescrape': 'false'}
 	elif choice == 'clear_debrid_cache_and_show':
 		from caches.debrid_cache import debrid_cache
 		debrid_cache.clear_cache()	
-		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false'}
-		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'], 'season': season, 'episode': episode, 'autoplay': 'false'}
+		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'], 'autoplay': 'false', 'prescrape': 'false'}
+		else: play_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': meta['tmdb_id'],
+							'season': season, 'episode': episode, 'autoplay': 'false', 'prescrape': 'false'}
 	elif choice == 'scrape_with_default':
 		if media_type == 'movie': play_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': meta['tmdb_id'],
 												'default_ext_only': 'true', 'prescrape': 'false', 'autoplay': 'false'}
@@ -930,7 +956,3 @@ def media_extra_info_choice(params):
 def discover_choice(params):
 	from windows.base_window import open_window
 	open_window(('windows.discover', 'Discover'), 'discover.xml', media_type=params['media_type'])
-
-def movies_stingers_choice(params):
-	from windows.base_window import open_window
-	return open_window(('windows.stingers_notification', 'StingersNotification'), 'stingers_notification.xml', meta=params)

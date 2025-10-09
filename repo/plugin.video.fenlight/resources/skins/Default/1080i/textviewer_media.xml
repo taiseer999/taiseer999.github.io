@@ -44,14 +44,14 @@
                     <align>right</align>
                     <aligny>top</aligny>
                     <aspectratio aligny="top">keep</aspectratio>
-                    <texture colordiffuse="FFCCCCCC">fenlight_common/fenlight.png</texture>
+                    <texture colordiffuse="FFCCCCCC">$INFO[Window(10000).Property(fenlight.addon_icon_mini)]</texture>
                 </control>
                 <control type="textbox" id="2001">
                     <top>50</top>
                     <left>20</left>
                     <width>1100</width>
                     <height>690</height>
-                    <font>font_midi</font> <!-- FENLIGHT_33 -->
+                    <font>Name1</font> <!-- FENLIGHT_33 -->
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>FFCCCCCC</textcolor>

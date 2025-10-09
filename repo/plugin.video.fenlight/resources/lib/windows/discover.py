@@ -96,14 +96,19 @@ class Discover(BaseDialog):
 		if choice != None:
 			self.set_key_values(self.chosen_item['url_insert'] % ','.join([str(i['id']) for i in choice]), ', '.join([i['name'] for i in choice]))
 
+	def network(self):
+		network_list = sorted(meta_lists.networks(), key=lambda k: k['name'])
+		choice = self.selection_dialog(self.chosen_item['label'], [{'name': i['name']} for i in network_list], network_list)
+		if choice != None: self.set_key_values(self.chosen_item['url_insert'] % str(choice['id']), str(choice['name']))
+
 	def provider(self):
 		providers = meta_lists.watch_providers_movies() if self.media_type == 'movie' else meta_lists.watch_providers_tvshows()
 		choice = self.selection_dialog(self.chosen_item['label'], [{'name': i['name']} for i in providers], providers)
 		if choice != None: self.set_key_values(self.chosen_item['url_insert'] % str(choice['id']), str(choice['name']))
 
-	def network(self):
-		network_list = sorted(meta_lists.networks(), key=lambda k: k['name'])
-		choice = self.selection_dialog(self.chosen_item['label'], [{'name': i['name']} for i in network_list], network_list)
+	def languages(self):
+		language_list = sorted(meta_lists.languages(), key=lambda k: k['name'])
+		choice = self.selection_dialog(self.chosen_item['label'], [{'name': i['name']} for i in language_list], language_list)
 		if choice != None: self.set_key_values(self.chosen_item['url_insert'] % str(choice['id']), str(choice['name']))
 
 	def certifications(self):
@@ -183,7 +188,7 @@ class Discover(BaseDialog):
 		return {key: self.discover_items[key] for key in [i for i in self.discover_items if self.get_attribute(self, i)]}
 
 	def make_url(self, active_attributes):
-		self.url = 'https://api.themoviedb.org/3/discover/%s?language=en-US&region=US&with_original_language=en%s' \
+		self.url = 'https://api.themoviedb.org/3/discover/%s?language=en-US&region=US%s' \
 					% (('movie' if self.media_type == 'movie' else 'tv'), ''.join([self.get_attribute(self, i) for i in active_attributes]))
 
 	def make_label(self, active_attributes):
@@ -236,6 +241,5 @@ class Discover(BaseDialog):
 
 	def set_starting_constants(self, kwargs):
 		self.chosen_item, self.list_item, self.media_type, self.active_attributes, self.label, self.url = None, None, kwargs['media_type'], [], '', ''
-		d_items = self.discover_items.items()
-		for key, values in d_items:
+		for key, values in self.discover_items.items():
 			for key_value in ('key', 'display_key'): self.set_attribute(self, values[key_value], '')

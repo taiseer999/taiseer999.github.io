@@ -278,8 +278,10 @@ def title_key(title, ignore_articles):
 	except: return title
 
 def sort_for_article(_list, _key, ignore_articles):
-	if not ignore_articles: _list.sort(key=lambda k: k.get(_key))
-	else: _list.sort(key=lambda k: re.sub(r'(^the |^a |^an )', '', k.get(_key).lower()))
+	try:
+		if not ignore_articles: _list.sort(key=lambda k: k.get(_key))
+		else: _list.sort(key=lambda k: re.sub(r'(^the |^a |^an )', '', k.get(_key).lower()))
+	except: pass
 	return _list
 	
 def sort_list(sort_key, sort_direction, list_data, ignore_articles):

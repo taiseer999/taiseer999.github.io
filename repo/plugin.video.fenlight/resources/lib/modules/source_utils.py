@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
 import json
+import base64
+import time
+import requests
+from threading import Thread
 from urllib.parse import unquote, unquote_plus
+from caches.settings_cache import get_setting
 from modules.metadata import episodes_meta
 from modules.settings import date_offset
-from modules.kodi_utils import supported_media, get_property, set_property, notification, sleep
-from modules.utils import adjust_premiered_date, get_datetime, jsondate_to_datetime, subtract_dates
-from modules.kodi_utils import logger
+from modules.kodi_utils import supported_media, get_property, set_property, notification
+from modules.utils import adjust_premiered_date, get_datetime, jsondate_to_datetime, subtract_dates, chunks
+# from modules.kodi_utils import logger
 
 def extras():
 	return ('sample', 'extra', 'extras', 'deleted', 'unused', 'footage', 'inside', 'blooper', 'bloopers', 'making.of', 'feature', 'featurette', 'behind.the.scenes', 'trailer')
@@ -381,59 +386,30 @@ def get_cache_expiry(media_type, meta, season):
 	except: single_expiry, season_expiry, show_expiry = 72, 72, 240
 	return single_expiry, season_expiry, show_expiry
 
-
-
-
-
-import ctypes, random, time
-def get_external_cache_status(data, debrid, token, services, unchecked_hashes):
-	import re
-	import base64
-	import requests
-	from threading import Thread
-	from caches.settings_cache import get_setting
-	def _busy_check(service):
-		count, pause_needed = 0, False
-		prop = 'fenlight.%s_cache_check' % service
-		while get_property(prop) == 'true':
-			sleep(200)
-			pause_needed = True
-			count += 200
-			if count >= 9000: break
-		if pause_needed: sleep(1000)
-	def _process(service, unchecked_hashes):
-		data = []
-		if service in ('mediafusion', 'comet', 'torrentio'):
+def get_external_cache_status(debrid, unchecked_hashes, data, active_debrid):
+	def _process(service, hashes):
+		result = []
+		if service in ('mediafusion', 'torrentio'):
 			if service == 'mediafusion':
-				_busy_check(service)
-				set_property('fenlight.%s_cache_check' % service, 'true')
-				base_link, name_test = 'https://mediafusion.elfhosted.com/%s=%s' % (debrid, token), '⚡'
+				base_link, name_test = 'https://mediafusion.elfhosted.com/%s=%s' % (debrid_name, token), '⚡'
 				params = json.dumps({'enable_catalogs': False, 'max_streams_per_resolution': 99, 'torrent_sorting_priority':[], 'certification_filter': ['Disable'],
-											'nudity_filter': ['Disable'], 'streaming_provider': {'token': token, 'service': debrid,
+											'nudity_filter': ['Disable'], 'streaming_provider': {'token': token, 'service': debrid_name,
 											'only_show_cached_streams': True}}).encode('utf-8')
 				headers = {'encoded_user_data': base64.b64encode(params).decode('utf-8')}
-			elif service == 'comet':
-				_busy_check(service)
-				set_property('fenlight.%s_cache_check' % service, 'true')
-				params = json.dumps({'maxResultsPerResolution': 0, 'maxSize': 0, 'cachedOnly': True, 'removeTrash': True, 'resultFormat': ['title','size'],
-									'debridService': debrid, 'debridApiKey': token, 'debridStreamProxyPassword': '', 'languages': {'required': [], 'exclude': [],
-									'preferred': []}, 'resolutions': {}, 'options': {'remove_ranks_under': -10000000000, 'allow_english_in_languages': False,
-									'remove_unknown_languages': False}}).encode('utf-8')
-				params = base64.b64encode(params).decode('utf-8')
-				base_link, name_test = 'https://comet.elfhosted.com/%s' % params, '⚡'
-				headers = {}
 			elif service == 'torrentio':
-				base_link, name_test = 'https://torrentio.strem.fun/%s=%s' % (debrid, token), '[RD+]'
+				base_link, name_test = 'https://torrentio.strem.fun/%s=%s' % (debrid_name, token), '[RD+]'
 				headers = {'User-Agent': 'Mozilla/5.0'}
 			try:
-				if 'tvshowtitle' in data: url = '%s%s' % (base_link, tv_link % (imdb_id, data['season'], data['episode']))
-				else: url = '%s%s' % (base_link, movie_link % imdb_id)
-				data = requests.get(url, headers=headers, timeout=9)
-				data = data.json()['streams']
-				if data: data = [re.search(r'\b\w{40}\b', i.get('url')).group() or i['infoHash'] for i in data if name_test in i['name']]
+				if 'tvshowtitle' in data: url = '%s%s' % (base_link, '/stream/series/%s:%s:%s.json' % (imdb_id, data['season'], data['episode']))
+				else: url = '%s%s' % (base_link, '/stream/movie/%s.json' % imdb_id)
+				result = requests.get(url, headers=headers, timeout=9)
+				result = result.json()['streams']
+				if result:
+					result = [re.search(r'\b\w{40}\b', i.get('url')) for i in result if name_test in i['name']]
+					result = [i.group() for i in result if i]
 			except: pass
-			if service in ('mediafusion', 'comet'): set_property('fenlight.%s_cache_check' % service, 'false')
 		elif service == 'dmm':
+			import ctypes, random
 			def get_secret():
 				def calc_value_alg(t, n, const):
 					temp = t ^ n
@@ -467,31 +443,32 @@ def get_external_cache_status(data, debrid, token, services, unchecked_hashes):
 				n = f"{n:x}"
 				solution = slice_hash(s, n)
 				return dmmProblemKey, solution
-			
-			if len(unchecked_hashes) > 100: unchecked_hashes = random.sample(unchecked_hashes, 100)
-			base_link = 'https://debridmediamanager.com/api/availability/check'
+			def fetch(hash_chunk):
+				try:
+					json_data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb_id, 'hashes': hash_chunk}
+					r = requests.post('https://debridmediamanager.com/api/availability/check', json=json_data, timeout=9).json()
+					r = [i['hash'] for i in r['available'] if 'hash' in i]
+					result_extend(r)
+				except: pass
+			result = []
+			result_extend = result.extend
 			dmmProblemKey, solution = get_secret()
-			json_data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb_id, 'hashes': unchecked_hashes}
-			# try:
-			data = requests.post(base_link, json=json_data, timeout=9)
-			test = data.ok
-			logger('test', test)
-			data = data.json()
-			logger('data', data)
-			data = data['available']
-			data = [i['hash'] for i in data if 'hash' in i]
-			logger('dmm data', data)
-			# except: data = []
-		results.extend(data)
+			unchecked_hashes_chunks = list(chunks(unchecked_hashes, 100))
+			threads = [Thread(target=fetch, args=(item,)) for item in unchecked_hashes_chunks]
+			[i.start() for i in threads]
+			[i.join() for i in threads]
+		results.extend(result)
 	try:
 		results = []
-		token = get_setting('fenlight.%s' % token)
-		movie_link = '/stream/movie/%s.json'
-		tv_link = '/stream/series/%s:%s:%s.json'
 		imdb_id = data['imdb']
+		debrid_name, services, token = {'Real-Debrid': ('realdebrid', ['torrentio'], get_setting('fenlight.rd.token')),
+										'AllDebrid': ('alldebrid', ['mediafusion'], get_setting('fenlight.ad.token'))}[debrid]
 		threads = [Thread(target=_process, args=(item, unchecked_hashes)) for item in services]
 		[i.start() for i in threads]
 		[i.join() for i in threads]
 		results = list(set(results))
 	except: pass
+	if debrid == 'Real-Debrid':
+		try: _process('dmm', [i for i in unchecked_hashes if not i in results])
+		except: pass
 	return results

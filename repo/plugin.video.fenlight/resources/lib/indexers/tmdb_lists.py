@@ -35,7 +35,7 @@ def get_tmdb_lists(params):
 				if custom_fanart: fanart = custom_fanart
 				else: fanart = background
 				mode = 'random.build_tmdb_lists_contents' if random else 'tmdblist.build_tmdb_list'
-				url_params = {'mode': mode, 'list_id': list_id, 'list_name': list_name, 'sort_order': sort_order, 'updated_at': updated_at}
+				url_params = {'mode': mode, 'list_id': list_id, 'list_name': list_name, 'sort_order': sort_order, 'updated_at': updated_at, 'iconImage': poster, 'name': list_name}
 				if random: url_params['random'] = 'true'
 				if shuffle_lists: url_params['shuffle'] = 'true'
 				url = build_url(url_params)
@@ -45,11 +45,12 @@ def get_tmdb_lists(params):
 					'original_list_name': list_name, 'original_sort_order': sort_order, 'custom_poster': custom_poster, 'custom_fanart': custom_fanart})),
 				('[B]Delete List[/B]', 'RunPlugin(%s)' % build_url({'mode': 'tmdblist.delete_tmdb_list', 'list_id': list_id})),
 				('[B]Clear Contents Cache[/B]', 'RunPlugin(%s)' % build_url({'mode': 'tmdblist.cache_delete_list_tmdb', 'list_id': list_id})),
-				('[B]Clear All Lists Cache[/B]', 'RunPlugin(%s)' % build_url({'mode': 'tmdblist.cache_delete_all_tmdb'}))]
+				('[B]Clear All Lists Cache[/B]', 'RunPlugin(%s)' % build_url({'mode': 'tmdblist.cache_delete_all_tmdb'})),
+				('[B]Add to Shortcut Folder[/B]', 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_known', 'url': url}))]
 				listitem = kodi_utils.make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': poster, 'poster': poster, 'thumb': poster, 'fanart': fanart, 'banner': fanart})
-				info_tag = listitem.getVideoInfoTag()
+				info_tag = listitem.getVideoInfoTag(True)
 				info_tag.setPlot(' ')
 				listitem.addContextMenuItems(cm)
 				yield (url, listitem, True)
@@ -60,7 +61,7 @@ def get_tmdb_lists(params):
 		listitem = kodi_utils.make_listitem()
 		listitem.setLabel('[I]Make New TMDb List...[/I]')
 		listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': background, 'banner': background})
-		info_tag = listitem.getVideoInfoTag()
+		info_tag = listitem.getVideoInfoTag(True)
 		info_tag.setPlot(' ')
 		yield (url, listitem, False)
 	handle, icon, background = int(sys.argv[1]), kodi_utils.get_icon('tmdb'), kodi_utils.get_addon_fanart()
@@ -102,18 +103,18 @@ def build_tmdb_list(params):
 	def _paginate_list(data, page_no, paginate_start):
 		if use_result: total_pages = 1
 		elif paginate_enabled:
-			limit = page_limit(is_home)
+			limit = page_limit(is_external)
 			data, total_pages = paginate_list(data, page_no, limit, paginate_start)
-			if is_home: paginate_start = limit
+			if is_external: paginate_start = limit
 		else: total_pages = 1
 		return data, total_pages, paginate_start
-	handle, is_external, is_home, content = int(sys.argv[1]), kodi_utils.external(), kodi_utils.home(), 'movies'
-	hide_next_page = is_home and widget_hide_next_page()
+	handle, is_external, content = int(sys.argv[1]), kodi_utils.external(), 'movies'
+	hide_next_page = is_external and widget_hide_next_page()
 	try:
 		threads, item_list = [], []
 		item_list_extend = item_list.extend
 		user, slug, list_type = '', '', ''
-		paginate_enabled = paginate(is_home)
+		paginate_enabled = paginate(is_external)
 		use_result = 'result' in params
 		list_name, list_id, sort_order, updated_at = params.get('list_name'), params.get('list_id'), params.get('sort_order'), params.get('updated_at')
 		page_no, paginate_start = int(params.get('new_page', '1')), int(params.get('paginate_start', '0'))

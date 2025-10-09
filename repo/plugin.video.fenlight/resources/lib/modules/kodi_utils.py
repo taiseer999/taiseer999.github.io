@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 # TRUMP WON
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
+import os
 from urllib.parse import urlencode, unquote
 
 def random_valid_type_check():
 	return {'build_movie_list': 'movie', 'build_tvshow_list': 'tvshow', 'build_season_list': 'season', 'build_episode_list': 'episode',
 	'build_in_progress_episode': 'single_episode', 'build_recently_watched_episode': 'single_episode', 'build_next_episode': 'single_episode',
-	'build_my_calendar': 'single_episode', 'build_trakt_lists': 'trakt_list', 'trakt.list.build_trakt_list': 'trakt_list', 'build_trakt_lists_contents': 'trakt_list',
-	'personal_lists.build_personal_list': 'personal_list', 'build_personal_lists_contents': 'personal_list',
-	'tmdblist.build_tmdb_list': 'tmdb_list', 'build_tmdb_lists_contents': 'tmdb_list'}
+	'build_my_calendar': 'single_episode', 'build_trakt_lists': 'trakt_list',
+	'trakt.list.build_trakt_list': 'trakt_list', 'build_trakt_lists_contents': 'trakt_list', 'personal_lists.build_personal_list': 'personal_list',
+	'build_personal_lists_contents': 'personal_list', 'tmdblist.build_tmdb_list': 'tmdb_list', 'build_tmdb_lists_contents': 'tmdb_list'}
 
 def random_episodes_check():
 	return {'build_in_progress_episode': 'episode.progress', 'build_recently_watched_episode': 'episode.recently_watched',
@@ -73,10 +74,14 @@ def addon_profile():
 	return get_property('fenlight.addon_profile') or translate_path(addon_info('profile'))
 
 def addon_icon():
-	return get_property('fenlight.addon_icon') or addon_info('icon')
+	return get_property('fenlight.addon_icon') or translate_path(addon_info('icon'))
+
+def addon_icon_mini():
+	return get_property('fenlight.addon_icon_mini') or os.path.join(addon_info('path'), 'resources', 'media', 'addon_icons', 'minis',
+														os.path.basename(translate_path(addon_info('icon'))))
 
 def addon_fanart():
-	return get_property('fenlight.addon_fanart') or addon_info('fanart')
+	return get_property('fenlight.addon_fanart') or translate_path(addon_info('fanart'))
 
 def get_icon(image_name, image_folder='icons'):
 	return translate_path('special://home/addons/plugin.video.fenlight/resources/media/%s/%s.png' % (image_folder, image_name))
@@ -94,7 +99,7 @@ def add_dir(handle, url_params, list_name, icon_image='folder', fanart_image=Non
 	listitem = make_listitem()
 	listitem.setLabel(list_name)
 	listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': fanart})
-	info_tag = listitem.getVideoInfoTag()
+	info_tag = listitem.getVideoInfoTag(True)
 	info_tag.setPlot(' ')
 	add_item(handle, url, listitem, isFolder)
 

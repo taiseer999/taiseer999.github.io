@@ -35,7 +35,7 @@ class source:
 						direct_debrid_link = item.get('direct_debrid_link', False)
 						folder_id, cache_type = item.get('folder_id', ''), item.get('cache_type', '')
 						source_item = {'name': file_name, 'display_name': display_name, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size,
-									'extraInfo': details, 'url_dl': file_dl, 'id': file_dl, 'downloads': False, 'direct': True, 'source': self.scrape_provider,
+									'extraInfo': details, 'url_dl': file_dl, 'id': file_dl, 'downloads': False, 'direct': True, 'source': self.scrape_provider, 'debrid': self.scrape_provider,
 									'scrape_provider': self.scrape_provider, 'direct_debrid_link': direct_debrid_link, 'folder_id': folder_id, 'cache_type': cache_type}
 						yield source_item
 					except: pass

@@ -11,15 +11,13 @@ from indexers.movies import Movies
 from indexers.tvshows import TVShows
 from modules import metadata
 from modules import kodi_utils, settings
-from modules.utils import TaskPool, paginate_list, sort_for_article, gen_md5, get_datetime, get_current_timestamp, make_image, download_image
+from modules.utils import TaskPool, paginate_list, sort_for_article, get_datetime, get_current_timestamp, make_image, download_image
 # logger = kodi_utils.logger
 
 def get_personal_lists(params):
 	def _process():
 		for item in data:
 			try:
-				cm = []
-				cm_append = cm.append
 				list_name, sort_order, description, list_total = item['name'], item['sort_order'], item['description'], item['total']
 				author, seen = item.get('author', 'Unknown'), item.get('seen', 'true')
 				if show_author: name_insert = '%s | [I]%s[/I]' % (list_name, author)
@@ -31,7 +29,8 @@ def get_personal_lists(params):
 				custom_fanart = item.get('fanart', '')
 				fanart = custom_fanart or background
 				mode = 'random.build_personal_lists_contents' if random else 'personal_lists.build_personal_list'
-				url_params = {'mode': mode, 'list_name': list_name, 'category_name': list_name, 'sort_order': sort_order, 'seen': seen, 'author': author}
+				url_params = {'mode': mode, 'list_name': list_name, 'category_name': list_name, 'sort_order': sort_order, 'seen': seen, 'author': author,
+				'iconImage': poster, 'name': list_name}
 				if random: url_params['random'] = 'true'
 				if shuffle_lists: url_params['shuffle'] = 'true'
 				url = build_url(url_params)
@@ -39,11 +38,12 @@ def get_personal_lists(params):
 				('[B]Edit Properties[/B]', 'RunPlugin(%s)' % build_url({'mode': 'personal_lists.adjust_personal_list_properties', 'description': description, 'author': author,
 					'list_name': list_name, 'sort_order': sort_order, 'seen': seen, 'poster': custom_poster, 'fanart': custom_fanart})),
 				('[B]Delete List[/B]', 'RunPlugin(%s)' % build_url({'mode': 'personal_lists.delete_personal_list', 'list_name': list_name, 'author': author,
-					'poster': custom_poster, 'fanart': custom_fanart}))]
+					'poster': custom_poster, 'fanart': custom_fanart})),
+				('[B]Add to Shortcut Folder[/B]', 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_known', 'url': url}))]
 				listitem = kodi_utils.make_listitem()
 				listitem.setLabel(display)
 				listitem.setArt({'icon': poster, 'poster': poster, 'thumb': poster, 'fanart': fanart, 'banner': fanart})
-				info_tag = listitem.getVideoInfoTag()
+				info_tag = listitem.getVideoInfoTag(True)
 				info_tag.setPlot(description)
 				listitem.addContextMenuItems(cm)
 				yield (url, listitem, True)
@@ -54,7 +54,7 @@ def get_personal_lists(params):
 		listitem = kodi_utils.make_listitem()
 		listitem.setLabel('[I]Make New Personal List...[/I]')
 		listitem.setArt({'icon': new_icon, 'poster': new_icon, 'thumb': new_icon, 'fanart': background, 'banner': background})
-		info_tag = listitem.getVideoInfoTag()
+		info_tag = listitem.getVideoInfoTag(True)
 		info_tag.setPlot(' ')
 		yield (url, listitem, False)
 	icon, background = kodi_utils.get_icon('lists'), kodi_utils.get_addon_fanart()
@@ -92,17 +92,17 @@ def build_personal_list(params):
 	def _paginate_list(data, page_no, paginate_start):
 		if use_result: total_pages = 1
 		elif paginate_enabled:
-			limit = settings.page_limit(is_home)
+			limit = settings.page_limit(is_external)
 			data, total_pages = paginate_list(data, page_no, limit, paginate_start)
-			if is_home: paginate_start = limit
+			if is_external: paginate_start = limit
 		else: total_pages = 1
 		return data, total_pages, paginate_start
-	handle, is_external, is_home = int(sys.argv[1]), kodi_utils.external(), kodi_utils.home()
-	hide_next_page = is_home and settings.widget_hide_next_page()
+	handle, is_external = int(sys.argv[1]), kodi_utils.external()
+	hide_next_page = is_external and settings.widget_hide_next_page()
 	try:
 		threads, item_list, content = [], [], 'movies'
 		item_list_extend = item_list.extend
-		paginate_enabled = settings.paginate(is_home)
+		paginate_enabled = settings.paginate(is_external)
 		use_result = 'result' in params
 		list_name, author, sort_order = params.get('list_name'), params.get('author'), params.get('sort_order')
 		page_no, paginate_start = int(params.get('new_page', '1')), int(params.get('paginate_start', '0'))

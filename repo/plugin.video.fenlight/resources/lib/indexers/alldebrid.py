@@ -24,7 +24,7 @@ def ad_cloud(folder_id=None):
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
-				info_tag = listitem.getVideoInfoTag()
+				info_tag = listitem.getVideoInfoTag(True)
 				info_tag.setPlot(' ')
 				yield (url, listitem, True)
 			except: pass
@@ -57,7 +57,7 @@ def browse_ad_cloud(folder):
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
 				listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon})
-				info_tag = listitem.getVideoInfoTag()
+				info_tag = listitem.getVideoInfoTag(True)
 				info_tag.setPlot(' ')
 				yield (url, listitem, False)
 			except: pass
