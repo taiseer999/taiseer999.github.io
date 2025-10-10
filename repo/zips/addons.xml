@@ -3692,7 +3692,7 @@ The complete source code of the Sign-in Server can be download here: https://git
 You can clone the project and host it in your own server. 
 		</disclaimer>
 	</extension>
-</addon><addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.38" provider-name="CocoJoe">
+</addon><addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.39" provider-name="CocoJoe">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
