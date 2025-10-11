@@ -51,7 +51,7 @@
 		<font>
 			<name>font14_textbox2</name>
 			<filename>monadi-reg.ttf</filename>
-			<size>28</size>
+			<size>31</size>
 			<linespacing>1.1</linespacing>
 		</font>
 		<font>
@@ -892,7 +892,7 @@
 		</font>
         <font>
             <name>font_tiny</name>
-            <filename>IHacen-Promoter.ttf</filename>
+            <filename>Hacen-Promoter.ttf</filename>
             <size>21</size>
         </font>
         <font>
@@ -931,7 +931,7 @@
 			<name>font14_textbox</name>
 			<filename>GeezaPro.ttf</filename>
 			<size>33</size>
-			<linespacing>1</linespacing>
+			<linespacing>1.2</linespacing>
 		</font>
 		<font>
 			<name>font14_textbox2</name>
