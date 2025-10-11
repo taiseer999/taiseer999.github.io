@@ -2394,7 +2394,7 @@ msgstr ""
 
 msgctxt "#31964"
 msgid "NoTo"
-msgstr ""
+msgstr "حسن"
 
 msgctxt "#31965"
 msgid "BoxSet mod"
@@ -2562,3 +2562,7 @@ msgstr ""
 #~ msgctxt "#31959"
 #~ msgid "SYSTEM"
 #~ msgstr "النظام"
+
+msgctxt "#31223"
+msgid "Raleway"
+msgstr "جيزا"
