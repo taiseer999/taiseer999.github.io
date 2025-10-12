@@ -1858,8 +1858,9 @@
                 <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)</visible>
                 <onfocus>ClearProperty(moviecontent)</onfocus>
                 <onclick>SetProperty(moviecontent,1)</onclick>
-                <onclick condition="!Skin.HasSetting(extended.info.only.local)">SetFocus(10052)</onclick>
-                <onclick condition="Skin.HasSetting(extended.info.only.local)">SetFocus(10050)</onclick>
+                <onclick condition="Skin.HasSetting(extended.info.local.cast)">SetProperty(dontslide,1,home)</onclick>
+                <onclick condition="Skin.HasSetting(extended.info.local.cast)">SetFocus(10050)</onclick>
+                <onclick condition="!Skin.HasSetting(extended.info.local.cast)">SetFocus(10052)</onclick>
                 <include>buttondimensions</include>
                 <include content="buttontextures">
                     <param name="icon" value="buttonsdialogs/cast.png"/>
@@ -1876,18 +1877,7 @@
                 <include content="buttontextures">
                     <param name="icon" value="buttonsdialogs/set.png"/>
                 </include>
-                <visible>Skin.HasSetting(extended.info.only.local)</visible>
-            </control>
-
-            <control type="radiobutton" id="13">
-                <visible>String.IsEqual(ListItem.DBType,movie)</visible>
-                <visible>!String.IsEmpty(ListItem.Director)</visible>
-                <onfocus>ClearProperty(moviecontent)</onfocus>
-                <include>buttondimensions</include>
-                <include content="buttontextures">
-                    <param name="icon" value="buttonsdialogs/director.png"/>
-                </include>
-                <visible>!Skin.HasSetting(hidebutton.video.director) + Skin.HasSetting(extended.info.only.local)</visible>
+                <visible>Skin.HasSetting(extended.info.local.collections)</visible>
             </control>
 
             <!-- Crew -->
@@ -2265,8 +2255,8 @@
         </control>
     </include>
 
-    <expression name="ShowTmdbCast">!Skin.HasSetting(extended.info.only.local) + !Skin.HasSetting(hidebutton.video.cast) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)]</expression>
-    <expression name="ShowTmdbDirector">!Skin.HasSetting(extended.info.only.local) + !Skin.HasSetting(hidebutton.video.director) + String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(Window(home).Property(TMDbHelper.ListItem.Director))</expression>
+    <expression name="ShowTmdbCast">!Skin.HasSetting(extended.info.local.cast) + !Skin.HasSetting(hidebutton.video.cast) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)]</expression>
+    <expression name="ShowTmdbDirector">!Skin.HasSetting(hidebutton.video.director) + String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(Window(home).Property(TMDbHelper.ListItem.Director))</expression>
     <expression name="ShowTmdbCrew">Skin.HasSetting(showbutton.video.crew) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]</expression>
     <expression name="ShowTmdbStudio">Skin.HasSetting(showbutton.video.studio) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + !String.IsEmpty(Window(home).Property(TMDbHelper.ListItem.Studio))</expression>
     <expression name="ShowTmdbSimilar">Skin.HasSetting(showbutton.video.similar) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]</expression>

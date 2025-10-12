@@ -1889,10 +1889,6 @@ msgctxt "#31538"
 msgid "Blur radius"
 msgstr ""
 
-msgctxt "#31550"
-msgid "Additional fanart"
-msgstr ""
-
 msgctxt "#31554"
 msgid "HD Movies"
 msgstr ""
@@ -2465,3 +2461,14 @@ msgctxt "#32077"
 msgid "seconds"
 msgstr ""
 
+msgctxt "#31990"
+msgid "Prefer online cast"
+msgstr ""
+
+msgctxt "#31991"
+msgid "Prefer online collections"
+msgstr ""
+
+msgctxt "#31992"
+msgid "Prefer online artwork"
+msgstr ""
