@@ -80,7 +80,7 @@
 		<font>
 			<name>font15</name>
 			<filename>monadi-reg.ttf</filename>
-			<size>35</size>
+			<size>30</size>
 		</font>
 		<font>
 			<name>font15_bold</name>
@@ -396,7 +396,7 @@
 		<font>
 			<name>font15</name>
 			<filename>arial.ttf</filename>
-			<size>32</size>
+			<size>30</size>
 		</font>
 		<font>
 			<name>font15_bold</name>
@@ -675,7 +675,7 @@
 		<font>
 			<name>font15</name>
 			<filename>Hacen-Promoter.ttf</filename>
-			<size>35</size>
+			<size>30</size>
 		</font>
 		<font>
 			<name>font15_bold</name>
@@ -953,7 +953,7 @@
 		<font>
 			<name>font15</name>
 			<filename>GeezaPro.ttf</filename>
-			<size>35</size>
+			<size>30</size>
 		</font>
 		<font>
 			<name>font15_bold</name>
