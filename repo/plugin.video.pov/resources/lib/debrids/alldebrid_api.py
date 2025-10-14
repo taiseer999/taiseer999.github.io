@@ -5,11 +5,11 @@ from modules import kodi_utils
 # logger = kodi_utils.logger
 
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
-base_url = 'https://api.alldebrid.com/v4/'
 user_agent = 'pov_for_kodi'
+base_url = 'https://api.alldebrid.com/v4/'
 timeout = 10.0
 session = requests.Session()
-session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
+session.mount('https://api.alldebrid.com', requests.adapters.HTTPAdapter(max_retries=1))
 
 class AllDebridAPI:
 	icon = 'alldebrid.png'

@@ -83,7 +83,7 @@ def traktMonitor():
 	trakt_service_string = 'TraktMonitor Service Update %s - %s'
 	update_string = 'Next Update in %s minutes...'
 	if not kodi_utils.get_property('pov_traktmonitor_first_run') == 'true':
-		clear_trakt_list_contents_data('user_lists')
+		for i in ('public', 'user_lists'): clear_trakt_list_contents_data(i)
 		kodi_utils.set_property('pov_traktmonitor_first_run', 'true')
 	while not monitor.abortRequested():
 		while is_playing() or get_visibility('Container().isUpdating') or get_property('pov_pause_services') == 'true': monitor.waitForAbort(10)

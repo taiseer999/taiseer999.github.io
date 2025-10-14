@@ -5,8 +5,8 @@ from modules import kodi_utils
 # logger = kodi_utils.logger
 
 ls, get_setting, set_setting = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.set_setting
-base_url = 'https://app.real-debrid.com/rest/1.0/'
 auth_url = 'https://app.real-debrid.com/oauth/v2/'
+base_url = 'https://app.real-debrid.com/rest/1.0/'
 timeout = 28.0
 session = requests.Session()
 session.mount('https://app.real-debrid.com', requests.adapters.HTTPAdapter(max_retries=1))

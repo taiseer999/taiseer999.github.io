@@ -34,7 +34,7 @@ def search_trakt_lists(params):
 				user, username = list_info['user']['ids']['slug'], list_info['user']['username']
 				display = '[B]%s[/B] | [I](x%s) - %s[/I]' % (name.upper(), str(item_count), username)
 				plot = '[B]Link[/B]: [I]%s[/I][CR][CR][B]Likes[/B]: %s' % (list_info['share_link'], list_info['likes'])
-				url = build_url({'mode': 'build_trakt_list', 'user': user, 'slug': slug, 'list_id': list_id, 'name': name})
+				url = build_url({'mode': 'build_trakt_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'public', 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'trakt.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': name, 'iconImage': 'trakt.png'})))
 				cm_append((likelist_str, 'RunPlugin(%s)' % build_url({'mode': 'trakt.trakt_like_a_list', 'user': user, 'list_slug': slug})))
@@ -109,7 +109,7 @@ def get_trakt_trending_popular_lists(params):
 				likes, share_link, item_count = item['likes'], item['share_link'], item.get('item_count', '?')
 				display = '[B]%s[/B] | [I](x%s) - %s[/I]' % (name, item_count, user)
 				plot = '[B]Link[/B]: [I]%s[/I][CR][CR][B]Likes[/B]: %s' % (share_link, likes)
-				url = build_url({'mode': 'build_trakt_list', 'user': user, 'slug': slug, 'list_id': list_id, 'name': name})
+				url = build_url({'mode': 'build_trakt_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'public', 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': name, 'iconImage': 'trakt.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': name, 'iconImage': 'trakt.png'})))
 				cm_append((likelist_str, 'RunPlugin(%s)' % build_url({'mode': 'trakt.trakt_like_a_list', 'user': user, 'list_slug': slug})))
@@ -134,8 +134,9 @@ def get_trakt_trending_popular_lists(params):
 def build_trakt_list(params):
 	def _thread_target(q):
 		while not q.empty():
-			try: target, *args = q.get() ; target(*args)
+			try: target, *args = q.get()
 			except: pass
+			else: target(*args)
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
 	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')

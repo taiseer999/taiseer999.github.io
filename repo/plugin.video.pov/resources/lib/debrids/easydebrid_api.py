@@ -7,7 +7,7 @@ ip_url = 'https://api.ipify.org'
 base_url = 'https://easydebrid.com/api/v1'
 timeout = 10.0
 session = requests.Session()
-session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
+session.mount('https://easydebrid.com', requests.adapters.HTTPAdapter(max_retries=1))
 
 class EasyDebridAPI:
 	icon = 'easydebrid.png'

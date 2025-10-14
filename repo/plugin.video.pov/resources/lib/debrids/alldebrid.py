@@ -70,8 +70,7 @@ def resolve_ad(params):
 	url = params['url']
 	resolved_link = Debrid().unrestrict_link(url)
 	if params.get('play', 'false') != 'true' : return resolved_link
-	from modules.player import POVPlayer
-	POVPlayer().run(resolved_link, 'video')
+	kodi_utils.player.play(resolved_link)
 
 def show_account_info():
 	from datetime import datetime

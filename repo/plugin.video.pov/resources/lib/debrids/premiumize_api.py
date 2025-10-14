@@ -10,7 +10,7 @@ user_agent = 'POV for Kodi'
 base_url = 'https://www.premiumize.me/api/'
 timeout = 10.0
 session = requests.Session()
-session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
+session.mount('https://www.premiumize.me', requests.adapters.HTTPAdapter(max_retries=1))
 
 class PremiumizeAPI:
 	icon = 'premiumize.png'

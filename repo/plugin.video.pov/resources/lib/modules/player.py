@@ -38,14 +38,6 @@ class POVPlayer(kodi_utils.xbmc_player):
 	def run(self, url=None, media_type=None):
 		if not url: return
 		try:
-			if media_type == 'video':
-				playlist = kodi_utils.make_playlist(media_type)
-				playlist.clear()
-				listitem = kodi_utils.make_listitem()
-				listitem.setInfo(type=media_type, infoLabels={})
-				playlist.add(url, listitem)
-				kodi_utils.close_all_dialog()
-				return self.play(playlist)
 			self.meta = json.loads(kodi_utils.get_property('pov_playback_meta'))
 			kodi_utils.clear_property('pov_playback_meta')
 			self.meta_get = self.meta.get

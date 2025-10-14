@@ -77,21 +77,18 @@ class Indexer(Debrid):
 			except: pass
 
 	def transfers(self, items):
-		import re
+		KODI_VERSION = kodi_utils.get_kodi_version()
 		for count, item in enumerate(items, 1):
 			try:
 				cm = []
 				file_type = 'folder' if item['file_id'] is None else 'file'
 				name = clean_file_name(item['name']).upper()
-				status = item['status']
-				progress = item['progress']
-				if not status == 'finished':
-					try: progress = re.findall(r'\.{0,1}(\d+)', str(progress))[0][:2]
-					except: progress = ''
-				else: progress = 100
+				message = '[CR]'.join(item['message'].split(', '))
+				status, progress = item['status'], item['progress']
+				progress = 100 if status == 'finished' else progress or 0
 				if file_type == 'folder':
 					is_folder = True if status == 'finished' else False
-					display = '%02d | %s%% | [B]%s[/B] | [I]%s [/I]' % (count, str(progress), folder_str, name)
+					display = '%02d | %.2f%% | [B]%s[/B] | [I]%s [/I]' % (count, progress, folder_str, name)
 					url_params = {'mode': 'premiumize.pm_torrent_cloud', 'id': item['folder_id'], 'folder_name': normalize(item['name'])}
 				else:
 					is_folder = False
@@ -100,7 +97,7 @@ class Indexer(Debrid):
 					if url_link.startswith('/'): url_link = 'https' + url_link
 					size = details['size']
 					display_size = float(int(size))/1073741824
-					display = '%02d | %s%% | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, str(progress), file_str, display_size, name)
+					display = '%02d | %.2f%% | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, progress, file_str, display_size, name)
 					url_params = {'mode': 'media_play', 'url': url_link, 'media_type': 'video'}
 					down_file_params = {'mode': 'downloader', 'media_type': 'cloud.premiumize',
 										'name': item['name'], 'url': url_link, 'image': default_icon}
@@ -110,6 +107,7 @@ class Indexer(Debrid):
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
 				listitem.setArt(default_art)
+				if not status == 'finished': listitem.setInfo('video', {'plot': message}) if KODI_VERSION < 20 else listitem.getVideoInfoTag().setPlot(message)
 				yield (url, listitem, is_folder)
 			except: pass
 

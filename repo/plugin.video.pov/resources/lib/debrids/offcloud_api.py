@@ -8,7 +8,7 @@ ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 base_url = 'https://offcloud.com/api'
 timeout = 10.0
 session = requests.Session()
-session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
+session.mount('https://offcloud.com', requests.adapters.HTTPAdapter(max_retries=1))
 
 class OffcloudAPI:
 	icon = 'offcloud.png'

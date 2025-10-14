@@ -29,13 +29,13 @@ class Router:
 		elif 'discover.' in mode:
 			from indexers.discover import Discover
 			runmode(Discover, params, mode.split('.')[1])
-		elif '_play' in mode or 'play_' in mode:
-			if mode == 'play_media':
-				from modules.sources import SourceSelect
-				SourceSelect().playback_prep(params)
-			elif mode == 'media_play':
-				from modules.player import POVPlayer
-				POVPlayer().run(params_get('url'), params_get('media_type'))
+		elif mode == 'media_play':
+			from modules.kodi_utils import player, close_all_dialog
+			close_all_dialog()
+			player.play(params['url'])
+		elif mode == 'play_media':
+			from modules.sources import SourceSelect
+			SourceSelect().playback_prep(params)
 		elif 'choice' in mode:
 			from modules import dialogs
 			if mode == 'scraper_color_choice':

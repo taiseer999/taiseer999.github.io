@@ -150,6 +150,5 @@ def resolve_tb(params):
 	elif media_type == 'webdl': resolved_link = Debrid().unrestrict_webdl(file_id)
 	else: resolved_link = Debrid().unrestrict_link(file_id)
 	if params.get('play', 'false') != 'true': return resolved_link
-	from modules.player import POVPlayer
-	POVPlayer().run(resolved_link, 'video')
+	kodi_utils.player.play(resolved_link)
 

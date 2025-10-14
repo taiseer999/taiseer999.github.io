@@ -25,13 +25,13 @@ nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
 class Movies:
 	def __init__(self, params):
 		self.params = params
+		self.items, self.new_page, self.total_pages = [], {}, None
 		self.id_type, self.list, self.action, self.exit_list_params = (
 			self.params.get('id_type', 'tmdb_id'),
 			self.params.get('list', []),
 			self.params.get('action', None),
 			self.params.get('exit_list_params', None)
 		)
-		self.items, self.new_page, self.total_pages, self.is_widget = [], {}, None, 'unchecked'
 		self.append = self.items.append
 		self.current_date = get_datetime_function()
 		self.meta_user_info = settings.metadata_user_info()
@@ -43,7 +43,7 @@ class Movies:
 		self.cm_sort = settings.context_menu_sort()
 		self.rpdb_enabled = self.meta_user_info['extra_rpdb_enabled']
 		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
-		if self.is_widget == 'unchecked': self.is_widget = kodi_utils.external_browse()
+		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
 		if not self.exit_list_params: self.exit_list_params = get_infolabel('Container.FolderPath')
 		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
@@ -171,8 +171,6 @@ class Indexer(Movies):
 	def run(self):
 		try:
 			params_get = self.params.get
-			self.is_widget = kodi_utils.external_browse()
-			self.exit_list_params = params_get('exit_list_params', None) or get_infolabel('Container.FolderPath')
 			self.handle, self.builder = int(sys.argv[1]), self.worker
 			view_type, content_type = 'view.movies', 'movies'
 			mode = params_get('mode')

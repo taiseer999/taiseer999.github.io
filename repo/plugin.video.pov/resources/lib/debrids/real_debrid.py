@@ -133,6 +133,5 @@ def resolve_rd(params):
 	url = params['url']
 	resolved_link = Debrid().unrestrict_link(url)
 	if params.get('play', 'false') != 'true' : return resolved_link
-	from modules.player import POVPlayer
-	POVPlayer().run(resolved_link, 'video')
+	kodi_utils.player.play(resolved_link)
 

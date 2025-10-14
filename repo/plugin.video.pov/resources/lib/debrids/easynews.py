@@ -43,8 +43,7 @@ def resolve_easynews(params):
 	resolved_link = EasyNews().unrestrict_link(url_dl)
 	if resolved_link: resolved_link += '|seekable=0'
 	if not params.get('play', 'false') == 'true': return resolved_link
-	from modules.player import POVPlayer
-	POVPlayer().run(resolved_link, 'video')
+	kodi_utils.player.play(resolved_link)
 
 def seekable_easynews(params):
 	url_dl = params['url_dl']

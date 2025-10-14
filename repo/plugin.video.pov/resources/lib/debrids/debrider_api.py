@@ -8,7 +8,7 @@ ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 base_url = 'https://debrider.app/api/v1'
 timeout = 10.0
 session = requests.Session()
-session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
+session.mount('https://debrider.app', requests.adapters.HTTPAdapter(max_retries=1))
 
 class DebriderAPI:
 	icon = 'debrider.png'

@@ -5,13 +5,12 @@ from modules import kodi_utils
 # logger = kodi_utils.logger
 
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
+user_agent = 'POV for Kodi'
 ip_url = 'https://api.ipify.org'
 base_url = 'https://api.torbox.app/v1/api'
-user_agent = 'POV for Kodi'
 timeout = 28.0
 session = requests.Session()
-session.headers['User-Agent'] = user_agent
-session.mount(base_url, requests.adapters.HTTPAdapter(max_retries=1))
+session.mount('https://api.torbox.app', requests.adapters.HTTPAdapter(max_retries=1))
 
 class TorBoxAPI:
 	icon = 'torbox.png'
@@ -20,7 +19,7 @@ class TorBoxAPI:
 		self.token = get_setting('tb.token')
 
 	def _request(self, method, path, params=None, json=None, data=None):
-		session.headers['Authorization'] = 'Bearer %s' % self.token
+		session.headers.update({'User-Agent': user_agent, 'Authorization': 'Bearer %s' % self.token})
 		url = '%s/%s' % (base_url, path) if not path.startswith('http') else path
 		try:
 			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
