@@ -7061,7 +7061,7 @@ Added arabic fonts
         <description lang="fr">Arctic: Zephyr - Martian est basé sur le skin original Arctic: Zephyr, créé par jurialmunkey et son extension par beatmasterRS. Arctic se focalise sur le fait d'être simple, claire et minimaliste.</description>
         <description lang="zh_CN">Arctic: Zephyr - Martian 是基于 jurialmunkey 所创 Arctic 皮肤的第三个版本，以及 beatmasterRS 对该皮肤的扩展版本。Arctic 系列皮肤主打简洁、干净且简约的风格，并略带独特设计巧思。</description>
     </extension>
-</addon><addon id="skin.bingie" version="1.0.9.3" name="Bingie" provider-name="matke">
+</addon><addon id="skin.bingie" version="1.0.9.4" name="Bingie" provider-name="matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />
@@ -7071,7 +7071,7 @@ Added arabic fonts
 		<import addon="resource.images.studios.coloured" version="0.0.23" />
 		<import addon="plugin.video.themoviedb.helper" version="5.4.21" />
 		<import addon="script.wikipedia" version="0.0.6" />
-		<import addon="plugin.program.autocompletion" version="2.1.3" />
+		<import addon="plugin.program.autocompletion" version="2.1.2" />
 	</requires>
 	<extension debugging="false" defaultthemename="Textures.xbt" effectslowdown="1" point="xbmc.gui.skin">
         <res aspect="16:9" default="true" folder="1080i" height="1080" width="1920" />
