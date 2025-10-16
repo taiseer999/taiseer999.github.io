@@ -419,7 +419,7 @@
             <name>Bold31</name>  <!--widget header-->
             <filename>monadi.ttf</filename>
 			<style>bold</style>
-            <size>30</size>
+            <size>25</size>
         </font>
 		<!--Small-->
         <font>
@@ -487,7 +487,7 @@
             <name>Bold43</name>
             <filename>monadi.ttf</filename>
 			<style>bold</style>
-            <size>42</size>
+            <size>39</size>
         </font>
         <font>
             <name>Bold44</name>
@@ -1161,7 +1161,7 @@
             <name>Bold31</name>  <!--widget header-->
             <filename>Hacen-Promoter.ttf</filename>
 			<style>bold</style>
-            <size>30</size>
+            <size>25</size>
         </font>
 		<!--Small-->
         <font>
@@ -1903,7 +1903,7 @@
             <name>Bold31</name>  <!--widget header-->
             <filename>PFDinTextArabic-Bold.ttf</filename>
 			<style>bold</style>
-            <size>30</size>
+            <size>25</size>
         </font>
 		<!--Small-->
         <font>
@@ -2155,7 +2155,7 @@
 		<font>		
 			<name>Plots</name> <!--plot font for bingie home/bingie library & Info Dialogue-->
             <filename>PFDinTextArabic-Regular.ttf</filename>
-			<linespacing>1.08</linespacing>
+			<linespacing>0.97</linespacing>
             <size>30</size> 
         </font>	
 		<font>
@@ -2645,7 +2645,7 @@
             <name>Bold31</name>  <!--widget header-->
             <filename>URWGeometricArabic-Bold.ttf</filename>
 			<style>bold</style>
-            <size>30</size>
+            <size>25</size>
         </font>
 		<!--Small-->
         <font>
@@ -2897,7 +2897,7 @@
 		<font>		
 			<name>Plots</name> <!--plot font for bingie home/bingie library & Info Dialogue-->
             <filename>URWGeometricArabic-Medium.ttf</filename>
-			<linespacing>1.08</linespacing>
+			<linespacing>0.8</linespacing>
             <size>30</size> 
         </font>	
 		<font>
@@ -3387,7 +3387,7 @@
             <name>Bold31</name>  <!--widget header-->
             <filename>AmazonEmberV2-Bold.ttf</filename>
 			<style>bold</style>
-            <size>30</size>
+            <size>25</size>
         </font>
 		<!--Small-->
         <font>
@@ -3639,7 +3639,7 @@
 		<font>		
 			<name>Plots</name> <!--plot font for bingie home/bingie library & Info Dialogue-->
             <filename>AmazonEmberV2-Medium.ttf</filename>
-			<linespacing>1.08</linespacing>
+			<linespacing>0.87</linespacing>
             <size>30</size> 
         </font>	
 		<font>
@@ -4129,7 +4129,7 @@
             <name>Bold31</name>  <!--widget header-->
             <filename>Outfit-Bold.ttf</filename>
 			<style>bold</style>
-            <size>30</size>
+            <size>25</size>
         </font>
 		<!--Small-->
         <font>
@@ -4381,7 +4381,7 @@
 		<font>		
 			<name>Plots</name> <!--plot font for bingie home/bingie library & Info Dialogue-->
             <filename>Outfit-Regular.ttf</filename>
-			<linespacing>1.08</linespacing>
+			<linespacing>1.0</linespacing>
             <size>30</size> 
         </font>	
 		<font>

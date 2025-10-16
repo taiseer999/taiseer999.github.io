@@ -3026,7 +3026,7 @@ v.3.3.7
         <website />
         <source />
     </extension>
-</addon><addon id="script.bingie.widgets" name="Bingie Widgets" version="1.0.1" provider-name="matke">
+</addon><addon id="script.bingie.widgets" name="Bingie Widgets" version="1.0.1.1" provider-name="matke">
     <requires>
 		<import addon="xbmc.python" version="3.0.0" />
         <import addon="xbmc.addon" version="12.0.0" />
@@ -4716,6 +4716,24 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
 		<forum>http://forum.kodi.tv/showthread.php?tid=235676</forum>
 		<website />
 		<source>https://github.com/kodi-community-addons/script.skin.helper.backgrounds</source>
+	</extension>
+</addon><addon id="script.skin.helper.colorpicker" name="Skin Helper Service ColorPicker" version="2.0.3" provider-name="marcelveldt,sualfred and others">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.pil" version="1.1.7" />
+	</requires>
+	<extension point="xbmc.python.library" library="default.py" />
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Colorpicker for Kodi Skins. Part of Skin Helper Suite</summary>
+		<description lang="en_GB">Colorpicker for Kodi Skins. Part of Skin Helper Suite</description>
+		<platform>all</platform>
+		<license>GPL-2.0</license>
+		<forum>https://forum.kodi.tv/showthread.php?tid=235676</forum>
+		<source>https://github.com/kodi-community-addons/script.skin.helper.colorpicker</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+		</assets>
 	</extension>
 </addon><addon id="script.skin.helper.service" name="Skin Helper Service" version="1.30.0" provider-name="marcelveldt and others">
     <requires>
@@ -7043,7 +7061,7 @@ Added arabic fonts
         <description lang="fr">Arctic: Zephyr - Martian est basé sur le skin original Arctic: Zephyr, créé par jurialmunkey et son extension par beatmasterRS. Arctic se focalise sur le fait d'être simple, claire et minimaliste.</description>
         <description lang="zh_CN">Arctic: Zephyr - Martian 是基于 jurialmunkey 所创 Arctic 皮肤的第三个版本，以及 beatmasterRS 对该皮肤的扩展版本。Arctic 系列皮肤主打简洁、干净且简约的风格，并略带独特设计巧思。</description>
     </extension>
-</addon><addon id="skin.bingie" version="1.0.9" name="Bingie" provider-name="matke">
+</addon><addon id="skin.bingie" version="1.0.9.1" name="Bingie" provider-name="matke">
 	<requires>
 		<import version="5.17.0" addon="xbmc.gui" />
 		<import addon="script.bingie.helper" version="1.1.2" />
