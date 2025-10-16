@@ -571,7 +571,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
     def setInfo(self):
         hide_spoilers = False
         if self.next and self.next.type == "episode":
-            hide_spoilers = self.hideSpoilers(self.next, use_cache=False)
+            hide_spoilers = self.hideSpoilers(self.next, fully_watched=False, watched=False, use_cache=False)
         if self.next:
             self.setProperty(
                 'post.play.background',
@@ -736,7 +736,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
 
 def play(video=None, play_queue=None, resume=False, bgm=False, **kwargs):
     try:
-        w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume, bgm=bgm)
+        w = VideoPlayerWindow.open(video=video, play_queue=play_queue, resume=resume, bgm=bgm, aggressive=True)
     except util.NoDataException:
         raise
     finally:

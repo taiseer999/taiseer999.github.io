@@ -302,7 +302,7 @@ class PlayerSettingsInterface(object):
         qualityIndex = self.getQualityIndex(quality_type)
 
         if qualityIndex >= 9:
-            return allow4k and 2160 or 1088
+            return allow4k and util.INTERFACE.maxVerticalDPRes or 1088
         elif qualityIndex >= 6:
             return 720
         elif qualityIndex >= 5:

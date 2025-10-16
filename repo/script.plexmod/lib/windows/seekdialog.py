@@ -1902,7 +1902,8 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
 
         self._seeking = True
         self._seekingWithoutOSD = without_osd
-        self.selectedOffset += offset
+        sign = offset > 0 and 1 or -1
+        self.selectedOffset += max(abs(offset), self.useAlternateSeek and util.addonSettings.altseekValidSeekWindow or 0) * sign
         # Don't skip past 5 seconds from end
         if self.selectedOffset > self.duration - 5000:
             # offset = +100, at = 80000, duration = 80007, realoffset = 2
@@ -2551,11 +2552,11 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
 
             if offset or (self.autoSeekTimeout and time.time() >= self.autoSeekTimeout and
                           self.offset != self.selectedOffset):
-                self.resetAutoSeekTimer(None)
                 #off = offset is not None and offset or None
                 #self.doSeek(off)
-                if self.selectedOffset and abs(self.selectedOffset - self.offset) >= 10000 and not self.handler.waitingForSOS:
-                    util.DEBUG_LOG("SeekDialog: Tick: Seek: {}, {}", self.offset, self.selectedOffset)
+                if not self.useAlternateSeek or (((self.selectedOffset and abs(self.selectedOffset - self.offset) >= util.addonSettings.altseekValidSeekWindow) or not self.selectedOffset) and not self.handler.waitingForSOS):
+                    util.DEBUG_LOG("SeekDialog: Tick: Seek: {}, {}, {}", self.offset, self.selectedOffset, util.addonSettings.altseekValidSeekWindow)
+                    self.resetAutoSeekTimer(None)
                     self.doSeek()
                     return True
 

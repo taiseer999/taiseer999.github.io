@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.plexmod"
        name="Plex"
-       version="0.8.0-rc4"
+       version="1.0.0"
        provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -34,16 +34,7 @@
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Core/Signals: Don't re-register signal callbacks twice
-- Watchlist: Add logging to removeFromWatchlistBlind
-- Watchlist/Episodes/Movies/Home: Re-jig window-less watchlist handling; when resuming/watching an item directly from home without visiting the item view itself, try blindly removing items from watchlist if fully watched (didn't work before)
-- Core/KodiGUI: Less implicit checks for a window's autoplay capability
-- Opener: Implement/trigger window.onBlindClose if the window was only used for immediate playback, not for display
-- CE/LG/Player: Be less strict with alternate seek
-- CE/LG/Player: Clamp seek fix to +/- 10 seconds to fix edge cases (thanks @peaceoutt32)
-- CE/LG/Player: Dynamically increasse "area of effect"/leeway for alternate seek
-- CE/LG/Player: Fix seek state not necessarily being reflected in the UI when using alternate seek
-- i18n: Update Hungiarian translation
+- See changelog or forum
         </news>
         <assets>
             <icon>icon2.png</icon>

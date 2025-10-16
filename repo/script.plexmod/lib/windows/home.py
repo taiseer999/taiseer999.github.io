@@ -307,6 +307,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
     SERVER_LIST_ID = 260
     REFRESH_SL_ID = 262
 
+    USER_MENU_BG_ID = 801
+    USER_MENU_GROUP_ID = 901
+
     PLAYER_STATUS_BUTTON_ID = 204
 
     HUB_AR16X9_00 = 400
@@ -2812,6 +2815,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
             items.append(kodigui.ManagedListItem(T(32459, 'Offline Mode'), data_source='go_online'))
         else:
             items.append(kodigui.ManagedListItem(T(32460, 'Sign In'), data_source='signin'))
+        items.append(kodigui.ManagedListItem(T(32924, 'Minimize'), data_source='minimize'))
+        items.append(kodigui.ManagedListItem(T(32336, 'Exit'), data_source='exit'))
 
         if len(items) > 1:
             items[0].setProperty('first', '1')
@@ -2825,7 +2830,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         self.userList.addItems(items)
         itemHeight = util.vscale(66, r=0)
 
-        self.getControl(801).setHeight((len(items) * itemHeight) + 80)
+        self.userList.setHeight((len(items) * itemHeight))
+        self.getControl(self.USER_MENU_GROUP_ID).setHeight((len(items) * itemHeight))
+        self.getControl(self.USER_MENU_BG_ID).setHeight((len(items) * itemHeight) + 80)
 
         if not mouse:
             self.setFocusId(self.USER_LIST_ID)
@@ -2874,6 +2881,18 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
             self.closeOption = option
             kill_background()
             self.doClose()
+        elif option == 'exit':
+            self._shuttingDown = True
+            util.DEBUG_LOG("Home: Initiating shutdown, setting background")
+            background.setShutdown()
+            self.closeOption = "exit"
+            self.doClose()
+            return
+        elif option == 'minimize':
+            self.storeLastBG()
+            util.setGlobalProperty('is_active', '')
+            xbmc.executebuiltin('ActivateWindow(10000)')
+            return
         else:
             self.closeOption = option
             kill_background()
