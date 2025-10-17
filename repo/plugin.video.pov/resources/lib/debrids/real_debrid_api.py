@@ -1,5 +1,4 @@
 import requests
-from threading import Thread
 from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
@@ -18,28 +17,24 @@ class RealDebridAPI:
 		self.token = get_setting('rd.token')
 
 	def _get(self, url):
+		if self.token == '': return None
 		original_url = url
 		url = base_url + url
-		if self.token == '': return None
-#		if '?' not in url: url += '?auth_token=%s' % self.token
-#		else: url += '&auth_token=%s' % self.token
 		session.headers['Authorization'] = f"Bearer {self.token}"
 		response = session.get(url, timeout=timeout)
-		if not response.ok and any(value in response.text for value in ('bad_token', 'Bad Request')):
+		if not response.ok and any(value in response.text for value in ('bad_token',)):
 			if self.refresh_token(): response = self._get(original_url)
 			else: return None
 		try: return response.json()
 		except: return response
 
 	def _post(self, url, post_data):
+		if self.token == '': return None
 		original_url = url
 		url = base_url + url
-		if self.token == '': return None
-#		if '?' not in url: url += '?auth_token=%s' % self.token
-#		else: url += '&auth_token=%s' % self.token
 		session.headers['Authorization'] = f"Bearer {self.token}"
 		response = session.post(url, data=post_data, timeout=timeout)
-		if not response.ok and any(value in response.text for value in ('bad_token', 'Bad Request')):
+		if not response.ok and any(value in response.text for value in ('bad_token',)):
 			if self.refresh_token(): response = self._post(original_url, post_data)
 			else: return None
 		try: return response.json()

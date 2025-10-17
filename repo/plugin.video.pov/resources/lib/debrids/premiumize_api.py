@@ -1,12 +1,11 @@
 import requests
-from threading import Thread
 from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
+user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
 client_id = '663882072'
-user_agent = 'POV for Kodi'
 base_url = 'https://www.premiumize.me/api/'
 timeout = 10.0
 session = requests.Session()
@@ -17,20 +16,19 @@ class PremiumizeAPI:
 
 	def __init__(self):
 		self.token = get_setting('pm.token')
+		session.headers.update(self.headers())
 
-	def _get(self, url, data={}):
+	def _get(self, url, data=None):
 		if self.token == '': return None
-		headers = {'User-Agent': user_agent, 'Authorization': 'Bearer %s' % self.token}
 		url = base_url + url
-		response = session.get(url, data=data, headers=headers, timeout=timeout)
+		response = session.get(url, data=data, timeout=timeout)
 		try: return response.json()
 		except: return response.text
 
-	def _post(self, url, data={}):
+	def _post(self, url, data=None):
 		if self.token == '' and not 'token' in url: return None
-		headers = {'User-Agent': user_agent, 'Authorization': 'Bearer %s' % self.token}
 		if not 'token' in url: url = base_url + url
-		response = session.post(url, data=data, headers=headers, timeout=timeout)
+		response = session.post(url, data=data, timeout=timeout)
 		try: return response.json()
 		except: return response.text
 

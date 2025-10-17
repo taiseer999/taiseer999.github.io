@@ -75,9 +75,10 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'pm_cloud', 'name': clca_str }, 'premiumize.png', n_ins, False)
 
 	def alldebrid(self):
-		ad_str, acc_str, cloud_str = ls(32063), ls(32494), ls(32496)
+		ad_str, acc_str, his_str, cloud_str = ls(32063), ls(32494), ls(32486), ls(32496)
 		clca_str, n_ins = ls(32497) % ad_str, _in_str % (ad_str.upper(), '')
 		self._add_item({'mode': 'alldebrid.ad_torrent_cloud',       'name': cloud_str}, 'alldebrid.png', n_ins)
+		self._add_item({'mode': 'alldebrid.ad_downloads',           'name': his_str  }, 'alldebrid.png', n_ins)
 		self._add_item({'mode': 'alldebrid.show_account_info',      'name': acc_str  }, 'alldebrid.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'ad_cloud', 'name': clca_str }, 'alldebrid.png', n_ins, False)
 

@@ -199,18 +199,9 @@ class Router:
 			function = manual_function_import('debrids.easynews', mode.split('.')[-1])
 			function(params)
 		elif 'alldebrid' in mode:
-			if mode == 'alldebrid.ad_torrent_cloud':
-				from debrids.alldebrid import ad_torrent_cloud
-				ad_torrent_cloud(params_get('id'))
-			elif mode == 'alldebrid.browse_ad_cloud':
-				from debrids.alldebrid import browse_ad_cloud
-				browse_ad_cloud(params['folder'])
-			elif mode == 'alldebrid.resolve_ad':
-				from debrids.alldebrid import resolve_ad
-				resolve_ad(params)
-			elif mode == 'alldebrid.show_account_info':
-				from debrids.alldebrid import show_account_info
-				show_account_info()
+			from debrids.alldebrid import Indexer, resolve_ad
+			if 'resolve_' in mode: resolve_ad(params)
+			else: Indexer().run(params)
 		elif 'premiumize' in mode:
 			from debrids.premiumize import Indexer
 			Indexer().run(params)

@@ -102,7 +102,8 @@ class RealDebrid:
 		return True
 
 class Premiumize:
-	user_agent = 'POV for Kodi'
+	user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
+	kodi_utils.logger('user_agent', user_agent)
 
 	def __init__(self):
 		self.token = get_setting('pm.token')
@@ -160,8 +161,6 @@ class Premiumize:
 		return True
 
 class AllDebrid:
-	user_agent = 'pov_for_kodi'
-
 	def __init__(self):
 		self.token = get_setting('ad.token')
 
@@ -182,8 +181,7 @@ class AllDebrid:
 			clear_cache('ad_cloud', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
 
-		params = {'agent': self.user_agent}
-		response = requests.get(self.base_url('v4/pin/get'), params=params, timeout=timeout)
+		response = requests.get(self.base_url('v4/pin/get'), timeout=timeout)
 		result = response.json()['data']
 		expires_in, expires_at = result['expires_in'], result['expires_in'] + time.monotonic()
 		try: qr_icon = qr_str % '&bgcolor=ffd700&data=%s' % quote(result['user_url'])
@@ -206,7 +204,7 @@ class AllDebrid:
 		sleep(500)
 		headers = {}
 		headers.update({'Authorization': 'Bearer %s' % self.token})
-		response = requests.get(self.base_url('v4/user'), params=params, headers=headers, timeout=timeout)
+		response = requests.get(self.base_url('v4/user'), headers=headers, timeout=timeout)
 		result = response.json()['data']
 		username = result['user']['username']
 		set_setting('ad.account_id', str(username))
@@ -290,7 +288,7 @@ class EasyDebrid:
 		return True
 
 class TorBox:
-	user_agent = 'POV for Kodi'
+	user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
 
 	def __init__(self):
 		self.token = get_setting('tb.token')

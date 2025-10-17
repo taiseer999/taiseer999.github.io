@@ -14,9 +14,9 @@ class EasyDebridAPI:
 
 	def __init__(self):
 		self.token = get_setting('ed.token')
+		session.headers['Authorization'] = 'Bearer %s' % self.token
 
 	def _request(self, method, path, params=None, json=None, data=None):
-		session.headers['Authorization'] = 'Bearer %s' % self.token
 		url = '%s/%s' % (base_url, path)
 		try:
 			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)

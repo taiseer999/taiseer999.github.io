@@ -83,7 +83,7 @@ def traktMonitor():
 	trakt_service_string = 'TraktMonitor Service Update %s - %s'
 	update_string = 'Next Update in %s minutes...'
 	if not kodi_utils.get_property('pov_traktmonitor_first_run') == 'true':
-		for i in ('public', 'user_lists'): clear_trakt_list_contents_data(i)
+		for i in ('user_lists', 'my_lists'): clear_trakt_list_contents_data(i)
 		kodi_utils.set_property('pov_traktmonitor_first_run', 'true')
 	while not monitor.abortRequested():
 		while is_playing() or get_visibility('Container().isUpdating') or get_property('pov_pause_services') == 'true': monitor.waitForAbort(10)
@@ -111,36 +111,23 @@ def traktMonitor():
 
 def premAccntNotification():
 	logger('POV', 'Debrid Account Expiry Notification Service Starting')
-	if get_setting('ad.account_id') != '':
-		if limit := int(get_setting('ad.expires', '7')):
-			from debrids.alldebrid_api import AllDebridAPI
-			days_remaining = AllDebridAPI().days_remaining()
-			if not days_remaining is None and days_remaining <= limit:
-				kodi_utils.notification('AllDebrid expires in %s days' % days_remaining)
-	if get_setting('pm.account_id') != '':
-		if limit := int(get_setting('pm.expires', '7')):
-			from debrids.premiumize_api import PremiumizeAPI
-			days_remaining = PremiumizeAPI().days_remaining()
-			if not days_remaining is None and days_remaining <= limit:
-				kodi_utils.notification('Premiumize.me expires in %s days' % days_remaining)
-	if get_setting('rd.username') != '':
-		if limit := int(get_setting('rd.expires', '7')):
-			from debrids.real_debrid_api import RealDebridAPI
-			days_remaining = RealDebridAPI().days_remaining()
-			if not days_remaining is None and days_remaining <= limit:
-				kodi_utils.notification('Real-Debrid expires in %s days' % days_remaining)
-	if get_setting('ed.account_id') != '':
-		if limit := int(get_setting('ed.expires', '7')):
-			from debrids.easydebrid_api import EasyDebridAPI
-			days_remaining = EasyDebridAPI().days_remaining()
-			if not days_remaining is None and days_remaining <= limit:
-				kodi_utils.notification('EasyDebrid expires in %s days' % days_remaining)
-	if get_setting('tb.account_id') != '':
-		if limit := int(get_setting('tb.expires', '7')):
-			from debrids.torbox_api import TorBoxAPI
-			days_remaining = TorBoxAPI().days_remaining()
-			if not days_remaining is None and days_remaining <= limit:
-				kodi_utils.notification('TorBox expires in %s days' % days_remaining)
+	from importlib import import_module
+	for name, expires, module, cls in (
+		('ad.account_id', 'ad.expires', 'alldebrid_api', 'AllDebridAPI'),
+		('pm.account_id', 'pm.expires', 'premiumize_api', 'PremiumizeAPI'),
+		('rd.username', 'rd.expires', 'real_debrid_api', 'RealDebridAPI'),
+		('ed.account_id', 'ed.expires', 'easydebrid_api', 'EasyDebridAPI'),
+		('tb.account_id', 'tb.expires', 'torbox_api', 'TorBoxAPI')
+	):
+		try:
+			if get_setting(name) == '': continue
+			if limit := int(get_setting(expires, '7')):
+				module = 'debrids.%s' % module
+				cls = getattr(import_module(module), cls)
+				days_remaining = cls().days_remaining()
+				if not days_remaining is None and days_remaining <= limit:
+					kodi_utils.notification('%s expires in %s days' % (cls.__name__, days_remaining))
+		except: pass
 	return logger('POV', 'Debrid Account Expiry Notification Service Finished')
 
 def checkUndesirablesDatabase():

@@ -1,12 +1,10 @@
 import requests
-from threading import Thread
 from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
 
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
-user_agent = 'pov_for_kodi'
-base_url = 'https://api.alldebrid.com/v4/'
+base_url = 'https://api.alldebrid.com/'
 timeout = 10.0
 session = requests.Session()
 session.mount('https://api.alldebrid.com', requests.adapters.HTTPAdapter(max_retries=1))
@@ -16,22 +14,23 @@ class AllDebridAPI:
 
 	def __init__(self):
 		self.token = get_setting('ad.token')
+		session.headers['Authorization'] = 'Bearer %s' % self.token
 
-	def _get(self, url, url_append=''):
+	def _get(self, url, params=None):
+		if self.token == '': return None
 		result = None
+		url = base_url + url
 		try:
-			if self.token == '': return None
-			url = base_url + url + '?agent=%s&apikey=%s' % (user_agent, self.token) + url_append
-			result = session.get(url, timeout=timeout).json()
+			result = session.get(url, params=params, timeout=timeout).json()
 			if result.get('status') == 'success' and 'data' in result: result = result['data']
 		except: pass
 		return result
 
-	def _post(self, url, data={}):
+	def _post(self, url, data=None):
+		if self.token == '': return None
 		result = None
+		url = base_url + url
 		try:
-			if self.token == '': return None
-			url = base_url + url + '?agent=%s&apikey=%s' % (user_agent, self.token)
 			result = session.post(url, data=data, timeout=timeout).json()
 			if result.get('status') == 'success' and 'data' in result: result = result['data']
 		except: pass
@@ -47,27 +46,27 @@ class AllDebridAPI:
 		return days
 
 	def account_info(self):
-		response = self._get('user')
+		response = self._get('v4/user')
 		return response
 
 	def list_transfer(self, transfer_id):
-		url = 'magnet/status'
-		url_append = '&id=%s' % transfer_id
-		result = self._get(url, url_append)
+		url = 'v4/magnet/status'
+		params = {'id': transfer_id}
+		result = self._get(url, params)
 		result = result['magnets']
 		return result
 
 	def delete_torrent(self, transfer_id):
-		url = 'magnet/delete'
-		url_append = '&id=%s' % transfer_id
-		result = self._get(url, url_append)
-		if result.get('success', False):
-			return True
+		url = 'v4/magnet/delete'
+		params = {'id': transfer_id}
+		result = self._get(url, params)
+		result = False if 'error' in result else True
+		return result
 
 	def unrestrict_link(self, link):
-		url = 'link/unlock'
-		url_append = '&link=%s' % link
-		response = self._get(url, url_append)
+		url = 'v4/link/unlock'
+		params = {'link': link}
+		response = self._get(url, params)
 		try: return response['link']
 		except: return None
 
@@ -76,14 +75,14 @@ class AllDebridAPI:
 		return cache_info['instant']
 
 	def check_cache(self, hashes):
-		data = {'magnets[]': hashes}
+		data = {'v4/magnets[]': hashes}
 		response = self._post('magnet/instant', data)
 		return response
 
 	def create_transfer(self, magnet):
-		url = 'magnet/upload'
-		url_append = '&magnet=%s' % magnet
-		result = self._get(url, url_append)
+		url = 'v4/magnet/upload'
+		params = {'magnet': magnet}
+		result = self._get(url, params)
 		result = result['magnets'][0]
 		return result.get('id', '')
 
@@ -113,7 +112,7 @@ class AllDebridAPI:
 
 	def get_hosts(self):
 		string = 'pov_ad_valid_hosts'
-		url = 'hosts'
+		url = 'v4/hosts'
 		hosts_dict = {'AllDebrid': []}
 		hosts = []
 		try:
@@ -127,8 +126,13 @@ class AllDebridAPI:
 		except: pass
 		return hosts_dict
 
+	def downloads(self):
+		url = 'v4/user/history'
+		string = 'pov_ad_downloads'
+		return cache_object(self._get, string, url, False, 0.5)
+
 	def user_cloud(self):
-		url = 'magnet/status'
+		url = 'v4/magnet/status'
 		string = 'pov_ad_user_cloud'
 		return cache_object(self._get, string, url, False, 0.5)
 
@@ -146,6 +150,13 @@ class AllDebridAPI:
 				dbcon.commit()
 				user_cloud_success = True
 			except: user_cloud_success = False
+			# DOWNLOAD LINKS
+			try:
+				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_ad_downloads',))
+				clear_property('pov_ad_downloads')
+				dbcon.commit()
+				download_links_success = True
+			except: download_links_success = False
 			# HOSTERS
 			try:
 				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_ad_valid_hosts',))
@@ -160,6 +171,6 @@ class AllDebridAPI:
 				hash_cache_status_success = True
 			except: hash_cache_status_success = False
 		except: return False
-		if False in (user_cloud_success, hoster_links_success, hash_cache_status_success): return False
+		if False in (user_cloud_success, download_links_success, hoster_links_success, hash_cache_status_success): return False
 		return True
 

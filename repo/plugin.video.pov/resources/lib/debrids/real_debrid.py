@@ -64,10 +64,10 @@ class Indexer(Debrid):
 				size = float(int(item['bytes']))/1073741824
 				display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, size, name)
 				url_params = {'mode': 'real_debrid.resolve_rd', 'url': url_link, 'play': 'true'}
-				url = build_url(url_params)
 				down_file_params = {'mode': 'downloader', 'action': 'cloud.realdebrid',
 									'name': name, 'url': url_link, 'image': default_icon}
 				cm.append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
 				listitem.addContextMenuItems(cm)
@@ -86,7 +86,7 @@ class Indexer(Debrid):
 				filename, url_link = item['filename'], item['download']
 				name = clean_file_name(filename).upper()
 				size = float(int(item['filesize']))/1073741824
-				display = '%02d | %.2f GB | %s  | [I]%s [/I]' % (count, size, datetime_object, name)
+				display = '%02d | %.2f GB | %s | [I]%s [/I]' % (count, size, datetime_object, name)
 				url_params = {'mode': 'media_play', 'url': url_link, 'media_type': 'video'}
 				delete_params = {'mode': 'real_debrid.rd_delete', 'id': item['id'], 'cache_type': 'download'}
 				down_file_params = {'mode': 'downloader', 'action': 'cloud.realdebrid_direct',

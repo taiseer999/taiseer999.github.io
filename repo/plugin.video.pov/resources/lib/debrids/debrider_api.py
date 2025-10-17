@@ -1,5 +1,4 @@
 import requests
-from threading import Thread
 from caches.main_cache import cache_object
 from modules import kodi_utils
 # logger = kodi_utils.logger
@@ -15,9 +14,9 @@ class DebriderAPI:
 
 	def __init__(self):
 		self.token = get_setting('db.token')
+		session.headers['Authorization'] = 'Bearer %s' % self.token
 
 	def _request(self, method, path, params=None, json=None, data=None):
-		session.headers['Authorization'] = 'Bearer %s' % self.token
 		url = '%s/%s' % (base_url, path)
 		try:
 			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
