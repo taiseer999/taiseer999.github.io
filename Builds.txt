@@ -159,3 +159,16 @@ adult="no"
 info="http://your.info.url"
 description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
+name="AF2 CoreELEC LITE test"
+version="1.0"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=CoeALG9gy7GLazceiGO%2BX9orn9fIH4bsEBpua%2BNEB59CIoXrQlJTIy3DOt7mjRB2&expiry=5qwlqxIIJQfyOE0uNx%2FNlw%3D%3D&mac=2ff251034d3fb017994c2e1a58b65f7c8f521c58b40932734e75aa1f9da624bc"
+minor="http://"
+gui="http://"
+kodi="21"
+theme="http://your.themes.url"
+icon="https://i.postimg.cc/gJfdjkjN/Screenshot-2025-09-27-at-3-15-53-PM.png"
+fanart="https://i.postimg.cc/gJfdjkjN/Screenshot-2025-09-27-at-3-15-53-PM.png"
+preview="http://"
+adult="no"
+info="http://your.info.url"
+description="بيلد مخفف وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
