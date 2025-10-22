@@ -1173,7 +1173,7 @@ updated YouTube addon URL
             <clearlogo>resources/media/clearlogo.png</clearlogo>
         </assets>
     </extension>
-</addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.14" provider-name="drinfernoo, slamious">
+</addon><addon id="plugin.program.openwizardTaiseer" name="AbuKarim Wizard" version="2.0.18.15" provider-name="drinfernoo, slamious">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
