@@ -32,7 +32,7 @@
             <param name="font_light">URWGeometricArabic-Medium.ttf</param>
               <param name="plot_linespacing_head">1.15</param>
             <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">1.1</param>
+            <param name="plot_linespacing_main">0.8</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">32</param>
@@ -51,7 +51,7 @@
             <param name="font_light">PFDinTextArabic-Medium.ttf</param>
             <param name="plot_linespacing_head">1.1</param>
             <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">1.0</param>
+            <param name="plot_linespacing_main">0.92</param>
             <param name="plot_linespacing_mini">1</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">30</param>
@@ -129,7 +129,7 @@
             <param name="font_light">GeezaPro.ttf</param>
            <param name="plot_linespacing_head">1.15</param>
             <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">1.47</param>
+            <param name="plot_linespacing_main">1.1</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">31</param>
@@ -169,7 +169,7 @@
             <param name="font_light">Hacen-Promoter -reg.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.2</param>
+            <param name="plot_linespacing_main">1.18</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">28</param>
