@@ -2883,3 +2883,7 @@ msgstr ""
 msgctxt "#32086"
 msgid "Two-row information bar"
 msgstr "قسم المعلومات الى سطرين"
+
+msgctxt "#32086"
+msgid "System"
+msgstr ""

@@ -3164,3 +3164,7 @@ msgstr ""
 msgctxt "#32085"
 msgid "Decoding"
 msgstr ""
+
+msgctxt "#32086"
+msgid "System"
+msgstr ""
