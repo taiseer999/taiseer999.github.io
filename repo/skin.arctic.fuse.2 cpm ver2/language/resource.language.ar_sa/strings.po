@@ -2779,6 +2779,18 @@ msgctxt "#31587"
 msgid "Flip"
 msgstr "اقلب"
 
+msgctxt "#32035"
+msgid "Passthrough"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Input"
+msgstr ""
+
+msgctxt "#32055"
+msgid "Output"
+msgstr ""
+
 msgctxt "#32057"
 msgid "Top left"
 msgstr "اليسار"
@@ -2865,8 +2877,8 @@ msgid "Codecs & PPI"
 msgstr "معلومات المشغل PPI والترميز"
 
 msgctxt "#32085"
-msgid "DiscArt"
-msgstr "DiscArt"
+msgid "Decoding"
+msgstr ""
 
 msgctxt "#32086"
 msgid "Two-row information bar"
