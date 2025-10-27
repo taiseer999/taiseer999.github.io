@@ -80,4 +80,8 @@
         <filename>XB-Zar.ttf</filename>
         <familyname>XB Zar</familyname>
     </font>
+    <font>
+        <filename>tonos.ttf</filename>
+        <familyname>tonos</familyname>
+    </font>
 </fonts>
