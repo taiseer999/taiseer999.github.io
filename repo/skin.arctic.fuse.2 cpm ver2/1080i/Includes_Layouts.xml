@@ -2550,10 +2550,7 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                     </include>
-                    <include content="Object_Control" condition="$PARAM[selected]">
-                        <param name="control">image</param>
-                        <include>Texture_Box_Highlight_V</include>
-                    </include>
+                   
 
                     <include content="Object_Layout_Image_Icon">
                         <param name="selected">$PARAM[selected]</param>
