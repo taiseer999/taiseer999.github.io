@@ -206,7 +206,7 @@
                     </control>
                     <include>Object_BusySpinner_Image</include>
                     <control type="image">
-                        <texture colordiffuse="main_fg_70">special://skin/extras/icons/kodi.png</texture>
+                        <texture colordiffuse="main_fg_70">special://skin/extras/icons/coreelec.png</texture>
                         <aspectratio>keep</aspectratio>
                         <bordersize>30</bordersize>
                     </control>
@@ -238,7 +238,7 @@
                     <param name="hasspinner">true</param>
                     <param name="spinspinner">true</param>
                     <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-                    <param name="icon">special://skin/extras/icons/kodi.png</param>
+                    <param name="icon">special://skin/extras/icons/coreelec.png</param>
                     <param name="haslabel">false</param>
                 </include>
             </control>

@@ -1348,8 +1348,8 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] $INFO[Player.Process(audiochannelssink),][COLOR main_fg]$VAR[AudioCodecSpatialVar][/COLOR]</label>
-						<font>font_debug</font>
+						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR main_fg]$VAR[AudioCodecSpatialVar][/COLOR] $INFO[Player.Process(audiochannels),]</label>
+						<font>font_tiny</font>
 						
 					</control>
 				</control>
@@ -1375,6 +1375,51 @@
 						<label>$INFO[Player.Process(audio.live.kibit.rate),, $LOCALIZE[32012]] $INFO[Player.Process(audio.sample.rate),, kHz] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32012])[/COLOR]]</label>
 						<font>font_debug</font>
 						
+					</control>
+				</control>
+
+                   <control type="group"> <!-- Output -->
+					<width>620</width>
+					<height>40</height>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR main_fg]$LOCALIZE[32055]:[/COLOR]</label>
+						<font>font_debug</font>
+						
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$LOCALIZE[32035]</label>
+						<font>font_debug</font>
+						<visible>Player.Passthrough</visible>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(audiochannelssink),]</label>
+						<font>font_debug</font>
+						<visible>!Player.Passthrough</visible>
+					</control>
+
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$LOCALIZE[32085]</label>
+						<font>font_debug</font>
+						<visible>!Player.Passthrough + String.IsEmpty(Player.Process(audiochannelssink))</visible>
 					</control>
 				</control>
 
@@ -1434,45 +1479,6 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[VideoPlayer.SubtitlesLanguage]$VAR[|] $INFO[VideoPlayer.SubtitlesLangEx]</label>
-						<font>font_debug</font>
-						
-						<visible>!VideoPlayer.SubtitlesEnabled</visible>
-					</control>
-				</control>
-
-				<control type="group"> <!-- Subtitle name -->
-					<width>620</width>
-					<height>40</height>
-					<visible>VideoPlayer.HasSubtitles</visible>
-					<visible>!String.IsEmpty(VideoPlayer.SubtitlesName)</visible>
-					<control type="label">
-						<width>220</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>left</align>
-						<label>[COLOR main_fg]Subtitles Name:[/COLOR]</label>
-						<font>font_debug</font>
-						
-					</control>
-					<control type="label">
-						<left>220</left>
-						<width>400</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>right</align>
-						<label>$VAR[SubtitleVar] $VAR[SubtitleNameVar]</label>
-						<font>font_debug</font>
-						
-						<visible>VideoPlayer.SubtitlesEnabled</visible>
-						<visible>VideoPlayer.HasSubtitles</visible>
-					</control>
-					<control type="label">
-						<left>220</left>
-						<width>400</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>right</align>
-						<label>$INFO[VideoPlayer.SubtitlesName]</label>
 						<font>font_debug</font>
 						
 						<visible>!VideoPlayer.SubtitlesEnabled</visible>

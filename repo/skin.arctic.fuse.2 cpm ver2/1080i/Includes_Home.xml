@@ -463,12 +463,12 @@
                         <width>40</width>
                         <height>40</height>
                         <control type="image">
-                            <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
+                            <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/coreelec.png</texture>
                             <aspectratio>keep</aspectratio>
                             <bordersize>-16</bordersize>
                         </control>
                         <control type="image">
-                            <texture colordiffuse="$VAR[ColorGradient]">special://skin/extras/icons/kodi.png</texture>
+                            <texture colordiffuse="$VAR[ColorGradient]">special://skin/extras/icons/coreelec.png</texture>
                             <aspectratio>keep</aspectratio>
                             <bordersize>-16</bordersize>
                             <animation effect="fade" end="33" condition="true">Conditional</animation>

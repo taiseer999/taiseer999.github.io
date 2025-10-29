@@ -123,7 +123,7 @@
                     <param name="hasspinner">true</param>
                     <param name="spinspinner">true</param>
                     <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-                    <param name="icon">special://skin/extras/icons/kodi.png</param>
+                    <param name="icon">special://skin/extras/icons/coreelec.png</param>
                     <param name="haslabel">false</param>
                 </include>
             </control>
