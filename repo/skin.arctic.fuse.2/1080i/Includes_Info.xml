@@ -521,17 +521,17 @@
         <param name="is_player">false</param>
         <definition>
             <include content="Info_RatingsLine_Object" condition="![$PARAM[is_player]]">
-                <param name="icon">flags/$VAR[Info_RatingsLine_Object_Style]/ratings/kodi.png</param>
+                <param name="icon">flags/$VAR[Info_RatingsLine_Object_Style]/ratings/coreelec.png</param>
                 <param name="label">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_rating)]</param>
                 <param name="visible">[$PARAM[visible]] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_rating)) + String.IsEmpty($PARAM[container]ListItem.Rating) + !String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer))</param>
             </include>
             <include content="Info_RatingsLine_Object" condition="![$PARAM[is_player]]">
-                <param name="icon">flags/$VAR[Info_RatingsLine_Object_Style]/ratings/kodi.png</param>
+                <param name="icon">flags/$VAR[Info_RatingsLine_Object_Style]/ratings/coreelec.png</param>
                 <param name="label">$INFO[$PARAM[container]ListItem.Rating]</param>
                 <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[container]ListItem.Rating)</param>
             </include>
             <include content="Info_RatingsLine_Object" condition="$PARAM[is_player]">
-                <param name="icon">flags/$VAR[Info_RatingsLine_Object_Style]/ratings/kodi.png</param>
+                <param name="icon">flags/$VAR[Info_RatingsLine_Object_Style]/ratings/coreelec.png</param>
                 <param name="label">$INFO[VideoPlayer.Rating]</param>
                 <param name="visible">[$PARAM[visible]] + !String.IsEmpty(VideoPlayer.Rating)</param>
             </include>
@@ -2383,7 +2383,7 @@
             <orientation>horizontal</orientation>
             <itemgap>30</itemgap>
             <height>80</height>
-            <centertop>50%</centertop>
+            <centertop>-30%</centertop>
             <control type="image">
                 <width>300</width>
                 <height>80</height>

@@ -2383,7 +2383,7 @@
             <orientation>horizontal</orientation>
             <itemgap>30</itemgap>
             <height>80</height>
-            <centertop>50%</centertop>
+            <centertop>-30%</centertop>
             <control type="image">
                 <width>300</width>
                 <height>80</height>

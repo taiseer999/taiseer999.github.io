@@ -350,9 +350,7 @@
             <param name="id">010</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[572]</label>
-            <selected>!Skin.HasSetting(Furniture.DisableStudio)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.DisableStudio)</onclick>
-            <visible>!Skin.HasSetting(Furniture.EnableClock)</visible>
+            <visible>Skin.HasSetting(Furniture.EnableClock)</visible>
         </include>
         <include content="Settings_Button" description="Now Playing">
             <param name="dialog">false</param>

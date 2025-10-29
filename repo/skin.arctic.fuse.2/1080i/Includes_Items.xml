@@ -521,14 +521,7 @@
             <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes)</selected>
             <label>$LOCALIZE[20360]</label>
         </include>
-        <include content="Settings_Button">
-            <param name="id">8038</param>
-            <param name="control">radiobutton</param>
-            <param name="dialog">true</param>
-            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableStudio)</onclick>
-            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableStudio)</selected>
-            <label>$LOCALIZE[572]</label>
-        </include>
+       
         <include content="Settings_Button">
             <param name="id">8039</param>
             <param name="control">radiobutton</param>
