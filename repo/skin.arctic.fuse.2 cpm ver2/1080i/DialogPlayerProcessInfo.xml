@@ -33,7 +33,7 @@
 				<top>-220</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="main_fg_90">common/coal_blur.png</texture>
+				<texture colordiffuse="dialog_fg_90_90">common/coal_blur.png</texture>
 			</control>
 			<!-- PVR Left -->
 			<control type="grouplist">
@@ -44,7 +44,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamServiceName,[COLOR main_fg]$LOCALIZE[19099]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamServiceName,[COLOR dialog_fg_90]$LOCALIZE[19099]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -52,7 +52,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamProviderName,[COLOR main_fg]$LOCALIZE[19101]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamProviderName,[COLOR dialog_fg_90]$LOCALIZE[19101]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -60,7 +60,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamClient,[COLOR main_fg]$LOCALIZE[19012]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamClient,[COLOR dialog_fg_90]$LOCALIZE[19012]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -68,7 +68,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamDevice,[COLOR main_fg]$LOCALIZE[19006]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamDevice,[COLOR dialog_fg_90]$LOCALIZE[19006]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -76,7 +76,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamStatus,[COLOR main_fg]$LOCALIZE[19007]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamStatus,[COLOR dialog_fg_90]$LOCALIZE[19007]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -84,7 +84,7 @@
 					<width>1200</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR main_fg]$LOCALIZE[19015]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamEncryptionName,[COLOR dialog_fg_90]$LOCALIZE[19015]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -99,7 +99,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamBer,[COLOR main_fg]$LOCALIZE[19010]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamBer,[COLOR dialog_fg_90]$LOCALIZE[19010]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -107,7 +107,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamUnc,[COLOR main_fg]$LOCALIZE[19011]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamUnc,[COLOR dialog_fg_90]$LOCALIZE[19011]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -115,7 +115,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamMux,[COLOR main_fg]$LOCALIZE[19100]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamMux,[COLOR dialog_fg_90]$LOCALIZE[19100]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -123,7 +123,7 @@
 					<width>600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamSignal,[COLOR main_fg]$LOCALIZE[19008]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamSignal,[COLOR dialog_fg_90]$LOCALIZE[19008]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -138,7 +138,7 @@
 					<width>1600</width>
 					<height>50</height>
 					<aligny>bottom</aligny>
-					<label>$INFO[PVR.ActStreamSNR,[COLOR main_fg]$LOCALIZE[19009]:[/COLOR] ]</label>
+					<label>$INFO[PVR.ActStreamSNR,[COLOR dialog_fg_90]$LOCALIZE[19009]:[/COLOR] ]</label>
 					<font>font_debug</font>
 					
 				</control>
@@ -163,7 +163,7 @@
 						<left>-15</left>
 						<width>110</width>
 						<height>54</height>
-                        <texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
+                        <texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
 						<width>300</width>
@@ -184,7 +184,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Version:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Version:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -207,7 +207,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Profile:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Profile:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -242,7 +242,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Level:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Level:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -265,7 +265,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]RPU:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]RPU:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -288,7 +288,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Base Layer:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Base Layer:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -311,7 +311,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Enhancement Layer:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Enhancement Layer:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -346,7 +346,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Enhancement Layer Type:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Enhancement Layer Type:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -379,7 +379,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Metadata:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Metadata:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -409,7 +409,7 @@
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
-						<texture colordiffuse="main_fg_100">special://skin/extras/icons/dolbyvision.png</texture>
+						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolbyvision.png</texture>
 					</control>
 					<control type="label">
 						<left>250</left>
@@ -431,7 +431,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]L6 Max CLL/FALL:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]L6 Max CLL/FALL:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -475,7 +475,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]L6 Min/Max:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]L6 Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -518,7 +518,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Source Min/Max:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Source Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -561,7 +561,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]L1 Min/Max/Avg:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]L1 Min/Max/Avg:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -623,7 +623,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Source Min/Max:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Source Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -666,7 +666,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]L1 Min/Max/Avg:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]L1 Min/Max/Avg:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -729,7 +729,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]L5 Active Offsets:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]L5 Active Offsets:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -828,7 +828,7 @@
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
-						<texture colordiffuse="main_fg_100">special://skin/extras/icons/hdr10.png</texture>
+						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/hdr10.png</texture>
 					</control>
 					<control type="label">
 						<top>5</top>
@@ -849,7 +849,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Max CLL/FALL:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Max CLL/FALL:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -893,7 +893,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Min/Max:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Min/Max:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -939,7 +939,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Colour Primaries:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Colour Primaries:[/COLOR]</label>
 						<font>font_debug</font>
 						
 						
@@ -974,7 +974,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Screen resolution:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Screen resolution:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -998,9 +998,9 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Kodi fps:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Kodi fps:[/COLOR]</label>
 						<font>font_debug</font>
-						<color>main_fg</color>
+						<color>dialog_fg_90</color>
 					</control>
 					<control type="label">
 						<left>220</left>
@@ -1022,7 +1022,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Video decoder|deinterlace:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Video decoder|deinterlace:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1046,7 +1046,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]A|V bit rate:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]A|V bit rate:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1083,7 +1083,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Cache:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Cache:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1115,7 +1115,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Memory:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Memory:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1148,7 +1148,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]CPU Usage %:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]CPU Usage %:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1181,7 +1181,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]CPU :[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]CPU :[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1213,7 +1213,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Video source type:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Video source type:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1263,7 +1263,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Video encoding:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Video encoding:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1289,7 +1289,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Video encoding 2:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Video encoding 2:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1314,7 +1314,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Video colour:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Video colour:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1338,7 +1338,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Audio encoding:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Audio encoding:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1348,7 +1348,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR main_fg]$VAR[AudioCodecSpatialVar][/COLOR] $INFO[Player.Process(audiochannels),]</label>
+						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR dialog_fg_90]$VAR[AudioCodecSpatialVar][/COLOR] $INFO[Player.Process(audiochannels),]</label>
 						<font>font_tiny</font>
 						
 					</control>
@@ -1362,7 +1362,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Bitrate/sampling:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Bitrate/sampling:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1386,7 +1386,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]$LOCALIZE[32055]:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]$LOCALIZE[32055]:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1432,7 +1432,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Audio language:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Audio language:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1457,7 +1457,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Subtitle language:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Subtitle language:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1500,7 +1500,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Display mode:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Display mode:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1525,7 +1525,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]EOTF & Gamut:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]EOTF & Gamut:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1551,7 +1551,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Dolby Vision Profile:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Dolby Vision Profile:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1577,7 +1577,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Dolby Vision Metadata:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Dolby Vision Metadata:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1603,7 +1603,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]VS10 mode:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]VS10 mode:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1628,7 +1628,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]Pixel Format:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Pixel Format:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1654,7 +1654,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR main_fg]AML fps:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]AML fps:[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
