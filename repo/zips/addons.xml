@@ -3795,6 +3795,40 @@ You can clone the project and host it in your own server.
       <icon>icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.dbview" name="dbviewer" version="1.0.5" provider-name="Zaxxon709">
+    <extension point="xbmc.python.pluginsource" library="default.py">
+    </extension>
+    <extension point="xbmc.python.module" library="resources" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">View Authorized Accounts</summary>
+        <description lang="en">Debrid Manager Dependency</description>
+        <platform>all</platform>
+        <reuselanguageinvoker>false</reuselanguageinvoker>
+        <source>https://</source>
+    </extension>
+</addon><addon id="script.module.debridmgr" version="1.0.6" name="Debrid Manager" provider-name="Zaxxon709">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.requests" version="2.19.1" />
+            	<import addon="script.module.dbview" version="1.0.5" />
+	</requires>
+	<extension point="xbmc.service" library="lib/startup.py" start="startup" />
+	<extension point="xbmc.python.script" library="lib/default.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<reuselanguageinvoker>false</reuselanguageinvoker>
+		<summary lang="en">Debrid Manager</summary>
+		<description>Manage your Debrid logins</description>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<disclaimer lang="en">The author is not responsible for the use of this addon. [CR]The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.[CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</disclaimer>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.png</fanart>
+		</assets>
+	</extension>
 </addon><addon id="script.module.defusedxml" name="defusedxml" version="0.6.0+matrix.1" provider-name="Christian Heimes">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -6844,7 +6878,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.10.27">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.10.28">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.28" />
@@ -6875,7 +6909,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.11.2.23">
+</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.11.2.24">
  <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.28" />

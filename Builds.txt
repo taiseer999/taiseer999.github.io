@@ -160,7 +160,7 @@ info="http://your.info.url"
 description="بيلد مخفف وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
 name="AF2 CoreELEC MAX"
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=ZifV813EOuLsATKgLmOJhSRjU6VdgiHsAMvAV%2BfhBxUbDXGP89ud2KA%2BX5ft75Gi&expiry=%2FNaoHwawEf1emgvSsxO1ow%3D%3D&mac=70d2fced3dd2fd98c6ec4b4ec55706613171eabe67dc9a14e6e28d1ab85b8b8d"
 minor="http://"
 gui="http://"
@@ -171,4 +171,4 @@ fanart="https://i.postimg.cc/VL0rcYw3/Screenshot-2025-10-26-at-7-36-35-AM.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="بيلد مخفف وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
+description="بيلد كامل وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
