@@ -37,6 +37,7 @@ class source:
 			self.hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode'])) if 'tvshowtitle' in data else self.year
 			self.season_x = data['season'] if 'tvshowtitle' in data else None
 			self.season_xx = data['season'].zfill(2) if 'tvshowtitle' in data else None
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 
@@ -94,7 +95,7 @@ class source:
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'dmm', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'dmm', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': 0
 				}
 				if package: item['package'] = package

@@ -188,7 +188,7 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		if self.discover_params['media_type'] == 'movie': genres = meta_lists.movie_genres
 		else: genres = meta_lists.tvshow_genres
-		genre_list = [(k, v[0]) for k,v in sorted(genres.items())]
+		genre_list = [(k, v[0]) for k, v in sorted(genres.items())]
 		genres_choice = self._multiselect_dialog(heading_base % (include_base_str % ls(32470)), [i[0] for i in genre_list], genre_list)
 		if genres_choice != None:
 			genre_ids = ','.join([i[1] for i in genres_choice])
@@ -201,7 +201,7 @@ class Discover:
 		if self._action(key) in ('clear', None): return
 		if self.discover_params['media_type'] == 'movie': genres = meta_lists.movie_genres
 		else: genres = meta_lists.tvshow_genres
-		genre_list = [(k, v[0]) for k,v in sorted(genres.items())]
+		genre_list = [(k, v[0]) for k, v in sorted(genres.items())]
 		genres_choice = self._multiselect_dialog(heading_base % (exclude_base_str % ls(32470)), [i[0] for i in genre_list], genre_list)
 		if genres_choice != None:
 			genre_ids = ','.join([i[1] for i in genres_choice])
@@ -233,7 +233,7 @@ class Discover:
 	def rating(self):
 		key = 'rating'
 		if self._action(key) in ('clear', None): return
-		ratings = [i for i in range(1,11)]
+		ratings = [i for i in range(1, 11)]
 		ratings_list = [str(float(i)) for i in ratings]
 		rating = self._selection_dialog(ratings_list, ratings, heading_base % ('%s %s' % (ls(32661), ls(32621))))
 		if rating != None:
@@ -243,7 +243,7 @@ class Discover:
 	def rating_votes(self):
 		key = 'rating_votes'
 		if self._action(key) in ('clear', None): return
-		rating_votes = [i for i in range(0,1001,50)]
+		rating_votes = [i for i in range(0, 1001, 50)]
 		rating_votes.pop(0)
 		rating_votes.insert(0, 1)
 		rating_votes_list = [str(i) for i in rating_votes]

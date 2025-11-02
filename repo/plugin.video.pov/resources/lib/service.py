@@ -83,7 +83,7 @@ def traktMonitor():
 	trakt_service_string = 'TraktMonitor Service Update %s - %s'
 	update_string = 'Next Update in %s minutes...'
 	if not kodi_utils.get_property('pov_traktmonitor_first_run') == 'true':
-		for i in ('user_lists', 'my_lists'): clear_trakt_list_contents_data(i)
+		for i in ('user_lists', 'liked_lists', 'my_lists'): clear_trakt_list_contents_data(i)
 		kodi_utils.set_property('pov_traktmonitor_first_run', 'true')
 	while not monitor.abortRequested():
 		while is_playing() or get_visibility('Container().isUpdating') or get_property('pov_pause_services') == 'true': monitor.waitForAbort(10)
@@ -112,7 +112,7 @@ def traktMonitor():
 def premAccntNotification():
 	logger('POV', 'Debrid Account Expiry Notification Service Starting')
 	from importlib import import_module
-	for name, expires, module, cls in (
+	for user, expires, module, cls in (
 		('ad.account_id', 'ad.expires', 'alldebrid_api', 'AllDebridAPI'),
 		('pm.account_id', 'pm.expires', 'premiumize_api', 'PremiumizeAPI'),
 		('rd.username', 'rd.expires', 'real_debrid_api', 'RealDebridAPI'),
@@ -120,7 +120,7 @@ def premAccntNotification():
 		('tb.account_id', 'tb.expires', 'torbox_api', 'TorBoxAPI')
 	):
 		try:
-			if get_setting(name) == '': continue
+			if not get_setting(user): continue
 			if limit := int(get_setting(expires, '7')):
 				module = 'debrids.%s' % module
 				cls = getattr(import_module(module), cls)

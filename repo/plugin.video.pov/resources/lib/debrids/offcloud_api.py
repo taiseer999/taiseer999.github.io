@@ -24,13 +24,11 @@ class OffcloudAPI:
 		params = params or {}
 		params['key'] = self.token
 		url = '%s/%s' % (base_url, path) if not path.startswith('http') else path
-		try:
-			response = session.request(method, url, params=params, json=data, timeout=timeout)
-			result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
-			if not response.ok: response.raise_for_status()
-			return result
-		except requests.exceptions.RequestException as e:
-			kodi_utils.logger('offcloud error', str(e))
+		try: response = session.request(method, url, params=params, json=data, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
 	def _get(self, url, params=None):
 		return self._request('get', url, params=params)
@@ -61,7 +59,8 @@ class OffcloudAPI:
 	def delete_torrent(self, request_id):
 		params = {'key': self.token}
 		url = 'https://offcloud.com/cloud/remove/%s' % request_id
-		return self._get(url, params=params)
+		result = self._get(url, params=params)
+		return True if not result is None and result['success'] else False
 
 	def unrestrict_link(self, link):
 		return link

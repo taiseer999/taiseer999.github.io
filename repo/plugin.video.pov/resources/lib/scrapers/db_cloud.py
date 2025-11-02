@@ -46,8 +46,6 @@ class source(Debrid):
 	def _scrape_cloud(self):
 		try:
 			results_append = self.scrape_results.append
-			threads = []
-			append = threads.append
 			try: my_cloud_files = [
 				{**file, 'folder_name': files['name']}
 				for files in self.user_cloud(check_cache=False)

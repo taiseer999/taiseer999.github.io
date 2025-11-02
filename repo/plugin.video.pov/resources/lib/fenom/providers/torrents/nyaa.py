@@ -11,6 +11,7 @@ from fenom import source_utils
 
 
 class source:
+	timeout = 5
 	priority = 5
 	pack_capable = False
 	hasMovies = True
@@ -46,6 +47,7 @@ class source:
 			url2 = '%s%s' % (self.base_link, url2)
 			urls.append(url2)
 			# log_utils.log('urls = %s' % urls)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
@@ -54,7 +56,7 @@ class source:
 
 		for url in urls:
 			try:
-				results = client.request(url, timeout=5)
+				results = client.request(url, timeout=self.timeout)
 				if not results or 'magnet:' not in results: return sources
 				results = re.sub(r'[\n\t]', '', results)
 				tbody = client.parseDOM(results, 'tbody')

@@ -301,7 +301,7 @@ def folder_scraper_manager_choice(folder_info=None):
 	def _clear_property(setting_id):
 		clear_property(setting_id)
 	def _exit_save_settings():
-		for folder_no in range(1,6):
+		for folder_no in range(1, 6):
 			set_setting(name_setting % folder_no,  _get_property(name_setting % folder_no))
 			set_setting(movie_dir_setting % folder_no,  _get_property(movie_dir_setting % folder_no))
 			set_setting(tvshow_dir_setting % folder_no,  _get_property(tvshow_dir_setting % folder_no))
@@ -315,7 +315,7 @@ def folder_scraper_manager_choice(folder_info=None):
 			{'number': folder_no, 'name': folder_names[folder_no], 'display_setting': name_setting % folder_no,
 			'movie_setting': movie_dir_setting % folder_no, 'tvshow_setting': tvshow_dir_setting % folder_no, 'display': _get_property(name_setting % folder_no),
 			'movie_dir': _get_property(movie_dir_setting % folder_no), 'tvshow_dir': _get_property(tvshow_dir_setting % folder_no)}
-			for folder_no in range(1,6)
+			for folder_no in range(1, 6)
 		]
 	def _update_folder_info():
 		folder_info.update({'display': _get_property(name_setting % folder_info['number']), 'movie_dir': _get_property(movie_dir_setting % folder_info['number']),

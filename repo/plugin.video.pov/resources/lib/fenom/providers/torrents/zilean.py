@@ -3,9 +3,7 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
-import re, requests
-#from fenom import client
+import requests
 from fenom import source_utils
 
 
@@ -43,8 +41,9 @@ class source:
 				hdlr = year
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
-			results = requests.get(url, timeout=self.timeout) # client.request(url, timeout=5)
-			files = results.json() # jsloads(results)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
+			results = requests.get(url, timeout=self.timeout)
+			files = results.json()
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
@@ -69,17 +68,18 @@ class source:
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
+				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					dsize, isize = source_utils.convert_size(float(file["size"]), to='GB')
+					size = f"{float(file['size']) / 1073741824:.2f} GB"
+					dsize, isize = source_utils._size(size)
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'zilean', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'zilean', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': 0
 				}
 				if package: item['package'] = package

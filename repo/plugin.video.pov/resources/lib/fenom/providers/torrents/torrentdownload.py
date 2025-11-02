@@ -3,16 +3,14 @@
 	Fenomscrapers Project
 """
 
-import re, requests
+import re
 from urllib.parse import quote_plus, unquote_plus
 from fenom import client
 from fenom import source_utils
 
-session = requests.Session()
-session.headers = {'User-Agent': client.randomagent()}
-
 
 class source:
+	timeout = 5
 	priority = 3
 	pack_capable = True
 	hasMovies = True
@@ -34,6 +32,7 @@ class source:
 			self.episode_title = data['title'] if 'tvshowtitle' in data else None
 			self.year = data['year']
 			self.hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode'])) if 'tvshowtitle' in data else self.year
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 
@@ -58,8 +57,7 @@ class source:
 
 	def get_sources(self, url):
 		try:
-#			results = client.request(url, timeout=5)
-			results = session.get(url, timeout=5).text
+			results = client.request(url, timeout=self.timeout)
 			if not results: return
 			rows = client.parseDOM(results, 'tr')
 		except:
@@ -118,6 +116,7 @@ class source:
 			self.year = data['year']
 			self.season_x = data['season']
 			self.season_xx = self.season_x.zfill(2)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 
@@ -144,8 +143,7 @@ class source:
 
 	def get_sources_packs(self, link):
 		try:
-#			results = client.request(link, timeout=5)
-			results = session.get(link, timeout=5).text
+			results = client.request(link, timeout=self.timeout)
 			if not results: return
 			rows = client.parseDOM(results, 'tr')
 		except:

@@ -8,7 +8,7 @@ ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
 ip_url = 'https://api.ipify.org'
 base_url = 'https://api.torbox.app/v1/api'
-timeout = 28.0
+timeout = 20.0
 session = requests.Session()
 session.mount('https://api.torbox.app', requests.adapters.HTTPAdapter(max_retries=1))
 
@@ -17,36 +17,29 @@ class TorBoxAPI:
 
 	def __init__(self):
 		self.token = get_setting('tb.token')
-		session.headers.update({'User-Agent': user_agent, 'Authorization': 'Bearer %s' % self.token})
+		session.headers.update(self.headers())
 
 	def _request(self, method, path, params=None, json=None, data=None):
 		url = '%s/%s' % (base_url, path) if not path.startswith('http') else path
-		try:
-			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
-			result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
-			if not response.ok: response.raise_for_status()
-			return result
-		except requests.exceptions.RequestException as e:
-			kodi_utils.logger('torbox error', str(e))
-
-	def _process(self, result, path):
-		if   'control' in path: result = result.get('success')
-		elif 'success' in result and 'data' in result: result = result['data']
-		return result
+		try: response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		response = response.json() if 'json' in response.headers.get('Content-Type', '') else response
+		if 'data' in response and 'success' in response and not 'control' in path: response = response['data']
+		return response
 
 	def _get(self, url, params=None):
-		result = self._request('get', url, params=params)
-		return self._process(result, url)
+		return self._request('get', url, params=params)
 
 	def _post(self, url, params=None, json=None, data=None):
-		result = self._request('post', url, params=params, json=json, data=data)
-		return self._process(result, url)
+		return self._request('post', url, params=params, json=json, data=data)
 
 	def add_headers_to_url(self, url):
 		return '|'.join((str(url), kodi_utils.urlencode(self.headers())))
 
 	def headers(self):
-		return {'User-Agent': user_agent}
+		return {'User-Agent': user_agent, 'Authorization': 'Bearer %s' % self.token}
 
 	def days_remaining(self):
 		import datetime, time
@@ -74,17 +67,20 @@ class TorBoxAPI:
 	def delete_torrent(self, request_id):
 		data = {'torrent_id': request_id, 'operation': 'delete'}
 		url = 'torrents/controltorrent'
-		return self._post(url, json=data)
+		result = self._post(url, json=data)
+		return True if not result is None and result['success'] else False
 
 	def delete_usenet(self, request_id):
 		data = {'usenet_id': request_id, 'operation': 'delete'}
 		url = 'usenet/controlusenetdownload'
-		return self._post(url, json=data)
+		result = self._post(url, json=data)
+		return True if not result is None and result['success'] else False
 
 	def delete_webdl(self, request_id):
 		data = {'webdl_id': request_id, 'operation': 'delete'}
 		url = 'webdl/controlwebdownload'
-		return self._post(url, json=data)
+		result = self._post(url, json=data)
+		return True if not result is None and result['success'] else False
 
 	def unrestrict_link(self, file_id):
 		try: user_ip = requests.get(ip_url, timeout=2.0).text

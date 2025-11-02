@@ -3,9 +3,7 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
 import requests
-#from fenom import client
 from fenom import source_utils
 from fenom.control import setting as getSetting
 
@@ -49,8 +47,9 @@ class source:
 				url = '%s%s' % (self.base_link, self.movieSearch_link)
 				params = {'type': 'movie', 'id': '%s' % imdb}
 			# log_utils.log('url = %s' % url)
-			results = requests.get(url, params=params, headers=self._headers(), timeout=self.timeout) # client.request(url, timeout=7)
-			files = results.json()['data']['results'] # jsloads(results)['streams']
+			if 'timeout' in data: self.timeout = int(data['timeout'])
+			results = requests.get(url, params=params, headers=self._headers(), timeout=self.timeout)
+			files = results.json()['data']['results']
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
@@ -77,7 +76,7 @@ class source:
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
+				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 
 				try:
 					seeders = file['seeders']
@@ -94,7 +93,7 @@ class source:
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'aiostreams', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'aiostreams', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
 				}
 				if package: item['package'] = package

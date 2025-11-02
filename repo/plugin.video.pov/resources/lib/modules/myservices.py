@@ -8,6 +8,7 @@ from modules import kodi_utils, cache
 quote, clear_cache = requests.utils.quote, cache.clear_cache
 get_setting, set_setting, sleep = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.sleep
 notification, confirm_dialog = kodi_utils.notification, kodi_utils.confirm_dialog
+user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
 qr_str = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s'
 meta_keys = 'title year poster fanart clearlogo tmdblogo'
 code_str, nav2_str = 'PIN CODE: [B]%s[/B]', 'LOCATION: [B]%s[/B]'
@@ -87,8 +88,7 @@ class RealDebrid:
 		response = requests.post(self.base_url('oauth/v2/token'), data=data, timeout=timeout)
 		data.update(response.json())
 		sleep(500)
-		headers = {}
-		headers.update({'Authorization': 'Bearer %s' % data['access_token']})
+		headers = {'Authorization': 'Bearer %s' % data['access_token']}
 		response = requests.get(self.base_url('rest/1.0/user'), headers=headers, timeout=timeout)
 		username = response.json()['username']
 		client_id, secret = data['client_id'], data['client_secret']
@@ -102,9 +102,6 @@ class RealDebrid:
 		return True
 
 class Premiumize:
-	user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
-	kodi_utils.logger('user_agent', user_agent)
-
 	def __init__(self):
 		self.token = get_setting('pm.token')
 		self.client_id = '663882072'
@@ -150,8 +147,7 @@ class Premiumize:
 		if progress_dialog.iscanceled(): return False
 		if not self.token: return notification(32574)
 		sleep(500)
-		headers = {'User-Agent': self.user_agent}
-		headers.update({'Authorization': 'Bearer %s' % self.token})
+		headers = {'User-Agent': user_agent, 'Authorization': 'Bearer %s' % self.token}
 		response = requests.get(self.base_url('api/account/info'), headers=headers, timeout=timeout)
 		username = response.json()['customer_id']
 		token = str(data['access_token'])
@@ -202,8 +198,7 @@ class AllDebrid:
 		if progress_dialog.iscanceled(): return False
 		if not self.token: return notification(32574)
 		sleep(500)
-		headers = {}
-		headers.update({'Authorization': 'Bearer %s' % self.token})
+		headers = {'Authorization': 'Bearer %s' % self.token}
 		response = requests.get(self.base_url('v4/user'), headers=headers, timeout=timeout)
 		result = response.json()['data']
 		username = result['user']['username']
@@ -288,8 +283,6 @@ class EasyDebrid:
 		return True
 
 class TorBox:
-	user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
-
 	def __init__(self):
 		self.token = get_setting('tb.token')
 
@@ -311,7 +304,7 @@ class TorBox:
 			clear_cache('tb_cloud', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
 
-		params = {'app': self.user_agent}
+		params = {'app': user_agent}
 		response = requests.get(self.base_url('user/auth/device/start'), params=params, timeout=timeout)
 		result = response.json()['data']
 		data = {'device_code': result['device_code']}

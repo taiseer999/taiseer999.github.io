@@ -279,18 +279,18 @@ def paginate_list(item_list, page, letter, limit=20):
 		if letter == 't':
 			try:
 				beginswith_tuple = ('s', 'the s', 'a s', 'an s')
-				indexes = [i for i,v in enumerate(title_list) if v.startswith(beginswith_tuple)]
+				indexes = [i for i, v in enumerate(title_list) if v.startswith(beginswith_tuple)]
 				start_index = indexes[-1:][0] + 1
 			except: start_index = None
 		else:
 			beginswith_tuple = (letter, 'the %s' % letter, 'a %s' % letter, 'an %s' % letter)
-			try: start_index = next(i for i,v in enumerate(title_list) if v.startswith(beginswith_tuple))
+			try: start_index = next(i for i, v in enumerate(title_list) if v.startswith(beginswith_tuple))
 			except: start_index = None
 		return start_index
 	if letter != 'None':
 		from itertools import chain, zip_longest
 		title_list = [i['title'].lower() for i in item_list]
-		start_list = [chr(i) for i in range(97,123)]
+		start_list = [chr(i) for i in range(97, 123)]
 		letter_index = start_list.index(letter)
 		base_list = [element for element in list(chain.from_iterable([val for val in zip_longest(start_list[letter_index:], start_list[:letter_index][::-1])])) if element != None]
 		for i in base_list:

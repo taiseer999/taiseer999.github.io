@@ -18,19 +18,21 @@ class PremiumizeAPI:
 		self.token = get_setting('pm.token')
 		session.headers.update(self.headers())
 
-	def _get(self, url, data=None):
-		if self.token == '': return None
-		url = base_url + url
-		response = session.get(url, data=data, timeout=timeout)
-		try: return response.json()
-		except: return response.text
+	def _get(self, path):
+		url = base_url + path
+		try: response = session.get(url, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
-	def _post(self, url, data=None):
-		if self.token == '' and not 'token' in url: return None
-		if not 'token' in url: url = base_url + url
-		response = session.post(url, data=data, timeout=timeout)
-		try: return response.json()
-		except: return response.text
+	def _post(self, path, data=None):
+		url = base_url + path
+		try: response = session.post(url, data=data, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
 	def add_headers_to_url(self, url):
 		return url + '|' + kodi_utils.urlencode(self.headers())
@@ -57,9 +59,7 @@ class PremiumizeAPI:
 		return self._get(url)
 
 	def delete_torrent(self, transfer_id):
-		data = {'id': transfer_id}
-		url = 'transfer/delete'
-		return self._post(url, data)
+		return self.delete_object('transfer', transfer_id)
 
 	def unrestrict_link(self, link):
 		data = {'src': link}
@@ -133,13 +133,13 @@ class PremiumizeAPI:
 		else: url = 'item/rename'
 		data = {'id': file_id , 'name': new_name}
 		response = self._post(url, data)
-		return response['status']
+		return True if not response is None and response['status'] == 'success' else False
 
 	def delete_object(self, object_type, object_id):
 		data = {'id': object_id}
 		url = '%s/delete' % object_type
 		response = self._post(url, data)
-		return response['status']
+		return True if not response is None and response['status'] == 'success' else False
 
 	def get_item_details(self, item_id):
 		string = 'pov_pm_item_details_%s' % item_id

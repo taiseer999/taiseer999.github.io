@@ -13,6 +13,7 @@ SERVER_ERROR = ('521 Origin Down', 'No results returned', 'Connection Time-out',
 
 
 class source:
+	timeout = 5
 	priority = 2
 	pack_capable = True
 	hasMovies = True
@@ -41,7 +42,8 @@ class source:
 			url = '%s%s' % (self.base_link, url)
 			# log_utils.log('url = %s' % url)
 
-			rjson = client.request(url, timeout=5)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
+			rjson = client.request(url, timeout=self.timeout)
 			if not rjson or any(value in rjson for value in SERVER_ERROR): return sources
 			files = jsloads(rjson)
 			undesirables = source_utils.get_undesirables()
@@ -100,6 +102,7 @@ class source:
 			self.year = data['year']
 			self.season_x = data['season']
 			self.season_xx = self.season_x.zfill(2)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 
@@ -126,7 +129,7 @@ class source:
 
 	def get_sources_packs(self, link):
 		try:
-			rjson = client.request(link, timeout=5)
+			rjson = client.request(link, timeout=self.timeout)
 			if not rjson or any(value in rjson for value in SERVER_ERROR): return
 			files = jsloads(rjson)
 		except:

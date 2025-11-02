@@ -35,9 +35,9 @@ def log(msg, caller=None, level=LOGINFO):
 			func = inspect.currentframe().f_back.f_code
 			line_number = inspect.currentframe().f_back.f_lineno
 			caller = "%s.%s()" % (caller, func.co_name)
-			msg = 'From func name: %s Line # :%s\n                       msg : %s' % (caller, line_number, msg)
+			msg = '\nFrom func name: %s Line # :%s\n           msg: %s' % (caller, line_number, msg)
 		elif caller is not None and level == LOGERROR:
-			msg = 'From func name: %s.%s() Line # :%s\n                       msg : %s' % (caller[0], caller[1], caller[2], msg)
+			msg = '\nFrom func name: %s.%s() Line # :%s\n           msg: %s' % (caller[0], caller[1], caller[2], msg)
 
 		if debug_location == '1':
 			log_file = joinPath(LOGPATH, 'fenomscrapers.log')

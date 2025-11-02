@@ -4,7 +4,7 @@ import requests
 from threading import Thread
 from caches import trakt_cache
 from caches.main_cache import cache_object
-from indexers.metadata import movie_meta_external_id, tvshow_meta_external_id
+from indexers.metadata import movie_external_id, tvshow_external_id
 from modules import kodi_utils, settings
 from modules.cache import check_databases
 from modules.utils import sort_list, sort_for_article, make_thread_list, jsondate_to_datetime, paginate_list, get_datetime
@@ -22,7 +22,7 @@ retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502
 session.mount('https://api.trakt.tv', requests.adapters.HTTPAdapter(pool_maxsize=100, max_retries=retry))
 
 def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagination=False, page=1):
-	headers = {'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': V2_API_KEY}
+	headers = {'trakt-api-key': V2_API_KEY, 'trakt-api-version': '2', 'Content-Type': 'application/json'}
 	if with_auth is True and (token := settings.trakt_token()):
 		headers['Authorization'] = 'Bearer %s' % token
 	if pagination: params['page'] = page
@@ -59,7 +59,7 @@ def get_trakt(params):
 
 def trakt_refresh():
 	try:
-		data = {'redirect_uri': REDIRECT_URI, 'client_secret': CLIENT_SECRET, 'client_id': V2_API_KEY}
+		data = {'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET, 'redirect_uri': REDIRECT_URI}
 		data.update({'refresh_token': get_setting('trakt.refresh'), 'grant_type': 'refresh_token'})
 		response = call_trakt('oauth/token', data=data, with_auth=False)
 		expires = int(response['created_at']) + int(response['expires_in'])
@@ -448,7 +448,7 @@ def get_trakt_movie_id(item):
 	tmdb_id = None
 	if item['imdb']:
 		try:
-			meta = movie_meta_external_id('imdb_id', item['imdb'])
+			meta = movie_external_id('imdb_id', item['imdb'])
 			tmdb_id = meta['id']
 		except: pass
 	return tmdb_id
@@ -458,13 +458,13 @@ def get_trakt_tvshow_id(item):
 	tmdb_id = None
 	if item['imdb']:
 		try:
-			meta = tvshow_meta_external_id('imdb_id', item['imdb'])
+			meta = tvshow_external_id('imdb_id', item['imdb'])
 			tmdb_id = meta['id']
 		except: tmdb_id = None
 	if not tmdb_id:
 		if item['tvdb']:
 			try:
-				meta = tvshow_meta_external_id('tvdb_id', item['tvdb'])
+				meta = tvshow_external_id('tvdb_id', item['tvdb'])
 				tmdb_id = meta['id']
 			except: tmdb_id = None
 	return tmdb_id

@@ -180,17 +180,17 @@
 	<!-- Sources -->
 	<category label="Sources">
 		<setting label="External Scrapers" type="lsep" />
-		<setting id="provider.external" label="Enable" type="bool" default="true" visible="false" />
+		<setting id="provider.external" label="Enable" type="bool" default="true" />
 		<setting id="filter.foreign.single.audio" label="Remove identified Foreign single audio sources" type="bool" default="true" />
 		<setting id="filter.undesirables" label="Remove Undesirables" type="bool" default="false" />
 			<setting label="Define User Undesirables" type="action" subsetting="true" visible="eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=undesirablesInput)" />
 			<setting label="Remove User Undesirables" type="action" subsetting="true" visible="eq(-2,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=undesirablesUserRemove)" />
 		<setting id="debug.enabled" label="Enable Debug" type="bool" default="false" />
-		<setting id="debug.location" label="Logging Location" type="enum" default="1" values="Kodi Log|Addon Log" enable="eq(-1,true)" visible="eq(-1,true)" />
+		<setting id="debug.location" label="Logging Location" type="enum" default="0" values="Kodi Log|Addon Log" enable="eq(-1,true)" visible="eq(-1,true)" />
 		<setting label="Test All Source Providers (Magneto)" type="action" action="RunPlugin(plugin://plugin.video.pov/?mode=speedTest)" />
 		<setting label="Sources" type="lsep" />
 		<setting id="provider.animetosho" label="animetosho" type="bool" default="false" />
-		<setting id="provider.dmm" label="dmm" type="bool" default="false" visible="false" />
+		<setting id="provider.dmm" label="dmm" type="bool" default="false" />
 		<setting id="provider.nyaa" label="nyaa" type="bool" default="false" />
 		<setting id="provider.piratebay" label="piratebay" type="bool" default="true" />
 		<setting id="provider.torrentio" label="torrentio" type="bool" default="true" />
@@ -205,6 +205,9 @@
 		<setting id="provider.torz" label="stremthru torz" type="bool" default="false" />
 			<setting id="torz.url" label="torz instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
 		<setting id="provider.zilean" label="zilean" type="bool" default="false" />
+		<setting id="provider.prowlarr" label="prowlarr" type="bool" default="false" />
+			<setting id="prowlarr.token" label="x-api-key" type="text" default="" subsetting="true" visible="eq(-1,true)" />
+			<setting id="prowlarr.url" label="url" type="text" default="" subsetting="true" visible="eq(-2,true)" />
 		<setting id="provider.library" label="library" type="bool" default="false" visible="false" />
 		<!-- Folders 1-5 -->
 		<setting label="Folders 1-5" type="lsep" />

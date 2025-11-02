@@ -101,25 +101,6 @@ def mdblist_watchlist(media_type, page_no, letter):
 	else: final_list, total_pages = original_list, 1
 	return final_list, total_pages
 
-def mdb_clean_watchlist(list_id=None, silent=False):
-	if not kodi_utils.get_setting('mdblist.token'): return
-	if not silent and not kodi_utils.confirm_dialog(): return
-	try:
-		from caches.watched_cache import get_watched_items, get_in_progress_tvshows
-		m = get_watched_items('movie', 1, 'None', False)
-		t = get_watched_items('tvshow', 1, 'None', False)
-		p = get_in_progress_tvshows('tvshow', 1, 'None', False)
-		data = {
-			'movies': [{'tmdb': int(i['media_id'])} for i in m[0]],
-			'shows': [{'tmdb': int(i['media_id'])} for i in t[0] + p[0]]
-		}
-		if not data['movies'] and not data['shows']: return
-		if list_id: url = '%s/lists/%s/items/%s' % (base_url, list_id, 'remove')
-		else: url = '%s/watchlist/items/%s' % (base_url, 'remove')
-		call_mdblist(url, json=data, method='post')
-		clear_mdbl_cache()
-	except: pass
-
 def get_mdb(params):
 	results = []
 	action = params['action']

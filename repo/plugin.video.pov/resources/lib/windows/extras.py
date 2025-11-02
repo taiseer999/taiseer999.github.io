@@ -554,7 +554,7 @@ class Extras(BaseDialog):
 	def listitem_check(self):
 		return self.get_infolabel('ListItem.Title') == self.meta['title']
 
-	def add_items(self,_id, items):
+	def add_items(self, _id, items):
 		self.getControl(_id).addItems(items)
 
 	def set_poster(self):

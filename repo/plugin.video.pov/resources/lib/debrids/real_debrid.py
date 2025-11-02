@@ -57,16 +57,17 @@ class Indexer(Debrid):
 		for count, item in enumerate(items, 1):
 			try:
 				cm = []
+				cm_append = cm.append
 				name = item['path'].lstrip('/')
 				name = clean_file_name(name).upper()
 				url_link = item['url_link']
 				if url_link.startswith('/'): url_link = 'http' + url_link
 				size = float(int(item['bytes']))/1073741824
 				display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, size, name)
-				url_params = {'mode': 'real_debrid.resolve_rd', 'url': url_link, 'play': 'true'}
-				down_file_params = {'mode': 'downloader', 'action': 'cloud.realdebrid',
-									'name': name, 'url': url_link, 'image': default_icon}
-				cm.append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+				params = {'name': name, 'url': url_link, 'image': default_icon}
+				url_params = {**params, 'mode': 'real_debrid.resolve_rd', 'play': 'true'}
+				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.realdebrid'}
+				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
@@ -82,15 +83,15 @@ class Indexer(Debrid):
 				if not item['download'].lower().endswith(tuple(extensions)): continue
 				cm = []
 				cm_append = cm.append
-				datetime_object = jsondate_to_datetime(item['generated'], '%Y-%m-%dT%H:%M:%S.%fZ', remove_time=True)
-				filename, url_link = item['filename'], item['download']
-				name = clean_file_name(filename).upper()
+				name = item['filename']
+				name = clean_file_name(name).upper()
 				size = float(int(item['filesize']))/1073741824
+				datetime_object = jsondate_to_datetime(item['generated'], '%Y-%m-%dT%H:%M:%S.%fZ', remove_time=True)
 				display = '%02d | %.2f GB | %s | [I]%s [/I]' % (count, size, datetime_object, name)
-				url_params = {'mode': 'media_play', 'url': url_link, 'media_type': 'video'}
-				delete_params = {'mode': 'real_debrid.rd_delete', 'id': item['id'], 'cache_type': 'download'}
-				down_file_params = {'mode': 'downloader', 'action': 'cloud.realdebrid_direct',
-									'name': name, 'url': url_link, 'image': default_icon}
+				params = {'name': name, 'url': item['download'], 'id': item['id'], 'image': default_icon}
+				url_params = {**params, 'mode': 'media_play', 'media_type': 'video'}
+				delete_params = {**params, 'mode': 'real_debrid.rd_delete', 'cache_type': 'download'}
+				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.realdebrid_direct'}
 				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				cm_append(('[B]%s %s[/B]' % (delete_str, file_str.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
 				url = build_url(url_params)
@@ -105,7 +106,7 @@ class Indexer(Debrid):
 		if not kodi_utils.confirm_dialog(): return
 		if cache_type == 'torrent': result = self.delete_torrent(file_id)
 		else: result = self.delete_download(file_id) # cache_type: 'download'
-		if result.status_code in (401, 403, 404): return kodi_utils.notification(32574)
+		if not result: return kodi_utils.notification(32574)
 		self.clear_cache()
 		kodi_utils.container_refresh()
 

@@ -13,10 +13,10 @@
 		</control>
 		<control type="group">
 			<animation type="WindowOpen" reversible="false">
-				<effect type="slide" start="0,264" end="0,0" time="350" />
+				<effect type="slide" start="0,-268" end="0,0" time="350" />
 			</animation>
-			<left>16</left>
-			<top>804</top>
+			<left>1312</left>
+			<top>8</top>
 			<control type="group">
 				<left>5</left>
 				<top>5</top>

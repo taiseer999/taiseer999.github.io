@@ -5,7 +5,7 @@ from modules import kodi_utils
 
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 base_url = 'https://debrider.app/api/v1'
-timeout = 10.0
+timeout = 20.0
 session = requests.Session()
 session.mount('https://debrider.app', requests.adapters.HTTPAdapter(max_retries=1))
 
@@ -18,13 +18,11 @@ class DebriderAPI:
 
 	def _request(self, method, path, params=None, json=None, data=None):
 		url = '%s/%s' % (base_url, path)
-		try:
-			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
-			result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
-			if not response.ok: response.raise_for_status()
-			return result
-		except requests.exceptions.RequestException as e:
-			kodi_utils.logger('debrider error', str(e))
+		try: response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
 	def _get(self, url, params=None):
 		return self._request('get', url, params=params)
@@ -44,10 +42,9 @@ class DebriderAPI:
 		return self._get(url)
 
 	def delete_torrent(self, request_id):
-		session.headers['Authorization'] = 'Bearer %s' % self.token
-		url = '%s/%s/%s' % (base_url, 'tasks', request_id)
-		result = session.delete(url, timeout=timeout)
-		return 'success' if result.ok else ''
+		url = '%s/%s' % ('tasks', request_id)
+		result = self._request('delete', url)
+		return True if not result is None and not result else False
 
 	def unrestrict_link(self, link):
 		return link
@@ -59,6 +56,8 @@ class DebriderAPI:
 		return [{h: i['files']} for h, i in zip([hash_string], result['result']) if i['cached']]
 
 	def check_cache(self, hashes):
+#		hashes = [f"magnet:?xt=urn:btih:{i}" for i in hashes]
+		hashes = [i for i in hashes if len(i) == 40]
 		data = {'data': hashes}
 		url = 'link/lookup'
 		result = self._post(url, json=data)

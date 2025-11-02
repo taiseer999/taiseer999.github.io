@@ -1,8 +1,11 @@
 
-  [COLOR dodgerblue][B]CREDITS[/B][/COLOR]
-- Fen, Venom, Mr-Kodi.
+  [COLOR dodgerblue][B]Version 5.11[/B][/COLOR]
+- Updated instances urls.
 
   [COLOR dodgerblue][B]Version 5.10[/B][/COLOR]
+- Change for some titles missing mpaa metadata.
+- Changed sources to repsect Settings/Results/Display/Scraper Timeout.
+- Added prowlarr.
 - Increased Trakt api timeout to 10s.
 - Added Exclude Completed Season Premieres subsetting for Auto Play.
 - Disabled Auto Play for all Rescrape with... context menu options.
@@ -364,6 +367,9 @@
 - Reverted all Fen databases to addon_data folder.
 - Changed setting causing erroneous lines in settings file.
 - Fixed hard coded Trakt/TMDb api, moved to settings file defaults.
+
+  [COLOR dodgerblue][B]CREDITS[/B][/COLOR]
+- Fen, Venom, Mr-Kodi.
 
   [COLOR dodgerblue][B]Version 2.6.12/13[/B][/COLOR]
 - Fixed Trakt In Progress issues for Movies and TV Shows where no TMDb ID can be fetched.

@@ -186,7 +186,7 @@ class Images():
 		thumbs_path = os.path.join(folder_path, '.thumbs')
 		thumbs = list_dirs(thumbs_path)[1]
 		thumbs.sort()
-		all_images_json = json.dumps([(os.path.join(folder_path, i), i)for i in files])
+		all_images_json = json.dumps([(os.path.join(folder_path, i), i) for i in files])
 		image_action = json.dumps({'mode': 'slideshow_image', 'all_images': all_images_json, 'page_no': 'final_page'})
 		self.list_items = list(builder())
 		self.next_page_params = {}

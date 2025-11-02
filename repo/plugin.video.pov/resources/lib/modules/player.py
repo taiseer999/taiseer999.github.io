@@ -184,12 +184,12 @@ class POVPlayer(kodi_utils.xbmc_player):
 			if self.current_point >= self.set_watched:
 				if self.media_type == 'movie':
 					watched_function = ws.mark_as_watched_unwatched_movie
-					watched_params = {'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_watched', 'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year,
-									'refresh': 'false', 'from_playback': 'true'}
+					watched_params = {'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_watched', 'refresh': 'false', 'from_playback': 'true',
+									'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year}
 				else:
 					watched_function = ws.mark_as_watched_unwatched_episode
-					watched_params = {'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'season': self.season, 'episode': self.episode,
-									'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year, 'tvdb_id': self.tvdb_id, 'refresh': 'false', 'from_playback': 'true'}
+					watched_params = {'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'refresh': 'false', 'from_playback': 'true',
+									'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year, 'tvdb_id': self.tvdb_id, 'season': self.season, 'episode': self.episode}
 				Thread(target=self.run_media_watched, args=(watched_function, watched_params)).start()
 			else:
 #				kodi_utils.clear_property('pov_total_autoplays')

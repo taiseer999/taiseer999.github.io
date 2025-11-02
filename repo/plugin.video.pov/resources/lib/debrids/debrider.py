@@ -36,10 +36,9 @@ class Indexer(Debrid):
 				if not item['status'] == 'completed' and not item['type'] == 'torrent': continue
 				cm = []
 				cm_append = cm.append
-				request_id, folder_name = item['id'], item['name']
-				delete_params = {'mode': 'debrider.db_delete', 'folder_id': request_id}
-				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, folder_str, clean_file_name(normalize(folder_name)).upper())
-				url_params = {'mode': 'debrider.db_browse_cloud', 'folder_id': request_id}
+				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, folder_str, clean_file_name(normalize(item['name'])).upper())
+				url_params = {'mode': 'debrider.db_browse_cloud', 'folder_id': item['id']}
+				delete_params = {'mode': 'debrider.db_delete', 'folder_id': item['id']}
 				cm_append(('[B]%s %s[/B]' % (delete_str, folder_str.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
@@ -58,11 +57,11 @@ class Indexer(Debrid):
 				name = item['name'].split('/')[-1]
 				name = clean_file_name(name).upper()
 				size = float(int(item['size']))/1073741824
-				link = item['download_link']
 				display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, size, name)
-				url_params = {'mode': 'media_play', 'url': link, 'media_type': 'video'}
-				down_file_params = {'mode': 'downloader', 'action': 'cloud.debrider_direct', 'name': name, 'url': link, 'image': default_icon}
-				cm_append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+				params = {'name': name, 'url': item['download_link'], 'image': default_icon}
+				url_params = {**params, 'mode': 'media_play', 'media_type': 'video'}
+				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.debrider_direct'}
+				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
@@ -75,7 +74,7 @@ class Indexer(Debrid):
 	def cloud_delete(self, folder_id):
 		if not kodi_utils.confirm_dialog(): return
 		result = self.delete_torrent(folder_id)
-		if 'success' not in result: return kodi_utils.notification(32574)
+		if not result: return kodi_utils.notification(32574)
 		self.clear_cache()
 		kodi_utils.container_refresh()
 
@@ -83,7 +82,8 @@ class Indexer(Debrid):
 		try:
 			kodi_utils.show_busy_dialog()
 			account_info = self.account_info()
-			plan, desc = account_info['subscription']['plan']['name'], account_info['subscription']['plan']['description']
+			plan = account_info['subscription']['plan']['name']
+			desc = account_info['subscription']['plan']['description']
 			body = []
 			append = body.append
 			append(ls(32758) % account_info['id'])

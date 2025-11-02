@@ -49,7 +49,7 @@ class Indexer(Debrid):
 					url_params = {'mode': 'media_play', 'url': link, 'media_type': 'video'}
 					down_file_params = {'mode': 'downloader', 'action': 'cloud.offcloud_direct', 'name': folder_name, 'url': link, 'image': default_icon}
 					cm_append(('[B]%s %s[/B]' % (delete_str, file_str.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
-					cm.append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+					cm.append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
@@ -68,9 +68,10 @@ class Indexer(Debrid):
 				name = clean_file_name(name).upper()
 				link = self.requote_uri(item)
 				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, file_str, name)
-				url_params = {'mode': 'media_play', 'url': link, 'media_type': 'video'}
-				down_file_params = {'mode': 'downloader', 'action': 'cloud.offcloud_direct', 'name': name, 'url': link, 'image': default_icon}
-				cm_append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+				params = {'name': name, 'url': link, 'image': default_icon}
+				url_params = {**params, 'mode': 'media_play', 'media_type': 'video'}
+				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.offcloud_direct'}
+				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
@@ -83,7 +84,7 @@ class Indexer(Debrid):
 	def cloud_delete(self, folder_id):
 		if not kodi_utils.confirm_dialog(): return
 		result = self.delete_torrent(folder_id)
-		if 'success' not in result: return kodi_utils.notification(32574)
+		if not result: return kodi_utils.notification(32574)
 		self.clear_cache()
 		kodi_utils.container_refresh()
 

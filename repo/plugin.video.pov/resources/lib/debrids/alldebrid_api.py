@@ -16,25 +16,25 @@ class AllDebridAPI:
 		self.token = get_setting('ad.token')
 		session.headers['Authorization'] = 'Bearer %s' % self.token
 
-	def _get(self, url, params=None):
-		if self.token == '': return None
-		result = None
-		url = base_url + url
-		try:
-			result = session.get(url, params=params, timeout=timeout).json()
-			if result.get('status') == 'success' and 'data' in result: result = result['data']
-		except: pass
-		return result
+	def _get(self, path, params=None):
+		url = base_url + path
+		try: response = session.get(url, params=params, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		response = response.json() if 'json' in response.headers.get('Content-Type', '') else response
+		if 'data' in response and response.get('status') == 'success': response = response['data']
+		return response
 
-	def _post(self, url, data=None):
-		if self.token == '': return None
-		result = None
-		url = base_url + url
-		try:
-			result = session.post(url, data=data, timeout=timeout).json()
-			if result.get('status') == 'success' and 'data' in result: result = result['data']
-		except: pass
-		return result
+	def _post(self, path, data=None):
+		url = base_url + path
+		try: response = session.post(url, data=data, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		response = response.json() if 'json' in response.headers.get('Content-Type', '') else response
+		if 'data' in response and response.get('status') == 'success': response = response['data']
+		return response
 
 	def days_remaining(self):
 		import datetime
@@ -60,8 +60,7 @@ class AllDebridAPI:
 		url = 'v4/magnet/delete'
 		params = {'id': transfer_id}
 		result = self._get(url, params)
-		result = False if 'error' in result else True
-		return result
+		return True if not result is None and not 'error' in result else False
 
 	def unrestrict_link(self, link):
 		url = 'v4/link/unlock'

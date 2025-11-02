@@ -14,6 +14,7 @@ session.headers = {'User-Agent': client.randomagent()}
 
 
 class source:
+	timeout = 5
 	priority = 5
 	pack_capable = True
 	hasMovies = True
@@ -36,6 +37,7 @@ class source:
 			self.year = data['year']
 			self.hdlr = 'S%02dE%02d' % (int(data['season']), int(data['episode'])) if 'tvshowtitle' in data else self.year
 			self.hdlr2 = 'S%d - %d' % (int(data['season']), int(data['episode'])) if 'tvshowtitle' in data else self.year
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 
@@ -68,7 +70,7 @@ class source:
 	def get_sources(self, url):
 		try:
 #			results = client.request(url, timeout=5)
-			results = session.get(url, timeout=5).text
+			results = session.get(url, timeout=self.timeout).text
 			if not results: return
 			rows = client.parseDOM(results, 'div', attrs={'class': 'home_list_entry home_list_entry_alt home_list_entry_compl_1'})
 		except:
@@ -135,6 +137,7 @@ class source:
 			self.year = data['year']
 			self.season_x = data['season']
 			self.season_xx = self.season_x.zfill(2)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			self.undesirables = source_utils.get_undesirables()
 			self.check_foreign_audio = source_utils.check_foreign_audio()
 
@@ -163,7 +166,7 @@ class source:
 	def get_sources_packs(self, link):
 		try:
 #			results = client.request(link, timeout=5)
-			results = session.get(link, timeout=5).text
+			results = session.get(link, timeout=self.timeout).text
 			if not results: return
 			rows = client.parseDOM(results, 'div', attrs={'class': 'home_list_entry home_list_entry_alt home_list_entry_compl_1'})
 		except:

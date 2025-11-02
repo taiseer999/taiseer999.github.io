@@ -61,8 +61,9 @@ def get_tmdb_lists(params):
 def build_tmdb_list(params):
 	def _thread_target(q):
 		while not q.empty():
-			try: target, *args = q.get() ; target(*args)
+			try: target, *args = q.get()
 			except: pass
+			else: target(*args)
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
 	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
 	user, name, list_id = params.get('user'), params.get('name'), params.get('list_id')

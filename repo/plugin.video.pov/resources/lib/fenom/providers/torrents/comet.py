@@ -3,9 +3,7 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
 import re, requests
-#from fenom import client
 from fenom import source_utils
 from fenom.control import setting as getSetting
 
@@ -19,7 +17,7 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = (
-			"https://comet.matrixnode.ru",
+			"https://comet.stremio.ru",
 			"https://comet.elfhosted.com",
 			"https://cometfortheweebs.midnightignite.me"
 		)[int(getSetting('comet.url', '0'))]
@@ -48,8 +46,9 @@ class source:
 				hdlr = year
 				url = '%s/%s%s' % (self.base_link, self._params(), self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
-			results = requests.get(url, timeout=self.timeout) # client.request(url, timeout=7)
-			files = results.json()['streams'] # jsloads(results)['streams']
+			if 'timeout' in data: self.timeout = int(data['timeout'])
+			results = requests.get(url, timeout=self.timeout)
+			files = results.json()['streams']
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
@@ -79,7 +78,7 @@ class source:
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
+				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 
 				try:
 					seeders = int(re.search(r'👤\s*(\d+)', file_info).group(1))
@@ -96,7 +95,7 @@ class source:
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'comet', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'comet', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
 				}
 				if package: item['package'] = package

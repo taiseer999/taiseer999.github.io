@@ -3,8 +3,8 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
-import re, requests
+from json import loads as jsloads
+import re
 from fenom import client
 from fenom import source_utils
 
@@ -44,9 +44,9 @@ class source:
 				hdlr = year
 				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
-			headers = {'User-Agent': client.randomagent(), 'Accept': 'application/json'}
-			results = requests.get(url, headers=headers, timeout=self.timeout) # client.request(url, timeout=5)
-			files = results.json()['streams'] # jsloads(results)['streams']
+			if 'timeout' in data: self.timeout = int(data['timeout'])
+			results = client.request(url, timeout=self.timeout)
+			files = jsloads(results)['streams']
 			_INFO = re.compile(r'👤.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
@@ -81,7 +81,7 @@ class source:
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
+				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				# if not episode_title: #filter for eps returned in movie query (rare but movie and show exists for Run in 2020)
 					# ep_strings = [r'(?:\.|\-)s\d{2}e\d{2}(?:\.|\-|$)', r'(?:\.|\-)s\d{2}(?:\.|\-|$)', r'(?:\.|\-)season(?:\.|\-)\d{1,2}(?:\.|\-|$)']
 					# name_lower = name.lower()
@@ -102,7 +102,7 @@ class source:
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'torrentio', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'torrentio', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
 				}
 				if package: item.update({'package': package, 'true_size': True})

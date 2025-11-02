@@ -14,11 +14,7 @@ def thumb_cleaner():
 	if not dbfile.exists(): return notification('Failed')
 	item_list = []
 	minimum_uses = 30
-	days = xbmcgui.Dialog().input(
-		'Remove Thumbs Older Than (Days)...',
-		defaultt=str(minimum_uses),
-		type=xbmcgui.INPUT_NUMERIC
-	)
+	days = xbmcgui.Dialog().numeric(0 , 'Remove Thumbs Older Than (Days)...', defaultt=str(minimum_uses))
 	if not days: return notification('No Days Set')
 	back_date = (current_date - timedelta(days=int(days))).strftime('%Y-%m-%d %H:%M:%S')
 	dbcon = database.connect(str(dbfile), isolation_level=None)

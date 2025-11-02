@@ -71,10 +71,10 @@ class Indexer(Debrid):
 				name = clean_file_name(item['short_name']).upper()
 				size = float(int(item['size']))/1073741824
 				display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, size, name)
-				params = {'url': item['url'], 'media_type': item['mediatype']}
-				url_params = {'mode': 'torbox.resolve_tb', 'play': 'true', **params}
-				down_file_params = {'mode': 'downloader', 'action': 'cloud.torbox', 'name': name, 'image': default_icon, **params}
-				cm_append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+				params = {'name': name, 'url': item['url'], 'media_type': item['mediatype'], 'image': default_icon}
+				url_params = {**params, 'mode': 'torbox.resolve_tb', 'play': 'true'}
+				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.torbox'}
+				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)

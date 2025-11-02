@@ -81,6 +81,7 @@ class Indexer(Debrid):
 		for count, item in enumerate(items, 1):
 			try:
 				cm = []
+				cm_append = cm.append
 				file_type = 'folder' if item['file_id'] is None else 'file'
 				name = clean_file_name(item['name']).upper()
 				message = '[CR]'.join(item['message'].split(', '))
@@ -99,9 +100,8 @@ class Indexer(Debrid):
 					display_size = float(int(size))/1073741824
 					display = '%02d | %.2f%% | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, progress, file_str, display_size, name)
 					url_params = {'mode': 'media_play', 'url': url_link, 'media_type': 'video'}
-					down_file_params = {'mode': 'downloader', 'media_type': 'cloud.premiumize',
-										'name': item['name'], 'url': url_link, 'image': default_icon}
-					cm.append((down_str,'RunPlugin(%s)' % build_url(down_file_params)))
+					down_file_params = {'mode': 'downloader', 'media_type': 'cloud.premiumize', 'name': item['name'], 'url': url_link, 'image': default_icon}
+					cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
@@ -114,7 +114,7 @@ class Indexer(Debrid):
 	def cloud_delete(self, file_type, file_id):
 		if not kodi_utils.confirm_dialog(): return
 		result = self.delete_object(file_type, file_id)
-		if not result == 'success': return kodi_utils.ok_dialog(text=32574, top_space=True)
+		if not result: return kodi_utils.ok_dialog(text=32574, top_space=True)
 		self.clear_cache()
 		kodi_utils.container_refresh()
 
@@ -122,7 +122,7 @@ class Indexer(Debrid):
 		new_name = kodi_utils.dialog.input('POV', defaultt=current_name)
 		if not new_name: return
 		result = self.rename_cache_item(file_type, file_id, new_name)
-		if not result == 'success': return kodi_utils.ok_dialog(text=32574, top_space=True)
+		if not result: return kodi_utils.ok_dialog(text=32574, top_space=True)
 		self.clear_cache()
 		kodi_utils.container_refresh()
 

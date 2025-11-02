@@ -21,6 +21,21 @@ season_display, show_display = ls(32537), ls(32089)
 pack_check = (season_display, show_display)
 
 class External:
+	def dialog_hook(function):
+		def wrapper(instance, *args, **kwargs):
+			if not instance.background:
+				hide_busy_dialog()
+				if not instance.progress_dialog and not instance.load_action:
+					progressDialogBG.create('POV', 'POV loading...')
+				else: instance._make_progress_dialog()
+			result = function(instance, *args, **kwargs)
+			if not instance.background:
+				if not instance.progress_dialog and not instance.load_action:
+					progressDialogBG.close()
+				else: instance._kill_progress_dialog()
+			return result
+		return wrapper
+
 	def __init__(self, source_dict, debrid_torrents, debrid_hosters, internal_scrapers, prescrape_sources, display_uncached_torrents, progress_dialog, disabled_ignored=False):
 		self.scrape_provider = 'external'
 		self.debrid_torrents, self.debrid_hosters = debrid_torrents, debrid_hosters
@@ -37,46 +52,42 @@ class External:
 		self.int_dialog_highlight, self.ext_dialog_highlight = get_setting('int_dialog_highlight', 'darkgoldenrod'), get_setting('ext_dialog_highlight', 'dodgerblue')
 		self.finish_early, self.load_action = get_setting('search.finish.early') == 'true', get_setting('load_action') == '1'
 		self.int_total, self.ext_total = total_format % (self.int_dialog_highlight, '%s'), total_format % (self.ext_dialog_highlight, '%s')
-		self.timeout = 30 if self.disabled_ignored else int(get_setting('scrapers.timeout.1', '10'))
+		self.timeout = int(get_setting('scrapers.timeout.1', '10')) * 2 if self.disabled_ignored else int(get_setting('scrapers.timeout.1', '10'))
 		self.meta = json.loads(get_property('pov_playback_meta'))
 		self.background = self.meta.get('background', False)
 		self.internal_sources_total, self.internal_resolutions = 0, dict.fromkeys(resolutions.split(), 0)
 		self.sources_total, self.resolutions = {'total': 0}, dict.fromkeys(resolutions.split(), 0)
 
+	@dialog_hook
 	def results(self, info):
-		if not self.background:
-			hide_busy_dialog()
-			if not self.progress_dialog and not self.load_action:
-				progressDialogBG.create('POV', 'POV loading...')
-			else: self._make_progress_dialog()
 		Source.sources_total, Source.resolutions = self.sources_total, self.resolutions
-		Source.hostDict, Source.sources = self.hostDict, self.sources
-		threads = []
-		for provider, module, *pack in self.source_dict:
-			if info['media_type'] == 'movie':
-				if not module.hasMovies: continue
-				args, name = (provider, module), provider
-			else:
-				if not module.hasEpisodes: continue
-				args = provider, module, pack[0] if pack else ''
-				name = pack_display % (provider, pack[0]) if pack and pack[0] else provider
-			obj = Source(info, self.meta, args=args, name=name)
-			obj.thread.start()
-			threads.append(obj)
-		self.wait(threads)
+		Source.hostDict, Source.sources, Source.timeout = self.hostDict, self.sources, self.timeout - 1
 		try:
+			self.threads = []
+			for provider, module, *pack in self.source_dict:
+				if info['media_type'] == 'movie':
+					if not module.hasMovies: continue
+					args, name = (provider, module), provider
+				else:
+					if not module.hasEpisodes: continue
+					args = provider, module, pack[0] if pack else ''
+					name = pack_display % (provider, pack[0]) if pack and pack[0] else provider
+				obj = Source(info, self.meta, args=args, name=name)
+				obj.thread.start()
+				self.threads.append(obj)
+			self.wait()
 			self.sources = self.process_duplicates(self.sources)
 			torrent_sources = [i for i in self.sources if 'hash' in i]
 			result_hashes = list({i['hash'] for i in torrent_sources})
 			DebridCheck.set_cached_hashes(result_hashes)
-			threads = []
+			self.threads = []
 			for item in self.debrid_torrents:
 				if not (args := next((i for i in debrid_list if i[0] == item), None)): continue
 				obj = DebridCheck(*args, meta=self.meta)
 				obj.thread.start()
-				threads.append(obj)
-			self.wait(threads, debrid_check=True)
-			for item in threads:
+				self.threads.append(obj)
+			self.wait(debrid_check=True)
+			for item in self.threads:
 				hashes, status = item.cached_list, ('Unchecked %s' if item.name in ('Real-Debrid', 'AllDebrid') else 'Uncached %s') % item.name
 				self.final_sources.extend([{**i, 'cache_provider': item.name, 'debrid': item.name} for i in torrent_sources if i['hash'] in hashes])
 				self.final_sources.extend([{**i, 'cache_provider': status, 'debrid': item.name} for i in torrent_sources if not i['hash'] in hashes])
@@ -88,13 +99,9 @@ class External:
 					valid_hosters = [i for i in result_hosters if i in v]
 					self.final_sources.extend([{**i, 'debrid': k} for i in hoster_sources if i['source'] in valid_hosters])
 		except: notification(32574)
-		if not self.background:
-			if not self.progress_dialog and not self.load_action:
-				progressDialogBG.close()
-			else: self._kill_progress_dialog()
 		return self.final_sources
 
-	def wait(self, threads, debrid_check=False):
+	def wait(self, debrid_check=False):
 		if not self.background:
 			string1, string2 = ls(32579) if debrid_check else ls(32676), ls(32677)
 			if self.internal_activated or self.internal_prescraped:
@@ -102,12 +109,12 @@ class External:
 				string4 = ext_format % (self.ext_dialog_highlight, '%s')
 			else: string4 = ext_scr_format % (self.ext_dialog_highlight, ls(32118))
 			line1 = line2 = line3 = ''
-		len_threads = len(threads)
+		len_threads = len(self.threads)
 		end_time = time.monotonic() + self.timeout
-		while not all((i.completed for i in threads)):
+		while not all((i.completed for i in self.threads)):
 			if time.monotonic() > end_time or monitor.abortRequested(): break
 			sleep(self.sleep_time)
-			alive_threads = [x.thread.name for x in threads if not x.completed]
+			alive_threads = [x.thread.name for x in self.threads if not x.completed]
 			if not self.background:
 				try:
 					if self.progress_dialog and self.progress_dialog.iscanceled(): break
@@ -192,6 +199,7 @@ class External:
 
 class Source:
 	scrape_provider = 'external'
+	timeout = 10
 	hostDict = {}
 	sources = []
 	sources_total, resolutions = {'total': 0}, dict.fromkeys(resolutions.split(), 0)
@@ -206,14 +214,14 @@ class Source:
 			self.get_source = self.get_movie_source
 			self.season_divider, self.show_divider = 1, 1
 			self.data = {
-				'imdb': info['imdb_id'], 'aliases': aliases, 'title': self.title, 'year': self.year
+				'timeout': self.timeout, 'imdb': info['imdb_id'], 'aliases': aliases, 'title': self.title, 'year': self.year
 			}
 		else:
 			self.get_source = self.get_episode_source
 			self.season_divider = int(next((x['episode_count'] for x in meta['season_data'] if int(x['season_number']) == int(meta['season'])), 1))
 			self.show_divider = int(meta['total_aired_eps'])
 			self.data = {
-				'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'aliases': aliases,
+				'timeout': self.timeout, 'imdb': info['imdb_id'], 'tvdb': info['tvdb_id'], 'aliases': aliases,
 				'title': normalize(info['ep_name']), 'tvshowtitle': self.title, 'year': self.year,
 				'season': str(self.season), 'episode': str(self.episode), 'total_seasons': self.total_seasons
 			}

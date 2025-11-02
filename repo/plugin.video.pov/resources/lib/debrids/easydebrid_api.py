@@ -5,7 +5,7 @@ from modules import kodi_utils
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 ip_url = 'https://api.ipify.org'
 base_url = 'https://easydebrid.com/api/v1'
-timeout = 10.0
+timeout = 20.0
 session = requests.Session()
 session.mount('https://easydebrid.com', requests.adapters.HTTPAdapter(max_retries=1))
 
@@ -18,13 +18,11 @@ class EasyDebridAPI:
 
 	def _request(self, method, path, params=None, json=None, data=None):
 		url = '%s/%s' % (base_url, path)
-		try:
-			response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
-			result = response.json() if 'json' in response.headers.get('Content-Type', '') else response.text
-			if not response.ok: response.raise_for_status()
-			return result
-		except requests.exceptions.RequestException as e:
-			kodi_utils.logger('easydebrid error', str(e))
+		try: response = session.request(method, url, params=params, json=json, data=data, timeout=timeout)
+		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
+		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
+		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
 	def _get(self, url, params=None):
 		return self._request('get', url, params=params)

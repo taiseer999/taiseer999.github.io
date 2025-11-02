@@ -114,7 +114,7 @@ class MetaCache(BaseCache):
 		except: return
 
 	def delete_all_seasons_memory_cache(self, media_id):
-		for item in range(1,51): clear_property('pov_meta_season_%s_%s' % (string(media_id), string(item)))
+		for item in range(1, 51): clear_property('pov_meta_season_%s_%s' % (string(media_id), string(item)))
 
 	def delete_all(self):
 		try:

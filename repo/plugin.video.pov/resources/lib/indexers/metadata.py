@@ -4,7 +4,7 @@ from modules.utils import jsondate_to_datetime, subtract_dates, make_thread_list
 # from modules.kodi_utils import logger
 
 movie_data, tvshow_data, tmdb_english_translation = tmdb.movie_details, tmdb.tvshow_details, tmdb.english_translation
-movie_external, tvshow_external, season_episodes_details = tmdb.movie_external_id, tmdb.tvshow_external_id, tmdb.season_episodes_details
+movie_external_id, tvshow_external_id, season_episodes_details = tmdb.movie_external_id, tmdb.tvshow_external_id, tmdb.season_episodes_details
 default_fanarttv_data, fanarttv_get, fanarttv_add = fanarttv.default_fanart_nometa, fanarttv.get, fanarttv.add
 subtract_dates_function, jsondate_to_datetime_function = subtract_dates, jsondate_to_datetime
 backup_resolutions, writer_credits = {'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632'}, ('Author', 'Writer', 'Screenplay', 'Characters')
@@ -33,7 +33,7 @@ def movie_meta(id_type, media_id, user_info, current_date):
 		tmdb_api = user_info['tmdb_api']
 		if id_type == 'tmdb_id' or id_type == 'imdb_id': data = movie_data(media_id, language, tmdb_api)
 		else:
-			external_result = movie_external(id_type, media_id, tmdb_api)
+			external_result = movie_external_id(id_type, media_id, tmdb_api)
 			if not external_result: data = None
 			else: data = movie_data(external_result['id'], language, tmdb_api)
 		if not data or data.get('success', True) is False:
@@ -88,7 +88,7 @@ def tvshow_meta(id_type, media_id, user_info, current_date):
 		if id_type == 'tmdb_id':
 			data = tvshow_data(media_id, language, tmdb_api)
 		else:
-			external_result = tvshow_external(id_type, media_id, tmdb_api)
+			external_result = tvshow_external_id(id_type, media_id, tmdb_api)
 			if not external_result: data = None
 			else: data = tvshow_data(external_result['id'], language, tmdb_api)
 		if not data or data.get('success', True) is False:
@@ -181,12 +181,6 @@ def all_episodes_meta(meta, user_info, Thread):
 	except: pass
 	return data
 
-def movie_meta_external_id(external_source, external_id):
-	return movie_external(external_source, external_id)
-
-def tvshow_meta_external_id(external_source, external_id):
-	return tvshow_external(external_source, external_id)
-
 def english_translation(media_type, media_id, user_info):
 	key = 'title' if media_type == 'movie' else 'name'
 	translations = tmdb_english_translation(media_type, media_id, user_info['tmdb_api'])
@@ -256,7 +250,7 @@ def build_movie_meta(data, user_info, fanarttv_data=None):
 			x['certification']
 			for i in release_dates['results']
 			for x in i['release_dates']
-			if i['iso_3166_1'] == 'US' and x['certification'] != '' and x['note'] == ''
+			if i['iso_3166_1'] == 'US' and x['certification']
 		][0]
 		except: pass
 	credits = data_get('credits')
@@ -264,7 +258,7 @@ def build_movie_meta(data, user_info, fanarttv_data=None):
 		all_cast = credits.get('cast', None)
 		if all_cast:
 			try: cast = [
-				{'name': i['name'], 'role': i['character'], 'thumbnail': tmdb_image_base % (image_resolution['profile'], i['profile_path'])if i['profile_path'] else ''}
+				{'name': i['name'], 'role': i['character'], 'thumbnail': tmdb_image_base % (image_resolution['profile'], i['profile_path']) if i['profile_path'] else ''}
 				for i in all_cast
 			]
 			except: pass

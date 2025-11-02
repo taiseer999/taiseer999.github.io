@@ -66,7 +66,7 @@ def get_bookmarks(watched_indicators, media_type):
 def set_bookmark(media_type, tmdb_id, curr_time, total_time, title, season='', episode=''):
 	try:
 		adjusted_current_time = float(curr_time) - 5
-		resume_point = round(adjusted_current_time/float(total_time)*100,1)
+		resume_point = round(adjusted_current_time/float(total_time)*100, 1)
 		watched_indicators = settings.watched_indicators()
 		if watched_indicators == 1: trakt_progress('set_progress', media_type, tmdb_id, resume_point, season, episode, refresh_trakt=True)
 		else:
@@ -246,7 +246,7 @@ def get_watched_status_season(watched_info, tmdb_id, season, aired_eps):
 
 def get_watched_status_episode(watched_info, tmdb_id, season='', episode=''):
 	try:
-		watched = [i for i in watched_info if i[0] == tmdb_id and (i[1],i[2]) == (season,episode)]
+		watched = [i for i in watched_info if i[0] == tmdb_id and (i[1], i[2]) == (season, episode)]
 		if watched: return 1, 5
 		else: return 0, 4
 	except: return 0, 4

@@ -3,9 +3,7 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
 import hashlib, requests
-#from fenom import client
 from fenom import source_utils
 from fenom.control import setting as getSetting
 
@@ -46,6 +44,7 @@ class source:
 			else:
 				hdlr = year
 			# log_utils.log('url = %s' % url)
+			if 'timeout' in data: self.timeout = int(data['timeout'])
 			headers = {'User-Agent': self.user_agent, 'Authorization': 'Bearer %s' % self.token}
 			results = requests.get(url, params=params, headers=headers, timeout=self.timeout)
 			files = results.json()['data']['nzbs']
@@ -93,7 +92,7 @@ class source:
 
 				item = {
 					'source': 'usenet', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'torboxnews', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'torboxnews', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders, 'tracker': file['tracker']
 				}
 				if package: item['package'] = package
