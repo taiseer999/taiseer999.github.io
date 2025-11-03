@@ -146,12 +146,12 @@
         <param name="size_light_hint">17</param>
 
         <!-- Tiny -->
-        <param name="size_heavy_tiny">22</param>
-        <param name="size_light_tiny">22</param>
+        <param name="size_heavy_tiny">23</param>
+        <param name="size_light_tiny">23</param>
 
         <!-- Mini -->
-        <param name="size_heavy_mini">25</param>
-        <param name="size_light_mini">24</param>
+        <param name="size_heavy_mini">26</param>
+        <param name="size_light_mini">26</param>
 
         <!-- Main -->
         <param name="size_heavy_main">30</param>
@@ -172,14 +172,14 @@
         <!-- Huge -->
         <param name="size_heavy_huge">45</param>
         <param name="size_light_huge">45</param>
-        <param name="size_heavy_huge_x2">80</param>
+        <param name="size_heavy_huge_x2">90</param>
         <param name="size_light_huge_x2">90</param>
 
         <!-- Linespacing -->
         <param name="plot_linespacing_head">1.146</param>
-        <param name="plot_linespacing_midi">1.5</param>
+        <param name="plot_linespacing_midi">1.46</param>
         <param name="plot_linespacing_main">1.135</param>
-        <param name="plot_linespacing_mini">1.1</param>
+        <param name="plot_linespacing_mini">1.24</param>
         <param name="plot_linespacing_tiny">1.1</param>
 
         <definition>
@@ -324,7 +324,7 @@
             <font>
                 <name>font10</name>
                 <filename>$PARAM[font_regular]</filename>
-                <size>$PARAM[size_heavy_tiny]</size>
+                <size>$PARAM[size_light_tiny]</size>
             </font>
             <font>
                 <name>font12</name>
@@ -339,7 +339,7 @@
             <font>
                 <name>font14</name>
                 <filename>$PARAM[font_regular]</filename>
-                 <size>$PARAM[size_heavy_mini]</size>
+                  <size>$PARAM[size_light_midi]</size>
             </font>
             <font>
                 <name>font45</name>
