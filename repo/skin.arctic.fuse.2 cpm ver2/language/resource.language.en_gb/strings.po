@@ -3161,10 +3161,11 @@ msgctxt "#32086"
 msgid "Two-row information bar"
 msgstr ""
 
-msgctxt "#32085"
+msgctxt "#32087"
 msgid "Decoding"
 msgstr ""
 
-msgctxt "#32086"
+
+msgctxt "#32088"
 msgid "System"
-msgstr ""
+msgstr "

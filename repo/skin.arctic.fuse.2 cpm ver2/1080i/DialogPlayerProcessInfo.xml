@@ -1443,7 +1443,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]$INFO[Player.Process(audiochannels),]</label>
-						<font>font_debug</font>
+						<font>font_tiny</font>
 						
 					</control>
 				</control>
