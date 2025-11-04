@@ -33,7 +33,7 @@
 				<top>-220</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="main_fg_90">common/coal_blur.png</texture>
+				<texture colordiffuse="$VAR[ColorHighlight]">common/coal_blur.png</texture>
 			</control>
 			<!-- PVR Left -->
 			<control type="grouplist">
@@ -1348,7 +1348,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR dialog_fg_90]$VAR[AudioCodecSpatialVar][/COLOR] $INFO[Player.Process(audiochannels),]</label>
+						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR dialog_fg_90]$VAR[AudioCodecSpatialVar][/COLOR]</label>
 						<font>font_tiny</font>
 						
 					</control>
@@ -1437,12 +1437,12 @@
 						
 					</control>
 					<control type="label">
-						<left>220</left>
-						<width>400</width>
+						<left>170</left>
+						<width>450</width>
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]</label>
+						<label>$INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]$INFO[Player.Process(audiochannels),]</label>
 						<font>font_debug</font>
 						
 					</control>
