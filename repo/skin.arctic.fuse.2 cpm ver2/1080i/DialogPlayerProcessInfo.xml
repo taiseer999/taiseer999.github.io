@@ -1191,7 +1191,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[System.CpuFrequency] $VAR[|] $INFO[System.CPUTemperature]</label>
+						<label>$INFO[System.CpuFrequency] $VAR[|][COLOR GREEN] $INFO[System.CPUTemperature][/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1442,8 +1442,8 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[VideoPlayer.AudioLanguage] $VAR[|] $INFO[VideoPlayer.AudioLanguageEx]$INFO[Player.Process(audiochannels),]</label>
-						<font>font_tiny</font>
+						<label>[COLOR ffdaa520]$INFO[VideoPlayer.AudioLanguage][/COLOR]  ($INFO[Player.Process(audiochannels),])</label>
+						<font>font_hint</font>
 						
 					</control>
 				</control>
