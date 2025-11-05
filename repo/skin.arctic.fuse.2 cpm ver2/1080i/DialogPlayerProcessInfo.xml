@@ -1273,7 +1273,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR ffdaa520]$INFO[VideoPlayer.VideoCodec][/COLOR] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[VideoPlayer.VideoAspect] $VAR[|] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
+						<label>[COLOR ffdaa520]$INFO[VideoPlayer.VideoCodec][/COLOR] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
 						<font>font_debug</font>
 						
 					</control>
