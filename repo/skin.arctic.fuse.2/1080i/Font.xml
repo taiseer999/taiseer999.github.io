@@ -197,6 +197,44 @@
         <param name="size_light_main_x2">60</param>
         </include>
     </fontset>
+
+    <fontset id="Rosemery" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">ArbFONTS-rosemery.ttf</param>
+            <param name="font_bold">ArbFONTS-rosemery.ttf</param>
+            <param name="font_regular">ArbFONTS-rosemery.ttf</param>
+            <param name="font_light">ArbFONTS-rosemery.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.15</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">28</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+
+    <fontset id="AdobeArabic" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AdobeArabic-BoldItalic.ttf</param>
+            <param name="font_bold">AdobeArabic-BoldItalic.ttf</param>
+            <param name="font_regular">AdobeArabic-BoldItalic.ttf</param>
+            <param name="font_light">AdobeArabic-BoldItalic.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.0</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">35</param>
+        <param name="size_light_main">38</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
 </fonts>
 
 
