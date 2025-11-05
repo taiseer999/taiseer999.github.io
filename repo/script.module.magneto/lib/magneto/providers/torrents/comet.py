@@ -3,7 +3,7 @@
 	Fenomscrapers Project
 """
 
-from json import loads as jsloads, dumps as jsdumps
+from json import loads as jsloads
 import re, queue
 from magneto.modules import client
 from magneto.modules import source_utils
@@ -12,28 +12,20 @@ from magneto.modules.control import setting as getSetting
 
 class source:
 	timeout = 10
-	priority = 2
+	priority = 1
 	pack_capable = True
 	hasMovies = True
 	hasEpisodes = True
 	_queue = queue.SimpleQueue()
 	def __init__(self):
-		params = (
-			'eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2Us'
-			'InJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUi'
-			'LCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJk'
-			'ZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhj'
-			'bHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3Zl'
-			'X3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxz'
-			'ZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
-		)
 		self.language = ['en']
 		self.base_link = (
+			"https://comet.stremio.ru",
 			"https://comet.elfhosted.com",
 			"https://cometfortheweebs.midnightignite.me"
 		)[int(getSetting('comet.url', '0'))]
-		self.movieSearch_link = f"/{params}/stream/movie/%s.json"
-		self.tvSearch_link = f"/{params}/stream/series/%s:%s:%s.json"
+		self.movieSearch_link = '/stream/movie/%s.json'
+		self.tvSearch_link = '/stream/series/%s:%s:%s.json'
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -51,17 +43,20 @@ class source:
 				season = data['season']
 				episode = data['episode']
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
-				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
+				url = '%s/%s%s' % (self.base_link, self._params(), self.tvSearch_link % (imdb, season, episode))
 			else:
 				hdlr = year
-				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
+				url = '%s/%s%s' % (self.base_link, self._params(), self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
 			try:
 				results = client.request(url, timeout=self.timeout)
 				files = jsloads(results)['streams']
-			except: files = []
-			self._queue.put_nowait(files) # if seasons
-			self._queue.put_nowait(files) # if shows
+			except:
+				files = []
+				raise
+			finally:
+				self._queue.put_nowait(files) # if seasons
+				self._queue.put_nowait(files) # if shows
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
@@ -83,7 +78,7 @@ class source:
 				if source_utils.remove_lang(name_info, check_foreign_audio): continue
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
-				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name) 
+				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 
 				try:
 					seeders = int(re.search(r'👤\s*(\d+)', file_info).group(1))
@@ -98,8 +93,11 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				sources_append({'provider': 'comet', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				sources_append({
+					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
+					'provider': 'comet', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
+				})
 			except:
 				source_utils.scraper_error('COMET')
 		return sources
@@ -114,7 +112,7 @@ class source:
 			imdb = data['imdb']
 			year = data['year']
 			season = data['season']
-			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
+			url = '%s/%s%s' % (self.base_link, self._params(), self.tvSearch_link % (imdb, season, data['episode']))
 			files = self._queue.get(timeout=self.timeout + 1)
 			_INFO = re.compile(r'💾.*')
 			undesirables = source_utils.get_undesirables()
@@ -164,11 +162,25 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': 'comet', 'source': 'torrent', 'seeders': seeders, 'hash': hash, 'name': name, 'name_info': name_info, 'quality': quality,
-							'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
+				item = {
+					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
+					'provider': 'comet', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders, 'package': package
+				}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)
 			except:
 				source_utils.scraper_error('COMET')
 		return sources
+
+	def _params(self):
+		return (
+			'eyJtYXhSZXN1bHRzUGVyUmVzb2x1dGlvbiI6MCwibWF4U2l6ZSI6MCwiY2FjaGVkT25seSI6ZmFsc2Us'
+			'InJlbW92ZVRyYXNoIjp0cnVlLCJyZXN1bHRGb3JtYXQiOlsidGl0bGUiLCJtZXRhZGF0YSIsInNpemUi'
+			'LCJsYW5ndWFnZXMiXSwiZGVicmlkU2VydmljZSI6InRvcnJlbnQiLCJkZWJyaWRBcGlLZXkiOiIiLCJk'
+			'ZWJyaWRTdHJlYW1Qcm94eVBhc3N3b3JkIjoiIiwibGFuZ3VhZ2VzIjp7InJlcXVpcmVkIjpbXSwiZXhj'
+			'bHVkZSI6W10sInByZWZlcnJlZCI6W119LCJyZXNvbHV0aW9ucyI6e30sIm9wdGlvbnMiOnsicmVtb3Zl'
+			'X3JhbmtzX3VuZGVyIjotMTAwMDAwMDAwMDAsImFsbG93X2VuZ2xpc2hfaW5fbGFuZ3VhZ2VzIjpmYWxz'
+			'ZSwicmVtb3ZlX3Vua25vd25fbGFuZ3VhZ2VzIjpmYWxzZX19'
+		)

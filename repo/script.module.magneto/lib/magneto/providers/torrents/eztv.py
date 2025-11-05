@@ -57,11 +57,8 @@ class source:
 				url = unquote_plus(client.replaceHTMLCodes(link[0])).split('&tr')[0]
 				hash = re.search(r'btih:(.*?)(?:&|$)', url, re.I).group(1)
 				if len(hash) != 40: # eztv has some base32 encoded hashes
-					from magneto.modules import log_utils
 					hash = source_utils.base32_to_hex(hash, 'EZTV')
-					log_utils.log('url with base32 hash:  "%s" ' % url, __name__, log_utils.LOGDEBUG)
 					url = re.sub(re.search(r'btih:(.*?)(?:&|$)', url).group(1), hash, url)
-					log_utils.log('url converted to hex40 hash:  "%s" ' % url, __name__, log_utils.LOGDEBUG)
 
 				name = ''.join(link[1].partition('[eztv]')[:2]).replace(' Torrent: Magnet Link', '')
 				name = source_utils.clean_name(name)
@@ -126,11 +123,8 @@ class source:
 				url = unquote_plus(client.replaceHTMLCodes(link[0])).split('&tr')[0]
 				hash = re.search(r'btih:(.*?)(?:&|$)', url, re.I).group(1)
 				if len(hash) != 40: # eztv has some base32 encoded hashes
-					from magneto.modules import log_utils
 					hash = source_utils.base32_to_hex(hash, 'EZTV')
-					log_utils.log('url with base32 hash:  "%s" ' % url, __name__, log_utils.LOGDEBUG)
 					url = re.sub(re.search(r'btih:(.*?)(?:&|$)', url).group(1), hash, url)
-					log_utils.log('url converted to hex40 hash:  "%s" ' % url, __name__, log_utils.LOGDEBUG)
 
 				name = ''.join(link[1].partition('[eztv]')[:2]).replace(' Torrent: Magnet Link', '')
 				name = source_utils.clean_name(name)

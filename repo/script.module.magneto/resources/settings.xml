@@ -12,31 +12,30 @@
     <setting type="action" label="[COLOR firebrick]-- torrent scraper Info --[/COLOR]" visible="false" action="RunPlugin(plugin://script.module.magneto/?action=ShowHelp&amp;name=torrentInfo)" />
     <setting label="Websites" type="lsep" />
     <setting id="provider.1337x" type="bool" label="$NUMBER[1337]X" default="false" />
-    <setting id="provider.bitcq" type="bool" label="BITCQ (Pack capable)" default="false" />
     <setting id="provider.bitsearch" type="bool" label="BITSEARCH (Pack capable)" default="false" />
     <setting id="provider.eztv" type="bool" label="EZTV (Pack capable/Shows only)" default="false" />
     <setting id="provider.kickass2" type="bool" label="KICKASS2 (Pack capable)" default="false" />
     <setting id="provider.knaben" type="bool" label="KNABEN" default="false" />
-    <setting id="provider.limetorrents" type="bool" label="LIMETORRENTS (Pack capable)" default="false" />
     <setting id="provider.nyaa" type="bool" label="NYAA" default="false" />
     <setting id="provider.piratebay" type="bool" label="PIRATEBAY (Pack capable)" default="true" />
     <setting id="provider.rutor" type="bool" label="RUTOR (Pack capable)" default="false" />
     <setting id="provider.torlock" type="bool" label="TORLOCK" default="false" />
     <setting id="provider.torrentdownload" type="bool" label="TORRENTDOWNLOAD (Pack capable)" default="true" />
-    <setting id="provider.torrentfunk" type="bool" label="TORRENTFUNK (Pack capable)" default="false" />
     <setting id="provider.torrentproject2" type="bool" label="TORRENTPROJECT2 (Pack capable)" default="false" />
     <setting id="provider.torrentz2" type="bool" label="TORRENTZ2 (Pack capable)" default="false" />
     <setting id="provider.ytsmx" type="bool" label="YTSMX (Movies only)" default="false" />
     <setting label="Indexers" type="lsep" />
     <setting id="provider.comet" type="bool" label="COMET (Pack capable)" default="false" />
-        <setting id="comet.url" label="comet instance" type="enum" default="0" values="Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+        <setting id="comet.url" label="comet instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
     <setting id="provider.mediafusion" type="bool" label="MEDIAFUSION (Pack capable)" default="false" />
-        <setting id="mediafusion.url" label="mediafusion instance" type="enum" default="0" values="Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+        <setting id="mediafusion.url" label="mediafusion instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
     <setting id="provider.torz" type="bool" label="STREMTHRU TORZ P2P (Pack capable)" default="false" />
-        <setting id="torz.url" label="torz instance" type="enum" default="0" values="Elfhosted|MunifTanjim" subsetting="true" visible="eq(-1,true)" />
+        <setting id="torz.url" label="torz instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
     <setting id="provider.torrentio" type="bool" label="TORRENTIO (Pack capable)" default="true" />
     <setting id="provider.torrentsdb" type="bool" label="TORRENTSDB (Pack capable)" default="false" />
     <setting id="provider.zilean" type="bool" label="ZILEAN (Pack capable)" default="true" />
+    <setting id="provider.bitmagnet" type="bool" label="BITMAGNET (Pack capable)" default="false" />
+    <setting id="provider.dmm" type="bool" label="DMM (Pack capable)" default="false" />
 </category>
 
 <category label="Prowlarr/Torznab"> <!-- Indexers -->

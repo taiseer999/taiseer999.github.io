@@ -3,12 +3,9 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
 import hashlib, requests, queue
-#from magneto.modules import client
 from magneto.modules import source_utils
-from magneto.modules.control import setting as getSetting
-
+from magneto.modules.control import setting as getSetting, addonInfo
 
 
 class source:
@@ -21,16 +18,16 @@ class source:
 	def __init__(self):
 		self.token = getSetting('prowlarr.token')
 		self.language = ['en']
-		self.headers = {'user-agent': 'Magneto for Kodi', 'x-api-key': self.token}
-		self.base_link = getSetting('prowlarr.url')
+		self.headers = {'user-agent': f"Magneto/{addonInfo('version')}", 'x-api-key': self.token}
+		self.base_link = getSetting('prowlarr.url').rstrip('/')
 		self.movieSearch_link = '/api/v1/search'
 		self.tvSearch_link = '/api/v1/search'
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
 		sources = []
-		if not data or self.token: return sources
-		append = sources.append
+		if not (data and self.token): return sources
+		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			title = title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -51,9 +48,14 @@ class source:
 			try:
 				results = requests.get(url, params=params, headers=self.headers, timeout=self.timeout)
 				files = results.json()
-			except: files = []
-			self._queue.put_nowait(files) # if seasons
-			self._queue.put_nowait(files) # if shows
+			except:
+				files = []
+				raise
+			finally:
+				self._queue.put_nowait(files) # if seasons
+				self._queue.put_nowait(files) # if shows
+			undesirables = source_utils.get_undesirables()
+			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
 			source_utils.scraper_error('PROWLARR')
 			return sources
@@ -61,14 +63,18 @@ class source:
 		for file in files:
 			try:
 				name = source_utils.clean_name(file['title'])
+
 				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
+				if source_utils.remove_lang(name_info, check_foreign_audio): continue
+				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
 				if file['protocol'] == 'usenet':
 					url = file['downloadUrl']
-					file['infoHash'] = hashlib.md5(file['fileName'].encode()).hexdigest()
 					file['seeders'] = file['age']
-				else: url = 'magnet:?xt=urn:btih:%s&dn=%s' % (file['infoHash'], name)
+					file['infoHash'] = file.get('infoHash') or hashlib.md5(file['fileName'].encode()).hexdigest()
+				elif 'infoHash' in file: url = 'magnet:?xt=urn:btih:%s&dn=%s' % (file['infoHash'], name)
+				else: continue
 
 				try:
 					seeders = int(file['seeders'])
@@ -83,15 +89,18 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				append({'provider': file['indexer'], 'source': file['protocol'], 'seeders': seeders, 'hash': file['infoHash'], 'name': name, 'name_info': name_info,
-							'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize})
+				sources_append({
+					'source': file['protocol'], 'language': 'en', 'direct': False, 'debridonly': True,
+					'provider': file['indexer'], 'hash': file['infoHash'], 'url': url, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
+				})
 			except:
 				source_utils.scraper_error('PROWLARR')
 		return sources
 
 	def sources_packs(self, data, hostDict, search_series=False, total_seasons=None, bypass_filter=False):
 		sources = []
-		if not data or not self.token: return sources
+		if not (data and self.token): return sources
 		sources_append = sources.append
 		try:
 			title = data['tvshowtitle'].replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
@@ -101,6 +110,8 @@ class source:
 			season = data['season']
 			url = '%s%s' % (self.base_link, self.tvSearch_link)
 			files = self._queue.get(timeout=self.timeout + 1)
+			undesirables = source_utils.get_undesirables()
+			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
 			source_utils.scraper_error('PROWLARR')
 			return sources
@@ -124,12 +135,15 @@ class source:
 					package = 'show'
 
 				name_info = source_utils.info_from_name(name, title, year, season=season, pack=package)
+				if source_utils.remove_lang(name_info, check_foreign_audio): continue
+				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
+
 				if file['protocol'] == 'usenet':
 					url = file['downloadUrl']
-					file['infoHash'] = hashlib.md5(file['fileName'].encode()).hexdigest()
 					file['seeders'] = file['age']
-				else: url = 'magnet:?xt=urn:btih:%s&dn=%s' % (file['infoHash'], name)
-
+					file['infoHash'] = file.get('infoHash') or hashlib.md5(file['fileName'].encode()).hexdigest()
+				elif 'infoHash' in file: url = 'magnet:?xt=urn:btih:%s&dn=%s' % (file['infoHash'], name)
+				else: continue
 				try:
 					seeders = int(file['seeders'])
 					if self.min_seeders > seeders: continue
@@ -143,8 +157,11 @@ class source:
 				except: dsize = 0
 				info = ' | '.join(info)
 
-				item = {'provider': file['indexer'], 'source': file['protocol'], 'seeders': seeders, 'hash': file['infoHash'], 'name': name, 'name_info': name_info,
-							'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'package': package}
+				item = {
+					'source': file['protocol'], 'language': 'en', 'direct': False, 'debridonly': True,
+					'provider': file['indexer'], 'hash': file['infoHash'], 'url': url, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders, 'package': package
+				}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs
 				sources_append(item)

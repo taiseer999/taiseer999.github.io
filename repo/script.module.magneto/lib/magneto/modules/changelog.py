@@ -3,7 +3,7 @@
 """
 
 from magneto.modules.control import addonPath, addonVersion, joinPath
-from magneto.windows.textviewer import TextViewerXML
+from magneto.modules.textviewer import TextViewerXML
 
 
 def get():

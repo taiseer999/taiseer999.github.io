@@ -3,10 +3,9 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
-import xml.etree.ElementTree as ET
-import requests, queue
-#from magneto.modules import client
+from json import loads as jsloads
+import queue
+from magneto.modules import client
 from magneto.modules import source_utils
 from magneto.modules.control import setting as getSetting
 
@@ -21,11 +20,12 @@ class source:
 	def __init__(self):
 		self.language = ['en']
 		self.base_link = (
+			"https://stremthru.stremio.ru",
 			"https://stremthru.elfhosted.com",
-			"https://stremthru.13377001.xyz"
+			"https://stremthrufortheweebs.midnightignite.me"
 		)[int(getSetting('torz.url', '0'))]
-		self.movieSearch_link = '/v0/torznab/api'
-		self.tvSearch_link = '/v0/torznab/api'
+		self.movieSearch_link = '/v0/torrents?sid=%s'
+		self.tvSearch_link = '/v0/torrents?sid=%s:%s:%s'
 		self.min_seeders = 0
 
 	def sources(self, data, hostDict):
@@ -43,33 +43,30 @@ class source:
 				season = data['season']
 				episode = data['episode']
 				hdlr = 'S%02dE%02d' % (int(season), int(episode))
-				url = '%s%s' % (self.base_link, self.tvSearch_link)
-				params = {'t': 'tvsearch', 'imdbid': imdb, 'season': season, 'ep': episode}
+				url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, episode))
 			else:
 				hdlr = year
-				url = '%s%s' % (self.base_link, self.movieSearch_link)
-				params = {'t': 'movie', 'imdbid': imdb}
+				url = '%s%s' % (self.base_link, self.movieSearch_link % imdb)
 			# log_utils.log('url = %s' % url)
 			try:
-				results = requests.get(url, params=params, timeout=self.timeout) # client.request(url, timeout=self.timeout)
-				files = ET.fromstring(results.text) # jsloads(results)['streams']
-			except: files = ET.fromstring('<?xml version="1.0" ?><metadata />')
-			self._queue.put_nowait(files) # if seasons
-			self._queue.put_nowait(files) # if shows
+				results = client.request(url, timeout=self.timeout)
+				files = jsloads(results)['data']['items']
+			except:
+				files = []
+				raise
+			finally:
+				self._queue.put_nowait(files) # if seasons
+				self._queue.put_nowait(files) # if shows
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
 			source_utils.scraper_error('TORZ')
 			return sources
 
-		for file in files.findall('.//item'):
+		for file in files:
 			try:
-				attr_dict = {}
-				for attr in file.findall('torznab:attr', {'torznab': 'http://torznab.com/schemas/2015/feed'}):
-					key, val = attr.get('name'), attr.get('value')
-					if key and val: attr_dict[key] = val
-				hash = attr_dict.get('infohash', '')
-				name = file.find('title').text
+				hash = file['hash']
+				name = file['name']
 
 				name = source_utils.clean_name(name)
 
@@ -80,10 +77,14 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 
+				try:
+					seeders = file['seeders']
+					if self.min_seeders > seeders: continue
+				except: seeders = 0
+
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = float(attr_dict.get('size', '0'))
-					size = f"{size / 1073741824:.2f} GB"
+					size = f"{float(file['size']) / 1073741824:.2f} GB"
 					dsize, isize = source_utils._size(size)
 					info.insert(0, isize)
 				except: dsize = 0
@@ -91,8 +92,8 @@ class source:
 
 				sources_append({
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'torz', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
-					'quality': quality, 'info': info, 'size': dsize, 'seeders': 0
+					'provider': 'torz', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
 				})
 			except:
 				source_utils.scraper_error('TORZ')
@@ -108,7 +109,7 @@ class source:
 			imdb = data['imdb']
 			year = data['year']
 			season = data['season']
-			url = '%s%s' % (self.base_link, self.tvSearch_link)
+			url = '%s%s' % (self.base_link, self.tvSearch_link % (imdb, season, data['episode']))
 			files = self._queue.get(timeout=self.timeout + 1)
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
@@ -116,14 +117,10 @@ class source:
 			source_utils.scraper_error('TORZ')
 			return sources
 
-		for file in files.findall('.//item'):
+		for file in files:
 			try:
-				attr_dict = {}
-				for attr in file.findall('torznab:attr', {'torznab': 'http://torznab.com/schemas/2015/feed'}):
-					key, val = attr.get('name'), attr.get('value')
-					if key and val: attr_dict[key] = val
-				hash = attr_dict.get('infohash', '')
-				name = file.find('title').text
+				hash = file['hash']
+				name = file['name']
 
 				episode_start, episode_end = 0, 0
 				if not search_series:
@@ -144,11 +141,14 @@ class source:
 				if undesirables and source_utils.remove_undesirables(name_info, undesirables): continue
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
+				try:
+					seeders = file['seeders']
+					if self.min_seeders > seeders: continue
+				except: seeders = 0
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = float(attr_dict.get('size', '0'))
-					size = f"{size / 1073741824:.2f} GB"
+					size = f"{float(file['size']) / 1073741824:.2f} GB"
 					dsize, isize = source_utils._size(size)
 					info.insert(0, isize)
 				except: dsize = 0
@@ -156,8 +156,8 @@ class source:
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'torz', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
-					'quality': quality, 'info': info, 'size': dsize, 'seeders': 0, 'package': package
+					'provider': 'torz', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
+					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders, 'package': package
 				}
 				if search_series: item.update({'last_season': last_season})
 				elif episode_start: item.update({'episode_start': episode_start, 'episode_end': episode_end}) # for partial season packs

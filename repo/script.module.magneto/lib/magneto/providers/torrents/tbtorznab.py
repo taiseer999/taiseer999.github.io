@@ -3,17 +3,15 @@
 	Fenomscrapers Project
 """
 
-#from json import loads as jsloads
 import xml.etree.ElementTree as ET
 import hashlib, requests, queue
-#from magneto.modules import client
 from magneto.modules import source_utils
 from magneto.modules.control import setting as getSetting
 
 
 class source:
 	timeout = 10
-	priority = 1
+	priority = 3
 	pack_capable = True
 	hasMovies = True
 	hasEpisodes = True
@@ -52,9 +50,12 @@ class source:
 			try:
 				results = requests.get(url, params=params, headers=self.headers, timeout=self.timeout)
 				files = ET.fromstring(results.text)
-			except: files = ET.fromstring('<?xml version="1.0" ?><metadata />')
-			self._queue.put_nowait(files) # if seasons
-			self._queue.put_nowait(files) # if shows
+			except:
+				files = ET.fromstring('<?xml version="1.0" ?><metadata />')
+				raise
+			finally:
+				self._queue.put_nowait(files) # if seasons
+				self._queue.put_nowait(files) # if shows
 			undesirables = source_utils.get_undesirables()
 			check_foreign_audio = source_utils.check_foreign_audio()
 		except:
@@ -95,7 +96,7 @@ class source:
 
 				sources_append({
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'tbtorznab', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'tbtorznab', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders
 				})
 			except:
@@ -164,7 +165,7 @@ class source:
 
 				item = {
 					'source': 'torrent', 'language': 'en', 'direct': False, 'debridonly': True,
-					'provider': 'tbtorznab', 'url': url, 'hash': hash, 'name': name, 'name_info': name_info,
+					'provider': 'tbtorznab', 'hash': hash, 'url': url, 'name': name, 'name_info': name_info,
 					'quality': quality, 'info': info, 'size': dsize, 'seeders': seeders, 'package': package
 				}
 				if search_series: item.update({'last_season': last_season})
