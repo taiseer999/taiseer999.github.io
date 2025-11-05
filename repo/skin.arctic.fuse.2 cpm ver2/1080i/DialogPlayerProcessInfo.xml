@@ -1191,7 +1191,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[System.CpuFrequency] $VAR[|][COLOR GREEN] $INFO[System.CPUTemperature][/COLOR]</label>
+						<label>$INFO[System.CpuFrequency] $VAR[|][COLOR limegreen]($INFO[System.CPUTemperature])[/COLOR]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1273,33 +1273,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR ffdaa520]$INFO[VideoPlayer.VideoCodec][/COLOR] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[VideoPlayer.VideoAspect]</label>
-						<font>font_debug</font>
-						
-					</control>
-				</control>
-
-
-				<control type="group"> <!-- Video encoding 2 -->
-					<width>620</width>
-					<height>40</height>
-					<visible>Player.HasVideo</visible>
-					<control type="label">
-						<width>220</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>left</align>
-						<label>[COLOR dialog_fg_90]Video encoding 2:[/COLOR]</label>
-						<font>font_debug</font>
-						
-					</control>
-					<control type="label">
-						<left>220</left>
-						<width>400</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>right</align>
-						<label>$INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
+						<label>[COLOR ffdaa520]$INFO[VideoPlayer.VideoCodec][/COLOR] $VAR[|] $INFO[VideoPlayer.VideoResolution] $VAR[|] $INFO[VideoPlayer.VideoAspect] $VAR[|] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)] $VAR[|] $INFO[Player.Process(videofps),, fps] $VAR[|] $INFO[Player.Process(video.bit.depth),,-bit]</label>
 						<font>font_debug</font>
 						
 					</control>
@@ -1423,6 +1397,29 @@
 					</control>
 				</control>
 
+                   <control type="group"> <!--channels -->
+					<width>620</width>
+					<height>40</height>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR dialog_fg_90]channels:[/COLOR]</label>
+						<font>font_debug</font>
+						
+					</control>
+					<control type="label">
+						<left>170</left>
+						<width>450</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>($INFO[Player.Process(audiochannels),])</label>
+						<font>font_debug</font>
+                    </control>
+				    </control>
+
 				<control type="group"> <!-- Audio language -->
 					<width>620</width>
 					<height>40</height>
@@ -1442,8 +1439,8 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[COLOR ffdaa520]$INFO[VideoPlayer.AudioLanguage][/COLOR]  ($INFO[Player.Process(audiochannels),])</label>
-						<font>font_hint</font>
+						<label>$INFO[VideoPlayer.AudioLanguage]</label>
+						<font>font_debug</font>
 						
 					</control>
 				</control>
