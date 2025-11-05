@@ -1,5 +1,5 @@
 from jurialmunkey.ftools import cached_property
-from tmdbhelper.lib.addon.plugin import ADDONPATH, get_setting, executebuiltin, format_folderpath
+from tmdbhelper.lib.addon.plugin import executebuiltin, format_folderpath
 from tmdbhelper.lib.addon.logger import kodi_log
 
 
@@ -22,186 +22,109 @@ class PlayerResolverBase:
         self.player = player
         self.handle = handle
 
-    dummy_filename = 'dummy.mp4'
-    dummy_listitem_path = f'{ADDONPATH}/resources/dummy.mp4'
-    poll_wait = 0.25
-    next_episodes_list = None
-
-    @cached_property
-    def xbmc_monitor(self):
-        from xbmc import Monitor
-        return Monitor()
-
-    @cached_property
-    def xbmc_player(self):
-        from xbmc import Player
-        return Player()
-
-    @cached_property
-    def dummy_duration(self):
-        from jurialmunkey.parser import try_float
-        return try_float(get_setting('dummy_duration', 'str')) or 1.0
-
-    @cached_property
-    def dummy_delay(self):
-        from jurialmunkey.parser import try_float
-        return try_float(get_setting('dummy_delay', 'str')) or 1.0
-
-    @cached_property
-    def dummy_listitem(self):
-        from tmdbhelper.lib.items.listitem import ListItem
-        return ListItem(path=self.dummy_listitem_path).get_listitem()
+    allow_playlist = True
 
     def update_playerstring(self):
         from tmdbhelper.lib.player.action.playerstring import load_playerstring
         kodi_log(['lib.player - playerstring:\n', f'{load_playerstring(self.listitem)}'], 1)
 
-    def update_episodequeue(self):
+    @cached_property
+    def playlist(self):
+
+        if not self.allow_playlist:
+            kodi_log(f'lib.player - Playlist: Skipping', 1)
+            return
+
         if not self.player.make_playlist:
-            kodi_log(f'lib.player - Playlist: Not Enabled', 1)
+            kodi_log(f'lib.player - Playlist: Disabled', 1)
             return
 
-        if not self.next_episodes_list:
-            kodi_log(f'lib.player - Playlist: No Next Episodes', 1)
+        if not self.next_episodes.listitem:
+            kodi_log(f'lib.player - Playlist: No Items', 1)
             return
 
-        kodi_log(f'lib.player - Playlist: Waiting for playback...', 1)
-        from tmdbhelper.lib.player.action.waiting import PlayerWaiting
-        PlayerWaiting(True, 30).run()
+        kodi_log(f'lib.player - Playlist: Updating', 1)
+        return self.next_episodes.update(listitem=self.listitem)
 
-        kodi_log(f'lib.player - Playlist: Adding {len(self.next_episodes_list)} episodes', 1)
-        self.next_episodes.update()
+    """
+    setResolvedUrl
+    """
 
-    def set_resolved_url(self):
+    def execute_seturl(self):
         from xbmcplugin import setResolvedUrl
-        kodi_log(['lib.player - resolving path to url\n', self.path], 1)
+        kodi_log(['lib.player - resolving path to url\n', self.path, f'\nPlaylist {bool(self.playlist)}'], 1)  # Print self.playlist to log to make sure property initialises
         setResolvedUrl(self.handle, True, self.listitem)
         self.update_playerstring()
-        self.update_episodequeue()
 
-    def executebuiltin_player(self):
-        kodi_log(['lib.player - playing path with xbmc.Player():\n', self.action], 1)
-        self.xbmc_player.play(self.action, self.listitem)
+    """
+    Player
+    """
+
+    def execute_player(self):
+        from xbmc import Player
+        kodi_log(['lib.player - playing path with xbmc.Player():\n', self.action, f'\nPlaylist {bool(self.playlist)}'], 1)
+        Player().play(self.playlist) if self.playlist else Player().play(self.action, self.listitem)
         self.update_playerstring()
-        # self.update_episodequeue()
 
-    def executebuiltin_action(self):
+    """
+    Action
+    """
+
+    def execute_action(self):
         kodi_log(['lib.player - executing action:\n', self.action], 1)
-        # Kodi launches busy dialog on home screen that needs to be told to close
-        # Otherwise the busy dialog will prevent window activation for folder path
-        executebuiltin('Dialog.Close(busydialog, force)')
         executebuiltin(self.action)
 
-    def wait_for_player_condition(self, filename=None):
-        """
-        filename=file to wait for playback of set file
-        filename=True to wait for playback of any file
-        filename=None to wait for playback to stop
-        """
-        if not filename:
-            return bool(self.xbmc_player.isPlaying())
-        if not self.xbmc_player.isPlaying():
-            return True
-        if isinstance(filename, str):
-            return bool(not self.xbmc_player.getPlayingFile().endswith(filename))
-        return False
-
-    def wait_for_player(self, filename=None, timeout=5, stop_after=0):
-        while (
-                not self.xbmc_monitor.abortRequested()
-                and timeout > 0
-                and self.wait_for_player_condition(filename)
-        ):
-            self.xbmc_monitor.waitForAbort(self.poll_wait)
-            timeout -= self.poll_wait
-
-        # Wait to stop file
-        self.player_stop_after(filename, stop_after) if stop_after > 0 else None
-        return timeout
-
-    def player_stop_after(self, filename=None, wait=0):
-        kodi_log(f'lib.player - wait {wait} to stop {filename}', 1)
-        self.xbmc_monitor.waitForAbort(wait)
-        if not self.xbmc_player.isPlaying():
-            kodi_log(f'lib.player - not playing anything!', 1)
-            return
-        if not self.xbmc_player.getPlayingFile().endswith(filename):
-            kodi_log(f'lib.player - not playing {filename}', 1)
-            return
-        kodi_log(f'lib.player - stopping {filename}', 1)
-        self.xbmc_player.stop()
-
-    def set_resolved_url_dummy(self):
-        from xbmcplugin import setResolvedUrl
-        kodi_log(['lib.player - resolving dummy path to url\n', self.dummy_listitem_path], 1)
-        setResolvedUrl(self.handle, True, self.dummy_listitem)
-
-    def rtd_check_strm(self):
-        if not self.is_strm and get_setting('only_resolve_strm'):
-            kodi_log(['lib.player - skipped dummy no strm setting\n', self.dummy_filename], 1)
-            return False
-        return True
-
-    def rtd_check_handle(self):
-        if self.handle is None:
-            kodi_log(['lib.player - skipped dummy no resolve handle\n', self.dummy_filename], 1)
-            return False
-        return True
-
-    def rtd_check_action(self):
-        if not self.is_folder and not self.action:
-            kodi_log(['lib.player - skipped dummy have resolvable file\n', self.dummy_filename], 1)
-            return False
-        return True
-
-    def rtd_check_start(self):
-        # Wait till our dummy file plays and then stop after setting duration
-        self.set_resolved_url_dummy()
-        if self.wait_for_player(filename=self.dummy_filename, stop_after=self.dummy_duration) <= 0:
-            kodi_log(['lib.player - resolve dummy file timeout\n', self.dummy_filename], 1)
-            return False
-        return True
-
-    def rtd_check_stop(self):
-        # Wait for our file to stop before continuing
-        if self.dummy_duration and self.wait_for_player() <= 0:
-            kodi_log(['lib.player - stopped dummy file timeout\n', self.dummy_filename], 1)
-            return False
-        return True
-
-    def rtd_success(self):
-        # Wait for additional delay after stopping
-        from tmdbhelper.lib.addon.dialog import BusyDialog
-        with BusyDialog(False if self.dummy_delay < 1 else True):
-            self.xbmc_monitor.waitForAbort(self.dummy_delay)
-        kodi_log(['lib.player - successfully resolved dummy file\n', self.dummy_filename], 1)
-        return True
-
-    def rtd_run(self):
-        for func in (
-            self.rtd_check_handle,
-            self.rtd_check_action,
-            self.rtd_check_strm,
-            self.rtd_check_start,
-            self.rtd_check_stop,
-            self.rtd_success,
-        ):
-            if not func():
-                self.dummy_success = False
-                return
-        self.dummy_success = True
+    """
+    Dummy Resolver
+    """
 
     @cached_property
-    def routing(self):
-        if self.is_folder:
-            return self.executebuiltin_action
-        if self.action:
-            return self.executebuiltin_player
-        return self.set_resolved_url
+    def dummy(self):
+        from tmdbhelper.lib.player.action.dummy import PlayerDummy
+        return PlayerDummy(self)
 
-    def run(self):
-        self.rtd_run()
-        self.routing()
+    @cached_property
+    def is_resolvable(self):
+        if self.dummy.success:
+            return False
+        if not self.dummy.is_handle:
+            return False
+        if self.dummy.is_action:
+            return False
+        return True
+
+    """
+    Execute
+    """
+
+    @cached_property
+    def success(self):
+        return self.execute()
+
+    def execute(self):
+
+        # Force close any busy dialogs to avoid duplicate busy error which causes app exit
+        executebuiltin('Dialog.Close(busydialog, force)')
+
+        if not self.path:
+            return False
+
+        if not self.listitem:
+            return False
+
+        if self.is_resolvable:
+            self.execute_seturl()
+            return True
+
+        if not self.action:
+            return False
+
+        if self.is_folder:
+            self.execute_action()
+            return True
+
+        self.execute_player()
+        return True
 
 
 class PlayerResolverNone(PlayerResolverBase):
@@ -233,6 +156,10 @@ class PlayerResolverNone(PlayerResolverBase):
             return self.path.replace('executebuiltin://', '')
         if self.is_folder:
             return format_folderpath(self.path)
+        if not self.player.is_resolvable:
+            return self.path
+        if self.handle is None:
+            return self.path
 
     @cached_property
     def listitem(self):
@@ -241,12 +168,6 @@ class PlayerResolverNone(PlayerResolverBase):
         self.player.item.details.infoproperties['isPlayable'] = 'false' if self.is_folder else 'true'
         self.player.item.details.infoproperties['is_folder'] = 'true' if self.is_folder else 'false'
         return self.player.item.details.get_listitem()
-
-    @cached_property
-    def next_episodes_list(self):
-        if not self.player.make_playlist:
-            return
-        return self.next_episodes.listitems
 
     @cached_property
     def next_episodes(self):

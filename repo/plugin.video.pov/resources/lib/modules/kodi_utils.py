@@ -216,9 +216,13 @@ def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
 	if isinstance(heading, int): heading = local_string(heading)
 	heading = heading.replace('[B]', '').replace('[/B]', '')
 	if file:
-		with open_file(file) as f: text = f.read()
+		with open_file(file) as f: text = f.read().encode('utf-8', errors='ignore').decode('utf-8-sig')
 	if kodi_log and confirm_dialog(text=local_string(32855), ok_label=local_string(32824), cancel_label=local_string(32828), top_space=True):
-		text = ''.join(i for i in text.splitlines(keepends=True) if any(x in i.lower() for x in ('exception', 'error')))
+		lines = []
+		for line in text.splitlines(keepends=True):
+			if line[0].isdigit(): lines += [line]
+			else: lines[-1] += line
+		text = ''.join(i for i in lines if any(x in i.lower() for x in ('exception', 'error')))
 	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
 
 def notification(line1, time=3000, icon=None, sound=False):
@@ -411,8 +415,8 @@ def toggle_language_invoker():
 	new_value = 'false' if current_addon_setting == 'true' else 'true'
 	if not confirm_dialog(text=local_string(32979) % (current_addon_setting.upper(), new_value.upper())): return
 	if new_value == 'true' and not confirm_dialog(text=32980, top_space=True): return
-	addon_xml = 'special://home/addons/plugin.video.pov/addon.xml'
-	tree = ET.parse(translate_path(addon_xml))
+	addon_xml = translate_path('special://home/addons/plugin.video.pov/addon.xml')
+	tree = ET.parse(addon_xml)
 	root = tree.getroot()
 	item = next(root.iter('reuselanguageinvoker'), None)
 	if item is None: return notification(32574, 1500)

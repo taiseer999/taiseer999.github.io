@@ -7,11 +7,11 @@ from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_d
 fanart_empty = BaseDialog.fanart
 poster_empty = media_path('box_office.png')
 info_icons_dict, extra_info_choices = {k: media_path(v) for k, v in (
-	('real-debrid', 'realdebrid.png'), ('rd_cloud', 'realdebrid.png'), ('premiumize', 'premiumize.png'), ('pm_cloud', 'premiumize.png'),
-	('alldebrid', 'alldebrid.png'), ('ad_cloud', 'alldebrid.png'), ('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'),
-	('torbox', 'torbox.png'), ('tb_cloud', 'torbox.png'), ('debrider', 'debrider.png'), ('db_cloud', 'debrider.png'),
-	('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'), ('cam', 'flagSD.png'),
-	('tele', 'flagSD.png'), ('scr', 'flagSD.png'), ('sd', 'flagSD.png'), ('720p', 'flag720p.png'), ('1080p', 'flag1080p.png'),  ('4k', 'flag4k.png')
+	('alldebrid', 'alldebrid.png'), ('ad_cloud', 'alldebrid.png'), ('premiumize', 'premiumize.png'), ('pm_cloud', 'premiumize.png'),
+	('real-debrid', 'realdebrid.png'), ('rd_cloud', 'realdebrid.png'), ('torbox', 'torbox.png'), ('tb_cloud', 'torbox.png'),
+	('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'), ('debrider', 'debrider.png'), ('db_cloud', 'debrider.png'),
+	('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'),
+	('cam', 'flagSD.png'), ('tele', 'flagSD.png'), ('scr', 'flagSD.png'), ('sd', 'flagSD.png'), ('720p', 'flag720p.png'), ('1080p', 'flag1080p.png'),  ('4k', 'flag4k.png')
 )}, (
 	('PACK', '[B]PACK[/B]'), ('DOLBY VISION', '[B]D/VISION[/B]'), ('HIGH DYNAMIC RANGE (HDR)', '[B]HDR[/B]'), ('HYBRID', '[B]HYBRID[/B]'), ('AV1', '[B]AV1[/B]'),
 	('HEVC (X265)', '[B]HEVC[/B]'), ('REMUX', 'REMUX'), ('BLURAY', 'BLURAY'), ('SDR', 'SDR'), ('3D', '3D'), ('DOLBY ATMOS', 'ATMOS'), ('DOLBY TRUEHD', 'TRUEHD'),

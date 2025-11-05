@@ -216,11 +216,11 @@ class Router:
 		elif 'offcloud' in mode:
 			from debrids.offcloud import Indexer
 			Indexer().run(params)
-		elif 'easydebrid' in mode:
-			from debrids.easydebrid import Indexer
-			Indexer().run(params)
 		elif 'debrider' in mode:
 			from debrids.debrider import Indexer
+			Indexer().run(params)
+		elif 'easydebrid' in mode:
+			from debrids.easydebrid import Indexer
 			Indexer().run(params)
 		elif '_settings' in mode:
 			if mode == 'open_settings':

@@ -264,8 +264,8 @@ class Navigator:
 		clear_all_str, clear_meta_str = clca_str % all_str, clca_str % ls(32527)
 		clear_list_str, clear_trakt_str = clca_str % ls(32501), clca_str % ls(32037)
 		clear_imdb_str, clint_str, clext_str = clca_str % ls(32064), clca_str % ls(32096), clca_str % ls(32118)
-		clear_rd_str, clear_pm_str, clear_ad_str = clca_str % ls(32054), clca_str % ls(32061), clca_str % ls(32063)
-		clear_oc_str, clear_tb_str, clear_db_str = clca_str % 'Offcloud', clca_str % 'TorBox', clca_str % 'Debrider'
+		clear_ad_str, clear_pm_str, clear_rd_str = clca_str % ls(32063), clca_str % ls(32061), clca_str % ls(32054)
+		clear_tb_str, clear_oc_str, clear_db_str = clca_str % 'TorBox', clca_str % 'Offcloud', clca_str % 'Debrider'
 		clear_all_upper = '[B]%s[/B]' % clear_all_str.upper()
 		n_ins, clean_ins = _in_str % (cache_str.upper(), ''), _in_str % (clean_str.upper(), '')
 		self._add_item({'mode': 'clean_settings',                            'name': clean_all_str      }, 'tools.png', clean_ins, False)
@@ -279,11 +279,11 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'imdb',              'name': clear_imdb_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'internal_scrapers', 'name': clint_str          }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'external_scrapers', 'name': clext_str          }, 'tools.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'rd_cloud',          'name': clear_rd_str       }, 'tools.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'pm_cloud',          'name': clear_pm_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'ad_cloud',          'name': clear_ad_str       }, 'tools.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud',          'name': clear_oc_str       }, 'tools.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'pm_cloud',          'name': clear_pm_str       }, 'tools.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'rd_cloud',          'name': clear_rd_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',          'name': clear_tb_str       }, 'tools.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud',          'name': clear_oc_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'db_cloud',          'name': clear_db_str       }, 'tools.png', n_ins, False)
 		self._end_directory()
 

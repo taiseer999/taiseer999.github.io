@@ -124,8 +124,11 @@ def autoplay_next_settings():
 	window_time = autoplay_next_window_time() + 1
 	window_percentage = 100 - autoplay_next_window_percentage()
 	autoscrape_time = int(get_setting('autoscrape_next_window_time', '20'))
-	return {'scraper_time': scraper_time, 'threshold': threshold, 'run_popup': run_popup, 'timer_method': timer_method,
-			'window_time': window_time, 'window_percentage': window_percentage, 'autoscrape_next_window_time': autoscrape_time}
+	return {
+		'scraper_time': scraper_time, 'threshold': threshold, 'run_popup': run_popup,
+		'timer_method': timer_method, 'window_time': window_time, 'window_percentage': window_percentage,
+		'autoscrape_next_window_time': autoscrape_time
+	}
 
 def filter_status(filter_type):
 	return int(get_setting('filter_%s' % filter_type, '0'))
@@ -187,7 +190,7 @@ def extras_enabled_menus():
 	return [int(i) for i in setting.split(',')]
 
 def check_prescrape_sources(scraper):
-	if scraper in ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud'): return get_setting('check.%s' % scraper) == 'true'
+	if scraper in ('easynews', 'rd_cloud', 'pm_cloud', 'ad_cloud', 'tb_cloud', 'oc_cloud', 'db_cloud'): return get_setting('check.%s' % scraper) == 'true'
 	if get_setting('check.%s' % scraper) == 'true' and get_setting('auto_play') != 'true': return True
 	else: return False
 
@@ -203,16 +206,23 @@ def easynews_language_filter():
 def results_sort_order():
 	direction = 1 if get_setting('results.sort_size') == '1' else -1
 	return (
-			lambda k: (k['quality_rank'], k['provider_rank'], direction*k['size']), #Quality, Provider, Size
-			lambda k: (k['quality_rank'], direction*k['size'], k['provider_rank']), #Quality, Size, Provider
-			lambda k: (k['provider_rank'], k['quality_rank'], direction*k['size']), #Provider, Quality, Size
-			lambda k: (k['provider_rank'], direction*k['size'], k['quality_rank']), #Provider, Size, Quality
-			lambda k: (direction*k['size'], k['quality_rank'], k['provider_rank']), #Size, Quality, Provider
-			lambda k: (direction*k['size'], k['provider_rank'], k['quality_rank'])  #Size, Provider, Quality
-			)[int(get_setting('results.sort_order', '1'))]
+		lambda k: (k['quality_rank'], k['provider_rank'], direction*k['size']), #Quality, Provider, Size
+		lambda k: (k['quality_rank'], direction*k['size'], k['provider_rank']), #Quality, Size, Provider
+		lambda k: (k['provider_rank'], k['quality_rank'], direction*k['size']), #Provider, Quality, Size
+		lambda k: (k['provider_rank'], direction*k['size'], k['quality_rank']), #Provider, Size, Quality
+		lambda k: (direction*k['size'], k['quality_rank'], k['provider_rank']), #Size, Quality, Provider
+		lambda k: (direction*k['size'], k['provider_rank'], k['quality_rank'])  #Size, Provider, Quality
+	)[int(get_setting('results.sort_order', '1'))]
 
 def active_internal_scrapers():
-	clouds = [('rd', 'provider.rd_cloud'), ('pm', 'provider.pm_cloud'), ('ad', 'provider.ad_cloud'), ('oc', 'provider.oc_cloud'), ('tb', 'provider.tb_cloud'), ('db', 'provider.db_cloud')]
+	clouds = [
+		('ad', 'provider.ad_cloud'),
+		('pm', 'provider.pm_cloud'),
+		('rd', 'provider.rd_cloud'),
+		('tb', 'provider.tb_cloud'),
+		('oc', 'provider.oc_cloud'),
+		('db', 'provider.db_cloud')
+	]
 	settings = ['provider.external', 'provider.easynews', 'provider.folders']
 	settings_append = settings.append
 	for item in clouds:
@@ -230,15 +240,27 @@ def provider_sort_ranks():
 	db_priority = int(get_setting('db.priority', '9'))
 	ed_priority = int(get_setting('ed.priority', '9'))
 	rd_priority = int(get_setting('rd.priority', '10'))
-	return {'real-debrid': rd_priority, 'rd_cloud': rd_priority, 'premiumize.me': pm_priority, 'pm_cloud': pm_priority,
-			'alldebrid': ad_priority, 'ad_cloud': ad_priority, 'offcloud': oc_priority, 'oc_cloud': oc_priority,
-			'torbox': tb_priority, 'tb_cloud': tb_priority, 'debrider': db_priority, 'db_cloud': db_priority,
-			'easydebrid': ed_priority, 'easynews': en_priority, 'folders': 0}
+	return {
+		'alldebrid': ad_priority, 'ad_cloud': ad_priority,
+		'premiumize.me': pm_priority, 'pm_cloud': pm_priority,
+		'real-debrid': rd_priority, 'rd_cloud': rd_priority,
+		'torbox': tb_priority, 'tb_cloud': tb_priority,
+		'offcloud': oc_priority, 'oc_cloud': oc_priority,
+		'debrider': db_priority, 'db_cloud': db_priority,
+		'easydebrid': ed_priority,
+		'easynews': en_priority, 'folders': 0
+	}
 
 def sort_to_top(provider):
-	return get_setting({'rd_cloud': 'results.sort_rdcloud_first', 'pm_cloud': 'results.sort_pmcloud_first', 'ad_cloud': 'results.sort_adcloud_first', 
-						'oc_cloud': 'results.sort_occloud_first', 'tb_cloud': 'results.sort_tbcloud_first', 'db_cloud': 'results.sort_dbcloud_first',
-						'folders': 'results.sort_folders_first'}[provider]) == 'true'
+	return get_setting({
+		'ad_cloud': 'results.sort_adcloud_first',
+		'pm_cloud': 'results.sort_pmcloud_first',
+		'rd_cloud': 'results.sort_rdcloud_first',
+		'tb_cloud': 'results.sort_tbcloud_first',
+		'oc_cloud': 'results.sort_occloud_first',
+		'db_cloud': 'results.sort_dbcloud_first',
+		'folders': 'results.sort_folders_first'
+	}[provider]) == 'true'
 
 def auto_resume(media_type):
 	auto_resume = get_setting('auto_resume_%s' % media_type)
@@ -273,15 +295,18 @@ def nextep_display_settings():
 	return {'unaired_color': 'cyan', 'unwatched_color': 'darkgoldenrod', 'include_airdate': include_airdate}
 
 def nextep_content_settings():
+	include_unaired = get_setting('nextep.include_unaired') == 'true'
+	include_unwatched = False # get_setting('nextep.include_unwatched') == 'true'
 	sort_type = int(get_setting('nextep.sort_type'))
 	sort_order = int(get_setting('nextep.sort_order'))
 	sort_direction = sort_order == 0
 	sort_key = 'pov_last_played' if sort_type == 0 else 'pov_first_aired' if sort_type == 1 else 'pov_name'
-	include_unaired = get_setting('nextep.include_unaired') == 'true'
-#	include_unwatched = get_setting('nextep.include_unwatched') == 'true'
 	sort_airing_today_to_top = get_setting('nextep.sort_airing_today_to_top', 'false') == 'true'
-	return {'sort_key': sort_key, 'sort_direction': sort_direction, 'sort_type': sort_type, 'sort_order':sort_order,
-			'include_unaired': include_unaired, 'include_unwatched': False, 'sort_airing_today_to_top': sort_airing_today_to_top}
+	return {
+		'include_unaired': include_unaired, 'include_unwatched': include_unwatched,
+		'sort_type': sort_type, 'sort_order': sort_order, 'sort_direction': sort_direction, 'sort_key': sort_key,
+		'sort_airing_today_to_top': sort_airing_today_to_top
+	}
 
 def scraping_settings():
 	def provider_color(provider, fallback):
@@ -289,8 +314,8 @@ def scraping_settings():
 	highlight_type = int(get_setting('highlight.type', '0'))
 	hoster_highlight, torrent_highlight = '', ''
 	easynews_highlight, debrid_cloud_highlight, folders_highlight = '', '', ''
-	rd_highlight, pm_highlight, ad_highlight, oc_highlight = '', '', '', ''
-	tb_highlight, ed_highlight, db_highlight = '', '', ''
+	rd_highlight, pm_highlight, ad_highlight, tb_highlight = '', '', '', ''
+	oc_highlight, db_highlight, ed_highlight = '', '', ''
 	highlight_4K, highlight_1080P, highlight_720P, highlight_SD = '', '', '', ''
 	if highlight_type in (0, 1):
 		easynews_highlight = provider_color('easynews', 'limegreen')
@@ -303,8 +328,8 @@ def scraping_settings():
 			rd_highlight = provider_color('rd', 'seagreen')
 			pm_highlight = provider_color('pm', 'orangered')
 			ad_highlight = provider_color('ad', 'goldenrod')
-			oc_highlight = provider_color('oc', 'dodgerblue')
 			tb_highlight = provider_color('tb', 'darkseagreen')
+			oc_highlight = provider_color('oc', 'dodgerblue')
 			db_highlight = provider_color('db', 'gold')
 			ed_highlight = provider_color('ed', 'cornflowerblue')
 	else:
@@ -312,12 +337,14 @@ def scraping_settings():
 		highlight_1080P = get_setting('scraper_1080p_highlight', 'lawngreen')
 		highlight_720P = get_setting('scraper_720p_highlight', 'gold')
 		highlight_SD = get_setting('scraper_SD_highlight', 'lightsaltegray')
-	return {'uncached': 'dimgray', 'highlight_type': highlight_type, 'hoster_highlight': hoster_highlight, 'torrent_highlight': torrent_highlight,
-			'real-debrid': rd_highlight, 'rd_cloud': debrid_cloud_highlight, 'premiumize': pm_highlight, 'pm_cloud': debrid_cloud_highlight,
-			'alldebrid': ad_highlight, 'ad_cloud': debrid_cloud_highlight, 'offcloud': oc_highlight, 'oc_cloud': debrid_cloud_highlight,
-			'torbox': tb_highlight, 'tb_cloud': debrid_cloud_highlight, 'debrider': db_highlight, 'db_cloud': debrid_cloud_highlight,
-			'easydebrid': ed_highlight, 'easynews': easynews_highlight, '4k': highlight_4K, '1080p': highlight_1080P,
-			'720p': highlight_720P, 'sd': highlight_SD, 'cam': highlight_SD, 'tele': highlight_SD, 'scr': highlight_SD, 'folders': folders_highlight}
+	return {
+		'uncached': 'dimgray', 'highlight_type': highlight_type, 'hoster_highlight': hoster_highlight, 'torrent_highlight': torrent_highlight, 'folders': folders_highlight,
+		'4k': highlight_4K, '1080p': highlight_1080P, '720p': highlight_720P, 'sd': highlight_SD, 'cam': highlight_SD, 'tele': highlight_SD, 'scr': highlight_SD,
+		'alldebrid': ad_highlight, 'ad_cloud': debrid_cloud_highlight, 'premiumize': pm_highlight, 'pm_cloud': debrid_cloud_highlight,
+		'real-debrid': rd_highlight, 'rd_cloud': debrid_cloud_highlight, 'torbox': tb_highlight, 'tb_cloud': debrid_cloud_highlight,
+		'offcloud': oc_highlight, 'oc_cloud': debrid_cloud_highlight, 'debrider': db_highlight, 'db_cloud': debrid_cloud_highlight,
+		'easydebrid': ed_highlight, 'easynews': easynews_highlight
+	}
 
 def get_rpdb_data():
 	return get_setting('get_rpdb_data') == 'true', get_setting('get_rpdb_data_series') == 'true'
@@ -340,33 +367,39 @@ def tmdb_api_key():
 	return get_setting('tmdb_api')
 
 def get_resolution():
-	return ({'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profile': 'w185'},
-			{'poster': 'w342', 'fanart': 'w780', 'still': 'w300', 'profile': 'w342'},
-			{'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632'},
-			{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original'}
-			)[int(get_setting('image_resolutions', '2'))]
+	return (
+		{'poster': 'w185', 'fanart': 'w300', 'still': 'w185', 'profile': 'w185'},
+		{'poster': 'w342', 'fanart': 'w780', 'still': 'w300', 'profile': 'w342'},
+		{'poster': 'w780', 'fanart': 'w1280', 'still': 'original', 'profile': 'h632'},
+		{'poster': 'original', 'fanart': 'original', 'still': 'original', 'profile': 'original'}
+	)[int(get_setting('image_resolutions', '2'))]
 
 def get_language():
 	return get_setting('meta_language', 'en')
 
 def get_art_provider():
 	if not get_fanart_data(): return ('poster', 'poster2', 'fanart', 'fanart2')
-	return {True: ('poster2', 'poster', 'fanart2', 'fanart'), False: ('poster', 'poster2', 'fanart', 'fanart2')}[get_setting('fanarttv.default') == 'true']
+	return {
+		True: ('poster2', 'poster', 'fanart2', 'fanart'),
+		False: ('poster', 'poster2', 'fanart', 'fanart2')
+	}[get_setting('fanarttv.default') == 'true']
 
 def metadata_user_info():
 	tmdb_api = tmdb_api_key()
-	extra_fanart_enabled = get_fanart_data()
 	image_resolution = get_resolution()
 	meta_language = get_language()
 	hide_watched = widget_hide_watched()
+	extra_fanart_enabled = get_fanart_data()
 	if extra_fanart_enabled: fanart_client_key = fanarttv_client_key()
 	else: fanart_client_key = ''
 	extra_rpdb_enabled, extra_rpdb_enabled_series = get_rpdb_data()
 	if extra_rpdb_enabled or extra_rpdb_enabled_series: rpdb_api = rpdb_api_key()
 	else: rpdb_api = ''
-	return {'extra_fanart_enabled': extra_fanart_enabled, 'image_resolution': image_resolution , 'language': meta_language,
-			'fanart_client_key': fanart_client_key, 'tmdb_api': tmdb_api, 'widget_hide_watched': hide_watched,
-			'rpdb_api_key': rpdb_api, 'extra_rpdb_enabled': extra_rpdb_enabled, 'extra_rpdb_enabled_series': extra_rpdb_enabled_series}
+	return {
+		'image_resolution': image_resolution , 'language': meta_language, 'widget_hide_watched': hide_watched,
+		'tmdb_api': tmdb_api, 'fanart_client_key': fanart_client_key, 'extra_fanart_enabled': extra_fanart_enabled,
+		'rpdb_api_key': rpdb_api, 'extra_rpdb_enabled': extra_rpdb_enabled, 'extra_rpdb_enabled_series': extra_rpdb_enabled_series
+	}
 
 def make_global_list():
 	global global_list

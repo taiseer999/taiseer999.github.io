@@ -1,5 +1,6 @@
 
   [COLOR dodgerblue][B]Version 5.11[/B][/COLOR]
+- Added bitmagnet.
 - Updated instances urls.
 
   [COLOR dodgerblue][B]Version 5.10[/B][/COLOR]

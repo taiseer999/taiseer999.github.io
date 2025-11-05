@@ -132,7 +132,7 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from debrids.easynews_api import clear_media_results_database
 		clear_media_results_database()
-		items = 'pm_cloud', 'rd_cloud', 'ad_cloud', 'oc_cloud', 'tb_cloud', 'db_cloud', 'folders'
+		items = 'ad_cloud', 'pm_cloud', 'rd_cloud', 'tb_cloud', 'oc_cloud', 'db_cloud', 'folders'
 		for item in items: clear_cache(item, silent=True)
 	elif cache_type == 'external_scrapers':
 		if not _confirm(): return
@@ -157,6 +157,10 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from indexers.imdb_api import clear_imdb_cache
 		success = clear_imdb_cache()
+	elif cache_type == 'ad_cloud':
+		if not _confirm(): return
+		from debrids.alldebrid_api import AllDebridAPI
+		success = AllDebridAPI().clear_cache()
 	elif cache_type == 'pm_cloud':
 		if not _confirm(): return
 		from debrids.premiumize_api import PremiumizeAPI
@@ -165,18 +169,14 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from debrids.real_debrid_api import RealDebridAPI
 		success = RealDebridAPI().clear_cache()
-	elif cache_type == 'ad_cloud':
-		if not _confirm(): return
-		from debrids.alldebrid_api import AllDebridAPI
-		success = AllDebridAPI().clear_cache()
-	elif cache_type == 'oc_cloud':
-		if not _confirm(): return
-		from debrids.offcloud_api import OffcloudAPI
-		success = OffcloudAPI().clear_cache()
 	elif cache_type == 'tb_cloud':
 		if not _confirm(): return
 		from debrids.torbox_api import TorBoxAPI
 		success = TorBoxAPI().clear_cache()
+	elif cache_type == 'oc_cloud':
+		if not _confirm(): return
+		from debrids.offcloud_api import OffcloudAPI
+		success = OffcloudAPI().clear_cache()
 	elif cache_type == 'db_cloud':
 		if not _confirm(): return
 		from debrids.debrider_api import DebriderAPI
@@ -200,11 +200,11 @@ def clear_all_cache():
 		('imdb', '%s %s' % (ls(32064), ls(32524))),
 		('internal_scrapers', '%s %s' % (ls(32096), ls(32524))),
 		('external_scrapers', '%s %s' % (ls(32118), ls(32524))),
-		('rd_cloud', '%s %s' % (ls(32054), ls(32524))),
-		('pm_cloud', '%s %s' % (ls(32061), ls(32524))),
 		('ad_cloud', '%s %s' % (ls(32063), ls(32524))),
-		('oc_cloud', '%s %s' % ('Offcloud', ls(32524))),
+		('pm_cloud', '%s %s' % (ls(32061), ls(32524))),
+		('rd_cloud', '%s %s' % (ls(32054), ls(32524))),
 		('tb_cloud', '%s %s' % ('TorBox', ls(32524))),
+		('oc_cloud', '%s %s' % ('Offcloud', ls(32524))),
 		('db_cloud', '%s %s' % ('Debrider', ls(32524)))
 	)
 	kodi_utils.progressDialog.create('POV', '')

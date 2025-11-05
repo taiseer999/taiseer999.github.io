@@ -1,4 +1,3 @@
-from xbmcgui import Dialog
 from jurialmunkey.ftools import cached_property
 from tmdbhelper.lib.addon.plugin import get_localized, get_setting
 from tmdbhelper.lib.script.method.decorators import get_tmdb_id, map_kwargs
@@ -9,9 +8,11 @@ class Player:
 
     selected = None
     ignore_default = False
+    allow_playlist = True
     tmdb_type = None
     season = None
     episode = None
+    mode_affix = 'null'
 
     def __init__(
         self,
@@ -20,9 +21,17 @@ class Player:
         mode=None,
         **kwargs
     ):
-        self.player = player  # the player file name
-        self.mode = mode  # search or play
+        self.player_file = player  # the player file name
+        self.player_mode = mode  # search or play
         self.handle = handle  # Handle from plugin callback hook
+
+    @property
+    def player_mode(self):
+        return self._player_mode
+
+    @player_mode.setter
+    def player_mode(self, value):
+        self._player_mode = f'{value}_{self.mode_affix}' if value else None
 
     """
     Init Setup Steps
@@ -94,6 +103,10 @@ class Player:
     def force_recache_kodidb(self):
         return bool(get_setting('default_player_kodi', 'int') and get_setting('force_recache_kodidb'))
 
+    @cached_property
+    def combined_players(self):
+        return get_setting('combined_players')
+
     """
     Kodi DB
     """
@@ -138,14 +151,23 @@ class Player:
             self.tmdb_type,
             data=self.player_items,
             user=self.player_chosen,
-            file=self.player,
-            mode=self.mode,
+            file=self.player_file,
+            mode=self.player_mode,
         )
         player_default.ignore_default = self.ignore_default
         return player_default
 
     @cached_property
     def player_select(self):
+        if not self.combined_players:
+            return self.get_player_select_standard()
+        return self.get_player_select_combined()
+
+    def get_player_select_standard(self):
+        from tmdbhelper.lib.player.dialog.standard import PlayerSelectStandard
+        return PlayerSelectStandard(data=self.player_items)
+
+    def get_player_select_combined(self):
         from tmdbhelper.lib.player.dialog.combined import PlayerSelectCombined
         return PlayerSelectCombined(data=self.player_items)
 
@@ -161,23 +183,26 @@ class Player:
 
     @cached_property
     def player_current(self):
-        return self.get_next_player()
+        self.initialise_setup()
+        return self.get_player()
 
-    def get_next_player(self, fallback=None):
+    def get_player(self, fallback=None):
         player = None
         player = self.player_default.get_player_by_info(fallback)
+        player = player or self.get_next_player_default()
+        player = player or self.player_select.select(detailed=True)
+        return self.set_resolver(player) if player else None
 
+    def get_next_player_default(self):
         try:
-            player = player or next(self.player_default.queue)
+            return next(self.player_default.queue)
         except StopIteration:
-            player = player or self.player_select.select(detailed=True)
-
-        if not player:
             return
 
+    def set_resolver(self, player):
         from tmdbhelper.lib.player.action.resolver import PlayerResolver
         player.resolver = PlayerResolver(player, handle=self.handle)
-
+        player.resolver.allow_playlist = self.allow_playlist
         return player
 
     """
@@ -223,10 +248,8 @@ class Player:
         return Monitor()
 
     def play(self):
-        self.initialise_setup()
-
         while self.player_current and not self.xbmc_monitor.abortRequested():
-            self.play_loop()
+            self.loop()
 
         if self.player_current:
             return kodi_log(f'lib.player - Aborted!', 1)
@@ -236,43 +259,32 @@ class Player:
 
         kodi_log(f'lib.player - Success!', 1)
 
-    def play_loop(self):
+    def loop(self):
 
-        kodi_log(f'lib.player - {self.player_current.name}: Attempting to resolve...', 1)
+        kodi_log([
+            f'lib.player - {self.player_current.name}: Resolving...\n',
+            f'{self.player_current.file} {self.player_current.mode}\n',
+            f'{self.player_current.resolver.path}'], 1)
 
         if not self.player_current.resolver.path:
-            kodi_log(f'lib.player - {self.player_current.name}: Failed to resolve!', 1)
-            self.player_items.del_player(self.player_current)
-            self.player_current = self.get_next_player(self.player_current.fallback)
-            return
+            return self.more()
 
-        # self.test()
-        kodi_log(f'lib.player - {self.player_current.name}: Resolved\n{self.player_current.resolver.path} {self.player_current.resolver.is_folder}', 1)
-        self.reupdate_listing()
-        self.player_current.resolver.run()
-        self.player_current = False
-
-    @staticmethod
-    def reupdate_listing():
         from tmdbhelper.lib.player.action.reupdate import PlayerReUpdateListing
         PlayerReUpdateListing().run()
 
-    def test(self):
-        data = [
-            ('RT', self.translation),
-            ('DT', self.details),
-            ('KD', self.recached_kodidb),
-            ('PP', self.providers),
-            ('PD', self.player_current.name),
-            ('PF', self.player_current.resolver.path),
-            ('PF', self.player_current.resolver.is_folder),
-        ]
+        if not self.player_current.resolver.success:
+            return self.more()
 
-        Dialog().textviewer('OUTPUT', '\n'.join([f'{k}: {v}' for k, v in data]))
+        self.player_current = False
+
+    def more(self):
+        self.player_items.del_player(self.player_current)
+        self.player_current = self.get_player(self.player_current.fallback)
 
 
 class PlayerMovie(Player):
     tmdb_type = 'movie'
+    mode_affix = 'movie'
 
     def __init__(
         self,
@@ -285,6 +297,7 @@ class PlayerMovie(Player):
 
 class PlayerEpisode(Player):
     tmdb_type = 'tv'
+    mode_affix = 'episode'
 
     def __init__(
         self,
@@ -309,9 +322,10 @@ def Player(tmdb_type, **kwargs):
 
 @map_kwargs({'play': 'tmdb_type'})
 @get_tmdb_id
-def player_play(ignore_default=False, **kwargs):
+def player_play(ignore_default=False, allow_playlist=True, **kwargs):
     from jurialmunkey.parser import boolean
     kodi_log(['player_play - attempting to play\n', kwargs], 1)
     player = Player(**kwargs)
     player.ignore_default = boolean(ignore_default)
+    player.allow_playlist = boolean(allow_playlist)
     player.play()

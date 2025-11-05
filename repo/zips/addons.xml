@@ -1415,7 +1415,7 @@ updated YouTube addon URL
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.pov" version="5.11.01" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.11.02" name="POV" provider-name="kodifitzwell">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -2027,7 +2027,7 @@ updated YouTube addon URL
 			<fanart>fanart.jpg</fanart>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.themoviedb.helper" version="6.10.8" name="TMDb Helper" provider-name="jurialmunkey">
+</addon><addon id="plugin.video.themoviedb.helper" version="6.11.0" name="TMDb Helper" provider-name="jurialmunkey">
 <requires>
   <import addon="xbmc.python" version="3.0.1" />
   <import addon="script.module.requests" version="2.9.1" />

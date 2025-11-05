@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<!-- General -->
+	<!-- Provider Accounts -->
 	<category label="My Services">
 		<!-- Debrider -->
 		<setting label="Debrider" type="lsep" />
@@ -40,7 +40,6 @@
 		<setting id="en.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="7" option="int" range="1,1,10" visible="eq(-8,true)+!eq(-6,)" />
 		<!--setting id="easynews.api_version" label="API Version" type="enum" default="0" values="Version 2|Version 3" visible="!eq(-2,)" /-->
 	</category>
-	<!-- Provider Accounts -->
 	<category label="My Services">
 		<!-- Premiumize -->
 		<setting label="Premiumize" type="lsep" />
@@ -190,6 +189,7 @@
 		<setting label="Test All Source Providers (Magneto)" type="action" action="RunPlugin(plugin://plugin.video.pov/?mode=speedTest)" />
 		<setting label="Sources" type="lsep" />
 		<setting id="provider.animetosho" label="animetosho" type="bool" default="false" />
+		<setting id="provider.bitmagnet" label="bitmagnet" type="bool" default="false" />
 		<setting id="provider.dmm" label="dmm" type="bool" default="false" />
 		<setting id="provider.nyaa" label="nyaa" type="bool" default="false" />
 		<setting id="provider.piratebay" label="piratebay" type="bool" default="true" />
@@ -217,6 +217,7 @@
 		<setting id="check.folders" label="Check Before Full Search" type="bool" default="false" visible="eq(-3,true)" />
 		<setting id="results.sort_folders_first" label="Show Results at Top" type="bool" default="true" visible="eq(-4,true)" />
 	</category>
+	<!-- General -->
 	<category label="General">
 		<!-- General -->
 		<setting label="General" type="lsep" />
@@ -383,8 +384,8 @@
 			<setting id="provider.rd_colour" label="Real Debrid Color" type="action" default="seagreen" subsetting="true" visible="eq(-3,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=rd)" />
 			<setting id="provider.pm_colour" label="Premiumize Color" type="action" default="orangered" subsetting="true" visible="eq(-4,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=pm)" />
 			<setting id="provider.ad_colour" label="All Debrid Color" type="action" default="goldenrod" subsetting="true" visible="eq(-5,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ad)" />
-			<setting id="provider.oc_colour" label="Offcloud Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-6,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=oc)" />
-			<setting id="provider.tb_colour" label="TorBox Color" type="action" default="darkseagreen" subsetting="true" visible="eq(-7,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=tb)" />
+			<setting id="provider.tb_colour" label="TorBox Color" type="action" default="darkseagreen" subsetting="true" visible="eq(-6,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=tb)" />
+			<setting id="provider.oc_colour" label="Offcloud Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-7,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=oc)" />
 			<setting id="provider.db_colour" label="Debrider Color" type="action" default="gold" subsetting="true" visible="eq(-8,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=db)" />
 			<setting id="provider.ed_colour" label="EasyDebrid Color" type="action" default="cornflowerblue" subsetting="true" visible="eq(-9,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ed)" />
 			<setting id="provider.easynews_colour" label="Easynews Color" type="action" default="darkturquoise" subsetting="true" visible="eq(-10,0)|eq(-10,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=easynews)" />

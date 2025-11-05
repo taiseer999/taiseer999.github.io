@@ -3,7 +3,7 @@ import json
 import random
 import requests
 from threading import Thread
-from debrids import real_debrid_api, premiumize_api, alldebrid_api, offcloud_api, torbox_api, easydebrid_api, debrider_api
+from debrids import alldebrid_api, premiumize_api, real_debrid_api, torbox_api, offcloud_api, debrider_api, easydebrid_api
 from caches.debrid_cache import DebridCache
 from modules.utils import clean_file_name, make_thread_list
 from modules.settings import enabled_debrids_check
@@ -19,10 +19,10 @@ debrid_list = (
 	('Real-Debrid', 'rd', real_debrid_api.RealDebridAPI),
 	('Premiumize.me', 'pm', premiumize_api.PremiumizeAPI),
 	('AllDebrid', 'ad', alldebrid_api.AllDebridAPI),
-	('Debrider', 'db', debrider_api.DebriderAPI),
-	('EasyDebrid', 'ed', easydebrid_api.EasyDebridAPI),
 	('TorBox', 'tb', torbox_api.TorBoxAPI),
-	('Offcloud', 'oc', offcloud_api.OffcloudAPI)
+	('Offcloud', 'oc', offcloud_api.OffcloudAPI),
+	('Debrider', 'db', debrider_api.DebriderAPI),
+	('EasyDebrid', 'ed', easydebrid_api.EasyDebridAPI)
 )
 
 def import_debrid(debrid_provider):
@@ -118,7 +118,7 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 		file_key = next((i['link'] for i in selected_files), None)
 		if source['debrid'] in ('Premiumize.me',): file_url = api.add_headers_to_url(file_key)
 		else: file_url = api.unrestrict_link(file_key)
-		if source['debrid'] in ('Premiumize.me', 'Debrider', 'EasyDebrid'):
+		if source['debrid'] in ('Premiumize.me', 'Debrider'):
 			if store_to_cloud: Thread(target=api.create_transfer, args=(source['url'],)).start()
 		if source['debrid'] in ('Real-Debrid', 'AllDebrid', 'TorBox'):
 			if not store_to_cloud: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
@@ -196,7 +196,7 @@ class DebridCheck:
 		self.cached_list, self.hashes_to_cache = [], []
 		self.imdb, self.season, self.episode = meta.get('imdb_id'), meta.get('season'), meta.get('episode')
 		self.name, self.debrid, self.function = args
-		self.thread = Thread(target=self.cache_check, name=args[0])
+		self.thread = Thread(target=self.cache_check, name=self.name)
 
 	def cache_write(self):
 		DebridCache().set_many(self.hashes_to_cache, self.debrid)
