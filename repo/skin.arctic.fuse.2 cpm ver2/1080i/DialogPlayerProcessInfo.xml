@@ -163,7 +163,7 @@
 						<left>-15</left>
 						<width>110</width>
 						<height>54</height>
-                        <texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolbyvision.png</texture>
+                        <texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolby.vision.horizontal.small.png</texture>
 					</control>
 					<control type="label">
 						<width>300</width>
@@ -171,8 +171,8 @@
 						<left>180</left>
 						<height>50</height>
 						<aligny>bottom</aligny>
-						<label>[COLOR limegreen]Configuration[/COLOR]</label>
-						<font>font_main_bold</font>
+						<label>[COLOR limegreen]DV Configuration[/COLOR]</label>
+						<font>font_mini_bold</font>
 						
 					</control>
 				</control>
@@ -409,7 +409,7 @@
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
-						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolbyvision.png</texture>
+						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolby.vision.horizontal.small.png</texture>
 					</control>
 					<control type="label">
 						<left>250</left>
@@ -417,8 +417,8 @@
 						<height>45</height>
 						<top>5</top>
 						<aligny>bottom</aligny>
-						<label>[COLOR limegreen]Levels Metadata[/COLOR]</label>
-						<font>font_main_bold</font>
+						<label>[COLOR limegreen]DV Levels Metadata[/COLOR]</label>
+						<font>font_mini_bold</font>
 						
 					</control>
 				</control>
@@ -828,7 +828,7 @@
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
-						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/hdr10.png</texture>
+						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/hdr.10.small.png</texture>
 					</control>
 					<control type="label">
 						<top>5</top>
@@ -836,8 +836,8 @@
 						<height>50</height>
 						<aligny>bottom</aligny>
 						<left>200</left>
-						<label>[COLOR limegreen]Static Metadata[/COLOR]</label>
-						<font>font_main_bold</font>
+						<label>[COLOR limegreen]HDR Static Metadata[/COLOR]</label>
+						<font>font_mini_bold</font>
 					</control>
 				</control>
 				<control type="group"> <!-- HDR MaxCLL/MaxFALL -->
