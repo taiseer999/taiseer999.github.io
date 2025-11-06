@@ -1067,7 +1067,10 @@
 					<description>CACHE BAR</description>
 					<width>640</width>
 					<height>8</height>
+					<centertop>50%</centertop>
 					<info>Player.CacheLevel</info>
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 					
 				</control>
 
@@ -1099,7 +1102,10 @@
 					<description>RAM BAR</description>
 					<width>640</width>
 					<height>8</height>
+					<centertop>50%</centertop>
 					<info>system.memory(used)</info>
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 					
 				</control>
 
@@ -1132,8 +1138,11 @@
 					<description>CPU BAR</description>
 					<width>640</width>
 					<height>8</height>
+					<centertop>50%</centertop>
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 					
 				</control>
 
@@ -1270,30 +1279,6 @@
 				</control>
 
 
-				<control type="group"> <!-- Audio encoding -->
-					<width>620</width>
-					<height>40</height>
-					<control type="label">
-						<width>220</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>left</align>
-						<label>[COLOR white]Audio encoding:[/COLOR]</label>
-						<font>font_debug</font>
-						<textcolor>ffadff2f</textcolor>
-					</control>
-					<control type="label">
-						<left>220</left>
-						<width>400</width>
-						<height>40</height>
-						<aligny>bottom</aligny>
-						<align>right</align>
-						<label>[COLOR ffffd700]$VAR[AudioCodecVar] $VAR[AudioChannelsVar][/COLOR] [COLOR ffadff2f]$VAR[AudioCodecSpatialVar][/COLOR]</label>
-						<font>font_debug</font>
-						<textcolor>ffadff2f</textcolor>
-					</control>
-				</control>
-
 				<control type="group"> <!-- Audio sampling -->
 					<width>620</width>
 					<height>40</height>
@@ -1302,9 +1287,9 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR white]Bitrate/sampling:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Bitrate/sampling:[/COLOR]</label>
 						<font>font_debug</font>
-						<textcolor>ffadff2f</textcolor>
+						
 					</control>
 					<control type="label">
 						<left>220</left>
@@ -1312,11 +1297,79 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(audiobitspersample),$COMMA , bits]$INFO[Player.Process(audiosamplerate),$COMMA , Hz]$INFO[VideoPlayer.AudioBitrate,$COMMA , kb/s]</label>
+						<label>$INFO[Player.Process(audio.live.kibit.rate),, $LOCALIZE[32012]] $INFO[Player.Process(audio.sample.rate),, kHz] $INFO[VideoPlayer.AudioKibitRate,- [COLOR dialog_fg_70](Ø , $LOCALIZE[32012])[/COLOR]]</label>
 						<font>font_debug</font>
-						<textcolor>ffadff2f</textcolor>
+						
 					</control>
 				</control>
+
+                   <control type="group"> <!-- Output -->
+					<width>620</width>
+					<height>40</height>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR dialog_fg_90]Output:[/COLOR]</label>
+						<font>font_debug</font>
+						
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>Passthrough</label>
+						<font>font_debug</font>
+						<visible>Player.Passthrough</visible>
+					</control>
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Process(audiochannelssink),]</label>
+						<font>font_debug</font>
+						<visible>!Player.Passthrough</visible>
+					</control>
+
+					<control type="label">
+						<left>220</left>
+						<width>400</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>Decoding</label>
+						<font>font_debug</font>
+						<visible>!Player.Passthrough + String.IsEmpty(Player.Process(audiochannelssink))</visible>
+					</control>
+				</control>
+
+                   <control type="group"> <!--channels -->
+					<width>620</width>
+					<height>40</height>
+					<control type="label">
+						<width>220</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>[COLOR dialog_fg_90]channels:[/COLOR]</label>
+						<font>font_debug</font>
+						
+					</control>
+					<control type="label">
+						<left>170</left>
+						<width>450</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>($INFO[Player.Process(audiochannels),])</label>
+						<font>font_debug</font>
+                    </control>
+				    </control>
 
 				<control type="group"> <!-- Audio language -->
 					<width>620</width>

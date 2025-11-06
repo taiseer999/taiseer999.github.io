@@ -1103,8 +1103,10 @@
 					<description>CACHE BAR</description>
 					<width>640</width>
 					<height>8</height>
+					<centertop>50%</centertop>
 					<info>Player.CacheLevel</info>
-					
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 				</control>
 
 				<control type="group"> <!-- Memory -->
@@ -1135,8 +1137,10 @@
 					<description>RAM BAR</description>
 					<width>640</width>
 					<height>8</height>
+					<centertop>50%</centertop>
 					<info>system.memory(used)</info>
-					
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 				</control>
 
 				<control type="group"> <!-- CPU Usage -->
@@ -1168,9 +1172,11 @@
 					<description>CPU BAR</description>
 					<width>640</width>
 					<height>8</height>
+					<centertop>50%</centertop>
 					<info>System.CPUUsage</info>
 					<visible>System.SupportsCPUUsage</visible>
-					
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 				</control>
 
 				<control type="group"> <!-- CPU -->
@@ -1672,6 +1678,8 @@
 					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(audio.queue.level)</info>
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 					
 				</control>
 				<control type="progress">
@@ -1679,21 +1687,24 @@
 					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(audio.queue.data.level)</info>
-					
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 				</control>
 				<control type="progress">
 					<description>VIDEO QUEUE BAR</description>
 					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(video.queue.level)</info>
-					
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 				</control>
 				<control type="progress">
 					<description>VIDEO QUEUE DATA BAR</description>
 					<width>520</width>
 					<height>8</height>
 					<info>Player.Process(video.queue.data.level)</info>
-					
+					<texturebg colordiffuse="panel_fg_12" border="6">progress/progress-bg.png</texturebg>
+							<midtexture colordiffuse="dialog_fg_90" border="6">progress/progress-bg.png</midtexture>
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
@@ -1731,7 +1742,7 @@
 					<width>auto</width>
 					<height>50</height>
 					<textoffsetx>40</textoffsetx>
-					<label>Player Process Information</label>
+					<label>PlayerProcessInformation</label>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
 				</control>
 			</control>

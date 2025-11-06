@@ -9,7 +9,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -18,7 +18,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -27,7 +27,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -325,7 +325,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -334,7 +334,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -343,7 +343,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -638,7 +638,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -647,7 +647,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -656,7 +656,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -954,7 +954,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -963,7 +963,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -972,7 +972,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1267,7 +1267,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1276,7 +1276,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1285,7 +1285,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1583,7 +1583,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner.png</texture>
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1592,7 +1592,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1601,7 +1601,7 @@
                 <width>210</width>
                 <height>90</height>
                 <control type="image">
-                    <texture colordiffuse="80FFFFFF">common/corner_small.png</texture>
+                   <texture colordiffuse="$VAR[ColorHighlight]">common/corner_small.png</texture>
                 </control>
             </control>
             <control type="group">

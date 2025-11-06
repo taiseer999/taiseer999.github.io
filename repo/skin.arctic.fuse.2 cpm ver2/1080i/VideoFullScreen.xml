@@ -105,7 +105,7 @@
                 <param name="imageId">47</param>
                 <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="Video_Background_Flag">
@@ -113,7 +113,7 @@
                 <param name="imageId">49</param>
                 <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="Audio_Background_Flag">
@@ -121,7 +121,7 @@
                 <param name="imageId">51</param>
                 <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="SDR_Bypass_Flag">
@@ -209,7 +209,7 @@
                 <param name="imageId">73</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
                 <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="PCM_Flag">
@@ -424,7 +424,7 @@
                 <param name="imageId">47</param>
                 <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="Video_Background_Flag">
@@ -432,7 +432,7 @@
                 <param name="imageId">49</param>
                 <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="Audio_Background_Flag">
@@ -440,7 +440,7 @@
                 <param name="imageId">51</param>
                 <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="SDR_Bypass_Flag">
@@ -528,7 +528,7 @@
                 <param name="imageId">73</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
                 <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="PCM_Flag">
@@ -743,7 +743,7 @@
                 <param name="imageId">47</param>
                 <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="Video_Background_Flag">
@@ -751,7 +751,7 @@
                 <param name="imageId">49</param>
                 <param name="visible">!String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="Audio_Background_Flag">
@@ -759,7 +759,7 @@
                 <param name="imageId">51</param>
                 <param name="visible">String.IsEmpty(Player.Process(video.source.hdr.type.raw)) + !String.IsEmpty(VideoPlayer.AudioCodec)</param>
                 <param name="texture">common/corner_small.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="SDR_Bypass_Flag">
@@ -847,7 +847,7 @@
                 <param name="imageId">73</param>
                 <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm) | String.IsEqual(VideoPlayer.AudioCodec,ac3) | String.IsEqual(VideoPlayer.AudioCodec,dca) | String.IsEqual(VideoPlayer.AudioCodec,dolbydigital) | String.IsEqual(VideoPlayer.AudioCodec,dtshd) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x) | String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma_x_imax) | String.IsEqual(VideoPlayer.AudioCodec,eac3) | String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos) | String.IsEqual(VideoPlayer.AudioCodec,mp3) | String.IsEqual(VideoPlayer.AudioCodec,mp3float) | String.IsEqual(VideoPlayer.AudioCodec,flac) | String.IsEqual(VideoPlayer.AudioCodec,opus) | String.IsEqual(VideoPlayer.AudioCodec,pcm) | String.IsEqual(VideoPlayer.AudioCodec,pcm_bluray) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s16le) | String.IsEqual(VideoPlayer.AudioCodec,pcm_s24le) | String.IsEqual(VideoPlayer.AudioCodec,truehd) | String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)</param>
                 <param name="texture">common/selectedwhite.png</param>
-                <param name="colordiffuse">80FFFFFF</param>
+                <param name="colordiffuse">$VAR[ColorHighlight]</param>
             </include>
 			
             <include content="PCM_Flag">
