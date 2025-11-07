@@ -84,4 +84,8 @@
         <filename>tonos.ttf</filename>
         <familyname>tonos</familyname>
     </font>
+    <font>
+        <filename>BalooBhaijaan2-Regular.ttf</filename>
+        <familyname>Baloo Bhaijaan2</familyname>
+    </font>
 </fonts>
