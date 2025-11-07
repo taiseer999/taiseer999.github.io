@@ -9,7 +9,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             
@@ -324,7 +324,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             
@@ -636,7 +636,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             
@@ -951,7 +951,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             
@@ -1263,7 +1263,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             
@@ -1578,7 +1578,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorHighlight]">common/corner.png</texture>
+                    <texture colordiffuse="main_fg_70">common/corner.png</texture>
                 </control>
             </control>
             
