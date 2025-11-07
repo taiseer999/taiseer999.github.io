@@ -119,7 +119,7 @@
         <texturefocus colordiffuse="$VAR[ColorHighlight]">common/circle.png</texturefocus>
     </include>
     <include name="Texture_Button_X">
-        <texture border="$PARAM[border]" colordiffuse="$VAR[ColorHighlight]">common/menu.png</texture>
+        <texture border="$PARAM[border]" colordiffuse="$VAR[ColorHighlight]">common/circle.png</texture>
     </include>
     <include name="Texture_Button_Y">
         <texture colordiffuse="$VAR[ColorHighlight]"></texture>
