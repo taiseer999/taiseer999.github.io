@@ -18,21 +18,19 @@ class PremiumizeAPI:
 		self.token = get_setting('pm.token')
 		session.headers.update(self.headers())
 
-	def _get(self, path):
+	def _request(self, method, path, data=None):
 		url = base_url + path
-		try: response = session.get(url, timeout=timeout)
+		try: response = session.request(method, url, data=data, timeout=timeout)
 		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
 			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
 		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
 		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
+	def _get(self, path):
+		return self._request('get', path)
+
 	def _post(self, path, data=None):
-		url = base_url + path
-		try: response = session.post(url, data=data, timeout=timeout)
-		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
-		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
-		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
+		return self._request('post', path, data=data)
 
 	def add_headers_to_url(self, url):
 		return url + '|' + kodi_utils.urlencode(self.headers())

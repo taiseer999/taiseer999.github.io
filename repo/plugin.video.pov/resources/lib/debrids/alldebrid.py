@@ -27,7 +27,6 @@ class Indexer(Debrid):
 			_builder = self.torrent_cloud
 		elif '_downloads' in params['mode']:
 			items = self.downloads()['links']
-			items.sort(key=lambda k: k['date'], reverse=True)
 			_builder = self.browse_downloads
 		else: return getattr(self, params['mode'].split('.')[-1])()
 		__handle__ = int(sys.argv[1])
@@ -37,6 +36,7 @@ class Indexer(Debrid):
 		kodi_utils.set_view_mode('view.premium')
 
 	def torrent_cloud(self, items):
+		items.sort(key=lambda k: k['id'], reverse=True)
 		for count, item in enumerate(items, 1):
 			try:
 				if not item['statusCode'] == 4: continue
@@ -78,6 +78,7 @@ class Indexer(Debrid):
 			except: pass
 
 	def browse_downloads(self, items):
+		items.sort(key=lambda k: k['date'], reverse=True)
 		for count, item in enumerate(items, 1):
 			try:
 				if not item['filename'].lower().endswith(tuple(extensions)): continue

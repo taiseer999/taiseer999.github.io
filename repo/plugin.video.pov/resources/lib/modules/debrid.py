@@ -46,16 +46,16 @@ def debrid_valid_hosts(enabled_debrids):
 	[i.join() for i in threads]
 	return debrid_hosts
 
-def manual_add_magnet_to_cloud(params):
+def unchecked_magnet_status(params):
 	params['provider'] = params['provider'].replace('Unchecked ', '').replace('Uncached ', '')
-	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
 	show_busy_dialog()
 	api = import_debrid(params['provider'])
-	api.clear_cache()
-	result = api.create_transfer(params['url'])
+	result = api.parse_magnet_pack(params['url'], params['info_hash'])
 	hide_busy_dialog()
-	if result: notification(32576)
-	else: notification(32575)
+	if result: notification('%s Cached' % params['provider'])
+	else: return notification('%s Not Cached' % params['provider'])
+	torrent_id = next((i['torrent_id'] for i in result if 'torrent_id' in i), '')
+	if torrent_id: api.delete_torrent(torrent_id)
 
 def manual_add_nzb_to_cloud(params):
 	params['provider'] = params['provider'].replace('Unchecked ', '').replace('Uncached ', '')
@@ -64,6 +64,17 @@ def manual_add_nzb_to_cloud(params):
 	api = import_debrid(params['provider'])
 	api.clear_cache()
 	result = api.create_transfer(params['url'], params['name'])
+	hide_busy_dialog()
+	if result: notification(32576)
+	else: notification(32575)
+
+def manual_add_magnet_to_cloud(params):
+	params['provider'] = params['provider'].replace('Unchecked ', '').replace('Uncached ', '')
+	if not confirm_dialog(text=ls(32831) % params['provider'].upper()): return
+	show_busy_dialog()
+	api = import_debrid(params['provider'])
+	api.clear_cache()
+	result = api.create_transfer(params['url'])
 	hide_busy_dialog()
 	if result: notification(32576)
 	else: notification(32575)
@@ -152,15 +163,32 @@ def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, d
 	url_params = {'mode': 'media_play', 'url': link, 'media_type': 'video'}
 	return kodi_utils.execute_builtin('RunPlugin(%s)' % kodi_utils.build_url(url_params))
 
-def tio_check_cache(token, imdb, season, episode, collector):
+def mfn_check_cache(imdb, season, episode, collector):
+	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
+	else: url = 'movie/%s.json' % (imdb)
+	params = (
+		'D-T2iZoymNCCD1T5c2sX5u8tIZVcgcFWlCsCJ72rCmrU2mDdmvgieM-lvX-bp4h_ExG1IpHLObtgmLCC'
+		'k_QbhNTZz32wbhNmYO1HLaefzqGoYjcIhiUH-MWgL-dMxyrTPR2fo2--HtvH0V5KpEi6vPfjKKGBmpe3'
+		'wRD0c_QsSxlcQ'
+	)
+	url = 'https://mediafusion.elfhosted.com/%s/stream/%s' % (params, url)
+	pattern = re.compile(r'\b\w{40}\b')
+	try:
+		results = requests.get(url, timeout=7.05)
+		files = results.json()['streams']
+		collector.extend(pattern.findall(file['url'])[-1] for file in files if '⚡' in file['name'] and 'url' in file)
+	except Exception as e: kodi_utils.logger('mfn error', str(e))
+
+def tio_check_cache(imdb, season, episode, collector):
 	from fenom import client
 	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
 	else: url = 'movie/%s.json' % (imdb)
-	url = 'https://torrentio.strem.fun/debridoptions=nocatalog|%s/stream/%s' % (token, url)
+	params = 'debridoptions=nodownloadlinks,nocatalog|realdebrid=T2iZoymNCCD1T5c2sX5u8tIZVcgcFWlCsCJ72rCmrU2mDdmvgieM'
+	url = 'https://torrentio.strem.fun/%s/stream/%s' % (params, url)
 	headers = {'User-Agent': client.randomagent(), 'Accept': 'application/json'}
 	pattern = re.compile(r'\b\w{40}\b')
 	try:
-		results = requests.get(url, headers=headers, timeout=5.05)
+		results = requests.get(url, headers=headers, timeout=7.05)
 		files = results.json()['streams']
 		collector.extend(pattern.findall(file['url'])[-1] for file in files if '+' in file['name'] and 'url' in file)
 	except Exception as e: kodi_utils.logger('tio error', str(e))
@@ -170,14 +198,14 @@ def dmm_check_cache(unchecked_hashes_chunk, imdb, collector): # DMM API Allows m
 		100 sample size should be enough """
 	from fenom import client
 	from fenom.providers.torrents.dmm import get_secret
+	unchecked_hashes_chunk = [i for i in unchecked_hashes_chunk if len(i) == 40]
 	if len(unchecked_hashes_chunk) > 100: unchecked_hashes_chunk = random.sample(unchecked_hashes_chunk, 100)
-	hashes = [i for i in unchecked_hashes_chunk if len(i) == 40]
 	url = 'https://debridmediamanager.com/api/availability/check'
 	headers = {'User-Agent': client.randomagent(), 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*'}
 	dmmProblemKey, solution = get_secret()
-	data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb, 'hashes': hashes}
+	data = {'dmmProblemKey': dmmProblemKey, 'solution': solution, 'imdbId': imdb, 'hashes': unchecked_hashes_chunk}
 	try:
-		results = requests.post(url, headers=headers, json=data, timeout=5.05)
+		results = requests.post(url, headers=headers, json=data, timeout=7.05)
 		files = results.json()['available']
 		collector.extend(file['hash'] for file in files if 'hash' in file)
 	except Exception as e: kodi_utils.logger('dmm error', str(e))
@@ -203,9 +231,10 @@ class DebridCheck:
 
 	def external_check_cache(self, unchecked_hashes):
 		checked_hashes = []
-		token = {'rd': 'realdebrid=%s', 'ad': 'alldebrid=%s'}[self.debrid] % self.function().token
 		for i in (threads := (
-			Thread(target=tio_check_cache, args=(token, self.imdb, self.season, self.episode, checked_hashes)),
+			Thread(target=mfn_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes))
+			if self.debrid == 'ad' else
+			Thread(target=tio_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
 			Thread(target=dmm_check_cache, args=(unchecked_hashes, self.imdb, checked_hashes))
 		)): i.start()
 		for i in threads: i.join()

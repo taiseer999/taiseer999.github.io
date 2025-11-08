@@ -1,5 +1,6 @@
 
   [COLOR dodgerblue][B]Version 5.11[/B][/COLOR]
+- Added Check Cache Status to unchecked results context menu options.
 - Added bitmagnet.
 - Updated instances urls.
 

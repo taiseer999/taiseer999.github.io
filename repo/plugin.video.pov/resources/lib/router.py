@@ -271,12 +271,15 @@ class Router:
 		elif mode == 'clean_thumbnails':
 			from modules.thumbnails import thumb_cleaner
 			thumb_cleaner()
-		elif mode == 'manual_add_magnet_to_cloud':
-			from modules.debrid import manual_add_magnet_to_cloud
-			manual_add_magnet_to_cloud(params)
+		elif mode == 'unchecked_magnet':
+			from modules.debrid import unchecked_magnet_status
+			unchecked_magnet_status(params)
 		elif mode == 'manual_add_nzb_to_cloud':
 			from modules.debrid import manual_add_nzb_to_cloud
 			manual_add_nzb_to_cloud(params)
+		elif mode == 'manual_add_magnet_to_cloud':
+			from modules.debrid import manual_add_magnet_to_cloud
+			manual_add_magnet_to_cloud(params)
 		elif mode == 'browse_packs':
 			from modules.debrid import debrid_packs
 			debrid_packs(params['provider'], params['name'], params['magnet_url'], params['info_hash'], params['highlight'])

@@ -16,9 +16,9 @@ class AllDebridAPI:
 		self.token = get_setting('ad.token')
 		session.headers['Authorization'] = 'Bearer %s' % self.token
 
-	def _get(self, path, params=None):
+	def _request(self, method, path, params=None, data=None):
 		url = base_url + path
-		try: response = session.get(url, params=params, timeout=timeout)
+		try: response = session.request(method, url, params=params, data=data, timeout=timeout)
 		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
 			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
 		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
@@ -26,15 +26,11 @@ class AllDebridAPI:
 		if 'data' in response and response.get('status') == 'success': response = response['data']
 		return response
 
+	def _get(self, path, params=None):
+		return self._request('get', path, params=params)
+
 	def _post(self, path, data=None):
-		url = base_url + path
-		try: response = session.post(url, data=data, timeout=timeout)
-		except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-			return kodi_utils.notification('%s timeout' % self.__class__.__name__)
-		if not response.ok: kodi_utils.logger(self.__class__.__name__, f"{response.reason}\n{response.url}")
-		response = response.json() if 'json' in response.headers.get('Content-Type', '') else response
-		if 'data' in response and response.get('status') == 'success': response = response['data']
-		return response
+		return self._request('post', path, data=data)
 
 	def days_remaining(self):
 		import datetime

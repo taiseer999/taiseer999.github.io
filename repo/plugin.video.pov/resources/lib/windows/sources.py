@@ -24,7 +24,7 @@ extra_info_str, down_file_str, browse_pack_str, down_pack_str, cloud_str = ls(32
 filter_str, clr_filter_str, filters_ignored, start_full_scrape = ls(32152), ls(32153), ls(32686), ls(32529)
 filter_quality, filter_provider, filter_title, filter_extraInfo = ls(32154), ls(32157), ls(32679), ls(32169)
 en_seek_str, en_dl_str, oc_clr_str = '[B]EN: PLAY (SEEK ENABLED)[/B]', '[B]EN: PLAY (FROM DOWNLOAD)[/B]', '[B]OC: CLEAR CLOUD STORAGE[/B]'
-run_plugin_str, ignored_str = 'RunPlugin(%s)', '[B][COLOR dodgerblue](%s)[/COLOR][/B]'
+run_plugin_str, ignored_str, check_str = 'RunPlugin(%s)', '[B][COLOR dodgerblue](%s)[/COLOR][/B]', '[B]CHECK CACHE STATUS[/B]'
 string, upper, lower = str, str.upper, str.lower
 
 class SourceResults(BaseDialog):
@@ -332,6 +332,10 @@ class ResultsContextMenu(BaseDialog):
 		cache_provider = self.item.get('cache_provider', 'None')
 		magnet_url = self.item.get('url', 'None')
 		info_hash = self.item.get('hash', 'None')
+		if 'Unchecked' in cache_provider:
+			self.item_list.append(self.make_contextmenu_item(check_str, run_plugin_str, {
+				'mode': 'unchecked_magnet', 'provider': cache_provider, 'url': magnet_url, 'info_hash': info_hash
+			}))
 		if 'easynews' in scrape_provider:
 			params = {'meta': meta_json, 'name': name, 'url_dl': self.item['url_dl'], 'size': self.item['size']}
 			seek_params = {'mode': 'easynews.seekable_easynews', **params}
