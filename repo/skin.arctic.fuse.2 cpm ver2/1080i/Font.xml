@@ -41,26 +41,7 @@
         <param name="size_light_main_x2">60</param>
 
         </include>
-    </fontset>
-
-    <fontset id="خط pdf" unicode="true">
-<include content="Font_Default">
-            <param name="font_black">PFDinTextArabic-Bold.ttf</param>
-            <param name="font_bold">PFDinTextArabic-Bold.ttf</param>
-            <param name="font_regular">PFDinTextArabic-Regular.ttf</param>
-            <param name="font_light">PFDinTextArabic-Medium.ttf</param>
-            <param name="plot_linespacing_head">1.1</param>
-            <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">0.92</param>
-            <param name="plot_linespacing_mini">1</param>
-            <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">30</param>
-        <param name="size_light_main">30</param>
-        <param name="size_heavy_main_x2">60</param>
-        <param name="size_light_main_x2">60</param>
-            
-         </include>
-
+    
     </fontset>
 
     <fontset id="الجزيرة" unicode="true">
@@ -198,6 +179,24 @@
         </include>
     </fontset>
 
+<fontset id="AdobeArabic" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AdobeArabic-Bold.ttf</param>
+            <param name="font_bold">AdobeArabic-Bold.ttf</param>
+            <param name="font_regular">AdobeArabic-Bold.ttf</param>
+            <param name="font_light">AdobeArabic-Bold.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.1</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
 </fonts>
 
 
