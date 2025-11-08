@@ -1637,14 +1637,14 @@
 					<width>auto</width>
 					<height>50</height>
 					<textoffsetx>40</textoffsetx>
-					<label>Dolby Vision - HDR</label>
+					<label>[COLOR limegreen]Dolby Vision - HDR[/COLOR]</label>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5552,Home)</onfocus>
 				</control>
 				<control type="button" id="5553">
 					<width>auto</width>
 					<height>50</height>
 					<textoffsetx>40</textoffsetx>
-					<label>Player Process Information</label>
+					<label>[COLOR limegreen]PlayerProcessInformation[/COLOR]</label>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
 				</control>
 			</control>
@@ -1653,7 +1653,7 @@
                 <center>view_pad</center>
                 <height>110</height>
                 <include>OSD_Codecs</include>
-				<textcolor>grey</textcolor>
+				
 				<include content="Object_MenuHeader">
 				<param name="icon">special://skin/extras/icons/bars-progress.png</param>
                 <param name="label"></param>
