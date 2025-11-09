@@ -332,7 +332,7 @@ class ResultsContextMenu(BaseDialog):
 		cache_provider = self.item.get('cache_provider', 'None')
 		magnet_url = self.item.get('url', 'None')
 		info_hash = self.item.get('hash', 'None')
-		if 'Unchecked' in cache_provider:
+		if next((True for x in ('Real-Debrid', 'AllDebrid') if x in cache_provider), False):
 			self.item_list.append(self.make_contextmenu_item(check_str, run_plugin_str, {
 				'mode': 'unchecked_magnet', 'provider': cache_provider, 'url': magnet_url, 'info_hash': info_hash
 			}))

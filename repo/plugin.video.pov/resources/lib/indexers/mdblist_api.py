@@ -38,6 +38,11 @@ def mdb_userlists():
 	url = '%s/lists/user' % base_url
 	return cache_object(call_mdblist, string, url, json=False, expiration=EXPIRES_1_HOURS)
 
+def mdb_externallists():
+	string = 'mdb_externallists'
+	url = '%s/external/lists/user' % base_url
+	return cache_object(call_mdblist, string, url, json=False, expiration=EXPIRES_1_HOURS)
+
 def mdb_toplists():
 	string = 'mdb_toplists'
 	url = '%s/lists/top' % base_url
@@ -80,7 +85,8 @@ def mdb_list_items(list_id, list_type):
 			{'sort': 'random'}, {'sort': 'usort'}
 		)[sort_index]
 	else: params = None
-	if list_id: url = '%s/lists/%s/items?unified=true' % (base_url, list_id)
+	if list_type == 'external': url = '%s/external/lists/%s/items?unified=true' % (base_url, list_id)
+	elif list_id: url = '%s/lists/%s/items?unified=true' % (base_url, list_id)
 	else: url = '%s/watchlist/items?unified=true' % base_url
 	results = call_mdblist(url, params=params)
 	if list_type and ignore_articles and not sort_index:

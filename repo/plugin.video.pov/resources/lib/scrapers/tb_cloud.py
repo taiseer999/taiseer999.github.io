@@ -14,6 +14,7 @@ class source(Debrid):
 	def results(self, info):
 		try:
 			self.sources = []
+			sources_append = self.sources.append
 			if not enabled_debrids_check('tb'): return internal_results(self.scrape_provider, self.sources)
 			self.scrape_results = []
 			title_filter = filter_by_name(self.scrape_provider)
@@ -21,64 +22,68 @@ class source(Debrid):
 			self.year, self.season, self.episode = int(info.get('year')), info.get('season'), info.get('episode')
 			if self.media_type == 'episode': self.seas_ep_query_list = source_utils.seas_ep_query_list(self.season, self.episode)
 			self.folder_query, self.year_query_list = clean_title(normalize(title)), tuple(map(str, range(self.year - 1, self.year + 2)))
-			for i in (threads := (
-				Thread(target=self._scrape_cloud, args=(self.user_cloud, 'torent')),
-				Thread(target=self._scrape_cloud, args=(self.user_cloud_usenet, 'usenet')),
-				Thread(target=self._scrape_cloud, args=(self.user_cloud_webdl, 'webdl'))
-			)): i.start()
-			[i.join() for i in threads]
+			self._scrape_cloud()
 			if not self.scrape_results: return internal_results(self.scrape_provider, self.sources)
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
-			def _process():
-				for item in self.scrape_results:
-					try:
-						file_name = item['short_name']
-						if title_filter and not check_title(title, file_name, self.aliases, self.year, self.season, self.episode): continue
-						direct_debrid_link, URLName = item['mediatype'], clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
-						file_dl, size = item['url'], round(float(item['size'])/1073741824, 2)
-						video_quality, details = get_file_info(name_info=release_info_format(file_name))
-						source_item = {'name': file_name, 'title': file_name, 'URLName': URLName, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size,
-									'extraInfo': details, 'url_dl': file_dl, 'id': file_dl, 'downloads': False, 'direct': True, 'source': self.scrape_provider,
-									'scrape_provider': self.scrape_provider, 'direct_debrid_link': direct_debrid_link}
-						yield source_item
-					except: pass
-			self.sources = list(_process())
-		except Exception as e:
-			from modules.kodi_utils import logger
-			logger('POV torbox scraper Exception', e)
-		internal_results(self.scrape_provider, self.sources)
-		return self.sources
-
-	def _scrape_cloud(self, function, mediatype):
-		try:
-			results_append = self.scrape_results.append
-			files = []
-			try: files = [
-				{**file, 'url': '%d,%d' % (i['id'], file['id']), 'folder_name': i['name'], 'mediatype': mediatype}
-				for i in function(check_cache=False) if i['download_finished'] and i['files']
-				for file in i['files']
-			]
-			except: return files
-			for file in files:
+			for item in self.scrape_results:
 				try:
-					if not file['short_name'].lower().endswith(tuple(extensions)): continue
-					formalized = normalize(file['folder_name'])
+					if not item['filename'].lower().endswith(tuple(extensions)): continue
+					formalized = normalize(item['folder_name'])
 					foldername = clean_title(formalized)
-					normalized = normalize(file['short_name'])
+					normalized = normalize(item['filename'])
 					filename = clean_title(normalized)
 					if self.media_type == 'movie':
 						if not (
 							any(x in filename for x in self.year_query_list)
-							or # because usenet obfuscation
+							or # usenet obfuscation
 							any(x in foldername for x in self.year_query_list)
 						): continue
 					elif not (
 						seas_ep_filter(self.season, self.episode, normalized)
-						or # because usenet obfuscation
+						or # usenet obfuscation
 						seas_ep_filter(self.season, self.episode, formalized)
 					): continue
 					if not (self.folder_query in filename or self.folder_query in foldername): continue
-					results_append(file)
+
+					if title_filter and not check_title(title, normalized, self.aliases, self.year, self.season, self.episode): continue
+					direct_debrid_link, URLName = item['mediatype'], clean_file_name(normalized).replace('html', ' ').replace('+', ' ').replace('-', ' ')
+					file_dl, size = item['link'], round(float(item['size'])/1073741824, 2)
+					video_quality, details = get_file_info(name_info=release_info_format(normalized))
+					sources_append({
+						'source': self.scrape_provider, 'direct': True, 'direct_debrid_link': direct_debrid_link,
+						'scrape_provider': self.scrape_provider, 'id': file_dl, 'url_dl': file_dl, 'name': normalized, 'title': normalized,
+						'URLName': URLName, 'extraInfo': details, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size
+					})
 				except: pass
+		except Exception as e:
+			from modules.kodi_utils import logger
+			logger(f"POV {self.scrape_provider} Exception", e)
+		internal_results(self.scrape_provider, self.sources)
+		return self.sources
+
+	def _scrape_cloud(self):
+		try:
+			results_append = self.scrape_results.append
+			for i in (threads := (
+				Thread(target=self._scrape_folders, args=(self.user_cloud, 'torent')),
+				Thread(target=self._scrape_folders, args=(self.user_cloud_usenet, 'usenet')),
+				Thread(target=self._scrape_folders, args=(self.user_cloud_webdl, 'webdl'))
+			)): i.start()
+			[i.join() for i in threads]
+		except: pass
+
+	def _scrape_folders(self, function, mediatype):
+		try:
+			results_append = self.scrape_results.append
+			folder = function(check_cache=False)
+			for file in folder:
+				for item in file['files']:
+					try:
+						item.update({
+							'filename': item['short_name'], 'folder_name': file['name'],
+							'mediatype': mediatype, 'link': '%d,%d' % (file['id'], item['id'])
+						})
+						results_append(item)
+					except: pass
 		except: pass
 

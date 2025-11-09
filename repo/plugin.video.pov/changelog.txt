@@ -1,6 +1,8 @@
 
   [COLOR dodgerblue][B]Version 5.11[/B][/COLOR]
-- Added Check Cache Status to unchecked results context menu options.
+- Fixed empty season list, thanks Redditor!
+- Added MDBList external lists, sort respects Settings/Navigation/Sorting/MDBList Sort Type.
+- Added Check Cache Status to Real Debrid/AllDebrid results context menu options.
 - Added bitmagnet.
 - Updated instances urls.
 
@@ -26,7 +28,7 @@
 
   [COLOR dodgerblue][B]Version 5.08[/B][/COLOR]
 - Probable fix for Easynews, thanks Redditor POVAnonyMouse!
-- Probable fix for All Debrid.
+- Probable fix for AllDebrid.
 - Added Vietnamese to meta language choices.
 - Added setting to change instance preference for aiostreams, comet, mediafusion, torz.
   Recommended to clear External Scrapers Cache after switch.
@@ -138,7 +140,7 @@
 - Completed clear cache for Offcloud/TorBox.
 - Added "Premium Expires Notification (days)" for each debrid (0 disables check).
 - Refactored each debrid.
-- Changed Real Debrid/All Debrid integration.
+- Changed Real Debrid/AllDebrid integration.
   Only two sources that will return results, `torrentio debrid+` and `mediafusion debrid+`.
   This relies on the `torrentio` and `mediafusion` internal caches, so there is a little
   logic and the chance of it being cached is high.  If you only have either debrid, disable
@@ -153,7 +155,7 @@
   that after receiving a resolved link from the service, the torrent will be deleted from
   the users cloud.
 - Fix for TorBox Cloud Storage.  Thanks Reddit/Discord users!
-- Fixed All Debrid no results.  Clear External Scrapers Cache after switching debrid provider.
+- Fixed AllDebrid no results.  Clear External Scrapers Cache after switching debrid provider.
 - EXPERIMENTAL: changed Full-Screen playback window, if errors occur change setting
   Playback/Loading Progress to Background.  One service in particular seems to cause
   kodi to "freeze", causing pause in the animation.

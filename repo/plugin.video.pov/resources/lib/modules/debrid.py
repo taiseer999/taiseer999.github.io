@@ -92,7 +92,8 @@ def resolve_internal_sources(scrape_provider, item_id, url_dl, direct_debrid_lin
 			url = details['link']
 			if url.startswith('/'): url = 'https' + url
 		elif scrape_provider == 'ad_cloud':
-			url = alldebrid_api.AllDebridAPI().unrestrict_link(item_id)
+			if direct_debrid_link: url = url_dl
+			else: url = alldebrid_api.AllDebridAPI().unrestrict_link(item_id)
 		elif scrape_provider == 'tb_cloud':
 			if direct_debrid_link == 'usenet': function = 'unrestrict_usenet'
 			elif direct_debrid_link == 'webdl': function = 'unrestrict_webdl'

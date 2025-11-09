@@ -167,10 +167,12 @@ class RealDebridAPI:
 		url = 'downloads?limit=500'
 		return cache_object(self._get, string, url, False, 0.5)
 
-	def user_cloud(self):
+	def user_cloud(self, completed=True):
 		string = 'pov_rd_user_cloud'
 		url = 'torrents?limit=500'
-		return cache_object(self._get, string, url, False, 0.5)
+		result = cache_object(self._get, string, url, False, 0.5)
+		if completed: result = [i for i in result if i.get('ended')]
+		return result
 
 	def user_cloud_info(self, file_id):
 		string = 'pov_rd_user_cloud_info_%s' % file_id

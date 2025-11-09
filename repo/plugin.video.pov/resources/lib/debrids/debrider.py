@@ -33,7 +33,6 @@ class Indexer(Debrid):
 	def torrent_cloud(self, items):
 		for count, item in enumerate(items, 1):
 			try:
-				if not item['status'] == 'completed' and not item['type'] == 'torrent': continue
 				cm = []
 				cm_append = cm.append
 				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, folder_str, clean_file_name(normalize(item['name'])).upper())

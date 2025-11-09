@@ -39,7 +39,6 @@ class Indexer(Debrid):
 		items.sort(key=lambda k: k['id'], reverse=True)
 		for count, item in enumerate(items, 1):
 			try:
-				if not item['statusCode'] == 4: continue
 				cm = []
 				cm_append = cm.append
 				for i in item['links']: i.pop('files', None)

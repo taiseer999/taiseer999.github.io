@@ -13,8 +13,9 @@ class source(Debrid):
 	def results(self, info):
 		try:
 			self.sources = []
+			sources_append = self.sources.append
 			if not enabled_debrids_check('db'): return internal_results(self.scrape_provider, self.sources)
-			self.folder_results, self.scrape_results = [], []
+			self.scrape_results = []
 			title_filter = filter_by_name(self.scrape_provider)
 			self.media_type, title = info.get('media_type'), info.get('title')
 			self.year, self.season, self.episode = int(info.get('year')), info.get('season'), info.get('episode')
@@ -23,48 +24,44 @@ class source(Debrid):
 			self._scrape_cloud()
 			if not self.scrape_results: return internal_results(self.scrape_provider, self.sources)
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
-			def _process():
-				for item in self.scrape_results:
-					try:
-						file_name = item['filename']
-						if title_filter and not check_title(title, file_name, self.aliases, self.year, self.season, self.episode): continue
-						file_dl, size = item['url'], round(float(item['size'])/1073741824, 2)
-						URLName = clean_file_name(file_name).replace('html', ' ').replace('+', ' ').replace('-', ' ')
-						video_quality, details = get_file_info(name_info=release_info_format(file_name))
-						source_item = {'name': file_name, 'title': file_name, 'URLName': URLName, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size,
-									'extraInfo': details, 'url_dl': file_dl, 'id': file_dl, 'downloads': False, 'direct': True, 'source': self.scrape_provider,
-									'scrape_provider': self.scrape_provider}
-						yield source_item
-					except: pass
-			self.sources = list(_process())
+			for item in self.scrape_results:
+				try:
+					if not item['filename'].lower().endswith(tuple(extensions)): continue
+					formalized = normalize(item['folder_name'])
+					foldername = clean_title(formalized)
+					normalized = normalize(item['filename'])
+					filename = clean_title(normalized)
+					if self.media_type == 'movie':
+						if not any(x in filename for x in self.year_query_list): continue
+					elif not seas_ep_filter(self.season, self.episode, normalized): continue
+					if not (self.folder_query in filename or self.folder_query in foldername): continue
+
+					if title_filter and not check_title(title, normalized, self.aliases, self.year, self.season, self.episode): continue
+					URLName = clean_file_name(normalized).replace('html', ' ').replace('+', ' ').replace('-', ' ')
+					file_dl, size = item['link'], round(float(item['size'])/1073741824, 2)
+					video_quality, details = get_file_info(name_info=release_info_format(normalized))
+					sources_append({
+						'source': self.scrape_provider, 'direct': True,
+						'scrape_provider': self.scrape_provider, 'id': file_dl, 'url_dl': file_dl, 'name': normalized, 'title': normalized,
+						'URLName': URLName, 'extraInfo': details, 'quality': video_quality, 'size': size, 'size_label': '%.2f GB' % size
+					})
+				except: pass
 		except Exception as e:
 			from modules.kodi_utils import logger
-			logger('POV debrider scraper Exception', e)
+			logger(f"POV {self.scrape_provider} Exception", e)
 		internal_results(self.scrape_provider, self.sources)
 		return self.sources
 
 	def _scrape_cloud(self):
 		try:
 			results_append = self.scrape_results.append
-			try: my_cloud_files = [
-				{**file, 'folder_name': files['name']}
-				for files in self.user_cloud(check_cache=False)
-				if files['status'] == 'completed' and files['type'] == 'torrent'
-				for file in files['files']
-			]
-			except: return self.sources
-			for item in my_cloud_files:
-				try:
-					if not item['name'].lower().endswith(tuple(extensions)): continue
-					formalized = normalize(item['folder_name'])
-					foldername = clean_title(formalized)
-					normalized = normalize(item['name'].split('/')[-1])
-					filename = clean_title(normalized)
-					if self.media_type == 'movie':
-						if not any(x in filename for x in self.year_query_list): continue
-					elif not seas_ep_filter(self.season, self.episode, normalized): continue
-					if not (self.folder_query in filename or self.folder_query in foldername): continue
-					results_append({'filename': normalized, 'url': item['download_link'], 'size': item['size']})
-				except: pass
+			my_cloud_files = self.user_cloud(check_cache=False)
+			for file in my_cloud_files:
+				for item in file['files']:
+					try:
+						name, url = item['name'].split('/')[-1], item['download_link']
+						item.update({'filename': name, 'folder_name': file['name'], 'link': url})
+						results_append(item)
+					except: pass
 		except: pass
 

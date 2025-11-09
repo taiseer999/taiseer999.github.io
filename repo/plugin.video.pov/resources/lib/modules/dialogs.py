@@ -594,58 +594,6 @@ def extras_menu(params):
 	meta = function('tmdb_id', params['tmdb_id'], settings.metadata_user_info(), get_datetime())
 	open_window(('windows.extras', 'Extras'), 'extras.xml', meta=meta, is_widget=params.get('is_widget', 'false'), is_home=params.get('is_home', 'false'))
 
-def media_extra_info(media_type, meta):
-	extra_info = meta.get('extra_info', None)
-	body = []
-	append = body.append
-	tagline_str, premiered_str, rating_str, votes_str, runtime_str = ls(32619), ls(32620), ls(32621), ls(32623), ls(32622)
-	genres_str, budget_str, revenue_str, director_str, writer_str = ls(32624), ls(32625), ls(32626), ls(32627), ls(32628)
-	studio_str, collection_str, homepage_str, status_str, type_str, classification_str = ls(32615), ls(32499), ls(32629), ls(32630), ls(32631), ls(32632)
-	network_str, created_by_str, last_aired_str, next_aired_str, seasons_str, episodes_str = ls(32480), ls(32633), ls(32634), ls(32635), ls(32636), ls(32506)
-	try:
-		if media_type == 'movie':
-			def _process_budget_revenue(info):
-				if isinstance(info, int): info = '${:,}'.format(info)
-				return info
-			if 'tagline' in meta and meta['tagline']: append('[B]%s:[/B] %s' % (tagline_str, meta['tagline']))
-			if 'alternative_titles' in meta and meta['alternative_titles']: append('[B]%s:[/B] %s' % ('Aliases', ', '.join(meta['alternative_titles'])))
-			if 'status' in extra_info: append('[B]%s:[/B] %s' % (status_str, extra_info['status']))
-			append('[B]%s:[/B] %s' % (premiered_str, meta['premiered']))
-			append('[B]%s:[/B] %s (%s %s)' % (rating_str, meta['rating'], meta['votes'], votes_str))
-			append('[B]%s:[/B] %d mins' % (runtime_str, int(float(meta['duration'])/60)))
-			append('[B]%s:[/B] %s' % (genres_str, meta['genre']))
-			if 'budget' in extra_info: append('[B]%s:[/B] %s' % (budget_str, _process_budget_revenue(extra_info['budget'])))
-			if 'revenue' in extra_info: append('[B]%s:[/B] %s' % (revenue_str, _process_budget_revenue(extra_info['revenue'])))
-			append('[B]%s:[/B] %s' % (director_str, meta['director']))
-			append('[B]%s:[/B] %s' % (writer_str, meta['writer'] or 'N/A'))
-			append('[B]%s:[/B] %s' % (studio_str, meta['studio'] or 'N/A'))
-			if extra_info.get('collection_name'): append('[B]%s:[/B] %s' % (collection_str, extra_info['collection_name']))
-			if extra_info.get('homepage'): append('[B]%s:[/B] %s' % (homepage_str, extra_info['homepage']))
-		else:
-			if 'type' in extra_info: append('[B]%s:[/B] %s' % (type_str, extra_info['type']))
-			if 'alternative_titles' in meta and meta['alternative_titles']: append('[B]%s:[/B] %s' % ('Aliases', ', '.join(meta['alternative_titles'])))
-			if 'status' in extra_info: append('[B]%s:[/B] %s' % (status_str, extra_info['status']))
-			append('[B]%s:[/B] %s' % (premiered_str, meta['premiered']))
-			append('[B]%s:[/B] %s (%s %s)' % (rating_str, meta['rating'], meta['votes'], votes_str))
-			append('[B]%s:[/B] %d mins' % (runtime_str, int(float(meta['duration'])/60)))
-			append('[B]%s:[/B] %s' % (classification_str, meta['mpaa']))
-			append('[B]%s:[/B] %s' % (genres_str, meta['genre']))
-			append('[B]%s:[/B] %s' % (network_str, meta['studio']))
-			if 'created_by' in extra_info: append('[B]%s:[/B] %s' % (created_by_str, extra_info['created_by']))
-			if extra_info.get('last_episode_to_air', False):
-				last_ep = extra_info['last_episode_to_air']
-				lastep_str = '[%s] S%.2dE%.2d - %s' % (last_ep['air_date'], last_ep['season_number'], last_ep['episode_number'], last_ep['name'])
-				append('[B]%s:[/B] %s' % (last_aired_str, lastep_str))
-			if extra_info.get('next_episode_to_air', False):
-				next_ep = extra_info['next_episode_to_air']
-				nextep_str = '[%s] S%.2dE%.2d - %s' % (next_ep['air_date'], next_ep['season_number'], next_ep['episode_number'], next_ep['name'])
-				append('[B]%s:[/B] %s' % (next_aired_str, nextep_str))
-			append('[B]%s:[/B] %s' % (seasons_str, meta['total_seasons']))
-			append('[B]%s:[/B] %s' % (episodes_str, meta['total_aired_eps']))
-			if 'homepage' in extra_info: append('[B]%s:[/B] %s' % (homepage_str, extra_info['homepage']))
-	except: return notification(32574)
-	return '\n\n'.join(body)
-
 def refresh_cached_meta(meta):
 	from caches.meta_cache import MetaCache
 	try:

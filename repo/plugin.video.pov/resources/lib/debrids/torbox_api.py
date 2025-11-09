@@ -197,25 +197,28 @@ class TorBoxAPI:
 		else: result.sort(key=lambda k: int(k['age'].rstrip('d')), reverse=False)
 		return result
 
-	def user_cloud(self, request_id=None, check_cache=True):
+	def user_cloud(self, request_id=None, check_cache=True, completed=True):
 		string = 'pov_tb_user_cloud_info_%s' % request_id if request_id else 'pov_tb_user_cloud'
 		url = 'torrents/mylist?id=%s' % request_id if request_id else 'torrents/mylist'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
+		if not request_id and completed: result = [i for i in result if i['download_finished'] and i['files']]
 		return result
 
-	def user_cloud_usenet(self, request_id=None, check_cache=True):
+	def user_cloud_usenet(self, request_id=None, check_cache=True, completed=True):
 		string = 'pov_tb_user_cloud_usenet_info_%s' % request_id if request_id else 'pov_tb_user_cloud_usenet'
 		url = 'usenet/mylist?id=%s' % request_id if request_id else 'usenet/mylist'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
+		if not request_id and completed: result = [i for i in result if i['download_finished'] and i['files']]
 		return result
 
-	def user_cloud_webdl(self, request_id=None, check_cache=True):
+	def user_cloud_webdl(self, request_id=None, check_cache=True, completed=True):
 		string = 'pov_tb_user_cloud_webdl_info_%s' % request_id if request_id else 'pov_tb_user_cloud_webdl'
 		url = 'webdl/mylist?id=%s' % request_id if request_id else 'webdl/mylist'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
+		if not request_id and completed: result = [i for i in result if i['download_finished'] and i['files']]
 		return result
 
 	def clear_cache(*args):

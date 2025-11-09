@@ -47,7 +47,6 @@ class Indexer(Debrid):
 		items.sort(key=lambda k: k['updated_at'], reverse=True)
 		for count, item in enumerate(items, 1):
 			try:
-				if not item['download_finished']: continue
 				cm = []
 				cm_append = cm.append
 				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, folder_str, clean_file_name(normalize(item['name'])).upper())

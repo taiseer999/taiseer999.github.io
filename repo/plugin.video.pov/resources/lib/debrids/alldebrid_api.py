@@ -126,10 +126,12 @@ class AllDebridAPI:
 		string = 'pov_ad_downloads'
 		return cache_object(self._get, string, url, False, 0.5)
 
-	def user_cloud(self):
+	def user_cloud(self, completed=True):
 		url = 'v4/magnet/status'
 		string = 'pov_ad_user_cloud'
-		return cache_object(self._get, string, url, False, 0.5)
+		result = cache_object(self._get, string, url, False, 0.5)
+		if completed: result['magnets'] = [i for i in result['magnets'] if i['statusCode'] == 4]
+		return result
 
 	def clear_cache(self):
 		from modules.kodi_utils import clear_property, path_exists, database_connect, maincache_db

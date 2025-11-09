@@ -94,11 +94,12 @@ class DebriderAPI:
 		except Exception:
 			return None
 
-	def user_cloud(self, request_id=None, check_cache=True):
+	def user_cloud(self, request_id=None, check_cache=True, completed=True):
 		string = 'pov_db_user_cloud_info_%s' % request_id if request_id else 'pov_db_user_cloud'
 		url = '%s/%s' % ('tasks', request_id) if request_id else 'tasks'
 		if check_cache: result = cache_object(self._get, string, url, False, 0.5)
 		else: result = self._get(url)
+		if not request_id and completed: result = [i for i in result if i['status'] == 'completed']
 		return result
 
 	def clear_cache(*args):

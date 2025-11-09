@@ -58,13 +58,15 @@ def get_mdb_lists(params):
 			try:
 				cm = []
 				cm_append = cm.append
-				name, user, slug, list_id = item['name'], item['user_name'], item['slug'], item['id']
-				likes, item_count = item['likes'] or 0, item.get('items', '?')
+				list_type = 'external' if 'source' in item else 'user_lists'
+				name, user, list_id = item['name'], item['user_name'], item['id']
+				slug, likes, item_count = item.get('slug', ''), item.get('likes', 0), item.get('items', '?')
 				display = '%s (x%s)' % (name, item_count) if item_count else name
-				plot, cln_str = '[B]Likes[/B]: %s' % likes, '[B]Clean List[/B]'
-				if item.get('private'): display = '[COLOR cyan][I]%s[/I][/COLOR]' % display
+				plot = '[B]Likes[/B]: %s' % likes if likes else ''
+				if list_type == 'external': display = '[I]%s[/I]' % display
+				elif item.get('private'): display = '[COLOR cyan][I]%s[/I][/COLOR]' % display
 				elif item.get('dynamic'): display = '[COLOR magenta][I]%s[/I][/COLOR]' % display
-				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'name': name})
+				url = build_url({'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': list_type, 'name': name})
 				cm_append((add2menu_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.add_external', 'name': display, 'iconImage': 'mdblist.png'})))
 				cm_append((add2folder_str, 'RunPlugin(%s)' % build_url({'mode': 'menu_editor.shortcut_folder_add_item', 'name': display, 'iconImage': 'mdblist.png'})))
 				cm_append((copy2str, 'RunPlugin(%s)' % build_url({'mode': 'tmdb_manager_choice', 'mdbl_list_id': list_id, 'mdbl_list_name': name, 'user': user, 'list_slug': slug})))
@@ -75,7 +77,9 @@ def get_mdb_lists(params):
 				listitem.addContextMenuItems(cm, replaceItems=False)
 				yield (url, listitem, True)
 			except: pass
-	lists = mdblist_api.mdb_userlists()
+	lists = []
+	lists += mdblist_api.mdb_userlists()
+	lists += mdblist_api.mdb_externallists()
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
 	kodi_utils.set_category(__handle__, params.get('name'))

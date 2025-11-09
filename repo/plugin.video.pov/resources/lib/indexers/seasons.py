@@ -55,7 +55,7 @@ class Seasons:
 					season_number, episode_count = item_get('season_number'), item_get('episode_count')
 					poster_path, air_date = item_get('poster_path'), item_get('air_date')
 					if not poster_path is None: poster = tmdb_image_base % (image_resolution, poster_path)
-					else: show_poster
+					else: poster = show_poster
 					if season_number == 0: unaired = False
 					elif episode_count == 0: unaired = True
 					elif season_number != total_seasons: unaired = False

@@ -72,8 +72,6 @@ class Router:
 				dialogs.folder_scraper_manager_choice()
 			elif mode == 'set_language_filter_choice':
 				dialogs.set_language_filter_choice(params['filter_setting'])
-			elif mode == 'media_extra_info_choice':
-				dialogs.media_extra_info(params['media_type'], params['meta'])
 			elif mode == 'extras_lists_choice':
 				dialogs.extras_lists_choice()
 			elif mode == 'random_choice':

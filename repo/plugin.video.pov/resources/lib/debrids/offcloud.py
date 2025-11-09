@@ -33,7 +33,6 @@ class Indexer(Debrid):
 	def torrent_cloud(self, items):
 		for count, item in enumerate(items, 1):
 			try:
-				if not item['status'] == 'downloaded': continue
 				cm = []
 				cm_append = cm.append
 				request_id, server = item['requestId'], item['server']
