@@ -117,8 +117,8 @@
         <textureradiofocus colordiffuse="$INFO[Skin.String(ActiveSpinControlColor)]">common/radio/radio-button-fo.png</textureradiofocus>
         <textureradionofocus colordiffuse="$INFO[Skin.String(ButtonTextColor)]">common/radio/radio-button-nf.png</textureradionofocus>
         <textureradioondisabled colordiffuse="aaffffff">common/radio/radio-button-fo.png</textureradioondisabled>
-        <textureradiooffdisabled colordiffuse="$INFO[Skin.String(ButtonTextColor)]">common/radio/radio-button-nf.png</textureradiooffdisabled>
-        <textoffsetx>50</textoffsetx>
+        <textureradiooffdisabled colordiffuse="aaffffff">common/radio/radio-button-nf.png</textureradiooffdisabled>        <textoffsetx>50</textoffsetx>
+        <textoffsetx>50</textoffsetx>       
         <radioposx/>
         <pulseonselect>false</pulseonselect>
         <texturefocus colordiffuse="$INFO[Skin.String(ButtonFocusColor)]" border="10">diffuse/panel.png</texturefocus>
