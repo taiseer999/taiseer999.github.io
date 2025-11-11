@@ -242,6 +242,53 @@ def tmdb_tv_search(query, page_no):
 	url = '%s/search/tv?api_key=%s&language=en-US&query=%s&page=%s' % (base_url, tmdb_api_key(), query, page_no)
 	return cache_object(get_tmdb, string, url, expiration=EXPIRES_4_HOURS)
 
+def tmdb_moviesanime_popular(page_no):
+	string = 'tmdb_moviesanime_popular_%s' % page_no
+	url = '%s/discover/movie?api_key=%s&page=%s&with_keywords=210024&sort_by=popularity.desc' % (base_url, tmdb_api_key(), page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_moviesanime_latest_releases(page_no):
+	current_date, previous_date = get_dates(91, reverse=True)
+	string = 'tmdb_moviesanime_latest_releases_%s' % page_no
+	url = '%s/discover/movie?api_key=%s&with_keywords=210024&sort_by=primary_release_date.desc' % (base_url, tmdb_api_key())
+	url += '&release_date.gte=%s&release_date.lte=%s&with_release_type=4|5&page=%s' % (previous_date, current_date, page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_moviesanime_genres(genre_id, page_no):
+	string = 'tmdb_moviesanime_genres_%s_%s' % (genre_id, page_no)
+	url = '%s/discover/movie?api_key=%s&with_keywords=210024&with_genres=%s&sort_by=popularity.desc&page=%s' % (base_url, tmdb_api_key(), genre_id, page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_moviesanime_year(year, page_no):
+	string = 'tmdb_moviesanime_year_%s_%s' % (year, page_no)
+	url = '%s/discover/movie?api_key=%s&with_keywords=210024' % (base_url, tmdb_api_key())
+	url += '&sort_by=popularity.desc&certification_country=US&primary_release_year=%s&page=%s' % (year, page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_tvanime_popular(page_no):
+	string = 'tmdb_tvanime_popular_%s' % page_no
+	url = '%s/discover/tv?api_key=%s&page=%s&with_keywords=210024&sort_by=popularity.desc' % (base_url, tmdb_api_key(), page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_tvanime_premieres(page_no):
+	current_date, previous_date = get_dates(91, reverse=True)
+	string = 'tmdb_tvanime_premieres_%s' % page_no
+	url = '%s/discover/tv?api_key=%s&with_keywords=210024&sort_by=first_air_date.desc' % (base_url, tmdb_api_key())
+	url += '&first_air_date.gte=%s&first_air_date.lte=%s&page=%s' % (previous_date, current_date, page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_tvanime_genres(genre_id, page_no):
+	string = 'tmdb_tvanime_genres_%s_%s' % (genre_id, page_no)
+	url = '%s/discover/tv?api_key=%s&with_keywords=210024' % (base_url, tmdb_api_key())
+	url += '&with_genres=%s&sort_by=popularity.desc&include_null_first_air_dates=false&page=%s' % (genre_id, page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
+def tmdb_tvanime_year(year, page_no):
+	string = 'tmdb_tvanime_year_%s_%s' % (year, page_no)
+	url = '%s/discover/tv?api_key=%s&with_keywords=210024' % (base_url, tmdb_api_key())
+	url += '&sort_by=popularity.desc&include_null_first_air_dates=false&first_air_date_year=%s&page=%s' % (year, page_no)
+	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
+
 def tmdb_popular_people(page_no):
 	string = 'tmdb_popular_people_%s' % page_no
 	url = '%s/person/popular?api_key=%s&language=en-US&page=%s' % (base_url, tmdb_api_key(), page_no)

@@ -52,8 +52,8 @@ class PremiumizeAPI:
 		response = self._get(url)
 		return response
 
-	def transfers_list(self):
-		url = 'transfer/list'
+	def item_listall(self):
+		url = 'item/listall'
 		return self._get(url)
 
 	def delete_torrent(self, transfer_id):
@@ -117,7 +117,7 @@ class PremiumizeAPI:
 #			transfer_id = result['id']
 			transfer_id = self.create_transfer(magnet_url)
 			if not transfer_id: return None
-			transfers = self.transfers_list()['transfers']
+			transfers = self.downloads()['transfers']
 			folder_id = [i['folder_id'] for i in transfers if i['id'] == transfer_id][0]
 			result = self.zip_folder(folder_id)
 			if result['status'] == 'success':
@@ -160,6 +160,11 @@ class PremiumizeAPI:
 		except: pass
 		return hosts_dict
 
+	def downloads(self):
+		string = 'pov_pm_downloads'
+		url = 'transfer/list'
+		return cache_object(self._get, string, url, False, 0.5)
+
 	def user_cloud(self, folder_id=None):
 		if folder_id:
 			string = 'pov_pm_user_cloud_%s' % folder_id
@@ -167,11 +172,6 @@ class PremiumizeAPI:
 		else:
 			string = 'pov_pm_user_cloud_root'
 			url = 'folder/list'
-		return cache_object(self._get, string, url, False, 0.5)
-
-	def user_cloud_all(self):
-		string = 'pov_pm_user_cloud_all_files'
-		url = 'item/listall'
 		return cache_object(self._get, string, url, False, 0.5)
 
 	def clear_cache(*args):
@@ -199,8 +199,8 @@ class PremiumizeAPI:
 			except: user_cloud_success = False
 			# DOWNLOAD LINKS
 			try:
-				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_pm_transfers_list',))
-				clear_property('pov_pm_transfers_list')
+				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_pm_downloads',))
+				clear_property('pov_pm_downloads')
 				dbcon.commit()
 				download_links_success = True
 			except: download_links_success = False

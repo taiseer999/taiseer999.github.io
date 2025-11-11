@@ -318,9 +318,17 @@ class Subtitles(kodi_utils.xbmc_player):
 			except: lang = chosen_sub['language']
 			final_filename = sub_filename + '_%s.%s' % (lang, chosen_sub['format'])
 			final_path = '%s%s' % (subtitle_path, final_filename)
-			subtitle = subtitles.download(chosen_sub['url'], final_path)
+			response = subtitles.download(chosen_sub['url'])
+			if isinstance(response, str): return kodi_utils.notification('Subtitles Error: %s' % response)
+			try:
+				if not 'utf-8' in response.encoding.lower():
+					import codecs
+					content = codecs.decode(response.content, encoding='utf-8')
+				else: content = response.text
+			except: content = response.content
+			with kodi_utils.open_file(final_path, 'w') as file: file.write(content)
 			kodi_utils.sleep(1000)
-			return subtitle
+			return final_path
 		if not self.subs_action in ('auto', 'select'): return
 		import os
 		from indexers import subtitles

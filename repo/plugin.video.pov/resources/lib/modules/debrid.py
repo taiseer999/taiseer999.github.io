@@ -3,7 +3,7 @@ import json
 import random
 import requests
 from threading import Thread
-from debrids import alldebrid_api, premiumize_api, real_debrid_api, torbox_api, offcloud_api, debrider_api, easydebrid_api
+from debrids import alldebrid_api, premiumize_api, real_debrid_api, torbox_api, offcloud_api, easydebrid_api
 from caches.debrid_cache import DebridCache
 from modules.utils import clean_file_name, make_thread_list
 from modules.settings import enabled_debrids_check
@@ -21,7 +21,6 @@ debrid_list = (
 	('AllDebrid', 'ad', alldebrid_api.AllDebridAPI),
 	('TorBox', 'tb', torbox_api.TorBoxAPI),
 	('Offcloud', 'oc', offcloud_api.OffcloudAPI),
-	('Debrider', 'db', debrider_api.DebriderAPI),
 	('EasyDebrid', 'ed', easydebrid_api.EasyDebridAPI)
 )
 
@@ -130,7 +129,7 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 		file_key = next((i['link'] for i in selected_files), None)
 		if source['debrid'] in ('Premiumize.me',): file_url = api.add_headers_to_url(file_key)
 		else: file_url = api.unrestrict_link(file_key)
-		if source['debrid'] in ('Premiumize.me', 'Debrider'):
+		if source['debrid'] in ('Premiumize.me',):
 			if store_to_cloud: Thread(target=api.create_transfer, args=(source['url'],)).start()
 		if source['debrid'] in ('Real-Debrid', 'AllDebrid', 'TorBox'):
 			if not store_to_cloud: Thread(target=api.delete_torrent, args=(torrent_id,)).start()

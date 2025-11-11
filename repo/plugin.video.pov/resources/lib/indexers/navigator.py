@@ -48,7 +48,6 @@ class Navigator:
 		if 'AllDebrid' in debrids: self.alldebrid()
 		if 'TorBox' in debrids: self.torbox()
 		if 'Offcloud' in debrids: self.offcloud()
-		if 'Debrider' in debrids: self.debrider()
 		if 'EasyDebrid' in debrids: self.easydebrid()
 		self._end_directory()
 
@@ -70,7 +69,7 @@ class Navigator:
 		pm_str, acc_str, his_str, cloud_str = ls(32061), ls(32494), ls(32486), ls(32496)
 		clca_str, n_ins = ls(32497) % pm_str, _in_str % (pm_str.upper(), '')
 		self._add_item({'mode': 'premiumize.pm_torrent_cloud',      'name': cloud_str}, 'premiumize.png', n_ins)
-		self._add_item({'mode': 'premiumize.pm_transfers',          'name': his_str  }, 'premiumize.png', n_ins)
+		self._add_item({'mode': 'premiumize.pm_downloads',          'name': his_str  }, 'premiumize.png', n_ins)
 		self._add_item({'mode': 'premiumize.show_account_info',     'name': acc_str  }, 'premiumize.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'pm_cloud', 'name': clca_str }, 'premiumize.png', n_ins, False)
 
@@ -106,13 +105,6 @@ class Navigator:
 		ed_str, cloud_str, ai_str = 'EasyDebrid', ls(32496), ls(32494)
 		n_ins = _in_str % (ed_str.upper(), '')
 		self._add_item({'mode': 'easydebrid.show_account_info',                    'name': ai_str    }, 'easydebrid.png', n_ins, False)
-
-	def debrider(self):
-		db_str, cloud_str, ai_str = 'Debrider', ls(32496), ls(32494)
-		clca_str, n_ins = ls(32497) % db_str, _in_str % (db_str.upper(), '')
-		self._add_item({'mode': 'debrider.db_torrent_cloud',        'name': cloud_str}, 'debrider.png', n_ins)
-		self._add_item({'mode': 'debrider.show_account_info',       'name': ai_str   }, 'debrider.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'db_cloud', 'name': clca_str }, 'debrider.png', n_ins, False)
 
 	def favourites(self):
 		fav_str = ls(32453)
@@ -243,7 +235,7 @@ class Navigator:
 		settings_str, changelog_log_viewer_str = ls(32247), '%s & %s' % (changelog_str, log_utils)
 		shortcut_manager_str, source_manager_str = '%s %s' % (short_str, manager_str), '%s %s' % (source_str, manager_str)
 		n_ins, l_str = _in_str % (settings_str.upper(), ''), _in_str % ('LINKS', '')
-		self._add_item({'mode': 'open_settings', 'query': '5.0', 'name': pov_str                 }, 'pov.png', n_ins, False)
+		self._add_item({'mode': 'open_settings', 'query': '4.0', 'name': pov_str                 }, 'pov.png', n_ins, False)
 		self._add_item({'mode': 'open_settings', 'query': '1.0', 'name': ms_str                  }, 'settings.png', n_ins, False)
 		self._add_item({'mode': 'navigator.clear_info',          'name': clean_str               }, 'settings.png', n_ins)
 		self._add_item({'mode': 'navigator.log_utils',           'name': changelog_log_viewer_str}, 'settings.png', n_ins)
@@ -265,7 +257,7 @@ class Navigator:
 		clear_list_str, clear_trakt_str = clca_str % ls(32501), clca_str % ls(32037)
 		clear_imdb_str, clint_str, clext_str = clca_str % ls(32064), clca_str % ls(32096), clca_str % ls(32118)
 		clear_ad_str, clear_pm_str, clear_rd_str = clca_str % ls(32063), clca_str % ls(32061), clca_str % ls(32054)
-		clear_tb_str, clear_oc_str, clear_db_str = clca_str % 'TorBox', clca_str % 'Offcloud', clca_str % 'Debrider'
+		clear_tb_str, clear_oc_str = clca_str % 'TorBox', clca_str % 'Offcloud'
 		clear_all_upper = '[B]%s[/B]' % clear_all_str.upper()
 		n_ins, clean_ins = _in_str % (cache_str.upper(), ''), _in_str % (clean_str.upper(), '')
 		self._add_item({'mode': 'clean_settings',                            'name': clean_all_str      }, 'tools.png', clean_ins, False)
@@ -284,7 +276,6 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'rd_cloud',          'name': clear_rd_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'tb_cloud',          'name': clear_tb_str       }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud',          'name': clear_oc_str       }, 'tools.png', n_ins, False)
-		self._add_item({'mode': 'clear_cache', 'cache': 'db_cloud',          'name': clear_db_str       }, 'tools.png', n_ins, False)
 		self._end_directory()
 
 	def set_view_modes(self):
@@ -351,7 +342,7 @@ class Navigator:
 		from modules.meta_lists import years
 		menu_type = self.params_get('menu_type')
 		mode = 'build_movie_list' if menu_type == 'movie' else 'build_tvshow_list'
-		action = 'simkl_movies_year' if menu_type == 'movie' else 'simkl_tv_year'
+		action = 'tmdb_moviesanime_year' if menu_type == 'movie' else 'tmdb_tvanime_year'
 		lst_ins = self.make_list_name(menu_type)
 		for i in years():
 			list_name = 'ANIME %s: %s %s' % (lst_ins.upper(), str(i), ls(32460))
@@ -377,15 +368,15 @@ class Navigator:
 	def anime_genres(self):
 		menu_type = self.params_get('menu_type')
 		if menu_type == 'movie':
-			from modules.meta_lists import anime_genres as genre_list
-			mode, action = 'build_movie_list', 'simkl_movies_genres'
+			from modules.meta_lists import movie_genres as genre_list
+			mode, action = 'build_movie_list', 'tmdb_moviesanime_genres'
 		else:
-			from modules.meta_lists import anime_genres as genre_list
-			mode, action = 'build_tvshow_list', 'simkl_tv_genres'
+			from modules.meta_lists import tvshow_genres as genre_list
+			mode, action = 'build_tvshow_list', 'tmdb_tvanime_genres'
 		lst_ins = self.make_list_name(menu_type)
-		for genre, slug in sorted(genre_list):
+		for genre, value in sorted(genre_list.items()):
 			list_name = 'ANIME %s: %s %s' % (lst_ins.upper(), genre, ls(32470))
-			self._add_item({'mode': mode, 'action': action, 'genre_id': slug, 'name': genre}, 'genres.png', list_name=list_name)
+			self._add_item({'mode': mode, 'action': action, 'genre_id': value[0], 'name': genre}, 'genres.png', list_name=list_name)
 		self._end_directory()
 
 	def multiselect_genres(self):

@@ -158,15 +158,20 @@ class TVShows:
 		return self.items
 
 class Indexer(TVShows):
-	tmdb_main = ('tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today', 'tmdb_tv_on_the_air', 'tmdb_tv_upcoming')
+	tmdb_main, trakt_main = (
+		'tmdb_tv_popular', 'tmdb_tv_premieres', 'tmdb_tv_airing_today', 'tmdb_tv_on_the_air', 'tmdb_tv_upcoming',
+		'tmdb_tvanime_popular', 'tmdb_tvanime_premieres'
+	), (
+		'trakt_tv_trending', 'trakt_tv_most_watched', 'trakt_tv_most_favorited',
+		'trakt_tv_trending_recent', 'trakt_tvanime_trending', 'trakt_tvanime_most_watched'
+	)
+	tmdb_special_key_dict = {
+		'tmdb_tv_languages': 'language', 'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year', 'tmdb_tvanime_year': 'year'
+	}
 	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
-	tmdb_special_key_dict = {'tmdb_tv_languages': 'language', 'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year'}
-	trakt_main = ('trakt_tv_trending', 'trakt_tv_trending_recent', 'trakt_tv_most_watched', 'trakt_tv_most_favorited')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists', 'trakt_droplist')
 	mdblist_personal = ('mdblist_watchlist',)
 	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
-	simkl_main = ('simkl_tv_popular', 'simkl_tv_most_watched', 'simkl_tv_recent_release', 'simkl_onas_popular', 'simkl_onas_most_watched', 'simkl_onas_recent_release')
-	simkl_special_key_dict = {'simkl_tv_genres': 'genre_id', 'simkl_tv_year': 'year'}
 	similar = ('tmdb_tv_similar', 'tmdb_tv_recommendations')
 	personal_dict = {
 		'in_progress_tvshows': ('caches.watched_cache', 'get_in_progress_tvshows'),
@@ -253,7 +258,7 @@ class Indexer(TVShows):
 				data = function(query, page_no)
 				self.list = [i['id'] for i in data['results']]
 				if data['page'] < data['total_pages']: self.new_page = {'query': query, 'name': name, 'new_page': string(data['page'] + 1)}
-			elif self.action == 'tmdb_tv_genres':
+			elif self.action in ('tmdb_tv_genres', 'tmdb_tvanime_genres'):
 				genre_id = self.params['genre_id']
 				if not genre_id: return
 				data = function(genre_id, page_no)
@@ -274,17 +279,6 @@ class Indexer(TVShows):
 				self.id_type = 'trakt_dict'
 				data = function('shows')
 				self.list = [i['ids'] for i in data]
-			elif self.action in Indexer.simkl_main:
-				self.id_type = 'trakt_dict'
-				data = function(page_no)
-				self.list = data
-			elif self.action in Indexer.simkl_special_key_dict:
-				key = Indexer.simkl_special_key_dict[self.action]
-				function_var = params_get(key, None)
-				if not function_var: return
-				data = function(function_var)
-				self.id_type = 'trakt_dict'
-				self.list = data
 			if self.total_pages and not self.is_widget and settings.nav_jump_use_alphabet():
 				url_params = {'mode': 'build_navigate_to_page', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
 							'transfer_action': self.action, 'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', '')}

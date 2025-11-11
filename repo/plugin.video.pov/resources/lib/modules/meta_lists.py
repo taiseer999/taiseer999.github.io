@@ -113,24 +113,6 @@ tvshow_genres = {
 	'War & Politics': ['10768', 'genre_war.png'],                          'Western': ['37', 'genre_western.png']
 }
 
-anime_genres = (
-	('Anime', 'anime'),                    ('Action', 'action'),                  ('Adventure', 'adventure'),
-	('Cars', 'cars'),                      ('Comedy', 'comedy'),                  ('Dementia', 'dementia'),
-	('Demons', 'demons'),                  ('Drama', 'drama'),                    ('Ecchi', 'ecchi'),
-	('Fantasy', 'fantasy'),                ('Game', 'game'),                      ('Harem', 'harem'),
-	('Historical', 'historical'),          ('Horror', 'horror'),                  ('Josei', 'josei'),
-	('Kids', 'kids'),                      ('Magic', 'magic'),                    ('Martial Arts', 'martial-arts'),
-	('Mecha', 'mecha'),                    ('Military', 'military'),              ('Music', 'music'),
-	('Mystery', 'mystery'),                ('Parody', 'parody'),                  ('Police', 'police'),
-	('Psychological', 'psychological'),    ('Romance', 'romance'),                ('Samurai', 'samurai'),
-	('School', 'school'),                  ('Sci-Fi', 'sci-fi'),                  ('Seinen', 'seinen'),
-	('Shoujo', 'shoujo'),                  ('Shoujo Ai', 'shoujo-ai'),            ('Shounen', 'shounen'),
-	('Shounen Ai', 'shounen-ai'),          ('Slice Of Life', 'slice-of-life'),    ('Space', 'space'),
-	('Sports', 'sports'),                  ('Super Power', 'super-power'),        ('Supernatural', 'supernatural'),
-	('Thriller', 'thriller'),              ('Vampire', 'vampire'),                ('Yaoi', 'yaoi'),
-	('Yuri', 'yuri')
-)
-
 networks = (
 	{'id': 54, 'name': 'Disney Channel','logo': 'https://i.imgur.com/ZCgEkp6.png'},         {'id': 44, 'name': 'Disney XD','logo': 'https://i.imgur.com/PAJJoqQ.png'},
 	{'id': 2, 'name': 'ABC','logo': 'https://i.imgur.com/qePLxos.png'},                     {'id': 493, 'name': 'BBC America','logo': 'https://i.imgur.com/TUHDjfl.png'},
@@ -194,7 +176,6 @@ meta_colors = (
 media_lists = (
 	"'tmdb%'",
 	"'trakt%'",
-	"'simkl%'",
 	"'mdb%'",
 	"'imdb%'",
 	"'pov%'",

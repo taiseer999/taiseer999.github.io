@@ -23,7 +23,7 @@ class source(Debrid):
 			self.folder_query, self.year_query_list = clean_title(normalize(title)), tuple(map(str, range(self.year - 1, self.year + 2)))
 			self._scrape_cloud()
 			if not self.scrape_results: return internal_results(self.scrape_provider, self.sources)
-			aliases = source_utils.get_aliases_titles(info.get('aliases', []))
+			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
 			for item in self.scrape_results:
 				try:
 					if not item['filename'].lower().endswith(tuple(extensions)): continue
@@ -36,9 +36,9 @@ class source(Debrid):
 					elif not seas_ep_filter(self.season, self.episode, normalized): continue
 					if not (self.folder_query in filename or self.folder_query in foldername): continue
 
-					if title_filter and not check_title(title, normalized, aliases, self.year, self.season, self.episode): continue
+					if title_filter and not check_title(title, normalized, self.aliases, self.year, self.season, self.episode): continue
 					URLName = clean_file_name(normalized).replace('html', ' ').replace('+', ' ').replace('-', ' ')
-					file_dl, size = item['link'], size = round(float(item['size'])/1073741824, 2)
+					file_dl, size = item['link'], round(float(int(item['size']))/1073741824, 2)
 					video_quality, details = get_file_info(name_info=release_info_format(normalized))
 					sources_append({
 						'source': self.scrape_provider, 'direct': True,
@@ -55,7 +55,7 @@ class source(Debrid):
 	def _scrape_cloud(self):
 		try:
 			results_append = self.scrape_results.append
-			my_cloud_files = self.user_cloud_all()['files']
+			my_cloud_files = self.item_listall()['files']
 			for item in my_cloud_files:
 				try:
 					item.update({'filename': item['name'], 'folder_name': item['path'], 'link': item['id']})

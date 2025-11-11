@@ -152,15 +152,21 @@ class Movies:
 		return self.items
 
 class Indexer(Movies):
-	tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres')
+	tmdb_main, trakt_main = (
+		'tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres',
+		'tmdb_moviesanime_popular', 'tmdb_moviesanime_latest_releases'
+	), (
+		'trakt_movies_trending', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice',
+		'trakt_movies_trending_recent', 'trakt_moviesanime_trending', 'trakt_moviesanime_most_watched'
+	)
+	tmdb_special_key_dict = {
+		'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_moviesanime_year':'year',
+		'tmdb_movies_certifications': 'certification'
+	}
 	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
-	tmdb_special_key_dict = {'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_movies_certifications': 'certification'}
-	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
 	mdblist_personal = ('mdblist_watchlist',)
 	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
-	simkl_main = ('simkl_movies_popular', 'simkl_movies_most_watched', 'simkl_movies_recent_release')
-	simkl_special_key_dict = {'simkl_movies_genres': 'genre_id', 'simkl_movies_year': 'year'}
 	similar = ('tmdb_movies_similar', 'tmdb_movies_recommendations')
 	personal_dict = {
 		'in_progress_movies': ('caches.watched_cache', 'get_in_progress_movies'),
@@ -190,7 +196,8 @@ class Indexer(Movies):
 				self.id_type = 'trakt_dict'
 				data = function(page_no)
 				self.list = [i['movie']['ids'] for i in data]
-				if self.action not in ('trakt_movies_top10_boxoffice'): self.new_page = {'new_page': string(page_no + 1)}
+				if self.action not in ('trakt_movies_top10_boxoffice', 'trakt_moviesanime_trending'):
+					self.new_page = {'new_page': string(page_no + 1)}
 			elif self.action in Indexer.tmdb_personal:
 				data, total_pages = function('movie', page_no, letter)
 				self.list = [i['id'] for i in data]
@@ -245,7 +252,7 @@ class Indexer(Movies):
 				from modules.meta_lists import oscar_winners
 				self.list = [i for i in chunks(oscar_winners, 20)][page_no-1]
 				if self.list[-1] != 631: self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action == 'tmdb_movies_genres':
+			elif self.action in ('tmdb_movies_genres', 'tmdb_moviesanime_genres'):
 				genre_id = params_get('genre_id')
 				if not genre_id: return
 				data = function(genre_id, page_no)
@@ -271,17 +278,6 @@ class Indexer(Movies):
 				self.id_type = 'trakt_dict'
 				data = function('movies')
 				self.list = [i['ids'] for i in data]
-			elif self.action in Indexer.simkl_main:
-				self.id_type = 'trakt_dict'
-				data = function(page_no)
-				self.list = data
-			elif self.action in Indexer.simkl_special_key_dict:
-				key = Indexer.simkl_special_key_dict[self.action]
-				function_var = params_get(key, None)
-				if not function_var: return
-				data = function(function_var)
-				self.id_type = 'trakt_dict'
-				self.list = data
 			if self.total_pages and not self.is_widget and settings.nav_jump_use_alphabet():
 				url_params = {'mode': 'build_navigate_to_page', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
 							'transfer_action': self.action, 'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', '')}

@@ -9,8 +9,7 @@ poster_empty = media_path('box_office.png')
 info_icons_dict, extra_info_choices = {k: media_path(v) for k, v in (
 	('alldebrid', 'alldebrid.png'), ('ad_cloud', 'alldebrid.png'), ('premiumize', 'premiumize.png'), ('pm_cloud', 'premiumize.png'),
 	('real-debrid', 'realdebrid.png'), ('rd_cloud', 'realdebrid.png'), ('torbox', 'torbox.png'), ('tb_cloud', 'torbox.png'),
-	('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'), ('debrider', 'debrider.png'), ('db_cloud', 'debrider.png'),
-	('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'),
+	('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'), ('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'),
 	('cam', 'flagSD.png'), ('tele', 'flagSD.png'), ('scr', 'flagSD.png'), ('sd', 'flagSD.png'), ('720p', 'flag720p.png'), ('1080p', 'flag1080p.png'),  ('4k', 'flag4k.png')
 )}, (
 	('PACK', '[B]PACK[/B]'), ('DOLBY VISION', '[B]D/VISION[/B]'), ('HIGH DYNAMIC RANGE (HDR)', '[B]HDR[/B]'), ('HYBRID', '[B]HYBRID[/B]'), ('AV1', '[B]AV1[/B]'),

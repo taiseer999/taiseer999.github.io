@@ -23,7 +23,7 @@ def _make_progress_dialog(**kwargs):
 def authorize(service):
 	try: success = {
 		'realdebrid': RealDebrid, 'premiumize': Premiumize, 'alldebrid': AllDebrid,
-		'torbox': TorBox, 'offcloud': Offcloud, 'debrider': Debrider, 'easydebrid': EasyDebrid,
+		'torbox': TorBox, 'offcloud': Offcloud, 'easydebrid': EasyDebrid,
 		'trakt': Trakt, 'mdblist': MDBList, 'tmdblist': TMDbList
 	}[service]().set_auth()
 	except Exception as e: kodi_utils.logger('myservices error', str(e))
@@ -286,58 +286,6 @@ class Offcloud:
 		if not api_key: return notification(32574)
 		set_setting('oc.account_id', str(user_id))
 		set_setting('oc.token', api_key)
-		notification('Set %s Authorization' % cls_name)
-		return True
-
-class Debrider:
-	def __init__(self):
-		self.token = get_setting('db.token')
-
-	def base_url(self, path):
-		return 'https://debrider.app/api/%s' % path
-
-	def poll_auth(self, data):
-		response = requests.get(self.base_url('app/device/auth'), params=data, timeout=timeout)
-		if not response.ok: return
-		data.update(response.json())
-		self.token = data
-
-	def set_auth(self):
-		cls_name = self.__class__.__name__
-		if get_setting('db.token'):
-			if not confirm_dialog(): return
-			set_setting('db.token', '')
-			set_setting('db.account_id', '')
-			clear_cache('db_cloud', silent=True)
-			return notification('Removed %s Authorization' % cls_name)
-
-		response = requests.get(self.base_url('app/device/code'), timeout=timeout)
-		result = response.json()
-		data = {'code': result['device_code']}
-		expires_in, expires_at = result['expires_in'], result['expires_in'] + time.monotonic()
-		try: qr_icon = qr_str % '&bgcolor=ffd700&data=%s' % quote(result['verification_url'])
-		except: qr_icon = ''
-		meta = {**dict.fromkeys(meta_keys.split(), ''), 'poster': qr_icon}
-		detail = code_str % result['user_code'], nav2_str % result['verification_url']
-		progress_dialog = _make_progress_dialog(meta=meta)
-		timer = RepeatTimer(result['interval'], self.poll_auth, args=(data,))
-		timer.start()
-		for i in range(1, expires_in + 1):
-			if self.token or progress_dialog.iscanceled(): break
-			lines = await_str % divmod(expires_at - time.monotonic(), 60), *detail
-			progress = 100 - int(100 * i / expires_in)
-			progress_dialog.update('[CR]'.join(lines), progress)
-			sleep(1000)
-		timer.cancel()
-		progress_dialog.close()
-		if progress_dialog.iscanceled(): return False
-		self.token = data['apikey']
-		headers = {'Authorization': 'Bearer %s' % self.token}
-		response = requests.get(self.base_url('v1/account'), headers=headers, timeout=timeout)
-		result = response.json()
-		customer = result['id']
-		set_setting('db.account_id', str(customer))
-		set_setting('db.token', self.token)
 		notification('Set %s Authorization' % cls_name)
 		return True
 

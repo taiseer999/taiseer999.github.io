@@ -23,9 +23,9 @@ class Indexer(Debrid):
 			args = params.get('id'), params.get('folder_name')
 			items = self.user_cloud(args[0])['content']
 			_builder = self.torrent_cloud
-		elif '_transfers' in params['mode']:
-			items = self.transfers_list()['transfers']
-			_builder = self.transfers
+		elif '_downloads' in params['mode']:
+			items = self.downloads()['transfers']
+			_builder = self.browse_downloads
 		else: return getattr(self, params['mode'].split('.')[-1])()
 		__handle__ = int(sys.argv[1])
 		kodi_utils.add_items(__handle__, list(_builder(items, *args)))
@@ -63,8 +63,7 @@ class Indexer(Debrid):
 					display_size = float(int(size))/1073741824
 					display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, display_size, name)
 					url_params = {'mode': 'media_play', 'url': url_link, 'media_type': 'video'}
-					down_file_params = {'mode': 'downloader', 'action': 'cloud.premiumize',
-										'name': item['name'], 'url': url_link, 'image': default_icon}
+					down_file_params = {'mode': 'downloader', 'action': 'cloud.premiumize', 'name': item['name'], 'url': url_link, 'image': default_icon}
 					cm_append((download_string, 'RunPlugin(%s)' % build_url(down_file_params)))
 				cm_append((rename_str % file_type.capitalize(), 'RunPlugin(%s)' % build_url(rename_params)))
 				cm_append(('[B]%s %s[/B]' % (delete_str, string.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
@@ -76,7 +75,7 @@ class Indexer(Debrid):
 				yield (url, listitem, is_folder)
 			except: pass
 
-	def transfers(self, items):
+	def browse_downloads(self, items):
 		KODI_VERSION = kodi_utils.get_kodi_version()
 		for count, item in enumerate(items, 1):
 			try:
@@ -90,7 +89,8 @@ class Indexer(Debrid):
 				if file_type == 'folder':
 					is_folder = True if status == 'finished' else False
 					display = '%02d | %.2f%% | [B]%s[/B] | [I]%s [/I]' % (count, progress, folder_str, name)
-					url_params = {'mode': 'premiumize.pm_torrent_cloud', 'id': item['folder_id'], 'folder_name': normalize(item['name'])}
+					if is_folder: url_params = {'mode': 'premiumize.pm_torrent_cloud', 'id': item['folder_id'], 'folder_name': normalize(item['name'])}
+					else: url_params = {'mode': 'premiumize.pm_downloads'}
 				else:
 					is_folder = False
 					details = self.get_item_details(item['file_id'])

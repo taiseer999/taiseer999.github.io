@@ -59,17 +59,16 @@ tvshow_list = [
 
 anime_list = [
 	{'name': 'Series Calendar', 'iconImage': 'trakt.png', 'mode': 'build_anime_calendar'},
-	{'name': 'Series Popular This Week', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'simkl_tv_popular'},
-	{'name': 'Series Most Watched', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'simkl_tv_most_watched'},
-	{'name': 'Series Recent Released', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'simkl_tv_recent_release'},
+	{'name': 'Series Trending', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'trakt_tvanime_trending'},
+	{'name': 'Series Most Watched', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'trakt_tvanime_most_watched'},
+	{'name': 'Series Popular', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'tmdb_tvanime_popular'},
+	{'name': 'Series Recent Released', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'tmdb_tvanime_premieres'},
 	{'name': 'Series Genres', 'iconImage': 'genres.png', 'mode': 'navigator.anime_genres', 'menu_type': 'tvshow'},
 	{'name': 'Series Years', 'iconImage': 'calender.png', 'mode': 'navigator.anime_years', 'menu_type': 'tvshow'},
-	{'name': 'ONAs Popular This Week', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'simkl_onas_popular'},
-	{'name': 'ONAs Most Watched', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'simkl_onas_most_watched'},
-	{'name': 'ONAs Recent Released', 'iconImage': 'tv.png', 'mode': 'build_tvshow_list', 'action': 'simkl_onas_recent_release'},
-	{'name': 'Movies Popular This Week', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'simkl_movies_popular'},
-	{'name': 'Movies Most Watched', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'simkl_movies_most_watched'},
-	{'name': 'Movies Recent Released', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'simkl_movies_recent_release'},
+	{'name': 'Movies Trending', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'trakt_moviesanime_trending'},
+	{'name': 'Movies Most Watched', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'trakt_moviesanime_most_watched'},
+	{'name': 'Movies Popular', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'tmdb_moviesanime_popular'},
+	{'name': 'Movies Recent Released', 'iconImage': 'movies.png', 'mode': 'build_movie_list', 'action': 'tmdb_moviesanime_latest_releases'},
 	{'name': 'Movies Genres', 'iconImage': 'genres.png', 'mode': 'navigator.anime_genres', 'menu_type': 'movie'},
 	{'name': 'Movies Years', 'iconImage': 'calender.png', 'mode': 'navigator.anime_years', 'menu_type': 'movie'}
 ]

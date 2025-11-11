@@ -25,10 +25,10 @@ class source(Debrid):
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
 			for item in self.scrape_results:
 				try:
+					if filter_lang and not any(i in lang_filters for i in item['language']) : continue
 					normalized = normalize(item['name'])
 
 					if title_filter and not check_title(title, normalized, self.aliases, self.year, self.season, self.episode): continue
-					if filter_lang and not any(i in lang_filters for i in item['language']) : continue
 					URLName = clean_file_name(normalized).replace('html', ' ').replace('+', ' ').replace('-', ' ')
 					url_dl, size = item['url_dl'], round(float(int(item['rawSize']))/1073741824, 2)
 					video_quality, details = get_file_info(name_info=release_info_format(normalized))

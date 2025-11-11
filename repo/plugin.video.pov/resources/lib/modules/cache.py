@@ -132,7 +132,7 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from debrids.easynews_api import clear_media_results_database
 		clear_media_results_database()
-		items = 'ad_cloud', 'pm_cloud', 'rd_cloud', 'tb_cloud', 'oc_cloud', 'db_cloud', 'folders'
+		items = 'ad_cloud', 'pm_cloud', 'rd_cloud', 'tb_cloud', 'oc_cloud', 'folders'
 		for item in items: clear_cache(item, silent=True)
 	elif cache_type == 'external_scrapers':
 		if not _confirm(): return
@@ -177,10 +177,6 @@ def clear_cache(cache_type, silent=False):
 		if not _confirm(): return
 		from debrids.offcloud_api import OffcloudAPI
 		success = OffcloudAPI().clear_cache()
-	elif cache_type == 'db_cloud':
-		if not _confirm(): return
-		from debrids.debrider_api import DebriderAPI
-		success = DebriderAPI().clear_cache()
 	elif cache_type == 'folders':
 		from caches.main_cache import main_cache
 		main_cache.delete_all_folderscrapers()
@@ -204,8 +200,7 @@ def clear_all_cache():
 		('pm_cloud', '%s %s' % (ls(32061), ls(32524))),
 		('rd_cloud', '%s %s' % (ls(32054), ls(32524))),
 		('tb_cloud', '%s %s' % ('TorBox', ls(32524))),
-		('oc_cloud', '%s %s' % ('Offcloud', ls(32524))),
-		('db_cloud', '%s %s' % ('Debrider', ls(32524)))
+		('oc_cloud', '%s %s' % ('Offcloud', ls(32524)))
 	)
 	kodi_utils.progressDialog.create('POV', '')
 	for count, (cache_type, cache_label) in enumerate(caches, 1):

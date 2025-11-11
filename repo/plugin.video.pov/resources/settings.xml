@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<!-- Provider Accounts -->
-	<category label="My Services">
-		<!-- Debrider -->
-		<setting label="Debrider" type="lsep" />
-		<setting id="db.token" label="ed token" type="text" default="" visible="false" />
-		<setting id="db.enabled" label="Enable" type="bool" default="true" visible="!eq(-1,)" />
-		<setting id="db.account_id" label="Customer ID" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
-		<setting id="db.torrent.enabled" label="Use Torrent Services" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
-		<setting id="store_torrent.debrider" label="Add Resolved Torrents to Cloud" type="bool" default="false" visible="eq(-3,true)+!eq(-4,)" />
-		<setting id="provider.db_cloud" label="Search DB Cloud" type="bool" default="false" visible="eq(-4,true)+!eq(-5,)" />
-			<setting id="db_cloud.title_filter" label="Filter Results by Name" type="bool" default="false" subsetting="true" visible="eq(-1,true)+eq(-5,true)+!eq(-6,)" />
-			<setting id="check.db_cloud" label="Check Before Full Search" type="bool" default="false" subsetting="true" visible="eq(-2,true)+eq(-6,true)+!eq(-7,)" />
-			<setting id="results.sort_dbcloud_first" label="Show Results at Top" type="bool" default="true" subsetting="true" visible="eq(-3,true)+eq(-7,true)+!eq(-8,)" />
-		<setting id="db.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="9" option="int" range="1,1,10" visible="eq(-8,true)+!eq(-9,)" />
-		<setting id="db.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-9,true)+!eq(-10,)" />
-		<setting label="Authorize" type="action" visible="eq(-11,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=debrider)" />
-		<setting label="Remove Authorization" type="action" visible="!eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=debrider)" />
-		<!-- EasyDebrid -->
-		<setting label="EasyDebrid" type="lsep" />
-		<setting id="ed.token" label="ed token" type="text" default="" visible="false" />
-		<setting id="ed.enabled" label="Enable" type="bool" default="true" visible="!eq(-1,)" />
-		<setting id="ed.account_id" label="Customer ID" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
-		<setting id="ed.torrent.enabled" label="Use Torrent Services" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
-		<setting id="ed.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="9" option="int" range="1,1,10" visible="eq(-3,true)+!eq(-4,)" />
-		<setting id="ed.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-4,true)+!eq(-5,)" />
-		<setting label="Authorize" type="action" visible="eq(-6,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=easydebrid)" />
-		<setting label="Remove Authorization" type="action" visible="!eq(-7,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=easydebrid)" />
-		<!-- Easynews -->
-		<setting label="Easynews" type="lsep" />
-		<setting id="provider.easynews" label="Enable" type="bool" default="false" />
-		<setting id="easynews_user" label="Login" type="text" default="" enable="true" visible="eq(-1,true)" />
-		<setting id="easynews_password" label="Password" type="text" default="" enable="true" visible="eq(-2,true)" />
-		<setting id="easynews.title_filter" label="Filter Results by Name" type="bool" default="false" visible="eq(-3,true)+!eq(-1,)" />
-		<setting id="easynews.filter_lang" label="Filter Languages" type="bool" default="false" visible="eq(-4,true)+!eq(-2,)" />
-			<setting id="easynews.lang_filters" label="Choose Languages To Include" type="action" default="eng" subsetting="true" visible="eq(-5,true)+!eq(-3,)+eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=set_language_filter_choice&amp;filter_setting=easynews.lang_filters)" />
-		<setting id="easynews_moderation" label="Exclude Adult Results" type="bool" default="true" visible="eq(-6,true)+!eq(-4,)" />
-		<setting id="check.easynews" label="Check Before Full Search" type="bool" default="false" visible="eq(-7,true)+!eq(-5,)" />
-		<setting id="en.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="7" option="int" range="1,1,10" visible="eq(-8,true)+!eq(-6,)" />
-		<!--setting id="easynews.api_version" label="API Version" type="enum" default="0" values="Version 2|Version 3" visible="!eq(-2,)" /-->
+	<!-- Sources -->
+	<category label="Sources">
+		<setting label="External Scrapers" type="lsep" />
+		<setting id="provider.external" label="Enable" type="bool" default="true" />
+		<setting id="filter.foreign.single.audio" label="Remove identified Foreign single audio sources" type="bool" default="true" />
+		<setting id="filter.undesirables" label="Remove Undesirables" type="bool" default="false" />
+			<setting label="Define User Undesirables" type="action" subsetting="true" visible="eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=undesirablesInput)" />
+			<setting label="Remove User Undesirables" type="action" subsetting="true" visible="eq(-2,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=undesirablesUserRemove)" />
+		<setting id="debug.enabled" label="Enable Debug" type="bool" default="false" />
+		<setting id="debug.location" label="Logging Location" type="enum" default="0" values="Kodi Log|Addon Log" enable="eq(-1,true)" visible="eq(-1,true)" />
+		<setting label="Test All Source Providers (Magneto)" type="action" action="RunPlugin(plugin://plugin.video.pov/?mode=speedTest)" />
+		<setting label="Sources" type="lsep" />
+		<setting id="provider.animetosho" label="animetosho" type="bool" default="false" />
+		<setting id="provider.bitmagnet" label="bitmagnet" type="bool" default="false" />
+		<setting id="provider.dmm" label="dmm" type="bool" default="false" />
+		<setting id="provider.nyaa" label="nyaa" type="bool" default="false" />
+		<setting id="provider.piratebay" label="piratebay" type="bool" default="true" />
+		<setting id="provider.torrentio" label="torrentio" type="bool" default="true" />
+		<setting id="provider.torrentdownload" label="torrentdownload" type="bool" default="false" />
+		<setting id="provider.torrentsdb" label="torrentsdb" type="bool" default="false" />
+		<setting id="provider.aiostreams" label="aiostreams" type="bool" default="false" />
+			<setting id="aiostreams.url" label="aiostreams instance" type="enum" default="0" values="Kuu-lection|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+		<setting id="provider.comet" label="comet" type="bool" default="false" />
+			<setting id="comet.url" label="comet instance" type="enum" default="0" values="Kuu-lection|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+		<setting id="provider.mediafusion" label="mediafusion" type="bool" default="false" />
+			<setting id="mediafusion.url" label="mediafusion instance" type="enum" default="0" values="Kuu-lection|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+		<setting id="provider.torz" label="stremthru torz" type="bool" default="false" />
+			<setting id="torz.url" label="torz instance" type="enum" default="0" values="Kuu-lection|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+		<setting id="provider.zilean" label="zilean" type="bool" default="false" />
+		<setting id="provider.prowlarr" label="prowlarr" type="bool" default="false" />
+			<setting id="prowlarr.token" label="x-api-key" type="text" default="" subsetting="true" visible="eq(-1,true)" />
+			<setting id="prowlarr.url" label="url" type="text" default="" subsetting="true" visible="eq(-2,true)" />
+		<setting id="provider.library" label="library" type="bool" default="false" visible="false" />
+		<!-- Folders 1-5 -->
+		<setting label="Folders 1-5" type="lsep" />
+		<setting id="provider.folders" label="Enable" type="bool" default="false" />
+		<setting id="folders.manage" label="Manage Folder Scrapers" type="action" default="[B]Browse...[/B]" visible="eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=folder_scraper_manager_choice)" />
+		<setting id="folders.title_filter" label="Filter Results by Name" type="bool" default="false" visible="eq(-2,true)" />
+		<setting id="check.folders" label="Check Before Full Search" type="bool" default="false" visible="eq(-3,true)" />
+		<setting id="results.sort_folders_first" label="Show Results at Top" type="bool" default="true" visible="eq(-4,true)" />
 	</category>
+	<!-- Provider Accounts -->
 	<category label="My Services">
 		<!-- Premiumize -->
 		<setting label="Premiumize" type="lsep" />
@@ -57,6 +59,16 @@
 		<setting id="pm.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
 		<setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=premiumize)" />
 		<setting label="Remove Authorization" type="action" visible="!eq(-13,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=premiumize)" />
+		<!-- EasyDebrid -->
+		<setting label="EasyDebrid" type="lsep" />
+		<setting id="ed.token" label="ed token" type="text" default="" visible="false" />
+		<setting id="ed.enabled" label="Enable" type="bool" default="true" visible="!eq(-1,)" />
+		<setting id="ed.account_id" label="Customer ID" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
+		<setting id="ed.torrent.enabled" label="Use Torrent Services" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
+		<setting id="ed.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="9" option="int" range="1,1,10" visible="eq(-3,true)+!eq(-4,)" />
+		<setting id="ed.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-4,true)+!eq(-5,)" />
+		<setting label="Authorize" type="action" visible="eq(-6,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=easydebrid)" />
+		<setting label="Remove Authorization" type="action" visible="!eq(-7,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=easydebrid)" />
 		<!-- TorBox-->
 		<setting label="TorBox" type="lsep" />
 		<setting id="tb.token" label="tb token" type="text" default="" visible="false" />
@@ -126,8 +138,20 @@
 		<setting id="ad.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
 		<setting label="Authorize" type="action" visible="eq(-12,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=alldebrid)" />
 		<setting label="Remove Authorization" type="action" visible="!eq(-13,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=alldebrid)" />
+		<!-- Easynews -->
+		<setting label="Easynews" type="lsep" />
+		<setting id="provider.easynews" label="Enable" type="bool" default="false" />
+		<setting id="easynews_user" label="Login" type="text" default="" enable="true" visible="eq(-1,true)" />
+		<setting id="easynews_password" label="Password" type="text" default="" enable="true" visible="eq(-2,true)" />
+		<setting id="easynews.title_filter" label="Filter Results by Name" type="bool" default="false" visible="eq(-3,true)+!eq(-1,)" />
+		<setting id="easynews.filter_lang" label="Filter Languages" type="bool" default="false" visible="eq(-4,true)+!eq(-2,)" />
+			<setting id="easynews.lang_filters" label="Choose Languages To Include" type="action" default="eng" subsetting="true" visible="eq(-5,true)+!eq(-3,)+eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=set_language_filter_choice&amp;filter_setting=easynews.lang_filters)" />
+		<setting id="easynews_moderation" label="Exclude Adult Results" type="bool" default="true" visible="eq(-6,true)+!eq(-4,)" />
+		<setting id="check.easynews" label="Check Before Full Search" type="bool" default="false" visible="eq(-7,true)+!eq(-5,)" />
+		<setting id="en.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="7" option="int" range="1,1,10" visible="eq(-8,true)+!eq(-6,)" />
+		<!--setting id="easynews.api_version" label="API Version" type="enum" default="0" values="Version 2|Version 3" visible="!eq(-2,)" /-->
 	</category>
-	<!-- Trakt -->
+	<!-- My Lists -->
 	<category label="My Lists">
 		<!-- Trakt -->
 		<setting label="Trakt" type="lsep" />
@@ -150,6 +174,12 @@
 		<setting label="Trakt Cache" type="lsep" />
 		<setting id="trakt.sync_interval" label="Refresh Data from Trakt Server every...(mins)" type="slider" default="30" option="int" range="5,5,480" />
 		<setting id="trakt.sync_refresh_widgets" label="Attempt to Refresh Widgets After Refresh" type="bool" default="false" />
+		<!-- MDBList -->
+		<setting label="MDBList" type="lsep" />
+		<setting id="mdblist.token" label="API Key" type="text" default="" visible="false" />
+		<setting id="mdblist_user" label="Username" type="text" default="" enable="false" visible="!eq(-1,)" />
+		<setting label="Authorize" type="action" visible="eq(-2,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=mdblist)" />
+		<setting label="Remove Authorization" type="action" visible="!eq(-3,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=mdblist)" />
 		<!-- TMDB -->
 		<setting label="TMDB Lists" type="lsep" />
 		<setting id="tmdb.session_id" type="text" default="" visible="false" />
@@ -161,61 +191,11 @@
 		<setting id="tmdblist.watchlist_sync" label="Purge Watchlist on Trakt Refresh" type="bool" default="false" visible="!eq(-3,)" />
 		<setting label="Authorize" type="action" visible="eq(-4,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=tmdblist)" />
 		<setting label="Remove Authorization" type="action" visible="!eq(-5,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=tmdblist)" />
-		<!-- MDBList -->
-		<setting label="MDBList" type="lsep" />
-		<setting id="mdblist.token" label="API Key" type="text" default="" visible="false" />
-		<setting id="mdblist_user" label="Username" type="text" default="" enable="false" visible="!eq(-1,)" />
-		<setting label="Authorize" type="action" visible="eq(-2,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=mdblist)" />
-		<setting label="Remove Authorization" type="action" visible="!eq(-3,)" option="close" action="RunPlugin(plugin://plugin.video.pov/?mode=myservices&amp;action=mdblist)" />
-		<!-- Simkl -->
-		<setting label="SIMKL" type="lsep" />
-		<setting id="simkl_api" label="API Key (optional)" type="text" default="" enable="true" option="hidden" />
 		<!-- IMDb -->
 		<setting label="IMDb" type="lsep" />
 		<setting id="imdb_user" label="User" type="text" default="" enable="true" />
 		<setting id="imdb_lists.sort_type" label="Sort Type" type="enum" default="0" values="List Default|Alphabetical|IMDb Rating|Popularity|Your Rating|Number Of Ratings|Release Date|Runtime|Date Added" visible="!eq(-1,)" />
 		<setting id="imdb_lists.sort_direction" label="Sort Order" type="enum" default="0" values="Ascending|Descending" visible="!eq(-2,)" />
-	</category>
-	<!-- Sources -->
-	<category label="Sources">
-		<setting label="External Scrapers" type="lsep" />
-		<setting id="provider.external" label="Enable" type="bool" default="true" />
-		<setting id="filter.foreign.single.audio" label="Remove identified Foreign single audio sources" type="bool" default="true" />
-		<setting id="filter.undesirables" label="Remove Undesirables" type="bool" default="false" />
-			<setting label="Define User Undesirables" type="action" subsetting="true" visible="eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=undesirablesInput)" />
-			<setting label="Remove User Undesirables" type="action" subsetting="true" visible="eq(-2,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=undesirablesUserRemove)" />
-		<setting id="debug.enabled" label="Enable Debug" type="bool" default="false" />
-		<setting id="debug.location" label="Logging Location" type="enum" default="0" values="Kodi Log|Addon Log" enable="eq(-1,true)" visible="eq(-1,true)" />
-		<setting label="Test All Source Providers (Magneto)" type="action" action="RunPlugin(plugin://plugin.video.pov/?mode=speedTest)" />
-		<setting label="Sources" type="lsep" />
-		<setting id="provider.animetosho" label="animetosho" type="bool" default="false" />
-		<setting id="provider.bitmagnet" label="bitmagnet" type="bool" default="false" />
-		<setting id="provider.dmm" label="dmm" type="bool" default="false" />
-		<setting id="provider.nyaa" label="nyaa" type="bool" default="false" />
-		<setting id="provider.piratebay" label="piratebay" type="bool" default="true" />
-		<setting id="provider.torrentio" label="torrentio" type="bool" default="true" />
-		<setting id="provider.torrentdownload" label="torrentdownload" type="bool" default="false" />
-		<setting id="provider.torrentsdb" label="torrentsdb" type="bool" default="false" />
-		<setting id="provider.aiostreams" label="aiostreams" type="bool" default="false" />
-			<setting id="aiostreams.url" label="aiostreams instance" type="enum" default="0" values="Kuukuuma|Midnightignite" subsetting="true" visible="eq(-1,true)" />
-		<setting id="provider.comet" label="comet" type="bool" default="false" />
-			<setting id="comet.url" label="comet instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
-		<setting id="provider.mediafusion" label="mediafusion" type="bool" default="false" />
-			<setting id="mediafusion.url" label="mediafusion instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
-		<setting id="provider.torz" label="stremthru torz" type="bool" default="false" />
-			<setting id="torz.url" label="torz instance" type="enum" default="0" values="Kuukuuma|Elfhosted|Midnightignite" subsetting="true" visible="eq(-1,true)" />
-		<setting id="provider.zilean" label="zilean" type="bool" default="false" />
-		<setting id="provider.prowlarr" label="prowlarr" type="bool" default="false" />
-			<setting id="prowlarr.token" label="x-api-key" type="text" default="" subsetting="true" visible="eq(-1,true)" />
-			<setting id="prowlarr.url" label="url" type="text" default="" subsetting="true" visible="eq(-2,true)" />
-		<setting id="provider.library" label="library" type="bool" default="false" visible="false" />
-		<!-- Folders 1-5 -->
-		<setting label="Folders 1-5" type="lsep" />
-		<setting id="provider.folders" label="Enable" type="bool" default="false" />
-		<setting id="folders.manage" label="Manage Folder Scrapers" type="action" default="[B]Browse...[/B]" visible="eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=folder_scraper_manager_choice)" />
-		<setting id="folders.title_filter" label="Filter Results by Name" type="bool" default="false" visible="eq(-2,true)" />
-		<setting id="check.folders" label="Check Before Full Search" type="bool" default="false" visible="eq(-3,true)" />
-		<setting id="results.sort_folders_first" label="Show Results at Top" type="bool" default="true" visible="eq(-4,true)" />
 	</category>
 	<!-- General -->
 	<category label="General">
@@ -386,15 +366,14 @@
 			<setting id="provider.ad_colour" label="All Debrid Color" type="action" default="goldenrod" subsetting="true" visible="eq(-5,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ad)" />
 			<setting id="provider.tb_colour" label="TorBox Color" type="action" default="darkseagreen" subsetting="true" visible="eq(-6,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=tb)" />
 			<setting id="provider.oc_colour" label="Offcloud Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-7,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=oc)" />
-			<setting id="provider.db_colour" label="Debrider Color" type="action" default="gold" subsetting="true" visible="eq(-8,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=db)" />
-			<setting id="provider.ed_colour" label="EasyDebrid Color" type="action" default="cornflowerblue" subsetting="true" visible="eq(-9,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ed)" />
-			<setting id="provider.easynews_colour" label="Easynews Color" type="action" default="darkturquoise" subsetting="true" visible="eq(-10,0)|eq(-10,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=easynews)" />
-			<setting id="provider.debrid_cloud_colour" label="Debrid Cloud Color" type="action" default="darkviolet" subsetting="true" visible="eq(-11,0)|eq(-11,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=debrid_cloud)" />
-			<setting id="provider.folders_colour" label="Folders 1-5 Color" type="action" default="darkgoldenrod" subsetting="true" visible="eq(-12,0)|eq(-12,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=folders)" />
-			<setting id="scraper_4k_highlight" label="4K Results Color" type="action" default="magenta" subsetting="true" visible="eq(-13,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_4k_highlight)" />
-			<setting id="scraper_1080p_highlight" label="1080P Results Color" type="action" default="cyan" subsetting="true" visible="eq(-14,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_1080p_highlight)" />
-			<setting id="scraper_720p_highlight" label="720P Results Color" type="action" default="mediumorchid" subsetting="true" visible="eq(-15,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_720p_highlight)" />
-			<setting id="scraper_SD_highlight" label="SD Results Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-16,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_SD_highlight)" />
+			<setting id="provider.ed_colour" label="EasyDebrid Color" type="action" default="cornflowerblue" subsetting="true" visible="eq(-8,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ed)" />
+			<setting id="provider.easynews_colour" label="Easynews Color" type="action" default="darkturquoise" subsetting="true" visible="eq(-9,0)|eq(-9,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=easynews)" />
+			<setting id="provider.debrid_cloud_colour" label="Debrid Cloud Color" type="action" default="darkviolet" subsetting="true" visible="eq(-10,0)|eq(-10,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=debrid_cloud)" />
+			<setting id="provider.folders_colour" label="Folders 1-5 Color" type="action" default="darkgoldenrod" subsetting="true" visible="eq(-11,0)|eq(-11,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=folders)" />
+			<setting id="scraper_4k_highlight" label="4K Results Color" type="action" default="magenta" subsetting="true" visible="eq(-12,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_4k_highlight)" />
+			<setting id="scraper_1080p_highlight" label="1080P Results Color" type="action" default="cyan" subsetting="true" visible="eq(-13,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_1080p_highlight)" />
+			<setting id="scraper_720p_highlight" label="720P Results Color" type="action" default="mediumorchid" subsetting="true" visible="eq(-14,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_720p_highlight)" />
+			<setting id="scraper_SD_highlight" label="SD Results Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-15,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_SD_highlight)" />
 		<!-- Progress Color Highlights -->
 		<setting label="Progress Color Highlights" type="lsep" />
 		<setting id="int_dialog_highlight" label="Internal Scrapers Color" type="action" default="magenta" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_dialog_color_choice&amp;setting=internal)" />

@@ -1,5 +1,8 @@
 
   [COLOR dodgerblue][B]Version 5.11[/B][/COLOR]
+- Removed Simkl due to low client_id api limits.
+  Anime menu needs to be restored "To Default" from within Anime Menu context menu.
+  Any Anime menu items added to other menus/folders need to be removed and re-added.
 - Fixed empty season list, thanks Redditor!
 - Added MDBList external lists, sort respects Settings/Navigation/Sorting/MDBList Sort Type.
 - Added Check Cache Status to Real Debrid/AllDebrid results context menu options.
@@ -8,7 +11,7 @@
 
   [COLOR dodgerblue][B]Version 5.10[/B][/COLOR]
 - Change for some titles missing mpaa metadata.
-- Changed sources to repsect Settings/Results/Display/Scraper Timeout.
+- Changed sources to respect Settings/Results/Display/Scraper Timeout.
 - Added prowlarr.
 - Increased Trakt api timeout to 10s.
 - Added Exclude Completed Season Premieres subsetting for Auto Play.
