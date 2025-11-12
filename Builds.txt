@@ -3,7 +3,7 @@ version="1.0.0"
 zip="url.to.wizard"
 
 name="NimbusARABIC"
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=VY2L%2FiL3He0BqBN1Lt6lmqtY8GkFOLfX7l6BfstKMnKXunsdfzxyBFCbWvo2mXih&expiry=R%2Bqv7Dmab%2Bbzt7PNEyb4JA%3D%3D&mac=fce7bbb08598cf38c82bf2e21850dd18cefda543af6a0c427d883164ef3644c7"
 minor="http://"
 gui="http://"
