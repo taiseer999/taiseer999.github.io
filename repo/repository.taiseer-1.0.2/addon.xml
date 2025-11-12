@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.taiseer" name="ABUKARIM repository " version="1.0.2" provider-name="taiseer999">
+<addon id="repository.taiseer" name="ABUKARIM repository" version="1.0.2" provider-name="taiseer999">
     <extension point="xbmc.addon.repository" name="Example Repository">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml</info>
@@ -8,7 +8,7 @@
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary>repository.taiseer</summary>
+        <summary>ABUKARIM repository</summary>
         <description>Arabic Kodi</description>
         <disclaimer></disclaimer>
         <platform>all</platform>

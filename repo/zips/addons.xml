@@ -2596,7 +2596,7 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
   </extension>
-</addon><addon id="repository.taiseer" name="ABUKARIM repository " version="1.0.2" provider-name="taiseer999">
+</addon><addon id="repository.taiseer" name="ABUKARIM repository" version="1.0.2" provider-name="taiseer999">
     <extension point="xbmc.addon.repository" name="Example Repository">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/main/repo/zips/addons.xml</info>
@@ -2605,7 +2605,7 @@ updated YouTube addon URL
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary>repository.taiseer</summary>
+        <summary>ABUKARIM repository</summary>
         <description>Arabic Kodi</description>
         <disclaimer />
         <platform>all</platform>
