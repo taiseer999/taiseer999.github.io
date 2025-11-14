@@ -268,11 +268,11 @@
                 <visible>Skin.HasSetting(Indicator.RatingsCircle)</visible>
                 <visible>!String.IsEmpty($PARAM[listitem].Rating) | !String.IsEmpty($PARAM[listitem].UserRating)</visible>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]">common/circle.png</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]">common/circle1.png</texture>
                 </control>
                 <control type="image">
                     <bordersize>3</bordersize>
-                    <texture colordiffuse="black">common/circle.png</texture>
+                    <texture colordiffuse="black">common/circle1.png</texture>
                 </control>
                 <control type="label">
                     <font>font_hint</font>
@@ -437,7 +437,7 @@
         <param name="hasprogress">false</param>
         <param name="texture">dialog/loading-back.png</param>
         <param name="size">100</param>
-        <param name="icon">special://skin/extras/icons/kodi.png</param>
+        <param name="icon">special://skin/extras/icons/coreelec.png</param>
         <param name="progress">Control.GetLabel(32)</param>
         <param name="progress_id">32</param>
         <param name="spinprogress">false</param>
@@ -909,12 +909,12 @@
                 <height>96</height>
                 <centerleft>50%</centerleft>
                 <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
+                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/coreelec.png</texture>
             </control>
             <control type="label">
                 <height>32</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>KODI</label>
+                <label>CoreELEC</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
@@ -1592,7 +1592,7 @@
     </include>
 
     <include name="Object_MenuHeader">
-        <param name="icon">special://skin/extras/icons/kodi.png</param>
+        <param name="icon">special://skin/extras/icons/coreelec.png</param>
         <param name="bordersize">icon_home_bordersize</param>
         <param name="label">$LOCALIZE[33063]</param>
         <param name="has_icon">true</param>
