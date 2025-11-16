@@ -280,7 +280,7 @@
                                     <item>
                                         <label>CoreELEC</label>
                                         <label2>service.coreelec.settings</label2>
-                                        <icon>special://skin/extras/icons/coreelec.png</icon>
+                                        <icon>special://skin/extras/icons/kodi.png</icon>
                                         <onclick>RunAddon(service.coreelec.settings)</onclick>
                                         <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
                                     </item>

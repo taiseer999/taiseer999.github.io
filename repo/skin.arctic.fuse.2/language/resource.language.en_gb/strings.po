@@ -2824,6 +2824,31 @@ msgctxt "#31588"
 msgid "Updating ratings"
 msgstr ""
 
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31589"
+msgid "Apply new settings"
+msgstr ""
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31590"
+msgid "Changes made to settings have not been applied."
+msgstr ""
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31591"
+msgid "Pressing close exits the dialog without applying changes."
+msgstr ""
+
+#: /1080i/Includes_Dialogs.xml
+msgctxt "#31592"
+msgid "Press right for options menu"
+msgstr ""
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31593"
+msgid "Apply your changes?"
+msgstr ""
+
 msgctxt "#32000"
 msgid "Display mode"
 msgstr ""
@@ -2965,7 +2990,7 @@ msgid "Memory usage"
 msgstr ""
 
 msgctxt "#32035"
-msgid "Bit depth"
+msgid "Passthrough"
 msgstr ""
 
 msgctxt "#32036"
@@ -3021,7 +3046,7 @@ msgid "VS10 status"
 msgstr ""
 
 msgctxt "#32051"
-msgid "Sample rate"
+msgid "Input"
 msgstr ""
 
 msgctxt "#32052"
@@ -3037,7 +3062,7 @@ msgid "Video"
 msgstr ""
 
 msgctxt "#32055"
-msgid "System"
+msgid "Output"
 msgstr ""
 
 msgctxt "#32056"
@@ -3156,10 +3181,16 @@ msgctxt "#32084"
 msgid "Codecs & PPI"
 msgstr ""
 
-msgctxt "#32085"
-msgid "DiscArt"
-msgstr ""
 
 msgctxt "#32086"
 msgid "Two-row information bar"
 msgstr ""
+
+msgctxt "#32087"
+msgid "Decoding"
+msgstr ""
+
+
+msgctxt "#32088"
+msgid "System"
+msgstr "
