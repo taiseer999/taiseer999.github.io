@@ -23,7 +23,7 @@
                 <include content="Dialog_Head">
                     <param name="label">$INFO[ListItem.Label]</param>
                 </include>
-                 <include>Dialog_Manage_Head_Button</include>
+                <include>Dialog_Manage_Head_Button</include>
 
                 <!-- Content -->
                 <control type="group" id="8000">

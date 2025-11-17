@@ -350,7 +350,9 @@
             <param name="id">010</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[572]</label>
-            <visible>Skin.HasSetting(Furniture.EnableClock)</visible>
+            <selected>!Skin.HasSetting(Furniture.DisableStudio)</selected>
+            <onclick>Skin.ToggleSetting(Furniture.DisableStudio)</onclick>
+            <visible>!Skin.HasSetting(Furniture.EnableClock)</visible>
         </include>
         <include content="Settings_Button" description="Now Playing">
             <param name="dialog">false</param>
@@ -874,6 +876,17 @@
             <label>$LOCALIZE[31115]</label>
             <onclick>Skin.ToggleSetting(HolidayMode.Australia)</onclick>
             <selected>Skin.HasSetting(HolidayMode.Australia)</selected>
+            <visible>Skin.HasSetting(EnableHolidayTheme)</visible>
+        </include>
+        <include content="Settings_Button" description="Holiday Theme: Halloween">
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">018</param>
+            <param name="control">radiobutton</param>
+            <label>Halloween</label>
+            <onclick>Skin.ToggleSetting(HolidayMode.Halloween)</onclick>
+            <selected>Skin.HasSetting(HolidayMode.Halloween)</selected>
             <visible>Skin.HasSetting(EnableHolidayTheme)</visible>
         </include>
     </include>

@@ -109,8 +109,8 @@
             <param name="diffuse">diffuse/dialog_w920_h1000.png</param>
         </include>
     </include>
-    
-<include name="Dialog_Background_BlurDimension_DialogWiderMenu">
+	
+    <include name="Dialog_Background_BlurDimension_DialogWiderMenu">
         <include content="Dialog_Background_Blur">
             <param name="shadow">$PARAM[shadow]</param>
             <param name="transparency">$PARAM[transparency]</param>
@@ -188,7 +188,7 @@
                 <height>1</height>
                 <left>40</left>
                 <right>40</right>
-                <texture colordiffuse="$VAR[Color_DialogBorder]">common/selectbox_thin.png</texture>
+                <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
             </control>
         </control>
         <!-- <control type="group">
