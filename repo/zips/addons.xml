@@ -6882,7 +6882,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.12.5">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.12.6">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.28" />
@@ -6904,6 +6904,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <extension point="xbmc.addon.metadata">
         <summary lang="en">A minimalist row based skin</summary>
         <description lang="en">Arctic Fuse is a minimalist row based skin providing a vertical quick nav menu and customisable widgets</description>
+        <description lang="ar">سكن مخفف صمم ليظهر الاختصارات بشكل صفوف ولذا تكون الملعلومات جاهزة وايجادها سهل بالتنقل العامودي - تم ترجمة وتعديل السكن من ابوكريم ليتلائم مع متطلبات المستخدم العربي ووضع فيه كثير من التعديلات الممتعة</description>
         <platform>all</platform>
         <license>Creative Commons Attribution Non-Commercial Share-Alike 4.0</license>
         <forum />
