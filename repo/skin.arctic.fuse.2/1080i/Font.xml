@@ -46,10 +46,10 @@
 
     <fontset id="الجزيرة" unicode="true">
         <include content="Font_Default">
-            <param name="font_black">Outfit-Bold.ttf</param>
-            <param name="font_bold">Outfit-Bold.ttf</param>
-            <param name="font_regular">Outfit-Bold.ttf</param>
-            <param name="font_light">Outfit-Bold.ttf</param>
+            <param name="font_black">Outfit-Regular.ttf</param>
+            <param name="font_bold">Outfit-Regular.ttf</param>
+            <param name="font_regular">Outfit-Regular.ttf</param>
+            <param name="font_light">Outfit-Regular.ttf</param>
                <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
             <param name="plot_linespacing_main">1.15</param>
@@ -207,6 +207,25 @@
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
             <param name="plot_linespacing_main">1.23</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+
+     <fontset id="ElRady" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">Abd ElRady Medium.ttf</param>
+            <param name="font_bold">Abd ElRady Medium.ttf</param>
+            <param name="font_regular">Abd ElRady Medium.ttf</param>
+            <param name="font_light">Abd ElRady Medium.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.26</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">30</param>
