@@ -168,7 +168,7 @@
             <param name="spinspinner">$PARAM[busy_visible]</param>
         </include>
         <control type="image">
-            <texture colordiffuse="main_fg_70">special://skin/extras/icons/coreelec.png</texture>
+            <texture colordiffuse="main_fg_70">special://skin/extras/icons/kodi.png</texture>
             <aspectratio>keep</aspectratio>
             <bordersize>30</bordersize>
         </control>
