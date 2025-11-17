@@ -5,17 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: 2015-09-21 11:01+0000\n"
-"PO-Revision-Date: 2024-04-14 19:47+0000\n"
-"Last-Translator: Christian Gade <gade@kodi.tv>\n"
+"PO-Revision-Date: 2025-10-11 06:29+0000\n"
+"Last-Translator: Dmitry Petrov <dimakrm361@gmail.com>\n"
 "Language-Team: Russian <https://kodi.weblate.cloud/projects/kodi-add-ons-video/plugin-video-youtube/ru_ru/>\n"
 "Language: ru_ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.13.3\n"
 
 msgctxt "Addon Summary"
 msgid "Plugin for YouTube"
@@ -50,16 +50,16 @@ msgstr ""
 
 msgctxt "#30003"
 msgid "YouTube"
-msgstr ""
+msgstr "YouTube"
 
 # empty strings from id 30004 to 30006
 msgctxt "#30007"
 msgid "Use InputStream.Adaptive"
-msgstr ""
+msgstr "Использовать InputStream.Adaptive"
 
 msgctxt "#30008"
 msgid "Configure InputStream.Adaptive"
-msgstr ""
+msgstr "Настроить InputStream.Adaptive"
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
@@ -67,7 +67,7 @@ msgstr "Всегда задавать вопрос о качестве виде�
 
 msgctxt "#30010"
 msgid "Maximum video quality"
-msgstr ""
+msgstr "Максимальное качество видео"
 
 msgctxt "#30011"
 msgid "480p"
@@ -103,12 +103,11 @@ msgstr "1080p Прямой эфир / 720p (HD)"
 
 msgctxt "#30019"
 msgid "144p"
-msgstr ""
+msgstr "144p"
 
-# empty strings 30019
 msgctxt "#30020"
-msgid "Allow 3D"
-msgstr "Разрешить 3D"
+msgid "Enable Stereoscopic 3D video"
+msgstr "Включить стереоскопическое 3D-видео"
 
 msgctxt "#30021"
 msgid "Show fanart"
@@ -128,11 +127,11 @@ msgstr "Размер кэша (Мб)"
 
 msgctxt "#30025"
 msgid "Enable Setup Wizard"
-msgstr ""
+msgstr "Включить мастер настройки"
 
 msgctxt "#30026"
 msgid "Override views"
-msgstr ""
+msgstr "Переопределить представления"
 
 msgctxt "#30027"
 msgid "View: Default"
@@ -148,11 +147,11 @@ msgstr "Вид: Фильмы"
 
 msgctxt "#30030"
 msgid "Configure %s?"
-msgstr ""
+msgstr "Настроить %s?"
 
 msgctxt "#30031"
-msgid ""
-msgstr ""
+msgid "Requests cache size (MB)"
+msgstr "Размер кэша запросов (МБ)"
 
 msgctxt "#30032"
 msgid "View: TV Shows"
@@ -186,11 +185,11 @@ msgstr "ID плейлиста для истории"
 # empty strings from id 30039 to 30099
 msgctxt "#30100"
 msgid "Bookmarks"
-msgstr ""
+msgstr "Закладки"
 
 msgctxt "#30101"
 msgid "Bookmark"
-msgstr ""
+msgstr "Закладка"
 
 msgctxt "#30102"
 msgid "Search"
@@ -205,24 +204,24 @@ msgid ""
 msgstr ""
 
 msgctxt "#30105"
-msgid ""
-msgstr ""
+msgid "filtered"
+msgstr "отфильтровано"
 
 msgctxt "#30106"
-msgid "Next Page (%d)"
-msgstr "Следующая страница (%d)"
+msgid "Next page: %d"
+msgstr "Следующая страница: %d"
 
 msgctxt "#30107"
 msgid "Watch Later"
 msgstr "Отложенный просмотр"
 
 msgctxt "#30108"
-msgid ""
-msgstr ""
+msgid "Enter the name of the bookmark"
+msgstr "Введите название закладки"
 
 msgctxt "#30109"
-msgid ""
-msgstr ""
+msgid "Enter a valid YouTube or plugin URL for the bookmark"
+msgstr "Введите действительный URL-адрес YouTube или плагина для закладки"
 
 msgctxt "#30110"
 msgid "New Search"
@@ -237,8 +236,8 @@ msgid "Sign Out"
 msgstr "Выйти"
 
 msgctxt "#30113"
-msgid ""
-msgstr ""
+msgid "Related to \"%s\""
+msgstr "Относится к \"%s\""
 
 msgctxt "#30114"
 msgid "Confirm delete"
@@ -257,7 +256,7 @@ msgid "Remove \"%s\"?"
 msgstr "Удалить \"%s\"?"
 
 msgctxt "#30118"
-msgid ""
+msgid "Links from \"%s\""
 msgstr ""
 
 msgctxt "#30119"
@@ -266,11 +265,11 @@ msgstr "Пожалуйста, подождите..."
 
 msgctxt "#30120"
 msgid "Confirm clear"
-msgstr ""
+msgstr "Подтвердить отчиску"
 
 msgctxt "#30121"
 msgid "Clear %s?"
-msgstr ""
+msgstr "Очистить %s?"
 
 # YouTube
 # empty strings from id 30121 to 30199
@@ -301,11 +300,11 @@ msgstr ""
 # YouTube
 # empty strings from id 30206 to 30499
 msgctxt "#30500"
-msgid ""
+msgid "%s failed"
 msgstr ""
 
 msgctxt "#30501"
-msgid ""
+msgid "Edit %s"
 msgstr ""
 
 msgctxt "#30502"
@@ -373,7 +372,7 @@ msgid "Subscribe to %s"
 msgstr "Подписаться %s"
 
 msgctxt "#30518"
-msgid ""
+msgid "Feeds"
 msgstr ""
 
 msgctxt "#30519"
@@ -385,16 +384,16 @@ msgid "Add to..."
 msgstr "Добавить в..."
 
 msgctxt "#30521"
-msgid ""
-msgstr ""
+msgid "Delete requests cache database"
+msgstr "Удалить базу данных с кешом запросов"
 
 msgctxt "#30522"
-msgid ""
-msgstr ""
+msgid "Clear requests cache"
+msgstr "Удалить кеш запросов"
 
 msgctxt "#30523"
-msgid ""
-msgstr ""
+msgid "requests cache"
+msgstr "запросов в кеше"
 
 msgctxt "#30524"
 msgid "Select language"
@@ -406,11 +405,11 @@ msgstr "Выберите регион"
 
 msgctxt "#30526"
 msgid "Setup Wizard"
-msgstr ""
+msgstr "Мастер настройки"
 
 msgctxt "#30527"
 msgid "Language and Region"
-msgstr ""
+msgstr "Язык и регион"
 
 msgctxt "#30528"
 msgid "Rate..."
@@ -457,16 +456,16 @@ msgid "Disliked Videos"
 msgstr "Непонравившееся видео"
 
 msgctxt "#30539"
+msgid "Play recently added"
+msgstr "Воспроизвести недавно добавленное"
+
+msgctxt "#30540"
 msgid ""
 msgstr ""
 
-msgctxt "#30540"
-msgid "Play with..."
-msgstr "Воспроизвести с помощью..."
-
 msgctxt "#30541"
 msgid "Show channel name and video details in description"
-msgstr ""
+msgstr "Отображать название канала и детали видео в описании"
 
 msgctxt "#30542"
 msgid "rtmpe streams are not supported"
@@ -481,24 +480,24 @@ msgid "More Links from the description"
 msgstr "Больше ссылок из описания"
 
 msgctxt "#30545"
-msgid "No further links found."
-msgstr "Ссылки не найдены."
+msgid "No videos found."
+msgstr "Видео не найдено."
 
 msgctxt "#30546"
 msgid "Please complete all login prompts"
-msgstr ""
+msgstr "Пожалуйста заполните все формы авторизации"
 
 msgctxt "#30547"
-msgid "You may be prompted to enable two applications so that YouTube is functioning properly."
-msgstr ""
+msgid "You may be prompted to login and enable access to multiple applications so that this addon can function properly."
+msgstr "Вас могут запросить войти и дать доступ нескольким приложениям, так дополнение сможет функционировать корректно."
 
 msgctxt "#30548"
 msgid ""
 msgstr ""
 
 msgctxt "#30549"
-msgid "No videos streams found"
-msgstr "Видеопотоки не найдены"
+msgid "No streams found"
+msgstr "Трансляции не найдены"
 
 msgctxt "#30550"
 msgid ""
@@ -550,15 +549,15 @@ msgstr ""
 
 msgctxt "#30562"
 msgid "View all"
-msgstr ""
+msgstr "Посмотреть всё"
 
 msgctxt "#30563"
-msgid ""
-msgstr ""
+msgid "Plugin execution timeout"
+msgstr "Время выполнения плагина"
 
 msgctxt "#30564"
-msgid ""
-msgstr ""
+msgid "For testing only - forcibly terminate plugin execution after set time limit. Set to 0 seconds (default) to disable."
+msgstr "Для целей тестирования - принудительно остановить выполнение плагина через заданное время. Установите на 0 секунд (по-умолчанию) для выключения."
 
 msgctxt "#30565"
 msgid ""
@@ -578,11 +577,11 @@ msgstr "Удалить из списка Отложенного просмотр
 
 msgctxt "#30569"
 msgid "Are you sure you want to remove \"%s\" as your Watch Later list?"
-msgstr ""
+msgstr "Вы уверены что хотите убрать \"%s\" из списка \"Посмотреть позже\"?"
 
 msgctxt "#30570"
 msgid "Are you sure you want to replace your current Watch Later list with \"%s\"?"
-msgstr ""
+msgstr "Вы уверены что хотите заменить список \"Посмотреть позже\" с \"%s\"?"
 
 msgctxt "#30571"
 msgid "Set as History"
@@ -609,8 +608,8 @@ msgid "Failed"
 msgstr "Ошибка"
 
 msgctxt "#30577"
-msgid ""
-msgstr ""
+msgid "Smallest (4:3)"
+msgstr "Наименьшее (4:3)"
 
 msgctxt "#30578"
 msgid "Force SSL certificate verification"
@@ -618,7 +617,7 @@ msgstr "Принудительная проверка SSL сертификато
 
 msgctxt "#30579"
 msgid "InputStream.Adaptive is activated in the YouTube settings, however the add-on has been disabled. Would you like to enable InputStream.Adaptive now?"
-msgstr ""
+msgstr "InputStream.Adaptive активирован в настройках YouTube, но дополнение выключено. Хотите включить InputStream.Adaptive сейчас?"
 
 msgctxt "#30580"
 msgid "Reset access manager"
@@ -649,32 +648,32 @@ msgid "Blacklist"
 msgstr "Черный список"
 
 msgctxt "#30587"
-msgid "Add to My Subscriptions filter"
-msgstr "Добавить в фильтр моих подписок"
+msgid "Hide \"Playlists\" folder"
+msgstr "Скрыть папку \"Плейлисты\""
 
 msgctxt "#30588"
-msgid "Remove from My Subscriptions filter"
-msgstr "Удалить из фильтра моих подписок"
+msgid "Hide \"Search\" folder"
+msgstr "Скрыть папку \"Поиск\""
 
 msgctxt "#30589"
-msgid "Added to My Subscriptions filter"
-msgstr "Добавлен в фильтр Мои подписки"
+msgid "Hide \"Shorts\" folder"
+msgstr "Скрыть папку \"Shorts\""
 
 msgctxt "#30590"
-msgid "Removed from My Subscriptions filter"
-msgstr "Убран из фильтра Мои подписки"
+msgid "Hide \"Live\" folder"
+msgstr "Скрыть папку \"Прямой эфир\""
 
 msgctxt "#30591"
 msgid "Thumbnail size"
 msgstr "Размер иконок"
 
 msgctxt "#30592"
-msgid "Medium (16:9)"
-msgstr "Средний (16:9)"
+msgid "Small (16:9)"
+msgstr "Маленький (16:9)"
 
 msgctxt "#30593"
-msgid "High (4:3)"
-msgstr "Большой (4:3)"
+msgid "Medium (4:3)"
+msgstr "Средний (4:3)"
 
 msgctxt "#30594"
 msgid "Safe search"
@@ -689,20 +688,20 @@ msgid "Strict"
 msgstr "Строгий"
 
 msgctxt "#30597"
-msgid "Updated: %s"
-msgstr "Обновлено: %s"
+msgid "Hide \"Members only\" folder"
+msgstr "Скрыть папку \"Только для платных подписчиков\""
 
 msgctxt "#30598"
-msgid ""
-msgstr ""
+msgid "Large (4:3)"
+msgstr "Большой (4:3)"
 
 msgctxt "#30599"
 msgid "Failed to enable personal API keys. Missing: %s"
 msgstr "Ошибка включения персонального API ключа. Отсутствует: %s"
 
 msgctxt "#30600"
-msgid ""
-msgstr ""
+msgid "Largest (16:9)"
+msgstr "Крупный (16:9)"
 
 msgctxt "#30601"
 msgid "%s with Original/%s fallback"
@@ -753,39 +752,39 @@ msgid "Retry"
 msgstr "Повтор"
 
 msgctxt "#30613"
-msgid ""
-msgstr ""
+msgid "Add to %s"
+msgstr "Добавить в %s"
 
 msgctxt "#30614"
-msgid ""
-msgstr ""
+msgid "Remove from %s"
+msgstr "Убрать из %s"
 
 msgctxt "#30615"
-msgid ""
-msgstr ""
+msgid "Added to %s"
+msgstr "Добавлено в %s"
 
 msgctxt "#30616"
-msgid ""
-msgstr ""
+msgid "Removed from %s"
+msgstr "Убрано из %s"
 
 msgctxt "#30617"
 msgid "InputStream.Adaptive"
-msgstr ""
+msgstr "InputStream.Adaptive"
 
 msgctxt "#30618"
-msgid ""
-msgstr ""
+msgid "Stream redirect"
+msgstr "Переадресация потока"
 
 msgctxt "#30619"
-msgid ""
-msgstr ""
+msgid "Enable to reduce resource usage on less powerful devices, but could lead to IP bans. Use at own risk."
+msgstr "Включить для снижения потребления ресурсов в маломощных устройствах, но это может привести к блокировке по IP. Используйте на свой страх и риск."
 
 msgctxt "#30620"
 msgid "Port %s already in use. Cannot start http server."
 msgstr "Порт %s уже используется. Ошибка запуска HTTP сервера."
 
 msgctxt "#30621"
-msgid ""
+msgid "Verbose"
 msgstr ""
 
 msgctxt "#30622"
@@ -797,8 +796,8 @@ msgid "Install InputStream Helper"
 msgstr "Установить InputStream Helper"
 
 msgctxt "#30624"
-msgid ""
-msgstr ""
+msgid "Members only"
+msgstr "Только для платных подписчиков"
 
 msgctxt "#30625"
 msgid "InputStream Helper is already installed."
@@ -894,15 +893,15 @@ msgstr "Завершенный прямой эфир"
 
 msgctxt "#30648"
 msgid "API Key is incorrect. Settings > API > API Key"
-msgstr ""
+msgstr "Неверный API ключ. Настройки > API > Ключ API (Key)"
 
 msgctxt "#30649"
 msgid "Client Id is incorrect. Settings > API > API Id"
-msgstr ""
+msgstr "Неверный идентификатор клиента. Настройки > API >Идентификатор клиента (API Id)"
 
 msgctxt "#30650"
 msgid "Client Secret is incorrect. Settings > API > API Secret"
-msgstr ""
+msgstr "Неверный секретный код клиента. Настройки > API > Секретный код клиента (API Secret)"
 
 msgctxt "#30651"
 msgid "Location"
@@ -938,7 +937,7 @@ msgstr "Введите имя пользователя"
 
 msgctxt "#30659"
 msgid "User is now \"%s\""
-msgstr ""
+msgstr "Выбран пользователь \"%s\""
 
 msgctxt "#30660"
 msgid "Users"
@@ -962,27 +961,27 @@ msgstr "Смена пользователя"
 
 msgctxt "#30665"
 msgid "Switch to \"%s\" now?"
-msgstr ""
+msgstr "Переключить на \"%s\" сейчас?"
 
 msgctxt "#30666"
 msgid "\"%s\" removed"
-msgstr ""
+msgstr "\"%s\" удален"
 
 msgctxt "#30667"
 msgid "Renamed \"%s\" to \"%s\""
-msgstr ""
+msgstr "\"%s\" переименован на \"%s\""
 
 msgctxt "#30668"
 msgid "Play count minimum percent"
 msgstr "Минимальный процент отметки просмотра"
 
 msgctxt "#30669"
-msgid "Mark unwatched"
-msgstr "Отметить как не просмотренное"
+msgid "%s removed"
+msgstr "%s удален"
 
 msgctxt "#30670"
-msgid "Mark watched"
-msgstr "Отметить как просмотренное"
+msgid "Added %s"
+msgstr "Добавлен %s"
 
 msgctxt "#30671"
 msgid "Clear playback history"
@@ -990,19 +989,19 @@ msgstr "Очистить историю просмотра"
 
 msgctxt "#30672"
 msgid "Delete playback history database"
-msgstr ""
+msgstr "Удалить историю просмотров"
 
 msgctxt "#30673"
 msgid "playback history"
 msgstr "история просмотра"
 
 msgctxt "#30674"
-msgid "Reset resume point"
-msgstr "Сброс точки возобновления"
+msgid ""
+msgstr ""
 
 msgctxt "#30675"
 msgid "Use local playback history (watched, resume tracking)"
-msgstr ""
+msgstr "Использовать локальную историю просмотров (просмотренные, трекер времени)"
 
 msgctxt "#30676"
 msgid "Just now"
@@ -1054,7 +1053,7 @@ msgstr "кеш данных"
 
 msgctxt "#30688"
 msgid "Use MPEG-DASH for videos"
-msgstr ""
+msgstr "Использовать MPEG-DASH для видео"
 
 msgctxt "#30689"
 msgid "Use for live streams"
@@ -1062,7 +1061,7 @@ msgstr "Использовать для прямого эфира"
 
 msgctxt "#30690"
 msgid "InputStream.Adaptive >= 2.0.12 is required for adaptive live streams"
-msgstr ""
+msgstr "Требуется InputStream.Adaptive >= 2.0.12 для прямых трансляций"
 
 msgctxt "#30691"
 msgid "Airing now"
@@ -1118,7 +1117,7 @@ msgstr ""
 
 msgctxt "#30704"
 msgid "Use YouTube website urls with default player"
-msgstr ""
+msgstr "Использовать ссылки YouTube с проигрывателем по-умолчанию"
 
 msgctxt "#30705"
 msgid "Download subtitles"
@@ -1137,12 +1136,12 @@ msgid "Play audio only"
 msgstr "Воспроизвести аудио"
 
 msgctxt "#30709"
-msgid ""
-msgstr ""
+msgid "WebVTT subtitles"
+msgstr "WebVTT субтитры"
 
 msgctxt "#30710"
-msgid ""
-msgstr ""
+msgid "TTML subtitles"
+msgstr "TTML субтитры"
 
 msgctxt "#30711"
 msgid ""
@@ -1153,16 +1152,16 @@ msgid "Rate videos in playlists"
 msgstr "Оценивать видео в плейлистах"
 
 msgctxt "#30713"
-msgid "Added to Watch Later"
-msgstr "Добавлено в список \"Смотреть позже\""
+msgid "Prefer dubbed audio over original audio"
+msgstr "Предпочитать дубляж аудио вместо оригинала"
 
 msgctxt "#30714"
-msgid "Added to playlist"
-msgstr "Добавлен в плейлист"
+msgid "Prefer automatically translated dubbed audio over original audio"
+msgstr "Предпочитать автоматически переведенное аудио дубляж вместо оригинального аудио"
 
 msgctxt "#30715"
-msgid "Removed from playlist"
-msgstr "Убран из плейлиста"
+msgid "Use YouTube internal list for Watch History?[CR][CR]Requires signing-in via the addon and activating history tracking on YouTube."
+msgstr ""
 
 msgctxt "#30716"
 msgid "Liked video"
@@ -1173,8 +1172,8 @@ msgid "Disliked video"
 msgstr "Оценка \"Не нравится\" поставлена"
 
 msgctxt "#30718"
-msgid "Rating removed"
-msgstr "Оценка убрана"
+msgid "Use YouTube internal list for Watch Later?[CR][CR]Requires signing-in via the addon."
+msgstr ""
 
 msgctxt "#30719"
 msgid "Subscribed to channel"
@@ -1185,20 +1184,20 @@ msgid "Unsubscribed from channel"
 msgstr "Отписан от канала"
 
 msgctxt "#30721"
-msgid ""
-msgstr ""
+msgid "Enable Panoramic/180/360/VR video"
+msgstr "Включить Панорамные/180/360/VR видео"
 
 msgctxt "#30722"
 msgid "Enable HDR video"
-msgstr ""
+msgstr "Включить HDR видео"
 
 msgctxt "#30723"
 msgid "Proxy is required for MPEG-DASH VODs (see Advanced > HTTP Server)[CR]HDR and >1080p video requires InputStream.Adaptive >= 2.3.14"
-msgstr ""
+msgstr "Требуется прокси для MPEG-DASH VODs (смотрите HTTP сервер)[CR]HDR >1080p видео требуют nputStream.Adaptive >= 2.3.14"
 
 msgctxt "#30724"
 msgid "Enable high framerate video"
-msgstr ""
+msgstr "Включить видео с высокой частотой кадров"
 
 msgctxt "#30725"
 msgid "1440p (QHD)"
@@ -1210,15 +1209,15 @@ msgstr "Загрузки"
 
 msgctxt "#30727"
 msgid "Enable H.264 video"
-msgstr ""
+msgstr "Включить H.264 видео"
 
 msgctxt "#30728"
 msgid "Enable VP9 video"
-msgstr ""
+msgstr "Включить VP9 видео"
 
 msgctxt "#30729"
 msgid "Prefer lower resolution streams for unselected codecs"
-msgstr ""
+msgstr "Предпочитать потоки в низком разрешении для не выбранных кодеков"
 
 msgctxt "#30730"
 msgid "Play (Ask for quality)"
@@ -1246,43 +1245,43 @@ msgstr "Изменен"
 
 msgctxt "#30736"
 msgid "Shorts"
-msgstr ""
+msgstr "Shorts"
 
 msgctxt "#30737"
 msgid "Shorts - Max duration"
-msgstr ""
+msgstr "Shorts - Максимальная длительность"
 
 msgctxt "#30738"
-msgid ""
-msgstr ""
+msgid "Enable spatial audio"
+msgstr "Включить пространственный звук"
 
 msgctxt "#30739"
 msgid "Subscribers"
-msgstr ""
+msgstr "Подписчики"
 
 msgctxt "#30740"
 msgid "HLS"
-msgstr ""
+msgstr "HLS"
 
 msgctxt "#30741"
 msgid "Multi-stream HLS"
-msgstr ""
+msgstr "Многопоточный HLS"
 
 msgctxt "#30742"
 msgid "Adaptive HLS"
-msgstr ""
+msgstr "Адаптивный HLS"
 
 msgctxt "#30743"
 msgid "MPEG-DASH"
-msgstr ""
+msgstr "MPEG-DASH"
 
 msgctxt "#30744"
 msgid "Original"
-msgstr ""
+msgstr "Оригинал"
 
 msgctxt "#30745"
 msgid "Dubbed"
-msgstr ""
+msgstr "Дубляж"
 
 msgctxt "#30746"
 msgid "Descriptive"
@@ -1294,79 +1293,79 @@ msgstr ""
 
 msgctxt "#30748"
 msgid "Stream features"
-msgstr ""
+msgstr "Функции потоков"
 
 msgctxt "#30749"
 msgid "Enable AV1 video"
-msgstr ""
+msgstr "Включить AV1 видео"
 
 msgctxt "#30750"
 msgid "Enable Vorbis audio"
-msgstr ""
+msgstr "Включить Vorbis аудио"
 
 msgctxt "#30751"
 msgid "Enable Opus audio"
-msgstr ""
+msgstr "Включить Opus аудио"
 
 msgctxt "#30752"
 msgid "Enable AAC audio"
-msgstr ""
+msgstr "Включить AAC аудио"
 
 msgctxt "#30753"
 msgid "Enable surround sound audio"
-msgstr ""
+msgstr "Включить пространственное аудио"
 
 msgctxt "#30754"
 msgid "Enable AC-3 audio"
-msgstr ""
+msgstr "Включить AC-3 аудио"
 
 msgctxt "#30755"
 msgid "Enable EAC-3 audio"
-msgstr ""
+msgstr "Включить EAC-3 аудио"
 
 msgctxt "#30756"
 msgid "Enable DTS audio"
-msgstr ""
+msgstr "Включить DTS аудио"
 
 msgctxt "#30757"
 msgid "Remove similar/duplicate streams"
-msgstr ""
+msgstr "Убирать похожие/дублирующие потоки"
 
 msgctxt "#30758"
 msgid "Stream selection"
-msgstr ""
+msgstr "Выбор потока"
 
 msgctxt "#30759"
 msgid "Quality selection"
-msgstr ""
+msgstr "Выбор качества"
 
 msgctxt "#30760"
 msgid "Automatic + Quality selection"
-msgstr ""
+msgstr "Автоматически + Выбор качества"
 
 msgctxt "#30761"
 msgid "Update playback history on Youtube"
-msgstr ""
+msgstr "Обновить историю просмотра в Youtube"
 
 msgctxt "#30762"
 msgid "Multi-language"
-msgstr ""
+msgstr "Многоязычный"
 
 msgctxt "#30763"
 msgid "Multi-audio"
-msgstr ""
+msgstr "Мульти-аудио"
 
 msgctxt "#30764"
 msgid "Requests connect timeout"
-msgstr ""
+msgstr "Таймаут запросов"
 
 msgctxt "#30765"
 msgid "Requests read timeout"
-msgstr ""
+msgstr "Таймаут на чтение запросов"
 
 msgctxt "#30766"
 msgid "Premieres"
-msgstr ""
+msgstr "Премьеры"
 
 msgctxt "#30767"
 msgid "Views"
@@ -1374,67 +1373,67 @@ msgstr "Просмотры"
 
 msgctxt "#30768"
 msgid "Disable high framerate video at maximum video quality"
-msgstr ""
+msgstr "Выключить высокую частоту на максимальном качестве видео"
 
 msgctxt "#30769"
 msgid "Clear Watch Later list"
-msgstr ""
+msgstr "Очистить список \"Посмотреть позже\""
 
 msgctxt "#30770"
 msgid "Are you sure you want to clear your Watch Later list?"
-msgstr ""
+msgstr "Вы уверены что хотите очистить ваш список Посмотреть позже\"?"
 
 msgctxt "#30771"
 msgid "Disable fractional framerate hinting"
-msgstr ""
+msgstr "Выключить метку дробной частоты кадров"
 
 msgctxt "#30772"
 msgid "Disable all framerate hinting"
-msgstr ""
+msgstr "Включить все метки частоты кадров"
 
 msgctxt "#30773"
 msgid "Show video details in video lists"
-msgstr ""
+msgstr "Отображать детали видео в списках видео"
 
 msgctxt "#30774"
 msgid "All available"
-msgstr ""
+msgstr "Все доступные"
 
 msgctxt "#30775"
 msgid "%s (translation)"
-msgstr ""
+msgstr "%s (перевод)"
 
 msgctxt "#30776"
 msgid "Ask + Automatic + Quality selection"
-msgstr ""
+msgstr "Спрашивать + Автоматически + Выбор качества"
 
 msgctxt "#30777"
 msgid "Views for %s (%s)"
-msgstr ""
+msgstr "Просмотры для %s (%s)"
 
 msgctxt "#30778"
 msgid "Import old playback history?"
-msgstr ""
+msgstr "Импортировать старую историю просмотра?"
 
 msgctxt "#30779"
 msgid "Import old search history?"
-msgstr ""
+msgstr "Импортировать старую историю поиска?"
 
 msgctxt "#30780"
 msgid "Clear local watch later list"
-msgstr ""
+msgstr "Очистить локальный список \"Посмотреть позже\""
 
 msgctxt "#30781"
 msgid "Delete watch later database"
-msgstr ""
+msgstr "Удалить базу данных \"Посмотреть позже\""
 
 msgctxt "#30782"
 msgid "local watch later list"
-msgstr ""
+msgstr "локальный список \"Посмотреть позже\""
 
 msgctxt "#30783"
 msgid "settings to recommended values"
-msgstr ""
+msgstr "настройки к рекомендованным значениям"
 
 msgctxt "#30784"
 msgid "listings to show minimal details"
@@ -1442,147 +1441,224 @@ msgstr ""
 
 msgctxt "#30785"
 msgid "performance settings"
-msgstr ""
+msgstr "настройки производительности"
 
 msgctxt "#30786"
 msgid "Choose device capabilities"
-msgstr ""
+msgstr "Выберите возможности устройства"
 
 msgctxt "#30787"
 msgid "720p, H.264 only | Limited or older devices"
-msgstr ""
+msgstr "720p, только H.264| Ограниченные или старые устройства"
 
 msgctxt "#30788"
 msgid "1080p/30 fps | Raspberry Pi 3, or similar"
-msgstr ""
+msgstr "1080p/30 fps | Raspberry Pi 3, или подобные"
 
 msgctxt "#30789"
 msgid "4K/30 fps or 1080p/60 fps, HDR if compatible | Raspberry Pi 5, or similar"
-msgstr ""
+msgstr "4K/30 fps or 1080p/60 fps, HDR если совместимо | Raspberry Pi 5, или подобные"
 
 msgctxt "#30790"
 msgid "4K/60 fps, HDR if compatible | Fire TV Cube Gen 2, Shield TV, Fire TV Stick 4K Gen 1, or similar"
-msgstr ""
+msgstr "4K/60 fps, HDR если совместимо | Fire TV Cube Gen 2, Shield TV, Fire TV Stick 4K Gen 1, или подобные"
 
 msgctxt "#30791"
 msgid "4K/60 fps, HDR, using AV1 | Fire TV Cube Gen 3, Fire TV Stick 4K Max, Vero V, or similar"
-msgstr ""
+msgstr "4K/60 fps, HDR, с кодеком AV1 | Fire TV Cube Gen 3, Fire TV Stick 4K Max, Vero V, или подобные"
 
 msgctxt "#30792"
 msgid "8K/60 fps, HDR, using AV1 | Modern device or PC with full capabilities"
-msgstr ""
+msgstr "8K/60 fps, HDR, с кодеком AV1 | Современные устройства или ПК с полными возможностями"
 
 msgctxt "#30793"
 msgid "Views count display colour"
-msgstr ""
+msgstr "Цвет счётчика просмотров"
 
 msgctxt "#30794"
 msgid "Subscriber/Likes count display colour"
-msgstr ""
+msgstr "Цвет счётчика подписчиков или лайков"
 
 msgctxt "#30795"
 msgid "Videos/Comments count display colour"
-msgstr ""
+msgstr "Цвет счётчика комментариев или просмотров"
 
 msgctxt "#30796"
 msgid "1080p/60 fps | Raspberry Pi 4, or similar"
-msgstr ""
+msgstr "1080p/60 fps | Raspberry Pi 4, или подобные"
 
 msgctxt "#30797"
 msgid "1080p/30 fps or 720p/30 fps, H.264 only | Raspberry Pi 1/2, or similar"
-msgstr ""
+msgstr "1080p/30 fps or 720p/30 fps, только H.264| Raspberry Pi 1/2, или подобные"
 
 msgctxt "#30798"
 msgid "Clear bookmarks list"
-msgstr ""
+msgstr "Очистить список закладок"
 
 msgctxt "#30799"
 msgid "Delete bookmarks database"
-msgstr ""
+msgstr "Удалить базу данных закладок"
 
 msgctxt "#30800"
 msgid "bookmarks list"
-msgstr ""
+msgstr "список закладок"
 
 msgctxt "#30801"
 msgid "Clear Bookmarks list"
-msgstr ""
+msgstr "Очистить список закладок"
 
 msgctxt "#30802"
 msgid "Are you sure you want to clear your Bookmarks list?"
-msgstr ""
+msgstr "Вы уверены что хотите очистить список ваших закладок?"
 
 msgctxt "#30803"
 msgid "Bookmark %s"
-msgstr ""
+msgstr "Добавить в закладки"
 
 msgctxt "#30804"
 msgid "Use YouTube website urls with external player"
-msgstr ""
+msgstr "Использовать ссылки YouTube c внешним проигрывателем"
 
 msgctxt "#30805"
 msgid "Use MPEG-DASH with external player"
-msgstr ""
+msgstr "Использовать MPEG-DASH с внешним проигрывателем"
 
 msgctxt "#30806"
 msgid "Jump to page..."
-msgstr ""
+msgstr "Перепрыгнуть на страницу..."
 
 msgctxt "#30807"
 msgid "Use channel name as"
-msgstr ""
+msgstr "Использовать имя канала как"
 
 msgctxt "#30808"
-msgid "Hide videos from listings"
-msgstr ""
+msgid "Hide items from listings"
+msgstr "Убрать элементы из списка"
 
 msgctxt "#30809"
 msgid "All upcoming videos"
-msgstr ""
+msgstr "Все предстоящие видео"
 
 msgctxt "#30810"
 msgid "All previously streamed (completed) videos"
-msgstr ""
+msgstr "Все предыдущие записи трансляций"
 
 msgctxt "#30811"
 msgid "Filter Live folders"
-msgstr ""
+msgstr "Фильтровать папки трансляций"
 
 msgctxt "#30812"
 msgid "Clear subscription feed history"
-msgstr ""
+msgstr "Очистить историю ленты подписок"
 
 msgctxt "#30813"
 msgid "Delete subscription feed history database"
-msgstr ""
+msgstr "Очистить базу данных ленты подписок"
 
 msgctxt "#30814"
 msgid "feed history"
-msgstr ""
+msgstr "лента подписок"
 
 msgctxt "#30815"
 msgid "Go back..."
-msgstr ""
+msgstr "Вернуться назад..."
 
 msgctxt "#30816"
 msgid "List is empty.[CR][CR]Refresh from context menu or try again later."
-msgstr ""
+msgstr "Список пуст.[CR][CR]Обновите из контекстного меню или попробуйте снова."
 
 msgctxt "#30817"
 msgid "Refresh settings.xml"
-msgstr ""
+msgstr "Обновить settings.xml"
 
 msgctxt "#30818"
 msgid "Are you sure you want to refresh settings.xml?"
-msgstr ""
+msgstr "Вы уверены что хотите обновить settings.xml?"
 
 msgctxt "#30819"
 msgid "Play from start"
-msgstr ""
+msgstr "Начать с начала"
 
 msgctxt "#30820"
 msgid "Podcast"
-msgstr ""
+msgstr "Подкаст"
+
+# empty strings 30019
+#~ msgctxt "#30020"
+#~ msgid "Allow 3D"
+#~ msgstr "Разрешить 3D"
+
+#~ msgctxt "#30540"
+#~ msgid "Play with..."
+#~ msgstr "Воспроизвести с помощью..."
+
+#~ msgctxt "#30587"
+#~ msgid "Add to My Subscriptions filter"
+#~ msgstr "Добавить в фильтр моих подписок"
+
+#~ msgctxt "#30588"
+#~ msgid "Remove from My Subscriptions filter"
+#~ msgstr "Удалить из фильтра моих подписок"
+
+#~ msgctxt "#30589"
+#~ msgid "Added to My Subscriptions filter"
+#~ msgstr "Добавлен в фильтр Мои подписки"
+
+#~ msgctxt "#30590"
+#~ msgid "Removed from My Subscriptions filter"
+#~ msgstr "Убран из фильтра Мои подписки"
+
+#~ msgctxt "#30592"
+#~ msgid "Medium (16:9)"
+#~ msgstr "Средний (16:9)"
+
+#~ msgctxt "#30593"
+#~ msgid "High (4:3)"
+#~ msgstr "Большой (4:3)"
+
+#~ msgctxt "#30597"
+#~ msgid "Updated: %s"
+#~ msgstr "Обновлено: %s"
+
+#~ msgctxt "#30669"
+#~ msgid "Mark unwatched"
+#~ msgstr "Отметить как не просмотренное"
+
+#~ msgctxt "#30670"
+#~ msgid "Mark watched"
+#~ msgstr "Отметить как просмотренное"
+
+#~ msgctxt "#30674"
+#~ msgid "Reset resume point"
+#~ msgstr "Сброс точки возобновления"
+
+#~ msgctxt "#30713"
+#~ msgid "Added to Watch Later"
+#~ msgstr "Добавлено в список \"Смотреть позже\""
+
+#~ msgctxt "#30714"
+#~ msgid "Added to playlist"
+#~ msgstr "Добавлен в плейлист"
+
+#~ msgctxt "#30715"
+#~ msgid "Removed from playlist"
+#~ msgstr "Убран из плейлиста"
+
+#~ msgctxt "#30718"
+#~ msgid "Rating removed"
+#~ msgstr "Оценка убрана"
+
+#~ msgctxt "#30545"
+#~ msgid "No further links found."
+#~ msgstr "Ссылки не найдены."
+
+#~ msgctxt "#30549"
+#~ msgid "No videos streams found"
+#~ msgstr "Видеопотоки не найдены"
+
+#~ msgctxt "#30106"
+#~ msgid "Next Page (%d)"
+#~ msgstr "Следующая страница (%d)"
 
 #~ msgctxt "#30585"
 #~ msgid "Filtered channel list (comma delimited)"

@@ -2,7 +2,7 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2018 plugin.video.youtube
+    Copyright (C) 2016-2025 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
@@ -10,14 +10,13 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+from time import strftime, gmtime
 from datetime import date, datetime, time as dt_time, timedelta
 from importlib import import_module
 from re import compile as re_compile
 from sys import modules
-from threading import Condition, Lock
 
 from ..exceptions import KodionException
-from ..logger import Logger
 
 
 try:
@@ -46,9 +45,11 @@ __RE_MATCH_ABBREVIATED__ = re_compile(
 )
 
 __INTERNAL_CONSTANTS__ = {
-    'epoch_dt': (
-        datetime.fromtimestamp(0, tz=timezone.utc) if timezone
-        else datetime.fromtimestamp(0)
+    'epoch_dt': datetime.fromtimestamp(0),
+    'epoch_dt_utc': (
+        datetime.fromtimestamp(0, tz=timezone.utc)
+        if timezone else
+        None
     ),
     'local_offset': None,
     'Jan': 1,
@@ -72,7 +73,7 @@ now = datetime.now
 fromtimestamp = datetime.fromtimestamp
 
 
-def parse(datetime_string):
+def parse_to_dt(datetime_string):
     if not datetime_string:
         return None
 
@@ -141,7 +142,7 @@ def parse(datetime_string):
             match['tzinfo'] = timezone.utc
         return datetime(**match)
 
-    raise KodionException('Could not parse |{datetime}| as ISO 8601'
+    raise KodionException('Could not parse {datetime!r} as ISO 8601'
                           .format(datetime=datetime_string))
 
 
@@ -176,7 +177,7 @@ def utc_to_local(dt):
     return dt + offset
 
 
-def datetime_to_since(context, dt, local=True):
+def datetime_to_since(context, dt, local=True, as_seconds=False):
     if timezone:
         _now = now(tz=timezone.utc)
         if local:
@@ -185,12 +186,15 @@ def datetime_to_since(context, dt, local=True):
         _now = now() if local else datetime.utcnow()
 
     diff = _now - dt
+    seconds = diff.total_seconds()
+    if as_seconds:
+        return seconds
+
     yesterday = _now - timedelta(days=1)
     yyesterday = _now - timedelta(days=2)
     use_yesterday = (_now - yesterday).total_seconds() > 10800
     today = _now.date()
     tomorrow = today + timedelta(days=1)
-    seconds = diff.total_seconds()
 
     if seconds > 0:
         if seconds < 60:
@@ -238,7 +242,13 @@ def datetime_to_since(context, dt, local=True):
     return ' '.join((context.format_date_short(dt), context.format_time(dt)))
 
 
-def strptime(datetime_str, fmt=None):
+# Python strptime bug workaround
+# https://github.com/python/cpython/issues/71587
+if '_strptime' not in modules:
+    modules['_strptime'] = import_module('_strptime')
+
+
+def strptime(datetime_str, fmt=None, _strptime=modules['_strptime']):
     if fmt is None:
         fmt = '%Y-%m-%d%H%M%S'
 
@@ -277,39 +287,23 @@ def strptime(datetime_str, fmt=None):
         else:
             datetime_str = time_part
 
-    try:
-        return datetime.strptime(datetime_str, fmt)
-    except TypeError:
-        if '_strptime' not in modules or strptime.reloading.locked():
-            if strptime.reloaded.acquire(False):
-                _strptime = import_module('_strptime')
-                modules['_strptime'] = _strptime
-                Logger.log_error('Python strptime bug workaround'
-                                 ' - https://github.com/python/cpython/issues/71587')
-                strptime.reloaded.notify_all()
-                strptime.reloaded.release()
-            else:
-                strptime.reloaded.acquire()
-                while '_strptime' not in modules:
-                    strptime.reloaded.wait()
-                _strptime = modules['_strptime']
-                strptime.reloaded.release()
-        else:
-            _strptime = modules['_strptime']
-
-        if timezone:
-            return _strptime._strptime_datetime(datetime, datetime_str, fmt)
-        return datetime(*(_strptime._strptime(datetime_str, fmt)[0][0:6]))
-
-
-strptime.reloading = Lock()
-strptime.reloaded = Condition(lock=strptime.reloading)
+    if timezone:
+        return _strptime._strptime_datetime(datetime, datetime_str, fmt)
+    return datetime(*(_strptime._strptime(datetime_str, fmt)[0][0:6]))
 
 
 def since_epoch(dt_object=None):
     if dt_object is None:
         dt_object = now(tz=timezone.utc) if timezone else datetime.utcnow()
-    return (dt_object - __INTERNAL_CONSTANTS__['epoch_dt']).total_seconds()
+    if dt_object.tzinfo:
+        if timezone:
+            epoch = __INTERNAL_CONSTANTS__['epoch_dt_utc']
+        else:
+            dt_object = dt_object.replace(tzinfo=None)
+            epoch = __INTERNAL_CONSTANTS__['epoch_dt']
+    else:
+        epoch = __INTERNAL_CONSTANTS__['epoch_dt']
+    return (dt_object - epoch).total_seconds()
 
 
 def yt_datetime_offset(**kwargs):
@@ -319,3 +313,33 @@ def yt_datetime_offset(**kwargs):
         _now = datetime.utcnow()
 
     return (_now - timedelta(**kwargs)).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def imf_fixdate(seconds,
+                _days=(
+                        'Mon',
+                        'Tue',
+                        'Wed',
+                        'Thu',
+                        'Fri',
+                        'Sat',
+                        'Sun',
+                ),
+                _months=(
+                        None,
+                        'Jan',
+                        'Feb',
+                        'Mar',
+                        'Apr',
+                        'May',
+                        'Jun',
+                        'Jul',
+                        'Aug',
+                        'Sep',
+                        'Oct',
+                        'Nov',
+                        'Dec',
+                )):
+    _time = gmtime(seconds)
+    out = strftime('{weekday}, %d {month} %Y %H:%M:%S GMT', _time)
+    return out.format(weekday=_days[_time.tm_wday], month=_months[_time.tm_mon])
