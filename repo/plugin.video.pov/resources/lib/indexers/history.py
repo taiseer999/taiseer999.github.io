@@ -22,16 +22,16 @@ mode_dict, clear_history_list = {
 	'imdb_keyword_tvshow': ('imdb_keyword_tvshow_queries', {'mode': 'get_search_term', 'search_type': 'imdb_keyword', 'media_type': 'tvshow'}),
 	'easynews_video': ('easynews_video_queries', {'mode': 'get_search_term', 'search_type': 'easynews_video'}),
 	'tb_usenet': ('torbox_usenet_queries', {'mode': 'get_search_term', 'search_type': 'tb_usenet'})
-}, [
-	('movie_queries', four_insert_string % (delete_str, mov_str, search_str, hist_str)),
-	('tvshow_queries', four_insert_string % (delete_str, tv_str, search_str, hist_str)),
-	('people_queries', four_insert_string % (delete_str, peop_str, search_str, hist_str)),
-	('tmdb_collections_queries', five_insert_string % (delete_str, tmdb_str, coll_str, search_str, hist_str)),
-	('imdb_keyword_movie_queries', five_insert_string % (delete_str, imdb_str, key_str, mov_str, hist_str)),
-	('imdb_keyword_tvshow_queries', five_insert_string % (delete_str, imdb_str, key_str, tv_str, hist_str)),
-	('easynews_video_queries', four_insert_string % (delete_str, easy_str, search_str, hist_str)),
-	('torbox_usenet_queries', four_insert_string % (delete_str, 'TorBox', search_str, hist_str))
-]
+}, {
+	'movie_queries': four_insert_string % (delete_str, mov_str, search_str, hist_str),
+	'tvshow_queries': four_insert_string % (delete_str, tv_str, search_str, hist_str),
+	'people_queries': four_insert_string % (delete_str, peop_str, search_str, hist_str),
+	'tmdb_collections_queries': five_insert_string % (delete_str, tmdb_str, coll_str, search_str, hist_str),
+	'imdb_keyword_movie_queries': five_insert_string % (delete_str, imdb_str, key_str, mov_str, hist_str),
+	'imdb_keyword_tvshow_queries': five_insert_string % (delete_str, imdb_str, key_str, tv_str, hist_str),
+	'easynews_video_queries': four_insert_string % (delete_str, easy_str, search_str, hist_str),
+	'torbox_usenet_queries': four_insert_string % (delete_str, 'TorBox', search_str, hist_str)
+}
 
 def search_history(params):
 	def _builder():
@@ -110,9 +110,9 @@ def remove_from_search_history(params):
 
 def clear_search_history():
 	try:
-		list_items = [{'line1': item[1], 'icon': search_icon} for item in clear_history_list]
-		kwargs = {'items': json.dumps(list_items), 'heading': hist_str, 'enumerate': 'false', 'multi_choice': 'false', 'multi_line': 'false'}
-		setting = kodi_utils.select_dialog([item[0] for item in clear_history_list], **kwargs)
+		list_items = [{'line1': item, 'icon': search_icon} for item in clear_history_list.values()]
+		kwargs = {'items': json.dumps(list_items), 'heading': hist_str}
+		setting = kodi_utils.select_dialog([item for item in clear_history_list.keys()], **kwargs)
 		if setting is None: return
 		main_cache.set(setting, '', expiration=timedelta(days=365))
 		kodi_utils.notification(32576)

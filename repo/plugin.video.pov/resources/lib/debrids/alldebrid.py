@@ -36,7 +36,7 @@ class Indexer(Debrid):
 		kodi_utils.set_view_mode('view.premium')
 
 	def torrent_cloud(self, items):
-		items.sort(key=lambda k: k['id'], reverse=True)
+		items.sort(key=lambda k: (k['uploadDate'], k['id']), reverse=True)
 		for count, item in enumerate(items, 1):
 			try:
 				cm = []

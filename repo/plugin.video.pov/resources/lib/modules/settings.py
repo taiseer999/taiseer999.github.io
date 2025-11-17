@@ -169,8 +169,8 @@ def easynews_active():
 	return easynews_status
 
 def watched_indicators():
-	if get_setting('trakt_user') == '': return 0
-	return int(get_setting('watched_indicators','0'))
+	if get_setting('trakt_user') == '' and get_setting('mdblist_user') == '': return 0
+	return int(get_setting('watched_indicators', '0'))
 
 def widget_hide_watched():
 	return get_setting('widget_hide_watched') == 'true'

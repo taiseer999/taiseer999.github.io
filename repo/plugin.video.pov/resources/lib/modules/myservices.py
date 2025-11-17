@@ -11,21 +11,41 @@ notification, confirm_dialog = kodi_utils.notification, kodi_utils.confirm_dialo
 user_agent = 'POV/%s' % kodi_utils.get_addoninfo('version')
 qr_str = 'https://api.qrserver.com/v1/create-qr-code/?size=256x256&qzone=1%s'
 meta_keys = 'title year poster fanart clearlogo tmdblogo'
-code_str, nav2_str = 'PIN CODE: [B]%s[/B]', 'LOCATION: [B]%s[/B]'
-await_str = 'REMAINING: [B]%02d:%02d[/B]'
+code_str, nav2_str, await_str = 'PIN CODE: [B]%s[/B]', 'LOCATION: [B]%s[/B]', 'REMAINING: [B]%02d:%02d[/B]'
+auth_str, noauth_str = 'Authorized: Select to Remove', 'Unauthorized: Select to Add'
 timeout = 10.05
+
+def watch_indicators(function):
+	def wrapper(*args, **kwargs):
+		text = (
+			'At successful activation, watched status and resume progress will be set to [B]%s[/B]. '
+			'To change settings after activation, use the addon settings category:[CR]'
+			'[B]Features/Watched Indicators/Watched Status Provider[/B]'
+		) % args[0].__class__.__name__
+		if function(*args, **kwargs): kodi_utils.ok_dialog(text=text)
+	return wrapper
 
 def _make_progress_dialog(**kwargs):
 	progress_dialog = create_window(('windows.sources', 'ProgressMedia'), 'progress_media.xml', **kwargs)
 	Thread(target=progress_dialog.run).start()
 	return progress_dialog
 
-def authorize(service):
-	try: success = {
+def authorize():
+	def _builder():
+		for k, v in services.items():
+			item = kodi_utils.make_listitem()
+			item.setLabel('[B]%s[/B]' % k.upper())
+			item.setLabel2(auth_str if v().token else noauth_str)
+			item.setArt({'icon': media_path + v.icon})
+			yield(item)
+	media_path, services = kodi_utils.media_path(), {
 		'realdebrid': RealDebrid, 'premiumize': Premiumize, 'alldebrid': AllDebrid,
 		'torbox': TorBox, 'offcloud': Offcloud, 'easydebrid': EasyDebrid,
 		'trakt': Trakt, 'mdblist': MDBList, 'tmdblist': TMDbList
-	}[service]().set_auth()
+	}
+	service = kodi_utils.dialog.select('My Services', list(_builder()), useDetails=True)
+	if not service > -1: return
+	try: success = tuple(services.values())[service]().set_auth()
 	except Exception as e: kodi_utils.logger('myservices error', str(e))
 	else: return success
 	return notification(32574)
@@ -36,6 +56,7 @@ class RepeatTimer(Timer):
 			self.function(*self.args, **self.kwargs)
 
 class RealDebrid:
+	icon = 'realdebrid.png'
 	def __init__(self):
 		self.token = get_setting('rd.token')
 		self.client_id = get_setting('rd.client_id') or 'X245A4XAIBGVM'
@@ -102,6 +123,7 @@ class RealDebrid:
 		return True
 
 class Premiumize:
+	icon = 'premiumize.png'
 	def __init__(self):
 		self.token = get_setting('pm.token')
 		self.client_id = '663882072'
@@ -157,6 +179,7 @@ class Premiumize:
 		return True
 
 class AllDebrid:
+	icon = 'alldebrid.png'
 	def __init__(self):
 		self.token = get_setting('ad.token')
 
@@ -208,6 +231,7 @@ class AllDebrid:
 		return True
 
 class TorBox:
+	icon = 'torbox.png'
 	def __init__(self):
 		self.token = get_setting('tb.token')
 
@@ -261,12 +285,16 @@ class TorBox:
 		return True
 
 class Offcloud:
+	icon = 'offcloud.png'
+	def __init__(self):
+		self.token = get_setting('oc.token')
+
 	def base_url(self, path):
 		return 'https://offcloud.com/api/%s' % path
 
 	def set_auth(self):
 		cls_name = self.__class__.__name__
-		if get_setting('oc.token'):
+		if self.token:
 			if not confirm_dialog(): return
 			set_setting('oc.token', '')
 			set_setting('oc.account_id', '')
@@ -290,12 +318,16 @@ class Offcloud:
 		return True
 
 class EasyDebrid:
+	icon = 'easydebrid.png'
+	def __init__(self):
+		self.token = get_setting('ed.token')
+
 	def base_url(self, path):
 		return 'https://easydebrid.com/api/v1/%s' % path
 
 	def set_auth(self):
 		cls_name = self.__class__.__name__
-		if get_setting('ed.token'):
+		if self.token:
 			if not confirm_dialog(): return
 			set_setting('ed.token', '')
 			set_setting('ed.account_id', '')
@@ -313,6 +345,7 @@ class EasyDebrid:
 		return True
 
 class Trakt:
+	icon = 'trakt.png'
 	def __init__(self):
 		self.token = get_setting('trakt.token')
 		self.client_id = get_setting('trakt.client_id')
@@ -327,6 +360,7 @@ class Trakt:
 		data.update(response.json())
 		self.token = data['access_token']
 
+	@watch_indicators
 	def set_auth(self):
 		cls_name = self.__class__.__name__
 		if self.token:
@@ -384,15 +418,23 @@ class Trakt:
 		return True
 
 class MDBList:
+	icon = 'mdblist.png'
+	def __init__(self):
+		self.token = get_setting('mdblist.token')
+
 	def base_url(self, path):
 		return 'https://api.mdblist.com/%s' % path
 
+	@watch_indicators
 	def set_auth(self):
 		cls_name = self.__class__.__name__
-		if get_setting('mdblist.token'):
+		if self.token:
 			if not confirm_dialog(): return
 			set_setting('mdblist_user', '')
 			set_setting('mdblist.token', '')
+			set_setting('mdbl_indicators_active', 'false')
+			set_setting('watched_indicators', '0')
+			sleep(500)
 			clear_cache('mdblist', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
 
@@ -404,10 +446,15 @@ class MDBList:
 		user_id, username = result['user_id'], result['username']
 		set_setting('mdblist_user', str(username))
 		set_setting('mdblist.token', api_key)
+		set_setting('mdbl_indicators_active', 'true')
+		set_setting('watched_indicators', '2')
 		notification('Set %s Authorization' % cls_name)
+		sleep(500)
+		clear_cache('mdblist', silent=True)
 		return True
 
 class TMDbList:
+	icon = 'tmdb.png'
 	def __init__(self):
 		self.read = get_setting('tmdb_read_token')
 		self.token = get_setting('tmdb.token')

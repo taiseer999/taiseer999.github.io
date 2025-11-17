@@ -2,7 +2,9 @@ import json
 from datetime import datetime
 from threading import Thread
 from indexers import metadata
+from indexers.mdblist_api import mdbl_watched_unwatched, mdbl_progress
 from indexers.trakt_api import trakt_watched_unwatched, trakt_official_status, trakt_progress
+from caches.mdbl_cache import clear_mdbl_collection_watchlist_data
 from caches.trakt_cache import clear_trakt_collection_watchlist_data
 from modules import kodi_utils, settings, utils
 # logger = kodi_utils.logger
@@ -13,10 +15,10 @@ progressDialogBG, execJSONRPC = kodi_utils.progressDialogBG, kodi_utils.execJSON
 get_datetime, adjust_premiered_date = utils.get_datetime, utils.adjust_premiered_date
 sort_for_article, make_thread_list = utils.sort_for_article, utils.make_thread_list
 clean_file_name, paginate_list = utils.clean_file_name, utils.paginate_list
-WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db
-indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB}
+WATCHED_DB, TRAKT_DB, MDBL_DB = kodi_utils.watched_db, kodi_utils.trakt_db, kodi_utils.mdbl_db
+indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB, 2: MDBL_DB}
 
-def connect_database(database_file):
+def _database_connect(database_file):
 	return kodi_utils.database_connect(database_file, timeout=timeout, isolation_level=None)
 
 def set_PRAGMAS(dbcon):
@@ -57,7 +59,7 @@ def detect_bookmark(bookmarks, tmdb_id, season='', episode=''):
 
 def get_bookmarks(watched_indicators, media_type):
 	try:
-		dbcon = connect_database(get_database(watched_indicators))
+		dbcon = _database_connect(get_database(watched_indicators))
 		dbcur = set_PRAGMAS(dbcon)
 		result = dbcur.execute("""SELECT media_id, resume_point, curr_time, season, episode, resume_id FROM progress WHERE db_type = ?""", (media_type,))
 		return result.fetchall()
@@ -68,19 +70,21 @@ def set_bookmark(media_type, tmdb_id, curr_time, total_time, title, season='', e
 		adjusted_current_time = float(curr_time) - 5
 		resume_point = round(adjusted_current_time/float(total_time)*100, 1)
 		watched_indicators = settings.watched_indicators()
-		if watched_indicators == 1: trakt_progress('set_progress', media_type, tmdb_id, resume_point, season, episode, refresh_trakt=True)
+		if watched_indicators == 1:
+			trakt_progress('set_progress', media_type, tmdb_id, resume_point, season, episode, refresh_trakt=True)
+		elif watched_indicators == 2:
+			mdbl_progress('set_progress', media_type, tmdb_id, resume_point, season, episode, refresh_mdb=True)
 		else:
 			erase_bookmark(media_type, tmdb_id, season, episode)
 			data_base = get_database(watched_indicators)
 			last_played = get_last_played_value(data_base)
-			dbcon = connect_database(data_base)
+			dbcon = _database_connect(data_base)
 			dbcur = set_PRAGMAS(dbcon)
 			dbcur.execute("""INSERT OR REPLACE INTO progress VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
 						(media_type, tmdb_id, season, episode, str(resume_point), str(curr_time), last_played, 0, title))
 		if settings.sync_kodi_library_watchstatus():
-#			from modules.kodi_library import set_bookmark_kodi_library
 			set_bookmark_kodi_library(media_type, tmdb_id, curr_time, total_time, season, episode)
-		refresh_container()
+		kodi_utils.container_refresh()
 	except: pass
 
 def erase_bookmark(media_type, tmdb_id, season='', episode='', refresh='false'):
@@ -90,11 +94,14 @@ def erase_bookmark(media_type, tmdb_id, season='', episode='', refresh='false'):
 		if media_type == 'episode': season, episode = int(season), int(episode)
 		try: resume_id = detect_bookmark(bookmarks, tmdb_id, season, episode)[2]
 		except: return
-		if watched_indicators == 1: trakt_progress('clear_progress', media_type, tmdb_id, 0, season, episode, resume_id)
-		dbcon = connect_database(get_database(watched_indicators))
+		if watched_indicators == 1:
+			trakt_progress('clear_progress', media_type, tmdb_id, 0, season, episode, resume_id)
+		elif watched_indicators == 2:
+			mdbl_progress('clear_progress', media_type, tmdb_id, 0, season, episode, resume_id)
+		dbcon = _database_connect(get_database(watched_indicators))
 		dbcur = set_PRAGMAS(dbcon)
 		dbcur.execute("""DELETE FROM progress where db_type = ? and media_id = ? and season = ? and episode = ?""", (media_type, tmdb_id, season, episode))
-		refresh_container(refresh == 'true')
+		if refresh == 'true': kodi_utils.container_refresh()
 	except: pass
 
 def batch_erase_bookmark(watched_indicators, insert_list, action):
@@ -115,7 +122,21 @@ def batch_erase_bookmark(watched_indicators, insert_list, action):
 				except: continue
 				process_list_append(('clear_progress', i[0], i[1], 0, i[2], i[3], resume_id))
 			if process_list: threads = list(make_thread_list(_process, process_list, Thread))
-		dbcon = connect_database(get_database(watched_indicators))
+		elif watched_indicators == 2:
+			def _process(arg):
+				try: mdbl_progress(*arg)
+				except: pass
+			process_list = []
+			process_list_append = process_list.append
+			media_type = insert_list[0][0]
+			tmdb_id = insert_list[0][1]
+			bookmarks = get_bookmarks(watched_indicators, media_type)
+			for i in insert_list:
+				try: resume_point, curr_time, resume_id = detect_bookmark(bookmarks, tmdb_id, i[2], i[3])
+				except: continue
+				process_list_append(('clear_progress', i[0], i[1], 0, i[2], i[3], resume_id))
+			if process_list: threads = list(make_thread_list(_process, process_list, Thread))
+		dbcon = _database_connect(get_database(watched_indicators))
 		dbcur = set_PRAGMAS(dbcon)
 		dbcur.executemany("""DELETE FROM progress where db_type = ? and media_id = ? and season = ? and episode = ?""", modified_list)
 	except: pass
@@ -123,7 +144,7 @@ def batch_erase_bookmark(watched_indicators, insert_list, action):
 def get_watched_info_movie(watched_indicators):
 	info = []
 	try:
-		dbcon = connect_database(get_database(watched_indicators))
+		dbcon = _database_connect(get_database(watched_indicators))
 		dbcur = set_PRAGMAS(dbcon)
 		dbcur.execute("""SELECT media_id, title, last_played FROM watched_status WHERE db_type = ?""", ('movie',))
 		info = dbcur.fetchall()
@@ -133,7 +154,7 @@ def get_watched_info_movie(watched_indicators):
 def get_watched_info_tv(watched_indicators):
 	info = []
 	try:
-		dbcon = connect_database(get_database(watched_indicators))
+		dbcon = _database_connect(get_database(watched_indicators))
 		dbcur = set_PRAGMAS(dbcon)
 		dbcur.execute("""SELECT media_id, season, episode, title, last_played FROM watched_status WHERE db_type = ?""", ('episode',))
 		info = dbcur.fetchall()
@@ -144,7 +165,7 @@ def get_in_progress_movies(dummy_arg, page_no, letter):
 	watched_indicators = settings.watched_indicators()
 	paginate = settings.paginate()
 	limit = settings.page_limit()
-	dbcon = connect_database(get_database(watched_indicators))
+	dbcon = _database_connect(get_database(watched_indicators))
 	dbcur = set_PRAGMAS(dbcon)
 	dbcur.execute("""SELECT media_id, last_played, title FROM progress WHERE db_type = ?""", ('movie',))
 	data = dbcur.fetchall()
@@ -182,7 +203,7 @@ def get_in_progress_tvshows(dummy_arg, page_no, letter, paginate=None):
 
 def get_in_progress_episodes():
 	watched_indicators = settings.watched_indicators()
-	dbcon = connect_database(get_database(watched_indicators))
+	dbcon = _database_connect(get_database(watched_indicators))
 	dbcur = set_PRAGMAS(dbcon)
 	dbcur.execute("""SELECT media_id, season, episode, resume_point, last_played, title FROM progress WHERE db_type = ?""", ('episode',))
 	data = dbcur.fetchall()
@@ -252,31 +273,29 @@ def get_watched_status_episode(watched_info, tmdb_id, season='', episode=''):
 	except: return 0, 4
 
 def mark_as_watched_unwatched_movie(params):
-	action, media_type = params.get('action'), 'movie'
-	refresh, from_playback = params.get('refresh', 'true') == 'true', params.get('from_playback', 'false') == 'true'
+	media_type, action = 'movie', params.get('action')
 	tmdb_id, title, year = params.get('tmdb_id'), params.get('title'), params.get('year')
+	refresh, from_playback = params.get('refresh', 'true') == 'true', params.get('from_playback', 'false') == 'true'
 	watched_indicators = settings.watched_indicators()
 	if watched_indicators == 1:
-		if from_playback == 'true' and trakt_official_status(media_type) is False: skip_trakt_mark = True
-		else: skip_trakt_mark = False
-		if skip_trakt_mark: kodi_utils.sleep(3000)
-		elif not trakt_watched_unwatched(action, 'movies', tmdb_id): return kodi_utils.notification(32574)
+		if from_playback and trakt_official_status(media_type) is False: kodi_utils.sleep(3000)
+		elif not trakt_watched_unwatched(action, 'movies', tmdb_id):
+			return kodi_utils.notification(32574)
 		clear_trakt_collection_watchlist_data('watchlist', media_type)
+	elif watched_indicators == 2:
+		if not mdbl_watched_unwatched(action, 'movies', tmdb_id): return kodi_utils.notification(32574)
+		clear_mdbl_collection_watchlist_data('watchlist')
 	mark_as_watched_unwatched(watched_indicators, media_type, tmdb_id, action, title=title)
 	if settings.sync_kodi_library_watchstatus():
-#		from modules.kodi_library import mark_as_watched_unwatched_kodi_library
 		mark_as_watched_unwatched_kodi_library(media_type, action, title, year)
-	refresh_container(refresh)
+	if refresh: kodi_utils.container_refresh()
 
 def mark_as_watched_unwatched_tvshow(params):
-	action, tmdb_id = params.get('action'), params.get('tmdb_id')
+	tmdb_id, action = params.get('tmdb_id'), params.get('action')
 	try: tvdb_id = int(params.get('tvdb_id', '0'))
 	except: tvdb_id = 0
 	watched_indicators = settings.watched_indicators()
 	kodi_utils.progressDialogBG.create(ls(32577), '')
-	if watched_indicators == 1:
-		if not trakt_watched_unwatched(action, 'shows', tmdb_id, tvdb_id): return kodi_utils.notification(32574)
-		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
 	data_base = get_database(watched_indicators)
 	title, year = params.get('title', ''), params.get('year', '')
 	meta_user_info = settings.metadata_user_info()
@@ -300,24 +319,34 @@ def mark_as_watched_unwatched_tvshow(params):
 			episode_date, premiered = adjust_premiered_date(ep['premiered'], adjust_hours)
 			if not episode_date or current_date < episode_date: continue
 			insert_append(make_batch_insert(action, 'episode', tmdb_id, season_number, ep_number, last_played, title))
+	if watched_indicators == 1:
+		if not trakt_watched_unwatched(action, 'shows', tmdb_id, tvdb_id): return kodi_utils.notification(32574)
+		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
+	elif watched_indicators == 2:
+		data = []
+		episodes = {}
+		for i in insert_list: episodes[i[2]] = episodes.get(i[2], []).append({'number': i[3]})
+		for k, v in episodes.items():
+			if action == 'mark_as_watched':
+				for i in v: i['watched_at'] = last_played
+			data += [{'number': k, 'episodes': v}]
+		if not mdbl_watched_unwatched(action, 'shows', tmdb_id, tvdb_id, data): return kodi_utils.notification(32574)
+		clear_mdbl_collection_watchlist_data('watchlist')
 	batch_mark_as_watched_unwatched(watched_indicators, insert_list, action)
 	kodi_utils.progressDialogBG.close()
 	if settings.sync_kodi_library_watchstatus(): batch_mark_kodi_library(action, insert_list, title, year)
-	refresh_container()
+	kodi_utils.container_refresh()
 
 def mark_as_watched_unwatched_season(params):
-	season = int(params.get('season'))
+	season, action = int(params.get('season')), params.get('action')
 	if season == 0: return kodi_utils.notification(32575)
-	action, title, year, tmdb_id = params.get('action'), params.get('title'), params.get('year'), params.get('tmdb_id')
 	try: tvdb_id = int(params.get('tvdb_id', '0'))
 	except: tvdb_id = 0
+	tmdb_id, title, year = params.get('tmdb_id'), params.get('title'), params.get('year')
 	watched_indicators = settings.watched_indicators()
 	insert_list = []
 	insert_append = insert_list.append
 	kodi_utils.progressDialogBG.create(ls(32577), '')
-	if watched_indicators == 1:
-		if not trakt_watched_unwatched(action, 'season', tmdb_id, tvdb_id, season): return kodi_utils.notification(32574)
-		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
 	data_base = get_database(watched_indicators)
 	meta_user_info = settings.metadata_user_info()
 	adjust_hours = settings.date_offset()
@@ -333,37 +362,49 @@ def mark_as_watched_unwatched_season(params):
 		if not episode_date or current_date < episode_date: continue
 		kodi_utils.progressDialogBG.update(int(float(count) / float(len(ep_data)) * 100), ls(32577), '%s' % display)
 		insert_append(make_batch_insert(action, 'episode', tmdb_id, season_number, ep_number, last_played, title))
+	if watched_indicators == 1:
+		if not trakt_watched_unwatched(action, 'season', tmdb_id, tvdb_id, season): return kodi_utils.notification(32574)
+		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
+	elif watched_indicators == 2:
+		episodes = [{'number': i[3]} for i in insert_list]
+		if action == 'mark_as_watched':
+			for i in episodes: i['watched_at'] = last_played
+		data = [{'number': season, 'episodes': episodes}]
+		if not mdbl_watched_unwatched(action, 'season', tmdb_id, tvdb_id, data): return kodi_utils.notification(32574)
+		clear_mdbl_collection_watchlist_data('watchlist')
 	batch_mark_as_watched_unwatched(watched_indicators, insert_list, action)
 	kodi_utils.progressDialogBG.close()
 	if settings.sync_kodi_library_watchstatus(): batch_mark_kodi_library(action, insert_list, title, year)
-	refresh_container()
+	kodi_utils.container_refresh()
 
 def mark_as_watched_unwatched_episode(params):
-	action, media_type = params.get('action'), 'episode'
-	refresh, from_playback = params.get('refresh', 'true') == 'true', params.get('from_playback', 'false') == 'true'
-	tmdb_id = params.get('tmdb_id')
+	season, episode = int(params.get('season')), int(params.get('episode'))
+	if season == 0: return kodi_utils.notification(32575)
+	media_type, action = 'episode', params.get('action')
 	try: tvdb_id = int(params.get('tvdb_id', '0'))
 	except: tvdb_id = 0
-	season, episode, title, year = int(params.get('season')), int(params.get('episode')), params.get('title'), params.get('year')
+	tmdb_id, title, year = params.get('tmdb_id'), params.get('title'), params.get('year')
+	refresh, from_playback = params.get('refresh', 'true') == 'true', params.get('from_playback', 'false') == 'true'
 	watched_indicators = settings.watched_indicators()
-	if season == 0: kodi_utils.notification(32575); return
 	if watched_indicators == 1:
-		if from_playback == 'true' and trakt_official_status(media_type) is False: skip_trakt_mark = True
-		else: skip_trakt_mark = False
-		if skip_trakt_mark: kodi_utils.sleep(3000)
-		elif not trakt_watched_unwatched(action, media_type, tmdb_id, tvdb_id, season, episode): return kodi_utils.notification(32574)
+		if from_playback and trakt_official_status(media_type) is False: kodi_utils.sleep(3000)
+		elif not trakt_watched_unwatched(action, media_type, tmdb_id, tvdb_id, season, episode):
+			return kodi_utils.notification(32574)
 		clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
+	elif watched_indicators == 2:
+		if not mdbl_watched_unwatched(action, media_type, tmdb_id, tvdb_id, None, season, episode):
+			return kodi_utils.notification(32574)
+		clear_mdbl_collection_watchlist_data('watchlist')
 	mark_as_watched_unwatched(watched_indicators, media_type, tmdb_id, action, season, episode, title)
 	if settings.sync_kodi_library_watchstatus():
-#		from modules.kodi_library import mark_as_watched_unwatched_kodi_library
 		mark_as_watched_unwatched_kodi_library(media_type, action, title, year, season, episode)
-	refresh_container(refresh)
+	if refresh: kodi_utils.container_refresh()
 
 def mark_as_watched_unwatched(watched_indicators, media_type='', tmdb_id='', action='', season='', episode='', title=''):
 	try:
 		data_base = get_database(watched_indicators)
 		last_played = get_last_played_value(data_base)
-		dbcon = connect_database(data_base)
+		dbcon = _database_connect(data_base)
 		dbcur = set_PRAGMAS(dbcon)
 		if action == 'mark_as_watched':
 			dbcur.execute("""INSERT OR IGNORE INTO watched_status VALUES (?, ?, ?, ?, ?, ?)""", (media_type, tmdb_id, season, episode, last_played, title))
@@ -374,7 +415,7 @@ def mark_as_watched_unwatched(watched_indicators, media_type='', tmdb_id='', act
 
 def batch_mark_as_watched_unwatched(watched_indicators, insert_list, action):
 	try:
-		dbcon = connect_database(get_database(watched_indicators))
+		dbcon = _database_connect(get_database(watched_indicators))
 		dbcur = set_PRAGMAS(dbcon)
 		if action == 'mark_as_watched':
 			dbcur.executemany("""INSERT OR IGNORE INTO watched_status VALUES (?, ?, ?, ?, ?, ?)""", insert_list)
@@ -385,6 +426,7 @@ def batch_mark_as_watched_unwatched(watched_indicators, insert_list, action):
 
 def get_last_played_value(database_type):
 	if database_type == WATCHED_DB: return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	elif database_type == MDBL_DB: return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 	else: return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
 def make_batch_insert(action, media_type, tmdb_id, season, episode, last_played, title):
@@ -392,17 +434,13 @@ def make_batch_insert(action, media_type, tmdb_id, season, episode, last_played,
 	else: return (media_type, tmdb_id, season, episode)
 
 def batch_mark_kodi_library(action, insert_list, title, year):
-#	from modules.kodi_library import get_library_video, batch_mark_episodes_as_watched_unwatched_kodi_library
 	in_library = get_library_video('tvshow', title, year)
 	if not in_library: return
 	if batch_mark_episodes_as_watched_unwatched_kodi_library(action, in_library, insert_list): kodi_utils.notification(32787)
 
-def refresh_container(refresh=True):
-	if refresh: kodi_utils.container_refresh()
-
 def clear_local_bookmarks():
 	try:
-		dbcon = connect_database(kodi_utils.get_video_database_path())
+		dbcon = _database_connect(kodi_utils.get_video_database_path())
 		dbcur = set_PRAGMAS(dbcon)
 		file_ids = dbcur.execute("""SELECT idFile FROM files WHERE strFilename LIKE 'plugin.video.pov%'""").fetchall()
 		for i in ('bookmark', 'streamdetails', 'files'):

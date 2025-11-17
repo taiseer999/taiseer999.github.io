@@ -18,7 +18,7 @@ fanart_empty = kodi_utils.get_addoninfo('fanart')
 poster_empty = kodi_utils.media_path('box_office.png')
 item_jump = kodi_utils.media_path('item_jump.png')
 item_next = kodi_utils.media_path('item_next.png')
-watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdbmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDB Lists Manager[/B]', ls(32200)
+watched_str, unwatched_str, traktmanager_str, tmdbmanager_str, mdblmanager_str = ls(32642), ls(32643), ls(32198), '[B]TMDB Lists Manager[/B]', ls(32200)
 favmanager_str, extras_str, options_str, recomm_str = ls(32197), ls(32645), ls(32646), '[B]%s...[/B]' % ls(32503)
 random_str, exit_str, browse_str = ls(32611), ls(32650), ls(32652)
 nextpage_str, switchjump_str, jumpto_str = ls(32799), ls(32784), ls(32964)
@@ -48,7 +48,7 @@ class TVShows:
 		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
 		if not self.exit_list_params: self.exit_list_params = get_infolabel('Container.FolderPath')
-		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
+		self.watched_title = ('POV', 'Trakt', 'MDBList')[self.watched_indicators]
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
 
 	def build_tvshow_content(self, _position, _id):
@@ -83,7 +83,7 @@ class TVShows:
 			recommended_params = build_url({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_recommendations', 'tmdb_id': tmdb_id})
 			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
 			tmdb_manager_params = build_url({'mode': 'tmdb_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
-			mdb_manager_params = build_url({'mode': 'mdb_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
+			mdbl_manager_params = build_url({'mode': 'mdbl_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
 			fav_manager_params = build_url({'mode': 'favourites_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'title': title})
 			cm_append((self.cm_sort['options'], options_str, run_plugin % options_params))
 			if self.open_extras:
@@ -93,7 +93,7 @@ class TVShows:
 				cm_append((self.cm_sort['extras'], extras_str, run_plugin % extras_params))
 			cm_append((self.cm_sort['trakt'], traktmanager_str, run_plugin % trakt_manager_params))
 			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
-			cm_append((self.cm_sort['mdblist'], mdbmanager_str, run_plugin % mdb_manager_params))
+			cm_append((self.cm_sort['mdblist'], mdblmanager_str, run_plugin % mdbl_manager_params))
 			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
 			if not playcount: cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % build_url({
 				'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_watched', 'year': year,

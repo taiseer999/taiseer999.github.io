@@ -41,11 +41,17 @@ def get_random_episode(tmdb_id, continual=False):
 	ep_name, plot = chosen_episode['title'], chosen_episode['plot']
 	try: premiered = adjust_premiered_date(chosen_episode['premiered'], adjust_hours)[1]
 	except: premiered = chosen_episode['premiered']
-	meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'episode': episode, 'premiered': premiered, 'ep_name': ep_name, 'plot': plot})
+	meta.update({
+		'media_type': 'episode', 'rootname': display_name, 'season': season, 'episode': episode,
+		'premiered': premiered, 'ep_name': ep_name, 'plot': plot
+	})
 	if continual: meta['random_continual'] = 'true'
 	else: meta['random'] = 'true'
-	url_params = {'mode': 'play_media', 'media_type': 'episode', 'autoplay': 'true', 'tmdb_id': meta['tmdb_id'], 'query': query,
-					'tvshowtitle': meta['rootname'], 'season': season, 'episode': episode, 'background': 'true', 'meta': json.dumps(meta)}
+	url_params = {
+		'mode': 'play_media', 'media_type': 'episode', 'autoplay': 'true', 'background': 'true',
+		'tmdb_id': meta['tmdb_id'], 'tvshowtitle': meta['rootname'], 'season': season, 'episode': episode,
+		'query': query, 'meta': json.dumps(meta)
+	}
 	return meta, url_params
 
 def nextep_playback_info(meta):
@@ -60,10 +66,14 @@ def nextep_playback_info(meta):
 		custom_title = meta_get('custom_title', None)
 		title = custom_title or meta_get('title')
 		display_name = '%s - %dx%.2d' % (title, int(season), int(episode))
-		meta.update({'media_type': 'episode', 'rootname': display_name, 'season': season, 'ep_name': ep_data['title'],
-					'episode': episode, 'premiered': airdate, 'plot': ep_data['plot']})
-		url_params = {'mode': 'play_media', 'media_type': 'episode', 'tmdb_id': tmdb_id, 'tvshowtitle': meta_get('rootname'), 'season': season,
-					'episode': episode, 'background': 'true'}
+		meta.update({
+			'media_type': 'episode', 'rootname': display_name, 'season': season, 'episode': episode,
+			'premiered': airdate, 'ep_name': ep_data['title'], 'plot': ep_data['plot']
+		})
+		url_params = {
+			'mode': 'play_media', 'media_type': 'episode', 'background': 'true',
+			'tmdb_id': tmdb_id, 'tvshowtitle': meta_get('rootname'), 'season': season, 'episode': episode
+		}
 		if custom_title: url_params['custom_title'] = custom_title
 		return url_params
 	meta_get = meta.get

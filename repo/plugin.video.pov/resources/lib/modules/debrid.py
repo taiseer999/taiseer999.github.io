@@ -12,7 +12,7 @@ from modules import kodi_utils
 
 ls, get_setting, notification = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.notification
 show_busy_dialog, hide_busy_dialog = kodi_utils.show_busy_dialog, kodi_utils.hide_busy_dialog
-confirm_dialog, select_dialog = kodi_utils.confirm_dialog, kodi_utils.select_dialog
+ok_dialog, confirm_dialog, select_dialog = kodi_utils.ok_dialog, kodi_utils.confirm_dialog, kodi_utils.select_dialog
 plswait_str, checking_debrid_str, remaining_debrid_str = ls(32577), ls(32578), ls(32579)
 
 debrid_list = (
@@ -51,10 +51,10 @@ def unchecked_magnet_status(params):
 	api = import_debrid(params['provider'])
 	result = api.parse_magnet_pack(params['url'], params['info_hash'])
 	hide_busy_dialog()
-	if result: notification('%s Cached' % params['provider'])
-	else: return notification('%s Not Cached' % params['provider'])
-	torrent_id = next((i['torrent_id'] for i in result if 'torrent_id' in i), '')
-	if torrent_id: api.delete_torrent(torrent_id)
+	if not result: return ok_dialog(text='%s Not Cached' % params['provider'], top_space=True)
+	torrent_id = next((i['torrent_id'] for i in result if 'torrent_id' in i), None)
+	if torrent_id: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
+	ok_dialog(text='%s Cached' % params['provider'], top_space=True)
 
 def manual_add_nzb_to_cloud(params):
 	params['provider'] = params['provider'].replace('Unchecked ', '').replace('Uncached ', '')
@@ -113,8 +113,10 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 	try:
 		extensions = supported_video_extensions()
 		extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
+		if source['debrid'] in ('Real-Debrid', 'AllDebrid'): args = source['url'], source['hash'], True
+		else: args = source['url'], source['hash']
 		api = import_debrid(source['debrid'])
-		files = api.parse_magnet_pack(source['url'], source['hash'])
+		files = api.parse_magnet_pack(*args)
 		selected_files = []
 		selected_files_append = selected_files.append
 		for i in files or selected_files:
@@ -135,12 +137,12 @@ def resolve_external_sources(source, store_to_cloud, title, season, episode):
 			if not store_to_cloud: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
 		return file_url
 	except Exception as e:
-		kodi_utils.logger('resolve_external_sources exception', f"{e}\n{source}")
+		kodi_utils.logger('resolve_external_sources exception', f"{e}\n{json.dumps(source, indent=2)}")
 		if files and torrent_id: Thread(target=api.delete_torrent, args=(torrent_id,)).start()
 
 def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, download=False):
-	show_busy_dialog()
 	debrid_provider = debrid_provider.replace('Unchecked ', '')
+	show_busy_dialog()
 	api = import_debrid(debrid_provider)
 	pack_choices = api.parse_magnet_pack(magnet_url, info_hash)
 	hide_busy_dialog()
@@ -153,7 +155,7 @@ def debrid_packs(debrid_provider, name, magnet_url, info_hash, highlight=None, d
 		'line2': '%s: %.2f GB' % (ls(32584), float(item['size'])/1073741824)
 	})
 	if download: return pack_choices
-	kwargs = {'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
+	kwargs = {'enumerate': 'true', 'multi_line': 'true'}
 	kwargs.update({'items': json.dumps(pack_choices), 'heading': name, 'highlight': highlight})
 	chosen_result = select_dialog(pack_choices, **kwargs)
 	if chosen_result is None: return
@@ -178,6 +180,18 @@ def mfn_check_cache(imdb, season, episode, collector):
 		files = results.json()['streams']
 		collector.extend(pattern.findall(file['url'])[-1] for file in files if '⚡' in file['name'] and 'url' in file)
 	except Exception as e: kodi_utils.logger('mfn error', str(e))
+
+def trz_check_cache(imdb, season, episode, collector):
+	if str(season).isdigit(): url = 'series/%s:%s:%s.json' % (imdb, season, episode)
+	else: url = 'movie/%s.json' % (imdb)
+	params = 'eyJzdG9yZXMiOlt7ImMiOiJhZCIsInQiOiJzdGF0aWNEZW1vQXBpa2V5UHJlbSJ9XSwiY2FjaGVkIjp0cnVlfQ=='
+	url = 'https://stremthru.elfhosted.com/stremio/torz/%s/stream/%s' % (params, url)
+	pattern = re.compile(r'\b\w{40}\b')
+	try:
+		results = requests.get(url, timeout=7.05)
+		files = results.json()['streams']
+		collector.extend(pattern.findall(file['url'])[-1] for file in files if '⚡' in file['name'] and 'url' in file)
+	except Exception as e: kodi_utils.logger('tor error', str(e))
 
 def tio_check_cache(imdb, season, episode, collector):
 	from fenom import client
@@ -231,12 +245,15 @@ class DebridCheck:
 
 	def external_check_cache(self, unchecked_hashes):
 		checked_hashes = []
-		for i in (threads := (
-			Thread(target=mfn_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes))
-			if self.debrid == 'ad' else
+		if self.debrid == 'ad': threads = (
+			Thread(target=mfn_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
+			Thread(target=trz_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes))
+		)
+		else: threads = (
 			Thread(target=tio_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
 			Thread(target=dmm_check_cache, args=(unchecked_hashes, self.imdb, checked_hashes))
-		)): i.start()
+		)
+		for i in threads: i.start()
 		for i in threads: i.join()
 		return list(set(checked_hashes))
 

@@ -53,7 +53,7 @@ def _make_items(modules):
 			line2 = total_str % (total, *values)
 			icon = module.data['poster'] or default_icon
 			item = list_item(line1, line2, offscreen=True)
-			item.setArt({'poster': icon})
+			item.setArt({'icon': icon})
 			yield item
 		except: pass
 

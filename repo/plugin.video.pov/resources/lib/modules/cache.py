@@ -7,6 +7,7 @@ watched_db = kodi_utils.watched_db
 favourites_db = kodi_utils.favourites_db
 views_db = kodi_utils.views_db
 trakt_db = kodi_utils.trakt_db
+mdbl_db = kodi_utils.mdbl_db
 maincache_db = kodi_utils.maincache_db
 metacache_db = kodi_utils.metacache_db
 debridcache_db = kodi_utils.debridcache_db
@@ -55,6 +56,14 @@ def check_databases():
 	dbcon.close()
 	dbcon = database_connect(trakt_db) # Trakt
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS trakt_data (id text unique, data text)""")
+	dbcon.execute("""CREATE TABLE IF NOT EXISTS watched_status
+					(db_type text, media_id text, season integer, episode integer, last_played text, title text, unique(db_type, media_id, season, episode))""")
+	dbcon.execute("""CREATE TABLE IF NOT EXISTS progress
+					(db_type text, media_id text, season integer, episode integer, resume_point text, curr_time text,
+					last_played text, resume_id integer, title text, unique(db_type, media_id, season, episode))""")
+	dbcon.close()
+	dbcon = database_connect(mdbl_db) # MDBList
+	dbcon.execute("""CREATE TABLE IF NOT EXISTS mdbl_data (id text unique, data text)""")
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS watched_status
 					(db_type text, media_id text, season integer, episode integer, last_played text, title text, unique(db_type, media_id, season, episode))""")
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS progress
@@ -148,7 +157,8 @@ def clear_cache(cache_type, silent=False):
 	elif cache_type == 'mdblist':
 		if not _confirm(): return
 		from indexers.mdblist_api import clear_mdbl_cache
-		success = clear_mdbl_cache()
+		from caches.mdbl_cache import clear_all_mdbl_cache_data
+		success = clear_mdbl_cache() and clear_all_mdbl_cache_data()
 	elif cache_type == 'tmdblist':
 		if not _confirm(): return
 		from indexers.tmdb_api import clear_tmdbl_cache
@@ -193,6 +203,7 @@ def clear_all_cache():
 		('meta', '%s %s' % (ls(32527), ls(32524))),
 		('list', '%s %s' % (ls(32815), ls(32524))),
 		('trakt', ls(32087)),
+		('mdblist', 'MDBList'),
 		('imdb', '%s %s' % (ls(32064), ls(32524))),
 		('internal_scrapers', '%s %s' % (ls(32096), ls(32524))),
 		('external_scrapers', '%s %s' % (ls(32118), ls(32524))),

@@ -66,8 +66,8 @@ class Router:
 				dialogs.trakt_manager_choice(params)
 			elif mode == 'tmdb_manager_choice':
 				dialogs.tmdb_manager_choice(params)
-			elif mode == 'mdb_manager_choice':
-				dialogs.mdb_manager_choice(params)
+			elif mode == 'mdbl_manager_choice':
+				dialogs.mdbl_manager_choice(params)
 			elif mode == 'folder_scraper_manager_choice':
 				dialogs.folder_scraper_manager_choice()
 			elif mode == 'set_language_filter_choice':
@@ -87,6 +87,10 @@ class Router:
 				from modules.utils import manual_function_import
 				function = manual_function_import('indexers.trakt_api', mode.split('.')[-1])
 				function(params)
+		elif 'mdblist.' in mode:
+			if 'mdbl_account_info' in mode:
+				from indexers.mdblist import mdbl_account_info
+				mdbl_account_info()
 		elif 'tmdb.' in mode:
 			if 'edit_tmdb_list' in mode:
 				from indexers.tmdb import edit_tmdb_list
@@ -283,7 +287,7 @@ class Router:
 			upload_logfile()
 		elif mode == 'myservices':
 			from modules.myservices import authorize
-			authorize(params['action'])
+			authorize()
 		elif 'refer_link' in mode:
 			from modules.myservices import refer_link
 			refer_link(params['query'])

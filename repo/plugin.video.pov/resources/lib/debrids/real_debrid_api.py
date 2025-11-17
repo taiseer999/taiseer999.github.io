@@ -127,7 +127,7 @@ class RealDebridAPI:
 			self.delete_torrent(torrent_id)
 			return ''
 
-	def parse_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash, errors=False):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
@@ -136,7 +136,7 @@ class RealDebridAPI:
 				kodi_utils.sleep(500)
 				torrent_info = self.torrent_info(torrent_id)
 				if key in torrent_info: break
-			else: raise Exception('uncached magnet:\n%s' % magnet_url)
+			else: raise Exception('real debrid uncached magnet')
 			torrent_files = (i for i in torrent_info['files'] if i['selected'])
 			torrent_files = [
 				{'link': link,
@@ -148,9 +148,8 @@ class RealDebridAPI:
 			]
 			return torrent_files
 		except Exception as e:
-			kodi_utils.logger('real debrid exception', str(e))
 			if torrent_id: self.delete_torrent(torrent_id)
-			return None
+			if errors: raise
 
 	def get_hosts(self):
 		string = 'pov_rd_valid_hosts'

@@ -81,7 +81,7 @@ class AllDebridAPI:
 		result = result['magnets'][0]
 		return result.get('id', '')
 
-	def parse_magnet_pack(self, magnet_url, info_hash):
+	def parse_magnet_pack(self, magnet_url, info_hash, errors=False):
 		from modules.source_utils import supported_video_extensions
 		try:
 			extensions = supported_video_extensions()
@@ -90,7 +90,7 @@ class AllDebridAPI:
 				kodi_utils.sleep(500)
 				transfer_info = self.list_transfer(torrent_id)
 				if transfer_info[key]: break
-			else: raise Exception('uncached magnet:\n%s' % magnet_url)
+			else: raise Exception('alldebrid uncached magnet')
 			torrent_files = [
 				{'link': item['link'],
 				 'size': item['size'],
@@ -101,9 +101,8 @@ class AllDebridAPI:
 			]
 			return torrent_files
 		except Exception as e:
-			kodi_utils.logger('alldebrid exception', str(e))
 			if torrent_id: self.delete_torrent(torrent_id)
-			return None
+			if errors: raise
 
 	def get_hosts(self):
 		string = 'pov_ad_valid_hosts'

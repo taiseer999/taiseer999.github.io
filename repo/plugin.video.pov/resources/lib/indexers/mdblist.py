@@ -17,7 +17,7 @@ item_jump = kodi_utils.media_path('item_jump.png')
 add2menu_str, add2folder_str, copy2str = ls(32730), ls(32731), '[B]Export to TMDB[/B]'
 nextpage_str, jump2_str = ls(32799), ls(32964)
 
-def search_mdb_lists(params):
+def search_mdbl_lists(params):
 	def _process():
 		for item in lists:
 			try:
@@ -40,7 +40,7 @@ def search_mdb_lists(params):
 			except: pass
 	page = params.get('new_page', '1')
 	search_title = params.get('search_title', None) or kodi_utils.dialog.input('POV')
-	if search_title: lists, pages = mdblist_api.mdb_searchlists(search_title), '1'
+	if search_title: lists, pages = mdblist_api.mdbl_searchlists(search_title), '1'
 	else: lists, pages = [], page
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
@@ -52,7 +52,7 @@ def search_mdb_lists(params):
 	kodi_utils.end_directory(__handle__)
 	kodi_utils.set_view_mode('view.main')
 
-def get_mdb_lists(params):
+def get_mdbl_lists(params):
 	def _process():
 		for item in lists:
 			try:
@@ -78,8 +78,8 @@ def get_mdb_lists(params):
 				yield (url, listitem, True)
 			except: pass
 	lists = []
-	lists += mdblist_api.mdb_userlists()
-	lists += mdblist_api.mdb_externallists()
+	lists += mdblist_api.mdbl_userlists()
+	lists += mdblist_api.mdbl_externallists()
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
 	kodi_utils.set_category(__handle__, params.get('name'))
@@ -88,7 +88,7 @@ def get_mdb_lists(params):
 	kodi_utils.end_directory(__handle__)
 	kodi_utils.set_view_mode('view.main')
 
-def get_mdb_toplists(params):
+def get_mdbl_toplists(params):
 	def _process():
 		for item in lists:
 			try:
@@ -109,7 +109,7 @@ def get_mdb_toplists(params):
 				listitem.addContextMenuItems(cm)
 				yield (url, listitem, True)
 			except: pass
-	lists = mdblist_api.mdb_toplists()
+	lists = mdblist_api.mdbl_toplists()
 	__handle__ = int(sys.argv[1])
 	kodi_utils.add_items(__handle__, list(_process()))
 	kodi_utils.set_category(__handle__, params.get('name'))
@@ -128,7 +128,7 @@ def build_mdb_list(params):
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
-	results = mdblist_api.mdb_list_items(list_id, list_type)
+	results = mdblist_api.mdbl_list_items(list_id, list_type)
 	if paginate() and results: process_list, total_pages = paginate_list(results, page, letter, page_limit())
 	else: process_list, total_pages = results, 1
 	movies, tvshows = Movies({'id_type': 'trakt_dict'}), TVShows({'id_type': 'trakt_dict'})
@@ -160,4 +160,20 @@ def build_mdb_list(params):
 	kodi_utils.set_content(__handle__, content)
 	kodi_utils.end_directory(__handle__, False if is_widget else None)
 	kodi_utils.set_view_mode('view.%s' % content, content)
+
+def mdbl_account_info():
+	try:
+		kodi_utils.show_busy_dialog()
+		account_info = mdblist_api.call_mdblist('user')
+		api_requests = account_info['api_requests']
+		remaining = api_requests - account_info['api_requests_count']
+		body = []
+		append = body.append
+		append('[B]Username:[/B] %s' % account_info['username'])
+		append('[B]Supporter:[/B] %s' % account_info['is_supporter'])
+		append('[B]API Request Limit:[/B] %s' % api_requests)
+		append('[B]API Request Remaining:[/B] %s' % remaining)
+		kodi_utils.hide_busy_dialog()
+		return kodi_utils.show_text('MDBList'.upper(), '\n\n'.join(body), font_size='large')
+	except: kodi_utils.hide_busy_dialog()
 

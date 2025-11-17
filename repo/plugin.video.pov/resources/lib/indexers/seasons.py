@@ -27,7 +27,7 @@ class Seasons:
 		self.meta_user_info = settings.metadata_user_info()
 		self.watched_indicators = settings.watched_indicators()
 		self.watched_info = get_watched_info_tv(self.watched_indicators)
-		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
+		self.watched_title = ('POV', 'Trakt', 'MDBList')[self.watched_indicators]
 		self.show_unaired = settings.show_unaired()
 		self.is_widget = kodi_utils.external_browse()
 		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']

@@ -132,7 +132,7 @@ class Extras(BaseDialog):
 			elif chosen_var == mdbl_id:
 				params = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id, 'tvdb_id': self.meta['tvdb_id'],
 						'media_type': self.media_type, 'icon': self.poster}
-				return dialogs.mdb_manager_choice(params)
+				return dialogs.mdbl_manager_choice(params)
 			elif chosen_var == tmdbl_id:
 				params = {'tmdb_id': self.tmdb_id, 'imdb_id': self.imdb_id, 'tvdb_id': self.meta['tvdb_id'],
 						'media_type': self.media_type, 'icon': self.poster}
@@ -246,7 +246,7 @@ class Extras(BaseDialog):
 				except: pass
 		try:
 			spoiler = ls(32985).upper()
-			data = mdblist_api.mdb_media_info(self.imdb_id, self.media_type)
+			data = mdblist_api.mdbl_media_info(self.imdb_id, self.media_type)
 			if not data is None:
 				ratings, reviews = data['ratings'], data['reviews']
 				reviews.sort(key=lambda k: k['updated_at'] or '', reverse=True)
@@ -315,7 +315,7 @@ class Extras(BaseDialog):
 				except: pass
 		try:
 			icon_path = media_path()
-			data = mdblist_api.mdb_parentsguide(self.imdb_id, self.media_type)
+			data = mdblist_api.mdbl_parentsguide(self.imdb_id, self.media_type)
 			item_list = list(builder())
 			self.setProperty('tikiskins.extras.imdb_parentsguide.number', '(x%02d)' % len(item_list))
 			self.item_action_dict[parentsguide_id] = 'tikiskins.extras.listings'

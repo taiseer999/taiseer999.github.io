@@ -248,7 +248,7 @@ def tmdb_moviesanime_popular(page_no):
 	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
 
 def tmdb_moviesanime_latest_releases(page_no):
-	current_date, previous_date = get_dates(91, reverse=True)
+	current_date, previous_date = get_dates(181, reverse=True)
 	string = 'tmdb_moviesanime_latest_releases_%s' % page_no
 	url = '%s/discover/movie?api_key=%s&with_keywords=210024&sort_by=primary_release_date.desc' % (base_url, tmdb_api_key())
 	url += '&release_date.gte=%s&release_date.lte=%s&with_release_type=4|5&page=%s' % (previous_date, current_date, page_no)
@@ -271,7 +271,7 @@ def tmdb_tvanime_popular(page_no):
 	return cache_object(get_tmdb, string, url, expiration=EXPIRES_2_DAYS)
 
 def tmdb_tvanime_premieres(page_no):
-	current_date, previous_date = get_dates(91, reverse=True)
+	current_date, previous_date = get_dates(181, reverse=True)
 	string = 'tmdb_tvanime_premieres_%s' % page_no
 	url = '%s/discover/tv?api_key=%s&with_keywords=210024&sort_by=first_air_date.desc' % (base_url, tmdb_api_key())
 	url += '&first_air_date.gte=%s&first_air_date.lte=%s&page=%s' % (previous_date, current_date, page_no)
@@ -632,12 +632,12 @@ def import_trakt_list(params):
 	finally: progressBG.close()
 
 def import_mdbl_list(params):
-	from indexers.mdblist_api import mdb_list_items
+	from indexers.mdblist_api import mdbl_list_items
 	send_str = 'Sending list to TMDB...'
 	try:
 		progressBG = kodi_utils.progressDialogBG
 		progressBG.create(send_str, list_heading)
-		items = mdb_list_items(params['mdbl_list_id'], None)
+		items = mdbl_list_items(params['mdbl_list_id'], None)
 		len_items, wait = len(items), sum(1000 for i in chunks(items, 500))
 		for count, item in enumerate(items, 1):
 			kodi_utils.sleep(int(wait / len_items))

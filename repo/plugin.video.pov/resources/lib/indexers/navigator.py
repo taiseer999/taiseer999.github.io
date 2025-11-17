@@ -134,6 +134,13 @@ class Navigator:
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'name': tu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'popular' , 'name': pu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.search_trakt_lists'                                       , 'name': sea_str}, 'trakt.png', n_ins)
+		if mdblist_status:
+			self._add_item({'mode': 'build_movie_list', 'action': 'mdblist_watchlist'       , 'name': mdb_m_str }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_tvshow_list', 'action': 'mdblist_watchlist'      , 'name': mdb_t_str }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.get_mdbl_lists', 'list_type': 'my_lists', 'name': ml_str    }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'mdblist.mdbl_account_info'                             , 'name': ai_str    }, 'mdblist.png', m_n_ins, False)
+			self._add_item({'mode': 'build_mdb_list.get_mdbl_toplists'                      , 'name': pu_str    }, 'mdblist.png', m_n_ins)
+			self._add_item({'mode': 'build_mdb_list.search_mdbl_lists'                      , 'name': sea_str   }, 'mdblist.png', m_n_ins)
 		if tmdb_status:
 			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_watchlist'          , 'name': 'Movie Watchlist'        }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_watchlist'         , 'name': 'TV Show Watchlist'      }, 'tmdb.png', '[B]TMDB:[/B] ')
@@ -142,12 +149,6 @@ class Navigator:
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_favorite'          , 'name': 'TV Show Favorite'       }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_movie_list', 'action': 'tmdb_recommendations'    , 'name': 'Movie Recommendations'  }, 'tmdb.png', '[B]TMDB:[/B] ')
 			self._add_item({'mode': 'build_tvshow_list', 'action': 'tmdb_recommendations'   , 'name': 'TV Show Recommendations'}, 'tmdb.png', '[B]TMDB:[/B] ')
-		if mdblist_status:
-			self._add_item({'mode': 'build_movie_list', 'action': 'mdblist_watchlist'       , 'name': mdb_m_str }, 'mdblist.png', m_n_ins)
-			self._add_item({'mode': 'build_tvshow_list', 'action': 'mdblist_watchlist'      , 'name': mdb_t_str }, 'mdblist.png', m_n_ins)
-			self._add_item({'mode': 'build_mdb_list.get_mdb_lists', 'list_type': 'my_lists' , 'name': ml_str    }, 'mdblist.png', m_n_ins)
-			self._add_item({'mode': 'build_mdb_list.get_mdb_toplists'                       , 'name': pu_str    }, 'mdblist.png', m_n_ins)
-			self._add_item({'mode': 'build_mdb_list.search_mdb_lists'                       , 'name': sea_str   }, 'mdblist.png', m_n_ins)
 		if imdb_status:
 			self._add_item({'mode': 'navigator.imdb_watchlists', 'name': wlist_str}, 'imdb.png', i_n_ins)
 			self._add_item({'mode': 'navigator.imdb_lists',      'name': ls_str   }, 'imdb.png', i_n_ins)
@@ -236,7 +237,7 @@ class Navigator:
 		shortcut_manager_str, source_manager_str = '%s %s' % (short_str, manager_str), '%s %s' % (source_str, manager_str)
 		n_ins, l_str = _in_str % (settings_str.upper(), ''), _in_str % ('LINKS', '')
 		self._add_item({'mode': 'open_settings', 'query': '4.0', 'name': pov_str                 }, 'pov.png', n_ins, False)
-		self._add_item({'mode': 'open_settings', 'query': '1.0', 'name': ms_str                  }, 'settings.png', n_ins, False)
+		self._add_item({'mode': 'myservices',                    'name': ms_str                  }, 'settings.png', n_ins, False)
 		self._add_item({'mode': 'navigator.clear_info',          'name': clean_str               }, 'settings.png', n_ins)
 		self._add_item({'mode': 'navigator.log_utils',           'name': changelog_log_viewer_str}, 'settings.png', n_ins)
 		self._add_item({'mode': 'navigator.set_view_modes',      'name': views_str               }, 'settings.png', n_ins)
@@ -254,7 +255,7 @@ class Navigator:
 		clean_thumbs_str = '%s %s' % (clean_str, 'Stale Kodi Thumbnails')
 		clean_all_str = '%s %s %s' % (clean_str, all_str, settings_str)
 		clear_all_str, clear_meta_str = clca_str % all_str, clca_str % ls(32527)
-		clear_list_str, clear_trakt_str = clca_str % ls(32501), clca_str % ls(32037)
+		clear_list_str, clear_trakt_str, clear_mdbl_str = clca_str % ls(32501), clca_str % ls(32037), clca_str % 'MDBList'
 		clear_imdb_str, clint_str, clext_str = clca_str % ls(32064), clca_str % ls(32096), clca_str % ls(32118)
 		clear_ad_str, clear_pm_str, clear_rd_str = clca_str % ls(32063), clca_str % ls(32061), clca_str % ls(32054)
 		clear_tb_str, clear_oc_str = clca_str % 'TorBox', clca_str % 'Offcloud'
@@ -268,6 +269,7 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'meta',              'name': clear_meta_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'list',              'name': clear_list_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'trakt',             'name': clear_trakt_str    }, 'tools.png', n_ins, False)
+		self._add_item({'mode': 'clear_cache', 'cache': 'mdblist',           'name': clear_mdbl_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'imdb',              'name': clear_imdb_str     }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'internal_scrapers', 'name': clint_str          }, 'tools.png', n_ins, False)
 		self._add_item({'mode': 'clear_cache', 'cache': 'external_scrapers', 'name': clext_str          }, 'tools.png', n_ins, False)

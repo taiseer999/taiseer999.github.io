@@ -46,9 +46,10 @@ class NextEpisode(BaseDialog):
 		self.setProperty('tikiskins.fanart', self.original_fanart())
 		self.setProperty('tikiskins.nextep_function', self.function)
 		if self.function == 'next_ep':
-			self.setProperty('tikiskins.next_episode', '[B]%s[/B][CR][B]%02dx%02d[/B] - %s' % (self.meta['title'], self.meta['season'], self.meta['episode'], self.meta['ep_name']))
-		else:
-			self.setProperty('tikiskins.title', '[B]%s[/B]' % self.meta['title'])
+			self.setProperty('tikiskins.next_episode', '[B]%s[/B][CR][B]%02dx%02d[/B] - %s' % (
+				self.meta['title'], self.meta['season'], self.meta['episode'], self.meta['ep_name']
+			))
+		else: self.setProperty('tikiskins.title', '[B]%s[/B]' % self.meta['title'])
 
 	def original_poster(self):
 		self.poster = self.meta.get(self.poster_main) or self.meta.get(self.poster_backup) or poster_empty

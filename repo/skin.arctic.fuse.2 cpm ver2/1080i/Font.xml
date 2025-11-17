@@ -223,7 +223,7 @@
             <param name="font_bold">Abd ElRady Medium.ttf</param>
             <param name="font_regular">Abd ElRady Medium.ttf</param>
             <param name="font_light">Abd ElRady Medium.ttf</param>
-             <param name="plot_linespacing_head">0.8</param>
+             <param name="plot_linespacing_head">1.2</param>
             <param name="plot_linespacing_midi">1.25</param>
             <param name="plot_linespacing_main">1.26</param>
             <param name="plot_linespacing_mini">1.2</param>

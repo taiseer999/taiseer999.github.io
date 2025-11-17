@@ -46,7 +46,7 @@ class Episodes:
 		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
 		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
-		self.watched_title = 'Trakt' if self.watched_indicators == 1 else 'POV'
+		self.watched_title = ('POV', 'Trakt', 'MDBList')[self.watched_indicators]
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
 		self.container_update = 'ActivateWindow(Videos,%s,return)' if self.is_widget else 'Container.Update(%s)'
 
@@ -150,7 +150,7 @@ class Episodes:
 					'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'year': year,
 					'tmdb_id': tmdb_id, 'tvdb_id': tvdb_id, 'season': season, 'episode': episode,  'title': title
 				})))
-			if self.list_type == 'next_episode_trakt': cm_append((traktmanager_str, run_plugin % build_url({
+			if self.watched_indicators == 1: cm_append((traktmanager_str, run_plugin % build_url({
 				'mode': 'trakt_manager_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id
 			})))
 			props['episode_type'] = item_get('episode_type')
@@ -213,6 +213,8 @@ class Episodes:
 #					except: unwatched = []
 #					self.list += unwatched
 				resformat, self.resinsert = '%Y-%m-%dT%H:%M:%S.%fZ', '2000-01-01T00:00:00.000Z'
+			elif self.watched_indicators == 2:
+				resformat, self.resinsert = '%Y-%m-%dT%H:%M:%SZ', '2000-01-01T00:00:00Z'
 			else: resformat, self.resinsert = '%Y-%m-%d %H:%M:%S', '2000-01-01 00:00:00'
 #		threads = list(make_thread_list_enumerate(self.build_episode_content, self.list, Thread))
 		threads = TaskPool().tasks_enumerate(self.build_episode_content, self.list, Thread)
@@ -247,10 +249,8 @@ class Indexer(Episodes):
 				self.list_type = 'in_progress'
 				self.list = get_in_progress_episodes()
 			elif 'next_episode' in mode:
-				indicators = settings.watched_indicators()
-				watched_info = get_watched_info_tv(indicators)
-				if indicators == 1: self.list_type = 'next_episode_trakt'
-				else: self.list_type = 'next_episode_pov'
+				watched_info = get_watched_info_tv(self.watched_indicators)
+				self.list_type = 'next_episode_pov'
 				self.list = get_next_episodes(watched_info)
 			elif 'my_calendar' in mode:
 				recently_aired = params_get('recently_aired', None)

@@ -198,7 +198,7 @@ def trakt_watched_unwatched(action, media, media_id, tvdb_id=0, season=None, epi
 def trakt_progress(action, media, media_id, percent, season=None, episode=None, resume_id=None, refresh_trakt=False):
 	if action == 'clear_progress':
 		url = 'sync/playback/%s' % resume_id
-		call_trakt(url, method='delete') # result = call_trakt(url, is_delete=True)
+		call_trakt(url, method='delete')
 	else:
 		url = 'scrobble/pause'
 		if media in ('movie', 'movies'): data = {'movie': {'ids': {'tmdb': media_id}}, 'progress': float(percent)}
@@ -399,7 +399,7 @@ def delete_trakt_list(params):
 	list_slug = params['list_slug']
 	if not kodi_utils.confirm_dialog(): return
 	url = 'users/%s/lists/%s' % (user, list_slug)
-	call_trakt(url, method='delete') # call_trakt(url, is_delete=True)
+	call_trakt(url, method='delete')
 	trakt_sync_activities()
 	kodi_utils.notification(32576)
 	kodi_utils.container_refresh()
