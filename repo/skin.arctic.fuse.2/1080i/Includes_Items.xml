@@ -986,7 +986,7 @@
         </include>
     </include>
 
-       <include name="Items_DialogSettings">
+    <include name="Items_DialogSettings">
         <include content="Settings_ButtonImage">
             <param name="id">9001</param>
             <param name="groupid">9101</param>
@@ -994,7 +994,7 @@
             <param name="icon">special://skin/extras/icons/circle-check.png</param>
             <visible>Control.IsEnabled(28) + Control.IsVisible(28)</visible>
             <onclick>SendClick(28)</onclick>
-        </include> -->
+        </include>
         <include content="Settings_ButtonImage">
             <param name="id">9002</param>
             <param name="groupid">9102</param>
