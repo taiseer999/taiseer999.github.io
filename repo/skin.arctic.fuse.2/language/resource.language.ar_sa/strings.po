@@ -1287,8 +1287,8 @@ msgstr "جاري البحث"
 
 #: /1080i/Includes_MediaFilter.xml
 msgctxt "#31273"
-msgid "Press down to access scrollbar"
-msgstr "اضغط للاسفل لظهور شريط التمرير"
+msgid "Access scrollbar"
+msgstr "شريط التمرير"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31274"
@@ -1382,20 +1382,20 @@ msgid "Text labels"
 msgstr "عناوين نصية"
 
 msgctxt "#31293"
-msgid "Press down for cast and more info"
-msgstr "اضغط للأسفل لرؤية طاقم العمل ومعلومات اخرى"
+msgid "Cast and more info"
+msgstr "طاقم العمل ومعلومات اخرى"
 
 msgctxt "#31294"
-msgid "Press down for bookmarks and chapters"
-msgstr "اضغط للأسفل لرؤية الفصول والاجزاء المفضلة"
+msgid "Bookmarks and chapters"
+msgstr "الفصول والاجزاء المفضلة"
 
 msgctxt "#31295"
-msgid "Press down for channels"
-msgstr "اضغط للأسفل لرؤية القنوات"
+msgid "Channels"
+msgstr "القنوات"
 
 msgctxt "#31296"
-msgid "Press down for playlist"
-msgstr "اضغط للأسفل لرؤية قوائم التشغيل"
+msgid "Playlist"
+msgstr "قوائم التشغيل"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31297"
@@ -1403,12 +1403,12 @@ msgid "Extra fanart"
 msgstr "مزيد من صور العمل الفني"
 
 msgctxt "#31298"
-msgid "Press down for movies and tv shows starring this actor"
-msgstr "اضغط للأسفل لإيجاد افلام او مسلسلات لنفس الممثل"
+msgid "Movies and tv shows starring this actor"
+msgstr "افلام او مسلسلات لنفس الممثل"
 
 msgctxt "#31299"
-msgid "Information is loading"
-msgstr "جاري تجهيز المعلومات"
+msgid "Crew"
+msgstr "فريق العمل"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31300"
@@ -1636,7 +1636,7 @@ msgid "Advanced mode applies a horizontal category layout."
 msgstr "الوضع المتقدم يغير الترتيب الى افقي"
 
 msgctxt "#31346"
-msgid "Press down for more by this artist"
+msgid "More by this artist"
 msgstr "اضغط للأسفل لرؤية مزيدا من أعمال الممثل"
 
 #: /1080i/Includes_DialogInfo.xml
@@ -1646,7 +1646,7 @@ msgstr "التصوير"
 
 
 msgctxt "#31348"
-msgid "Press down for channel EPG"
+msgid "Channel EPG"
 msgstr ""
 
 #: /1080i/SkinSettings.xml
@@ -2169,6 +2169,16 @@ msgstr "إختيار المؤثرات"
 msgctxt "#31461"
 msgid "Choose preset"
 msgstr "اختار نموذج معد مسبقا"
+
+#: /1080i/Includes_Views_Wall.xml
+msgctxt "#31462"
+msgid "Wall Banner"
+msgstr ""
+
+#: /1080i/Includes_Views.xml
+msgctxt "#31463"
+msgid "Filter and view options"
+msgstr ""
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31465"
@@ -2801,8 +2811,8 @@ msgstr "لا تغير بالضغط على خروج"
 
 #: /1080i/Includes_Dialogs.xml
 msgctxt "#31592"
-msgid "Press right for options menu"
-msgstr "اظغط يمين للمنيو"
+msgid "Options menu"
+msgstr "قائمة الخيارات"
 
 #: /1080i/Includes_DialogManage.xml
 msgctxt "#31593"
