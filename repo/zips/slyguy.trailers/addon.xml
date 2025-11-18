@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="slyguy.trailers" name="SlyGuy Trailers" provider-name="SlyGuy" version="0.0.33">
+<addon id="slyguy.trailers" name="SlyGuy Trailers" provider-name="SlyGuy" version="0.0.33.1">
     <requires>
         <import addon="script.module.slyguy" version="0.86.20"/>
     </requires>
@@ -22,8 +22,8 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <description lang="en">An add-on to enhance the Kodi trailer experience</description>
-
-عرض الريلرز
+<description lang="ar">  عرض الريلرز
+</description>
 
         <reuselanguageinvoker>true</reuselanguageinvoker>
         <license></license>
