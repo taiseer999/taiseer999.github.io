@@ -7417,6 +7417,41 @@ For a complete view of changes visit https://github.com/b-jesch/skin.estuary.mod
 		<description lang="en_NZ">Nimbus Skin</description>
 		<description lang="en_US">Nimbus Skin</description>
 	</extension>
+</addon><addon id="slyguy.trailers" name="SlyGuy Trailers" provider-name="SlyGuy" version="0.0.33">
+    <requires>
+        <import addon="script.module.slyguy" version="0.86.20" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" start="login" />
+    <extension point="kodi.context.item">
+        <menu id="kodi.core.main">
+        <item library="default.py">
+            <label>$LOCALIZE[20410]</label>
+            <visible>
+                    [String.IsEqual(ListItem.DBType,movie) + String.Contains(Window(10000).Property(_slyguy_trailer_context_menu),1)] |
+                    [String.IsEqual(ListItem.DBType,tvshow) + String.Contains(Window(10000).Property(_slyguy_trailer_context_menu),2)] |
+                    [String.IsEqual(ListItem.DBType,season) + String.IsEqual(ListItem.Season,) + String.Contains(Window(10000).Property(_slyguy_trailer_context_menu),2)] |
+                    [String.IsEqual(ListItem.DBType,season) + String.Contains(Window(10000).Property(_slyguy_trailer_context_menu),3)]
+            </visible>
+        </item>
+        </menu>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <description lang="en">An add-on to enhance the Kodi trailer experience</description>
+
+عرض الريلرز
+
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <license />
+        <language />
+        <website />
+        <news>ytdlp to 2025.10.22</news>
+        <assets>
+        <icon>icon.png</icon>
+        </assets>
+    </extension>
 </addon><addon id="vfs.libarchive" version="21.0.2.1" name="Archive support" provider-name="spiff">
   <requires>
     <import addon="kodi.binary.global.main" minversion="2.0.0" version="2.0.2" />
