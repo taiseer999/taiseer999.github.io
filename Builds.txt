@@ -142,3 +142,16 @@ adult="no"
 info="http://your.info.url"
 description="بيلد كامل وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
 
+name="AF2/AH2 CE"
+version="1.0"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=6xC0d33jgycihZW5NCHCe%2BxUkOtzmqyNRZvlhbdO2qBXG9AL54j7X79mQixiEE3F&expiry=%2Ba9uZKy%2FeHJopbCSB%2FkuPA%3D%3D&mac=65c1c2df74997c8072c2071f48ab40bc36e374599148b7ebba04907976b1da96"
+minor="http://"
+gui="http://"
+kodi="21"
+theme="http://your.themes.url"
+icon="https://i.postimg.cc/L8H2cq2M/Screenshot-2025-11-19-at-3-45-46-PM.png"
+fanart="https://i.postimg.cc/L8H2cq2M/Screenshot-2025-11-19-at-3-45-46-PM.png"
+preview="http://"
+adult="no"
+info="http://your.info.url"
+description="بيلد كامل وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
