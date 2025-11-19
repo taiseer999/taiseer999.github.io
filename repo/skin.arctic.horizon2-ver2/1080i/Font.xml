@@ -22,7 +22,7 @@
  <!-- Title fonts -->
          <font>
             <name>font_info_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>85</size>
         </font>
         <font>
@@ -32,13 +32,13 @@
         </font>
         <font>
             <name>font_info_black_doublerow</name>
-            <filename>PFDinTextArabic-XBlack.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_info_light_doublerow</name>
-            <filename>PFDinTextArabic-XBlack.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>56</size>
             <linespacing>0.9</linespacing>
         </font>
@@ -46,55 +46,55 @@
         <!-- Black Fonts -->
         <font>
             <name>font_huge_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>49</size>
         </font>
         <font>
             <name>font_head_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>42</size>
         </font>
         <font>
             <name>font_midi_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>37</size>
         </font>
         <font>
             <name>font_main_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>32</size>
         </font>
         <font>
             <name>font_mini_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>28</size>
         </font>
         <font>
             <name>font_tiny_black</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>24</size>
         </font>
         <font>
             <name>font_hint_black</name>
             <style>uppercase</style>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>18</size>
         </font>
 
         <!-- Bold Fonts -->
         <font>
             <name>font_huge_bold</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>49</size>
         </font>
         <font>
             <name>font_head_bold</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>42</size>
         </font>
         <font>
             <name>font_midi_bold</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>37</size>
         </font>
         <font>
@@ -104,50 +104,50 @@
         </font>
         <font>
             <name>font_mini_bold</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>28</size>
         </font>
         <font>
             <name>font_tiny_bold</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>24</size>
         </font>
         <font>
             <name>font_hint_bold</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>18</size>
         </font>
 
         <!-- Standard Fonts -->
         <font>
             <name>font_midi</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>35</size>
         </font>
         <font>
             <name>font_main</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>30</size>
         </font>
         <font>
             <name>font_mini</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>26</size>
         </font>
         <font>
             <name>font_tiny</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>22</size>
         </font>
         <font>
             <name>font_hint</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>16</size>
             <linespacing>0.9</linespacing>
         </font>
         <font>
             <name>font_hint_button</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>16</size>
             <linespacing>1.15</linespacing>
         </font>
@@ -155,25 +155,25 @@
         <!-- Textbox Fonts -->
         <font>
             <name>font_huge_plot</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <linespacing>1.46</linespacing>
             <size>47</size>
         </font>
         <font>
             <name>font_midi_plot</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <linespacing>1.46</linespacing>
             <size>35</size>
         </font>
         <font>
             <name>font_main_plot</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <linespacing>1.14</linespacing>
             <size>30</size>
         </font>
         <font>
             <name>font_mini_plot</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <linespacing>1.24</linespacing>
             <size>22</size>
         </font>
@@ -188,17 +188,17 @@
         <!-- Music visualisation scrolling text -->
         <font>
             <name>font_musicvis_biggest</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>230</size>
         </font>
         <font>
             <name>font_musicvis_bigger</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>130</size>
         </font>
         <font>
             <name>font_musicvis_big</name>
-            <filename>PFDinTextArabic-Bold.ttf</filename>
+            <filename>monadi.ttf</filename>
             <size>80</size>
         </font>
 
@@ -224,12 +224,12 @@
         <!-- Required for system -->
         <font>
             <name>font13</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>23</size>
         </font>
         <font>
             <name>Clock</name>
-            <filename>PFDinTextArabic-Regular.ttf</filename>
+            <filename>monadi-reg.ttf</filename>
             <size>130</size>
         </font>
 
@@ -243,14 +243,19 @@
 
 <!-- PlayerProcessInfo -->
         <font>
-            <name>font_tiny1</name>
-            <filename>Inter-Unicode-Regular.ttf</filename>
-            <size>21</size>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
         </font>
         <font>
-            <name>font_tiny_iconic</name>
-            <filename>fa-solid-900.ttf</filename>
-            <size>22</size>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
         </font>
     </fontset>
 
@@ -481,14 +486,19 @@
 
         <!-- PlayerProcessInfo -->
         <font>
-            <name>font_tiny1</name>
-            <filename>Inter-Unicode-Regular.ttf</filename>
-            <size>21</size>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
         </font>
         <font>
-            <name>font_tiny_iconic</name>
-            <filename>fa-solid-900.ttf</filename>
-            <size>22</size>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
         </font>
     </fontset>
   
@@ -782,14 +792,19 @@
 
         <!-- PlayerProcessInfo -->
         <font>
-            <name>font_tiny1</name>
-            <filename>Inter-Unicode-Regular.ttf</filename>
-            <size>21</size>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
         </font>
         <font>
-            <name>font_tiny_iconic</name>
-            <filename>fa-solid-900.ttf</filename>
-            <size>22</size>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
         </font>
     </fontset>
 
@@ -1083,14 +1098,19 @@
 
         <!-- PlayerProcessInfo -->
         <font>
-            <name>font_tiny1</name>
-            <filename>Inter-Unicode-Regular.ttf</filename>
-            <size>21</size>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
         </font>
         <font>
-            <name>font_tiny_iconic</name>
-            <filename>fa-solid-900.ttf</filename>
-            <size>22</size>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
         </font>
    
     </fontset>

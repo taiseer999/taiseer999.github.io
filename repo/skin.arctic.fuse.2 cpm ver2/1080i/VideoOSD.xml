@@ -197,41 +197,6 @@
                     </control>
                 </control>
 
-                <!-- DiscArt -->
-                <control type="image">
-                    <left>1455</left>
-                    <bottom>242</bottom>
-                    <width>500</width>
-                    <height>425</height>
-                    <texture colordiffuse="80000000">common/disc_background.png</texture>
-                    <animation effect="slide" start="500,0" end="0,0" tween="sine" easing="out" time="600" delay="370" condition="!Pvr.IsPlayingTv + !String.IsEmpty(Player.Art(discart)) + !Skin.HasSetting(OSD.DiscArt) + !Window.IsVisible(1140) + !Window.IsVisible(1141) + !Window.IsVisible(1142) + !Window.IsVisible(1146) + !Window.IsVisible(1147) + !Window.IsVisible(1148) + !Window.IsVisible(1159) + !Window.IsVisible(videobookmarks)">
-                        WindowOpen
-                    </animation>
-                    <animation effect="slide" start="0,0" end="500,0" tween="sine" easing="out" time="400" delay="0" condition="Pvr.IsPlayingTv | String.IsEmpty(Player.Art(discart)) | Skin.HasSetting(OSD.DiscArt) | Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(1142) | Window.IsVisible(1146) | Window.IsVisible(1147) | Window.IsVisible(1148) | Window.IsVisible(1159) | Window.IsVisible(videobookmarks)">
-                        WindowClose
-                    </animation>
-                    <animation effect="slide" start="500,0" end="0,0" tween="sine" easing="out" time="600" delay="370">WindowOpen</animation>
-                    <animation effect="slide" start="0,0" end="500,0" tween="sine" easing="out" time="400" delay="0">WindowClose</animation>
-                    <visible>true</visible>
-                </control>
-                <control type="image">
-                    <bottom>255</bottom>
-                    <left>1470</left>
-                    <width>400</width>
-                    <height>400</height>
-                    <texture background="true">$INFO[Player.Art(discart)]</texture>
-                    <aspectratio aligny="bottom">keep</aspectratio>
-                    <animation effect="slide" start="500,0" end="0,0" tween="sine" easing="out" time="600" delay="370" condition="!Pvr.IsPlayingTv + !String.IsEmpty(Player.Art(discart)) + !Skin.HasSetting(OSD.DiscArt) + !Window.IsVisible(1140) + !Window.IsVisible(1141) + !Window.IsVisible(1142) + !Window.IsVisible(1146) + !Window.IsVisible(1147) + !Window.IsVisible(1148) + !Window.IsVisible(1159) + !Window.IsVisible(videobookmarks)">
-                        WindowOpen
-                    </animation>
-                    <animation effect="slide" start="0,0" end="500,0" tween="sine" easing="out" time="400" delay="0" condition="Pvr.IsPlayingTv | String.IsEmpty(Player.Art(discart)) | Skin.HasSetting(OSD.DiscArt) | Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(1142) | Window.IsVisible(1146) | Window.IsVisible(1147) | Window.IsVisible(1148) | Window.IsVisible(1159) | Window.IsVisible(videobookmarks)">
-                        WindowClose
-                    </animation>
-                    <animation effect="slide" start="500,0" end="0,0" tween="sine" easing="out" time="600" delay="370">WindowOpen</animation>
-                    <animation effect="slide" start="0,0" end="500,0" tween="sine" easing="out" time="400" delay="0">WindowClose</animation>
-                    <animation effect="rotate" start="0" end="-360" loop="true" time="20000" center="auto" reversible="false" condition="Player.Playing | Player.Paused">Conditional</animation>
-                    <visible>true</visible>
-                </control>
             </control>
 
             <control type="group">
@@ -269,6 +234,46 @@
                         <ondown>6091</ondown>
                     </control>
                 </control>
+            </control>
+
+            <control type="group">
+                <visible>[!Pvr.IsPlayingTv + !String.IsEmpty(Player.Art(discart)) + !Skin.HasSetting(OSD.DiscArt)]</visible>
+                <left>1455</left>
+                <top>400</top>
+
+                <!-- Disc Background -->
+                <control type="image">
+                    <width>500</width>
+                    <height>425</height>
+                    <texture colordiffuse="shadow_hard">common/discart.png</texture>
+                </control>
+
+                <!-- Disc Art -->
+                <control type="image">
+                    <left>15</left>
+                    <top>10</top>
+                    <width>400</width>
+                    <height>400</height>
+                    <texture background="true">$INFO[Player.Art(discart)]</texture>
+                    <aspectratio aligny="bottom">keep</aspectratio>
+                    <visible>Skin.HasSetting(OSD.DiscArtNoRotate)</visible>
+                </control>
+                <control type="image">
+                    <left>15</left>
+                    <top>10</top>
+                    <width>400</width>
+                    <height>400</height>
+                    <texture background="true">$INFO[Player.Art(discart)]</texture>
+                    <aspectratio aligny="bottom">keep</aspectratio>
+                    <animation effect="rotate" start="0" end="-360" loop="true" time="20000" center="auto" condition="Player.Playing | Player.Paused">Conditional</animation>
+                    <visible>!Skin.HasSetting(OSD.DiscArtNoRotate)</visible>
+                </control>
+
+                <animation effect="slide" start="500" end="0" time="750">WindowOpen</animation>
+                <animation effect="slide" start="0" end="500" time="750">WindowClose</animation>
+                <animation effect="slide" start="0" end="500" time="750" condition="Control.HasFocus(6006) | Control.HasFocus(6007) | Control.HasFocus(6008) | Control.HasFocus(6009)">
+                    WindowClose
+                </animation>
             </control>
         </control>
     </controls>

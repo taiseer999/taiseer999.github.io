@@ -339,14 +339,6 @@
                 <param name="texture">codecs/VS10.png</param>
                 <param name="colordiffuse">AB16A34A</param>
             </include>
-
-             <include content="MP2_Flag">
-                <param name="groupId">106</param>
-                <param name="imageId">107</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp2)</param>
-                <param name="texture">codecs/MP2.png</param>
-                <param name="colordiffuse">dialog_fg_90</param>
-            </include>
         </control>
 
         <control type="group" id="3">
@@ -650,21 +642,13 @@
                 <param name="texture">codecs/OPUS.png</param>
                 <param name="colordiffuse">dialog_fg_90</param>
             </include>
-	
+			
             <include content="VS10_Indicator_Flag">
                 <param name="groupId">104</param>
                 <param name="imageId">105</param>
                 <param name="visible">String.Contains(Player.Process(amlogic.vs10.mode),SDR) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision)</param>
                 <param name="texture">codecs/VS10.png</param>
                 <param name="colordiffuse">AB16A34A</param>
-            </include>
-
-            <include content="MP2_Flag">
-                <param name="groupId">106</param>
-                <param name="imageId">107</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp2)</param>
-                <param name="texture">codecs/MP2.png</param>
-                <param name="colordiffuse">dialog_fg_90</param>
             </include>
         </control>
 
@@ -977,15 +961,6 @@
                 <param name="texture">codecs/VS10.png</param>
                 <param name="colordiffuse">AB16A34A</param>
             </include>
-
-             <include content="MP2_Flag">
-                <param name="groupId">106</param>
-                <param name="imageId">107</param>
-                <param name="visible">String.IsEqual(VideoPlayer.AudioCodec,mp2)</param>
-                <param name="texture">codecs/MP2.png</param>
-                <param name="colordiffuse">dialog_fg_90</param>
-            </include>
-            
         </control>
     </controls>
 </window>
