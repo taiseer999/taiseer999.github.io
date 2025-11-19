@@ -7,13 +7,14 @@ from six.moves.urllib_parse import unquote, urlparse, parse_qsl
 
 from slyguy import plugin, gui
 from slyguy.inputstream import MPD
-from slyguy.constants import IS_ANDROID, IS_PYTHON3, ADDON_PROFILE, ADDON_ID
+from slyguy.constants import IS_ANDROID, IS_PYTHON3, ADDON_PROFILE, ADDON_ID, ADDON_PATH
 from slyguy.log import log
 from slyguy.util import get_addon
 
 from .constants import YOTUBE_PLUGIN_ID, TUBED_PLUGIN_ID, TrailerItem
 from .settings import settings, YTMode
 from .language import _
+from .deno import install_deno
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -68,7 +69,12 @@ def play_yt_dlp(video_id):
        # 'quiet': True,
         'cachedir': ADDON_PROFILE,
        # 'no_warnings': True,
+       'js_runtimes': {},
     }
+
+    path = install_deno()
+    if path:
+        ydl_opts['js_runtimes']['deno'] = {'path': path}
 
     if settings.YT_COOKIES_PATH.value:
         ydl_opts['cookiefile'] = xbmc.translatePath(settings.YT_COOKIES_PATH.value)

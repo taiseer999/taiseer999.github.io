@@ -28,3 +28,4 @@ plugin_ies_overrides = Indirect(defaultdict(list))
 # Misc
 IN_CLI = Indirect(False)
 LAZY_EXTRACTORS = Indirect(None)  # `False`=force, `None`=disabled, `True`=enabled
+supported_js_runtimes = Indirect({})

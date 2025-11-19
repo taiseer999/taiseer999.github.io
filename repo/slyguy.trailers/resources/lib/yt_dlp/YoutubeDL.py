@@ -43,6 +43,7 @@ from .networking.exceptions import (
     SSLError,
     network_exceptions,
 )
+from .globals import supported_js_runtimes
 from .networking.impersonate import ImpersonateRequestHandler
 from .plugins import directories as plugin_directories
 # from .postprocessor import _PLUGIN_CLASSES as plugin_pps
@@ -739,6 +740,8 @@ class YoutubeDL:
                 else:
                     raise
 
+        self.params['js_runtimes'] = self.params.get('js_runtimes', {'deno': {}})
+
         self.params['compat_opts'] = set(self.params.get('compat_opts', ()))
         self.params['http_headers'] = HTTPHeaderDict(std_headers, self.params.get('http_headers'))
         self._load_cookies(self.params['http_headers'].get('Cookie'))  # compat
@@ -856,6 +859,14 @@ class YoutubeDL:
             return archive
 
         self.archive = preload_download_archive(self.params.get('download_archive'))
+
+    @functools.cached_property
+    def _js_runtimes(self):
+        runtimes = {}
+        for name, config in self.params.get('js_runtimes', {}).items():
+            runtime_cls = supported_js_runtimes.value.get(name)
+            runtimes[name] = runtime_cls(path=config.get('path')) if runtime_cls else None
+        return runtimes
 
     def warn_if_short_id(self, argv):
         # short YouTube ID starting with dash?
