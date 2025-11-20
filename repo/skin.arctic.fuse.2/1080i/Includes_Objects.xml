@@ -268,11 +268,11 @@
                 <visible>Skin.HasSetting(Indicator.RatingsCircle)</visible>
                 <visible>!String.IsEmpty($PARAM[listitem].Rating) | !String.IsEmpty($PARAM[listitem].UserRating)</visible>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]">common/circle.png</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]">common/circle1.png</texture>
                 </control>
                 <control type="image">
                     <bordersize>3</bordersize>
-                    <texture colordiffuse="black">common/circle.png</texture>
+                    <texture colordiffuse="black">common/circle1.png</texture>
                 </control>
                 <control type="label">
                     <font>font_hint</font>
@@ -907,7 +907,7 @@
             <control type="label">
                 <height>32</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>Kodi</label>
+                <label>CoreELEC</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
