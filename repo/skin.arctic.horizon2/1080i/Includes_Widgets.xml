@@ -21,6 +21,8 @@
         </definition>
     </include>
 
+    <!-- Octo added titles to labels -->
+
     <include name="Widget_Label">
         <param name="usealtlabel">false</param>
         <param name="usewidgetlabel">false</param>
@@ -50,6 +52,7 @@
                     <visible>$PARAM[labelvisible]</visible>
                 </control>
                 <control type="label">
+                <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
                     <top>30</top>
                     <height>30</height>
                     <aligny>center</aligny>
@@ -60,14 +63,39 @@
                     <include content="Object_Label" condition="$PARAM[usewidgetlabel]">
                         <param name="label">[CAPITALIZE]$INFO[Container($PARAM[id]).ListItem.Property(widget)][/CAPITALIZE]</param>
                     </include>
-                    <label>$PARAM[label]</label>
+                    <label>$PARAM[label] [COLOR=$VAR[ColorWatchedProgress]]»[/COLOR] $INFO[ListItem.TVShowTitle] $INFO[ListItem.Label,~ ]</label>
                     <font>font_main_black</font>
                     <visible>Control.HasFocus($PARAM[id])</visible>
                     <visible>$PARAM[labelvisible]</visible>
                     <visible>![$PARAM[infowidget_full]] | !Skin.HasSetting(Widgets.ExpandedHeader)</visible>
+                    <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+                </control>
+                
+                <control type="label">
+                <focusedcolor>$VAR[ColorSettingsToggleButtonText]</focusedcolor>
+                    <top>30</top>
+                    <height>30</height>
+                    <aligny>center</aligny>
+                    <textcolor>main_fg_100</textcolor>
+                    <include content="Object_Label" condition="$PARAM[usealtlabel]">
+                        <param name="label">[CAPITALIZE]$PARAM[altlabel][/CAPITALIZE] [COLOR=$VAR[ColorWatchedProgress]]»[/COLOR] $INFO[ListItem.Label]</param>
+                    </include>
+                    <include content="Object_Label" condition="$PARAM[usewidgetlabel]">
+                        <param name="label">[CAPITALIZE]$INFO[Container($PARAM[id]).ListItem.Property(widget)][/CAPITALIZE] [COLOR=$VAR[ColorWatchedProgress]]»[/COLOR] $INFO[ListItem.Label]</param>
+                    </include>
+                    <label>$PARAM[label] [COLOR=$VAR[ColorWatchedProgress]]»[/COLOR] $INFO[ListItem.Label]</label>
+                    <font>font_main_black</font>
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                    <visible>$PARAM[labelvisible]</visible>
+                    <visible>![$PARAM[infowidget_full]] | !Skin.HasSetting(Widgets.ExpandedHeader)</visible>
+                    <visible>!String.IsEqual(ListItem.DBType,episode)</visible>
                 </control>
 
 
+            
+
+
+                
 
                 <include content="Object_Control" condition="$PARAM[infowidget]">
                     <param name="control">group</param>
@@ -83,17 +111,18 @@
                             <param name="line_id">0</param>
                             <param name="controltype">label</param>
                             <param name="infoline">true</param>
-                            <param name="ratings">false</param>
+                            <param name="ratings">true</param>
                             <param name="plotheight">info_plot_small_h</param>
+                            <top>-50</top>
                             <width>info_panel_w</width>
-                            <height>260</height>
+                            <height>320</height>
                         </include>
                         <include content="Info_Panel" condition="Skin.HasSetting(Widgets.ExpandedHeader)">
                             <param name="container">Container($PARAM[id]).</param>
                             <param name="line_id">0</param>
                             <param name="controltype">label</param>
                             <width>info_panel_w</width>
-                            <height>320</height>
+                            <height>330</height>
                         </include>
                     </include>
 
@@ -110,9 +139,9 @@
                             <param name="controltype">label</param>
                             <param name="plotbox">true</param>
                             <param name="plotheight">info_plot_h</param>
-                            <param name="plotlabel">[COLOR=main_fg_90]$VAR[Label_Plot_Widget_Title,[B],[/B]][/COLOR]$VAR[Label_Plot_Widget]</param>
+                            <param name="plotlabel">[COLOR=main_fg_90]$VAR[Label_Plot_Widget_Title,[B],[/B]][/COLOR]$VAR[Label_Plot_Widget]</param>                          
                             <width>info_panel_w</width>
-                            <height>160</height>
+                            <height>200</height>
                         </include>
                     </include>
                 </include>
@@ -137,6 +166,7 @@
             </control>
         </definition>
     </include>
+    
 
     <include name="Widget_SlideAnimation">
         <param name="infowidget_full">false</param>
@@ -400,9 +430,15 @@
         </control>
     </include>
 
+
+<!-- Octo modofied size and positioning -->
     <include name="Widget_Lovefilm_RatingTitle">
         <control type="image">
-            <height>240</height>
+            <height>180</height>
+            <width>500</width>
+            <top>50</top>
+            <left>70</left>
+            <centertop>25%</centertop>
             <fadetime>400</fadetime>
             <aspectratio aligny="top" align="center">keep</aspectratio>
             <texture background="true">$INFO[Container($PARAM[id]).ListITem.Art(clearlogo)]</texture>
@@ -474,12 +510,12 @@
                     <param name="container">Container($PARAM[id]).</param>
                     <param name="line_id">0</param>
                     <param name="controltype">label</param>
-                    <param name="plotwidth">720</param>
-                    <param name="plotheight">201</param>
+                    <param name="plotwidth">750</param>
+                    <param name="plotheight">250</param>
                     <width>info_panel_w</width>
-                    <height>520</height>
+                    <height>450</height>
                     <left>160</left>
-                    <top>-720</top>
+                    <top>-680</top>
                     <visible>Control.Hasfocus($PARAM[id])</visible>
                     <animation effect="fade" start="100" end="0" time="0" reversible="false" condition="Container($PARAM[id]).OnNext | Container($PARAM[id]).OnPrevious">Conditional</animation>
                     <animation effect="fade" start="0" end="100" delay="1200" time="400" reversible="false" condition="!Container($PARAM[id]).OnNext + !Container($PARAM[id]).OnPrevious">Conditional</animation>
@@ -488,6 +524,9 @@
             </control>
         </definition>
     </include>
+
+<!-- Octo modofied lovefilm overlay, and positioning -->
+
 
     <include name="Widget_Lovefilm">
         <param name="visible">true</param>
@@ -506,43 +545,31 @@
                     <param name="id">$PARAM[id]</param>
                 </include>
                 <control type="group">
-                    <top>20</top>
-                    <height>720</height>
+                    <top>30</top>
+                    <height>700</height>
+
                     <control type="image">
-                        <right>1280</right>
-                        <width>1280</width>
-                        <aspectratio>stretch</aspectratio>
-                        <fadetime>400</fadetime>
-                        <texture background="true" flipx="true">$INFO[Container($PARAM[id]).ListItem.Art(fanart)]</texture>
+                        <texture background="true">common/4x4_black.png</texture>
                     </control>
-                    <control type="image">
-                        <width>1280</width>
-                        <right>0</right>
-                        <aspectratio>scale</aspectratio>
-                        <fadetime>400</fadetime>
-                        <texture background="true">$INFO[Container($PARAM[id]).ListItem.Art(fanart)]</texture>
+  
+                      <control type="image">
+                        <width>1300</width>
+                        <right>-200</right>
+                        <bottom>200</bottom>
+                        <fadetime>600</fadetime>
+                        <texture background="true" diffuse="diffuse/flixart_soft.png">$INFO[Container($PARAM[id]).ListItem.Art(fanart)]</texture>
+                        <aspectratio scalediffuse="false" align="center">scale</aspectratio>                        
                     </control>
-                    <control type="image">
-                        <width>100</width>
-                        <texture colordiffuse="black">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <left>100</left>
-                        <right>-100</right>
-                        <texture>common/dim-side-bezier.png</texture>
-                    </control>
-                    <control type="image">
-                        <texture flipy="true">common/dim-top-bezier.png</texture>
-                    </control>
+
                     <include content="Info_Panel">
                         <param name="container">Container($PARAM[id]).</param>
                         <param name="line_id">0</param>
                         <param name="controltype">label</param>
-                        <param name="plotwidth">880</param>
+                        <param name="plotwidth">1000</param>
                         <width>info_panel_w</width>
                         <height>320</height>
                         <left>view_pad</left>
-                        <top>80</top>
+                        <top>60</top>
                         <visible>Control.Hasfocus($PARAM[id])</visible>
                         <animation effect="fade" start="0" end="100" delay="400" time="400" reversible="false">Visible</animation>
                     </include>
@@ -714,6 +741,49 @@
         <param name="detailed">true</param>
         <param name="spacertop">-200</param>
         <param name="item_w">view_poster_item_w</param>
+        <param name="itemlayout_w">view_poster_itemlayout_w</param>
+        <definition>
+            <include content="Widget_Poster">
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="detailed">$PARAM[detailed]</param>
+                <param name="infowidget">$PARAM[infowidget]</param>
+                <param name="infowidget_full">$PARAM[infowidget_full]</param>
+                <param name="item_h">$PARAM[item_h]</param>
+                <param name="itemlayout_h">$PARAM[itemlayout_h]</param>
+                <param name="item_w">$PARAM[item_w]</param>
+                <param name="itemlayout_w">$PARAM[itemlayout_w]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="altvisible">$PARAM[altvisible]</param>
+                <param name="labelvisible">$PARAM[labelvisible]</param>
+                <hitrect x="0" y="360" w="1920" h="$PARAM[itemlayout_h]" />
+                <movement>6</movement>
+                <nested />
+            </include>
+            <include content="Object_Control">
+                <param name="control">group</param>
+                <param name="id">$PARAM[spacerid]</param>
+                <top>$PARAM[spacertop]</top>
+                <height>0</height>
+                <visible>[Container($PARAM[id]).IsUpdating | !Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]] + $PARAM[visible]</visible>
+                <animation effect="fade" start="100" end="0" time="400" reversible="false">Hidden</animation>
+            </include>
+        </definition>
+    </include>
+
+
+    <include name="List_Button_Row">
+        <param name="visible">true</param>
+        <param name="altvisible">false</param>
+        <param name="include">List_Button_Row</param>
+        <param name="item_h">120</param>
+        <param name="itemlayout_h">160</param>
+        <param name="detailed">true</param>
+        <param name="spacertop">-200</param>
+        <param name="item_w">120</param>
         <param name="itemlayout_w">view_poster_itemlayout_w</param>
         <definition>
             <include content="Widget_Poster">

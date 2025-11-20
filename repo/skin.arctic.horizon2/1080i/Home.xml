@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
-    <defaultcontrol>300</defaultcontrol>
+
+  <defaultcontrol>300</defaultcontrol>
     <include>Action_Blur_Onload</include>
 
     <!-- OPTIMIZATION 1: Conditional script loading to prevent unnecessary executions -->
@@ -74,7 +75,13 @@
         <include>Background_ExtraFanart</include>
         <include>Background_Main</include>
 
-        <!-- OPTIMIZATION 4: Using your cached expressions -->
+
+
+
+
+
+
+ <!-- OPTIMIZATION 4: Using your cached expressions -->
         <control type="group">
             <visible>$EXP[Exp_TMDBWidget_Container301]</visible>
             <visible>$EXP[Exp_FullscreenWidgetStandard]</visible>
@@ -127,12 +134,109 @@
                     <animation effect="fade" start="100" end="0" delay="300" time="1"
                         reversible="false">Hidden</animation>
                 </control>
-            </control>
+
+
+
+<!-- Octo added fallback fanart bg for background "none "-->
+
+<control type="group">
+                    <visible>[$EXP[Exp_BackgroundStyle_None] | $EXP[Exp_BackgroundStyle_Image]] | [$EXP[Exp_ForegroundStyle_Artwork] | $EXP[Exp_BackgroundStyle_Fanart] | $EXP[Exp_BackgroundStyle_Image] | $EXP[Exp_BackgroundStyle_None]] + $EXP[Exp_SkinSetting_WidgetsDisableExpandedBackground]</visible>
+
+                   
+           <control type="image">
+                <texture background="true" diffuse="diffuse/flixart_soft.png" fallback="common/4x4_transparent.png">$VAR[Image_FullscreenWidget_Artwork]</texture>
+                <aspectratio scalediffuse="false" align="center">scale</aspectratio>
+                    <right>0</right>
+                    <width>900</width>
+                    <height>720</height>
+                    <aspectratio>scale</aspectratio>
+                          <fadetime>300</fadetime>
+           </control>
+           </control>
+
+
+
+
+
+           </control>
 
             <control type="image">
                 <texture>background/vignetted.png</texture>
             </control>
-        </control>
+
+
+
+
+
+            </control>
+
+
+
+
+
+
+         <!-- Octo made bay for menu items -->
+          <control type="group">      
+            <animation type="Visible" reversible="false">
+            <effect type="fade" start="0" end="100" time="400" delay="800"/>
+        </animation>
+        <animation type="WindowOpen" reversible="false">
+            <effect type="fade" start="0" end="100" time="400" delay="800"/>
+        </animation>
+        <animation type="Hidden" reversible="false">
+            <effect type="fade" start="100" end="0" time="150" delay="0"/>
+        </animation>
+            <include>Background_NotVideo</include>         
+
+            <control type="image">
+            <texture colordiffuse="66333333">background/4x4_black.png</texture>
+            <width>100%</width>
+            <height>132</height>
+            <aligny>top</aligny>
+            <fadetime>600</fadetime> 
+            <visible>$EXP[Exp_TMDBWidget_Container301]</visible>
+            <visible>!$EXP[Exp_InfoDialogs]</visible>
+            <visible>!$EXP[Exp_RecommendationDialogs]</visible>
+           <visible> !$EXP[Exp_FullscreenWidgetStandard]</visible> 
+                    <visible>!$EXP[Exp_ForegroundStyle_FlixArt]</visible>         
+                    <visible>!$EXP[Exp_ForegroundStyle_KeyArt]</visible>    
+       <animation type="Visible" reversible="false">
+            <effect type="fade" start="0" end="100" time="300" delay="100" tween="sine" easing="out"/>
+        </animation>
+        <animation type="Hidden" reversible="false">
+            <effect type="fade" start="100" end="0" time="300" delay="0" tween="sine" easing="out"/>
+        </animation>
+            </control>
+            
+
+            <control type="image">
+            <texture colordiffuse="66333333">background/fullscreen_fade_bg_flip.png</texture>
+            <height>132</height>
+            <width>1150</width>
+            <aligny>top</aligny>
+            <fadetime>600</fadetime> 
+            <aspectratio>stretch</aspectratio>
+            <visible>$EXP[Exp_TMDBWidget_Container301]</visible>
+            <visible>!$EXP[Exp_InfoDialogs]</visible>
+            <visible>!$EXP[Exp_RecommendationDialogs]</visible>
+            <visible>$EXP[Exp_FullscreenWidgetStandard]</visible> 
+                    <visible>!$EXP[Exp_ForegroundStyle_FlixArt]</visible> 
+                    <visible>!$EXP[Exp_ForegroundStyle_KeyArt]</visible>             
+              <aspectratio scalediffuse="false" align="center">stretch</aspectratio>
+       <animation type="Visible" reversible="false">
+            <effect type="fade" start="0" end="100" time="300" delay="100" tween="sine" easing="out"/>
+        </animation>
+        <animation type="Hidden" reversible="false">
+            <effect type="fade" start="100" end="0" time="300" delay="0" tween="sine" easing="out"/>
+        </animation>      
+            </control>
+</control>
+
+
+
+
+
+
 
         <!-- OPTIMIZATION 6: Using your cached control visibility -->
         <control type="group" id="320">
@@ -208,17 +312,20 @@
         <include condition="!Skin.HasSetting(Home.VerticalMenu)">Home_Horz_Furniture_TopLeft</include>
         <include condition="Skin.HasSetting(Home.VerticalMenu)">Home_Vert_Furniture_TopLeft</include>
 
+
+        <!-- Octo decreased space above search bar -->
+
         <!-- Search transition using your expression -->
         <control type="group">
             <visible>$EXP[Exp_WindowNext1114]</visible>
             <left>40</left>
             <top>60</top>
-            <height>view_pad</height>
+            <height>42</height>
             <control type="group">
                 <left>20</left>
                 <width>740</width>
                 <control type="group">
-                    <height>70</height>
+                    <height>40</height>
                     <centertop>50%</centertop>
                     <include content="Object_MenuBar_Item">
                         <param name="haslabel" value="false" />
@@ -228,7 +335,7 @@
                     <control type="image">
                         <left>10</left>
                         <width>60</width>
-                        <bordersize>4</bordersize>
+                        <bordersize>0</bordersize>
                         <aspectratio>keep</aspectratio>
                         <texture colordiffuse="$VAR[ColorSelected]">
                             special://skin/extras/icons/search.png</texture>
@@ -284,6 +391,15 @@
             <onclick>ClearProperty(AnimationDirection)</onclick>
             <onclick>ActivateWindow(1114)</onclick>
             <texturefocus />
+            <texturenofocus />
+            <font />
+            <left>80</left>
+            <centertop>100</centertop>
+            <height>60</height>
+            <width>120</width>
+        </include>
+    </controls>
+</window>        <texturefocus />
             <texturenofocus />
             <font />
             <left>80</left>

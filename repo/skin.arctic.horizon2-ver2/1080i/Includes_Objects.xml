@@ -39,10 +39,10 @@
         <texturesliderbackground colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" border="$PARAM[border]">$PARAM[texture]</texturesliderbackground>
     </include>
     <include name="Object_ContentDynamic">
-        <content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]">$PARAM[content]</content>
+        <content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]" browse="never">$PARAM[content]</content>
     </include>
     <include name="Object_ContentInclude">
-        <content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]"><include>$PARAM[include]</include></content>
+        <content target="$PARAM[target]" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]" browse="never"><include>$PARAM[include]</include></content>
     </include>
     <include name="Object_ContentItem">
         <content>
@@ -143,50 +143,86 @@
         </definition>
     </include>
 
-
+    <!-- Octo made new rating overlay -->
     <include name="Object_RatingOverlay_Position_Thin">
-        <left>30</left>
-        <centertop>0</centertop>
+        <left>4</left>
+        <top>4</top>
+        <right>4</right>
+        <width>100%</width>
+        <height>54</height>
     </include>
     <include name="Object_RatingOverlay_Position_Bold">
-        <left>20</left>
-        <top>20</top>
+        <left>4</left>
+        <top>4</top>
+        <right>4</right>
+        <width>100%</width>
+        <height>54</height>
     </include>
     <include name="_Object_RatingOverlay">
         <control type="group">
             <include condition="Skin.HasSetting(SelectBox.Thin)">Object_RatingOverlay_Position_Thin</include>
             <include condition="!Skin.HasSetting(SelectBox.Thin)">Object_RatingOverlay_Position_Bold</include>
-            <width>36</width>
-            <height>36</height>
-            <visible>!String.IsEmpty(ListItem.Rating)</visible>
+            <left>4</left>
+            <width>15</width>
+            <height>15</height>
+            <height>15</height>
+            <align>center</align>
+
             <control type="image">
-                <bordersize>-4</bordersize>
-                <texture colordiffuse="main_bg_100">common/circle.png</texture>
+                <height>35</height>
+                <align>left</align>
+                <aligny>top</aligny>
+                <width>35</width>
+                <top>-1</top>
+                <left>3</left>
+                <aspectratio>keep</aspectratio>
+                <bordersize>0</bordersize>
+                <texture colordiffuse="77000000">mod/blank.png</texture>
+            <visible>!String.IsEmpty(ListItem.Rating)</visible>                
             </control>
-            <control type="image">
-                <bordersize>-14</bordersize>
-                <texture colordiffuse="main_fg_30">progress/circle/p100.png</texture>
-            </control>
-            <control type="image">
-                <bordersize>-14</bordersize>
-                <texture colordiffuse="$VAR[ColorWatchedProgress]">$VAR[Defs_Progress_Rating,progress/circle/p,.png]</texture>
-            </control>
-            <control type="image">
-                <bordersize>2</bordersize>
-                <texture colordiffuse="main_bg_100">common/circle.png</texture>
-            </control>
-            <control type="label">
+
+            <control type="textbox">
                 <label>$INFO[ListItem.Rating]</label>
+                <width>36</width>
                 <align>center</align>
-                <font>font_hint</font>
-                <textcolor>panel_fg_100</textcolor>
-                <bottom>2</bottom>
+                <aligny>top</aligny>
+                <font>font_hint_bold</font>
+                <textcolor>main_fg_90</textcolor>
+                <top>3</top>
+                <centerleft>21</centerleft>
             </control>
+
+            <control type="image">
+               <align>right</align>
+               <aligny>top</aligny>
+               <top>4</top>
+               <right>11</right>
+               <width>34</width>
+               <height>35</height>
+               <aspectratio>keep</aspectratio>
+               <bordersize>0</bordersize>
+               <texture colordiffuse="77000000">mod/blank2.png</texture>
+               <visible>!String.IsEmpty(ListItem.Property(original_language))</visible>
+            </control>
+
+            <control type="textbox">
+                <label>[CAPITALIZE]$INFO[ListItem.Property(original_language)][/CAPITALIZE]</label>
+                <align>center</align>
+                <aligny>top</aligny>
+                <font>font_hint_bold</font>
+                <textcolor>main_fg_90</textcolor>
+                <width>36</width>
+                <centerright>28</centerright>
+                <top>3</top>
+            </control>
+
         </control>
     </include>
+
     <include name="Object_RatingOverlay">
         <include condition="Skin.HasSetting(Indicator.Ratings)">_Object_RatingOverlay</include>
     </include>
+
 
     <include name="Object_StarRating">
         <param name="selected" default="false" />
@@ -434,7 +470,7 @@
         <param name="hasprogress" default="false" />
         <param name="texture" default="dialog/loading-back.png" />
         <param name="size" default="100" />
-        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
+        <param name="icon" default="special://skin/extras/icons/kodi.png" />
         <param name="progress" default="Control.GetLabel(32)" />
         <param name="progress_id" default="32" />
         <param name="spinprogress" default="false" />
@@ -456,7 +492,7 @@
                     <aspectratio align="center" aligny="center">keep</aspectratio>
                     <texture>$PARAM[icon]</texture>
                     <colordiffuse>$PARAM[colordiffuse]_70</colordiffuse>
-                    <visible>![Container.Scrolling + $EXP[Exp_AlphabetTypes_Only]]</visible>
+                    <visible>!$EXP[Exp_ContainerScrollingAlphabet]</visible>
                     <animation effect="fade" start="0" end="100" time="200" delay="1200" reversible="true">Visible</animation>
                     <animation effect="fade" start="100" end="0" time="200" delay="400" reversible="true">Hidden</animation>
                 </control>
@@ -530,7 +566,7 @@
                     <texture diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
                     <visible>$PARAM[icon_visible]</visible>
                 </include>
-                <include content="Object_Control" condition="Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="$EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control" value="image" />
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -552,7 +588,7 @@
                     <texture colordiffuse="$PARAM[colordiffuse]" border="12">$PARAM[texture]</texture>
                 </include>
                 <nested />
-                <include content="Object_Control" condition="Skin.HasSetting(Glass.BorderOutline) + $PARAM[condition]">
+                <include content="Object_Control" condition="$EXP[Exp_SkinSetting_GlassBorderOutline] + $PARAM[condition]">
                     <param name="control" value="image" />
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -674,12 +710,12 @@
                 <height>96</height>
                 <centerleft>50%</centerleft>
                 <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/coreelec.png</texture>
+                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
             </control>
             <control type="label">
                 <height>32</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>coreelec</label>
+                <label>KODI</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
@@ -691,7 +727,7 @@
             <align>center</align>
             <font>font_info_black</font>
             <textcolor>$VAR[ColorHighlight]</textcolor>
-            <label>[COLOR=main_logo]Arctic[/COLOR] Horizon 2</label>
+            <label>[COLOR=main_logo]Arctic[/COLOR] Horizon 2.1 Arizen</label>
         </control>
         <control type="group">
             <bottom>80</bottom>
@@ -738,60 +774,7 @@
         </control>
     </include>
 
-    <include name="Object_MenuButton">
-        <param name="icon" default="$VAR[Image_MuteBug]" />
-        <param name="overlay" default="true" />
-        <param name="bordersize" default="6" />
-        <param name="profileimage" default="false" />
-        <param name="flipy" default="false" />
-        <definition>
-            <control type="group">
-                <width>60</width>
-                <nested />
-                <control type="image">
-                    <include content="Dimension_Padding"><param name="pad" value="-24" /></include>
-                    <texture colordiffuse="shadow_hard" border="54">shadows/circle_shadow.png</texture>
-                </control>
-                <control type="button">
-                    <texturefocus colordiffuse="dialog_bg_100" border="30">common/circle.png</texturefocus>
-                    <texturenofocus colordiffuse="dialog_bg_100" border="30">common/circle.png</texturenofocus>
-                    <onclick>Action(menu)</onclick>
-                </control>
-                <include content="Object_Control" condition="$PARAM[overlay]">
-                    <param name="control" value="image" />
-                    <texture colordiffuse="overlay_soft" border="30">common/circle.png</texture>
-                </include>
-                <include content="Object_Control" condition="![$PARAM[profileimage]]">
-                    <param name="control" value="image" />
-                    <aspectratio>keep</aspectratio>
-                    <bordersize>$PARAM[bordersize]</bordersize>
-                    <texture colordiffuse="dialog_fg_70" flipy="$PARAM[flipy]">$PARAM[icon]</texture>
-                    <visible>![Container.Scrolling + $EXP[Exp_AlphabetTypes_Only]]</visible>
-                    <animation effect="fade" start="0" end="100" time="200" delay="1200" reversible="true">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="200" delay="400" reversible="true">Hidden</animation>
-                </include>
-                <include content="Object_Control" condition="![$PARAM[profileimage]]">
-                    <param name="control" value="label" />
-                    <textcolor>dialog_fg_70</textcolor>
-                    <label>$INFO[ListItem.SortLetter]</label>
-                    <align>center</align>
-                    <aligny>center</aligny>
-                    <font>font_main_black</font>
-                    <visible>Container.Scrolling + $EXP[Exp_AlphabetTypes_Only]</visible>
-                    <animation effect="fade" start="0" end="100" time="200" delay="400" reversible="true">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="200" delay="1200" reversible="true">Hidden</animation>
-                </include>
-                <include content="Object_Control" condition="$PARAM[profileimage]">
-                    <param name="control" value="image" />
-                    <width>44</width>
-                    <height>44</height>
-                    <centertop>50%</centertop>
-                    <centerleft>50%</centerleft>
-                    <texture diffuse="common/circle.png">$INFO[System.ProfileThumb]</texture>
-                </include>
-            </control>
-        </definition>
-    </include>
+<!-- Octo added limit to episode width, and colored episode number -->
 
     <include name="Object_Indicator">
         <param name="affix" default="" />
@@ -850,20 +833,26 @@
                     <visible>![!String.IsEmpty($PARAM[listitem].Property(role)) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season)] + !Skin.HasSetting(Indicator.DisableEpisodes)]</visible>
                 </control>
                 <control type="label">
+                    <top>-1</top>
+                    <textwidth>23</textwidth>
+                    <scroll>false</scroll>                
                     <font>font_hint_bold</font>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <textcolor>panel_fg_100</textcolor>
+                    <textcolor>$VAR[ColorWatchedProgress]</textcolor>
                     <label>$INFO[$PARAM[listitem].Property(UnWatchedEpisodes)]</label>
                     <visible>[!Integer.IsEqual($PARAM[listitem].Property(UnWatchedEpisodes),0) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season) | String.IsEqual($PARAM[listitem].DBType,episode)] + !Skin.HasSetting(Indicator.DisableEpisodes)]</visible>
                     <visible>!$PARAM[listitem].IsResumable | Skin.HasSetting(Indicator.DisableProgress)</visible>
                     <visible>![!String.IsEmpty($PARAM[listitem].Property(role)) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[listitem].DBType,season)] + !Skin.HasSetting(Indicator.DisableEpisodes)]</visible>
                 </control>
                 <control type="label">
+                    <top>-1</top>
+                    <textwidth>23</textwidth>
+                    <scroll>false</scroll>                
                     <font>font_hint_bold</font>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <textcolor>panel_fg_100</textcolor>
+                    <textcolor>$VAR[ColorWatchedProgress]</textcolor>
                     <label>$INFO[$PARAM[listitem].Property(Episodes)]</label>
                     <visible>!String.IsEmpty($PARAM[listitem].Property(role)) + [String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,season)] + !Skin.HasSetting(Indicator.DisableEpisodes)</visible>
                 </control>
@@ -1044,6 +1033,7 @@
         <param name="itemgap" default="60" />
         <param name="texturename" default="menu" />
         <param name="invertcolor" default="false" />
+        <!-- Octo changed color value for buttons -->
         <definition>
             <control type="group" id="$PARAM[groupid]">
                 <left>0</left>
@@ -1069,7 +1059,7 @@
                     <param name="texture" value="common/$PARAM[texturename]main_x.png" />
                     <param name="icon" value="$PARAM[icon]" />
                     <param name="colordiffuse_icon" value="main_fg_70" />
-                    <param name="colordiffuse_back" value="main_fg_12" />
+                    <param name="colordiffuse_back" value="$VAR[ColorGradient]" />
                 </include>
             </control>
             <control type="$PARAM[control]" id="$PARAM[id]">
@@ -1084,7 +1074,7 @@
                 <include content="Object_FocusedColor" condition="$PARAM[invertcolor]">
                     <param name="focusedcolor">panel_bg</param>
                 </include>
-                <texturenofocus colordiffuse="main_fg_12">common/$PARAM[texturename]main_y.png</texturenofocus>
+                <texturenofocus colordiffuse="$VAR[ColorGradient]">common/$PARAM[texturename]main_y.png</texturenofocus>
                 <texturefocus>special://profile/addon_data/script.texturemaker/ArcticHorizon/$PARAM[texturename]main_h_y.png</texturefocus>
                 <font>font_mini_bold</font>
                 <label>$PARAM[label]</label>
@@ -1101,7 +1091,7 @@
                 <height>256</height>
                 <control type="image">
                     <visible>![Control.HasFocus($PARAM[id]) | $PARAM[focused]]</visible>
-                    <texture colordiffuse="main_fg_12">common/$PARAM[texturename]main_z.png</texture>
+                    <texture colordiffuse="$VAR[ColorGradient]">common/$PARAM[texturename]main_z.png</texture>
                 </control>
                 <control type="image">
                     <visible>Control.HasFocus($PARAM[id]) | $PARAM[focused]</visible>
@@ -1130,7 +1120,7 @@
                 <height>160</height>
                 <centerleft>50%</centerleft>
                 <texturefocus flipy="true">special://profile/addon_data/script.texturemaker/ArcticHorizon/circlebutton_h.png</texturefocus>
-                <texturenofocus colordiffuse="main_fg_12">common/circlebutton.png</texturenofocus>
+                <texturenofocus colordiffuse="buttons">common/circlebutton.png</texturenofocus>
                 <nested />
             </control>
             <control type="group" id="$PARAM[groupid]">
@@ -1159,7 +1149,7 @@
     </include>
 
     <include name="Object_Options_Menu_Popup">
-        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
+        <param name="icon" default="special://skin/extras/icons/kodi.png" />
         <param name="header" default="$LOCALIZE[33063]" />
         <param name="id" default="9000" />
         <param name="groupid" default="89000" />
@@ -1282,7 +1272,7 @@
     </include>
 
     <include name="Object_Options_Menu">
-        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
+        <param name="icon" default="special://skin/extras/icons/kodi.png" />
         <param name="header" default="$LOCALIZE[33063]" />
         <param name="id" default="9000" />
         <param name="groupid" default="89000" />
@@ -1308,10 +1298,10 @@
                 </include>
                 <include content="Furniture_MenuButton" condition="$PARAM[has_button_overlay] + ![$PARAM[use_side_nib]]">
                     <param name="icon" value="$PARAM[menuicon]" />
-                    <visible>!Window.IsVisible(DialogBusy.xml)</visible>
-                    <visible>!Window.IsVisible(DialogExtendedProgressBar.xml)</visible>
-                    <visible>!Window.IsVisible(DialogNotification.xml)</visible>
-                    <visible>!Window.IsVisible(DialogVolumeBar.xml) | Player.Muted</visible>
+                    <visible>!$EXP[Exp_WindowVisible_DialogBusy]</visible>
+                    <visible>!$EXP[Exp_WindowVisible_DialogExtendedProgressBar]</visible>
+                    <visible>!$EXP[Exp_WindowVisible_DialogNotification]</visible>
+                    <visible>!Window.IsVisible(DialogVolumeBar.xml) | $EXP[Exp_PlayerMuted]</visible>
                 </include>
                 <include content="Object_MenuButton" condition="$PARAM[has_button_overlay] + $PARAM[use_side_nib]">
                     <param name="profileimage">$EXP[Exp_HasProfileImage]</param>
@@ -1451,7 +1441,7 @@
                             <width>80</width>
                             <visible>![Control.HasFocus($PARAM[id]) | $PARAM[altfocus]]</visible>
                             <control type="group">
-                                <visible>!Control.HasFocus(302)</visible>
+                                <visible>!$EXP[Exp_Control302_HasFocus]</visible>
                                 <control type="image">
                                     <aspectratio>keep</aspectratio>
                                     <bordersize>4</bordersize>
@@ -1467,7 +1457,7 @@
                                 </control>
                             </control>
                             <control type="group">
-                                <visible>Control.HasFocus(302)</visible>
+                                <visible>$EXP[Exp_Control302_HasFocus]</visible>
                                 <control type="group">
                                     <width>60</width>
                                     <centerleft>50%</centerleft>
@@ -1688,7 +1678,7 @@
                     <param name="windowopen_condition" value="!Window.Previous(1114)" />
                 </include>
                 <include content="Animation_FadeOut" condition="$PARAM[animations]">
-                    <param name="windowclose_condition" value="!Window.Next(1114)" />
+                    <param name="windowclose_condition" value="!$EXP[Exp_WindowNext1114]" />
                 </include>
                 <include content="Object_Width" condition="$PARAM[altwidth_condition]">
                     <param name="width">$PARAM[altwidth]</param>
@@ -1755,7 +1745,7 @@
     </include>
 
     <include name="Object_MenuHeader">
-        <param name="icon" default="special://skin/extras/icons/coreelec.png" />
+        <param name="icon" default="special://skin/extras/icons/kodi.png" />
         <param name="label" default="$LOCALIZE[33063]" />
         <param name="has_icon" default="true" />
         <param name="colordiffuse" default="$VAR[ColorHighlight]" />
@@ -2130,5 +2120,9 @@
                 <bordersize>$PARAM[icon_other_bordersize]</bordersize>
             </control>
         </definition>
+    </include>
+</includes>on>
+    </include>
+</includes>>includes>>on>
     </include>
 </includes>

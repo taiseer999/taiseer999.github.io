@@ -66,6 +66,8 @@
         </definition>
     </include>
 
+    <!-- Octo changed broken "ondown" to close information window -->
+
     <!-- Button Group for DialogInfo -->
     <include name="DialogInfo_ButtonGroup">
         <control type="grouplist" id="4000">
@@ -88,7 +90,7 @@
             <onup condition="$EXP[Exp_DialogInfoFocusButtons] + String.IsEmpty(Window(Home).Property(ResetScroll))">SetProperty(ResetScroll," ",home)</onup>
             <onup condition="$EXP[Exp_DialogInfoFocusButtons] + !String.IsEmpty(Window(Home).Property(ResetScroll))">ClearProperty(ResetScroll,home)</onup>
             <onup condition="$EXP[Exp_DialogInfoFocusButtons]">61</onup>
-            <ondown condition="$EXP[Exp_DialogInfoFocusButtons]">7002</ondown>
+            <ondown condition="$EXP[Exp_DialogInfoFocusButtons]">Dialog.Close(movieinformation)</ondown>
             <include>$PARAM[include]</include>
         </control>
     </include>
@@ -100,7 +102,7 @@
             <onup condition="String.IsEmpty(Window(Home).Property(ResetScroll))">SetProperty(ResetScroll," ",home)</onup>
             <onup condition="!String.IsEmpty(Window(Home).Property(ResetScroll))">ClearProperty(ResetScroll,home)</onup>
             <onup>61</onup>
-            <ondown>7002</ondown>
+            <ondown>Dialog.Close(movieinformation)</ondown>
             <onfocus condition="$EXP[Exp_DialogInfoFocusButtons]">SetFocus(4000)</onfocus>
             <onclick condition="!$EXP[Exp_IsPersonInfo]">SetFocus(5001)</onclick>
             <onclick condition="!$EXP[Exp_IsPersonInfo]">Action(Select)</onclick>

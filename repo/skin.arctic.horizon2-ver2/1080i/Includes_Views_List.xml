@@ -91,7 +91,7 @@
     <include name="View_List_NewTemplate">
         <param name="id">501</param>
         <param name="icon">$INFO[ListItem.Icon]</param>
-        <param name="width">grid_x44</param>
+        <param name="width">grid_x43</param>
         <param name="viewtype_label">$LOCALIZE[31121]</param>
         <param name="diffuse">diffuse/square_w480_h480.png</param>
         <param name="include">List_MediaList</param>
@@ -105,7 +105,7 @@
         <param name="top">grid_x24</param>
         <param name="poster_top">0</param>
         <param name="poster_visible">true</param>
-        <param name="hasline">true</param>
+        <param name="hasline">false</param>
         <param name="hasview">true</param>
         <param name="spacing">grid_x04</param>
         <param name="reposition_include">Items_Null</param>
@@ -158,10 +158,10 @@
                                 <param name="detailed">$PARAM[detailed]</param>
                                 <focusposition>$PARAM[focusposition]</focusposition>
                                 <movement>$PARAM[movement]</movement>
-                                <left>-grid_x04</left>
-                                <right>-grid_x04</right>
-                                <top>20</top>
-                                <bottom>-20</bottom>
+                                <left>-grid_x01</left>
+                                <right>-grid_x01</right>
+                                <top>0</top>
+                                <bottom>0</bottom>
                                 <include content="Object_Visible" condition="$PARAM[hasview]">
                                     <param name="visible">$EXP[Exp_View_Special] + $EXP[Exp_View_$PARAM[id]]</param>
                                 </include>
@@ -221,7 +221,7 @@
         <include content="View_List_NewTemplate">
             <param name="id">521</param>
             <param name="icon">$VAR[Image_Poster]</param>
-            <param name="width">grid_x30</param>
+            <param name="width">grid_x40</param>
             <param name="viewtype_label">$LOCALIZE[31343]</param>
             <param name="diffuse">diffuse/poster_w320_h480.png</param>
             <param name="include">List_MediaList</param>
@@ -230,6 +230,8 @@
             <param name="focusposition">1</param>
             <param name="detailed">true</param>
             <param name="reposition_include">Animation_Reposition</param>
+            <param name="top">100</param>    
+            <param name="flipside">true</param>            
         </include>
     </include>
 
@@ -258,7 +260,7 @@
         <include content="View_List_NewTemplate">
             <param name="id">517</param>
             <param name="icon">$VAR[Image_Landscape]</param>
-            <param name="width">780</param>
+            <param name="width">720</param>
             <param name="viewtype_label">$LOCALIZE[31144]</param>
             <param name="diffuse">diffuse/landscape_w780_h440.png</param>
             <param name="include">List_Infolist</param>
@@ -268,10 +270,10 @@
             <param name="flipside">true</param>
             <param name="detailed">true</param>
             <param name="top">200</param>
-            <param name="poster_top">grid_x04</param>
+            <param name="poster_top">grid_x01</param>
             <param name="hasimage">true</param>
             <param name="hasline">false</param>
-            <param name="spacing">40</param>
+            <param name="spacing">0</param>
         </include>
     </include>
 
@@ -289,10 +291,10 @@
             <param name="flipside">true</param>
             <param name="detailed">true</param>
             <param name="top">200</param>
-            <param name="poster_top">grid_x04</param>
+            <param name="poster_top">grid_x01</param>
             <param name="hasimage">true</param>
             <param name="hasline">false</param>
-            <param name="spacing">40</param>
+            <param name="spacing">-10</param>
         </include>
     </include>
 

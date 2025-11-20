@@ -72,12 +72,12 @@
                     <top>0</top>
                     <height>$PARAM[flixart_size_h]</height>
                     <width>$PARAM[flixart_size_w]</width>
-                    <aspectratio scalediffuse="true">scale</aspectratio>
+                    <aspectratio scalediffuse="false">scale</aspectratio>
 
                     <include content="Object_Texture" condition="$EXP[Exp_BackgroundStyle_BlurOrImage]">
                         <param name="texture">$VAR[Image_Foreground_FlixArt]</param>
                         <param name="background">true</param>
-                        <param name="diffuse">diffuse/flixart_hard.png</param>
+                        <param name="diffuse">diffuse/flixart_soft.png</param>
                     </include>
 
                     <include content="Object_Texture" condition="[$EXP[Exp_ForegroundStyle_KeyArt] | $EXP[Exp_ForegroundStyle_FlixArt]]">
@@ -90,11 +90,14 @@
         </definition>
     </include>
 
+    <!-- Octo reduced size of keyart -->
+
     <include name="Background_KeyArt">
         <include content="Object_Control">
             <param name="control" value="image" />
             <right>0</right>
-            <width>50%</width>
+            <width>40%</width>
+            <height>50%</height>
             <fadetime>400</fadetime>
             <aspectratio scalediffuse="false" aligny="top">scale</aspectratio>
 
@@ -107,7 +110,7 @@
             <include content="Object_Texture" condition="!$EXP[Exp_BackgroundStyle_BlurOrImage]">
                 <param name="texture">$VAR[Image_Foreground_FlixArt]</param>
                 <param name="background">true</param>
-                <param name="diffuse">diffuse/flixart_soft.png</param>
+                <param name="diffuse">diffuse/flixart_hard.png</param>
             </include>
         </include>
     </include>
@@ -203,7 +206,7 @@
     </include>
 
     <include name="Background_Fanart">
-        <control type="image">
+        <control type="image" width="200">
             <fadetime>600</fadetime>
             <aspectratio>scale</aspectratio>
             <texture background="true">$VAR[Image_Background_Fanart]</texture>
@@ -303,12 +306,10 @@
             <include content="Object_Control" condition="$PARAM[plain_background]">
                 <param name="control" value="group" />
                 <description>Plain background used to prevent fadetime transitions</description>
-                <include>Animation_Background_FadeInOut</include>
                 <include>Background_Image</include>
             </include>
             <include content="Object_Control" condition="!$PARAM[plain_background]">
                 <param name="control" value="group" />
-                <include>Animation_Background_FadeInOut</include>
                 <include condition="$EXP[Exp_BackgroundStyle_None]">Background_None</include>
                 <include condition="$EXP[Exp_BackgroundStyle_Image]">Background_Stretch</include>
                 <include condition="$EXP[Exp_BackgroundStyle_Fanart]">Background_Fanart</include>

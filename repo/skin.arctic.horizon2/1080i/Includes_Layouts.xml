@@ -466,7 +466,7 @@
                 <include content="Object_Control">
                     <param name="control">label</param>
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <right>grid_x04</right>
+                    <right>grid_x02</right>
                     <left>grid_x04</left>
                     <textcolor>dialog_fg_70</textcolor>
                     <selectedcolor>dialog_fg_70</selectedcolor>
@@ -1211,10 +1211,13 @@
         </definition>
     </include>
 
+    <!-- Octo modified banners -->
+
     <include name="Layout_BigBanner">
         <param name="selected">false</param>
         <param name="fg_layer">true</param>
         <param name="bg_layer">true</param>
+                <param name="icon">$INFO[ListItem.Art(fanart)]</param>
         <param name="diffuse">diffuse/banner_w1760_h320.png</param>
         <definition>
             <control type="group">
@@ -1227,16 +1230,43 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                     </include>
+
+            <control type="image">
+               <left>-1</left>
+               <texture background="true" diffuse="diffuse/banner_w1760_h320.png">common/4x4_black.png</texture>
+            </control>
+
+           <control type="image">
+                <texture background="true" diffuse="diffuse/banner_fade.png" fallback="common/4x4_black.png">$PARAM[icon]</texture>
+                <aspectratio scalediffuse="false" align="center">scale</aspectratio>
+                <left>40%</left>
+                <align>left</align>
+           </control>
+
                     <control type="image">
-                        <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_Banner]</texture>
-                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <texture background="true" diffuse="$PARAM[diffuse]">$INFO[ListItem.Art(clearlogo)]</texture>
+                        <aspectratio scalediffuse="false" align="center">keep</aspectratio>
+                        <bordersize>100,70,100,70</bordersize>
+                        <right>1050</right>
+                        <left>0</left>
                     </control>
-                    <control type="image">
-                        <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_Clearlogo]</texture>
-                        <aspectratio scalediffuse="false" align="left">keep</aspectratio>
-                        <bordersize>20</bordersize>
-                        <visible>String.IsEmpty(ListItem.Art(banner)) + String.IsEmpty(ListItem.Art(tvshow.banner)) + String.IsEmpty(ListItem.Art(season.banner))</visible>
-                    </control>
+                    <control type="textbox">
+                            <visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
+                            <wrapmultiline>true</wrapmultiline>
+                            <textcolor>main_fg_90</textcolor>
+                            <wrapmultiline>true</wrapmultiline>
+                            <label>$INFO[ListItem.Label]</label>
+                            <textoffsetx>30</textoffsetx>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <font>font_banner_black_doublerow</font>
+                            <width>700</width>
+                            <scroll>false</scroll>
+                            <wrapmultiline>true</wrapmultiline>
+                        <right>1050</right>
+                        <left>100</left>
+                            <top>-20</top>
+                        </control>        
                 </include>
                 <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
@@ -1257,38 +1287,80 @@
         </definition>
     </include>
 
+<!-- Octo modified featurebanner bg overlay -->
+
     <include name="Layout_FeatureBanner">
         <param name="selected">false</param>
         <param name="icon">$INFO[ListItem.Art(fanart)]</param>
+        <param name="diffuse">diffuse/featurebanner.png</param>
         <definition>
+                               
             <control type="group">
                 <nested />
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
                 <include content="Object_ItemBack">
-                    <param name="selected">$PARAM[selected]</param>
+                    <param name="selected">$PARAM[shadow_colordiffuse]</param>
                     <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                 </include>
-                <control type="image">
-                    <texture background="true" diffuse="diffuse/featurefilm_y.png">$PARAM[icon]</texture>
-                    <aspectratio scalediffuse="false" align="left">scale</aspectratio>
-                    <right>0</right>
-                    <width>1067</width>
-                </control>
-                <control type="image">
-                    <texture background="true" flipx="true" diffuse="diffuse/featurefilm_x.png">$PARAM[icon]</texture>
-                    <aspectratio scalediffuse="false" align="right">scale</aspectratio>
-                    <right>1067</right>
-                </control>
-                <control type="image">
-                    <width>400</width>
-                    <texture colordiffuse="black" border="12" flipx="true">diffuse/featurefilm_x.png</texture>
-                </control>
-                <control type="image">
-                    <left>400</left>
-                    <right>400</right>
-                    <texture>common/dim-side-bezier.png</texture>
-                </control>
+
+            <control type="image">
+               <left>-1</left>
+               <texture background="true" diffuse="diffuse/featurebanner.png">common/4x4_black.png</texture>
+            </control>
+
+           <control type="image">
+                <texture background="true" diffuse="diffuse/featurebanner_fade.png" fallback="common/4x4_black.png">$PARAM[icon]</texture>
+                <aspectratio scalediffuse="false" align="center">scale</aspectratio>
+                <left>40%</left>
+                <align>left</align>
+           </control>
+
+
+
+          
+
+
+                <include content="Object_Control">
+                    <param name="control">group</param>
+                    <visible>String.IsEqual(ListItem.DBType,episode) | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | String.IsEqual(ListItem.DBType,video) | $EXP[Exp_IsPVRItem]</visible>
+                    <include content="Object_Control" condition="$PARAM[bg_layer]">
+                        <param name="control">image</param>
+                        <texture border="12" colordiffuse="bbffffff">diffuse/poster_fade.png</texture>
+                    </include>
+                    <include content="Object_Control" condition="$PARAM[fg_layer]">
+                        <param name="control">group</param>
+                        <bottom>0</bottom>
+                        <height>120</height>
+                        <!-- <control type="label">
+                            <textcolor>ffdedede</textcolor>
+                            <label>$VAR[Label_Landscape_Plain]</label>
+                            <textoffsetx>30</textoffsetx>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <font>font_mini_bold</font>
+                            <height>20</height>
+                            <bottom>30</bottom>
+                        </control> -->
+                        <control type="label">
+                            <textcolor>ffdedede</textcolor>
+                            <label>$VAR[Label_Landscape_Upper]</label>
+                            <textoffsetx>30</textoffsetx>
+                            <align>left</align>
+                            <font>font_mini_bold</font>
+                            <height>40</height>
+                            <bottom>50</bottom>
+                        </control>
+
+                    </include>
+                </include>
+
+
+
+
+
+
+
 
                 <control type="group">
                     <animation effect="fade" start="100" end="0" delay="1200" time="400" reversible="false">Hidden</animation>
@@ -1565,7 +1637,7 @@
                         <info>ListItem.Progress</info>
                         <visible>Integer.IsGreater(ListItem.Progress,1) + !Integer.IsGreater(ListItem.Progress,99)</visible>
                     </include>
-                    <include condition="$PARAM[selected]">Animation_FocusBounce</include>
+                    <include>Animation_FocusBounce</include>
                 </control>
                 <control type="group">
                     <include content="Animation_ConditionalFade" condition="!$PARAM[detailed] + !$PARAM[selected]">
@@ -2130,6 +2202,7 @@
             <control type="group">
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
+                <aspectratio scalediffuse="false" align="left" aligny="top">keep</aspectratio>
                 <include content="Object_ItemBack">
                     <param name="selected">$PARAM[selected]</param>
                     <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>

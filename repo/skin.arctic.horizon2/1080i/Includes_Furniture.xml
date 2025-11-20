@@ -104,9 +104,10 @@
                             <param name="profileimage" value="$EXP[Exp_HasProfileImage]" />
                             <right>0</right>
                         </include>
+                        <!-- Octo removed right padding for clock -->
                         <include content="Furniture_Clock_Big" condition="!$PARAM[minimal]">
                             <param name="align" value="right" />
-                            <right>80</right>
+                            <right>0</right>
                         </include>
                     </include>
                 </include>
@@ -136,7 +137,7 @@
             </control>
         </definition>
     </include>
-
+<!-- Octo removed right padding for clock -->
     <include name="Furniture_MenuButton">
         <param name="hasclock">true</param>
         <definition>
@@ -150,7 +151,7 @@
                     </include>
                     <include content="Furniture_Clock_Big" condition="$PARAM[hasclock]">
                         <param name="align" value="right" />
-                        <right>80</right>
+                        <right>0</right>
                     </include>
                 </include>
             </include>

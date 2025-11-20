@@ -6,7 +6,8 @@
             <include content="Info_Panel">
                 <param name="plotheight">info_plot_h</param>
                 <param name="details">!$EXP[Exp_ListViews] + !Control.IsVisible(540) + !Control.IsVisible(54) + !Control.IsVisible(552)</param>
-                <top>view_top</top>
+                <!-- Octo reduced top padding to make better room for expanded plot -->
+                <top>170</top>
                 <width>info_panel_w</width>
                 <left>view_pad</left>
             </include>
@@ -67,8 +68,9 @@
             <param name="viewtype_label">$LOCALIZE[31113]</param>
         </include>
     </include>
-    <include name="View_051_Landscape_Row">
+    <include name="View_051_Landscape_Row"> 
         <include content="View_Row_Include">
+            <param name="pad" value="200" />
             <param name="id">51</param>
             <param name="include">List_Landscape_Row</param>
             <param name="wall_include">List_Landscape_Wall</param>

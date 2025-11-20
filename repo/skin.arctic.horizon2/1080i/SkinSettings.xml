@@ -169,7 +169,7 @@
                                 <label>$LOCALIZE[31247]</label>
                                 <visible>Container(3).HasFocus(1)</visible>
                                 <onclick>Skin.ToggleSetting(Widgets.OpaqueFocus)</onclick>
-                                <selected>Skin.HasSetting(Widgets.OpaqueFocus)</selected>
+                                <selected>$EXP[Exp_SkinSetting_WidgetsOpaqueFocus]</selected>
                             </include>
                             <include content="Dialog_Settings_Button">
                                 <param name="id">1011</param>
@@ -319,53 +319,9 @@
                                 <label>$LOCALIZE[31221]</label>
                                 <visible>Container(3).HasFocus(2)</visible>
                                 <onclick>Skin.ToggleSetting(Glass.BorderOutline)</onclick>
-                                <selected>Skin.HasSetting(Glass.BorderOutline)</selected>
+                                <selected>$EXP[Exp_SkinSetting_GlassBorderOutline]</selected>
                             </include>
 
-                            <include content="Dialog_Settings_Label" description="Codec logos">
-                                <param name="id">2363</param>
-                                <label>$LOCALIZE[32063]</label>
-                                <visible>Container(3).HasFocus(2)</visible>
-                            </include>
-                            <include content="Dialog_Settings_Button">
-                                <param name="id">2368</param>
-                                <param name="control" value="button" />
-                                <label>$LOCALIZE[32062]</label>
-                                <visible>Container(3).HasFocus(2)</visible>
-                                <onclick condition="!Skin.HasSetting(osd.useleftCodecStartupLogos) + !Skin.HasSetting(osd.usecenterCodecStartupLogos) + !Skin.HasSetting(osd.userightCodecStartupLogos)">Skin.ToggleSetting(osd.useleftCodecStartupLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">Skin.ToggleSetting(osd.usecenterCodecStartupLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">Skin.ToggleSetting(osd.userightCodecStartupLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">Skin.Reset(osd.useleftCodecStartupLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.userightCodecStartupLogos)">Skin.Reset(osd.userightCodecStartupLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">Skin.Reset(osd.usecenterCodecStartupLogos)</onclick>
-                                <label2>$VAR[OSDCodecLogosStartupLabel]</label2>
-                            </include>
-                            <include content="Dialog_Settings_Button">
-                                <param name="id">2367</param>
-                                <param name="control" value="button" />
-                                <label>$LOCALIZE[32060]</label>
-                                <visible>Container(3).HasFocus(2)</visible>
-                                <onclick condition="!Skin.HasSetting(osd.useleftCodecLogos) + !Skin.HasSetting(osd.usecenterCodecLogos) + !Skin.HasSetting(osd.userightCodecLogos)">Skin.ToggleSetting(osd.useleftCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.useleftCodecLogos)">Skin.ToggleSetting(osd.usecenterCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.usecenterCodecLogos)">Skin.ToggleSetting(osd.userightCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.useleftCodecLogos)">Skin.Reset(osd.useleftCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.userightCodecLogos)">Skin.Reset(osd.userightCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(osd.usecenterCodecLogos)">Skin.Reset(osd.usecenterCodecLogos)</onclick>
-                                <label2>$VAR[OSDCodecLogosLabel]</label2>
-                            </include>
-                            <include content="Dialog_Settings_Button">
-                                <param name="id">2362</param>
-                                <param name="control" value="button" />
-                                <label>$LOCALIZE[32061]</label>
-                                <visible>Container(3).HasFocus(2)</visible>
-                                <onclick condition="!Skin.HasSetting(ppi.useleftCodecLogos) + !Skin.HasSetting(ppi.usecenterCodecLogos) + !Skin.HasSetting(ppi.userightCodecLogos)">Skin.ToggleSetting(ppi.useleftCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(ppi.useleftCodecLogos)">Skin.ToggleSetting(ppi.usecenterCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.ToggleSetting(ppi.userightCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(ppi.useleftCodecLogos)">Skin.Reset(ppi.useleftCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(ppi.userightCodecLogos)">Skin.Reset(ppi.userightCodecLogos)</onclick>
-                                <onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.Reset(ppi.usecenterCodecLogos)</onclick>
-                                <label2>$VAR[PPICodecLogosLabel]</label2>
-                            </include>
 
                             <!-- Navigation -->
                             <include content="Dialog_Settings_Label" description="Navigation">
@@ -410,7 +366,7 @@
                                 <label>$LOCALIZE[31339]</label>
                                 <visible>Container(3).HasFocus(3)</visible>
                                 <onclick>Skin.ToggleSetting(DialogInfo.FocusButtons)</onclick>
-                                <selected>Skin.HasSetting(DialogInfo.FocusButtons)</selected>
+                                <selected>S$EXP[Exp_DialogInfoFocusButtons]</selected>
                             </include>
                             <include content="Dialog_Settings_Button">
                                 <param name="id">3005</param>
@@ -454,7 +410,7 @@
                                 <label>$LOCALIZE[31277]</label>
                                 <visible>Container(3).HasFocus(4)</visible>
                                 <onclick>Skin.ToggleSetting(Furniture.DisableLeftHeader)</onclick>
-                                <selected>!Skin.HasSetting(Furniture.DisableLeftHeader)</selected>
+                                <selected>!$EXP[Exp_FurnitureDisableLeftHeader]</selected>
                                 <!-- Reset window -->
                                 <onclick>SetProperty(ReplaceWindow,skinsettings,Home)</onclick>
                                 <onclick>ReplaceWindow(1197)</onclick>
@@ -465,7 +421,7 @@
                                 <label>$LOCALIZE[31278] / $LOCALIZE[31244]</label>
                                 <visible>Container(3).HasFocus(4)</visible>
                                 <onclick>Skin.ToggleSetting(Furniture.DisableRightHeader)</onclick>
-                                <selected>!Skin.HasSetting(Furniture.DisableRightHeader)</selected>
+                                <selected>!$EXP[Exp_FurnitureDisableRightHeader]</selected>
                                 <!-- Reset window -->
                                 <onclick>SetProperty(ReplaceWindow,skinsettings,Home)</onclick>
                                 <onclick>ReplaceWindow(1197)</onclick>
@@ -476,8 +432,8 @@
                                 <label>-  $LOCALIZE[13014]</label>
                                 <visible>Container(3).HasFocus(4)</visible>
                                 <onclick>Skin.ToggleSetting(Furniture.UseMinimalClock)</onclick>
-                                <selected>Skin.HasSetting(Furniture.UseMinimalClock)</selected>
-                                <enable>!Skin.HasSetting(Furniture.DisableRightHeader) | !Skin.HasSetting(Furniture.DisableLeftHeader)</enable>
+                                <selected>$EXP[Exp_FurnitureUseMinimalClock]</selected>
+                                <enable>!$EXP[Exp_FurnitureDisableRightHeader] | !$EXP[Exp_FurnitureDisableLeftHeader]</enable>
                                 <!-- Reset window -->
                                 <onclick>SetProperty(ReplaceWindow,skinsettings,Home)</onclick>
                                 <onclick>ReplaceWindow(1197)</onclick>
@@ -490,7 +446,7 @@
                                 <onclick condition="!Skin.String(WeatherClock,Small)">Skin.SetString(WeatherClock,Small)</onclick>
                                 <onclick condition="Skin.String(WeatherClock,Small)">Skin.Reset(WeatherClock)</onclick>
                                 <selected>Skin.String(WeatherClock,Small)</selected>
-                                <enable>!Skin.HasSetting(Furniture.DisableRightHeader) + !Skin.HasSetting(Furniture.UseMinimalClock)</enable>
+                                <enable>!$EXP[Exp_FurnitureDisableRightHeader] + !$EXP[Exp_FurnitureUseMinimalClock]</enable>
                             </include>
                             <include content="Dialog_Settings_Button" description="Profile image">
                                 <param name="id">4005</param>
@@ -498,11 +454,11 @@
                                 <label>-  $LOCALIZE[31195]</label>
                                 <visible>Container(3).HasFocus(4)</visible>
                                 <onclick>Skin.ToggleSetting(Home.ShowProfileImage)</onclick>
-                                <selected>Skin.HasSetting(Home.ShowProfileImage)</selected>
+                                <selected>$EXP[Exp_SkinSetting_HomeShowProfileImage]</selected>
                                 <!-- Reset window -->
                                 <onclick>SetProperty(ReplaceWindow,skinsettings,Home)</onclick>
                                 <onclick>ReplaceWindow(1197)</onclick>
-                                <enable>!Skin.HasSetting(Furniture.DisableRightHeader) + !Skin.HasSetting(Furniture.UseMinimalClock)</enable>
+                                <enable>!$EXP[Exp_FurnitureDisableRightHeader] + !$EXP[Exp_FurnitureUseMinimalClock]</enable>
                             </include>
                             <include content="Dialog_Settings_Label" description="Footer">
                                 <param name="id">4006</param>
@@ -630,7 +586,7 @@
                                 <label>$LOCALIZE[31272]</label>
                                 <visible>Container(3).HasFocus(5)</visible>
                                 <onclick>Skin.ToggleSetting(Views.DisableBigPosterRowAutoInfo)</onclick>
-                                <selected>!Skin.HasSetting(Views.DisableBigPosterRowAutoInfo)</selected>
+                                <selected>!$EXP[Exp_SkinSetting_ViewsDisableBigPosterRowAutoInfo]</selected>
                             </include>
                             <include content="Dialog_Settings_Button" description="Plugin init">
                                 <param name="id">5011</param>
@@ -676,7 +632,7 @@
                                 <label>$LOCALIZE[31378]</label>
                                 <visible>Container(3).HasFocus(5)</visible>
                                 <onclick>Skin.ToggleSetting(OSD.DisablePopUpDialogs)</onclick>
-                                <selected>!Skin.HasSetting(OSD.DisablePopUpDialogs)</selected>
+                                <selected>!$EXP[Exp_SkinSetting_OSDDisablePopups]</selected>
                             </include>
                             <include content="Dialog_Settings_Button" description="Trailer button plays fullscreen">
                                 <param name="id">5009</param>
@@ -694,7 +650,6 @@
                                 <onclick>Skin.ToggleSetting(OSD.DisablePauseOnInfo)</onclick>
                                 <selected>!Skin.HasSetting(OSD.DisablePauseOnInfo)</selected>
                             </include>
-
 
                             <!-- Details -->
                             <include content="Dialog_Settings_Label" description="Details">

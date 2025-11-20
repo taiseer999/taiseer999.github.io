@@ -34,7 +34,7 @@
                         <label2>        $LOCALIZE[31038]        </label2>
                         <onclick>Skin.Reset(TMDbHelper.EnableBlur)</onclick>
                         <onclick>Skin.SetString(BackgroundStyle,None)</onclick>
-                        <selected>Skin.String(BackgroundStyle,None)</selected>
+                        <selected>$EXP[Exp_BackgroundStyle_None]</selected>
                     </include>
                     <include content="Dialog_Settings_Button">
                         <param name="id" value="7002" />
@@ -43,7 +43,7 @@
                         <label2>        $LOCALIZE[31038]        </label2>
                         <onclick>Skin.Reset(TMDbHelper.EnableBlur)</onclick>
                         <onclick>Skin.SetString(BackgroundStyle,Image)</onclick>
-                        <selected>Skin.String(BackgroundStyle,Image)</selected>
+                        <selected>$EXP[Exp_BackgroundStyle_Image]</selected>
                     </include>
                     <include content="Dialog_Settings_Button">
                         <param name="id" value="7003" />
@@ -52,7 +52,7 @@
                         <label2>        $LOCALIZE[31036]        </label2>
                         <onclick>Skin.Reset(TMDbHelper.EnableBlur)</onclick>
                         <onclick>Skin.SetString(BackgroundStyle,Fanart)</onclick>
-                        <selected>Skin.String(BackgroundStyle,Fanart)</selected>
+                        <selected>$EXP[Exp_BackgroundStyle_Fanart]</selected>
                     </include>
                     <include content="Dialog_Settings_Button">
                         <param name="id" value="7004" />
@@ -61,7 +61,7 @@
                         <label2>        $LOCALIZE[31037]        </label2>
                         <onclick>Skin.SetBool(TMDbHelper.EnableBlur)</onclick>
                         <onclick>Skin.SetString(BackgroundStyle,Blur)</onclick>
-                        <selected>Skin.String(BackgroundStyle,Blur)</selected>
+                        <selected>$EXP[Exp_BackgroundStyle_Blur]</selected>
                     </include>
                     <control type="group" id="7901">
                         <height>40</height>
@@ -80,7 +80,7 @@
                         <label2>        $LOCALIZE[31038]        </label2>
                         <onclick>Skin.SetString(ForegroundStyle,None)</onclick>
                         <selected>Skin.String(ForegroundStyle,None)</selected>
-                        <enable>!Skin.String(BackgroundStyle,Fanart)</enable>
+                        <enable>!$EXP[Exp_BackgroundStyle_Fanart]</enable>
                     </include>
                     <include content="Dialog_Settings_Button">
                         <param name="id" value="7007" />
@@ -89,7 +89,7 @@
                         <label2>        $LOCALIZE[31036]        </label2>
                         <onclick>Skin.SetString(ForegroundStyle,ClearArt)</onclick>
                         <selected>Skin.String(ForegroundStyle,ClearArt)</selected>
-                        <enable>!Skin.String(BackgroundStyle,Fanart)</enable>
+                        <enable>!$EXP[Exp_BackgroundStyle_Fanart]</enable>
                     </include>
                     <include content="Dialog_Settings_Button">
                         <param name="id" value="7008" />
@@ -97,8 +97,8 @@
                         <label>$LOCALIZE[31041]</label>
                         <label2>        $LOCALIZE[31165]        </label2>
                         <onclick>Skin.SetString(ForegroundStyle,FlixArt)</onclick>
-                        <selected>Skin.String(ForegroundStyle,FlixArt)</selected>
-                        <enable>!Skin.String(BackgroundStyle,Fanart)</enable>
+                        <selected>$EXP[Exp_ForegroundStyle_FlixArt]</selected>
+                        <enable>!$EXP[Exp_BackgroundStyle_Fanart]</enable>
                     </include>
                     <include content="Dialog_Settings_Button">
                         <param name="id" value="7009" />
@@ -106,8 +106,8 @@
                         <label>$LOCALIZE[31012]</label>
                         <label2>        $LOCALIZE[31165]        </label2>
                         <onclick>Skin.SetString(ForegroundStyle,KeyArt)</onclick>
-                        <selected>Skin.String(ForegroundStyle,KeyArt)</selected>
-                        <enable>!Skin.String(BackgroundStyle,Fanart)</enable>
+                        <selected>$EXP[Exp_ForegroundStyle_KeyArt]</selected>
+                        <enable>!$EXP[Exp_BackgroundStyle_Fanart]</enable>
                     </include>
                 </control>
             </control>
@@ -138,7 +138,7 @@
                             <label2>        $LOCALIZE[31038]        </label2>
                             <onclick>Skin.Reset(TMDbHelper.EnableCrop)</onclick>
                             <onclick>Skin.SetBool(UseLightFont)</onclick>
-                            <selected>!Skin.HasSetting(TMDbHelper.EnableCrop) + Skin.HasSetting(UseLightFont)</selected>
+                            <selected>!Skin.HasSetting(TMDbHelper.EnableCrop) + $EXP[Exp_SkinSetting_UseLightFont]</selected>
                         </include>
                         <include content="Dialog_Settings_Button">
                             <param name="id" value="8003" />
@@ -147,7 +147,7 @@
                             <label2>        $LOCALIZE[31038]        </label2>
                             <onclick>Skin.Reset(TMDbHelper.EnableCrop)</onclick>
                             <onclick>Skin.Reset(UseLightFont)</onclick>
-                            <selected>!Skin.HasSetting(TMDbHelper.EnableCrop) + !Skin.HasSetting(UseLightFont)</selected>
+                            <selected>!Skin.HasSetting(TMDbHelper.EnableCrop) + !$EXP[Exp_SkinSetting_UseLightFont]</selected>
                         </include>
                         <include content="Dialog_Settings_Button">
                             <param name="id" value="8002" />
@@ -180,8 +180,8 @@
                             <param name="control" value="radiobutton" />
                             <label>$LOCALIZE[31226]</label>
                             <onclick>Skin.ToggleSetting(Background.ExtraFanart)</onclick>
-                            <selected>Skin.HasSetting(Background.ExtraFanart)</selected>
-                            <visible>Skin.String(BackgroundStyle,Fanart)</visible>
+                            <selected>$EXP[Exp_SkinSetting_BackgroundExtraFanart]</selected>
+                            <visible>$EXP[Exp_BackgroundStyle_Fanart]</visible>
                         </include>
                         <include content="Dialog_Settings_Button" description="Shorter Plot Title">
                             <param name="id" value="8026" />
@@ -189,29 +189,29 @@
                             <label>$LOCALIZE[31380]</label>
                             <onclick>Skin.ToggleSetting(Background.NarrowPlot)</onclick>
                             <selected>Skin.HasSetting(Background.NarrowPlot)</selected>
-                            <visible>!Skin.String(BackgroundStyle,Fanart)</visible>
+                            <visible>!$EXP[Exp_BackgroundStyle_Fanart]</visible>
                         </include>
                         <include content="Dialog_Settings_Button" description="Simple background (information)">
                             <param name="id" value="8021" />
                             <param name="control" value="radiobutton" />
                             <label>$LOCALIZE[31176] ([LOWERCASE]$LOCALIZE[19033][/LOWERCASE])</label>
                             <onclick>Skin.ToggleSetting(Info.EnableSimpleBackground)</onclick>
-                            <selected>Skin.HasSetting(Info.EnableSimpleBackground)</selected>
+                            <selected>$EXP[Exp_SkinSetting_InfoEnableSimpleBackground]</selected>
                         </include>
                         <include content="Dialog_Settings_Button" description="Simple background (standard widgets)">
                             <param name="id" value="8022" />
                             <param name="control" value="radiobutton" />
                             <label>$LOCALIZE[31176] ([LOWERCASE]$LOCALIZE[31103][/LOWERCASE])</label>
                             <onclick>Skin.ToggleSetting(Widgets.DisableSimpleBackground)</onclick>
-                            <selected>!Skin.HasSetting(Widgets.DisableSimpleBackground)</selected>
+                            <selected>!$EXP[Exp_SkinSetting_WidgetsDisableSimpleBackground]</selected>
                         </include>
                         <include content="Dialog_Settings_Button" description="Simple background (expanded widgets)">
                             <param name="id" value="8023" />
                             <param name="control" value="radiobutton" />
                             <label>$LOCALIZE[31176] ([LOWERCASE]$LOCALIZE[31327][/LOWERCASE])</label>
                             <onclick>Skin.ToggleSetting(Widgets.DisableExpandedBackground)</onclick>
-                            <selected>Skin.HasSetting(Widgets.DisableExpandedBackground) + !Skin.HasSetting(Widgets.DisableSimpleBackground)</selected>
-                            <enable>!Skin.HasSetting(Widgets.DisableSimpleBackground)</enable>
+                            <selected>$EXP[Exp_SkinSetting_WidgetsDisableExpandedBackground] + !$EXP[Exp_SkinSetting_WidgetsDisableSimpleBackground]</selected>
+                            <enable>!$EXP[Exp_SkinSetting_WidgetsDisableSimpleBackground]</enable>
                         </include>
 
                     </control>
@@ -221,7 +221,7 @@
 
             <control type="group">
                 <right>400</right>
-                <visible>ControlGroup(9000).HasFocus() + !Control.HasFocus(9099) + !Control.HasFocus(9098)</visible>
+                <visible>$EXP[Exp_ControlGroupHasFocus_9000] + !Control.HasFocus(9099) + !Control.HasFocus(9098)</visible>
                 <include>Animation_FadeIn</include>
                 <include>Animation_FadeOut</include>
                 <control type="image">

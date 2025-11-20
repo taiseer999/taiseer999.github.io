@@ -9,7 +9,7 @@
             <param name="id">6000</param>
             <onleft>Close</onleft>
             <onright>Close</onright>
-            <ondown condition="!VideoPlayer.Content(livetv)">SetFocus(6501)</ondown>
+            <ondown condition="!$EXP[Exp_VideoPlayerContentLiveTV]">SetFocus(6501)</ondown>
             <onup>Close</onup>
             <oninfo>Close</oninfo>
             <!-- <onclick>Close</onclick> -->
@@ -70,7 +70,7 @@
                     <left>-40</left>
                     <width>1190</width>
                     <onclick>SetProperty(OSDExtendedInfo,1,Home)</onclick>
-                    <onclick condition="!Player.Paused + !Skin.HasSetting(OSD.DisablePauseOnInfo)">Pause</onclick>
+                    <onclick condition="!$EXP[Exp_PlayerPaused] + !Skin.HasSetting(OSD.DisablePauseOnInfo)">Pause</onclick>
                     <onclick>Action(Close)</onclick>
                     <onclick>Dialog.Close(videoosd,force)</onclick>
                     <onclick>RunScript(plugin.video.themoviedb.helper,recommendations=oninfo,tmdb_type=person,tmdb_id=$INFO[Container(6501).ListItem.UniqueID(tmdb)],window_id=1191)</onclick>
@@ -132,7 +132,7 @@
                     <animation effect="fade" start="100" end="20" time="200" delay="0" condition="Container(6539).IsUpdating">Conditional</animation>
                     <visible>!String.IsEmpty(Window.Property(CastMemberList))</visible>
                     <onclick>SetProperty(OSDExtendedInfo,1,Home)</onclick>
-                    <onclick condition="!Player.Paused + !Skin.HasSetting(OSD.DisablePauseOnInfo)">Pause</onclick>
+                    <onclick condition="!$EXP[Exp_PlayerPaused] + !Skin.HasSetting(OSD.DisablePauseOnInfo)">Pause</onclick>
                     <onclick>Action(Close)</onclick>
                     <onclick>Dialog.Close(videoosd,force)</onclick>
                     <onclick>RunScript(plugin.video.themoviedb.helper,recommendations=oninfo,tmdb_type=$INFO[Window.Property(CastMemberParamType)],tmdb_id=$INFO[Container(6539).ListItem.UniqueID(tmdb)],window_id=1191)</onclick>
@@ -161,7 +161,7 @@
         <include content="OSD_CastInfo_HintText">
             <param name="label">$LOCALIZE[31293]</param>
             <visible>Control.HasFocus(6000)</visible>
-            <visible>!VideoPlayer.Content(livetv)</visible>
+            <visible>!$EXP[Exp_VideoPlayerContentLiveTV]</visible>
             <visible>!Window.IsVisible(script-tmdbhelper-wikipedia.xml)</visible>
         </include>
     </controls>

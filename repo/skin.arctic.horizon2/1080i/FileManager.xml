@@ -6,6 +6,7 @@
         <include>Background_Main</include>
         <include content="Dialog_Background">
             <include>Dimension_Info</include>
+
             <include content="Animation_WindowTransition_Settings">
                 <param name="windowopen" value="!Window.Previous(FileManager.xml)" />
                 <param name="windowclose" value="!Window.Next(FileManager.xml)" />

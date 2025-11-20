@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
     <!-- OPTIMIZATION 1: Simplified Furniture Top Left -->
+    <!-- Octo hid title furniture on home page -->
     <include name="Home_Base_Furniture_TopLeft">
         <control type="group">
             <include content="Furniture_Top_Left">
@@ -8,6 +9,8 @@
             </include>
             <visible>!$EXP[Exp_InfoDialogs]</visible>
             <visible>!$EXP[Exp_RecommendationDialogs]</visible>
+            <visible>!$EXP[Exp_TMDBWidget_Container300] | !$EXP[Exp_TMDBWidget_Container301]</visible>
+
             <!-- OPTIMIZATION: Reduced animation time and removed delay for lower-end devices -->
             <animation effect="fade" start="0" end="100" time="200" delay="100" reversible="false"
                 condition="!Skin.HasSetting(Performance.ReduceEffects)">Visible</animation>
@@ -207,7 +210,7 @@
                 <left>20</left>
                 <width>80</width>
                 <height>60</height>
-                <centertop>50%</centertop>
+                <centertop>20%</centertop>
                 <aspectratio>keep</aspectratio>
                 <bordersize>4</bordersize>
                 <texture colordiffuse="main_fg_70">special://skin/extras/icons/search.png</texture>
@@ -292,6 +295,39 @@
         </control>
     </include>
 
+        <!-- Need icon for bumper -->
+        <control type="image">
+            <left>20</left>
+            <width>80</width>
+            <height>60</height>
+            <centertop>50%</centertop>
+            <aspectratio>keep</aspectratio>
+            <bordersize>0</bordersize>
+            <texture colordiffuse="main_fg_70">special://skin/extras/icons/home.png</texture>
+            <visible>Skin.HasSetting(Home.DisableSearchMenu) + !Control.HasFocus(302)</visible>
+        </control>
+        <control type="image">
+            <left>20</left>
+            <width>80</width>
+            <height>60</height>
+            <centertop>50%</centertop>
+            <aspectratio>keep</aspectratio>
+            <bordersize>4</bordersize>
+            <texture colordiffuse="main_fg_70">special://skin/extras/icons/search.png</texture>
+            <visible>!Skin.HasSetting(Home.DisableSearchMenu) + !Control.HasFocus(302)</visible>
+        </control>
+        <control type="image">
+            <left>20</left>
+            <width>80</width>
+            <height>60</height>
+            <centertop>50%</centertop>
+            <aspectratio>keep</aspectratio>
+            <bordersize>4</bordersize>
+            <texture colordiffuse="main_fg_70">$INFO[Container(300).ListITem.Icon]</texture>
+            <visible>Control.HasFocus(302)</visible>
+        </control>
+    
+
     <!-- OPTIMIZATION 9: Streamlined Text Menu Buttons -->
     <include name="Home_Horz_Menubar_Text_Button">
         <!-- Focused state -->
@@ -299,8 +335,8 @@
             <texturefocus />
             <texturenofocus />
             <!-- OPTIMIZATION: Use static textures instead of dynamic texture maker -->
-            <alttexturefocus border="80" colordiffuse="$VAR[ColorSelected]">common/menumain.png</alttexturefocus>
-            <alttexturenofocus border="80" colordiffuse="$VAR[ColorSelected]">common/menumain.png</alttexturenofocus>
+            <alttexturefocus border="80" colordiffuse="$VAR[ColorSelected]">common/menumain2.png</alttexturefocus>
+            <alttexturenofocus border="80" colordiffuse="$VAR[ColorSelected]">common/menumain2.png</alttexturenofocus>
             <usealttexture>String.IsEqual(Container(300).ListItem.Label,$PARAM[label]) +
                 !$EXP[Exp_Control302_HasFocus]</usealttexture>
             <visible>$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]</visible>
@@ -318,18 +354,18 @@
         <control type="togglebutton">
             <texturefocus />
             <texturenofocus />
-            <alttexturefocus border="80" colordiffuse="dialog_bg_100">common/menumain.png</alttexturefocus>
-            <alttexturenofocus border="80" colordiffuse="dialog_bg_100">common/menumain.png</alttexturenofocus>
+            <alttexturefocus border="80" colordiffuse="dialog_bg_100">common/menumain2.png</alttexturefocus>
+            <alttexturenofocus border="80" colordiffuse="dialog_bg_100">common/menumain2.png</alttexturenofocus>
             <usealttexture>String.IsEqual(Container(300).ListItem.Label,$PARAM[label]) +
                 !$EXP[Exp_Control302_HasFocus]</usealttexture>
             <visible>![$EXP[Exp_ControlHasFocus_300] | $EXP[Exp_ControlHasFocus_399]]</visible>
             <height>256</height>
             <width>auto</width>
             <label>$PARAM[label]</label>
-            <altlabel>[COLOR=dialog_fg_70]$PARAM[label][/COLOR]</altlabel>
+            <altlabel>[COLOR=dialog_fg_30]$PARAM[label][/COLOR]</altlabel>
             <textoffsetx>80</textoffsetx>
             <font>font_main_bold</font>
-            <textcolor>main_fg_70</textcolor>
+            <textcolor>main_fg_30</textcolor>
             <aligny>center</aligny>
         </control>
     </include>
@@ -812,4 +848,6 @@
             </include>
         </include>
     </include>
-</includes>
+</includes>de>
+    </include>
+</includes>/includes>

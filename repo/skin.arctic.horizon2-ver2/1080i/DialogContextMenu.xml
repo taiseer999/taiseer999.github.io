@@ -27,7 +27,7 @@
                 <control type="group">
                     <visible>$EXP[Exp_ContextMenu_HasQuickNav]</visible>
                     <include content="Dialog_Background">
-                        <param name="overlay" value="true" />
+                        <param name="overlay" value="false" />
                         <param name="overlay_texture" value="$VAR[Image_ContextFanart]" />
                         <include content="Dialog_Context_Image">
                             <param name="diffuse" value="diffuse/poster_w435_h640.png" />

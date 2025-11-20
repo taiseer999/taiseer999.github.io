@@ -7,7 +7,7 @@
     </include>
 
     <variable name="ColorMainItem">
-        <value condition="Skin.String(ForegroundStyle,FlixArt)">ff3d3543</value>
+        <value condition="$EXP[Exp_ForegroundStyle_FlixArt]">ff3d3543</value>
         <value>ff34353b</value>
     </variable>
 
@@ -22,20 +22,20 @@
     <!-- Highlight Color -->
     <variable name="ColorHighlight">
         <value condition="!String.IsEmpty(Skin.String(focuscolor.name))">$INFO[Skin.String(focuscolor.name)]</value>
-        <value>ff0091ea</value>
+        <value>ff4a148c</value>
     </variable>
 
     <!-- Gradient Color -->
     <variable name="ColorGradient">
         <value condition="!Skin.HasSetting(EnableMonochromeHighlight) + !String.IsEmpty(Skin.String(gradientcolor.name))">$INFO[Skin.String(gradientcolor.name)]</value>
-        <value condition="!Skin.HasSetting(EnableMonochromeHighlight)">ff00bfa5</value>
+        <value condition="!Skin.HasSetting(EnableMonochromeHighlight)">ff9c27b0</value>
         <value>$VAR[ColorHighlight]</value>
     </variable>
 
     <!-- Watched / Progress Color -->
     <variable name="ColorWatchedProgress">
         <value condition="!String.IsEmpty(Skin.String(watchedprogresscolor.name))">$INFO[Skin.String(watchedprogresscolor.name)]</value>
-        <value>ff03b585</value>
+        <value>ffd7ad33</value>
     </variable>
 
     <!-- EPG Progress Color -->

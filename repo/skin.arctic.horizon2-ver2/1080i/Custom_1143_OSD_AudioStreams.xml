@@ -13,7 +13,7 @@
             <param name="nibpos" value="250" />
             <param name="method" value="set_player_audiostream" />
             <include>OSD_Stream_Selector_Loading</include>
-            <visible>Window.IsVisible(videoosd)</visible>
+            <visible>$EXP[Exp_WindowVisible_VideoOSD]</visible>
         </include>
     </controls>
 </window>

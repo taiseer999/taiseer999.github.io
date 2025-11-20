@@ -267,7 +267,7 @@
         </animation>
     </include>
 
-    <include name="Animation_WindowTransition_Settings">
+    <include>
         <param name="windowopen">!$EXP[Exp_SettingsDialogs_Prev]</param>
         <param name="windowclose">!$EXP[Exp_SettingsDialogs_Next]</param>
 

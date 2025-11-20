@@ -147,6 +147,7 @@
 
 
     <!-- ORIGINAL EXPRESSIONS (ESSENTIAL FOR FUNCTIONALITY) -->
+     <!-- ORIGINAL EXPRESSIONS (ESSENTIAL FOR FUNCTIONALITY) -->
     <expression name="Exp_HasBackgroundVideo">[Skin.HasSetting(UseBackgroundVideo) +
         $EXP[Exp_PlayerHasVideo]
         + ![$EXP[Exp_InfoDialogs] + !$EXP[Exp_StringIsEmpty_WindowHomePropertyHasTrailer]]]</expression>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog">
-    <include content="Object_DefaultControl" condition="!Skin.HasSetting(DialogInfo.FocusButtons)">
+    <include content="Object_DefaultControl" condition="!$EXP[Exp_DialogInfoFocusButtons]">
         <param name="always">true</param>
         <param name="defaultcontrol">5000</param>
     </include>
-    <include content="Object_DefaultControl" condition="Skin.HasSetting(DialogInfo.FocusButtons) + !$EXP[Exp_IsPersonInfo]">
+    <include content="Object_DefaultControl" condition="$EXP[Exp_DialogInfoFocusButtons] + !$EXP[Exp_IsPersonInfo]">
         <param name="always">true</param>
         <param name="defaultcontrol">5001</param>
     </include>
-    <include content="Object_DefaultControl" condition="Skin.HasSetting(DialogInfo.FocusButtons) + $EXP[Exp_IsPersonInfo]">
+    <include content="Object_DefaultControl" condition="$EXP[Exp_DialogInfoFocusButtons] + $EXP[Exp_IsPersonInfo]">
         <param name="always">true</param>
         <param name="defaultcontrol">5010</param>
     </include>
@@ -17,7 +17,7 @@
     <onunload>ClearProperty(HasTrailer,Home)</onunload>
     <controls>
 
-        <include condition="Window.IsVisible(1191) | Window.IsVisible(fullscreenvideo)">Background_Main</include>
+        <include condition="Window.IsVisible(1191) | $EXP[Exp_WindowVisible_FullscreenVideo]">Background_Main</include>
         <include>Defs_TMDbHelper_Loader</include>
 
         <include content="DialogInfo_MainGroup">
@@ -33,7 +33,7 @@
                 </include>
                 <include content="DialogInfo_RightGroup">
                     <control type="group">
-                        <visible>!Control.HasFocus(7001) | !Player.HasVideo</visible>
+                        <visible>!Control.HasFocus(7001) | !$EXP[Exp_PlayerHasVideo]</visible>
                         <visible>!Control.HasFocus(7003)</visible>
 
                         <animation effect="fade" start="0" end="100" time="400" delay="400" reversible="false">Visible</animation>
@@ -74,8 +74,8 @@
         </include>
 
         <include condition="Skin.HasSetting(Recommendations.UseLocal)" content="DialogInfo_LocalRecommendations">
-            <onup condition="!Skin.HasSetting(DialogInfo.FocusButtons)">SetFocus(5000)</onup>
-            <onup condition="Skin.HasSetting(DialogInfo.FocusButtons)">SetFocus(4000)</onup>
+            <onup condition="!$EXP[Exp_DialogInfoFocusButtons]">SetFocus(5000)</onup>
+            <onup condition="$EXP[Exp_DialogInfoFocusButtons]">SetFocus(4000)</onup>
             <ondown>330</ondown>
             <visible>ControlGroup(6000).HasFocus()</visible>
             <include>Animation_Recommendations_Visible</include>

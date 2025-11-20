@@ -466,7 +466,7 @@
                 <include content="Object_Control">
                     <param name="control">label</param>
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <right>grid_x04</right>
+                    <right>grid_x02</right>
                     <left>grid_x04</left>
                     <textcolor>dialog_fg_70</textcolor>
                     <selectedcolor>dialog_fg_70</selectedcolor>
@@ -689,7 +689,7 @@
 
                 <!-- Detailed Info -->
                 <control type="group">
-                    <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
+                    <visible>[$EXP[Exp_IsMovieType] | $EXP[Exp_StringIsEqual_ListItemDBType_TVShow] | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | $EXP[Exp_StringIsEqual_ListItemDBType_Set] | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
                     <left>grid_x04</left>
                     <right>grid_x04</right>
                     <control type="group">
@@ -743,7 +743,7 @@
 
                 <!-- Basic Info -->
                 <control type="group">
-                    <visible>![String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
+                    <visible>![$EXP[Exp_IsMovieType] | $EXP[Exp_StringIsEqual_ListItemDBType_TVShow] | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Episode)] | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | $EXP[Exp_StringIsEqual_ListItemDBType_Set] | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,album)]</visible>
                     <left>grid_x04</left>
                     <right>grid_x04</right>
 
@@ -1096,7 +1096,7 @@
                         <aspectratio scalediffuse="false">scale</aspectratio>
                     </control>
                 </include>
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -1145,12 +1145,12 @@
                         <aspectratio scalediffuse="false" align="left">keep</aspectratio>
                         <bordersize>20</bordersize>
                         <visible>!$EXP[Exp_HasArtLandscape]</visible>
-                        <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)</visible>
+                        <visible>$EXP[Exp_IsMovieType] | $EXP[Exp_StringIsEqual_ListItemDBType_Set] | $EXP[Exp_StringIsEqual_ListItemDBType_TVShow] | $EXP[Exp_StringIsEqual_ListItemDBType_Season]</visible>
                     </include>
                 </include>
                 <include content="Object_Control" condition="!Skin.HasSetting(Views.DisableBigLandscapeText)">
                     <param name="control">group</param>
-                    <visible>String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,video) | $EXP[Exp_IsPVRItem]</visible>
+                    <visible>String.IsEqual(ListItem.DBType,episode) | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | String.IsEqual(ListItem.DBType,video) | $EXP[Exp_IsPVRItem]</visible>
                     <include content="Object_Control" condition="$PARAM[bg_layer]">
                         <param name="control">image</param>
                         <texture border="12" colordiffuse="bbffffff">diffuse/poster_fade.png</texture>
@@ -1189,7 +1189,7 @@
                         </control>
                     </include>
                 </include>
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -1211,10 +1211,13 @@
         </definition>
     </include>
 
+    <!-- Octo modified banners -->
+
     <include name="Layout_BigBanner">
         <param name="selected">false</param>
         <param name="fg_layer">true</param>
         <param name="bg_layer">true</param>
+                <param name="icon">$INFO[ListItem.Art(fanart)]</param>
         <param name="diffuse">diffuse/banner_w1760_h320.png</param>
         <definition>
             <control type="group">
@@ -1227,18 +1230,45 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                     </include>
+
+            <control type="image">
+               <left>-1</left>
+               <texture background="true" diffuse="diffuse/banner_w1760_h320.png">common/4x4_black.png</texture>
+            </control>
+
+           <control type="image">
+                <texture background="true" diffuse="diffuse/banner_fade.png" fallback="common/4x4_black.png">$PARAM[icon]</texture>
+                <aspectratio scalediffuse="false" align="center">scale</aspectratio>
+                <left>40%</left>
+                <align>left</align>
+           </control>
+
                     <control type="image">
-                        <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_Banner]</texture>
-                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <texture background="true" diffuse="$PARAM[diffuse]">$INFO[ListItem.Art(clearlogo)]</texture>
+                        <aspectratio scalediffuse="false" align="center">keep</aspectratio>
+                        <bordersize>100,70,100,70</bordersize>
+                        <right>1050</right>
+                        <left>0</left>
                     </control>
-                    <control type="image">
-                        <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_Clearlogo]</texture>
-                        <aspectratio scalediffuse="false" align="left">keep</aspectratio>
-                        <bordersize>20</bordersize>
-                        <visible>String.IsEmpty(ListItem.Art(banner)) + String.IsEmpty(ListItem.Art(tvshow.banner)) + String.IsEmpty(ListItem.Art(season.banner))</visible>
-                    </control>
+                    <control type="textbox">
+                            <visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
+                            <wrapmultiline>true</wrapmultiline>
+                            <textcolor>main_fg_90</textcolor>
+                            <wrapmultiline>true</wrapmultiline>
+                            <label>$INFO[ListItem.Label]</label>
+                            <textoffsetx>30</textoffsetx>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <font>font_banner_black_doublerow</font>
+                            <width>700</width>
+                            <scroll>false</scroll>
+                            <wrapmultiline>true</wrapmultiline>
+                        <right>1050</right>
+                        <left>100</left>
+                            <top>-20</top>
+                        </control>        
                 </include>
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -1257,38 +1287,80 @@
         </definition>
     </include>
 
+<!-- Octo modified featurebanner bg overlay -->
+
     <include name="Layout_FeatureBanner">
         <param name="selected">false</param>
         <param name="icon">$INFO[ListItem.Art(fanart)]</param>
+        <param name="diffuse">diffuse/featurebanner.png</param>
         <definition>
+                               
             <control type="group">
                 <nested />
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
                 <include content="Object_ItemBack">
-                    <param name="selected">$PARAM[selected]</param>
+                    <param name="selected">$PARAM[shadow_colordiffuse]</param>
                     <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                 </include>
-                <control type="image">
-                    <texture background="true" diffuse="diffuse/featurefilm_y.png">$PARAM[icon]</texture>
-                    <aspectratio scalediffuse="false" align="left">scale</aspectratio>
-                    <right>0</right>
-                    <width>1067</width>
-                </control>
-                <control type="image">
-                    <texture background="true" flipx="true" diffuse="diffuse/featurefilm_x.png">$PARAM[icon]</texture>
-                    <aspectratio scalediffuse="false" align="right">scale</aspectratio>
-                    <right>1067</right>
-                </control>
-                <control type="image">
-                    <width>400</width>
-                    <texture colordiffuse="black" border="12" flipx="true">diffuse/featurefilm_x.png</texture>
-                </control>
-                <control type="image">
-                    <left>400</left>
-                    <right>400</right>
-                    <texture>common/dim-side-bezier.png</texture>
-                </control>
+
+            <control type="image">
+               <left>-1</left>
+               <texture background="true" diffuse="diffuse/featurebanner.png">common/4x4_black.png</texture>
+            </control>
+
+           <control type="image">
+                <texture background="true" diffuse="diffuse/featurebanner_fade.png" fallback="common/4x4_black.png">$PARAM[icon]</texture>
+                <aspectratio scalediffuse="false" align="center">scale</aspectratio>
+                <left>40%</left>
+                <align>left</align>
+           </control>
+
+
+
+          
+
+
+                <include content="Object_Control">
+                    <param name="control">group</param>
+                    <visible>String.IsEqual(ListItem.DBType,episode) | $EXP[Exp_StringIsEqual_ListItemDBType_Season] | String.IsEqual(ListItem.DBType,video) | $EXP[Exp_IsPVRItem]</visible>
+                    <include content="Object_Control" condition="$PARAM[bg_layer]">
+                        <param name="control">image</param>
+                        <texture border="12" colordiffuse="bbffffff">diffuse/poster_fade.png</texture>
+                    </include>
+                    <include content="Object_Control" condition="$PARAM[fg_layer]">
+                        <param name="control">group</param>
+                        <bottom>0</bottom>
+                        <height>120</height>
+                        <!-- <control type="label">
+                            <textcolor>ffdedede</textcolor>
+                            <label>$VAR[Label_Landscape_Plain]</label>
+                            <textoffsetx>30</textoffsetx>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <font>font_mini_bold</font>
+                            <height>20</height>
+                            <bottom>30</bottom>
+                        </control> -->
+                        <control type="label">
+                            <textcolor>ffdedede</textcolor>
+                            <label>$VAR[Label_Landscape_Upper]</label>
+                            <textoffsetx>30</textoffsetx>
+                            <align>left</align>
+                            <font>font_mini_bold</font>
+                            <height>40</height>
+                            <bottom>50</bottom>
+                        </control>
+
+                    </include>
+                </include>
+
+
+
+
+
+
+
 
                 <control type="group">
                     <animation effect="fade" start="100" end="0" delay="1200" time="400" reversible="false">Hidden</animation>
@@ -1305,7 +1377,7 @@
                     </include>
                 </control>
 
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -1393,7 +1465,7 @@
                         </control>
                     </include>
                 </include>
-                <include content="Object_Control" condition="!$PARAM[selected] + $PARAM[bg_layer] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $PARAM[bg_layer] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -1565,7 +1637,7 @@
                         <info>ListItem.Progress</info>
                         <visible>Integer.IsGreater(ListItem.Progress,1) + !Integer.IsGreater(ListItem.Progress,99)</visible>
                     </include>
-                    <include condition="$PARAM[selected]">Animation_FocusBounce</include>
+                    <include>Animation_FocusBounce</include>
                 </control>
                 <control type="group">
                     <include content="Animation_ConditionalFade" condition="!$PARAM[detailed] + !$PARAM[selected]">
@@ -1609,7 +1681,7 @@
                                 <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
                                 <font>font_main_bold</font>
                                 <align>left</align>
-                                <visible>![!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | Window.IsVisible(fullscreenvideo)] + !String.ISEmpty(ListItem.Title)]]</visible>
+                                <visible>![!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | $EXP[Exp_WindowVisible_FullscreenVideo]] + !String.ISEmpty(ListItem.Title)]]</visible>
                             </control>
                             <control type="label">
                                 <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
@@ -1621,7 +1693,7 @@
                                 <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
                                 <font>font_main_bold</font>
                                 <align>left</align>
-                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | Window.IsVisible(fullscreenvideo)] + !String.ISEmpty(ListItem.Title)]</visible>
+                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | $EXP[Exp_WindowVisible_FullscreenVideo]] + !String.ISEmpty(ListItem.Title)]</visible>
                             </control>
                             <include content="Object_Indicator" condition="!Window.IsVisible(MyPVRGuide.xml)">
                                 <param name="shadow">false</param>
@@ -1649,7 +1721,7 @@
                                 <font>font_tiny</font>
                                 <align>left</align>
                                 <autoscroll>false</autoscroll>
-                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | Window.IsVisible(fullscreenvideo)] + !String.ISEmpty(ListItem.Title)]</visible>
+                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | $EXP[Exp_WindowVisible_FullscreenVideo]] + !String.ISEmpty(ListItem.Title)]</visible>
                             </control>
                         </control>
                     </control>
@@ -1741,7 +1813,7 @@
                                 <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
                                 <font>font_main_bold</font>
                                 <align>left</align>
-                                <visible>![!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | Window.IsVisible(fullscreenvideo)] + !String.ISEmpty(ListItem.Title)]]</visible>
+                                <visible>![!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | $EXP[Exp_WindowVisible_FullscreenVideo]] + !String.ISEmpty(ListItem.Title)]]</visible>
                             </control>
                             <control type="label">
                                 <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
@@ -1753,7 +1825,7 @@
                                 <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
                                 <font>font_main_bold</font>
                                 <align>left</align>
-                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | Window.IsVisible(fullscreenvideo)] + !String.ISEmpty(ListItem.Title)]</visible>
+                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | $EXP[Exp_WindowVisible_FullscreenVideo]] + !String.ISEmpty(ListItem.Title)]</visible>
                             </control>
                             <include content="Object_Indicator" condition="!Window.IsVisible(MyPVRGuide.xml)">
                                 <param name="shadow">false</param>
@@ -1781,7 +1853,7 @@
                                 <font>font_tiny</font>
                                 <align>left</align>
                                 <autoscroll>false</autoscroll>
-                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | Window.IsVisible(fullscreenvideo)] + !String.ISEmpty(ListItem.Title)]</visible>
+                                <visible>!String.IsEmpty(ListItem.EpisodeName) | !String.IsEmpty(ListItem.Genre) | ListItem.IsFolder | [[Window.IsVisible(MyPVRChannels.xml) | $EXP[Exp_WindowVisible_FullscreenVideo]] + !String.ISEmpty(ListItem.Title)]</visible>
                             </control>
                         </control>
                     </control>
@@ -1995,7 +2067,7 @@
                         <centertop>50%</centertop>
                     </control>
                 </control>
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -2021,7 +2093,7 @@
                 </include>
                 <control type="group">
                     <height>$PARAM[item_w]</height>
-                    <include content="Object_Control" condition="$PARAM[selected] + Skin.HasSetting(Widgets.OpaqueFocus)">
+                    <include content="Object_Control" condition="$PARAM[selected] + $EXP[Exp_SkinSetting_WidgetsOpaqueFocus]">
                         <param name="control">image</param>
                         <texture colordiffuse="$VAR[ColorMainItem]" diffuse="$PARAM[diffuse]">common/white.png</texture>
                         <visible>$EXP[Exp_IsPVRItem]</visible>
@@ -2050,7 +2122,7 @@
                         <align>center</align>
                     </control>
                 </include>
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -2107,7 +2179,7 @@
                         <textoffsetx>20</textoffsetx>
                     </control>
                 </control>
-                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                     <param name="control">image</param>
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -2130,6 +2202,7 @@
             <control type="group">
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
+                <aspectratio scalediffuse="false" align="left" aligny="top">keep</aspectratio>
                 <include content="Object_ItemBack">
                     <param name="selected">$PARAM[selected]</param>
                     <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
@@ -2141,7 +2214,7 @@
                         <aspectratio scalediffuse="false">scale</aspectratio>
                         <visible>$EXP[Exp_HasLandscapeFormatArt]</visible>
                     </control>
-                    <include content="Object_Control" condition="$PARAM[selected] + Skin.HasSetting(Widgets.OpaqueFocus)">
+                    <include content="Object_Control" condition="$PARAM[selected] + $EXP[Exp_SkinSetting_WidgetsOpaqueFocus]">
                         <param name="control">image</param>
                         <texture colordiffuse="$VAR[ColorMainItem]" diffuse="$PARAM[diffuse]">common/white.png</texture>
                         <visible>!$EXP[Exp_HasLandscapeFormatArt]</visible>
@@ -2151,7 +2224,7 @@
                         <aspectratio scalediffuse="false">keep</aspectratio>
                         <bordersize>40</bordersize>
                         <top>0</top>
-                        <include content="Object_Bottom" condition="!Skin.HasSetting(Widgets.OpaqueFocus)">
+                        <include content="Object_Bottom" condition="!$EXP[Exp_SkinSetting_WidgetsOpaqueFocus]">
                             <param name="bottom">-40</param>
                         </include>
                         <visible>!$EXP[Exp_HasLandscapeFormatArt]</visible>
@@ -2194,7 +2267,7 @@
                 </control>
                 <include content="Object_Control">
                     <param name="control">group</param>
-                    <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
+                    <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
                         <param name="control">image</param>
                         <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                     </include>
