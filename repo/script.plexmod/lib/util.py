@@ -23,37 +23,44 @@ import requests
 import plexnet.util
 
 from .kodijsonrpc import rpc
-
 from . import colors
 # noinspection PyUnresolvedReferences
 from .exceptions import NoDataException
-from .logging import log, log_error
+from .logging import log, DEBUG_LOG, LOG, ERROR, setShutdown, showNotification
 # noinspection PyUnresolvedReferences
 from .i18n import T, TRANSLATED_ROLES
 from . import aspectratio
 # noinspection PyUnresolvedReferences
 from .kodi_util import (ADDON, xbmc, xbmcvfs, xbmcaddon, xbmcgui, translatePath, KODI_VERSION_MAJOR, KODI_VERSION_MINOR,
-                        KODI_BUILD_NUMBER, FROM_KODI_REPOSITORY)
+                        KODI_BUILD_NUMBER, FROM_KODI_REPOSITORY, PYTHON_VERSION, ENABLE_HIGH_CONCURRENCY)
 from .properties import setGlobalProperty, setGlobalBoolProperty, waitForGPEmpty, waitForConsumption, getGlobalProperty
 # noinspection PyUnresolvedReferences
 from .addonsettings import addonSettings, AddonSettings
 from .settings_util import getSetting, getUserSetting, setSetting, USER_SETTINGS, JSON_SETTINGS, DEFAULT_SETTINGS
+from .os_utils import fast_iglob
 from .monitor import MONITOR
 
 
 DEBUG = True
-_SHUTDOWN = False
 
 SKIN_PLEXTUARY = "skin.plextuary" in xbmc.getSkinDir()
 PROFILE = translatePath(ADDON.getAddonInfo('profile'))
 
 
 DEF_THEME = "modern-colored"
-THEME_VERSION = 62
+THEME_VERSION = 69
 
-xbmc.log('script.plexmod: Kodi {0}.{1} (build {2})'.format(KODI_VERSION_MAJOR, KODI_VERSION_MINOR, KODI_BUILD_NUMBER),
+UI_INTERVAL = 1 / float(addonSettings.uiWaitRate)
+
+MONITOR.wait_interval = UI_INTERVAL
+
+xbmc.log('script.plexmod: Kodi {0}.{1} (build {2}, Python: {3}, '
+         'High concurrency possible: {4})'.format(KODI_VERSION_MAJOR, KODI_VERSION_MINOR, KODI_BUILD_NUMBER,
+                                         PYTHON_VERSION, ENABLE_HIGH_CONCURRENCY),
          xbmc.LOGINFO)
 
+xbmc.log('script.plexmod: UI wait rate is {0} ({1} Hz)'.format(UI_INTERVAL, addonSettings.uiWaitRate),
+         xbmc.LOGINFO)
 
 def getChannelMapping():
     data = rpc.Settings.GetSettings(filter={"section": "system", "category": "audio"})["settings"]
@@ -89,7 +96,7 @@ except:
 try:
     DISPLAY_RESOLUTION = [xbmcgui.getScreenWidth(), xbmcgui.getScreenHeight()]
 except:
-    log('Couldn\'t determine display resolution')
+    LOG('Couldn\'t determine display resolution')
     DISPLAY_RESOLUTION = [1920, 1080]
 
 
@@ -115,31 +122,6 @@ homeButtonMapped()
 DEBUG = addonSettings.debug
 
 
-def LOG(msg, *args, **kwargs):
-    return log(msg, *args, **kwargs)
-
-
-def DEBUG_LOG(msg, *args, **kwargs):
-    if _SHUTDOWN:
-        return
-
-    if not addonSettings.debug and not xbmc.getCondVisibility('System.GetBool(debug.showloginfo)'):
-        return
-
-    return log(msg, *args, **kwargs)
-
-
-def ERROR(txt='', hide_tb=False, notify=False, time_ms=3000):
-    short = log_error(txt, hide_tb)
-    if notify:
-        showNotification('ERROR: {0}'.format(txt or short), time_ms=time_ms)
-    return short
-
-
-def TEST(msg):
-    xbmc.log('---TEST: {0}'.format(msg), xbmc.LOGINFO)
-
-
 hasCustomBGColour = False
 if KODI_VERSION_MAJOR > 18:
     hasCustomBGColour = not addonSettings.dynamicBackgrounds and addonSettings.backgroundColour and \
@@ -158,14 +140,6 @@ def reInitAddon():
     ADDON = xbmcaddon.Addon()
     getAdvancedSettings()
     populateTimeFormat()
-
-
-def showNotification(message, time_ms=3000, icon_path=None, header=ADDON.getAddonInfo('name')):
-    try:
-        icon_path = icon_path or translatePath(ADDON.getAddonInfo('icon'))
-        xbmc.executebuiltin('Notification({0},{1},{2},{3})'.format(header, message, time_ms, icon_path))
-    except RuntimeError:  # Happens when disabling the addon
-        LOG(message)
 
 
 def videoIsPlaying():
@@ -213,33 +187,33 @@ def durationToText(seconds):
     return '0 seconds'
 
 
-def durationToShortText(ms, shortHourMins=False, shortSeconds=False):
+def durationToShortText(ms, shortHourMins=False, shortSeconds=False, noSpaces=False):
     """
     Converts seconds to a short user friendly string
     Example: 143 -> 2m 23s
     """
     days = int(ms / 86400000)
     if days:
-        return '{0} d'.format(days)
+        return '{0}{1}d'.format(days, "" if noSpaces else " ")
     left = ms % 86400000
     hours = int(left / 3600000)
     if hours:
-        hours_s = '{0} h '.format(hours)
+        hours_s = '{0}{1}h '.format(hours, "" if noSpaces else " ")
     else:
         hours_s = ''
     left = left % 3600000
     mins = int(left / 60000)
     if mins:
         if shortHourMins and hours:
-            return '{0}:{1} h'.format(hours, mins)
-        return hours_s + '{0} m'.format(mins)
+            return '{0}:{1}{2}h'.format(hours, mins, "" if noSpaces else " ")
+        return hours_s + '{0}{1}m'.format(mins, "" if noSpaces else " ")
     elif hours_s:
         return hours_s.rstrip()
     secs = int(left % 60000)
     if secs:
         secs /= 1000
-        return '{0} s'.format(round(secs) if shortSeconds and round(secs) == int(secs) else secs)
-    return '0 s'
+        return '{0}{1}s'.format(round(secs) if shortSeconds and round(secs) == int(secs) else secs, "" if noSpaces else " ")
+    return noSpaces and '0s' or '0 s'
 
 
 def cleanLeadingZeros(text):
@@ -611,8 +585,11 @@ timeFormat, timeFormatKN, padHour = getTimeFormat()
 
 def getShortDateFormat():
     try:
-        return (rpc.Settings.GetSettingValue(setting="locale.shortdateformat")["value"]
-                .replace("DD", "%d").replace("MM", "%m").replace("YYYY", "%Y"))
+        fromAPI = rpc.Settings.GetSettingValue(setting="locale.shortdateformat")["value"]
+        if fromAPI == "regional":
+            return xbmc.getRegion('dateshort').replace('%-d', '%d')
+        else:
+            return fromAPI.replace("DD", "%d").replace("MM", "%m").replace("YYYY", "%Y")
     except:
         DEBUG_LOG("Couldn't get locale.shortdateformat setting, falling back to MM/DD/YYYY")
         return "%d/%m/%Y"
@@ -662,13 +639,33 @@ def getPlatform():
 
 
 platform = getPlatform()
+platform_version = None
+device = None
+vendor = None
+model = None
 
 
 def getCoreELEC():
+    global platform, device, platform_version, vendor, model
     try:
         stdout = subprocess.check_output('lsb_release', shell=True).decode()
         match = re.search(r'CoreELEC', stdout)
         if match:
+            platform = "Linux"
+            try:
+                model = subprocess.check_output(['cat', '/proc/device-tree/model']).decode().strip("\0 \n\r")
+                vendor, device = model.split()
+            except:
+                pass
+            try:
+                platform_version = stdout.split(":")[1].strip()
+            except:
+                pass
+
+            if model:
+                #device = ("{} ({})".format(model, stdout.strip("\0 \n\r")).replace("\0", "")
+                #          .replace("\n", "").replace("\r", ""))
+                device = "{} (CoreELEC)".format(model).replace("\0", "").replace("\n", "").replace("\r", "")
             return True
 
     except:
@@ -688,13 +685,9 @@ def getWebOS():
 
 
 def getPlatformFlavor():
-    # detected before?
-    flavor = getSetting('platform_flavor', None)
-    if flavor is None:
-        flavor = 'default'
-        if platform in ['Linux', 'RaspberryPi']:
-            flavor = "CoreELEC" if getCoreELEC() else "LG WebOS" if getWebOS() else 'default'
-        setSetting('platform_flavor', flavor)
+    flavor = 'default'
+    if platform in ['Linux', 'RaspberryPi']:
+        flavor = "CoreELEC" if getCoreELEC() else "LG WebOS" if getWebOS() else 'default'
 
     if flavor != 'default':
         LOG("{} detected".format(flavor))
@@ -745,6 +738,10 @@ def getProgressImage(obj, perc=None, view_offset=None):
         if not view_offset:
             view_offset = obj.get('viewOffset') and obj.viewOffset.asInt()
         if not view_offset or not obj.get('duration'):
+            return ''
+        try:
+            view_offset = int(view_offset)
+        except ValueError:
             return ''
         pct = int((view_offset / obj.duration.asFloat()) * 100)
     else:
@@ -879,9 +876,20 @@ def garbageCollect():
     gc.collect(2)
 
 
+def cleanupCacheFolder():
+    try:
+        base = translatePath("special://temp")
+        for f in fast_iglob(os.path.join(base, "theme_*.mp3")):
+            fn = os.path.join(base, f)
+            DEBUG_LOG("Removing leftover cached file: {}", fn)
+            xbmcvfs.delete(fn)
+    except:
+        pass
+
+
 def shutdown():
-    global MONITOR, ADDON, T, _SHUTDOWN
-    _SHUTDOWN = True
+    global MONITOR, ADDON, T
+    setShutdown()
     del MONITOR
     del T
     del ADDON

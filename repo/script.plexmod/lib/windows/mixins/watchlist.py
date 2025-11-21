@@ -79,26 +79,24 @@ class IsWatchlistedTask(WatchlistCheckBaseTask):
         if self.isCanceled():
             return
 
-        server = None
         try:
             if self.isCanceled():
                 return
-            server = self.getServer()
-            res = server.query("/library/metadata/{}/userState".format(self.guid))
-            is_wl = False
-
-            # some etree foo to find the watchlisted state
-            if res and res.get("size", 0):
-                for child in res:
-                    if child.tag == "UserState":
-                        if child.get("watchlistedAt", None):
-                            is_wl = True
-                        break
+            is_wl = is_watchlisted(guid=self.guid, server=self.getServer())
             self.callback(is_wl)
         except:
             util.ERROR()
-        finally:
-            del server
+
+
+def is_watchlisted(guid, server):
+    res = server.query("/library/metadata/{}/userState".format(guid))
+
+    # some etree foo to find the watchlisted state
+    if res and res.get("size", 0):
+        for child in res:
+            if child.tag == "UserState":
+                if child.get("watchlistedAt", None):
+                    return True
 
 
 def wl_wrap(f):
@@ -120,13 +118,25 @@ def removeFromWatchlistBlind(guid):
     if not util.getUserSetting("use_watchlist", True):
         return
 
-    util.DEBUG_LOG("Watchlist: Trying to blindly remove {}", guid)
+    util.DEBUG_LOG("Watchlist: Blind: Trying to blindly remove {}", guid)
     try:
         if not guid or not guid.startswith("plex://"):
             return
 
         server = pnUtil.SERVERMANAGER.getDiscoverServer()
-        server.query("/actions/removeFromWatchlist", ratingKey=GUIDToRatingKey(guid), method="put")
+
+        tries = 0
+        g = GUIDToRatingKey(guid)
+        while tries < 3:
+            server.query("/actions/removeFromWatchlist", ratingKey=g, method="put")
+            if not is_watchlisted(g, server):
+                break
+            util.LOG("Watchlist: Blind: Item still watchlisted, retrying ({}/3)", tries + 1)
+            util.MONITOR.waitForAbort(0.1)
+            tries += 1
+        else:
+            util.LOG("Watchlist: Blind: Action failed.")
+            return
     except:
         exc = traceback.format_exc()
         util.DEBUG_LOG("Watchlist: Failed to blindly remove {}: {}", guid, exc)
@@ -310,7 +320,24 @@ class WatchlistUtilsMixin(object):
         server = pnUtil.SERVERMANAGER.getDiscoverServer()
 
         try:
-            server.query("/actions/{}".format(method), ratingKey=GUIDToRatingKey(item.guid), method="put")
+            g = GUIDToRatingKey(item.guid)
+            tries = 0
+            wl_action_failed = False
+            while tries < 3:
+                server.query("/actions/{}".format(method), ratingKey=g, method="put")
+                is_wl = is_watchlisted(g, server)
+                if (is_wl and method == "addToWatchlist") or (not is_wl and method == "removeFromWatchlist"):
+                    break
+                util.LOG("Watchlist: Action didn't succeed, retrying ({}/3)", tries + 1)
+                util.MONITOR.waitForAbort(0.1)
+                tries += 1
+            else:
+                util.LOG("Watchlist: Action failed.")
+                wl_action_failed = True
+
+            if wl_action_failed:
+                return self.is_watchlisted
+
             util.DEBUG_LOG("Watchlist action {} for {} succeeded", method, item.ratingKey)
             self.is_watchlisted = method == "addToWatchlist"
             self.setBoolProperty("is_watchlisted", method == "addToWatchlist")

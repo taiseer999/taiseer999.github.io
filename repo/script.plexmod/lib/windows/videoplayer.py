@@ -356,6 +356,7 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
         self.hidePostPlay()
 
         player.PLAYER.dontRequeueBGM = True
+        player.PLAYER.startingVideoPlayback = True
 
         def anyOtherVPlayer():
             return any(list(filter(lambda x: x['playerid'] > 0, kodijsonrpc.rpc.Player.GetActivePlayers())))
@@ -379,8 +380,10 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
                 util.MONITOR.waitForAbort(0.5)
 
         # wait for BGM to end if it's playing or queued
-        if self.handleBGM:
+        if self.handleBGM or player.PLAYER.isPlayingAudio():
             util.DEBUG_LOG("Checking BGM")
+            if player.PLAYER.BGMTask:
+                player.PLAYER.BGMTask.cancel()
             ct = 0
             while not player.PLAYER.bgmPlaying and player.PLAYER.bgmStarting and ct < 20:
                 util.DEBUG_LOG("Waiting for BGM to start as it has been queued")
@@ -418,6 +421,8 @@ class VideoPlayerWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RolesMi
         except Exception as e:
             util.LOG("Playback failed: {}", traceback.format_exc())
             self.doClose()
+        finally:
+            player.PLAYER.startingVideoPlayback = False
 
         util.DEBUG_LOG("VideoPlayerWindow: Playback initialized; returning from play()")
 

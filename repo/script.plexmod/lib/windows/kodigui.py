@@ -154,8 +154,8 @@ class XMLBase(object):
                                 pass
 
                         tries = 0
-                        while xbmc.Player().isPlaying() and tries < 50:
-                            util.MONITOR.waitForAbort(0.1)
+                        while xbmc.Player().isPlaying() and tries < util.MONITOR.waitAmount(5):
+                            util.MONITOR.waitFor()
                             tries += 1
                     except:
                         pass
@@ -277,16 +277,18 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
     def waitForOpen(self, base_win_id=None):
         tries = 0
         while ((not base_win_id and not self.isOpen) or
-               (base_win_id and xbmcgui.getCurrentWindowId() <= base_win_id)) and tries < 120:
+               (base_win_id and xbmcgui.getCurrentWindowId() <= base_win_id)) and tries < util.MONITOR.waitAmount(120, interval=1.0):
             if tries == 0:
-                util.LOG("Couldn't open window {}, other dialog open? Retrying for 120s.", self)
+                util.LOG("Couldn't open window {}, other dialog open? Retrying for 120s. ({}, {}, {})", (self, base_win_id, xbmcgui.getCurrentWindowId(), self.isOpen))
             if util.MONITOR.abortRequested():
-                util.LOG("Couldn't open window {}, abort requested", self)
+                util.LOG("Couldn't open window {}, abort requested ({}, {}, {})", (self, base_win_id, xbmcgui.getCurrentWindowId(), self.isOpen))
                 break
             self.show()
             if not self.isOpen:
                 tries += 1
-                util.MONITOR.waitForAbort(1.0)
+                util.MONITOR.waitFor(1.0)
+            else:
+                break
 
         util.DEBUG_LOG("Window {} opened: {}", self, self.isOpen)
 
@@ -355,8 +357,8 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
         self._closing = False
         # can we activate?
         ct = 0
-        while xbmcgui.getCurrentWindowDialogId() > 9999 and ct < 20:
-            util.MONITOR.waitForAbort(0.1)
+        while xbmcgui.getCurrentWindowDialogId() > 9999 and ct < util.MONITOR.waitAmount(2):
+            util.MONITOR.waitFor()
             ct += 1
 
         lastWinID = BaseFunctions.lastWinID
@@ -373,15 +375,15 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
                 # Activate of window 'xxxxxx' refused because there are active modal dialogs
                 if xbmcgui.getCurrentWindowId() == lastWinID:
                     util.DEBUG_LOG('{}: not yet active, retrying', self.__class__.__name__)
-                    util.MONITOR.waitForAbort(0.1)
+                    util.MONITOR.waitFor()
 
                 ct = 0
-                while xbmcgui.getCurrentWindowId() == lastWinID and ct < 4 and not util.MONITOR.abortRequested():
+                while xbmcgui.getCurrentWindowId() == lastWinID and ct < util.MONITOR.waitAmount(2, interval=0.5) and not util.MONITOR.abortRequested():
                     ct += 1
                     # we might have run into an active dialog, which happens sometimes, so we didn't really activate the window
                     # retry
                     xbmcgui.WindowXML.show(self)
-                    util.MONITOR.waitForAbort(0.5)
+                    util.MONITOR.waitFor(0.5)
 
                 util.DEBUG_LOG("{}: activation state (ID: {}, last: {}, current: {})", self, self._winID, lastWinID, xbmcgui.getCurrentWindowId())
 
@@ -474,7 +476,7 @@ class ControlledBase:
         self.wait()
 
     def wait(self):
-        while not self._closing and not MONITOR.waitForAbort(0.1):
+        while not self._closing and not MONITOR.waitFor():
             pass
 
     def close(self):
@@ -1398,6 +1400,6 @@ class GlobalProperty():
 
 def waitForVisibility(control):
     tries = 0
-    while not xbmc.getCondVisibility('Control.IsVisible({0})'.format(control)) and tries < 50:
-        util.MONITOR.waitForAbort(0.1)
+    while not xbmc.getCondVisibility('Control.IsVisible({0})'.format(control)) and tries < util.MONITOR.waitAmount(5):
+        util.MONITOR.waitFor()
         tries += 1

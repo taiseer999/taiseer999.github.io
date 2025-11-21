@@ -169,10 +169,10 @@ class BusySignalContext(BusyMsgContext):
 
         try:
             if not self.ignoreSignal:
-                waited = 0
-                while not self.signalReceived and waited < self.waitMax:
-                    util.MONITOR.waitForAbort(0.1)
-                    waited += 0.1
+                tries = 0
+                while not self.signalReceived and tries < util.MONITOR.waitAmount(self.waitMax):
+                    util.MONITOR.waitFor()
+                    tries += 1
         finally:
             self.signalEmitter.off(self.wfSignal, self.onSignal)
 

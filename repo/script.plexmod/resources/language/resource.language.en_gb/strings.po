@@ -1270,6 +1270,14 @@ msgctxt "#33604"
 msgid "When the above is enabled and no video chapters are available, simulate them by using the markers identified by the Plex Server (Intro, Credits)."
 msgstr ""
 
+msgctxt "#35001"
+msgid "Combine video & virtual chapters"
+msgstr ""
+
+msgctxt "#35002"
+msgid "Combine video & virtual chapters when both are available."
+msgstr ""
+
 msgctxt "#33605"
 msgid "Video Chapters"
 msgstr ""
@@ -1707,7 +1715,7 @@ msgid "Request this amount of media items per chunk request in library view (+6-
 msgstr ""
 
 msgctxt "#32973"
-msgid "Episodes: Skip Post Play screen"
+msgid "Episodes: Continuous playback"
 msgstr ""
 
 msgctxt "#32974"
@@ -2271,7 +2279,7 @@ msgid "\"Use alternate seek\" wait for seek"
 msgstr ""
 
 msgctxt "#33650"
-msgid "This adjusts the delay between seek-tries on problematic platforms when \"Use alternate seek\" is enabled, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. Default: 500ms"
+msgid "This adjusts the delay between seek-tries on problematic platforms when \"Use alternate seek\" is enabled, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. Default: 100ms"
 msgstr ""
 
 msgctxt "#33651"
@@ -2769,4 +2777,120 @@ msgstr ""
 
 msgctxt "#34030"
 msgid "Unlock Direct Play for above 4K"
+msgstr ""
+
+msgctxt "#34031"
+msgid "Producer"
+msgstr ""
+
+msgctxt "#34032"
+msgid "Audio Language"
+msgstr ""
+
+msgctxt "#34033"
+msgid "Subtitle Language"
+msgstr ""
+
+msgctxt "#34034"
+msgid "Folder Location"
+msgstr ""
+
+msgctxt "#34035"
+msgid "Editions"
+msgstr ""
+
+msgctxt "#34036"
+msgid "DOVI"
+msgstr ""
+
+msgctxt "#34037"
+msgid "HDR"
+msgstr ""
+
+msgctxt "#34038"
+msgid "Force plex.direct mapping"
+msgstr ""
+
+msgctxt "#34039"
+msgid "If you (still) don't see any posters: Under certain circumstances when Kodi still can't resolve hostnames when loading assets, even though the host resolves natively, enable this to force plex.direct mapping via advancedsettings.xml."
+msgstr ""
+
+msgctxt "#34040"
+msgid "By Progress"
+msgstr ""
+
+msgctxt "#34041"
+msgid "Progress"
+msgstr ""
+
+msgctxt "#34042"
+msgid "By Album"
+msgstr ""
+
+msgctxt "#34043"
+msgid "Album"
+msgstr ""
+
+msgctxt "#34044"
+msgid "UI wait poll rate (Hz)"
+msgstr ""
+
+msgctxt "#34045"
+msgid "When waiting for certain events to occur, wait this long. Default: 10 Hz. With a decent device try 100 Hz, it should feel snappier in certain situations."
+msgstr ""
+
+msgctxt "#34046"
+msgid "Fade theme music in/out"
+msgstr ""
+
+msgctxt "#34047"
+msgid "Cache theme music"
+msgstr ""
+
+msgctxt "#34048"
+msgid "Cache theme music locally instead of streaming it directly"
+msgstr ""
+
+msgctxt "#34049"
+msgid "Seek back on start"
+msgstr ""
+
+msgctxt "#34050"
+msgid "Issue a quick seek forward then back to the start of the video, when we start fresh (no resume point, not marker to immediately skip). Can fix A/V desync issues with certain setups (e.g. CoreELEC on Ugoos with passthrough). Only for DirectPlay. This still requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)"
+msgstr ""
+
+msgctxt "#34051"
+msgid "Movies: Play pre-rolls"
+msgstr ""
+
+msgctxt "#34052"
+msgid "Plays pre-roll clips (server-defined) before playing a movie without a resume point. User-specific."
+msgstr ""
+
+msgctxt "#34053"
+msgid "Cinema Trailers to Play Before Movies"
+msgstr ""
+
+msgctxt "#34054"
+msgid "Play pre-rolls before trailers"
+msgstr ""
+
+msgctxt "#34055"
+msgid "Official Plex clients play the trailers first, then the preroll clips. Enabling this will do the opposite. Default: On. User-specific."
+msgstr ""
+
+msgctxt "#34056"
+msgid "\"Use alternate seek\" prefer reported time"
+msgstr ""
+
+msgctxt "#34057"
+msgid "Use reported seek time instead of the current player time (usually more accurate); Default: On"
+msgstr ""
+
+msgctxt "#34058"
+msgid "\"Use alternate seek\" wait for valid player time"
+msgstr ""
+
+msgctxt "#34059"
+msgid "The player time reporting might be inaccurate on playback start. Wait for a valid player time before seeking; Default: Off"
 msgstr ""

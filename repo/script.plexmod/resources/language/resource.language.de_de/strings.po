@@ -1562,6 +1562,16 @@ msgctxt "#33604"
 msgid "When the above is enabled and no video chapters are available, simulate them by using the markers identified by the Plex Server (Intro, Credits)."
 msgstr "Wenn die obige Option aktiviert ist und keine Video-Kapitel verfügbar sind, virtuelle Kapitel aus den Plex-Server-Markern (Intro, Abspann) erzeugen."
 
+#:
+msgctxt "#35001"
+msgid "Combine video & virtual chapters"
+msgstr "Video- & virtuelle Kapitel kombinieren"
+
+#:
+msgctxt "#35002"
+msgid "Combine video & virtual chapters when both are available."
+msgstr "Kombiniere Video-Kapitel mit virtuellen Kapiteln, falls beide verfügbar sind."
+
 #: 
 msgctxt "#33605"
 msgid "Video Chapters"
@@ -2120,8 +2130,8 @@ msgstr "Diese Anzahl an Medieninhalten pro gestückelter Anfrage in der Biblioth
 
 #: 
 msgctxt "#32973"
-msgid "Episodes: Skip Post Play screen"
-msgstr "Direkt zur nächsten Episode springen"
+msgid "Episodes: Continuous playback"
+msgstr "Episoden: Nahtlose Wiedergabe"
 
 #: 
 msgctxt "#32974"
@@ -2862,8 +2872,8 @@ msgstr "\"Alternatives Spulen\" Sprungwartezeit"
 
 #: 
 msgctxt "#33650"
-msgid "This adjusts the delay between seek-tries on problematic platforms when \"Use alternate seek\" is enabled, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. Default: 500ms"
-msgstr "Dies passt die Wartezeit zwischen Sprungversuchen auf problematischen Plattformen an, wenn \"Alternatives Spulen\" aktiv ist, welches den Fehler behebt, dass das Fortsetzen manchmal nicht funktioniert, oder doppelt gesprungen wird. Solltest Du Fortsetzen-/Doppelsprungprobleme haben, diesen Wert erhöhen. Standard: 500ms"
+msgid "This adjusts the delay between seek-tries on problematic platforms when \"Use alternate seek\" is enabled, which fixes resume not always working or double-seeking. When you have resume/double-seek issues, increase this. Default: 100ms"
+msgstr "Dies passt die Wartezeit zwischen Sprungversuchen auf problematischen Plattformen an, wenn \"Alternatives Spulen\" aktiv ist, welches den Fehler behebt, dass das Fortsetzen manchmal nicht funktioniert, oder doppelt gesprungen wird. Solltest Du Fortsetzen-/Doppelsprungprobleme haben, diesen Wert erhöhen. Standard: 100ms"
 
 #: 
 msgctxt "#33651"
@@ -3345,3 +3355,115 @@ msgstr "an der ersten Abspannmarkierung"
 msgctxt "#34027"
 msgid "earliest between threshold percent and first credits marker"
 msgstr "frühester Wert zwischen Fortschrittsgrenze und erster Abspannmarkierung"
+
+msgctxt "#34028"
+msgid "\"Use alternate seek\" valid seek window"
+msgstr "\"Alternatives Spulen\" valides Spulfenster"
+
+msgctxt "#34029"
+msgid "When \"Use alternate seek\" is enabled, any seek amount outside of this threshold window will be applied, otherwise the seek attempt will be ignored. If you encounter any seek issues, play with this value (ms, default: 2000)"
+msgstr "Mit aktiviertem \"Alternatives Spulen\", wird jeder Spulversuch größer als dieser Wert angewandt, ansonsten wird der Spulversuch ignoriert. Sollten Probleme beim Spulen auftreten, diesen Wert verändern (ms, Standard: 2000)"
+
+msgctxt "#34030"
+msgid "Unlock Direct Play for above 4K"
+msgstr "Direct Play für über 4K freischalten"
+
+msgctxt "#34031"
+msgid "Producer"
+msgstr "Produzent"
+
+msgctxt "#34032"
+msgid "Audio Language"
+msgstr "Tonspur Sprache"
+
+msgctxt "#34033"
+msgid "Subtitle Language"
+msgstr "Untertitel Sprache"
+
+msgctxt "#34034"
+msgid "Folder Location"
+msgstr "Speicherort"
+
+msgctxt "#34035"
+msgid "Editions"
+msgstr "Edition"
+
+msgctxt "#34036"
+msgid "DOVI"
+msgstr "DOVI"
+
+msgctxt "#34037"
+msgid "HDR"
+msgstr "HDR"
+
+msgctxt "#34038"
+msgid "Force plex.direct mapping"
+msgstr "plex.direct-Zuordnung erzwingen"
+
+msgctxt "#34039"
+msgid "If you (still) don't see any posters: Under certain circumstances when Kodi still can't resolve hostnames when loading assets, even though the host resolves natively, enable this to force plex.direct mapping via advancedsettings.xml."
+msgstr "Sind (weiterhin) keine Poster sichtbar: In bestimmten Fällen kann Kodi weiterhin keine Hostnamen auflösen. In dem Fall aktivieren um die plex.direct-Zuordnung via advancedsettings.xml zu erzwingen."
+
+msgctxt "#34040"
+msgid "By Progress"
+msgstr "Nach Fortschritt"
+
+msgctxt "#34041"
+msgid "Progress"
+msgstr "Fortschritt"
+
+msgctxt "#34042"
+msgid "By Album"
+msgstr "Nach Album"
+
+msgctxt "#34043"
+msgid "Album"
+msgstr "Album"
+
+msgctxt "#34044"
+msgid "UI wait poll rate (Hz)"
+msgstr "UI Warteabtastrate (Hz)"
+
+msgctxt "#34045"
+msgid "When waiting for certain events to occur, poll this often. Default: 10 Hz. With a decent device try 100 Hz, it should feel snappier in certain situations."
+msgstr "Warten wir auf bestimmte Ereignisse, frage so häufig ab. Standard: 10 Hz. Mit einem leistungsfähigen Gerät, versuche 100 Hz, was sich in bestimmten Situationen schneller anfühlen sollte."
+
+msgctxt "#34046"
+msgid "Fade theme music in/out"
+msgstr "Titelmusik überblenden"
+
+msgctxt "#34047"
+msgid "Cache theme music"
+msgstr "Titelmusik zwischenspeichern"
+
+msgctxt "#34048"
+msgid "Cache theme music locally instead of streaming it directly"
+msgstr "Speichere Titelmusik lokal zwischen anstatt es direkt zu streamen"
+
+msgctxt "#34049"
+msgid "Seek back on start"
+msgstr "Zurückspringen beim Start"
+
+msgctxt "#34050"
+msgid "Issue a quick seek forward then back to the start of the video, when we start fresh (no resume point, not marker to immediately skip). Can fix A/V desync issues with certain setups (e.g. CoreELEC on Ugoos with passthrough). Only for DirectPlay. This still requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)"
+msgstr "Springe kurz vorwärts und dann zurück zum Start des Videos, wenn wir ein nicht bereits angefangenes Video starten (kein Wiedergabepunkt, keine Markierung, die sofort übersprungen würde). Kann A/V-Synchronisierungsfehler unter bestimmten Umständen beheben (z. B. CoreELEC on Ugoos with passthrough). Nur für Direkte Wiedergabe. Dies benötigt weiterhin einen passenden Wert für \"Verzögerung nach Änderung der Bildwiederholrate\" in Kodi (standard: Aus, CE/LG: An)"
+
+msgctxt "#34051"
+msgid "Movies: Play pre-rolls"
+msgstr "Filme: Pre-Roll-Clips abspielen"
+
+msgctxt "#34052"
+msgid "Plays pre-roll clips (server-defined) before playing a movie without a resume point. User-specific."
+msgstr "Spielt erst einen Pre-Roll-Clip (serverseitig definiert) vor einem nicht bereits angefangenen Film ab. Benutzerspezifisch."
+
+msgctxt "#34053"
+msgid "Cinema Trailers to Play Before Movies"
+msgstr "Kinotrailer, die vor dem Film abgespielt werden"
+
+msgctxt "#34054"
+msgid "Play pre-rolls before trailers"
+msgstr "Pre-Roll-Clips vor Kinotrailern abspielen"
+
+msgctxt "#34055"
+msgid "Official Plex clients play the trailers first, then the preroll clips. Enabling this will do the opposite. Default: On. User-specific."
+msgstr "Die offiziellen Plex Clients spielen zuerst Kinotrailer, dann die Pre-Roll-Clips ab. Diese Einstellung invertiert das. Standard: An. Benutzerspezifisch."

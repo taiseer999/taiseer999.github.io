@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+import datetime
+
 from functools import wraps
 
 from . import plexobjects
@@ -13,7 +15,7 @@ from . import mediachoice
 from .mixins import AudioCodecMixin
 
 from lib.data_cache import dcm
-from lib.util import T
+from lib.util import T, shortDF, durationToShortText
 
 
 class PlexVideoItemList(plexobjects.PlexItemList):
@@ -405,6 +407,55 @@ class Video(media.MediaItem, AudioCodecMixin):
         else:
             return res.upper()
 
+    @property
+    def bestMedia(self):
+        return sorted(self.media(), key=lambda m: m.videoResolution)[0]
+
+    def meta_resolutionString(self, *args, **kwargs):
+        try:
+            media = self.bestMedia
+            if media.videoResolution.isdigit():
+                return '{0}p'.format(media.videoResolution)
+            else:
+                return media.videoResolution.upper()
+        except:
+            return ''
+
+    def meta_addedAt(self, *args, **kwargs):
+        addedAt = self.get("addedAt")
+        if addedAt:
+            return datetime.datetime.fromtimestamp(addedAt.asFloat()).strftime(shortDF)
+        return ''
+
+    def meta_originallyAvailableAt(self, *args, **kwargs):
+        val = self.get("originallyAvailableAt")
+        if val:
+            return datetime.datetime.strptime(val, "%Y-%m-%d").strftime(shortDF)
+        return ''
+
+    def meta_lastViewedAt(self, *args, **kwargs):
+        val = self.get("lastViewedAt")
+        if val:
+            return datetime.datetime.fromtimestamp(val.asFloat()).strftime(shortDF)
+        return ''
+
+    def meta_contentRating(self, *args, **kwargs):
+        return self.get("contentRating", '')
+
+    def meta_duration(self, *args, **kwargs):
+        return durationToShortText(self.get("duration", '').asInt(), noSpaces=True)
+
+    def meta_viewCount(self, *args, **kwargs):
+        return self.get("viewCount", '')
+
+    def meta_mediaBitrate(self, *args, **kwargs):
+        try:
+            media = self.bestMedia
+            bits = int(media.get("bitrate", ''))
+            return util.bitrateToString(bits, multiplier=1000)
+        except:
+            return ''
+
     @forceMediaChoice
     def audioCodecString(self):
         if not self.mediaChoice:
@@ -684,6 +735,9 @@ class Movie(PlayableVideo):
         self.session = self._findSession(data)
         self.transcodeSession = self._findTranscodeSession(data)
 
+    def isLibraryItem(self):
+        return True
+
     @property
     def defaultTitle(self):
         title = self.title or ''
@@ -763,6 +817,9 @@ class Show(CachableItemsMixin, Video, media.RelatedMixin, SectionOnDeckMixin):
     @property
     def isFullyWatched(self):
         return self.isWatched
+
+    def isLibraryItem(self):
+        return True
 
     def seasons(self):
         path = self.key
@@ -959,6 +1016,9 @@ class Episode(PlayableVideo, SectionOnDeckMixin):
             self._show = plexobjects.listItems(self.server, self.grandparentKey, cachable=self.cachable,
                                                cache_ref=self.cacheRef, not_cachable=self._not_cachable)[0]
         return self._show
+
+    def isLibraryItem(self):
+        return True
 
     @property
     def genres(self):

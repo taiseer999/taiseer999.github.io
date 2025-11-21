@@ -305,6 +305,16 @@ class MultiUAOptionsSetting(MultiOptionsSetting, UserAwareSetting):
     pass
 
 
+class UAListSetting(ListSetting, UserAwareSetting):
+    def __init__(self, ID, label, default, options, **kwargs):
+        super(UAListSetting, self).__init__(ID, label, default, **kwargs)
+        self.options = options
+
+    def set(self, val, skip_get=False):
+        val = len(self.options) - 1 - val
+        return UserAwareSetting.set(self, val, skip_get=True)
+
+
 class KCMSetting(OptionsSetting):
     key = None
 
@@ -449,7 +459,7 @@ class Settings(object):
                 ),
                 ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
                 BoolSetting(
-                    'theme_music_loop', T(33737, 'Loop theme music'), True
+                    'theme_music_loop', T(33737, 'Loop theme music'), False
                 ),
                 PlayedThresholdSetting('played_threshold', T(33501, 'Video played threshold'), 1,
                                        show_cb=lambda: plexnet.plexapp.SERVERMANAGER.selectedServer.prefs.get("LibraryVideoPlayedThreshold", None) is None
@@ -467,8 +477,8 @@ class Settings(object):
                     (
                         (0, T(34024, 'at selected threshold percentage')),
                         (1, T(34025, 'at final credits marker position')),
-                        (2, T(34025, 'at first credits marker position')),
-                        (3, T(34026, 'earliest between threshold percent and first credits marker')),
+                        (2, T(34026, 'at first credits marker position')),
+                        (3, T(34027, 'earliest between threshold percent and first credits marker')),
                     ),
                     show_cb=lambda: plexnet.plexapp.SERVERMANAGER.selectedServer.prefs.get(
                         "LibraryVideoPlayedAtBehaviour", None) is None
@@ -488,7 +498,7 @@ class Settings(object):
                              ' of asking whether to resume or start from the beginning.')
                 ),
                 BoolSetting(
-                    'home_inprogress_resume', T(33713, 'Home: Resume in-progress items'), True
+                    'home_inprogress_resume', T(33713, 'Home: Resume in-progress items'), False
                 ).description(
                     T(33714, 'Resume in-progress items directly instead of visiting the media.')
                 ),
@@ -651,7 +661,7 @@ class Settings(object):
                         ('modern-dotted', T(32986, 'Modern (dotted)')),
                         ('modern-colored', T(32989, 'Modern (colored)')),
                         ('classic', T(32987, 'Classic')),
-                        ('custom', T(32988, 'Custom')),
+                        #('custom', T(32988, 'Custom')),
                     ), theme_relevant=True
                 ).description(
                     T(32984, 'stub')
@@ -725,7 +735,7 @@ class Settings(object):
                     [(g, g) for g in genres.GENRES_TV]
                 ).description(T(33017, "")),
                 BoolSetting(
-                    'hubs_use_new_continue_watching', T(32998, ''), False
+                    'hubs_use_new_continue_watching', T(32998, ''), True
                 ).description(
                     T(32999, "")
                 ),
@@ -763,6 +773,17 @@ class Settings(object):
             T(32940, 'Player UI'), (
                 BoolSetting('player_official', T(33045, 'Behave like official Plex clients'), True).description(
                     T(33046, '')),
+                BoolUserSetting('preplay_preroll', T(34051, 'Movies: Play pre-rolls'), False).description(
+                    T(34052, 'Plays pre-roll clips (server-defined) before playing a movie without a resume '
+                             'point. User-specific.')),
+                BoolUserSetting('preplay_preroll_first', T(34054, 'Play pre-rolls before trailers'), True).description(
+                    T(34055, 'Official Plex clients play the trailers first, then the preroll clips. Enabling '
+                             'this will do the opposite. Default: On. User-specific.')),
+                UAListSetting(
+                    'preplay_trailers', T(34053, 'Cinema Trailers to Play Before Movies'),
+                    5,
+                    list(map(str, list(range(6))))
+                ),
                 BoolSetting('no_osd_time_spoilers', T(33004, ''), False, backport_from="no_spoilers").description(
                     T(33005, '')),
                 MultiUAOptionsSetting(
@@ -819,6 +840,11 @@ class Settings(object):
                 ).description(T(33094, '')),
                 BoolSetting('resume_seek_behind_onlydp', T(33096, ''), True).description(
                     T(33097, '')),
+                BoolSetting('seek_back_on_start', T(34049, 'Seek back on start'), util.altSeekRecommended).description(
+                    T(34050, "Issue a quick seek forward then back to the start of the video, when we start "
+                             "fresh (no resume point, not marker to immediately skip). Can fix A/V desync issues with "
+                             "certain setups (e.g. CoreELEC on Ugoos with passthrough). Only for DirectPlay. This still "
+                             "requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)")),
                 OptionsSetting(
                     'player_stop_on_idle',
                     T(32946, 'Stop video playback on idle after'),
@@ -844,6 +870,11 @@ class Settings(object):
                 ).description(
                     T(33604, 'When the above is enabled and no video chapters are available, simulate them by using the'
                              ' markers identified by the Plex Server (Intro, Credits).')
+                ),
+                BoolUserSetting(
+                    'combined_chapters', T(35001, 'Combine video & virtual chapters'), True
+                ).description(
+                    T(35002, 'Combine video & virtual chapters when both are available.')
                 ),
                 BoolUserSetting(
                     'auto_skip_in_transcode', T(32948, 'Allow auto-skip when transcoding'), True
@@ -887,7 +918,7 @@ class Settings(object):
                              'ing setting applies. Doesn\'t override enabled binge mode.\nCan be disabled/enabled per TV show.')
                 ),
                 BoolUserSetting(
-                    'skip_post_play_tv', T(32973, 'Episodes: Skip Post Play screen'), False
+                    'skip_post_play_tv', T(32973, 'Episodes: Continuous playback'), False
                 ).description(
                     T(32974, 'When finishing an episode, don\'t show Post Play but go to the next one immediately.'
                              '\nCan be disabled/enabled per TV show. Doesn\'t override enabled binge mode. '
@@ -924,6 +955,9 @@ class Settings(object):
                 ).description(
                     T(32992, 'stub')
                 ),
+                BoolSetting(
+                    'force_pd_mapping', T(34038, 'Force plex.direct mapping'), False
+                ).description(T(34039, 'stub')),
                 IPSetting('manual_ip_0', T(32044, 'Connection 1 IP'), ''),
                 IntegerSetting('manual_port_0', T(32045, 'Connection 1 Port'), 32400),
                 IPSetting('manual_ip_1', T(32046, 'Connection 2 IP'), ''),

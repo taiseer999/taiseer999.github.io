@@ -168,13 +168,13 @@
                     <default>false</default>
                     <control type="toggle"/>
                 </setting>
-                <setting id="coreelec_resume_seek_wait" type="integer" label="33649" help="33650">
+                <setting id="coreelec_resume_seek_wait2" type="integer" label="33649" help="33650">
                     <level>0</level>
-                    <default>850</default>
+                    <default>100</default>
                     <constraints>
-                        <minimum>500</minimum>
-                        <step>50</step>
-                        <maximum>2500</maximum>
+                        <minimum>10</minimum>
+                        <step>10</step>
+                        <maximum>5000</maximum>
                     </constraints>
                     <control type="slider" format="integer">
                         <popup>false</popup>
@@ -191,6 +191,16 @@
                     <control type="slider" format="integer">
                         <popup>false</popup>
                     </control>
+                </setting>
+                <setting id="coreelec_seek_prefer_reported" type="boolean" label="34056" help="34057">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="coreelec_wait_player_time1" type="boolean" label="34058" help="34059">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
                 </setting>
                 <setting id="show_media_ends_info" type="boolean" label="32540" help="32541">
                     <level>0</level>
@@ -439,6 +449,11 @@
                     <default>true</default>
                     <control type="toggle"/>
                 </setting>
+                <setting id="theme_music_fade" type="boolean" label="34046">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
             </group>
         </category>
         <category id="screensaver" label="32488">
@@ -460,6 +475,11 @@
                 <setting id="always_compile_templates" type="boolean" label="33068" help="33069">
                     <level>0</level>
                     <default>false</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="cache_theme_music" type="boolean" label="34047" help="34048">
+                    <level>0</level>
+                    <default>true</default>
                     <control type="toggle"/>
                 </setting>
                 <setting id="verify_mapped_files" type="boolean" label="33002" help="33003">
@@ -598,6 +618,18 @@
                         <minimum>0.5</minimum>
                         <step>0.5</step>
                         <maximum>10</maximum>
+                    </constraints>
+                    <control type="slider" format="number">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="ui_wait_rate" type="number" label="34044" help="34045">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>10</step>
+                        <maximum>1000</maximum>
                     </constraints>
                     <control type="slider" format="number">
                         <popup>false</popup>

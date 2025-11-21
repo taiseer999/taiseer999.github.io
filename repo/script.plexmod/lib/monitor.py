@@ -11,6 +11,7 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
         xbmc.Monitor.__init__(self, *args, **kwargs)
         signalsmixin.SignalsMixin.__init__(self)
         self.device_sleeping = False
+        self.wait_interval = 0.1
 
     def watchStatusChanged(self):
         self.trigger('changed.watchstatus')
@@ -47,6 +48,9 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
         xbmc.executebuiltin('System.LogOff')
 
     def onNotification(self, sender, method, data):
+        if method == "Application.OnVolumeChanged":
+            return
+
         LOG("Notification: {} {} {}".format(sender, method, data))
         if sender == 'script.plexmod' and method.endswith('RESTORE'):
             from .windows import kodigui, windowutils
@@ -121,6 +125,16 @@ class UtilityMonitor(xbmc.Monitor, signalsmixin.SignalsMixin):
     def onSettingsChanged(self):
         """ unused stub, but works if needed """
         pass
+
+    def waitFor(self, interval=None):
+        if interval is None:
+            interval = self.wait_interval
+        return self.waitForAbort(interval)
+
+    def waitAmount(self, amount, interval=None):
+        if interval is None:
+            interval = self.wait_interval
+        return amount / float(interval)
 
 
 MONITOR = UtilityMonitor()

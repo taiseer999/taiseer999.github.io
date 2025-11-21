@@ -435,6 +435,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         self._checkingForExit = False
         self._skipNextAction = False
         self._reloadOnReinit = False
+        self._recheckPD = False
+        self._checkingPD = False
         self._applyTheme = False
         self._ignoreTick = False
         self._ignoreInput = False
@@ -515,7 +517,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         self.hookSignals()
         util.CRON.registerReceiver(self)
         self.updateProperties()
-        self.checkPlexDirectHosts(plexapp.SERVERMANAGER.serversByUuid.values(), source="stored")
+        self.checkPlexDirectHosts(list(plexapp.SERVERMANAGER.serversByUuid.values()), source="stored")
 
     def closeWRecompileTpls(self):
         self._applyTheme = False
@@ -529,7 +531,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
             return
 
         if player.PLAYER.bgmPlaying:
-            player.PLAYER.stopAndWait()
+            player.PLAYER.stopAndWait(fade=util.addonSettings.themeMusicFade, deferred=True)
 
         self._anyItemAction = False
         if self._applyTheme:
@@ -546,8 +548,11 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
             return
 
         if self._reloadOnReinit:
+            if self._recheckPD:
+                self.checkPlexDirectHosts(list(plexapp.SERVERMANAGER.serversByUuid.values()))
             self.serverRefresh()
             self._reloadOnReinit = False
+            self._recheckPD = False
 
         if self.lastFocusID:
             # try focusing the last focused ID. if that's a hub, and it's empty (=not focusable), try focusing the
@@ -571,84 +576,103 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
             self._updateOnDeckHubs()
 
     def checkPlexDirectHosts(self, servers, source="stored", *args, **kwargs):
-        handlePD = util.getSetting('handle_plexdirect')
-        if handlePD == "never":
-            return
+        while self._checkingPD:
+            util.MONITOR.waitFor()
+        try:
+            self._checkingPD = True
+            util.DEBUG_LOG("Home: checkPlexDirectHosts: {} ({})", servers, source)
+            handlePD = util.getSetting('handle_plexdirect')
+            if handlePD == "never":
+                return
 
-        hosts = []
-        for server in servers:
-            force_check = False
-            # we might have an active connection that's marked as local but a combination of settings doesn't allow us
-            # to connect insecurely; force plex.direct handling in this case
-            if server.activeConnection and ".plex.direct:" in server.activeConnection.address and \
-                    not server.activeConnection.pdHostnameResolved:
-                util.DEBUG_LOG("Forcing check for plex.direct connections of: {}", server)
-                force_check = True
+            forcePD = util.getSetting('force_pd_mapping')
 
-            if not force_check:
-                # only check stored or myplex servers
-                if server.sourceType not in (None, plexresource.ResourceConnection.SOURCE_MYPLEX):
-                    continue
-                # if we're set to honor dnsRebindingProtection=1 and the server has this flag at 0 or
-                # if we're set to honor publicAddressMatches=1 and the server has this flag at 0, and we haven't seen the
-                # server locally, skip plex.direct handling
-                if (((util.addonSettings.honorPlextvDnsrebind and not server.dnsRebindingProtection) or
-                        (util.addonSettings.honorPlextvPam and not server.sameNetwork and not server.anyLANConnection))
-                        and not server.anyPDHostNotResolvable):
-                    util.DEBUG_LOG("Ignoring DNS handling for plex.direct connections of: {}", server)
-                    continue
-            hosts += [c.address for c in server.connections]
+            hosts = []
+            s = []
+            for server in servers:
+                force_check = False
+                # we might have an active connection that's marked as local but a combination of settings doesn't allow us
+                # to connect insecurely; force plex.direct handling in this case
+                if (server.activeConnection and ".plex.direct:" in server.activeConnection.address and
+                        not server.activeConnection.pdHostnameResolved) or forcePD:
+                    util.DEBUG_LOG("Forcing check for plex.direct connections of: {} (force: {})", server, forcePD)
+                    force_check = True
 
-        knownHosts = pdm.getHosts()
-        pdHosts = [host for host in hosts if ".plex.direct:" in host]
+                if not force_check:
+                    # only check stored or myplex servers
+                    if server.sourceType not in (None, plexresource.ResourceConnection.SOURCE_MYPLEX):
+                        continue
+                    # if we're set to honor dnsRebindingProtection=1 and the server has this flag at 0 or
+                    # if we're set to honor publicAddressMatches=1 and the server has this flag at 0, and we haven't seen the
+                    # server locally, skip plex.direct handling
+                    if (((util.addonSettings.honorPlextvDnsrebind and not server.dnsRebindingProtection) or
+                            (util.addonSettings.honorPlextvPam and not server.sameNetwork and not server.anyLANConnection))
+                            and not server.anyPDHostNotResolvable):
+                        util.DEBUG_LOG("Ignoring DNS handling for plex.direct connections of: {}", server)
+                        continue
+                hosts += [c.address for c in server.connections]
+                s.append(server.name)
 
-        util.DEBUG_LOG("Checking host mapping for {} {} connections: {}", len(pdHosts), source, ", ".join(pdHosts))
+            knownHosts = pdm.getHosts()
+            pdHosts = [host for host in hosts if ".plex.direct:" in host]
 
-        newHosts = set(pdHosts) - set(knownHosts)
-        if newHosts:
-            force_mapping = None
-            # even for docker hosts we might want to force the mapping if it's the active connection and it didn't
-            # resolve
-            if server.activeConnection and not server.activeConnection.pdHostnameResolved:
-                force_mapping = server.activeConnection.address
-                util.DEBUG_LOG("Forcing mapping for active connection via: {}", server.activeConnection.address)
-            pdm.newHosts(newHosts, source=source, force_mapping=force_mapping)
-        diffLen = len(pdm.diff)
+            util.DEBUG_LOG("Checking host mapping for {} {} connections: {}, servers: {}",
+                           len(pdHosts), source, ", ".join(pdHosts), ", ".join(s))
 
-        # there are situations where the myPlexManager's resources are ready earlier than
-        # any other. In that case, force the check.
-        force = plexapp.MANAGER.gotResources
+            newHosts = set(pdHosts) - set(knownHosts)
+            if newHosts:
+                force_mapping = []
+                # even for docker hosts we might want to force the mapping if it's the active connection and it didn't
+                # resolve
+                for server in servers:
+                    if not server.anyPDHostNotResolvable and not forcePD:
+                        continue
+                    addrs = [c.address for c in server.connections if ".plex.direct:" in c.address and (not c.pdHostnameResolved or forcePD)]
+                    force_mapping += addrs
+                    util.DEBUG_LOG("Forcing mapping for connections via: {}", addrs)
+                pdm.newHosts(newHosts, source=source, force_mapping=force_mapping)
+            diffLen = len(pdm.diff)
 
-        if ((source == "stored" and plexapp.ACCOUNT.isOffline) or source == "myplex" or force) and pdm.differs:
-            if handlePD == 'ask':
-                button = optionsdialog.show(
-                    T(32993, '').format(diffLen),
-                    T(32994, '').format(diffLen),
-                    T(32328, 'Yes'),
-                    T(32035, 'Always'),
-                    T(32033, 'Never'),
-                )
-                if button not in (0, 1, 2):
-                    return
+            # there are situations where the myPlexManager's resources are ready earlier than
+            # any other. In that case, force the check.
+            force = plexapp.MANAGER.gotResources
 
-                if button == 1:
-                    util.setSetting('handle_plexdirect', 'always')
-                elif button == 2:
-                    util.setSetting('handle_plexdirect', 'never')
-                    return
+            util.DEBUG_LOG("Plex.direct hosts that we'll add to advancedsettings.xml: {}", pdm.diff)
 
-            hadHosts = pdm.hadHosts
-            pdm.write()
+            if ((source == "stored" and plexapp.ACCOUNT.isOffline) or source == "myplex" or force or forcePD) and pdm.differs:
+                if handlePD == 'ask':
+                    button = optionsdialog.show(
+                        T(32993, '').format(diffLen),
+                        T(32994, '').format(diffLen),
+                        T(32328, 'Yes'),
+                        T(32035, 'Always'),
+                        T(32033, 'Never'),
+                    )
+                    if button not in (0, 1, 2):
+                        pdm.resetHosts()
+                        return
 
-            if not hadHosts and handlePD == "ask":
-                optionsdialog.show(
-                    T(32995, ''),
-                    T(32996, ''),
-                    T(32997, 'OK'),
-                )
-            else:
-                # be less intrusive
-                util.showNotification(T(32996, ''), header=T(32995, ''))
+                    if button == 1:
+                        util.setSetting('handle_plexdirect', 'always')
+                    elif button == 2:
+                        util.setSetting('handle_plexdirect', 'never')
+                        pdm.resetHosts()
+                        return
+
+                hadHosts = pdm.hadHosts
+                pdm.write()
+
+                if not hadHosts and handlePD == "ask":
+                    optionsdialog.show(
+                        T(32995, ''),
+                        T(32996, ''),
+                        T(32997, 'OK'),
+                    )
+                else:
+                    # be less intrusive
+                    util.showNotification(T(32996, ''), header=T(32995, ''))
+        finally:
+            self._checkingPD = False
 
     def loadLibrarySettings(self):
         setting_key = 'home.settings.{}.{}'.format(plexapp.SERVERMANAGER.selectedServer.uuid[-8:], plexapp.ACCOUNT.ID)
@@ -747,6 +771,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         plexapp.util.APP.on('change:path_mapping_indicators', self.setDirty)
         plexapp.util.APP.on('change:hub_season_thumbnails', self.setDirty)
         plexapp.util.APP.on('change:use_watchlist', self.setDirty)
+        plexapp.util.APP.on('change:force_pd_mapping', self.setHostsDirty)
         plexapp.util.APP.on('change:debug', self.setDebugFlag)
         plexapp.util.APP.on('change:update_source', self.updateSourceChanged)
         plexapp.util.APP.on('watchlist:modified', self.watchlistDirty)
@@ -778,6 +803,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         plexapp.util.APP.off('change:path_mapping_indicators', self.setDirty)
         plexapp.util.APP.off('change:hub_season_thumbnails', self.setDirty)
         plexapp.util.APP.off('change:use_watchlist', self.setDirty)
+        plexapp.util.APP.off('change:force_pd_mapping', self.setHostsDirty)
         plexapp.util.APP.off('change:debug', self.setDebugFlag)
         plexapp.util.APP.off('change:update_source', self.updateSourceChanged)
         plexapp.util.APP.off('watchlist:modified', self.watchlistDirty)
@@ -865,6 +891,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
                 not xbmc.Player().isPlayingVideo()):
             util.DEBUG_LOG("Home: Ticking, section stale, calling showHubs(update=True)")
             self.showHubs(self.lastSection, update=True)
+            util.cleanupCacheFolder()
 
     def doClose(self, force=True):
         util.DEBUG_LOG("Home: doClose called, triggering close.windows")
@@ -1245,6 +1272,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
     def setDirty(self, *args, **kwargs):
         self._reloadOnReinit = True
         self.cacheSpoilerSettings()
+
+    def setHostsDirty(self, *args, **kwargs):
+        self._recheckPD = True
+        self.setDirty()
 
     def watchlistDirty(self, *args, **kwargs):
         # mark watchlist hub dirty
@@ -1928,7 +1959,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
                         last_item_index = len(control) - 1
                         control.selectItem(last_item_index)
                         while control.getSelectedPos() != last_item_index:
-                            util.MONITOR.waitForAbort(0.1)
+                            util.MONITOR.waitFor()
 
                         if not control[last_item_index].dataSource:
                             last_item_index -= 1
@@ -1987,10 +2018,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         # wait 2s at max if we're currently awaiting any hubs to reload
         # fixme: this can be done in a better way, probably
         waited = 0
-        while any(self.tasks) and waited < 20:
+        while any(self.tasks) and waited < util.MONITOR.waitAmount(2):
             if waited > 5:
                 self.showBusy(True)
-            util.MONITOR.waitForAbort(0.1)
+            util.MONITOR.waitFor()
             waited += 1
         self.showBusy(False)
 
@@ -2010,7 +2041,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         if not immediate:
             if not self.sectionChangeTimeout:
                 return
-            while not util.MONITOR.waitForAbort(0.1):
+            while not util.MONITOR.waitFor():
                 # timing issue
                 if not self.sectionChangeTimeout:
                     return
@@ -2026,7 +2057,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
     def _sectionReallyChanged(self, section):
         with self.lock:
             while self.block_section_change:
-                util.MONITOR.waitForAbort(0.1)
+                util.MONITOR.waitFor()
 
             self.setProperty('hub.focus', '')
             if util.addonSettings.dynamicBackgrounds:

@@ -4,7 +4,7 @@ import os
 
 from kodi_six import xbmc
 from kodi_six import xbmcgui
-from plexnet import plexplayer, media, util as pnUtil, plexapp, plexlibrary
+from plexnet import plexplayer, media, util as pnUtil, plexapp, plexlibrary, playlist, playqueue
 
 from lib import metadata
 from lib import util
@@ -533,6 +533,41 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             self.playBtnClicked = True
 
         self.fromPlayback = True
+
+        preRoll = util.getUserSetting('preplay_preroll', False)
+        preRollFirst = util.getUserSetting('preplay_preroll_first', True)
+        trailers = 5 - util.getUserSetting('preplay_trailers', 5)
+        # play playqueue if necessary (trailer preplay or plex told us to preplay something)
+        if not resume:
+            if preRoll or trailers:
+                pq = playqueue.createPlayQueueForItem(self.video, use_async=False, method="POST",
+                                                          extrasPrefixCount=trailers)
+
+                _items = [item for item in pq.items if item.get('type') == 'clip']
+                for item in _items:
+                    item.isExtra = True
+
+                if preRoll and preRollFirst and trailers:
+                    items = []
+                    # move prerolls to the front
+                    for item in reversed(_items):
+                        if not item.get('subtype'):
+                            # pre-roll detected
+                            items.insert(0, item)
+                    for item in _items:
+                        if item.get('subtype') == 'trailer':
+                            items.append(item)
+                else:
+                    # use server pq as is, but filter out prerolls if not wanted
+                    items = list(filter(lambda x: x.get('subtype') == "trailer", _items)) if not preRoll else _items
+
+                items.append(self.video)
+
+                pl = playlist.LocalPlaylist(items, self.video.getServer())
+                self.processCommand(
+                    videoplayer.play(play_queue=pl, bgm=self.useBGM))
+                return True
+
         self.processCommand(videoplayer.play(video=self.video, resume=resume, bgm=self.useBGM))
         return True
 

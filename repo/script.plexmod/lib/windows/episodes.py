@@ -324,7 +324,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             # we may have set up the hooks before
             self._setup_hooks()
         self._setup()
-        self.postSetup()
+        self.postSetup(select_play_button=False)
 
     def doAutoPlay(self, blind=False):
         # First reload the video to get all the other info
@@ -337,6 +337,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
     def onFirstInit(self):
         self._onFirstInit()
+        if not self.hadUserInteraction:
+            self.selectPlayButton()
 
         if self.show_ and not util.getSetting("slow_connection") and \
                 (not self.cameFrom or self.cameFrom not in (self.show_.ratingKey, "postplay")) and \
@@ -377,7 +379,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             self.relatedListControl.reset()
             self.reset(episode=redirect.episode if redirect.select_episode else None, season=redirect.season)
             self.hadUserInteraction = True
-            self._setup()
+            self._setup(from_redirect=True)
             self.postSetup()
             return
         except AttributeError:
@@ -431,9 +433,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                          do_focus=not self.manuallySelectedSeason)
         self.fillRelated()
 
-    def postSetup(self):
+    def postSetup(self, select_play_button=True):
         self.checkForHeaderFocus(xbmcgui.ACTION_MOVE_DOWN, initial=True)
-        if not self.hadUserInteraction:
+        if not self.hadUserInteraction and select_play_button:
             self.selectPlayButton()
         self.initialized = True
 
@@ -443,6 +445,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             if selected:
                 set_focus = self.getPlayButtonID(selected, base=not self.currentItemLoaded
                                                  and self.PLAY_BUTTON_DISABLED_ID or None)
+                kodigui.waitForVisibility(set_focus)
                 self.setCondFocusId(set_focus)
 
     @busy.dialog()
@@ -453,7 +456,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         player.PLAYER.on('new.video', self.onNewVideo)
         player.PLAYER.on('video.progress', self.onVideoProgress)
 
-    def _setup(self):
+    def _setup(self, from_redirect=False):
         (self.season or self.show_).reload(checkFiles=1, **VIDEO_RELOAD_KW)
 
         if not self.episodesPaginator:
@@ -468,7 +471,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         self.watchlist_setup(self.show_)
         self.updateProperties()
         self.setBoolProperty("initialized", True)
-        self.fillEpisodes()
+        self.fillEpisodes(from_redirect=from_redirect)
 
         hasSeasons = self.fillSeasons(self.show_, seasonsFilter=lambda x: len(x) > 1, selectSeason=self.season)
         hasPrev = self.fillExtras(hasSeasons)
@@ -571,6 +574,13 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                    ((not had_progress_data or not from_reinit) and not self.episode and not mli.dataSource.isFullyWatched):
                     #if self.episodeListControl.getSelectedPosition() < mli.pos():
                     self.episodeListControl.selectItem(mli.pos())
+
+                    tries = 0
+                    while self.episodeListControl.getSelectedPos() != mli.pos() and tries < util.MONITOR.waitAmount(4, interval=0.5):
+                        util.MONITOR.waitFor(0.5)
+                        self.episodeListControl.selectItem(mli.pos())
+                        tries += 1
+
                     self.episodesPaginator.setEpisode(self.episode or mli.dataSource)
                     self.lastItem = mli
                     selected_new = mli
@@ -619,8 +629,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
             # wait for ep list to update
             waited = 0
-            while self.episodeListControl.getSelectedItem() != selected_new and waited < 20:
-                util.MONITOR.waitForAbort(0.1)
+            while self.episodeListControl.getSelectedItem() != selected_new and waited < util.MONITOR.waitAmount(2):
+                util.MONITOR.waitFor()
                 waited += 1
 
         self.episode = None
@@ -1024,8 +1034,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         # wait for current item to be loaded
         if not from_auto_play:
             amount = 0
-            while not self.currentItemLoaded and amount < 50:
-                util.MONITOR.waitForAbort(0.1)
+            while not self.currentItemLoaded and amount < util.MONITOR.waitAmount(5):
+                util.MONITOR.waitFor()
                 amount += 1
 
             if not self.currentItemLoaded:
@@ -1184,6 +1194,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             )
         elif choice['key'] == 'delete':
             self.delete(mli.dataSource)
+            self.fillEpisodes()
         elif choice['key'] == 'playback_settings':
             self.playbackSettings(self.show_, pos, bottom)
         elif choice['key'] == 'refresh':
@@ -1235,6 +1246,8 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
 
         if not self._delete():
             util.messageDialog(T(32330, 'Message'), T(32331, 'There was a problem while attempting to delete the media.'))
+        else:
+            return True
 
     @busy.dialog()
     def _delete(self):
@@ -1491,8 +1504,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
         # mli.setProperty('progress', util.getProgressImage(obj))
         return mli
 
-    def fillEpisodes(self, update=False):
+    def fillEpisodes(self, update=False, from_redirect=False):
         items = self.episodesPaginator.paginate()
+        if from_redirect:
+            self.episodeListControl.setSelectedItemByPos(0)
         if not update:
             self.selectEpisode()
         self.reloadItems(items, with_progress=True)
@@ -1556,9 +1571,10 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
                         tries = 0
                         PBID = self.getPlayButtonID(mli)
                         while not xbmc.getCondVisibility('Control.IsVisible({})'.format(PBID)) \
-                                and not util.MONITOR.abortRequested() and tries < 15:
-                            util.MONITOR.waitForAbort(0.1)
+                                and not util.MONITOR.abortRequested() and tries < util.MONITOR.waitAmount(1.5):
+                            util.MONITOR.waitFor()
                             tries += 1
+                        util.MONITOR.waitFor()
                         if xbmc.getCondVisibility('Control.IsVisible({})'.format(PBID)) and self.getFocusId() != PBID:
                             self.setFocusId(PBID)
 
