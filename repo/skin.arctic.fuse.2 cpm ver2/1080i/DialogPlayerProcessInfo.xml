@@ -163,7 +163,7 @@
 						<left>-15</left>
 						<width>110</width>
 						<height>54</height>
-                        <texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolby.vision.horizontal.small.png</texture>
+                        <texture colordiffuse="main_fg_100">codecs/dolbyvision.png</texture>
 					</control>
 					<control type="label">
 						<width>300</width>
@@ -409,7 +409,7 @@
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
-						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/dolby.vision.horizontal.small.png</texture>
+						<texture colordiffuse="main_fg_100">codecs/dolbyvision.png</texture>
 					</control>
 					<control type="label">
 						<left>250</left>
@@ -828,7 +828,7 @@
 						<top>4</top>
 						<width>110</width>
 						<height>54</height>
-						<texture colordiffuse="dialog_fg_90_100">special://skin/extras/icons/hdr.10.small.png</texture>
+						<texture colordiffuse="main_fg_100">codecs/hdr10a.png</texture>
 					</control>
 					<control type="label">
 						<top>5</top>
@@ -1735,14 +1735,14 @@
 					<width>auto</width>
 					<height>55</height>
 					<textoffsetx>40</textoffsetx>
-					<label>[COLOR limegreen]Dolby Vision - HDR[/COLOR]</label>
+					<label>Dolby Vision - HDR</label>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5552,Home)</onfocus>
 				</control>
 				<control type="button" id="5553">
 					<width>auto</width>
 					<height>55</height>
 					<textoffsetx>40</textoffsetx>
-					<label>[COLOR limegreen]PlayerProcessInformation[/COLOR]</label>
+					<label>PlayerProcessInformation</label>
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5553,Home)</onfocus>
 				</control>
 			</control>
