@@ -2350,6 +2350,7 @@
         <param name="flipped">false</param>
         <param name="visible">true</param>
         <param name="size">40</param>
+        <param name="icon_visible">true</param>
         <definition>
             <control type="group">
                 <centertop>50%</centertop>
@@ -2377,7 +2378,7 @@
         </definition>
     </include>
 
-    <include name="Info_Bottom_Right">
+  <include name="Info_Bottom_Right">
         <control type="grouplist">
             <align>right</align>
             <orientation>horizontal</orientation>

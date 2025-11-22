@@ -268,11 +268,11 @@
                 <visible>Skin.HasSetting(Indicator.RatingsCircle)</visible>
                 <visible>!String.IsEmpty($PARAM[listitem].Rating) | !String.IsEmpty($PARAM[listitem].UserRating)</visible>
                 <control type="image">
-                    <texture colordiffuse="$VAR[ColorWatchedProgress]">common/circle1.png</texture>
+                    <texture colordiffuse="$VAR[ColorWatchedProgress]">common/circle.png</texture>
                 </control>
                 <control type="image">
                     <bordersize>3</bordersize>
-                    <texture colordiffuse="black">common/circle1.png</texture>
+                    <texture colordiffuse="black">common/circle.png</texture>
                 </control>
                 <control type="label">
                     <font>font_hint</font>
@@ -841,8 +841,8 @@
             </control>
         </definition>
     </include>
-	
-    <include name="Object_InfoCircle_VS10">
+
+<include name="Object_InfoCircle_VS10">
         <param name="bordersize">1</param>
         <param name="aspectratio">scale</param>
         <param name="colorbacking">main_fg_100</param>
@@ -890,6 +890,7 @@
         	</control>
         </definition>
     </include>
+
 
     <include name="Object_StartUp_Logo">
         <control type="grouplist">
@@ -1663,6 +1664,22 @@
                 <textoffsetx>0</textoffsetx>
                 <textcolor>dialog_fg_70</textcolor>
                 <selectedcolor>dialog_fg_70</selectedcolor>
+            </control>
+        </definition>
+    </include>
+    <include name="Object_Numeric_Button">
+        <param name="control">button</param>
+        <definition>
+            <control type="$PARAM[control]" id="$PARAM[id]">
+                <nested />
+                <height>keyboard_numeric</height>
+                <width>keyboard_numeric</width>
+                <font>font_main</font>
+                <textoffsetx>0</textoffsetx>
+                <textcolor>dialog_fg_70</textcolor>
+                <selectedcolor>dialog_fg_70</selectedcolor>
+                <include>Texture_KeyboardButton</include>
+                <texturenofocus colordiffuse="$VAR[Color_DialogBorder]">common/circle.png</texturenofocus>
             </control>
         </definition>
     </include>

@@ -1326,17 +1326,14 @@
                 <param name="control">image</param>
                 <include>Texture_Menu_Highlight_H</include>
             </include>
-            <control type="group">
-                <left>40</left>
-                <right>$PARAM[misc]</right>
-                <control type="label">
-                    <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <right>40</right>
-                    <textcolor>main_fg_70</textcolor>
-                    <selectedcolor>main_fg_70</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <align>center</align>
-                </control>
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <left>20</left>
+                <right>20</right>
+                <textcolor>main_fg_70</textcolor>
+                <selectedcolor>main_fg_70</selectedcolor>
+                <label>$INFO[ListItem.Label]</label>
+                <align>center</align>
             </control>
         </definition>
     </include>
@@ -2551,7 +2548,6 @@
                         <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                     </include>
                     
-
                     <include content="Object_Layout_Image_Icon">
                         <param name="selected">$PARAM[selected]</param>
                         <param name="diffuse">$PARAM[diffuse]</param>
