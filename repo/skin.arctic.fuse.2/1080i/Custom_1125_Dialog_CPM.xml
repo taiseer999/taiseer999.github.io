@@ -8,11 +8,11 @@
         <include>Dialog_Dim_Overlay</include>
 
         <control type="group">
-            <include>Dimension_DialogWiderMenu</include>
+            <include>Dimension_DialogHugeMenu</include>
             <include>Animation_Right_Delay</include>
 
             <include content="Dialog_Foreground_Side">
-                <param name="dialog_size">Dimension_DialogWiderMenu</param>
+                <param name="dialog_size">Dimension_DialogHugeMenu</param>
                 <param name="lines_right">dialog_buttongroup_w</param>
             </include>
 
