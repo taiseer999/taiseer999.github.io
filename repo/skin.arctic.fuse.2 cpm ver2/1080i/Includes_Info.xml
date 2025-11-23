@@ -2373,12 +2373,13 @@
                     <aspectratio>keep</aspectratio>
                     <texture colordiffuse="$PARAM[icon_colordiffuse]" diffuse="$PARAM[icon_diffuse]">$PARAM[icon]</texture>
                     <bordersize>$PARAM[bordersize]</bordersize>
+                    <visible>$PARAM[icon_visible]</visible>
                 </control>
             </control>
         </definition>
     </include>
 
-  <include name="Info_Bottom_Right">
+    <include name="Info_Bottom_Right">
         <control type="grouplist">
             <align>right</align>
             <orientation>horizontal</orientation>

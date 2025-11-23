@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
@@ -22,12 +23,12 @@
             <!-- Font for codec flag -->
             <font>
                 <name>font_infotag_bold</name>
-                <filename>LeagueSpartan-ExtraBold.ttf</filename>
+                <filename>monadit.ttf</filename>
                 <size>22</size>
                 <style>uppercase</style>
             </font>
 
-            <!-- Keyboard Symbol Font -->
+              <!-- Keyboard Symbol Font -->
             <font>
                 <name>font_midi_iconic</name>
                 <filename>fa-solid-900.ttf</filename>
@@ -57,6 +58,11 @@
                 <name>font_itsy_iconic</name>
                 <filename>fa-solid-900.ttf</filename>
                 <size>12</size>
+            </font>
+            <font>
+                <name>font_tiny_iconic_regular</name>
+                <filename>fa-regular-400.ttf</filename>
+                <size>24</size>
             </font>
 
             <!-- Kodi Logo Font -->
