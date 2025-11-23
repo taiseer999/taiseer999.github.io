@@ -437,7 +437,7 @@
         <param name="hasprogress">false</param>
         <param name="texture">dialog/loading-back.png</param>
         <param name="size">100</param>
-        <param name="icon">special://skin/extras/icons/kodi.png</param>
+        <param name="icon">special://skin/extras/icons/coreelec.png</param>
         <param name="progress">Control.GetLabel(32)</param>
         <param name="progress_id">32</param>
         <param name="spinprogress">false</param>
@@ -842,56 +842,6 @@
         </definition>
     </include>
 
-<include name="Object_InfoCircle_VS10">
-        <param name="bordersize">1</param>
-        <param name="aspectratio">scale</param>
-        <param name="colorbacking">main_fg_100</param>
-        <param name="colordiffuse">main_bg_90</param>
-        <param name="textcolor">main_fg_90</param>
-        <param name="font_top">font_mini_bold</param>
-        <param name="include_labels">true</param>
-        <param name="backing_visible">true</param>
-        <param name="shadow_colordiffuse">shadow_soft</param>
-        <definition>
-        	<control type="group">
-                <height>80</height>
-                <control type="group">
-                	<centertop>50%</centertop>
-                	<height>50</height>
-                	<width>50</width>
-                	<control type="image">
-                        <include content="Dimension_Padding">
-                        	<param name="pad">-40</param>
-                        </include>
-                        <bordersize>40</bordersize>
-                        <bordertexture colordiffuse="$PARAM[shadow_colordiffuse]">shadows/circle_50-shadow-40.png</bordertexture>
-                        <texture colordiffuse="$PARAM[colorbacking]">diffuse/circle/circle_50.png</texture>
-                        <visible>$PARAM[backing_visible]</visible>
-                	</control>
-                	<include content="Object_InfoCircle_Image">
-                        <param name="bordersize">$PARAM[bordersize]</param>
-                        <param name="aspectratio">$PARAM[aspectratio]</param>
-                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                        <param name="icon">$PARAM[icon]</param>
-                        <param name="diffuse">$PARAM[diffuse]</param>
-                	</include>
-                </control>
-                <nested />
-                <left>40</left>
-                <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_labels]">
-                	<left>80</left>
-                	<height>50</height>
-                	<top>35</top>
-                	<textcolor>$PARAM[textcolor]</textcolor>
-                	<selectedcolor>$PARAM[textcolor]</selectedcolor>
-                	<label>$PARAM[label]</label>
-                	<font>$PARAM[font]</font>
-                </include>
-        	</control>
-        </definition>
-    </include>
-
-
     <include name="Object_StartUp_Logo">
         <control type="grouplist">
             <height>128</height>
@@ -903,7 +853,7 @@
                 <height>96</height>
                 <centerleft>50%</centerleft>
                 <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
+                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/coreelec.png</texture>
             </control>
             <control type="label">
                 <height>32</height>
@@ -1586,7 +1536,7 @@
     </include>
 
     <include name="Object_MenuHeader">
-        <param name="icon">special://skin/extras/icons/kodi.png</param>
+        <param name="icon">special://skin/extras/icons/coreelec.png</param>
         <param name="bordersize">icon_home_bordersize</param>
         <param name="label">$LOCALIZE[33063]</param>
         <param name="has_icon">true</param>
@@ -1660,21 +1610,22 @@
                 <include>defs_dialog_$PARAM[control]</include>
                 <nested />
                 <width>80</width>
-                <font>font_main</font>
+                <font>font_midi</font>
                 <textoffsetx>0</textoffsetx>
                 <textcolor>dialog_fg_70</textcolor>
                 <selectedcolor>dialog_fg_70</selectedcolor>
             </control>
         </definition>
     </include>
-    <include name="Object_Numeric_Button">
+
+<include name="Object_Numeric_Button">
         <param name="control">button</param>
         <definition>
             <control type="$PARAM[control]" id="$PARAM[id]">
                 <nested />
                 <height>keyboard_numeric</height>
                 <width>keyboard_numeric</width>
-                <font>font_main</font>
+                <font>font_head</font>
                 <textoffsetx>0</textoffsetx>
                 <textcolor>dialog_fg_70</textcolor>
                 <selectedcolor>dialog_fg_70</selectedcolor>
@@ -2151,16 +2102,16 @@
                 <centerright>20</centerright>
                 <centertop>50%</centertop>
                 <texture colordiffuse="$PARAM[color_off]">buttons/check-off.png</texture>
-                <width>24</width>
-                <height>24</height>
+                <width>28</width>
+                <height>28</height>
                 <visible>!$PARAM[selected]</visible>
             </control>
             <control type="image">
                 <centerright>20</centerright>
                 <centertop>50%</centertop>
                 <texture colordiffuse="$PARAM[color_on]">buttons/check-on.png</texture>
-                <width>24</width>
-                <height>24</height>
+                <width>28</width>
+                <height>28</height>
                 <visible>$PARAM[selected]</visible>
             </control>
         </definition>
