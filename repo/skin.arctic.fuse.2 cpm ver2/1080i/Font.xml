@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fonts>
 
+<fontset id="Default" unicode="false">
+        <include>Font_Default_Inter</include>
+    </fontset>
 
-
-<fontset id="Default" unicode="true">
-
-        <include content="Font_Default">
+    <fontset id="Default (Unicode)" unicode="true">
+        <include content="Font_Default_Inter">
             <param name="font_black">monadi.ttf</param>
             <param name="font_bold">monadi.ttf</param>
             <param name="font_regular">monadi-reg.ttf</param>
