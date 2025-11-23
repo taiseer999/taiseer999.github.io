@@ -33,7 +33,7 @@
 				<top>-220</top>
 				<right>30</right>
 				<height>380</height>
-				<texture colordiffuse="$VAR[ColorHighlight]">common/coal_blur.png</texture>
+				<texture colordiffuse="main_fg_70">common/coal_blur.png</texture>
 			</control>
 			<!-- PVR Left -->
 			<control type="grouplist">

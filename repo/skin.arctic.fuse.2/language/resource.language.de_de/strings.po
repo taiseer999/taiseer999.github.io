@@ -182,7 +182,7 @@ msgstr "Mitglied der Besetzung"
 
 msgctxt "#31035"
 msgid "Crew member"
-msgstr "Mitglied der Crew"
+msgstr "Mitglied der Besatzung"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31036"
@@ -254,7 +254,7 @@ msgstr "Standard-Widgets"
 #: /1080i/Includes_Search.xml
 msgctxt "#31050"
 msgid "Crew"
-msgstr "Crew"
+msgstr "Besatzung"
 
 #: /1080i/Custom_1153_Dialog_SearchDiscover_Actors.xml
 msgctxt "#31051"
@@ -1293,8 +1293,8 @@ msgstr "Suche"
 
 #: /1080i/SkinSettings.xml /1080i/Includes_MediaFilter.xml
 msgctxt "#31273"
-msgid "Press down to access scrollbar"
-msgstr "Runter-Taste > Scrollbalken öffnen"
+msgid "Access scrollbar"
+msgstr "Scrollbalken aufrufen"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31274"
@@ -1388,20 +1388,20 @@ msgid "Text labels"
 msgstr "Text-Labels"
 
 msgctxt "#31293"
-msgid "Press down for cast and more info"
-msgstr "Runter-Taste > Besetzung und weitere Infos"
+msgid "Cast and more info"
+msgstr "Besetzung und weitere Informationen"
 
 msgctxt "#31294"
-msgid "Press down for bookmarks and chapters"
-msgstr "Runter-Taste > Lesezeichen und Kapitel"
+msgid "Bookmarks and chapters"
+msgstr "Lesezeichen und Kapitel"
 
 msgctxt "#31295"
-msgid "Press down for channels"
-msgstr "Runter-Taste > Kanalansicht"
+msgid "Channels"
+msgstr "Kanäle"
 
 msgctxt "#31296"
-msgid "Press down for playlist"
-msgstr "Runter-Taste > Playlistenansicht"
+msgid "Playlist"
+msgstr "Playlist"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31297"
@@ -1409,8 +1409,8 @@ msgid "Extra fanart"
 msgstr "Extra-Fanart"
 
 msgctxt "#31298"
-msgid "Press down for movies and tv shows starring this actor"
-msgstr "Runter-Taste > Weitere Filme und Serien des Darstellers"
+msgid "Movies and tv shows starring this actor"
+msgstr "Filme und Serien des Darstellers"
 
 msgctxt "#31299"
 msgid "Information is loading"
@@ -1423,8 +1423,8 @@ msgstr "Fensterhintergrund anpassen"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31301"
-msgid "Press down for crew"
-msgstr "Runter-Taste > Crew"
+msgid "Crew"
+msgstr "Besatzung"
 
 msgctxt "#31302"
 msgid "Management options"
@@ -1645,8 +1645,8 @@ msgid "Advanced mode applies a horizontal category layout."
 msgstr "Im erweiterten Modus wird ein horizontales Kategorielayout verwendet."
 
 msgctxt "#31346"
-msgid "Press down for more by this artist"
-msgstr "Runter-Taste > Mehr von diesem Interpreten"
+msgid "More by this artist"
+msgstr "Mehr von diesem Interpreten"
 
 #: /1080i/Includes_DialogInfo.xml
 msgctxt "#31347"
@@ -1654,8 +1654,8 @@ msgid "Photography"
 msgstr "Fotografie"
 
 msgctxt "#31348"
-msgid "Press down for channel EPG"
-msgstr "Runter-Taste > Kanal-EPG"
+msgid "Channel EPG"
+msgstr "Kanal-EPG"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31349"
@@ -2196,13 +2196,13 @@ msgstr "Wand - Banner"
 
 #: /1080i/Includes_Views.xml
 msgctxt "#31463"
-msgid "Press down for filter and view options"
-msgstr "Nach unten drücken für Filter- und Anzeigeoptionen"
+msgid "Filter and view options"
+msgstr "Filter- und Ansichtsoptionen"
 
 #: /1080i/Includes_Views.xml
 msgctxt "#31464"
-msgid "Press right for filter and view options"
-msgstr "Rechts drücken für Filter- und Anzeigeoptionen"
+msgid "Filter and view options"
+msgstr "Filter- und Ansichtsoptionen"
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31465"
@@ -2824,330 +2824,27 @@ msgctxt "#31588"
 msgid "Updating ratings"
 msgstr "Aktualisiere Bewertungen"
 
-msgctxt "#32000"
-msgid "Display mode"
-msgstr "Bildauflösung"
-
-msgctxt "#32001"
-msgid "Video mode"
-msgstr "Videoauflösung"
-
-msgctxt "#32002"
-msgid "Color space"
-msgstr "Farbbereich"
-
-msgctxt "#32003"
-msgid "Mb/s"
-msgstr "Mb/s"
-
-msgctxt "#32004"
-msgid "Bit depth"
-msgstr "Bittiefe"
-
-msgctxt "#32005"
-msgid "Decoder"
-msgstr "Decoder"
-
-msgctxt "#32006"
-msgid "VS10 engine"
-msgstr "VS10-Engine"
-
-msgctxt "#32007"
-msgid "More"
-msgstr "Mehr"
-
-msgctxt "#32008"
-msgid "Video queue"
-msgstr "Video Queue"
-
-msgctxt "#32009"
-msgid "Video queue data"
-msgstr "Video Queue-Daten"
-
-msgctxt "#32010"
-msgid "Audio queue"
-msgstr "Audio Queue"
-
-msgctxt "#32011"
-msgid "Audio queue data"
-msgstr "Audio Queue-Daten"
-
-msgctxt "#32012"
-msgid "Kb/s"
-msgstr "Kb/s"
-
-msgctxt "#32013"
-msgid "Playback time"
-msgstr "Wiedergabezeit"
-
-msgctxt "#32014"
-msgid "Processor"
-msgstr "Prozessor"
-
-msgctxt "#32015"
-msgid "Metadata"
-msgstr "Metadaten"
-
-msgctxt "#32016"
-msgid "Profile"
-msgstr "Profil"
-
-msgctxt "#32017"
-msgid "Level"
-msgstr "Level"
-
-msgctxt "#32018"
-msgid "RPU"
-msgstr "RPU"
-
-msgctxt "#32019"
-msgid "Base Layer"
-msgstr "Base Layer"
-
-msgctxt "#32020"
-msgid "Enhancement Layer"
-msgstr "Enhancement Layer"
-
-msgctxt "#32021"
-msgid "Enhancement Layer Type"
-msgstr "Enhancement Layer Typ"
-
-msgctxt "#32022"
-msgid "Metadata"
-msgstr "Metadaten"
-
-msgctxt "#32023"
-msgid "Pixel format"
-msgstr "Pixelformat"
-
-msgctxt "#32024"
-msgid "Aspect ratio"
-msgstr "Verhältnis"
-
-msgctxt "#32025"
-msgid "HDR10 MDL"
-msgstr "HDR10 MDL"
-
-msgctxt "#32026"
-msgid "HDR10 MaxCLL/FALL"
-msgstr "HDR10 MaxCLL/FALL"
-
-msgctxt "#32027"
-msgid "Media source"
-msgstr "Medienquelle"
-
-msgctxt "#32028"
-msgid "Unknown"
-msgstr "Unbekannt"
-
-msgctxt "#32029"
-msgid "On"
-msgstr "An"
-
-msgctxt "#32030"
-msgid "Off"
-msgstr "Aus"
-
-msgctxt "#32031"
-msgid "Deinterlacing"
-msgstr "Verfahren"
-
-msgctxt "#32032"
-msgid "Player cache"
-msgstr "Player Cache"
-
-msgctxt "#32033"
-msgid "N/A"
-msgstr "Nicht verfügbar"
-
-msgctxt "#32034"
-msgid "Memory usage"
-msgstr "Arbeitsspeicher"
-
-msgctxt "#32035"
-msgid "Bit depth"
-msgstr "Bittiefe"
-
-msgctxt "#32036"
-msgid "AML FPS"
-msgstr "AML FPS"
-
-msgctxt "#32037"
-msgid "DV Configuration"
-msgstr "DV Konfiguration"
-
-msgctxt "#32038"
-msgid "DV Levels Metadata"
-msgstr "DV-Ebenen Metadaten"
-
-msgctxt "#32039"
-msgid "HDR Static Metadata"
-msgstr "Statische HDR-Metadaten"
-
-msgctxt "#32040"
-msgid "cd/m²"
-msgstr "cd/m²"
-
-msgctxt "#32041"
-msgid "RPU MDL"
-msgstr "RPU MDL"
-
-msgctxt "#32042"
-msgid "RPU MaxCLL/FALL"
-msgstr "RPU MaxCLL/FALL"
-
-msgctxt "#32043"
-msgid "FLL MIN / MAX / Ø"
-msgstr "FLL MIN / MAX / Ø"
-
-msgctxt "#32044"
-msgid "PQ  MIN / MAX / Ø"
-msgstr "PQ  MIN / MAX / Ø"
-
-msgctxt "#32045"
-msgid "12-bit"
-msgstr "12-bit"
-
-msgctxt "#32046"
-msgid "Codec"
-msgstr "Codec"
-
-msgctxt "#32047"
-msgid "Bitrate"
-msgstr "Bitrate"
-
-msgctxt "#32048"
-msgid "VS10 status"
-msgstr "VS10-Status"
-
-msgctxt "#32051"
-msgid "Sample rate"
-msgstr "Abtastrate"
-
-msgctxt "#32052"
-msgid "Audio language"
-msgstr "Audiosprache"
-
-msgctxt "#32053"
-msgid "Subtitle language"
-msgstr "Untertitelsprache"
-
-msgctxt "#32054"
-msgid "Video"
-msgstr "Video"
-
-msgctxt "#32055"
-msgid "System"
-msgstr "System"
-
-msgctxt "#32056"
-msgid "Audio"
-msgstr "Ton"
-
-msgctxt "#32057"
-msgid "Top left"
-msgstr "Oben links"
-
-msgctxt "#32058"
-msgid "Top center"
-msgstr "Oben mittig"
-
-msgctxt "#32059"
-msgid "Top right"
-msgstr "Oben rechts"
-
-msgctxt "#32060"
-msgid "Position of the codec logos in the OSD"
-msgstr "Position der Codec-Logos im OSD"
-
-msgctxt "#32061"
-msgid "Position of the codec logos in the PlayerProcessInfo"
-msgstr "Position der Codec-Logos im PlayerProcessInfo"
-
-msgctxt "#32062"
-msgid "Position of the codec logos when video starts"
-msgstr "Position der Codec-Logos beim Start des Videos"
-
-msgctxt "#32063"
-msgid "Position of codec logos"
-msgstr "Position der Codec-Logos"
-
-msgctxt "#32064"
-msgid "Original"
-msgstr "Original"
-
-msgctxt "#32065"
-msgid "VS10"
-msgstr "VS10"
-
-msgctxt "#32066"
-msgid "Audio codec"
-msgstr "Audiocodec"
-
-msgctxt "#32067"
-msgid "L5 Active Offsets"
-msgstr "L5 Aktive Offsets"
-
-msgctxt "#32068"
-msgid "Version"
-msgstr "Version"
-
-msgctxt "#32069"
-msgid "Bit depth"
-msgstr "Bittiefe"
-
-msgctxt "#32070"
-msgid "EOTF & Gamut"
-msgstr "EOTF & Gamut"
-
-msgctxt "#32071"
-msgid "Duration of the codec logos when video starts"
-msgstr "Dauer der Codec-Logos beim Start des Videos"
-
-msgctxt "#32072"
-msgid "Time for codec logos"
-msgstr "Zeit für Codec-Logos"
-
-msgctxt "#32073"
-msgid "PlayerProcessInfo"
-msgstr "PlayerProcessInfo"
-
-msgctxt "#32074"
-msgid "PlayerProcessInfo mode"
-msgstr "PlayerProcessInfo-Modus"
-
-msgctxt "#32075"
-msgid "second"
-msgstr "Sekunde"
-
-msgctxt "#32076"
-msgid "Show file name in PlayerProcessInfo"
-msgstr "Dateinamen in PlayerProcessInfo anzeigen"
-
-msgctxt "#32077"
-msgid "Modern"
-msgstr "Modern"
-
-msgctxt "#32078"
-msgid "Classic"
-msgstr "Klassisch"
-
-msgctxt "#32079"
-msgid "Original"
-msgstr "Original"
-
-msgctxt "#32080"
-msgid "Version selection"
-msgstr "Versionsauswahl"
-
-msgctxt "#32081"
-msgid "Show file name and path in the version selection"
-msgstr "Dateiname und Pfad in der Versionsauswahl anzeigen"
-
-msgctxt "#32082"
-msgid "Customise video osd"
-msgstr "Video-OSD anpassen"
-
-msgctxt "#32083"
-msgid "Customise video info"
-msgstr "Videoinformation anpassen"
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31589"
+msgid "Apply new settings"
+msgstr "Neue Einstellungen anwenden"
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31590"
+msgid "Changes made to settings have not been applied."
+msgstr "Die Änderungen an den Einstellungen wurden nicht übernommen."
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31591"
+msgid "Pressing back again closes the dialog without applying changes."
+msgstr "Durch erneutes Drücken von Zurück wird das Dialogfeld geschlossen, ohne dass die Änderungen übernommen werden."
+
+#: /1080i/Includes_Dialogs.xml
+msgctxt "#31592"
+msgid "Options menu"
+msgstr "Optionsmenü"
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31593"
+msgid "Apply your changes?"
+msgstr "Änderungen übernehmen?"

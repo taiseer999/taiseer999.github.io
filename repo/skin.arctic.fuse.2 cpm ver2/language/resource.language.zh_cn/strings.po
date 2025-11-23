@@ -682,7 +682,7 @@ msgstr "迈阿密电子风色"
 
 msgctxt "#31141"
 msgid "Plain Monochrome"
-msgstr "单色"
+msgstr "纯单色"
 
 msgctxt "#31142"
 msgid "Total Duration"
@@ -2829,298 +2829,27 @@ msgctxt "#31588"
 msgid "Updating ratings"
 msgstr "更新评分"
 
-msgctxt "#32000"
-msgid "Display mode"
-msgstr "显示模式"
-
-msgctxt "#32001"
-msgid "Video mode"
-msgstr "启用视频模式切换"
-
-msgctxt "#32002"
-msgid "Color space"
-msgstr "颜色空间"
-
-msgctxt "#32003"
-msgid "Mb/s"
-msgstr "Mb/s"
-
-msgctxt "#32004"
-msgid "Bit depth"
-msgstr "位深度"
-
-msgctxt "#32005"
-msgid "Decoder"
-msgstr "解码器"
-
-msgctxt "#32006"
-msgid "VS10 engine"
-msgstr "VS10 引擎"
-
-msgctxt "#32007"
-msgid "More"
-msgstr "更多"
-
-msgctxt "#32008"
-msgid "Video queue"
-msgstr "视频队列"
-
-msgctxt "#32009"
-msgid "Video queue data"
-msgstr "视频队列数据"
-
-msgctxt "#32010"
-msgid "Audio queue"
-msgstr "音频队列"
-
-msgctxt "#32011"
-msgid "Audio queue data"
-msgstr "音频队列数据"
-
-msgctxt "#32012"
-msgid "Kb/s"
-msgstr "Kb/s"
-
-msgctxt "#32013"
-msgid "Playback time"
-msgstr "播放时间"
-
-msgctxt "#32014"
-msgid "Processor"
-msgstr "处理器"
-
-msgctxt "#32015"
-msgid "Metadata"
-msgstr "元数据"
-
-msgctxt "#32016"
-msgid "Profile"
-msgstr "Profile"
-
-msgctxt "#32017"
-msgid "Level"
-msgstr "Level"
-
-msgctxt "#32018"
-msgid "RPU"
-msgstr "RPU"
-
-msgctxt "#32019"
-msgid "Base Layer"
-msgstr "基础层"
-
-msgctxt "#32020"
-msgid "Enhancement Layer"
-msgstr "增强层"
-
-msgctxt "#32021"
-msgid "Enhancement Layer Type"
-msgstr "增强层类型"
-
-msgctxt "#32022"
-msgid "Metadata"
-msgstr "元数据"
-
-msgctxt "#32023"
-msgid "Pixel format"
-msgstr "像素格式"
-
-msgctxt "#32024"
-msgid "Aspect ratio"
-msgstr "长宽比"
-
-msgctxt "#32025"
-msgid "HDR10 MDL"
-msgstr "HDR10 MDL"
-
-msgctxt "#32026"
-msgid "HDR10 MaxCLL/FALL"
-msgstr "HDR10 MaxCLL/FALL"
-
-msgctxt "#32027"
-msgid "Media source"
-msgstr "媒体源"
-
-msgctxt "#32028"
-msgid "Unknown"
-msgstr "未知"
-
-msgctxt "#32029"
-msgid "On"
-msgstr "开启"
-
-msgctxt "#32030"
-msgid "Off"
-msgstr "关闭"
-
-msgctxt "#32031"
-msgid "Deinterlacing"
-msgstr "去隔行扫描"
-
-msgctxt "#32032"
-msgid "Player cache"
-msgstr "播放器缓存"
-
-msgctxt "#32033"
-msgid "N/A"
-msgstr "不可用"
-
-msgctxt "#32034"
-msgid "Memory usage"
-msgstr "内存使用"
-
-msgctxt "#32035"
-msgid "Bit depth"
-msgstr "位深度"
-
-msgctxt "#32036"
-msgid "AML FPS"
-msgstr "AML FPS"
-
-msgctxt "#32037"
-msgid "DV Configuration"
-msgstr "DV 配置"
-
-msgctxt "#32038"
-msgid "DV Levels Metadata"
-msgstr "DV 级别元数据"
-
-msgctxt "#32039"
-msgid "HDR Static Metadata"
-msgstr "HDR 静态元数据"
-
-msgctxt "#32040"
-msgid "cd/m²"
-msgstr "cd/m²"
-
-msgctxt "#32041"
-msgid "RPU MDL"
-msgstr "RPU MDL"
-
-msgctxt "#32042"
-msgid "RPU MaxCLL/FALL"
-msgstr "RPU MaxCLL/FALL"
-
-msgctxt "#32043"
-msgid "FLL MIN / MAX / Ø"
-msgstr "FLL MIN / MAX / Ø"
-
-msgctxt "#32044"
-msgid "PQ  MIN / MAX / Ø"
-msgstr "PQ  MIN / MAX / Ø"
-
-msgctxt "#32045"
-msgid "12-bit"
-msgstr "12-bit"
-
-msgctxt "#32046"
-msgid "Codec"
-msgstr "编解码器"
-
-msgctxt "#32047"
-msgid "Bitrate"
-msgstr "码率"
-
-msgctxt "#32048"
-msgid "VS10 status"
-msgstr "VS10 状态"
-
-msgctxt "#32051"
-msgid "Sample rate"
-msgstr "采样率"
-
-msgctxt "#32052"
-msgid "Audio language"
-msgstr "对白语言"
-
-msgctxt "#32053"
-msgid "Subtitle language"
-msgstr "字幕语言"
-
-msgctxt "#32054"
-msgid "Video"
-msgstr "视频"
-
-msgctxt "#32055"
-msgid "System"
-msgstr "系统"
-
-msgctxt "#32056"
-msgid "Audio"
-msgstr "音频"
-
-msgctxt "#32057"
-msgid "Top left"
-msgstr "左上角"
-
-msgctxt "#32058"
-msgid "Top center"
-msgstr "顶部中心"
-
-msgctxt "#32059"
-msgid "Top right"
-msgstr "右上角"
-
-msgctxt "#32060"
-msgid "Position of the codec logos in the OSD"
-msgstr "编解码器标识在 OSD 中的位置"
-
-msgctxt "#32061"
-msgid "Position of the codec logos in the PlayerProcessInfo"
-msgstr "编解码器标识在播放器进程信息中的位置"
-
-msgctxt "#32062"
-msgid "Position of the codec logos when video starts"
-msgstr "视频开始时编解码器标识的位置"
-
-msgctxt "#32063"
-msgid "Codec logos"
-msgstr "编解码器标识"
-
-msgctxt "#32064"
-msgid "Original"
-msgstr "原始"
-
-msgctxt "#32065"
-msgid "VS10"
-msgstr "VS10"
-
-msgctxt "#32066"
-msgid "Audio codec"
-msgstr "音频编码"
-
-msgctxt "#32067"
-msgid "L5 Active Offsets"
-msgstr "L5 活动偏移量"
-
-msgctxt "#32068"
-msgid "Version"
-msgstr "版本"
-
-msgctxt "#32069"
-msgid "Bit depth"
-msgstr "位深度"
-
-msgctxt "#32070"
-msgid "EOTF & Gamut"
-msgstr "EOTF & 色域"
-
-msgctxt "#32071"
-msgid "Duration of the codec logos when video starts"
-msgstr "视频开始时编解码器标识的持续时间"
-
-msgctxt "#32072"
-msgid "Standard"
-msgstr "标准"
-
-msgctxt "#32073"
-msgid "PlayerProcessInfo"
-msgstr "播放器进程信息"
-
-msgctxt "#32074"
-msgid "Use classic PlayerProcessInfo"
-msgstr "使用经典的播放器进程信息"
-
-msgctxt "#32075"
-msgid "second"
-msgstr "第二"
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31589"
+msgid "Apply new settings"
+msgstr "应用新设置"
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31590"
+msgid "Changes made to settings have not been applied."
+msgstr "所做的设置更改尚未应用。"
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31591"
+msgid "Pressing back again closes the dialog without applying changes."
+msgstr "再次按下“返回键”将关闭对话框，不应用更改。"
+
+#: /1080i/Includes_Dialogs.xml
+msgctxt "#31592"
+msgid "Options menu"
+msgstr "菜单选项"
+
+#: /1080i/Includes_DialogManage.xml
+msgctxt "#31593"
+msgid "Apply your changes?"
+msgstr "应用您的更改？"
