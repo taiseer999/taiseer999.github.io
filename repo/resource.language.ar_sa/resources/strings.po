@@ -2237,7 +2237,7 @@ msgid "Country"
 msgstr "الدولة"
 
 msgctxt "#575"
-msgid "In progress"
+msgid "In Progress"
 msgstr "في تقدم"
 
 msgctxt "#576"
@@ -19733,3 +19733,4 @@ msgstr ""
 #~ msgctxt "#310"
 #~ msgid "Keyboard layouts"
 #~ msgstr "نسق لوحة المفاتيح"
+

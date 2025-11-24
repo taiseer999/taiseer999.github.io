@@ -3191,7 +3191,6 @@ msgctxt "#32084"
 msgid "Codecs & PPI"
 msgstr ""
 
-
 msgctxt "#32086"
 msgid "Two-row information bar"
 msgstr ""
@@ -3200,7 +3199,26 @@ msgctxt "#32087"
 msgid "Decoding"
 msgstr ""
 
-
 msgctxt "#32088"
 msgid "System"
-msgstr "
+msgstr ""
+
+msgctxt "#32300"
+msgid "switch skin"
+msgstr ""
+
+msgctxt "#32301"
+msgid "My TV"
+msgstr ""
+
+msgctxt "#32303"
+msgid "My Movies"
+msgstr ""
+
+msgctxt "#32302"
+msgid "KDrama"
+msgstr ""
+
+msgctxt "#32304"
+msgid "Popular"
+msgstr ""
