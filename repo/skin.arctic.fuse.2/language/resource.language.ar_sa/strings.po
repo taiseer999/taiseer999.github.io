@@ -2820,6 +2820,16 @@ msgctxt "#31593"
 msgid "Apply your changes?"
 msgstr "تنفيذ التغيرات"
 
+#: /1080i/Includes_OSD.xml
+msgctxt "#31594"
+msgid "Press down"
+msgstr "اضغط للاسفل"
+
+#: /1080i/Includes_OSD.xml
+msgctxt "#31595"
+msgstr "اضغط لليمين"
+msgstr ""
+
 msgctxt "#32035"
 msgid "Passthrough"
 msgstr ""

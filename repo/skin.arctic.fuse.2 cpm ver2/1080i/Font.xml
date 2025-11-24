@@ -16,8 +16,8 @@
             <param name="plot_linespacing_main">1.1</param>
             <param name="plot_linespacing_mini">1.1</param>
             <param name="plot_linespacing_tiny">0.9</param>
-        <param name="size_heavy_main">32</param>
-        <param name="size_light_main">30</param>
+        <param name="size_heavy_main">33</param>
+        <param name="size_light_main">33</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
 
