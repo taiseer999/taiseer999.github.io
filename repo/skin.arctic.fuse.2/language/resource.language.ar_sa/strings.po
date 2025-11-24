@@ -2827,8 +2827,8 @@ msgstr "اضغط للاسفل"
 
 #: /1080i/Includes_OSD.xml
 msgctxt "#31595"
+msgstr "Press right"
 msgstr "اضغط لليمين"
-msgstr ""
 
 msgctxt "#32035"
 msgid "Passthrough"
