@@ -61,7 +61,7 @@ SPACER = '='
 # You can edit these however you want, just make sure that you have a %s in each of the
 # THEME's so it grabs the text from the menu item
 COLOR1 = 'white'
-COLOR2 = 'limegreen'
+COLOR2 = 'orange'
 # Primary menu items   / {0} is the menu item and is required
 THEME1 = u'[COLOR {color1}]{{}}[/COLOR]'.format(color1=COLOR1)
 # Build Names          / {0} is the menu item and is required
