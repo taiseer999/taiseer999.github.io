@@ -110,6 +110,9 @@ def stingers_use_chapters():
 def stingers_percentage():
 	return int(get_setting('fenlight.stinger_alert.window_percentage', '90'))
 
+def include_anime_tvshow():
+	return get_setting('fenlight.include_anime_tvshow', 'false') == 'true'
+
 def auto_play(media_type):
 	return get_setting('fenlight.auto_play_%s' % media_type, 'false') == 'true'
 
@@ -237,6 +240,9 @@ def external_scraper_info():
 	module = get_setting('fenlight.external_scraper.module')
 	if module in ('empty_setting', ''): return None, ''
 	return module, module.split('.')[-1]
+
+def external_filter_sources():
+	return get_setting('fenlight.external.filter_sources', 'true') == 'true'
 
 def filter_by_name(scraper):
 	if get_property('fs_filterless_search') == 'true': return False

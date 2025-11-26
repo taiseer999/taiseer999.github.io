@@ -19,6 +19,7 @@ def get_key_id(params):
 	if search_type == 'media_title':
 		if media_type == 'movie': url_params, string = {'mode': 'build_movie_list', 'action': 'tmdb_movies_search'}, 'movie_queries'
 		elif media_type == 'anime': url_params, string = {'mode': 'build_tvshow_list', 'action': 'trakt_anime_search', 'is_anime_list': 'true'}, 'anime_queries'
+		elif media_type == 'tvshow_anime': url_params, string = {'mode': 'build_tvshow_list', 'action': 'tmdb_tv_search'}, 'tvshow_anime_queries'
 		else: url_params, string = {'mode': 'build_tvshow_list', 'action': 'trakt_tv_search'}, 'tvshow_queries'
 	elif search_type == 'people': string = 'people_queries'
 	elif search_type == 'tmdb_keyword':
@@ -33,8 +34,7 @@ def get_key_id(params):
 	if search_type == 'people': return person_search(key_id)
 	if search_type == 'easynews_image': return search_easynews_image(key_id)
 	url_params.update({'query': key_id, 'key_id': key_id, 'name': 'Search Results for %s' % key_id})
-	action = 'ActivateWindow(Videos,%s,return)' if external() else 'Container.Update(%s)'
-	return execute_builtin(action % build_url(url_params))
+	return execute_builtin('ActivateWindow(Videos,%s,return)' if external() else 'Container.Update(%s)' % build_url(url_params))
 
 def add_to_search(search_name, search_list):
 	try:
@@ -60,6 +60,7 @@ def clear_search():
 	clear_history_list = [('Clear Movie Search History', 'movie_queries'),
 	('Clear TV Show Search History', 'tvshow_queries'),
 	('Clear Anime Search History', 'anime_queries'),
+	('Clear TV Show & Anime Search History', 'tvshow_anime_queries'),
 	('Clear People Search History', 'people_queries'),
 	('Clear Keywords Movie Search History', 'keyword_tmdb_movie_queries'),
 	('Clear Keywords TV Show Search History', 'keyword_tmdb_tvshow_queries'),

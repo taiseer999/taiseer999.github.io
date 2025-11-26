@@ -9,7 +9,7 @@ class TVShows:
 	main = ('tmdb_tv_popular', 'tmdb_tv_popular_today', 'tmdb_tv_premieres', 'tmdb_tv_airing_today','tmdb_tv_on_the_air', 'tmdb_tv_upcoming',
 	'tmdb_anime_popular', 'tmdb_anime_popular_recent', 'tmdb_anime_premieres', 'tmdb_anime_upcoming', 'tmdb_anime_on_the_air')
 	special = ('tmdb_tv_languages', 'tmdb_tv_networks', 'tmdb_tv_providers', 'tmdb_tv_year', 'tmdb_tv_decade', 'tmdb_tv_recommendations', 'tmdb_tv_genres',
-	'tmdb_tv_keyword_results', 'tmdb_tv_keyword_results_direct', 'tmdb_anime_year', 'tmdb_anime_decade', 'tmdb_anime_genres',
+	'tmdb_tv_search', 'tmdb_tv_keyword_results', 'tmdb_tv_keyword_results_direct', 'tmdb_anime_year', 'tmdb_anime_decade', 'tmdb_anime_genres',
 	'tmdb_anime_providers')
 	personal = {'in_progress_tvshows': ('modules.watched_status', 'get_in_progress_tvshows'),
 	'watched_tvshows': ('modules.watched_status', 'get_watched_items'),
@@ -39,7 +39,10 @@ class TVShows:
 
 	def is_anime(self):
 		if 'is_anime_list' in self.params: self.is_anime_list = self.params['is_anime_list'] == 'true'
-		elif self.action in self.personal or self.action == 'tmdb_tv_search': self.is_anime_list = False
+		elif self.action in self.personal:
+			if settings.include_anime_tvshow(): self.is_anime_list = None
+			else: self.is_anime_list = False
+		elif self.action == 'tmdb_tv_search': self.is_anime_list = None
 		else: self.is_anime_list = None
 
 	def fetch_list(self):

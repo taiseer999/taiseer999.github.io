@@ -43,7 +43,7 @@ class Images():
 						actor_poster, actor_image = self.tmdb_image_base % ('w185', p_path), self.tmdb_image_base % ('h632', p_path)
 						actor_url = self.tmdb_image_base % ('original', p_path)
 					else:
-						actor_poster, actor_image = get_icon('genre_family'), get_icon('genre_family')
+						actor_poster, actor_image = get_icon('empty_person'), get_icon('empty_person')
 						actor_url = ''
 					url_params = {'mode': 'person_data_dialog', 'actor_name': name, 'actor_id': actor_id, 'actor_image': actor_image}
 					listitem = make_listitem()
@@ -71,7 +71,7 @@ class Images():
 					known_for_list = [i for i in known_for_list if not i == 'NA']
 					known_for = ' | [I]%s[/I]' % ', '.join(known_for_list) if known_for_list else ''
 					if p_path: actor_poster, actor_image = self.tmdb_image_base % ('w185', p_path), self.tmdb_image_base % ('h632', p_path)
-					else: actor_poster, actor_image = get_icon('genre_family'), get_icon('genre_family')
+					else: actor_poster, actor_image = get_icon('empty_person'), get_icon('empty_person')
 					url_params = {'mode': 'person_data_dialog', 'actor_name': name, 'actor_id': actor_id, 'actor_image': actor_image}
 					listitem = make_listitem()
 					listitem.setProperties({'thumb': actor_poster, 'name': name + known_for, 'actor_name': name, 'actor_id': actor_id,
@@ -89,7 +89,7 @@ class Images():
 			self.direct_search_result = True
 			item = results[0]
 			return open_window(('windows.people', 'People'), 'people.xml', key_id=None, actor_name=item['name'], actor_id=item['id'],
-					actor_image=self.tmdb_image_base % ('h632', item['profile_path']) if item['profile_path'] else get_icon('genre_family'))
+					actor_image=self.tmdb_image_base % ('h632', item['profile_path']) if item['profile_path'] else get_icon('empty_person'))
 		self.list_items = list(builder())
 		if data['total_pages'] > page_no: page_no += 1
 		else: page_no = 'final_page'
@@ -125,7 +125,7 @@ class Images():
 		results = tmdb_media_images(self.params['media_type'], self.params['tmdb_id'])
 		try:
 			posters, clearlogos = [i for i in results['posters']], [dict(i, **{'file_path': '%s.png' % i['file_path'].split('.')[0]}) for i in results['logos']]
-			fanarts, landscapes = [i for i in results['backdrops'] if i['iso_639_1'] == 'xx'], [i for i in results['backdrops'] if i['iso_639_1'] == 'en']
+			fanarts, landscapes = [i for i in results['backdrops'] if i['iso_639_1'] in (None, 'xx')], [i for i in results['backdrops'] if i['iso_639_1'] == 'en']
 			for item in ((posters, '%s _Poster_%03d'), (fanarts, '%s _Fanart_%03d'), (landscapes, '%s _Landscape_%03d'), (clearlogos, '%s _Clearlogo_%03d')):
 				if item[0]: all_images.extend([(self.tmdb_image_base % ('original', i['file_path']), item[1] % (rootname, count), self.tmdb_image_base % ('w300', i['file_path'])) \
 												for count, i in enumerate(item[0], 1)])
@@ -210,7 +210,7 @@ class Images():
 					listitem.setProperties({'thumb': thumb_url, 'path': image_url, 'name': item, 'action': image_action, 'delete': 'true'})
 					yield listitem
 				except: pass
-		fallback_image = get_icon('genre_family')
+		fallback_image = get_icon('empty_person')
 		if not folder_path: folder_path = self.params.get('folder_path')
 		thumbs_path = os.path.join(folder_path, '.thumbs')
 		extensions = image_extensions()

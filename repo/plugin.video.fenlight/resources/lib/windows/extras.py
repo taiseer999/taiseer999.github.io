@@ -17,8 +17,8 @@ class Extras(BaseDialog):
 	button_ids = (10, 11, 12, 13, 14, 15, 16, 17, 50)
 	plot_id, cast_id, recommended_id, more_like_this_id, reviews_id, comments_id, trivia_id = 2000, 2050, 2051, 2052, 2053, 2054, 2055
 	blunders_id, parentsguide_id, in_lists_id, videos_id, year_id, genres_id, networks_id, collection_id = 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063
-	parentsguide_icons = {'Sex & Nudity': kodi_utils.get_icon('sex_nudity'), 'Violence & Gore': kodi_utils.get_icon('genre_war'), 'Profanity': kodi_utils.get_icon('bad_language'),
-							'Alcohol, Drugs & Smoking': kodi_utils.get_icon('drugs_alcohol'), 'Frightening & Intense Scenes': kodi_utils.get_icon('genre_horror')}
+	parentsguide_icons = {'Sex & Nudity': kodi_utils.get_icon('sex_nudity'), 'Violence & Gore': kodi_utils.get_icon('violence'), 'Profanity': kodi_utils.get_icon('bad_language'),
+							'Alcohol, Drugs & Smoking': kodi_utils.get_icon('drugs_alcohol'), 'Frightening & Intense Scenes': kodi_utils.get_icon('horror')}
 	def __init__(self, *args, **kwargs):
 		BaseDialog.__init__(self, *args)
 		self.control_id = None
@@ -149,7 +149,7 @@ class Extras(BaseDialog):
 					yield listitem
 				except: pass
 		try:
-			icon = kodi_utils.get_icon('genre_family')
+			icon = kodi_utils.get_icon('empty_person')
 			item_list = list(builder())
 			self.setProperty('cast.number', 'x%s' % len(item_list))
 			self.item_action_dict[Extras.cast_id] = 'name'
@@ -524,7 +524,7 @@ class Extras(BaseDialog):
 		self.close()
 
 	def movies_play(self):
-		url_params = {'mode': 'playback.media', 'media_type': 'movie', 'tmdb_id': self.tmdb_id}
+		url_params = {'media_type': 'movie', 'tmdb_id': self.tmdb_id}
 		Sources().playback_prep(url_params)
 
 	def show_plot(self):
@@ -566,7 +566,7 @@ class Extras(BaseDialog):
 
 	def play_nextep(self):
 		if self.nextep_season == None: return kodi_utils.ok_dialog(text='No Episodes Available')
-		url_params = {'mode': 'playback.media', 'media_type': 'episode', 'tmdb_id': self.tmdb_id, 'season': self.nextep_season, 'episode': self.nextep_episode}
+		url_params = {'media_type': 'episode', 'tmdb_id': self.tmdb_id, 'season': self.nextep_season, 'episode': self.nextep_episode, 'autoplay': 'true'}
 		Sources().playback_prep(url_params)
 
 	def play_random_episode(self):
