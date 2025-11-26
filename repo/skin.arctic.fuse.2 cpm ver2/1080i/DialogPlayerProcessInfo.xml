@@ -1421,7 +1421,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>($INFO[Player.Process(audiochannels),])</label>
+						<label>($VAR[AudioChannelsInputVar])</label>
 						<font>font_mini</font>
                     </control>
 				    </control>
