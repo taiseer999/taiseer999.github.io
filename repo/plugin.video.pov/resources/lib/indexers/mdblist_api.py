@@ -201,7 +201,6 @@ def mdbl_indicators_movies(watched_info):
 	if not watched_items: return
 #	threads = list(make_thread_list(_process, watched_items, Thread))
 	for i in TaskPool(40).tasks(_process, watched_items, Thread): i.join()
-	insert_list.sort(key=lambda k: k[4], reverse=False)
 	mdbl_cache.MDBLCache().set_bulk_movie_watched(insert_list)
 
 def mdbl_indicators_tv(watched_info):
@@ -218,7 +217,6 @@ def mdbl_indicators_tv(watched_info):
 	if not watched_items: return
 #	threads = list(make_thread_list(_process, watched_items, Thread))
 	for i in TaskPool(40).tasks(_process, watched_items, Thread): i.join()
-	insert_list.sort(key=lambda k: k[4], reverse=False)
 	mdbl_cache.MDBLCache().set_bulk_tvshow_watched(insert_list)
 
 def mdbl_progress(action, media, media_id, percent, season=None, episode=None, resume_id=None, refresh_mdb=False):

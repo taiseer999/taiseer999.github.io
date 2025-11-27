@@ -23,8 +23,7 @@ session.mount('https://api.trakt.tv', requests.adapters.HTTPAdapter(pool_maxsize
 
 def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagination=False, page=1):
 	headers = {'trakt-api-key': V2_API_KEY, 'trakt-api-version': '2', 'Content-Type': 'application/json'}
-	if with_auth is True and (token := settings.trakt_token()):
-		headers['Authorization'] = 'Bearer %s' % token
+	if with_auth is True and (token := settings.trakt_token()): headers['Authorization'] = 'Bearer %s' % token
 	if pagination: params['page'] = page
 	try:
 		response = session.request(
@@ -510,7 +509,7 @@ def trakt_indicators_tv():
 				insert_append(('episode', tmdb_id, season_no, e['number'], e['last_watched_at'], title))
 	insert_list = []
 	insert_append = insert_list.append
-	result = [(i,) for i in call_trakt('users/me/watched/shows?extended=full')] # TaskPool requires tuple
+	result = [(i,) for i in call_trakt('sync/watched/shows?extended=full')] # TaskPool requires tuple
 #	threads = list(make_thread_list(_process, result, Thread))
 	for i in TaskPool(40).tasks(_process, result, Thread): i.join()
 	trakt_cache.TraktCache().set_bulk_tvshow_watched(insert_list)

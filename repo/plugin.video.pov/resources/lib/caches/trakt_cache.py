@@ -1,4 +1,5 @@
-from modules.kodi_utils import sleep, confirm_dialog, close_all_dialog, trakt_db, database_connect
+from modules.kodi_utils import trakt_db, database_connect
+from modules.utils import chunks
 # from modules.kodi_utils import logger
 
 timeout = 20
@@ -15,17 +16,20 @@ TC_BASE_SET = 'INSERT OR REPLACE INTO trakt_data (id, data) VALUES (?, ?)'
 TC_BASE_DELETE = 'DELETE FROM trakt_data WHERE id = ?'
 
 class TraktCache:
+	batch_size = 1000
 	def __init__(self):
 		self._connect_database()
 		self._set_PRAGMAS()
 
 	def set_bulk_movie_watched(self, insert_list):
 		self._delete(WATCHED_DELETE, ('movie',))
-		self._executemany(WATCHED_INSERT, insert_list)
+		for i in chunks(insert_list, self.batch_size):
+			self._executemany(WATCHED_INSERT, i)
 
 	def set_bulk_tvshow_watched(self, insert_list):
 		self._delete(WATCHED_DELETE, ('episode',))
-		self._executemany(WATCHED_INSERT, insert_list)
+		for i in chunks(insert_list, self.batch_size):
+			self._executemany(WATCHED_INSERT, i)
 
 	def set_bulk_movie_progress(self, insert_list):
 		self._delete(PROGRESS_DELETE, ('movie',))
@@ -119,7 +123,8 @@ def clear_trakt_recommendations(media_type):
 def clear_all_trakt_cache_data(refresh=True):
 	try:
 		dbcur = TraktCache().dbcur
-		for table in ('trakt_data', 'progress', 'watched_status'): dbcur.execute(BASE_DELETE % table)
+		for table in ('trakt_data', 'progress', 'watched_status'):
+			dbcur.execute(BASE_DELETE % table)
 		dbcur.execute("""VACUUM""")
 		if not refresh: return True
 		from indexers.trakt_api import trakt_sync_activities_thread
