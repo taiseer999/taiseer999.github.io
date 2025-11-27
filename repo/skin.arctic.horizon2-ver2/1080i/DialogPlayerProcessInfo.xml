@@ -1376,7 +1376,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$LOCALIZE[32035]</label>
+						<label>Passthrough</label>
 						<font>font_mini</font>
 						<visible>Player.Passthrough</visible>
 					</control>
