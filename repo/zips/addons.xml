@@ -1415,7 +1415,7 @@ updated YouTube addon URL
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="plugin.video.pov" version="5.11.18" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.11.19" name="POV" provider-name="kodifitzwell">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -6908,7 +6908,7 @@ Added arabic fonts
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.horizon.2.ver2" name="Arctic Horizon 2-ver2" provider-name="jurialmunkey" version="3.91">
+</addon><addon id="skin.arctic.horizon.2.ver2" name="Arctic Horizon 2-ver2" provider-name="jurialmunkey" version="3.92">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinshortcuts" version="0.4.0" />

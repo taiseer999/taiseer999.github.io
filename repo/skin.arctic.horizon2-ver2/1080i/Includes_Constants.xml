@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <!-- Octo decreased padding -->
-
     <!-- Basic View Constants -->
-    <constant name="view_pad">60</constant>
+    <constant name="view_pad">80</constant>
     <constant name="view_top">200</constant>
     <constant name="view_bar">40</constant>
     <constant name="view_gutter">-10</constant>
@@ -74,15 +72,13 @@
     <constant name="optionsmenu_w">480</constant>
 
     <!-- Studio Logo -->
-    <constant name="studio_logo_w">340</constant>
-
-    <!-- Octo reduced size of flixart -->
+    <constant name="studio_logo_w">240</constant>
 
     <!-- FlixArt -->
-    <constant name="flixart_size_w">900</constant>
+    <constant name="flixart_size_w">1280</constant>
     <constant name="flixart_size_h">720</constant>
-    <constant name="flixart_size_w">768</constant>
-    <constant name="flixart_size_h">432</constant>
+    <constant name="flixart_size_w">1152</constant>
+    <constant name="flixart_size_h">648</constant>
 
     <!-- Info Dialogs -->
     <constant name="infodialog_left_w">620</constant>
@@ -108,16 +104,16 @@
     <!-- View Info -->
     <constant name="info_poster_w">475</constant>
     <constant name="info_poster_h">680</constant>
-    <constant name="info_plot_w">1100</constant>
-    <constant name="info_panel_w">1100</constant>
+    <constant name="info_plot_w">880</constant>
+    <constant name="info_panel_w">1120</constant>
     <constant name="info_widelandscape_w">820</constant>
     <constant name="info_landscape_w">731.42</constant>
     <constant name="info_landscape_h">411.42375</constant>
     <constant name="info_landscape_details_t">440</constant>
-    <constant name="-info_plot_small_h">-160</constant>
-    <constant name="info_plot_small_h">160</constant>
-    <constant name="-info_plot_h">-144</constant>
-    <constant name="info_plot_h">144</constant>
+    <constant name="-info_plot_small_h">-41</constant>
+    <constant name="info_plot_small_h">41</constant>
+    <constant name="-info_plot_h">-81</constant>
+    <constant name="info_plot_h">81</constant>
     <constant name="-info_plot_large_h">-121</constant>
     <constant name="info_plot_large_h">121</constant>
     <constant name="-info_plot_mediainfo_h">-201</constant>
@@ -136,17 +132,17 @@
     <constant name="infowidget_next_t">160</constant>
     <constant name="infowidget_mext_t">280</constant>
     <constant name="infowidget_main_t">280</constant>
-    <constant name="infowidget_full_t">-300</constant> <!-- Moves plot and info higher for fully expanded widgets -->
-    <constant name="infowidget_plot_t">475</constant>
-    <constant name="fullscreenwidget_buttongroup_t">490</constant> <!-- Expands height of fullscreen widget -->
-    <constant name="fullscreenwidget_buttongroup_h">0</constant> <!-- Positions fullscreen buttons -->
-    <constant name="fullscreenwidget_infopanel_t">-270</constant> <!-- Moves fullscreen plot higher-->
-    <constant name="widget_label_t">-380</constant> <!-- Expands space for plot under expanded widgets -->
+    <constant name="infowidget_full_t">-260</constant>
+    <constant name="infowidget_plot_t">440</constant>
+    <constant name="fullscreenwidget_buttongroup_t">720</constant>
+    <constant name="fullscreenwidget_buttongroup_h">30</constant>
+    <constant name="fullscreenwidget_infopanel_t">-260</constant>
+    <constant name="widget_label_t">-420</constant>
     <constant name="widget_label_h">-180</constant>
     <constant name="widget_items_t">200</constant>
-    <constant name="widget_items_h">850</constant>
+    <constant name="widget_items_h">880</constant>
     <constant name="widget_sbump_h">-280</constant>
-    <constant name="widget_tbump_h">550</constant>
+    <constant name="widget_tbump_h">600</constant>
     <constant name="widget_stack_h">780</constant>
     <constant name="widget_stack_t">-380</constant>
     <constant name="widget_ebump_h">880</constant>

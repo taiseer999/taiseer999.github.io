@@ -2,12 +2,12 @@
 <window>
     <defaultcontrol>120</defaultcontrol>
     <controls>
-        <include condition="!$EXP[Exp_WindowVisible_VideoOSD]">Object_Overlay</include>
+        <include condition="!Window.IsVisible(videoosd)">Object_Overlay</include>
         <include content="Dialog_Background">
             <visible>!Window.IsVisible(DialogSlider.xml)</visible>
             <include>Animation_SlideIn_Dialog</include>
-            <include condition="$EXP[Exp_WindowVisible_VideoOSD]">Dimension_DialogSelect_OSD</include>
-            <include condition="!$EXP[Exp_WindowVisible_VideoOSD]">Dimension_Info</include>
+            <include condition="Window.IsVisible(videoosd)">Dimension_DialogSelect_OSD</include>
+            <include condition="!Window.IsVisible(videoosd)">Dimension_Info</include>
             <include>Dialog_Overlay_Buttons</include>
             <control type="group">
                 <left>settings_category_w</left>
@@ -17,7 +17,7 @@
             <include content="Dialog_Header" description="Service Name">
                 <param name="id" value="100" />
                 <align>left</align>
-                <include content="Object_Top" condition="!$EXP[Exp_WindowVisible_VideoOSD]">
+                <include content="Object_Top" condition="!Window.IsVisible(videoosd)">
                     <param name="top">-160</param>
                 </include>
             </include>

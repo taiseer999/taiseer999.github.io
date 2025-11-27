@@ -123,7 +123,7 @@
                 <ondown condition="Skin.String(Rows.OnDown,Trailer) + !String.IsEmpty(ListItem.Trailer)">PlayMedia($ESCINFO[ListItem.Trailer],playlist_type_hint=1)</ondown>
                 <ondown condition="Skin.String(Rows.OnDown,Trailer) + String.IsEmpty(ListItem.Trailer) + !String.IsEmpty(Container(99950).ListItem.Trailer)">PlayMedia($ESCINFO[Container(99950).ListItem.Trailer],playlist_type_hint=1)</ondown>
             </include>
-            <include content="Object_Control" condition="!$EXP[Exp_SkinSetting_DisableAlphabetScrollbar]">
+            <include content="Object_Control" condition="!Skin.HasSetting(DisableAlphabetScrollbar)">
                 <param name="control" value="grouplist" />
                 <visible>$EXP[Exp_AlphabetVisible]</visible>
                 <orientation>horizontal</orientation>
@@ -298,7 +298,7 @@
             <include>View_Furniture_Combined_Top</include>
             <control type="group">
                 <visible>$EXP[Exp_RowViews] | $EXP[Exp_CombinedViews]</visible>
-                <include condition="!$EXP[Exp_BackgroundStyle_Fanart] + Skin.String(ForegroundStyle,ClearArt)">View_ClearArt</include>
+                <include condition="!Skin.String(BackgroundStyle,Fanart) + Skin.String(ForegroundStyle,ClearArt)">View_ClearArt</include>
             </control>
         </control>
         <control type="group">
@@ -315,7 +315,7 @@
     </include>
 
     <include name="View_ClearArt">
-        <include content="Object_Control" condition="!$EXP[Exp_BackgroundStyle_Fanart]">
+        <include content="Object_Control" condition="!Skin.String(BackgroundStyle,Fanart)">
             <param name="control" value="image" />
             <bottom>divider_bottom</bottom>
             <right>view_pad</right>

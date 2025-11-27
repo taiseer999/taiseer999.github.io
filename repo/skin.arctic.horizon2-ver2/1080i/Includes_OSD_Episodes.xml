@@ -17,7 +17,7 @@
                         <param name="selected" value="$PARAM[selected]" />
                         <param name="shadow_colordiffuse" value="$PARAM[shadow_colordiffuse]" />
                     </include>
-                    <include content="Object_Control" condition="$PARAM[selected] + $EXP[Exp_SkinSetting_WidgetsOpaqueFocus]">
+                    <include content="Object_Control" condition="$PARAM[selected] + Skin.HasSetting(Widgets.OpaqueFocus)">
                         <param name="control">image</param>
                         <texture colordiffuse="$VAR[ColorMainItem]" diffuse="$PARAM[diffuse]">common/white.png</texture>
                     </include>
@@ -82,7 +82,7 @@
                     <texture>indicator/playwhite.png</texture>
                     <animation effect="fade" start="0" end="100" delay="400" time="200">Visible</animation>
                 </control>
-                <include content="Object_Control" condition="!$PARAM[selected] + $EXP[Exp_SkinSetting_GlassBorderOutline]">
+                <include content="Object_Control" condition="!$PARAM[selected] + Skin.HasSetting(Glass.BorderOutline)">
                     <param name="control" value="image" />
                     <texture colordiffuse="overlay_line" border="12">common/box-outline.png</texture>
                 </include>
@@ -156,11 +156,11 @@
                 </control>
                 <control type="image">
                     <bordersize>2</bordersize>
-                    <include content="Object_AspectRatio" condition="$EXP[Exp_VideoPlayerContentLiveTV]">
+                    <include content="Object_AspectRatio" condition="VideoPlayer.Content(livetv)">
                         <param name="scalediffuse">false</param>
                         <param name="aspectratio">keep</param>
                     </include>
-                    <include content="Object_AspectRatio" condition="!$EXP[Exp_VideoPlayerContentLiveTV]">
+                    <include content="Object_AspectRatio" condition="!VideoPlayer.Content(livetv)">
                         <param name="scalediffuse">false</param>
                         <param name="aspectratio">scale</param>
                     </include>

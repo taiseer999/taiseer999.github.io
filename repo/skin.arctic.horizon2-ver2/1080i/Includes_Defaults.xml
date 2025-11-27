@@ -385,7 +385,7 @@
     <include name="Defs_AutoScroll">
         <param name="include" default="Defs_AutoScroll_Value" />
         <definition>
-           <include content="$PARAM[include]" condition="String.IsEqual(Skin.String(AutoScrollTime),5s)">
+            <include content="$PARAM[include]" condition="String.IsEqual(Skin.String(AutoScrollTime),5s)">
                 <param name="time" value="5000" />
                 <param name="condition" value="$PARAM[condition]" />
             </include>
@@ -418,7 +418,7 @@
                 <param name="condition" value="$PARAM[condition]" />
             </include>
             <include content="$PARAM[include]" condition="String.IsEqual(Skin.String(AutoScrollTime),10m)">
-                <param name="time" value="100000" />
+                <param name="time" value="600000" />
                 <param name="condition" value="$PARAM[condition]" />
             </include>
         </definition>
