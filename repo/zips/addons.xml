@@ -1173,7 +1173,7 @@ updated YouTube addon URL
             <clearlogo>resources/media/clearlogo.png</clearlogo>
         </assets>
     </extension>
-</addon><addon id="plugin.program.openwizardAbuKarim.3" name="AbuKarim Wizard 3" version="3.0.1.8" provider-name="drinfernoo, slamious, Abukarim">
+</addon><addon id="plugin.program.openwizardAbuKarim.3" name="[COLOR limegreen]AbuKarim Wizard 3[/COLOR]" version="3.0.1.7" provider-name="drinfernoo, slamious, Abukarim">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
@@ -1190,8 +1190,8 @@ updated YouTube addon URL
     <extension point="xbmc.service" library="startup.py" start="startup" />
     
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">[COLOR blue]Open[/COLOR]Wizard</summary>
-        <description lang="en">[COLOR blue]Open[/COLOR]Wizard offers many maintenance features, selective add-on data saving, and automated build installs.</description>
+         <summary lang="en">[COLOR limegreen]Open[/COLOR]Wizard</summary>
+        <description lang="en">[COLOR limegreen]Open[/COLOR]Wizard offers many maintenance features, selective add-on data saving, and automated build installs.</description>
         <platform>all</platform>
         <reuselanguageinvoker>false</reuselanguageinvoker>
         <source>https://www.github.com/a4k-openproject/plugin.program.openwizard/</source>

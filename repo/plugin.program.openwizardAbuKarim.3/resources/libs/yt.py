@@ -47,9 +47,10 @@ import xbmc
 import xbmcgui
 
 import re
-import urllib.request as urllib2
+import urllib2
 import urllib
 import cgi
+import HTMLParser
 
 try:
     import simplejson as json
@@ -75,7 +76,7 @@ def Clean(text):
 
 def PlayVideo(id, forcePlayer=False):
     import sys
-    dp.create("Loading video",'Please Wait')
+    dp.create("Loading video",'','Please Wait','')
 
     video, links = GetVideoInformation(id)
 
