@@ -47,8 +47,8 @@
 
     <fontset id="الجزيرة" unicode="true">
         <include content="Font_Default">
-            <param name="font_black">Outfit-Regular.ttf</param>
-            <param name="font_bold">Outfit-Regular.ttf</param>
+            <param name="font_black">Questrial-Regular2.ttf</param>
+            <param name="font_bold">Questrial-Regular2.ttf</param>
             <param name="font_regular">Outfit-Regular.ttf</param>
             <param name="font_light">Outfit-Regular.ttf</param>
                <param name="plot_linespacing_head">0.8</param>
