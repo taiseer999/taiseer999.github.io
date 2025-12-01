@@ -103,7 +103,7 @@
 		</item>
 		<item id="6">
 			<property name="id">$NUMBER[6]</property>
-			<label>$LOCALIZE[31085]</label>
+			<label>البث المباشر</label>
 			<label2>Common Shortcut</label2>
 			<icon>special://skin/extras/icons/livetv.png</icon>
 			<thumb />
@@ -402,7 +402,7 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">8</property>
-			<label>$LOCALIZE[31168]</label>
+			<label>None</label>
 			<label2>الإفتراضي</label2>
 			<icon>special://skin/extras/icons/film.png</icon>
 			<thumb />
@@ -418,7 +418,7 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">8</property>
-			<label>$LOCALIZE[31169]</label>
+			<label>None</label>
 			<label2>الإفتراضي</label2>
 			<icon>special://skin/extras/icons/tv.png</icon>
 			<thumb />
@@ -775,7 +775,7 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31371]</label>
+			<label>Stacked - يقوم بعرض ودجيت/قسم أسفل العنصر المركز عليه</label>
 			<label2 />
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb />
@@ -3041,7 +3041,7 @@
 						<param name="id" value="3605" />
 						<param name="spacerid" value="3805" />
 						<param name="buttonid" value="300500" />
-						<param name="label" value="$LOCALIZE[31371]" />
+						<param name="label" value="Stacked - يقوم بعرض ودجيت/قسم أسفل العنصر المركز عليه" />
 						<param name="usealtlabel" value="True" />
 						<param name="altlabel">$INFO[Container(3604).ListItem.Label]</param>
 						<param name="usewidgetlabel" value="False" />
@@ -3086,7 +3086,7 @@
 							<param name="include">skinshortcuts-group-kwry</param>
 						</include>
 						<onfocus>SetProperty(TMDbHelper.WidgetContainer,3605,Home)</onfocus>
-						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,$LOCALIZE[31371],Home)</onfocus>
+						<onfocus condition="False + ![False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,Stacked - يقوم بعرض ودجيت/قسم أسفل العنصر المركز عليه,Home)</onfocus>
 						<onfocus condition="False + [False] + Skin.HasSetting(Widgets.ExpandedHeader)">SetProperty(Slide.WidgetTitle,[CAPITALIZE]$INFO[Container(3605).ListItem.Property(widget)][/CAPITALIZE],Home)</onfocus>
 						<onfocus condition="False">SetProperty(Slide.WidgetContainer,3605,Home)</onfocus>
 						<onfocus>SetProperty(Slide.WidgetInfoStyle,,Home)</onfocus>
@@ -5142,7 +5142,7 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31371]</label>
+			<label>Stacked - يقوم بعرض ودجيت/قسم أسفل العنصر المركز عليه</label>
 			<label2 />
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb />
@@ -5240,7 +5240,7 @@
 		<item id="5">
 			<property name="id">$NUMBER[5]</property>
 			<property name="mainmenuid">3</property>
-			<label>$LOCALIZE[31371]</label>
+			<label>Stacked - يقوم بعرض ودجيت/قسم أسفل العنصر المركز عليه</label>
 			<label2 />
 			<icon>special://skin/extras/icons/shortcut.png</icon>
 			<thumb />
@@ -6463,7 +6463,7 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">8</property>
-			<label>$LOCALIZE[31168]</label>
+			<label>None</label>
 			<label2>الإفتراضي</label2>
 			<icon>special://skin/extras/icons/film.png</icon>
 			<thumb />
@@ -6479,7 +6479,7 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">8</property>
-			<label>$LOCALIZE[31169]</label>
+			<label>None</label>
 			<label2>الإفتراضي</label2>
 			<icon>special://skin/extras/icons/tv.png</icon>
 			<thumb />
@@ -6513,7 +6513,7 @@
 		<item id="1">
 			<property name="id">$NUMBER[1]</property>
 			<property name="mainmenuid">8</property>
-			<label>$LOCALIZE[31168]</label>
+			<label>None</label>
 			<label2>الإفتراضي</label2>
 			<icon>special://skin/extras/icons/film.png</icon>
 			<thumb />
@@ -6529,7 +6529,7 @@
 		<item id="2">
 			<property name="id">$NUMBER[2]</property>
 			<property name="mainmenuid">8</property>
-			<label>$LOCALIZE[31169]</label>
+			<label>None</label>
 			<label2>الإفتراضي</label2>
 			<icon>special://skin/extras/icons/tv.png</icon>
 			<thumb />
@@ -6567,7 +6567,7 @@
 			<param name="spacerid" value="5201" />
 			<param name="groupid" value="5101" />
 			<param name="id" value="5001" />
-			<param name="label" value="$LOCALIZE[31168]" />
+			<param name="label" value="None" />
 			<param name="visible" value="!String.IsEmpty(Control.GetLabel(9099).index(1))" />
 			<param name="altvisible" value="[Control.HasFocus(340) | [System.IdleTime(1) + !System.IdleTime(2) + Control.HasFocus(9099) + !String.IsEqual(Window.Property(PreviousSearchTerm),Control.GetLabel(9099).index(1))]]" />
 			<param name="include" value="List_Poster_Row" />
@@ -6612,7 +6612,7 @@
 			<param name="spacerid" value="5202" />
 			<param name="groupid" value="5102" />
 			<param name="id" value="5002" />
-			<param name="label" value="$LOCALIZE[31169]" />
+			<param name="label" value="None" />
 			<param name="visible" value="!String.IsEmpty(Control.GetLabel(9099).index(1))" />
 			<param name="altvisible" value="[Control.HasFocus(340) | [System.IdleTime(1) + !System.IdleTime(2) + Control.HasFocus(9099) + !String.IsEqual(Window.Property(PreviousSearchTerm),Control.GetLabel(9099).index(1))]]" />
 			<param name="include" value="List_Poster_Row" />
@@ -6783,7 +6783,7 @@
 			<param name="label">$LOCALIZE[24001]</param>
 		</include>
 		<include content="Home_Horz_Menubar_Text_Button" condition="[System.HasPVRAddon] + [PVR.HasTVChannels]">
-			<param name="label">$LOCALIZE[31085]</param>
+			<param name="label">البث المباشر</param>
 		</include>
 	</include>
 	<include name="skinshortcuts-template-dialog-lookup">

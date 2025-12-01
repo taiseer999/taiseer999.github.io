@@ -1366,7 +1366,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]$LOCALIZE[32055]:[/COLOR]</label>
+						<label>[COLOR dialog_fg_90]Output:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -1397,7 +1397,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$LOCALIZE[32085]</label>
+						<label>Decoding</label>
 						<font>font_mini</font>
 						<visible>!Player.Passthrough + String.IsEmpty(Player.Process(audiochannelssink))</visible>
 					</control>
