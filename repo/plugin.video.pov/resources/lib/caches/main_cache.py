@@ -35,13 +35,12 @@ class MainCache(BaseCache):
 			expires = self._get_timestamp(datetime.now() + expiration)
 			self.dbcur.execute(BASE_SET, (string, repr(data), int(expires)))
 			self.set_memory_cache(data, string, int(expires))
-		except: return None
+		except: pass
 
 	def get_memory_cache(self, string, current_time):
 		result = None
 		try:
-			try: cachedata = get_property(string.encode('utf-8'))
-			except: cachedata = get_property(string)
+			cachedata = get_property(string)
 			if cachedata:
 				cachedata = eval(cachedata)
 				if cachedata[0] > current_time: result = cachedata[1]
@@ -51,9 +50,8 @@ class MainCache(BaseCache):
 	def set_memory_cache(self, data, string, expires):
 		try:
 			cachedata = (expires, data)
-			try: cachedata_repr = repr(cachedata).encode('utf-8')
-			except: cachedata_repr = repr(cachedata)
-			set_property(string, cachedata_repr)
+			cachedata = repr(cachedata)
+			set_property(string, cachedata)
 		except: pass
 
 	def delete(self, string, dbcon=None):
@@ -67,11 +65,7 @@ class MainCache(BaseCache):
 
 	def delete_all_lists(self):
 		from modules.meta_lists import media_lists
-		media_list = media_lists
-		len_media_list = len(media_list)
-		for count, item in enumerate(media_list, 1):
-			if count == 1: command = LIKE_SELECT % item
-			else: command += '%s%s' % (ALL_LIST_ADD, item)
+		command = LIKE_SELECT % ALL_LIST_ADD.join(media_lists)
 		self.dbcur.execute(command)
 		results = self.dbcur.fetchall()
 		try:

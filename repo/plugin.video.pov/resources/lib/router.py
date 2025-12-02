@@ -212,8 +212,9 @@ class Router:
 			if 'resolve_' in mode: resolve_rd(params)
 			else: Indexer().run(params)
 		elif 'torbox' in mode:
-			from debrids.torbox import Indexer, resolve_tb
-			if 'resolve_' in mode: resolve_tb(params)
+			from debrids.torbox import Indexer, Uncached, resolve_tb
+			if 'nzb_cache_and_play' in mode: Uncached().nzb_cache_and_play(params)
+			elif 'resolve_' in mode: resolve_tb(params)
 			else: Indexer().run(params)
 		elif 'offcloud' in mode:
 			from debrids.offcloud import Indexer

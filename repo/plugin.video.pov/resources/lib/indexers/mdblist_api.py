@@ -121,6 +121,7 @@ def mdbl_collection_watchlist_items(url):
 		result = call_mdblist(url, params=params)
 		if not result is None:
 			items['has_more'] = result['pagination']['has_more']
+			params['offset'] = result['pagination']['page'] * result['pagination']['limit']
 			if 'movies' in result: items['movies'] += result['movies']
 			if 'shows' in result: items['shows'] += result['shows']
 		else: items['has_more'] = False
@@ -305,6 +306,7 @@ def mdbl_watched_progress():
 		result = call_mdblist(url, params=params)
 		if not result is None:
 			watched['has_more'] = result['pagination']['has_more']
+			params['offset'] = result['pagination']['page'] * result['pagination']['limit']
 			if 'movies' in result: watched['movies'] += result['movies']
 			if 'episodes' in result: watched['episodes'] += result['episodes']
 		else: watched['has_more'] = False

@@ -38,9 +38,9 @@ def authorize():
 			item.setArt({'icon': '%s%s' % (icon_path, api.icon)})
 			yield(item)
 	icon_path, services = kodi_utils.media_path(), (
+		('trakt', Trakt), ('mdblist', MDBList), ('tmdblist', TMDbList),
 		('real-debrid', RealDebrid), ('premiumize.me', Premiumize), ('alldebrid', AllDebrid),
-		('torbox', TorBox), ('offcloud', Offcloud), ('easydebrid', EasyDebrid), ('easynews', EasyNews),
-		('trakt', Trakt), ('mdblist', MDBList), ('tmdblist', TMDbList)
+		('torbox', TorBox), ('offcloud', Offcloud), ('easydebrid', EasyDebrid), ('easynews', EasyNews)
 	)
 	service = kodi_utils.dialog.select('My Services', list(_builder()), useDetails=True)
 	if service < 0: return

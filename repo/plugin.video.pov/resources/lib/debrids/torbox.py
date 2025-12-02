@@ -1,4 +1,5 @@
 import sys
+import json
 from debrids.torbox_api import TorBoxAPI as Debrid
 from modules import kodi_utils
 from modules.source_utils import supported_video_extensions
@@ -85,8 +86,7 @@ class Indexer(Debrid):
 
 	def usenet_query(self, items):
 		KODI_VERSION = kodi_utils.get_kodi_version()
-		uncached = [i for i in items if not i['cached']]
-		items = [i for i in items if i['cached']] + uncached
+		items.sort(key=lambda k: k['cached'], reverse=True)
 		for count, item in enumerate(items, 1):
 			try:
 				name = clean_file_name(item['raw_title']).upper()
@@ -142,6 +142,39 @@ class Indexer(Debrid):
 			kodi_utils.hide_busy_dialog()
 			return kodi_utils.show_text('TorBox'.upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
+
+class Uncached(Debrid):
+	def nzb_cache_and_play(self, params):
+		meta = json.loads(params['meta'])
+		source = json.loads(params['source'])
+		line, status_str = '%s[CR]%s[B]STATUS[/B]: %s', '(%2d%%, ETA %s) %s'
+		title, season, episode = meta['title'], meta['season'], meta['episode']
+		if season and episode: line1, line2 = '[B]%s (%02dx%02d)[/B]' % (title, season, episode), '[CR]'
+		else: line1, line2 = '[B]%s (%s)[/B]' % (title, meta['year']), '[CR]'
+		kodi_utils.progressDialog.create('POV', '')
+		kodi_utils.progressDialog.update(0, line % (line1, line2, 'GRAB'))
+		try:
+			store_to_cloud = get_setting('store_usenet.torbox') == 'true'
+			nzb_id = self.create_transfer(source['url'], source['name'])
+			if not nzb_id: return kodi_utils.notification(32574)
+			resolved_link = None
+			data = {'files': []}
+			while not data['files']:
+				if kodi_utils.progressDialog.iscanceled(): return
+				progress = int(float(data.get('progress', '0')) * 100)
+				status = status_str % (progress, data.get('eta', 'NA'), data.get('download_state', '...').upper())
+				kodi_utils.progressDialog.update(progress, line % (line1, line2, status))
+				kodi_utils.sleep(500)
+				result = self.nzb_info(nzb_id)
+				if result and 'id' in result: data = result
+			else: resolved_link = self.resolve_nzb(
+				source['url'], source['hash'], store_to_cloud, title, season, episode, nzb_info=result
+			)
+		finally: kodi_utils.progressDialog.close()
+		if not resolved_link: return kodi_utils.notification(32574)
+		kodi_utils.set_property('pov_playback_meta', params.get('meta', ''))
+		from modules.player import POVPlayer
+		POVPlayer().run(resolved_link)
 
 def resolve_tb(params):
 	file_id, media_type = params['url'], params['media_type']

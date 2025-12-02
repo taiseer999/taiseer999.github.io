@@ -22,8 +22,9 @@ quality_choices, pack_check = ('4K', '1080P', '720P', 'SD', 'TELE', 'CAM', 'SCR'
 extra_info_str, down_file_str, browse_pack_str, down_pack_str, cloud_str = ls(32605), ls(32747), ls(32746), ls(32007), ls(32016)
 filter_str, clr_filter_str, filters_ignored, start_full_scrape = ls(32152), ls(32153), ls(32686), ls(32529)
 filter_quality, filter_provider, filter_title, filter_extraInfo = ls(32154), ls(32157), ls(32679), ls(32169)
-en_seek_str, en_dl_str, oc_clr_str = '[B]EN: PLAY (SEEK ENABLED)[/B]', '[B]EN: PLAY (FROM DOWNLOAD)[/B]', '[B]OC: CLEAR CLOUD STORAGE[/B]'
 run_plugin_str, ignored_str, check_str = 'RunPlugin(%s)', '[B][COLOR dodgerblue](%s)[/COLOR][/B]', '[B]CHECK CACHE STATUS[/B]'
+en_seek_str, en_dl_str = '[B]EN: PLAY (SEEK ENABLED)[/B]', '[B]EN: PLAY (FROM DOWNLOAD)[/B]'
+tb_cnp_str, oc_clr_str = '[B]TB: CACHE AND PLAY[/B]', '[B]OC: CLEAR CLOUD STORAGE[/B]'
 string, upper, lower = str, str.upper, str.lower
 
 class SourceResults(BaseDialog):
@@ -332,9 +333,11 @@ class ResultsContextMenu(BaseDialog):
 		magnet_url = self.item.get('url', 'None')
 		info_hash = self.item.get('hash', 'None')
 		if next((True for x in ('Real-Debrid', 'AllDebrid') if x in cache_provider), False):
-			self.item_list.append(self.make_contextmenu_item(check_str, run_plugin_str, {
-				'mode': 'unchecked_magnet', 'provider': cache_provider, 'url': magnet_url, 'info_hash': info_hash
-			}))
+			params = {'mode': 'unchecked_magnet', 'provider': cache_provider, 'url': magnet_url, 'info_hash': info_hash}
+			self.item_list.append(self.make_contextmenu_item(check_str, run_plugin_str, params))
+		if 'Uncached' in cache_provider and provider_source == 'usenet':
+			params = {'mode': 'torbox.nzb_cache_and_play', 'meta': meta_json, 'source': source}
+			self.item_list.append(self.make_contextmenu_item(tb_cnp_str, run_plugin_str, params))
 		if 'easynews' in scrape_provider:
 			params = {'meta': meta_json, 'name': name, 'url_dl': self.item['url_dl'], 'size': self.item['size']}
 			seek_params = {'mode': 'easynews.seekable_easynews', **params}
@@ -342,9 +345,8 @@ class ResultsContextMenu(BaseDialog):
 			self.item_list.append(self.make_contextmenu_item(en_seek_str, run_plugin_str, seek_params))
 			self.item_list.append(self.make_contextmenu_item(en_dl_str, run_plugin_str, spool_params))
 		if 'Offcloud' in cache_provider:
-			self.item_list.append(self.make_contextmenu_item(oc_clr_str, run_plugin_str, {
-				'mode': 'offcloud.user_cloud_clear'
-			}))
+			params = {'mode': 'offcloud.user_cloud_clear'}
+			self.item_list.append(self.make_contextmenu_item(oc_clr_str, run_plugin_str, params))
 		if self.filter_applied: self.item_list.append(self.make_contextmenu_item(clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
 		else: self.item_list.append(self.make_contextmenu_item(filter_str, run_plugin_str, {'mode': 'results_filter'}))
 		self.item_list.append(self.make_contextmenu_item(extra_info_str, run_plugin_str, {'mode': 'results_info'}))

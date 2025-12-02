@@ -133,7 +133,7 @@ class TorBoxAPI:
 	def create_transfer(self, link, name=''):
 		if link.startswith('magnet'): key, result = 'torrent_id', self.add_magnet(link)
 		else: key, result = 'usenetdownload_id', self.add_nzb(link, name)
-		return result.get(key, '')
+		return result.get(key, '') if result else ''
 
 	def parse_magnet_pack(self, magnet_url, info_hash):
 		from modules.source_utils import supported_video_extensions
@@ -154,14 +154,15 @@ class TorBoxAPI:
 			if torrent_id: self.delete_torrent(torrent_id)
 			return None
 
-	def resolve_nzb(self, nzb_url, info_hash, store_to_cloud, title, season, episode):
+	def resolve_nzb(self, nzb_url, info_hash, store_to_cloud, title, season, episode, nzb_info=None):
 		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter
 		try:
 			extensions = supported_video_extensions()
 			extras_filtering_list = tuple(i for i in extras_filter() if not i in title.lower())
-			if not self.check_single_magnet(info_hash): return None
-			nzb_id = self.create_transfer(nzb_url)
-			nzb_files = self.nzb_info(nzb_id)
+			if not nzb_info:
+				nzb_id = self.create_transfer(nzb_url)
+				nzb_files = self.nzb_info(nzb_id)
+			else: nzb_id, nzb_files = nzb_info['id'], nzb_info
 			selected_files = []
 			for i in nzb_files['files']:
 				link, filename, size = '%d,%d' % (nzb_id, i['id']), i['short_name'].lower(), i['size']

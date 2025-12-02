@@ -1,5 +1,9 @@
 
+  [COLOR dodgerblue][B]Version 5.12[/B][/COLOR]
+- Minor changes.
+
   [COLOR dodgerblue][B]Version 5.11[/B][/COLOR]
+- EXPERIMENTAL: Added Cache And Play to uncached TorBox usenet results context menu.
 - Refactored Trakt/MDBList cache functions.
 - Added MDBList Collection list and some caching to reduce api calls.
 - Added MDBList watched status and resume progress (requires re-authorization).

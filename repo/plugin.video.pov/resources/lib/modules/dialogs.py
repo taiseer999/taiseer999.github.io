@@ -763,10 +763,9 @@ def torbox_usenet_query(meta, season, episode):
 			except: pass
 	query = meta.get('tvshowtitle') or '%s %s' % (meta['title'], meta['year'])
 	kodi_utils.progressDialogBG.create(query, 'POV Working...')
-	files = TorBox().usenet_search(query, season, episode, meta.get('imdb_id', ''))
+	files = TorBox().usenet_search(query, season, episode, meta.get('imdb_id'))
 #	files = TorBox().usenet_search(query, season, episode, None)
-	uncached = [i for i in files if not i['cached']]
-	files = [i for i in files if i['cached']] + uncached
+	files.sort(key=lambda k: k['cached'], reverse=True)
 	kodi_utils.progressDialogBG.close()
 	if not files: return notification(32760)
 	choices = list(_builder())
