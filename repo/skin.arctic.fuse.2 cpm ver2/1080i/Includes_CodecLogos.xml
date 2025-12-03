@@ -166,7 +166,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="dialog_fg_90">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -472,7 +472,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="dialog_fg_90">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -775,7 +775,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="dialog_fg_90">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1081,7 +1081,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="dialog_fg_90">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1384,7 +1384,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="dialog_fg_90">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1690,7 +1690,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="dialog_fg_90">codecs/AAC.png</texture>
                 </control>
             </control>
