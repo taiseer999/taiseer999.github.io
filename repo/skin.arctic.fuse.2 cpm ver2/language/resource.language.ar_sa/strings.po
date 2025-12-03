@@ -2965,4 +2965,8 @@ msgstr "مشهور"
 
 msgctxt "#32305"
 msgid "In Progress"
-msgstr "في تقدم"
+msgstr "قيد المشاهدة"
+
+msgctxt "#32306"
+msgid "Codecs / PPI"
+msgstr "الترميز ومعلومات المشغل"

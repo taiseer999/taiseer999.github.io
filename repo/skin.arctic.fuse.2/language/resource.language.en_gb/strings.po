@@ -3226,3 +3226,7 @@ msgstr ""
 msgctxt "#32305"
 msgid "In Progress"
 msgstr ""
+
+msgctxt "#32306"
+msgid "Codecs / PPI"
+msgstr ""

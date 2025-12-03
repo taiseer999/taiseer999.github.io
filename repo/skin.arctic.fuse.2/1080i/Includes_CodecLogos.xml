@@ -149,7 +149,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -464,7 +464,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -776,7 +776,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1091,7 +1091,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1403,7 +1403,7 @@
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
