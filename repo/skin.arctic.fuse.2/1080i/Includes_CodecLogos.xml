@@ -18,7 +18,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -28,7 +28,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -38,7 +38,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -78,7 +78,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -88,7 +88,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -98,7 +98,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -145,7 +145,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>145</top>
+                <top>135</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -333,7 +333,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -343,7 +343,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -353,7 +353,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -393,7 +393,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -403,7 +403,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -413,7 +413,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -460,7 +460,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>145</top>
+                <top>135</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -645,7 +645,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -655,7 +655,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -665,7 +665,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -705,7 +705,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -715,7 +715,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -725,7 +725,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -772,7 +772,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>145</top>
+                <top>135</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -960,7 +960,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -970,7 +970,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -980,7 +980,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -1020,7 +1020,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -1030,7 +1030,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -1040,7 +1040,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -1087,7 +1087,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>145</top>
+                <top>135</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1272,7 +1272,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -1282,7 +1282,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -1292,7 +1292,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -1332,7 +1332,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -1342,7 +1342,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -1352,7 +1352,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -1399,7 +1399,7 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>145</top>
+                <top>135</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
@@ -1587,7 +1587,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -1597,7 +1597,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -1607,7 +1607,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -1647,7 +1647,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
@@ -1657,7 +1657,7 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>52</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
@@ -1667,7 +1667,7 @@
                 <top>65</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
+                    <width>145</width>
                     <height>33</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10Plus.png</texture>
                 </control>
@@ -1714,11 +1714,11 @@
             </control>
             <control type="group">
                 <visible>String.IsEqual(VideoPlayer.AudioCodec,aac) | String.IsEqual(VideoPlayer.AudioCodec,aac_latm)</visible>
-                <top>145</top>
+                <top>135</top>
                 <left>30</left>
                 <control type="image">
                     <width>150</width>
-                    <height>40</height>
+                    <height>56</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
