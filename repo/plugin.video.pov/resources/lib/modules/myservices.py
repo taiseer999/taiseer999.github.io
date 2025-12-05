@@ -366,7 +366,6 @@ class EasyNews:
 		if not all((username, password)): return
 		api = EasyNewsAPI()
 		api.username, api.password = username, password
-		api.auth = api._get_auth()
 		account_info, usage_info = api.account()
 		if not account_info or not usage_info: return notification(32574)
 		set_setting('easynews_user', username)

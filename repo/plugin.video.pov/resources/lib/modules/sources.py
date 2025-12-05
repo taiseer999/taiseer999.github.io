@@ -189,10 +189,10 @@ class SourceSelect():
 		else:
 			results = self.filter_results(results)
 			results = self.sort_results(results)
-			results = self._special_filter(results, av1_filter_key, self.filter_av1)
 			results = self._special_filter(results, hevc_filter_key, self.filter_hevc)
 			results = self._special_filter(results, hdr_filter_key, self.filter_hdr)
 			results = self._special_filter(results, dolby_vision_filter_key, self.filter_dv)
+			results = self._special_filter(results, av1_filter_key, self.filter_av1)
 			results = self._sort_first(results)
 		return results
 
@@ -484,6 +484,8 @@ class SourceSelect():
 			priority_list = [i for i in results if key in i['extraInfo']]
 			remainder_list = [i for i in results if not i in priority_list]
 			results = priority_list + remainder_list
+		elif enable_setting == 3:
+			results.sort(key=lambda k: key in k['extraInfo'], reverse=True)
 		return results
 
 	def _grab_meta(self):

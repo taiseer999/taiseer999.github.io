@@ -60,7 +60,7 @@
 						<left>160</left>
 						<width>380</width>
 						<height>20</height>
-						<font>font14</font>
+						<font>font12</font>
 						<align>left</align>
 						<aligny>bottom</aligny>
 						<label>[B]Next Episode... $INFO[Player.TimeRemaining()][/B]</label>

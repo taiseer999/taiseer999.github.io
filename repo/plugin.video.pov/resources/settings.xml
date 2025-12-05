@@ -320,6 +320,10 @@
 		<setting id="ignore_results_filter" label="Ignore All Filters When No Results Available" type="bool" default="true" />
 		<setting id="search.finish.early" label="Stop Search Early if Most Sources Finished" type="bool" default="false" />
 		<setting id="scrapers.timeout.1" label="Scraper Timeout" type="number" default="10" />
+		<!-- Language -->
+		<setting label="Language" type="lsep" />
+		<setting id="results.language_filter" label="Sort Priority Language to Top" type="bool" default="false" />
+			<setting id="results.language" label="Priority Language" type="select" default="English" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" enable="eq(-1,true)" />
 		<!-- Sorting and Filtering -->
 		<setting label="Sorting and Filtering" type="lsep" />
 		<setting id="results.sort_order_display" label="Results Sorting" type="action" default="Quality, Provider, Size" action="RunPlugin(plugin://plugin.video.pov/?mode=results_sorting_choice)" />
@@ -328,14 +332,12 @@
 			<setting id="results.size.speed" label="Internet Speed (Mbit/s)" type="number" default="20" subsetting="true" visible="eq(-1,1)" />
 			<setting id="results.size.file" label="File Size (MB)" type="number" default="10000" subsetting="true" visible="eq(-2,2)" />
 		<setting id="results.include.unknown.size" label="Include Results With Unknown Size" type="bool" default="true" />
-		<setting id="results.language_filter" label="Sort Priority Language at Top" type="bool" default="false" />
-			<setting id="results.language" label="Priority Language" type="select" default="English" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" enable="eq(-1,true)" />
 		<setting id="include_prerelease_results" label="Include Pre-Release Results (CAM/SCR/TELE)" type="bool" default="false" />
 		<setting id="include_3d_results" label="Include 3D Results" type="bool" default="false" />
-		<setting id="filter_hevc" label="HEVC Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)" />
-		<setting id="filter_hdr" label="HDR Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)" />
-		<setting id="filter_dv" label="Dolby Vision Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)" />
-		<setting id="filter_av1" label="AV1 Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)" />
+		<setting id="filter_hevc" label="HEVC Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)|Sort to Top" />
+		<setting id="filter_hdr" label="HDR Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)|Sort to Top" />
+		<setting id="filter_dv" label="Dolby Vision Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)|Sort to Top" />
+		<setting id="filter_av1" label="AV1 Files Filter" type="enum" default="0" values="Include|Exclude|Prefer (Autoplay)|Sort to Top" />
 		<!-- Results Color Highlights -->
 		<setting label="Results Color Highlights" type="lsep" />
 		<setting id="highlight.type" label="Highlight Results Based On" type="enum" default="2" values="Scraper Type|Provider|Quality" />

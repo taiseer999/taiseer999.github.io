@@ -1,6 +1,5 @@
 import re
 import json
-import base64
 import requests
 from urllib.parse import urlencode, quote
 from caches.main_cache import cache_object
@@ -26,13 +25,6 @@ class EasyNewsAPI:
 		self.username = get_setting('easynews_user')
 		self.password = get_setting('easynews_password')
 		self.moderation = 1 if get_setting('easynews_moderation') == 'true' else 0
-		self.auth = self._get_auth()
-
-	def _get_auth(self):
-		user_info = '%s:%s' % (self.username, self.password)
-		user_info = user_info.encode('utf-8')
-		auth = 'Basic ' + base64.b64encode(user_info).decode('utf-8')
-		return auth
 
 	def search(self, query, expiration=48):
 		url, self.params = self._translate_search(query)
@@ -93,14 +85,12 @@ class EasyNewsAPI:
 		return files
 
 	def _get(self, url, params=None):
-		headers = {'Authorization': self.auth}
-		response = session.get(url, params=params, headers=headers, timeout=timeout).text
+		response = session.get(url, auth=(self.username, self.password), params=params, timeout=timeout).text
 		try: return json.loads(response)
 		except: return response
 
 	def unrestrict_link(self, url_dl, spool=False):
-		headers = {'Authorization': self.auth}
-		response = session.get(url_dl, headers=headers, stream=True, timeout=timeout*3)
+		response = session.get(url_dl, auth=(self.username, self.password), stream=True, timeout=timeout*3)
 		if not response.ok: return None
 		if spool: return response
 		chunk = next(response.iter_content(chunk_size=1048576), b'')

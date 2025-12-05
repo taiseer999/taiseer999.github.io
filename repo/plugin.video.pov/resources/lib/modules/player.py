@@ -27,8 +27,8 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.set_resume, self.set_watched, self.playback_event = 5, 90, None
 		self.media_marked, self.nextep_info_gathered = False, False
 		self.subs_searched, self.stingers_checked = False, False
-		self.nextep_started, self.random_continual_started = False, False
-		self.autoplay_next_episode, self.play_random_continual = False, False
+		self.nextep_started, self.play_random_continual = False, False
+		self.autoplay_next_episode = False
 		self.autoplay_nextep = settings.autoplay_next_episode()
 		self.autoscrape_next_episode = False
 		self.autoscrape_nextep = settings.autoscrape_next_episode()
@@ -149,9 +149,9 @@ class POVPlayer(kodi_utils.xbmc_player):
 	def monitor(self):
 		if self.media_type == 'episode':
 			self.play_random_continual = 'random_continual' in self.meta
-			if not self.play_random_continual and self.autoscrape_nextep: self.autoscrape_next_episode = 'random' not in self.meta
 			if not self.play_random_continual and self.autoplay_nextep: self.autoplay_next_episode = 'random' not in self.meta
-			if self.autoplay_nextep and self.autoscrape_nextep: self.autoscrape_next_episode = False
+			if not self.play_random_continual and self.autoscrape_nextep: self.autoscrape_next_episode = 'random' not in self.meta
+			if not self.play_random_continual and self.autoplay_nextep and self.autoscrape_nextep: self.autoscrape_next_episode = False
 		while not self.playback_event: kodi_utils.sleep(100)
 		while self.progress_dialog: self.progress_dialog.pop()()
 		kodi_utils.close_all_dialog()
@@ -170,8 +170,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 					if not self.nextep_info_gathered: self.info_next_ep()
 					self.remaining_time = round(self.total_time - self.curr_time)
 					if self.remaining_time <= self.start_prep:
-						if not self.nextep_started:
-							self.run_random_continual()
+						if not self.nextep_started: self.run_random_continual()
 				if self.autoplay_next_episode:
 					if not self.nextep_info_gathered: self.info_next_ep()
 					self.remaining_time = round(self.total_time - self.curr_time)
