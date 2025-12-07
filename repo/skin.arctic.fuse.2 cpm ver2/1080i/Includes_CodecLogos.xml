@@ -35,8 +35,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -45,8 +45,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -95,8 +95,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -105,8 +105,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -165,8 +165,8 @@
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -341,8 +341,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -351,8 +351,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -401,8 +401,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -411,8 +411,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -471,8 +471,8 @@
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -644,8 +644,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -654,8 +654,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -704,8 +704,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -714,8 +714,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -774,8 +774,8 @@
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -950,8 +950,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -960,8 +960,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -1010,8 +1010,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -1020,8 +1020,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -1080,8 +1080,8 @@
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1253,8 +1253,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -1263,8 +1263,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -1313,8 +1313,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -1323,8 +1323,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -1383,8 +1383,8 @@
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1559,8 +1559,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -1569,8 +1569,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -1619,8 +1619,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/SDR.png</texture>
                 </control>
             </control>
@@ -1629,8 +1629,8 @@
                 <top>52</top>
                 <left>30</left>
                 <control type="image">
-                    <width>145</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/HDR10.png</texture>
                 </control>
             </control>
@@ -1689,8 +1689,8 @@
                 <top>135</top>
                 <left>30</left>
                 <control type="image">
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <texture colordiffuse="FFffffff">codecs/AAC.png</texture>
                 </control>
             </control>
@@ -1898,8 +1898,8 @@
                 <control type="image" id="$PARAM[imageId]">
                     <top>52</top>
                     <left>30</left>
-                    <width>150</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -1919,8 +1919,8 @@
                 <control type="image" id="$PARAM[imageId]">
                     <top>52</top>
                     <left>30</left>
-                    <width>150</width>
-                    <height>52</height>
+                    <width>155</width>
+                    <height>60</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
@@ -2171,8 +2171,8 @@
                 <control type="image" id="$PARAM[imageId]">
                     <top>135</top>
                     <left>30</left>
-                    <width>150</width>
-                    <height>56</height>
+                    <width>155</width>
+                    <height>60</height>
                     <visible>$PARAM[visible]</visible>
                     <texture>$PARAM[texture]</texture>
                     <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
