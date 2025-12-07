@@ -288,8 +288,8 @@
                                         <label>$LOCALIZE[32306]</label>
                                         <label2>skin.arctic.fuse.2</label2>
                                         <icon>special://skin/extras/icons/codecs.png</icon>
-                                        <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_CPM,Home)</onclick>
-                                        <onclick>SetProperty(CustomDialogSettingsTitle,CPM,Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_Hybrid,Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,Hybrid,Home)</onclick>
                                         <onclick>ActivateWindow(1125)</onclick>
                                         <visible></visible>
                                     </item>

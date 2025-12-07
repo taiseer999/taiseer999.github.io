@@ -35,7 +35,7 @@
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_BackgroundStyle)">Items_Settings_BackgroundStyle</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_BackgroundImage)">Items_Settings_BackgroundImage</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_Indicators)">Items_Settings_Indicators</include>
-        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_CPM)">Items_Settings_CPM</include>
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_Hybrid)">Items_Settings_Hybrid</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_CustomStartup)">Items_Settings_CustomStartup</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_Autoscroll)">Items_Settings_Autoscroll</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),Items_Settings_MPAACountries)">Items_Settings_MPAACountries</include>
@@ -3192,7 +3192,7 @@
         </include>
     </include>
 	
-    <include name="Items_Settings_CPM">
+    <include name="Items_Settings_Hybrid">
         <include content="Settings_Label">
             <param name="id">8001</param>
             <param name="dialog">true</param>
