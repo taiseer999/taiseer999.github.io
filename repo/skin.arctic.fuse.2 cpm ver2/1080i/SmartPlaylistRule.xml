@@ -127,7 +127,7 @@
                 </control>
                 <control type="image">
                     <bordersize>12</bordersize>
-                    <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/kodi.png</texture>
+                    <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/coreelec.png</texture>
                 </control>
             </control>
         </control>

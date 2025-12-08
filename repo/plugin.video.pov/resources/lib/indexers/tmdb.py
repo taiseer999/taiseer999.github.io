@@ -1,5 +1,5 @@
-import json
 import sys
+import json
 from queue import SimpleQueue
 from threading import Thread
 from indexers import tmdb_api

@@ -7,7 +7,7 @@ from indexers.imdb_api import imdb_images, people_get_imdb_id, imdb_people_image
 from modules.kodi_utils import media_path, notification, set_property, make_listitem, list_dirs, delete_file
 # from modules.kodi_utils import logger
 
-class Images():
+class Images:
 	def run(self, params):
 		self.params = params
 		self.mode = self.params.pop('mode')

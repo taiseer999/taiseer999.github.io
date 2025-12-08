@@ -5,9 +5,9 @@ from modules.utils import clean_file_name, normalize
 from modules.settings import enabled_debrids_check, filter_by_name
 # from modules.kodi_utils import logger
 
-extensions = source_utils.supported_video_extensions()
 internal_results, check_title, clean_title = source_utils.internal_results, source_utils.check_title, source_utils.clean_title
 get_file_info, release_info_format, seas_ep_filter = source_utils.get_file_info, source_utils.release_info_format, source_utils.seas_ep_filter
+extensions, extras_filter = source_utils.supported_video_extensions(), source_utils.extras_filter()
 
 class source(Debrid):
 	scrape_provider = 'ad_cloud'
@@ -25,6 +25,7 @@ class source(Debrid):
 			self._scrape_cloud()
 			if not self.scrape_results: return internal_results(self.scrape_provider, self.sources)
 			self.aliases = source_utils.get_aliases_titles(info.get('aliases', []))
+			extras_filtering_list = tuple(i for i in extras_filter if not i in title.lower())
 			for item in self.scrape_results:
 				try:
 					if not item['filename'].lower().endswith(tuple(extensions)): continue
@@ -33,6 +34,7 @@ class source(Debrid):
 					normalized = normalize(item['filename'])
 					filename = clean_title(normalized)
 					if self.media_type == 'movie':
+						if any(x in filename for x in extras_filtering_list): continue
 						if not any(x in filename for x in self.year_query_list): continue
 					elif not seas_ep_filter(self.season, self.episode, normalized): continue
 					if not (self.folder_query in filename or self.folder_query in foldername): continue

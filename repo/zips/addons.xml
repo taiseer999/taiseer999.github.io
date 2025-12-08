@@ -1363,7 +1363,7 @@ updated YouTube addon URL
         </assets>
         <news>INFO: For latest changes see Changelog within Tools of add-on.</news>
     </extension>
-</addon><addon id="plugin.video.fenlight" name="FenLightAM" provider-name="Tikipeter/AnonyMouse" version="2.1.58">
+</addon><addon id="plugin.video.fenlight" name="FenLightAM" provider-name="Tikipeter/AnonyMouse" version="2.1.60">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.pil" version="1.1.7" />
@@ -1978,7 +1978,7 @@ version 3.0.0:
 - Major upgrade from Python 2 to Python 3, allowing use of Kodi 19 Matrix
 </news>
   </extension>
-</addon><addon id="plugin.video.pov" version="5.12.02" name="POV" provider-name="kodifitzwell">
+</addon><addon id="plugin.video.pov" version="5.12.03" name="POV" provider-name="kodifitzwell">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" />
@@ -7141,7 +7141,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
     <disclaimer lang="zh_CN">可放心使用此脚本，更多信息访问 kodi.tv</disclaimer>
     <disclaimer lang="zh_TW">歡迎使用本腳本，相關資訊請參閱kodi.tv</disclaimer>
   </extension>
-</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.17.29">
+</addon><addon id="skin.arctic.fuse.2" name="Arctic Fuse 2" provider-name="jurialmunkey/Abukareem" version="4.6.17.30">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.28" />
@@ -7173,7 +7173,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.12.5.31">
+</addon><addon id="skin.arctic.fuse.2.cpmver2" name="Arctic Fuse 2 -cpm ver2" provider-name="jurialmunkey . AK" version="2.12.5.32">
  <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.28" />

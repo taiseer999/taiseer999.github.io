@@ -7,7 +7,6 @@ from windows import open_window
 from indexers.metadata import tvshow_meta, season_episodes_meta, all_episodes_meta
 from modules import kodi_utils, settings
 from modules.sources import SourceSelect
-from modules.player import POVPlayer
 from modules.utils import get_datetime, adjust_premiered_date
 # from modules.kodi_utils import logger
 
@@ -102,7 +101,7 @@ def execute_scrape_nextep(meta):
 		SourceSelect.scrape_next_ep.clear()
 		kodi_utils.clear_property('pov_background_url')
 		return kodi_utils.notification(32736)
-	if action == 'play': POVPlayer().stop()
+	if action == 'play': kodi_utils.player.stop()
 
 def execute_nextep(meta, nextep_settings):
 	def _get_nextep_params():
@@ -150,7 +149,7 @@ def execute_nextep(meta, nextep_settings):
 			except: pass
 		return final_action
 	kodi_utils.clear_property('pov_background_url')
-	player = POVPlayer()
+	player = kodi_utils.player
 	run_popup, display_nextep_popup = nextep_settings['run_popup'], nextep_settings['window_time']
 	nextep_prep, nextep_threshold_check = nextep_settings['start_prep'], nextep_settings['threshold_check']
 	nextep_meta, nextep_params = _get_nextep_params()

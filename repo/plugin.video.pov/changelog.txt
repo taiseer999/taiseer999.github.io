@@ -1,5 +1,6 @@
 
   [COLOR dodgerblue][B]Version 5.12[/B][/COLOR]
+- Fixed uncached results sorted to top.
 - Added Sort to Top setting for Results/Sorting and Filtering:
     HEVC Files Filter
     HDR Files Filter
