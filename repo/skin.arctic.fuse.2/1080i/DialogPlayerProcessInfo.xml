@@ -28,9 +28,9 @@
 			<height>300</height>
 			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
 			<control type="image">
-				<left>30</left>
+				<left>20</left>
 				<top>-220</top>
-				<right>30</right>
+				<right>20</right>
 				<height>450</height>
 				<texture colordiffuse="main_fg_90">common/coal_blur.png</texture>
 			</control>
@@ -1924,11 +1924,11 @@
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
-				<left>30</left>
+				<right>20</right>
 				<top>-270</top>
 				<width>1000</width>
 				<height>50</height>
-				<align>left</align>
+				<align>right</align>
 				<orientation>horizontal</orientation>
 				<itemgap>-10</itemgap>
 				<onup>Close</onup>

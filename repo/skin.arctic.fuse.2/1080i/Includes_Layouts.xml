@@ -2129,6 +2129,7 @@
         <param name="diffuse">diffuse/poster_w217_h310.png</param>
         <param name="icon">$VAR[Image_Poster]</param>
         <param name="listitem">ListItem</param>
+        <param name="listitem_label">ListItem.Label</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_w]</width>
@@ -2143,6 +2144,19 @@
                         <param name="control">image</param>
                         <include>Texture_Box_Highlight_V</include>
                     </include>
+                     <!-- poster wall title -->
+                <control type="label">
+                    <textcolor>ffdedede</textcolor>
+                    <label>$INFO[$PARAM[listitem_label]]</label>
+                    <left>10</left>
+                    <right>10</right>
+                    <align>center</align>
+                    <font>font_mini</font>
+                    <height>50</height>
+                    <top>310</top>
+                    <scroll>true</scroll>
+                    <scrollspeed>40</scrollspeed>
+                </control>
                     <control type="textbox">
                         <textcolor>main_fg_70</textcolor>
                         <label>$INFO[$PARAM[listitem].$PARAM[listitem_label]]</label>

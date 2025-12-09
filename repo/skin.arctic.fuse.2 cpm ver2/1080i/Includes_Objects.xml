@@ -437,7 +437,7 @@
         <param name="hasprogress">false</param>
         <param name="texture">dialog/loading-back.png</param>
         <param name="size">100</param>
-        <param name="icon">special://skin/extras/icons/coreelec.png</param>
+        <param name="icon">special://skin/extras/icons/kodi.png</param>
         <param name="progress">Control.GetLabel(32)</param>
         <param name="progress_id">32</param>
         <param name="spinprogress">false</param>
@@ -853,12 +853,12 @@
                 <height>96</height>
                 <centerleft>50%</centerleft>
                 <aspectratio>keep</aspectratio>
-                <texture>special://skin/extras/icons/coreelec.png</texture>
+                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
             </control>
             <control type="label">
                 <height>32</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>CoreELEC</label>
+                <label>KODI</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
@@ -1151,19 +1151,13 @@
         <definition>
             <control type="group">
                 <nested />
-                <centerbottom>0</centerbottom>
-                <right>25</right>
+                 <bottom>0</bottom>
+                <right>0</right>
                 <width>64</width>
                 <height>64</height>
 
                 <!-- Visibility of Group -->
                 <include content="Object_Indicator_Visible">
-                    <param name="listitem">$PARAM[listitem]</param>
-                </include>
-
-                <!-- Focused Item -->
-                <include content="Object_Indicator_Selected" condition="$PARAM[selected]">
-                    <param name="shadow">$PARAM[shadow]</param>
                     <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
@@ -1536,7 +1530,7 @@
     </include>
 
     <include name="Object_MenuHeader">
-        <param name="icon">special://skin/extras/icons/coreelec.png</param>
+        <param name="icon">special://skin/extras/icons/kodi.png</param>
         <param name="bordersize">icon_home_bordersize</param>
         <param name="label">$LOCALIZE[33063]</param>
         <param name="has_icon">true</param>

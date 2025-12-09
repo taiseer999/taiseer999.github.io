@@ -28,9 +28,9 @@
 			<height>300</height>
 			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
 			<control type="image">
-				<left>30</left>
+				<left>20</left>
 				<top>-220</top>
-				<right>30</right>
+				<right>20</right>
 				<height>450</height>
 				<texture colordiffuse="main_fg_90">common/coal_blur.png</texture>
 			</control>
@@ -170,7 +170,7 @@
 						<left>180</left>
 						<height>50</height>
 						<aligny>bottom</aligny>
-						<label>[COLOR limegreen]DV Configuration[/COLOR]</label>
+						<label>[COLOR blue]DV Configuration[/COLOR]</label>
 						<font>font10_bold</font>
 						
 					</control>
@@ -183,7 +183,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Version:[/COLOR]</label>
+						<label>[COLOR FF009688]Version:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -206,7 +206,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Profile:[/COLOR]</label>
+						<label>[COLOR FF009688]Profile:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -241,7 +241,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Level:[/COLOR]</label>
+						<label>[COLOR FF009688]Level:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -264,7 +264,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]RPU:[/COLOR]</label>
+						<label>[COLOR FF009688]RPU:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -287,7 +287,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Base Layer:[/COLOR]</label>
+						<label>[COLOR FF009688]Base Layer:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -310,7 +310,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Enhancement Layer:[/COLOR]</label>
+						<label>[COLOR FF009688]Enhancement Layer:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -345,7 +345,7 @@
 						<height>36</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Enhancement Layer Type:[/COLOR]</label>
+						<label>[COLOR FF009688]Enhancement Layer Type:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -378,7 +378,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Metadata:[/COLOR]</label>
+						<label>[COLOR FF009688]Metadata:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -416,7 +416,7 @@
 						<height>45</height>
 						<top>5</top>
 						<aligny>bottom</aligny>
-						<label>[COLOR limegreen]DV Levels Metadata[/COLOR]</label>
+						<label>[COLOR blue]DV Levels Metadata[/COLOR]</label>
 						<font>font10_bold</font>
 						
 					</control>
@@ -430,7 +430,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]L6 Max CLL/FALL:[/COLOR]</label>
+						<label>[COLOR FF009688]L6 Max CLL/FALL:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -474,7 +474,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]L6 Min/Max:[/COLOR]</label>
+						<label>[COLOR FF009688]L6 Min/Max:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -517,7 +517,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Source Min/Max:[/COLOR]</label>
+						<label>[COLOR FF009688]Source Min/Max:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -560,7 +560,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]L1 Min/Max/Avg:[/COLOR]</label>
+						<label>[COLOR FF009688]L1 Min/Max/Avg:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -622,7 +622,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Source Min/Max:[/COLOR]</label>
+						<label>[COLOR FF009688]Source Min/Max:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -665,7 +665,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]L1 Min/Max/Avg:[/COLOR]</label>
+						<label>[COLOR FF009688]L1 Min/Max/Avg:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -728,7 +728,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]L5 Active Offsets:[/COLOR]</label>
+						<label>[COLOR FF009688]L5 Active Offsets:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -835,7 +835,7 @@
 						<height>50</height>
 						<aligny>bottom</aligny>
 						<left>200</left>
-						<label>[COLOR limegreen]HDR Static Metadata[/COLOR]</label>
+						<label>[COLOR blue]HDR Static Metadata[/COLOR]</label>
 						<font>font10_bold</font>
 					</control>
 				</control>
@@ -848,7 +848,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Max CLL/FALL:[/COLOR]</label>
+						<label>[COLOR FF009688]Max CLL/FALL:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -892,7 +892,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Min/Max:[/COLOR]</label>
+						<label>[COLOR FF009688]Min/Max:[/COLOR]</label>
 						<font>font_mini</font>
 						
 					</control>
@@ -938,7 +938,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR dialog_fg_90]Colour Primaries:[/COLOR]</label>
+						<label>[COLOR FF009688]Colour Primaries:[/COLOR]</label>
 						<font>font_mini</font>
 						
 						
@@ -1924,11 +1924,11 @@
 				</control>
 			</control>
 			<control type="grouplist" id="5550">
-				<left>30</left>
+				<right>20</right>
 				<top>-270</top>
 				<width>1000</width>
 				<height>50</height>
-				<align>left</align>
+				<align>right</align>
 				<orientation>horizontal</orientation>
 				<itemgap>-10</itemgap>
 				<onup>Close</onup>
