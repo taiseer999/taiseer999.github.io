@@ -1100,7 +1100,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>[COLOR FF009688]V.decoder|deinterlace:[/COLOR]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1527,7 +1527,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[VideoPlayer.SubtitlesName] $VAR[|] $INFO[VideoPlayer.SubtitlesLanguage] $VAR[|] $INFO[VideoPlayer.SubtitlesLangEx]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>VideoPlayer.HasSubtitles + VideoPlayer.SubtitlesEnabled</visible>
 					</control>
@@ -1538,7 +1538,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLanguage][/COLOR] $VAR[|] [COLOR dimgrey]$INFO[VideoPlayer.SubtitlesLangEx][/COLOR]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>VideoPlayer.HasSubtitles + !VideoPlayer.SubtitlesEnabled</visible>
 					</control>
@@ -1550,7 +1550,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>[COLOR dimgrey]No subtitle[/COLOR]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1670,7 +1670,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(video.source.hdr.type)] $VAR[DVProfileVar]$VAR[DVELVar]$VAR[VideoConvVar]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1721,7 +1721,7 @@
 						<aligny>bottom</aligny>
 						<align>left</align>
 						<label>$INFO[Player.Process(amlogic.video.fps.info)][COLOR orange]$INFO[Player.Process(amlogic.video.fps.drop),	-&gt; ][/COLOR]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
