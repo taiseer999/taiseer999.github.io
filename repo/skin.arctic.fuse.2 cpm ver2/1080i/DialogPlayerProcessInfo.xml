@@ -29,7 +29,7 @@
 			<animation effect="slide" end="0,-20" time="150" condition="VideoPlayer.Content(LiveTV)">conditional</animation>
 			<control type="image">
 				<left>20</left>
-				<top>-220</top>
+				<top>-240</top>
 				<right>20</right>
 				<height>450</height>
 				<texture colordiffuse="main_fg_90">common/coal_blur.png</texture>
@@ -151,7 +151,7 @@
 			<!-- Dolby Vision - HDR Left -->
 			<control type="grouplist">
 				<left>60</left>
-				<top>-210</top>
+				<top>-240</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<visible>String.IsEqual(Player.Process(video.dovi.has.config),1)</visible>
 				<control type="group"> <!-- DV Config -->
@@ -397,7 +397,7 @@
 			<!-- Dolby Vision - HDR Middle -->
 			<control type="grouplist">
 				<left>600</left>
-				<top>-210</top>
+				<top>-240</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<visible>String.IsEqual(Player.Process(video.dovi.has.header),1)</visible>
 				<control type="group"> <!-- DV Levels Metadata -->
@@ -817,7 +817,7 @@
 			<!-- Dolby Vision - HDR Right -->
 			<control type="grouplist">
 				<left>1320</left>
-				<top>-210</top>
+				<top>-240</top>
 				<visible>Control.HasFocus(5552)</visible>
 				<control type="group">
 					<width>700</width>
@@ -962,7 +962,7 @@
 			<!-- Player Left -->
 			<control type="grouplist">
 				<left>50</left>
-				<top>-220</top>
+				<top>-240</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="group">
 					<!-- Video source type -->
@@ -1062,7 +1062,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[System.ScreenResolution]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1099,8 +1099,8 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>[COLOR FF009688]V.decoder|deinterlace:[/COLOR]</label>
-						<font>font_tiny</font>
+						<label>[COLOR FF009688]Decoder|Deinterlace:[/COLOR]</label>
+						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 					<control type="label">
@@ -1170,7 +1170,7 @@
 						<aligny>bottom</aligny>
 						<align>right</align>
 						<label>$INFO[Player.Process(audiochannels),]</label>
-						<font>font_mini</font>
+						<font>font_tiny</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
 				</control>
@@ -1272,7 +1272,7 @@
 			<!-- Player Middle -->
 			<control type="grouplist">
 				<left>710</left>
-				<top>-220</top>
+				<top>-240</top>
 				<visible>Control.HasFocus(5553)</visible>
 				<control type="group">
 					<!-- Display mode -->
@@ -1591,7 +1591,7 @@
 			<!-- Player Right -->
 			<control type="grouplist">
 				<left>1350</left>
-				<top>-220</top>
+				<top>-240</top>
 				<visible>Control.HasFocus(5553)</visible>
 
 				<control type="group">
@@ -1925,7 +1925,7 @@
 			</control>
 			<control type="grouplist" id="5550">
 				<right>20</right>
-				<top>-270</top>
+				<top>-290</top>
 				<width>1000</width>
 				<height>50</height>
 				<align>right</align>
