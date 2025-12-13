@@ -58,11 +58,6 @@
         <value condition="Skin.String(VideoOSD.PersonCredits.WidgetInfo,shows)">special://skin/extras/icons/tv.png</value>
     </variable>
 
-    <variable name="Image_Discover_TMDbType">
-        <value condition="Skin.String(Discover.TMDbType,movie)">special://skin/extras/icons/film.png</value>
-        <value condition="Skin.String(Discover.TMDbType,tv)">special://skin/extras/icons/tv.png</value>
-    </variable>
-
     <variable name="Image_Settings_Level">
         <value condition="String.IsEqual(Control.GetLabel(20),$LOCALIZE[10039])">special://skin/extras/icons/settings-expert.png</value>
         <value condition="String.IsEqual(Control.GetLabel(20),$LOCALIZE[10038])">special://skin/extras/icons/settings-advanced.png</value>
@@ -232,7 +227,7 @@
     </variable>
 
     <variable name="Image_Scrollbar_NumItems">
-        <value condition="!Window.IsMedia">special://skin/extras/icons/coreelec.png</value>
+        <value condition="!Window.IsMedia">special://skin/extras/icons/kodi.png</value>
         <value condition="!String.IsEmpty(Container.TotalWatched) + [Container.Content(movies) | Container.Content(tvshows) | Container.Content(seasons) | Container.Content(episodes) | Container.Content(videos) | Container.Content(sets)] + ![Control.HasFocus(503) | Control.HasFocus(513) | Control.HasFocus(523)]">special://skin/extras/icons/eye2.png</value>
 
         <value condition="Container.Content(seasons) + Control.HasFocus(503) + !String.IsEmpty(Container(502).ListItem.Property(watchedepisodes))">special://skin/extras/icons/eye2.png</value>
