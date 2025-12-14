@@ -39,6 +39,31 @@
 				</control>
 			</control>
 			
+			<control type="group">
+				<visible>String.Contains(Player.Process(video.source.hdr.type),Dolby Vision) + String.Contains(Player.Process(video.dovi.profile),0)</visible>
+				<top>290</top>
+				<width>1275</width>
+				<height>780</height>
+				<left>10</left>
+				<include content="OSD_Dialog_Background_Blur">
+					<param name="diffuse">diffuse/dialog_w1280_h740.png</param>
+				</include>
+				<include content="Object_MenuHeader">
+					<param name="label">[CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE]</param>
+					<param name="icon">special://skin/extras/icons/chart-simple.png</param>
+				</include>
+				<control type="image">
+					<texture border="20" colordiffuse="dialog_fg_12">common/dialog.png</texture>
+				</control>
+				<control type="image">
+					<left>40</left>
+					<right>40</right>
+					<height>1</height>
+					<centerbottom>40</centerbottom>
+					<texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+				</control>
+			</control>
+			
 			<!-- Long background -->
 			<control type="group">
 				<visible>String.IsEqual(Player.Process(video.dovi.has.config),1) | String.Contains(Player.Process(video.hdr.type),hdr)</visible>
