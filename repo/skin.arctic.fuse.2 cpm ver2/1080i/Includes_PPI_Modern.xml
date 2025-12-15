@@ -109,7 +109,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -251,7 +251,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -275,7 +275,7 @@
 						<left>211</left>
 						<top>21</top>
 						<label>$VAR[VS10ModeVar]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 					</control>
 					
 					<!-- VS10 status -->
@@ -399,7 +399,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -471,7 +471,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -693,7 +693,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -886,7 +886,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -989,7 +989,7 @@
 						<left>341</left>
 						<top>141</top>
 						<label>$VAR[RPUPresentVar]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					
@@ -1004,7 +1004,7 @@
 						<left>341</left>
 						<top>171</top>
 						<label>$VAR[BLPresentVar]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					
@@ -1019,14 +1019,14 @@
 						<left>341</left>
 						<top>201</top>
 						<label>$VAR[ELPresentVar]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<control type="label">
 						<left>410</left>
 						<top>201</top>
 						<label>$VAR[ELSourcePresentVar]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.el.present),Player.Process(video.dovi.el.present))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
@@ -1050,7 +1050,7 @@
 						<left>341</left>
 						<top>231</top>
 						<label>$VAR[DVELVar1]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 						<visible>!String.Contains(Player.Process(video.dovi.el.type),minimum)</visible>
 						<visible>!String.Contains(Player.Process(video.dovi.el.type),full)</visible>
@@ -1059,7 +1059,7 @@
 						<left>410</left>
 						<top>231</top>
 						<label>$VAR[ELSourcePresentVar]</label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.el.type),Player.Process(video.dovi.el.type))</visible>
 						<visible>!String.IsEqual(Player.Process(video.source.dovi.profile),0)</visible>
 					</control>
@@ -1077,7 +1077,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -1253,7 +1253,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -1437,7 +1437,7 @@
 						<left>483</left>
 						<top>202</top>
 						<label></label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<!-- Arrows: Top to bottom with line icon -->
@@ -1446,7 +1446,7 @@
 						<top>216</top>
 						<angle>90</angle>
 						<label></label>
-						<font>font_tiny_iconic_regular</font>
+						<font>font_tiny_iconic_ppi</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 				</control>

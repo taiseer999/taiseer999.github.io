@@ -65,6 +65,11 @@
                 <size>24</size>
             </font>
 
+             <font>
+                <name>font_tiny_iconic_ppi</name>
+                <filename>fa-regular-400.ttf</filename>
+                <size>24</size>
+            </font>
             <!-- Kodi Logo Font -->
             <font>
                 <name>font_logo</name>
