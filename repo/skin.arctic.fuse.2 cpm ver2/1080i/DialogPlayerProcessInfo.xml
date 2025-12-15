@@ -1109,7 +1109,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>[UPPERCASE]$INFO[Player.Process(videodecoder)][/UPPERCASE] $VAR[VideoDecoder,(,)] $VAR[Label_VideoHWDecoder, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
+						<label>$INFO[Player.Process(videodecoder), ]$VAR[Label_VideoHWDecoder, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
 						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
