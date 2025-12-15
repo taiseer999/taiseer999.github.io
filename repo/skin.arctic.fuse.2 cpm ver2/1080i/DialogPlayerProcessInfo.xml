@@ -1109,7 +1109,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(videodecoder), ]$VAR[Label_VideoHWDecoder, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
+						<label>[UPPERCASE]$INFO[Player.Process(videodecoder)][/UPPERCASE] $VAR[VideoDecoder,(,)] $VAR[Label_VideoHWDecoder, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
 						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1396,6 +1396,17 @@
 						<label>$INFO[Player.Process(video.hdr.colour.primaries)]</label>
 						<font>font_mini</font>
 						<shadowcolor>black</shadowcolor>
+	                </control>
+					<!-- N/A -->
+					<control type="label">
+						<left>200</left>
+						<width>420</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>N/A</label>
+						<font>font_mini</font>
+						<visible>String.IsEmpty(Player.Process(video.hdr.colour.primaries))</visible>
 					</control>
 				</control>
 				<control type="group">
