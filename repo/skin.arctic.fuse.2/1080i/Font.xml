@@ -14,10 +14,10 @@
               <param name="plot_linespacing_head">1.15</param>
             <param name="plot_linespacing_midi">1.2</param>
             <param name="plot_linespacing_main">1.1</param>
-            <param name="plot_linespacing_mini">1.1</param>
+            <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">0.9</param>
-        <param name="size_heavy_main">33</param>
-        <param name="size_light_main">33</param>
+        <param name="size_heavy_main">35</param>
+        <param name="size_light_main">35</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
 
@@ -33,11 +33,11 @@
             <param name="font_light">URWGeometricArabic-Medium.ttf</param>
               <param name="plot_linespacing_head">1.15</param>
             <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">0.8</param>
+            <param name="plot_linespacing_main">0.77</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">32</param>
-        <param name="size_light_main">30</param>
+        <param name="size_light_main">32</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
 
@@ -53,11 +53,11 @@
             <param name="font_light">Outfit-Regular.ttf</param>
                <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.15</param>
+            <param name="plot_linespacing_main">1.0</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">28</param>
-        <param name="size_light_main">27</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
         </include>
@@ -89,13 +89,13 @@
             <param name="font_bold">AmazonEmberV2-Bold.ttf</param>
             <param name="font_regular">AmazonEmberV2-Medium.ttf</param>
             <param name="font_light">AmazonEmberV2-Medium.ttf</param>
-            <param name="size_heavy_main">27</param>
-        <param name="size_light_main">27</param>
+            <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param> 
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">0.95</param>
+            <param name="plot_linespacing_main">0.85</param>
             <param name="plot_linespacing_mini">1.0</param>
             <param name="plot_linespacing_tiny">1.07</param>
             
@@ -111,7 +111,7 @@
             <param name="font_light">GeezaPro.ttf</param>
            <param name="plot_linespacing_head">1.15</param>
             <param name="plot_linespacing_midi">1.2</param>
-            <param name="plot_linespacing_main">1.36</param>
+            <param name="plot_linespacing_main">1.38</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">0.9</param>
         <param name="size_heavy_main">33</param>
@@ -132,11 +132,11 @@
             <param name="font_light">MOHANDbold.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.0</param>
+            <param name="plot_linespacing_main">0.91</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
         <param name="size_heavy_main">33</param>
-        <param name="size_light_main">30</param>
+        <param name="size_light_main">33</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
         </include>
@@ -151,11 +151,11 @@
             <param name="font_light">Hacen-Promoter -reg.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.18</param>
+            <param name="plot_linespacing_main">1.05</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">28</param>
-        <param name="size_light_main">29</param>
+        <param name="size_heavy_main">31</param>
+        <param name="size_light_main">31</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
         </include>
@@ -170,11 +170,11 @@
             <param name="font_light">tonos-VF.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.2</param>
+            <param name="plot_linespacing_main">1.05</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">26</param>
-        <param name="size_light_main">27</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
         </include>
@@ -189,52 +189,16 @@
             <param name="font_light">AdobeArabic-Bold.ttf</param>
              <param name="plot_linespacing_head">0.8</param>
             <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.2</param>
+            <param name="plot_linespacing_main">1.1</param>
             <param name="plot_linespacing_mini">1.2</param>
             <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">30</param>
-        <param name="size_light_main">30</param>
+        <param name="size_heavy_main">32</param>
+        <param name="size_light_main">32</param>
         <param name="size_heavy_main_x2">60</param>
         <param name="size_light_main_x2">60</param>
         </include>
     </fontset>
-    <fontset id="heading" unicode="true">
-
-        <include content="Font_Default">
-            <param name="font_black">ArbFONTS-94PT-Bold-Heading.ttf</param>
-            <param name="font_bold">ArbFONTS-94PT-Bold-Heading.ttf</param>
-            <param name="font_regular">ArbFONTS-94PT-Bold-Heading.ttf</param>
-            <param name="font_light">ArbFONTS-94PT-Bold-Heading.ttf</param>
-             <param name="plot_linespacing_head">0.8</param>
-            <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.23</param>
-            <param name="plot_linespacing_mini">1.2</param>
-            <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">30</param>
-        <param name="size_light_main">30</param>
-        <param name="size_heavy_main_x2">60</param>
-        <param name="size_light_main_x2">60</param>
-        </include>
-    </fontset>
-
-     <fontset id="ElRady" unicode="true">
-
-        <include content="Font_Default">
-            <param name="font_black">Abd ElRady Medium.ttf</param>
-            <param name="font_bold">Abd ElRady Medium.ttf</param>
-            <param name="font_regular">Abd ElRady Medium.ttf</param>
-            <param name="font_light">Abd ElRady Medium.ttf</param>
-             <param name="plot_linespacing_head">1.2</param>
-            <param name="plot_linespacing_midi">1.25</param>
-            <param name="plot_linespacing_main">1.26</param>
-            <param name="plot_linespacing_mini">1.2</param>
-            <param name="plot_linespacing_tiny">1.07</param>
-        <param name="size_heavy_main">30</param>
-        <param name="size_light_main">30</param>
-        <param name="size_heavy_main_x2">60</param>
-        <param name="size_light_main_x2">60</param>
-        </include>
-    </fontset>
+    
 </fonts>
 
 

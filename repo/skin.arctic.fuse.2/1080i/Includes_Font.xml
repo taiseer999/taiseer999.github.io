@@ -61,7 +61,7 @@
             </font>
             <font>
                 <name>font_tiny_iconic_regular</name>
-                <filename>fa-regular-400.ttf</filename>
+                <filename>GeezaPro.ttf</filename>
                 <size>24</size>
             </font>
 
@@ -365,7 +365,7 @@
         <param name="font_light">Inter-Light.ttf</param>
         <param name="plot_linespacing_head">1.169</param>
         <param name="plot_linespacing_midi">1.50</param>
-        <param name="plot_linespacing_main">1.10</param>
+        <param name="plot_linespacing_main">1.0</param>
         <param name="plot_linespacing_mini">1.31</param>
         <param name="plot_linespacing_tiny">1.23</param>
         <definition>
@@ -396,8 +396,8 @@
                 <param name="size_light_mini">24</param>
 
                 <!-- Main -->
-                <param name="size_heavy_main">28</param>
-                <param name="size_light_main">28</param>
+                <param name="size_heavy_main">30</param>
+                <param name="size_light_main">30</param>
                 <param name="size_heavy_main_x2">56</param>
                 <param name="size_light_main_x2">56</param>
 
