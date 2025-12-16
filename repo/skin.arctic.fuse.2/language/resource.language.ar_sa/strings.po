@@ -2970,3 +2970,14 @@ msgstr "قيد المشاهدة"
 msgctxt "#32306"
 msgid "Codecs / PPI"
 msgstr "الترميز ومعلومات المشغل"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31596"
+msgid "Additional icons"
+msgstr "ايقونات اضافية"
+
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31597"
+msgid "Confirmation"
+msgstr "تأكيد"
