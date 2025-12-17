@@ -1,18 +1,15 @@
-Version 5.1.153 (November 24, 2024)
+Version 5.1.188 (Dec 07, 2025)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - torbox
+    - bigshare
 
 - Resolvers Fixed/Updated:
-    - filelions
-    - premiumize
-    - realdebrid
-    - reviewrate
-    - streamwish
-    - vinovo
-    - vk
+    - doodstream
+    - savefiles
+    - streamup
+    - voe
 
 - Resolvers Removed
     - None

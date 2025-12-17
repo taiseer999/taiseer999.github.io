@@ -28,7 +28,7 @@ logger = common.log_utils.Logger.get_logger(__name__)
 logger.disable()
 
 CLIENT_ID = 'X245A4XAIBGVM'
-USER_AGENT = 'ResolveURL for Kodi/%s' % common.addon_version
+USER_AGENT = 'ResolveURL/%s' % common.addon_version
 INTERVALS = 5  # seconds
 FORMATS = common.VIDEO_FORMATS
 STALLED = ['magnet_error', 'error', 'virus', 'dead']
@@ -63,10 +63,11 @@ class RealDebridResolver(ResolveUrl):
             self.headers.update({'Authorization': 'Bearer %s' % self.get_setting('token')})
             if media_id.lower().startswith('magnet:'):
                 torrent_id = self.__add_magnet(media_id)
-                if not torrent_id == "":
+                if torrent_id:
                     torrent_info = self.__torrent_info(torrent_id)
                     status = torrent_info.get('status')
-                    if not status in ['downloaded', 'waiting_files_selection'] and (self.get_setting('cached_only') == 'true' or cached_only):
+                    if status not in ['downloaded', 'waiting_files_selection'] and (self.get_setting('cached_only') == 'true' or cached_only):
+                        self.__delete_torrent(torrent_id)
                         raise ResolverError('Real-Debrid: {0}'.format(i18n('cached_torrents_only')))
                     heading = 'Resolve URL Real-Debrid {0}'.format(i18n('transfer'))
                     line1 = torrent_info.get('filename')
@@ -84,7 +85,8 @@ class RealDebridResolver(ResolveUrl):
                                     )
                                     if not keep_transfer:
                                         self.__delete_torrent(torrent_id)
-                                    raise ResolverError('Real-Debrid: Torrent ID  {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                    logger.log_debug('Real-Debrid: Torrent ID {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                    return
                                 elif any(x in status for x in STALLED):
                                     self.__delete_torrent(torrent_id)
                                     raise ResolverError('Real-Debrid: Torrent ID %s has stalled | REASON: %s' % (torrent_id, status))
@@ -152,7 +154,8 @@ class RealDebridResolver(ResolveUrl):
                                             )
                                             if not keep_transfer:
                                                 self.__delete_torrent(torrent_id)
-                                            raise ResolverError('Real-Debrid: Torrent ID {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                            logger.log_debug('Real-Debrid: Torrent ID {0} :: {1}'.format(torrent_id, i18n('user_cancelled')))
+                                            return
                                         elif any(x in status for x in STALLED):
                                             self.__delete_torrent(torrent_id)
                                             raise ResolverError('Real-Debrid: Torrent ID %s has stalled | REASON: %s' % (torrent_id, status))

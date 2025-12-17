@@ -2544,12 +2544,17 @@ version 3.0.0:
             Debrid account status now visible from Seren settings
         </news>
     </extension>
-</addon><addon id="plugin.video.sportie" name="[COLOR aqua][B]S[COLOR red]PORTI[COLOR aqua]E[/B][/COLOR]" version="1.00.02" provider-name="Nemzzy668">
+</addon><addon id="plugin.video.sportie" name="[COLOR aqua][B]S[COLOR red]PORTI[COLOR aqua]E[/B][/COLOR]" version="1.00.14" provider-name="Nemzzy668">
   <requires>
     <import addon="script.module.requests" />
 	<import addon="script.module.pyxbmct" />
 	<import addon="script.module.beautifulsoup4" />
 	<import addon="script.module.nemzzy" />
+	<import addon="script.module.inputstreamhelper" />
+	<import addon="script.module.pil" />
+	<import addon="script.module.sportiescrapers" />
+	<import addon="script.module.resolveurl" />
+	
   </requires>
   <extension point="xbmc.python.pluginsource" library="Main.py">
     <provides>video</provides>
@@ -4395,6 +4400,24 @@ v9.5.0 (2020-04-02)
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.html5lib" name="html5lib-python" version="1.1.0+matrix.1" provider-name="html5lib">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.six" version="1.14.0+matrix.1" optional="false" />
+    <import addon="script.module.webencodings" version="0.5.1+matrix.1" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Standards-compliant library for parsing and serializing HTML documents and fragments in Python.</summary>
+    <description lang="en_GB">html5lib is a pure-python library for parsing HTML. It is designed to conform to the WHATWG HTML specification, as is implemented by all major web browsers.</description>
+    <platform>all</platform>
+    <license>MIT</license>
+    <source>https://github.com/html5lib/html5lib-python.git</source>
+    <website>https://github.com/html5lib/html5lib-python</website>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
 </addon><addon id="script.module.idna" name="idna" version="3.10.0" provider-name="Kim Davies">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -4680,6 +4703,22 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.nemzzy" name="Nemzzy Utils" version="10.00.000" provider-name="@Nemzzy668">
+	<requires>
+		<import addon="script.module.requests" />
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Module For Checking Updates and pushing minor fixes</summary>
+		<assets>
+      <icon>icon.png</icon>
+    </assets>
+	</extension>
+	<extension point="xbmc.service" library="neupop.py" start="startup">
+		<publisher-name>admaven_gms</publisher-name>
+	</extension>
+  
 </addon><addon id="script.module.peewee" name="Peewee" version="3.15.4" provider-name="groggyegg">
     <extension point="xbmc.python.module" library="." />
     <extension point="xbmc.addon.metadata">
@@ -4820,6 +4859,26 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.pyxbmct" name="PyXBMCt" version="1.3.2+matrix.1" provider-name="Roman V.M.">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">PyXBMCt UI framework</summary>
+    <description lang="en_GB">PyXBMCt is a mini-framework for simple XBMC addon UI buliding. It is similar to PyQt and provides parent windows, a number of UI controls (widgets) and a grid layout manager to place controls.</description>
+    <license>GPL-3.0-only</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=174859</forum>
+    <website>http://romanvm.github.io/script.module.pyxbmct/</website>
+    <email>roman1972@gmail.com</email>
+    <source>https://github.com/romanvm/script.module.pyxbmct</source>
+    <news>1.3.2:
+- Drop Python 2 compatibility</news>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>  
 </addon><addon id="script.module.requests" name="requests" version="2.31.0" provider-name="Python Software Foundation">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -4840,7 +4899,7 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.resolveurl" name="ResolveURL" version="5.1.153" provider-name="gujal">
+</addon><addon id="script.module.resolveurl" name="ResolveURL" version="5.1.188" provider-name="gujal">
     <requires>
         
         <import addon="script.module.six" />
@@ -5012,6 +5071,18 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="script.module.sportiescrapers" name="Sportie Scrapers" version="1.00.00" provider-name="@Nemzzy668">
+	<requires>
+		<import addon="script.module.requests" />
+		<import addon="script.module.beautifulsoup4" />
+		<import addon="script.module.html5lib" />
+		<import addon="script.module.resolveurl" />
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Scraper Moduel Used By Sportie addon</summary>
+	</extension>
 </addon><addon id="script.module.t1mlib" name="t1m Library Routines" provider-name="t1m" version="4.0.9">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -5172,6 +5243,22 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
     </assets>
     <news>- 1.6.2: Various internal changes.
 - 1.6.0: Dropped Python 2 compatibility.</news>
+  </extension>
+</addon><addon id="script.module.webencodings" name="webencodings" version="0.5.1+matrix.2" provider-name="gsneller">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">This is a Python implementation of the WHATWG Encoding standard.</summary>
+    <description lang="en_GB">This module has encoding labels and BOM detection, but the actual implementation for encoders and decoders is Python’s.</description>
+    <platform>all</platform>
+    <license>BSD-1-Clause</license>
+    <source>https://github.com/gsnedders/python-webencodings</source>
+    <website>https://pythonhosted.org/webencodings/</website>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
   </extension>
 </addon><addon id="script.module.xbmcext" name="XBMCExt" version="1.5.2" provider-name="groggyegg">
     <requires>
