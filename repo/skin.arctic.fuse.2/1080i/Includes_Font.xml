@@ -396,8 +396,8 @@
                 <param name="size_light_mini">24</param>
 
                 <!-- Main -->
-                <param name="size_heavy_main">30</param>
-                <param name="size_light_main">30</param>
+                <param name="size_heavy_main">29</param>
+                <param name="size_light_main">29</param>
                 <param name="size_heavy_main_x2">56</param>
                 <param name="size_light_main_x2">56</param>
 

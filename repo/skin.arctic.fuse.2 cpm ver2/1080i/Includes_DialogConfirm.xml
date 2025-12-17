@@ -166,7 +166,7 @@
                             <itemgap>20</itemgap>
 
                             <control type="textbox" id="1">
-                                <font>font_mini_bold</font>
+                                <font>font_main_bold</font>
                                 <textcolor>dialog_fg_90</textcolor>
                                 <height min="80">auto</height>
                                 <aligny>center</aligny>
