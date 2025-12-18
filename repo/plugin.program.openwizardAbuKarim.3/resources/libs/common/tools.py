@@ -417,7 +417,7 @@ def kill_kodi(msg=None, over=None):
         if not msg:
             msg = '[COLOR {0}]You are about to close Kodi. Would you like to continue?[/COLOR]'.format(CONFIG.COLOR2)
         
-        choice = dialog.yesno('Exist',
+        choice = dialog.yesno('Exit',
                                   msg,
                                   nolabel='[B][COLOR red]Cancel[/COLOR][/B]',
                                   yeslabel='[B][COLOR springgreen]Exit[/COLOR][/B]')

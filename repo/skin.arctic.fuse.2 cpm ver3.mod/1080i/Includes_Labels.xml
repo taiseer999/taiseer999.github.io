@@ -348,7 +348,7 @@
 
     <variable name="Label_Setting_ForegroundLogo">
         <value condition="!Skin.HasSetting(TMDbHelper.EnableCrop)">$LOCALIZE[31329]</value>
-        <value>$LOCALIZE[32078]</value>
+        <value>$LOCALIZE[31330]</value>
     </variable>
 
     <variable name="Label_Setting_RatingsStyle">
