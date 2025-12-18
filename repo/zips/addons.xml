@@ -2544,33 +2544,6 @@ version 3.0.0:
             Debrid account status now visible from Seren settings
         </news>
     </extension>
-</addon><addon id="plugin.video.sportie" name="[COLOR aqua][B]S[COLOR red]PORTI[COLOR aqua]E[/B][/COLOR]" version="1.00.14" provider-name="Nemzzy668">
-  <requires>
-    <import addon="script.module.requests" />
-	<import addon="script.module.pyxbmct" />
-	<import addon="script.module.beautifulsoup4" />
-	<import addon="script.module.nemzzy" />
-	<import addon="script.module.inputstreamhelper" />
-	<import addon="script.module.pil" />
-	<import addon="script.module.sportiescrapers" />
-	<import addon="script.module.resolveurl" />
-	
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="Main.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">Sports Kodi Addon</summary>
-    <description lang="en">Watch Live Sports, Free scraped sources</description>
-    <platform>all</platform>
-	<assets>
-        <icon>icon.png</icon>
-        <fanart>fanart.jpg</fanart>
-		<screenshot>resources/screenshots/1.png</screenshot>
-		<screenshot>resources/screenshots/2.png</screenshot>
-		<screenshot>resources/screenshots/3.png</screenshot>
-    </assets>
-  </extension>
 </addon><addon id="plugin.video.sportscentral" name="Sports Central" version="0.1.5" provider-name="X">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -2806,27 +2779,6 @@ version 3.0.0:
         <description>a4kSubtitles Repository</description>
         <platform>all</platform>
     </extension>
-</addon><addon id="repository.bingie" name="Bingie Repository" provider-name="matke" version="1.0.0">
-	<extension point="xbmc.addon.repository" name="Bingie Repository">
-		<requires>
-			<import addon="xbmc.addon" version="12.0.0" />
-		</requires>
-		<dir minversion="20.9.1">
-			<info compressed="false">https://raw.githubusercontent.com/matke-84/repository.bingie/main/omega/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/matke-84/repository.bingie/main/omega/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/matke-84/repository.bingie/main/omega/</datadir>
-		</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Bingie Repository</summary>
-        <description lang="en">A repository for Bingie skin.</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-	</extension>
 </addon><addon id="repository.cocoscrapers" name="CocoScrapers Repository" version="1.0.1.1" provider-name="CocoScrapers">
     <extension point="xbmc.addon.repository" name="CocoScrapers Repository">
         <dir minversion="19.0">
@@ -3114,32 +3066,6 @@ version 3.0.0:
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="repository.titan.bingie.mod" name="Titan BINGIE MOD Repository" provider-name="AchillesPunks, Matke" version="2.0.1">
-	<extension point="xbmc.addon.repository" name="Titan BINGIE MOD Repository">
-		<requires>
-			<import addon="xbmc.addon" version="12.0.0" />
-		</requires>
-		<dir minversion="20.0.0" maxversion="20.9.0">
-			<info compressed="false">https://raw.githubusercontent.com/AchillesPunks/repository.titan.bingie.mod/master/nexus/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/AchillesPunks/repository.titan.bingie.mod/master/nexus/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/AchillesPunks/repository.titan.bingie.mod/master/nexus/</datadir>
-		</dir>
-		<dir minversion="20.9.1">
-			<info compressed="false">https://raw.githubusercontent.com/AchillesPunks/repository.titan.bingie.mod/master/omega/addons.xml</info>
-			<checksum>https://raw.githubusercontent.com/AchillesPunks/repository.titan.bingie.mod/master/omega/addons.xml.md5</checksum>
-			<datadir zip="true">https://raw.githubusercontent.com/AchillesPunks/repository.titan.bingie.mod/master/omega/</datadir>
-		</dir>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Titan BINGIE MOD Repository</summary>
-        <description lang="en">A repository for Titan BINGIE MOD skin.</description>
-        <disclaimer />
-        <platform>all</platform>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-	</extension>
 </addon><addon id="repository.umbrella" name="Umbrella Repository" version="2.2.4" provider-name="Umbrella">
     <extension point="xbmc.addon.repository" name="Umbrella Repository">
         <dir minversion="18.9.701" maxversion="19.5">
@@ -3370,32 +3296,6 @@ version 3.0.0:
 		<description lang="en">reFocus UI sounds</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="screensaver.bing" name="Bing: Photos of the Week" version="1.0.6" provider-name="Lunatixz">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.six" version="1.0.0" />
-        <import addon="script.module.kodi-six" version="0.1.3.1" />
-        <import addon="script.module.requests" version="2.7.0" /> 
-        <import addon="script.module.simplecache" version="1.0.0" />
-    </requires>
-    <extension point="xbmc.ui.screensaver" library="default.py" />
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Explore breathtaking images from the Bing homepage... </summary>
-        <description lang="en_GB">Explore breathtaking images from the Bing homepage... </description>
-        <license>GPL-3.0-or-later</license>
-        <platform>all</platform>
-        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/screensaver.bing</source>
-        <forum>https://forum.kodi.tv/showthread.php?tid=319728</forum>
-        <news>v.1.0.5[CR]- Matrix compatibility.</news>
-        <assets>
-            <icon>resources/images/icon.png</icon>
-            <fanart>resources/images/fanart.jpg</fanart>
-            <screenshot>resources/images/screenshot01.jpg</screenshot>
-            <screenshot>resources/images/screenshot02.jpg</screenshot>
-            <screenshot>resources/images/screenshot03.jpg</screenshot>
-            <screenshot>resources/images/screenshot04.jpg</screenshot>
-        </assets>
-    </extension>
 </addon><addon id="script.amlogic.framecapture" name="Amlogic frame capture" version="0.1" provider-name="roidy">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
@@ -3529,79 +3429,6 @@ v.3.3.7
 		<assets>
 				<icon>icon.png</icon>
 		</assets>
-    </extension>
-</addon><addon id="script.bingie.helper" name="Bingie Helper" version="1.1.2" provider-name="cartman.dos, matke">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.simplejson" version="3.17.0" />
-	</requires>
-	<extension point="xbmc.python.script" library="default.py" />
-	<extension point="xbmc.addon.metadata">
-		<language />
-		<summary lang="en">BINGIE Helper Script</summary>
-		<description lang="en">Helper for some of BINGIE features</description>
-		<platform>all</platform>
-		<license>GPL v3.0</license>
-		<forum>https://forum.kodi.tv/showthread.php?tid=334820</forum>
-		<website />
-		<source>https://github.com/matke-84/script.bingie.helper/</source>
-		<assets>
-			<icon>resources/icon.png</icon>
-			<fanart>resources/fanart.jpg</fanart>
-		</assets>
-	</extension>
-</addon><addon id="script.bingie.toolbox" name="Bingie Toolbox" version="1.0.0" provider-name="matke">
-    <requires>
-		<import addon="xbmc.python" version="3.0.0" />
-        <import addon="xbmc.addon" version="12.0.0" />
-        <import addon="script.module.simplejson" version="3.3.0" />
-		<import addon="script.module.simplecache" version="1.0.0" />
-    </requires>
-
-    <extension point="xbmc.python.library" library="default.py" />
-    <extension point="xbmc.python.pluginsource" library="plugin.py" />
-
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Bingie Toolbox</summary>
-        <description>Toolbox for Bingie skin.</description>
-		<assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-        <language />
-        <platform>all</platform>
-        <license>GPL v2.0</license>
-        <forum />
-        <website />
-        <source />
-    </extension>
-</addon><addon id="script.bingie.widgets" name="Bingie Widgets" version="1.0.1.1" provider-name="matke">
-    <requires>
-		<import addon="xbmc.python" version="3.0.0" />
-        <import addon="xbmc.addon" version="12.0.0" />
-        <import addon="script.module.simplecache" version="2.0.2" />
-		<import addon="script.module.requests" version="2.9.1" />
-        <import addon="script.module.infotagger" version="0.0.4" />
-    </requires>
-
-    <extension point="xbmc.python.pluginsource" library="plugin.py">
-        <provides>video</provides>
-    </extension>
-    <extension library="service.py" point="xbmc.service" start="login" />
-
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en">Bingie Widgets</summary>
-        <description>Widgets for Bingie skin.</description>
-		<assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-        <language />
-        <platform>all</platform>
-        <license>GPL v2.0</license>
-        <forum />
-        <website />
-        <source />
     </extension>
 </addon><addon id="script.colorbox" name="colorbox Script" version="2.0.8" provider-name="BADMS, drinfernoo">
 	<requires>
@@ -4151,23 +3978,6 @@ v.3.3.7
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.beautifulsoup4" name="beautifulsoup4" version="4.12.2" provider-name="Leonard Richardson">
-  <requires>
-    <import addon="xbmc.python" version="3.0.0" />
-    <import addon="script.module.soupsieve" version="2.4.1" />
-  </requires>
-  <extension point="xbmc.python.module" library="lib" />
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Screen-scraping library</summary>
-    <description lang="en_GB">Beautiful Soup is a library that makes it easy to scrape information from web pages. It sits atop an HTML or XML parser, providing Pythonic idioms for iterating, searching, and modifying the parse tree.</description>
-    <license>MIT</license>
-    <platform>all</platform>
-    <website>https://www.crummy.com/software/BeautifulSoup/</website>
-	<source>https://code.launchpad.net/beautifulsoup</source>
-    <assets>
-      <icon>resources/icon.png</icon>
-    </assets>
-  </extension>
 </addon><addon id="script.module.bottle" name="Bottle" version="0.12.23" provider-name="Marcel Hellkamp">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -4398,24 +4208,6 @@ v9.5.0 (2020-04-02)
     <source>https://github.com/PythonCharmers/python-future</source>
     <assets>
       <icon>resources/icon.png</icon>
-    </assets>
-  </extension>
-</addon><addon id="script.module.html5lib" name="html5lib-python" version="1.1.0+matrix.1" provider-name="html5lib">
-  <requires>
-    <import addon="xbmc.python" version="3.0.0" />
-    <import addon="script.module.six" version="1.14.0+matrix.1" optional="false" />
-    <import addon="script.module.webencodings" version="0.5.1+matrix.1" />
-  </requires>
-  <extension point="xbmc.python.module" library="lib" />
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">Standards-compliant library for parsing and serializing HTML documents and fragments in Python.</summary>
-    <description lang="en_GB">html5lib is a pure-python library for parsing HTML. It is designed to conform to the WHATWG HTML specification, as is implemented by all major web browsers.</description>
-    <platform>all</platform>
-    <license>MIT</license>
-    <source>https://github.com/html5lib/html5lib-python.git</source>
-    <website>https://github.com/html5lib/html5lib-python</website>
-    <assets>
-      <icon>icon.png</icon>
     </assets>
   </extension>
 </addon><addon id="script.module.idna" name="idna" version="3.10.0" provider-name="Kim Davies">
@@ -4703,22 +4495,6 @@ v1.30.0
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.nemzzy" name="Nemzzy Utils" version="10.00.000" provider-name="@Nemzzy668">
-	<requires>
-		<import addon="script.module.requests" />
-	</requires>
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.addon.metadata">
-		<platform>all</platform>
-		<summary lang="en">Module For Checking Updates and pushing minor fixes</summary>
-		<assets>
-      <icon>icon.png</icon>
-    </assets>
-	</extension>
-	<extension point="xbmc.service" library="neupop.py" start="startup">
-		<publisher-name>admaven_gms</publisher-name>
-	</extension>
-  
 </addon><addon id="script.module.peewee" name="Peewee" version="3.15.4" provider-name="groggyegg">
     <extension point="xbmc.python.module" library="." />
     <extension point="xbmc.addon.metadata">
@@ -4859,26 +4635,6 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.pyxbmct" name="PyXBMCt" version="1.3.2+matrix.1" provider-name="Roman V.M.">
-  <requires>
-    <import addon="xbmc.python" version="3.0.0" />
-  </requires>
-  <extension point="xbmc.python.module" library="lib" />
-  <extension point="xbmc.addon.metadata">
-    <platform>all</platform>
-    <summary lang="en_GB">PyXBMCt UI framework</summary>
-    <description lang="en_GB">PyXBMCt is a mini-framework for simple XBMC addon UI buliding. It is similar to PyQt and provides parent windows, a number of UI controls (widgets) and a grid layout manager to place controls.</description>
-    <license>GPL-3.0-only</license>
-    <forum>https://forum.kodi.tv/showthread.php?tid=174859</forum>
-    <website>http://romanvm.github.io/script.module.pyxbmct/</website>
-    <email>roman1972@gmail.com</email>
-    <source>https://github.com/romanvm/script.module.pyxbmct</source>
-    <news>1.3.2:
-- Drop Python 2 compatibility</news>
-    <assets>
-      <icon>icon.png</icon>
-    </assets>
-  </extension>  
 </addon><addon id="script.module.requests" name="requests" version="2.31.0" provider-name="Python Software Foundation">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -4899,33 +4655,6 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.resolveurl" name="ResolveURL" version="5.1.188" provider-name="gujal">
-    <requires>
-        
-        <import addon="script.module.six" />
-        <import addon="script.module.kodi-six" />
-        <import addon="plugin.video.youtube" optional="true" />
-        <import addon="script.module.python.twitch" optional="true" />
-        <import addon="plugin.googledrive" optional="true" />
-    </requires>
-    <extension point="xbmc.python.module" library="lib" />
-    <extension point="xbmc.python.pluginsource" library="lib/default.py" />
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <summary lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
-        <summary lang="es_ES">Resolver enlaces a videos de sitios populares para poder reproducirlos en XBMC/Kodi.</summary>
-        <summary lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju.</summary>
-        <summary lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi.</summary>
-        <description lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
-        <description lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi, απλοποίηση της ανάπτυξης των προσθέτων που χρησιμοποιούν πολλαπλούς εξυπηρετητές για υλικό βίντεο</description>
-        <description lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
-        <disclaimer lang="en_GB">This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not here. This script in no way searches for any content whatsoever.</disclaimer>
-        <disclaimer lang="el_GR">Το ανωτέρο σενάριο το μόνο που κάνει είναι να επιλύει οπτικοακουστικό περιεχόμενο από νόμιμες πηγές χωρίς προκατάληψη. Εάν το ανωτέρο σενάριο χρησιμοποιηθεί από τρίτους ώστε να επιλύσει περιεχόμενο το οποίο σας προκαλεί αντίδραση ότι παραβιάζει την πνευματική σας ιδιοκτησία παρακαλώ μεταφέρετε τα παραπονά σας στον ιστότοπο τον οποίο βρίσκεται το εν λόγω περιεχόμενο η τον δημιουργό ο οποίος πραγματοποιεί την σύνδεση και όχι εδω. Το σενάριο αυτό ουδεμία περίπτωση πραγματοποιεί αναζήτηση περιεχομένου.</disclaimer>
-        <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
-        </assets>
-    </extension>
 </addon><addon id="script.module.routing" name="Plugin routing" version="0.2.3+matrix.1" provider-name="takoi,Team Kodi">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -5055,34 +4784,6 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
       <fanart>fanart.jpg</fanart>
     </assets>
   </extension>
-</addon><addon id="script.module.soupsieve" name="soupsieve" version="2.4.1" provider-name="Isaac Muse">
-  <requires>
-    <import addon="xbmc.python" version="3.0.0" />
-  </requires>
-  <extension point="xbmc.python.module" library="lib" />
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">A modern CSS selector implementation for Beautiful Soup.</summary>
-    <description lang="en_GB">A modern CSS selector implementation for Beautiful Soup.</description>
-    <license>MIT</license>
-    <platform>all</platform>
-    <website>https://facelessuser.github.io/soupsieve/</website>
-    <source>https://github.com/facelessuser/soupsieve</source>
-    <assets>
-      <icon>resources/icon.png</icon>
-    </assets>
-  </extension>
-</addon><addon id="script.module.sportiescrapers" name="Sportie Scrapers" version="1.00.00" provider-name="@Nemzzy668">
-	<requires>
-		<import addon="script.module.requests" />
-		<import addon="script.module.beautifulsoup4" />
-		<import addon="script.module.html5lib" />
-		<import addon="script.module.resolveurl" />
-	</requires>
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.addon.metadata">
-		<platform>all</platform>
-		<summary lang="en">Scraper Moduel Used By Sportie addon</summary>
-	</extension>
 </addon><addon id="script.module.t1mlib" name="t1m Library Routines" provider-name="t1m" version="4.0.9">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -5243,22 +4944,6 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
     </assets>
     <news>- 1.6.2: Various internal changes.
 - 1.6.0: Dropped Python 2 compatibility.</news>
-  </extension>
-</addon><addon id="script.module.webencodings" name="webencodings" version="0.5.1+matrix.2" provider-name="gsneller">
-  <requires>
-    <import addon="xbmc.python" version="3.0.0" />
-  </requires>
-  <extension point="xbmc.python.module" library="lib" />
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en_GB">This is a Python implementation of the WHATWG Encoding standard.</summary>
-    <description lang="en_GB">This module has encoding labels and BOM detection, but the actual implementation for encoders and decoders is Python’s.</description>
-    <platform>all</platform>
-    <license>BSD-1-Clause</license>
-    <source>https://github.com/gsnedders/python-webencodings</source>
-    <website>https://pythonhosted.org/webencodings/</website>
-    <assets>
-      <icon>icon.png</icon>
-    </assets>
   </extension>
 </addon><addon id="script.module.xbmcext" name="XBMCExt" version="1.5.2" provider-name="groggyegg">
     <requires>
@@ -7388,7 +7073,7 @@ Added arabic fonts
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.avdvplus.estuary" version="4.0.1" name="avdvplus.Estuary" provider-name="phil65, Ichabod Fletchman">
+</addon><addon id="skin.avdvplus.estuary" version="4.0.1.1" name="avdvplus.Estuary" provider-name="phil65, Ichabod Fletchman">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0" />
 	</requires>
@@ -7572,34 +7257,6 @@ Added arabic fonts
 		<disclaimer lang="vi_VN">Estuary là giao diện mặc định cho Kodi, loại bỏ nó có thể gây ra sự cố</disclaimer>
 		<disclaimer lang="zh_CN">Estuary 是 Kodi 的默认皮肤，删除它可能导致故障。</disclaimer>
 		<disclaimer lang="zh_TW">Estuary 是 Kodi 預設的佈景主題，移除它可能會造成問題</disclaimer>
-	</extension>
-</addon><addon id="skin.bingie" version="2.0" name="Bingie" provider-name="matke">
-	<requires>
-		<import version="5.17.0" addon="xbmc.gui" />
-		<import addon="script.bingie.helper" version="1.1.2" />
-		<import addon="script.bingie.toolbox" version="1.0.0" />
-		<import addon="script.bingie.widgets" version="1.0.0" />
-		<import addon="script.skinshortcuts" version="2.0.3" />
-		<import addon="resource.images.studios.coloured" version="0.0.23" />
-		<import addon="plugin.video.themoviedb.helper" version="5.4.21" />
-		<import addon="script.wikipedia" version="0.0.6" />
-		<import addon="plugin.program.autocompletion" version="2.1.2" />
-		<import addon="resource.images.skinicons.wide" version="1.0.5" />
-	</requires>
-	<extension debugging="false" defaultthemename="Textures.xbt" effectslowdown="1" point="xbmc.gui.skin">
-        <res aspect="16:9" default="true" folder="1080i" height="1080" width="1920" />
-    </extension>
-	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">Kodi skin with Netflix layout.</summary>
-		<description>Bingie – The home of your favorite movies and shows!</description>
-		<platform>all</platform>
-		<license>GPL v2.0</license>
-		<forum />
-		<source />
-		<assets>
-			<icon>resources/icon.png</icon>
-			<fanart>resources/fanart.jpg</fanart>			
-		</assets>
 	</extension>
 </addon><addon id="skin.cpm.estuary" version="4.0.9.30" name="cpm.Estuary" provider-name="phil65, Ichabod Fletchman">
 	<requires>
