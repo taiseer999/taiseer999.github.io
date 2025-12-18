@@ -922,7 +922,14 @@
                 <textcolor>$VAR[ColorHighlight]</textcolor>
                 <label>$NUMBER[2]</label>
             </control>
-            
+            <control type="label">
+                <aligny>center</aligny>
+                <align>center</align>
+                <width>auto</width>
+                <font>font_title_huge</font>
+                <textcolor>$VAR[ColorHighlight]</textcolor>
+                <label>[COLOR=main_logo]cpm[/COLOR]</label>
+            </control>
         </control>
         <control type="group">
             <bottom>80</bottom>
@@ -1694,7 +1701,7 @@
                 <include>defs_dialog_$PARAM[control]</include>
                 <nested />
                 <width>80</width>
-                <font>font_main</font>
+                <font>font_midi</font>
                 <textoffsetx>0</textoffsetx>
                 <textcolor>dialog_fg_70</textcolor>
                 <selectedcolor>dialog_fg_70</selectedcolor>
@@ -1707,14 +1714,14 @@
         <definition>
             <control type="$PARAM[control]" id="$PARAM[id]">
                 <nested />
-                <height>keyboard_numeric</height>
+                <height>keyboard_numeric_height</height>
                 <width>keyboard_numeric</width>
-                <font>font_main</font>
-                <textoffsetx>0</textoffsetx>
+                <font>font_head</font>
+                <!-- <textoffsetx>0</textoffsetx>
                 <textcolor>dialog_fg_70</textcolor>
                 <selectedcolor>dialog_fg_70</selectedcolor>
                 <include>Texture_KeyboardButton</include>
-                <texturenofocus colordiffuse="$VAR[Color_DialogBorder]">common/circle.png</texturenofocus>
+                <texturenofocus colordiffuse="$VAR[Color_DialogBorder]">common/circle.png</texturenofocus> -->
             </control>
         </definition>
     </include>
@@ -2186,16 +2193,16 @@
                 <centerright>20</centerright>
                 <centertop>50%</centertop>
                 <texture colordiffuse="$PARAM[color_off]">buttons/check-off.png</texture>
-                <width>24</width>
-                <height>24</height>
+                <width>28</width>
+                <height>28</height>
                 <visible>!$PARAM[selected]</visible>
             </control>
             <control type="image">
                 <centerright>20</centerright>
                 <centertop>50%</centertop>
                 <texture colordiffuse="$PARAM[color_on]">buttons/check-on.png</texture>
-                <width>24</width>
-                <height>24</height>
+                <width>28</width>
+                <height>28</height>
                 <visible>$PARAM[selected]</visible>
             </control>
         </definition>

@@ -130,7 +130,7 @@
                                         <control type="label">
                                             <height>40</height>
                                             <textcolor>main_fg_70</textcolor>
-                                            <label fallback="19055">$INFO[system.memory(used.percent),Used memory: ,]</label>
+                                            <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[32034]: ,]</label>
                                         </control>
                                         <control type="group">
                                             <height>12</height>
@@ -159,7 +159,7 @@
                                         <control type="label">
                                             <height>40</height>
                                             <textcolor>main_fg_70</textcolor>
-                                            <label fallback="19055">$INFO[System.CPUUsage,$LOCALIZE[13271] ,]</label>
+                                            <label fallback="19055">$INFO[System.CpuAltUsage,$LOCALIZE[13271] ,]</label>
                                         </control>
                                         <control type="group">
                                             <height>12</height>

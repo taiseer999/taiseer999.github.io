@@ -159,7 +159,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$INFO[system.memory(used.percent),Used memory: ,]</label>
+                                                <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[32034]: ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -188,7 +188,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$INFO[System.CPUUsage,$LOCALIZE[13271] ,]</label>
+                                                <label fallback="19055">$INFO[System.CpuAltUsage,$LOCALIZE[13271] ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -314,19 +314,19 @@
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31449][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/hat-wizard.png</icon>
                                         <onclick>ActivateWindow(1180)</onclick>
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31496][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/screwdriver-wrench.png</icon>
                                         <onclick>ActivateWindow(1115)</onclick>
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31275][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/search.png</icon>
                                         <onclick>SetProperty(Shortcuts.EditMenu,menu=searchmenu,Home)</onclick>
                                         <onclick>ClearProperty(Shortcuts.EditMode,Home)</onclick>
@@ -335,7 +335,7 @@
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31086][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/bars.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31086][/CAPITALIZE],Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_PowerMenuConfigure,Home)</onclick>
@@ -343,7 +343,7 @@
                                     </item>
                                     <item>
                                         <label>$LOCALIZE[31203] $LOCALIZE[31434]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/gauge.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_VideoOSD,Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31430]: $LOCALIZE[31434],Home)</onclick>
@@ -351,7 +351,7 @@
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31203] $LOCALIZE[12003][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/circle-info.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_VideoInfo,Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31430]: $LOCALIZE[12003],Home)</onclick>
@@ -359,13 +359,13 @@
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31321][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/table.png</icon>
                                         <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
                                     </item>
                                     <item>
                                         <label>[CAPITALIZE]$LOCALIZE[31234][/CAPITALIZE]</label>
-                                        <label2>sskin.arctic.fuse.2</label2>
+                                        <label2>skin.arctic.fuse.2.cpm.mod</label2>
                                         <icon>special://skin/extras/icons/cube.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,Items_Settings_Indicators,Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31235],Home)</onclick>
