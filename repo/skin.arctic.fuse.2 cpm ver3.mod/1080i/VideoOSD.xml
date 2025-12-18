@@ -105,7 +105,18 @@
                         </include>
                     </control>
 
-						
+                    <!-- Clock on center -->
+                        <control type="label">
+                           <height>80</height>
+                           <center>0</center>
+                           <centerbottom>100</centerbottom>
+                           <align>center</align>
+                           <aligny>center</aligny>
+                           <label>$INFO[System.Time]</label>
+                           <textcolor>main_fg_50</textcolor>
+                           <font>font_title_main1</font>
+                        </control>
+
                         <!-- Button PlayerProcessInfo -->
                         <!--control type="button" id="6009">
                             <include>Defs_OSD_Button</include>

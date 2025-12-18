@@ -2,7 +2,7 @@
 <window>
 
     <controls>
-        <include>Dialog_Confirm</include>
+        <include>Dialog_Confirm_Side</include>
 
         <!-- <control type="group">
             <include content="Animation_Fade_In">

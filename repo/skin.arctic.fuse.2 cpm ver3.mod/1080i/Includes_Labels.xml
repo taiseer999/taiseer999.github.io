@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Label_DialogConfirm_Heading">
+        <value condition="Control.IsVisible(20)">$LOCALIZE[20186]...</value>
+        <value condition="Control.IsVisible(11) + !Control.IsVisible(10) + !Control.IsVisible(12)">$LOCALIZE[19033]</value>
+        <value>$LOCALIZE[31597]</value>
+    </variable>
+
     <variable name="Label_SkinSettings_Level">
         <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),3)">$LOCALIZE[10039]</value>
         <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),2)">$LOCALIZE[10038]</value>
@@ -121,12 +127,12 @@
     </variable>
 
     <variable name="Label_Settings_InfoText">
-        <value condition="System.HasVisibleModalDialog | Control.HasFocus(60) | Control.HasFocus(20)">$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.2), • AF2 v,]</value>
+        <value condition="System.HasVisibleModalDialog | Control.HasFocus(60) | Control.HasFocus(20)">$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.2.cpm.mod), • AF2 v,]</value>
         <value condition="Window.IsVisible(SettingsCategory.xml) + [ControlGroup(3).HasFocus() | ControlGroup(5).HasFocus()]">$INFO[Control.GetLabel(6)]</value>
         <value condition="Window.IsVisible(SkinSettings.xml) + [Control.HasFocus(10000) | String.IsEmpty(Window.Property(InfoText.Header))]">$INFO[Container(10000).ListItem.Label2]</value>
         <value condition="Window.IsVisible(SkinSettings.xml) + !String.IsEmpty(Window.Property(InfoText.Header))">$INFO[Window.Property(InfoText.Message)]</value>
         <value condition="Window.IsVisible(addonbrowser) + Control.HasFocus(50)">$INFO[Container(50).ListItem.AddonName,, • ]$INFO[Container(50).ListItem.AddonVersion,v,]$INFO[Container(50).ListItem.AddonOrigin, • ,]</value>
-        <value>$INFO[System.BuildVersionCode,CoreELEC ] $INFO[System.AddonVersion(skin.arctic.fuse.2),• Arctic Fuse 2 • , (Hybrid)]</value>
+        <value>$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.2.cpm.mod), • AF2 v,]</value>
     </variable>
 
     <variable name="Label_Settings_NavigationOnBack">
@@ -175,12 +181,12 @@
     </variable>
 
     <variable name="Label_Plot_Episode_Type_TMDBHelper">
-        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.Episode_type),series_premiere)">$LOCALIZE[31210]</value>
-        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.Episode_type),season_premiere)">$LOCALIZE[31211]</value>
-        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.Episode_type),mid_season_premiere)">$LOCALIZE[31212]</value>
-        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.Episode_type),series_finale)">$LOCALIZE[31214]</value>
-        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.Episode_type),season_finale)">$LOCALIZE[31215]</value>
-        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.Episode_type),mid_season_finale)">$LOCALIZE[31218]</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Episode_type),series_premiere)">$LOCALIZE[31210]</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Episode_type),season_premiere)">$LOCALIZE[31211]</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Episode_type),mid_season_premiere)">$LOCALIZE[31212]</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Episode_type),series_finale)">$LOCALIZE[31214]</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Episode_type),season_finale)">$LOCALIZE[31215]</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Episode_type),mid_season_finale)">$LOCALIZE[31218]</value>
     </variable>
 
     <variable name="Label_Shortcut_EnableDisable">
@@ -334,14 +340,15 @@
 
     <variable name="Label_Setting_BackgroundBlur">
         <value condition="Skin.String(Background.ArtworkStyle,Simple)">$LOCALIZE[31438] ($LOCALIZE[31254])</value>
-        <value condition="Skin.String(Background.ArtworkStyle,Fanart)">$LOCALIZE[20445] ($LOCALIZE[31254])</value>
-        <value condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">$LOCALIZE[31268] $LOCALIZE[39173] ($LOCALIZE[31254])</value>
-        <value>$LOCALIZE[31269] $LOCALIZE[39173] ($LOCALIZE[31267])</value>
+        <value condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">$LOCALIZE[20445] ($LOCALIZE[31254])</value>
+        <value condition="Skin.String(TMDbHelper.Blur.Size,1080)">$LOCALIZE[39173] ($LOCALIZE[13508] $LOCALIZE[31267])</value>
+        <value condition="Skin.String(TMDbHelper.Blur.Size,720)">$LOCALIZE[39173] ($LOCALIZE[13507] $LOCALIZE[31267])</value>
+        <value>$LOCALIZE[39173] ($LOCALIZE[571] $LOCALIZE[31267])</value>
     </variable>
 
     <variable name="Label_Setting_ForegroundLogo">
         <value condition="!Skin.HasSetting(TMDbHelper.EnableCrop)">$LOCALIZE[31329]</value>
-        <value>$LOCALIZE[31330]</value>
+        <value>$LOCALIZE[32078]</value>
     </variable>
 
     <variable name="Label_Setting_RatingsStyle">
@@ -517,11 +524,6 @@
         <value condition="Player.Forwarding">FF</value>
         <value condition="Player.Rewinding">RW</value>
         <value>$LOCALIZE[208]</value>
-    </variable>
-
-    <variable name="Label_Discover_TMDbType">
-        <value condition="Skin.String(Discover.TMDbType,movie)">$LOCALIZE[20342]</value>
-        <value condition="Skin.String(Discover.TMDbType,tv)">$LOCALIZE[20343]</value>
     </variable>
 
     <variable name="Label_Setting_SeekbarPauseBehaviour">
@@ -824,6 +826,11 @@
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Studio.3.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Studio.3.Name)]</value>
         <value condition="!String.IsEmpty(VideoPlayer.Studio)">$INFO[VideoPlayer.Studio]</value>
 
+    </variable>
+
+    <variable name="Label_Language">
+        <value condition="!String.IsEmpty(ListItem.Property(Language))">$INFO[ListItem.Property(Language)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Language))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Language)]</value>
     </variable>
 
     <variable name="Label_Country">
@@ -1807,13 +1814,6 @@
     <variable name="Label_ContextMenu">
         <value condition="!String.ISEmpty(Window(Home).Property(TMDbHelper.ListItem.base_label))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
         <value>$LOCALIZE[10106]</value>
-    </variable>
-
-    <variable name="Label_ContextMenu_Type">
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_tvshowtitle)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_tvshowtitle),Window(Home).Property(TMDbHelper.ListItem.base_label))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_tvshowtitle)]</value>
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_year))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_year)]</value>
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_dbtype))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_dbtype),[CAPITALIZE],[/CAPITALIZE]]</value>
-        <value>$LOCALIZE[19055]</value>
     </variable>
 
     <variable name="Label_Widget_Style">

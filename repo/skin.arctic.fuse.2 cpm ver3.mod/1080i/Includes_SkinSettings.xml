@@ -935,7 +935,7 @@
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">023</param>
+            <param name="id">0023</param>
             <param name="control">button</param>
             <label>$LOCALIZE[32073]</label>
             <label2>$VAR[OSDCodecLogosStartupLabel1]</label2>
@@ -951,7 +951,7 @@
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">020</param>
+            <param name="id">0020</param>
             <param name="control">button</param>
             <label>$LOCALIZE[32060]</label>
             <label2>$VAR[OSDCodecLogosLabel]</label2>
@@ -966,7 +966,7 @@
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">021</param>
+            <param name="id">0021</param>
             <param name="control">button</param>
             <label>$LOCALIZE[32061]</label>
             <label2>$VAR[PPICodecLogosLabel]</label2>
@@ -982,7 +982,7 @@
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">022</param>
+            <param name="id">0022</param>
             <param name="control">radiobutton</param>
             <param name="slevel">2</param>
             <label>$LOCALIZE[32074]</label>
