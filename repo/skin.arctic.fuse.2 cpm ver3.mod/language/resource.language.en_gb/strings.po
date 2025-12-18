@@ -3225,3 +3225,27 @@ msgstr ""
 msgctxt "#32089"
 msgid "Clock + Date and Weather"
 msgstr ""
+
+msgctxt "#32300"
+msgid "switch skin"
+msgstr ""
+
+msgctxt "#32301"
+msgid "My TV"
+msgstr ""
+
+msgctxt "#32303"
+msgid "My Movies"
+msgstr ""
+
+msgctxt "#32302"
+msgid "KDrama"
+msgstr ""
+
+msgctxt "#32304"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#32305"
+msgid "In Progress"
+msgstr ""

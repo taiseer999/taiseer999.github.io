@@ -1063,7 +1063,7 @@
 				<!-- Display mode -->
 				<control type="label">
 					<top>20</top>
-					<label>$LOCALIZE[32000]:</label>
+					<label>Display mode</label>
 					<font>font_tiny</font>
 					<textcolor>$VAR[ColorHighlight]</textcolor>
 				</control>
@@ -1077,7 +1077,7 @@
 				<!-- Video mode -->
 				<control type="label">
 					<top>55</top>
-					<label>$LOCALIZE[32001]:</label>
+					<label>Video mode</label>
 					<font>font_tiny</font>
 					<textcolor>$VAR[ColorHighlight]</textcolor>
 				</control>
@@ -1091,7 +1091,7 @@
 				<!-- Pixel format -->
 				<control type="label">
 					<top>90</top>
-					<label>$LOCALIZE[32023]:</label>
+					<label>Pixel format</label>
 					<font>font_tiny</font>
 					<textcolor>$VAR[ColorHighlight]</textcolor>
 				</control>
@@ -1104,7 +1104,7 @@
 				<!-- Bit depth -->
 				<control type="label">
 					<top>125</top>
-					<label>$LOCALIZE[32035]:</label>
+					<label>Bit depth</label>
 					<font>font_tiny</font>
 					<textcolor>$VAR[ColorHighlight]</textcolor>
 				</control>
@@ -1496,7 +1496,7 @@
 				<control type="label">
 				    <visible>!String.Contains(System.OSVersionInfo,(cpm))</visible>
 					<top>125</top>
-					<label>$LOCALIZE[21444]:</label>
+					<label>Audio channels</label>
 					<font>font_tiny</font>
 					<textcolor>$VAR[ColorHighlight]</textcolor>
 				</control>

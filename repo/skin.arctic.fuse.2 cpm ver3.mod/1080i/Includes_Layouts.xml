@@ -1036,7 +1036,6 @@
                                 <label>$INFO[ListItem.Label]</label>
                                 <align>left</align>
                                 <left>80</left>
-                                <right>50</right>
                                 <textcolor>main_fg_70</textcolor>
                                 <visible>![$PARAM[include_detailed_labels]]</visible>
                             </control>
@@ -1081,7 +1080,6 @@
                                 <label>$INFO[ListItem.Label]</label>
                                 <align>left</align>
                                 <left>80</left>
-                                <right>50</right>
                                 <include>Color_SelectedText</include>
                                 <visible>![$PARAM[include_detailed_labels]]</visible>
                             </control>
@@ -1421,7 +1419,7 @@
                         <centerleft>50%</centerleft>
                         <top>20</top>
                         <height>60</height>
-                        <texture>$INFO[ListItem.Thumb,flags/colorful/language/,.png]</texture>
+                        <texture>$INFO[ListItem.Thumb,flags/color/language/,.png]</texture>
                         <aspectratio>keep</aspectratio>
                     </control>
                     <control type="label">
@@ -1483,17 +1481,17 @@
                 </control>
 
                 <control type="group">
-                    <right>105</right>
+                    <right>95</right>
                     <centertop>40</centertop>
-                    <width>80</width>
-                    <height>40</height>
+                    <width>85</width>
+                    <height>28</height>
                     <animation effect="fade" start="100" end="20" condition="!ListItem.property(sync)">Conditional</animation>
                     <control type="image">
                         <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
                             <param name="colordiffuse">$VAR[ColorSelected]</param>
                         </include>
                         <colordiffuse>dialog_fg_70</colordiffuse>
-                        <texture border="20">common/dialog.png</texture>
+                        <texture border="10">flags/blank.png</texture>
                     </control>
                     <control type="label">
                         <include content="Object_TextColor" condition="$PARAM[selected]">
@@ -1501,7 +1499,7 @@
                         </include>
                         <textcolor>dialog_bg_100</textcolor>
                         <label>[B]SYNC[/B]</label>
-                        <font>font_tiny</font>
+                        <font>font_tiny_bold</font>
                         <align>center</align>
                     </control>
                 </control>
@@ -1510,7 +1508,7 @@
                     <right>40</right>
                     <centertop>40</centertop>
                     <width>50</width>
-                    <height>50</height>
+                    <height>30</height>
                     <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
                         <param name="colordiffuse">$VAR[ColorSelected]</param>
                     </include>
@@ -2131,6 +2129,7 @@
         <param name="diffuse">diffuse/poster_w217_h310.png</param>
         <param name="icon">$VAR[Image_Poster]</param>
         <param name="listitem">ListItem</param>
+        <param name="listitem_label">ListItem.Label</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_w]</width>
@@ -2145,6 +2144,19 @@
                         <param name="control">image</param>
                         <include>Texture_Box_Highlight_V</include>
                     </include>
+                     <!-- poster wall title -->
+                <control type="label">
+                    <textcolor>ffdedede</textcolor>
+                    <label>$INFO[$PARAM[listitem_label]]</label>
+                    <left>10</left>
+                    <right>10</right>
+                    <align>center</align>
+                    <font>font_mini</font>
+                    <height>50</height>
+                    <top>310</top>
+                    <scroll>true</scroll>
+                    <scrollspeed>40</scrollspeed>
+                </control>
                     <control type="textbox">
                         <textcolor>main_fg_70</textcolor>
                         <label>$INFO[$PARAM[listitem].$PARAM[listitem_label]]</label>
@@ -2549,11 +2561,7 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
                     </include>
-                    <include content="Object_Control" condition="$PARAM[selected]">
-                        <param name="control">image</param>
-                        <include>Texture_Box_Highlight_V</include>
-                    </include>
-
+                    
                     <include content="Object_Layout_Image_Icon">
                         <param name="selected">$PARAM[selected]</param>
                         <param name="diffuse">$PARAM[diffuse]</param>

@@ -3055,15 +3055,15 @@ msgstr ""
 
 msgctxt "#32057"
 msgid "Top left"
-msgstr ""
+msgstr "يسار"
 
 msgctxt "#32058"
 msgid "Top center"
-msgstr ""
+msgstr "وسط"
 
 msgctxt "#32059"
 msgid "Top right"
-msgstr ""
+msgstr "يمين"
 
 msgctxt "#32060"
 msgid "Position of the codec logos in the OSD"
@@ -3185,3 +3185,26 @@ msgctxt "#32089"
 msgid "Clock + Date and Weather"
 msgstr "الساعة + التاريخ والطقس"
 
+msgctxt "#32300"
+msgid "switch skin"
+msgstr "تغير السكن"
+
+msgctxt "#32301"
+msgid "My TV"
+msgstr "مسلسلاتي"
+
+msgctxt "#32303"
+msgid "My Movies"
+msgstr "افلامي"
+
+msgctxt "#32302"
+msgid "KDrama"
+msgstr "كوري"
+
+msgctxt "#32304"
+msgid "Popular"
+msgstr "مشهور"
+
+msgctxt "#32305"
+msgid "In Progress"
+msgstr "قيد المشاهدة"
