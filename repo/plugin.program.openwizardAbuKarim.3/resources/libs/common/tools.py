@@ -417,10 +417,10 @@ def kill_kodi(msg=None, over=None):
         if not msg:
             msg = '[COLOR {0}]You are about to close Kodi. Would you like to continue?[/COLOR]'.format(CONFIG.COLOR2)
         
-        choice = dialog.yesno('Force Close Kodi',
+        choice = dialog.yesno('Exist',
                                   msg,
-                                  nolabel='[B][COLOR red] No Cancel[/COLOR][/B]',
-                                  yeslabel='[B][COLOR springgreen]Force Close Kodi[/COLOR][/B]')
+                                  nolabel='[B][COLOR red]Cancel[/COLOR][/B]',
+                                  yeslabel='[B][COLOR springgreen]Exit[/COLOR][/B]')
     if choice == 1:
         from resources.libs.common import logging
         logging.log("Force Closing Kodi: Platform[{0}]".format(str(platform())))
