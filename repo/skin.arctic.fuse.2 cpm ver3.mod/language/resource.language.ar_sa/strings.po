@@ -3151,7 +3151,7 @@ msgstr "عرض شعارات برنامج ترميز الصور"
 
 msgctxt "#32081"
 msgid "Clock + Date"
-msgstr "الساعة+التاريخ"
+msgstr "الساعة + التاريخ"
 
 msgctxt "#32082"
 msgid "Weather icon colour"

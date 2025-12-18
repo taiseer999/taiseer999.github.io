@@ -2859,6 +2859,16 @@ msgctxt "#31595"
 msgid "Press right"
 msgstr "Nyomd jobbra"
 
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31596"
+msgid "Additional icons"
+msgstr "További ikonok"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31597"
+msgid "Confirmation"
+msgstr "Megerősítés"
+
 msgctxt "#32000"
 msgid "Display output mode"
 msgstr "Kimeneti felbontás"
