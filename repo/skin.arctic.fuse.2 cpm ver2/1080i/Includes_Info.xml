@@ -1424,7 +1424,7 @@
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">AAC</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],aac) | String.IsEqual($PARAM[listitem_audiocodec],aac_latm)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[listitem_audiocodec],aac) | String.IsEqual($PARAM[listitem_audiocodec],aac_latm) | String.IsEqual($PARAM[listitem_audiocodec],aac_lc) | String.IsEqual($PARAM[listitem_audiocodec],he_aac) | String.IsEqual($PARAM[listitem_audiocodec],he_aac_v2) | String.IsEqual($PARAM[listitem_audiocodec],aac_ssr) | String.IsEqual($PARAM[listitem_audiocodec],aac_ltp)</param>
             </include>
             <include content="Info_Line_VideoQuality_Object">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
