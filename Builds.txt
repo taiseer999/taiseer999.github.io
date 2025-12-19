@@ -113,3 +113,17 @@ preview="http://"
 adult="no"
 info="http://your.info.url"
 description="بيلد كامل الدسم وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
+
+name="AF2 V3 CE"
+version="1.0"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=w2k4TAt9jZMg%2Fkyr2mwkh7xX1haLPUma35pJm%2BF5fHko2Sst%2BymTTW5Dg0KUbc2j&expiry=k7KAJ%2B11jHmRTxNHG5YN%2BA%3D%3D&mac=d33d071264435af1d1309480b6d3a3ba919b8374814492796ed0849da741961a"
+minor="http://"
+gui="http://"
+kodi="21"
+theme="http://your.themes.url"
+icon="https://i.postimg.cc/xTHhfx4G/Screenshot-2025-12-19-at-10-06-23-AM.png"
+fanart="https://i.postimg.cc/xTHhfx4G/Screenshot-2025-12-19-at-10-06-23-AM.png"
+preview="http://"
+adult="no"
+info="http://your.info.url"
+description="سريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط".
