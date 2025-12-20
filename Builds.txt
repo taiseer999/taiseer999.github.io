@@ -101,7 +101,7 @@ info="http://your.info.url"
 description="بيلد مخفف وسريع على الاجهزة الداعمة لكوراليك نسخة CPM فقط"
 
 name="AF2 MAX CE"
-version="1.7"
+version="1.8"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=ZifV813EOuLsATKgLmOJhSRjU6VdgiHsAMvAV%2BfhBxUbDXGP89ud2KA%2BX5ft75Gi&expiry=p0qpTBki4gitMO5XV4y75A%3D%3D&mac=354543407237a0067e17b63a5984c7e729b63e74dffbf51b35f43bd60994f2c8"
 minor="http://"
 gui="http://"
