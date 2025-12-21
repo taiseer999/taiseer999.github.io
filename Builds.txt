@@ -59,7 +59,7 @@ info="http://your.info.url"
 description="بيلد سريع وخفيف جدا وصالح لجميع الاجهزة - ينصح به للاجهزة الضعيفة ونظام اندرويد"
 
 name="AF2 ِMax"
-version="1.5"
+version="1.6"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=y3ggtvyhqPY75QC7rDkolL01JwUiQhVdIj7uAWnTWjDFooj3TeqIN8FcCuooUjQW&expiry=lK7BpFPNzNjz%2FKXhYvPPpg%3D%3D&mac=415f4e22aebf8d5773c6aef7a62f73598112e9f509b9051c0930d61458dd36dd"
 minor="http://"
 gui="http://"
