@@ -7,12 +7,11 @@
     </include>
     <controls>
 
-        <!--include>Dialog_Dim_Overlay</include-->
+        <include>Dialog_Dim_Overlay</include>
 
         <control type="group">
             <include>Animation_SlideIn_Dialog</include>
-            <!--top>40</top-->
-            <top>0</top>
+            <top>40</top>
             <height>200</height>
             <width>960</width>
             <centerleft>50%</centerleft>

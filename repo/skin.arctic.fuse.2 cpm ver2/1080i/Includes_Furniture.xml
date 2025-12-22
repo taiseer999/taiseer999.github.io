@@ -41,7 +41,7 @@
         <param name="visible">true</param>
         <definition>
             <control type="group">
-                <include>Dimension_Topbar</include>
+                <include>Dimension_Bottombar</include>
                 <control type="group">
                     <include>Dimension_Furniture_Gutters</include>
                     <control type="group">
@@ -50,82 +50,8 @@
                             <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | $EXP[Exp_PlainBackgroundWindows]</visible>
                             <include condition="!Skin.HasSetting(Furniture.EnableClock) + !Skin.HasSetting(Furniture.DisableStudio)">Info_Bottom_Right</include>
                         </control>
-                        
-                  <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | $EXP[Exp_PlainBackgroundWindows]</visible>
-                    
-                    <!-- Codecs -->
-                    <include content="Object_Codecs" condition="Skin.HasSetting(Furniture.EnableObject_Codecs)">
-                        <param name="infohide" value="false" />
-                    </include>
-
-                    <include content="Object_Patch" condition="Skin.HasSetting(Furniture.EnableObject_Patch)">
-                        <param name="infohide" value="false" />
-                    </include>
-                    
-                    <include content="Object_CodecsText" condition="Skin.HasSetting(Furniture.EnableObject_CodecsText)">
-                        <param name="infohide" value="false" />
-                    </include>
-
-                    <include content="Furniture_shadows" condition="Skin.HasSetting(Furniture.EnableClock) | Skin.HasSetting(Furniture.EnableClock_Date) | Skin.HasSetting(Furniture.EnableClockDateWeather) | Skin.HasSetting(Furniture.Enable_Network) | Skin.HasSetting(Furniture.Network_RAM) | Skin.HasSetting(Furniture.Enable_Ram)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-
-                    <include content="Furniture_Clock" condition="Skin.HasSetting(Furniture.EnableClock)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-
-                    <include content="Furniture_Clock_Date" condition="Skin.HasSetting(Furniture.EnableClock_Date)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-
-                    <include content="Furniture_Clock_Date_Weather" condition="Skin.HasSetting(Furniture.EnableClockDateWeather)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-
-                    <include content="Furniture_Network" condition="Skin.HasSetting(Furniture.Enable_Network)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-
-                    <include content="Furniture_Network_Ram" condition="Skin.HasSetting(Furniture.Network_RAM)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-
-                    <include content="Furniture_Ram" condition="Skin.HasSetting(Furniture.Enable_Ram)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-                    
-                    <include content="Furniture_Date_Weather" condition="Skin.HasSetting(Furniture.EnableClockDateWeather)">
-                        <param name="textcolor">$PARAM[textcolor]</param>
-                        <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
-                        <param name="shadowcolor">$PARAM[shadowcolor_sublabel]</param>
-                        <param name="shadowcolor_sublabel">$PARAM[shadowcolor_sublabel]</param>
-                    </include>
-                  </control>
-
-                  <control type="group">
-                            <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying)</visible>
+                        <control type="group">
+                            <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | $EXP[Exp_PlainBackgroundWindows]</visible>
                             <include content="Furniture_Clock" condition="Skin.HasSetting(Furniture.EnableClock)">
                                 <param name="textcolor">$PARAM[textcolor]</param>
                                 <param name="textcolor_sublabel">$PARAM[textcolor_sublabel]</param>
@@ -144,6 +70,7 @@
                                 <orientation>horizontal</orientation>
                                 <align>right</align>
                                 <itemgap>0</itemgap>
+
                                 <control type="label">
                                     <textcolor>main_fg_30</textcolor>
                                     <width max="400">auto</width>
@@ -175,6 +102,7 @@
                                     <textcolor>00ffffff</textcolor>
                                     <label> ---</label>
                                 </control>
+
                                 <control type="multiimage">
                                     <right>0</right>
                                     <width>28</width>
@@ -197,501 +125,11 @@
                                     <aspectratio scalediffuse="false">keep</aspectratio>
                                     <visible>!Player.Playing</visible>
                                 </control>
+
                             </control>
                         </include>
                     </control>
                 </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_shadows">
-        <param name="toplabel"></param>
-        <param name="bottomlabel"></param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_tiny</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_30</param>
-        <definition>
-            <control type="group">
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">56</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo) | !Window.IsVisible(DialogVideoInfo.xml)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>42%</centertop>
-                        <control type="image">
-                        <visible>![Window.IsVisible(AddonBrowser.xml) | Window.IsVisible(SettingsSysteminfo.xml) | Window.IsVisible(EventLog.xml)]</visible>
-                        <visible>Window.IsVisible(Home.xml) | Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(52) | Control.IsVisible(53) | Control.IsVisible(54) | Control.IsVisible(57) | Control.IsVisible(58) | Control.IsVisible(59) | Control.IsVisible(500) | Control.IsVisible(510) | Control.IsVisible(520) | Control.IsVisible(530)| Control.IsVisible(540) | Control.IsVisible(560) | Control.IsVisible(570) | Control.IsVisible(580) | Control.IsVisible(590) | Control.IsVisible(502) | Control.IsVisible(512) | Control.IsVisible(522) | Control.IsVisible(532) | Control.IsVisible(542) | Control.IsVisible(510) | Control.IsVisible(520) | Control.IsVisible(572) | Control.IsVisible(582) | Control.IsVisible(592) | Control.IsVisible(551) | Control.IsVisible(553) | Control.IsVisible(554) | Control.IsVisible(555) | Control.IsVisible(557) | Control.IsVisible(561)</visible>
-                           <right>-480</right>
-                           <top>-360</top>
-                           <height>700</height>
-                           <width>1000</width>
-                           <texture>shadowspot.png</texture>
-                        </control>
-                        <control type="image">
-                        <visible>![Window.IsVisible(AddonBrowser.xml) | Window.IsVisible(SettingsSysteminfo.xml) | Window.IsVisible(EventLog.xml)]</visible>
-                        <visible>Window.IsVisible(Home.xml) | Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(52) | Control.IsVisible(53) | Control.IsVisible(54) | Control.IsVisible(57) | Control.IsVisible(58) | Control.IsVisible(59) | Control.IsVisible(500) | Control.IsVisible(510) | Control.IsVisible(520) | Control.IsVisible(530)| Control.IsVisible(540) | Control.IsVisible(560) | Control.IsVisible(570) | Control.IsVisible(580) | Control.IsVisible(590) | Control.IsVisible(502) | Control.IsVisible(512) | Control.IsVisible(522) | Control.IsVisible(532) | Control.IsVisible(542) | Control.IsVisible(510) | Control.IsVisible(520) | Control.IsVisible(572) | Control.IsVisible(582) | Control.IsVisible(592) | Control.IsVisible(551) | Control.IsVisible(553) | Control.IsVisible(554) | Control.IsVisible(555) | Control.IsVisible(557) | Control.IsVisible(561)</visible>
-                           <right>-480</right>
-                           <top>-360</top>
-                           <height>700</height>
-                           <width>1000</width>
-                           <texture>shadowspot.png</texture>
-                        </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_Clock_Date">
-        <param name="toplabel">$INFO[System.Time]</param>
-        <param name="bottomlabel">$INFO[System.Date]</param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_title_main1</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_70</param>
-        <definition>
-            <control type="group">
-                <!--include>Furniture_Right_Visible</include-->
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">48</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>50%</centertop>
-                    <!--include>Furniture_Right_Sliding</include-->
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[toplabel]</label>
-                        <font>font_title_main1</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>50%</centertop>
-                    </control>
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[bottomlabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>5%</centertop>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_Clock_Date_Weather">
-        <param name="toplabel">$INFO[System.Time]</param>
-        <param name="bottomlabel">$INFO[System.Date] I $INFO[Weather.Temperature]</param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_title_main1</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_30</param>
-        <definition>
-            <control type="group">
-                <!--include>Furniture_Right_Visible</include-->
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">48</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>50%</centertop>
-                    <!--include>Furniture_Right_Sliding</include-->
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[toplabel]</label>
-                        <font>font_title_main1</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>50%</centertop>
-                    </control>
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[bottomlabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <right>30</right>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>5%</centertop>
-                    </control>
-                    <control type="image">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <right>0</right>
-                        <centertop>5</centertop>
-                        <width>24</width>
-                        <height>24</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture colordiffuse="dialog_fg_50">resource://resource.images.weathericons.white/$INFO[Weather.FanartCode].png</texture>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_Clock">
-        <param name="toplabel">$INFO[System.Time]</param>
-        <param name="bottomlabel">$INFO[System.Date]</param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_title_main1</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_30</param>
-        <definition>
-            <control type="group">
-                <!--include>Furniture_Right_Visible</include-->
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">48</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>50%</centertop>
-                    <!--include>Furniture_Right_Sliding</include-->
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[toplabel]</label>
-                        <font>font_title_main1</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>50%</centertop>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_Network">
-        <param name="toplabel"></param>
-        <param name="bottomlabel">$VAR[NetworkVar]</param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_tiny</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_30</param>
-        <definition>
-            <control type="group">
-                <!--include>Furniture_Right_Visible</include-->
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">56</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo) | !Window.IsVisible(DialogVideoInfo.xml)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>42%</centertop>
-                    <!--include>Furniture_Right_Sliding</include-->
-                    <control type="label" id="$PARAM[id]">
-                        <visible>[![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[toplabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>96%</centertop>
-                    </control>
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[bottomlabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>96%</centertop>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_Network_Ram">
-        <param name="toplabel"></param>
-        <param name="bottomlabel">$VAR[NetworkVar] I $INFO[system.memory(used.percent),RAM :,]</param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_tiny</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_30</param>
-        <definition>
-            <control type="group">
-                <!--include>Furniture_Right_Visible</include-->
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">56</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo) | !Window.IsVisible(DialogVideoInfo.xml)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>42%</centertop>
-                    <!--include>Furniture_Right_Sliding</include-->
-                    <control type="label" id="$PARAM[id]">
-                        <visible>[![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[toplabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>96%</centertop>
-                    </control>
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[bottomlabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>96%</centertop>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Furniture_Ram">
-        <param name="toplabel"></param>
-        <param name="bottomlabel">$INFO[system.memory(used.percent),RAM :,]</param>
-        <param name="textcolor">main_fg_50</param>
-        <param name="topfont">font_tiny</param>
-        <param name="bottomfont">font_tiny</param>
-        <param name="shadowcolor_sublabel">main_bg_30</param>
-        <definition>
-            <control type="group">
-                <!--include>Furniture_Right_Visible</include-->
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="visible_condition">!$EXP[Exp_Notification_IsActive]</param>
-                    <param name="windowopen_condition">false</param>
-                    <param name="posy">56</param>
-                </include>
-                <control type="group">
-                    <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo) | !Window.IsVisible(DialogVideoInfo.xml)</visible>
-                    <visible>![Window.IsVisible(DialogVideoInfo.xml) + ![Skin.String(Info.Layout,Flip) | Skin.String(Info.Layout,Flix)]]</visible>
-                    <height>80</height>
-                    <centertop>42%</centertop>
-                    <!--include>Furniture_Right_Sliding</include-->
-                    <control type="label" id="$PARAM[id]">
-                        <visible>[![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[toplabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>96%</centertop>
-                    </control>
-                    <control type="label" id="$PARAM[id]">
-                        <visible>![Control.IsVisible(550) + !Container.Content(files) | Control.IsVisible(552) + !Container.Content(files) | Control.IsVisible(558) + !Container.Content(files)]</visible>
-                        <label>$PARAM[bottomlabel]</label>
-                        <font>font_tiny</font>
-                        <textcolor>$PARAM[textcolor]</textcolor>
-                        <shadowcolor>panel_bg_30</shadowcolor>
-                        <align>right</align>
-                        <height>40</height>
-                        <centertop>96%</centertop>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-   <include name="Object_Codecs">
-        <param name="infohide" default="true" />
-        <definition>
-            <control type="grouplist">
-                <visible>!Skin.HasSetting(Furniture.EnableObject_CodecsText)</visible>
-                <visible>!Player.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo)</visible>
-                <visible>!Window.IsActive(DialogNotification.xml)</visible>
-                <visible>!Window.IsActive(DialogExtendedProgressBar.xml)</visible>
-                <orientation>horizontal</orientation>
-                <top>906</top>
-                <left>500</left>
-                <align>right</align>
-                <itemgap>15</itemgap>
-                <usecontrolcoords>true</usecontrolcoords>
-                <!--visible>[!String.IsEmpty(ListItem.VideoCodec) + !String.IsEmpty(ListItem.AudioCodec)] | !String.IsEmpty(ListItem.VideoResolution)</visible-->
-                <control type="image" id="Studio">
-                    <!--left>7</left-->
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">$VAR[Image_CombinedStudio]</texture>
-                </control>
-                <control type="image">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio align="left">keep</aspectratio>
-                    <texture colordiffuse="panel_fg_100">flags/colorful/other/3D.png</texture>
-                    <visible>VideoPlayer.IsStereoscopic</visible>
-                </control>
-                <control type="image">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio align="left">keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">$VAR[Image_HDRCodec]</texture>
-                    <visible>String.Contains(ListItem.FileNameAndPath,HDR) | !String.IsEmpty(Listitem.HdrType)</visible>
-                </control>
-                <control type="image" id="77881">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio align="left">keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">$VAR[Image_RipSource]</texture>
-                    <visible>!String.IsEmpty(Control.GetLabel(77881))</visible>
-                </control>
-                <control type="image" id="77882">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>94</width>
-                    <height>58</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">flags/colorful/resolution/$INFO[ListItem.VideoResolution].png</texture>
-                    <visible>!String.IsEmpty(ListItem.VideoResolution)</visible>
-                    <visible>!String.IsEmpty(Control.GetLabel(77882))</visible>
-                </control>
-                <control type="image" id="77883">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">flags/colorful/source/$INFO[ListItem.VideoCodec].png</texture>
-                    <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
-                    <visible>!String.IsEmpty(Control.GetLabel(77883))</visible>
-                </control>
-                <control type="image" id="77884">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">flags/colorful/aspectratio/$INFO[ListItem.VideoAspect].png</texture>
-                    <visible>!String.IsEmpty(ListItem.VideoAspect)</visible>
-                    <visible>!String.IsEmpty(Control.GetLabel(77884))</visible>
-                </control>
-                <control type="image" id="77885">
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">$VAR[Image_AudioCodec]</texture>
-                    <visible>!String.IsEmpty(ListItem.AudioCodec)</visible>
-                    <visible>!String.IsEmpty(Control.GetLabel(77885))</visible>
-                </control>
-                <control type="image" id="77886">
-                    <!--left>7</left-->
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>72</width>
-                    <height>48</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">flags/colorful/channels/$INFO[ListItem.AudioChannels].png</texture>
-                    <visible>!String.IsEmpty(ListItem.AudioChannels)</visible>
-                    <visible>!String.IsEmpty(Control.GetLabel(77886))</visible>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Object_CodecsText">
-        <param name="infohide" default="true" />
-        <definition>
-            <control type="grouplist">
-                <visible>!Skin.HasSetting(Furniture.EnableObject_Codecs)</visible>
-                <visible>!ListItem.HasMedia | !Skin.HasSetting(Furniture.EnableNowPlaying) | Window.IsActive(visualisation) | Window.IsActive(fullscreenvideo)</visible>
-                <visible>!Window.IsActive(DialogNotification.xml)</visible>
-                <visible>!Window.IsActive(DialogExtendedProgressBar.xml)</visible>
-                <orientation>horizontal</orientation>
-                <top>906</top>
-                <left>500</left>
-                <align>right</align>
-                <itemgap>15</itemgap>
-                <usecontrolcoords>true</usecontrolcoords>
-                <!--visible>[!String.IsEmpty(ListItem.VideoCodec) + !String.IsEmpty(ListItem.AudioCodec)] | !String.IsEmpty(ListItem.VideoResolution)</visible-->
-                <control type="image" id="Studio">
-                    <!--left>7</left-->
-                    <fadetime>100</fadetime>
-                    <centertop>50%</centertop>
-                    <width>85</width>
-                    <height>58</height>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_100">$VAR[Image_CombinedStudio]</texture>
-                    <visible>!Skin.HasSetting(Furniture.EnableObject_Codecs)</visible>
-                    <visible>!Skin.HasSetting(Furniture.DisableStudio)</visible>
-                </control>
-                <control type="Label">
-                <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
-                    <centertop>50%</centertop>
-                    <align>left</align>
-                    <aligny>center</aligny>
-                    <width>auto</width>
-                    <font>font_tiny_bold</font>
-                    <textcolor>main_fg_90</textcolor>
-                    <label max="1800">[UPPERCASE]$VAR[HDRcodectypeVar1] $VAR[ListItem_RipSource] •  $INFO[ListItem.VideoResolution]  •  $INFO[ListItem.VideoCodec]  •  $INFO[ListItem.VideoAspect]  •  $VAR[AudioCodecVar1]  •  $VAR[AudioChannelsVar1][/UPPERCASE]</label>
-                    <height>32</height>
-                </control>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Object_Patch">
-        <definition>
-            <control type="grouplist">
-                   <visible>Window.IsActive(DialogVideoInfo.xml) + Control.HasFocus(4006)</visible>    
-                <top>940</top>
-                <left>0</left>
-                <align>left</align>
-                <usecontrolcoords>true</usecontrolcoords>
-              <control type="group">
-                    <height>80</height>
-                    <centerbottom>80</centerbottom>
-                    <align>center</align>
-                    <fadetime>100</fadetime>
-                    <control type="label">
-                        <left>0</left>
-                        <aligny>center</aligny>
-                        <label>$INFO[ListItem.Path] $INFO[ListItem.FileName]</label>
-                        <textcolor>main_fg_70</textcolor>
-                        <font>font_tiny</font>
-                        <width>1760</width>
-                    </control>
-              </control>
             </control>
         </definition>
     </include>
@@ -753,7 +191,7 @@
         </control>
     </include>
 
-   <include name="Furniture_Busy_Icon">
+    <include name="Furniture_Busy_Icon">
         <param name="hasspinner">false</param>
         <param name="hasprogress">false</param>
         <param name="hasicon">true</param>
@@ -995,6 +433,33 @@
                 </include>
             </control>
 
+        </definition>
+    </include>
+
+
+    <include name="Furniture_Clock">
+        <param name="toplabel">$INFO[System.Time]</param>
+        <param name="bottomlabel">$INFO[System.Date]</param>
+        <param name="textcolor">main_fg_30</param>
+        <param name="topfont">font_main_bold</param>
+        <param name="bottomfont">font_tiny</param>
+        <definition>
+            <control type="group">
+
+                <control type="group">
+                    <height>80</height>
+                    <centertop>50%</centertop>
+
+                    <control type="label" id="$PARAM[id]">
+                        <label>$PARAM[toplabel]</label>
+                        <font>font_main_bold</font>
+                        <textcolor>$PARAM[textcolor]</textcolor>
+                        <align>right</align>
+                        <height>40</height>
+                        <centertop>50%</centertop>
+                    </control>
+                </control>
+            </control>
         </definition>
     </include>
 

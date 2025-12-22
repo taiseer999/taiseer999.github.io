@@ -8,6 +8,7 @@
 
     <variable name="Path_HolidayMode">
         <value condition="Skin.HasSetting(HolidayMode.Australia)">summer</value>
+        <value condition="Skin.HasSetting(HolidayMode.Halloween)">halloween</value>
         <value>winter</value>
     </variable>
 
@@ -22,8 +23,8 @@
     </variable>
 
     <variable name="Path_SkinVariables_SkinFolder">
-        <value condition="!String.IsEmpty(Skin.String(SkinVariables.SkinUser))">skin.arctic.fuse.2.cpm.mod$INFO[Skin.String(SkinVariables.SkinUser),-,]</value>
-        <value>skin.arctic.fuse.2.cpm.mod</value>
+        <value condition="!String.IsEmpty(Skin.String(SkinVariables.SkinUser))">skin.arctic.fuse.2$INFO[Skin.String(SkinVariables.SkinUser),-,]</value>
+        <value>skin.arctic.fuse.2</value>
     </variable>
 
     <variable name="Path_SkinVariables_SkinUserSlug">

@@ -9,13 +9,12 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"codec
 "X-Generator: Poedit 3.4.1\n"
-
 
 msgctxt "#31000"
 msgid "Live TV / PVR"
@@ -701,7 +700,7 @@ msgstr ""
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31146"
-msgid "CoreELEC logo and CPU temp"
+msgid "Profile image and logo"
 msgstr ""
 
 #: /1080i/Includes_Shortcuts_Window.xml
@@ -1414,7 +1413,7 @@ msgid "Movies and tv shows starring this actor"
 msgstr ""
 
 msgctxt "#31299"
-msgid "Information is loading"
+msgid "Crew"
 msgstr ""
 
 #: /1080i/SkinSettings.xml
@@ -1424,7 +1423,7 @@ msgstr ""
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31301"
-msgid "Crew"
+msgid "Press down for crew"
 msgstr ""
 
 msgctxt "#31302"
@@ -2202,7 +2201,7 @@ msgstr ""
 
 #: /1080i/Includes_Views.xml
 msgctxt "#31464"
-msgid "Filter and view options"
+msgid "Press right for filter and view options"
 msgstr ""
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
@@ -2837,7 +2836,7 @@ msgstr ""
 
 #: /1080i/Includes_DialogManage.xml
 msgctxt "#31591"
-msgid "Pressing back again closes the dialog without applying changes."
+msgid "Pressing close exits the dialog without applying changes."
 msgstr ""
 
 #: /1080i/Includes_Dialogs.xml
@@ -2860,22 +2859,12 @@ msgctxt "#31595"
 msgid "Press right"
 msgstr ""
 
-#: /1080i/Includes_SkinSettings.xml
-msgctxt "#31596"
-msgid "Additional icons"
-msgstr ""
-
-#: /1080i/Includes_Labels.xml
-msgctxt "#31597"
-msgid "Confirmation"
-msgstr ""
-
 msgctxt "#32000"
-msgid "Display output mode"
+msgid "Display mode"
 msgstr ""
 
 msgctxt "#32001"
-msgid "Video resolution"
+msgid "Video mode"
 msgstr ""
 
 msgctxt "#32002"
@@ -2887,15 +2876,15 @@ msgid "Mb/s"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Audio bitrate"
+msgid "Bit depth"
 msgstr ""
 
 msgctxt "#32005"
-msgid "Video decoder"
+msgid "Decoder"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Dolby VS10 engine"
+msgid "VS10 engine"
 msgstr ""
 
 msgctxt "#32007"
@@ -2923,19 +2912,19 @@ msgid "Kb/s"
 msgstr ""
 
 msgctxt "#32013"
-msgid "DV metadata"
+msgid "Playback time"
 msgstr ""
 
 msgctxt "#32014"
-msgid "CPU temp & usage"
+msgid "Processor"
 msgstr ""
 
 msgctxt "#32015"
-msgid "Version"
+msgid "Metadata"
 msgstr ""
 
 msgctxt "#32016"
-msgid "Dolby Vision profile"
+msgid "Profile"
 msgstr ""
 
 msgctxt "#32017"
@@ -2963,7 +2952,7 @@ msgid "Metadata"
 msgstr ""
 
 msgctxt "#32023"
-msgid "Video output"
+msgid "Pixel format"
 msgstr ""
 
 msgctxt "#32024"
@@ -2999,7 +2988,7 @@ msgid "Deinterlacing"
 msgstr ""
 
 msgctxt "#32032"
-msgid "Videoplayer cache"
+msgid "Player cache"
 msgstr ""
 
 msgctxt "#32033"
@@ -3011,11 +3000,11 @@ msgid "Memory usage"
 msgstr ""
 
 msgctxt "#32035"
-msgid "Video color depth"
+msgid "Passthrough"
 msgstr ""
 
 msgctxt "#32036"
-msgid "System / AML fps"
+msgid "AML FPS"
 msgstr ""
 
 msgctxt "#32037"
@@ -3031,7 +3020,7 @@ msgid "HDR Static Metadata"
 msgstr ""
 
 msgctxt "#32040"
-msgid "nits"
+msgid "cd/m²"
 msgstr ""
 
 msgctxt "#32041"
@@ -3043,11 +3032,11 @@ msgid "RPU MaxCLL/FALL"
 msgstr ""
 
 msgctxt "#32043"
-msgid "FLL MIN / MAX / AVG"
+msgid "FLL MIN / MAX / Ø"
 msgstr ""
 
 msgctxt "#32044"
-msgid "PQ  MIN / MAX / AVG"
+msgid "PQ  MIN / MAX / Ø"
 msgstr ""
 
 msgctxt "#32045"
@@ -3055,23 +3044,19 @@ msgid "12-bit"
 msgstr ""
 
 msgctxt "#32046"
-msgid "Audio codec"
+msgid "Codec"
 msgstr ""
 
 msgctxt "#32047"
-msgid "Video bitrate"
+msgid "Bitrate"
 msgstr ""
 
 msgctxt "#32048"
 msgid "VS10 status"
 msgstr ""
 
-msgctxt "#32049"
-msgid "Audio sample rate"
-msgstr ""
-
 msgctxt "#32051"
-msgid "Video sample rate"
+msgid "Input"
 msgstr ""
 
 msgctxt "#32052"
@@ -3087,7 +3072,7 @@ msgid "Video"
 msgstr ""
 
 msgctxt "#32055"
-msgid "System"
+msgid "Output"
 msgstr ""
 
 msgctxt "#32056"
@@ -3115,11 +3100,11 @@ msgid "Position of the codec logos in the PlayerProcessInfo"
 msgstr ""
 
 msgctxt "#32062"
-msgid "Show codec logos at bottom when video starts"
+msgid "Position of the codec logos when video starts"
 msgstr ""
 
 msgctxt "#32063"
-msgid "Codec logos"
+msgid "Position of codec logos"
 msgstr ""
 
 msgctxt "#32064"
@@ -3127,7 +3112,7 @@ msgid "Original"
 msgstr ""
 
 msgctxt "#32065"
-msgid "Dolby VS10 mode"
+msgid "VS10"
 msgstr ""
 
 msgctxt "#32066"
@@ -3135,95 +3120,87 @@ msgid "Audio codec"
 msgstr ""
 
 msgctxt "#32067"
-msgid "L5 Active Offsets Top-Bottom"
+msgid "L5 Active Offsets"
+msgstr ""
 
 msgctxt "#32068"
-msgid "L5 Active Offsets Left-Right"
+msgid "Version"
 msgstr ""
 
 msgctxt "#32069"
-msgid "channels"
+msgid "Bit depth"
 msgstr ""
 
 msgctxt "#32070"
-msgid "5 sec"
+msgid "EOTF & Gamut"
 msgstr ""
 
 msgctxt "#32071"
-msgid "7 sec"
+msgid "Duration of the codec logos when video starts"
 msgstr ""
 
 msgctxt "#32072"
-msgid "10 sec"
+msgid "Time for codec logos"
 msgstr ""
 
 msgctxt "#32073"
-msgid "Show codec logos at top when video starts"
+msgid "PlayerProcessInfo"
 msgstr ""
 
 msgctxt "#32074"
-msgid "Video OSD extras"
+msgid "PlayerProcessInfo mode"
 msgstr ""
 
 msgctxt "#32075"
-msgid "Network Connected"
+msgid "second"
 msgstr ""
 
 msgctxt "#32076"
-msgid "Network not connected"
+msgid "Show file name in PlayerProcessInfo"
 msgstr ""
 
-#: /1080i/Includes_Labels.xml
 msgctxt "#32077"
-msgid "Network connection under the clock"
+msgid "Modern"
 msgstr ""
 
 msgctxt "#32078"
-msgid "Clearlogo"
+msgid "Classic"
 msgstr ""
 
 msgctxt "#32079"
-msgid "Coloured"
+msgid "Original"
 msgstr ""
 
 msgctxt "#32080"
-msgid "Show Image codec logos"
+msgid "Version selection"
 msgstr ""
 
 msgctxt "#32081"
-msgid "Clock + Date"
+msgid "Show file name and path in the version selection"
 msgstr ""
 
 msgctxt "#32082"
-msgid "Weather icon colour"
+msgid "Customise video osd"
 msgstr ""
 
 msgctxt "#32083"
-msgid "White"
+msgid "Customise video info"
 msgstr ""
 
 msgctxt "#32084"
-msgid "Low"
-msgstr ""
-
-msgctxt "#32085"
-msgid "High"
+msgid "Codecs & PPI"
 msgstr ""
 
 msgctxt "#32086"
-msgid "Current"
+msgid "Two-row information bar"
 msgstr ""
 
 msgctxt "#32087"
-msgid "Show Text codec logos"
+msgid "Decoding"
 msgstr ""
 
 msgctxt "#32088"
-msgid "Hide filename and path"
-msgstr ""
-
-msgctxt "#32089"
-msgid "Clock + Date and Weather"
+msgid "System"
 msgstr ""
 
 msgctxt "#32300"
@@ -3248,4 +3225,18 @@ msgstr ""
 
 msgctxt "#32305"
 msgid "In Progress"
+msgstr ""
+
+msgctxt "#32306"
+msgid "Codecs / PPI"
+msgstr ""
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31596"
+msgid "Additional icons"
+msgstr ""
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31597"
+msgid "Confirmation"
 msgstr ""

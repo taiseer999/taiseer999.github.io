@@ -15,36 +15,6 @@
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <include>Animation_SlideIn_Dialog</include>
-                <control type="grouplist">
-                    <height>80</height>
-                    <centerbottom>80</centerbottom>
-                    <orientation>horizontal</orientation>
-                    <align>center</align>
-                    <itemgap>10</itemgap>
-                    <control type="label">
-                        <left>-12</left>
-                        <aligny>center</aligny>
-                        <label>$INFO[Container($PARAM[id]).ListItem.Path]</label>
-                        <textcolor>main_fg_70</textcolor>
-                        <font>font_tiny</font>
-                        <width>auto</width>
-                    </control>
-                </control>
-                <control type="grouplist">
-                    <height>80</height>
-                    <centerbottom>50</centerbottom>
-                    <orientation>horizontal</orientation>
-                    <align>center</align>
-                    <itemgap>10</itemgap>
-                    <control type="label">
-                        <left>-12</left>
-                        <aligny>center</aligny>
-                        <label>$INFO[Container($PARAM[id]).ListItem.FileName]</label>
-                        <textcolor>main_fg_70</textcolor>
-                        <font>font_tiny</font>
-                        <width>auto</width>
-                    </control>
-                </control>
                 <control type="group">
                     <include>Dimension_DialogVersionSelect</include>
                     <include content="Dialog_Background_Group">
@@ -215,6 +185,7 @@
         <include content="Dialog_Manage_Dim">
             <param name="onback">50</param>
         </include>
+
         <control type="group">
             <include>Dimension_DialogVersionSelect</include>
             <include content="Dialog_Manage">

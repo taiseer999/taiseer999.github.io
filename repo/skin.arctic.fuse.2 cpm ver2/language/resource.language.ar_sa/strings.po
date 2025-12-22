@@ -1407,8 +1407,9 @@ msgid "Movies and tv shows starring this actor"
 msgstr "افلام او مسلسلات لنفس الممثل"
 
 msgctxt "#31299"
-msgid "Crew"
-msgstr "فريق العمل"
+msgid "Information is loading"
+msgstr "جاري تحميل المعلومات"
+
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31300"
@@ -1417,8 +1418,8 @@ msgstr "لون خلفية نافذة الحوار"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31301"
-msgid "Press down for crew"
-msgstr "اضغط للاسفل لمشاهدة فريق العمل"
+msgid "crew"
+msgstr "فريق العمل"
 msgctxt
 
 msgctxt "#31302"
@@ -2822,368 +2823,125 @@ msgstr "تنفيذ التغيرات"
 #: /1080i/Includes_OSD.xml
 msgctxt "#31594"
 msgid "Press down"
-msgstr "اضغط لأسفل"
+msgstr "اضغط للاسفل"
 
 #: /1080i/Includes_OSD.xml
 msgctxt "#31595"
-msgid "Press right"
-msgstr "اضغط على اليمين"
-
-msgctxt "#32000"
-msgid "Display output mode"
-msgstr ""
-
-msgctxt "#32001"
-msgid "Video resolution"
-msgstr ""
-
-msgctxt "#32002"
-msgid "Color space"
-msgstr ""
-
-msgctxt "#32003"
-msgid "Mb/s"
-msgstr ""
-
-msgctxt "#32004"
-msgid "Audio bitrate"
-msgstr ""
-
-msgctxt "#32005"
-msgid "Video decoder"
-msgstr ""
-
-msgctxt "#32006"
-msgid "Dolby VS10 engine"
-msgstr ""
-
-msgctxt "#32007"
-msgid "More"
-msgstr ""
-
-msgctxt "#32008"
-msgid "Video queue"
-msgstr ""
-
-msgctxt "#32009"
-msgid "Video queue data"
-msgstr ""
-
-msgctxt "#32010"
-msgid "Audio queue"
-msgstr ""
-
-msgctxt "#32011"
-msgid "Audio queue data"
-msgstr ""
-
-msgctxt "#32012"
-msgid "Kb/s"
-msgstr ""
-
-msgctxt "#32013"
-msgid "DV metadata"
-msgstr ""
-
-msgctxt "#32014"
-msgid "CPU temp & usage"
-msgstr ""
-
-msgctxt "#32015"
-msgid "Version"
-msgstr ""
-
-msgctxt "#32016"
-msgid "Dolby Vision profile"
-msgstr ""
-
-msgctxt "#32017"
-msgid "Level"
-msgstr ""
-
-msgctxt "#32018"
-msgid "RPU"
-msgstr ""
-
-msgctxt "#32019"
-msgid "Base Layer"
-msgstr ""
-
-msgctxt "#32020"
-msgid "Enhancement Layer"
-msgstr ""
-
-msgctxt "#32021"
-msgid "Enhancement Layer Type"
-msgstr ""
-
-msgctxt "#32022"
-msgid "Metadata"
-msgstr ""
-
-msgctxt "#32023"
-msgid "Video output"
-msgstr ""
-
-msgctxt "#32024"
-msgid "Aspect ratio"
-msgstr ""
-
-msgctxt "#32025"
-msgid "HDR10 MDL"
-msgstr ""
-
-msgctxt "#32026"
-msgid "HDR10 MaxCLL/FALL"
-msgstr ""
-
-msgctxt "#32027"
-msgid "Media source"
-msgstr ""
-
-msgctxt "#32028"
-msgid "Unknown"
-msgstr ""
-
-msgctxt "#32029"
-msgid "On"
-msgstr ""
-
-msgctxt "#32030"
-msgid "Off"
-msgstr ""
-
-msgctxt "#32031"
-msgid "Deinterlacing"
-msgstr ""
-
-msgctxt "#32032"
-msgid "Videoplayer cache"
-msgstr ""
-
-msgctxt "#32033"
-msgid "N/A"
-msgstr ""
-
-msgctxt "#32034"
-msgid "Memory usage"
-msgstr ""
+msgstr "Press right"
+msgstr "اضغط لليمين"
 
 msgctxt "#32035"
-msgid "Video color depth"
-msgstr ""
-
-msgctxt "#32036"
-msgid "System / AML fps"
-msgstr ""
-
-msgctxt "#32037"
-msgid "DV Configuration"
-msgstr ""
-
-msgctxt "#32038"
-msgid "DV Levels Metadata"
-msgstr ""
-
-msgctxt "#32039"
-msgid "HDR Static Metadata"
-msgstr ""
-
-msgctxt "#32040"
-msgid "nits"
-msgstr ""
-
-msgctxt "#32041"
-msgid "RPU MDL"
-msgstr ""
-
-msgctxt "#32042"
-msgid "RPU MaxCLL/FALL"
-msgstr ""
-
-msgctxt "#32043"
-msgid "FLL MIN / MAX / AVG"
-msgstr ""
-
-msgctxt "#32044"
-msgid "PQ  MIN / MAX / AVG"
-msgstr ""
-
-msgctxt "#32045"
-msgid "12-bit"
-msgstr ""
-
-msgctxt "#32046"
-msgid "Audio codec"
-msgstr ""
-
-msgctxt "#32047"
-msgid "Video bitrate"
-msgstr ""
-
-msgctxt "#32048"
-msgid "VS10 status"
-msgstr ""
-
-msgctxt "#32049"
-msgid "Audio sample rate"
+msgid "Passthrough"
 msgstr ""
 
 msgctxt "#32051"
-msgid "Video sample rate"
-msgstr ""
-
-msgctxt "#32052"
-msgid "Audio language"
-msgstr ""
-
-msgctxt "#32053"
-msgid "Subtitle language"
-msgstr ""
-
-msgctxt "#32054"
-msgid "Video"
+msgid "Input"
 msgstr ""
 
 msgctxt "#32055"
-msgid "System"
-msgstr ""
-
-msgctxt "#32056"
-msgid "Audio"
+msgid "Output"
 msgstr ""
 
 msgctxt "#32057"
 msgid "Top left"
-msgstr "يسار"
+msgstr "اليسار"
 
 msgctxt "#32058"
 msgid "Top center"
-msgstr "وسط"
+msgstr "بالوسط"
 
 msgctxt "#32059"
 msgid "Top right"
-msgstr "يمين"
+msgstr "اليمين"
 
 msgctxt "#32060"
 msgid "Position of the codec logos in the OSD"
-msgstr "موضع شعارات برنامج الترميز في OSD"
+msgstr "شاشة الفيديو"
 
 msgctxt "#32061"
 msgid "Position of the codec logos in the PlayerProcessInfo"
-msgstr "موضع شعارات برنامج الترميز في PlayerProcessInfo"
+msgstr "  PPI عند فتح شاشة معلومات التشغيل"
 
 msgctxt "#32062"
-msgid "Show codec logos at bottom when video starts"
-msgstr "عرض شعارات الترميز في الأسفل عند بدء تشغيل الفيديو"
+msgid "Position of the codec logos when video starts"
+msgstr "عند بدء تشغيل الفيديو"
 
 msgctxt "#32063"
-msgid "Codec logos"
-msgstr "شعارات الترميز"
+msgid "Position of codec logos"
+msgstr "موضع شعارات الترميز بأعلى الشاشة"
 
-msgctxt "#32064"
-msgid "Original"
-msgstr "أصلي"
-
-msgctxt "#32065"
-msgid "Dolby VS10 mode"
-msgstr ""
-
-msgctxt "#32066"
-msgid "Audio codec"
-msgstr ""
-
-msgctxt "#32067"
-msgid "L5 Active Offsets Top-Bottom"
-
-msgctxt "#32068"
-msgid "L5 Active Offsets Left-Right"
-msgstr ""
-
-msgctxt "#32069"
-msgid "channels"
-msgstr ""
-
-msgctxt "#32070"
-msgid "5 sec"
-msgstr ""
 
 msgctxt "#32071"
-msgid "7 sec"
-msgstr ""
+msgid "Duration of the codec logos when video starts"
+msgstr "مدة بقاء شعارات الترميز عند بدء تشغيل الفيديو"
 
 msgctxt "#32072"
-msgid "10 sec"
-msgstr ""
+msgid "Time for codec logos"
+msgstr "وقت شعارات الترميز"
 
 msgctxt "#32073"
-msgid "Show codec logos at top when video starts"
-msgstr "عرض شعارات الترميز في الأعلى عند بدء الفيديو"
+msgid "PlayerProcessInfo"
+msgstr "معلومات المشغل PPI"
 
 msgctxt "#32074"
-msgid "Video OSD extras"
-msgstr "إضافات فيديو OSD"
+msgid "PlayerProcessInfo mode"
+msgstr "PPI تصميم معلومات المشغل"
 
 msgctxt "#32075"
-msgid "Network Connected"
-msgstr "متصل بالشبكة"
+msgid "second"
+msgstr ""
 
 msgctxt "#32076"
-msgid "Network not connected"
-msgstr "الشبكة غير متصلة"
+msgid "Show file name in PlayerProcessInfo"
+msgstr " إظهار اسم الملف في معلومات المشغل"
 
-#: /1080i/Includes_Labels.xml
 msgctxt "#32077"
-msgid "Network connection under the clock"
-msgstr "اتصال الشبكة تحت الساعة"
+msgid "Modern"
+msgstr "حديث"
 
 msgctxt "#32078"
-msgid "Clearlogo"
-msgstr "شعار"
+msgid "Classic"
+msgstr "كلاسيكي"
 
 msgctxt "#32079"
-msgid "Coloured"
-msgstr "ملون"
+msgid "Original"
+msgstr "مطور"
 
 msgctxt "#32080"
-msgid "Show Image codec logos"
-msgstr "عرض شعارات برنامج ترميز الصور"
+msgid "Version selection"
+msgstr "اختيار الإصدار"
 
 msgctxt "#32081"
-msgid "Clock + Date"
-msgstr "الساعة + التاريخ"
+msgid "Show file name and path in the version selection"
+msgstr "عرض اسم الملف والمسار في اختيار الإصدار"
 
 msgctxt "#32082"
-msgid "Weather icon colour"
-msgstr "لون رمز الطقس"
+msgid "Customise video osd"
+msgstr "شاشة عرض الفيديو"
 
 msgctxt "#32083"
-msgid "White"
-msgstr "أبيض"
+msgid "Customise video info"
+msgstr "معلومات الفيديو"
 
 msgctxt "#32084"
-msgid "Low"
-msgstr "منخفض"
+msgid "Codecs & PPI"
+msgstr "معلومات المشغل PPI والترميز"
 
 msgctxt "#32085"
-msgid "High"
-msgstr "مرتفع"
+msgid "Decoding"
+msgstr ""
 
 msgctxt "#32086"
-msgid "Current"
-msgstr "حالي"
+msgid "Two-row information bar"
+msgstr "قسم المعلومات الى سطرين"
 
 msgctxt "#32087"
-msgid "Show Text codec logos"
-msgstr "إظهار شعارات برنامج ترميز النص"
+msgid "Decoding"
+msgstr ""
 
 msgctxt "#32088"
-msgid "Hide filename and path"
-msgstr "إخفاء اسم الملف والمسار"
-
-msgctxt "#32089"
-msgid "Clock + Date and Weather"
-msgstr "الساعة + التاريخ والطقس"
+msgid "System"
+msgstr ""
 
 msgctxt "#32300"
 msgid "switch skin"
@@ -3208,3 +2966,18 @@ msgstr "مشهور"
 msgctxt "#32305"
 msgid "In Progress"
 msgstr "قيد المشاهدة"
+
+msgctxt "#32306"
+msgid "Codecs / PPI"
+msgstr "الترميز ومعلومات المشغل"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31596"
+msgid "Additional icons"
+msgstr "ايقونات اضافية"
+
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31597"
+msgid "Confirmation"
+msgstr "تأكيد"

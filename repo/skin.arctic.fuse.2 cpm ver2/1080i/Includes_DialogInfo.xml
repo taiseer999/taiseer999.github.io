@@ -1725,13 +1725,12 @@
                     <!-- Codecs -->
                     <include content="Object_InfoCircle_Detail">
                         <param name="id">05</param>
-                        <param name="name">[UPPERCASE]$INFO[ListItem.VideoResolution,, • ]$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoAspect, • ,:1]$VAR[AudioCodecVar12, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
+                        <param name="name">[UPPERCASE]$INFO[ListItem.VideoResolution,, • ]$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
                         <param name="role">$INFO[ListItem.VideoVersionName]</param>
                         <param name="icon">special://skin/extras/icons/photo-film.png</param>
                         <param name="fallback_role">$LOCALIZE[31207]</param>
                         <param name="shot">$INFO[ListItem.Art(poster)]</param>
                         <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
-                        <scroll>true</scroll>
                     </include>
 
                     <!-- Providers -->
@@ -2288,7 +2287,7 @@
                                     <param name="label">$LOCALIZE[342]</param>
                                     <param name="icon">special://skin/extras/icons/film.png</param>
                                     <onfocus>SetProperty(ModeName,$LOCALIZE[342])</onfocus>
-                                    <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_movies&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_by=premiered&amp;nextpage=false&amp;cacheonly=true&amp;length=1])</onfocus>
+                                    <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_movies&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_by=premiered&amp;nextpage=false&amp;cacheonly=true&amp;length=1&amp;exclude_key=genre&amp;exclude_value=Documentary / News / Talk])</onfocus>
                                     <onclick condition="!Container(7001).IsUpdating + !Integer.IsEqual(Container(7001).NumItems,0)">SetFocus(7001)</onclick>
                                 </include>
                                 <!-- TV Shows -->

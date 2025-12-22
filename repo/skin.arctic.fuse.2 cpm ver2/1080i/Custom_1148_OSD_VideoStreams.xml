@@ -24,7 +24,7 @@
                 <include>OSD_Stream_Selector_Divider</include>
                 <right>-40</right>
                 <bottom>220</bottom>
-                <width>620</width>
+                <width>520</width>
                 <height>480</height>
                 <include content="Object_MenuHeader">
                     <param name="label">$LOCALIZE[157]</param>

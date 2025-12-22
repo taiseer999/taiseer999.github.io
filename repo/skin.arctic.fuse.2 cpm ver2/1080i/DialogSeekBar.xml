@@ -19,7 +19,6 @@
             <include condition="Skin.HasSetting(osd.useleftCodecLogos)">CodecLogosLeftOSD</include>
             <include condition="Skin.HasSetting(osd.usecenterCodecLogos)">CodecLogosCenterOSD</include>
             <include condition="Skin.HasSetting(osd.userightCodecLogos)">CodecLogosRightOSD</include>
-            <include condition="Skin.HasSetting(ExtraOSD)">ExtraOSD</include>
 
             <include content="Animation_ConditionalFade">
                 <param name="condition">![Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]</param>
@@ -33,7 +32,6 @@
                 <include>OSD_Progress_Bar</include>
 
                 <control type="label" id="3099">
-                <visible>!Skin.HasSetting(ExtraOSD)</visible>
                     <label>$VAR[Label_OSD_Header]</label>
                     <font>font_midi_bold</font>
                     <textcolor>panel_fg_90</textcolor>
@@ -42,19 +40,6 @@
                     <left>view_pad</left>
                     <include>OSD_HideControls</include>
                 </control>
-                
-                <control type="label" id="30991">
-                    <visible>Skin.HasSetting(ExtraOSD)</visible>
-                    <label>$VAR[Label_OSD_Header]</label>
-                    <font>font_midi_bold</font>
-                    <textcolor>panel_fg_90</textcolor>
-                    <height>40</height>
-                    <centerbottom>260</centerbottom>
-                    <right>view_pad</right>
-                    <align>right</align>
-                    <include>OSD_HideControls</include>
-                </control>
-                
             </control>
 
             <include content="OSD_CastInfo_HintText">

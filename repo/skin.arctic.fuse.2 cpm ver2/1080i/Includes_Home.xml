@@ -300,12 +300,12 @@
 
             </control>
             <control type="image">
-                <texture colordiffuse="$VAR[Layout_Home_Menu_Color_NF]">osd/settings.png</texture>
+                <texture colordiffuse="$VAR[Layout_Home_Menu_Color_NF]">special://skin/extras/icons/bars.png</texture>
                 <bordersize>icon_home_bordersize</bordersize>
                 <visible>![Control.HasFocus($PARAM[id]) + !Window.IsVisible(1163)]</visible>
             </control>
             <control type="image">
-                <texture colordiffuse="$VAR[ColorSelected]">osd/settings.png</texture>
+                <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/bars.png</texture>
                 <bordersize>icon_home_bordersize</bordersize>
                 <visible>Control.HasFocus($PARAM[id]) + !Window.IsVisible(1163)</visible>
             </control>
@@ -415,7 +415,7 @@
                         </include>
                     </control>
 
-                    <!--control type="group">
+                    <control type="group">
                         <centerright>20</centerright>
                         <centertop>50%</centertop>
                         <height>50</height>
@@ -434,24 +434,6 @@
                             <param name="colordiffuse">white</param>
                             <param name="icon">$VAR[Image_ProfileThumb]</param>
                         </include>
-                    </control-->
-                    
-                    <control type="group">
-                        <centerright>20</centerright>
-                        <centertop>50%</centertop>
-                        <height>70</height>
-                        <width>70</width>                   
-                        <control type="image">
-                            <texture>special://skin/extras/icons/CE.png</texture>
-                            <aspectratio>keep</aspectratio>
-                            <bordersize>-16</bordersize>
-                        </control>
-                        <control type="image">
-                            <texture>special://skin/extras/icons/CE.png</texture>
-                            <aspectratio>keep</aspectratio>
-                            <bordersize>-16</bordersize>
-                            <animation effect="fade" end="33" condition="true">Conditional</animation>
-                        </control>
                     </control>
 
                 </control>
@@ -461,13 +443,12 @@
     <include name="Home_Menu_Vert_Bottom">
         <param name="include_label">$EXP[Exp_HomeMenu_IsExpanded]</param>
         <param name="label">$VAR[Label_ProfileName]</param>
-        <param name="bottomlabel">[COLOR $VAR[ColorHighlight]]$INFO[System.CPUTemperature][/COLOR]</param>
         <definition>
             <control type="group">
                 <include>Dimension_Bottombar</include>
                 <control type="group">
                     <left>view_menu_main_head_x</left>
-                    <!--animation effect="fade" start="100" end="70" condition="true">Conditional</animation-->
+                    <animation effect="fade" start="100" end="70" condition="true">Conditional</animation>
                     <include>Dimension_Furniture_Gutters</include>
                     <control type="group">
                         <include content="View_Furniture_Bottom_ViewLine" condition="$PARAM[include_label]">
@@ -476,35 +457,22 @@
                             <param name="textcolor">dialog_fg_90</param>
                         </include>
                     </control>
-                     <control type="label">
-                     <visible>!Skin.HasSetting(SideMenu.DisableProfileLogo)</visible>
-                      <width>100</width>
-                        <bottom>-56</bottom>
-                        <centerright>-2</centerright>
-                        <label>$PARAM[bottomlabel]</label>
-                        <font>font_tiny_bold</font>
-                        <textcolor>dialog_fg_90</textcolor>
-                        <shadowcolor>panel_bg_70</shadowcolor>
-                        <font>font_hint_bold</font>
-                    </control>
                     <control type="group">
-                    <visible>!Skin.HasSetting(SideMenu.DisableProfileLogo)</visible>
-                        <centertop>30%</centertop>
+                        <centertop>50%</centertop>
                         <centerright>20</centerright>
-                        <width>60</width>
-                        <height>60</height>
+                        <width>40</width>
+                        <height>40</height>
                         <control type="image">
-                            <texture colordiffuse="dialog_fg_70">special://skin/extras/icons/cpu.png</texture>
+                            <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/coreelec.png</texture>
                             <aspectratio>keep</aspectratio>
-                            <bordersize>0</bordersize>
+                            <bordersize>-16</bordersize>
                         </control>
-
-                        <!--control type="image">
-                            <texture colordiffuse="$VAR[ColorGradient]">special://skin/extras/icons/kodi.png</texture>
+                        <control type="image">
+                            <texture colordiffuse="$VAR[ColorGradient]">special://skin/extras/icons/coreelec.png</texture>
                             <aspectratio>keep</aspectratio>
                             <bordersize>-16</bordersize>
                             <animation effect="fade" end="33" condition="true">Conditional</animation>
-                        </control-->
+                        </control>
                     </control>
                 </control>
             </control>

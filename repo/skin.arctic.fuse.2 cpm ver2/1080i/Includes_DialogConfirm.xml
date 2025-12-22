@@ -166,14 +166,14 @@
                             <itemgap>20</itemgap>
 
                             <control type="textbox" id="1">
-                                <font>font_midi_bold</font>
+                                <font>font_main_bold</font>
                                 <textcolor>dialog_fg_90</textcolor>
                                 <height min="80">auto</height>
                                 <aligny>center</aligny>
                             </control>
 
                             <control type="textbox" id="9">
-                                <font>font_main_plot</font>
+                                <font>font_mini_plot</font>
                                 <textcolor>dialog_fg_70</textcolor>
                                 <height>auto</height>
                             </control>
@@ -357,6 +357,7 @@
                                         <param name="condition">Control.IsVisible(20)</param>
                                     </include>
                                 </control>
+                                <width>640</width>
                             </include>
 
                         </control>

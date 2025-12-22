@@ -4,19 +4,6 @@
     <include name="Weather_Forecast_Weekly_Item">
         <item>
             <label>$INFO[Window(Weather).Property($PARAM[prefix].HighTemp),[B],°[/B]]$INFO[Window(Weather).Property($PARAM[prefix].LowTemp), ,°]</label>
-            <icon>Weather_Icons/$INFO[Window(weather).Property($PARAM[prefix].FanartCode),,.png]</icon>
-            <property name="Fanart">resource://resource.images.weatherfanart.multi/$INFO[Window(weather).Property($PARAM[prefix].FanartCode)]/</property>
-            <property name="DayName">$INFO[Window(Weather).Property($PARAM[prefix].Title)]</property>
-            <property name="Outlook">$INFO[Window(Weather).Property($PARAM[prefix].Outlook)]</property>
-            <property name="RainChance">$INFO[Window(Weather).Property($PARAM[prefix].ChancePrecipitation)]</property>
-            <property name="HighTemp">$INFO[Window(Weather).Property($PARAM[prefix].HighTemp)]</property>
-            <property name="LowTemp">$INFO[Window(Weather).Property($PARAM[prefix].LowTemp)]</property>
-            <property name="LowTempPrefix">$LOCALIZE[32084] : </property>
-            <property name="TempUnit">°</property>
-            <visible>Skin.HasSetting(Furniture.EnableColourWeather)</visible>
-        </item>
-        <item>
-            <label>$INFO[Window(Weather).Property($PARAM[prefix].HighTemp),[B],°[/B]]$INFO[Window(Weather).Property($PARAM[prefix].LowTemp), ,°]</label>
             <icon>resource://resource.images.weathericons.white/$INFO[Window(weather).Property($PARAM[prefix].FanartCode),,.png]</icon>
             <property name="Fanart">resource://resource.images.weatherfanart.multi/$INFO[Window(weather).Property($PARAM[prefix].FanartCode)]/</property>
             <property name="DayName">$INFO[Window(Weather).Property($PARAM[prefix].Title)]</property>
@@ -24,9 +11,8 @@
             <property name="RainChance">$INFO[Window(Weather).Property($PARAM[prefix].ChancePrecipitation)]</property>
             <property name="HighTemp">$INFO[Window(Weather).Property($PARAM[prefix].HighTemp)]</property>
             <property name="LowTemp">$INFO[Window(Weather).Property($PARAM[prefix].LowTemp)]</property>
-            <property name="LowTempPrefix">$LOCALIZE[32084] : </property>
+            <property name="LowTempPrefix">$LOCALIZE[391]: </property>
             <property name="TempUnit">°</property>
-            <visible>!Skin.HasSetting(Furniture.EnableColourWeather)</visible>
         </item>
     </include>
 
@@ -75,17 +61,6 @@
     <include name="Weather_Forecast_Hourly_Item">
         <item>
             <label>$INFO[Window(Weather).Property($PARAM[prefix].HighTemp),[B],°[/B]]$INFO[Window(Weather).Property($PARAM[prefix].LowTemp), ,°]</label>
-            <icon>Weather_Icons/$INFO[Window(weather).Property($PARAM[prefix].FanartCode),,.png]</icon>
-            <property name="Fanart">resource://resource.images.weatherfanart.multi/$INFO[Window(weather).Property($PARAM[prefix].FanartCode)]/</property>
-            <property name="DayName">$INFO[Window(Weather).Property($PARAM[prefix].time)]</property>
-            <property name="Outlook">$INFO[Window(Weather).Property($PARAM[prefix].outlook)]</property>
-            <property name="RainChance">$INFO[Window(Weather).Property($PARAM[prefix].ChancePrecipitation)]</property>
-            <property name="HighTemp">$INFO[Window(Weather).Property($PARAM[prefix].temperature)]</property>
-            <property name="LowTemp">$INFO[Window(Weather).Property($PARAM[prefix].feelslike)]</property>
-            <visible>Skin.HasSetting(Furniture.EnableColourWeather) + !String.IsEmpty(Window(weather).Property($PARAM[prefix].outlook))</visible>
-        </item>
-        <item>
-            <label>$INFO[Window(Weather).Property($PARAM[prefix].HighTemp),[B],°[/B]]$INFO[Window(Weather).Property($PARAM[prefix].LowTemp), ,°]</label>
             <icon>resource://resource.images.weathericons.white/$INFO[Window(weather).Property($PARAM[prefix].FanartCode),,.png]</icon>
             <property name="Fanart">resource://resource.images.weatherfanart.multi/$INFO[Window(weather).Property($PARAM[prefix].FanartCode)]/</property>
             <property name="DayName">$INFO[Window(Weather).Property($PARAM[prefix].time)]</property>
@@ -93,7 +68,7 @@
             <property name="RainChance">$INFO[Window(Weather).Property($PARAM[prefix].ChancePrecipitation)]</property>
             <property name="HighTemp">$INFO[Window(Weather).Property($PARAM[prefix].temperature)]</property>
             <property name="LowTemp">$INFO[Window(Weather).Property($PARAM[prefix].feelslike)]</property>
-            <visible>!Skin.HasSetting(Furniture.EnableColourWeather) + !String.IsEmpty(Window(weather).Property($PARAM[prefix].outlook))</visible>
+            <visible>!String.IsEmpty(Window(weather).Property($PARAM[prefix].outlook))</visible>
         </item>
     </include>
 
@@ -296,8 +271,8 @@
             <param name="unit">na</param>
         </include>
     </include>
-    
     <include name="Weather_Forecast_Graph_Items_02">
+
         <include content="Weather_Forecast_Graph_Item">
             <param name="name">$LOCALIZE[31525]</param>
             <param name="type">visibility</param>
@@ -328,8 +303,8 @@
             <param name="unit">speed</param>
         </include>
     </include>
-
     <include name="Weather_Forecast_Graph_Items_03">
+
         <include content="Weather_Forecast_Graph_Item">
             <param name="name">$LOCALIZE[1376]</param>
             <param name="type">pressure</param>
@@ -356,57 +331,6 @@
             <param name="unit">percent</param>
         </include>
 
-    </include>
-
-    <include name="Weather_Details_Panel_Graph">
-        <control type="group">
-            <visible>!String.IsEmpty(Window(weather).Property(hourly.1.temperaturegraph))</visible>
-            <height>840</height>
-            <control type="group">
-                <include content="Dimension_Padding">
-                    <param name="pad">40</param>
-                </include>
-        <include content="Weather_Forecast_List">
-            <param name="items">Weather_Forecast_Graph_Items_01</param>
-            <param name="itemlayout">Weather_Forecast_Graph_Itemlayout</param>
-            <param name="control">wraplist</param>
-            <param name="height">160</param>
-            <param name="visible">!String.IsEmpty(Window(weather).Property(hourly.1.temperaturegraph))</param>
-        </include>
-            </control>
-        </control>
-        <control type="group">
-            <visible>!String.IsEmpty(Window(weather).Property(hourly.1.temperaturegraph))</visible>
-            <height>840</height>
-            <control type="group">
-                <include content="Dimension_Padding">
-                    <param name="pad">40</param>
-                </include>
-                <include content="Weather_Forecast_List">
-                    <param name="items">Weather_Forecast_Graph_Items_02</param>
-                    <param name="itemlayout">Weather_Forecast_Graph_Itemlayout</param>
-                    <param name="control">wraplist</param>
-                    <param name="height">160</param>
-                    <param name="visible">!String.IsEmpty(Window(weather).Property(hourly.1.temperaturegraph))</param>
-                </include>
-            </control>
-        </control>
-        <control type="group">
-            <visible>!String.IsEmpty(Window(weather).Property(hourly.1.temperaturegraph))</visible>
-            <height>840</height>
-            <control type="group">
-                <include content="Dimension_Padding">
-                    <param name="pad">40</param>
-                </include>
-                <include content="Weather_Forecast_List">
-                    <param name="items">Weather_Forecast_Graph_Items_03</param>
-                    <param name="itemlayout">Weather_Forecast_Graph_Itemlayout</param>
-                    <param name="control">wraplist</param>
-                    <param name="height">160</param>
-                    <param name="visible">!String.IsEmpty(Window(weather).Property(hourly.1.temperaturegraph))</param>
-                </include>
-            </control>
-        </control>
     </include>
 
     <include name="Weather_Details_Panel_Graph">

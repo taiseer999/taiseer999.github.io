@@ -316,18 +316,7 @@
             <label2>$VAR[Label_Setting_RatingsStyle]</label2>
             <onclick>Skin.ToggleSetting(Furniture.EnableColourRatings)</onclick>
         </include>
-        
-        <include content="Settings_Button" description="Coloured weather">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">005</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[32082]</label>
-            <label2>$VAR[Label_Setting_WeatherStyle]</label2>
-            <onclick>Skin.ToggleSetting(Furniture.EnableColourWeather)</onclick>
-        </include>
-        
+
         <!-- <include content="Settings_Label" description="Header">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
@@ -335,117 +324,25 @@
             <label>$LOCALIZE[31208]</label>
         </include> -->
 
+
+
         <include content="Settings_Label" description="Footer">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">009</param>
             <label>$LOCALIZE[31239]</label>
         </include>
-        
         <include content="Settings_Button" description="Clock">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">038</param>
-            <param name="control">radiobutton</param>
-            <param name="reload">true</param>
-            <label>$LOCALIZE[31042]</label>
-            <selected>Skin.HasSetting(Furniture.EnableClock)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.EnableClock)</onclick>
-            <enable>!Skin.HasSetting(Furniture.EnableClock_Date) + !Skin.HasSetting(Furniture.EnableClockDateWeather)</enable>
-        </include>
-        
-        <include content="Settings_Button" description="ClockDate">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">006</param>
             <param name="control">radiobutton</param>
             <param name="reload">true</param>
-            <label>$LOCALIZE[32081]</label>
-            <selected>Skin.HasSetting(Furniture.EnableClock_Date)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.EnableClock_Date)</onclick>
-            <enable>!Skin.HasSetting(Furniture.EnableClock) + !Skin.HasSetting(Furniture.EnableClockDateWeather)</enable>
+            <label>$LOCALIZE[31042]</label>
+            <selected>Skin.HasSetting(Furniture.EnableClock)</selected>
+            <onclick>Skin.ToggleSetting(Furniture.EnableClock)</onclick>
         </include>
-        
-        <include content="Settings_Button" description="DateWeather">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">00666</param>
-            <param name="control">radiobutton</param>
-            <param name="reload">true</param>
-            <label>$LOCALIZE[32089]</label>
-            <selected>Skin.HasSetting(Furniture.EnableClockDateWeather)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.EnableClockDateWeather)</onclick>
-            <enable>!Skin.HasSetting(Furniture.EnableClock_Date) + !Skin.HasSetting(Furniture.EnableClock)</enable>
-        </include>
-        
-        <include content="Settings_Button" description="Network">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">036</param>
-            <param name="control">radiobutton</param>
-            <param name="reload">true</param>
-            <label>$LOCALIZE[32077]</label>
-            <selected>Skin.HasSetting(Furniture.Enable_Network)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.Enable_Network)</onclick>
-            <enable>!Skin.HasSetting(Furniture.Network_RAM) + !Skin.HasSetting(Furniture.Enable_Ram)</enable>
-        </include>
-        
-        <include content="Settings_Button" description="RAM">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">03600</param>
-            <param name="control">radiobutton</param>
-            <param name="reload">true</param>
-            <label>RAM</label>
-            <selected>Skin.HasSetting(Furniture.Enable_Ram)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.Enable_Ram)</onclick>
-            <enable>!Skin.HasSetting(Furniture.Enable_Network) + !Skin.HasSetting(Furniture.Network_RAM)</enable>
-        </include>
-        
-        <include content="Settings_Button" description="NetworkRAM">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0360</param>
-            <param name="control">radiobutton</param>
-            <param name="reload">true</param>
-            <label>$LOCALIZE[32077] + RAM</label>
-            <selected>Skin.HasSetting(Furniture.Network_RAM)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.Network_RAM)</onclick>
-            <enable>!Skin.HasSetting(Furniture.Enable_Network) + !Skin.HasSetting(Furniture.Enable_Ram)</enable>
-        </include>
-        
-        <include content="Settings_Button" description="Object_Codecs">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">037</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[32080]</label>
-            <selected>Skin.HasSetting(Furniture.EnableObject_Codecs)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.EnableObject_Codecs)</onclick>
-            <enable>Skin.HasSetting(Furniture.DisableStudio)</enable>
-            <visible>!Skin.HasSetting(Furniture.EnableObject_CodecsText)</visible>
-        </include>
-        
-        <include content="Settings_Button" description="Object_CodecsText">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0037</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[32087]</label>
-            <selected>Skin.HasSetting(Furniture.EnableObject_CodecsText)</selected>
-            <onclick>Skin.ToggleSetting(Furniture.EnableObject_CodecsText)</onclick>
-            <enable>Skin.HasSetting(Furniture.DisableStudio)</enable>
-            <visible>!Skin.HasSetting(Furniture.EnableObject_Codecs)</visible>
-        </include>
-        
         <include content="Settings_Button" description="Studio">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
@@ -455,12 +352,8 @@
             <label>$LOCALIZE[572]</label>
             <selected>!Skin.HasSetting(Furniture.DisableStudio)</selected>
             <onclick>Skin.ToggleSetting(Furniture.DisableStudio)</onclick>
-            <!--visible>!Skin.HasSetting(Furniture.EnableClock)</visible>
-            <visible>!Skin.HasSetting(Furniture.EnableClock1)</visible-->
-            <visible>!Skin.HasSetting(Furniture.EnableObject_Codecs)</visible>
-            <visible>!Skin.HasSetting(Furniture.EnableObject_CodecsText)</visible>
+            <visible>!Skin.HasSetting(Furniture.EnableClock)</visible>
         </include>
-        
         <include content="Settings_Button" description="Now Playing">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
@@ -898,97 +791,6 @@
             <selected>Skin.HasSetting(SkinUserLogin.StartupLoginScreen)</selected>
             <visible>!Skin.HasSetting(SkinUserLogin.Disabled)</visible>
         </include>
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0019</param>
-            <param name="control">button</param>
-            <label>Debug</label>
-					<selected>Skin.HasSetting(Skin.ToggleDebug)</selected>
-					<onclick>Skin.ToggleSetting(Skin.ToggleDebug)</onclick>
-					<onclick>Skin.ToggleDebug</onclick>
-        </include>
-        <include content="Settings_Label" description="Codec logos">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">018</param>
-            <label>$LOCALIZE[32063]</label>
-        </include>
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">019</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[32062]</label>
-            <label2>$VAR[OSDCodecLogosStartupLabel]</label2>
-            <onclick condition="!Skin.HasSetting(osd.5CodecStartupLogos) + !Skin.HasSetting(osd.7CodecStartupLogos) + !Skin.HasSetting(osd.10CodecStartupLogos)">Skin.ToggleSetting(osd.5CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.5CodecStartupLogos)">Skin.ToggleSetting(osd.7CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.7CodecStartupLogos)">Skin.ToggleSetting(osd.10CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.5CodecStartupLogos)">Skin.Reset(osd.5CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.10CodecStartupLogos)">Skin.Reset(osd.10CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.7CodecStartupLogos)">Skin.Reset(osd.7CodecStartupLogos)</onclick>
-        </include>
-        
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0023</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[32073]</label>
-            <label2>$VAR[OSDCodecLogosStartupLabel1]</label2>
-            <onclick condition="!Skin.HasSetting(osd.15CodecStartupLogos) + !Skin.HasSetting(osd.17CodecStartupLogos) + !Skin.HasSetting(osd.110CodecStartupLogos)">Skin.ToggleSetting(osd.15CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.15CodecStartupLogos)">Skin.ToggleSetting(osd.17CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.17CodecStartupLogos)">Skin.ToggleSetting(osd.110CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.15CodecStartupLogos)">Skin.Reset(osd.15CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.110CodecStartupLogos)">Skin.Reset(osd.110CodecStartupLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.17CodecStartupLogos)">Skin.Reset(osd.17CodecStartupLogos)</onclick>
-        </include>
-        
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0020</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[32060]</label>
-            <label2>$VAR[OSDCodecLogosLabel]</label2>
-            <onclick condition="!Skin.HasSetting(osd.useleftCodecLogos) + !Skin.HasSetting(osd.usecenterCodecLogos) + !Skin.HasSetting(osd.userightCodecLogos)">Skin.ToggleSetting(osd.useleftCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useleftCodecLogos)">Skin.ToggleSetting(osd.usecenterCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.usecenterCodecLogos)">Skin.ToggleSetting(osd.userightCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.useleftCodecLogos)">Skin.Reset(osd.useleftCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.userightCodecLogos)">Skin.Reset(osd.userightCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(osd.usecenterCodecLogos)">Skin.Reset(osd.usecenterCodecLogos)</onclick>
-        </include>
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0021</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[32061]</label>
-            <label2>$VAR[PPICodecLogosLabel]</label2>
-            <onclick condition="!Skin.HasSetting(ppi.useleftCodecLogos) + !Skin.HasSetting(ppi.usecenterCodecLogos) + !Skin.HasSetting(ppi.userightCodecLogos)">Skin.ToggleSetting(ppi.useleftCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(ppi.useleftCodecLogos)">Skin.ToggleSetting(ppi.usecenterCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.ToggleSetting(ppi.userightCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(ppi.useleftCodecLogos)">Skin.Reset(ppi.useleftCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(ppi.userightCodecLogos)">Skin.Reset(ppi.userightCodecLogos)</onclick>
-            <onclick condition="Skin.HasSetting(ppi.usecenterCodecLogos)">Skin.Reset(ppi.usecenterCodecLogos)</onclick>
-        </include>
-        
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">0022</param>
-            <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[32074]</label>
-            <onclick>Skin.ToggleSetting(ExtraOSD)</onclick>
-            <selected>Skin.HasSetting(ExtraOSD)</selected>
-        </include>
 
         <include content="Settings_Label" description="Holiday Theme">
             <param name="window">skinsettings</param>
@@ -1042,6 +844,7 @@
             <visible>Skin.HasSetting(EnableHolidayTheme)</visible>
         </include>
 
+
         <include content="Settings_Label" description="Expert">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
@@ -1093,6 +896,7 @@
             <onclick>Skin.ToggleSetting(TMDbHelper.DisablePVR)</onclick>
             <selected>!Skin.HasSetting(TMDbHelper.DisablePVR)</selected>
         </include>
+
 
     </include>
 

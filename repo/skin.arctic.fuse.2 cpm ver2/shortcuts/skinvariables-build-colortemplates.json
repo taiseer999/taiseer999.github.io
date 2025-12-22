@@ -30,9 +30,9 @@
                 "skindir": [
                     {
                         "rules": ["{skinuser}!="],
-                        "value": "ArcticFuse2-cpm-{skinuser}"
+                        "value": "ArcticFuse2-{skinuser}"
                     },
-                    "ArcticFuse2-cpm-defaultuser"
+                    "ArcticFuse2-defaultuser"
                 ]
             }
         },
