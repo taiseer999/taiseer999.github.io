@@ -109,14 +109,6 @@
             <param name="diffuse">diffuse/dialog_w920_h1000.png</param>
         </include>
     </include>
-	
-    <include name="Dialog_Background_BlurDimension_DialogWiderMenu">
-        <include content="Dialog_Background_Blur">
-            <param name="shadow">$PARAM[shadow]</param>
-            <param name="transparency">$PARAM[transparency]</param>
-            <param name="diffuse">diffuse/dialog_w920_h1000.png</param>
-        </include>
-    </include>
 
     <include name="Dialog_Background_BlurDimension_DialogHugeMenu">
         <include content="Dialog_Background_Blur">

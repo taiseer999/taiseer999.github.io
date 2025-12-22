@@ -41,7 +41,9 @@
 
     <variable name="Action_Sync">
         <value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + !String.IsEmpty(ListItem.Property(tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[ListItem.Property(tmdb_id)],$VAR[Path_Param_Type],cache_refresh)</value>
+
         <value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_ID))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_ID)],$VAR[Path_Param_Type],cache_refresh)</value>
+
 
         <value condition="[String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(ListItem.Property(tvshow.tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[ListItem.Property(tvshow.tmdb_id)],$VAR[Path_Param_Type],season=$INFO[ListItem.Season],cache_refresh)</value>
         <value condition="[String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.tvshow.tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[Window(Home).Property(TMDbHelper.ListItem.tvshow.tmdb_id)],$VAR[Path_Param_Type],season=$INFO[ListItem.Season],cache_refresh)</value>
@@ -424,13 +426,13 @@
     </variable>
 
     <variable name="Action_HomeMenu_OnLeft_Indicator">
-        <value condition="Control.HasFocus(308)">special://skin/extras/icons/bars.png</value>
+        <value condition="Control.HasFocus(308)">osd/settings.png</value>
         <value condition="Control.HasFocus(309)">$VAR[Image_SearchDiscover]</value>
         <value>$INFO[Container(300).ListItem.Icon]</value>
     </variable>
 
     <variable name="Action_HomeMenu_OnLeft_Icon">
-        <value condition="Control.HasFocus(308)">special://skin/extras/icons/bars.png</value>
+        <value condition="Control.HasFocus(308)">osd/settings.png</value>
         <value condition="Control.HasFocus(309)">special://skin/extras/icons/star.png</value>
         <value>$INFO[Container(300).ListItem.Icon]</value>
     </variable>
@@ -921,6 +923,7 @@
         <value condition="Skin.HasSetting(Spotlight.UseMenuButton) + $EXP[Exp_Hubs_Spotlight_HasItems]">Action(contextmenu)</value>
         <value>Action(info)</value>
     </variable>
+
 
     <variable name="Action_RatingsMonitor">
         <value condition="Skin.String(CustomRating.Movies.Item01,TMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>

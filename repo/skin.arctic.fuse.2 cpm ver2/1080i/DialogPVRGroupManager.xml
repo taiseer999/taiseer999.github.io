@@ -190,6 +190,7 @@
 
         </control>
 
+
         <include content="Dialog_Manage">
             <param name="onback">8000</param>
             <param name="include">Items_DialogPVRGroupManager</param>

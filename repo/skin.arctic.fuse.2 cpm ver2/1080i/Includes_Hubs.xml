@@ -123,7 +123,7 @@
                     <param name="hasspinner">true</param>
                     <param name="spinspinner">true</param>
                     <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-                    <param name="icon">special://skin/extras/icons/coreelec.png</param>
+                    <param name="icon">special://skin/extras/icons/kodi.png</param>
                     <param name="haslabel">false</param>
                 </include>
             </control>
@@ -645,6 +645,10 @@
                         <bordersize>icon_home_bordersize</bordersize>
                         <visible>!Control.HasFocus(308)</visible>
                         <visible>!Skin.HasSetting(Furniture.EnableClock)</visible>
+                        <visible>!Skin.HasSetting(Furniture.EnableClock1)</visible>
+                        <visible>!Skin.HasSetting(Furniture.EnableClock2)</visible>
+                        <visible>!Skin.HasSetting(Furniture.EnableClock11)</visible>
+                        <visible>!Skin.HasSetting(Furniture.EnableClock111)</visible>
                     </control>
                     <control type="image">
                         <texture colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/bars.png</texture>

@@ -299,7 +299,7 @@
                             <height>30</height>
                             <font>$PARAM[font]</font>
                             <textcolor>$PARAM[textcolor]</textcolor>
-                            <label fallback="19055">$INFO[System.CPUUsage,CPU: ,]</label>
+                            <label fallback="19055">$INFO[System.CpuAltUsage,CPU: ,]</label>
                         </control>
                         <control type="group">
                             <height>12</height>
@@ -399,7 +399,7 @@
             <param name="id">$PARAM[id]</param>
             <param name="toplabel">$INFO[Weather.Temperature]</param>
             <param name="sublabel">$INFO[Weather.Conditions]</param>
-            <param name="icon">$INFO[Weather.FanartCode,resource://resource.images.weathericons.white/,.png]</param>
+            <param name="icon">$VAR[Image_Weather]</param>
             <param name="icon_bordersize">12</param>
             <param name="icon_withtext">true</param>
             <nested />

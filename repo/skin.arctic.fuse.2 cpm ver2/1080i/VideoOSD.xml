@@ -23,7 +23,7 @@
                     <control type="grouplist" id="6091">
                         <centerbottom>80</centerbottom>
                         <height>120</height>
-                        <left>-20</left>
+                        <left>-10</left>
                         <orientation>horizontal</orientation>
                         <itemgap>osd_itemgap</itemgap>
                         <onleft>6009</onleft>
@@ -105,11 +105,49 @@
                         </include>
                     </control>
 
-                    <!-- Right Side Buttons -->
+                    <!-- Clock on center -->
+                        <control type="label">
+                           <height>80</height>
+                           <center>0</center>
+                           <centerbottom>100</centerbottom>
+                           <align>center</align>
+                           <aligny>center</aligny>
+                           <label>$INFO[System.Time]</label>
+                           <textcolor>main_fg_50</textcolor>
+                           <font>font_title_main1</font>
+                        </control>
+
+                        <!-- Button PlayerProcessInfo -->
+                        <!--control type="button" id="6009">
+                            <include>Defs_OSD_Button</include>
+                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
+                            <onclick>ActivateWindow(playerprocessinfo)</onclick>
+                        </control>
+                        <include content="OSD_Button_Icon_Overlay">
+                            <param name="icon">osd/playerprocessinfo.png</param>
+                            <param name="id">6009</param>
+                            <param name="groupid">6109</param>
+                            <param name="itemgap">osd_itemgap</param>
+                        </include-->
+					
+                        <!-- Button VS10 -->
+                        <!--control type="button" id="60010">
+                            <include>Defs_OSD_Button</include>
+                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
+                            <onclick>ActivateWindow(1189)</onclick>
+                        </control>
+                        <include content="OSD_Button_Icon_Overlay">
+                            <param name="icon">osd/VS10png.png</param>
+                            <param name="id">60010</param>
+                            <param name="groupid">61010</param>
+                            <param name="itemgap">osd_itemgap</param>
+                        </include-->
+
+                 <!-- Right Side Buttons -->
                     <control type="grouplist" id="6092">
                         <centerbottom>80</centerbottom>
                         <height>120</height>
-                        <right>-20</right>
+                        <right>-10</right>
                         <orientation>horizontal</orientation>
                         <itemgap>osd_itemgap</itemgap>
                         <align>right</align>
@@ -189,7 +227,7 @@
                             <onfocus>ActivateWindow(1159)</onfocus>
                         </control>
                         <include content="OSD_Button_Icon_Overlay">
-                            <param name="icon">special://skin/extras/icons/ppi.png</param>
+                            <param name="icon">special://skin/extras/icons/playerinfo.png</param>
                             <param name="id">6009</param>
                             <param name="groupid">6109</param>
                             <param name="itemgap">osd_itemgap</param>
@@ -234,46 +272,6 @@
                         <ondown>6091</ondown>
                     </control>
                 </control>
-            </control>
-
-            <control type="group">
-                <visible>[!Pvr.IsPlayingTv + !String.IsEmpty(Player.Art(discart)) + !Skin.HasSetting(OSD.DiscArt)]</visible>
-                <left>1455</left>
-                <top>400</top>
-
-                <!-- Disc Background -->
-                <control type="image">
-                    <width>500</width>
-                    <height>425</height>
-                    <texture colordiffuse="shadow_hard">common/discart.png</texture>
-                </control>
-
-                <!-- Disc Art -->
-                <control type="image">
-                    <left>15</left>
-                    <top>10</top>
-                    <width>400</width>
-                    <height>400</height>
-                    <texture background="true">$INFO[Player.Art(discart)]</texture>
-                    <aspectratio aligny="bottom">keep</aspectratio>
-                    <visible>Skin.HasSetting(OSD.DiscArtNoRotate)</visible>
-                </control>
-                <control type="image">
-                    <left>15</left>
-                    <top>10</top>
-                    <width>400</width>
-                    <height>400</height>
-                    <texture background="true">$INFO[Player.Art(discart)]</texture>
-                    <aspectratio aligny="bottom">keep</aspectratio>
-                    <animation effect="rotate" start="0" end="-360" loop="true" time="20000" center="auto" condition="Player.Playing | Player.Paused">Conditional</animation>
-                    <visible>!Skin.HasSetting(OSD.DiscArtNoRotate)</visible>
-                </control>
-
-                <animation effect="slide" start="500" end="0" time="750">WindowOpen</animation>
-                <animation effect="slide" start="0" end="500" time="750">WindowClose</animation>
-                <animation effect="slide" start="0" end="500" time="750" condition="Control.HasFocus(6006) | Control.HasFocus(6007) | Control.HasFocus(6008) | Control.HasFocus(6009)">
-                    WindowClose
-                </animation>
             </control>
         </control>
     </controls>

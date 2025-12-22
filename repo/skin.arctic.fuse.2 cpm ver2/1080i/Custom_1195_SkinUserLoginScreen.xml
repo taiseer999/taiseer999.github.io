@@ -189,7 +189,7 @@
                                 </control>
                             </control>
                         </focusedlayout>
-                        <content>plugin://script.skinvariables/?info=get_skin_user&amp;skinid=skin.arctic.fuse.2&amp;folder=1080i&amp;allow_new=true&amp;reload=$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload)]</content>
+                        <content>plugin://script.skinvariables/?info=get_skin_user&amp;skinid=skin.arctic.fuse.2.cpm.mod&amp;folder=1080i&amp;allow_new=true&amp;reload=$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload)]</content>
                     </control>
                 </control>
 
@@ -238,7 +238,7 @@
                     <param name="hasspinner">true</param>
                     <param name="spinspinner">true</param>
                     <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-                    <param name="icon">special://skin/extras/icons/coreelec.png</param>
+                    <param name="icon">special://skin/extras/icons/kodi.png</param>
                     <param name="haslabel">false</param>
                 </include>
             </control>

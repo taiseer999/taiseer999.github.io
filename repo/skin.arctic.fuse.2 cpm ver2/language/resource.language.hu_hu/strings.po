@@ -230,7 +230,7 @@ msgstr "Nézettípusok"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31045"
 msgid "Landscape"
-msgstr ""
+msgstr "Tájkép"
 
 #: /1080i/Includes_Search.xml
 msgctxt "#31046"
@@ -289,7 +289,7 @@ msgstr ""
 #: /1080i/Includes_Views_Wall.xml
 msgctxt "#31058"
 msgid "Wall Ring"
-msgstr ""
+msgstr "Egészoldalas kis-kör"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31059"
@@ -495,7 +495,7 @@ msgstr "Tábla sor"
 #: /1080i/Includes_Views_Wall.xml
 msgctxt "#31101"
 msgid "Wall Board"
-msgstr "Tábla"
+msgstr "Tábla duplasor"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31102"
@@ -545,7 +545,7 @@ msgstr "Poszter sor"
 
 msgctxt "#31112"
 msgid "Landscape Row"
-msgstr "Landscape sor"
+msgstr "Tájkép sor"
 
 msgctxt "#31113"
 msgid "Square Row"
@@ -700,8 +700,8 @@ msgstr "A felszín inicializálása"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31146"
-msgid "Profile image and logo"
-msgstr "Profilkép és logó"
+msgid "CoreELEC logo and CPU temp"
+msgstr "CoreELEC logó és CPU hőmérséklet"
 
 #: /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31147"
@@ -736,7 +736,7 @@ msgstr "Kombinált négyzetes"
 #: /1080i/DialogAddonSettings.xml
 msgctxt "#31153"
 msgid "Combined Landscape"
-msgstr "Kombinált landscape"
+msgstr "Kombinált tájkép"
 
 msgctxt "#31154"
 msgid "Misc options"
@@ -955,7 +955,7 @@ msgstr "Szám hossza"
 #: /1080i/SkinSettings.xml
 msgctxt "#31199"
 msgid "Date and time"
-msgstr "Dátum éd idő"
+msgstr "Dátum és idő"
 
 #: /1080i/Includes_Info.xml
 msgctxt "#31200"
@@ -2836,7 +2836,7 @@ msgstr "A beállításokon végrehajtott módosítások nem lettek alkalmazva."
 
 #: /1080i/Includes_DialogManage.xml
 msgctxt "#31591"
-msgid "Pressing back again closes the dialog without applying changes.."
+msgid "Pressing back again closes the dialog without applying changes."
 msgstr "A vissza gombra kattintva a változtatások mentése nélkül kilép a párbeszédpanelből."
 
 #: /1080i/Includes_Dialogs.xml
@@ -2848,3 +2848,380 @@ msgstr "Beállítások menüje"
 msgctxt "#31593"
 msgid "Apply your changes?"
 msgstr "Beállítások alkalmazása?"
+
+#: /1080i/Includes_OSD.xml
+msgctxt "#31594"
+msgid "Press down"
+msgstr "Nyomd lefelé"
+
+#: /1080i/Includes_OSD.xml
+msgctxt "#31595"
+msgid "Press right"
+msgstr "Nyomd jobbra"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31596"
+msgid "Additional icons"
+msgstr "További ikonok"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31597"
+msgid "Confirmation"
+msgstr "Megerősítés"
+
+msgctxt "#32000"
+msgid "Display output mode"
+msgstr "Kimeneti felbontás"
+
+msgctxt "#32001"
+msgid "Video resolution"
+msgstr "Videó felbontás"
+
+msgctxt "#32002"
+msgid "Color space"
+msgstr "Színtér"
+
+msgctxt "#32003"
+msgid "Mb/s"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Audio bitrate"
+msgstr "Audió bitsebesség"
+
+msgctxt "#32005"
+msgid "Video decoder"
+msgstr "Videó dekóder"
+
+msgctxt "#32006"
+msgid "Dolby VS10 engine"
+msgstr ""
+
+msgctxt "#32007"
+msgid "More"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Video queue"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Video queue data"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Audio queue"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Audio queue data"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Kb/s"
+msgstr ""
+
+msgctxt "#32013"
+msgid "DV metadata"
+msgstr "DV metaadat"
+
+msgctxt "#32014"
+msgid "CPU temp & usage"
+msgstr "CPU használat"
+
+msgctxt "#32015"
+msgid "Version"
+msgstr "Verzió"
+
+msgctxt "#32016"
+msgid "Dolby Vision profile"
+msgstr "Dolby Vision profil"
+
+msgctxt "#32017"
+msgid "Level"
+msgstr ""
+
+msgctxt "#32018"
+msgid "RPU"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Base Layer"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Enhancement Layer"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Enhancement Layer Type"
+msgstr "Enhancement Layer típus"
+
+msgctxt "#32022"
+msgid "Metadata"
+msgstr "Metaadat"
+
+msgctxt "#32023"
+msgid "Video output"
+msgstr "Videó kimenet"
+
+msgctxt "#32024"
+msgid "Aspect ratio"
+msgstr "Képarány"
+
+msgctxt "#32025"
+msgid "HDR10 MDL"
+msgstr ""
+
+msgctxt "#32026"
+msgid "HDR10 MaxCLL/FALL"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Media source"
+msgstr "Média forrás"
+
+msgctxt "#32028"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+msgctxt "#32029"
+msgid "On"
+msgstr "Be"
+
+msgctxt "#32030"
+msgid "Off"
+msgstr "Ki"
+
+msgctxt "#32031"
+msgid "Deinterlacing"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Videoplayer cache"
+msgstr "Videó puffer"
+
+msgctxt "#32033"
+msgid "N/A"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Memory usage"
+msgstr "Memória használat"
+
+msgctxt "#32035"
+msgid "Video color depth"
+msgstr "Videó színmélység"
+
+msgctxt "#32036"
+msgid "System / AML fps"
+msgstr "Rendszer / AML fps"
+
+msgctxt "#32037"
+msgid "DV Configuration"
+msgstr "DV beállítás"
+
+msgctxt "#32038"
+msgid "DV Levels Metadata"
+msgstr "DV szintek metaadatai"
+
+msgctxt "#32039"
+msgid "HDR Static Metadata"
+msgstr "HDR statikus metaadat"
+
+msgctxt "#32040"
+msgid "nits"
+msgstr ""
+
+msgctxt "#32041"
+msgid "RPU MDL"
+msgstr ""
+
+msgctxt "#32042"
+msgid "RPU MaxCLL/FALL"
+msgstr ""
+
+msgctxt "#32043"
+msgid "FLL MIN / MAX / AVG"
+msgstr ""
+
+msgctxt "#32044"
+msgid "PQ  MIN / MAX / AVG"
+msgstr ""
+
+msgctxt "#32045"
+msgid "12-bit"
+msgstr ""
+
+msgctxt "#32046"
+msgid "Audio codec"
+msgstr "Hang kodek"
+
+msgctxt "#32047"
+msgid "Video bitrate"
+msgstr "Videó bitsebesség"
+
+msgctxt "#32048"
+msgid "VS10 status"
+msgstr "VS10 állapot"
+
+msgctxt "#32049"
+msgid "Audio sample rate"
+msgstr "Audió mintavétel"
+
+msgctxt "#32051"
+msgid "Video sample rate"
+msgstr "Videó mintavétel"
+
+msgctxt "#32052"
+msgid "Audio language"
+msgstr "Szinkronnyelv"
+
+msgctxt "#32053"
+msgid "Subtitle language"
+msgstr "Feliratnyelv"
+
+msgctxt "#32054"
+msgid "Video"
+msgstr "Videó"
+
+msgctxt "#32055"
+msgid "System"
+msgstr "Rendszer"
+
+msgctxt "#32056"
+msgid "Audio"
+msgstr "Hang"
+
+msgctxt "#32057"
+msgid "Top left"
+msgstr "Bal oldalon"
+
+msgctxt "#32058"
+msgid "Top center"
+msgstr "Középen"
+
+msgctxt "#32059"
+msgid "Top right"
+msgstr "Jobb oldalon"
+
+msgctxt "#32060"
+msgid "Position of the codec logos in the OSD"
+msgstr "OSD-vel megjelenített kodek logók helyzete"
+
+msgctxt "#32061"
+msgid "Position of the codec logos in the PlayerProcessInfo"
+msgstr "PlayerProcessinfóval megjelenített kodek logók helyzete"
+
+msgctxt "#32062"
+msgid "Show codec logos at bottom when video starts"
+msgstr "Kodek logók mutatása lent a videóindításkor"
+
+msgctxt "#32063"
+msgid "Codec logos"
+msgstr "Kodek logók beállításai"
+
+msgctxt "#32064"
+msgid "Original"
+msgstr "Eredeti"
+
+msgctxt "#32065"
+msgid "Dolby VS10 mode"
+msgstr "Dolby VS10 mód"
+
+msgctxt "#32066"
+msgid "Audio codec"
+msgstr "Hang kodek"
+
+msgctxt "#32067"
+msgid "L5 Active Offsets Top-Bottom"
+msgstr "L5 aktív vágás Fent-Lent"
+
+msgctxt "#32068"
+msgid "L5 Active Offsets Left-Right"
+msgstr "L5 aktív vágás Bal-Jobb"
+
+msgctxt "#32069"
+msgid "channels"
+msgstr "csatorna"
+
+msgctxt "#32070"
+msgid "5 sec"
+msgstr "5 másodperc"
+
+msgctxt "#32071"
+msgid "7 sec"
+msgstr "7 másodperc"
+
+msgctxt "#32072"
+msgid "10 sec"
+msgstr "10 másodperc"
+
+msgctxt "#32073"
+msgid "Show codec logos at top when video starts"
+msgstr "Kodek logók mutatása fennt a videóindításkor"
+
+msgctxt "#32074"
+msgid "Video OSD extras"
+msgstr "Extrák a videó OSD-n"
+
+msgctxt "#32075"
+msgid "Network Connected"
+msgstr "Hálózat csatlakoztatva"
+
+msgctxt "#32076"
+msgid "Network not connected"
+msgstr "Nincs hálózat"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#32077"
+msgid "Network connection under the clock"
+msgstr "Hálózati csatlakozás az óra alatt"
+
+msgctxt "#32078"
+msgid "Clearlogo"
+msgstr "Clearlogó"
+
+msgctxt "#32079"
+msgid "Coloured"
+msgstr "Színes"
+
+msgctxt "#32080"
+msgid "Show Image codec logos"
+msgstr "Kodek logókat mutat"
+
+msgctxt "#32081"
+msgid "Clock + Date"
+msgstr "Óra és dátum"
+
+msgctxt "#32082"
+msgid "Weather icon colour"
+msgstr "Időjárás ikonok színe"
+
+msgctxt "#32083"
+msgid "White"
+msgstr "Fehér"
+
+msgctxt "#32084"
+msgid "Low"
+msgstr "Min"
+
+msgctxt "#32085"
+msgid "High"
+msgstr "Max"
+
+msgctxt "#32086"
+msgid "Current"
+msgstr "Jelenleg"
+
+msgctxt "#32087"
+msgid "Show Text codec logos"
+msgstr "Szöveges kodek logók"
+
+msgctxt "#32088"
+msgid "Hide filename and path"
+msgstr "Elérési út és fájlnév elrejtése"
+
+msgctxt "#32089"
+msgid "Clock + Date and Weather"
+msgstr "Óra + dátum és időjárás"

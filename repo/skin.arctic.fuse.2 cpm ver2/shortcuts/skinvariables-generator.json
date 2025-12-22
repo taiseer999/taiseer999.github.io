@@ -4,7 +4,7 @@
     "header": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<includes>",
     "footer": "</includes>",
     "buildv": "2.12.19",
-    "skinid": "skin.arctic.fuse.2",
+    "skinid": "skin.arctic.fuse.2.cpm.mod",
     "getnfo": {
         "default_home_window_id": "Skin.String(Hub.Home.ReplaceWindow)"
     },

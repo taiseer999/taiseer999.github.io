@@ -159,7 +159,7 @@
                                         <control type="label">
                                             <height>40</height>
                                             <textcolor>main_fg_70</textcolor>
-                                            <label fallback="19055">$LOCALIZE[32014]: $INFO[System.CPUTemperature] | $INFO[System.CpuAltUsage]</label>
+                                            <label fallback="19055">$INFO[System.CpuAltUsage,$LOCALIZE[13271] ,]</label>
                                         </control>
                                         <control type="group">
                                             <height>12</height>

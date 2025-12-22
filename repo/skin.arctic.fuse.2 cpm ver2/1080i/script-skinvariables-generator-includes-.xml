@@ -22,7 +22,7 @@
                     <param name="groupid">100701</param>
                     <param name="label">$LOCALIZE[31128]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -42,7 +42,7 @@
                     <include content="Widget_NoResults">
                         <param name="id">100601</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(100601) | System.IdleTime(3)]</param>
                     </include>
@@ -61,7 +61,7 @@
                     <param name="groupid">100702</param>
                     <param name="label">$LOCALIZE[32305]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -98,9 +98,9 @@
                 <include content="Widget_Row">
                     <param name="id">100603</param>
                     <param name="groupid">100703</param>
-                    <param name="label">$LOCALIZE[31122]</param>
+                    <param name="label">$LOCALIZE[31026]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -120,7 +120,7 @@
                     <include content="Widget_NoResults">
                         <param name="id">100603</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="default" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=movies+section.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(100603) | System.IdleTime(3)]</param>
                     </include>
@@ -137,14 +137,14 @@
                 <include content="Widget_Row">
                     <param name="id">100604</param>
                     <param name="groupid">100704</param>
-                    <param name="label">$LOCALIZE[1036]</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100603.Label)]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(100603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100603)</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
@@ -159,7 +159,7 @@
                     <include content="Widget_NoResults">
                         <param name="id">100604</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">favourites://</content>
+                    <content sortby="default" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.100603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100603.FolderPath)]</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(100604) | System.IdleTime(3)]</param>
                     </include>
@@ -173,13 +173,52 @@
                     <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[342],Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentItem,0,Home)</onfocus>
                 </include>
+                <include content="Widget_Row">
+                    <param name="id">100605</param>
+                    <param name="groupid">100705</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.100604.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(100604)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(100604)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">100805</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(5).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(5).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">100605</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.100604.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.100604.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(100605) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">100605</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">100605</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-bd0901f6,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[342],Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,0,Home)</onfocus>
+                </include>
                 <!-- Sidemenu Widgets for sidemenu 1 $LOCALIZE[20343] -->
                 <include content="Widget_Row">
                     <param name="id">101601</param>
                     <param name="groupid">101701</param>
                     <param name="label">$LOCALIZE[31128]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -194,7 +233,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">101801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(5).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(5).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(6).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">101601</param>
@@ -216,9 +255,9 @@
                 <include content="Widget_Row">
                     <param name="id">101602</param>
                     <param name="groupid">101702</param>
-                    <param name="label">$LOCALIZE[32305] - $LOCALIZE[20343]</param>
+                    <param name="label">$LOCALIZE[32305]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -233,12 +272,12 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">101802</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(6).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(7).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">101602</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=tv&amp;list_name=%D9%82%D9%8A%D8%AF+%D8%A7%D9%84%D8%AA%D9%82%D8%AF%D9%85&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=resume.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(101602) | System.IdleTime(3)]</param>
                     </include>
@@ -255,29 +294,29 @@
                 <include content="Widget_Row">
                     <param name="id">101603</param>
                     <param name="groupid">101703</param>
-                    <param name="label">$LOCALIZE[32305] - $LOCALIZE[20360]</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.101602.Label)]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Apps_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(101602)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(101602)</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
                     <param name="widgetconstants_affix">_detailed</param>
                     <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">True</param>
+                    <param name="widget_positioning">False</param>
                     <param name="positioningid">101803</param>
-                    <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(7).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible))]]</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(8).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">101603</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.101602.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.101602.FolderPath)]</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(101603) | System.IdleTime(3)]</param>
                     </include>
@@ -294,9 +333,9 @@
                 <include content="Widget_Row">
                     <param name="id">101604</param>
                     <param name="groupid">101704</param>
-                    <param name="label">$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</param>
+                    <param name="label">$LOCALIZE[31026]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Apps_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -308,15 +347,15 @@
                     <param name="widgetconstants_affix">_detailed</param>
                     <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
                     <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">True</param>
+                    <param name="widget_positioning">False</param>
                     <param name="positioningid">101804</param>
-                    <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(8).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible))]]</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(9).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">101604</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="default" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=tvsections.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(101604) | System.IdleTime(3)]</param>
                     </include>
@@ -333,14 +372,14 @@
                 <include content="Widget_Row">
                     <param name="id">101605</param>
                     <param name="groupid">101705</param>
-                    <param name="label">$LOCALIZE[31122]</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.101604.Label)]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(101604)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(101604)</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
@@ -350,12 +389,12 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">101805</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(9).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(10).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">101605</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=tv&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.101604.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.101604.FolderPath)]</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(101605) | System.IdleTime(3)]</param>
                     </include>
@@ -369,13 +408,91 @@
                     <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[20343],Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentItem,1,Home)</onfocus>
                 </include>
+                <include content="Widget_Row">
+                    <param name="id">101606</param>
+                    <param name="groupid">101706</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.101605.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(101605)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(101605)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">101806</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(11).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">101606</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.101605.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.101605.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(101606) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">101606</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">101606</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-93532622,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[20343],Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,1,Home)</onfocus>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">101607</param>
+                    <param name="groupid">101707</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.101606.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(101606)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(101606)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">101807</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(12).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">101607</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.101606.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.101606.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(101607) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">101607</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">101607</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-93532622,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[20343],Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,1,Home)</onfocus>
+                </include>
                 <!-- Sidemenu Widgets for sidemenu 2 $LOCALIZE[32302] -->
                 <include content="Widget_Row">
                     <param name="id">102601</param>
                     <param name="groupid">102701</param>
-                    <param name="label">Korean Movies  AbuKarim - $LOCALIZE[342]</param>
+                    <param name="label">$LOCALIZE[342]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -390,12 +507,12 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">102801</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(10).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(13).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">102601</param>
                     </include>
-                    <content sortby="dateadded" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Movies++AbuKarim&amp;list_slug=korean-movies-abukarim-26374953&amp;user_slug=taiseer999&amp;plugin_category=Korean+Movies++AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="default" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=AbukarimMovies.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(102601) | System.IdleTime(3)]</param>
                     </include>
@@ -412,14 +529,14 @@
                 <include content="Widget_Row">
                     <param name="id">102602</param>
                     <param name="groupid">102702</param>
-                    <param name="label">Korean Drama AbuKarim - $LOCALIZE[20343]</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.102601.Label)]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(102601)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(102601)</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
@@ -429,12 +546,12 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">102802</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(11).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(14).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">102602</param>
                     </include>
-                    <content sortby="dateadded" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Drama+AbuKarim&amp;list_slug=korean-drama-abukarim&amp;user_slug=taiseer999&amp;plugin_category=Korean+Drama+AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
+                    <content sortby="random" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.102601.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.102601.FolderPath)]</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(102602) | System.IdleTime(3)]</param>
                     </include>
@@ -451,14 +568,14 @@
                 <include content="Widget_Row">
                     <param name="id">102603</param>
                     <param name="groupid">102703</param>
-                    <param name="label">$INFO[Window.Property(WidgetMeta.102602.Label)]</param>
+                    <param name="label">$LOCALIZE[20343]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Landscape_Row</param>
+                    <param name="include">List_Square_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
                     <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(102602)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">Control.HasFocus(102602)</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">False</param>
                     <param name="busy_isupdating">True</param>
                     <param name="widgetfade_include">true</param>
                     <param name="widgetfade_disable">false</param>
@@ -468,12 +585,12 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">102803</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(12).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(15).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">102603</param>
                     </include>
-                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.102602.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.102602.FolderPath)]</content>
+                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=dir_custom_node&amp;filename=koreantvab.json&amp;basedir=special%3A%2F%2Fprofile%2Faddon_data%2Fplugin.video.themoviedb.helper%2Fnodes%2F&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
                     <include content="Defs_AutoScroll" condition="False">
                         <param name="condition">[!Control.HasFocus(102603) | System.IdleTime(3)]</param>
                     </include>
@@ -482,6 +599,84 @@
                     </include>
                     <include content="Action_View_Movement_OnRight">
                         <param name="id">102603</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-772a73c0,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[32302],Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">102604</param>
+                    <param name="groupid">102704</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.102603.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(102603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(102603)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">102804</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(16).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(18).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">102604</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.102603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.102603.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102604) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102604</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102604</param>
+                    </include>
+                    <onfocus>SetProperty(SideMenu.CurrentGUID,guid-772a73c0,Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[32302],Home)</onfocus>
+                    <onfocus>SetProperty(SideMenu.CurrentItem,2,Home)</onfocus>
+                </include>
+                <include content="Widget_Row">
+                    <param name="id">102605</param>
+                    <param name="groupid">102705</param>
+                    <param name="label">$INFO[Window.Property(WidgetMeta.102604.Label)]</param>
+                    <param name="usewidgetlabel">False</param>
+                    <param name="include">List_Landscape_Row</param>
+                    <param name="grouplistid">400</param>
+                    <param name="refocus">$VAR[Action_Home_Menu_SetFocus]</param>
+                    <param name="detailed">False</param>
+                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0) | !Skin.HasSetting(Hub.Home.DisableMoveBetweenGroups)] + [Control.IsVisible(102604)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
+                    <param name="altvisible">Control.HasFocus(102604)</param>
+                    <param name="busy_isupdating">True</param>
+                    <param name="widgetfade_include">true</param>
+                    <param name="widgetfade_disable">false</param>
+                    <param name="widgetconstants_affix">_detailed</param>
+                    <param name="widget_showoverlay">[[True] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_hideartwork">[[True] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
+                    <param name="widget_positioning">False</param>
+                    <param name="positioningid">102805</param>
+                    <param name="positioningtop">0</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(17).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(18).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(19).Property(visible))]]</param>
+                    <description/>
+                    <include content="Widget_NoResults">
+                        <param name="id">102605</param>
+                    </include>
+                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.102604.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.102604.FolderPath)]</content>
+                    <include content="Defs_AutoScroll" condition="False">
+                        <param name="condition">[!Control.HasFocus(102605) | System.IdleTime(3)]</param>
+                    </include>
+                    <include content="Action_View_Movement_OnLeft">
+                        <param name="id">102605</param>
+                    </include>
+                    <include content="Action_View_Movement_OnRight">
+                        <param name="id">102605</param>
                     </include>
                     <onfocus>SetProperty(SideMenu.CurrentGUID,guid-772a73c0,Home)</onfocus>
                     <onfocus>SetProperty(SideMenu.CurrentName,$LOCALIZE[32302],Home)</onfocus>
@@ -508,7 +703,7 @@
                     <param name="widget_positioning">True</param>
                     <param name="positioningid">103801</param>
                     <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(13).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(18).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(18).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(19).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">103601</param>
@@ -547,7 +742,7 @@
                     <param name="widget_positioning">True</param>
                     <param name="positioningid">103802</param>
                     <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(14).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(19).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(19).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">103602</param>
@@ -586,7 +781,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">103803</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(15).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(20).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">103603</param>
@@ -625,7 +820,7 @@
                     <param name="widget_positioning">False</param>
                     <param name="positioningid">103804</param>
                     <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(16).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(18).Property(visible))]]</param>
+                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(21).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(22).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(23).Property(visible))]]</param>
                     <description/>
                     <include content="Widget_NoResults">
                         <param name="id">103604</param>
@@ -653,160 +848,225 @@
         <item>
             <label>$LOCALIZE[31128]</label>
             <property name="id">100601</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(100601)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31128]</label>
             <property name="id">100601</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(100601)</visible>
         </item>
         <item>
             <label>$LOCALIZE[32305]</label>
             <property name="id">100602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(100602)</visible>
         </item>
         <item>
             <label>$LOCALIZE[32305]</label>
             <property name="id">100602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(100602)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[31122]</label>
+            <label>$LOCALIZE[31026]</label>
             <property name="id">100603</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(100603)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[31122]</label>
+            <label>$LOCALIZE[31026]</label>
             <property name="id">100603</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(100603)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[1036]</label>
+            <label>$INFO[Window.Property(WidgetMeta.100603.Label)]</label>
             <property name="id">100604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(100604)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[1036]</label>
+            <label>$INFO[Window.Property(WidgetMeta.100603.Label)]</label>
             <property name="id">100604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(100604)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.100604.Label)]</label>
+            <property name="id">100605</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(100605)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.100604.Label)]</label>
+            <property name="id">100605</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(100605)</visible>
         </item>
         <!-- Sidemenu Widgets for sidemenu 1 $LOCALIZE[20343] -->
         <item>
             <label>$LOCALIZE[31128]</label>
             <property name="id">101601</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101601)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31128]</label>
             <property name="id">101601</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(101601)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20343]</label>
+            <label>$LOCALIZE[32305]</label>
             <property name="id">101602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101602)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20343]</label>
+            <label>$LOCALIZE[32305]</label>
             <property name="id">101602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(101602)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20360]</label>
+            <label>$INFO[Window.Property(WidgetMeta.101602.Label)]</label>
             <property name="id">101603</property>
-            <property name="include">List_Apps_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101603)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20360]</label>
+            <label>$INFO[Window.Property(WidgetMeta.101602.Label)]</label>
             <property name="id">101603</property>
-            <property name="include">List_Apps_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(101603)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</label>
+            <label>$LOCALIZE[31026]</label>
             <property name="id">101604</property>
-            <property name="include">List_Apps_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101604)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</label>
+            <label>$LOCALIZE[31026]</label>
             <property name="id">101604</property>
-            <property name="include">List_Apps_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(101604)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[31122]</label>
+            <label>$INFO[Window.Property(WidgetMeta.101604.Label)]</label>
             <property name="id">101605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(101605)</visible>
         </item>
         <item>
-            <label>$LOCALIZE[31122]</label>
+            <label>$INFO[Window.Property(WidgetMeta.101604.Label)]</label>
             <property name="id">101605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(101605)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.101605.Label)]</label>
+            <property name="id">101606</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(101606)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.101605.Label)]</label>
+            <property name="id">101606</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(101606)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.101606.Label)]</label>
+            <property name="id">101607</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(101607)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.101606.Label)]</label>
+            <property name="id">101607</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(101607)</visible>
         </item>
         <!-- Sidemenu Widgets for sidemenu 2 $LOCALIZE[32302] -->
         <item>
-            <label>Korean Movies  AbuKarim - $LOCALIZE[342]</label>
+            <label>$LOCALIZE[342]</label>
             <property name="id">102601</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(102601)</visible>
         </item>
         <item>
-            <label>Korean Movies  AbuKarim - $LOCALIZE[342]</label>
+            <label>$LOCALIZE[342]</label>
             <property name="id">102601</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(102601)</visible>
         </item>
         <item>
-            <label>Korean Drama AbuKarim - $LOCALIZE[20343]</label>
+            <label>$INFO[Window.Property(WidgetMeta.102601.Label)]</label>
             <property name="id">102602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(102602)</visible>
         </item>
         <item>
-            <label>Korean Drama AbuKarim - $LOCALIZE[20343]</label>
+            <label>$INFO[Window.Property(WidgetMeta.102601.Label)]</label>
             <property name="id">102602</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(102602)</visible>
         </item>
         <item>
-            <label>$INFO[Window.Property(WidgetMeta.102602.Label)]</label>
+            <label>$LOCALIZE[20343]</label>
             <property name="id">102603</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Square_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(102603)</visible>
         </item>
         <item>
-            <label>$INFO[Window.Property(WidgetMeta.102602.Label)]</label>
+            <label>$LOCALIZE[20343]</label>
             <property name="id">102603</property>
-            <property name="include">List_Landscape_Row</property>
+            <property name="include">List_Square_Row</property>
             <visible>!Control.IsVisible(102603)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.102603.Label)]</label>
+            <property name="id">102604</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(102604)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.102603.Label)]</label>
+            <property name="id">102604</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(102604)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.102604.Label)]</label>
+            <property name="id">102605</property>
+            <property name="include">List_Landscape_Row</property>
+            <property name="visible">True</property>
+            <visible>Control.IsVisible(102605)</visible>
+        </item>
+        <item>
+            <label>$INFO[Window.Property(WidgetMeta.102604.Label)]</label>
+            <property name="id">102605</property>
+            <property name="include">List_Landscape_Row</property>
+            <visible>!Control.IsVisible(102605)</visible>
         </item>
         <!-- Sidemenu Widgets for sidemenu 3 $LOCALIZE[24001] -->
         <item>
@@ -862,580 +1122,6 @@
             <visible>!Control.IsVisible(103604)</visible>
         </item>
     </include>
-    <!-- Static Mainmenu -->
-    <include name="skinvariables-sidemenu-staticitems">
-        <item>
-            <label>$LOCALIZE[342]</label>
-            <icon>special://skin/extras/icons/moviesl.png</icon>
-            <property name="path">ActivateWindow(1108)</property>
-            <property name="menu">sidemenu</property>
-            <property name="mode"/>
-            <property name="node"/>
-            <property name="item">$NUMBER[0]</property>
-            <property name="guid">guid-bd0901f6</property>
-            <property name="target"/>
-            <property name="fanart"/>
-            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-            <property name="widget_style"/>
-            <property name="widget_sortby"/>
-            <property name="widget_sortorder"/>
-            <property name="widget_limit"/>
-            <property name="widget_path"/>
-            <property name="spotlight_path">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-            <property name="spotlight_target">videos</property>
-            <property name="spotlight_label">$LOCALIZE[32304]</property>
-            <property name="use_as_widget"/>
-            <label2>$LOCALIZE[31026]</label2>
-            <onclick>Dialog.Close(1170,true)</onclick>
-            <onclick>SetProperty(Hub.ResetDefaultControl,True,1108)</onclick>
-            <onclick>ActivateWindow(1108)</onclick>
-            <visible>True</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[20343]</label>
-            <icon>special://skin/extras/icons/tvl.png</icon>
-            <property name="path">ActivateWindow(1107)</property>
-            <property name="menu">sidemenu</property>
-            <property name="mode"/>
-            <property name="node"/>
-            <property name="item">$NUMBER[1]</property>
-            <property name="guid">guid-93532622</property>
-            <property name="target"/>
-            <property name="fanart"/>
-            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-            <property name="widget_style"/>
-            <property name="widget_sortby"/>
-            <property name="widget_sortorder"/>
-            <property name="widget_limit"/>
-            <property name="widget_path"/>
-            <property name="spotlight_path">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-            <property name="spotlight_target">videos</property>
-            <property name="spotlight_label">$LOCALIZE[32304]</property>
-            <property name="use_as_widget"/>
-            <label2>$LOCALIZE[31026]</label2>
-            <onclick>Dialog.Close(1170,true)</onclick>
-            <onclick>SetProperty(Hub.ResetDefaultControl,True,1107)</onclick>
-            <onclick>ActivateWindow(1107)</onclick>
-            <visible>True</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32302]</label>
-            <icon>special://skin/extras/icons/kdl.png</icon>
-            <property name="path">ActivateWindow(1106)</property>
-            <property name="menu">sidemenu</property>
-            <property name="mode"/>
-            <property name="node"/>
-            <property name="item">$NUMBER[2]</property>
-            <property name="guid">guid-772a73c0</property>
-            <property name="target"/>
-            <property name="fanart"/>
-            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-            <property name="widget_style"/>
-            <property name="widget_sortby"/>
-            <property name="widget_sortorder"/>
-            <property name="widget_limit"/>
-            <property name="widget_path"/>
-            <property name="spotlight_path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean&amp;list_slug=korean&amp;user_slug=kikkah&amp;plugin_category=Korean&amp;tmdb_id=None&amp;sort_by=rank&amp;sort_how=desc&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-            <property name="spotlight_target">videos</property>
-            <property name="spotlight_label">$LOCALIZE[32304]</property>
-            <property name="use_as_widget"/>
-            <label2>$LOCALIZE[31026]</label2>
-            <onclick>Dialog.Close(1170,true)</onclick>
-            <onclick>SetProperty(Hub.ResetDefaultControl,True,1106)</onclick>
-            <onclick>ActivateWindow(1106)</onclick>
-            <visible>True</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[24001]</label>
-            <icon>special://skin/extras/icons/shapes.png</icon>
-            <property name="path">ActivateWindow(addonbrowser)</property>
-            <property name="menu">sidemenu</property>
-            <property name="mode"/>
-            <property name="node"/>
-            <property name="item">$NUMBER[3]</property>
-            <property name="guid">guid-3cf57acf</property>
-            <property name="target"/>
-            <property name="fanart"/>
-            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-            <property name="widget_style"/>
-            <property name="widget_sortby"/>
-            <property name="widget_sortorder"/>
-            <property name="widget_limit"/>
-            <property name="widget_path"/>
-            <property name="spotlight_path"/>
-            <property name="spotlight_target"/>
-            <property name="spotlight_label"/>
-            <property name="use_as_widget"/>
-            <label2/>
-            <onclick>Dialog.Close(1170,true)</onclick>
-            <onclick>ActivateWindow(addonbrowser)</onclick>
-            <visible>True</visible>
-        </item>
-    </include>
-    <!-- Dynamic Submenus -->
-    <include name="skinvariables-sidemenu-submenu">
-        <include content="Hub_Submenu_List">
-            <param name="id">0302</param>
-            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
-            <param name="hidden_button_prefix">0302</param>
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="submenu_widget_id">601</param>
-            <include content="Action_SkinVariables_ShortcutList_Onclick">
-                <param name="id">0302</param>
-            </include>
-            <content>
-                <item>
-                    <label>$LOCALIZE[31128]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fupcoming.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">0</property>
-                    <property name="item">$NUMBER[0]</property>
-                    <property name="guid">guid-bd96e544</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[601]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[32305]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=movie&amp;list_name=Your+In-Progress&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">0</property>
-                    <property name="item">$NUMBER[1]</property>
-                    <property name="guid">guid-a726967a</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[602]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=movie&amp;list_name=Your+In-Progress&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[31122]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">0</property>
-                    <property name="item">$NUMBER[2]</property>
-                    <property name="guid">guid-fec58444</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[603]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[1036]</label>
-                    <icon>special://skin/extras/icons/moviesl.png</icon>
-                    <property name="path">favourites://</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">0</property>
-                    <property name="item">$NUMBER[3]</property>
-                    <property name="guid">guid-f5d496d2</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[604]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2/>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,favourites://,return)</onclick>
-                    <visible>True</visible>
-                </item>
-            </content>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6)</visible>
-            <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
-        </include>
-        <include content="Hub_Submenu_List">
-            <param name="id">1302</param>
-            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
-            <param name="hidden_button_prefix">1302</param>
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="submenu_widget_id">1601</param>
-            <include content="Action_SkinVariables_ShortcutList_Onclick">
-                <param name="id">1302</param>
-            </include>
-            <content>
-                <item>
-                    <label>$LOCALIZE[31128]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fupcoming.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">1</property>
-                    <property name="item">$NUMBER[0]</property>
-                    <property name="guid">guid-f86a0daa</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[1601]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[32305] - $LOCALIZE[20343]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=tv&amp;list_name=%D9%82%D9%8A%D8%AF+%D8%A7%D9%84%D8%AA%D9%82%D8%AF%D9%85&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">1</property>
-                    <property name="item">$NUMBER[1]</property>
-                    <property name="guid">guid-5f3ea321</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[1602]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=tv&amp;list_name=%D9%82%D9%8A%D8%AF+%D8%A7%D9%84%D8%AA%D9%82%D8%AF%D9%85&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[32305] - $LOCALIZE[20360]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2ftrakt%2finprogress.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">1</property>
-                    <property name="item">$NUMBER[2]</property>
-                    <property name="guid">guid-dbbe6a1a</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[1603]</property>
-                    <property name="widget_style">Apps</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2ftrakt%2finprogress.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">1</property>
-                    <property name="item">$NUMBER[3]</property>
-                    <property name="guid">guid-8893c186</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[1604]</property>
-                    <property name="widget_style">Apps</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[31122]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=tv&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">1</property>
-                    <property name="item">$NUMBER[4]</property>
-                    <property name="guid">guid-fc2c448b</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[1605]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=tv&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-            </content>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)</visible>
-            <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
-        </include>
-        <include content="Hub_Submenu_List">
-            <param name="id">2302</param>
-            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
-            <param name="hidden_button_prefix">2302</param>
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="submenu_widget_id">2601</param>
-            <include content="Action_SkinVariables_ShortcutList_Onclick">
-                <param name="id">2302</param>
-            </include>
-            <content>
-                <item>
-                    <label>Korean Movies  AbuKarim - $LOCALIZE[342]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Movies++AbuKarim&amp;list_slug=korean-movies-abukarim-26374953&amp;user_slug=taiseer999&amp;plugin_category=Korean+Movies++AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">2</property>
-                    <property name="item">$NUMBER[0]</property>
-                    <property name="guid">guid-8a30383f</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[2601]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby">dateadded</property>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Movies++AbuKarim&amp;list_slug=korean-movies-abukarim-26374953&amp;user_slug=taiseer999&amp;plugin_category=Korean+Movies++AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>Korean Drama AbuKarim - $LOCALIZE[20343]</label>
-                    <icon>image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fdefault.png/</icon>
-                    <property name="path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Drama+AbuKarim&amp;list_slug=korean-drama-abukarim&amp;user_slug=taiseer999&amp;plugin_category=Korean+Drama+AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">2</property>
-                    <property name="item">$NUMBER[1]</property>
-                    <property name="guid">guid-c8da4a7c</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[2602]</property>
-                    <property name="widget_style">Poster</property>
-                    <property name="widget_sortby">dateadded</property>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24000]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Drama+AbuKarim&amp;list_slug=korean-drama-abukarim&amp;user_slug=taiseer999&amp;plugin_category=Korean+Drama+AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>Stacked Folder</label>
-                    <icon>special://skin/extras/icons/list-ol.png</icon>
-                    <property name="path">Stacked_Folder</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">2</property>
-                    <property name="item">$NUMBER[2]</property>
-                    <property name="guid">guid-241e5b1d</property>
-                    <property name="target"/>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[2603]</property>
-                    <property name="widget_style"/>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2/>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>Stacked_Folder</onclick>
-                    <visible>True</visible>
-                </item>
-            </content>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)</visible>
-            <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
-        </include>
-        <include content="Hub_Submenu_List">
-            <param name="id">3302</param>
-            <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
-            <param name="hidden_button_prefix">3302</param>
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="submenu_widget_id">3601</param>
-            <include content="Action_SkinVariables_ShortcutList_Onclick">
-                <param name="id">3302</param>
-            </include>
-            <content>
-                <item>
-                    <label>$LOCALIZE[1037]</label>
-                    <icon>special://skin/extras/icons/addon.png</icon>
-                    <property name="path">addons://sources/video/</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">3</property>
-                    <property name="item">$NUMBER[0]</property>
-                    <property name="guid">guid-1baa5d42</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3601]</property>
-                    <property name="widget_style">Icon</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24001]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,addons://sources/video/,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[1043]</label>
-                    <icon>special://skin/extras/icons/addon.png</icon>
-                    <property name="path">addons://sources/executable/</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">3</property>
-                    <property name="item">$NUMBER[1]</property>
-                    <property name="guid">guid-22e2338a</property>
-                    <property name="target">programs</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3602]</property>
-                    <property name="widget_style">Icon</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[24001]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(programs,addons://sources/executable/,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>$LOCALIZE[14022]</label>
-                    <icon>special://skin/extras/icons/folder.png</icon>
-                    <property name="path">library://video/files.xml/</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">3</property>
-                    <property name="item">$NUMBER[2]</property>
-                    <property name="guid">guid-9c498aa4</property>
-                    <property name="target">videos</property>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3603]</property>
-                    <property name="widget_style">Circle</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2>$LOCALIZE[14022]</label2>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>ActivateWindow(videos,library://video/files.xml/,return)</onclick>
-                    <visible>True</visible>
-                </item>
-                <item>
-                    <label>Stacked Folder</label>
-                    <icon>special://skin/extras/icons/list-ol.png</icon>
-                    <property name="path">Stacked_Folder</property>
-                    <property name="menu">sidemenu</property>
-                    <property name="mode">widgets</property>
-                    <property name="node">3</property>
-                    <property name="item">$NUMBER[3]</property>
-                    <property name="guid">guid-8ceb2698</property>
-                    <property name="target"/>
-                    <property name="fanart"/>
-                    <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-                    <property name="widget_id">$NUMBER[3604]</property>
-                    <property name="widget_style">Circle</property>
-                    <property name="widget_sortby"/>
-                    <property name="widget_sortorder"/>
-                    <property name="widget_limit"/>
-                    <property name="widget_path"/>
-                    <label2/>
-                    <onclick>Dialog.Close(1170,true)</onclick>
-                    <onclick>Stacked_Folder</onclick>
-                    <visible>True</visible>
-                </item>
-            </content>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)</visible>
-            <visible>!String.IsEmpty(Container(300).ListItem.Property(use_as_widget))</visible>
-        </include>
-    </include>
-    <!-- Category Spotlights -->
-    <include name="skinvariables-sidemenu-spotlight">
-        <include content="Spotlight_List">
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="sortorder">ascending</param>
-            <param name="sortby"/>
-            <param name="content">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</param>
-            <param name="target">videos</param>
-            <param name="limit"/>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6)</visible>
-        </include>
-        <include content="Spotlight_List">
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="sortorder">ascending</param>
-            <param name="sortby"/>
-            <param name="content">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</param>
-            <param name="target">videos</param>
-            <param name="limit"/>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)</visible>
-        </include>
-        <include content="Spotlight_List">
-            <param name="window_id">Home</param>
-            <param name="property_window_id">Home</param>
-            <param name="sortorder">ascending</param>
-            <param name="sortby">random</param>
-            <param name="content">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean&amp;list_slug=korean&amp;user_slug=kikkah&amp;plugin_category=Korean&amp;tmdb_id=None&amp;sort_by=rank&amp;sort_how=desc&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</param>
-            <param name="target">videos</param>
-            <param name="limit"/>
-            <visible>String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)</visible>
-        </include>
-    </include>
     <!-- Standard Widgets -->
     <include name="skinvariables-sidemenu-widgets">
         <!-- Widget Group -->
@@ -1452,587 +1138,7 @@
                 <param name="property_window_id">Home</param>
                 <param name="is_homemenu">false</param>
                 <param name="visible">True</param>
-                <!-- Standard Widgets for Category sidemenu 0 $LOCALIZE[342] -->
-                <include content="Widget_Row">
-                    <param name="id">601</param>
-                    <param name="groupid">701</param>
-                    <param name="label">$LOCALIZE[31128]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">801</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(1).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(1).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(2).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(3).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">601</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=movie&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(601) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">601</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">601</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">602</param>
-                    <param name="groupid">702</param>
-                    <param name="label">$LOCALIZE[32305]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">802</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(2).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(2).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(3).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(4).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">602</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=movie&amp;list_name=Your+In-Progress&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(602) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">602</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">602</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">603</param>
-                    <param name="groupid">703</param>
-                    <param name="label">$LOCALIZE[31122]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">803</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(3).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(3).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(4).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(5).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">603</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=movie&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(603) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">603</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">603</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">604</param>
-                    <param name="groupid">704</param>
-                    <param name="label">$LOCALIZE[1036]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-bd0901f6)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">804</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(4).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(4).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(5).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">604</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">favourites://</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(604) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">604</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">604</param>
-                    </include>
-                </include>
-                <!-- Standard Widgets for Category sidemenu 1 $LOCALIZE[20343] -->
-                <include content="Widget_Row">
-                    <param name="id">1601</param>
-                    <param name="groupid">1701</param>
-                    <param name="label">$LOCALIZE[31128]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">1801</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(5).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(5).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">1601</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trending_day&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(1601) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">1601</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">1601</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">1602</param>
-                    <param name="groupid">1702</param>
-                    <param name="label">$LOCALIZE[32305] - $LOCALIZE[20343]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">1802</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(6).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(6).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">1602</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_inprogress&amp;tmdb_type=tv&amp;list_name=%D9%82%D9%8A%D8%AF+%D8%A7%D9%84%D8%AA%D9%82%D8%AF%D9%85&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(1602) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">1602</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">1602</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">1603</param>
-                    <param name="groupid">1703</param>
-                    <param name="label">$LOCALIZE[32305] - $LOCALIZE[20360]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Apps_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">True</param>
-                    <param name="positioningid">1803</param>
-                    <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(7).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(7).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">1603</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_ondeck&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(1603) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">1603</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">1603</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">1604</param>
-                    <param name="groupid">1704</param>
-                    <param name="label">$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Apps_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">True</param>
-                    <param name="positioningid">1804</param>
-                    <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(8).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(8).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">1604</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_nextepisodes&amp;tmdb_type=tv&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(1604) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">1604</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">1604</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">1605</param>
-                    <param name="groupid">1705</param>
-                    <param name="label">$LOCALIZE[31122]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-93532622)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">1805</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(9).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(9).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">1605</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_watchlist&amp;tmdb_type=tv&amp;list_name=%D9%82%D8%A7%D8%A6%D9%85%D8%A9+%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(1605) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">1605</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">1605</param>
-                    </include>
-                </include>
-                <!-- Standard Widgets for Category sidemenu 2 $LOCALIZE[32302] -->
-                <include content="Widget_Row">
-                    <param name="id">2601</param>
-                    <param name="groupid">2701</param>
-                    <param name="label">Korean Movies  AbuKarim - $LOCALIZE[342]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">2801</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(10).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(10).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">2601</param>
-                    </include>
-                    <content sortby="dateadded" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Movies++AbuKarim&amp;list_slug=korean-movies-abukarim-26374953&amp;user_slug=taiseer999&amp;plugin_category=Korean+Movies++AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(2601) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">2601</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">2601</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">2602</param>
-                    <param name="groupid">2702</param>
-                    <param name="label">Korean Drama AbuKarim - $LOCALIZE[20343]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">2802</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(11).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(11).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">2602</param>
-                    </include>
-                    <content sortby="dateadded" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean+Drama+AbuKarim&amp;list_slug=korean-drama-abukarim&amp;user_slug=taiseer999&amp;plugin_category=Korean+Drama+AbuKarim&amp;tmdb_id=None&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(2602) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">2602</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">2602</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">2603</param>
-                    <param name="groupid">2703</param>
-                    <param name="label">$INFO[Window.Property(WidgetMeta.2602.Label)]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Landscape_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-772a73c0)] + [Control.IsVisible(2602)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">Control.HasFocus(2602)</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">2803</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(12).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(12).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">2603</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.2602.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.2602.FolderPath)]</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(2603) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">2603</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">2603</param>
-                    </include>
-                </include>
-                <!-- Standard Widgets for Category sidemenu 3 $LOCALIZE[24001] -->
-                <include content="Widget_Row">
-                    <param name="id">3601</param>
-                    <param name="groupid">3701</param>
-                    <param name="label">$LOCALIZE[1037]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Icon_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">True</param>
-                    <param name="positioningid">3801</param>
-                    <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(13).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(13).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">3601</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/video/</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3601) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3601</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">3601</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">3602</param>
-                    <param name="groupid">3702</param>
-                    <param name="label">$LOCALIZE[1043]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Icon_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">True</param>
-                    <param name="positioningid">3802</param>
-                    <param name="positioningtop">-80</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(14).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(14).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">3602</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="programs" limit="" browse="$VAR[Defs_BrowseLimitedLists]">addons://sources/executable/</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3602) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3602</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">3602</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">3603</param>
-                    <param name="groupid">3703</param>
-                    <param name="label">$LOCALIZE[14022]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Circle_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)] + [True] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">False</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">3803</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(15).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(15).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">3603</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="videos" limit="" browse="$VAR[Defs_BrowseLimitedLists]">library://video/files.xml/</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3603) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3603</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">3603</param>
-                    </include>
-                </include>
-                <include content="Widget_Row">
-                    <param name="id">3604</param>
-                    <param name="groupid">3704</param>
-                    <param name="label">$INFO[Window.Property(WidgetMeta.3603.Label)]</param>
-                    <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Circle_Row</param>
-                    <param name="grouplistid">400</param>
-                    <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
-                    <param name="detailed">False</param>
-                    <param name="visible">[String.IsEqual(Container(300).ListItem.Property(guid),guid-3cf57acf)] + [Control.IsVisible(3603)] + String.IsEmpty(Window.Property(Widgets.ResetPosition))</param>
-                    <param name="altvisible">Control.HasFocus(3603)</param>
-                    <param name="busy_isupdating">True</param>
-                    <param name="widgetfade_include">true</param>
-                    <param name="widgetfade_disable">false</param>
-                    <param name="widgetconstants_affix">_detailed</param>
-                    <param name="widget_showoverlay">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_hideartwork">[[Skin.HasSetting(Hub.Home.DisableSubmenu)] + !Skin.HasSetting(Widgets.DontHideArtworkOnClassic) + !Skin.HasSetting(Hub.Home.EnableDetailedInformation)]</param>
-                    <param name="widget_positioning">False</param>
-                    <param name="positioningid">3804</param>
-                    <param name="positioningtop">0</param>
-                    <param name="positioningcheck">[!String.IsEmpty(Container(480).ListItemAbsolute(16).Property(include)) + [!String.IsEmpty(Container(480).ListItemAbsolute(16).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(17).Property(visible)) | !String.IsEmpty(Container(480).ListItemAbsolute(18).Property(visible))]]</param>
-                    <description/>
-                    <include content="Widget_NoResults">
-                        <param name="id">3604</param>
-                    </include>
-                    <content sortby="" sortorder="ascending" target="$INFO[Window.Property(WidgetMeta.3603.Target)]" limit="" browse="$VAR[Defs_BrowseLimitedLists]">$INFO[Window.Property(WidgetMeta.3603.FolderPath)]</content>
-                    <include content="Defs_AutoScroll" condition="False">
-                        <param name="condition">[!Control.HasFocus(3604) | System.IdleTime(3)]</param>
-                    </include>
-                    <include content="Action_View_Movement_OnLeft">
-                        <param name="id">3604</param>
-                    </include>
-                    <include content="Action_View_Movement_OnRight">
-                        <param name="id">3604</param>
-                    </include>
-                </include>
-                <!-- Global Widgets for sidemenu -->
+                <!-- Classic Widgets for sidemenu -->
             </include>
         </include>
     </include>
@@ -2249,219 +1355,7 @@
     </include>
     <!-- List Check Widgets -->
     <include name="skinvariables-sidemenu-widgets-listcheck">
-        <!-- Standard Widgets for Category sidemenu 0 $LOCALIZE[342] -->
-        <item>
-            <label>$LOCALIZE[31128]</label>
-            <property name="id">601</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(601)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[31128]</label>
-            <property name="id">601</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(601)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305]</label>
-            <property name="id">602</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(602)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305]</label>
-            <property name="id">602</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(602)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[31122]</label>
-            <property name="id">603</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(603)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[31122]</label>
-            <property name="id">603</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(603)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[1036]</label>
-            <property name="id">604</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(604)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[1036]</label>
-            <property name="id">604</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(604)</visible>
-        </item>
-        <!-- Standard Widgets for Category sidemenu 1 $LOCALIZE[20343] -->
-        <item>
-            <label>$LOCALIZE[31128]</label>
-            <property name="id">1601</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(1601)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[31128]</label>
-            <property name="id">1601</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(1601)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20343]</label>
-            <property name="id">1602</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(1602)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20343]</label>
-            <property name="id">1602</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(1602)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20360]</label>
-            <property name="id">1603</property>
-            <property name="include">List_Apps_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(1603)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[20360]</label>
-            <property name="id">1603</property>
-            <property name="include">List_Apps_Row</property>
-            <visible>!Control.IsVisible(1603)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</label>
-            <property name="id">1604</property>
-            <property name="include">List_Apps_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(1604)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32305] - $LOCALIZE[19031] $LOCALIZE[20360]</label>
-            <property name="id">1604</property>
-            <property name="include">List_Apps_Row</property>
-            <visible>!Control.IsVisible(1604)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[31122]</label>
-            <property name="id">1605</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(1605)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[31122]</label>
-            <property name="id">1605</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(1605)</visible>
-        </item>
-        <!-- Standard Widgets for Category sidemenu 2 $LOCALIZE[32302] -->
-        <item>
-            <label>Korean Movies  AbuKarim - $LOCALIZE[342]</label>
-            <property name="id">2601</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(2601)</visible>
-        </item>
-        <item>
-            <label>Korean Movies  AbuKarim - $LOCALIZE[342]</label>
-            <property name="id">2601</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(2601)</visible>
-        </item>
-        <item>
-            <label>Korean Drama AbuKarim - $LOCALIZE[20343]</label>
-            <property name="id">2602</property>
-            <property name="include">List_Poster_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(2602)</visible>
-        </item>
-        <item>
-            <label>Korean Drama AbuKarim - $LOCALIZE[20343]</label>
-            <property name="id">2602</property>
-            <property name="include">List_Poster_Row</property>
-            <visible>!Control.IsVisible(2602)</visible>
-        </item>
-        <item>
-            <label>$INFO[Window.Property(WidgetMeta.2602.Label)]</label>
-            <property name="id">2603</property>
-            <property name="include">List_Landscape_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(2603)</visible>
-        </item>
-        <item>
-            <label>$INFO[Window.Property(WidgetMeta.2602.Label)]</label>
-            <property name="id">2603</property>
-            <property name="include">List_Landscape_Row</property>
-            <visible>!Control.IsVisible(2603)</visible>
-        </item>
-        <!-- Standard Widgets for Category sidemenu 3 $LOCALIZE[24001] -->
-        <item>
-            <label>$LOCALIZE[1037]</label>
-            <property name="id">3601</property>
-            <property name="include">List_Icon_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(3601)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[1037]</label>
-            <property name="id">3601</property>
-            <property name="include">List_Icon_Row</property>
-            <visible>!Control.IsVisible(3601)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[1043]</label>
-            <property name="id">3602</property>
-            <property name="include">List_Icon_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(3602)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[1043]</label>
-            <property name="id">3602</property>
-            <property name="include">List_Icon_Row</property>
-            <visible>!Control.IsVisible(3602)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[14022]</label>
-            <property name="id">3603</property>
-            <property name="include">List_Circle_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(3603)</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[14022]</label>
-            <property name="id">3603</property>
-            <property name="include">List_Circle_Row</property>
-            <visible>!Control.IsVisible(3603)</visible>
-        </item>
-        <item>
-            <label>$INFO[Window.Property(WidgetMeta.3603.Label)]</label>
-            <property name="id">3604</property>
-            <property name="include">List_Circle_Row</property>
-            <property name="visible">True</property>
-            <visible>Control.IsVisible(3604)</visible>
-        </item>
-        <item>
-            <label>$INFO[Window.Property(WidgetMeta.3603.Label)]</label>
-            <property name="id">3604</property>
-            <property name="include">List_Circle_Row</property>
-            <visible>!Control.IsVisible(3604)</visible>
-        </item>
-        <!-- Global Widgets for sidemenu -->
+        <!-- Classic Widgets for sidemenu -->
     </include>
     <!-- Static Mainmenu -->
     <include name="skinvariables-1101menu-staticitems">
@@ -3063,7 +1957,7 @@
                     <property name="fanart"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[604]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -3086,7 +1980,7 @@
                     <property name="fanart"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[605]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -3109,7 +2003,7 @@
                     <property name="fanart"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[606]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -3132,7 +2026,7 @@
                     <property name="fanart"/>
                     <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
                     <property name="widget_id">$NUMBER[607]</property>
-                    <property name="widget_style">Poster</property>
+                    <property name="widget_style"/>
                     <property name="widget_sortby"/>
                     <property name="widget_sortorder"/>
                     <property name="widget_limit"/>
@@ -3313,7 +2207,7 @@
                     <param name="groupid">704</param>
                     <param name="label">$LOCALIZE[31122]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -3349,7 +2243,7 @@
                     <param name="groupid">705</param>
                     <param name="label">$LOCALIZE[31236]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -3385,7 +2279,7 @@
                     <param name="groupid">706</param>
                     <param name="label">because most watched</param>
                     <param name="usewidgetlabel">True</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -3421,7 +2315,7 @@
                     <param name="groupid">707</param>
                     <param name="label">$LOCALIZE[16102]</param>
                     <param name="usewidgetlabel">False</param>
-                    <param name="include">List_Poster_Row</param>
+                    <param name="include">List_Landscape_Row</param>
                     <param name="grouplistid">400</param>
                     <param name="refocus">$VAR[Action_Hubs_Complex_SetFocus]</param>
                     <param name="detailed">False</param>
@@ -3615,53 +2509,53 @@
         <item>
             <label>$LOCALIZE[31122]</label>
             <property name="id">604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(604)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31122]</label>
             <property name="id">604</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(604)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31236]</label>
             <property name="id">605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(605)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31236]</label>
             <property name="id">605</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(605)</visible>
         </item>
         <item>
             <label>because most watched</label>
             <property name="id">606</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(606)</visible>
         </item>
         <item>
             <label>because most watched</label>
             <property name="id">606</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(606)</visible>
         </item>
         <item>
             <label>$LOCALIZE[16102]</label>
             <property name="id">607</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <property name="visible">True</property>
             <visible>Control.IsVisible(607)</visible>
         </item>
         <item>
             <label>$LOCALIZE[16102]</label>
             <property name="id">607</property>
-            <property name="include">List_Poster_Row</property>
+            <property name="include">List_Landscape_Row</property>
             <visible>!Control.IsVisible(607)</visible>
         </item>
         <!-- Adaptive Widgets for Category 1107menu 1 $LOCALIZE[136] -->
@@ -4223,13 +3117,29 @@
     <!-- Static Power Main Menu -->
     <include name="skinvariables-powermainmenu-staticitems">
         <item>
+            <label>$LOCALIZE[5]</label>
+            <icon>special://skin/extras/icons/gear.png</icon>
+            <property name="path">ActivateWindow(settings)</property>
+            <property name="menu">powermainmenu</property>
+            <property name="mode"/>
+            <property name="node"/>
+            <property name="item">$NUMBER[0]</property>
+            <property name="guid">guid-aebceaab</property>
+            <property name="target"/>
+            <property name="fanart"/>
+            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
+            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
+            <onclick>ActivateWindow(settings)</onclick>
+            <visible>True</visible>
+        </item>
+        <item>
             <label>$LOCALIZE[31364]</label>
             <icon>special://skin/extras/icons/rotate.png</icon>
             <property name="path">ReloadSkin</property>
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[0]</property>
+            <property name="item">$NUMBER[1]</property>
             <property name="guid">guid-a23154b0</property>
             <property name="target"/>
             <property name="fanart"/>
@@ -4245,29 +3155,13 @@
             <property name="menu">powermainmenu</property>
             <property name="mode"/>
             <property name="node"/>
-            <property name="item">$NUMBER[1]</property>
+            <property name="item">$NUMBER[2]</property>
             <property name="guid">guid-8ade1465</property>
             <property name="target"/>
             <property name="fanart"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
             <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
             <onclick>Quit</onclick>
-            <visible>True</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[32300]</label>
-            <icon>special://skin/extras/icons/ss.png</icon>
-            <property name="path">PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</property>
-            <property name="menu">powermainmenu</property>
-            <property name="mode"/>
-            <property name="node"/>
-            <property name="item">$NUMBER[2]</property>
-            <property name="guid">guid-aebceaab</property>
-            <property name="target"/>
-            <property name="fanart"/>
-            <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
-            <onclick condition="Window.IsActive(DialogButtonMenu.xml) | Window.IsVisible(1170)">Close</onclick>
-            <onclick>PlayMedia(plugin://script.skinswitcher/?url=url&amp;mode=1&amp;name=Click+here+to+change+skins+&amp;iconimage=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ficon.png&amp;fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fscript.skinswitcher%2Ffanart.jpg)</onclick>
             <visible>True</visible>
         </item>
         <item>
@@ -4489,9 +3383,9 @@
             <property name="fanart"/>
             <onclick>ClearProperty(TMDbHelper.WidgetContainer.UpdateLock.OnFocus,1198)</onclick>
             <property name="expression"/>
-            <property name="spotlight_path">plugin://plugin.video.themoviedb.helper/?info=trakt_userlist&amp;tmdb_type=both&amp;list_name=Korean&amp;list_slug=korean&amp;user_slug=kikkah&amp;plugin_category=Korean&amp;tmdb_id=None&amp;sort_by=rank&amp;sort_how=desc&amp;reload=%24INFO%5BWindow%28Home%29.Property%28TMDbHelper.Widgets.Reload%29%5D&amp;widget=true</property>
+            <property name="spotlight_path"/>
             <property name="spotlight_target">videos</property>
-            <property name="spotlight_label">$LOCALIZE[32304]</property>
+            <property name="spotlight_label">Korean Movies  AbuKarim</property>
             <property name="sidemenu_path">plugin://script.skinvariables/?info=get_shortcuts_node&amp;menu=sidemenu-customnode-guid-772a73c0$VAR[Path_SkinVariables_SkinFolder,&amp;skin=,]</property>
             <property name="sidemenu_target"/>
             <property name="widgets_first_id">$VAR[skinvariables-sidemenu-itemfocus-102]</property>
@@ -4530,6 +3424,7 @@
         <value condition="Control.IsVisible(100602)">100602</value>
         <value condition="Control.IsVisible(100603)">100603</value>
         <value condition="Control.IsVisible(100604)">100604</value>
+        <value condition="Control.IsVisible(100605)">100605</value>
         <value>400</value>
     </variable>
     <!-- Variables for Side Menu $LOCALIZE[20343] focus -->
@@ -4539,6 +3434,8 @@
         <value condition="Control.IsVisible(101603)">101603</value>
         <value condition="Control.IsVisible(101604)">101604</value>
         <value condition="Control.IsVisible(101605)">101605</value>
+        <value condition="Control.IsVisible(101606)">101606</value>
+        <value condition="Control.IsVisible(101607)">101607</value>
         <value>400</value>
     </variable>
     <!-- Variables for Side Menu $LOCALIZE[32302] focus -->
@@ -4546,6 +3443,8 @@
         <value condition="Control.IsVisible(102601)">102601</value>
         <value condition="Control.IsVisible(102602)">102602</value>
         <value condition="Control.IsVisible(102603)">102603</value>
+        <value condition="Control.IsVisible(102604)">102604</value>
+        <value condition="Control.IsVisible(102605)">102605</value>
         <value>400</value>
     </variable>
     <!-- Variables for Side Menu $LOCALIZE[24001] focus -->
