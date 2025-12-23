@@ -48,7 +48,7 @@ class source(Debrid):
 					if not (self.folder_query in filename or self.folder_query in foldername): continue
 
 					if title_filter and not check_title(title, normalized, self.aliases, self.year, self.season, self.episode): continue
-					direct_debrid_link, URLName = item['mediatype'], clean_file_name(normalized).replace('html', ' ').replace('+', ' ').replace('-', ' ')
+					direct_debrid_link, URLName = item['media_type'], clean_file_name(normalized).replace('html', ' ').replace('+', ' ').replace('-', ' ')
 					file_dl, size = item['link'], round(float(item['size'])/1073741824, 2)
 					video_quality, details = get_file_info(name_info=release_info_format(normalized))
 					sources_append({
@@ -74,7 +74,7 @@ class source(Debrid):
 			[i.join() for i in threads]
 		except: pass
 
-	def _scrape_folders(self, function, mediatype):
+	def _scrape_folders(self, function, media_type):
 		try:
 			results_append = self.scrape_results.append
 			folder = function(check_cache=False)
@@ -83,7 +83,7 @@ class source(Debrid):
 					try:
 						item.update({
 							'filename': item['short_name'], 'folder_name': file['name'],
-							'mediatype': mediatype, 'link': '%d,%d' % (file['id'], item['id'])
+							'media_type': media_type, 'link': '%d,%d' % (file['id'], item['id'])
 						})
 						results_append(item)
 					except: pass

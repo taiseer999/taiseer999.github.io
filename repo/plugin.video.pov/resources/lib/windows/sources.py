@@ -1,17 +1,14 @@
 import json
 from windows import BaseDialog
+from modules.debrid import Source
 from modules.kodi_utils import media_path, hide_busy_dialog, dialog, select_dialog, ok_dialog, local_string as ls
-from modules.settings import get_art_provider, provider_sort_ranks, get_fanart_data
+from modules.settings import get_art_provider, get_fanart_data, info_icons, provider_sort_ranks
 # from modules.kodi_utils import logger
 
 fanart_empty = BaseDialog.fanart
 poster_empty = media_path('box_office.png')
-info_icons_dict, extra_info_choices = {k: media_path(v) for k, v in (
-	('alldebrid', 'alldebrid.png'), ('ad_cloud', 'alldebrid.png'), ('premiumize', 'premiumize.png'), ('pm_cloud', 'premiumize.png'),
-	('real-debrid', 'realdebrid.png'), ('rd_cloud', 'realdebrid.png'), ('torbox', 'torbox.png'), ('tb_cloud', 'torbox.png'),
-	('offcloud', 'offcloud.png'), ('oc_cloud', 'offcloud.png'), ('easydebrid', 'easydebrid.png'), ('easynews', 'easynews.png'), ('folders', 'folder.png'),
-	('cam', 'flagSD.png'), ('tele', 'flagSD.png'), ('scr', 'flagSD.png'), ('sd', 'flagSD.png'), ('720p', 'flag720p.png'), ('1080p', 'flag1080p.png'),  ('4k', 'flag4k.png')
-)}, (
+info_icons_dict = {k: media_path(v) for k, v in info_icons()}
+extra_info_choices = (
 	('PACK', '[B]PACK[/B]'), ('DOLBY VISION', '[B]D/VISION[/B]'), ('HIGH DYNAMIC RANGE (HDR)', '[B]HDR[/B]'), ('HYBRID', '[B]HYBRID[/B]'), ('AV1', '[B]AV1[/B]'),
 	('HEVC (X265)', '[B]HEVC[/B]'), ('REMUX', 'REMUX'), ('BLURAY', 'BLURAY'), ('SDR', 'SDR'), ('3D', '3D'), ('DOLBY ATMOS', 'ATMOS'), ('DOLBY TRUEHD', 'TRUEHD'),
 	('DOLBY DIGITAL EX', 'DD-EX'), ('DOLBY DIGITAL PLUS', 'DD+'), ('DOLBY DIGITAL', 'DD'), ('DTS-HD MASTER AUDIO', 'DTS-HD MA'), ('DTS-X', 'DTS-X'),
@@ -64,6 +61,8 @@ class SourceResults(BaseDialog):
 
 	def onAction(self, action):
 		chosen_listitem = self.get_listitem(self.window_id)
+		source = json.loads(chosen_listitem.getProperty('source'))
+		url = source.get('url')
 		if action in self.closing_actions:
 			if self.filter_applied: return self.clear_filter()
 			self.selected = (None, '')
@@ -74,26 +73,44 @@ class SourceResults(BaseDialog):
 					self.selected = ('perform_full_search', '')
 					return self.close()
 			if not 'UNCACHED' in chosen_listitem.getProperty('tikiskins.source_type'):
-				self.selected = ('play', json.loads(chosen_listitem.getProperty('source')))
+				self.selected = ('play', source)
 				return self.close()
-			source = json.loads(chosen_listitem.getProperty('source'))
-			cache_provider = source.get('cache_provider', 'None')
-			magnet_url = source.get('url', 'None')
-			params = {'provider': cache_provider, 'url': magnet_url, 'name': source.get('name', '')}
-			params['mode'] = 'manual_add_magnet_to_cloud' if magnet_url.startswith('magnet') else 'manual_add_nzb_to_cloud'
-			self.execute_code(run_plugin_str % self.build_url(params))
+			if url:
+				if not url.startswith('magnet'):
+					url = Source(source, self.meta).manual_add_nzb_to_cloud()
+					if not url is None:
+						source['unrestricted_link'] = url
+						self.selected = ('play', source)
+						return self.close()
+				else: Source(source, self.meta).manual_add_magnet_to_cloud()
+			else: ok_dialog(text=32760, top_space=True)
 		elif action == self.info_actions:
-			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem, fanart=self.original_fanart())
+			kwargs = dict(item=chosen_listitem, fanart=self.original_fanart())
+			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', **kwargs)
 		elif action in self.context_actions:
 			highlight = chosen_listitem.getProperty('tikiskins.highlight')
-			source = json.loads(chosen_listitem.getProperty('source'))
-			kwargs = dict(item=source, highlight=highlight, meta=self.meta, filter_applied=self.filter_applied)
+			kwargs = dict(item=source, meta=self.meta, highlight=highlight, filter_applied=self.filter_applied)
 			choice = self.open_window(('windows.sources', 'ResultsContextMenu'), 'contextmenu.xml', **kwargs)
 			if choice is None: return
-			if 'results_info' in choice:
-				self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', item=chosen_listitem, fanart=self.original_fanart())
-			elif 'clear_results_filter' in choice: return self.clear_filter()
+			if 'clear_results_filter' in choice: return self.clear_filter()
 			elif 'results_filter' in choice: return self.filter_results()
+			elif 'results_info' in choice:
+				kwargs = dict(item=chosen_listitem, fanart=self.original_fanart())
+				self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', **kwargs)
+			elif 'seekable_easynews' in choice:
+				url = Source(source, self.meta).resolve_internal_sources(True)
+				if not url is None:
+					source['unrestricted_link'] = url
+					self.selected = ('play', source)
+					return self.close()
+			elif 'browse_packs' in choice:
+				url = Source(source, self.meta).browse_packs(highlight)
+				if not url == 'cancel':
+					source['unrestricted_link'] = url
+					self.selected = ('play', source)
+					return self.close()
+			elif 'manual_add_magnet_to_cloud' in choice: Source(source, self.meta).manual_add_magnet_to_cloud()
+			elif 'unchecked_magnet_status' in choice: Source(source, self.meta).unchecked_magnet_status()
 			else: self.execute_code(choice)
 
 	def make_items(self):
@@ -324,52 +341,41 @@ class ResultsContextMenu(BaseDialog):
 		elif action in self.context_actions: return self.close()
 
 	def make_menu(self):
+		append = self.item_list.append
 		meta_json = json.dumps(self.meta)
 		source = json.dumps(self.item)
-		name = self.item.get('name')
-		provider_source = self.item.get('source')
-		scrape_provider = self.item.get('scrape_provider')
-		cache_provider = self.item.get('cache_provider', 'None')
-		magnet_url = self.item.get('url', 'None')
-		info_hash = self.item.get('hash', 'None')
-		if next((True for x in ('Real-Debrid', 'AllDebrid') if x in cache_provider), False):
-			params = {'mode': 'unchecked_magnet', 'provider': cache_provider, 'url': magnet_url, 'info_hash': info_hash}
-			self.item_list.append(self.make_contextmenu_item(check_str, run_plugin_str, params))
-		if 'Uncached' in cache_provider and provider_source == 'usenet':
-			params = {'mode': 'torbox.nzb_cache_and_play', 'meta': meta_json, 'source': source}
-			self.item_list.append(self.make_contextmenu_item(tb_cnp_str, run_plugin_str, params))
+		name, provider_source = self.item.get('name'), self.item.get('source')
+		magnet_url, info_hash = self.item.get('url', 'None'), self.item.get('hash', 'None')
+		scrape_provider, cache_provider = self.item.get('scrape_provider'), self.item.get('cache_provider', 'None')
+		if next((True for x in ('real-debrid', 'alldebrid') if x in cache_provider), False):
+			append(self.make_contextmenu_item(check_str, run_plugin_str, {'mode': 'unchecked_magnet_status'}))
+		if 'offcloud' in cache_provider:
+			append(self.make_contextmenu_item(oc_clr_str, run_plugin_str, {'mode': 'offcloud.user_cloud_clear'}))
 		if 'easynews' in scrape_provider:
 			params = {'meta': meta_json, 'name': name, 'url_dl': self.item['url_dl'], 'size': self.item['size']}
-			seek_params = {'mode': 'easynews.seekable_easynews', **params}
 			spool_params = {'mode': 'easynews.spool_easynews', **params}
-			self.item_list.append(self.make_contextmenu_item(en_seek_str, run_plugin_str, seek_params))
-			self.item_list.append(self.make_contextmenu_item(en_dl_str, run_plugin_str, spool_params))
-		if 'Offcloud' in cache_provider:
-			params = {'mode': 'offcloud.user_cloud_clear'}
-			self.item_list.append(self.make_contextmenu_item(oc_clr_str, run_plugin_str, params))
-		if self.filter_applied: self.item_list.append(self.make_contextmenu_item(clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
-		else: self.item_list.append(self.make_contextmenu_item(filter_str, run_plugin_str, {'mode': 'results_filter'}))
-		self.item_list.append(self.make_contextmenu_item(extra_info_str, run_plugin_str, {'mode': 'results_info'}))
+			seek_params = {'mode': 'seekable_easynews'}
+			append(self.make_contextmenu_item(en_seek_str, run_plugin_str, seek_params))
+			append(self.make_contextmenu_item(en_dl_str, run_plugin_str, spool_params))
+		if self.filter_applied:
+			append(self.make_contextmenu_item(clr_filter_str, run_plugin_str, {'mode': 'clear_results_filter'}))
+		else: append(self.make_contextmenu_item(filter_str, run_plugin_str, {'mode': 'results_filter'}))
+		append(self.make_contextmenu_item(extra_info_str, run_plugin_str, {'mode': 'results_info'}))
 		if 'Uncached' in cache_provider: return
 		if 'package' in self.item:
-			self.item_list.append(self.make_contextmenu_item(browse_pack_str, run_plugin_str, {
-				'mode': 'browse_packs', 'highlight': self.highlight, 'name': name, 'provider': cache_provider,
-				'magnet_url': magnet_url, 'info_hash': info_hash
-			}))
-			self.item_list.append(self.make_contextmenu_item(down_pack_str, run_plugin_str, {
+			append(self.make_contextmenu_item(browse_pack_str, run_plugin_str, {'mode': 'browse_packs'}))
+			append(self.make_contextmenu_item(down_pack_str, run_plugin_str, {
 				'mode': 'downloader', 'action': 'meta.pack', 'source': source, 'meta': meta_json,
 				'name': self.meta.get('rootname', ''), 'provider': cache_provider, 'url': None,
 				'magnet_url': magnet_url, 'info_hash': info_hash, 'highlight': self.highlight
 			}))
 		if not scrape_provider == 'folders':
-			self.item_list.append(self.make_contextmenu_item(down_file_str, run_plugin_str, {
+			append(self.make_contextmenu_item(down_file_str, run_plugin_str, {
 				'mode': 'downloader', 'action': 'meta.single', 'source': source, 'meta': meta_json,
 				'name': self.meta.get('rootname', ''), 'provider': scrape_provider, 'url': None
 			}))
 		if provider_source == 'torrent':
-			self.item_list.append(self.make_contextmenu_item(cloud_str, run_plugin_str, {
-				'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'url': magnet_url
-			}))
+			append(self.make_contextmenu_item(cloud_str, run_plugin_str, {'mode': 'manual_add_magnet_to_cloud'}))
 
 	def set_properties(self):
 		self.setProperty('tikiskins.context.highlight', self.highlight)

@@ -41,22 +41,11 @@ def search_easynews(params):
 def resolve_easynews(params):
 	url_dl = params['url_dl']
 	resolved_link = EasyNews().unrestrict_link(url_dl)
-	if resolved_link: resolved_link += '|seekable=0'
 	if not params.get('play', 'false') == 'true': return resolved_link
 	kodi_utils.player.play(resolved_link)
 
-def seekable_easynews(params):
-	url_dl = params['url_dl']
-	kodi_utils.show_busy_dialog()
-	resolved_link = EasyNews().unrestrict_link(url_dl)
-	kodi_utils.hide_busy_dialog()
-	if not resolved_link: return kodi_utils.notification(32574)
-	kodi_utils.set_property('pov_playback_meta', params.get('meta', ''))
-	from modules.player import POVPlayer
-	POVPlayer().run(resolved_link)
-
 def spool_easynews(params):
-	import shutil
+	import json, shutil
 	from threading import Thread, Event
 	from modules.player import POVPlayer
 	name, url_dl, size = params['url_dl'].split('/')[-1], params['url_dl'], float(params['size'])
@@ -80,8 +69,7 @@ def spool_easynews(params):
 			if fileobj.size() > 1048576 * 20: break
 			kodi_utils.sleep(500)
 		kodi_utils.progressDialogBG.close()
-		kodi_utils.set_property('pov_playback_meta', params.get('meta', ''))
-		POVPlayer().run(file_path)
+		POVPlayer().run(file_path, json.loads(params.get('meta', '{}')))
 	finally:
 		shutdown.set()
 		fileobj.close()

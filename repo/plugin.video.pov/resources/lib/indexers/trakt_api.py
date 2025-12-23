@@ -73,8 +73,9 @@ def trakt_refresh():
 def trakt_expires(func):
 	def wrapper(*args, **kwargs):
 		if get_setting('trakt.refresh', ''):
+			interval = settings.trakt_sync_interval()[1]
 			expires = float(get_setting('trakt.expires', '0'))
-			refresh = (expires - time.time()) // 3600 < 8
+			refresh = ((-1 * time.time() // 1 * -1) + interval) >= expires
 			if refresh and trakt_refresh(): kodi_utils.sleep(1000)
 		return func(*args, **kwargs)
 	return wrapper
@@ -412,7 +413,7 @@ def trakt_add_to_list(params):
 		media_ids = [(imdb_id, 'imdb'), (tvdb_id, 'tvdb'), (tmdb_id, 'tmdb')]
 		media_id, media_key = next(item for item in media_ids if item[0] != 'None')
 		if media_id in (tmdb_id, tvdb_id): media_id = int(media_id)
-	selected = get_trakt_list_selection(highlight=params.get('highlight', None))
+	selected = get_trakt_list_selection(highlight=params.get('highlight'))
 	if selected is None: return
 	data = {key: [{'ids': {media_key: media_id}}]}
 	if selected['user'] == 'Watchlist': add_to_watchlist(data)
@@ -428,7 +429,7 @@ def trakt_remove_from_list(params):
 		media_ids = [(imdb_id, 'imdb'), (tvdb_id, 'tvdb'), (tmdb_id, 'tmdb')]
 		media_id, media_key = next(item for item in media_ids if item[0] != 'None')
 		if media_id in (tmdb_id, tvdb_id): media_id = int(media_id)
-	selected = get_trakt_list_selection(highlight=params.get('highlight', None))
+	selected = get_trakt_list_selection(highlight=params.get('highlight'))
 	if selected is None: return
 	data = {key: [{'ids': {media_key: media_id}}]}
 	if selected['user'] == 'Watchlist': remove_from_watchlist(data)
@@ -491,7 +492,7 @@ def trakt_indicators_movies():
 	insert_append = insert_list.append
 	result = [(i,) for i in call_trakt('sync/watched/movies')] # TaskPool requires tuple
 #	threads = list(make_thread_list(_process, result, Thread))
-	for i in TaskPool(40).tasks(_process, result, Thread): i.join()
+	for i in TaskPool().tasks(_process, result, Thread): i.join()
 	trakt_cache.TraktCache().set_bulk_movie_watched(insert_list)
 
 def trakt_indicators_tv():
@@ -511,7 +512,7 @@ def trakt_indicators_tv():
 	insert_append = insert_list.append
 	result = [(i,) for i in call_trakt('sync/watched/shows?extended=full')] # TaskPool requires tuple
 #	threads = list(make_thread_list(_process, result, Thread))
-	for i in TaskPool(40).tasks(_process, result, Thread): i.join()
+	for i in TaskPool().tasks(_process, result, Thread): i.join()
 	trakt_cache.TraktCache().set_bulk_tvshow_watched(insert_list)
 
 def trakt_playback_progress():

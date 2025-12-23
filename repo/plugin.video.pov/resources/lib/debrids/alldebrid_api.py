@@ -104,22 +104,6 @@ class AllDebridAPI:
 			if torrent_id: self.delete_torrent(torrent_id)
 			if errors: raise
 
-	def get_hosts(self):
-		string = 'pov_ad_valid_hosts'
-		url = 'v4/hosts'
-		hosts_dict = {'AllDebrid': []}
-		hosts = []
-		try:
-			result = cache_object(self._get, string, url, False, 168)
-			result = result['hosts']
-			for k, v in result.items():
-				try: hosts.extend(v['domains'])
-				except: pass
-			hosts = list(set(hosts))
-			hosts_dict['AllDebrid'] = hosts
-		except: pass
-		return hosts_dict
-
 	def downloads(self):
 		url = 'v4/user/history'
 		string = 'pov_ad_downloads'

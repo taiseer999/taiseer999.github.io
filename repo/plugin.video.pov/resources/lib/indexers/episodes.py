@@ -119,7 +119,7 @@ class Episodes:
 			else:
 				color_tags = ('[COLOR cyan]', '[/COLOR]') if unaired else ('', '')
 				display = ''.join([title_string.upper(), seas_ep, color_tags[0], ep_name, color_tags[1]])
-			thumb = item_get('thumb', None) or show_fanart
+			thumb = item_get('thumb') or show_fanart
 			if self.thumb_fanart: background = thumb
 			else: background = show_fanart
 			item.update({'trailer': trailer, 'tvshowtitle': title, 'premiered': premiered, 'genre': genre, 'duration': duration,
@@ -252,7 +252,7 @@ class Indexer(Episodes):
 				self.list_type = 'next_episode_pov'
 				self.list = get_next_episodes(watched_info)
 			elif 'my_calendar' in mode:
-				recently_aired = params_get('recently_aired', None)
+				recently_aired = params_get('recently_aired')
 				self.list = trakt_get_my_calendar(recently_aired, get_datetime())
 				if recently_aired:
 					self.list_type = 'trakt_recently_aired'

@@ -1,4 +1,3 @@
-import sys
 import json
 from threading import Thread
 from caches import watched_cache as ws
@@ -9,7 +8,7 @@ from modules.utils import sec2time, make_title_slug
 # from modules.kodi_utils import logger
 
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
-ls, get_setting, notification = kodi_utils.local_string, kodi_utils.get_setting, kodi_utils.notification
+ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
 fanart_empty = kodi_utils.get_addoninfo('fanart')
 poster_empty = kodi_utils.media_path('box_office.png')
 
@@ -25,27 +24,24 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.autoplay_nextep = settings.autoplay_next_episode()
 		self.autoscrape_next_episode = False
 		self.autoscrape_nextep = settings.autoscrape_next_episode()
-		self.volume_check = get_setting('volumecheck.enabled', 'false') == 'true'
+		self.stinger_enabled = get_setting('stingers.enable') == 'true'
 		self.stinger_check = int(get_setting('stingers.threshold', '30'))
+		self.volume_check = get_setting('volumecheck.enabled', 'false') == 'true'
 
-	def run(self, url=None, progress_media=None):
+	def run(self, url=None, meta=None, progress_media=None):
 		if not url: return
 		try:
-			self.meta = json.loads(kodi_utils.get_property('pov_playback_meta'))
-			kodi_utils.clear_property('pov_playback_meta')
+			self.meta = meta or {}
 			self.meta_get = self.meta.get
 			self.tmdb_id, self.imdb_id, self.tvdb_id = self.meta_get('tmdb_id'), self.meta_get('imdb_id'), self.meta_get('tvdb_id')
 			self.media_type, self.title, self.year = self.meta_get('media_type'), self.meta_get('title'), self.meta_get('year')
 			self.season, self.episode = self.meta_get('season', ''), self.meta_get('episode', '')
-			background = self.meta_get('background', False) is True
-			library_item = True if 'from_library' in self.meta else False
-			if 'random' in self.meta or 'random_continual' in self.meta: bookmark = 0
-			elif library_item: bookmark = self.bookmarkLibrary()
+			if any(i in self.meta for i in ('random', 'random_continual')): bookmark = 0
 			else: bookmark = self.bookmarkPOV()
 			if bookmark == 'cancel': return
 			self.meta.update({'url': url, 'bookmark': bookmark})
 			listitem = self._make_listitem()
-			if not library_item: listitem.setProperty('StartPercent', str(bookmark))
+			listitem.setProperty('StartPercent', str(bookmark))
 			try:
 				trakt_ids = {'tmdb': self.tmdb_id, 'imdb': self.imdb_id, 'slug': make_title_slug(self.title)}
 				if self.media_type == 'episode': trakt_ids['tvdb'] = self.tvdb_id
@@ -53,11 +49,8 @@ class POVPlayer(kodi_utils.xbmc_player):
 				kodi_utils.set_property('script.trakt.ids', json.dumps(trakt_ids))
 			except: pass
 			self.playback_event = False
-			if library_item and not background:
-				listitem.setPath(url)
-				listitem.setProperty('IsPlayable', 'true')
-				kodi_utils.set_resolvedurl(int(sys.argv[1]), listitem)
-			else: self.play(url, listitem)
+			self.play(url, listitem)
+
 			if self.media_type == 'episode':
 				self.play_random_continual = 'random_continual' in self.meta
 				if not self.play_random_continual and self.autoplay_nextep: self.autoplay_next_episode = 'random' not in self.meta
@@ -73,8 +66,8 @@ class POVPlayer(kodi_utils.xbmc_player):
 					kodi_utils.sleep(1000)
 					self.total_time, self.curr_time = self.getTotalTime(), self.getTime()
 					self.current_point = round(float(self.curr_time/self.total_time * 100), 1)
-					if self.media_type == 'movie' and not self.stingers_checked:
-						if self.curr_time > self.stinger_check: self.run_stingers()
+					if self.curr_time > self.stinger_check and not self.stingers_checked:
+						self.run_stingers()
 					if self.current_point >= self.set_watched and not self.media_marked:
 						self.media_watched_marker()
 					if self.play_random_continual:
@@ -154,17 +147,6 @@ class POVPlayer(kodi_utils.xbmc_player):
 			if bookmark == 0: ws.erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
 		return bookmark
 
-	def bookmarkLibrary(self):
-		bookmark = 0
-		try: curr_time = ws.get_bookmark_kodi_library(self.media_type, self.tmdb_id, self.season, self.episode)
-		except: curr_time = 0.0
-		if curr_time > 0:
-			self.kodi_library_resumed = False
-			resume_point = sec2time(curr_time, n_msec=0)
-			bookmark = self.getResumeStatus(resume_point, curr_time, bookmark)
-			if bookmark == 0: ws.erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
-		return bookmark
-
 	def getResumeStatus(self, resume_point, percent, bookmark):
 		if settings.auto_resume(self.media_type): return percent
 		choice = open_window(
@@ -180,6 +162,16 @@ class POVPlayer(kodi_utils.xbmc_player):
 		)
 		return percent if choice is True else bookmark if choice is False else 'cancel'
 
+	def getStingers(self, tmdb_id, poster):
+		if not tmdb_id: return
+		from indexers import tmdb_api
+		stingers = {'duringcreditsstinger': 'During Credit Scene', 'aftercreditsstinger': 'After Credit Scene'}
+		keywords = tmdb_api.movie_keywords(tmdb_id) or []
+		keywords = [str(i['name']) for i in keywords]
+		if all((i in keywords for i in stingers.keys())): stinger = 'Dual Credit Scenes'
+		else: stinger = next((v for k, v in stingers.items() if k in keywords), None)
+		return kodi_utils.notification(stinger, time=6000, icon=poster) if stinger else ''
+
 	def media_watched_marker(self):
 		self.media_marked = True
 		try:
@@ -194,16 +186,13 @@ class POVPlayer(kodi_utils.xbmc_player):
 				}
 				Thread(target=self.run_media_watched, args=(watched_function, watched_params)).start()
 			else:
-#				kodi_utils.clear_property('pov_total_autoplays')
-#				kodi_utils.clear_property('pov_random_episode_history')
+				kodi_utils.clear_property('pov_total_autoplays')
 				if not self.current_point >= self.set_resume: return
 				ws.set_bookmark(self.media_type, self.tmdb_id, self.curr_time, self.total_time, self.title, self.season, self.episode)
 		except: pass
 
 	def run_media_watched(self, function, params):
-		try:
-			function(params)
-			kodi_utils.sleep(1000)
+		try: function(params)
 		except: pass
 
 	def run_scrape_next_ep(self):
@@ -240,8 +229,8 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.stingers_checked = True
 		try:
 			poster = self.meta.get('poster') or poster_empty
-			if not self.meta.get('stingers', '') == 'true': return
-			Thread(target=get_stingers, args=(self.tmdb_id, poster)).start()
+			tmdb_id = self.tmdb_id if self.media_type == 'movie' and self.stinger_enabled else None
+			Thread(target=self.getStingers, args=(tmdb_id, poster)).start()
 		except: pass
 
 	def info_next_ep(self):
@@ -276,10 +265,9 @@ class POVPlayer(kodi_utils.xbmc_player):
 class Subtitles(kodi_utils.xbmc_player):
 	def __init__(self):
 		kodi_utils.xbmc_player.__init__(self)
-		self.language_dict = language_choices
 		self.auto_enable = get_setting('subtitles.auto_enable')
 		self.subs_action = {'0': 'auto', '1': 'select', '2': 'off'}[get_setting('subtitles.subs_action', '2')]
-		self.language1 = self.language_dict[get_setting('subtitles.language')]
+		self.language1 = language_choices[get_setting('subtitles.language')]
 
 	def get(self, query, imdb_id, season, episode, poster):
 		def _video_file_subs():
@@ -287,35 +275,40 @@ class Subtitles(kodi_utils.xbmc_player):
 			except: available_sub_language = ''
 			if not available_sub_language == self.language1: return False
 			if self.auto_enable == 'true': self.showSubtitles(True)
-			notification(32852, icon=poster)
+			kodi_utils.notification(32852, icon=poster)
 			return True
 		def _downloaded_subs():
 			files = kodi_utils.list_dirs(subtitle_path)[1]
 			final_match = next((i for i in files if i == search_filename), None)
 			if not final_match: return False
 			subtitle = '%s%s' % (subtitle_path, final_match)
-			notification(32792, icon=poster)
+			kodi_utils.notification(32792, icon=poster)
 			return subtitle
 		def _searched_subs():
 			search_language = kodi_utils.convert_language(self.language1, format='short')
-			result = subtitles.search(imdb_id, search_language, season, episode)
-			if not result: return notification(32793, icon=poster)
-			result.sort(key=lambda k: k['isHearingImpaired'], reverse=False)
+			result = subtitles.search(imdb_id, season, episode)
+			if not result: return kodi_utils.notification(32793, icon=poster)
+			result.sort(key=lambda k: k['display'], reverse=False)
+			result.sort(key=lambda k: k['language'] == search_language, reverse=True)
 			if self.subs_action == 'select' and len(result) > 1:
 				try: video_path = self.getPlayingFile()
 				except: video_path = ''
 				if '|' in video_path: video_path = video_path.split('|')[0]
 				video_path = os.path.basename(video_path)
-				for i in result:
-					line1 = '%s (%s%s | %s)'% (i['display'], i['source'], ' | SDH' if i['isHearingImpaired'] else '', i['encoding'])
-					i.update({'line1': line1, 'line2': '[B]%s[/B]' % i['media'].upper(), 'icon': poster})
-				kwargs = {'enumerate': 'true', 'multi_choice': 'false', 'multi_line': 'true'}
-				kwargs.update({'items': json.dumps(result), 'heading': '%s - %s' % (ls(32246).upper(), video_path)})
+				heading = '%s - %s' % (ls(32246).upper(), video_path)
+				def _builder():
+					for i in result:
+						listitem = kodi_utils.make_listitem()
+						listitem.setLabel('%s%s' % (i['display'].upper(), ' (SDH)' if i['isHearingImpaired'] else ''))
+						listitem.setLabel2('%s[CR]%s' % (i['source'].upper(), i['media']))
+						listitem.setArt({'icon': i['flagUrl'].replace('24.png', '64.png')})
+						yield listitem
 				self.pause()
-				chosen_sub = kodi_utils.select_dialog(result, **kwargs)
+				chosen_sub = kodi_utils.dialog.select(heading, list(_builder()), useDetails=True)
 				self.pause()
-			else: chosen_sub = next(iter(result), None)
-			if not chosen_sub: return notification(32736, icon=poster)
+			else: chosen_sub = next((i for i, _ in enumerate(result) if _['language'] == search_language), -1)
+			if chosen_sub < 0: return kodi_utils.notification(32736, icon=poster)
+			chosen_sub = result[chosen_sub]
 			try: lang = kodi_utils.convert_language(chosen_sub['language'])
 			except: lang = chosen_sub['language']
 			final_filename = sub_filename + '_%s.%s' % (lang, chosen_sub['format'])
@@ -344,16 +337,6 @@ class Subtitles(kodi_utils.xbmc_player):
 		if subtitle: return self.setSubtitles(subtitle)
 		subtitle = _searched_subs()
 		if subtitle: return self.setSubtitles(subtitle)
-
-def get_stingers(tmdb_id, poster):
-	if not tmdb_id: return
-	from indexers.tmdb_api import movie_keywords
-	stingers = {'duringcreditsstinger': 'During Credit Scene', 'aftercreditsstinger': 'After Credit Scene'}
-	keywords = movie_keywords(tmdb_id) or []
-	keywords = [str(i['name']) for i in keywords]
-	if all((i in keywords for i in stingers.keys())): stinger = 'Dual Credit Scenes'
-	else: stinger = next((v for k, v in stingers.items() if k in keywords), None)
-	if stinger: notification(stinger, time=6000, icon=poster)
 
 def infoTagger(listitem, meta=None):
 	infotag = listitem.getVideoInfoTag(offscreen=True)

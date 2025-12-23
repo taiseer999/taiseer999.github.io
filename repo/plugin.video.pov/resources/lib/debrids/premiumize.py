@@ -65,8 +65,8 @@ class Indexer(Debrid):
 					url_params = {'mode': 'media_play', 'url': url_link, 'media_type': 'video'}
 					down_file_params = {'mode': 'downloader', 'action': 'cloud.premiumize', 'name': item['name'], 'url': url_link, 'image': default_icon}
 					cm_append((download_string, 'RunPlugin(%s)' % build_url(down_file_params)))
-				cm_append((rename_str % file_type.capitalize(), 'RunPlugin(%s)' % build_url(rename_params)))
 				cm_append(('[B]%s %s[/B]' % (delete_str, string.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
+				cm_append((rename_str % file_type.capitalize(), 'RunPlugin(%s)' % build_url(rename_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)

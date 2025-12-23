@@ -1,7 +1,7 @@
 import json
 from threading import Thread
 from datetime import datetime, timedelta
-from windows import BaseDialog
+from windows import BaseDialog, location, videoplayer
 from caches import watched_cache as ws
 from indexers import people, metadata, tmdb_api, imdb_api, mdblist_api
 from indexers.images import Images
@@ -98,13 +98,8 @@ class Extras(BaseDialog):
 				chosen = dialogs.trailer_choice(self.media_type, self.poster, self.tmdb_id, self.meta['trailer'], self.meta['all_trailers'])
 				if not chosen: return ok_dialog()
 				elif chosen == 'canceled': return
-				if self.is_widget == 'true':
-					close_all_dialog()
-					self.selected = self.plugin_runner % chosen
-					self.close()
-				else:
-					params = {'import_info': json.dumps(['windows.videoplayer', 'VideoPlayer']), 'skin_xml': 'videoplayer.xml', 'kwargs': json.dumps({'video': chosen})}
-					return self.open_window(('windows.videoplayer', 'VideoPlayer'), 'videoplayer.xml', video=chosen)
+				kwargs = {'meta': self.meta, 'is_widget': self.is_widget, 'is_home': self.is_home}
+				return videoplayer(chosen, self.close, type(self)('extras.xml', location, **kwargs).run)
 			elif chosen_var == extrainfo_id:
 				text = media_extra_info(self.media_type, self.meta)
 				self.open_window(('windows.extras', 'ShowTextMedia'), 'textviewer_media.xml', text=text, poster=self.poster)
@@ -118,7 +113,7 @@ class Extras(BaseDialog):
 				self.close()
 			elif chosen_var == director_id:
 				if self.media_type == 'movie':
-					director = self.meta.get('director', None)
+					director = self.meta.get('director')
 					if not director: return
 					return people.person_data_dialog({'query': director})
 				else:
@@ -721,7 +716,7 @@ class ExtrasChooser(BaseDialog):
 		self.item_list = list(builder())
 
 def media_extra_info(media_type, meta):
-	extra_info = meta.get('extra_info', None)
+	extra_info = meta.get('extra_info')
 	body = []
 	append = body.append
 	tagline_str, premiered_str, rating_str, votes_str, runtime_str = ls(32619), ls(32620), ls(32621), ls(32623), ls(32622)

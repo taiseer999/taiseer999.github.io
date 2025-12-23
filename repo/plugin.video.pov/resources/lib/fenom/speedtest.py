@@ -1,8 +1,8 @@
 import requests
-from concurrent.futures import ThreadPoolExecutor as Pool, as_completed
+from concurrent.futures import ThreadPoolExecutor as TPE, as_completed
 from time import monotonic
 import xbmc, xbmcaddon, xbmcgui
-from fenom import sources as fs_sources
+from modules.source_utils import external_sources as fs_sources
 
 log = xbmc.log
 Addon = xbmcaddon.Addon
@@ -81,8 +81,8 @@ def magneto():
 	modules = module_factory(fs_sources(ret_all=True), data)
 	len_modules = len(modules)
 	line0 = 'Title: %s' % data['rootname']
-	with Pool(len_modules or 1) as pool:
-		futures = [pool.submit(get_movie_source, i) for i in modules]
+	with TPE(len_modules or 1) as tpe:
+		futures = [tpe.submit(get_movie_source, i) for i in modules]
 		for i, future in enumerate(as_completed(futures), 1):
 			module = future.result()
 			line1 = 'Source: %s' % module.name.upper()

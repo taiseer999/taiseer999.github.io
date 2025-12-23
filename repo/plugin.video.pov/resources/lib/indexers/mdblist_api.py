@@ -131,10 +131,8 @@ def mdbl_list_items(list_id, list_type):
 	sort_index = settings.lists_sort_order('mdblist')
 	ignore_articles = settings.ignore_articles()
 	if list_type: params = (
-		{'sort': 'title', 'order': 'asc'},
-		{'sort': 'added', 'order': 'desc'},
-		{'sort': 'released', 'order': 'desc'},
-		{'sort': 'random'}, {'sort': 'usort'}
+		{'sort': 'title', 'order': 'asc'}, {'sort': 'added', 'order': 'desc'},
+		{'sort': 'released'}, {'sort': 'random'}, None # usort
 	)[sort_index]
 	else: params = None
 	if list_type == 'external': url = 'external/lists/%s/items?unified=true' % list_id
@@ -201,7 +199,7 @@ def mdbl_indicators_movies(watched_info):
 	watched_items = [(i,) for i in watched_info['movies']] # TaskPool requires tuple
 	if not watched_items: return
 #	threads = list(make_thread_list(_process, watched_items, Thread))
-	for i in TaskPool(40).tasks(_process, watched_items, Thread): i.join()
+	for i in TaskPool().tasks(_process, watched_items, Thread): i.join()
 	mdbl_cache.MDBLCache().set_bulk_movie_watched(insert_list)
 
 def mdbl_indicators_tv(watched_info):
@@ -217,7 +215,7 @@ def mdbl_indicators_tv(watched_info):
 	watched_items = [(i,) for i in watched_info['episodes']] # TaskPool requires tuple
 	if not watched_items: return
 #	threads = list(make_thread_list(_process, watched_items, Thread))
-	for i in TaskPool(40).tasks(_process, watched_items, Thread): i.join()
+	for i in TaskPool().tasks(_process, watched_items, Thread): i.join()
 	mdbl_cache.MDBLCache().set_bulk_tvshow_watched(insert_list)
 
 def mdbl_progress(action, media, media_id, percent, season=None, episode=None, resume_id=None, refresh_mdb=False):
@@ -379,7 +377,7 @@ def get_mdbl(params):
 		def _process():
 			for key, val in guide_map.items():
 				try:
-					if not (match := re.search(f"{key}\:\ \d", html)): continue
+					if not (match := re.search(rf"{key}\:\ \d", html)): continue
 					rank = rank_map[match.group().split(': ')[-1]]
 					yield {'title': val, 'ranking': rank, 'listings': []}
 				except: pass

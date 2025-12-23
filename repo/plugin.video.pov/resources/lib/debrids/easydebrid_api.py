@@ -84,8 +84,7 @@ class EasyDebridAPI:
 				if item['filename'].lower().endswith(tuple(extensions))
 			]
 			return torrent_files
-		except Exception:
-			return None
+		except: pass
 
 	def clear_cache(*args):
 		try:

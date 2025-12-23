@@ -19,15 +19,17 @@ def download(url):
 	response = _get(url, stream=True, retry=True)
 	return response if response.ok else response.reason
 
-def search(imdb_id, language, season=None, episode=None):
-	cache_name = 'wyziesubtitles_%s_%s' % (imdb_id, language)
-	if season: cache_name += '_%s_%s' % (season, episode)
+def search(imdb_id, season=None, episode=None):
+	cache_name = 'subtitles_wyzie_%s' % imdb_id
+	params = {'id': imdb_id, 'format': 'srt'}
+	if season:
+		cache_name += '_%s_%s' % (season, episode)
+		params.update({'season': season, 'episode': episode})
 	cache = main_cache.get(cache_name)
 	if cache: return cache
-	params = {'id': imdb_id, 'language': language, 'format': 'srt'}
-	if season: params.update({'season': season, 'episode': episode})
 	response = _get(search_url, params=params, retry=True)
-	response = response.json() if response.ok else []
-	main_cache.set(cache_name, response, expiration=timedelta(hours=24))
+	if not response.ok: return []
+	response = response.json()
+	if response: main_cache.set(cache_name, response, expiration=timedelta(hours=24))
 	return response
 

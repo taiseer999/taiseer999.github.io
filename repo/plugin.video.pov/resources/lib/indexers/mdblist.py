@@ -15,7 +15,7 @@ fanart = kodi_utils.get_addoninfo('fanart')
 default_icon = kodi_utils.media_path('mdblist.png')
 item_jump = kodi_utils.media_path('item_jump.png')
 add2menu_str, add2folder_str, copy2str = ls(32730), ls(32731), '[B]Export to TMDB[/B]'
-nextpage_str, jump2_str = ls(32799), ls(32964)
+nextpage_str, jump2_str, mdblist_str = ls(32799), ls(32964), 'MDBList'
 
 def search_mdbl_lists(params):
 	def _process():
@@ -39,7 +39,7 @@ def search_mdbl_lists(params):
 				yield (url, listitem, True)
 			except: pass
 	page = params.get('new_page', '1')
-	search_title = params.get('search_title', None) or kodi_utils.dialog.input('POV')
+	search_title = params.get('search_title') or kodi_utils.dialog.input('POV')
 	if search_title: lists, pages = mdblist_api.mdbl_searchlists(search_title), '1'
 	else: lists, pages = [], page
 	__handle__ = int(sys.argv[1])
@@ -125,6 +125,7 @@ def build_mdb_list(params):
 			else: target(*args)
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
 	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
+	use_alphabet = nav_jump_use_alphabet() > 0
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
@@ -147,14 +148,16 @@ def build_mdb_list(params):
 	content, total = max(
 		('movies', movies), ('tvshows', tvshows), key=lambda k: len(k[1].items)
 	)
-	if total_pages > 2 and not is_widget and nav_jump_use_alphabet():
-		url = {'mode': 'build_navigate_to_page', 'transfer_mode': 'build_mdb_list', 'media_type': 'Media', 'name': name,
-				'user': user, 'slug': slug, 'list_id': list_id, 'current_page': page, 'total_pages': total_pages, 'list_type': list_type}
+	if total_pages > 2 and not is_widget and use_alphabet:
+		url = {'mode': 'build_navigate_to_page', 'current_page': page, 'total_pages': total_pages,
+				'user': user, 'slug': slug, 'name': name, 'list_id': list_id, 'list_type': list_type,
+				'transfer_mode': 'build_mdb_list', 'media_type': 'Media'}
 		kodi_utils.add_dir(__handle__, url, jump2_str, iconImage=item_jump, isFolder=False)
-	kodi_utils.add_items(__handle__, items)
+	shuffle = params.get('name', '').lower().startswith('shuffle')
+	kodi_utils.add_items(__handle__, items, shuffle=shuffle)
 	if total_pages > page:
-		url = {'mode': 'build_mdb_list', 'user': user, 'slug': slug, 'name': name, 'list_id': list_id,
-				'new_page': page + 1, 'new_letter': letter, 'list_type': list_type}
+		url = {'mode': 'build_mdb_list', 'new_page': page + 1, 'new_letter': letter,
+				'user': user, 'slug': slug, 'name': name, 'list_id': list_id, 'list_type': list_type}
 		kodi_utils.add_dir(__handle__, url, nextpage_str)
 	kodi_utils.set_category(__handle__, name)
 	kodi_utils.set_content(__handle__, content)
@@ -174,6 +177,6 @@ def mdbl_account_info():
 		append('[B]API Request Limit:[/B] %s' % api_requests)
 		append('[B]API Request Remaining:[/B] %s' % remaining)
 		kodi_utils.hide_busy_dialog()
-		return kodi_utils.show_text('MDBList'.upper(), '\n\n'.join(body), font_size='large')
+		return kodi_utils.show_text(mdblist_str.upper(), '\n\n'.join(body), font_size='large')
 	except: kodi_utils.hide_busy_dialog()
 

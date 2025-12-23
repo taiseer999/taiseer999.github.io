@@ -141,16 +141,14 @@ class ThumbContextMenu(BaseDialog):
 		path = self.list_item.getProperty('tikiskins.path')
 		thumb_url = self.list_item.getProperty('tikiskins.thumb')
 		if enable_delete:
-			folder_path = self.list_item.getProperty('tikiskins.folder_path')
-			delete_file_params = {'mode': 'delete_image', 'image_url': path, 'thumb_url': thumb_url, 'folder_path': folder_path, 'in_progress': 'true'}
-			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % delete_str, 'RunPlugin(%s)', delete_file_params))
-		else:
-			name = self.list_item.getProperty('tikiskins.name')
-			down_file_params = {
-				'action': 'image', 'media_type': 'image', 'image': BaseDialog.icon,
-				'name': name, 'thumb_url': thumb_url, 'image_url': path, 'mode': 'downloader'
-			}
-			self.item_list.append(self.make_contextmenu_item(down_str, 'RunPlugin(%s)', down_file_params))
+			self.item_list.append(self.make_contextmenu_item('[B]%s[/B]' % delete_str, 'RunPlugin(%s)', {
+				'mode': 'delete_image', 'folder_path': self.list_item.getProperty('tikiskins.folder_path'),
+				'thumb_url': thumb_url, 'image_url': path, 'in_progress': 'true'
+			}))
+		else: self.item_list.append(self.make_contextmenu_item(down_str, 'RunPlugin(%s)', {
+			'mode': 'downloader', 'action': 'image', 'media_type': 'image', 'image': BaseDialog.icon,
+			'thumb_url': thumb_url, 'image_url': path, 'name': self.list_item.getProperty('tikiskins.name')
+		}))
 
 class SlideShow(BaseDialog):
 	def __init__(self, *args, **kwargs):

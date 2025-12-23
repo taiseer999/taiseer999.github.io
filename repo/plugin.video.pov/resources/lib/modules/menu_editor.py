@@ -179,7 +179,7 @@ class MenuEditor:
 				line2 = pos_str % (menu_name, line1 or ls(item_get('list_name')) if position_list else '')
 				if item_get('iconImage') in ('', 'None', None, 'DefaultFolder.png'): icon = 'DefaultFolder.png'
 				elif item_get('iconImage') == 'pov.png': icon = kodi_utils.get_addoninfo('icon')
-				elif item_get('network_id', None): icon = item_get('iconImage', 'discover.png')
+				elif item_get('network_id'): icon = item_get('iconImage', 'discover.png')
 				else: icon = '%s%s' % (icon_path, item_get('iconImage', 'discover.png'))
 				yield {'line1': line1, 'line2': line2, 'icon': icon}
 		menu_name, icon_path = menu_name.replace('[B]', '').replace('[/B]', ''), media_path()
@@ -272,7 +272,7 @@ class MenuEditor:
 		list_items = eval(choice_list)
 		name = self.params_get('name') or self.params_get('menu_name_translated')
 		menu_name = self._get_external_name_input(name) or name
-		self.menu_item.update({'name': menu_name, 'iconImage': self.params_get('iconImage', None) or self.menu_item_get('iconImage')})
+		self.menu_item.update({'name': menu_name, 'iconImage': self.params_get('iconImage') or self.menu_item_get('iconImage')})
 		position = self._menu_select(list_items, menu_name, multi_line='true', position_list=True) if list_items else 0
 		if position is None: return kodi_utils.notification(32736, 1500)
 		list_items.insert(position, self.menu_item)

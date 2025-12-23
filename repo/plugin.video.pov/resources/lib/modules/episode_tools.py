@@ -47,9 +47,8 @@ def get_random_episode(tmdb_id, continual=False):
 	if continual: meta['random_continual'] = 'true'
 	else: meta['random'] = 'true'
 	url_params = {
-		'mode': 'play_media', 'media_type': 'episode', 'autoplay': 'true', 'background': 'true',
-		'tmdb_id': meta['tmdb_id'], 'tvshowtitle': meta['rootname'], 'season': season, 'episode': episode,
-		'query': query, 'meta': json.dumps(meta)
+		'mode': 'play_media', 'media_type': 'episode', 'autoplay': 'true', 'season': season, 'episode': episode,
+		'tmdb_id': meta['tmdb_id'], 'tvshowtitle': meta['rootname'], 'query': query, 'meta': json.dumps(meta)
 	}
 	return meta, url_params
 
@@ -62,7 +61,7 @@ def nextep_playback_info(meta):
 		d = airdate.split('-')
 		episode_date = date(int(d[0]), int(d[1]), int(d[2]))
 		if current_date < episode_date: return 'no_next_episode'
-		custom_title = meta_get('custom_title', None)
+		custom_title = meta_get('custom_title')
 		title = custom_title or meta_get('title')
 		display_name = '%s - %dx%.2d' % (title, int(season), int(episode))
 		meta.update({
@@ -70,8 +69,8 @@ def nextep_playback_info(meta):
 			'premiered': airdate, 'ep_name': ep_data['title'], 'plot': ep_data['plot']
 		})
 		url_params = {
-			'mode': 'play_media', 'media_type': 'episode', 'background': 'true',
-			'tmdb_id': tmdb_id, 'tvshowtitle': meta_get('rootname'), 'season': season, 'episode': episode
+			'mode': 'play_media', 'media_type': 'episode', 'season': season, 'episode': episode,
+			'tmdb_id': tmdb_id, 'tvshowtitle': meta_get('rootname')
 		}
 		if custom_title: url_params['custom_title'] = custom_title
 		return url_params
@@ -91,15 +90,11 @@ def execute_scrape_nextep(meta):
 	nextep_meta, nextep_params = nextep_playback_info(meta)
 	if nextep_params == 'error': return kodi_utils.notification(32574)
 	elif nextep_params == 'no_next_episode': return
-	SourceSelect().playback_prep(nextep_params)
-	nextep_url = kodi_utils.get_property('pov_background_url')
-	if not nextep_url == 'true': return kodi_utils.notification(32760)
-	nextep_params['background'] = 'false'
-	SourceSelect.add_callback('scrape_next_ep', SourceSelect().playback_prep, nextep_params)
+	if not SourceSelect.background_prep(nextep_params): return kodi_utils.notification(32760)
+	SourceSelect.nextep_callback(nextep_params)
 	action = open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml', meta=nextep_meta, function='next_ep')
 	if action == 'cancel':
-		SourceSelect.scrape_next_ep.clear()
-		kodi_utils.clear_property('pov_background_url')
+		SourceSelect.nextep_params.clear()
 		return kodi_utils.notification(32736)
 	if action == 'play': kodi_utils.player.stop()
 
@@ -121,8 +116,6 @@ def execute_nextep(meta, nextep_settings):
 			current_number = 1
 			kodi_utils.set_property('pov_total_autoplays', str(current_number))
 			return True
-		kodi_utils.clear_property('pov_total_autoplays')
-		kodi_utils.notification(32736, 1500)
 		return False
 	def _continue_action():
 		if run_popup: action = open_window(('windows.next_episode', 'NextEpisode'), 'next_episode.xml', meta=nextep_meta, function='next_ep')
@@ -148,25 +141,22 @@ def execute_nextep(meta, nextep_settings):
 				kodi_utils.sleep(200)
 			except: pass
 		return final_action
-	kodi_utils.clear_property('pov_background_url')
 	player = kodi_utils.player
 	run_popup, display_nextep_popup = nextep_settings['run_popup'], nextep_settings['window_time']
 	nextep_prep, nextep_threshold_check = nextep_settings['start_prep'], nextep_settings['threshold_check']
 	nextep_meta, nextep_params = _get_nextep_params()
 	if nextep_params == 'error': return kodi_utils.notification(32574)
 	elif nextep_params == 'no_next_episode': return
-	SourceSelect().playback_prep(nextep_params)
-	nextep_url = kodi_utils.get_property('pov_background_url')
-	if not nextep_url == 'true': return kodi_utils.notification(32760)
-	nextep_params['background'] = 'false'
-	SourceSelect.add_callback('scrape_next_ep', SourceSelect().playback_prep, nextep_params)
+	if not SourceSelect.background_prep(nextep_params): return kodi_utils.notification(32760)
+	SourceSelect.nextep_callback(nextep_params)
 	action = _control()
 	if action == 'cancel':
-		SourceSelect.scrape_next_ep.clear()
-		kodi_utils.clear_property('pov_background_url')
+		SourceSelect.nextep_params.clear()
 		kodi_utils.clear_property('pov_total_autoplays')
 		return kodi_utils.notification(32736)
 	if action == 'close':
-		if not run_popup: kodi_utils.notification('%s %s S%02dE%02d' % (ls(32801), nextep_meta['title'], nextep_meta['season'], nextep_meta['episode']), 6500, nextep_meta['poster'])
+		if run_popup: return
+		text = '%s %s S%02dE%02d' % (ls(32801), nextep_meta['title'], nextep_meta['season'], nextep_meta['episode'])
+		kodi_utils.notification(text, 6500, nextep_meta['poster'])
 	if action == 'play': player.stop()
 

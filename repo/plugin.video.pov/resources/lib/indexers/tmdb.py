@@ -66,6 +66,7 @@ def build_tmdb_list(params):
 			else: target(*args)
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
 	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
+	use_alphabet = nav_jump_use_alphabet() > 0
 	user, name, list_id = params.get('user'), params.get('name'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
 	results = tmdb_api.all_items(tmdb_api.list_details, list_id)
@@ -87,14 +88,16 @@ def build_tmdb_list(params):
 	content, total = max(
 		('movies', movies), ('tvshows', tvshows), key=lambda k: len(k[1].items)
 	)
-	if total_pages > 2 and not is_widget and nav_jump_use_alphabet():
-		url = {'mode': 'build_navigate_to_page', 'transfer_mode': 'build_tmdb_list', 'media_type': 'Media',
-				'name': name, 'user': user, 'list_id': list_id, 'current_page': page, 'total_pages': total_pages}
+	if total_pages > 2 and not is_widget and use_alphabet:
+		url = {'mode': 'build_navigate_to_page', 'current_page': page, 'total_pages': total_pages,
+				'user': user, 'name': name, 'list_id': list_id,
+				'transfer_mode': 'build_tmdb_list', 'media_type': 'Media'}
 		kodi_utils.add_dir(__handle__, url, jump2_str, iconImage=item_jump, isFolder=False)
-	kodi_utils.add_items(__handle__, items)
+	shuffle = params.get('name', '').lower().startswith('shuffle')
+	kodi_utils.add_items(__handle__, items, shuffle=shuffle)
 	if total_pages > page:
-		url = {'mode': 'build_tmdb_list', 'user': user, 'name': name, 'list_id': list_id,
-				'new_page': page + 1, 'new_letter': letter}
+		url = {'mode': 'build_tmdb_list', 'new_page': page + 1, 'new_letter': letter,
+				'user': user, 'name': name, 'list_id': list_id}
 		kodi_utils.add_dir(__handle__, url, nextpage_str)
 	kodi_utils.set_category(__handle__, name)
 	kodi_utils.set_content(__handle__, content)

@@ -151,16 +151,6 @@ class RealDebridAPI:
 			if torrent_id: self.delete_torrent(torrent_id)
 			if errors: raise
 
-	def get_hosts(self):
-		string = 'pov_rd_valid_hosts'
-		url = 'hosts/domains'
-		hosts_dict = {'Real-Debrid': []}
-		try:
-			result = cache_object(self._get, string, url, False, 48)
-			hosts_dict['Real-Debrid'] = result
-		except: pass
-		return hosts_dict
-
 	def downloads(self):
 		string = 'pov_rd_downloads'
 		url = 'downloads?limit=500'

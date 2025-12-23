@@ -5,8 +5,7 @@ from urllib.parse import unquote, parse_qsl, urlparse
 from urllib.request import Request, urlopen
 from indexers.metadata import get_title
 from windows import open_window
-from modules import kodi_utils
-from modules.sources import SourceSelect
+from modules import debrid, kodi_utils
 from modules.settings import download_directory, get_art_provider, get_language
 from modules.utils import clean_file_name, clean_title, safe_string, remove_accents
 # from modules.kodi_utils import logger
@@ -31,20 +30,18 @@ def runner(params):
 			image_params['media_type'] = item
 			Downloader(image_params).run()
 	elif action == 'meta.pack':
-		from modules.debrid import debrid_packs
 		from modules.source_utils import find_season_in_release_title
 		threads = []
 		append = threads.append
-		provider, highlight = params['provider'], params['highlight']
-		pack_choices = debrid_packs(provider, params['name'], params['magnet_url'], params['info_hash'], download=True)
+		source, meta = json.loads(params['source']), json.loads(params['meta'])
+		pack_choices = debrid.Source(source, meta).browse_packs(download=True)
 		if not pack_choices: return kodi_utils.notification(32692)
-		heading = clean_file_name(json.loads(params['source']).get('name'))
+		heading = clean_file_name(source.get('name'))
 		kwargs = {'enumerate': 'true', 'multi_choice': 'true', 'multi_line': 'true'}
-		kwargs.update({'items': json.dumps(pack_choices), 'heading': heading, 'highlight': highlight})
+		kwargs.update({'items': json.dumps(pack_choices), 'heading': heading, 'highlight': params['highlight']})
 		chosen_list = kodi_utils.select_dialog(pack_choices, **kwargs)
 		if not chosen_list: return
-		show_package = json.loads(params['source']).get('package') == 'show'
-		meta  = json.loads(params.get('meta'))
+		show_package = source.get('package') == 'show'
 		default_name = '%s (%s)' % (clean_file_name(get_title(meta, get_language())), meta.get('year'))
 		default_foldername = kodi_utils.dialog.input(ls(32228), defaultt=default_name)
 		chosen_list = [{**params, 'pack_files': item} for item in chosen_list]
@@ -110,21 +107,20 @@ class Downloader:
 		url = self.params_get('url')
 		if url in (None, 'None', ''):
 			if self.action == 'meta.single':
-				source = json.loads(self.source)
-				url = SourceSelect().resolve_sources(source, self.meta)
-			elif self.action == 'meta.pack':
-				if self.provider == 'Premiumize.me':
-					from debrids.premiumize_api import PremiumizeAPI as debrid_function
-				elif self.provider == 'Real-Debrid':
+				url = debrid.Source(json.loads(self.source), self.meta).resolve_sources()
+			if self.action == 'meta.pack':
+				if self.provider == 'real-debrid':
 					from debrids.real_debrid_api import RealDebridAPI as debrid_function
-				elif self.provider == 'AllDebrid':
+				elif self.provider == 'premiumize.me':
+					from debrids.premiumize_api import PremiumizeAPI as debrid_function
+				elif self.provider == 'alldebrid':
 					from debrids.alldebrid_api import AllDebridAPI as debrid_function
-				elif self.provider == 'TorBox':
+				elif self.provider == 'torbox':
 					from debrids.torbox_api import TorBoxAPI as debrid_function
 				url = self.params_get('pack_files')['link']
-				if self.provider == 'Premiumize.me':
+				if self.provider == 'premiumize.me':
 					url = debrid_function().add_headers_to_url(url)
-				if self.provider in ('Real-Debrid', 'AllDebrid', 'TorBox'):
+				if self.provider in ('real-debrid', 'alldebrid', 'torbox'):
 					url = debrid_function().unrestrict_link(url)
 		else:
 			if self.action.startswith('cloud'):

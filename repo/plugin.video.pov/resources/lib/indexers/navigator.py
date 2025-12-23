@@ -43,12 +43,12 @@ class Navigator:
 		from modules.debrid import debrid_enabled
 		easynews, debrids = ks.easynews_active(), debrid_enabled()
 		if easynews: self.easynews()
-		if 'Real-Debrid' in debrids: self.real_debrid()
-		if 'Premiumize.me' in debrids: self.premiumize()
-		if 'AllDebrid' in debrids: self.alldebrid()
-		if 'TorBox' in debrids: self.torbox()
-		if 'Offcloud' in debrids: self.offcloud()
-		if 'EasyDebrid' in debrids: self.easydebrid()
+		if 'real-debrid' in debrids: self.real_debrid()
+		if 'premiumize.me' in debrids: self.premiumize()
+		if 'alldebrid' in debrids: self.alldebrid()
+		if 'torbox' in debrids: self.torbox()
+		if 'offcloud' in debrids: self.offcloud()
+		if 'easydebrid' in debrids: self.easydebrid()
 		self._end_directory()
 
 	def easynews(self):
@@ -449,7 +449,7 @@ class Navigator:
 				except: pass
 		handle, fanart = self.params_get('handle'), self.params_get('fanart')
 		folder_path = self.params_get('folder_path')
-		sources_folders = self.params_get('sources_folders', None)
+		sources_folders = self.params_get('sources_folders')
 		dirs, files = list_dirs(folder_path)
 		items = [(i, True) for i in dirs] + [(i, False) for i in files]
 		add_items(handle, list(_process()))

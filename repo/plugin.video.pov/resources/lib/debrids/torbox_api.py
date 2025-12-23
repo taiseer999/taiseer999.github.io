@@ -150,9 +150,8 @@ class TorBoxAPI:
 				if item['short_name'].lower().endswith(tuple(extensions))
 			]
 			return torrent_files
-		except Exception:
+		except Exception as e:
 			if torrent_id: self.delete_torrent(torrent_id)
-			return None
 
 	def resolve_nzb(self, nzb_url, info_hash, store_to_cloud, title, season, episode, nzb_info=None):
 		from modules.source_utils import supported_video_extensions, seas_ep_filter, extras_filter

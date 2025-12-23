@@ -32,7 +32,6 @@
 		<setting id="provider.prowlarr" label="prowlarr" type="bool" default="false" />
 			<setting id="prowlarr.token" label="x-api-key" type="text" default="" subsetting="true" visible="eq(-1,true)" />
 			<setting id="prowlarr.url" label="url" type="text" default="" subsetting="true" visible="eq(-2,true)" />
-		<setting id="provider.library" label="library" type="bool" default="false" visible="false" />
 		<!-- Folders 1-5 -->
 		<setting label="Folders 1-5" type="lsep" />
 		<setting id="provider.folders" label="Enable" type="bool" default="false" />
@@ -249,7 +248,7 @@
 		<setting id="single_ep_format" label="Single Episode Airdate Format" type="enum" default="2" values="Day-Month-Year|Year-Month-Day|Month-Day-Year" />
 		<setting id="paginate.lists" label="Paginate Lists When Possible" type="bool" default="true" />
 			<setting id="page_limit" label="Max. Lists items" type="number" default="100" subsetting="true" visible="eq(-1,true)" />
-			<setting id="nav_jump" label="Jump To... List Navigation" type="enum" default="0" values="Disable|Page|Alphabet" subsetting="true" visible="eq(-2,true)" />
+			<setting id="nav_jump" label="Jump To... List Navigation" type="enum" default="0" values="Disable|Page" subsetting="true" visible="eq(-2,true)" />
 		<setting id="show_specials" label="Show TV Show Specials When Available" type="bool" default="false" />
 		<setting id="use_season_title" label="Use Season Titles When Available" type="bool" default="false" />
 		<setting id="show_unaired" label="Include Unaired Episodes" type="bool" default="true" />
@@ -268,8 +267,8 @@
 		<setting id="context.options" label="Options..." type="slider" default="1" range="0,1,7" option="int" />
 		<setting id="context.extras" label="Extras.../Playback.../Browse..." type="slider" default="2" range="0,1,7" option="int" />
 		<setting id="context.trakt" label="Trakt Lists Manager" type="slider" default="3" range="0,1,7" option="int" />
-		<setting id="context.tmdblist" label="TMDB Lists Manager" type="slider" default="4" range="0,1,7" option="int" />
 		<setting id="context.mdblist" label="MDBList Manager" type="slider" default="4" range="0,1,7" option="int" />
+		<setting id="context.tmdblist" label="TMDB Lists Manager" type="slider" default="4" range="0,1,7" option="int" />
 		<setting id="context.favourites" label="Favorites Manager" type="slider" default="5" range="0,1,7" option="int" />
 		<setting id="context.mark" label="Mark Watched/Unwatched" type="slider" default="6" range="0,1,7" option="int" />
 		<setting id="context.exit" label="Exit List" type="slider" default="7" range="0,1,7" option="int" />
@@ -322,7 +321,7 @@
 		<setting id="scrapers.timeout.1" label="Scraper Timeout" type="number" default="10" />
 		<!-- Language -->
 		<setting label="Language" type="lsep" />
-		<setting id="results.language_filter" label="Sort Priority Language to Top" type="bool" default="false" />
+		<setting id="results.language_filter" label="Priority Language Sort to Top" type="bool" default="false" />
 			<setting id="results.language" label="Priority Language" type="select" default="English" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" enable="eq(-1,true)" />
 		<!-- Sorting and Filtering -->
 		<setting label="Sorting and Filtering" type="lsep" />
@@ -370,8 +369,8 @@
 		<!-- RPDB -->
 		<setting label="Rating Poster Database" type="lsep" />
 		<setting id="rpdb_api_key" label="API Key" type="text" default="" />
-			<setting id="get_rpdb_data" label="Use Poster At Movie Level" type="bool" default="false" subsetting="true" enable="!eq(-1,)" />
-			<setting id="get_rpdb_data_series" label="Use Poster At TV Show Level" type="bool" default="false" subsetting="true" enable="!eq(-2,)" />
+			<setting id="get_rpdb_movies" label="Use Poster At Movie Level" type="bool" default="false" subsetting="true" enable="!eq(-1,)" />
+			<setting id="get_rpdb_series" label="Use Poster At TV Show Level" type="bool" default="false" subsetting="true" enable="!eq(-2,)" />
 		<!-- Fanart -->
 		<setting label="Extra Art (Powered by Fanart.tv)" type="lsep" />
 		<setting id="get_fanart_data" label="Include Extra Art" type="bool" default="false" />

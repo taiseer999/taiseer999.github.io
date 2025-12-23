@@ -75,7 +75,7 @@ class People(BaseDialog):
 			except: notification(32760)
 		else: self.person_id = self.kwargs['actor_id']
 		person_info = tmdb_people_full_info(self.person_id)
-		if person_info.get('biography', None) in ('', None): person_info = tmdb_people_full_info(self.person_id, 'en')
+		if person_info.get('biography') in ('', None): person_info = tmdb_people_full_info(self.person_id, 'en')
 		self.person_name = person_info['name']
 		image_path = person_info['profile_path']
 		if image_path: self.person_image = tmdb_image_base % ('h632', image_path)

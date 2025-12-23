@@ -91,8 +91,8 @@ class Indexer(Debrid):
 				url_params = {**params, 'mode': 'media_play', 'media_type': 'video'}
 				delete_params = {**params, 'mode': 'real_debrid.rd_delete', 'cache_type': 'download'}
 				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.realdebrid_direct'}
-				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				cm_append(('[B]%s %s[/B]' % (delete_str, file_str.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
+				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)

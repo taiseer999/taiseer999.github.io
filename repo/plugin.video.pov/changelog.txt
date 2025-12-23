@@ -1,5 +1,9 @@
 
   [COLOR dodgerblue][B]Version 5.12[/B][/COLOR]
+- Added shuffle option for lists under My Lists Menu.
+  Duplicate/add list to a menu or shortcut folder from watchlist, personal, liked and
+  public lists, etc.  Prefix the list name with "Shuffle" and the list will be shuffled
+  on load or widget refresh (with respect to pagination).
 - Fixed uncached results sorted to top.
 - Added Sort to Top setting for Results/Sorting and Filtering:
     HEVC Files Filter

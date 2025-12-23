@@ -157,8 +157,7 @@ def check_title(title, aliases, release_title, hdlr, year, years=None): # non pa
 		if years:
 			for i in years: t = t.split(i)[0]
 		t = re.split(r'2160p|216op|4k|1080p|1o8op|108op|1o80p|720p|72op|480p|48op', t, 1, re.I)[0]
-#		if all(cleantitle.get(i) != cleantitle.get(t) for i in title_list): return False
-		if not any(cleantitle.get(i) in cleantitle.get(t) for i in title_list): return False
+		if all(cleantitle.get(i) != cleantitle.get(t) for i in title_list): return False
 
 # filter to remove episode ranges that should be picked up in "filter_season_pack()" ex. "s01e01-08"
 		if hdlr != year: # equal for movies but not for shows

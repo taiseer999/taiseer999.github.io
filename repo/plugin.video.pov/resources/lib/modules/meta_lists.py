@@ -180,6 +180,7 @@ media_lists = (
 	"'imdb%'",
 	"'pov%'",
 	"'POV%'",
+	"'subtitles%'",
 	"'https%'"
 )
 

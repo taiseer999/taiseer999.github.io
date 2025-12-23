@@ -29,8 +29,8 @@ class Movies:
 		self.id_type, self.list, self.action, self.exit_list_params = (
 			self.params.get('id_type', 'tmdb_id'),
 			self.params.get('list', []),
-			self.params.get('action', None),
-			self.params.get('exit_list_params', None)
+			self.params.get('action'),
+			self.params.get('exit_list_params')
 		)
 		self.append = self.items.append
 		self.current_date = get_datetime_function()
@@ -41,7 +41,7 @@ class Movies:
 		self.include_year_in_title = settings.include_year_in_title('movie')
 		self.open_extras = settings.extras_open_action('movie')
 		self.cm_sort = settings.context_menu_sort()
-		self.rpdb_enabled = self.meta_user_info['extra_rpdb_enabled']
+		self.rpdb_enabled = self.meta_user_info['extra_rpdb_movies']
 		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
 		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
@@ -90,8 +90,8 @@ class Movies:
 				url_params = play_params
 				cm_append((self.cm_sort['extras'], extras_str, run_plugin % extras_params))
 			cm_append((self.cm_sort['trakt'], traktmanager_str, run_plugin % trakt_manager_params))
-			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['mdblist'], mdblmanager_str, run_plugin % mdbl_manager_params))
+			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
 			if progress != '0' or resumetime != '0': cm_append((self.cm_sort['mark'], clearprog_str, run_plugin % build_url({
 				'mode': 'watched_unwatched_erase_bookmark', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'refresh': 'true'
@@ -152,15 +152,17 @@ class Movies:
 
 class Indexer(Movies):
 	tmdb_main, trakt_main = (
-		'tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters', 'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres',
+		'tmdb_movies_popular', 'tmdb_movies_blockbusters', 'tmdb_movies_in_theaters',
+		'tmdb_movies_upcoming', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres',
 		'tmdb_moviesanime_popular', 'tmdb_moviesanime_latest_releases'
 	), (
-		'trakt_movies_trending', 'trakt_movies_most_watched', 'trakt_movies_most_favorited', 'trakt_movies_top10_boxoffice',
-		'trakt_movies_trending_recent', 'trakt_moviesanime_trending', 'trakt_moviesanime_most_watched'
+		'trakt_movies_trending', 'trakt_movies_most_watched', 'trakt_movies_most_favorited',
+		'trakt_movies_top10_boxoffice', 'trakt_movies_trending_recent',
+		'trakt_moviesanime_trending', 'trakt_moviesanime_most_watched'
 	)
 	tmdb_special_key_dict = {
-		'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_moviesanime_year':'year',
-		'tmdb_movies_certifications': 'certification'
+		'tmdb_movies_languages': 'language', 'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year',
+		'tmdb_moviesanime_year': 'year', 'tmdb_movies_certifications': 'certification'
 	}
 	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
@@ -219,7 +221,7 @@ class Indexer(Movies):
 				except: pass
 			elif self.action in Indexer.imdb_personal:
 				self.id_type = 'imdb_id'
-				list_id = params_get('list_id', None)
+				list_id = params_get('list_id')
 				data, next_page = function('movie', list_id, page_no)
 				self.list = [i['imdb_id'] for i in data]
 				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1), 'new_letter': letter}
@@ -235,7 +237,7 @@ class Indexer(Movies):
 				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), 'tmdb_id': tmdb_id}
 			elif self.action in Indexer.tmdb_special_key_dict:
 				key = Indexer.tmdb_special_key_dict[self.action]
-				function_var = params_get(key, None)
+				function_var = params_get(key)
 				if not function_var: return
 				data = function(function_var, page_no)
 				self.list = [i['id'] for i in data['results']]
@@ -278,10 +280,17 @@ class Indexer(Movies):
 				data = function('movies')
 				self.list = [i['ids'] for i in data]
 			if self.total_pages and not self.is_widget and settings.nav_jump_use_alphabet():
-				url_params = {'mode': 'build_navigate_to_page', 'media_type': 'Movies', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-							'transfer_action': self.action, 'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', '')}
+				url_params = {
+					'mode': 'build_navigate_to_page', 'current_page': page_no, 'total_pages': self.total_pages,
+					'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', ''),
+					'transfer_mode': mode, 'transfer_action': self.action, 'media_type': 'Movies'
+				}
 				kodi_utils.add_dir(self.handle, url_params, jumpto_str, item_jump, isFolder=False)
-			kodi_utils.add_items(self.handle, self.builder())
+			if params_get('name', '').lower().startswith('shuffle') and self.action in {li for subl in (
+				Indexer.tmdb_personal, Indexer.trakt_personal, Indexer.mdblist_personal
+			) for li in subl}: shuffle = True
+			else: shuffle = False
+			kodi_utils.add_items(self.handle, self.builder(), shuffle=shuffle)
 			if self.new_page:
 				self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'name': ls(params_get('name'))})
 				kodi_utils.add_dir(self.handle, self.new_page, nextpage_str, item_next)

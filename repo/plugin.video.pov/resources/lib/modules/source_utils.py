@@ -3,7 +3,7 @@ import json
 import unicodedata
 from string import printable
 from urllib.parse import unquote, unquote_plus
-from fenom.control import getSettingDefault as fenom_default_settings, setting as fenom_getSetting, setSetting as fenom_setSetting
+from fenom.control import setting as fenom_getSetting, setSetting as fenom_setSetting
 from indexers.metadata import season_episodes_meta
 from modules import kodi_utils
 from modules.settings import check_prescrape_sources, date_offset, metadata_user_info
@@ -59,7 +59,25 @@ UNWANTED_TAGS = ('tamilrockers.com', 'www.tamilrockers.com', 'www.tamilrockers.w
 				'ramin.djawadi', 'extramovies.casa', 'extramovies.wiki', '13+', '18+', 'taht.oyunlar', 'crazy4tv.com', 'karibu', '989pa.com', 'best-torrents-net', '1-3-3-8.com',
 				'ssrmovies.club', 'va:', 'zgxybbs-fdns-uk', 'www.tamilblasters.mx', 'www.1tamilmv.work', 'www.xbay.me', 'crazy4tv-com', '(es)')
 
-def internal_sources(active_sources, prescrape=False):
+def external_sources(ret_all=False):
+	source_list = []
+	append = source_list.append
+	enabled = [
+		k.split('.')[1] for k, v in kodi_utils.make_settings_dict().items()
+		if k.startswith('provider.') and v == 'true'
+	]
+	files = kodi_utils.list_dirs('special://home/addons/plugin.video.pov/resources/lib/magneto')[1]
+	for item in files:
+		try:
+			module_name = item.split('.')[0]
+			if module_name in ('__init__',): continue
+			if not ret_all and not module_name in enabled: continue
+			module = manual_function_import('magneto.%s' % module_name, 'source')
+			append((module_name, module))
+		except: pass
+	return source_list
+
+def internal_sources(active_sources, media_type, prescrape=False):
 	def import_info():
 		files = kodi_utils.list_dirs('special://home/addons/plugin.video.pov/resources/lib/scrapers')[1]
 		for item in files:
@@ -67,7 +85,7 @@ def internal_sources(active_sources, prescrape=False):
 				module_name = item.split('.')[0]
 				if module_name in ('__init__', 'external', 'folders'): continue
 				if module_name not in active_sources: continue
-				if prescrape and not check_prescrape_sources(module_name): continue
+				if prescrape and not check_prescrape_sources(module_name, media_type): continue
 				module = manual_function_import('scrapers.%s' % module_name, 'source')
 				yield ('internal', module, module_name)
 			except: pass
@@ -92,7 +110,19 @@ def get_aliases_titles(aliases):
 	return result
 
 def internal_results(provider, sources):
-	kodi_utils.set_property('%s.internal_results' % provider, json.dumps(sources))
+	quality_count = sources_quality_count(sources)
+	kodi_utils.set_property('%s.internal_results' % provider, json.dumps(quality_count))
+
+def sources_quality_count(sources):
+	sourcesTotal = sources4K = sources1080p = sources720p = sourcesSD = 0
+	for i in sources:
+		quality = i['quality']
+		if quality == '4K': sources4K += 1
+		elif quality in ('1440p', '1080p'): sources1080p += 1
+		elif quality in ('720p', 'HD'): sources720p += 1
+		else: sourcesSD += 1
+		sourcesTotal += 1
+	return {'4K': sources4K, '1080p': sources1080p, '720p': sources720p, 'SD': sourcesSD, 'total': sourcesTotal}
 
 def normalize(title):
 	try:
@@ -100,27 +130,14 @@ def normalize(title):
 		return string(title)
 	except: return title
 
-def toggle_all(folder, setting, silent=False):
-	try:
-		sourcelist = scraper_names(folder)
-		for i in sourcelist:
-			source_setting = 'provider.' + i
-			fenom_setSetting(source_setting, setting)
-		if silent: return
-		return kodi_utils.notification(32576, 1500)
-	except:
-		if silent: return
-		return kodi_utils.notification(32574, 1500)
-
 def enable_disable(folder):
 	try:
-#		icon = 'special://home/addons/script.module.fenomscrapers/icon.png'
-		icon = 'special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png'
+		icon = 'special://home/addons/plugin.video.pov/resources/lib/fenom/fenom_icon.png'
 		enabled, disabled = scrapers_status(folder)
 		all_sources = sorted(enabled + disabled)
 		preselect = [all_sources.index(i) for i in enabled]
 		list_items = [{'line1': i.upper(), 'icon': icon} for i in all_sources]
-		kwargs = {'items': json.dumps(list_items), 'heading': 'POV', 'enumerate': 'false', 'multi_choice': 'true', 'multi_line': 'false', 'preselect': preselect}
+		kwargs = {'items': json.dumps(list_items), 'heading': 'POV', 'multi_choice': 'true', 'preselect': preselect}
 		chosen = kodi_utils.select_dialog(all_sources, **kwargs)
 		if chosen is None: return
 		for i in all_sources:
@@ -128,13 +145,6 @@ def enable_disable(folder):
 			else: fenom_setSetting('provider.' + i, 'false')
 		return kodi_utils.notification(32576, 1500)
 	except: return kodi_utils.notification(32574, 1500)
-
-def set_default_scrapers():
-	all_scrapers = scraper_names('all')
-	for i in all_scrapers:
-		scraper = 'provider.' + i
-		default_setting = fenom_default_settings(scraper)
-		fenom_setSetting(scraper, default_setting)
 
 def scrapers_status(folder='all'):
 	providers = scraper_names(folder)
@@ -145,14 +155,14 @@ def scrapers_status(folder='all'):
 def scraper_names(folder):
 	providerList = []
 	append = providerList.append
-#	source_folder_location = 'special://home/addons/script.module.fenomscrapers/lib/fenomscrapers/sources_fenomscrapers/%s'
-	source_folder_location = 'special://home/addons/plugin.video.pov/resources/lib/fenom/providers/%s'
-	sourceSubFolders = ('hosters', 'torrents')
-	if folder != 'all': sourceSubFolders = [i for i in sourceSubFolders if i == folder]
+	source_folder_location = 'special://home/addons/plugin.video.pov/resources/lib/magneto/%s'
+	sourceSubFolders = {'hosters': '', 'torrents': ''}
+	if folder == 'all': sourceSubFolders = ['']
+	else: sourceSubFolders = [v for k, v in sourceSubFolders.items() if k == folder]
 	for item in sourceSubFolders:
 		files = kodi_utils.list_dirs(source_folder_location % item)[1]
-		for m in files:
-			module_name = m.split('.')[0]
+		for item in files:
+			module_name = item.split('.')[0]
 			if module_name == '__init__': continue
 			append(module_name)
 	return providerList

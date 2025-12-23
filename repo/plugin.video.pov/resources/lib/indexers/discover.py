@@ -23,7 +23,7 @@ listitem_position = {
 class Discover:
 	def __init__(self, params):
 		self.view = 'view.main'
-		self.media_type, self.key = params.get('media_type', None), params.get('key', None)
+		self.media_type, self.key = params.get('media_type'), params.get('key')
 		self.window_id = 'POV_%s_discover_params' % self.media_type.upper() if self.media_type else ''
 		try: self.discover_params = json.loads(kodi_utils.get_property(self.window_id))
 		except: self.discover_params = {}

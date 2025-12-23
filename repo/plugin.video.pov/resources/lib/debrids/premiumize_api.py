@@ -101,8 +101,7 @@ class PremiumizeAPI:
 				if item['path'].lower().endswith(tuple(extensions))
 			]
 			return torrent_files
-		except Exception:
-			return None
+		except: pass
 
 	def zip_folder(self, folder_id):
 		url = 'zip/generate'
@@ -145,20 +144,6 @@ class PremiumizeAPI:
 		data = {'id': item_id}
 		args = [url, data]
 		return cache_object(self._post, string, args, False, 24)
-
-	def get_hosts(self):
-		string = 'pov_pm_valid_hosts'
-		url = 'services/list'
-		hosts_dict = {'Premiumize.me': []}
-		hosts = []
-		append = hosts.append
-		try:
-			result = cache_object(self._get, string, url, False, 168)
-			for x in result['directdl']:
-				for alias in result['aliases'][x]: append(alias)
-			hosts_dict['Premiumize.me'] = list(set(hosts))
-		except: pass
-		return hosts_dict
 
 	def downloads(self):
 		string = 'pov_pm_downloads'

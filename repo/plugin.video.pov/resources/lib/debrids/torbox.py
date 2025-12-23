@@ -23,14 +23,14 @@ class Indexer(Debrid):
 			if   media_type == 'usenet': items = self.user_cloud_usenet(folder_id)
 			elif media_type == 'webdl': items = self.user_cloud_webdl(folder_id)
 			else: items = self.user_cloud(folder_id)
-			items = [{**i, 'url': '%d,%d' % (int(folder_id), i['id']), 'mediatype': media_type} for i in items['files']]
+			items = [{**i, 'url': '%d,%d' % (int(folder_id), i['id']), 'media_type': media_type} for i in items['files']]
 			_builder = self.browse_cloud
 		elif '_torrent_cloud' in params['mode']:
 			media_type = params['media_type']
 			if   media_type == 'usenet': items = self.user_cloud_usenet()
 			elif media_type == 'webdl': items = self.user_cloud_webdl()
 			else: items = self.user_cloud()
-			items = [{**i, 'mediatype': media_type} for i in items]
+			items = [{**i, 'media_type': media_type} for i in items]
 			_builder = self.torrent_cloud
 		elif '_usenet_query' in params['mode']:
 			query, imdb_id = params.get('query'), params.get('imdb_id')
@@ -51,8 +51,8 @@ class Indexer(Debrid):
 				cm = []
 				cm_append = cm.append
 				display = '%02d | [B]%s[/B] | [I]%s [/I]' % (count, folder_str, clean_file_name(normalize(item['name'])).upper())
-				url_params = {'mode': 'torbox.tb_browse_cloud', 'folder_id': item['id'], 'media_type': item['mediatype']}
-				delete_params = {'mode': 'torbox.tb_delete', 'folder_id': item['id'], 'media_type': item['mediatype']}
+				url_params = {'mode': 'torbox.tb_browse_cloud', 'folder_id': item['id'], 'media_type': item['media_type']}
+				delete_params = {'mode': 'torbox.tb_delete', 'folder_id': item['id'], 'media_type': item['media_type']}
 				cm_append(('[B]%s %s[/B]' % (delete_str, folder_str.capitalize()), 'RunPlugin(%s)' % build_url(delete_params)))
 				url = build_url(url_params)
 				listitem = make_listitem()
@@ -71,7 +71,7 @@ class Indexer(Debrid):
 				name = clean_file_name(item['short_name']).upper()
 				size = float(int(item['size']))/1073741824
 				display = '%02d | [B]%s[/B] | %.2f GB | [I]%s [/I]' % (count, file_str, size, name)
-				params = {'name': name, 'url': item['url'], 'media_type': item['mediatype'], 'image': default_icon}
+				params = {'name': name, 'url': item['url'], 'media_type': item['media_type'], 'image': default_icon}
 				url_params = {**params, 'mode': 'torbox.resolve_tb', 'play': 'true'}
 				down_file_params = {**params, 'mode': 'downloader', 'action': 'cloud.torbox'}
 				cm_append((down_str, 'RunPlugin(%s)' % build_url(down_file_params)))
@@ -97,7 +97,7 @@ class Indexer(Debrid):
 				else: display = '%02d | %.2f GB | [I]%s[/I]'
 				display = display % (count, size, name)
 				plot = '[B]Tracker[/B]: [I]%s[/I][CR][CR][B]Files[/B]: %s[CR][CR][B]Age[/B]: %s' % (tracker, parts, age)
-				url_params = {'mode': 'manual_add_nzb_to_cloud', 'provider': 'TorBox', 'url': item['nzb'], 'name': name}
+				url_params = {'mode': 'manual_add_nzb_to_cloud', 'debrid': 'torbox', 'url': item['nzb'], 'name': name}
 				url = build_url(url_params)
 				listitem = make_listitem()
 				listitem.setLabel(display)
@@ -142,39 +142,6 @@ class Indexer(Debrid):
 			kodi_utils.hide_busy_dialog()
 			return kodi_utils.show_text('TorBox'.upper(), '\n\n'.join(body), font_size='large')
 		except: kodi_utils.hide_busy_dialog()
-
-class Uncached(Debrid):
-	def nzb_cache_and_play(self, params):
-		meta = json.loads(params['meta'])
-		source = json.loads(params['source'])
-		line, status_str = '%s[CR]%s[B]STATUS[/B]: %s', '(%2d%%, ETA %s) %s'
-		title, season, episode = meta['title'], meta['season'], meta['episode']
-		if season and episode: line1, line2 = '[B]%s (%02dx%02d)[/B]' % (title, season, episode), '[CR]'
-		else: line1, line2 = '[B]%s (%s)[/B]' % (title, meta['year']), '[CR]'
-		kodi_utils.progressDialog.create('POV', '')
-		kodi_utils.progressDialog.update(0, line % (line1, line2, 'GRAB'))
-		try:
-			store_to_cloud = get_setting('store_usenet.torbox') == 'true'
-			nzb_id = self.create_transfer(source['url'], source['name'])
-			if not nzb_id: return kodi_utils.notification(32574)
-			resolved_link = None
-			data = {'files': []}
-			while not data['files']:
-				if kodi_utils.progressDialog.iscanceled(): return
-				progress = int(float(data.get('progress', '0')) * 100)
-				status = status_str % (progress, data.get('eta', 'NA'), data.get('download_state', '...').upper())
-				kodi_utils.progressDialog.update(progress, line % (line1, line2, status))
-				kodi_utils.sleep(500)
-				result = self.nzb_info(nzb_id)
-				if result and 'id' in result: data = result
-			else: resolved_link = self.resolve_nzb(
-				source['url'], source['hash'], store_to_cloud, title, season, episode, nzb_info=result
-			)
-		finally: kodi_utils.progressDialog.close()
-		if not resolved_link: return kodi_utils.notification(32574)
-		kodi_utils.set_property('pov_playback_meta', params.get('meta', ''))
-		from modules.player import POVPlayer
-		POVPlayer().run(resolved_link)
 
 def resolve_tb(params):
 	file_id, media_type = params['url'], params['media_type']

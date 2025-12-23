@@ -151,7 +151,7 @@ class Seasons:
 					episode_date, premiered = adjust_premiered_date_function(premiered, adjust_hours)
 					playcount, overlay = get_watched_status_episode(self.watched_info, string(tmdb_id), season, episode)
 					resumetime, progress = get_resumetime(bookmarks, tmdb_id, season, episode)
-					thumb = item_get('thumb', None) or fanart
+					thumb = item_get('thumb') or fanart
 					if thumb_fanart: background = thumb
 					else: background = fanart
 					item.update({'trailer': trailer, 'tvshowtitle': show_title, 'premiered': premiered, 'genre': genre, 'duration': episode_run_time, 'mpaa': mpaa, 'studio': studio,

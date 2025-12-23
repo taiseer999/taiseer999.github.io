@@ -220,11 +220,9 @@ def random_choice(choice, meta):
 	if not tmdb_id: return
 	from modules.episode_tools import get_random_episode
 	from modules.sources import SourceSelect
-	meta, url_params = get_random_episode(tmdb_id, True if choice == 'play_random_continual' else False)
-	if not url_params: return notification(32760)
-	url_params['background'] = 'false'
-#	return execute_builtin('RunPlugin(%s)' % build_url(url_params))
-	SourceSelect().playback_prep(url_params)
+	meta, play_params = get_random_episode(tmdb_id, True if choice == 'play_random_continual' else False)
+	if not play_params: return notification(32760)
+	SourceSelect.factory(play_params)
 
 def playback_choice(content, poster, meta):
 	items = [
@@ -259,8 +257,11 @@ def set_quality_choice(quality_setting):
 
 def extras_lists_choice():
 	fl = [2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062]
-	dl = [ls(32664), ls(32503), ls(32607), ls(32984), ls(32986), ls(32989), ls(32531), ls(32616), ls(32617),
-			'%s %s' % (ls(32612), ls(32543)), '%s %s' % (ls(32612), ls(32470)), '%s %s' % (ls(32612), ls(32480)), '%s %s' % (ls(32612), ls(32499))]
+	dl = [
+		ls(32664), ls(32503), ls(32607), ls(32984), ls(32986), ls(32989), ls(32531), ls(32616), ls(32617),
+		'%s %s' % (ls(32612), ls(32543)), '%s %s' % (ls(32612), ls(32470)),
+		'%s %s' % (ls(32612), ls(32480)), '%s %s' % (ls(32612), ls(32499))
+	]
 	try: preselect = [fl.index(i) for i in settings.extras_enabled_menus()]
 	except: preselect = []
 	list_items = [{'line1': item} for item in dl]
@@ -285,26 +286,6 @@ def set_language_filter_choice(filter_setting):
 	if choice is None: return
 	if choice == []: return set_setting(filter_setting, 'eng')
 	set_setting(filter_setting, ', '.join(choice))
-
-def enable_scrapers_choice():
-	scraper_items = {
-		'folders': ls(32108).upper(), 'external': ls(32118).upper(), 'easynews': ls(32070).upper(),
-		'ad_cloud': ls(32099).upper(), 'pm_cloud': ls(32097).upper(), 'rd_cloud': ls(32098).upper(),
-		'tb_cloud': 'TB Cloud'.upper(), 'oc_cloud': 'OC Cloud'.upper()
-	}
-	scrapers, scraper_names = list(scraper_items.keys()), list(scraper_items.values())
-	preselect = [scrapers.index(i) for i in settings.active_internal_scrapers()]
-	list_items = [{'line1': item} for item in scraper_names]
-	kwargs = {'items': json.dumps(list_items), 'heading': 'POV', 'multi_choice': 'true', 'preselect': preselect}
-	choice = select_dialog(scrapers, **kwargs)
-	if choice is None: return
-	cloud_scrapers = {
-		'ad_cloud': 'ad.enabled', 'pm_cloud': 'pm.enabled', 'rd_cloud': 'rd.enabled',
-		'tb_cloud': 'tb.enabled', 'oc_cloud': 'oc.enabled'
-	}
-	for i in scrapers:
-		set_setting('provider.%s' % i, ('true' if i in choice else 'false'))
-		if i in cloud_scrapers and i in choice: set_setting(cloud_scrapers[i], 'true')
 
 def folder_scraper_manager_choice(folder_info=None):
 	def _get_property(setting_id):
@@ -387,8 +368,11 @@ def folder_scraper_manager_choice(folder_info=None):
 
 def results_sorting_choice():
 	quality, provider, size = ls(32241), ls(32583), ls(32584)
-	choices = [('%s, %s, %s' % (quality, provider, size), '0'), ('%s, %s, %s' % (quality, size, provider), '1'), ('%s, %s, %s' % (provider, quality, size), '2'),
-			   ('%s, %s, %s' % (provider, size, quality), '3'), ('%s, %s, %s' % (size, quality, provider), '4'), ('%s, %s, %s' % (size, provider, quality), '5')]
+	choices = [
+		('%s, %s, %s' % (quality, provider, size), '0'), ('%s, %s, %s' % (quality, size, provider), '1'),
+		('%s, %s, %s' % (provider, quality, size), '2'), ('%s, %s, %s' % (provider, size, quality), '3'),
+		('%s, %s, %s' % (size, quality, provider), '4'), ('%s, %s, %s' % (size, provider, quality), '5')
+	]
 	list_items = [{'line1': item[0]} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': 'POV'}
 	choice = select_dialog(choices, **kwargs)
@@ -475,9 +459,9 @@ def meta_language_choice():
 	clear_cache('meta', silent=True)
 
 def favourites_choice(params):
+	from caches.favourites_cache import favourites_cache
 	icon = media_path('favourites.png')
 	if params.get('cache'):
-		from caches.favourites_cache import favourites_cache
 		list = [('%s %s' % (ls(32028), ls(32453)), 'movie'), ('%s %s' % (ls(32029), ls(32453)), 'tvshow')]
 		list_items = [{'line1': item[0], 'icon': icon} for item in list]
 		kwargs = {'items': json.dumps(list_items), 'heading': ls(32453)}
@@ -485,7 +469,6 @@ def favourites_choice(params):
 		if media_type is None: return
 		if not favourites_cache.clear_favourites(media_type): notification(32574)
 	else:
-		from caches.favourites_cache import favourites_cache
 		media_type, tmdb_id, title = params['media_type'], params['tmdb_id'], params['title']
 		current_favourites = favourites_cache.get_favourites(media_type)
 		if any(i['tmdb_id'] == tmdb_id for i in current_favourites): action, text = favourites_cache.remove_from_favourites, '%s POV %s?' % (ls(32603), ls(32453))
@@ -494,45 +477,6 @@ def favourites_choice(params):
 		if action(media_type, tmdb_id, title): notification(32576)
 		else: notification(32574)
 
-def external_scrapers_choice():
-#	icon = 'special://home/addons/script.module.fenomscrapers/icon.png'
-	icon = 'special://home/addons/plugin.video.pov/resources/lib/fenom/media/icon.png'
-	all_color, hosters_color, torrent_color = 'mediumvioletred', get_setting('hoster.identify'), get_setting('torrent.identify')
-	enable_string, disable_string, specific_string, all_string = ls(32055), ls(32024), ls(32536), ls(32525)
-	scrapers_string, hosters_string, torrent_string = ls(32533), ls(32532), ls(32535)
-	fs_default_string = ls(32137)
-	all_scrapers_string = '%s %s' % (all_string, scrapers_string)
-	hosters_scrapers_string = '%s %s' % (hosters_string, scrapers_string)
-	torrent_scrapers_string = '%s %s' % (torrent_string, scrapers_string)
-	enable_string_base = '%s %s %s %s' % (enable_string, all_string, '%s', scrapers_string)
-	disable_string_base = '%s %s %s %s' % (disable_string, all_string, '%s', scrapers_string)
-	enable_disable_string_base = '%s/%s %s %s %s' % (enable_string, disable_string, specific_string, '%s', scrapers_string)
-	all_scrapers_base = '[COLOR %s]%s [/COLOR]' % (all_color, all_scrapers_string.upper())
-	debrid_scrapers_base = '[COLOR %s]%s [/COLOR]' % (hosters_color, hosters_scrapers_string.upper())
-	torrent_scrapers_base = '[COLOR %s]%s [/COLOR]' % (torrent_color, torrent_scrapers_string.upper())
-	tools_menu = [
-		(all_scrapers_base, fs_default_string, {'mode': 'set_default_scrapers'}),
-		(all_scrapers_base, enable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'true'}),
-		(all_scrapers_base, disable_string_base % '', {'mode': 'toggle_all', 'folder': 'all', 'setting': 'false'}),
-		(all_scrapers_base, enable_disable_string_base % '', {'mode': 'enable_disable', 'folder': 'all'}),
-		(debrid_scrapers_base, enable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'true'}),
-		(debrid_scrapers_base, disable_string_base % hosters_string, {'mode': 'toggle_all', 'folder': 'hosters', 'setting': 'false'}),
-		(debrid_scrapers_base, enable_disable_string_base % hosters_string, {'mode': 'enable_disable', 'folder': 'hosters'}),
-		(torrent_scrapers_base, enable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'true'}),
-		(torrent_scrapers_base, disable_string_base % torrent_string, {'mode': 'toggle_all', 'folder': 'torrents', 'setting': 'false'}),
-		(torrent_scrapers_base, enable_disable_string_base % torrent_string, {'mode': 'enable_disable', 'folder': 'torrents'})
-	]
-	list_items = [{'line1': item[0], 'line2': item[1], 'icon': icon} for item in tools_menu]
-	kwargs = {'items': json.dumps(list_items), 'heading': 'POV', 'multi_line': 'true'}
-	chosen_tool = select_dialog(tools_menu, **kwargs)
-	if chosen_tool is None: return
-	params = chosen_tool[2]
-	mode = params['mode']
-	if mode == 'toggle_all': source_utils.toggle_all(params['folder'], params['setting'])
-	elif mode == 'enable_disable': source_utils.enable_disable(params['folder'])
-	elif mode == 'set_default_scrapers': source_utils.set_default_scrapers()
-	return external_scrapers_choice()
-
 def options_menu(params, meta=None):
 	def _builder():
 		for item in listing:
@@ -540,8 +484,8 @@ def options_menu(params, meta=None):
 			if len(item) == 4: kwargs['icon'] = item[3]
 			yield kwargs
 	is_widget = params.get('is_widget', 'false').lower() == 'true'
-	content = params.get('content', None) or container_content()[:-1]
-	season, episode = params.get('season', None), params.get('episode', None)
+	content = params.get('content') or container_content()[:-1]
+	season, episode = params.get('season'), params.get('episode')
 	if not meta:
 		function = metadata.movie_meta if content == 'movie' else metadata.tvshow_meta
 		meta = function('tmdb_id', params['tmdb_id'], settings.metadata_user_info(), get_datetime())
@@ -568,7 +512,7 @@ def options_menu(params, meta=None):
 		('set_results_xml_display', base_str1 % ('', '%s %s' % (ls(32139), ls(32140))), base_str2 % results_xml_style_status) if multi_line == 'true' else None,
 		('clear_trakt_cache', ls(32497) % ls(32037), '') if watched_indicators == 1 else None,
 		('clear_mdbl_cache', ls(32497) % 'MDBList', '') if watched_indicators == 2 else None,
-		('clear_media_cache', ls(32604) % (ls(32028) if meta['mediatype'] == 'movie' else ls(32029)), '', meta['poster']) if content in ('movie', 'tvshow') and meta else None,
+		('clear_media_cache', ls(32604) % (ls(32028) if content in ('movie') else ls(32029)), '', meta['poster']) if content in ('movie', 'tvshow') and meta else None,
 		('open_pov_settings', '%s %s %s' % (open_str, ls(32036), settings_str), ''),
 		('reload_widgets', 'POV: Refresh Widgets', '') if is_widget else None
 	)
@@ -758,7 +702,7 @@ def torbox_usenet_query(meta, season, episode):
 				elif item['cached']: line2 = '%.2f GB | [COLOR magenta][B]CACHED[/B][/COLOR] | %s | %s'
 				else: line2 = '%.2f GB | %s | %s'
 				line2 = line2 % (size, age, tracker)
-				url_params = {'mode': 'manual_add_nzb_to_cloud', 'provider': 'TorBox', 'url': item['nzb'], 'name': name}
+				url_params = {'mode': 'manual_add_nzb_to_cloud', 'debrid': 'torbox', 'url': item['nzb'], 'name': name}
 				yield (url_params, name, line2)
 			except: pass
 	query = meta.get('tvshowtitle') or '%s %s' % (meta['title'], meta['year'])

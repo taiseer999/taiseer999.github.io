@@ -30,8 +30,8 @@ class TVShows:
 		self.id_type, self.list, self.action, self.exit_list_params = (
 			self.params.get('id_type', 'tmdb_id'),
 			self.params.get('list', []),
-			self.params.get('action', None),
-			self.params.get('exit_list_params', None)
+			self.params.get('action'),
+			self.params.get('exit_list_params')
 		)
 		self.append = self.items.append
 		self.current_date = get_datetime_function()
@@ -43,7 +43,7 @@ class TVShows:
 		self.open_extras = settings.extras_open_action('tvshow')
 		self.cm_sort = settings.context_menu_sort()
 		self.is_folder = False if self.open_extras else True
-		self.rpdb_enabled = self.meta_user_info['extra_rpdb_enabled_series']
+		self.rpdb_enabled = self.meta_user_info['extra_rpdb_series']
 		self.fanart_enabled = self.meta_user_info['extra_fanart_enabled']
 		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
@@ -92,8 +92,8 @@ class TVShows:
 			else:
 				cm_append((self.cm_sort['extras'], extras_str, run_plugin % extras_params))
 			cm_append((self.cm_sort['trakt'], traktmanager_str, run_plugin % trakt_manager_params))
-			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['mdblist'], mdblmanager_str, run_plugin % mdbl_manager_params))
+			cm_append((self.cm_sort['tmdblist'], tmdbmanager_str, run_plugin % tmdb_manager_params))
 			cm_append((self.cm_sort['favourites'], favmanager_str, run_plugin % fav_manager_params))
 			if not playcount: cm_append((self.cm_sort['mark'], watched_str % self.watched_title, run_plugin % build_url({
 				'mode': 'mark_as_watched_unwatched_tvshow', 'action': 'mark_as_watched', 'year': year,
@@ -223,7 +223,7 @@ class Indexer(TVShows):
 				except: pass
 			elif self.action in Indexer.imdb_personal:
 				self.id_type = 'imdb_id'
-				list_id = params_get('list_id', None)
+				list_id = params_get('list_id')
 				data, next_page = function('tvshow', list_id, page_no)
 				self.list = [i['imdb_id'] for i in data]
 				if next_page: self.new_page = {'list_id': list_id, 'new_page': string(page_no + 1), 'new_letter': letter}
@@ -244,7 +244,7 @@ class Indexer(TVShows):
 				if data['page'] < data['total_pages']: self.new_page = {'new_page': string(data['page'] + 1), 'tmdb_id': tmdb_id}
 			elif self.action in Indexer.tmdb_special_key_dict:
 				key = Indexer.tmdb_special_key_dict[self.action]
-				function_var = params_get(key, None)
+				function_var = params_get(key)
 				if not function_var: return
 				data = function(function_var, page_no)
 				self.list = [i['id'] for i in data['results']]
@@ -279,10 +279,17 @@ class Indexer(TVShows):
 				data = function('shows')
 				self.list = [i['ids'] for i in data]
 			if self.total_pages and not self.is_widget and settings.nav_jump_use_alphabet():
-				url_params = {'mode': 'build_navigate_to_page', 'media_type': 'TV Shows', 'current_page': page_no, 'total_pages': self.total_pages, 'transfer_mode': mode,
-							'transfer_action': self.action, 'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', '')}
+				url_params = {
+					'mode': 'build_navigate_to_page', 'current_page': page_no, 'total_pages': self.total_pages,
+					'query': params_get('search_name', ''), 'actor_id': params_get('actor_id', ''),
+					'transfer_mode': mode, 'transfer_action': self.action, 'media_type': 'TV Shows'
+				}
 				kodi_utils.add_dir(self.handle, url_params, jumpto_str, item_jump, isFolder=False)
-			kodi_utils.add_items(self.handle, self.worker())
+			if params_get('name', '').lower().startswith('shuffle') and self.action in {li for sub in (
+				Indexer.tmdb_personal, Indexer.trakt_personal, Indexer.mdblist_personal
+			) for li in sub}: shuffle = True
+			else: shuffle = False
+			kodi_utils.add_items(self.handle, self.worker(), shuffle=shuffle)
 			if self.new_page:
 				self.new_page.update({'mode': mode, 'action': self.action, 'exit_list_params': self.exit_list_params, 'name': ls(params_get('name'))})
 				kodi_utils.add_dir(self.handle, self.new_page, nextpage_str, item_next)

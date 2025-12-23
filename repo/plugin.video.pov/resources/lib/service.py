@@ -20,7 +20,6 @@ def checkSettingsFile():
 	settings_xml = profile_dir + 'settings.xml'
 	if not path_exists(profile_dir):
 		kodi_utils.make_directorys(profile_dir)
-	if not path_exists(settings_xml):
 		kodi_utils.addon().setSetting('kodi_menu_cache', 'true')
 		kodi_utils.sleep(500)
 	make_settings_dict()

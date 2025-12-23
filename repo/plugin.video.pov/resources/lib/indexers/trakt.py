@@ -48,7 +48,7 @@ def search_trakt_lists(params):
 				yield (url, listitem, True)
 			except: pass
 	page = params.get('new_page', '1')
-	search_title = params.get('search_title', None) or kodi_utils.dialog.input('POV')
+	search_title = params.get('search_title') or kodi_utils.dialog.input('POV')
 	if search_title: lists, pages = trakt_api.trakt_search_lists(search_title, page)
 	else: lists, pages = [], page
 	__handle__ = int(sys.argv[1])
@@ -69,7 +69,7 @@ def get_trakt_lists(params):
 				cm_append = cm.append
 				if list_type == 'liked_lists': item = item['list']
 				name, user, slug, list_id = item['name'], item['user']['ids']['slug'], item['ids']['slug'], item['ids']['trakt']
-				item_count, privacy = item.get('item_count', None), item['privacy'] == 'private'
+				item_count, privacy = item.get('item_count'), item['privacy'] == 'private'
 				url = build_url({'mode': 'build_trakt_list', 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': list_type, 'name': name})
 				if list_type == 'liked_lists':
 					display = '%s (x%s) - [I]%s[/I]' % (name, item_count, user) if item_count else '%s - [I]%s[/I]' % (name, user)
@@ -139,6 +139,7 @@ def build_trakt_list(params):
 			else: target(*args)
 	__handle__, _queue, is_widget = int(sys.argv[1]), SimpleQueue(), kodi_utils.external_browse()
 	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
+	use_alphabet = nav_jump_use_alphabet() > 0
 	user, slug, name = params.get('user'), params.get('slug'), params.get('name')
 	list_type, list_id = params.get('list_type'), params.get('list_id')
 	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
@@ -154,11 +155,11 @@ def build_trakt_list(params):
 		elif mtype == 'show':
 			_queue.put((tvshows.build_tvshow_content, idx, tag[mtype]['ids']))
 		elif mtype == 'episode':
-			params = {'media_ids': {'tmdb': tag['show']['ids']['tmdb']}, 'season': tag['episode']['season'], 'episode': tag['episode']['number']}
-			_queue.put((episodes.build_episode_content, idx, params))
+			ids = {'media_ids': {'tmdb': tag['show']['ids']['tmdb']}, 'season': tag['episode']['season'], 'episode': tag['episode']['number']}
+			_queue.put((episodes.build_episode_content, idx, ids))
 		elif mtype == 'season':
-			params = {'tmdb_id': tag['show']['ids']['tmdb'], 'season': tag['season']['number'], 'sort': idx}
-			_queue.put((seasons.build_season_list, params))
+			ids = {'tmdb_id': tag['show']['ids']['tmdb'], 'season': tag['season']['number'], 'sort': idx}
+			_queue.put((seasons.build_season_list, ids))
 	max_threads = min(_queue.qsize(), max_threads)
 	threads = (Thread(target=_thread_target, args=(_queue,)) for i in range(max_threads))
 	threads = list(TaskPool.process(threads))
@@ -168,14 +169,16 @@ def build_trakt_list(params):
 	content, total = max(
 		('movies', movies), ('tvshows', tvshows), ('seasons', seasons), ('episodes', episodes), key=lambda k: len(k[1].items)
 	)
-	if total_pages > 2 and not is_widget and nav_jump_use_alphabet():
-		url = {'mode': 'build_navigate_to_page', 'transfer_mode': 'build_trakt_list', 'media_type': 'Media', 'name': name,
-				'user': user, 'slug': slug, 'list_id': list_id, 'current_page': page, 'total_pages': total_pages, 'list_type': list_type}
+	if total_pages > 2 and not is_widget and use_alphabet:
+		url = {'mode': 'build_navigate_to_page', 'current_page': page, 'total_pages': total_pages,
+				'user': user, 'slug': slug, 'name': name, 'list_id': list_id, 'list_type': list_type,
+				'transfer_mode': 'build_trakt_list', 'media_type': 'Media'}
 		kodi_utils.add_dir(__handle__, url, jump2_str, iconImage=item_jump, isFolder=False)
-	kodi_utils.add_items(__handle__, items)
+	shuffle = params.get('name', '').lower().startswith('shuffle')
+	kodi_utils.add_items(__handle__, items, shuffle=shuffle)
 	if total_pages > page:
-		url = {'mode': 'build_trakt_list', 'user': user, 'slug': slug, 'name': name, 'list_id': list_id,
-				'new_page': page + 1, 'new_letter': letter, 'list_type': list_type}
+		url = {'mode': 'build_trakt_list', 'new_page': page + 1, 'new_letter': letter,
+				'user': user, 'slug': slug, 'name': name, 'list_id': list_id, 'list_type': list_type}
 		kodi_utils.add_dir(__handle__, url, nextpage_str)
 	kodi_utils.set_category(__handle__, name)
 	kodi_utils.set_content(__handle__, content)

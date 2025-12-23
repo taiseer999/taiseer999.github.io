@@ -594,9 +594,9 @@ def import_trakt_watchlist(*args):
 		items = []
 		for i in (('movie', 'movie'), ('show', 'tv')):
 			try: items += [
-					{'collected_at': item['collected_at'], 'watchlist': True, 'media_type': i[1], 'media_id': item['media_ids']['tmdb']}
-					for item in trakt_fetch_collection_watchlist('watchlist', i[0]) if 'tmdb' in item['media_ids']
-				]
+				{'collected_at': item['collected_at'], 'watchlist': True, 'media_type': i[1], 'media_id': item['media_ids']['tmdb']}
+				for item in trakt_fetch_collection_watchlist('watchlist', i[0]) if 'tmdb' in item['media_ids']
+			]
 			except: pass
 		if not items: return kodi_utils.notification(32760)
 		try: items.sort(key=lambda k: k['collected_at'], reverse=False)

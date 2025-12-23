@@ -35,7 +35,7 @@ class Router:
 			player.play(params['url'])
 		elif mode == 'play_media':
 			from modules.sources import SourceSelect
-			SourceSelect().playback_prep(params)
+			SourceSelect.factory(params)
 		elif 'choice' in mode:
 			from modules import dialogs
 			if mode == 'scraper_color_choice':
@@ -58,8 +58,6 @@ class Router:
 				dialogs.meta_language_choice()
 			elif mode == 'extras_menu_choice':
 				dialogs.extras_menu(params)
-			elif mode == 'enable_scrapers_choice':
-				dialogs.enable_scrapers_choice()
 			elif mode == 'favourites_choice':
 				dialogs.favourites_choice(params)
 			elif mode == 'trakt_manager_choice':
@@ -171,10 +169,7 @@ class Router:
 				from caches.watched_cache import erase_bookmark
 				erase_bookmark(params_get('media_type'), params_get('tmdb_id'), params_get('season', ''), params_get('episode', ''), params_get('refresh', 'false'))
 		elif 'toggle' in mode:
-			if mode == 'toggle_jump_to':
-				from modules.kodi_utils import toggle_jump_to
-				toggle_jump_to()
-			elif mode == 'toggle_provider':
+			if mode == 'toggle_provider':
 				from modules.utils import toggle_provider
 				toggle_provider()
 			elif mode == 'toggle_language_invoker':
@@ -212,9 +207,8 @@ class Router:
 			if 'resolve_' in mode: resolve_rd(params)
 			else: Indexer().run(params)
 		elif 'torbox' in mode:
-			from debrids.torbox import Indexer, Uncached, resolve_tb
-			if 'nzb_cache_and_play' in mode: Uncached().nzb_cache_and_play(params)
-			elif 'resolve_' in mode: resolve_tb(params)
+			from debrids.torbox import Indexer, resolve_tb
+			if 'resolve_' in mode: resolve_tb(params)
 			else: Indexer().run(params)
 		elif 'offcloud' in mode:
 			from debrids.offcloud import Indexer
@@ -271,18 +265,9 @@ class Router:
 		elif mode == 'clean_thumbnails':
 			from modules.thumbnails import thumb_cleaner
 			thumb_cleaner()
-		elif mode == 'unchecked_magnet':
-			from modules.debrid import unchecked_magnet_status
-			unchecked_magnet_status(params)
 		elif mode == 'manual_add_nzb_to_cloud':
-			from modules.debrid import manual_add_nzb_to_cloud
-			manual_add_nzb_to_cloud(params)
-		elif mode == 'manual_add_magnet_to_cloud':
-			from modules.debrid import manual_add_magnet_to_cloud
-			manual_add_magnet_to_cloud(params)
-		elif mode == 'browse_packs':
-			from modules.debrid import debrid_packs
-			debrid_packs(params['provider'], params['name'], params['magnet_url'], params['info_hash'], params['highlight'])
+			from modules.debrid import Source
+			Source(params).manual_add_nzb_to_cloud()
 		elif mode == 'upload_logfile':
 			from modules.kodi_utils import upload_logfile
 			upload_logfile()
