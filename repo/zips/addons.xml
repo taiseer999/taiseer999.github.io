@@ -4981,7 +4981,7 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
         <description lang="en_NZ">Nimbus Helper for the Nimbus Skin.</description>
         <description lang="en_US">Nimbus Helper for the Nimbus Skin.</description>
     </extension>
-</addon><addon id="script.plexmod" name="Plex" version="1.1.3-beta" provider-name="pannal">
+</addon><addon id="script.plexmod" name="Plex" version="1.1.4-beta5" provider-name="pannal">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.27.1+matrix.1" />
@@ -5013,7 +5013,13 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
         <source>https://github.com/pannal/plex-for-kodi</source>
         <platform>all</platform>
         <news>
-- Plexplayer: Fix crash with non-existant audio stream
+- Core: Concurrency: Check for sys._is_gil_enabled() instead of trying to discern it from the python version
+- Core/KodiGUI/Busy: busy.dialog: Wait for 1.5 seconds until showing the busy spinner (was: 0.5s)
+- Core: Detect CE U3k bullds above B9 that implement the alternative LAV filters for future auto-fixing of seamless branching titles
+- Core: Fix compatibility with Python 3.14 (3.14.2) (might break certain assumptions) (U3k B10)
+- Core: Future-proof template engine (ibis) (thanks @tuffghost)
+- Home/LibraryHubs: Use poster view for in progress TV/Movie library hubs (was 16x9 view)
+- Home/LibraryHubs: Add "Remove from continue watching" option to TV/Movie library's hubs in progress items as well
         </news>
         <assets>
             <icon>icon2.png</icon>

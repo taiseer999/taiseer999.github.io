@@ -455,6 +455,11 @@ class Settings(object):
                     T(32100, 'Skip user selection and pin entry on startup.')
                 ),
                 BoolSetting(
+                    'ensure_lastused', T(34062, 'Ensure Kodi Addon position'), True
+                ).description(
+                    T(34063, 'When not run from the Program addons section, our lastused value will not be updated. Make sure it does when the addon exits.')
+                ),
+                BoolSetting(
                     'search_use_kodi_kbd', T(32955, 'Use Kodi keyboard for searching'), False
                 ),
                 ThemeMusicSetting('theme_music', T(32480, 'Theme music'), 5),
@@ -715,6 +720,9 @@ class Settings(object):
                         ('unwatched', T(33010, 'Unwatched')),
                     ]
                 ),
+                BoolUserSetting(
+                    'show_directors', T(34061, 'Show directors in cast lists'), True
+                ),
                 MultiOptionsSetting(
                     'no_episode_spoilers4', T(33006, ''),
                     ['unwatched', 'blur_images', 'hide_summary'],
@@ -842,9 +850,11 @@ class Settings(object):
                     T(33097, '')),
                 BoolSetting('seek_back_on_start', T(34049, 'Seek back on start'), util.altSeekRecommended).description(
                     T(34050, "Issue a quick seek forward then back to the start of the video, when we start "
-                             "fresh (no resume point, not marker to immediately skip). Can fix A/V desync issues with "
-                             "certain setups (e.g. CoreELEC on Ugoos with passthrough). Only for DirectPlay. This still "
-                             "requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)")),
+                             "fresh (no resume point, no marker to immediately skip). Can fix A/V desync issues (e.g. "
+                             "CoreELEC on Ugoos with passthrough) and embedded subtitles showing late, with certain "
+                             "setups. Only for DirectPlay. This still requires a sensible value for \"Delay after "
+                             "change of refresh rate\" in Kodi (default: Off, CE/LG: On)")),
+                BoolSetting('initial_seek_blackout', T(34060, 'Blackout screen during initial seek'), True),
                 OptionsSetting(
                     'player_stop_on_idle',
                     T(32946, 'Stop video playback on idle after'),
@@ -1033,11 +1043,17 @@ class Settings(object):
                                        "e.g. in a hotel room. Adjusts the UI to visually "
                                        "wait for item refreshes and waits for the buffer to fill when starting "
                                        "playback.")),
+                BoolSetting(
+                    'onss_library_back_home', T(34064, 'Return to Home on Screensaver'), True
+                ).description(T(34065, 'When Kodi starts its screensaver, and we are in a library view, '
+                                       'return to home. This saves idle energy as the library views are very heavy '
+                                       'on the CPU even on idle due to a Kodi bug.'),),
                 OptionsSetting(
                     'action_on_sleep',
                     T(32700, 'Action on Sleep event'),
                     'none',
                     (('none', T(32702, 'Nothing')), ('stop', T(32703, 'Stop playback')),
+                     ('home', T(34066, 'Go Home')),
                      ('quit', T(32704, 'Quit Kodi')), ('reboot', T(32426, 'Reboot')),
                      ('shutdown', T(32423, 'Shutdown')),
                      ('hibernate', T(32425, 'Hibernate')), ('suspend', T(32424, 'Suspend')),

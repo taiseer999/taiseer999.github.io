@@ -1194,6 +1194,7 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             )
         elif choice['key'] == 'delete':
             self.delete(mli.dataSource)
+            self.episodesPaginator.leafCount = int(self.season.leafCount) if self.season else 0
             self.fillEpisodes()
         elif choice['key'] == 'playback_settings':
             self.playbackSettings(self.show_, pos, bottom)
@@ -1634,7 +1635,9 @@ class EpisodesWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMix
             self.rolesListControl.reset()
             return False
 
-        for role in ds.combined_roles:
+        roles = ds.combined_roles if util.getUserSetting('show_directors', True) else ds.roles
+
+        for role in roles:
             mli = kodigui.ManagedListItem(role.tag, role.role or
                                           util.TRANSLATED_ROLES[role.translated_role],
                                           thumbnailImage=role.thumb.asTranscodedImageURL(*self.ROLES_DIM),

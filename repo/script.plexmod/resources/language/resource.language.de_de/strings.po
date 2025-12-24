@@ -1426,6 +1426,14 @@ msgctxt "#33201"
 msgid "Specify solid Background Color instead of using media images"
 msgstr "Hintergrundfarbe anstatt Medienbildern verwenden"
 
+msgctxt "#33202"
+msgid "Custom Background Color"
+msgstr "Eigene Hintergrundfarbe"
+
+msgctxt "#33203"
+msgid "Specify your own background color in AARRGGBB format"
+msgstr "Eigene Hintergrundfarbe verwenden (AARRGGBB-Format)"
+
 #: 
 msgctxt "#33400"
 msgid "Use old compatibility profile"
@@ -3445,8 +3453,8 @@ msgid "Seek back on start"
 msgstr "Zurückspringen beim Start"
 
 msgctxt "#34050"
-msgid "Issue a quick seek forward then back to the start of the video, when we start fresh (no resume point, not marker to immediately skip). Can fix A/V desync issues with certain setups (e.g. CoreELEC on Ugoos with passthrough). Only for DirectPlay. This still requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)"
-msgstr "Springe kurz vorwärts und dann zurück zum Start des Videos, wenn wir ein nicht bereits angefangenes Video starten (kein Wiedergabepunkt, keine Markierung, die sofort übersprungen würde). Kann A/V-Synchronisierungsfehler unter bestimmten Umständen beheben (z. B. CoreELEC on Ugoos with passthrough). Nur für Direkte Wiedergabe. Dies benötigt weiterhin einen passenden Wert für \"Verzögerung nach Änderung der Bildwiederholrate\" in Kodi (standard: Aus, CE/LG: An)"
+msgid "Issue a quick seek forward then back to the start of the video, when we start fresh (no resume point, no marker to immediately skip). Can fix A/V desync issues (e.g. CoreELEC on Ugoos with passthrough) and embedded subtitles showing late, with certain setups. Only for DirectPlay. This still requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)"
+msgstr "Springe kurz vorwärts und dann zurück zum Start des Videos, wenn wir ein nicht bereits angefangenes Video starten (kein Wiedergabepunkt, keine Markierung, die sofort übersprungen würde). Kann A/V-Synchronisierungsfehler unter bestimmten Umständen beheben (z. B. CoreELEC on Ugoos with passthrough), sowie zu spät einsetzende eingebettete Untertitel. Nur für Direkte Wiedergabe. Dies benötigt weiterhin einen passenden Wert für \"Verzögerung nach Änderung der Bildwiederholrate\" in Kodi (standard: Aus, CE/LG: An)"
 
 msgctxt "#34051"
 msgid "Movies: Play pre-rolls"
@@ -3467,3 +3475,43 @@ msgstr "Pre-Roll-Clips vor Kinotrailern abspielen"
 msgctxt "#34055"
 msgid "Official Plex clients play the trailers first, then the preroll clips. Enabling this will do the opposite. Default: On. User-specific."
 msgstr "Die offiziellen Plex Clients spielen zuerst Kinotrailer, dann die Pre-Roll-Clips ab. Diese Einstellung invertiert das. Standard: An. Benutzerspezifisch."
+
+msgctxt "#34056"
+msgid "\"Use alternate seek\" prefer reported time"
+msgstr "\"Alternatives Spulen\" mitgeteilte Zeit präferieren"
+
+msgctxt "#34057"
+msgid "Use reported seek time instead of the current player time (usually more accurate); Default: On"
+msgstr "Verwende die mitgeteilte Zeit anstatt der aktuellen Player-Zeit (normalerweise akkurater); Standard: An"
+
+msgctxt "#34058"
+msgid "\"Use alternate seek\" wait for valid player time"
+msgstr "\"Alternatives Spulen\" warte auf valide Player-Zeit"
+
+msgctxt "#34059"
+msgid "The player time reporting might be inaccurate on playback start. Wait for a valid player time before seeking; Default: On"
+msgstr "Die Player-Zeit-Mitteilung kann inakkurat sein beim Starten einer Wiedergabe. Warte auf eine valide Player-Zeit vor dem Spulen; Standard: An"
+
+msgctxt "#34060"
+msgid "Blackout screen during initial seek"
+msgstr "Verdunkeln während initialem Spulen"
+
+msgctxt "#34061"
+msgid "Show directors in cast lists"
+msgstr "Regisseure in Besetzungen anzeigen"
+
+msgctxt "#34062"
+msgid "Ensure Kodi Addon position"
+msgstr "Kodi Addon-Position sicherstellen"
+
+msgctxt "#34063"
+msgid "When not run from the Program addons section, our lastused value will not be updated. Make sure it does when the addon exits."
+msgstr "Werden wir nicht vob Programme-Addons-Kategorie gestartet, wird unser \"zuletzt-benutzt\"-Wert nicht aktualisiert. Sichergehen, dass das geschieht, wenn das Addon beendet wird."
+
+msgctxt "#34064"
+msgid "Return to Home on Screensaver"
+msgstr "Zurück zu Home bei Bildschirmschoner"
+
+msgctxt "#34065"
+msgid "When Kodi starts its screensaver, and we are in a library view, return to home. This saves idle energy as the library views are very heavy on the CPU even on idle due to a Kodi bug."
+msgstr "Wenn Kodi seinen Bildschirmschoner startet und wir in einer Bibliothek-Ansicht sind, zu Home zurückkehren. Dies spart Energie, da ein Kodi-Bug zu einer hohen Idle-CPU-Nutzung in Bibliotheksansichten führt."

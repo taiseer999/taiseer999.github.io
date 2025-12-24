@@ -783,7 +783,9 @@ class PrePlayWindow(kodigui.ControlledWindow, windowutils.UtilMixin, RatingsMixi
             self.rolesListControl.reset()
             return False
 
-        for role in self.video.combined_roles:
+        roles = self.video.combined_roles if util.getUserSetting('show_directors', True) else self.video.roles
+
+        for role in roles:
             mli = kodigui.ManagedListItem(role.tag, role.role or util.TRANSLATED_ROLES[role.translated_role],
                                           thumbnailImage=role.thumb.asTranscodedImageURL(*self.ROLES_DIM),
                                           data_source=role)

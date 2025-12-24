@@ -670,7 +670,9 @@ class ShowWindow(kodigui.ControlledWindow, windowutils.UtilMixin, SeasonsMixin, 
             self.rolesListControl.reset()
             return has_prev
 
-        for role in self.mediaItem.combined_roles:
+        roles = self.mediaItem.combined_roles if util.getUserSetting('show_directors', True) else self.mediaItem.roles
+
+        for role in roles:
             mli = kodigui.ManagedListItem(role.tag, role.role or util.TRANSLATED_ROLES[role.translated_role],
                                           thumbnailImage=role.thumb.asTranscodedImageURL(*self.ROLES_DIM),
                                           data_source=role)

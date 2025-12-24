@@ -367,10 +367,10 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         'tv.moreingenre': {'index': 15, 'with_progress': True, 'do_updates': True},
         'tv.recentlyviewed': {'index': 16, 'with_progress': True, 'text2lines': True, 'do_updates': True},
         # MOVIE
-        'movie.inprogress': {'index': 0, 'with_progress': True, 'with_art': True, 'do_updates': True, 'text2lines': True},
-        'movie.recentlyreleased': {'index': 1, 'do_updates': True, 'with_progress': True, 'text2lines': True},
-        'movie.recentlyadded': {'index': 2, 'do_updates': True, 'with_progress': True, 'text2lines': True},
-        'movie.genre': {'index': 3, 'with_progress': True, 'text2lines': True, 'do_updates': True},
+        'movie.inprogress': {'index': 1, 'with_progress': True, 'do_updates': True, 'text2lines': True},
+        'movie.recentlyreleased': {'index': 2, 'do_updates': True, 'with_progress': True, 'text2lines': True},
+        'movie.recentlyadded': {'index': 3, 'do_updates': True, 'with_progress': True, 'text2lines': True},
+        'movie.genre': {'index': 4, 'with_progress': True, 'text2lines': True, 'do_updates': True},
         'movie.by.actor.or.director': {'index': 7, 'with_progress': True, 'text2lines': True, 'do_updates': True},
         'movie.topunwatched': {'index': 13, 'text2lines': True, 'do_updates': True},
         'movie.recentlyviewed': {'index': 14, 'with_progress': True, 'text2lines': True, 'do_updates': True},
@@ -827,8 +827,7 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
         self._ignoreTick = True
         self.stopRetryingRequests()
 
-        # fixme: add "update" to the list of closeOptions for which we should force quit if necessary?
-        # self.closeOption = "update"
+        self.closeOption = "update"
         self.unhookSignals()
         self.doClose()
         return True
@@ -860,8 +859,9 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
                 # wait for it to be consumed
                 try:
                     util.waitForConsumption('update_response', timeout=200)
-                finally:
-                    return self.doUpdate()
+                except Exception:
+                    pass
+                return self.doUpdate()
 
     def tick(self):
         if self._shuttingDown:
@@ -1692,6 +1692,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
             hub_title = plexapp.SERVERMANAGER.selectedServer.currentHubs.get(section_hub_key,
                                                                              section_hub_key)
 
+        clean_identifier = hub.getCleanHubIdentifier()
+
         select_base = 0
 
         options = []
@@ -1717,7 +1719,8 @@ class HomeWindow(kodigui.BaseWindow, util.CronReceiver, CommonMixin, SpoilersMix
 
             if ds.TYPE in ('episode', 'movie'):
                     #hub.hubIdentifier == "continueWatching"):
-                if hub.hubIdentifier in ("home.continue", "continueWatching", "home.ondeck"):
+                if (hub.hubIdentifier in ("home.continue", "continueWatching", "home.ondeck") or
+                        clean_identifier in ("tv.inprogress", "movie.inprogress")):
                     # allow removing items from CW
                     options.append(dropdown.SEPARATOR)
                     options.append({'key': 'remove_cw', 'display': T(33662, "Remove from Continue Watching")})

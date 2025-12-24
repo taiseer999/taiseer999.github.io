@@ -446,7 +446,7 @@ class LibraryWindow(PlaybackBtnMixin, kodigui.MultiWindow, windowutils.UtilMixin
         self.finalChunkPosition = 0
 
         if self.section.TYPE == 'movies_shows':
-            self.CHUNK_SIZE = min(300, util.addonSettings.libraryChunkSize)
+            self.CHUNK_SIZE = min(100, util.addonSettings.libraryChunkSize)
         else:
             self.CHUNK_SIZE = util.addonSettings.libraryChunkSize
 
@@ -470,11 +470,13 @@ class LibraryWindow(PlaybackBtnMixin, kodigui.MultiWindow, windowutils.UtilMixin
     @busy.dialog()
     def doClose(self, **kw):
         pnUtil.APP.off("watchlist:modified", self.setWatchlistDirty)
+        util.MONITOR.off("library.back_home", self.goHomeRoot)
         self.tasks.kill()
         kodigui.MultiWindow.doClose(self)
 
     def onFirstInit(self):
         pnUtil.APP.on("watchlist:modified", self.setWatchlistDirty)
+        util.MONITOR.on("library.back_home", self.goHomeRoot)
         if self.showPanelControl and not self.refill:
             self.showPanelControl.newControl(self)
             self.keyListControl.newControl(self)
@@ -1868,10 +1870,26 @@ class PostersWindow(kodigui.ControlledWindow, windowutils.UtilMixin):
     CHUNK_OVERCOMMIT = 6
 
 
+class PostersCompactWindow(PostersWindow):
+    xmlFile = 'script-plex-posters-compact.xml'
+    VIEWTYPE = 'panel3'
+    MULTI_WINDOW_ID = 3
+    ROW_SIZE = 10
+    CHUNK_OVERCOMMIT = 30
+
+
 class PostersSmallWindow(PostersWindow):
     xmlFile = 'script-plex-posters-small.xml'
     VIEWTYPE = 'panel2'
     MULTI_WINDOW_ID = 1
+    ROW_SIZE = 10
+    CHUNK_OVERCOMMIT = 30
+
+
+class PostersSmallCompactWindow(PostersWindow):
+    xmlFile = 'script-plex-posters-small-compact.xml'
+    VIEWTYPE = 'panel4'
+    MULTI_WINDOW_ID = 4
     ROW_SIZE = 10
     CHUNK_OVERCOMMIT = 30
 
@@ -1900,8 +1918,10 @@ class ListViewSquareWindow(PostersWindow):
 VIEWS_POSTER = {
     'panel': PostersWindow,
     'panel2': PostersSmallWindow,
+    'panel3': PostersCompactWindow,
+    'panel4': PostersSmallCompactWindow,
     'list': ListView16x9Window,
-    'all': (PostersWindow, PostersSmallWindow, ListView16x9Window)
+    'all': (PostersWindow, PostersCompactWindow, PostersSmallWindow, PostersSmallCompactWindow, ListView16x9Window)
 }
 
 VIEWS_SQUARE = {

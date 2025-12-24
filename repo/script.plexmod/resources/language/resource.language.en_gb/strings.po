@@ -1202,6 +1202,14 @@ msgctxt "#33201"
 msgid "Specify solid Background Color instead of using media images"
 msgstr ""
 
+msgctxt "#33202"
+msgid "Custom Background Color"
+msgstr ""
+
+msgctxt "#33203"
+msgid "Specify your own background color in AARRGGBB format"
+msgstr ""
+
 msgctxt "#33400"
 msgid "Use old compatibility profile"
 msgstr ""
@@ -2856,7 +2864,7 @@ msgid "Seek back on start"
 msgstr ""
 
 msgctxt "#34050"
-msgid "Issue a quick seek forward then back to the start of the video, when we start fresh (no resume point, not marker to immediately skip). Can fix A/V desync issues with certain setups (e.g. CoreELEC on Ugoos with passthrough). Only for DirectPlay. This still requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)"
+msgid "Issue a quick seek forward then back to the start of the video, when we start fresh (no resume point, no marker to immediately skip). Can fix A/V desync issues (e.g. CoreELEC on Ugoos with passthrough) and embedded subtitles showing late, with certain setups. Only for DirectPlay. This still requires a sensible value for \"Delay after change of refresh rate\" in Kodi (default: Off, CE/LG: On)"
 msgstr ""
 
 msgctxt "#34051"
@@ -2892,5 +2900,29 @@ msgid "\"Use alternate seek\" wait for valid player time"
 msgstr ""
 
 msgctxt "#34059"
-msgid "The player time reporting might be inaccurate on playback start. Wait for a valid player time before seeking; Default: Off"
+msgid "The player time reporting might be inaccurate on playback start. Wait for a valid player time before seeking; Default: On"
+msgstr ""
+
+msgctxt "#34060"
+msgid "Blackout screen during initial seek"
+msgstr ""
+
+msgctxt "#34061"
+msgid "Show directors in cast lists"
+msgstr ""
+
+msgctxt "#34062"
+msgid "Ensure Kodi Addon position"
+msgstr ""
+
+msgctxt "#34063"
+msgid "When not run from the Program addons section, our lastused value will not be updated. Make sure it does when the addon exits."
+msgstr ""
+
+msgctxt "#34064"
+msgid "Return to Home on Screensaver"
+msgstr ""
+
+msgctxt "#34065"
+msgid "When Kodi starts its screensaver, and we are in a library view, return to home. This saves idle energy as the library views are very heavy on the CPU even on idle due to a Kodi bug."
 msgstr ""

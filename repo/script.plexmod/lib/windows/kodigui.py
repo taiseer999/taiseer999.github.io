@@ -166,22 +166,22 @@ class XMLBase(object):
                         try:
                             self._errored = True
                             self.closeWRecompileTpls()
-                        finally:
-                            return
+                        except Exception:
+                            pass
                     elif self.__class__.__name__ == "BackgroundWindow":
                         try:
                             self._errored = True
                             self.doClose()
+                        except Exception:
+                            pass
+                    else:
+                        try:
+                            self._errored = True
+                            self.doClose()
                         finally:
-                            return
-
-                    try:
-                        self._errored = True
-                        self.doClose()
-                    finally:
-                        from . import windowutils
-                        windowutils.HOME.closeWRecompileTpls()
-                        return
+                            from . import windowutils
+                            windowutils.HOME.closeWRecompileTpls()
+                    return
                 raise
         self._onInit()
 
@@ -222,10 +222,25 @@ class BaseWindow(XMLBase, xbmcgui.WindowXML, BaseFunctions):
         global LAST_BG_URL
         self._winID = xbmcgui.getCurrentWindowId()
         BaseFunctions.lastWinID = self._winID
-        self.setProperty('use_solid_background', util.hasCustomBGColour and '1' or '')
-        if util.hasCustomBGColour:
+        self.setProperty('use_solid_background', util.useSolidBackground and '1' or '')
+        if util.useSolidBackground:
             bgColour = util.addonSettings.backgroundColour if util.addonSettings.backgroundColour != "-" \
                 else "ff000000"
+
+            if util.addonSettings.customBackgroundColour:
+                try:
+                    cbgColour = util.addonSettings.customBackgroundColour.strip("#").strip().lower()
+                    cbgclen = len(cbgColour)
+                    if cbgclen < 6 or cbgclen > 8:
+                        # invalid color
+                        util.LOG("Invalid custom background colour: {}".format(util.addonSettings.customBackgroundColour))
+                    else:
+                        if cbgclen == 6:
+                            cbgColour = "ff{}".format(cbgColour)
+                        bgColour = cbgColour
+                except:
+                    pass
+
             self.setProperty('background_colour', "0x%s" % bgColour.lower())
             self.setProperty('background_colour_opaque', "0x%s" % bgColour.lower())
         else:

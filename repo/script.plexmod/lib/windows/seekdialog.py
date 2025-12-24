@@ -473,6 +473,8 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
         self.videoSettingsHaveChanged()
         self.update()
 
+        self.setBoolProperty("initialized", True)
+
     def onReInit(self):
         util.DEBUG_LOG("SeekDialog: onReInit")
         self.lastTimelineResponse = None
@@ -487,6 +489,7 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
         self.updateChapters()
         self.videoSettingsHaveChanged()
         self.updateProgress()
+        self.setBoolProperty("initialized", True)
 
     def setup(self, duration, meta, offset=0, bif_url=None, title='', title2='', chapters=None, keepMarkerDef=False):
         """
@@ -506,6 +509,7 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
         self.setProperty('shuffled', (self.handler.playlist and self.handler.playlist.isShuffled) and '1' or '')
         self.setProperty('show.buffer', (util.addonSettings.playerShowBuffer and self.isDirectPlay) and '1' or '')
         self.setProperty('theme', 'modern')
+        self.setBoolProperty("initialized", False)
 
         self.killTimeKeeper()
 
@@ -2201,6 +2205,9 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
     def onPlayBackPaused(self):
         util.DEBUG_LOG("SeekDialog: OnPlaybackPaused")
 
+        if self.handler and self.handler.seekBackTo and not self.handler.seekBackToDone:
+            return
+
         # Need to resume the video when changing streams on CoreELEC
         if self.useAlternateSeek and self.videoPausedForAudioStreamChange:
             self.videoPausedForAudioStreamChange = False
@@ -2512,7 +2519,6 @@ class SeekDialog(kodigui.BaseDialog, windowutils.GoHomeMixin, PlexSubtitleDownlo
         """
         Called ~1/s; can be wildly inaccurate.
         """
-
         if self.handler and self.handler.player and self.handler.player.isExternal:
             return
 
