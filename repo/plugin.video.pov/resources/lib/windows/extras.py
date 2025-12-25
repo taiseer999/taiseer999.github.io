@@ -719,7 +719,7 @@ def media_extra_info(media_type, meta):
 	extra_info = meta.get('extra_info')
 	body = []
 	append = body.append
-	tagline_str, premiered_str, rating_str, votes_str, runtime_str = ls(32619), ls(32620), ls(32621), ls(32623), ls(32622)
+	tagline_str, plot_str, premiered_str, rating_str, votes_str, runtime_str = ls(32619), 'Plot', ls(32620), ls(32621), ls(32623), ls(32622)
 	genres_str, budget_str, revenue_str, director_str, writer_str = ls(32624), ls(32625), ls(32626), ls(32627), ls(32628)
 	studio_str, collection_str, homepage_str, status_str, type_str, classification_str = ls(32615), ls(32499), ls(32629), ls(32630), ls(32631), ls(32632)
 	network_str, created_by_str, last_aired_str, next_aired_str, seasons_str, episodes_str = ls(32480), ls(32633), ls(32634), ls(32635), ls(32636), ls(32506)
@@ -729,6 +729,7 @@ def media_extra_info(media_type, meta):
 				if isinstance(info, int): info = '${:,}'.format(info)
 				return info
 			if 'tagline' in meta and meta['tagline']: append('[B]%s:[/B] %s' % (tagline_str, meta['tagline']))
+			if 'plot' in meta and meta['plot']: append('[B]%s:[/B] %s' % (plot_str, meta['plot']))
 			if 'alternative_titles' in meta and meta['alternative_titles']: append('[B]%s:[/B] %s' % ('Aliases', ', '.join(meta['alternative_titles'])))
 			if 'status' in extra_info: append('[B]%s:[/B] %s' % (status_str, extra_info['status']))
 			append('[B]%s:[/B] %s' % (premiered_str, meta['premiered']))
@@ -743,6 +744,7 @@ def media_extra_info(media_type, meta):
 			if extra_info.get('collection_name'): append('[B]%s:[/B] %s' % (collection_str, extra_info['collection_name']))
 			if extra_info.get('homepage'): append('[B]%s:[/B] %s' % (homepage_str, extra_info['homepage']))
 		else:
+			if 'plot' in meta and meta['plot']: append('[B]%s:[/B] %s' % (plot_str, meta['plot']))
 			if 'type' in extra_info: append('[B]%s:[/B] %s' % (type_str, extra_info['type']))
 			if 'alternative_titles' in meta and meta['alternative_titles']: append('[B]%s:[/B] %s' % ('Aliases', ', '.join(meta['alternative_titles'])))
 			if 'status' in extra_info: append('[B]%s:[/B] %s' % (status_str, extra_info['status']))
