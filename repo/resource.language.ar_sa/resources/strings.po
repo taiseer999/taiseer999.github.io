@@ -1639,11 +1639,11 @@ msgstr "طريقة العرض: أيقونات كبيرة"
 
 msgctxt "#418"
 msgid "Low"
-msgstr "منخفض"
+msgstr "الصغرى"
 
 msgctxt "#419"
 msgid "High"
-msgstr "مرتفع"
+msgstr "العليا"
 
 msgctxt "#420"
 msgid "Best match"

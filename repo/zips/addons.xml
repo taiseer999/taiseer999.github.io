@@ -3232,7 +3232,7 @@ version 3.0.0:
 		<description lang="en">White Weather Icons</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="resource.language.ar_sa" version="11.0.90.19" name="Arabic" provider-name="Team Kodi">
+</addon><addon id="resource.language.ar_sa" version="11.0.90.20" name="Arabic" provider-name="Team Kodi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
   </requires>
@@ -7579,7 +7579,7 @@ Added arabic fonts
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="weather.openmeteo" name="Open-Meteo" version="1.0.14.1" provider-name="OpenHT">
+</addon><addon id="weather.openmeteo" name="Open-Meteo" version="1.0.14.2" provider-name="OpenHT">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.27.1+matrix.1" />

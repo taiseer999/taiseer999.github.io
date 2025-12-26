@@ -121,7 +121,7 @@ msgstr "صافي"
 
 msgctxt "#32251"
 msgid "Mainly Clear"
-msgstr "صافي بشكل عام"
+msgstr "صافي عموما"
 
 msgctxt "#32255"
 msgid "Moonrise"
