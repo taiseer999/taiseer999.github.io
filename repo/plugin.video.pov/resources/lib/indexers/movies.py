@@ -7,7 +7,7 @@ from modules import kodi_utils, settings
 from modules.utils import manual_function_import, get_datetime, TaskPool, chunks
 # logger = kodi_utils.logger
 
-meta_function, get_datetime_function = movie_meta, get_datetime
+movie_meta_function, get_datetime_function = movie_meta, get_datetime
 get_watched_function, get_watched_info_function = get_watched_status_movie, get_watched_info_movie
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
 string, ls, build_url, get_infolabel = str, kodi_utils.local_string, kodi_utils.build_url, kodi_utils.get_infolabel
@@ -51,7 +51,7 @@ class Movies:
 
 	def build_movie_content(self, _position, _id):
 		try:
-			meta = meta_function(self.id_type, _id, self.meta_user_info, self.current_date)
+			meta = movie_meta_function(self.id_type, _id, self.meta_user_info, self.current_date)
 			meta_get = meta.get
 			if not meta or meta_get('blank_entry', False): return
 			playcount, overlay = get_watched_function(self.watched_info, string(meta['tmdb_id']))

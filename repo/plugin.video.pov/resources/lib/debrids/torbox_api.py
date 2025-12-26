@@ -231,6 +231,7 @@ class TorBoxAPI:
 			try:
 				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('torbox_usenet_queries',))
 				clear_property('torbox_usenet_queries')
+				dbcon.commit()
 				usenet_queries_success = True
 			except: usenet_queries_success = False
 			# USER CLOUD
@@ -243,6 +244,7 @@ class TorBoxAPI:
 					dbcon.commit()
 				user_cloud_success = True
 			except: user_cloud_success = False
+			dbcon.close()
 			# HASH CACHED STATUS
 			try:
 				DebridCache().clear_debrid_results('tb')

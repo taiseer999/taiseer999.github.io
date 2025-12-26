@@ -539,8 +539,8 @@ class Manager:
 				fut.name = pack_display % (provider, *pack) if pack and pack[0] else provider
 				self.threads.add(fut)
 			self.wait()
-			self.sources.extend(i for fut in self.threads for i in (fut.result() if fut.done() else []))
-			self.sources = self.process_duplicates(self.sources)
+			providers = (i for fut in self.threads for i in (fut.result() if fut.done() else []))
+			self.sources.extend(self.process_duplicates(providers))
 			torrent_sources = [i for i in self.sources if 'hash' in i]
 			result_hashes = list({i['hash'] for i in torrent_sources})
 			DebridCheck.set_cached_hashes(result_hashes)
@@ -552,8 +552,8 @@ class Manager:
 			self.wait(debrid_check=True)
 			for name, hashes in ((fut.name, fut.result() if fut.done() else []) for fut in self.threads):
 				status = ('Unchecked %s' if name in ('real-debrid', 'alldebrid') else 'Uncached %s') % name
-				self.final_sources.extend([{**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes])
-				self.final_sources.extend([{**i, 'cache_provider': status, 'debrid': name} for i in torrent_sources if not i['hash'] in hashes])
+				self.final_sources.extend({**i, 'cache_provider': name, 'debrid': name} for i in torrent_sources if i['hash'] in hashes)
+				self.final_sources.extend({**i, 'cache_provider': status, 'debrid': name} for i in torrent_sources if i['hash'] in hashes)
 			self.final_sources = [i for i in self.final_sources if not (i['source'] == 'usenet' and 'Unchecked' in i['cache_provider'])]
 			hoster_sources = [i for i in self.sources if not 'hash' in i]
 			result_hosters = list({i['source'].lower() for i in hoster_sources})
@@ -601,21 +601,19 @@ class Manager:
 			sleep(self.sleep_time)
 
 	def process_duplicates(self, sources):
-		def _process():
-			uniqueURLs, uniqueHashes = set(), set()
-			for provider in sources:
-				try:
-					url = provider['url'].lower()
-					if url in uniqueURLs: continue
-					uniqueURLs.add(url)
-					if 'hash' in provider:
-						_hash = provider['hash'].lower()
-						if _hash in uniqueHashes: continue
-						uniqueHashes.add(_hash)
-						yield provider
-					else: yield provider
-				except: yield provider
-		return list(_process())
+		uniqueURLs, uniqueHashes = set(), set()
+		for provider in sources:
+			try:
+				url = provider['url'].lower()
+				if url in uniqueURLs: continue
+				uniqueURLs.add(url)
+				if 'hash' in provider:
+					_hash = provider['hash'].lower()
+					if _hash in uniqueHashes: continue
+					uniqueHashes.add(_hash)
+					yield provider
+				else: yield provider
+			except: yield provider
 
 	def process_internal_results(self):
 		def _process_quality_count(sources):

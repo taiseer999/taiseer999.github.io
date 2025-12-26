@@ -663,8 +663,8 @@ msgstr "Genre auswählen"
 
 #: /resources/lib/container.py
 msgctxt "#32113"
-msgid "Also accepts X days relative from today in the format T-X or T+X (e.g. T-10 is ten days ago)"
-msgstr "Akzeptiert auch X Tage relativ ab heute im Format T-X oder T+X (z.B. T-10 war vor 10 Tagen)"
+msgid "Also accepts days from today as T-X or T+X (e.g. T-10 is ten days ago)"
+msgstr "Akzeptiert auch Tage ab heute als T-X oder T+X (z.B. T-10 war vor 10 Tagen)"
 
 #: /resources/lib/container.py
 msgctxt "#32114"
@@ -761,15 +761,40 @@ msgctxt "#32151"
 msgid "Visit [B]{}[/B] to generate your key and then input into TMDbHelper settings under the API keys section."
 msgstr "Besuche [B]{}[/B], um einen API-Schlüssel zu erstellen, und gib diesen danach in den API-Schlüssel-Einstellungen von TMDbHelper an."
 
+#: /resources/tmdbhelper/lib/script/discover/trakt.py
+msgctxt "#32153"
+msgid "Query"
+msgstr "Abfrage"
+
 #: /resources/lib/container.py
 msgctxt "#32119"
 msgid "Select Release Types"
 msgstr "Veröffentlichungstypen auswählen"
 
+#: /resources/tmdbhelper/lib/items/directories/base/basedir_trakt.py
+msgctxt "#32155"
+msgid "Airing"
+msgstr "Ausstrahlung"
+
 #: /resources/lib/container.py
 msgctxt "#32120"
 msgid "Select Region for Release"
 msgstr "Region für Veröffentlichung auswählen"
+
+#: /resources/tmdbhelper/lib/items/directories/base/basedir_trakt.py
+msgctxt "#32157"
+msgid "Decades"
+msgstr "Jahrzehnte"
+
+#: /resources/tmdbhelper/lib/items/directories/base/basedir_trakt.py
+msgctxt "#32158"
+msgid "Certifications"
+msgstr "Zertifizierungen"
+
+#: /resources/tmdbhelper/lib/items/directories/base/basedir_trakt.py
+msgctxt "#32159"
+msgid "Lists"
+msgstr "Listen"
 
 #: /resources/lib/container.py
 msgctxt "#32121"
@@ -795,6 +820,11 @@ msgstr "Trakt-Liste zur Kodi-Bibliothek hinzufügen"
 msgctxt "#32126"
 msgid "Are you sure you want to add this Trakt list to your Kodi library?"
 msgstr "Soll diese Trakt-Liste wirklich zur Kodi-Bibliothek hinzugefügt werden?"
+
+#: /resources/tmdbhelper/lib/script/discover/tmdb.py
+msgctxt "#32165"
+msgid "Add another item?"
+msgstr "Ein weiteres Element hinzufügen?"
 
 #: /resources/lib/context.py
 msgctxt "#32130"
@@ -1055,6 +1085,31 @@ msgctxt "#32204"
 msgid "Trending"
 msgstr "Im Trend"
 
+#: /resources/tmdbhelper/lib/script/discover/tmdb.py
+msgctxt "#32217"
+msgid "With Provider Region"
+msgstr "Mit Anbieterregion"
+
+#: /resources/tmdbhelper/lib/script/discover/tmdb.py
+msgctxt "#32218"
+msgid "With Watch Monetization Types"
+msgstr "Mit Monetarisierungsarten"
+
+#: /resources/tmdbhelper/lib/script/discover/tmdb.py
+msgctxt "#32219"
+msgid "Certification Country"
+msgstr "Zertifizierung Land"
+
+#: /resources/tmdbhelper/lib/script/discover/tmdb/routes.py
+msgctxt "#32220"
+msgid "With Origin Country"
+msgstr "Mit Ursprungsland"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32221"
+msgid "Miniseries"
+msgstr "Miniserien"
+
 #: /resources/lib/plugin.py
 msgctxt "#32205"
 msgid "Most Played"
@@ -1115,6 +1170,11 @@ msgctxt "#32216"
 msgid "Successfully logged out of Trakt user account"
 msgstr "Erfolgreich vom Trakt-Benutzerkonto abgemeldet"
 
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32234"
+msgid "Reality"
+msgstr "Reality"
+
 #: /resources/lib/script.py
 msgctxt "#32222"
 msgid "Manage artwork"
@@ -1129,6 +1189,11 @@ msgstr "Empfohlen"
 msgctxt "#32224"
 msgid "Similar"
 msgstr "Ähnlich"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32238"
+msgid "Scripted"
+msgstr "Gescripted"
 
 #: /resources/lib/plugin.py
 msgctxt "#32225"
@@ -1400,6 +1465,16 @@ msgctxt "#32280"
 msgid "Last Fortnight"
 msgstr "Letzte 14 Tage"
 
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32293"
+msgid "Returning Series"
+msgstr "Wiederkehrende Serien"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32294"
+msgid "Planned"
+msgstr "Geplant"
+
 #: /resources/lib/basedir.py
 msgctxt "#32281"
 msgid "Last Week"
@@ -1459,6 +1534,16 @@ msgstr "Zu Merkliste hinzufügen"
 msgctxt "#32292"
 msgid "Remove from watchlist"
 msgstr "Aus Merkliste entfernen"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32307"
+msgid "In Production"
+msgstr "In Produktion"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32308"
+msgid "Ended"
+msgstr "Fertiggestellt"
 
 #: /resources/lib/script.py
 msgctxt "#32295"
@@ -1537,6 +1622,21 @@ msgstr "Sortierte Liste durchsuchen"
 msgctxt "#32310"
 msgid "TMDb ID for {} not found!"
 msgstr "TMDb-ID für {} nicht gefunden!"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32323"
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: /resources/tmdbhelper/lib/addon/consts.py
+msgctxt "#32324"
+msgid "Pilot"
+msgstr "Pilot"
+
+#: /resources/tmdbhelper/lib/items/directories/tmdb/lists_discodir.py
+msgctxt "#32325"
+msgid "Edit Filters"
+msgstr "Filter bearbeiten"
 
 #: /resources/lib/player/players.py
 msgctxt "#32311"
@@ -1641,6 +1741,11 @@ msgstr "Auflösungsmethode des Players auswählen"
 msgctxt "#32333"
 msgid "User Choice"
 msgstr "Benutzerauswahl"
+
+#: /resources/tmdbhelper/lib/script/discover/tmdb/routes.py
+msgctxt "#32346"
+msgid "Timezone"
+msgstr "Zeitzone"
 
 #: /resources/lib/player/configure.py
 msgctxt "#32334"

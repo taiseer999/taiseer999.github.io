@@ -23,12 +23,12 @@ mdbl_db        = 'special://profile/addon_data/plugin.video.pov/mdblcache.db'
 maincache_db   = 'special://profile/addon_data/plugin.video.pov/maincache.db'
 metacache_db   = 'special://profile/addon_data/plugin.video.pov/metacache.db'
 debridcache_db = 'special://profile/addon_data/plugin.video.pov/debridcache.db'
-external_db    = 'special://profile/addon_data/plugin.video.pov/providerscache2.db'
+external_db    = 'special://profile/addon_data/plugin.video.pov/providerscache.db'
 databases_path = 'special://profile/addon_data/plugin.video.pov/'
 packages_path  = 'special://home/addons/packages/'
 
 current_dbs           = ('settings.xml', 'debridcache.db', 'favourites.db', 'maincache.db', 'metacache.db', 'fenomundesirables.db',
-						'navigator.db', 'providerscache2.db', 'traktcache4.db', 'mdblcache.db', 'views.db', 'watched.db', 'fenomcache.db')
+						'navigator.db', 'providerscache.db', 'traktcache4.db', 'mdblcache.db', 'views.db', 'watched.db', 'fenomcache.db')
 movie_dict_removals   = ('tmdblogo', 'fanart_added', 'cast', 'poster', 'rootname', 'imdb_id', 'tmdb_id', 'tvdb_id', 'all_trailers',
 						'fanart', 'banner', 'clearlogo', 'clearart', 'landscape', 'discart', 'original_title', 'english_title', 'extra_info',
 						'alternative_titles', 'country_codes', 'fanarttv_fanart', 'fanarttv_poster', 'fanart2', 'poster2', 'meta_language')
@@ -271,8 +271,6 @@ def set_view_property(view_type, view_id):
 def set_view_properties():
 	dbcon = database_connect(views_db, isolation_level=None)
 	dbcur = dbcon.cursor()
-	dbcur.execute("""PRAGMA synchronous = OFF""")
-	dbcur.execute("""PRAGMA journal_mode = OFF""")
 	dbcur.execute("""SELECT * FROM views""")
 	view_ids = dbcur.fetchall()
 	for item in view_ids: set_property('pov_%s' % item[0], item[1])
@@ -311,8 +309,8 @@ def clear_view(view_type):
 		dbcon = database_connect('special://profile/Database/ViewModes6.db')
 		dbcur = dbcon.cursor()
 		dbcur.execute("""DELETE FROM view WHERE path LIKE 'plugin://plugin.video.pov/%'""")
-		dbcur.connection.commit()
-		dbcur.connection.close()
+		dbcon.commit()
+		dbcon.close()
 	except: return notification(32574, 1500)
 	notification(32576, 1500)
 

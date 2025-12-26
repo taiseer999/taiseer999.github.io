@@ -87,15 +87,14 @@ class MainCache(BaseCache):
 			for item in remove_list: self.delete_memory_cache(str(item))
 		except: pass
 
-main_cache = MainCache()
-
 def cache_object(function, string, url, json=False, expiration=24):
-	cache = main_cache.get(string)
+	maincache = MainCache()
+	cache = maincache.get(string)
 	if cache: return cache
 	if isinstance(url, list): args = tuple(url)
 	else: args = (url,)
 	if json: result = function(*args).json()
 	else: result = function(*args)
-	main_cache.set(string, result, expiration=timedelta(hours=expiration))
+	maincache.set(string, result, expiration=timedelta(hours=expiration))
 	return result
 

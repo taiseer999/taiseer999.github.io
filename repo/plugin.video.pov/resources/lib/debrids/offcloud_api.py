@@ -130,6 +130,7 @@ class OffcloudAPI:
 					dbcon.commit()
 				user_cloud_success = True
 			except: user_cloud_success = False
+			dbcon.close()
 			# HASH CACHED STATUS
 			try:
 				DebridCache().clear_debrid_results('oc')

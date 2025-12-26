@@ -188,9 +188,9 @@ class PremiumizeAPI:
 				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_pm_valid_hosts',))
 				clear_property('pov_pm_valid_hosts')
 				dbcon.commit()
-				dbcon.close()
 				hoster_links_success = True
 			except: hoster_links_success = False
+			dbcon.close()
 			# HASH CACHED STATUS
 			try:
 				DebridCache().clear_debrid_results('pm')

@@ -38,7 +38,7 @@ class NavigatorCache(BaseCache):
 	def delete_list(self, list_name, list_type):
 		self.dbcur.execute(DELETE_LIST, (list_name, list_type))
 		self.delete_memory_cache(list_name, list_type)
-		self.dbcon.execute("""VACUUM""")
+		self.dbcur.execute("""VACUUM""")
 
 	def get_memory_cache(self, list_name, list_type):
 		try: return eval(get_property(self._get_list_prop(list_type) % list_name))

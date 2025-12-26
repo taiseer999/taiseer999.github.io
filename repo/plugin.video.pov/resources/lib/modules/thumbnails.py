@@ -50,8 +50,8 @@ def thumb_cleaner():
 	progress_dialog.update(66, line % 'Removing Texture IDS...')
 	dbcur.executemany("DELETE FROM texture WHERE id = ?", item_list)
 	progress_dialog.update(99, line % 'Cleaning Database...')
-	dbcur.execute("VACUUM")
 	dbcon.commit()
+	dbcur.execute("VACUUM")
 	xbmc.sleep(1500)
 	try: progress_dialog.close()
 	except: pass

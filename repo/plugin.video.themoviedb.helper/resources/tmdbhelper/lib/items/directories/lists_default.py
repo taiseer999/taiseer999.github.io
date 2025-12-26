@@ -1,5 +1,5 @@
 from tmdbhelper.lib.items.container import ContainerDefaultCacheDirectory
-from tmdbhelper.lib.addon.plugin import convert_type, get_localized
+from tmdbhelper.lib.addon.plugin import convert_type, get_localized, get_language
 from jurialmunkey.ftools import cached_property
 from jurialmunkey.parser import try_int
 
@@ -91,7 +91,7 @@ class ListProperties:
 
     @cached_property
     def cache_name(self):
-        return '_'.join(map(str, self.cache_name_tuple))
+        return '_'.join(map(str, (*self.cache_name_tuple, get_language())))  # Append region/language in case of regional or language variations in lists
 
     @cached_property
     def pmax(self):
@@ -174,6 +174,54 @@ class ListProperties:
         if self.pagination and self.pages and self.next_page <= self.pages:
             self.sorted_items.append(self.next_page_item)
         return self.sorted_items
+
+
+class ListSliceProperties(ListProperties):
+    unconfigured_item_data = None
+
+    @cached_property
+    def cache_name(self):
+        return self.class_name
+
+    @property
+    def next_page(self):
+        return self.page + 1
+
+    def get_uncached_items(self):
+        return
+
+    @cached_property
+    def items(self):
+        return self.get_cached_items() or []
+
+    @cached_property
+    def pages(self):
+        return (self.count + self.limit - 1) // self.limit  # Ceiling division
+
+    @cached_property
+    def count(self):
+        return len(self.filtered_items)
+
+    @cached_property
+    def limit(self):
+        return self.pmax * 20
+
+    @cached_property
+    def item_a(self):
+        return max(((self.page - 1) * self.limit), 0)
+
+    @cached_property
+    def item_z(self):
+        return min((self.page * self.limit), self.count)
+
+    @cached_property
+    def sorted_items(self):
+        sorted_items = self.filtered_items
+        return sorted_items[self.item_a:self.item_z]
+
+    @cached_property
+    def container_content(self):
+        return convert_type(self.tmdb_type, 'container', items=self.sorted_items)
 
 
 class ListDefault(ContainerDefaultCacheDirectory):

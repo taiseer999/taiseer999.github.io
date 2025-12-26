@@ -1,6 +1,6 @@
 import requests
 from datetime import timedelta
-from caches.main_cache import main_cache
+from caches.main_cache import MainCache
 from modules.kodi_utils import notification, sleep
 # from modules.kodi_utils import logger
 
@@ -25,11 +25,12 @@ def search(imdb_id, season=None, episode=None):
 	if season:
 		cache_name += '_%s_%s' % (season, episode)
 		params.update({'season': season, 'episode': episode})
-	cache = main_cache.get(cache_name)
+	maincache = MainCache()
+	cache = maincache.get(cache_name)
 	if cache: return cache
 	response = _get(search_url, params=params, retry=True)
 	if not response.ok: return []
 	response = response.json()
-	if response: main_cache.set(cache_name, response, expiration=timedelta(hours=24))
+	if response: maincache.set(cache_name, response, expiration=timedelta(hours=24))
 	return response
 

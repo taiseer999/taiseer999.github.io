@@ -39,6 +39,16 @@ def check_databases():
 	dbcon = database_connect(maincache_db) # Main Cache
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS maincache (id text unique, data text, expires integer)""")
 	dbcon.close()
+	try:
+		meta_file = kodi_utils.translate_path(metacache_db)
+		dbcon = kodi_utils.database.connect(meta_file)
+		dbcur = dbcon.cursor()
+		dbcur.execute("""pragma journal_mode""")
+		truncate = True if dbcur.fetchone()[0].lower() == 'wal' else False
+		dbcon.close()
+		if not truncate: raise Exception
+		with open(meta_file, 'w') as file: pass
+	except: pass
 	dbcon = database_connect(metacache_db) # Meta Cache
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS metadata
 					(db_type text not null, tmdb_id text not null, imdb_id text, tvdb_id text, meta text, expires integer, unique (db_type, tmdb_id))""")
@@ -93,11 +103,11 @@ def clean_databases(current_time=None, database_check=True, silent=False):
 	command_base = 'DELETE from %s WHERE CAST(%s AS INT) <= ?'
 	for db, sql in (
 		(external_db, command_base % ('results_data', 'expires')),
+		(debridcache_db, command_base % ('debrid_data', 'expires')),
 		(maincache_db, command_base % ('maincache', 'expires')),
 		(metacache_db, command_base % ('metadata', 'expires')),
 		(metacache_db, command_base % ('function_cache', 'expires')),
-		(metacache_db, command_base % ('season_metadata', 'expires')),
-		(debridcache_db, command_base % ('debrid_data', 'expires'))
+		(metacache_db, command_base % ('season_metadata', 'expires'))
 	):
 		try:
 			dbcon = database_connect(db)
@@ -123,7 +133,7 @@ def limit_metacache_database(max_size=50):
 	dbcur.execute("""DELETE FROM function_cache WHERE ROWID IN (SELECT ROWID FROM function_cache ORDER BY ROWID DESC LIMIT -1 OFFSET 100)""")
 	dbcur.execute("""DELETE FROM season_metadata WHERE ROWID IN (SELECT ROWID FROM season_metadata ORDER BY ROWID DESC LIMIT -1 OFFSET 100)""")
 	dbcon.commit()
-	dbcon.execute("""VACUUM""")
+	dbcur.execute("""VACUUM""")
 
 def get_current_time():
 	import time, datetime
@@ -188,12 +198,12 @@ def clear_cache(cache_type, silent=False):
 		from debrids.offcloud_api import OffcloudAPI
 		success = OffcloudAPI().clear_cache()
 	elif cache_type == 'folders':
-		from caches.main_cache import main_cache
-		main_cache.delete_all_folderscrapers()
+		from caches.main_cache import MainCache
+		MainCache().delete_all_folderscrapers()
 	else: # 'list'
 		if not _confirm(): return
-		from caches.main_cache import main_cache
-		main_cache.delete_all_lists()
+		from caches.main_cache import MainCache
+		MainCache().delete_all_lists()
 	if not silent and success: kodi_utils.notification(32576, 1500)
 
 def clear_all_cache():
@@ -206,16 +216,12 @@ def clear_all_cache():
 		('mdblist', 'MDBList'),
 		('imdb', '%s %s' % (ls(32064), ls(32524))),
 		('internal_scrapers', '%s %s' % (ls(32096), ls(32524))),
-		('external_scrapers', '%s %s' % (ls(32118), ls(32524))),
-		('ad_cloud', '%s %s' % (ls(32063), ls(32524))),
-		('pm_cloud', '%s %s' % (ls(32061), ls(32524))),
-		('rd_cloud', '%s %s' % (ls(32054), ls(32524))),
-		('tb_cloud', '%s %s' % ('TorBox', ls(32524))),
-		('oc_cloud', '%s %s' % ('Offcloud', ls(32524)))
+		('external_scrapers', '%s %s' % (ls(32118), ls(32524)))
 	)
 	kodi_utils.progressDialog.create('POV', '')
 	for count, (cache_type, cache_label) in enumerate(caches, 1):
 		try:
+			if kodi_utils.progressDialog.iscanceled(): break
 			kodi_utils.progressDialog.update(int(count / len(caches) * 100), line % (ls(32816), cache_label))
 			clear_cache(cache_type, silent=True)
 			kodi_utils.sleep(200)

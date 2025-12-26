@@ -87,18 +87,20 @@ class EasyDebridAPI:
 		except: pass
 
 	def clear_cache(*args):
+		from modules.kodi_utils import clear_property, path_exists, database_connect, maincache_db
 		try:
-			if not kodi_utils.path_exists(kodi_utils.maincache_db): return True
+#			if not path_exists(maincache_db): return True
 			from caches.debrid_cache import DebridCache
-			dbcon = kodi_utils.database_connect(kodi_utils.maincache_db)
-			dbcur = dbcon.cursor()
+#			dbcon = database_connect(maincache_db)
+#			dbcur = dbcon.cursor()
 			# USER CLOUD
 			try:
 #				dbcur.execute("""DELETE FROM maincache WHERE id = ?""", ('pov_ed_user_cloud',))
-				kodi_utils.clear_property('pov_ed_user_cloud')
+				clear_property('pov_ed_user_cloud')
 #				dbcon.commit()
 				user_cloud_success = True
 			except: user_cloud_success = False
+#			dbcon.close()
 			# HASH CACHED STATUS
 			try:
 				DebridCache().clear_debrid_results('ed')

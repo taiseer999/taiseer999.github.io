@@ -1,5 +1,6 @@
 
   [COLOR dodgerblue][B]Version 5.12[/B][/COLOR]
+- Attempt to work around kodi piers alpha 2 weirdness.
 - Added shuffle option for lists under My Lists Menu.
   Duplicate/add list to a menu or shortcut folder from watchlist, personal, liked and
   public lists, etc.  Prefix the list name with "Shuffle" and the list will be shuffled

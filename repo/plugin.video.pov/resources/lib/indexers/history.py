@@ -2,7 +2,7 @@ import sys
 import json
 from urllib.parse import unquote
 from datetime import timedelta
-from caches.main_cache import main_cache
+from caches.main_cache import MainCache
 from modules import kodi_utils, settings
 # from modules.kodi_utils import logger
 
@@ -52,7 +52,7 @@ def search_history(params):
 	setting_id, action_dict = mode_dict[params['action']]
 	url_params = dict(action_dict)
 	kodi_utils.add_dir(__handle__, action_dict, new_search_str, iconImage=default_icon, isFolder=False)
-	contents = main_cache.get(setting_id)
+	contents = MainCache().get(setting_id)
 	if contents: kodi_utils.add_items(__handle__, list(_builder()))
 	kodi_utils.set_category(__handle__, params.get('name'))
 	kodi_utils.set_content(__handle__, '')
@@ -91,19 +91,21 @@ def get_search_term(params):
 def add_to_search_history(search_name, search_list):
 	try:
 		result = []
-		cache = main_cache.get(search_list)
+		maincache = MainCache()
+		cache = maincache.get(search_list)
 		if cache: result = cache
 		if search_name in result: result.remove(search_name)
 		result.insert(0, search_name)
 		result = result[:50]
-		main_cache.set(search_list, result, expiration=timedelta(days=365))
+		maincache.set(search_list, result, expiration=timedelta(days=365))
 	except: pass
 
 def remove_from_search_history(params):
 	try:
-		result = main_cache.get(params['setting_id'])
+		maincache = MainCache()
+		result = maincache.get(params['setting_id'])
 		result.remove(params.get('query'))
-		main_cache.set(params['setting_id'], result, expiration=timedelta(days=365))
+		maincache.set(params['setting_id'], result, expiration=timedelta(days=365))
 		kodi_utils.notification(32576)
 		kodi_utils.container_refresh()
 	except: pass
@@ -114,7 +116,7 @@ def clear_search_history():
 		kwargs = {'items': json.dumps(list_items), 'heading': hist_str}
 		setting = kodi_utils.select_dialog([item for item in clear_history_list.keys()], **kwargs)
 		if setting is None: return
-		main_cache.set(setting, '', expiration=timedelta(days=365))
+		MainCache().set(setting, '', expiration=timedelta(days=365))
 		kodi_utils.notification(32576)
 	except: pass
 

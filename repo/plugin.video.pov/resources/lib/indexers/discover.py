@@ -13,7 +13,8 @@ people_icon = kodi_utils.media_path('people.png')
 poster_url, profile_url = 'https://image.tmdb.org/t/p/w780%s', 'https://image.tmdb.org/t/p/h632/%s'
 base_str, heading_base = '[B]%s:[/B]  [I]%s[/I]', '%s %s - %s' % (ls(32036), ls(32451), '%s')
 include_base_str, exclude_base_str = '%s %s' % (ls(32188), '%s'), '%s %s' % (ls(32189), '%s')
-_ln_ins, menu_export_str, fold_export_str= '[B]%s %s:[/B]  [I]%s[/I]', 'MENU EXPORT', 'FOLDER EXPORT'
+_ln_ins, menu_export_str, fold_export_str = '[B]%s %s:[/B]  [I]%s[/I]', 'MENU EXPORT', 'FOLDER EXPORT'
+export_str, remove_str, clear_str = ls(32697), ls(32698), ls(32699)
 listitem_position = {
 	'similar': 0, 'recommended': 0, 'year_start': 3, 'year_end': 4, 'include_genres': 5, 'exclude_genres': 6, 'include_keywords': 7,
 	'exclude_keywords': 8, 'language': 9, 'region': 10, 'network': 10, 'companies': 11, 'rating': 11, 'certification': 12,
@@ -371,17 +372,16 @@ class Discover:
 		except:
 			kodi_utils.notification(32574)
 
-	def history(self, media_type=None, display=True):
+	def history(self):
 		def _builder():
-			for count, item in enumerate(data):
+			for count, (data_id, item) in enumerate(data, 1):
 				try:
 					cm = []
 					cm_append = cm.append
-					data_id = history[count][0]
-					name = item['name']
+					item = eval(item)
 					url_params = {'mode': item['mode'], 'action': item['action'], 'query': item['query'],
-									'name': name, 'iconImage': default_icon}
-					display = '%s | %s' % (count+1, name)
+									'name': item['name'], 'iconImage': default_icon}
+					display = '%s | %s' % (count, item['name'])
 					url = build_url(url_params)
 					remove_single_params = {'mode': 'discover_remove_from_history', 'data_id': data_id, 'silent': False}
 					remove_all_params = {'mode': 'discover_remove_all_history', 'media_type': media_type, 'silent': True}
@@ -396,17 +396,8 @@ class Discover:
 					yield (url, listitem, True)
 				except: pass
 		__handle__ = int(sys.argv[1])
-		media_type = media_type if media_type else self.media_type
-		string = 'pov_discover_%s_%%' % media_type
-		dbcon = kodi_utils.database_connect(maincache_db, isolation_level=None)
-		dbcur = dbcon.cursor()
-		dbcur.execute("""PRAGMA synchronous = OFF""")
-		dbcur.execute("""PRAGMA journal_mode = OFF""")
-		dbcur.execute("""SELECT id, data FROM maincache WHERE id LIKE ? ORDER BY rowid DESC""", (string,))
-		history = dbcur.fetchall()
-		if not display: return [i[0] for i in history]
-		data = [eval(i[1]) for i in history]
-		export_str, remove_str, clear_str = ls(32697), ls(32698), ls(32699)
+		media_type = self.media_type
+		data = get_history(media_type)
 		item_list = list(_builder())
 		kodi_utils.add_items(__handle__, item_list)
 		self._end_directory()
@@ -594,11 +585,20 @@ class Discover:
 			('%s (%s)' % (rat_str, asc_str), '&sort_by=vote_average.asc'),     ('%s (%s)' % (rat_str, desc_str), '&sort_by=vote_average.desc')
 		]
 
+def get_history(media_type):
+	string = 'pov_discover_%s_%%' % media_type
+	dbcon = kodi_utils.database_connect(maincache_db)
+	dbcur = dbcon.cursor()
+	dbcur.execute("""SELECT id, data FROM maincache WHERE id LIKE ? ORDER BY rowid DESC""", (string,))
+	history = dbcur.fetchall()
+	return history
+
 def set_history(media_type, name, query):
-	from caches.main_cache import main_cache
+	from caches.main_cache import MainCache
 	from datetime import timedelta
 	string = 'pov_discover_%s_%s' % (media_type, query)
-	cache = main_cache.get(string)
+	maincache = MainCache()
+	cache = maincache.get(string)
 	if cache: return
 	if media_type == 'movie':
 		mode = 'build_movie_list'
@@ -607,13 +607,14 @@ def set_history(media_type, name, query):
 		mode = 'build_tvshow_list'
 		action = 'tmdb_tv_discover'
 	data = {'mode': mode, 'action': action, 'name': name, 'query': query}
-	main_cache.set(string, data, expiration=timedelta(days=7))
+	maincache.set(string, data, expiration=timedelta(days=7))
 
 def remove_from_history(params):
 	dbcon = kodi_utils.database_connect(maincache_db, isolation_level=None)
 	dbcur = dbcon.cursor()
+	dbcur.execute("""PRAGMA synchronous = OFF""")
+	dbcur.execute("""PRAGMA journal_mode = OFF""")
 	dbcur.execute("""DELETE FROM maincache WHERE id = ?""", (params['data_id'],))
-	dbcon.commit()
 	kodi_utils.clear_property(params['data_id'])
 	kodi_utils.container_refresh()
 	if not params['silent']: kodi_utils.notification(32576)
@@ -621,8 +622,8 @@ def remove_from_history(params):
 def remove_all_history(params):
 	media_type = params['media_type']
 	if not kodi_utils.confirm_dialog(): return
-	all_history = Discover({}).history(media_type, display=False)
-	for item in all_history:
+	all_history = get_history(media_type)
+	for item in (i[0] for i in all_history):
 		remove_from_history({'data_id': item, 'silent': True})
 	kodi_utils.notification(32576)
 

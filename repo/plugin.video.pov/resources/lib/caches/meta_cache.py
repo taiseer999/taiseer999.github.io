@@ -24,7 +24,7 @@ class MetaCache(BaseCache):
 
 	def _set_PRAGMAS(self):
 		self.dbcur.execute("""PRAGMA synchronous = OFF""")
-		self.dbcur.execute("""PRAGMA journal_mode = WAL""")
+		self.dbcur.execute("""PRAGMA journal_mode = OFF""")
 		self.dbcur.execute("""PRAGMA mmap_size = 268435456""")
 
 	def get(self, media_type, id_type, media_id):
@@ -121,7 +121,7 @@ class MetaCache(BaseCache):
 			self.dbcur.execute(GET_ALL)
 			all_entries = self.dbcur.fetchall()
 			for i in all_tables: self.dbcur.execute(DELETE_ALL % i)
-			self.dbcon.execute("""VACUUM""")
+			self.dbcur.execute("""VACUUM""")
 			for i in all_entries:
 				try:
 					tmdb_id = string(i[1])

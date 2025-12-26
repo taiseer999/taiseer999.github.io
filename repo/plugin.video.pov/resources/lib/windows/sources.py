@@ -61,8 +61,6 @@ class SourceResults(BaseDialog):
 
 	def onAction(self, action):
 		chosen_listitem = self.get_listitem(self.window_id)
-		source = json.loads(chosen_listitem.getProperty('source'))
-		url = source.get('url')
 		if action in self.closing_actions:
 			if self.filter_applied: return self.clear_filter()
 			self.selected = (None, '')
@@ -73,8 +71,10 @@ class SourceResults(BaseDialog):
 					self.selected = ('perform_full_search', '')
 					return self.close()
 			if not 'UNCACHED' in chosen_listitem.getProperty('tikiskins.source_type'):
-				self.selected = ('play', source)
+				self.selected = ('play', json.loads(chosen_listitem.getProperty('source')))
 				return self.close()
+			source = json.loads(chosen_listitem.getProperty('source'))
+			url = source.get('url')
 			if url:
 				if not url.startswith('magnet'):
 					url = Source(source, self.meta).manual_add_nzb_to_cloud()
@@ -89,6 +89,7 @@ class SourceResults(BaseDialog):
 			self.open_window(('windows.sources', 'ResultsInfo'), 'sources_info.xml', **kwargs)
 		elif action in self.context_actions:
 			highlight = chosen_listitem.getProperty('tikiskins.highlight')
+			source = json.loads(chosen_listitem.getProperty('source'))
 			kwargs = dict(item=source, meta=self.meta, highlight=highlight, filter_applied=self.filter_applied)
 			choice = self.open_window(('windows.sources', 'ResultsContextMenu'), 'contextmenu.xml', **kwargs)
 			if choice is None: return

@@ -218,6 +218,61 @@ class Source:
 		if result: notification(32576)
 		else: notification(32575)
 
+class DebridCheck:
+	def __init__(self, meta, name):
+		self.cached_list = []
+		self.name, self.debrid, self.function = self._debrid_dict[name]
+		self.imdb, self.season, self.episode = meta.get('imdb_id'), meta.get('season'), meta.get('episode')
+
+	def cache_check(self):
+		try:
+			self.cached_list.extend(i[0] for i in self.cached_hashes if i[1] == self.debrid and i[2] == 'True')
+			unchecked_filter = {h[0] for h in self.cached_hashes if h[1] == self.debrid}
+			unchecked_hashes = [i for i in self.hash_list if not i in unchecked_filter]
+			if not unchecked_hashes: return
+			if self.debrid in ('rd', 'ad'): checked_hashes = self.external_check_cache(unchecked_hashes)
+			else: checked_hashes = self.function().check_cache(unchecked_hashes)
+			if not checked_hashes: return
+			hashes_to_cache = []
+			process_append = hashes_to_cache.append
+			cached_append = self.cached_list.append
+			try:
+				for h in unchecked_hashes:
+					if h in checked_hashes:
+						cached_append(h)
+						cached = 'True'
+					else: cached = 'False'
+					process_append((h, cached))
+			except:
+				for i in unchecked_hashes: process_append((i, 'False'))
+			if hashes_to_cache: Thread(target=self.cache_write, args=(hashes_to_cache,)).start()
+		finally: return self.cached_list
+
+	def external_check_cache(self, unchecked_hashes):
+		checked_hashes = []
+		if self.debrid == 'ad': threads = (
+			Thread(target=mfn_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
+			Thread(target=trz_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes))
+		)
+		else: threads = (
+			Thread(target=tio_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
+			Thread(target=dmm_check_cache, args=(unchecked_hashes, self.imdb, checked_hashes))
+		)
+		for i in threads: i.start()
+		for i in threads: i.join()
+		return list(set(checked_hashes))
+
+	def cache_write(self, hashes):
+		DebridCache().set_many(hashes, self.debrid)
+
+	@classmethod
+	def set_cached_hashes(cls, hash_list):
+		cls.hash_list = hash_list
+		cls.cached_hashes = DebridCache().get_many(hash_list) or []
+
+	_debrid_dict = {i[0]: i for i in debrid_list}
+	hash_list, cached_hashes = [], []
+
 import requests
 from fenom.client import randomagent
 
@@ -278,59 +333,4 @@ def dmm_check_cache(unchecked_hashes_chunk, imdb, collector): # DMM API Allows m
 		files = results.json()['available']
 		collector.extend(file['hash'] for file in files if 'hash' in file)
 	except Exception as e: kodi_utils.logger('dmm error', str(e))
-
-class DebridCheck:
-	def __init__(self, meta, name):
-		self.cached_list = []
-		self.name, self.debrid, self.function = self._debrid_dict[name]
-		self.imdb, self.season, self.episode = meta.get('imdb_id'), meta.get('season'), meta.get('episode')
-
-	def cache_check(self):
-		try:
-			self.cached_list.extend(i[0] for i in self.cached_hashes if i[1] == self.debrid and i[2] == 'True')
-			unchecked_filter = {h[0] for h in self.cached_hashes if h[1] == self.debrid}
-			unchecked_hashes = [i for i in self.hash_list if not i in unchecked_filter]
-			if not unchecked_hashes: return
-			if self.debrid in ('rd', 'ad'): checked_hashes = self.external_check_cache(unchecked_hashes)
-			else: checked_hashes = self.function().check_cache(unchecked_hashes)
-			if not checked_hashes: return
-			hashes_to_cache = []
-			process_append = hashes_to_cache.append
-			cached_append = self.cached_list.append
-			try:
-				for h in unchecked_hashes:
-					if h in checked_hashes:
-						cached_append(h)
-						cached = 'True'
-					else: cached = 'False'
-					process_append((h, cached))
-			except:
-				for i in unchecked_hashes: process_append((i, 'False'))
-			if hashes_to_cache: Thread(target=self.cache_write, args=(hashes_to_cache,)).start()
-		finally: return self.cached_list
-
-	def external_check_cache(self, unchecked_hashes):
-		checked_hashes = []
-		if self.debrid == 'ad': threads = (
-			Thread(target=mfn_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
-			Thread(target=trz_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes))
-		)
-		else: threads = (
-			Thread(target=tio_check_cache, args=(self.imdb, self.season, self.episode, checked_hashes)),
-			Thread(target=dmm_check_cache, args=(unchecked_hashes, self.imdb, checked_hashes))
-		)
-		for i in threads: i.start()
-		for i in threads: i.join()
-		return list(set(checked_hashes))
-
-	def cache_write(self, hashes):
-		DebridCache().set_many(hashes, self.debrid)
-
-	@classmethod
-	def set_cached_hashes(cls, hash_list):
-		cls.hash_list = hash_list
-		cls.cached_hashes = DebridCache().get_many(hash_list) or []
-
-	_debrid_dict = {i[0]: i for i in debrid_list}
-	hash_list, cached_hashes = [], []
 
