@@ -7579,7 +7579,7 @@ Added arabic fonts
 			<icon>icon.png</icon>
 		</assets>
 	</extension>
-</addon><addon id="weather.openmeteo" name="Open-Meteo" version="1.0.14" provider-name="OpenHT">
+</addon><addon id="weather.openmeteo" name="Open-Meteo" version="1.0.14.1" provider-name="OpenHT">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.27.1+matrix.1" />
