@@ -1,0 +1,13 @@
+Open Source Software (OSS) Attribution
+
+service.listitem.helper (by axbmcuser) is licensed under GNU General Public License 2.0. 
+To view a copy of this license, visit https://www.gnu.org/licenses/gpl-2.0
+
+script.toolbox (by phil65) is licensed under GNU General Public License 2.0. 
+To view a copy of this license, visit https://www.gnu.org/licenses/gpl-2.0
+
+script.module.metadatautils (by marcelveldt and others) is licensed under Apache License 2.0. 
+To view a copy of this license, visit https://www.apache.org/licenses/LICENSE-2.0
+
+script.embuary.helper (by sualfred) is licensed under GNU General Public License 2.0. 
+To view a copy of this license, visit https://www.gnu.org/licenses/gpl-2.0

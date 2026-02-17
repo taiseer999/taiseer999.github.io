@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<settings version="1">
+	<section id="service.listitem.helper">
+		
+		<category id="api_keys" label="30100" help="">
+			<group id="1">
+				<setting id="omdb_api_key" type="string" label="30101" help="">
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="tmdb_api_key" type="string" label="30102" help="">
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="mdblist_api_key" type="string" label="30107" help="">
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<control type="edit" format="string"/>
+				</setting>
+				<setting id="separatordummy_1_1" type="action" label="30103" help="">
+					<control type="button" format="action"/>
+				</setting>
+				<setting id="separatordummy_1_2" type="action" label="30104" help="">
+					<control type="button" format="action"/>
+				</setting>
+			</group>
+		</category>
+		
+		<category id="debug" label="30200" help="">
+			<group id="1">
+				<setting id="clear_image_cache" type="action" label="30201" help="">
+					<data>RunScript(service.listitem.helper,action=clear_image_cache)</data>
+					<control type="button" format="action"/>
+				</setting>
+				<setting id="separatordummy_2_1" type="action" label="30202" help="">
+					<control type="button" format="action"/>
+				</setting>
+			</group>
+		</category>
+		
+	</section>
+</settings>

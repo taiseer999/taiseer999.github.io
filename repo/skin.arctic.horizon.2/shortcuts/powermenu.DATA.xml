@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<shortcuts>   
+    <shortcut>
+        <icon>special://skin/extras/icons/sun.png</icon>
+        <label>$LOCALIZE[8]</label>
+        <label2>Power Shortcut</label2>
+        <action>ActivateWindow(weather)</action>
+    </shortcut>
+<!-- Octo replaced broken favorites shortcut --> 
+    <shortcut>
+        <icon>special://skin/extras/icons/favourites2.png</icon>
+        <label>$LOCALIZE[1036]</label>
+        <label2>Power Shortcut</label2>
+        <action>ActivateWindow(favouritesbrowser)</action>
+    </shortcut>
+    <shortcut>
+        <icon>special://skin/extras/icons/filebox.png</icon>
+        <label>$LOCALIZE[7]</label>
+        <label2>Power Shortcut</label2>
+        <action>ActivateWindow(filemanager)</action>
+    </shortcut>  
+    <shortcut>
+        <icon>special://skin/extras/icons/addon.png</icon>
+        <label>$LOCALIZE[24001]</label>
+        <label2>Power Shortcut</label2>
+        <action>ActivateWindow(addonbrowser)</action>
+    </shortcut>
+    <shortcut>
+        <icon>special://skin/extras/icons/settings.png</icon>
+        <label>$LOCALIZE[5]</label>
+        <label2>Power Shortcut</label2>
+        <action>ActivateWindow(interfacesettings)</action>
+    </shortcut>
+    <shortcut>
+        <icon>special://skin/extras/icons/power.png</icon>
+        <label>$LOCALIZE[13009]</label>
+        <label2>Power Shortcut</label2>
+        <action>Quit()</action>
+    </shortcut>
+<!-- Octo added install from zip -->    
+ 	<shortcut>
+		<defaultID>settings</defaultID>
+		<label>Install From Zip</label>
+		<label2>Power Shortcut</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb>special://skin/extras/icons/folder.png</thumb>
+		<action>InstallFromZip</action>
+		</shortcut>         
+     <!-- Octo added reload skin -->
+<shortcut>
+		<defaultID>20183</defaultID>
+		<label>20183</label>
+		<label2>Default</label2>
+		<icon>special://skin/extras/icons/update.png</icon>
+		<thumb>special://skin/extras/icons/update.png</thumb>
+		<action>ReloadSkin()</action>
+		</shortcut>   
+<!-- Octo added toggle skin debug -->    
+	<shortcut>
+		<defaultID>19026</defaultID>
+		<label>Toggle Skin Debug</label>
+		<label2>Custom item</label2>
+		<icon>DefaultShortcut.png</icon>
+		<thumb>special://skin/extras/icons/align-justify.png</thumb>
+		<action>Skin.ToggleDebug()</action>
+		</shortcut>    
+</shortcuts>

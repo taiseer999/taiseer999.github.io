@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+
+<fontset id="Default" unicode="false">
+        <include>Font_Default_Inter</include>
+    </fontset>
+
+    <fontset id="Default (Unicode)" unicode="true">
+        <include content="Font_Default_Inter">
+            <param name="font_black">monadi.ttf</param>
+            <param name="font_bold">monadi.ttf</param>
+            <param name="font_regular">monadi-reg.ttf</param>
+            <param name="font_light">monadi-reg.ttf</param>
+              <param name="plot_linespacing_head">1.15</param>
+            <param name="plot_linespacing_midi">1.2</param>
+            <param name="plot_linespacing_main">1.1</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">0.9</param>
+        <param name="size_heavy_main">35</param>
+        <param name="size_light_main">35</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+
+        </include>
+    </fontset>
+
+<fontset id="URW" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">URWGeometricArabic-Bold.ttf</param>
+            <param name="font_bold">URWGeometricArabic-Bold.ttf</param>
+            <param name="font_regular">URWGeometricArabic-Medium.ttf</param>
+            <param name="font_light">URWGeometricArabic-Medium.ttf</param>
+              <param name="plot_linespacing_head">1.15</param>
+            <param name="plot_linespacing_midi">1.2</param>
+            <param name="plot_linespacing_main">0.77</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">0.9</param>
+        <param name="size_heavy_main">32</param>
+        <param name="size_light_main">32</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+
+        </include>
+    
+    </fontset>
+
+    <fontset id="الجزيرة" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">Questrial-Regular2.ttf</param>
+            <param name="font_bold">Questrial-Regular2.ttf</param>
+            <param name="font_regular">Outfit-Regular.ttf</param>
+            <param name="font_light">Outfit-Regular.ttf</param>
+               <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.0</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+
+    </fontset>
+	
+<fontset id="الخط الاصلي" unicode="true">
+        <include content="Font_Default">
+            <param name="font_black">RobotoNotoCondensed-Bold.ttf</param>
+            <param name="font_bold">RobotoNotoCondensed-Bold.ttf</param>
+            <param name="font_regular">RobotoNotoCondensed-Regular.ttf</param>
+            <param name="font_light">RobotoNotoCondensed-Light.ttf</param>
+            <param name="plot_linespacing_head">1.169</param>
+        <param name="plot_linespacing_midi">1.50</param>
+        <param name="plot_linespacing_main">1.16</param>
+        <param name="plot_linespacing_mini">1.31</param>
+        <param name="plot_linespacing_tiny">1.23</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">32</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>	
+    </fontset>
+
+    <fontset id="امازون" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_bold">AmazonEmberV2-Bold.ttf</param>
+            <param name="font_regular">AmazonEmberV2-Medium.ttf</param>
+            <param name="font_light">AmazonEmberV2-Medium.ttf</param>
+            <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param> 
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">0.85</param>
+            <param name="plot_linespacing_mini">1.0</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+            
+        </include>
+    </fontset>
+
+ <fontset id="جيزا" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">GeezaProb.ttf</param>
+            <param name="font_bold">GeezaProb.ttf</param>
+            <param name="font_regular">GeezaPro.ttf</param>
+            <param name="font_light">GeezaPro.ttf</param>
+           <param name="plot_linespacing_head">1.15</param>
+            <param name="plot_linespacing_midi">1.2</param>
+            <param name="plot_linespacing_main">1.38</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">0.9</param>
+        <param name="size_heavy_main">33</param>
+        <param name="size_light_main">33</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+
+            
+        </include>
+    </fontset>
+
+<fontset id="المهند" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">MOHANDbold.ttf</param>
+            <param name="font_bold">MOHANDbold.ttf</param>
+            <param name="font_regular">MOHANDbold.ttf</param>
+            <param name="font_light">MOHANDbold.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">0.91</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">33</param>
+        <param name="size_light_main">33</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+
+<fontset id="حسن" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">Hacen-Promoter.ttf</param>
+            <param name="font_bold">Hacen-Promoter.ttf</param>
+            <param name="font_regular">Hacen-Promoter -reg.ttf</param>
+            <param name="font_light">Hacen-Promoter -reg.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.05</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">31</param>
+        <param name="size_light_main">31</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+
+    <fontset id="تونس" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">tonos-VF.ttf</param>
+            <param name="font_bold">tonos-VF.ttf</param>
+            <param name="font_regular">tonos-VF.ttf</param>
+            <param name="font_light">tonos-VF.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.05</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">30</param>
+        <param name="size_light_main">30</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+
+<fontset id="AdobeArabic" unicode="true">
+
+        <include content="Font_Default">
+            <param name="font_black">AdobeArabic-Bold.ttf</param>
+            <param name="font_bold">AdobeArabic-Bold.ttf</param>
+            <param name="font_regular">AdobeArabic-Bold.ttf</param>
+            <param name="font_light">AdobeArabic-Bold.ttf</param>
+             <param name="plot_linespacing_head">0.8</param>
+            <param name="plot_linespacing_midi">1.25</param>
+            <param name="plot_linespacing_main">1.1</param>
+            <param name="plot_linespacing_mini">1.2</param>
+            <param name="plot_linespacing_tiny">1.07</param>
+        <param name="size_heavy_main">32</param>
+        <param name="size_light_main">32</param>
+        <param name="size_heavy_main_x2">60</param>
+        <param name="size_light_main_x2">60</param>
+        </include>
+    </fontset>
+    
+</fonts>
+
+
+

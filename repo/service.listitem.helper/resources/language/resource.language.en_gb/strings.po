@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+
+
+
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "OMDb API key"
+msgstr ""
+
+msgctxt "#30102"
+msgid "TMDb API key"
+msgstr ""
+
+msgctxt "#30107"
+msgid "MDBList API key"
+msgstr ""
+
+msgctxt "#30103"
+msgid "[COLOR=selected][LIGHT] Above API keys are needed for retrieval of[/LIGHT][/COLOR]"
+msgstr ""
+
+msgctxt "#30104"
+msgid "[COLOR=selected][LIGHT]  - Ratings (Rotten Tomatoes, Letterboxd, Trakt, Metacritic, IMDb)[CR]  - Some additional values like budgets, revenues and awards[/LIGHT][/COLOR]"
+msgstr ""
+
+
+
+msgctxt "#30200"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Clear image cache"
+msgstr ""
+
+msgctxt "#30202"
+msgid "[COLOR=selected][LIGHT] Removes all cached images created by the blurimg function[/LIGHT][/COLOR]"
+msgstr ""
+
+
+
+msgctxt "#30999"
+msgid " "
+msgstr ""
