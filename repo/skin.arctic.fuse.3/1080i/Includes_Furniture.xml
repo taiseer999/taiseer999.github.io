@@ -162,21 +162,20 @@
             </include>
         </control>
     </include>
-    <include name="Furniture_Studio">
+   <include name="Furniture_Studio">
         <control type="grouplist">
-            <left>600</left>
-            <top>-450</top>
+            <align>right</align>
             <orientation>horizontal</orientation>
             <itemgap>20</itemgap>
             <include>Furniture_SlidesOver</include>
             <visible>!Player.HasMedia | Skin.HasSetting(Footer.DisableNowPlaying)</visible>
             <visible>String.IsEmpty(ListItem.VideoCodec) | !Skin.HasSetting(Footer.EnableCodecs)</visible>
-            <visible>!String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Wall)</visible>
             <control type="image">
                 <width>300</width>
                 <height>80</height>
                 <aspectratio align="right">keep</aspectratio>
                 <texture background="true">$VAR[Image_CombinedStudio]</texture>
+                <centertop>50%</centertop>
             </control>
         </control>
     </include>
