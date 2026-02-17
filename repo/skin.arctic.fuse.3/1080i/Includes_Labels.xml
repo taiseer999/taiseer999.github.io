@@ -387,7 +387,7 @@
     </variable>
 
     <variable name="Label_Studio">
-        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_studio))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_studio)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Network.1.Name)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name)]</value>
     </variable>
@@ -399,6 +399,16 @@
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.2.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.2.Name)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.3.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.3.Name)]</value>
         <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]</value>
+
+    </variable>
+    <variable name="Label_OSD_FromStudio">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Network.1.Name)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Network.2.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Network.2.Name)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Network.3.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Network.3.Name)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Studio.1.Name)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Studio.2.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Studio.2.Name)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Studio.3.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Studio.3.Name)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Studio)">$INFO[VideoPlayer.Studio]</value>
 
     </variable>
 
