@@ -1,0 +1,2042 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+
+<!--
+    =====================================================
+
+    Typographic Scale is Pentatonic
+    n=5 r=2 f0=32 for bold/black
+
+    regular is 2pts lower as feels taller than bold
+    quantise plotbox linespacing to 40px grid
+
+    Large title uses octave of double row (n=5 and n=10)
+
+    =====================================================
+     (3)    (4)    (5)     1      2      3      4      5
+     18  >  24  >  28  >  32  >  37  >  42  >  49  >  56
+    hint   tiny   mini   main   midi   head   huge   info
+    =====================================================
+-->
+<fontset id="Default" unicode="true">
+ <!-- Title fonts -->
+         <font>
+            <name>font_info_black</name>
+            <filename>monadi.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>monadi.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>monadi.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>monadi.ttf</filename>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>monadi.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>monadi.ttf</filename>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>monadi.ttf</filename>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>monadi.ttf</filename>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>monadi.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>monadi.ttf</filename>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>monadi.ttf</filename>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>monadi.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>monadi.ttf</filename>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>monadi.ttf</filename>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>monadi.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>monadi.ttf</filename>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>monadi-reg.ttf</filename>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>monadi-reg.ttf</filename>
+            <linespacing>1.46</linespacing>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>monadi-reg.ttf</filename>
+            <linespacing>1.14</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>monadi-reg.ttf</filename>
+            <linespacing>1.24</linespacing>
+            <size>22</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>22</size>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>monadi.ttf</filename>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>monadi.ttf</filename>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>monadi.ttf</filename>
+            <size>80</size>
+        </font>
+
+         <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+<!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+    </fontset>
+
+
+    <fontset id="Geza pro" unicode="false">
+   <!-- Title fonts -->
+        <font>
+            <name>font_info_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>RobotoCondensed-Light.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        
+        </font>
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>GeezaPro.ttf</filename>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>GeezaPro.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>GeezaPro.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>GeezaPro.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>GeezaPro.ttf</filename>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>GeezaPro.ttf</filename>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>GeezaPro.ttf</filename>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>GeezaPro.ttf</filename>
+            <linespacing>1.3</linespacing>
+            <size>36</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>GeezaPro.ttf</filename>
+            <linespacing>1.0</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>GeezaPro.ttf</filename>
+            <linespacing>1.10</linespacing>
+            <size>22</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>24</size>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>80</size>
+        </font>
+
+         <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>GeezaPro-Bold.ttf</filename>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+        <!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+    </fontset>
+  
+<fontset id="Hacen-Promoter -reg" unicode="true">
+
+        <!-- Title fonts -->
+          <font>
+            <name>font_info_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.24</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_tiny_plot</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_mini_cond</name>
+            <filename>Hacen-Promoter.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>0.96</linespacing>
+            <size>26</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_infotag_bold</name>
+            <filename>LeagueSpartan-ExtraBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+        <font>
+            <name>font_infotag</name>
+            <filename>LeagueSpartan-SemiBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>80</size>
+        </font>
+
+        <!-- Arial font -->
+        <font>
+            <name>font_mini_arial</name>
+            <filename>Arial.ttf</filename>
+            <size>25</size>
+            
+        </font>
+
+        <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>Hacen-Promoter -reg.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+        <!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+    </fontset>
+
+<fontset id="MOHANDbold" unicode="true">
+
+        <!-- Title fonts -->
+          <font>
+            <name>font_info_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>MOHANDbold.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>MOHANDbold.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.24</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_tiny_plot</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_mini_cond</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>0.96</linespacing>
+            <size>26</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_infotag_bold</name>
+            <filename>LeagueSpartan-ExtraBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+        <font>
+            <name>font_infotag</name>
+            <filename>LeagueSpartan-SemiBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>80</size>
+        </font>
+
+        <!-- Arial font -->
+        <font>
+            <name>font_mini_arial</name>
+            <filename>Arial.ttf</filename>
+            <size>25</size>
+            
+        </font>
+
+        <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>MOHANDbold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+        <!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+   
+    </fontset>
+
+<fontset id="الجزيرة" unicode="true">
+
+        <!-- Title fonts -->
+          <font>
+            <name>font_info_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.24</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_tiny_plot</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_mini_cond</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>0.96</linespacing>
+            <size>26</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_infotag_bold</name>
+            <filename>LeagueSpartan-ExtraBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+        <font>
+            <name>font_infotag</name>
+            <filename>LeagueSpartan-SemiBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>80</size>
+        </font>
+
+        <!-- Arial font -->
+        <font>
+            <name>font_mini_arial</name>
+            <filename>Arial.ttf</filename>
+            <size>25</size>
+            
+        </font>
+
+        <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>Outfit-Regular.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+        <!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+   
+    </fontset>
+
+    <fontset id="تونس" unicode="true">
+
+        <!-- Title fonts -->
+          <font>
+            <name>font_info_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>tonos-VF.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>tonos-VF.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.24</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_tiny_plot</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_mini_cond</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>0.96</linespacing>
+            <size>26</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_infotag_bold</name>
+            <filename>LeagueSpartan-ExtraBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+        <font>
+            <name>font_infotag</name>
+            <filename>LeagueSpartan-SemiBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>80</size>
+        </font>
+
+        <!-- Arial font -->
+        <font>
+            <name>font_mini_arial</name>
+            <filename>Arial.ttf</filename>
+            <size>25</size>
+            
+        </font>
+
+        <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>tonos-VF.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+        <!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+   
+    </fontset>
+
+ <fontset id="جميل" unicode="true">
+
+        <!-- Title fonts -->
+          <font>
+            <name>font_info_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <size>85</size>
+        </font>
+        <font>
+            <name>font_info_light</name>
+            <filename>RobotoCondensed-Black.ttf</filename>
+            <size>98</size>
+        </font>
+        <font>
+            <name>font_info_black_doublerow</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_info_light_doublerow</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <size>56</size>
+            <linespacing>0.9</linespacing>
+        </font>
+
+
+        <!-- Black Fonts -->
+        <font>
+            <name>font_huge_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_black</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_black</name>
+            <style>uppercase</style>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Bold Fonts -->
+        <font>
+            <name>font_huge_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>49</size>
+        </font>
+        <font>
+            <name>font_head_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>42</size>
+        </font>
+        <font>
+            <name>font_midi_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>37</size>
+        </font>
+        <font>
+            <name>font_main_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_mini_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_tiny_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_hint_bold</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>18</size>
+        </font>
+
+        <!-- Standard Fonts -->
+        <font>
+            <name>font_midi</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_tiny</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_hint</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>0.9</linespacing>
+        </font>
+        <font>
+            <name>font_hint_button</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>16</size>
+            <linespacing>1.15</linespacing>
+        </font>
+
+        <!-- Textbox Fonts -->
+        <font>
+            <name>font_huge_plot</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>47</size>
+        </font>
+        <font>
+            <name>font_midi_plot</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.46</linespacing>
+            <size>35</size>
+        </font>
+        <font>
+            <name>font_main_plot</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_mini_plot</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.24</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_tiny_plot</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>1.14</linespacing>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_mini_cond</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <linespacing>0.96</linespacing>
+            <size>26</size>
+        </font>
+
+        <!-- Font for codec flag -->
+        <font>
+            <name>font_videocodec_bold</name>
+            <filename>Nick-Titling.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_infotag_bold</name>
+            <filename>LeagueSpartan-ExtraBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+        <font>
+            <name>font_infotag</name>
+            <filename>LeagueSpartan-SemiBold.ttf</filename>
+            <size>22</size>
+            <style>uppercase</style>
+        </font>
+
+        <!-- Music visualisation scrolling text -->
+        <font>
+            <name>font_musicvis_biggest</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>230</size>
+        </font>
+        <font>
+            <name>font_musicvis_bigger</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+        <font>
+            <name>font_musicvis_big</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>80</size>
+        </font>
+
+        <!-- Arial font -->
+        <font>
+            <name>font_mini_arial</name>
+            <filename>Arial.ttf</filename>
+            <size>25</size>
+            
+        </font>
+
+        <!-- Keyboard Symbol Font -->
+        <font>
+            <name>font_main_iconic</name>
+            <filename>iconmonstr-iconic-font.ttf</filename>
+            <size>30</size>
+        </font>
+
+        <!-- Kodi Logo Font -->
+        <font>
+            <name>font_logo</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_logo_large</name>
+            <filename>Questrial-Regular.ttf</filename>
+            <size>44</size>
+        </font>
+
+        <!-- Required for system -->
+        <font>
+            <name>font13</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>23</size>
+        </font>
+        <font>
+            <name>Clock</name>
+            <filename>AdobeArabic-Bold.ttf</filename>
+            <aspect>0.89</aspect>
+            <size>130</size>
+        </font>
+
+        <!-- Testing Fonts -->
+        <font>
+            <name>font_debug</name>
+            <filename>RobotoNotoCondensed-Bold.ttf</filename>
+            <size>27</size>
+            
+        </font>
+
+        <!-- PlayerProcessInfo -->
+        <font>
+            <name>OpenSansSemiCondensed</name>
+            <filename>RobotoNotoCondensed-Regular.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>ArialUni</name>
+            <filename>arialuni.ttf</filename>
+            <size>42</size>
+        </font>
+        <font>
+            <name>ArialUniSmall</name>
+            <filename>arialuni.ttf</filename>
+            <size>23</size>
+        </font>
+   
+    </fontset>
+
+</fonts>
+
+
+

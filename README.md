@@ -1,108 +1,85 @@
-Tutorial and example repository for setting up a GitHub-hosted Kodi repo. For an example of a repo created using this method (including submodules), see https://www.github.com/jurialmunkey/repository.jurialmunkey/.
 
-# BASIC - How to setup for hosting on GitHub Pages
+Add  https://taiseer999.github.io/ in Kodi's File Manager to access the  repo via Kodi
 
-In order to follow this tutorial, first [use this repository as a template](https://github.com/drinfernoo/repository.example/generate) for a new repository, and then clone your newly created repository locally. For the simplest file manager source URL, it is recommended to name your newly created repository as `YOUR_USERNAME_HERE.github.io`.
 
-### Creating your repository add-on
----
-First, you'll need to edit the `addon.xml` file within the `/repo/repository.example` folder with your chosen add-on ID, a version number, and your username (or whatever you'd like) for `provider`, as seen on line 2:
+<p align="center">
+  <strong>
+    <a href="https://kodi.tv/">website</a>
+    •
+    <a href="https://kodi.wiki/view/Main_Page">docs</a>
+    •
+    <a href="https://forum.kodi.tv/">community</a>
+    •
+    <a href="https://kodi.tv/addons">add-ons</a>
+  </strong>
+</p>
 
-```XML
-<addon id="ADDON_ID_HERE" name="REPO_NAME_HERE" version="VERSION_NUMBER_HERE" provider-name="YOUR_USERNAME_HERE">
-```
+<p align="center">
+  <a href="LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-GPLv2-blue.svg?style=flat-square"></a>
+  <a href="https://docs.kodi.tv/"><img alt="Documentation" src="https://img.shields.io/badge/code-documented-brightgreen.svg?style=flat-square"></a>
+  <a href="https://github.com/xbmc/xbmc/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square"></a>
+  <a href="#how-to-contribute"><img alt="Contributions Welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square"></a>
+  <a href="http://jenkins.kodi.tv/"><img alt="Build" src="https://img.shields.io/badge/CI-jenkins-brightgreen.svg?style=flat-square"></a>
+  <a href="https://github.com/xbmc/xbmc/commits/master"><img alt="Commits" src="https://img.shields.io/github/commits-since/xbmc/xbmc/latest.svg?style=flat-square"></a>
+</p>
 
-You also need to replace `YOUR_USERNAME_HERE`, `REPOSITORY_NAME_HERE`, and `BRANCH_NAME_HERE` with your GitHub username, this repository's name, and the name of the branch (it's recommended to use the default branch, ususally `master` or `main`) respectively, as seen on lines 4-8:
+<a href="https://play.google.com/store/apps/details?id=org.xbmc.kodi" target="_blank">
+  <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="80"/>
+</a>
 
-```XML
-<dir>
-    <info compressed="false">https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/BRANCH_NAME_HERE/repo/zips/addons.xml</info>
-    <checksum>https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/BRANCH_NAME_HERE/repo/zips/addons.xml.md5</checksum>
-    <datadir zip="true">https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/BRANCH_NAME_HERE/repo/zips/</datadir>
-</dir>
-```
+<h1 align="center">
+  Welcome to Kodi Home Theater Software!
+</h1>
 
-You should also change the summary and description of your repository, as seen on lines 11-12:
+Kodi is an award-winning **free and open source** software media player and entertainment hub for digital media. Available as a native application for **Android, Linux, BSD, macOS, iOS, tvOS and Windows operating systems**, Kodi runs on most common processor architectures.
 
-```XML
-<summary>REPO_NAME_HERE</summary>
-<description>DESCRIPTION OF YOUR REPO HERE</description>
-```
+Created in 2003 by a group of like minded programmers, Kodi is a non-profit project run by the XBMC Foundation and developed by volunteers located around the world. More than 500 software developers have contributed to Kodi to date, and 100-plus translators have worked to expand its reach, making it available in more than 70 languages.
 
-While not required, it is also recommended to replace `icon.png` and `fanart.jpg` in the `repository.example` folder with art relevant to your repository or the add-ons contained within. `icon.png` should be 512x512 px, and `fanart.jpg` should be 1920x1080 px, or a similar ratio.
+While Kodi functions very well as a standard media player application for your computer, it has been designed to be the perfect companion for your HTPC. With its **beautiful interface and powerful skinning engine**, Kodi feels very natural to use from the couch with a remote control and is the ideal solution for your home theater.
 
-Finally, rename the `repository.example` folder to match whatever add-on ID you chose earlier.
+## Give your media the love it deserves
+Kodi can be used to play almost all popular audio and video formats around. It was designed for network playback, so you can stream your multimedia from anywhere in the house or directly from the internet using practically any protocol available.
 
-### Adding add-ons to your repository
----
-To build the repository, first place the add-on source folders for whichever add-ons you'd like to be contained in your Kodi repo inside this repository. For ease of updating included add-ons, the recommended method of doing this is via [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), which are supported by many Git clients, as well as the Git terminal. If you choose not to use submodules, you'll need to simply copy the source folders directly into this repository.
+Point Kodi to your media and watch it **scan and automagically create a personalized library** complete with box covers, descriptions, and fanart. There are playlist and slideshow functions, a weather forecast feature and many audio visualizations. Once installed, your computer or HTPC will become a fully functional multimedia jukebox.
 
-The `_repo_xml_generator.py` script included in this repository with build `.zip` files for each included add-on, as well as generating the necessary `addons.xml` and `addons.xml.md5` files, so that Kodi can infer the contents of the repo. It is designed to handle multiple versions of Kodi (for example, to serve different add-ons to Leia than are served to Matrix), and single repositories that serve the same add-ons to all Kodi versions.
+<p align="center">
+  <img src="docs/resources/kodi.gif" alt="Kodi">
+</p>
 
-##### Same add-ons to all versions (default)
----
-Place your add-on source folders in the `repo` folder of this repository.
-##### Different add-ons to different versions (advanced)
----
-Place your add-on source folders into a folder named after the version of Kodi you wish to serve from it, instead of `/repo`. For example, `/leia` for a Leia-focused repo, or `/matrix` for a Matrix-focused one. In order for your repository to be able to differentiate which add-ons to serve, you'll need to add a new `dir` section to your `addon.xml`, that defines which versions should be served.
+## Getting Started
+Kodi's developers work hard to make it support a large range of devices and operating systems. We provide final as well as development builds. To get started, head over to the **[downloads section](https://kodi.tv/download)** and simply select the platform that you want to install it on. A **[quick start guide](https://kodi.wiki/view/quick_start_guide)** to help you get acquainted with Kodi is available in our wiki.
 
-For example, to serve Leia only:
-```XML
-<dir minversion="18.0.0" maxversion="18.9.9">
-    <info compressed="false">https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/DEFAULT_BRANCH_NAME_HERE/leia/zips/addons.xml</info>
-    <checksum>https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/DEFAULT_BRANCH_NAME_HERE/leia/zips/addons.xml.md5</checksum>
-    <datadir zip="true">https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/DEFAULT_BRANCH_NAME_HERE/leia/zips/</datadir>
-</dir>
-```
-And for Matrix and up:
-```XML
-<dir minversion="19.0.0">
-    <info compressed="false">https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/DEFAULT_BRANCH_NAME_HERE/matrix/zips/addons.xml</info>
-    <checksum>https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/DEFAULT_BRANCH_NAME_HERE/matrix/zips/addons.xml.md5</checksum>
-    <datadir zip="true">https://raw.githubusercontent.com/YOUR_USERNAME_HERE/REPOSITORY_NAME_HERE/DEFAULT_BRANCH_NAME_HERE/matrix/zips/</datadir>
-</dir>
-```
----
-After adding your source folders, simply run `_repo_generator.py`. This will create `.zip`s of all of the desired add-ons, and place them in subfolders called `zips`, along with the generated `addons.xml` and `addons.xml.md5`. As of version 3, this script can create distributions for Krypton, Leia, Matrix, and Nexus, as well as the generic "repo", which is intended to serve to any version (like for the repository itself, or any cross-version libraries and dependencies).
+## How to Contribute
+Kodi is created by users for users and **we welcome every contribution**. There are no highly paid developers or poorly paid support personnel on the phones ready to take your call. There are only users who have seen a problem and done their best to fix it. This means Kodi will always need the contributions of users like you. How can you get involved?
 
-### Make your repository zip installable inside Kodi
----
-Copy the zip file of your repository, located at `REPO_FOLDER/zips/ADDON_ID_HERE/ADDON_ID_HERE-VERSION_NUMBER_HERE.zip`,
-and paste it into the root folder.
+* **Coding:** Developers can help Kodi by **[fixing a bug](https://github.com/xbmc/xbmc/issues)**, adding new features, making our technology smaller and faster and making development easier for others. Kodi's codebase consists mainly of C++ with small parts written in a variety of coding languages. Our add-ons mainly consist of python and XML. For more information, please have a look at our **[contributing guide](docs/CONTRIBUTING.md)**.
+* **Helping users:** Our support process relies on enthusiastic contributors like you to help others get the most out of Kodi. The #1 priority is always answering questions in our **[support forums](https://forum.kodi.tv/)**. Everyday new people discover Kodi, and everyday they are virtually guaranteed to have questions.
+* **Localization:** Translate **[Kodi](https://kodi.weblate.cloud/projects/kodi-core/kodi-main/)**, **[add-ons, skins etc.](https://kodi.weblate.cloud/)** into your native language.
+* **Add-ons:** **[Add-ons](https://kodi.tv/addons)** are what make Kodi the most extensible and customizable entertainment hub available. **[Get started building an add-on](https://kodi.tv/create-an-addon)**.
+* **Documentation:** Kodi's **[wiki pages](https://kodi.wiki/)** are the hub for information about Kodi and surrounding ecosystem. Help make our documentation better by writing new content or correcting existing material.
 
-Edit the link inside `index.html` to reflect your add-on's filename, as seen on line 1:
+**Not enough free time?** No problem! There are other ways to help Kodi.
 
-```HTML
-<a href="ADDON_ID_HERE-VERSION_NUMBER_HERE.zip">ADDON_ID_HERE-VERSION_NUMBER_HERE.zip</a>
-```
+* **Spread the word:** Share Kodi with the world! Tell your friends and family about how Kodi creates an amazing entertainment experience. Stay up to date on the latest stories about Kodi reading our **[news](https://kodi.tv/blog)** section, follow us on **[Twitter](https://twitter.com/koditv)** and **[Facebook](https://www.facebook.com/XBMC/)**, or **star Kodi's repo** if you want to follow development.
+* **Donate:** We are always happy to receive a **[donation](https://kodi.tv/contribute/donate)**. Donations are typically used for travel to attend conferences, any necessary paperwork and legal fees, and the yearly XBMC Foundation Developers Conference, where a great deal of coding and planning for the following year occurs. Donations may also be used to purchase necessary hardware and licenses for developers, along with t-shirts, stickers, and other accessories for conferences.
+* **Buy Kodi merchandise:** Purchasing Kodi gear helps just as much as a donation, and you get something in return! Checkout our **[store](https://kodi.tv/store)** for Kodi branded gear. We regularly add new products so check back often.
 
-After committing and pushing these changes to your repo, go to the "Settings" section for this repository on GitHub. In the first box, labeled "Repository name", change your repository's name. Generally, GitHub Pages repositories are named `YOUR_USERNAME_HERE.github.io`,  but it can be whatever you'd like.
-Next, scroll down to the "GitHub Pages" section, choose the default branch (or whichever you chose when modifying your `addon.xml`) as the source, and click "Save".
+## Building
+Kodi uses CMake as its building system but instructions are highly dependent on your operating system and target platform. Fortunately **[we've got you covered](docs/README.md)**.
 
-After that, you should be all done!
+## Acknowledgements
+Kodi couldn't exist without
 
-If you named this repository `YOUR_USERNAME_HERE.github.io` (as recommended), your file manager source will be:
+* All the **[contributors](https://github.com/xbmc/xbmc/graphs/contributors)**. Big or small a change, it does make a difference.
+* All the developers that write the fantastic **software and libraries** that Kodi uses. We stand on the shoulders of giants.
+* Our **[fantastic community](https://forum.kodi.tv/)** for the never ending support, inspiration, feedback, and for keeping us on our toes when we screw up!
+* **[Our sponsors](https://kodi.tv/sponsors)**. Without them, keeping a huge project like this alive would be next to impossible.
 
-`https://YOUR_USERNAME_HERE.github.io/`
+## License
+Kodi is **[GPLv2 licensed](LICENSE.md)**. You may use, distribute and copy it under the license terms.
 
-If you named it something else, it will be:
-
-`https://YOUR_USERNAME_HERE.github.io/REPOSITORY_NAME_HERE/`
-
-# ADVANCED - How to set up for hosting without GitHub Pages
-
-If you want to host your Kodi repo on a different host besides GitHub Pages, simply download this repository as a `.zip`, and unzip it, rather than using it as a template. Continue to follow the rest of the setup procedure, except for the setting up of GitHub Pages. The only differences will be in your `addon.xml` file, as it will need to reference your host, rather than GitHub:
-
-```XML
-<dir>
-    <info compressed="false">https://YOUR_HOST_URL_HERE/repo/zips/addons.xml</info>
-    <checksum>https://YOUR_HOST_URL_HERE/repo/zips/addons.xml.md5</checksum>
-    <datadir zip="true">https://YOUR_HOST_URL_HERE/repo/zips/</datadir>
-</dir>
-```
-
-And upload the contents of this repository to your host. It is **very important** that `YOUR_HOST_URL_HERE` is the URL to the *root* folder of this repository.
-
-After doing so, your file manager source will be:
-
-`https://YOUR_HOST_URL_HERE/`
+<a href="https://github.com/xbmc/xbmc/graphs/contributors"><img src="https://forthebadge.com/images/badges/built-by-developers.svg" height="25"></a>
+<a href="https://github.com/xbmc/xbmc"><img src="https://forthebadge.com/images/badges/certified-cousin-terio.svg" height="25"></a>
+<a href="https://github.com/xbmc/xbmc"><img src="https://forthebadge.com/images/badges/approved-by-george-costanza.svg" height="25"></a>
+<a href="https://kodi.tv/download"><img src="https://forthebadge.com/images/badges/check-it-out.svg" height="25"></a>
+<a href="https://github.com/xbmc/xbmc"><img src="https://forthebadge.com/images/badges/winter-is-coming.svg" height="25"></a>
