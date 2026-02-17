@@ -6744,7 +6744,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="3.1.17.16">
+</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="3.1.17.17">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.1.28" />
