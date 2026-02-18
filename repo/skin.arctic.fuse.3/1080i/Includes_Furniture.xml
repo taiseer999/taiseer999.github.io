@@ -171,8 +171,8 @@
             <visible>!Player.HasMedia | Skin.HasSetting(Footer.DisableNowPlaying)</visible>
             <visible>String.IsEmpty(ListItem.VideoCodec) | !Skin.HasSetting(Footer.EnableCodecs)</visible>
             <control type="image">
-                <width>300</width>
-                <height>80</height>
+                <width>290</width>
+                <height>100</height>
                 <aspectratio align="right">keep</aspectratio>
                 <texture background="true">$VAR[Image_CombinedStudio]</texture>
                 <centertop>50%</centertop>
