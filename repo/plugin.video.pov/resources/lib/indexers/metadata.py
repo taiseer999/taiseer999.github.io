@@ -41,24 +41,9 @@ def movie_meta(id_type, media_id, user_info, current_date):
 			else: meta = {'tmdb_id': '0000000', 'imdb_id': media_id, 'tvdb_id': '0000000', 'fanart_added': True, 'blank_entry': True}
 			metacache_set('movie', id_type, meta, EXPIRES_2_DAYS)
 			return meta
-		if language != 'en':
-			if data['overview'] in empty_value_check:
-				media_id, id_type = data['id'], 'tmdb_id'
-				eng_data = movie_data(media_id, 'en', tmdb_api)
-				eng_overview = eng_data['overview']
-				data['overview'] = eng_overview
-				if 'videos' in data:
-					all_trailers = data['videos']['results']
-					if all_trailers:
-						try: trailer_test = [i for i in all_trailers if i['site'] == 'YouTube' and i['type'] in trailers_test]
-						except: trailer_test = False
-					else: trailer_test = False
-				else: trailer_test = False
-				if not trailer_test:
-					if 'videos' in eng_data:
-						eng_all_trailers = eng_data['videos']['results']
-						if eng_all_trailers:
-							data['videos']['results'] = eng_all_trailers
+		if language != 'en' and data['overview'] in empty_value_check:
+			eng_all_trailers = english_trailers('movie', data, tmdb_api)
+			if eng_all_trailers: data['videos']['results'] = eng_all_trailers
 		if not fanarttv_data and extra_fanart_enabled: fanarttv_data = fanarttv_get('movies', language, data['id'], fanart_client_key)
 		meta = build_movie_meta(data, user_info, fanarttv_data)
 		metacache_set('movie', id_type, meta, movie_expiry(current_date, meta))
@@ -97,24 +82,9 @@ def tvshow_meta(id_type, media_id, user_info, current_date):
 			else: meta = {'tmdb_id': '0000000', 'imdb_id': 'tt0000000', 'tvdb_id': media_id, 'fanart_added': True, 'blank_entry': True}
 			metacache_set('tvshow', id_type, meta, EXPIRES_2_DAYS)
 			return meta
-		if language != 'en':
-			if data['overview'] in empty_value_check:
-				media_id, id_type = data['id'], 'tmdb_id'
-				eng_data = tvshow_data(media_id, 'en', tmdb_api)
-				eng_overview = eng_data['overview']
-				data['overview'] = eng_overview
-				if 'videos' in data:
-					all_trailers = data['videos']['results']
-					if all_trailers:
-						try: trailer_test = [i for i in all_trailers if i['site'] == 'YouTube' and i['type'] in trailers_test]
-						except: trailer_test = False
-					else: trailer_test = False
-				else: trailer_test = False
-				if not trailer_test:
-					if 'videos' in eng_data:
-						eng_all_trailers = eng_data['videos']['results']
-						if eng_all_trailers:
-							data['videos']['results'] = eng_all_trailers
+		if language != 'en' and data['overview'] in empty_value_check:
+			eng_all_trailers = english_trailers('tvshow', data, tmdb_api)
+			if eng_all_trailers: data['videos']['results'] = eng_all_trailers
 		if not fanarttv_data and extra_fanart_enabled: fanarttv_data = fanarttv_get('tv', language, data['external_ids']['tvdb_id'], fanart_client_key)
 		meta = build_tvshow_meta(data, user_info, fanarttv_data)
 		metacache_set('tvshow', id_type, meta, tvshow_expiry(current_date, meta))
@@ -134,7 +104,7 @@ def season_episodes_meta(season, meta, user_info):
 			if still_path: thumb = tmdb_image_base % (still_resolution, still_path)
 			else: thumb = None
 			try: duration = ep_data_get('runtime') * 60
-			except: duration = 60 * 60
+			except: duration = 0
 			guest_stars_list = ep_data_get('guest_stars')
 			if guest_stars_list:
 				try: guest_stars = [
@@ -149,9 +119,9 @@ def season_episodes_meta(season, meta, user_info):
 				try: director = [i['name'] for i in crew if i['job'] == 'Director'][0]
 				except: pass
 			yield {
-				'thumb': thumb, 'title': title, 'guest_stars': guest_stars, 'plot': plot, 'premiered': premiered,
-				'director': director, 'writer': writer, 'rating': rating, 'votes': votes, 'mediatype': 'episode',
-				'episode_type': ep_type, 'season': season, 'episode': episode, 'duration': duration
+				'thumb': thumb, 'guest_stars': guest_stars, 'director': director, 'writer': writer, 'plot': plot,
+				'title': title, 'premiered': premiered, 'rating': rating, 'votes': votes, 'duration': duration,
+				'mediatype': 'episode', 'episode_type': ep_type, 'season': season, 'episode': episode
 			}
 	metacache = MetaCache()
 	metacache_get, metacache_set = metacache.get, metacache.set
@@ -184,6 +154,24 @@ def all_episodes_meta(meta, user_info, Thread):
 	except: pass
 	return data
 
+def english_trailers(media_type, data, tmdb_api):
+	media_id, id_type = data['id'], 'tmdb_id'
+	if media_type == 'tvshow': eng_data = tvshow_data(media_id, 'en', tmdb_api)
+	else: eng_data = movie_data(media_id, 'en', tmdb_api)
+	eng_overview = eng_data['overview']
+	data['overview'] = eng_overview
+	if 'videos' in data:
+		all_trailers = data['videos']['results']
+		if all_trailers:
+			try: trailer_test = [i for i in all_trailers if i['site'] == 'YouTube' and i['type'] in trailers_test]
+			except: trailer_test = False
+		else: trailer_test = False
+	else: trailer_test = False
+	if not trailer_test:
+		if 'videos' in eng_data:
+			eng_all_trailers = eng_data['videos']['results']
+			if eng_all_trailers: return eng_all_trailers
+
 def english_translation(media_type, media_id, user_info):
 	key = 'title' if media_type == 'movie' else 'name'
 	translations = tmdb_english_translation(media_type, media_id, user_info['tmdb_api'])
@@ -214,15 +202,15 @@ def build_movie_meta(data, user_info, fanarttv_data=None):
 	image_resolution, language = user_info.get('image_resolution', backup_resolutions), user_info['language']
 	data_get = data.get
 	cast, all_trailers, country, country_codes = [], [], [], []
-	writer, mpaa, director, trailer, studio = '', '', '', '', ''
+	mpaa, trailer, writer, director, studio = '', '', '', '', ''
 	tmdb_id, imdb_id = data_get('id', ''), data_get('imdb_id', '')
 	rating, votes = data_get('vote_average', ''), data_get('vote_count', '')
 	plot, tagline, premiered = data_get('overview', ''), data_get('tagline', ''), data_get('release_date', '')
 	poster_path, backdrop_path = data_get('poster_path'), data_get('backdrop_path')
-	logo_path = next((i['file_path'] for i in data['images'].get('logos', [])), None)
+	logo_path = next((i['file_path'] for i in data['images'].get('logos', []) if i['file_path'].endswith('png')), None)
 	if not language in 'en,en-US':
 		try:
-			path = (i['file_path'] for i in data['images']['logos'] if str(i['iso_639_1']) in language)
+			path = (i['file_path'] for i in data['images']['logos'] if str(i['iso_639_1']) in language and i['file_path'].endswith('png'))
 			logo_path = next(path)
 		except: pass
 	if poster_path: poster = tmdb_image_base % (image_resolution['poster'], poster_path)
@@ -236,17 +224,19 @@ def build_movie_meta(data, user_info, fanarttv_data=None):
 	except: english_title = None
 	try: year = str(data_get('release_date').split('-')[0] or 0)
 	except: year = ''
-	try: duration = int(data_get('runtime', '90') * 60)
+	try: duration = data_get('runtime') * 60
 	except: duration = 0
 	try: genre = ', '.join([i['name'] for i in data_get('genres')])
-	except: genre == []
+	except: genre = ''
 	rootname = '%s (%s)' % (title, year)
 	companies = data_get('production_companies')
 	if companies:
-		if len(companies) == 1: studio = [i['name'] for i in companies][0]
-		else:
-			try: studio = [i['name'] for i in companies if i['logo_path'] not in empty_value_check][0] or [i['name'] for i in companies][0]
+		if not len(companies) == 1:
+			try:
+				studio = [i['name'] for i in companies if i['logo_path'] not in empty_value_check][0]
+				if not studio: studio = [i['name'] for i in companies][0]
 			except: pass
+		else: studio = [i['name'] for i in companies][0]
 	production_countries = data_get('production_countries')
 	if production_countries:
 		country = [i['name'] for i in production_countries]
@@ -300,7 +290,7 @@ def build_movie_meta(data, user_info, fanarttv_data=None):
 		'tagline': tagline, 'plot': plot, 'mpaa': mpaa, 'studio': studio, 'director': director, 'writer': writer,
 		'duration': duration, 'premiered': premiered, 'genre': genre, 'rating': rating, 'votes': votes,
 		'country': country, 'country_codes': country_codes, 'trailer': trailer, 'all_trailers': all_trailers,
-		'cast': cast, 'extra_info': extra_info, 'mediatype': 'movie', 'meta_language': user_info.get('language', '')
+		'cast': cast, 'extra_info': extra_info, 'mediatype': 'movie', 'meta_language': language
 	}
 	if fanarttv_data: meta_dict.update(fanarttv_data)
 	else: meta_dict.update(default_fanarttv_data)
@@ -310,17 +300,17 @@ def build_tvshow_meta(data, user_info, fanarttv_data=None):
 	image_resolution, language = user_info.get('image_resolution', backup_resolutions), user_info['language']
 	data_get = data.get
 	cast, all_trailers, country, country_codes = [], [], [], []
-	writer, mpaa, director, trailer, studio = '', '', '', '', ''
+	mpaa, trailer, writer, director, studio = '', '', '', '', ''
 	external_ids = data_get('external_ids')
 	tmdb_id, imdb_id, tvdb_id = data_get('id', ''), external_ids.get('imdb_id', ''), external_ids.get('tvdb_id', 'None')
 	rating, votes = data_get('vote_average', ''), data_get('vote_count', '')
 	plot, tagline, premiered = data_get('overview', ''), data_get('tagline', ''), data_get('first_air_date', '')
 	season_data, total_seasons, total_aired_eps = data_get('seasons'), data_get('number_of_seasons'), data_get('number_of_episodes')
 	poster_path, backdrop_path = data_get('poster_path'), data_get('backdrop_path')
-	logo_path = next((i['file_path'] for i in data['images'].get('logos', [])), None)
+	logo_path = next((i['file_path'] for i in data['images'].get('logos', []) if i['file_path'].endswith('png')), None)
 	if not language in 'en,en-US':
 		try:
-			path = (i['file_path'] for i in data['images']['logos'] if str(i['iso_639_1']) in language)
+			path = (i['file_path'] for i in data['images']['logos'] if str(i['iso_639_1']) in language and i['file_path'].endswith('png'))
 			logo_path = next(path)
 		except: pass
 	if poster_path: poster = tmdb_image_base % (image_resolution['poster'], poster_path)
@@ -337,14 +327,16 @@ def build_tvshow_meta(data, user_info, fanarttv_data=None):
 	try: duration = min(data_get('episode_run_time')) * 60
 	except: duration = 0
 	try: genre = ', '.join([i['name'] for i in data_get('genres')])
-	except: genre = []
+	except: genre = ''
 	rootname = '%s (%s)' % (title, year)
 	networks = data_get('networks')
 	if networks:
-		if len(networks) == 1: studio = [i['name'] for i in networks][0]
-		else:
-			try: studio = [i['name'] for i in networks if i['logo_path'] not in empty_value_check][0] or [i['name'] for i in networks][0]
+		if not len(networks) == 1:
+			try:
+				studio = [i['name'] for i in networks if i['logo_path'] not in empty_value_check][0]
+				if not studio: studio = [i['name'] for i in networks][0]
 			except: pass
+		else: studio = [i['name'] for i in networks][0]
 	production_countries = data_get('production_countries')
 	if production_countries:
 		country = [i['name'] for i in production_countries]
@@ -400,8 +392,8 @@ def build_tvshow_meta(data, user_info, fanarttv_data=None):
 		'tagline': tagline, 'plot': plot, 'mpaa': mpaa, 'studio': studio, 'director': director, 'writer': writer,
 		'duration': duration, 'premiered': premiered, 'genre': genre, 'rating': rating, 'votes': votes,
 		'country': country, 'country_codes': country_codes, 'trailer': trailer, 'all_trailers': all_trailers,
-		'cast': cast, 'extra_info': extra_info, 'mediatype': 'tvshow', 'meta_language': user_info.get('language', ''),
-		'status': status, 'total_aired_eps': total_aired_eps, 'total_seasons': total_seasons, 'season_data': season_data
+		'cast': cast, 'extra_info': extra_info, 'mediatype': 'tvshow', 'meta_language': language, 'status': status,
+		'total_aired_eps': total_aired_eps, 'total_seasons': total_seasons, 'season_data': season_data
 	}
 	if fanarttv_data: meta_dict.update(fanarttv_data)
 	else: meta_dict.update(default_fanarttv_data)

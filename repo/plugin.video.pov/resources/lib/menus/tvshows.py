@@ -28,12 +28,10 @@ class TVShows:
 	def __init__(self, params):
 		self.params = params
 		self.items, self.new_page, self.total_pages = [], {}, None
-		self.id_type, self.list, self.action, self.exit_list_params = (
-			self.params.get('id_type', 'tmdb_id'),
-			self.params.get('list', []),
-			self.params.get('action'),
-			self.params.get('exit_list_params')
-		)
+		self.id_type = self.params.get('id_type', 'tmdb_id')
+		self.list = self.params.get('list', [])
+		self.action = self.params.get('action')
+		self.exit_list_params = self.params.get('exit_list_params')
 		self.append = self.items.append
 		self.current_date = get_datetime_function()
 		self.meta_user_info = settings.metadata_user_info()
@@ -52,21 +50,23 @@ class TVShows:
 		self.watched_title = ('POV', 'Trakt', 'MDBList')[self.watched_indicators]
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
 
-	def build_tvshow_content(self, _position, _id):
+	def build_tvshow_content(self, position, tag):
 		try:
-			meta = tv_meta_function(self.id_type, _id, self.meta_user_info, self.current_date)
+			meta = tv_meta_function(self.id_type, tag, self.meta_user_info, self.current_date)
 			meta_get = meta.get
 			if not meta or meta_get('blank_entry', False): return
 			playcount, overlay, total_watched, total_unwatched = get_watched_function(self.watched_info, string(meta['tmdb_id']), meta.get('total_aired_eps'))
 			if self.widget_hide_watched and playcount: return
 			meta.update({'playcount': playcount, 'overlay': overlay})
-			sort = _id.get('sort', _position) if self.id_type == 'trakt_dict' else _position
-			props = {'pov_sort_order': string(sort)}
+			total_seasons, total_aired_eps = meta_get('total_seasons'), meta_get('total_aired_eps')
+			props = {
+				'pov_sort_order': string(position), 'unwatchedepisodes': string(total_unwatched),
+				'totalseasons': string(total_seasons), 'totalepisodes': string(total_aired_eps)
+			}
 			cm = []
 			cm_append = cm.append
 			rootname, title, year = meta_get('rootname'), meta_get('title'), meta_get('year')
 			tmdb_id, tvdb_id, imdb_id = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id')
-			total_seasons, total_aired_eps = meta_get('total_seasons'), meta_get('total_aired_eps')
 			poster = meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
 			fanart = meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart_empty
 			clearlogo = meta_get('clearlogo') or meta_get('tmdblogo') or ''
@@ -75,16 +75,15 @@ class TVShows:
 				poster = rpdb_data.get('rpdb') or poster
 			if self.fanart_enabled: banner, clearart, landscape = meta_get('banner'), meta_get('clearart'), meta_get('landscape')
 			else: banner, clearart, landscape = '', '', ''
-			if self.all_episodes:
-				if self.all_episodes == 1 and total_seasons > 1: url_params = build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
-				else: url_params = build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': 'all'})
+			if self.all_episodes and self.all_episodes == 1 and total_seasons > 1: url_params = build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
+			elif self.all_episodes: url_params = build_url({'mode': 'build_episode_list', 'tmdb_id': tmdb_id, 'season': 'all'})
 			else: url_params = build_url({'mode': 'build_season_list', 'tmdb_id': tmdb_id})
-			extras_params = build_url({'mode': 'extras_menu_choice', 'tmdb_id': tmdb_id, 'media_type': 'tvshow', 'is_widget': self.is_widget})
-			options_params = build_url({'mode': 'options_menu_choice', 'content': 'tvshow', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
+			extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
+			options_params = build_url({'mode': 'options_menu_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
 			recommended_params = build_url({'mode': 'build_tvshow_list', 'action': 'tmdb_tv_recommendations', 'tmdb_id': tmdb_id})
-			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
-			tmdb_manager_params = build_url({'mode': 'tmdb_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
-			mdbl_manager_params = build_url({'mode': 'mdbl_manager_choice', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id, 'media_type': 'tvshow'})
+			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
+			tmdb_manager_params = build_url({'mode': 'tmdb_manager_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
+			mdbl_manager_params = build_url({'mode': 'mdbl_manager_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id})
 			fav_manager_params = build_url({'mode': 'favourites_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'title': title})
 			cm_append((self.cm_sort['options'], options_str, run_plugin % options_params))
 			if self.open_extras:
@@ -107,14 +106,10 @@ class TVShows:
 			cm_append((self.cm_sort['exit'], exit_str, container_refresh % self.exit_list_params))
 			cm.sort(key=lambda k: k[0])
 			cm = [v for k, *v in cm if k]
-			props['unwatchedepisodes'] = string(total_unwatched)
-			props['totalepisodes'] = string(total_aired_eps)
-			props['totalseasons'] = string(total_seasons)
 			listitem = kodi_utils.make_listitem()
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)
 			listitem.setLabel(rootname if self.include_year_in_title else title)
-#			listitem.setContentLookup(False)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': landscape,
 							'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': landscape, 'tvshow.banner': banner})
 			if KODI_VERSION < 20:
@@ -141,6 +136,7 @@ class TVShows:
 				videoinfo.setRating(meta_get('rating'))
 				videoinfo.setStudios((meta_get('studio'),))
 				videoinfo.setTagLine(meta_get('tagline'))
+				videoinfo.setTags((imdb_id, string(tmdb_id), string(tvdb_id)))
 				videoinfo.setTitle(rootname if self.include_year_in_title else title)
 				videoinfo.setTrailer(meta_get('trailer'))
 				videoinfo.setTvShowStatus(meta_get('status'))
@@ -168,7 +164,9 @@ class Menu(TVShows):
 		'tmdb_tv_networks': 'network_id', 'tmdb_tv_year': 'year', 'tmdb_tvanime_year': 'year'
 	}
 	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
-	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists', 'trakt_droplist')
+	trakt_personal = (
+		'trakt_collection', 'trakt_watchlist', 'trakt_favorites', 'trakt_droplist', 'trakt_collection_lists'
+	)
 	mdblist_personal = ('mdblist_collection', 'mdblist_watchlist', 'mdblist_droplist')
 	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
 	similar = ('tmdb_tv_similar', 'tmdb_tv_recommendations')

@@ -17,7 +17,7 @@ remove_meta_keys, dict_removals = kodi_utils.remove_meta_keys, kodi_utils.episod
 calendar_sort_order, calendar_focus_today = settings.calendar_sort_order, settings.calendar_focus_today
 nextep_content_settings, nextep_display_settings = settings.nextep_content_settings, settings.nextep_display_settings
 thumb_fanart_info, date_offset_info, default_all_episodes = settings.thumb_fanart, settings.date_offset, settings.default_all_episodes
-single_ep_display_title, single_ep_format, ignore_articles = settings.single_ep_display_title, settings.single_ep_format, settings.ignore_articles
+single_ep_display_title, single_ep_format = settings.single_ep_display_title, settings.single_ep_format
 adjust_premiered_date_function, jsondate_to_datetime_function = adjust_premiered_date, jsondate_to_datetime
 date_difference_function, make_day_function, title_key_function, get_datetime_function = date_difference, make_day, title_key, get_datetime
 run_plugin, container_refresh, container_update = 'RunPlugin(%s)', 'Container.Refresh(%s)', 'Container.Update(%s)'
@@ -40,6 +40,7 @@ class Episodes:
 		self.watched_indicators = settings.watched_indicators()
 		self.watched_info = get_watched_info(self.watched_indicators)
 		self.bookmarks = get_bookmarks(self.watched_indicators, 'episode')
+		self.ignore_articles = settings.ignore_articles()
 		self.cm_sort = settings.context_menu_sort()
 		self.show_unaired = settings.show_unaired()
 		self.all_episodes = default_all_episodes()
@@ -53,14 +54,14 @@ class Episodes:
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
 		self.container_update = 'ActivateWindow(Videos,%s,return)' if self.is_widget else 'Container.Update(%s)'
 
-	def build_episode_content(self, _position, ep_data):
+	def build_episode_content(self, position, ep_data):
 		try:
 			ep_data_get = ep_data.get
 			meta = tv_meta_function('trakt_dict', ep_data_get('media_ids'), self.meta_user_info, self.current_date)
 			meta_get = meta.get
 			if not meta: return
 			if self.list_type.startswith('next_episode'): props = {'pov_last_played': ep_data_get('last_played', self.resinsert)}
-			else: props = {'pov_sort_order': string(ep_data_get('sort', _position))}
+			else: props = {'pov_sort_order': string(ep_data_get('sort', position))}
 			cm = []
 			cm_append = cm.append
 			tmdb_id, tvdb_id, imdb_id = meta_get('tmdb_id'), meta_get('tvdb_id'), meta_get('imdb_id')
@@ -70,7 +71,7 @@ class Episodes:
 			clearlogo = meta_get('clearlogo') or meta_get('tmdblogo') or ''
 			if self.fanart_enabled: banner, clearart, landscape = meta_get('banner'), meta_get('clearart'), meta_get('landscape')
 			else: banner, clearart, landscape = '', '', ''
-			cast, mpaa, duration, tvshow_plot = meta_get('cast', []), meta_get('mpaa'), meta_get('duration'), meta_get('plot')
+			cast, mpaa, episode_run_time, tvshow_plot = meta_get('cast', []), meta_get('mpaa'), meta_get('duration'), meta_get('plot')
 			trailer, genre, studio = string(meta_get('trailer')), meta_get('genre'), meta_get('studio')
 			orig_season, orig_episode = ep_data_get('season'), ep_data_get('episode')
 			curr_season_data = next((i for i in meta_get('season_data') if i['season_number'] == orig_season), {})
@@ -115,10 +116,9 @@ class Episodes:
 			elif self.list_type == 'trakt_calendar':
 				if episode_date: display_premiered = make_day_function(self.current_date, episode_date, self.date_format)
 				else: display_premiered == 'UNKNOWN'
-				display = ''.join(['[', display_premiered, '] ', title_string.upper(), seas_ep, ep_name])
-				if unaired:
-					displays = display.split(']')
-					display = ''.join(['[COLOR cyan]', displays[0], '][/COLOR]', displays[1]])
+				if unaired: display_premiered = ''.join(['[COLOR magenta]', display_premiered, '[/COLOR]'])
+				color_tags = ('[COLOR cyan][I]', '[/I][/COLOR]') if unaired else ('', '')
+				display = ''.join(['[', display_premiered, '] ', title_string.upper(), seas_ep, color_tags[0], ep_name, color_tags[1]])
 			else:
 				color_tags = ('[COLOR cyan]', '[/COLOR]') if unaired else ('', '')
 				display = ''.join([title_string.upper(), seas_ep, color_tags[0], ep_name, color_tags[1]])
@@ -128,7 +128,7 @@ class Episodes:
 			item.update({
 				'trailer': trailer, 'tvshowtitle': title, 'premiered': premiered, 'genre': genre,
 				'mpaa': mpaa, 'studio': studio, 'playcount': playcount, 'overlay': overlay, 'title': display,
-				'duration': item_get('duration') or duration or default_duration
+				'duration': item_get('duration') or episode_run_time
 			})
 			extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
 			options_params = build_url({'mode': 'options_menu_choice', 'content': 'episode', 'tmdb_id': tmdb_id, 'season': season, 'episode': episode, 'is_widget': self.is_widget})
@@ -172,7 +172,6 @@ class Episodes:
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)
 			listitem.setLabel(display)
-#			listitem.setContentLookup(False)
 			listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': thumb,
 							'season.poster': season_poster, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
 			if KODI_VERSION < 20:
@@ -187,7 +186,7 @@ class Episodes:
 				videoinfo.setDirectors(item_get('director').split(', '))
 				videoinfo.setDuration(int(item_get('duration') or default_duration))
 				videoinfo.setEpisode(episode)
-				videoinfo.setFirstAired(item_get('premiered'))
+				videoinfo.setFirstAired(premiered)
 				videoinfo.setGenres(genre.split(', '))
 				videoinfo.setIMDBNumber(imdb_id)
 				videoinfo.setMediaType('episode')
@@ -197,7 +196,7 @@ class Episodes:
 				videoinfo.setRating(item_get('rating'))
 				videoinfo.setSeason(season)
 				videoinfo.setStudios((studio,))
-				videoinfo.setTitle(item_get('title'))
+				videoinfo.setTitle(display)
 				videoinfo.setTrailer(trailer)
 				videoinfo.setTvShowStatus(show_status)
 				videoinfo.setTvShowTitle(title)
@@ -236,14 +235,15 @@ class Episodes:
 		for i in TaskPool().tasks_enumerate(self.build_episode_content, self.list, Thread): i.join()
 		if self.list_type.startswith('next_episode'):
 			def func(function):
-				if sort_key == 'pov_name': return title_key_function(function, ignore_articles())
+				if sort_key == 'pov_name': return title_key_function(function, self.ignore_articles)
 				elif sort_key == 'pov_last_played': return jsondate_to_datetime_function(function, resformat)
 				else: return function
+			def first_aired(item):
+				return jsondate_to_datetime_function(item[1].getProperty('pov_first_aired'), '%Y-%m-%d').date()
 			sort_key, sort_direction = nextep_settings['sort_key'], nextep_settings['sort_direction']
 			self.items.sort(key=lambda k: func(k[1].getProperty(sort_key)), reverse=sort_direction)
 			self.items.sort(key=lambda k: k[1].getProperty('pov_unaired') == 'true', reverse=False)
 			if nextep_settings['sort_airing_today_to_top']:
-				first_aired = lambda i: jsondate_to_datetime_function(i[1].getProperty('pov_first_aired'), '%Y-%m-%d').date()
 				self.items.sort(key=lambda k: date_difference_function(self.current_date, first_aired(k), 0), reverse=True)
 		elif self.list_type in ('trakt_calendar', 'trakt_recently_aired'):
 			reverse = calendar_sort_order() == 0 if self.list_type == 'trakt_calendar' else True

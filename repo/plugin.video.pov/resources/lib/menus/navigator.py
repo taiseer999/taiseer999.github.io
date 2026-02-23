@@ -113,7 +113,7 @@ class Navigator:
 		self._end_directory()
 
 	def my_content(self):
-		trakt_str, imdb_str, coll_str, wlist_str, ls_str = ls(32037), ls(32064), ls(32499), ls(32500), ls(32501)
+		trakt_str, imdb_str, coll_str, wlist_str, fav_str, ls_str = ls(32037), ls(32064), ls(32499), ls(32500), 'Favorites', ls(32501)
 		t_n_ins, i_n_ins, m_n_ins = _in_str % (trakt_str.upper(), ''), _in_str % (imdb_str.upper(), ''), _in_str % ('MDBList'.upper(), '')
 		t_str, user_str, l_str, ai_str, ml_str, drp_str = ls(32037), ls(32065), ls(32501), ls(32494), ls(32454), 'Dropped TV Shows'
 		tu_str, pu_str = '%s %s %s' % (ls(32458), user_str, l_str), '%s %s %s' % (ls(32459), user_str, l_str)
@@ -128,6 +128,7 @@ class Navigator:
 			self._add_item({'mode': 'navigator.trakt_lists'                                                 , 'name': ls_str   }, 'trakt.png', t_n_ins)
 			self._add_item({'mode': 'navigator.trakt_watchlists'                                            , 'name': wlist_str}, 'trakt.png', t_n_ins)
 			self._add_item({'mode': 'navigator.trakt_collections'                                           , 'name': coll_str }, 'trakt.png', t_n_ins)
+			self._add_item({'mode': 'navigator.trakt_favorites'                                             , 'name': fav_str  }, 'trakt.png', t_n_ins)
 			self._add_item({'mode': 'trakt.trakt_account_info'                                              , 'name': ai_str   }, 'trakt.png', t_n_ins, False)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'trending', 'name': tu_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_trakt_list.get_trakt_trending_popular_lists', 'list_type': 'popular' , 'name': pu_str }, 'trakt.png', n_ins)
@@ -180,6 +181,14 @@ class Navigator:
 		self._add_item({'mode': 'build_movie_list', 'action': 'trakt_watchlist',  'name': mov_str}, 'trakt.png', n_ins)
 		self._add_item({'mode': 'build_tvshow_list', 'action': 'trakt_watchlist', 'name': tv_str }, 'trakt.png', n_ins)
 		self._add_item({'mode': 'tmdb.import_trakt_watchlist',                    'name': 'Export to TMDB'}, 'trakt.png', n_ins, False) if tmdb_status else None
+		self._end_directory()
+
+	def trakt_favorites(self):
+		t_str, fav_str = ls(32037), 'Favorites'
+		trakt_fav_str = '%s %s' % (t_str, fav_str)
+		n_ins = _in_str % (trakt_fav_str.upper(), '')
+		self._add_item({'mode': 'build_movie_list', 'action': 'trakt_favorites',  'name': mov_str}, 'trakt.png', n_ins)
+		self._add_item({'mode': 'build_tvshow_list', 'action': 'trakt_favorites', 'name': tv_str }, 'trakt.png', n_ins)
 		self._end_directory()
 
 	def trakt_lists(self):

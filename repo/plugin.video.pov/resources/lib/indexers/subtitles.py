@@ -38,12 +38,6 @@ def subtitles_search(imdb_id, season=None, episode=None):
 	return response
 
 class Subtitles(kodi_utils.xbmc_player):
-	def __init__(self):
-		kodi_utils.xbmc_player.__init__(self)
-		self.auto_enable = get_setting('subtitles.auto_enable')
-		self.subs_action = {'0': 'auto', '1': 'select', '2': 'off'}[get_setting('subtitles.subs_action', '2')]
-		self.language1 = language_choices[get_setting('subtitles.language')]
-
 	def run(self, query, imdb_id, season, episode, poster):
 		def _video_file_subs():
 			try: available_sub_language = self.getSubtitles()
@@ -100,6 +94,9 @@ class Subtitles(kodi_utils.xbmc_player):
 			with kodi_utils.open_file(final_path, 'w') as file: file.write(content)
 			kodi_utils.sleep(1000)
 			return final_path
+		self.auto_enable = get_setting('subtitles.auto_enable')
+		self.language1 = language_choices[get_setting('subtitles.language')]
+		self.subs_action = {'0': 'auto', '1': 'select', '2': 'off'}[get_setting('subtitles.subs_action', '2')]
 		if not self.subs_action in ('auto', 'select'): return
 		kodi_utils.sleep(2500)
 		subtitle_path = 'special://temp/'

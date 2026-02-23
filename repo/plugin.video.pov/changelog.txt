@@ -1,5 +1,6 @@
 
   [COLOR dodgerblue][B]Version 6.02[/B][/COLOR]
+- Added Trakt Favorites.
 - Updated torboxnews.
 - Added artwork change for non-English languages from Github request.
 - Added context menu sorting for single episode lists.

@@ -91,8 +91,12 @@ def trakt_manager_choice(params):
 		 '%s items' % i['item_count'])
 		for i in trakt_api.trakt_get_lists('my_lists')
 	]
-	choices += [('collection', '[I]%s[/I]' % ls(32499), ''), ('watchlist', '[I]%s[/I]' % ls(32500), '')]
-	choices += [('drop', '%s %s...' % ('Toggle', 'Dropped'), '')] if params['media_type'] == 'tvshow' else []
+	choices += [
+		('collection', '[I]%s[/I]' % ls(32499), ''),
+		('favorites', '[I]%s[/I]' % 'Favorites', ''),
+		('watchlist', '[I]%s[/I]' % ls(32500), '')
+	]
+	if params['media_type'] == 'tvshow': choices += [('drop', 'Toggle Dropped', '')]
 	list_items = [{'line1': item[1], 'line2': item[2], 'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
@@ -100,18 +104,15 @@ def trakt_manager_choice(params):
 	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
 	if 'drop' in choice[0]:
 		return trakt_api.hide_unhide_trakt_items(params['tmdb_id'], 'shows', params['imdb_id'], 'dropped')
-	if 'watchlist' in choice[0] or 'collection' in choice[0]:
-		if 'watchlist' in choice[0]:
-			add_to_list, remove_from_list = trakt_api.add_to_watchlist, trakt_api.remove_from_watchlist
-		else: add_to_list, remove_from_list = trakt_api.add_to_collection, trakt_api.remove_from_collection
+	if 'watchlist' in choice[0] or 'collection' in choice[0] or 'favorites' in choice[0]:
 		list_items = trakt_api.trakt_fetch_collection_watchlist(choice[0], params['media_type'])
 		action = False if int(params['tmdb_id']) in {i['media_ids']['tmdb'] for i in list_items} else True
 		data = [{'ids': {'tmdb': int(params['tmdb_id'])}}]
 		data = {'shows' if params['media_type'] == 'tvshow' else 'movies': data}
 		if not action:
 			if not confirm_dialog(text=rem_str, top_space=True): return
-			return remove_from_list(data)
-		else: return add_to_list(data)
+			return trakt_api.remove_from_sync(choice[0], data)
+		else: return trakt_api.add_to_sync(choice[0], data)
 	list_items = {
 		i['movie']['ids']['tmdb'] if i['type'] == 'movie' else i['show']['ids']['tmdb']
 		for i in trakt_api.get_trakt_list_contents('my_lists', *choice[0])
@@ -489,7 +490,7 @@ def options_menu(params, meta=None):
 			if len(item) == 4: kwargs['icon'] = item[3]
 			yield kwargs
 	is_widget = params.get('is_widget', 'false').lower() == 'true'
-	content = params.get('content') or container_content()[:-1]
+	content = params.get('content') or params.get('media_type') or container_content()[:-1]
 	season, episode = params.get('season'), params.get('episode')
 	if not meta:
 		function = metadata.movie_meta if content == 'movie' else metadata.tvshow_meta
@@ -653,7 +654,7 @@ def scrape_with_custom_values(media_type, meta, season=None, episode=None):
 		set_property('fs_filterless_search', 'true')
 	SourceSelect().playback_prep(play_params)
 
-def scrape_from_episode_group(meta, season=None, episode=None):
+def scrape_from_episode_group(meta, season, episode):
 	from indexers.tmdb_api import episode_groups, episode_group_details
 	from modules.sources import SourceSelect
 	user_info = settings.metadata_user_info()
@@ -668,9 +669,6 @@ def scrape_from_episode_group(meta, season=None, episode=None):
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'enumerate': 'true', 'multi_line': 'true'}
 	choice = select_dialog([i[0] for i in choices], **kwargs)
 	if choice is None: return
-	episodes_data = metadata.season_episodes_meta(season, meta, user_info)
-	orig_ep = next((i for i in episodes_data if i['season'] == int(season) and i['episode'] == int(episode)), {})
-	title, premiered = orig_ep.get('title', ''), orig_ep.get('premiered', '')
 	episodes = episode_group_details(choice, user_info['tmdb_api'])
 	if not episodes: return notification(32760)
 	episodes = [
@@ -683,12 +681,14 @@ def scrape_from_episode_group(meta, season=None, episode=None):
 		episodes.index(i) for i in episodes
 		if i['season_number'] == int(season) and i['episode_number'] == int(episode)
 	), None)
-	if index is None: preselect = []
-	else: episodes, preselect = episodes[index:] + episodes[:index], [0]
+	if not index is None:
+		heading = episodes[index]['name']
+		episodes, preselect = episodes[index:] + episodes[:index], [0]
+	else: heading, preselect = meta['title'], []
 	choices = [(item['custom_season'], item['custom_episode'], item['custom_name'], item['custom_title']) for item in episodes]
 	if not choices: return
 	list_items = [{'line1': item[2], 'line2': item[3], 'icon': poster} for item in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': title, 'multi_line': 'true', 'preselect': preselect}
+	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true', 'preselect': preselect}
 	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
 	play_params = {'mode': 'play_media', 'tmdb_id': tmdb_id, 'media_type': 'episode', 'season': season, 'episode': episode}

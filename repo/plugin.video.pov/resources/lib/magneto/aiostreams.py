@@ -18,7 +18,7 @@ class source:
 		self.language = ['en']
 		self.base_link = (
 			"https://aiostreams.stremio.ru",
-			"https://aiostreamsfortheweebs.midnightignite.me"
+			"https://aiostreamsfortheweebsstable.midnightignite.me"
 		)[int(getSetting('aiostreams.url', '0'))]
 		self.movieSearch_link = '/api/v1/search'
 		self.tvSearch_link = '/api/v1/search'

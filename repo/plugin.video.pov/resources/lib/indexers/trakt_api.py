@@ -219,20 +219,31 @@ def trakt_watchlist(media_type, page_no, letter):
 	else: final_list, total_pages = original_list, 1
 	return final_list, total_pages
 
+def trakt_favorites(media_type, page_no, letter):
+	string_insert = 'movie' if media_type in ('movie', 'movies') else 'tvshow'
+	original_list = trakt_fetch_collection_watchlist('favorites', media_type)
+	if settings.paginate():
+		limit = settings.page_limit()
+		final_list, total_pages = paginate_list(original_list, page_no, letter, limit)
+	else: final_list, total_pages = original_list, 1
+	return final_list, total_pages
+
 def trakt_fetch_collection_watchlist(list_type, media_type):
 	if media_type in ('movie', 'movies'): key, string_insert, path_insert = ('movie', 'movie', 'movies')
 	else: key, string_insert, path_insert = ('show', 'tvshow', 'shows')
-	collected_at = 'listed_at' if list_type == 'watchlist' else 'collected_at' if media_type in ('movie', 'movies') else 'last_collected_at'
+	if list_type == 'collection':
+		collected_at = 'collected_at' if media_type in ('movie', 'movies') else 'last_collected_at'
+	else: collected_at = 'listed_at'
 	premiered = 'released' if key == 'movie' else 'first_aired'
 	string = 'trakt_%s_%s' % (list_type, string_insert)
 	url = {'path': 'sync/%s/%s', 'path_insert': (list_type, path_insert), 'params': {'extended': 'full'}, 'with_auth': True, 'pagination': False}
+	if list_type == 'collection': url['params']['limit'] = 1000
 	data = trakt_cache.cache_trakt_object(get_trakt, string, url)
-	if list_type == 'watchlist': data = [i for i in data if i['type'] == key]
-	result = [
-		{'media_ids': i[key]['ids'], 'title': i[key]['title'], 'collected_at': i.get(collected_at), 'premiered': i[key].get(premiered) or ''}
+	return [
+		{'title': i[key]['title'], 'media_ids': i[key]['ids'],
+		 'collected_at': i.get(collected_at), 'premiered': i[key].get(premiered) or ''}
 		for i in data
 	]
-	return result
 
 def add_to_list(user, slug, data):
 	result = call_trakt('users/%s/lists/%s/items' % (user, slug), data=data)
@@ -249,31 +260,18 @@ def remove_from_list(user, slug, data):
 	kodi_utils.container_refresh()
 	return result
 
-def add_to_watchlist(data):
-	result = call_trakt('sync/watchlist', data=data)
-	if result['added']['movies'] + result['added']['shows'] == 0: return kodi_utils.notification(32574)
+def add_to_sync(list_type, data):
+	key = 'episodes' if list_type == 'collection' else 'shows'
+	result = call_trakt('sync/%s' % list_type, data=data)
+	if result['added']['movies'] + result['added'][key] == 0: return kodi_utils.notification(32574)
 	kodi_utils.notification(32576)
 	trakt_sync_activities()
 	return result
 
-def remove_from_watchlist(data):
-	result = call_trakt('sync/watchlist/remove', data=data)
-	if result['deleted']['movies'] + result['deleted']['shows'] == 0: return kodi_utils.notification(32574)
-	kodi_utils.notification(32576)
-	trakt_sync_activities()
-	kodi_utils.container_refresh()
-	return result
-
-def add_to_collection(data):
-	result = call_trakt('sync/collection', data=data)
-	if result['added']['movies'] + result['added']['episodes'] == 0: return kodi_utils.notification(32574)
-	kodi_utils.notification(32576)
-	trakt_sync_activities()
-	return result
-
-def remove_from_collection(data):
-	result = call_trakt('sync/collection/remove', data=data)
-	if result['deleted']['movies'] + result['deleted']['episodes'] == 0: return kodi_utils.notification(32574)
+def remove_from_sync(list_type, data):
+	key = 'episodes' if list_type == 'collection' else 'shows'
+	result = call_trakt('sync/%s/remove' % list_type, data=data)
+	if result['deleted']['movies'] + result['deleted'][key] == 0: return kodi_utils.notification(32574)
 	kodi_utils.notification(32576)
 	trakt_sync_activities()
 	kodi_utils.container_refresh()
@@ -292,7 +290,7 @@ def trakt_trending_popular_lists(list_type):
 def get_trakt_list_contents(list_type, list_id, user, slug):
 	string = 'trakt_list_contents_%s_%s_%s' % (list_type, user, slug)
 #	url = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, slug), 'params': {'extended':'full'}, 'with_auth': True} # , 'method': 'sort_by_headers'}
-	url = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, list_id), 'with_auth': True}
+	url = {'path': 'users/%s/lists/%s/items', 'path_insert': (user, list_id), 'params': {'limit': 1000}, 'with_auth': True}
 	return trakt_cache.cache_trakt_object(get_trakt, string, url)
 
 def trakt_get_lists(list_type):
@@ -595,6 +593,8 @@ def trakt_sync_activities(force_update=False):
 	if _compare(latest_episodes['collected_at'], cached_episodes['collected_at']): trakt_cache.clear_trakt_collection_watchlist_data('collection', 'tvshow')
 	if _compare(latest_movies['watchlisted_at'], cached_movies['watchlisted_at']): trakt_cache.clear_trakt_collection_watchlist_data('watchlist', 'movie')
 	if _compare(latest_shows['watchlisted_at'], cached_shows['watchlisted_at']): trakt_cache.clear_trakt_collection_watchlist_data('watchlist', 'tvshow')
+	if _compare(latest_movies['favorited_at'], cached_movies['favorited_at']): trakt_cache.clear_trakt_collection_watchlist_data('favorites', 'movie')
+	if _compare(latest_shows['favorited_at'], cached_shows['favorited_at']): trakt_cache.clear_trakt_collection_watchlist_data('favorites', 'tvshow')
 	if _compare(latest_shows['dropped_at'], cached_shows['dropped_at']): trakt_cache.clear_trakt_hidden_data('dropped')
 	if _compare(latest_movies['recommendations_at'], cached_movies['recommendations_at']): trakt_cache.clear_trakt_recommendations('movies')
 	if _compare(latest_shows['recommendations_at'], cached_shows['recommendations_at']): trakt_cache.clear_trakt_recommendations('shows')

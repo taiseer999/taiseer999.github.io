@@ -141,6 +141,7 @@ def default_activities():
 				'collected_at': '2020-01-01T00:00:01.000Z',
 				'rated_at': '2020-01-01T00:00:01.000Z',
 				'watchlisted_at': '2020-01-01T00:00:01.000Z',
+				'favorited_at': '2020-01-01T00:00:01.000Z',
 				'recommendations_at': '2020-01-01T00:00:01.000Z',
 				'commented_at': '2020-01-01T00:00:01.000Z',
 				'paused_at': '2020-01-01T00:00:01.000Z',
@@ -159,6 +160,7 @@ def default_activities():
 				{
 				'rated_at': '2020-01-01T00:00:01.000Z',
 				'watchlisted_at': '2020-01-01T00:00:01.000Z',
+				'favorited_at': '2020-01-01T00:00:01.000Z',
 				'recommendations_at': '2020-01-01T00:00:01.000Z',
 				'commented_at': '2020-01-01T00:00:01.000Z',
 				'hidden_at': '2020-01-01T00:00:01.000Z',
@@ -182,6 +184,10 @@ def default_activities():
 				'commented_at': '2020-01-01T00:00:01.000Z'
 				},
 			'watchlist':
+				{
+				'updated_at': '2020-01-01T00:00:01.000Z'
+				},
+			'favorites':
 				{
 				'updated_at': '2020-01-01T00:00:01.000Z'
 				},

@@ -246,12 +246,10 @@ def title_key(title, ignore_articles):
 	if not ignore_articles: return title
 	try:
 		if title is None: title = ''
-		articles = ['the', 'a', 'an']
-		match = re.match(r'^((\w+)\s+)', title.lower())
-		if match and match.group(2) in articles: offset = len(match.group(1))
-		else: offset = 0
-		return title[offset:]
-	except: return title
+		match = re.match(r'^(?:the|an|a)\s+(\w.*)', title, re.I)
+		if match and match.group(1): title = match.group(1)
+	except: pass
+	return title
 
 def sort_for_article(_list, _key, ignore_articles):
 	if not ignore_articles: _list.sort(key=lambda k: k[_key])
@@ -297,6 +295,7 @@ def paginate_list(item_list, page, letter, limit=20):
 			start_index = _get_start_index(i)
 			if start_index: break
 		item_list = item_list[start_index:]
+	if not item_list: return item_list, page
 	pages = list(chunks(item_list, limit))
 	total_pages = len(pages)
 	return pages[page - 1], total_pages

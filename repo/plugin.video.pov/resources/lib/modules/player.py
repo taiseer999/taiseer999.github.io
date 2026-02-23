@@ -40,6 +40,9 @@ class POVPlayer(kodi_utils.xbmc_player):
 			if bookmark == 'cancel': return
 			self.meta.update({'url': url, 'bookmark': bookmark})
 			listitem = self._make_listitem()
+			listitem.setContentLookup(False)
+			listitem.setLabel(self.title)
+			listitem.setPath(url)
 			listitem.setProperty('StartPercent', str(bookmark))
 			try:
 				trakt_ids = {'tmdb': self.tmdb_id, 'imdb': self.imdb_id, 'slug': make_title_slug(self.title)}
@@ -93,21 +96,26 @@ class POVPlayer(kodi_utils.xbmc_player):
 	def _make_listitem(self):
 		listitem = kodi_utils.make_listitem()
 		try:
-			duration, plot, genre, trailer = self.meta_get('duration'), self.meta_get('plot'), self.meta_get('genre'), self.meta_get('trailer')
-			rating, votes, premiered, studio = self.meta_get('rating'), self.meta_get('votes'), self.meta_get('premiered'), self.meta_get('studio')
 			poster_main, poster_backup, fanart_main, fanart_backup = settings.get_art_provider()
 			poster = self.meta_get(poster_main) or self.meta_get(poster_backup) or poster_empty
 			fanart = self.meta_get(fanart_main) or self.meta_get(fanart_backup) or fanart_empty
 			clearlogo = self.meta_get('clearlogo') or self.meta_get('tmdblogo') or ''
+			if settings.get_fanart_data():
+				banner, clearart, landscape = self.meta_get('banner'), self.meta_get('clearart'), self.meta_get('landscape')
+			else: banner, clearart, landscape = '', '', ''
+			listitem.setArt({
+				'poster': poster, 'fanart': fanart, 'icon': poster, 'clearlogo': clearlogo,
+				'banner': banner, 'landscape': landscape, 'clearart': clearart,
+				'tvshow.clearlogo': clearlogo, 'tvshow.banner': banner,
+				'tvshow.landscape': landscape, 'tvshow.clearart': clearart
+			})
 			if self.media_type == 'movie':
 				if KODI_VERSION < 20:
 					listitem.setCast(self.meta_get('cast', []))
 					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
-					listitem.setInfo('video', {'mediatype': 'movie', 'trailer': trailer, 'title': self.title, 'size': '0', 'duration': duration,
-						'plot': plot, 'premiered': premiered, 'studio': studio, 'year': self.year, 'genre': genre, 'tagline': self.meta_get('tagline'),
-						'imdbnumber': self.imdb_id, 'director': self.meta_get('director'), 'writer': self.meta_get('writer'), 'rating': rating, 'votes': votes})
+					listitem.setInfo('video', set_info(self.meta))
 				else:
-					videoinfo = infoTagger(listitem, self.meta)
+					videoinfo = infotagger(listitem, self.meta)
 					videoinfo.setCast(make_cast_list(self.meta_get('cast', [])))
 					videoinfo.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
 					videoinfo.setMediaType('movie')
@@ -115,19 +123,12 @@ class POVPlayer(kodi_utils.xbmc_player):
 				if KODI_VERSION < 20:
 					listitem.setCast(self.meta_get('cast', []))
 					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-					listitem.setInfo('video', {'mediatype': 'episode', 'trailer': trailer, 'title': self.meta_get('ep_name'), 'size': '0', 'duration': duration,
-						'plot': plot, 'premiered': premiered, 'studio': studio, 'year': self.year, 'genre': genre, 'tvshowtitle': self.title,
-						'imdbnumber': self.imdb_id, 'season': self.season, 'episode': self.episode, 'rating': rating, 'votes': votes})
+					listitem.setInfo('video', {**set_info(self.meta), 'mediatype': 'episode', 'title': self.meta_get('ep_name')})
 				else:
-					videoinfo = infoTagger(listitem, self.meta)
+					videoinfo = infotagger(listitem, self.meta)
 					videoinfo.setCast(make_cast_list(self.meta_get('cast', [])))
 					videoinfo.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
 					videoinfo.setMediaType('episode')
-			if settings.get_fanart_data():
-				banner, clearart, landscape = self.meta_get('banner'), self.meta_get('clearart'), self.meta_get('landscape')
-			else: banner, clearart, landscape = '', '', ''
-			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo, 'landscape': landscape,
-							'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': landscape, 'tvshow.banner': banner})
 		except: pass
 		return listitem
 
@@ -262,7 +263,16 @@ class POVPlayer(kodi_utils.xbmc_player):
 	def onPlayBackStopped(self):
 		self.playback_event = 'stop'
 
-def infoTagger(listitem, meta=None):
+def set_info(meta):
+	return {key: val for key in (
+		'country', 'director', 'duration', 'genre', 'imdbnumber', 'mediatype',
+		'mpaa', 'originaltitle', 'overlay', 'playcount', 'plot', 'premiered', 'rating',
+		'studio', 'tag', 'tagline', 'title', 'trailer', 'votes', 'writer', 'year',
+		# tvshow exclusive
+		'episode', 'season', 'status', 'tvshowtitle'
+	) if key in meta and (val := meta[key])}
+
+def infotagger(listitem, meta=None):
 	infotag = listitem.getVideoInfoTag(offscreen=True)
 	if not meta: return infotag
 	for key, val in (

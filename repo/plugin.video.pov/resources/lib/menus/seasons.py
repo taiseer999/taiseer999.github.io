@@ -97,7 +97,6 @@ class Seasons:
 					listitem.addContextMenuItems(cm)
 					listitem.setProperties(props)
 					listitem.setLabel(title)
-#					listitem.setContentLookup(False)
 					listitem.setArt({'poster': poster, 'icon': poster, 'thumb': poster, 'fanart': fanart, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo,
 									'landscape': landscape, 'tvshow.poster': poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': landscape, 'tvshow.banner': banner})
 					if KODI_VERSION < 20:
@@ -152,8 +151,7 @@ class Seasons:
 					playcount, overlay = get_watched_status_episode(self.watched_info, string(tmdb_id), season, episode)
 					resumetime, progress = get_resumetime(bookmarks, tmdb_id, season, episode)
 					thumb = item_get('thumb') or fanart
-					if thumb_fanart: background = thumb
-					else: background = fanart
+					background = thumb if thumb_fanart else fanart
 					item.update({'trailer': trailer, 'tvshowtitle': show_title, 'premiered': premiered, 'genre': genre, 'duration': episode_run_time, 'mpaa': mpaa, 'studio': studio,
 								'playcount': playcount, 'overlay': overlay})
 					extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'tvshow', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
@@ -191,7 +189,6 @@ class Seasons:
 					listitem.addContextMenuItems(cm)
 					listitem.setProperties(props)
 					listitem.setLabel(display)
-#					listitem.setContentLookup(False)
 					listitem.setArt({'poster': show_poster, 'fanart': background, 'thumb': thumb, 'icon': thumb, 'banner': banner, 'clearart': clearart, 'clearlogo': clearlogo,
 									'landscape': thumb, 'tvshow.poster': show_poster, 'tvshow.clearart': clearart, 'tvshow.clearlogo': clearlogo, 'tvshow.landscape': thumb, 'tvshow.banner': banner})
 					if KODI_VERSION < 20:

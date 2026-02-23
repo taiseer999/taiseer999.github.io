@@ -26,12 +26,10 @@ class Movies:
 	def __init__(self, params):
 		self.params = params
 		self.items, self.new_page, self.total_pages = [], {}, None
-		self.id_type, self.list, self.action, self.exit_list_params = (
-			self.params.get('id_type', 'tmdb_id'),
-			self.params.get('list', []),
-			self.params.get('action'),
-			self.params.get('exit_list_params')
-		)
+		self.id_type = self.params.get('id_type', 'tmdb_id')
+		self.list = self.params.get('list', [])
+		self.action = self.params.get('action')
+		self.exit_list_params = self.params.get('exit_list_params')
 		self.append = self.items.append
 		self.current_date = get_datetime_function()
 		self.meta_user_info = settings.metadata_user_info()
@@ -49,21 +47,21 @@ class Movies:
 		self.watched_title = ('POV', 'Trakt', 'MDBList')[self.watched_indicators]
 		self.poster_main, self.poster_backup, self.fanart_main, self.fanart_backup = settings.get_art_provider()
 
-	def build_movie_content(self, _position, _id):
+	def build_movie_content(self, position, tag):
 		try:
-			meta = movie_meta_function(self.id_type, _id, self.meta_user_info, self.current_date)
+			meta = movie_meta_function(self.id_type, tag, self.meta_user_info, self.current_date)
 			meta_get = meta.get
 			if not meta or meta_get('blank_entry', False): return
 			playcount, overlay = get_watched_function(self.watched_info, string(meta['tmdb_id']))
 			if self.widget_hide_watched and playcount: return
 			meta.update({'playcount': playcount, 'overlay': overlay})
 			resumetime, progress = get_resumetime(self.bookmarks, string(meta['tmdb_id']))
-			sort = _id.get('sort', _position) if self.id_type == 'trakt_dict' else _position
-			props = {'pov_sort_order': string(sort)}
+			props = {'pov_sort_order': string(position)}
 			cm = []
 			cm_append = cm.append
 			clearprog_params, unwatched_params, watched_params = '', '', ''
 			rootname, title, year = meta_get('rootname'), meta_get('title'), meta_get('year')
+			display = rootname if self.include_year_in_title else title
 			tmdb_id, imdb_id = meta_get('tmdb_id'), meta_get('imdb_id')
 			poster = meta_get(self.poster_main) or meta_get(self.poster_backup) or poster_empty
 			fanart = meta_get(self.fanart_main) or meta_get(self.fanart_backup) or fanart_empty
@@ -76,7 +74,7 @@ class Movies:
 			else: banner, clearart, landscape, discart = '', '', '', ''
 			play_params = build_url({'mode': 'play_media', 'media_type': 'movie', 'tmdb_id': tmdb_id})
 			extras_params = build_url({'mode': 'extras_menu_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
-			options_params = build_url({'mode': 'options_menu_choice', 'content': 'movie', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
+			options_params = build_url({'mode': 'options_menu_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'is_widget': self.is_widget})
 			recommended_params = build_url({'mode': 'build_movie_list', 'action': 'tmdb_movies_recommendations', 'tmdb_id': tmdb_id})
 			trakt_manager_params = build_url({'mode': 'trakt_manager_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': 'None'})
 			tmdb_manager_params = build_url({'mode': 'tmdb_manager_choice', 'media_type': 'movie', 'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': 'None'})
@@ -108,8 +106,7 @@ class Movies:
 			listitem = kodi_utils.make_listitem()
 			listitem.addContextMenuItems(cm)
 			listitem.setProperties(props)
-			listitem.setLabel(rootname if self.include_year_in_title else title)
-#			listitem.setContentLookup(False)
+			listitem.setLabel(display)
 			listitem.setArt({'poster': poster, 'fanart': fanart, 'icon': poster, 'banner': banner, 'clearart': clearart,
 							'clearlogo': clearlogo, 'landscape': landscape, 'discart': discart})
 			if KODI_VERSION < 20:
@@ -134,7 +131,8 @@ class Movies:
 				videoinfo.setRating(meta_get('rating'))
 				videoinfo.setStudios((meta_get('studio'),))
 				videoinfo.setTagLine(meta_get('tagline'))
-				videoinfo.setTitle(rootname if self.include_year_in_title else title)
+				videoinfo.setTags((imdb_id, string(tmdb_id)))
+				videoinfo.setTitle(display)
 				videoinfo.setTrailer(meta_get('trailer'))
 				videoinfo.setVotes(meta_get('votes'))
 				videoinfo.setWriters(meta_get('writer').split(', '))
@@ -162,7 +160,7 @@ class Menu(Movies):
 		'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_moviesanime_year': 'year'
 	}
 	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
-	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_collection_lists')
+	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_favorites', 'trakt_collection_lists')
 	mdblist_personal = ('mdblist_collection', 'mdblist_watchlist')
 	imdb_personal = ('imdb_watchlist', 'imdb_user_list_contents', 'imdb_keywords_list_contents')
 	similar = ('tmdb_movies_similar', 'tmdb_movies_recommendations')
