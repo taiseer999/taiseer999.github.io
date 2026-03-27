@@ -154,7 +154,7 @@ def build_mdbl_list(params):
 	if total_pages > 2 and not is_widget and use_alphabet:
 		url = {'mode': 'build_navigate_to_page', 'current_page': page, 'total_pages': total_pages,
 				'user': user, 'slug': slug, 'name': name, 'list_id': list_id, 'list_type': list_type,
-				'transfer_mode': 'build_mdbl_list', 'media_type': 'Media'}
+				'transfer_mode': 'build_mdbl_list', 'mediatype': 'Media'}
 		kodi_utils.add_dir(__handle__, url, jump2_str, iconImage=item_jump, isFolder=False)
 	kodi_utils.add_items(__handle__, items)
 	if total_pages > page:
@@ -170,7 +170,7 @@ def mdbl_account_info():
 	try:
 		kodi_utils.show_busy_dialog()
 		account_info = mdblist_api.call_mdblist('user')
-		joined = jsondate_to_datetime(account_info['date_joined'], '%Y-%m-%dT%H:%M:%S+00:00')
+		joined = jsondate_to_datetime(account_info['date_joined'], '%Y-%m-%dT%H:%M:%SZ')
 		api_requests = account_info['api_requests']
 		remaining = api_requests - account_info['api_requests_count']
 		body = []

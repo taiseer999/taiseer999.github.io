@@ -1,0 +1,16 @@
+  TODO:
+- downloader, select dialog
+
+  [COLOR orange][B]Version 6.03[/B][/COLOR]
+- Extras updated thanks to pypi imdbinfo.
+- Thanks to Tomf!
+- Added debrid and cached status tag to results.
+- Added Hightlight Priority Language setting.
+- Refactor for playback meta to match addon meta language.
+- Fix for Trakt dropped shows.
+- (Experimental) Added FlickList.tv personal lists and watched/resume points.
+- Initial release.
+
+  [COLOR orange][B]CREDITS[/B][/COLOR]
+- Viren070, k3l3vra, Fen, Venom.
+

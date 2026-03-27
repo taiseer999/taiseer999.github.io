@@ -27,7 +27,7 @@
         <control type="group">
 
             <right>0</right>
-            <width>353
+            <width>320
             </width>
             <visible>$PARAM[visible_right]</visible>
             <include content="View_Line_Divider">
@@ -51,7 +51,7 @@
                 <label> $VAR[Furniture_Header_Right_Temperature,,] • $INFO[System.Time]</label>
                 <align>right</align>
                 <aligny>center</aligny>
-                <textcolor>main_fg_70</textcolor>
+                <textcolor>main_fg_100</textcolor>
                 <font>font_Topbar_bold</font>
                 <height>80</height>
                 
@@ -61,7 +61,7 @@
                 <label>$INFO[System.CPUTemperature,[COLOR lightgreen][/COLOR] ,]  $INFO[system.memory(used.percent),[COLOR darkorange][/COLOR] ,]  $VAR[NetworkVar]  </label>
                 <align>right</align>
                 <aligny>center</aligny>
-                <textcolor>main_fg_70</textcolor>
+                <textcolor>main_fg_100</textcolor>
                 <font>font_Topbarinfo</font>
                 <centertop>-10%</centertop>
                 <height>80</height>
@@ -265,7 +265,7 @@
                         <left>0</left>
                         <aligny>center</aligny>
                         <label>$INFO[ListItem.Path] $INFO[ListItem.FileName]</label>
-                        <textcolor>main_fg_70</textcolor>
+                        <textcolor>main_fg_100</textcolor>
                         <font>font_tiny</font>
                         <width>1760</width>
                     </control>
@@ -447,7 +447,7 @@
                     </include>
                     <control type="label">
                         <font>font_hint_bold</font>
-                        <textcolor>main_fg_70</textcolor>
+                        <textcolor>main_fg_100</textcolor>
                         <shadowcolor>main_bg_30</shadowcolor>
                         <label>$PARAM[minilabel]</label>
                         <width>auto</width>
@@ -457,7 +457,7 @@
                     </control>
                     <control type="label">
                         <font>font_hint_bold</font>
-                        <textcolor>main_fg_70</textcolor>
+                        <textcolor>main_fg_100</textcolor>
                         <shadowcolor>main_bg_30</shadowcolor>
                         <label>$PARAM[percentage_label]</label>
                         <width>auto</width>

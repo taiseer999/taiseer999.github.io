@@ -69,7 +69,7 @@ class Subtitles(kodi_utils.xbmc_player):
 					for i in result:
 						listitem = kodi_utils.make_listitem()
 						listitem.setLabel('%s%s' % (i['display'].upper(), ' (SDH)' if i['isHearingImpaired'] else ''))
-						listitem.setLabel2('%s[CR]%s' % (i['source'].upper(), i['media']))
+						listitem.setLabel2('%s - %s[CR]%s' % (i.get('origin') or 'N/A', i['source'].upper(), i.get('release') or i['media']))
 						listitem.setArt({'icon': i['flagUrl'].replace('24.png', '64.png')})
 						yield listitem
 				self.pause()
@@ -80,16 +80,11 @@ class Subtitles(kodi_utils.xbmc_player):
 			chosen_sub = result[chosen_sub]
 			try: lang = kodi_utils.convert_language(chosen_sub['language'])
 			except: lang = chosen_sub['language']
-			encoding = chosen_sub['encoding'].lower()
 			final_filename = sub_filename + '_%s.%s' % (lang, chosen_sub['format'])
 			final_path = '%s%s' % (subtitle_path, final_filename)
 			response = subtitles_download(chosen_sub['url'])
 			if isinstance(response, str): return kodi_utils.notification('Subtitles Error: %s' % response)
-			try:
-				if not 'utf-8' in encoding:
-					import codecs
-					content = codecs.decode(response.content, encoding=encoding)
-				else: content = response.text
+			try: content = response.text
 			except: content = response.content
 			with kodi_utils.open_file(final_path, 'w') as file: file.write(content)
 			kodi_utils.sleep(1000)

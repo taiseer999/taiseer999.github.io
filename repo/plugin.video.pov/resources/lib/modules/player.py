@@ -2,12 +2,14 @@ import json
 from threading import Thread
 from caches import watched_cache as ws
 from windows import open_window
+from indexers.metadata import art_infodict, movie_show_infodict, episode_infodict, info_tagger
 from modules import kodi_utils, settings
 from modules.utils import sec2time, make_title_slug
 # from modules.kodi_utils import logger
 
 KODI_VERSION, make_cast_list = kodi_utils.get_kodi_version(), kodi_utils.make_cast_list
 ls, get_setting = kodi_utils.local_string, kodi_utils.get_setting
+get_art_provider, meta_user_info = settings.get_art_provider, settings.metadata_user_info
 fanart_empty = kodi_utils.get_addoninfo('fanart')
 poster_empty = kodi_utils.media_path('box_office.png')
 
@@ -33,7 +35,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			self.meta = meta or {}
 			self.meta_get = self.meta.get
 			self.tmdb_id, self.imdb_id, self.tvdb_id = self.meta_get('tmdb_id'), self.meta_get('imdb_id'), self.meta_get('tvdb_id')
-			self.media_type, self.title, self.year = self.meta_get('media_type'), self.meta_get('title'), self.meta_get('year')
+			self.mediatype, self.title, self.year = self.meta_get('mediatype'), self.meta_get('title'), self.meta_get('year')
 			self.season, self.episode = self.meta_get('season', ''), self.meta_get('episode', '')
 			if any(i in self.meta for i in ('random', 'random_continual')): bookmark = 0
 			else: bookmark = self.bookmarkPOV()
@@ -46,14 +48,14 @@ class POVPlayer(kodi_utils.xbmc_player):
 			listitem.setProperty('StartPercent', str(bookmark))
 			try:
 				trakt_ids = {'tmdb': self.tmdb_id, 'imdb': self.imdb_id, 'slug': make_title_slug(self.title)}
-				if self.media_type == 'episode': trakt_ids['tvdb'] = self.tvdb_id
+				if self.mediatype == 'episode': trakt_ids['tvdb'] = self.tvdb_id
 				kodi_utils.clear_property('script.trakt.ids')
 				kodi_utils.set_property('script.trakt.ids', json.dumps(trakt_ids))
 			except: pass
 			self.playback_event = False
 			self.play(url, listitem)
 
-			if self.media_type == 'episode':
+			if self.mediatype == 'episode':
 				self.play_random_continual = 'random_continual' in self.meta
 				if not self.play_random_continual and self.autoplay_nextep: self.autoplay_next_episode = 'random' not in self.meta
 				if not self.play_random_continual and self.autoscrape_nextep: self.autoscrape_next_episode = 'random' not in self.meta
@@ -96,46 +98,32 @@ class POVPlayer(kodi_utils.xbmc_player):
 	def _make_listitem(self):
 		listitem = kodi_utils.make_listitem()
 		try:
-			poster_main, poster_backup, fanart_main, fanart_backup = settings.get_art_provider()
-			poster = self.meta_get(poster_main) or self.meta_get(poster_backup) or poster_empty
-			fanart = self.meta_get(fanart_main) or self.meta_get(fanart_backup) or fanart_empty
-			clearlogo = self.meta_get('clearlogo') or self.meta_get('tmdblogo') or ''
-			if settings.get_fanart_data():
-				banner, clearart, landscape = self.meta_get('banner'), self.meta_get('clearart'), self.meta_get('landscape')
-			else: banner, clearart, landscape = '', '', ''
-			listitem.setArt({
-				'poster': poster, 'fanart': fanart, 'icon': poster, 'clearlogo': clearlogo,
-				'banner': banner, 'landscape': landscape, 'clearart': clearart,
-				'tvshow.clearlogo': clearlogo, 'tvshow.banner': banner,
-				'tvshow.landscape': landscape, 'tvshow.clearart': clearart
-			})
-			if self.media_type == 'movie':
+			listitem.setArt(art_infodict(self.meta, (*get_art_provider(), poster_empty, fanart_empty), meta_user_info()))
+			if self.mediatype == 'movie':
 				if KODI_VERSION < 20:
-					listitem.setCast(self.meta_get('cast', []))
 					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
-					listitem.setInfo('video', set_info(self.meta))
+					listitem.setInfo('video', movie_show_infodict(self.meta))
+					listitem.setCast(self.meta_get('cast', []))
 				else:
-					videoinfo = infotagger(listitem, self.meta)
-					videoinfo.setCast(make_cast_list(self.meta_get('cast', [])))
-					videoinfo.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
-					videoinfo.setMediaType('movie')
+					infotag = info_tagger(listitem, movie_show_infodict(self.meta))
+					infotag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
+					infotag.setCast(make_cast_list(self.meta_get('cast', [])))
 			else:
 				if KODI_VERSION < 20:
-					listitem.setCast(self.meta_get('cast', []))
 					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-					listitem.setInfo('video', {**set_info(self.meta), 'mediatype': 'episode', 'title': self.meta_get('ep_name')})
+					listitem.setInfo('video', {**episode_infodict(self.meta), 'title': self.meta_get('ep_name')})
+					listitem.setCast(self.meta_get('cast', []))
 				else:
-					videoinfo = infotagger(listitem, self.meta)
-					videoinfo.setCast(make_cast_list(self.meta_get('cast', [])))
-					videoinfo.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-					videoinfo.setMediaType('episode')
+					infotag = info_tagger(listitem, {**episode_infodict(self.meta), 'title': self.meta_get('ep_name')})
+					infotag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
+					infotag.setCast(make_cast_list(self.meta_get('cast', [])))
 		except: pass
 		return listitem
 
 	def bookmarkPOV(self):
 		bookmark = 0
 		watched_indicators = settings.watched_indicators()
-		try: resume_point, curr_time, resume_id = ws.detect_bookmark(ws.get_bookmarks(watched_indicators, self.media_type), self.tmdb_id, self.season, self.episode)
+		try: resume_point, curr_time, resume_id = ws.detect_bookmark(ws.get_bookmarks(watched_indicators, self.mediatype), self.tmdb_id, self.season, self.episode)
 		except: resume_point, curr_time = 0, 0
 		resume_check = float(resume_point)
 		if resume_check > 0:
@@ -144,13 +132,13 @@ class POVPlayer(kodi_utils.xbmc_player):
 			if watched_indicators in (1, 2): resume_point = '%s%%' % str(percent)
 			else: resume_point = sec2time(raw_time, n_msec=0)
 			bookmark = self.getResumeStatus(resume_point, percent, bookmark)
-			if bookmark == 0: ws.erase_bookmark(self.media_type, self.tmdb_id, self.season, self.episode)
+			if bookmark == 0: ws.erase_bookmark(self.mediatype, self.tmdb_id, self.season, self.episode)
 		return bookmark
 
 	def getResumeStatus(self, resume_point, percent, bookmark):
-		if settings.auto_resume(self.media_type): return percent
+		if settings.auto_resume(self.mediatype): return percent
 		choice = open_window(
-			('windows.sources', 'ProgressMedia'),
+			('windows.progress', 'ProgressMedia'),
 			'progress_media.xml',
 			meta=self.meta,
 			text=ls(32790) % resume_point,
@@ -176,7 +164,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.media_marked = True
 		try:
 			if self.current_point >= self.set_watched:
-				if self.media_type == 'movie': watched_function, watched_params = ws.mark_as_watched_unwatched_movie, {
+				if self.mediatype == 'movie': watched_function, watched_params = ws.mark_as_watched_unwatched_movie, {
 					'mode': 'mark_as_watched_unwatched_movie', 'action': 'mark_as_watched', 'refresh': 'false', 'from_playback': 'true',
 					'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year
 				}
@@ -188,7 +176,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			else:
 				kodi_utils.clear_property('pov_total_autoplays')
 				if not self.current_point >= self.set_resume: return
-				ws.set_bookmark(self.media_type, self.tmdb_id, self.curr_time, self.total_time, self.title, self.season, self.episode)
+				ws.set_bookmark(self.mediatype, self.tmdb_id, self.curr_time, self.total_time, self.title, self.season, self.episode)
 		except: pass
 
 	def run_media_watched(self, function, params):
@@ -220,8 +208,8 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.subs_searched = True
 		try:
 			poster = self.meta.get('poster') or poster_empty
-			season = self.season if self.media_type == 'episode' else None
-			episode = self.episode if self.media_type == 'episode' else None
+			season = self.season if self.mediatype == 'episode' else None
+			episode = self.episode if self.mediatype == 'episode' else None
 			from indexers.subtitles import Subtitles
 			Thread(target=Subtitles().run, args=(self.title, self.imdb_id, season, episode, poster)).start()
 		except: pass
@@ -230,7 +218,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 		self.stingers_checked = True
 		try:
 			poster = self.meta.get('poster') or poster_empty
-			tmdb_id = self.tmdb_id if self.media_type == 'movie' and self.stinger_enabled else None
+			tmdb_id = self.tmdb_id if self.mediatype == 'movie' and self.stinger_enabled else None
 			Thread(target=self.getStingers, args=(tmdb_id, poster)).start()
 		except: pass
 
@@ -262,41 +250,4 @@ class POVPlayer(kodi_utils.xbmc_player):
 
 	def onPlayBackStopped(self):
 		self.playback_event = 'stop'
-
-def set_info(meta):
-	return {key: val for key in (
-		'country', 'director', 'duration', 'genre', 'imdbnumber', 'mediatype',
-		'mpaa', 'originaltitle', 'overlay', 'playcount', 'plot', 'premiered', 'rating',
-		'studio', 'tag', 'tagline', 'title', 'trailer', 'votes', 'writer', 'year',
-		# tvshow exclusive
-		'episode', 'season', 'status', 'tvshowtitle'
-	) if key in meta and (val := meta[key])}
-
-def infotagger(listitem, meta=None):
-	infotag = listitem.getVideoInfoTag(offscreen=True)
-	if not meta: return infotag
-	for key, val in (
-		('country', 'setCountries'), ('director', 'setDirectors'),
-		('duration', 'setDuration'), ('genre', 'setGenres'),
-		('imdbnumber', 'setIMDBNumber'), ('mediatype', 'setMediaType'),
-		('mpaa', 'setMpaa'), ('original_title', 'setOriginalTitle'),
-		('playcount', 'setPlaycount'), ('plot', 'setPlot'),
-		('premiered', 'setFirstAired' if 'episode' in meta else 'setPremiered'),
-		('rating', 'setRating'), ('studio', 'setStudios'),
-		('tagline', 'setTagLine'), ('title', 'setTitle'),
-		('trailer', 'setTrailer'), ('votes', 'setVotes'),
-		('writer', 'setWriters'), ('year', 'setYear'),
-		# tvshow exclusive
-		('air_date', 'setPremiered'), ('aired', 'setFirstAired'),
-		('ep_name', 'setTitle'), ('episode', 'setEpisode'), ('season', 'setSeason'),
-		('status', 'setTvShowStatus'), ('tvshowtitle', 'setTvShowTitle')
-	):
-		try:
-			if not key in meta or not (arg := meta[key]): continue
-			if   key in {'director', 'genre', 'studio', 'writer'}: arg = arg.split(', ')
-			elif key in {'episode', 'season', 'year'}: arg = int(arg)
-			func = getattr(infotag, val)
-			func(arg)
-		except: pass
-	return infotag
 

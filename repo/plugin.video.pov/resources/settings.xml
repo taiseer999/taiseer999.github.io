@@ -12,30 +12,20 @@
 		<setting id="debug.location" label="Logging Location" type="enum" default="0" values="Kodi Log|Addon Log" enable="eq(-1,true)" visible="eq(-1,true)" />
 		<setting label="Test All Source Providers (Magneto)" type="action" action="RunPlugin(plugin://plugin.video.pov/?mode=speedTest)" />
 		<setting label="Sources" type="lsep" />
-		<setting id="provider.animetosho" label="animetosho" type="bool" default="false" />
 		<setting id="provider.bitmagnet" label="bitmagnet" type="bool" default="false" />
 		<setting id="provider.dmm" label="dmm" type="bool" default="false" />
 		<setting id="provider.nyaa" label="nyaa" type="bool" default="false" />
 		<setting id="provider.piratebay" label="piratebay" type="bool" default="true" />
-		<setting id="provider.torrentio" label="torrentio" type="bool" default="true" />
 		<setting id="provider.torrentdownload" label="torrentdownload" type="bool" default="false" />
+		<setting id="provider.torrentio" label="torrentio" type="bool" default="true" />
 		<setting id="provider.torrentsdb" label="torrentsdb" type="bool" default="false" />
 		<setting id="provider.aiostreams" label="aiostreams (comet/mediafusion)" type="bool" default="false" />
 			<setting id="aiostreams.url" label="aiostreams instance" type="enum" default="0" values="Kuu-lection|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+		<setting id="provider.meteor" label="meteor" type="bool" default="false" />
 		<setting id="provider.torz" label="stremthru torz" type="bool" default="false" />
 			<setting id="torz.url" label="torz instance" type="enum" default="0" values="Kuu-lection|Munif|Midnightignite" subsetting="true" visible="eq(-1,true)" />
 		<setting id="provider.zilean" label="zilean" type="bool" default="false" />
 			<setting id="zilean.url" label="zilean instance" type="enum" default="0" values="Kuu-lection|Midnightignite" subsetting="true" visible="eq(-1,true)" />
-		<setting id="provider.prowlarr" label="prowlarr" type="bool" default="false" />
-			<setting id="prowlarr.token" label="x-api-key" type="text" default="" subsetting="true" visible="eq(-1,true)" />
-			<setting id="prowlarr.url" label="url" type="text" default="" subsetting="true" visible="eq(-2,true)" />
-		<!-- Folders 1-5 -->
-		<setting label="Folders 1-5" type="lsep" />
-		<setting id="provider.folders" label="Enable" type="bool" default="false" />
-		<setting id="folders.manage" label="Manage Folder Scrapers" type="action" default="[B]Browse...[/B]" visible="eq(-1,true)" action="RunPlugin(plugin://plugin.video.pov/?mode=folder_scraper_manager_choice)" />
-		<setting id="folders.title_filter" label="Filter Results by Name" type="bool" default="false" visible="eq(-2,true)" />
-		<setting id="check.folders" label="Check Before Full Search" type="bool" default="false" visible="eq(-3,true)" />
-		<setting id="results.sort_folders_first" label="Show Results at Top" type="bool" default="true" visible="eq(-4,true)" />
 	</category>
 	<!-- Provider Accounts -->
 	<category label="My Services">
@@ -53,13 +43,6 @@
 			<setting id="results.sort_pmcloud_first" label="Show Results at Top" type="bool" default="true" subsetting="true" visible="eq(-3,true)+eq(-8,true)+!eq(-9,)" />
 		<setting id="pm.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="8" option="int" range="1,1,10" visible="eq(-9,true)+!eq(-10,)" />
 		<setting id="pm.expires" label="Premium Expires Notification (days)" type="slider" default="0" option="int" range="0,1,7" visible="eq(-10,true)+!eq(-11,)" />
-		<!-- EasyDebrid -->
-		<setting label="EasyDebrid" type="lsep" />
-		<setting id="ed.token" label="ed token" type="text" default="" visible="false" />
-		<setting id="ed.enabled" label="Enable" type="bool" default="true" visible="!eq(-1,)" />
-		<setting id="ed.account_id" label="Customer ID" type="text" default="" enable="false" visible="eq(-1,true)+!eq(-2,)" />
-		<setting id="ed.torrent.enabled" label="Use Torrent Services" type="bool" default="true" enable="true" visible="eq(-2,true)+!eq(-3,)" />
-		<setting id="ed.priority" label="Priority (Lower Number Equals Higher Priority)" type="slider" default="9" option="int" range="1,1,10" visible="eq(-3,true)+!eq(-4,)" />
 		<!-- TorBox-->
 		<setting label="TorBox" type="lsep" />
 		<setting id="tb.token" label="tb token" type="text" default="" visible="false" />
@@ -166,11 +149,6 @@
 		<setting id="tmdb.account_id" label="User" type="text" default="" enable="false" visible="false"/>
 		<setting id="tmdblist.sort_name" label="Sort List Names Type" type="enum" default="0" values="Title|Number of Items|Recently Updated" visible="!eq(-2,)" />
 		<setting id="tmdblist.watchlist_sync" label="Purge Watchlist on Trakt Refresh" type="bool" default="false" visible="!eq(-3,)" />
-		<!-- IMDb -->
-		<setting label="IMDb" type="lsep" />
-		<setting id="imdb_user" label="User" type="text" default="" enable="true" />
-		<setting id="imdb_lists.sort_type" label="Sort Type" type="enum" default="0" values="List Default|Alphabetical|IMDb Rating|Popularity|Your Rating|Number Of Ratings|Release Date|Runtime|Date Added" visible="!eq(-1,)" />
-		<setting id="imdb_lists.sort_direction" label="Sort Order" type="enum" default="0" values="Ascending|Descending" visible="!eq(-2,)" />
 	</category>
 	<!-- General -->
 	<category label="General">
@@ -194,21 +172,6 @@
 		<!-- Hidden -->
 		<setting id="database.maintenance.due" type="text" default="0" visible="false" />
 		<setting id="reuse_language_invoker" type="text" default="true" visible="false" />
-		<setting id="folder1.display_name" type="text" default="Folder 1" visible="false" />
-		<setting id="folder1.movies_directory" type="text" default="None" visible="false" />
-		<setting id="folder1.tv_shows_directory" type="text" default="None" visible="false" />
-		<setting id="folder2.display_name" type="text" default="Folder 2" visible="false" />
-		<setting id="folder2.movies_directory" type="text" default="None" visible="false" />
-		<setting id="folder2.tv_shows_directory" type="text" default="None" visible="false" />
-		<setting id="folder3.display_name" type="text" default="Folder 3" visible="false" />
-		<setting id="folder3.movies_directory" type="text" default="None" visible="false" />
-		<setting id="folder3.tv_shows_directory" type="text" default="None" visible="false" />
-		<setting id="folder4.display_name" type="text" default="Folder 4" visible="false" />
-		<setting id="folder4.movies_directory" type="text" default="None" visible="false" />
-		<setting id="folder4.tv_shows_directory" type="text" default="None" visible="false" />
-		<setting id="folder5.display_name" type="text" default="Folder 5" visible="false" />
-		<setting id="folder5.movies_directory" type="text" default="None" visible="false" />
-		<setting id="folder5.tv_shows_directory" type="text" default="None" visible="false" />
 	</category>
 	<!-- Next Episodes -->
 	<category label="Features">
@@ -217,7 +180,7 @@
 		<setting id="trakt_indicators_active" label="trakt_indicators_active" type="text" default="false" visible="false" />
 		<setting id="mdbl_indicators_active" label="mdbl_indicators_active" type="text" default="false" visible="false" />
 		<setting id="watched_indicators" label="Watched Status Provider" type="enum" default="0" values="POV|Trakt|MDBList" visible="eq(-2,true)|eq(-1,true)" />
-		<setting id="amble.indicators" label="Authorize Trakt or MDBList for More options" type="text" enable="false" visible="eq(-2,false)" />
+		<setting id="amble.indicators" label="Authorize Trakt or MDBList for More options" type="text" enable="false" visible="eq(-3,false)+eq(-2,false)" />
 		<setting id="sync_kodi_library_watchstatus" label="Set Watched in Kodi Library when Watched in POV" type="bool" default="false" />
 		<!-- Content and Sorting -->
 		<setting label="Next Episodes" type="lsep" />
@@ -258,16 +221,6 @@
 		<setting id="sort.collection" label="Collection Sort Type" type="enum" default="0" values="Title|Date Added|Release Date" />
 		<setting id="sort.watchlist" label="Watchlist Sort Type" type="enum" default="0" values="Title|Date Added|Release Date" />
 		<setting id="ignore_articles" label="Ignore Articles When Sorting Lists" type="bool" default="true" />
-		<!-- Context Menu -->
-		<setting label="Context Menu Sorting" type="lsep" />
-		<setting id="context.options" label="Options..." type="slider" default="1" range="0,1,7" option="int" />
-		<setting id="context.extras" label="Extras.../Playback.../Browse..." type="slider" default="2" range="0,1,7" option="int" />
-		<setting id="context.trakt" label="Trakt Lists Manager" type="slider" default="3" range="0,1,7" option="int" />
-		<setting id="context.mdblist" label="MDBList Manager" type="slider" default="4" range="0,1,7" option="int" />
-		<setting id="context.tmdblist" label="TMDB Lists Manager" type="slider" default="4" range="0,1,7" option="int" />
-		<setting id="context.favourites" label="Favorites Manager" type="slider" default="5" range="0,1,7" option="int" />
-		<setting id="context.mark" label="Mark Watched/Unwatched" type="slider" default="6" range="0,1,7" option="int" />
-		<setting id="context.exit" label="Exit List" type="slider" default="7" range="0,1,7" option="int" />
 	</category>
 	<!-- Playback -->
 	<category label="Playback">
@@ -336,20 +289,18 @@
 		<setting label="Results Color Highlights" type="lsep" />
 		<setting id="highlight.type" label="Highlight Results Based On" type="enum" default="2" values="Scraper Type|Provider|Quality" />
 			<setting id="hoster.identify" label="Hosters Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-1,0)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=hoster)" />
-			<setting id="torrent.identify" label="Torrents Color" type="action" default="fuchsia" subsetting="true" visible="eq(-2,0)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=torrent)" />
+			<setting id="torrent.identify" label="Torrents Color" type="action" default="magenta" subsetting="true" visible="eq(-2,0)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=torrent)" />
 			<setting id="provider.rd_colour" label="Real Debrid Color" type="action" default="seagreen" subsetting="true" visible="eq(-3,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=rd)" />
 			<setting id="provider.pm_colour" label="Premiumize Color" type="action" default="orangered" subsetting="true" visible="eq(-4,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=pm)" />
 			<setting id="provider.ad_colour" label="All Debrid Color" type="action" default="goldenrod" subsetting="true" visible="eq(-5,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ad)" />
 			<setting id="provider.tb_colour" label="TorBox Color" type="action" default="darkseagreen" subsetting="true" visible="eq(-6,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=tb)" />
 			<setting id="provider.oc_colour" label="Offcloud Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-7,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=oc)" />
-			<setting id="provider.ed_colour" label="EasyDebrid Color" type="action" default="cornflowerblue" subsetting="true" visible="eq(-8,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=ed)" />
-			<setting id="provider.easynews_colour" label="Easynews Color" type="action" default="darkturquoise" subsetting="true" visible="eq(-9,0)|eq(-9,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=easynews)" />
-			<setting id="provider.debrid_cloud_colour" label="Debrid Cloud Color" type="action" default="darkviolet" subsetting="true" visible="eq(-10,0)|eq(-10,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=debrid_cloud)" />
-			<setting id="provider.folders_colour" label="Folders 1-5 Color" type="action" default="darkgoldenrod" subsetting="true" visible="eq(-11,0)|eq(-11,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=folders)" />
-			<setting id="scraper_4k_highlight" label="4K Results Color" type="action" default="magenta" subsetting="true" visible="eq(-12,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_4k_highlight)" />
-			<setting id="scraper_1080p_highlight" label="1080P Results Color" type="action" default="cyan" subsetting="true" visible="eq(-13,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_1080p_highlight)" />
-			<setting id="scraper_720p_highlight" label="720P Results Color" type="action" default="mediumorchid" subsetting="true" visible="eq(-14,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_720p_highlight)" />
-			<setting id="scraper_SD_highlight" label="SD Results Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-15,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_SD_highlight)" />
+			<setting id="provider.easynews_colour" label="Easynews Color" type="action" default="darkturquoise" subsetting="true" visible="eq(-8,0)|eq(-8,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=easynews)" />
+			<setting id="provider.debrid_cloud_colour" label="Debrid Cloud Color" type="action" default="darkviolet" subsetting="true" visible="eq(-9,0)|eq(-9,1)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_color_choice&amp;setting=debrid_cloud)" />
+			<setting id="scraper_4k_highlight" label="4K Results Color" type="action" default="magenta" subsetting="true" visible="eq(-10,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_4k_highlight)" />
+			<setting id="scraper_1080p_highlight" label="1080P Results Color" type="action" default="cyan" subsetting="true" visible="eq(-11,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_1080p_highlight)" />
+			<setting id="scraper_720p_highlight" label="720P Results Color" type="action" default="mediumorchid" subsetting="true" visible="eq(-12,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_720p_highlight)" />
+			<setting id="scraper_SD_highlight" label="SD Results Color" type="action" default="dodgerblue" subsetting="true" visible="eq(-13,2)" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_quality_color_choice&amp;setting=scraper_SD_highlight)" />
 		<!-- Progress Color Highlights -->
 		<setting label="Progress Color Highlights" type="lsep" />
 		<setting id="int_dialog_highlight" label="Internal Scrapers Color" type="action" default="magenta" action="RunPlugin(plugin://plugin.video.pov/?mode=scraper_dialog_color_choice&amp;setting=internal)" />
@@ -364,16 +315,9 @@
 		<!-- RPDB -->
 		<setting label="Rating Poster Database" type="lsep" />
 		<setting id="rpdb_api_key" label="API Key" type="text" default="" />
-			<setting id="get_rpdb_movies" label="Use Poster At Movie Level" type="bool" default="false" subsetting="true" enable="!eq(-1,)" />
-			<setting id="get_rpdb_series" label="Use Poster At TV Show Level" type="bool" default="false" subsetting="true" enable="!eq(-2,)" />
-		<!-- Fanart -->
-		<setting label="Extra Art (Powered by Fanart.tv)" type="lsep" />
-		<setting id="get_fanart_data" label="Include Extra Art" type="bool" default="false" />
-			<setting id="fanarttv.default" label="Use as Default Provider (Slow)" type="bool" default="false" subsetting="true" visible="eq(-1,true)" />
-		<!-- Fanart.tv -->
-		<setting label="Fanart.tv" type="lsep" />
-		<setting id="fanart_amble1" label="Become a VIP member at fanart.tv for many benefits" type="text" enable="false" />
-		<setting id="fanart_client_key" label="API Key (optional)" type="text" default="fe073550acf157bdb8a4217f215c0882" enable="true" option="hidden" />
+		<setting id="rpdb_theme" label="Theme" type="enum" default="0" values="Default|Rounded-Blocks|Blocks" />
+			<setting id="get_rpdb_movies" label="Use Poster At Movie Level" type="bool" default="false" subsetting="true" enable="!eq(-2,)" />
+			<setting id="get_rpdb_series" label="Use Poster At TV Show Level" type="bool" default="false" subsetting="true" enable="!eq(-3,)" />
 		<!-- TMDb -->
 		<setting label="TMDb" type="lsep" />
 		<setting id="image_resolutions" label="TMDb Image Resolution" type="enum" default="2" values="Low|Medium|High|Original" />
@@ -382,6 +326,19 @@
 		<!-- Trakt -->
 		<setting id="trakt.client_id" type="text" default="6bc29124c3d9466e06a3ed19a7b5976fcb28311008401e1ce04cf08196f8b16a" visible="false" />
 		<setting id="trakt.client_secret" type="text" default="99478842b17d44d7accafef45c6c1bbba235792753c195069ae149595cd3a919" visible="false" />
+	</category>
+	<!-- Context Menu -->
+	<category label="Context Menu">
+		<!-- Context Menu Sorting -->
+		<setting label="Context Menu Sorting" type="lsep" />
+		<setting id="context.options" label="Options..." type="slider" default="1" range="0,1,7" option="int" />
+		<setting id="context.extras" label="Extras.../Playback.../Browse..." type="slider" default="2" range="0,1,7" option="int" />
+		<setting id="context.trakt" label="Trakt Lists Manager" type="slider" default="3" range="0,1,7" option="int" />
+		<setting id="context.mdblist" label="MDBList Manager" type="slider" default="4" range="0,1,7" option="int" />
+		<setting id="context.tmdblist" label="TMDB Lists Manager" type="slider" default="4" range="0,1,7" option="int" />
+		<setting id="context.favorites" label="Favorites Manager" type="slider" default="5" range="0,1,7" option="int" />
+		<setting id="context.mark" label="Mark Watched/Unwatched" type="slider" default="6" range="0,1,7" option="int" />
+		<setting id="context.exit" label="Exit List" type="slider" default="7" range="0,1,7" option="int" />
 	</category>
 </settings>
 

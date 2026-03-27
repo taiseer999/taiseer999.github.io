@@ -34,8 +34,8 @@ class Router:
 			close_all_dialog()
 			player.play(params['url'])
 		elif mode == 'play_media':
-			from modules.sources import SourceSelect
-			SourceSelect.factory(params)
+			from sources import Sources
+			Sources.factory(params)
 		elif 'choice' in mode:
 			from modules import dialogs
 			if mode == 'scraper_color_choice':
@@ -44,8 +44,6 @@ class Router:
 				dialogs.scraper_dialog_color_choice(params['setting'])
 			elif mode == 'scraper_quality_color_choice':
 				dialogs.scraper_quality_color_choice(params['setting'])
-			elif mode == 'imdb_images_choice':
-				dialogs.imdb_images_choice(params['imdb_id'], params['rootname'])
 			elif mode == 'set_quality_choice':
 				dialogs.set_quality_choice(params['quality_setting'])
 			elif mode == 'results_sorting_choice':
@@ -58,16 +56,14 @@ class Router:
 				dialogs.meta_language_choice()
 			elif mode == 'extras_menu_choice':
 				dialogs.extras_menu(params)
-			elif mode == 'favourites_choice':
-				dialogs.favourites_choice(params)
+			elif mode == 'favorites_choice':
+				dialogs.favorites_choice(params)
 			elif mode == 'trakt_manager_choice':
 				dialogs.trakt_manager_choice(params)
 			elif mode == 'tmdb_manager_choice':
 				dialogs.tmdb_manager_choice(params)
 			elif mode == 'mdbl_manager_choice':
 				dialogs.mdbl_manager_choice(params)
-			elif mode == 'folder_scraper_manager_choice':
-				dialogs.folder_scraper_manager_choice()
 			elif mode == 'set_language_filter_choice':
 				dialogs.set_language_filter_choice(params['filter_setting'])
 			elif mode == 'extras_lists_choice':
@@ -78,9 +74,6 @@ class Router:
 			if 'trakt_account_info' in mode:
 				from menus.trakt import trakt_account_info
 				trakt_account_info()
-			elif 'hide_unhide_trakt_items' in mode:
-				from menus.trakt_api import hide_unhide_trakt_items
-				hide_unhide_trakt_items(params['action'], params['media_type'], params['media_id'], params['section'])
 			else:
 				from modules.utils import manual_function_import
 				function = manual_function_import('indexers.trakt_api', mode.split('.')[-1])
@@ -147,15 +140,9 @@ class Router:
 			elif mode == 'build_navigate_to_page':
 				from modules.dialogs import build_navigate_to_page
 				build_navigate_to_page(params)
-			elif mode == 'imdb_build_user_lists':
-				from indexers.imdb_api import imdb_build_user_lists
-				imdb_build_user_lists(params_get('media_type'))
 			elif mode == 'build_popular_people':
 				from menus.people import popular_people
 				popular_people()
-			elif mode == 'imdb_build_keyword_results':
-				from indexers.imdb_api import imdb_build_keyword_results
-				imdb_build_keyword_results(params['media_type'], params['query'])
 		elif 'watched_unwatched' in mode:
 			if mode == 'mark_as_watched_unwatched_episode':
 				from caches.watched_cache import mark_as_watched_unwatched_episode
@@ -171,7 +158,11 @@ class Router:
 				mark_as_watched_unwatched_movie(params)
 			elif mode == 'watched_unwatched_erase_bookmark':
 				from caches.watched_cache import erase_bookmark
-				erase_bookmark(params_get('media_type'), params_get('tmdb_id'), params_get('season', ''), params_get('episode', ''), params_get('refresh', 'false'))
+				erase_bookmark(
+					params_get('mediatype'), params_get('tmdb_id'),
+					params_get('season', ''), params_get('episode', ''),
+					params_get('refresh', 'false')
+				)
 		elif 'toggle' in mode:
 			if mode == 'toggle_provider':
 				from modules.utils import toggle_provider
@@ -185,7 +176,7 @@ class Router:
 				search_history(params)
 			elif mode == 'clear_search_history':
 				from menus.history import clear_search_history
-				clear_search_history()
+				clear_search_history(params)
 			elif mode == 'remove_from_history':
 				from menus.history import remove_from_search_history
 				remove_from_search_history(params)
@@ -217,9 +208,6 @@ class Router:
 		elif 'offcloud' in mode:
 			from menus.offcloud import Menu
 			Menu().run(params)
-		elif 'easydebrid' in mode:
-			from menus.easydebrid import Menu
-			Menu().run(params)
 		elif '_settings' in mode:
 			if mode == 'open_settings':
 				from modules.kodi_utils import open_settings
@@ -239,7 +227,10 @@ class Router:
 			Images().run(params)
 		elif '_text' in mode:
 			from modules.kodi_utils import show_text
-			show_text(params_get('heading'), params_get('text'), params_get('file'), params_get('font_size', 'small'), params_get('kodi_log', 'false') == 'true')
+			show_text(
+				params_get('heading'), params_get('text'), params_get('file'),
+				params_get('font_size', 'small'), params_get('kodi_log', 'false') == 'true'
+			)
 		elif '_view' in mode:
 			if mode == 'choose_view':
 				from modules.kodi_utils import choose_view
