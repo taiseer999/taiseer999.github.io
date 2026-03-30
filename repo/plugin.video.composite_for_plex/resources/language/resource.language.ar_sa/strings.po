@@ -1,10 +1,10 @@
 # Kodi language file
-# Addon Name: Composite
+# Addon Name: DPlex
 # Addon id: plugin.video.composite_for_plex
 # Addon Provider: anxdpanic
 msgid ""
 msgstr ""
-"Project-Id-Version: Composite\n"
+"Project-Id-Version: DPlex\n"
 "Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
 "PO-Revision-Date: 2020-01-18 21:15+0500\n"
@@ -18,11 +18,11 @@ msgstr ""
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
-msgstr ""
+msgstr "تصفح وشغل الفيديو والصوتيات والصور من سيرفر Plex الخاص بك.[CR][CR]نسخة معدلة ومطورة باسم DPlex."
 
 msgctxt "Addon Disclaimer"
-msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
-msgstr ""
+msgid "Deplex is NOT an official Plex add-on and is not supported or endorsed by Plex."
+msgstr "إضافة DPlex ليست إضافة رسمية من Plex ولا يتم دعمها من قبلهم."
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -1427,8 +1427,8 @@ msgid "Recently Added include watched"
 msgstr ""
 
 msgctxt "#30765"
-msgid "Composite Playlist"
-msgstr ""
+msgid "Deplex Playlist"
+msgstr "قائمة تشغيل DPlex"
 
 msgctxt "#30766"
 msgid "Generate a playlist from the information below"
@@ -1520,7 +1520,7 @@ msgstr ""
 
 msgctxt "#30788"
 msgid "Show [B]Composite Playlist[/B] menu"
-msgstr ""
+msgstr "إظهار قائمة [B]DPlex[/B]"
 
 msgctxt "#30789"
 msgid "Server(s)"

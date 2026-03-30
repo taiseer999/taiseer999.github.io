@@ -5,45 +5,46 @@
     <onload>Dialog.Close(videoosd,true)</onload>
     <controls>
         <control type="group">
+            <!-- Slide in from right + fade in -->
             <animation type="WindowOpen" reversible="false">
-                <effect type="fade" start="0" end="100" time="500"/>
+                <effect type="fade" start="0" end="100" time="400" tween="sine" easing="out"/>
+                <effect type="slide" start="80,0" end="0,0" time="400" tween="cubic" easing="out"/>
             </animation>
+            <!-- Fade out + slide right -->
             <animation type="WindowClose" reversible="false">
-                <effect type="fade" start="100" end="0" time="500"/>
+                <effect type="fade" start="100" end="0" time="300" tween="sine" easing="in"/>
+                <effect type="slide" start="0,0" end="80,0" time="300" tween="cubic" easing="in"/>
             </animation>
+            <!-- Positioned at bottom-right corner -->
             <control type="group">
-                <height>64</height>
-                <control type="image">
-                    <width>100%</width>
-                    <height>64</height>
-                    <texture colordiffuse="44000000">background.png</texture>
-                </control>
-                <control type="group">
-                    <top>12</top>
-                    <right>20</right>
-                    <width>70%</width>
-                    <control type="grouplist" id="3001">
-                        <orientation>horizontal</orientation>
-                        <height>40</height>
-                        <itemgap>10</itemgap>
-                        <align>right</align>
-                        <control type="button" id="3002">
-                            <label>$ADDON[plugin.video.composite_for_plex 30751]</label>
-                            <height>40</height>
-                            <width min="50">auto</width>
-                            <font>font20_title</font>
-                            <textoffsetx>32</textoffsetx>
-                            <textcolor>ddffffff</textcolor>
-                            <focusedcolor>eeffffff</focusedcolor>
-                            <selectedcolor>ddffffff</selectedcolor>
-                            <shadowcolor>22000000</shadowcolor>
-                            <aligny>center</aligny>
-                            <align>center</align>
-                            <texturefocus border="10" colordiffuse="FF063FB2">button.png</texturefocus>
-                            <texturenofocus border="10" colordiffuse="FF323232">button.png</texturenofocus>
-                            <alttexturefocus border="10" colordiffuse="FF063FB2">button.png</alttexturefocus>
-                            <alttexturenofocus border="10" colordiffuse="FF323232">button.png</alttexturenofocus>
-                        </control>
+                <bottom>90</bottom>
+                <right>48</right>
+                <width>260</width>
+                <height>52</height>
+                <control type="grouplist" id="3001">
+                    <orientation>horizontal</orientation>
+                    <height>52</height>
+                    <width>260</width>
+                    <itemgap>0</itemgap>
+                    <align>right</align>
+                    <control type="button" id="3002">
+                        <label>$ADDON[plugin.video.composite_for_plex 30751]</label>
+                        <height>52</height>
+                        <width min="160">auto</width>
+                        <font>font14</font>
+                        <textoffsetx>28</textoffsetx>
+                        <textcolor>FFFFFFFF</textcolor>
+                        <focusedcolor>FF111111</focusedcolor>
+                        <selectedcolor>FFFFFFFF</selectedcolor>
+                        <shadowcolor>66000000</shadowcolor>
+                        <aligny>center</aligny>
+                        <align>center</align>
+                        <!-- Focused: bright white pill button -->
+                        <texturefocus border="26" colordiffuse="FFFFFFFF">button.png</texturefocus>
+                        <!-- Unfocused: semi-transparent dark with white border feel -->
+                        <texturenofocus border="26" colordiffuse="BB333333">button.png</texturenofocus>
+                        <alttexturefocus border="26" colordiffuse="FFFFFFFF">button.png</alttexturefocus>
+                        <alttexturenofocus border="26" colordiffuse="BB333333">button.png</alttexturenofocus>
                     </control>
                 </control>
             </control>

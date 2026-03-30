@@ -29,6 +29,10 @@ def process_shows(context, url, tree=None):
     xbmcplugin.addSortMethod(get_handle(), xbmcplugin.SORT_METHOD_MPAA_RATING)
 
     # Get the URL and server name.  Get the XML and parse
+    # Append includeGuids=1 to retrieve IMDB/TMDB/TVDB IDs
+    if 'includeGuids' not in url:
+        url += '&includeGuids=1' if '?' in url else '?includeGuids=1'
+
     tree = get_xml(context, url, tree)
     if tree is None:
         return

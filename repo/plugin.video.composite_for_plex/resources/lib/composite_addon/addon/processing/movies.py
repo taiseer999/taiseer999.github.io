@@ -29,6 +29,10 @@ def process_movies(context, url, tree=None):
     # get the server name from the URL, which was passed via the on screen listing..
     server = context.plex_network.get_server_from_url(url)
 
+    # Append includeGuids=1 to retrieve IMDB/TMDB/TVDB IDs
+    if 'includeGuids' not in url:
+        url += '&includeGuids=1' if '?' in url else '?includeGuids=1'
+
     tree = get_xml(context, url, tree)
     if tree is None:
         return

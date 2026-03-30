@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+
 """
+Copyright (C) 2011-2018 PleXBMC (plugin.video.plexbmc) by hippojay (Dave Hawes-Johnson)
+Copyright (C) 2018-2026 DPlex (plugin.video.composite_for_plex)
 
-    Copyright (C) 2011-2018 PleXBMC (plugin.video.plexbmc) by hippojay (Dave Hawes-Johnson)
-    Copyright (C) 2018-2020 Composite (plugin.video.composite_for_plex)
+This file is part of Composite (plugin.video.composite_for_plex)
 
-    This file is part of Composite (plugin.video.composite_for_plex)
-
-    SPDX-License-Identifier: GPL-2.0-or-later
-    See LICENSES/GPL-2.0-or-later.txt for more information.
+SPDX-License-Identifier: GPL-2.0-or-later
+See LICENSES/GPL-2.0-or-later.txt for more information.
 """
 
 from urllib.parse import unquote
@@ -25,6 +25,7 @@ from .constants import StreamControl
 from .containers import Item
 from .items.common import get_banner_image
 from .items.common import get_fanart_image
+from .items.common import get_guid_ids
 from .items.common import get_thumb_image
 from .items.track import create_track_item
 from .logger import Logger
@@ -36,10 +37,126 @@ from .utils import write_pickled
 
 LOG = Logger()
 
+_clearlogo_cache = {}
+_TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/original'
+
+def _get_tmdbhelper_db_path():
+    """Return the TMDbHelper database path using Kodi's special:// protocol."""
+    return xbmcvfs.translatePath(
+        'special://userdata/addon_data/plugin.video.themoviedb.helper/database_07/ItemDetails.db'
+    )
+
+def _get_clearlogo_cached(tmdb_id, media_type='movie'):
+    """Read clearlogo from TMDbHelper database."""
+    if not tmdb_id:
+        return ''
+    cache_key = '%s*%s' % (tmdb_id, media_type)
+    if cache_key in _clearlogo_cache:
+        return _clearlogo_cache[cache_key]
+    try:
+        import sqlite3 as _sq
+        parent_id = '%s.%s' % (media_type, tmdb_id)
+        conn = _sq.connect(_get_tmdbhelper_db_path())
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT icon FROM art WHERE type='logos' AND parent_id=? "
+            "ORDER BY CASE WHEN iso_language='en' THEN 0 ELSE 1 END, rating DESC LIMIT 1",
+            (parent_id,)
+        )
+        row = cur.fetchone()
+        conn.close()
+        icon = row[0] if row and row[0] else ''
+        
+        if icon:
+            # Clean markdown artifacts like [url](url)/image.png
+            if '](' in icon:
+                icon = icon.split('](')[-1].replace(')', '')
+            
+            if icon.startswith('http'):
+                logo = icon
+            else:
+                logo = _TMDB_IMAGE_BASE + icon
+        else:
+            logo = ''
+            
+        _clearlogo_cache[cache_key] = logo
+        return logo
+    except:  # pylint: disable=bare-except
+        _clearlogo_cache[cache_key] = ''
+        return ''
+
+def _get_premium_info(media):
+    parts = []
+
+    res = media.get('videoResolution', '')
+    if res:
+        try:
+            r = int(res)
+            res_label = '4K' if r > 1088 else ('1080p' if r >= 1080 else ('720p' if r >= 720 else 'SD'))
+        except ValueError:
+            res_label = res.upper()
+        parts.append('[ %s ]' % res_label)
+
+    part_el = media.find('Part')
+    hdr_type = ''
+    audio_extra = ''
+
+    if part_el is not None:
+        for stream in part_el.findall('.//Stream'):
+            stype = stream.get('streamType')
+            if stype == '1' and not hdr_type:
+                dt = stream.get('displayTitle', '').upper()
+                cid = stream.get('codecID', '').upper()
+                if stream.get('DOVIBLPresent') == '1' or 'DOVI' in cid or 'DV' in dt:
+                    hdr_type = 'DV/HDR' if 'HDR' in dt else 'DV'
+                elif 'HDR10+' in dt:
+                    hdr_type = 'HDR10+'
+                elif 'HDR' in dt or stream.get('colorTransfer') in ('smpte2084', 'arib-std-b67'):
+                    hdr_type = 'HDR'
+            elif stype == '2' and not audio_extra:
+                dt = stream.get('displayTitle', '').upper()
+                if 'ATMOS' in dt:
+                    audio_extra = 'Atmos'
+                elif 'DTS:X' in dt or 'DTSX' in dt:
+                    audio_extra = 'DTS:X'
+            if hdr_type and audio_extra:
+                break
+
+    if hdr_type:
+        parts.append('[ %s ]' % hdr_type)
+
+    v_codec = media.get('videoCodec', '').lower()
+    if v_codec:
+        cmap = {'hevc': 'HEVC', 'h264': 'H.264', 'h265': 'H.265', 'av1': 'AV1'}
+        parts.append('[ %s ]' % cmap.get(v_codec, v_codec.upper()))
+
+    a_codec = media.get('audioCodec', '').lower()
+    a_ch = media.get('audioChannels', '')
+    if a_codec:
+        amap = {'truehd': 'TrueHD', 'dca': 'DTS', 'dts': 'DTS', 'dtshd': 'DTS-HD',
+                'eac3': 'EAC3', 'ac3': 'AC3'}
+        a_label = amap.get(a_codec, a_codec.upper())
+        if audio_extra:
+            a_label += ' ' + audio_extra
+        if a_ch:
+            ch_map = {'1': '1.0', '2': '2.0', '6': '5.1', '8': '7.1'}
+            a_label += ' ' + ch_map.get(str(a_ch), '%sch' % a_ch)
+        parts.append('[ %s ]' % a_label)
+
+    if part_el is not None:
+        sz = part_el.get('size', '')
+        if sz:
+            try:
+                gb = int(sz) / (1024 ** 3)
+                size_str = ('[ %.1f GB ]' % gb) if gb >= 1 else ('[ %.0f MB ]' % (int(sz) / (1024 ** 2)))
+                parts.append(size_str)
+            except ValueError:
+                pass
+
+    return ' • '.join(parts)
+
 
 def monitor_channel_transcode_playback(context, server, session_id):
-    # Logic may appear backward, but this does allow for a failed start to be detected
-    # First while loop waiting for start
     if context.settings.playback_monitor_disabled():
         return
 
@@ -47,22 +164,17 @@ def monitor_channel_transcode_playback(context, server, session_id):
     monitor = xbmc.Monitor()
     player = xbmc.Player()
 
-    LOG.debug('Not playing yet...sleeping for up to 20 seconds at 2 second intervals')
     while not player.isPlaying() and not monitor.abortRequested():
         count += 1
         if count >= 10:
-            # Waited 20 seconds and still no movie playing - assume it isn't going to..
             return
         if monitor.waitForAbort(2.0):
             return
 
-    LOG.debug('Waiting for playback to finish')
     while player.isPlaying() and not monitor.abortRequested():
         if monitor.waitForAbort(0.5):
             break
 
-    LOG.debug('Playback Stopped')
-    LOG.debug('Stopping PMS transcode job with session: %s' % session_id)
     server.stop_transcode_session(session_id)
 
 
@@ -84,6 +196,9 @@ def play_library_media(context, data):
     if 'includeMarkers' not in data['url']:
         data['url'] += '&' if '?' in data['url'] else '?'
         data['url'] += 'includeMarkers=1'
+
+    if 'includeGuids' not in data['url']:
+        data['url'] += '&includeGuids=1'
 
     tree = get_xml(context, data['url'])
     if tree is None:
@@ -112,8 +227,8 @@ def play_library_media(context, data):
     url, session = get_playback_url_and_session(server, url, stream, transcode, transcode_profile)
 
     details = {
-        'resume': int(int(stream_media['viewOffset']) / 1000),
-        'duration': int(int(stream_media['duration']) / 1000),
+        'resume': int(int(stream_media.get('viewOffset', 0)) / 1000),
+        'duration': int(int(stream_media.get('duration', 0)) / 1000),
     }
 
     if isinstance(data.get('force'), int):
@@ -124,12 +239,10 @@ def play_library_media(context, data):
 
     details['resuming'] = is_resuming_video()
 
-    LOG.debug('Resume has been set to %s' % details['resume'])
-
     list_item = create_playback_item(url, stream, stream_data, details)
 
     if stream['type'] in ['music', 'video']:
-        server.settings = None  # can't pickle xbmcaddon.Addon()
+        server.settings = None
         write_pickled('playback_monitor.pickle', {
             'details': details,
             'media_id': media_id,
@@ -145,8 +258,7 @@ def play_library_media(context, data):
         })
 
     xbmcplugin.setResolvedUrl(get_handle(), True, list_item)
-
-    set_now_playing_properties(server, media_id)
+    set_now_playing_properties(server, media_id, stream)
 
 
 def create_playback_item(url, streams, data, details):
@@ -154,75 +266,138 @@ def create_playback_item(url, streams, data, details):
         data = {}
 
     stream_art = streams.get('art', {})
-
     list_item = xbmcgui.ListItem(path=url, offscreen=True)
 
     if data:
-        fanart = stream_art.get('fanart', '')
-        if not fanart:
-            fanart = stream_art.get('section_art', '')
-
-        thumb = stream_art.get('thumb', '')
-        if not thumb:
-            thumb = stream_art.get('section_art', '')
-        if not thumb:
-            thumb = stream_art.get('fanart', '')
+        fanart = stream_art.get('fanart', '') or stream_art.get('section_art', '')
+        thumb = stream_art.get('thumb', '') or stream_art.get('section_art', '') or stream_art.get('fanart', '')
 
         poster = ''
-        if data.get('mediatype', '') == 'movie':
+        media_type = data.get('mediatype', '')
+        if media_type == 'movie':
             poster = thumb
-        elif data.get('mediatype', '') == 'episode':
-            poster = stream_art.get('season_thumb', '')
-            if not poster:
-                poster = stream_art.get('show_thumb', '')
+            db_media_type = 'movie'
+            tmdb_id = streams.get('guid_ids', {}).get('tmdb_id', '')
+        elif media_type == 'episode':
+            poster = stream_art.get('season_thumb', '') or stream_art.get('show_thumb', '')
+            db_media_type = 'tv'
+            # Try to use the show TMDB ID extracted in StreamData
+            tmdb_id = streams.get('show_tmdb_id', '')
+            # Fallback if not found
+            if not tmdb_id:
+                tmdb_id = streams.get('guid_ids', {}).get('tmdb_id', '')
+        else:
+            db_media_type = media_type
+            tmdb_id = streams.get('guid_ids', {}).get('tmdb_id', '')
+
+        clearlogo = _get_clearlogo_cached(tmdb_id, db_media_type)
 
         list_item.setArt({
             'icon': thumb,
             'thumb': thumb,
             'poster': poster,
             'fanart': fanart,
-            'banner': stream_art.get('banner')
+            'banner': stream_art.get('banner'),
+            'clearlogo': clearlogo,
+            'tvshow.clearlogo': clearlogo, # لعيون سكين Arctic Fuse 3
         })
+
+    # remove keys not recognized by infotagger before set_info
+    for _key in ('tmdb_id', 'tvdb_id', 'imdb_id'):
+        data.pop(_key, None)
 
     info_tag = ListItemInfoTag(list_item, streams['type'])
     info_tag.set_info(data)
-    time_dict = {
-        'TotalTime': int(details['duration']),
-    }
+    time_dict = {'TotalTime': int(details['duration'])}
     if details.get('resuming') and details.get('resume'):
         time_dict['ResumeTime'] = int(details['resume'])
         data['playcount'] = '0'
-
-        LOG.debug('Playback from resume point: %s' % details['resume'])
 
     info_tag.set_resume_point(time_dict)
 
     if streams['type'] == 'music':
         list_item.setProperty('culrc.source', i18n('Plex powered by LyricFind'))
 
+    guid_ids = streams.get('guid_ids', {})
+    if guid_ids.get('imdb_id'):
+        list_item.setProperty('IMDBNumber', guid_ids['imdb_id'])
+        list_item.setProperty('imdb_id', guid_ids['imdb_id'])
+    if guid_ids.get('tmdb_id'):
+        list_item.setProperty('tmdb_id', guid_ids['tmdb_id'])
+    if guid_ids.get('tvdb_id'):
+        list_item.setProperty('tvdb_id', guid_ids['tvdb_id'])
+
+    # --- التعديل الجذري للترجمات لضمان ظهور اللغات ---
+    subtitles_all = streams.get('subtitles_all', [])
+    LOG.debug('subtitles_all count: %d' % len(subtitles_all))
+    
+    if subtitles_all:
+        import os
+        tmp_dir = xbmcvfs.translatePath('special://temp/dplex_subs/')
+        try:
+            if not xbmcvfs.exists(tmp_dir):
+                xbmcvfs.mkdirs(tmp_dir)
+        except:
+            pass
+
+        sub_paths = []
+        for sub in subtitles_all:
+            sub_url = sub.get('key')
+            if not sub_url:
+                continue
+                
+            lang = sub.get('language') or sub.get('languageCode') or 'und'
+            fmt = (sub.get('format') or sub.get('codec') or 'srt').lower()
+            stream_id = sub.get('id', '0')
+            filename = '%s.%s.%s' % (stream_id, lang, fmt)
+            local_path = os.path.join(tmp_dir, filename)
+
+            try:
+                # نحمل الترجمة فوراً لتمرير المسار المحلي الذي يحتوي على اسم اللغة لكودي
+                if not xbmcvfs.exists(local_path):
+                    xbmcvfs.copy(sub_url, local_path)
+                
+                if xbmcvfs.exists(local_path):
+                    sub_paths.append(local_path)
+                else:
+                    sub_paths.append(sub_url)
+            except:
+                sub_paths.append(sub_url)
+
+        if sub_paths:
+            list_item.setSubtitles(sub_paths)
+    # ------------------------------------------------
+
     return list_item
 
 
-def set_now_playing_properties(server, media_id):
+def set_now_playing_properties(server, media_id, stream=None):
     window = xbmcgui.Window(10000)
     window.setProperty('plugin.video.composite-nowplaying.server', server.get_location())
     window.setProperty('plugin.video.composite-nowplaying.id', media_id)
+
+    if stream:
+        guid_ids = stream.get('guid_ids', {})
+        if guid_ids.get('imdb_id'):
+            window.setProperty('plugin.video.composite-nowplaying.imdb_id', guid_ids['imdb_id'])
+        if guid_ids.get('tmdb_id'):
+            window.setProperty('plugin.video.composite-nowplaying.tmdb_id', guid_ids['tmdb_id'])
+        if guid_ids.get('tvdb_id'):
+            window.setProperty('plugin.video.composite-nowplaying.tvdb_id', guid_ids['tvdb_id'])
 
 
 def get_playback_url_and_session(server, url, streams, transcode, transcode_profile):
     protocol = url.split(':', 1)[0]
 
     if protocol == 'file':
-        LOG.debug('We are playing a local file')
         return url.split(':', 1)[1], None
 
     if protocol.startswith('http'):
-        LOG.debug('We are playing a stream')
         if transcode:
-            LOG.debug('We will be transcoding the stream')
             return server.get_universal_transcode(streams['extra']['path'],
                                                   transcode_profile=transcode_profile)
-
+        if 'X-Plex-Token' in url:
+            return url, None
         return server.get_formatted_url(url), None
 
     return url, None
@@ -255,32 +430,32 @@ class StreamData:
         self.context = context
         self.server = server
         self.tree = tree
-
         self._content = None
 
         self.data = {
-            'contents': 'type',  # What type of data we are holding
-            'audio': {},  # Audio data held in a dict
-            'audio_count': 0,  # Number of audio streams
-            'subtitle': {},  # Subtitle data (embedded) held as a dict
-            'sub_count': 0,  # Number of subtitle streams
-            'parts': [],  # The different media locations
-            'parts_count': 0,  # Number of media locations
-            'media': {},  # Resume/duration data for media
-            'details': [],  # Bitrate, resolution and container for each part
-            'sub_offset': -1,  # Stream index for selected subs
-            'audio_offset': -1,  # Stream index for select audio
-            'full_data': {},  # Full metadata extract if requested
-            'type': 'video',  # Type of metadata
+            'contents': 'type',
+            'audio': {},
+            'audio_count': 0,
+            'subtitle': {},
+            'subtitles_all': [],
+            'sub_count': 0,
+            'parts': [],
+            'parts_count': 0,
+            'media': {},
+            'details': [],
+            'sub_offset': -1,
+            'audio_offset': -1,
+            'full_data': {},
+            'type': 'video',
             'intro_markers': [],
+            'guid_ids': {},
             'extra': {},
+            'show_tmdb_id': '', # تمت إضافتها لتخزين ID المسلسل
         }
 
         self.update_data()
 
     def update_data(self):
-        LOG.debug('Gathering stream info')
-
         if not self._get_content():
             return
 
@@ -289,49 +464,28 @@ class StreamData:
 
         if self.data['type'] == 'video':
             self._get_video_data()
-
         if self.data['type'] == 'music':
             self._get_track_data()
 
         self._get_art()
-
         self._get_media_details()
 
         if (self.data['type'] == 'video' and
                 self.context.settings.stream_control() == StreamControl().PLEX):
             self._get_audio_and_subtitles()
-        else:
-            LOG.debug('Stream selection is set OFF')
 
     @property
     def stream(self):
-        LOG.debug(self.data)
         return self.data
 
     def _get_content(self):
-        content = self.tree.find('Video')
-        if content is not None:
-            self.data['type'] = 'video'
-            self.data['extra']['path'] = content.get('key')
-            self._content = content
-            return True
-
-        content = self.tree.find('Track')
-        if content is not None:
-            self.data['type'] = 'music'
-            self.data['extra']['path'] = content.get('key')
-            self._content = content
-            return True
-
-        content = self.tree.find('Photo')
-        if content is not None:
-            self.data['type'] = 'picture'
-            self.data['extra']['path'] = content.get('key')
-            self._content = content
-            return True
-
-        LOG.debug('No content data found')
-        self._content = None
+        for tag, media_type in [('Video', 'video'), ('Track', 'music'), ('Photo', 'picture')]:
+            content = self.tree.find(tag)
+            if content is not None:
+                self.data['type'] = media_type
+                self.data['extra']['path'] = content.get('key')
+                self._content = content
+                return True
         return False
 
     def _get_video_data(self):
@@ -344,7 +498,7 @@ class StreamData:
             'rating': float(self._content.get('rating', 0)),
             'studio': [encode_utf8(self._content.get('studio', ''))],
             'mpaa': encode_utf8(self._content.get('contentRating', '')),
-            'year': int(self._content.get('year', 0)),
+            'year': int(self._content.get('year', 0) or 0),
             'tagline': self._content.get('tagline', ''),
             'mediatype': 'video'
         }
@@ -362,32 +516,58 @@ class StreamData:
             )
             self.data['full_data']['mediatype'] = 'episode'
 
+            # --- تعديل لاستخراج TMDB ID الخاص بالمسلسل (ضروري للوجوهات) ---
+            show_tmdb_id = ''
+            gp_guid = self._content.get('grandparentGuid', '')
+            if 'themoviedb://' in gp_guid:
+                show_tmdb_id = gp_guid.split('themoviedb://')[1].split('?')[0].replace('tv-', '')
+            
+            # إذا لم يكن موجوداً مباشرة، سنقوم بجلبه من تفاصيل المسلسل من بليكس
+            if not show_tmdb_id and self._content.get('grandparentKey'):
+                try:
+                    gp_url = self.server.get_formatted_url(self._content.get('grandparentKey') + '?includeGuids=1')
+                    gp_tree = get_xml(self.context, gp_url)
+                    if gp_tree is not None:
+                        gp_dir = gp_tree.find('Directory')
+                        if gp_dir is not None:
+                            gp_guids = get_guid_ids(gp_dir)
+                            show_tmdb_id = gp_guids.get('tmdb_id', '')
+                except Exception as e:
+                    LOG.debug('Failed to fetch grandparent for clearlogo: %s' % str(e))
+            
+            self.data['show_tmdb_id'] = show_tmdb_id
+            # ----------------------------------------------------------------
+
         if not self.context.settings.skip_metadata():
             tree_genres = self._content.findall('Genre')
-            if tree_genres is not None:
+            if tree_genres:
                 self.data['full_data']['genre'] = \
-                    list(map(lambda x: encode_utf8(x.get('tag', '')), tree_genres))
+                    [encode_utf8(x.get('tag', '')) for x in tree_genres]
 
         self.data['intro_markers'] = self._get_intro_markers()
+        self.data['guid_ids'] = get_guid_ids(self._content)
+        if self.data['guid_ids'].get('imdb_id'):
+            self.data['full_data']['imdbnumber'] = self.data['guid_ids']['imdb_id']
+        if self.data['guid_ids'].get('tmdb_id'):
+            self.data['full_data']['tmdb_id'] = self.data['guid_ids']['tmdb_id']
+        if self.data['guid_ids'].get('tvdb_id'):
+            self.data['full_data']['tvdb_id'] = self.data['guid_ids']['tvdb_id']
 
     def _get_track_data(self):
-
-        track_title = '%s. %s' % \
-                      (str(self._content.get('index', 0)).zfill(2),
-                       encode_utf8(self._content.get('title', i18n('Unknown'))))
-        lyrics = self._get_lyrics()
+        track_title = '%s. %s' % (
+            str(self._content.get('index', 0)).zfill(2),
+            encode_utf8(self._content.get('title', i18n('Unknown')))
+        )
 
         self.data['full_data'] = {
             'TrackNumber': int(self._content.get('index', 0)),
             'discnumber': int(self._content.get('parentIndex', 0)),
             'title': track_title,
             'rating': float(self._content.get('rating', 0)),
-            'album': encode_utf8(self._content.get('parentTitle',
-                                                   self.tree.get('parentTitle', ''))),
-            'artist': encode_utf8(self._content.get('grandparentTitle',
-                                                    self.tree.get('grandparentTitle', ''))),
+            'album': encode_utf8(self._content.get('parentTitle', self.tree.get('parentTitle', ''))),
+            'artist': encode_utf8(self._content.get('grandparentTitle', self.tree.get('grandparentTitle', ''))),
             'duration': int(self._content.get('duration', 0)) / 1000,
-            'lyrics': lyrics,
+            'lyrics': self._get_lyrics(),
         }
 
         self.data['extra']['album'] = self._content.get('parentKey')
@@ -398,12 +578,10 @@ class StreamData:
             if (marker.get('type') == 'intro' and
                     marker.get('startTimeOffset') and marker.get('endTimeOffset')):
                 return [marker.get('startTimeOffset'), marker.get('endTimeOffset')]
-
         return []
 
     def _get_lyrics(self):
         lyrics = []
-
         lyric_priorities = self.context.settings.get_lyrics_priorities()
         if not lyric_priorities:
             return ''
@@ -426,18 +604,10 @@ class StreamData:
         if lyrics:
             lyrics = sorted(lyrics, key=lambda l: l['priority'], reverse=True)
             return self.server.get_lyrics(lyrics[0]['id'])
-
         return ''
 
     def _get_art(self):
-        art = {
-            'banner': '',
-            'fanart': '',
-            'season_thumb': '',
-            'section_art': '',
-            'show_thumb': '',
-            'thumb': '',
-        }
+        art = {'banner': '', 'fanart': '', 'season_thumb': '', 'section_art': '', 'show_thumb': '', 'thumb': ''}
 
         if self.context.settings.skip_images():
             self.data['art'] = art
@@ -454,31 +624,23 @@ class StreamData:
 
         if '/:/resources/show-fanart.jpg' in art['section_art']:
             art['section_art'] = art.get('fanart', '')
-
         if art['fanart'] == '':
             art['fanart'] = art.get('section_art', '')
 
         if (self._content.get('grandparentThumb', '') and
                 '/:/resources/show.png' not in self._content.get('grandparentThumb', '')):
-            art['show_thumb'] = \
-                get_thumb_image(self.context, self.server, {
-                    'thumb': self._content.get('grandparentThumb', '')
-                })
+            art['show_thumb'] = get_thumb_image(self.context, self.server,
+                                                {'thumb': self._content.get('grandparentThumb', '')})
 
         if (art.get('season_thumb', '') and
                 '/:/resources/show.png' not in art.get('season_thumb', '')):
-            art['season_thumb'] = get_thumb_image(self.context, self.server, {
-                'thumb': art.get('season_thumb')
-            })
+            art['season_thumb'] = get_thumb_image(self.context, self.server,
+                                                  {'thumb': art.get('season_thumb')})
 
-        # get ALL SEASONS or TVSHOW thumb
         if (not art.get('season_thumb', '') and self._content.get('parentThumb', '') and
                 '/:/resources/show.png' not in self._content.get('parentThumb', '')):
-            art['season_thumb'] = \
-                get_thumb_image(self.context, self.server, {
-                    'thumb': self._content.get('parentThumb', '')
-                })
-
+            art['season_thumb'] = get_thumb_image(self.context, self.server,
+                                                  {'thumb': self._content.get('parentThumb', '')})
         elif not art.get('season_thumb', '') and art['show_thumb']:
             art['season_thumb'] = art['show_thumb']
 
@@ -486,43 +648,24 @@ class StreamData:
 
     def _get_media_details(self):
         media = self._content.findall('Media')
-
         self.data['details'] = []
         self.data['parts'] = []
         self.data['parts_count'] = 0
 
         for details in media:
-
-            try:
-                if details.get('videoResolution') == 'sd':
-                    resolution = 'SD'
-                elif int(details.get('videoResolution', 0)) > 1088:
-                    resolution = '4K'
-                elif int(details.get('videoResolution', 0)) >= 1080:
-                    resolution = 'HD 1080'
-                elif int(details.get('videoResolution', 0)) >= 720:
-                    resolution = 'HD 720'
-                else:
-                    resolution = 'SD'
-            except ValueError:
-                resolution = ''
-
+            premium_label = _get_premium_info(details)
             media_details = {
+                'premium_label': premium_label,
                 'bitrate': round(float(details.get('bitrate', 0)) / 1000, 1),
                 'bitDepth': details.get('bitDepth', 8),
-                'videoResolution': resolution,
+                'videoResolution': details.get('videoResolution', ''),
                 'container': details.get('container', 'unknown'),
-                'codec': details.get('videoCodec')
+                'codec': details.get('videoCodec'),
             }
 
-            parts = details.findall('Part')
-
-            # Get the media locations (file and web) for later on
-            append_parts = self.data['parts'].append
-            append_details = self.data['details'].append
-            for part in parts:
-                append_parts((part.get('key'), part.get('file')))
-                append_details(media_details)
+            for part in details.findall('Part'):
+                self.data['parts'].append((part.get('key'), part.get('file')))
+                self.data['details'].append(media_details)
                 self.data['parts_count'] += 1
 
     def _get_audio_and_subtitles(self):
@@ -534,25 +677,21 @@ class StreamData:
         self.data['contents'] = 'all'
         self.data['audio_count'] = 0
         self.data['sub_count'] = 0
-
-        tags = self.tree.iter('Stream')
+        self.data['subtitles_all'] = []
 
         forced_subtitle = False
-        for bits in tags:
+
+        for bits in self.tree.iter('Stream'):
             stream = dict(bits.items())
 
-            # Audio Streams
             if stream['streamType'] == '2':
                 self.data['audio_count'] += 1
                 audio_offset += 1
                 if stream.get('selected') == '1':
-                    LOG.debug('Found preferred audio id: %s ' % stream['id'])
                     self.data['audio'] = stream
                     self.data['audio_offset'] = audio_offset
 
-            # Subtitle Streams
             elif stream['streamType'] == '3':
-
                 if forced_subtitle:
                     continue
 
@@ -564,9 +703,12 @@ class StreamData:
                 forced_subtitle = stream.get('forced') == '1' and default_to_forced
                 selected = stream.get('selected') == '1'
 
+                if stream.get('key'):
+                    sub_copy = dict(stream)
+                    sub_copy['key'] = self.server.get_formatted_url(stream['key'])
+                    self.data['subtitles_all'].append(sub_copy)
+
                 if forced_subtitle or selected:
-                    LOG.debug('Found %s subtitles id : %s ' %
-                              ('preferred' if not forced_subtitle else 'forced', stream['id']))
                     self.data['sub_count'] += 1
                     self.data['subtitle'] = stream
                     if stream.get('key'):
@@ -580,12 +722,9 @@ class MediaSelect:
         self.context = context
         self.server = server
         self.data = data
-
         self.dvd_playback = False
-
         self._media_index = None
         self._media_url = None
-
         self.update_selection()
 
     def update_selection(self):
@@ -602,55 +741,54 @@ class MediaSelect:
 
     def _select_media(self):
         force_dvd = self.context.settings.force_dvd()
-
         count = self.data['parts_count']
         options = self.data['parts']
         details = self.data['details']
 
         if count > 1:
-
             dialog_options = []
             dvd_index = []
-            append_dialog_options = dialog_options.append
-            append_dvd_index = dvd_index.append
             index_count = 0
+
+            main_title = self.data['full_data'].get('title', i18n('Unknown'))
+            if self.data['full_data'].get('mediatype') == 'episode':
+                show_title = self.data['full_data'].get('tvshowtitle', '')
+                s = str(self.data['full_data'].get('season', 0)).zfill(2)
+                e = str(self.data['full_data'].get('episode', 0)).zfill(2)
+                main_title = '%s  S%sE%s - %s' % (show_title, s, e, main_title)
+
+            art = self.data.get('art', {})
+            thumb = art.get('thumb') or art.get('poster') or art.get('fanart') or ''
+
             for items in options:
+                if force_dvd and items[1] and '.ifo' in items[1].lower():
+                    dvd_index.append(index_count)
 
-                if items[1]:
-                    name = items[1].split('/')[-1]
-                    # name='%s %s %sMbps' % (items[1].split('/')[-1],
-                    # details[index_count]['videoResolution'], details[index_count]['bitrate'])
-                else:
-                    name = '%s %s %sMbps' % (items[0].split('.')[-1],
-                                             details[index_count]['videoResolution'],
-                                             details[index_count]['bitrate'])
+                list_item = xbmcgui.ListItem(label=main_title)
+                premium_label = details[index_count].get('premium_label', '')
+                list_item.setLabel2(premium_label if premium_label else 'Version %d' % (index_count + 1))
 
-                if force_dvd:
-                    if '.ifo' in name.lower():
-                        LOG.debug('Found IFO DVD file in ' + name)
-                        name = 'DVD Image'
-                        append_dvd_index(index_count)
+                if thumb:
+                    try:
+                        art_url = self.server.get_formatted_url(thumb)
+                        list_item.setArt({'thumb': art_url, 'poster': art_url, 'icon': art_url})
+                    except Exception:
+                        pass
 
-                append_dialog_options(name)
+                dialog_options.append(list_item)
                 index_count += 1
 
-            LOG.debug('Create selection dialog box - we have a decision to make!')
-            dialog = xbmcgui.Dialog()
-            result = dialog.select(i18n('Select media to play'), dialog_options)
+            result = xbmcgui.Dialog().select(i18n('Select version to play'), dialog_options, useDetails=True)
+
             if result == -1:
                 self._media_index = None
-
-            if result in dvd_index:
-                LOG.debug('DVD Media selected')
-                self.dvd_playback = True
-
-            self._media_index = result
-
-        else:
-            if force_dvd:
-                if '.ifo' in options[0]:
+            else:
+                if result in dvd_index:
                     self.dvd_playback = True
-
+                self._media_index = result
+        else:
+            if force_dvd and options and options[0][1] and '.ifo' in options[0][1].lower():
+                self.dvd_playback = True
             self._media_index = 0
 
     def _get_media_url(self):
@@ -663,60 +801,39 @@ class MediaSelect:
 
         if self._http(filename, stream):
             return
-
         file_type = get_file_type(filename)
-
         if self._auto(filename, file_type, stream):
             return
-
         if self._smb_afp(filename, file_type):
             return
-
-        LOG.debug('No option detected, streaming is safest to choose')
         self.media_url = self.server.get_formatted_url(stream)
 
     def _http(self, filename, stream):
-        if filename is None or self.context.settings.get_stream() == '1':  # http
-            LOG.debug('Selecting stream')
+        if filename is None or self.context.settings.get_stream() == '1':
             self.media_url = self.server.get_formatted_url(stream)
             return True
-
         return False
 
     def _auto(self, filename, file_type, stream):
-        if self.context.settings.get_stream() == '0':  # auto
-            # check if the file can be found locally
-            if file_type in ['NIX', 'WIN']:
-                LOG.debug('Checking for local file')
-                if xbmcvfs.exists(filename):
-                    LOG.debug('Local file exists')
-                    self.media_url = 'file:%s' % filename
-                    return True
-
-            LOG.debug('No local file')
+        if self.context.settings.get_stream() == '0':
+            if file_type in ['NIX', 'WIN'] and xbmcvfs.exists(filename):
+                self.media_url = 'file:%s' % filename
+                return True
             if self.dvd_playback:
-                LOG.debug('Forcing SMB for DVD playback')
                 self.context.settings.set_stream('2')
             else:
                 self.media_url = self.server.get_formatted_url(stream)
                 return True
-
         return False
 
     def _smb_afp(self, filename, file_type):
-        if self.context.settings.get_stream() in ['2', '3']:  # smb / AFP
-
+        if self.context.settings.get_stream() in ['2', '3']:
             filename = unquote(filename)
-            if self.context.settings.get_stream() == '2':
-                protocol = 'smb'
-            else:
-                protocol = 'afp'
+            protocol = 'smb' if self.context.settings.get_stream() == '2' else 'afp'
 
-            LOG.debug('Selecting smb/unc')
             if file_type == 'UNC':
                 self.media_url = '%s:%s' % (protocol, filename.replace('\\', '/'))
             else:
-                # Might be OSX type, in which case, remove Volumes and replace with server
                 server = self.server.get_location().split(':')[0]
                 login_string = ''
                 override_info = self.context.settings.override_info()
@@ -724,85 +841,56 @@ class MediaSelect:
                 if override_info.get('override'):
                     if override_info.get('ip_address'):
                         server = override_info.get('ip_address')
-                        LOG.debug('Overriding server with: %s' % server)
-
                     if override_info.get('user_id'):
                         login_string = '%s:%s@' % (override_info.get('user_id'),
                                                    override_info.get('password'))
-                        LOG.debug('Adding AFP/SMB login info for user: %s' %
-                                  override_info.get('user_id'))
 
                 if filename.find('Volumes') > 0:
-                    self.media_url = '%s:/%s' % \
-                                     (protocol, filename.replace('Volumes', login_string + server))
+                    self.media_url = '%s:/%s' % (protocol, filename.replace('Volumes', login_string + server))
+                elif file_type == 'WIN':
+                    self.media_url = '%s://%s%s/%s' % (protocol, login_string, server, filename[3:].replace('\\', '/'))
                 else:
-                    if file_type == 'WIN':
-                        self.media_url = ('%s://%s%s/%s' %
-                                          (protocol, login_string, server,
-                                           filename[3:].replace('\\', '/')))
-                    else:
-                        # else assume its a file local to server available over smb/samba.
-                        # Add server name to file path.
-                        self.media_url = '%s://%s%s%s' % (protocol, login_string, server, filename)
+                    self.media_url = '%s://%s%s%s' % (protocol, login_string, server, filename)
 
-            # nas override
             self._nas_override()
-
             return self.media_url is not None
-
         return False
 
     def _nas_override(self):
         override_info = self.context.settings.override_info()
         if override_info.get('override') and override_info.get('root'):
-            # Re-root the file path
-            LOG.debug('Altering path %s so root is: %s' %
-                      (self.media_url, override_info.get('root')))
             if '/' + override_info.get('root') + '/' in self.media_url:
                 components = self.media_url.split('/')
                 index = components.index(override_info.get('root'))
-                pop = components.pop
                 for _ in range(3, index):
-                    pop(3)
+                    components.pop(3)
                 self.media_url = '/'.join(components)
 
 
 def play_playlist(context, server, data):
-    LOG.debug('Creating new playlist')
     playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
     playlist.clear()
 
     url = server.join_url(server.get_url_location(), data['extra'].get('album'), 'children')
     tree = get_xml(context, url)
-
     if tree is None:
         return
 
-    track_tags = tree.findall('Track')
-    add_to_playlist = playlist.add
-    item_constructor = xbmcgui.ListItem
-
-    for track in track_tags:
-        LOG.debug('Adding playlist item')
+    for track in tree.findall('Track'):
         item = Item(server, None, tree, track)
         track = create_track_item(context, item, listing=False)
         url = track[0]
         details = track[1]
-        list_item = item_constructor(details.get('title', i18n('Unknown')), offscreen=True)
+        list_item = xbmcgui.ListItem(details.get('title', i18n('Unknown')), offscreen=True)
 
         thumb = data['full_data'].get('thumbnail', CONFIG['icon'])
         if 'thumbnail' in data['full_data']:
-            del data['full_data']['thumbnail']  # not a valid info label
+            del data['full_data']['thumbnail']
 
-        list_item.setArt({
-            'icon': thumb,
-            'thumb': thumb
-        })
+        list_item.setArt({'icon': thumb, 'thumb': thumb})
         info_tag = ListItemInfoTag(list_item, 'music')
         info_tag.set_info(details)
-        add_to_playlist(url, list_item)
+        playlist.add(url, list_item)
 
     index = int(data['extra'].get('index', 0)) - 1
-    LOG.debug('Playlist complete.  Starting playback from track %s [playlist index %s] ' %
-              (data['extra'].get('index', 0), index))
     xbmc.Player().playselected(index)

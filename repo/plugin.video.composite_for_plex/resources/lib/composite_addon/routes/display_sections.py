@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-
     Copyright (C) 2011-2018 PleXBMC (plugin.video.plexbmc) by hippojay (Dave Hawes-Johnson)
-    Copyright (C) 2018-2020 Composite (plugin.video.composite_for_plex)
+    Copyright (C) 2018-2026 DPlex (plugin.video.composite_for_plex)
 
     This file is part of Composite (plugin.video.composite_for_plex)
 
@@ -30,44 +29,52 @@ def run(context, content_filter=None, display_shared=False):
     xbmcplugin.setContent(get_handle(), 'files')
 
     server_list = context.plex_network.get_server_list()
-    LOG.debug('Using list of %s servers: %s' % (len(server_list), server_list))
-
     items = []
     append_item = items.append
-
     menus = context.settings.show_menus()
 
     server_section_menus, playlist_section_menus = \
         server_section_menus_items(context, server_list, content_filter, display_shared, menus)
 
+    # 1. إضافة الأقسام المدمجة
     if server_section_menus:
         items += combined_sections_item(context)
 
+    # 2. إضافة أقسام السيرفرات العادية
     items += server_section_menus
 
     if display_shared:
         if items:
             xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
-
-        xbmcplugin.endOfDirectory(get_handle(),
-                                  cacheToDisc=context.settings.cache_directory())
+        xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=context.settings.cache_directory())
         return
 
+    # 3. إضافة قائمة التشغيل (Playlists)
     if menus.get('playlists') and context.plex_network.is_myplex_signedin():
         items += playlist_section_menus
 
+    # --- [3.5 إضافة Watchlist موحدة للكل] ---
+    if context.plex_network.is_myplex_signedin():
+        # نختار سيرفر واحد شغال ليكون هو البوابة (Proxy) لحسابك
+        active_server = next((s for s in server_list if not s.is_offline()), None)
+        if active_server:
+            details = {'title': i18n('Watchlist')}
+            extra_data = {
+                'type': 'Folder',
+                'mode': MODES.GETCONTENT  # عرض المحتويات مباشرة
+            }
+            # نربطها بمسار الـ Watchlist العالمي
+            item_url = active_server.join_url(active_server.get_url_location(), '/library/watchlist')
+            gui_item = GUIItem(item_url, details, extra_data)
+            items.append(create_gui_item(context, gui_item))
+
+    # 4. إضافة باقي القوائم الإضافية
     if menus.get('composite_playlist') and context.plex_network.is_myplex_signedin():
         items += composite_playlist_item(context)
 
-    # For each of the servers we have identified
     if menus.get('queue') and context.plex_network.is_myplex_signedin():
-        details = {
-            'title': i18n('myPlex Queue')
-        }
-        extra_data = {
-            'type': 'Folder',
-            'mode': MODES.MYPLEXQUEUE
-        }
+        details = {'title': i18n('myPlex Queue')}
+        extra_data = {'type': 'Folder', 'mode': MODES.MYPLEXQUEUE}
         gui_item = GUIItem('http://myplexqueue', details, extra_data)
         append_item(create_gui_item(context, gui_item))
 
@@ -78,6 +85,38 @@ def run(context, content_filter=None, display_shared=False):
         xbmcplugin.addDirectoryItems(get_handle(), items, len(items))
 
     xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=context.settings.cache_directory())
+
+
+
+def watchlist_section_items(context, server_list):
+    """دالة لبناء عناصر Watchlist لكل سيرفر متاح"""
+    items = []
+    for server in server_list:
+        if server.is_offline() or server.is_secondary():
+            continue
+
+        prefix_server = context.settings.prefix_server()
+        if not prefix_server or (prefix_server and len(server_list) > 1):
+            prefix = server.get_name() + ': '
+        else:
+            prefix = ''
+
+        details = {
+            'title': prefix + i18n('Watchlist')
+        }
+        extra_data = {
+            'type': 'Folder',
+            'mode': MODES.GETCONTENT  # نستخدم Mode 0 لعرض المحتويات
+        }
+        
+        # الرابط الذي أضفناه في server.py
+        # بليكس يحتاج includeGuids=1 لظهور اللوجو، وهذا ما أضفناه في server.py
+        item_url = server.join_url(server.get_url_location(), '/library/watchlist')
+        
+        gui_item = GUIItem(item_url, details, extra_data)
+        items.append(create_gui_item(context, gui_item))
+        
+    return items
 
 
 def composite_playlist_item(context):

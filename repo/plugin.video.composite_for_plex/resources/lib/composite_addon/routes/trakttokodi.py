@@ -198,11 +198,11 @@ def search(context):
             if section.get_type() == content_type:
                 title = params.get('ep_title') if search_type == '4' \
                     else params.get('title')
-                url = '%s/search?type=%s&query=%s' % (section.get_path(), search_type, title)
+                url = '%s/search?type=%s&query=%s&includeGuids=1' % (section.get_path(), search_type, title)
                 processed = processed_xml(url)
 
                 if not _is_not_none(processed) and params.get('video_type') == 'episode':
-                    url = '%s/search?type=%s&query=%s' % \
+                    url = '%s/search?type=%s&query=%s&includeGuids=1' % \
                           (section.get_path(), '2', params.get('title'))
                     processed = processed_xml(url)
 

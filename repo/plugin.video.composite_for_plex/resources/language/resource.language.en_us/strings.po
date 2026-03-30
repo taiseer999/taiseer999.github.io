@@ -1,10 +1,10 @@
 # Kodi language file
-# Addon Name: Composite
+# Addon Name: DPlex
 # Addon id: plugin.video.composite_for_plex
 # Addon Provider: anxdpanic
 msgid ""
 msgstr ""
-"Project-Id-Version: Composite\n"
+"Project-Id-Version: DPlex\n"
 "Report-Msgid-Bugs-To: https://github.com/anxdpanic/plugin.video.composite_for_plex/issues\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
 "PO-Revision-Date: 2022-03-11 09:05+0000\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 msgctxt "Addon Description"
 msgid "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Fork of PleXBMC by Hippojay"
-msgstr ""
+msgstr "Browse and play video, music and photo media files managed by Plex Media Server.[CR][CR]Rebranded and modified as DPlex."
 
 msgctxt "Addon Disclaimer"
 msgid "Composite is NOT an official Plex add-on and is not supported or endorsed by Plex."
-msgstr ""
+msgstr "DPlex is NOT an official Plex add-on and is not supported or endorsed by Plex."
 
 msgctxt "#30000"
 msgid "Confirm file delete?"
@@ -1429,7 +1429,7 @@ msgstr ""
 
 msgctxt "#30765"
 msgid "Composite Playlist"
-msgstr ""
+msgstr "DPlex Playlist"
 
 msgctxt "#30766"
 msgid "Generate a playlist from the information below"
@@ -1521,7 +1521,7 @@ msgstr ""
 
 msgctxt "#30788"
 msgid "Show [B]Composite Playlist[/B] menu"
-msgstr ""
+msgstr "Show [B]DPlex Playlist[/B] menu"
 
 msgctxt "#30789"
 msgid "Server(s)"

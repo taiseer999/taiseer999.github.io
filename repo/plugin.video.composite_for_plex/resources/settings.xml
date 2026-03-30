@@ -5,7 +5,7 @@
             <group id="1">
                 <setting id="devicename" type="string" label="30660" help="">
                     <level>0</level>
-                    <default>Composite</default>
+                    <default>Dplex</default>
                     <control type="edit" format="string">
                         <heading>30660</heading>
                     </control>

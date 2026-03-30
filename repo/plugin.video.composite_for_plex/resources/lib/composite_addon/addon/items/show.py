@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-
     Copyright (C) 2011-2018 PleXBMC (plugin.video.plexbmc) by hippojay (Dave Hawes-Johnson)
-    Copyright (C) 2018-2020 Composite (plugin.video.composite_for_plex)
+    Copyright (C) 2018-2026 DPlex (plugin.video.composite_for_plex)
 
     This file is part of Composite (plugin.video.composite_for_plex)
 
@@ -19,7 +18,9 @@ from ..logger import Logger
 from ..strings import encode_utf8
 from ..strings import i18n
 from .common import get_banner_image
+from .common import get_clearlogo_from_db
 from .common import get_fanart_image
+from .common import get_guid_ids
 from .common import get_metadata
 from .common import get_thumb_image
 from .context_menu import ContextMenu
@@ -30,12 +31,11 @@ LOG = Logger()
 
 def create_show_item(context, item, library=False):
     metadata = get_metadata(context, item.data)
+    guid_ids = get_guid_ids(item.data)
 
-    # Create the basic data structures to pass up
     info_labels = {
         'title': encode_utf8(item.data.get('title', i18n('Unknown'))),
-        'sorttitle': encode_utf8(item.data.get('titleSort',
-                                               item.data.get('title', i18n('Unknown')))),
+        'sorttitle': encode_utf8(item.data.get('titleSort', item.data.get('title', i18n('Unknown')))),
         'tvshowtitle': encode_utf8(item.data.get('title', i18n('Unknown'))),
         'studio': [encode_utf8(item.data.get('studio', ''))],
         'plot': encode_utf8(item.data.get('summary', '')),
@@ -49,6 +49,9 @@ def create_show_item(context, item, library=False):
         'mediatype': 'tvshow'
     }
 
+    if guid_ids.get('imdb_id'):
+        info_labels['imdbnumber'] = guid_ids['imdb_id']
+
     prefix_server = (context.params.get('mode') in COMBINED_SECTIONS and
                      context.settings.prefix_server_in_combined())
 
@@ -56,6 +59,9 @@ def create_show_item(context, item, library=False):
         info_labels['title'] = '%s: %s' % (item.server.get_name(), info_labels['title'])
 
     _watched = int(item.data.get('viewedLeafCount', 0))
+
+    tmdb_id = guid_ids.get('tmdb_id', '')
+    clearlogo_url = get_clearlogo_from_db(tmdb_id, 'tv') if tmdb_id else ''
 
     extra_data = {
         'type': 'video',
@@ -66,11 +72,14 @@ def create_show_item(context, item, library=False):
         'thumb': get_thumb_image(context, item.server, item.data),
         'fanart_image': get_fanart_image(context, item.server, item.data),
         'banner': get_banner_image(context, item.server, item.data),
+        'clearlogo': clearlogo_url, 
         'key': item.data.get('key', ''),
-        'ratingKey': str(item.data.get('ratingKey', 0))
+        'ratingKey': str(item.data.get('ratingKey', 0)),
+        'imdb_id': guid_ids.get('imdb_id', ''),
+        'tmdb_id': tmdb_id,
+        'tvdb_id': guid_ids.get('tvdb_id', ''),
     }
 
-    # Set up overlays for watched and unwatched episodes
     if extra_data['WatchedEpisodes'] == 0:
         info_labels['playcount'] = 0
     elif extra_data['UnWatchedEpisodes'] == 0:
@@ -78,7 +87,6 @@ def create_show_item(context, item, library=False):
     else:
         extra_data['partialTV'] = 1
 
-    # Create URL based on whether we are going to flatten the season view
     if context.settings.flatten_seasons() == '2':
         LOG.debug('Flattening all shows')
         extra_data['mode'] = MODES.TVEPISODES
@@ -88,16 +96,39 @@ def create_show_item(context, item, library=False):
         extra_data['mode'] = MODES.TVSEASONS
         item_url = item.server.join_url(item.server.get_url_location(), extra_data['key'])
 
-    context_menu = None
-    if not context.settings.skip_context_menus():
-        context_menu = ContextMenu(context, item.server, item.url, extra_data).menu
-
     if library:
         extra_data['hash'] = _md5_hash(item.data)
         extra_data['path_mode'] = MODES.TXT_TVSHOWS_LIBRARY
 
+    context_menu = None
+    if not context.settings.skip_context_menus():
+        context_menu = ContextMenu(context, item.server, item.url, extra_data).menu
+
     gui_item = GUIItem(item_url, info_labels, extra_data, context_menu)
-    return create_gui_item(context, gui_item)
+    kodi_item = create_gui_item(context, gui_item)
+
+    # --- Inject Clearlogo & Fake Flags للويدجت ---
+    try:
+        list_item = kodi_item[1] if isinstance(kodi_item, tuple) else kodi_item
+        
+        if clearlogo_url:
+            list_item.setArt({
+                'clearlogo': clearlogo_url,
+                'tvshow.clearlogo': clearlogo_url,
+                'logo': clearlogo_url
+            })
+            
+        # 🌟 الوشم الإجباري لسكين Arctic Fuse لكي يرى مجلد المسلسل كأنه فيلم 4K
+        list_item.setProperty('VideoResolution', '4K')
+        list_item.setProperty('VideoCodec', 'hevc')
+        list_item.setProperty('AudioCodec', 'aac')
+        list_item.setProperty('AudioChannels', '6')
+        list_item.setProperty('VideoCodec.HDR', 'hdr10')
+        
+    except Exception as e:
+        LOG.debug('Injection error in show.py: %s' % str(e))
+
+    return kodi_item
 
 
 def _md5_hash(show):

@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
+
 """
-
-    Copyright (C) 2019-2020 Composite (plugin.video.composite_for_plex)
-
-    This file is part of Composite (plugin.video.composite_for_plex)
-
-    SPDX-License-Identifier: GPL-2.0-or-later
-    See LICENSES/GPL-2.0-or-later.txt for more information.
+Copyright (C) 2019-2020 Composite (plugin.video.composite_for_plex)
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import threading
@@ -24,23 +20,19 @@ from .utils import read_pickled
 
 LOG = Logger('player')
 
-
 class PlaybackMonitorThread(threading.Thread):
     LOG = Logger('PlaybackMonitorThread')
     MONITOR = xbmc.Monitor()
     PLAYER = xbmc.Player()
 
     def __init__(self, settings, monitor_dict, window):
-        super(PlaybackMonitorThread, self).__init__()  # pylint: disable=super-with-arguments
+        super(PlaybackMonitorThread, self).__init__()
         self._stopped = threading.Event()
         self._ended = threading.Event()
-
         self.settings = settings
         self._window = window
-
         self._monitor_dict = monitor_dict
         self._dialog_skip_intro = None
-
         self.daemon = True
         self.start()
 
@@ -111,15 +103,12 @@ class PlaybackMonitorThread(threading.Thread):
     def _wait_for_playback(self):
         np_wait_time = 0.5
         np_waited = 0.0
-
         while not self.PLAYER.isPlaying() and not self.MONITOR.abortRequested():
             self.LOG.debug('Waiting for playback to start')
-
             xbmc.sleep(int(np_wait_time * 1000))
             if np_waited >= 5:
                 self.stop()
                 return
-
             np_waited += np_wait_time
 
     def notify_upnext(self):
@@ -130,38 +119,23 @@ class PlaybackMonitorThread(threading.Thread):
                        callback_args=self.callback_arguments()).run()
             else:
                 self.LOG('Up Next silenced ...')
-
         elif self.media_type() != 'episode':
             self.LOG('Up Next [%s] is not an episode ...' % self.media_type())
         else:
             self.LOG('Up Next is disabled ...')
 
-    def report_playback_progress(self, current_time, total_time,
-                                 progress, played_time=-1):
+    def report_playback_progress(self, current_time, total_time, progress, played_time=-1):
         if current_time == 0 or total_time == 0:
             return played_time
-
         if played_time > -1:
             if played_time == current_time:
-                self.LOG.debug('Video paused at: %s secs of %s @ %s%%' %
-                               (current_time, total_time, progress))
-                self.server().report_playback_progress(self.media_id(),
-                                                       current_time * 1000,
-                                                       state='paused',
-                                                       duration=total_time * 1000)
+                self.server().report_playback_progress(self.media_id(), current_time * 1000,
+                                                       state='paused', duration=total_time * 1000)
             else:
-                self.LOG.debug('Video played time: %s secs of %s @ %s%%' %
-                               (current_time, total_time, progress))
-                self.server().report_playback_progress(self.media_id(),
-                                                       current_time * 1000,
-                                                       state='playing',
-                                                       duration=total_time * 1000)
+                self.server().report_playback_progress(self.media_id(), current_time * 1000,
+                                                       state='playing', duration=total_time * 1000)
                 played_time = current_time
         else:
-            self.LOG.debug('Playback Stopped: %s secs of %s @ %s%%' %
-                           (current_time, total_time, progress))
-            # report_playback_progress state=stopped will adjust current time to match duration
-            # and mark media as watched if progress >= 98%
             self.server().report_playback_progress(self.media_id(), current_time * 1000,
                                                    state='stopped', duration=total_time * 1000)
         return played_time
@@ -180,10 +154,9 @@ class PlaybackMonitorThread(threading.Thread):
 
     def _get_time_ms(self):
         try:
-            current_time = self.PLAYER.getTime()
+            return 1000 * self.PLAYER.getTime()
         except RuntimeError:
-            current_time = 0.0
-        return 1000 * current_time
+            return 0.0
 
     def _get_playback_progress(self, total_time):
         try:
@@ -192,32 +165,24 @@ class PlaybackMonitorThread(threading.Thread):
                 total_time = int(self.PLAYER.getTotalTime())
         except RuntimeError:
             current_time = 0
-
         try:
             progress = int((float(current_time) / float(total_time)) * 100)
         except ZeroDivisionError:
             progress = 0
-
         return current_time, total_time, progress
 
     def resume(self, current_time):
         resume_time = float(self.details().get('resume', 0))
-
-        if (resume_time <= 1  # don't resume if only 1 second
-                or resume_time <= float(current_time)):  # don't seek backwards or to current time
+        if resume_time <= 1 or resume_time <= float(current_time):
             return True
-
         if resume_time > float(current_time):
-            # seek to resume time if it's greater than the current time
             self.PLAYER.seekTime(int(resume_time) - 1)
             return True
-
         return False
 
     def _skip_intro_dialog(self):
         if self._dialog_skip_intro is not None:
             return
-
         self._dialog_skip_intro = SkipIntroDialog('skip_intro.xml',
                                                   CONFIG['addon'].getAddonInfo('path'),
                                                   'default', '720p', intro_end=self._intro_end())
@@ -229,14 +194,11 @@ class PlaybackMonitorThread(threading.Thread):
                     (self._intro_start() > self._get_time_ms() or
                      self._get_time_ms() > self._intro_end())):
                 self._dialog_skip_intro.on_hold = False
-
             if self._intro_start() <= self._get_time_ms() < self._intro_end():
                 self._skip_intro_dialog()
                 self._dialog_skip_intro.show()
-
             elif self._dialog_skip_intro and self._get_time_ms() >= self._intro_end():
                 self._dialog_skip_intro.close()
-
             elif self._dialog_skip_intro and self._get_time_ms() < self._intro_start():
                 self._dialog_skip_intro.close()
 
@@ -256,41 +218,30 @@ class PlaybackMonitorThread(threading.Thread):
 
         wait_time = 0.5
         waited = 0.0
-
         notified_upnext = False
         resumed = not self.details().get('resuming')
 
-        # Whilst the file is playing back
         while self.PLAYER.isPlaying() and not self.MONITOR.abortRequested():
-
             if not self._is_playing_current_file():
                 break
-
             current_time, total_time, progress = self._get_playback_progress(total_time)
-
             self.skip_intro()
-
             try:
                 report = int((float(waited) / 10.0)) >= 1
             except ZeroDivisionError:
                 report = False
-
-            if report:  # only report every ~10 seconds, times are updated at 0.5 seconds
+            if report:
                 waited = 0.0
                 played_time = self.report_playback_progress(current_time, total_time,
                                                             progress, played_time)
-
             if current_time > 0:
                 if not resumed:
                     resumed = self.resume(current_time)
-
                 if not notified_upnext:
                     notified_upnext = True
                     self.notify_upnext()
-
             if self.MONITOR.waitForAbort(wait_time):
                 break
-
             waited += wait_time
 
         _ = self.report_playback_progress(current_time, total_time, progress)
@@ -309,7 +260,6 @@ class CallbackPlayer(xbmc.Player):
     def __init__(self, window, settings, *args, **kwargs):
         self.args = args
         self.kwargs = kwargs
-
         self.settings = settings
         self.threads = []
         self.window = window
@@ -318,11 +268,9 @@ class CallbackPlayer(xbmc.Player):
         for thread in self.threads:
             if thread.ended():
                 continue
-
             if not thread.stopped():
                 self.LOG.debug('[%s]: stopping...' % thread.media_id())
                 thread.stop()
-
         for thread in self.threads:
             if thread.stopped() and not thread.ended():
                 try:
@@ -332,13 +280,10 @@ class CallbackPlayer(xbmc.Player):
 
     def cleanup_threads(self, only_ended=False):
         active_threads = []
-        append = active_threads.append
-
         for thread in self.threads:
             if only_ended and not thread.ended():
-                append(thread)
+                active_threads.append(thread)
                 continue
-
             if thread.ended():
                 self.LOG.debug('[%s]: clean up...' % thread.media_id())
             else:
@@ -356,14 +301,11 @@ class CallbackPlayer(xbmc.Player):
     def onPlayBackStarted(self):  # pylint: disable=invalid-name
         monitor_playback = not self.settings.playback_monitor_disabled(fresh=True)
         playback_dict = read_pickled('playback_monitor.pickle')
-
         self.cleanup_threads()
         if monitor_playback and playback_dict:
             self.threads.append(PlaybackMonitorThread(self.settings, playback_dict, self.window))
-
         elif not monitor_playback:
             self.LOG('Playback monitoring is disabled ...')
-
         elif not playback_dict:
             self.LOG('Playback monitoring failed to start, missing required {} ...')
 
@@ -379,65 +321,68 @@ class CallbackPlayer(xbmc.Player):
 
 
 def set_audio_subtitles(settings, stream):
-    """
-        Take the collected audio/sub stream data and apply to the media
-        If we do not have any subs then we switch them off
-    """
-
-    # If we have decided not to collect any sub data then do not set subs
     player = xbmc.Player()
     control = settings.stream_control(fresh=True)
 
     if stream['contents'] == 'type':
         LOG.debug('No audio or subtitle streams to process.')
-
-        # If we have decided to force off all subs, then turn them off now and return
         if control == StreamControl.NEVER:
             player.showSubtitles(False)
-            LOG.debug('All subs disabled')
-
         return
 
-    # Set the AUDIO component
+    # ── Audio ──────────────────────────────────────────────
     if control == StreamControl.PLEX:
-        LOG.debug('Attempting to set Audio Stream')
-
         audio = stream['audio']
-
         if stream['audio_count'] == 1:
-            LOG.debug('Only one audio stream present - will leave as default')
-
+            LOG.debug('Only one audio stream - leave as default')
         elif audio:
-            LOG.debug(
-                'Attempting to use selected language setting: %s' %
-                encode_utf8(audio.get('language', audio.get('languageCode', i18n('Unknown'))))
-            )
-            LOG.debug('Found preferred language at index %s' % stream['audio_offset'])
             try:
                 player.setAudioStream(stream['audio_offset'])
-                LOG.debug('Audio set')
             except:  # pylint: disable=bare-except
-                LOG.debug('Error setting audio, will use embedded default stream')
+                LOG.debug('Error setting audio')
 
-    # Set the SUBTITLE component
+    # ── Subtitles ──────────────────────────────────────────
     if control == StreamControl.PLEX:
-        LOG.debug('Attempting to set preferred subtitle Stream')
-        subtitle = stream['subtitle']
-        if subtitle:
-            LOG.debug('Found preferred subtitle stream')
+        subtitle = stream.get('subtitle', {})
+        all_subs = stream.get('subtitles_all', [])
+
+        if all_subs:
+            # الترجمات الخارجية محملة عبر listitem.setSubtitles()
+            # نختار الترجمة المحددة في Plex بالـ index الصحيح
+            selected_key = subtitle.get('key', '') if subtitle else ''
+            selected_index = 0
+            for i, sub in enumerate(all_subs):
+                if sub.get('key') == selected_key:
+                    selected_index = i
+                    break
+
+            LOG.debug('External subs: %d total, selecting index %d' % (len(all_subs), selected_index))
             try:
                 player.showSubtitles(False)
-                if subtitle.get('key'):
-                    player.setSubtitles(subtitle['key'])
-                else:
-                    LOG.debug('Enabling embedded subtitles at index %s' % stream['sub_offset'])
-                    player.setSubtitleStream(int(stream['sub_offset']))
-
+                player.setSubtitleStream(selected_index)
                 player.showSubtitles(True)
-                return
             except:  # pylint: disable=bare-except
-                LOG.debug('Error setting subtitle')
+                LOG.debug('Error setting external subtitle stream')
+
+        elif subtitle and not subtitle.get('key'):
+            # embedded
+            try:
+                player.showSubtitles(False)
+                player.setSubtitleStream(int(stream.get('sub_offset', 0)))
+                player.showSubtitles(True)
+            except:  # pylint: disable=bare-except
+                LOG.debug('Error setting embedded subtitle')
+
+        elif subtitle and subtitle.get('key'):
+            # ترجمة خارجية واحدة بدون subtitles_all (playback.py قديم)
+            try:
+                player.showSubtitles(False)
+                player.setSubtitles(subtitle['key'])
+                player.showSubtitles(True)
+            except:  # pylint: disable=bare-except
+                LOG.debug('Error setting subtitle via key')
 
         else:
-            LOG.debug('No preferred subtitles to set')
             player.showSubtitles(False)
+
+
