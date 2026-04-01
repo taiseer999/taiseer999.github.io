@@ -1,6 +1,11 @@
   TODO:
 - downloader, select dialog
 
+  [COLOR orange][B]Version 6.04[/B][/COLOR]
+- Subtitles require free api key from Wyzie Subs - https://sub.wyzie.io
+- Fixed FlickList Watchlist/Favorites.
+- Removed FlickList watched/resume points.
+
   [COLOR orange][B]Version 6.03[/B][/COLOR]
 - Extras updated thanks to pypi imdbinfo.
 - Thanks to Tomf!

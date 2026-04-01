@@ -72,20 +72,16 @@ def trakt_manager_choice(params):
 		 '%s items' % item['item_count'])
 		for item in trakt_api.trakt_get_lists('my_lists')
 	]
-	choices += [
-		('collection', '[I]%s[/I]' % ls(32499), ''),
-		('favorites', '[I]%s[/I]' % 'Favorites', ''),
-		('watchlist', '[I]%s[/I]' % ls(32500), '')
-	]
-	if params['mediatype'] == 'tvshow': choices += [('drop', 'Toggle Dropped', '')]
+	choices += [(i.lower(), '[I]%s[/I]' % i, '') for i in (ls(32499), ls(32453), ls(32500))]
+	if params['mediatype'] == 'tvshow': choices += [('dropped', 'Toggle Dropped', '')]
 	list_items = [{'line1': item[1], 'line2': item[2], 'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
 	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
-	if 'drop' in choice[0]:
+	if 'dropped' in choice[0]:
 		return trakt_api.hide_unhide_trakt_items(params['tmdb_id'], 'shows', params['imdb_id'], 'dropped')
-	if 'watchlist' in choice[0] or 'collection' in choice[0] or 'favorites' in choice[0]:
+	if 'watchlist' in choice[0] or 'favorites' in choice[0] or 'collection' in choice[0]:
 		list_items = trakt_api.trakt_fetch_collection_watchlist(choice[0], params['mediatype'])
 		action = False if int(params['tmdb_id']) in {i['media_ids']['tmdb'] for i in list_items} else True
 		data = [{'ids': {'tmdb': int(params['tmdb_id'])}}]
@@ -115,14 +111,14 @@ def mdbl_manager_choice(params):
 		(str(item['id']), item['name'], '%s items' % item['items'])
 		for item in mdblist_api.mdbl_get_lists('my_lists') if not item['dynamic']
 	]
-	choices += [(i, '[I]%s[/I]' % i.capitalize(), '') for i in ('collection', 'watchlist')]
-	choices += [('drop', '%s %s...' % ('Toggle', 'Dropped'), '')] if params['mediatype'] == 'tvshow' else []
+	choices += [(i.lower(), '[I]%s[/I]' % i, '') for i in (ls(32499), ls(32500))]
+	if params['mediatype'] == 'tvshow': choices += [('dropped', 'Toggle Dropped', '')]
 	list_items = [{'line1': item[1], 'line2': item[2],'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
 	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
-	if 'drop' in choice[0]:
+	if 'dropped' in choice[0]:
 		return mdblist_api.hide_unhide_mdbl_items(params['tmdb_id'], 'shows', params['imdb_id'], 'dropped')
 	if 'collection' in choice[0]:
 		list_items = mdblist_api.mdblist_collection('all', None, '')
@@ -152,17 +148,18 @@ def flicklist_manager_choice(params):
 		(str(item['id']), '%s' % item['name'], '%s items' % item['item_count'])
 		for item in flicklist_api.flicklist_get_lists('my_lists')
 	]
-	choices += [('favorites', '[I]%s[/I]' % 'Favorites', ''), ('watchlist', '[I]%s[/I]' % ls(32500), '')]
-	choices += [('drop', '%s %s...' % ('Toggle', 'Dropped'), '')] if params['mediatype'] == 'tvshow' else []
+	choices += [(i.lower(), '[I]%s[/I]' % i, '') for i in (ls(32453), ls(32500))]
+	if params['mediatype'] == 'tvshow': choices += [('dropped', 'Toggle Dropped', '')]
 	list_items = [{'line1': item[1], 'line2': item[2], 'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
 	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
-	if 'drop' in choice[0]:
+	if 'dropped' in choice[0]:
 		return flicklist_api.hide_unhide_flicklist_items(params['tmdb_id'], 'shows', params['tmdb_id'], 'dropped')
 	if 'watchlist' in choice[0] or 'favorites' in choice[0]:
-		list_items = flicklist_api.flicklist_fetch_collection_watchlist_items('user/%s' % choice[0])
+		if 'watchlist' in choice[0]: list_items = flicklist_api.flicklist_watchlist('all', None, '')
+		else: list_items = flicklist_api.flicklist_favorites('all', None, '')
 		action = False if int(params['tmdb_id']) in {i['tmdb_id'] for i in list_items} else True
 		args = choice[0], params['mediatype'], int(params['tmdb_id'])
 		if not action:

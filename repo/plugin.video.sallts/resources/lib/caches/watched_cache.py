@@ -17,7 +17,7 @@ progressDialogBG, execJSONRPC = kodi_utils.progressDialogBG, kodi_utils.execJSON
 get_datetime, adjust_premiered_date = utils.get_datetime, utils.adjust_premiered_date
 sort_for_article, make_thread_list = utils.sort_for_article, utils.make_thread_list
 clean_file_name, paginate_list = utils.clean_file_name, utils.paginate_list
-WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db,
+WATCHED_DB, TRAKT_DB = kodi_utils.watched_db, kodi_utils.trakt_db
 MDBL_DB, FLICKL_DB = kodi_utils.mdbl_db, kodi_utils.flickl_db
 indicators_dict = {0: WATCHED_DB, 1: TRAKT_DB, 2: MDBL_DB, 3: FLICKL_DB}
 
@@ -164,9 +164,9 @@ def get_in_progress_movies(dummy_arg, page_no, letter):
 	limit = settings.page_limit()
 	dbcon = _database_connect(get_database(watched_indicators))
 	dbcur = set_PRAGMAS(dbcon)
-	dbcur.execute("""SELECT media_id, last_played, title FROM progress WHERE db_type = ?""", ('movie',))
+	dbcur.execute("""SELECT media_id, title, last_played, FROM progress WHERE db_type = ?""", ('movie',))
 	data = dbcur.fetchall()
-	data = [{'media_id': i[0], 'title': i[2], 'last_played': i[1]} for i in data if not i[0] == '']
+	data = [{'media_id': i[0], 'title': i[1], 'last_played': i[2]} for i in data if not i[0] == '']
 	if settings.lists_sort_order('progress') == 0: original_list = sort_for_article(data, 'title', settings.ignore_articles())
 	else: original_list = sorted(data, key=lambda x: x['last_played'], reverse=True)
 	if paginate: final_list, total_pages = paginate_list(original_list, page_no, letter, limit)

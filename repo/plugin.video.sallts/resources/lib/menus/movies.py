@@ -34,6 +34,7 @@ class Movies:
 		self.current_date = get_datetime_function()
 		self.meta_user_info = settings.metadata_user_info()
 		self.watched_indicators = settings.watched_indicators()
+		self.watched_title = settings.watched_title(self.watched_indicators)
 		self.watched_info = get_watched_info_function(self.watched_indicators)
 		self.bookmarks = get_bookmarks(self.watched_indicators, 'movie')
 		self.include_year_in_title = settings.include_year_in_title('movie')
@@ -42,7 +43,6 @@ class Movies:
 		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
 		if not self.exit_list_params: self.exit_list_params = get_infolabel('Container.FolderPath')
-		self.watched_title = ('SALTS', 'Trakt', 'MDBList', 'FlickList')[self.watched_indicators]
 		self.art_provider = (*settings.get_art_provider(), poster_empty, fanart_empty)
 
 	def build_movie_content(self, position, tag):
@@ -160,7 +160,6 @@ class Menu(Movies):
 	tmdb_special_key_dict = {'tmdb_movies_networks': 'company', 'tmdb_movies_year': 'year', 'tmdb_moviesanime_year': 'year'}
 	tmdb_main = ('tmdb_movies_popular', 'tmdb_movies_latest_releases', 'tmdb_movies_premieres', 'tmdb_movies_upcoming', 'tmdb_movies_blockbusters', 'tmdb_moviesanime_popular', 'tmdb_moviesanime_latest_releases')
 	trakt_main = ('trakt_movies_trending', 'trakt_movies_trending_recent', 'trakt_movies_most_watched', 'trakt_moviesanime_trending', 'trakt_moviesanime_most_watched')
-	tmdb_personal = ('tmdb_watchlist', 'tmdb_favorite', 'tmdb_recommendations')
 	trakt_personal = ('trakt_collection', 'trakt_watchlist', 'trakt_favorites', 'trakt_collection_lists')
 	mdblist_personal = ('mdblist_collection', 'mdblist_watchlist')
 	flicklist_personal = ('flicklist_watchlist', 'flicklist_favorites')
@@ -214,10 +213,6 @@ class Menu(Movies):
 				self.list = [i['movie']['ids'] for i in data]
 				if self.action not in ('trakt_moviesanime_trending',):
 					self.new_page = {'new_page': string(page_no + 1)}
-			elif self.action in Menu.tmdb_personal:
-				data, total_pages = function('movie', page_no, letter)
-				self.list = [i['id'] for i in data]
-				if total_pages > page_no: self.new_page = {'new_page': string(page_no + 1), 'new_letter': letter}
 			elif self.action in Menu.trakt_personal:
 				self.id_type = 'trakt_dict'
 				data, total_pages = function('movies', page_no, letter)

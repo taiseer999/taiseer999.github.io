@@ -22,7 +22,10 @@ retry = requests.adapters.Retry(total=None, status=1, status_forcelist=(429, 502
 session.mount('https://api.trakt.tv', requests.adapters.HTTPAdapter(pool_maxsize=100, max_retries=retry))
 
 def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagination=False, page=1):
-	headers = {'trakt-api-key': V2_API_KEY, 'trakt-api-version': '2', 'Content-Type': 'application/json'}
+	headers = {
+		'User-Agent': session.headers['User-Agent'], 'Content-Type': 'application/json',
+		'trakt-api-key': V2_API_KEY, 'trakt-api-version': '2'
+	}
 	if with_auth is True and (token := settings.trakt_token()): headers['Authorization'] = 'Bearer %s' % token
 	if pagination: params['page'] = page
 	try:
@@ -81,6 +84,9 @@ def trakt_expires(func):
 			if refresh and trakt_refresh(): kodi_utils.sleep(1000)
 		return func(*args, **kwargs)
 	return wrapper
+
+def id_lookup(media_id, key='tmdb'):
+	return call_trakt('search/%s/%s' % (key, media_id))
 
 def trakt_recommendations(mediatype):
 	string = 'trakt_recommendations_%s' % mediatype
@@ -309,7 +315,7 @@ def _get_trakt_paginated_list(url):
 def trakt_get_lists(list_type):
 	if list_type == 'liked_lists': string, path_insert = 'trakt_liked_lists', 'likes/lists'
 	else: string, path_insert = 'trakt_my_lists', 'lists'
-	url = {'path': 'users/me/%s', 'path_insert': path_insert, 'with_auth': True}
+	url = {'path': 'users/me/%s', 'path_insert': path_insert, 'params': {'limit': 100}, 'with_auth': True}
 	return trakt_cache.cache_trakt_object(get_trakt, string, url)
 
 def make_new_trakt_list(params):
@@ -419,6 +425,7 @@ def trakt_indicators_movies():
 	insert_list = []
 	insert_append = insert_list.append
 	result = [(i,) for i in call_trakt('sync/watched/movies')] # TaskPool requires tuple
+	if not result: return
 #	threads = list(make_thread_list(_process, result, Thread))
 	for i in TaskPool().tasks(_process, result, Thread): i.join()
 	trakt_cache.TraktCache().set_bulk_movie_watched(insert_list)
@@ -439,6 +446,7 @@ def trakt_indicators_tv():
 	insert_list = []
 	insert_append = insert_list.append
 	result = [(i,) for i in call_trakt('sync/watched/shows')] # TaskPool requires tuple
+	if not result: return
 #	threads = list(make_thread_list(_process, result, Thread))
 	for i in TaskPool().tasks(_process, result, Thread): i.join()
 	trakt_cache.TraktCache().set_bulk_tvshow_watched(insert_list)
@@ -454,9 +462,9 @@ def trakt_progress_movies(progress_info):
 	insert_list = []
 	insert_append = insert_list.append
 	progress_items = [i for i in progress_info if i['type'] == 'movie' and i['progress'] > 1]
-	if progress_items:
-		threads = list(make_thread_list(_process, progress_items, Thread))
-		[i.join() for i in threads]
+	if not progress_items: return
+	threads = list(make_thread_list(_process, progress_items, Thread))
+	[i.join() for i in threads]
 	trakt_cache.TraktCache().set_bulk_movie_progress(insert_list)
 
 def trakt_progress_tv(progress_info):
@@ -479,11 +487,11 @@ def trakt_progress_tv(progress_info):
 	tmdb_list = []
 	tmdb_list_append = tmdb_list.append
 	progress_items = [i for i in progress_info if i['type'] == 'episode' and i['progress'] > 1]
-	if progress_items:
-		all_shows = [i['show'] for i in progress_items]
-		all_shows = [i for n, i in enumerate(all_shows) if i not in all_shows[n + 1:]] # remove duplicates
-		threads = list(make_thread_list(_process_tmdb_ids, all_shows, Thread))
-		[i.join() for i in threads]
+	if not progress_items: return
+	all_shows = [i['show'] for i in progress_items]
+	all_shows = [i for n, i in enumerate(all_shows) if i not in all_shows[n + 1:]] # remove duplicates
+	threads = list(make_thread_list(_process_tmdb_ids, all_shows, Thread))
+	[i.join() for i in threads]
 	insert_list = list(_process())
 	trakt_cache.TraktCache().set_bulk_tvshow_progress(insert_list)
 
@@ -530,7 +538,7 @@ def trakt_my_anime_calendar(current_date):
 		data = [i for n, i in enumerate(data) if i not in data[n + 1:]] # remove duplicates
 		return data
 	start, finish = trakt_calendar_days(False, current_date)
-	string = 'trakt_my_anime_calendar_%s_%s' % (start, finish)
+	string = 'trakt_get_my_calendar_anime_%s_%s' % (start, finish)
 	url = {'path': 'calendars/my/shows/%s/%s', 'path_insert': (start, finish), 'params': {'genres': 'anime'}, 'with_auth': True, 'pagination': False}
 	return trakt_cache.cache_trakt_object(_process, string, url)
 

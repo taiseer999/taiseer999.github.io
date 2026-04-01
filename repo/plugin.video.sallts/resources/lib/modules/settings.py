@@ -241,15 +241,17 @@ def use_season_title():
 	return get_setting('use_season_title') == 'true'
 
 def watched_indicators():
-	if all(get_setting(i) == '' for i in ('trakt_user', 'mdblist_user', 'flicklist_user')): return 0
+	if not any(get_setting(i) for i in ('trakt_user', 'mdblist_user')): return 0
 	return int(get_setting('watched_indicators', '0'))
+
+def watched_title(watched_indicators):
+	return ('SALTS', 'Trakt', 'MDBList')[watched_indicators]
 
 def widget_hide_watched():
 	return get_setting('widget_hide_watched') == 'true'
 
-default_internal_scrapers, cloud_scrapers = (
-	'pm_cloud', 'rd_cloud', 'tb_cloud', 'torboxnews'
-), ('pm_cloud', 'rd_cloud', 'tb_cloud')
+cloud_scrapers = ('pm_cloud', 'rd_cloud', 'tb_cloud')
+default_internal_scrapers = (*cloud_scrapers, 'torboxnews')
 
 def active_internal_scrapers():
 	settings = ['provider.external']

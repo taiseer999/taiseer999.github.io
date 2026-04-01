@@ -167,7 +167,7 @@ def mdbl_account_info():
 	try:
 		kodi_utils.show_busy_dialog()
 		account_info = mdblist_api.call_mdblist('user')
-		joined = jsondate_to_datetime(account_info['date_joined'], '%Y-%m-%dT%H:%M:%S+00:00')
+		joined = jsondate_to_datetime(account_info['date_joined'], '%Y-%m-%dT%H:%M:%SZ')
 		api_requests = account_info['api_requests']
 		remaining = api_requests - account_info['api_requests_count']
 		body = []

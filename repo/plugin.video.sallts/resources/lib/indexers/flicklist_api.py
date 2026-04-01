@@ -89,9 +89,20 @@ def hide_unhide_flicklist_items(action, mediatype, media_id, list_type):
 	kodi_utils.container_refresh()
 
 def flicklist_watchlist(mediatype, page_no, letter):
+	def _watchlist_items(url):
+		params = {'per_page': 200}
+		items = []
+		try:
+			for page in range(1, (MAX_LIST_ITEMS // params['per_page']) + 1):
+				params['page'] = page
+				result = call_flicklist(url, params=params)
+				if result is None: break
+				if 'items' in result: items += result['items']
+				if len(items) >= result['total']: break
+		finally: return items
 	string = 'flicklist_watchlist'
 	url = 'user/watchlist'
-	original_list = flicklist_cache.cache_flicklist_object(flicklist_fetch_collection_watchlist_items, string, url)
+	original_list = flicklist_cache.cache_flicklist_object(_watchlist_items, string, url)
 	if mediatype == 'all': return original_list
 	key = _media_type(mediatype)
 	original_list = [i for i in original_list if i['media_type'] == key]
@@ -106,9 +117,15 @@ def flicklist_watchlist(mediatype, page_no, letter):
 	return final_list, total_pages
 
 def flicklist_favorites(mediatype, page_no, letter):
+	def _favorites_items(url):
+		items = []
+		try:
+			result = call_flicklist(url)
+			if result: items += result
+		finally: return items
 	string = 'flicklist_favorites'
 	url = 'user/favorites'
-	original_list = flicklist_cache.cache_flicklist_object(flicklist_fetch_collection_watchlist_items, string, url)
+	original_list = flicklist_cache.cache_flicklist_object(_favorites_items, string, url)
 	if mediatype == 'all': return original_list
 	key = _media_type(mediatype)
 	original_list = [i for i in original_list if i['media_type'] == key]
@@ -117,14 +134,6 @@ def flicklist_favorites(mediatype, page_no, letter):
 		final_list, total_pages = paginate_list(original_list, page_no, letter, limit)
 	else: final_list, total_pages = original_list, 1
 	return final_list, total_pages
-
-def flicklist_fetch_collection_watchlist_items(url):
-	items = []
-	try:
-		result = call_flicklist(url)
-		if result is None: raise
-		items.extend(result)
-	finally: return items
 
 def add_to_list(list_id, mediatype, media_id):
 	data = {'tmdb_id': media_id, 'media_type': _media_type(mediatype)}
@@ -140,7 +149,8 @@ def remove_from_list(list_id, mediatype, media_id):
 	result = call_flicklist(url, params=params, method='delete')
 	if result is None: return kodi_utils.notification(32574)
 	kodi_utils.notification(32576)
-	flicklist_sync_activities()
+	# 6.04.01 - force, some remove events do not update last-activities
+	flicklist_sync_activities(force_update=True)
 	kodi_utils.container_refresh()
 	return result
 
@@ -159,7 +169,8 @@ def remove_from_collection(list_type, mediatype, media_id):
 	result = call_flicklist(url, params=params, method='delete')
 	if result is None: return kodi_utils.notification(32574)
 	kodi_utils.notification(32576)
-	flicklist_sync_activities()
+	# 6.04.01 - force, some remove events do not update last-activities
+	flicklist_sync_activities(force_update=True) 
 	kodi_utils.container_refresh()
 	return result
 
@@ -321,9 +332,9 @@ def flicklist_playback_progress():
 	return call_flicklist(url)
 
 def flicklist_watched_progress(mediatype):
-	params = {'watched_status': 'watched', 'media_type': _media_type(mediatype), 'per_page': 500}
+	params = {'watch_status': 'watched', 'media_type': _media_type(mediatype), 'per_page': 500}
 	watched = []
-	try:
+	try: # 6.04.01 - endpoint now returns every "mark" event for individual items
 		for page in range(1, (MAX_LIST_ITEMS // params['per_page']) + 1):
 			params['page'] = page
 			result = call_flicklist('scrobble/history', params=params)
@@ -341,7 +352,7 @@ def flicklist_sync_activities(force_update=False):
 		return int(time.mktime(date_time.timetuple()))
 	def _compare(latest, cached, res_format='%Y-%m-%dT%H:%M:%S.%fZ'):
 		if latest is None and cached is None: return False
-		try: result = _get_timestamp(js2date(latest, res_format)) > _get_timestamp(js2date(cached, res_format))
+		try: result = _get_timestamp(js2date(latest, res_format)) != _get_timestamp(js2date(cached, res_format))
 		except: result = True
 		return result
 	if not get_setting('flicklist_user', ''): return 'no account'
@@ -365,6 +376,7 @@ def flicklist_sync_activities(force_update=False):
 		flicklist_cache.clear_flicklist_collection_watchlist_data('watchlist')
 	elif _compare(latest['shows']['watchlisted_at'], cached['shows']['watchlisted_at']):
 		flicklist_cache.clear_flicklist_collection_watchlist_data('watchlist')
+	return 'success' # 6.04.01 - watched/resume api broken
 	if _compare(latest['movies']['watched_at'], cached['movies']['watched_at']): flicklist_indicators_movies()
 	if _compare(latest['episodes']['watched_at'], cached['episodes']['watched_at']): flicklist_indicators_tv()
 	refresh_movies_paused = _compare(latest['movies']['paused_at'], cached['movies']['paused_at'])

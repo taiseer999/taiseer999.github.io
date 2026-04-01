@@ -1,6 +1,7 @@
 import magneto
 from magneto.aiostreams import source as AIOStreams
 from indexers.metadata import movie_meta, tvshow_meta, season_episodes_meta
+from indexers.trakt_api import id_lookup
 from modules.player import SALTSPlayer
 from modules import settings
 from modules.utils import get_datetime
@@ -33,6 +34,14 @@ class Sources(magneto.MagnetoPlayer):
 				})
 			except: pass
 		else: self.meta = movie_meta('tmdb_id', self.tmdb_id, meta_user_info, current_date)
+		if self.imdb_id: return
+		try:
+			imdb_id = next((
+				i['movie']['ids']['imdb'] if i['type'] == 'movie' else i['show']['ids']['imdb']
+				for i in id_lookup(self.tmdb_id, 'tmdb')
+			), None)
+			if imdb_id: self.imdb_id = self.meta['imdb_id'] = imdb_id
+		except: pass
 
 	def play_file(self, results, source=None):
 		if not source: source = results[0]

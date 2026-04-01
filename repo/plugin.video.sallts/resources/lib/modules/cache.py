@@ -84,7 +84,7 @@ def remove_old_databases():
 def remove_old_packages():
 	files = kodi_utils.list_dirs(packages_path)[1]
 	for item in files:
-		if '.salts' in item and item.endswith('zip'):
+		if '.sallts' in item and item.endswith('zip'):
 			try: kodi_utils.delete_file(packages_path + item)
 			except: pass
 

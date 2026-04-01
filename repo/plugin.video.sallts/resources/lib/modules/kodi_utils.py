@@ -28,7 +28,7 @@ databases_path = 'special://profile/addon_data/plugin.video.sallts/'
 packages_path  = 'special://home/addons/packages/'
 
 current_dbs           = ('settings.xml', 'debridcache.db', 'favorites.db', 'maincache.db', 'metacache.db',
-						'navigator.db', 'traktcache.db', 'mdblcache.db', 'flickl_db', 'views.db', 'watched.db')
+						'navigator.db', 'traktcache.db', 'mdblcache.db', 'flicklcache.db', 'views.db', 'watched.db')
 myvideos_db_paths     = {19: '119', 20: '121', 21: '131', 22: '139'}
 
 def logger(heading, function):

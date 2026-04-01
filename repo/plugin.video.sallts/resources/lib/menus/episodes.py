@@ -38,6 +38,7 @@ class Episodes:
 		self.adjust_hours = date_offset_info()
 		self.meta_user_info = settings.metadata_user_info()
 		self.watched_indicators = settings.watched_indicators()
+		self.watched_title = settings.watched_title(self.watched_indicators)
 		self.watched_info = get_watched_info(self.watched_indicators)
 		self.bookmarks = get_bookmarks(self.watched_indicators, 'episode')
 		self.ignore_articles = settings.ignore_articles()
@@ -48,7 +49,6 @@ class Episodes:
 		self.display_title, self.date_format = single_ep_display_title(), single_ep_format()
 		self.is_widget = kodi_utils.external_browse()
 		self.widget_hide_watched = self.is_widget and self.meta_user_info['widget_hide_watched']
-		self.watched_title = ('SALTS', 'Trakt', 'MDBList', 'FlickList')[self.watched_indicators]
 		self.art_provider = (*settings.get_art_provider(), poster_empty, fanart_empty)
 		self.container_update = 'ActivateWindow(Videos,%s,return)' if self.is_widget else 'Container.Update(%s)'
 
@@ -173,7 +173,7 @@ class Episodes:
 			})))
 			if self.watched_indicators == 3: cm_append((
 				self.cm_sort['flicklist'], flicklistmanager_str, run_plugin % build_url({
-					'mode': 'FlickList_manager_choice', 'mediatype': 'tvshow',
+					'mode': 'flickList_manager_choice', 'mediatype': 'tvshow',
 					'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id
 			})))
 			cm.sort(key=lambda k: k[0])
