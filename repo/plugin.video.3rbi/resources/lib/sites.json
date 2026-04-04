@@ -1,0 +1,102 @@
+{
+    "sites": {
+        "akwam": {
+            "label": "Akwam",
+            "active": true,
+            "url": "https://ak.sv/"
+        },
+        "arabseed": {
+            "label": "ArabSeed",
+            "active": true,
+            "url": "https://a.asd.homes/"
+        },
+        "asia2tv": {
+            "label": "Asia2TV",
+            "active": true,
+            "url": "https://asia2tv.com"
+        },
+        "cima4u": {
+            "label": "Cima4u",
+            "active": true,
+            "url": "https://c4u.top"
+        },
+        "daktna": {
+            "label": "Daktna",
+            "active": true,
+            "url": "https://video.daktna.tv/"
+        },
+        "fajershow": {
+            "label": "FajerShow",
+            "active": true,
+            "url": "https://fajer.show/"
+        },
+        "shoofvod": {
+            "label": "ShoofVOD",
+            "active": true,
+            "url": "https://shoofvod.com/"
+        },
+        "egydead": {
+            "label": "EgyDead",
+            "active": true,
+            "url": "https://w.egydead.live"
+        },
+        "esseq": {
+            "label": "Esseq",
+            "active": true,
+            "url": "https://new.eishq.net"
+        },
+        "shoofmax": {
+            "label": "ShoofMax",
+            "active": true,
+            "url": "https://shoofmax.com"
+        },
+        "qrmzi": {
+            "label": "Qrmzi",
+            "active": true,
+            "url": "https://www.qrmzi.tv"
+        },
+        "cimanow": {
+            "label": "CimaNow",
+            "active": true,
+            "url": "https://cimanow.cc"
+        },
+        "faselhd": {
+            "label": "FaselHD",
+            "active": true,
+            "url": "https://faselhd.club",
+            "alt_urls": [
+                "https://web22812x.faselhdx.bid"
+            ]
+        },
+        "shahidmosalsalat": {
+            "label": "Shahid Mosalsalat",
+            "active": true,
+            "url": "https://v5.shahidmosalsalat.business/",
+            "alt_urls": [
+                "https://t.shahidmosalsalat.me/",
+                "https://w.shahidmosalsalat.me/",
+                "https://shahidmosalsalat.business/"
+            ]
+        },
+        "viola": {
+            "label": "VioLa",
+            "active": true,
+            "url": "https://vio-la.com"
+        },
+        "larozza": {
+            "label": "Larozza",
+            "active": true,
+            "url": "https://larozza.xyz"
+        },
+        "shhid4u": {
+            "label": "Shahid4U",
+            "active": false,
+            "url": "https://shhid4u.net"
+        },
+        "egydrama": {
+            "label": "EgyDrama",
+            "active": true,
+            "url": "https://v.egydrama.com"
+        }
+    }
+}
