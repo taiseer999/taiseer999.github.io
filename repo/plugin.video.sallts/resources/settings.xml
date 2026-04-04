@@ -122,7 +122,7 @@
 		<setting id="mdbl_indicators_active" label="mdbl_indicators_active" type="text" default="false" visible="false" />
 		<setting id="flicklist_indicators_active" label="mdbl_indicators_active" type="text" default="false" visible="false" />
 		<setting id="watched_indicators" label="Watched Status Provider" type="enum" default="0" values="SALTS|Trakt|MDBList" visible="eq(-3,true)|eq(-2,true)" />
-		<setting id="amble.indicators" label="Authorize Trakt/MDBList/FlickList for More options" type="text" enable="false" visible="eq(-4,false)+eq(-3,false)+eq(-2,false)" />
+		<setting id="amble.indicators" label="Authorize Trakt/MDBList for More options" type="text" enable="false" visible="eq(-4,false)+eq(-3,false)+eq(-2,false)" />
 		<setting id="sync_kodi_library_watchstatus" label="Set Watched in Kodi Library when Watched in SALTS" type="bool" default="false" />
 		<!-- Content and Sorting -->
 		<setting label="Next Episodes" type="lsep" />
@@ -168,13 +168,13 @@
 	<category label="Playback">
 		<!-- Playback -->
 		<setting label="Movies" type="lsep" />
-		<setting id="auto_play_movie" label="Auto Play" type="bool" default="false" visible="false" />
+		<setting id="auto_play_movie" label="Auto Play" type="bool" default="false" />
 		<setting id="auto_resume_movie" label="Automatically Resume Playback" type="enum" default="0" values="Never|Always" />
 		<setting id="stingers.enable" label="Enable Credit Scene Notification (Movie Stingers)" type="bool" default="false" />
 			<setting id="stingers.threshold" label="Notification Threshold (Seconds After Start)" type="slider" default="10" option="int" range="10,10,60" subsetting="true" visible="eq(-1,true)" />
 		<setting label="Episodes" type="lsep" />
-		<setting id="auto_play_episode" label="Auto Play" type="bool" default="false" visible="false" />
-		<setting id="autoplay_next_episode" label="Autoplay Next Episode" type="bool" default="false" visible="eq(-1,true)" />
+		<setting id="auto_play_episode" label="Auto Play" type="bool" default="false" />
+		<setting id="autoplay_next_episode" label="Autoplay Next Episode" type="bool" default="false" visible="false" />
 			<setting id="autoplay_next_show_window" label="Show Next Episode Window" type="bool" default="true" subsetting="true" visible="eq(-2,true)+eq(-1,true)" />
 			<setting id="autoplay_next_window_timer_method" label="Show Window Based On" type="enum" default="0" values="Time Remaining|Percentage Played" subsetting="true" visible="eq(-3,true)+eq(-2,true)+eq(-1,true)" />
 			<setting id="autoplay_next_window_time" label="Show Window Before End (secs)" type="slider" default="20" option="int" range="10,10,120" subsetting="true" visible="eq(-4,true)+eq(-3,true)+eq(-2,true)+eq(-1,0)" />

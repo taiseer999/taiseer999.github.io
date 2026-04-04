@@ -293,7 +293,7 @@ msgstr "التفافية-العودة للبداية"
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31059"
 msgid "Side"
-msgstr "تخصيص الجانب الايسر"
+msgstr "الجانب الايسر"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31060"
@@ -2330,7 +2330,7 @@ msgid "VS10 engine"
 msgstr ""
 
 msgctxt "#32007"
-msgid "More"
+msgid "Processing"
 msgstr ""
 
 msgctxt "#32008"
@@ -2450,11 +2450,11 @@ msgid "AML FPS"
 msgstr ""
 
 msgctxt "#32037"
-msgid "DV Configuration"
+msgid "Dolby Vision"
 msgstr ""
 
 msgctxt "#32038"
-msgid "DV Levels Metadata"
+msgid "Metadata"
 msgstr ""
 
 msgctxt "#32039"

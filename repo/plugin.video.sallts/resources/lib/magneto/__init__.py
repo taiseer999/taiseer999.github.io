@@ -336,7 +336,10 @@ class MagnetoPlayer:
 
 	def resolve_sources(self, item):
 		logger('aiostreams', f"resolve_sources\n{json.dumps(item, indent=2)}")
-		return item.get('url')
+		headers = item.get('requestHeaders')
+		if headers: url = '|'.join((item.get('url'), kore.urlencode(headers)))
+		else: url = item.get('url')
+		return url
 
 	def play_cancelled(self):
 #		kore.xbmcplugin.setResolvedUrl(int(sys.argv[1]), False, listitem=make_listitem())

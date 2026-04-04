@@ -81,7 +81,7 @@ def trakt_manager_choice(params):
 	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
 	if 'dropped' in choice[0]:
 		return trakt_api.hide_unhide_trakt_items(params['tmdb_id'], 'shows', params['imdb_id'], 'dropped')
-	if 'collection' in choice[0] or 'favorites' in choice[0] or 'watchlist' in choice[0]:
+	if 'watchlist' in choice[0] or 'favorites' in choice[0] or 'collection' in choice[0]:
 		list_items = trakt_api.trakt_fetch_collection_watchlist(choice[0], params['mediatype'])
 		action = False if int(params['tmdb_id']) in {i['media_ids']['tmdb'] for i in list_items} else True
 		data = [{'ids': {'tmdb': int(params['tmdb_id'])}}]
@@ -113,7 +113,7 @@ def mdbl_manager_choice(params):
 	]
 	choices += [(i.lower(), '[I]%s[/I]' % i, '') for i in (ls(32499), ls(32500))]
 	if params['mediatype'] == 'tvshow': choices += [('dropped', 'Toggle Dropped', '')]
-	list_items = [{'line1': item[1], 'line2': item[2],'icon': icon} for item in choices]
+	list_items = [{'line1': item[1], 'line2': item[2], 'icon': icon} for item in choices]
 	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
 	choice = select_dialog([(i[0], i[1]) for i in choices], **kwargs)
 	if choice is None: return
@@ -174,7 +174,7 @@ def tmdb_manager_choice(params):
 		return function({**params, 'list_id': choice[0]})
 	add_str, rem_str = 'Add to %s?' % choice[1], 'Remove from %s?' % choice[1]
 	params['mediatype'] = 'tv' if params['mediatype'] == 'tvshow' else 'movie'
-	if 'favorites' in choice[0] or 'watchlist' in choice[0]:
+	if 'watchlist' in choice[0] or 'favorites' in choice[0]:
 		if 'watchlist' == choice[0]:
 			list_items = tmdb_api.all_list_items(tmdb_api.watchlist, params['mediatype'])
 		else: list_items = tmdb_api.all_list_items(tmdb_api.favorites, params['mediatype'])
@@ -477,7 +477,7 @@ def build_navigate_to_page(params):
 	def _builder(use_alphabet):
 		for i in start_list:
 			if use_alphabet: line1, line2 = i.upper(), ls(32821) % (mediatype, i.upper())
-			else: line1, line2 = '%s %s' % (ls(32022), i), ls(32822) % i
+			else: line1, line2 = '%s %s' % ('Page', i), ls(32822) % i
 			yield {'line1': line1, 'line2': line2, 'icon': icon}
 	if use_alphabet:
 		start_list = [chr(i) for i in range(97,123)]

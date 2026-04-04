@@ -32,7 +32,7 @@
             <font>
                 <name>font_Topbar_bold</name>
                 <filename>monadi BOLD.ttf</filename>
-                <size>44</size>
+                <size>38</size>
                 <style>uppercase</style>
             </font>
 
@@ -40,7 +40,7 @@
             <font>
                 <name>font_Topbarinfo</name>
                 <filename>monadi-reg.ttf</filename>
-                <size>32</size>
+                <size>29</size>
                 <style>uppercase</style>
             </font>
 
@@ -153,7 +153,7 @@
         <!-- Linespacing -->
         <param name="plot_linespacing_head">1.169</param>
         <param name="plot_linespacing_midi">1.455</param>
-        <param name="plot_linespacing_main">1.0</param>
+        <param name="plot_linespacing_main">1.2</param>
         <param name="plot_linespacing_mini">1.31</param>
         <param name="plot_linespacing_tiny">1.23</param>
 

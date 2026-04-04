@@ -2,6 +2,8 @@
 - downloader, select dialog
 
   [COLOR orange][B]Version 6.04[/B][/COLOR]
+- Added Settings/Playback/Auto Play for Movies/Episodes.
+- Changed subtitles search parameters: utf-8 only, added sources.
 - Subtitles require free api key from Wyzie Subs - https://sub.wyzie.io
 - Fixed FlickList Watchlist/Favorites.
 - Removed FlickList watched/resume points.

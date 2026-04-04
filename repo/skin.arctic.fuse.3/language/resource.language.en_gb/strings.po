@@ -2323,7 +2323,7 @@ msgid "VS10 engine"
 msgstr ""
 
 msgctxt "#32007"
-msgid "More"
+msgid "Processing"
 msgstr ""
 
 msgctxt "#32008"
@@ -2443,11 +2443,11 @@ msgid "AML FPS"
 msgstr ""
 
 msgctxt "#32037"
-msgid "DV Configuration"
+msgid "Dolby Vision"
 msgstr ""
 
 msgctxt "#32038"
-msgid "DV Levels Metadata"
+msgid "Metadata"
 msgstr ""
 
 msgctxt "#32039"
