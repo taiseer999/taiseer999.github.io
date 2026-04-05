@@ -184,7 +184,8 @@
 						
 					</control>
 				</control>
-				<control type="group"> <!-- DV Version -->
+				<control type="group">
+				 <!-- DV Version -->
 					<width>400</width>
 					<height>36</height>
 					<control type="label">
@@ -208,7 +209,8 @@
 						
 					</control>
 				</control>
-				<control type="group"> <!-- DV Profile -->
+				<control type="group">
+				 <!-- DV Profile -->
 					<width>400</width>
 					<height>36</height>
 					<control type="label">
@@ -987,7 +989,7 @@
 						<wrapmultiline>true</wrapmultiline>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.hdr.colour.primaries)]</label>
+						<label>$VAR[ColorSpaceVar]</label>
 						<font>font_tiny_iconic_regular1</font>
 						
 						
@@ -1691,8 +1693,21 @@
 						<font>font_tiny_iconic_regular1</font>
 						<textcolor>grey</textcolor>
 						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
+					</control>
+					<control type="label">
+						<left>280</left>
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>10.0 [COLOR dimgrey][----][/COLOR]</label>
+						<font>font_tiny_iconic_regular1</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
 					</control>
 				</control>
+
 				<control type="group">
 					<!-- Dolby Vision Metadata -->
 					<width>520</width>
@@ -1719,6 +1734,18 @@
 						<label>$INFO[Player.Process(video.dovi.meta.version)]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
+						<visible>!String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
+					</control>
+					<control type="label">
+						<left>280</left>
+						<width>240</width>
+						<height>40</height>
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>[COLOR dimgrey]None[/COLOR]</label>
+						<font>font_tiny_iconic_regular1</font>
+						<shadowcolor>black</shadowcolor>
+						<visible>String.IsEqual(VideoPlayer.VideoCodec,av1)</visible>
 					</control>
 				</control>
 				<control type="group">
@@ -1743,7 +1770,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.source.hdr.type)] $VAR[DVProfileVar]$VAR[DVELVar]$VAR[VideoConvVar]</label>
+						<label>$VAR[DVVS10Var]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -2026,6 +2053,7 @@
 					<onfocus>SetProperty(PlayerInfoDialogFocus,5551,Home)</onfocus>
 				</control>
 				<control type="button" id="5552">
+							<visible>!String.Contains(Player.Process(amlogic.vs10.mode),sdr)</visible>
 							<visible>String.IsEqual(Player.Process(video.dovi.has.config),1) |
 					         String.IsEqual(Player.Process(video.dovi.has.header),1) |
 							 String.IsEqual(Player.Process(video.hdr.has.cll),1) |
