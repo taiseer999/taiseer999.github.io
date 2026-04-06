@@ -1,3 +1,14 @@
+[COLOR red][B]Version 6.04[/B][/COLOR]
+- Added debrid and cached status tag to Magneto Player results.
+- Added Hightlight Priority Language Magneto AIOStreams settings.
+- Fix for mediafusion format change causing no results.
+
+[COLOR red][B]Version 6.02[/B][/COLOR]
+- Fix for incorrect mediatype param in Magneto player json.  Thanks to github.  Requires manual re-install Player Json.
+- Added compatibility as external player with configurable AIOStreams source.  See main menu README.
+- Added meteor.
+- Updated bitmagnet.
+
 [COLOR red][B]Version 6.01[/B][/COLOR]
 - Removed elfhosted, elfhosted has disabled direct options.
 - Updated zilean.

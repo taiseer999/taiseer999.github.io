@@ -9,6 +9,7 @@ from modules.utils import make_thread_list, sort_for_article, jsondate_to_dateti
 EXPIRES_1_HOURS, MAX_LIST_ITEMS = 1, 10_000
 logger, js2date = kodi_utils.logger, jsondate_to_datetime
 get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
+req_headers = {'User-Agent': 'SALTS/6.0', 'X-FlickList-Client-Id': 'salts_redux'}
 base_url = 'https://flicklist.tv/api/%s'
 timeout = 5.05
 session = requests.Session()
@@ -20,7 +21,8 @@ def _media_type(mediatype):
 	return 'tv'
 
 def call_flicklist(path, params=None, json=None, method=None):
-	session.headers.update({'Authorization': 'Bearer %s' % get_setting('flicklist.token')})
+	current_token = session.headers.get('Authorization') or 'Bearer %s' % get_setting('flicklist.token')
+	session.headers.update({**req_headers, 'Authorization': current_token})
 	try:
 		response = session.request(method or 'get', base_url % path, params=params, json=json, timeout=timeout)
 		if response.status_code in (401,) and flicklist_refresh() is True:
@@ -34,13 +36,10 @@ def call_flicklist(path, params=None, json=None, method=None):
 
 def flicklist_refresh():
 	from datetime import datetime
+	current_token = session.headers.get('Authorization') or 'Bearer %s' % get_setting('flicklist.token')
+	headers = {**req_headers, 'Authorization': current_token}
 	try:
-		current_token = session.headers.get('Authorization') or get_setting('flicklist.token')
-		result = requests.post(
-			base_url % 'auth/refresh',
-			headers={'Authorization': 'Bearer %s' % current_token},
-			timeout=timeout
-		).json()
+		result = requests.post(base_url % 'auth/refresh', headers=headers, timeout=timeout).json()
 		dt = datetime.strptime(result['expires_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
 		expires = str(int(dt.timestamp()))
 		token = result['token']
@@ -99,7 +98,8 @@ def flicklist_watchlist(mediatype, page_no, letter):
 				if result is None: break
 				if 'items' in result: items += result['items']
 				if len(items) >= result['total']: break
-		finally: return items
+		except: pass
+		return items
 	string = 'flicklist_watchlist'
 	url = 'user/watchlist'
 	original_list = flicklist_cache.cache_flicklist_object(_watchlist_items, string, url)
@@ -122,7 +122,8 @@ def flicklist_favorites(mediatype, page_no, letter):
 		try:
 			result = call_flicklist(url)
 			if result: items += result
-		finally: return items
+		except: pass
+		return items
 	string = 'flicklist_favorites'
 	url = 'user/favorites'
 	original_list = flicklist_cache.cache_flicklist_object(_favorites_items, string, url)
@@ -334,14 +335,15 @@ def flicklist_playback_progress():
 def flicklist_watched_progress(mediatype):
 	params = {'watch_status': 'watched', 'media_type': _media_type(mediatype), 'per_page': 500}
 	watched = []
-	try: # 6.04.01 - endpoint now returns every "mark" event for individual items
+	try:
 		for page in range(1, (MAX_LIST_ITEMS // params['per_page']) + 1):
 			params['page'] = page
 			result = call_flicklist('scrobble/history', params=params)
 			if result is None: break
 			if 'results' in result: watched += result['results']
 			if result['page'] >= result['total_pages']: break
-	finally: return watched
+	except: pass
+	return watched
 
 def flicklist_sync_activities_thread(*args, **kwargs):
 	Thread(target=flicklist_sync_activities, args=args, kwargs=kwargs).start()
@@ -376,7 +378,6 @@ def flicklist_sync_activities(force_update=False):
 		flicklist_cache.clear_flicklist_collection_watchlist_data('watchlist')
 	elif _compare(latest['shows']['watchlisted_at'], cached['shows']['watchlisted_at']):
 		flicklist_cache.clear_flicklist_collection_watchlist_data('watchlist')
-	return 'success' # 6.04.01 - watched/resume api broken
 	if _compare(latest['movies']['watched_at'], cached['movies']['watched_at']): flicklist_indicators_movies()
 	if _compare(latest['episodes']['watched_at'], cached['episodes']['watched_at']): flicklist_indicators_tv()
 	refresh_movies_paused = _compare(latest['movies']['paused_at'], cached['movies']['paused_at'])

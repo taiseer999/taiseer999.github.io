@@ -83,8 +83,8 @@ class source:
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = f"{float(file['size']) / 1073741824:.2f} GB"
-					dsize, isize = source_utils._size(size)
+					size = float(file['size'])
+					dsize, isize = source_utils.convert_size(size)
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)
@@ -151,8 +151,8 @@ class source:
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = f"{float(file['size']) / 1073741824:.2f} GB"
-					dsize, isize = source_utils._size(size)
+					size = float(file['size'])
+					dsize, isize = source_utils.convert_size(size)
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)

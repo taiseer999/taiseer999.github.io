@@ -121,8 +121,8 @@
 		<setting id="trakt_indicators_active" label="trakt_indicators_active" type="text" default="false" visible="false" />
 		<setting id="mdbl_indicators_active" label="mdbl_indicators_active" type="text" default="false" visible="false" />
 		<setting id="flicklist_indicators_active" label="mdbl_indicators_active" type="text" default="false" visible="false" />
-		<setting id="watched_indicators" label="Watched Status Provider" type="enum" default="0" values="SALTS|Trakt|MDBList" visible="eq(-3,true)|eq(-2,true)" />
-		<setting id="amble.indicators" label="Authorize Trakt/MDBList for More options" type="text" enable="false" visible="eq(-4,false)+eq(-3,false)+eq(-2,false)" />
+		<setting id="watched_indicators" label="Watched Status Provider" type="enum" default="0" values="SALTS|Trakt|MDBList|FlickList" visible="eq(-3,true)|eq(-2,true)|eq(-1,true)" />
+		<setting id="amble.indicators" label="Authorize Trakt/MDBList/FlickList for More options" type="text" enable="false" visible="eq(-4,false)+eq(-3,false)+eq(-2,false)" />
 		<setting id="sync_kodi_library_watchstatus" label="Set Watched in Kodi Library when Watched in SALTS" type="bool" default="false" />
 		<!-- Content and Sorting -->
 		<setting label="Next Episodes" type="lsep" />

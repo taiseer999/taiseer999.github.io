@@ -148,7 +148,7 @@ class MagnetoPlayer:
 	def display_results(self, results):
 		window_format, window_number = results_format()
 		chosen_item = open_window(
-			('magneto.window_sources', 'SourcesResults'),
+			('magneto.player.window_sources', 'SourcesResults'),
 			'sources_results.xml',
 			window_format=window_format,
 			window_id=window_number,
@@ -290,12 +290,13 @@ class MagnetoPlayer:
 				})
 			except: pass
 		else: self.meta = cinemeta.movie_meta(self.imdb_id)
+		(Thread(target=cinemeta.external_ids, args=('imdb_id', self.imdb_id))).start()
 
 	def _clear_properties(self):
 		for item in default_internal_scrapers: clear_property(int_window_prop % item)
 
 	def _make_progress_dialog(self):
-		self.progress_dialog = create_window(('magneto.window_sources', 'SourcesPlayback'), 'sources_playback.xml', meta=self.meta)
+		self.progress_dialog = create_window(('magneto.player.window_sources', 'SourcesPlayback'), 'sources_playback.xml', meta=self.meta)
 		Thread(target=self.progress_dialog.run).start()
 
 	def _kill_progress_dialog(self):

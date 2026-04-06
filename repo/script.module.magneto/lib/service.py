@@ -34,7 +34,7 @@ class SettingsMonitor(control.monitor_class):
 		xbmc.log('[ script.module.magneto ]  Settings Monitor Service Starting...', LOGINFO)
 
 	def onSettingsChanged(self): # Kodi callback when the addon settings are changed
-		window.clearProperty('magneto')
+		window.clearProperty('magneto_settings')
 		control.sleep(50)
 		refreshed = control.make_settings_dict()
 		control.refresh_debugReversed()

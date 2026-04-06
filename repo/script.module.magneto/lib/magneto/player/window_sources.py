@@ -1,7 +1,6 @@
 import re
 import json
 from threading import Thread
-from modules.settings import debrid_enabled
 from . import kore
 from .window_base import BaseDialog
 # logger = kore.logger
@@ -14,8 +13,8 @@ debrid_dict, resume_dict = {
 	'offcloud': 'oc', 'easydebrid': 'ed', 'debrider': 'db', 'debridlink': 'dl'
 }, {10: 'resume', 11: 'start_over', 12: 'cancel'}
 info_quality_dict, info_icons_dict = {
-	'4k': get_icon('flag4k'), '1080p': get_icon('flag1080p'), '720p': get_icon('flag720p'),
-	'sd': get_icon('flagSD'), 'cam': get_icon('flagSD'), 'tele': get_icon('flagSD'), 'scr': get_icon('flagSD')
+	'4k': get_icon('flag_4k'), '1080p': get_icon('flag_1080p'), '720p': get_icon('flag_720p'),
+	'sd': get_icon('flag_sd'), 'cam': get_icon('flag_sd'), 'tele': get_icon('flag_sd'), 'scr': get_icon('flag_sd')
 }, {'aiostreams': get_icon('premium')}
 extra_info_choices, quality_choices = (
 	('PACK', 'PACK'), ('DOLBY VISION', 'D/VISION'), ('HIGH DYNAMIC RANGE (HDR)', 'HDR'), ('HYBRID', 'HYBRID'), ('AV1', 'AV1'),
@@ -25,7 +24,7 @@ extra_info_choices, quality_choices = (
 	('2CH AUDIO', '2CH'), ('DVD SOURCE', 'DVD'), ('WEB SOURCE', 'WEB'), ('MULTIPLE LANGUAGES', 'MULTI-LANG'), ('SUBTITLES', 'SUBS')
 ), ('4K', '1080P', '720P', 'SD', 'CAM/SCR/TELE')
 poster_lists, prerelease_values, prerelease_key = ('list', 'medialist'), ('CAM', 'SCR', 'TELE'), 'CAM/SCR/TELE'
-priority_label = '[COLOR orange][B]%s[/B][/COLOR]'
+priority_label = '[COLOR firebrick][B]%s[/B][/COLOR]'
 string, upper, lower = str, str.upper, str.lower
 resume_timeout = 10000
 
@@ -93,12 +92,6 @@ class SourcesResults(BaseDialog):
 					if choice is None: return
 					choice = [i[1] for i in choice]
 					filtered_list = [i for i in self.item_list if all(x in i.getProperty('extraInfo') for x in choice)]
-			elif filter_type == 'debrid':
-				chosen_listitem = self.get_listitem(self.window_id)
-				name, hash = chosen_listitem.getProperty('name'), chosen_listitem.getProperty('hash')
-				if not hash: return notification('Invalid Hash', 2000)
-				from debrids import Debrid
-				return Debrid(filter_value).manual_add_magnet_to_cloud(hash, name)
 			elif filter_type == 'results': return self.results_info(self.get_listitem(self.window_id))
 			if not filtered_list: return notification('No Results', 2000)
 			self.set_filter(filtered_list)
@@ -115,11 +108,11 @@ class SourcesResults(BaseDialog):
 			chosen_source = json.loads(chosen_listitem.getProperty('source'))
 			self.selected = ('play', chosen_source)
 			return self.close()
-#		elif action in self.context_actions:
+		elif action in self.context_actions:
 #			source = json.loads(chosen_listitem.getProperty('source'))
 #			choice = self.context_menu(source)
-#			if choice and choice == 'results_info': return self.results_info(chosen_listitem)
-#			if isinstance(choice, dict): return self.execute_code(run_plugin_str % self.build_url(choice))
+#			if choice == 'results_info':
+			return self.results_info(chosen_listitem)
 
 	def make_items(self, filtered_list=None):
 		def builder(results):
@@ -130,11 +123,6 @@ class SourcesResults(BaseDialog):
 					quality = (get('resolution') or 'sd').replace('2160p', '4K')
 					if not upper(quality) in quality_choices: quality = 'SD'
 					name = get('folderName') or get('filename')
-					if name: name = re.sub(
-						r'[\U0001F1E6-\U0001F1FF]{2}',
-						lambda m: f"[{chr(ord(m.group()[0]) - 127397)}{chr(ord(m.group()[1]) - 127397)}]",
-						name
-					)
 					languages = get('languages')
 					if languages and self.priority_language:
 						languages = [priority_label % i if _language.match(i) else i for i in item['languages']]
@@ -211,7 +199,6 @@ class SourcesResults(BaseDialog):
 			('Filter by [B]Info[/B]...', 'special_extraInfo'),
 			('Result [B]Info[/B]...', 'results_info')
 		])
-		data.extend([('Add to %s Cloud' % (priority_label % i), 'debrid_%s' % i) for i in debrid_enabled()])
 		self.filter_list = list(builder(data))
 
 	def set_properties(self):
@@ -235,7 +222,7 @@ class SourcesResults(BaseDialog):
 
 	def results_info(self, chosen_listitem):
 		return self.open_window(
-			('magneto.window_sources', 'SourcesInfo'),
+			('magneto.player.window_sources', 'SourcesInfo'),
 			'sources_info.xml',
 			item=chosen_listitem,
 			art={'poster': self.meta_get('poster'), 'fanart': self.meta_get('fanart')}
@@ -317,7 +304,7 @@ class SourcesPlayback(BaseDialog):
 		self.setProperty('clearlogo', clearlogo)
 		self.setProperty('year', year)
 		self.setProperty('poster', poster)
-		self.setProperty('genre', genre)
+		self.setProperty('genre', ', '.join(genre))
 
 	def set_resolver_properties(self):
 		if self.meta_get('mediatype') == 'episode': self.text = '[B]%02dx%02d - %s[/B][CR][CR]%s' % (

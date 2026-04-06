@@ -7,7 +7,8 @@ from modules import settings
 from modules.utils import get_datetime
 #from modules.kodi_utils import logger
 
-main_line, get_setting, notification = magneto.main_line, magneto.get_setting, magneto.notification
+main_line, get_setting = magneto.main_line, magneto.get_setting
+sleep, notification = magneto.sleep, magneto.notification
 
 class Sources(magneto.MagnetoPlayer):
 	def internal_sources(self):
@@ -46,18 +47,20 @@ class Sources(magneto.MagnetoPlayer):
 	def play_file(self, results, source=None):
 		if not source: source = results[0]
 		src_idx = next((i for i, _ in enumerate(results, 1) if _ == source), 1)
-		provider = source['scrape_provider']
+		provider = (i for i in (source.get('service'), source['addon'] or source['scrape_provider']) if i)
+		provider = ' | '.join(provider)
 		provider_text = provider.upper()
 		display_name = source['filename'].upper()
 		try: size_label = f"{source['size'] / 1073741824:.2f} GB"
 		except: size_label = 'N/A'
 		extraInfo = source.get('quality'), source.get('encode'), *source['visualTags'], *source['subtitles']
-		extraInfo = ' | '.join(i for i in (extraInfo) if i) or 'N/A'
+		extraInfo = ' | '.join(i.upper() for i in extraInfo if i) or 'N/A'
 		extra_info = '[B]%s[/B] | [B]%s[/B] | %s' %  (source.get('resolution', 'SD'), size_label, extraInfo)
 		resolve_display = '[B]%02d.[/B] [B]%s[/B]' % (src_idx, provider_text)
 		resolve_display = main_line % (resolve_display, extra_info, display_name)
 		res = self.sources_sd, self.sources_720p, self.sources_1080p, self.sources_4k, self.sources_total
 		self.progress_dialog.update_scraper(*res, resolve_display, 0)
+		sleep(200) # needed to update window before curl url check pause
 		self.url = self.resolve_sources(source) or notification('Invalid playback url')
 		if not self.url: return self.play_cancelled()
 		return SALTSPlayer().run(self.url, self.meta, self._kill_progress_dialog)

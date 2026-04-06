@@ -25,17 +25,18 @@
     <setting id="provider.torrentz2" type="bool" label="TORRENTZ2 (Pack capable)" default="false" />
     <setting id="provider.ytsmx" type="bool" label="YTSMX (Movies only)" default="false" />
     <setting label="Indexers" type="lsep" />
+    <setting id="provider.bitmagnet" type="bool" label="BITMAGNET (Pack capable)" default="false" />
     <setting id="provider.comet" type="bool" label="COMET (Pack capable)" default="false" />
         <setting id="comet.url" label="comet instance" type="enum" default="0" values="Kuu-lection|Midnightignite" subsetting="true" visible="eq(-1,true)" />
     <setting id="provider.mediafusion" type="bool" label="MEDIAFUSION (Pack capable)" default="false" />
         <setting id="mediafusion.url" label="mediafusion instance" type="enum" default="0" values="Kuu-lection|Midnightignite" subsetting="true" visible="eq(-1,true)" />
+    <setting id="provider.meteor" type="bool" label="METEOR (Pack capable)" default="false" />
     <setting id="provider.torz" type="bool" label="STREMTHRU TORZ P2P (Pack capable)" default="false" />
         <setting id="torz.url" label="torz instance" type="enum" default="0" values="Kuu-lection|Munif|Midnightignite" subsetting="true" visible="eq(-1,true)" />
     <setting id="provider.torrentio" type="bool" label="TORRENTIO (Pack capable)" default="true" />
     <setting id="provider.torrentsdb" type="bool" label="TORRENTSDB (Pack capable)" default="false" />
     <setting id="provider.zilean" type="bool" label="ZILEAN (Pack capable)" default="true" />
         <setting id="zilean.url" label="zilean instance" type="enum" default="0" values="Kuu-lection|Midnightignite" subsetting="true" visible="eq(-1,true)" />
-    <setting id="provider.bitmagnet" type="bool" label="BITMAGNET (Pack capable)" default="false" />
     <setting id="provider.dmm" type="bool" label="DMM (Pack capable)" default="false" />
 </category>
 
@@ -71,6 +72,35 @@
     <setting type="action" label="Clear Magneto log file" visible="eq(-3,true)+eq(-2,1)" action="RunPlugin(plugin://script.module.magneto/?action=tools_clearLogFile)" />
     <setting type="action" label="View Magneto log file" visible="eq(-4,true)+eq(-3,1)" action="RunPlugin(plugin://script.module.magneto/?action=tools_viewLogFile&amp;name=Magneto)" />
     <setting type="action" label="Upload Magneto log file to pastebin" visible="eq(-5,true)+eq(-4,1)" action="RunPlugin(plugin://script.module.magneto/?action=tools_uploadLogFile)" />
+</category>
+
+<category label="AIOStreams"> <!-- AIOStreams -->
+    <setting label="Results" type="lsep" />
+    <setting id="provider.aiostreams" type="bool" label="" default="true" visible="false" />
+    <setting id="results.list_format" type="enum" label="Results Format" default="1" values="List|Wide List" />
+    <setting id="highlight.type" label="Result Hightlight Type" type="enum" default="1" values="Resolution|Single Color" />
+    <setting id="scraper_single_highlight" label="" type="text" default="dodgerblue" visible="false" />
+    <setting id="scraper_single_display" label="Single Color Hightlight" type="action" default="[COLOR FF1E90FF]dodgerblue[/COLOR]" action="RunPlugin(plugin://script.module.magneto/?action=ColorPick&amp;setting=scraper_single_highlight)" />
+    <setting id="scraper_4k_highlight" label="" type="text" default="magenta" visible="false" />
+    <setting id="scraper_4k_display" label="4K Color Hightlight" type="action" default="[COLOR FFFF00FF]magenta[/COLOR]" action="RunPlugin(plugin://script.module.magneto/?action=ColorPick&amp;setting=scraper_4k_highlight)" />
+    <setting id="scraper_1080p_highlight" label="" type="text" default="orange" visible="false"/>
+    <setting id="scraper_1080p_display" label="1080p Color Hightlight" type="action" default="[COLOR FFFFA500]orange[/COLOR]" action="RunPlugin(plugin://script.module.magneto/?action=ColorPick&amp;setting=scraper_1080p_highlight)" />
+    <setting id="scraper_720p_highlight" label="" type="text" default="blue" visible="false" />
+    <setting id="scraper_720p_display" label="720p Color Hightlight" type="action" default="[COLOR FF0000FF]blue[/COLOR]" action="RunPlugin(plugin://script.module.magneto/?action=ColorPick&amp;setting=scraper_720p_highlight)"/>
+    <setting id="scraper_SD_highlight" label="" type="text" default="green" visible="false" />
+    <setting id="scraper_SD_display" label="SD Color Hightlight" type="action" default="[COLOR FF008000]green[/COLOR]" action="RunPlugin(plugin://script.module.magneto/?action=ColorPick&amp;setting=scraper_SD_highlight)" />
+    <setting id="results.language_filter" label="Hightlight Priority Language" type="bool" default="false" />
+        <setting id="results.language" label="Priority Language" type="select" default="English" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" visible="eq(-1,true)" />
+    <setting id="scraping_timeout" type="number" label="Scraping Timeout" default="30" />
+    <setting label="Setup" type="lsep" />
+    <setting id="aiostreams_instance" type="enum" label="Provider" default="0" values="Kuu|Custom|Viren|Yeb|Midnight" enable="true" />
+    <setting id="aio.ku_url" type="text" label="Url" default="https://aiostreams.stremio.ru" enable="false" visible="eq(-1,0)" />
+    <setting id="aio.custom_url" type="text" label="Url" default="" visible="eq(-2,1)" />
+    <setting id="aio.viren_url" type="text" label="Url" default="https://aiostreams.viren070.me" enable="false" visible="eq(-3,2)" />
+    <setting id="aio.yeb_url" type="text" label="Url" default="https://aiostreams.fortheweak.cloud" enable="false" visible="eq(-4,3)" />
+    <setting id="aio.midnight_url" type="text" label="Url" default="https://aiostreamsfortheweebsstable.midnightignite.me" enable="false" visible="eq(-5,4)" />
+    <setting id="aio.username" type="text" label="Username" default="" />
+    <setting id="aio.password" type="text" label="Password" default="" />
 </category>
 
 </settings>

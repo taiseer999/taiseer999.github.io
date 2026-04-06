@@ -62,16 +62,15 @@ class source:
 			source_utils.scraper_error('TBTORZNAB')
 			return sources
 
-		for file in files.findall('.//item'):
+		for file in files.item('item'):
 			try:
-				attr_dict = {}
+				attr_dict = {'title': file.find('title').text}
 				for attr in file.findall('torznab:attr', {'torznab': 'http://torznab.com/schemas/2015/feed'}):
 					key, val = attr.get('name'), attr.get('value')
-					if key and val: attr_dict[key] = val
-				hash = attr_dict.get('infohash', '')
-				name = file.find('title').text
+					if key: attr_dict[key] = val
+				hash = attr_dict['infohash']
 
-				name = source_utils.clean_name(name)
+				name = source_utils.clean_name(attr_dict['title'])
 
 				if not source_utils.check_title(title, aliases, name.replace('.(Archie.Bunker', ''), hdlr, year): continue
 				name_info = source_utils.info_from_name(name, title, year, hdlr, episode_title)
@@ -81,15 +80,14 @@ class source:
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 
 				try:
-					seeders = int(attr_dict.get('seeders', 0))
+					seeders = int(attr_dict['seeders'])
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = float(attr_dict.get('size', '0'))
-					size = f"{size / 1073741824:.2f} GB"
-					dsize, isize = source_utils._size(size)
+					size = float(attr_dict['size'])
+					dsize, isize = source_utils.convert_size(size)
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)
@@ -121,14 +119,15 @@ class source:
 			source_utils.scraper_error('TBTORZNAB')
 			return sources
 
-		for file in files.findall('.//item'):
+		for file in files.iter('item'):
 			try:
-				attr_dict = {}
+				attr_dict = {'title': file.find('title').text}
 				for attr in file.findall('torznab:attr', {'torznab': 'http://torznab.com/schemas/2015/feed'}):
 					key, val = attr.get('name'), attr.get('value')
-					if key and val: attr_dict[key] = val
-				hash = attr_dict.get('infohash', '')
-				name = file.find('title').text
+					if key: attr_dict[key] = val
+				hash = attr_dict['infohash']
+
+				name = source_utils.clean_name(attr_dict['title'])
 
 				episode_start, episode_end = 0, 0
 				if not search_series:
@@ -150,15 +149,14 @@ class source:
 
 				url = 'magnet:?xt=urn:btih:%s&dn=%s' % (hash, name)
 				try:
-					seeders = int(attr_dict.get('seeders', 0))
+					seeders = int(attr_dict['seeders'])
 					if self.min_seeders > seeders: continue
 				except: seeders = 0
 
 				quality, info = source_utils.get_release_quality(name_info, url)
 				try:
-					size = float(attr_dict.get('size', '0'))
-					size = f"{size / 1073741824:.2f} GB"
-					dsize, isize = source_utils._size(size)
+					size = float(attr_dict['size'])
+					dsize, isize = source_utils.convert_size(size)
 					info.insert(0, isize)
 				except: dsize = 0
 				info = ' | '.join(info)

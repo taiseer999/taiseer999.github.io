@@ -112,26 +112,26 @@ def clear_all_flicklist_cache_data(refresh=True):
 
 def default_activities():
 	return {
-			'all': '2020-01-01T00:00:01.000Z',
+			'all': '1970-01-01T00:00:00.000Z',
 			'movies':
 				{
-				'watched_at': '2020-01-01T00:00:01.000Z',
-				'paused_at': '2020-01-01T00:00:01.000Z',
-				'watchlisted_at': '2020-01-01T00:00:01.000Z'
+				'watched_at': '1970-01-01T00:00:00.000Z',
+				'paused_at': '1970-01-01T00:00:00.000Z',
+				'watchlisted_at': '1970-01-01T00:00:00.000Z'
 				},
 			'episodes':
 				{
-				'watched_at': '2020-01-01T00:00:01.000Z',
-				'paused_at': '2020-01-01T00:00:01.000Z'
+				'watched_at': '1970-01-01T00:00:00.000Z',
+				'paused_at': '1970-01-01T00:00:00.000Z'
 				},
 			'shows':
 				{
-				'watchlisted_at': '2020-01-01T00:00:01.000Z'
+				'watchlisted_at': '1970-01-01T00:00:00.000Z'
 				},
 			'lists':
 				{
-				'updated_at': '2020-01-01T00:00:01.000Z'
+				'updated_at': '1970-01-01T00:00:00.000Z'
 				},
-			'favorites': '2020-01-01T00:00:01.000Z'
+			'favorites': '1970-01-01T00:00:00.000Z'
 			}
 

@@ -12,9 +12,33 @@ action = params.get('action')
 name = params.get('name')
 
 if action is None:
-	control.openSettings('0.0', 'script.module.magneto')
+	from magneto.player.navigator import Navigator
+	Navigator(params).main()
 
-if action == "MagnetoSettings":
+elif action == 'MediaPlay':
+	from magneto import player
+	player.MagnetoPlayer().source_select(params)
+
+elif action in ('Movies', 'Series', 'Episodes'):
+	from magneto.player import navigator
+	if action == 'Episodes': cls = navigator.Episodes()
+	elif action == 'Series': cls = navigator.Series()
+	else: cls = navigator.Movies()
+	cls.run(params)
+
+elif action == 'ShowReadme':
+	from magneto.modules import help
+	help.get('aioStreams')
+
+elif action == 'InstallJson':
+	from magneto.player import settings
+	settings.install_json()
+
+elif action == 'ColorPick':
+	from magneto.player import settings
+	settings.color_pick(params)
+
+elif action == 'MagnetoSettings':
 	control.openSettings('0.0', 'script.module.magneto')
 
 elif action == 'ShowChangelog':
@@ -25,7 +49,7 @@ elif action == 'ShowHelp':
 	from magneto.modules import help
 	help.get(name)
 
-elif action == "Defaults":
+elif action == 'Defaults':
 	from magneto import sources
 	try:
 		provider_defaults = control.getProviderDefaults()
@@ -38,28 +62,28 @@ elif action == "Defaults":
 		control.notification(message='Success')
 	except: control.notification(message='Error')
 
-elif action == "toggleAll":
+elif action == 'toggleAll':
 	sourceList = []
 	sourceList = providers.all_providers
 	for i in sourceList:
 		source_setting = 'provider.' + i
 		control.setSetting(source_setting, params['setting'])
 
-elif action == "toggleAllHosters":
+elif action == 'toggleAllHosters':
 	sourceList = []
 	sourceList = providers.hoster_providers
 	for i in sourceList:
 		source_setting = 'provider.' + i
 		control.setSetting(source_setting, params['setting'])
 
-elif action == "toggleAllTorrent":
+elif action == 'toggleAllTorrent':
 	sourceList = []
 	sourceList = providers.torrent_providers
 	for i in sourceList:
 		source_setting = 'provider.' + i
 		control.setSetting(source_setting, params['setting'])
 
-elif action == "toggleAllPackTorrent":
+elif action == 'toggleAllPackTorrent':
 	from magneto import sources
 	sourceList = []
 	sourceList = sources(ret_all=True)

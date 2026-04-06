@@ -298,8 +298,9 @@ def mdbl_indicators_movies(watched_info):
 	insert_append = insert_list.append
 	watched_items = [(i,) for i in watched_info['movies']] # TaskPool requires tuple
 	if not watched_items: return
-#	threads = list(make_thread_list(_process, watched_items, Thread))
 	for i in TaskPool().tasks(_process, watched_items, Thread): i.join()
+#	threads = list(make_thread_list(_process, watched_items, Thread))
+#	[i.join() for i in threads]
 	mdbl_cache.MDBLCache().set_bulk_movie_watched(insert_list)
 
 def mdbl_indicators_tv(watched_info):
@@ -314,8 +315,9 @@ def mdbl_indicators_tv(watched_info):
 	insert_append = insert_list.append
 	watched_items = [(i,) for i in watched_info['episodes']] # TaskPool requires tuple
 	if not watched_items: return
-#	threads = list(make_thread_list(_process, watched_items, Thread))
 	for i in TaskPool().tasks(_process, watched_items, Thread): i.join()
+#	threads = list(make_thread_list(_process, watched_items, Thread))
+#	[i.join() for i in threads]
 	mdbl_cache.MDBLCache().set_bulk_tvshow_watched(insert_list)
 
 def mdbl_progress_movies(progress_info):
@@ -330,9 +332,9 @@ def mdbl_progress_movies(progress_info):
 	insert_list = []
 	insert_append = insert_list.append
 	progress_items = [i for i in progress_info if i['type'] == 'movie' and float(i['progress']) > 1]
-	if progress_items:
-		threads = list(make_thread_list(_process, progress_items, Thread))
-		[i.join() for i in threads]
+	if not progress_items: return
+	threads = list(make_thread_list(_process, progress_items, Thread))
+	[i.join() for i in threads]
 	mdbl_cache.MDBLCache().set_bulk_movie_progress(insert_list)
 
 def mdbl_progress_tv(progress_info):
@@ -348,9 +350,9 @@ def mdbl_progress_tv(progress_info):
 	insert_list = []
 	insert_append = insert_list.append
 	progress_items = [i for i in progress_info if i['type'] == 'episode' and float(i['progress']) > 1]
-	if progress_items:
-		threads = list(make_thread_list(_process, progress_items, Thread))
-		[i.join() for i in threads]
+	if not progress_items: return
+	threads = list(make_thread_list(_process, progress_items, Thread))
+	[i.join() for i in threads]
 	mdbl_cache.MDBLCache().set_bulk_tvshow_progress(insert_list)
 
 def mdbl_get_activity():

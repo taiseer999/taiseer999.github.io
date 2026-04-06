@@ -347,7 +347,7 @@ class FlickList:
 	icon = 'DefaultPlaylist.png'
 	def __init__(self):
 		self.token = get_setting('flicklist.token')
-		self.client_id = get_setting('flicklist.client_id') or 'flicklist_kodi_addon'
+		self.client_id = get_setting('flicklist.client_id') or 'salts_redux'
 
 	def base_url(self, path):
 		return 'https://flicklist.tv/api/%s' % path
@@ -358,6 +358,7 @@ class FlickList:
 		data.update(response.json())
 		self.token = data['access_token']
 
+	@watch_indicators
 	def set(self):
 		cls_name = self.__class__.__name__
 		if self.token:
@@ -366,6 +367,8 @@ class FlickList:
 			set_setting('flicklist.token', '')
 			set_setting('flicklist.expires', '')
 			set_setting('flicklist.client_id', '')
+			set_setting('flicklist_indicators_active', 'false')
+			set_setting('watched_indicators', '0')
 			sleep(500)
 			clear_cache('flicklist', silent=True)
 			return notification('Removed %s Authorization' % cls_name)
@@ -400,6 +403,8 @@ class FlickList:
 		set_setting('flicklist.token', self.token)
 		set_setting('flicklist.expires', expires)
 		set_setting('flicklist.client_id', self.client_id)
+		set_setting('flicklist_indicators_active', 'true')
+		set_setting('watched_indicators', '3')
 		notification('Set %s Authorization' % cls_name)
 		sleep(500)
 		clear_cache('flicklist', silent=True)
