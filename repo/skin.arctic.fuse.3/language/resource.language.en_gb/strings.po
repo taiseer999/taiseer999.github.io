@@ -2652,7 +2652,7 @@ msgstr ""
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#52077"
-msgid "Network and CPU + RAM below the clock"
+msgid "Network and CPU + RAM above the clock"
 msgstr ""
 
 msgctxt "#52075"

@@ -3029,7 +3029,7 @@ msgstr "ايقونات فيديو OSD"
 #: /1080i/Includes_Labels.xml
 msgctxt "#52077"
 msgid "Network and CPU + RAM below the clock"
-msgstr "حالة الشبكة وحرارة المعالج والذاكرة اسفل الساعة"
+msgstr "حالة الشبكة وحرارة المعالج والذاكرة فوق الساعة"
 
 msgctxt "#52075"
 msgid "Network Connected"
