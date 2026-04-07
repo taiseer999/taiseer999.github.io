@@ -1213,7 +1213,7 @@ updated YouTube addon URL
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.composite_for_plex" name="DPlex" version="16.0.1" provider-name="DPlex">
+</addon><addon id="plugin.video.composite_for_plex" name="DPlex" version="16.0.7.6" provider-name="DPlex">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
         <import addon="script.module.requests" version="2.12.4" />
@@ -1252,9 +1252,10 @@ updated YouTube addon URL
             <fanart>resources/media/fanart.png</fanart>
         </assets>
         <news>
-[fix] leftover kodi-six imports
-[lang] update translations from Weblate
-[update] Rebranded to DPlex with advanced StreamInfo injection.
+[fix] Improve runtime stability for companion HTTP responses and corrupted state files.
+[fix] Safer JSON/pickle writes to reduce failures after interrupted shutdowns.
+[fix] Correct preferred master server selection.
+[fix] Remove bundled Python cache files from release package.
         </news>
         <platform>all</platform>
         <license>GPL-2.0-or-later</license>

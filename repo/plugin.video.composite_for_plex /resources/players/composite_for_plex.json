@@ -1,0 +1,28 @@
+{
+    "name": "DPlex",
+    "plugin": "plugin.video.composite_for_plex",
+    "language": "en",
+    "priority": 200,
+    "assert": {
+        "play_movie": ["title", "year"],
+        "play_episode": ["showname", "season", "episode"],
+        "search_movie": ["title"],
+        "search_episode": ["showname"]
+    },
+    "play_movie": [
+        "plugin://plugin.video.composite_for_plex/?mode=32&video_type=movie&query={en_title_url}&title={en_title_url}&original_title={originaltitle_url}&year={year}&imdb_id={imdb}&tmdb_id={tmdb}",
+        {"dialog": "auto"}
+    ],
+    "play_episode": [
+        "plugin://plugin.video.composite_for_plex/?mode=32&video_type=episode&query={en_showname_url}&title={en_showname_url}&original_title={originaltitle_url}&season={season}&episode={episode}&tvdb_id={tvdb}&tmdb_id={tmdb}&imdb_id={imdb}",
+        {"dialog": "auto"}
+    ],
+    "search_movie": [
+        "plugin://plugin.video.composite_for_plex/?mode=32&video_type=movie&query={en_title_url}&title={en_title_url}&original_title={originaltitle_url}&year={year}&imdb_id={imdb}&tmdb_id={tmdb}",
+        {"dialog": "auto"}
+    ],
+    "search_episode": [
+        "plugin://plugin.video.composite_for_plex/?mode=32&video_type=show&query={en_showname_url}&title={en_showname_url}&original_title={originaltitle_url}&tvdb_id={tvdb}&tmdb_id={tmdb}&imdb_id={imdb}",
+        {"dialog": "auto"}
+    ]
+}
