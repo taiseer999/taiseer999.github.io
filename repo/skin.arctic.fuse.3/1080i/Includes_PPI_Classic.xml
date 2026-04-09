@@ -39,7 +39,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -181,7 +181,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -333,7 +333,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -405,7 +405,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -627,7 +627,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -985,7 +985,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -1161,7 +1161,7 @@
 					<control type="label">
 						<label></label>
 						<top>-25</top>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_100</textcolor>
 					</control>
 					
@@ -1353,7 +1353,7 @@
 						<left>483</left>
 						<top>202</top>
 						<label></label>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 					<!-- Arrows: Top to bottom with line icon -->
@@ -1362,7 +1362,7 @@
 						<top>216</top>
 						<angle>90</angle>
 						<label></label>
-						<font>font_tiny_iconic_regular1</font>
+						<font>font_tiny_iconic_regular</font>
 						<textcolor>dialog_fg_90</textcolor>
 					</control>
 				</control>
