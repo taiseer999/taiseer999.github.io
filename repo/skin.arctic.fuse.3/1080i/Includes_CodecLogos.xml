@@ -855,7 +855,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>46</height>
-                    <texture>codecs/DTS-HD-MA1.png</texture>
+                    <texture>codecs/DTS-HD-MA.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -1153,7 +1153,7 @@
                 <control type="image">
                     <width>150</width>
                     <height>46</height>
-                    <texture>codecs/DTS-HD-MA1.png</texture>
+                    <texture>codecs/DTS-HD-MA.png</texture>
                 </control>
             </control>
             <control type="group">
