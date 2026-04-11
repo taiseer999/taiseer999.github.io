@@ -1,0 +1,3 @@
+v4.1.0
+- Fixed Kodi download failures
+- Added provider_name / is_ai / ai_provider / display_name support

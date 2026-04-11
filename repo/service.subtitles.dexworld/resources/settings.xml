@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="DexWorld">
+    <setting id="server_url" type="text" label="Server URL" default="https://your-domain.com" />
+    <setting id="api_key" type="text" label="API Key" default="" option="hidden" />
+    <setting id="max_results" type="number" label="Max Results" default="15" />
+  </category>
+</settings>
