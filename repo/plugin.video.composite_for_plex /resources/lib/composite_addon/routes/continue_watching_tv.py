@@ -3,6 +3,7 @@
 """Combined Continue Watching TV with cached metadata resolution and lightweight paging."""
 
 import copy
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import xbmcplugin  # pylint: disable=import-error
 
@@ -182,40 +183,50 @@ def run(context):
     elif page_size <= 0:
         page_size = max(1, default_page_size or 1)
 
-    for server in server_list:
-        sections = server.get_sections()
-        for section in sections:
-            if section.content_type() != 'tvshows':
+    # --- Parallel fetch all onDeck ---
+    def _fetch(srv, sec):
+        try:
+            t = srv.get_ondeck(section=int(sec.get_key()))
+            return srv, t, sec.get_title() if hasattr(sec, 'get_title') else ''
+        except Exception:
+            return srv, None, ''
+
+    tasks = [(s, sec) for s in server_list for sec in s.get_sections() if sec.content_type() == 'tvshows']
+    results = []
+    if tasks:
+        with ThreadPoolExecutor(max_workers=min(8, len(tasks))) as pool:
+            for r in as_completed([pool.submit(_fetch, s, sec) for s, sec in tasks]):
+                try: results.append(r.result())
+                except Exception: pass
+
+    for server, tree, library_title in results:
+        if tree is None:
+            continue
+        for content in tree.iter('Video'):
+            show_key = _show_identity(content)
+            group = grouped.setdefault(show_key, {'first_seen': first_seen_counter, 'items': []})
+            if not group['items']:
+                group['first_seen'] = first_seen_counter
+            first_seen_counter += 1
+            version_key = (
+                server.get_uuid(),
+                content.get('grandparentRatingKey', ''),
+                content.get('ratingKey', ''),
+                (content.find('Media').get('videoResolution', '') if content.find('Media') is not None else ''),
+                (content.find('Media').get('videoCodec', '') if content.find('Media') is not None else ''),
+                (content.find('Media').get('audioCodec', '') if content.find('Media') is not None else '')
+            )
+            if any(existing['version_key'] == version_key for existing in group['items']):
                 continue
-            tree = server.get_ondeck(section=int(section.get_key()))
-            if tree is None:
-                continue
-            library_title = section.get_title() if hasattr(section, 'get_title') else ''
-            for content in tree.iter('Video'):
-                show_key = _show_identity(content)
-                group = grouped.setdefault(show_key, {'first_seen': first_seen_counter, 'items': []})
-                if not group['items']:
-                    group['first_seen'] = first_seen_counter
-                first_seen_counter += 1
-                version_key = (
-                    server.get_uuid(),
-                    content.get('grandparentRatingKey', ''),
-                    content.get('ratingKey', ''),
-                    (content.find('Media').get('videoResolution', '') if content.find('Media') is not None else ''),
-                    (content.find('Media').get('videoCodec', '') if content.find('Media') is not None else ''),
-                    (content.find('Media').get('audioCodec', '') if content.find('Media') is not None else '')
-                )
-                if any(existing['version_key'] == version_key for existing in group['items']):
-                    continue
-                group['items'].append({
-                    'version_key': version_key,
-                    'server': server,
-                    'tree': tree,
-                    'content': copy.deepcopy(content),
-                    'library_title': library_title,
-                    'quality_rank': _resolution_rank(content),
-                    'bitrate_rank': _bitrate_rank(content),
-                })
+            group['items'].append({
+                'version_key': version_key,
+                'server': server,
+                'tree': tree,
+                'content': copy.deepcopy(content),
+                'library_title': library_title,
+                'quality_rank': _resolution_rank(content),
+                'bitrate_rank': _bitrate_rank(content),
+            })
 
     if not grouped:
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)
@@ -231,6 +242,25 @@ def run(context):
 
     visible_entries = flat_entries[start:start + page_size]
     has_more = start + page_size < len(flat_entries)
+
+    # Pre-fetch all needed metadata in parallel
+    needed = {}
+    for entry in visible_entries:
+        c = entry['content']
+        gp_key = c.get('grandparentRatingKey', '')
+        if gp_key:
+            ck = '%s:%s' % (entry['server'].get_uuid(), gp_key)
+            if ck not in metadata_cache and ck not in needed:
+                needed[ck] = (entry['server'], gp_key)
+    if needed:
+        def _fetch_meta(srv, key):
+            try: return srv.get_metadata(key)
+            except Exception: return None
+        with ThreadPoolExecutor(max_workers=min(6, len(needed))) as pool:
+            futs = {pool.submit(_fetch_meta, srv, k): ck for ck, (srv, k) in needed.items()}
+            for f in as_completed(futs):
+                try: metadata_cache[futs[f]] = f.result()
+                except Exception: metadata_cache[futs[f]] = None
 
     items = []
     for entry in visible_entries:

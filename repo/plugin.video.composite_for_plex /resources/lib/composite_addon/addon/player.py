@@ -225,33 +225,48 @@ class PlaybackMonitorThread(threading.Thread):
             if not self._is_playing_current_file():
                 break
             current_time, total_time, progress = self._get_playback_progress(total_time)
-            self.skip_intro()
+            try:
+                self.skip_intro()
+            except Exception:
+                pass
             try:
                 report = int((float(waited) / 10.0)) >= 1
             except ZeroDivisionError:
                 report = False
             if report:
                 waited = 0.0
-                played_time = self.report_playback_progress(current_time, total_time,
-                                                            progress, played_time)
+                try:
+                    played_time = self.report_playback_progress(current_time, total_time,
+                                                                progress, played_time)
+                except Exception:
+                    pass
             if current_time > 0:
                 if not resumed:
                     resumed = self.resume(current_time)
                 if not notified_upnext:
                     notified_upnext = True
-                    self.notify_upnext()
+                    try:
+                        self.notify_upnext()
+                    except Exception:
+                        pass
             if self.MONITOR.waitForAbort(wait_time):
                 break
             waited += wait_time
 
-        _ = self.report_playback_progress(current_time, total_time, progress)
+        try:
+            _ = self.report_playback_progress(current_time, total_time, progress)
+        except Exception:
+            pass
 
         if self._dialog_skip_intro and self._dialog_skip_intro.showing:
             self._dialog_skip_intro.close()
 
         if self.session() is not None:
             self.LOG.debug('Stopping PMS transcode job with session %s' % self.session())
-            self.server().stop_transcode_session(self.session())
+            try:
+                self.server().stop_transcode_session(self.session())
+            except Exception:
+                pass
 
 
 class CallbackPlayer(xbmc.Player):

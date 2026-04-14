@@ -114,6 +114,60 @@ def _extract_ids(element):
     return ids
 
 
+def _fetch_discover_guids(plex_network, rating_key):
+    """Fetch GUIDs from Discover metadata endpoint for a single item."""
+    import requests as _req
+    try:
+        headers = plex_network.plex_identification_header()
+        url = '%s/library/metadata/%s' % (plex_network.discover_server, rating_key)
+        resp = _req.get(url, headers=headers,
+                        params={'includeGuids': 1},
+                        verify=True, timeout=(3, 10))
+        if resp.status_code != 200:
+            return {}
+        import xml.etree.ElementTree as ET
+        tree = ET.fromstring(resp.text.encode('utf-8'))
+        item = tree.find('.//Video') or tree.find('.//Directory') or tree
+        return _extract_ids(item)
+    except Exception:
+        return {}
+
+
+def _resolve_watchlist_guids(plex_network, entries):
+    """Pre-fetch GUIDs for watchlist entries that are missing them (parallel)."""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    to_resolve = []
+    for entry in entries:
+        ids = _extract_ids(entry)
+        if ids.get('imdb_id') or ids.get('tmdb_id') or ids.get('tvdb_id'):
+            continue  # already has GUIDs
+        rk = entry.get('ratingKey', '')
+        if rk:
+            to_resolve.append((rk, entry))
+
+    if not to_resolve:
+        return
+
+    with ThreadPoolExecutor(max_workers=min(6, len(to_resolve))) as pool:
+        futures = {pool.submit(_fetch_discover_guids, plex_network, rk): entry
+                   for rk, entry in to_resolve}
+        for future in as_completed(futures):
+            entry = futures[future]
+            try:
+                ids = future.result()
+                if ids:
+                    # Store GUIDs as attributes so _extract_ids picks them up next time
+                    for child_id, prefix in [('imdb_id', 'imdb'), ('tmdb_id', 'tmdb'), ('tvdb_id', 'tvdb')]:
+                        val = ids.get(child_id, '')
+                        if val:
+                            import xml.etree.ElementTree as ET
+                            guid_el = ET.SubElement(entry, 'Guid')
+                            guid_el.set('id', '%s://%s' % (prefix, val))
+            except Exception:
+                pass
+
+
 
 def _preview_limit(context):
     value = context.settings.performance_home_limit()
@@ -239,6 +293,12 @@ def run(context):
 
     visible_entries = entries[start:start + page_size] if page_size else entries[start:]
     has_more = (start + page_size) < len(entries) if page_size else False
+
+    # Pre-fetch GUIDs from Discover for items missing them (parallel)
+    try:
+        _resolve_watchlist_guids(context.plex_network, visible_entries)
+    except Exception as error:
+        LOG.debug('GUID resolve error (non-fatal): %s' % str(error))
 
     items = []
     for entry in visible_entries:

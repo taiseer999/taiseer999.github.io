@@ -15,6 +15,7 @@ from ..containers import GUIItem
 from ..strings import directory_item_translate
 from ..strings import encode_utf8
 from ..strings import i18n
+from .common import get_collection_thumb
 from .common import get_fanart_image
 from .common import get_link_url
 from .common import get_thumb_image
@@ -29,12 +30,22 @@ def create_directory_item(context, item):
         'title': title
     }
 
-    if '/collection' in item.url:
+    is_collection = '/collection' in item.url
+    if is_collection:
         info_labels['mediatype'] = 'set'
 
+    if is_collection:
+        thumb = get_collection_thumb(context, item.server, item.data)
+    else:
+        thumb = get_thumb_image(context, item.server, item.data)
+
+    fanart = get_fanart_image(context, item.server, item.data)
+    if not fanart:
+        fanart = get_fanart_image(context, item.server, item.tree)
+
     extra_data = {
-        'thumb': get_thumb_image(context, item.server, item.tree),
-        'fanart_image': get_fanart_image(context, item.server, item.tree),
+        'thumb': thumb,
+        'fanart_image': fanart,
         'mode': MODES.GETCONTENT,
         'type': 'Folder'
     }

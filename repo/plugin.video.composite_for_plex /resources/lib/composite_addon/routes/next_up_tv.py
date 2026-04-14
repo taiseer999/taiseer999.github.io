@@ -3,6 +3,7 @@
 """Combined Next Up TV with lightweight preview paging."""
 
 import copy
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import xbmcplugin  # pylint: disable=import-error
 
@@ -110,44 +111,54 @@ def run(context):
     elif page_size <= 0:
         page_size = max(1, default_page_size or 1)
 
-    for server in server_list:
-        sections = server.get_sections()
-        for section in sections:
-            if section.content_type() != 'tvshows':
+    # --- Parallel fetch all onDeck ---
+    def _fetch(srv, sec):
+        try:
+            t = srv.get_ondeck(section=int(sec.get_key()))
+            return srv, t, sec.get_title() if hasattr(sec, 'get_title') else ''
+        except Exception:
+            return srv, None, ''
+
+    tasks = [(s, sec) for s in server_list for sec in s.get_sections() if sec.content_type() == 'tvshows']
+    results = []
+    if tasks:
+        with ThreadPoolExecutor(max_workers=min(8, len(tasks))) as pool:
+            for r in as_completed([pool.submit(_fetch, s, sec) for s, sec in tasks]):
+                try: results.append(r.result())
+                except Exception: pass
+
+    for server, tree, library_title in results:
+        if tree is None:
+            continue
+        for content in tree.iter('Video'):
+            show_key = _show_identity(content)
+            group = grouped.setdefault(show_key, {'first_seen': order_index, 'items': []})
+            if not group['items']:
+                group['first_seen'] = order_index
+            order_index += 1
+            episode_copy = copy.deepcopy(content)
+            episode_copy.set('server_name_tag', server.get_name() if hasattr(server, 'get_name') else '')
+            episode_copy.set('library_title_tag', library_title)
+            episode_copy.set('force_show_prefix', '1')
+            episode_copy.set('force_sxee_prefix', '1')
+            version_key = (
+                server.get_uuid(),
+                episode_copy.get('grandparentRatingKey', ''),
+                episode_copy.get('parentIndex', ''),
+                episode_copy.get('index', ''),
+                episode_copy.find('Media').get('videoResolution', '') if episode_copy.find('Media') is not None else '',
+                episode_copy.find('Media').get('bitrate', '') if episode_copy.find('Media') is not None else ''
+            )
+            if any(existing['version_key'] == version_key for existing in group['items']):
                 continue
-            tree = server.get_ondeck(section=int(section.get_key()))
-            if tree is None:
-                continue
-            library_title = section.get_title() if hasattr(section, 'get_title') else ''
-            for content in tree.iter('Video'):
-                show_key = _show_identity(content)
-                group = grouped.setdefault(show_key, {'first_seen': order_index, 'items': []})
-                if not group['items']:
-                    group['first_seen'] = order_index
-                order_index += 1
-                episode_copy = copy.deepcopy(content)
-                episode_copy.set('server_name_tag', server.get_name() if hasattr(server, 'get_name') else '')
-                episode_copy.set('library_title_tag', library_title)
-                episode_copy.set('force_show_prefix', '1')
-                episode_copy.set('force_sxee_prefix', '1')
-                version_key = (
-                    server.get_uuid(),
-                    episode_copy.get('grandparentRatingKey', ''),
-                    episode_copy.get('parentIndex', ''),
-                    episode_copy.get('index', ''),
-                    episode_copy.find('Media').get('videoResolution', '') if episode_copy.find('Media') is not None else '',
-                    episode_copy.find('Media').get('bitrate', '') if episode_copy.find('Media') is not None else ''
-                )
-                if any(existing['version_key'] == version_key for existing in group['items']):
-                    continue
-                group['items'].append({
-                    'version_key': version_key,
-                    'server': server,
-                    'tree': tree,
-                    'content': episode_copy,
-                    'quality_rank': _resolution_rank(episode_copy),
-                    'bitrate_rank': _bitrate_rank(episode_copy),
-                })
+            group['items'].append({
+                'version_key': version_key,
+                'server': server,
+                'tree': tree,
+                'content': episode_copy,
+                'quality_rank': _resolution_rank(episode_copy),
+                'bitrate_rank': _bitrate_rank(episode_copy),
+            })
 
     if not grouped:
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)

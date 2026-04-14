@@ -471,14 +471,65 @@ class Plex:  # pylint: disable=too-many-public-methods, too-many-instance-attrib
     def get_myplex_queue(self):
         return self.get_processed_myplex_xml('/pms/playlists/queue/all')
 
-    def get_myplex_watchlist(self, filter_name='all'):
-        params = {
-            'includeCollections': 1,
-            'includeExternalMedia': 1,
-            'includeMeta': 1,
-            'includeGuids': 1
-        }
-        return self.get_processed_discover_xml('/library/sections/watchlist/%s' % filter_name, params=params)
+    def get_myplex_watchlist(self, filter_name='all', start=0, size=0):
+        """Read the cloud watchlist from Plex Discover."""
+        import copy
+
+        def _request_page(offset, page_size):
+            headers = self.plex_identification_header()
+            params = {
+                'includeCollections': 1,
+                'includeExternalMedia': 1,
+                'includeMeta': 1,
+                'includeGuids': 1,
+                'X-Plex-Container-Start': max(0, int(offset)),
+                'X-Plex-Container-Size': max(1, int(page_size)),
+            }
+            full_url = '%s/library/sections/watchlist/%s' % (self.discover_server, filter_name)
+            LOG.debug('discover watchlist url = %s' % full_url)
+            try:
+                response = requests.get(full_url,
+                                        headers=headers,
+                                        params=params,
+                                        verify=True,
+                                        timeout=(5, 30))
+            except requests.exceptions.ConnectionError as error:
+                LOG.error('Watchlist discover endpoint unreachable: %s' % error)
+                return ETree.fromstring('<?xml version="1.0" encoding="UTF-8"?><message status="error"></message>')
+            except requests.exceptions.ReadTimeout:
+                LOG.debug('Watchlist discover read timeout for %s' % full_url)
+                return ETree.fromstring('<?xml version="1.0" encoding="UTF-8"?><message status="error"></message>')
+
+            if response.status_code >= 400:
+                LOG.error('Watchlist discover HTTP response error: %s' % response.status_code)
+                return ETree.fromstring('<?xml version="1.0" encoding="UTF-8"?><message status="error"></message>')
+
+            response.encoding = 'utf-8'
+            return ETree.fromstring(encode_utf8(response.text, py2_only=False))
+
+        if size and int(size) > 0:
+            return _request_page(start, size)
+
+        page_size = 100
+        offset = max(0, int(start))
+        merged_tree = None
+
+        while True:
+            tree = _request_page(offset, page_size)
+            page_items = list(tree)
+
+            if merged_tree is None:
+                merged_tree = tree
+            else:
+                for child in page_items:
+                    merged_tree.append(copy.deepcopy(child))
+
+            count = len(page_items)
+            if count < page_size:
+                break
+            offset += count
+
+        return merged_tree
 
     def get_myplex_sections(self):
         xml = self.talk_to_myplex('/pms/system/library/sections')

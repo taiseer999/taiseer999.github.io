@@ -17,7 +17,36 @@ import xml.etree.ElementTree as ETree
 from urllib.parse import parse_qsl, quote, quote_plus, urlencode, urlparse, urlunparse
 
 import requests
+import socket
 import xbmcgui  # pylint: disable=import-error
+
+# Disable SSL warnings for self-signed certificates (like PKC)
+try:
+    import requests.packages.urllib3
+    requests.packages.urllib3.disable_warnings()
+except Exception:
+    pass
+
+# DNS rebind protection bypass for plex.direct domains (from plexmod)
+# Some routers block DNS resolution for these — resolve manually
+_original_getaddrinfo = socket.getaddrinfo
+
+def _plex_getaddrinfo(host, port, *args, **kwargs):
+    if isinstance(host, str) and host.endswith('plex.direct'):
+        try:
+            is_v6 = host.count('-') > 3
+            base = host.split('.', 1)[0]
+            ip = base.replace('-', ':') if is_v6 else base.replace('-', '.')
+            fam = socket.AF_INET6 if is_v6 else socket.AF_INET
+            return [(fam, socket.SOCK_STREAM, socket.IPPROTO_TCP, '', (ip, port))]
+        except Exception:
+            pass
+    return _original_getaddrinfo(host, port, *args, **kwargs)
+
+try:
+    socket.getaddrinfo = _plex_getaddrinfo
+except Exception:
+    pass
 
 from ..addon.constants import CONFIG
 from ..addon.data_cache import DATA_CACHE
@@ -33,6 +62,17 @@ LOG = Logger('plexserver')
 WINDOW = xbmcgui.Window(10000)
 
 LOG.debug('Using Requests version for HTTP: %s' % requests.__version__)
+
+# --- Connection pooling matching PKC approach ---
+_SESSION = requests.Session()
+_SESSION.headers.update({'Accept-Encoding': 'identity', 'Accept': 'application/xml'})
+_SESSION.encoding = 'utf-8'
+try:
+    _adapter = requests.adapters.HTTPAdapter(pool_connections=6, pool_maxsize=12, max_retries=1)
+    _SESSION.mount('http://', _adapter)
+    _SESSION.mount('https://', _adapter)
+except Exception:
+    pass
 
 # --- Ø·ÙØ¨Ø§Øª Ø®ÙÙÙØ© ÙÙÙÙÙ ÙØ§ÙØµÙÙÙ Ø§ÙØ³Ø±ÙØ¹Ø©Ø ÙØ·ÙØ¨Ø§Øª ÙØ§ÙÙØ© Ø¹ÙØ¯ Ø§ÙØ­Ø§Ø¬Ø© ---
 _LIGHT_ARGS = {
@@ -229,7 +269,7 @@ class PlexMediaServer:
                 if ((tag, 'https', url_parts.netloc, url_parts.path, uri, True) in self.connection_test_results):
                     self.connection_test_results.append((tag, url_parts.scheme, url_parts.netloc, url_parts.path, uri, False))
                     return
-            response = requests.get(uri, params=self.plex_identification_header,
+            response = _SESSION.get(uri, params=self.plex_identification_header,
                                      verify=self.ssl_certificate_verification, timeout=(2, 60))
             status_code = response.status_code
             if status_code in [requests.codes.ok, requests.codes.unauthorized]:
@@ -329,9 +369,8 @@ class PlexMediaServer:
             self.set_protocol('https')
 
     def _request(self, uri, params, method):
-        custom_headers = {'Accept-Encoding': 'identity', 'Accept': 'application/xml'}
         try:
-            response = getattr(requests, method)(uri, params=params, headers=custom_headers,
+            response = getattr(_SESSION, method)(uri, params=params,
                                                   verify=self.ssl_certificate_verification, timeout=(5, 60))
             if response: response.encoding = 'utf-8'
             return response
@@ -687,3 +726,16 @@ class PlexMediaServer:
     @staticmethod
     def _create_kodi_header(headers):
         return map(lambda x: '='.join((x[0], quote(x[1]))), headers.items())
+
+    def get_image_url(self, path):
+        """Simple image URL with just the token — for collection composite images."""
+        if not path:
+            return ''
+        path = str(path)
+        if path.startswith('http'):
+            return path
+        location = self.join_url(self.get_url_location(), path)
+        if self.token:
+            separator = '&' if '?' in location else '?'
+            location = '%s%sX-Plex-Token=%s' % (location, separator, quote(self.token))
+        return location

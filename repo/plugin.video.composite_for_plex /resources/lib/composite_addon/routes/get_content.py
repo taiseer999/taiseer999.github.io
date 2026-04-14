@@ -65,9 +65,13 @@ def run(context, url=None, server_uuid=None, mode=None):
 
     try:
         tree = get_xml(context, url)
+        if tree is None:
+            xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)
+            return
         process(context, url, tree, last_bit)
 
-    except:  # pylint: disable=bare-except
+    except Exception as exc:
+        LOG.debug('get_content error: %s [%s]' % (type(exc).__name__, exc))
         if mode not in [MODES.TXT_TVSHOWS, MODES.TXT_MOVIES, MODES.TXT_MOVIES_ON_DECK,
                         MODES.TXT_TVSHOWS_ON_DECK, MODES.TXT_MOVIES_RECENT_ADDED,
                         MODES.TXT_TVSHOWS_RECENT_ADDED, MODES.TXT_MOVIES_RECENT_RELEASE,

@@ -3,6 +3,7 @@
 """Combined on-deck with cached TV resolution and lightweight preview paging."""
 
 import xbmcplugin  # pylint: disable=import-error
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from ..addon.common import get_handle
 from ..addon.containers import GUIItem, Item
@@ -146,22 +147,32 @@ def run(context):
     raw_items = []
     LOG.debug('Using list of %s servers' % len(server_list))
 
-    for server in server_list:
-        sections = server.get_sections()
-        for section in sections:
-            if section.content_type() != content_type:
-                continue
-            tree = server.get_ondeck(section=int(section.get_key()))
-            if tree is None:
-                continue
-            for content in _iter_on_deck_items(tree, content_type):
-                if content_type == 'tvshows':
-                    resolved_tree, resolved_content = _resolve_tvshow_content(server, tree, content, metadata_cache)
-                    if resolved_content is None:
-                        continue
-                    raw_items.append((server, resolved_tree, resolved_content))
-                else:
-                    raw_items.append((server, tree, content))
+    # --- Parallel fetch all onDeck ---
+    def _fetch(srv, sec):
+        try:
+            return srv, srv.get_ondeck(section=int(sec.get_key()))
+        except Exception:
+            return srv, None
+
+    tasks = [(s, sec) for s in server_list for sec in s.get_sections() if sec.content_type() == content_type]
+    fetch_results = []
+    if tasks:
+        with ThreadPoolExecutor(max_workers=min(8, len(tasks))) as pool:
+            for r in as_completed([pool.submit(_fetch, s, sec) for s, sec in tasks]):
+                try: fetch_results.append(r.result())
+                except Exception: pass
+
+    for server, tree in fetch_results:
+        if tree is None:
+            continue
+        for content in _iter_on_deck_items(tree, content_type):
+            if content_type == 'tvshows':
+                resolved_tree, resolved_content = _resolve_tvshow_content(server, tree, content, metadata_cache)
+                if resolved_content is None:
+                    continue
+                raw_items.append((server, resolved_tree, resolved_content))
+            else:
+                raw_items.append((server, tree, content))
 
     if not raw_items:
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)

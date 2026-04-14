@@ -3,6 +3,7 @@
 """Combined recently added with global time sort and lightweight preview paging."""
 
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import xbmcplugin  # pylint: disable=import-error
 
@@ -92,23 +93,33 @@ def run(context):
     hide_watched = not context.settings.recently_added_include_watched()
 
     raw_items = []
-    for server in server_list:
-        sections = server.get_sections()
-        for section in sections:
-            if section.content_type() != content_type:
+
+    def _fetch(srv, sec):
+        try:
+            t = srv.get_recently_added(section=int(sec.get_key()), size=fetch_size, hide_watched=hide_watched)
+            return srv, t, sec.get_title() if hasattr(sec, 'get_title') else ''
+        except Exception:
+            return srv, None, ''
+
+    tasks = [(s, sec) for s in server_list for sec in s.get_sections() if sec.content_type() == content_type]
+    results = []
+    if tasks:
+        with ThreadPoolExecutor(max_workers=min(8, len(tasks))) as pool:
+            for r in as_completed([pool.submit(_fetch, s, sec) for s, sec in tasks]):
+                try: results.append(r.result())
+                except Exception: pass
+
+    for server, tree, library_title in results:
+        if tree is None:
+            continue
+        for content in tree.iter('Video'):
+            item_type = (content.get('type') or '').lower()
+            if item_type not in ('episode', 'movie'):
                 continue
-            tree = server.get_recently_added(section=int(section.get_key()), size=fetch_size, hide_watched=hide_watched)
-            if tree is None:
-                continue
-            library_title = section.get_title() if hasattr(section, 'get_title') else ''
-            for content in tree.iter('Video'):
-                item_type = (content.get('type') or '').lower()
-                if item_type not in ('episode', 'movie'):
-                    continue
-                raw_items.append((
-                    max(_dt(content.get('addedAt')), _dt(content.get('originallyAvailableAt')), _dt(content.get('year'))),
-                    server, tree, content, library_title
-                ))
+            raw_items.append((
+                max(_dt(content.get('addedAt')), _dt(content.get('originallyAvailableAt')), _dt(content.get('year'))),
+                server, tree, content, library_title
+            ))
 
     if not raw_items:
         xbmcplugin.endOfDirectory(get_handle(), cacheToDisc=False)

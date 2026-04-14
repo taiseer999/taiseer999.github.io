@@ -101,6 +101,23 @@ def get_thumb_image(context, server, data, width=720, height=720):
     if thumbnail.startswith('/'): return server.get_kodi_header_formatted_url(thumbnail)
     return CONFIG['icon']
 
+def get_collection_thumb(context, server, data):
+    """Get collection poster: tries thumb → composite → /library/collections/{key}/composite"""
+    if context.settings.skip_images(): return ''
+    # Try thumb first
+    thumbnail = encode_utf8(data.get('thumb', '').split('?t')[0])
+    if thumbnail.startswith('http'): return thumbnail
+    if thumbnail.startswith('/'): return server.get_kodi_header_formatted_url(thumbnail)
+    # Try composite attribute
+    composite = encode_utf8(data.get('composite', '').split('?t')[0])
+    if composite.startswith('http'): return composite
+    if composite.startswith('/'): return server.get_image_url(composite)
+    # Build from ratingKey
+    rating_key = data.get('ratingKey', '')
+    if rating_key:
+        return server.get_image_url('/library/collections/%s/composite' % rating_key)
+    return CONFIG['icon']
+
 def get_banner_image(context, server, data, width=720, height=720):
     if context.settings.skip_images(): return ''
     banner = encode_utf8(data.get('banner', '').split('?t')[0])

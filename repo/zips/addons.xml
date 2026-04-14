@@ -1024,7 +1024,7 @@ updated YouTube addon URL
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.composite_for_plex" name="DPlex" version="16.0.7.6" provider-name="DPlex">
+</addon><addon id="plugin.video.composite_for_plex" name="DPlex" version="17.0.1.0" provider-name="DPlex">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
         <import addon="script.module.requests" version="2.12.4" />
