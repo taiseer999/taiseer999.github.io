@@ -2,7 +2,7 @@
 """
 
     Copyright (C) 2014-2016 bromix (plugin.video.youtube)
-    Copyright (C) 2016-2025 plugin.video.youtube
+    Copyright (C) 2016-2019 plugin.video.youtube
 
     SPDX-License-Identifier: GPL-2.0-only
     See LICENSES/GPL-2.0-only for more information.
@@ -10,8 +10,9 @@
 
 from __future__ import absolute_import, division, unicode_literals
 
+from hashlib import md5
+
 from .storage import Storage
-from ..utils.methods import generate_hash
 
 
 class SearchHistory(Storage):
@@ -30,18 +31,22 @@ class SearchHistory(Storage):
                                   process=process)
         return result
 
+    @staticmethod
+    def _make_id(query):
+        return md5(query.encode('utf-8')).hexdigest()
+
     def add_item(self, query):
         if isinstance(query, dict):
             params = query
             query = params['q']
         else:
             params = {'q': query}
-        self._set(generate_hash(query), params)
+        self._set(self._make_id(query), params)
 
     def del_item(self, query):
         if isinstance(query, dict):
             query = query['q']
-        self._remove(generate_hash(query))
+        self._remove(self._make_id(query))
 
     def update_item(self, query, timestamp=None):
         if isinstance(query, dict):
@@ -49,4 +54,4 @@ class SearchHistory(Storage):
             query = params['q']
         else:
             params = {'q': query}
-        self._update(generate_hash(query), params, timestamp)
+        self._update(self._make_id(query), params, timestamp)
