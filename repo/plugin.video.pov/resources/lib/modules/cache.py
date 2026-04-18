@@ -29,7 +29,8 @@ def check_databases():
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS progress
 					(db_type text, media_id text, season integer, episode integer, resume_point text, curr_time text,
 					last_played text, resume_id integer, title text, unique(db_type, media_id, season, episode))""")
-	dbcon.execute("""CREATE INDEX IF NOT EXISTS pov_ws_media_season_episode ON watched_status (media_id, season DESC, episode DESC)""")
+	dbcon.execute("""DROP INDEX IF EXISTS pov_ws_media_season_episode""")
+	dbcon.execute("""CREATE INDEX IF NOT EXISTS pov_ws_in_progress_episodes ON watched_status (db_type, media_id, season DESC, episode DESC)""")
 	dbcon.close()
 	dbcon = database_connect(favorites_db) # Favorites
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS favorites (db_type text, tmdb_id text, title text, unique (db_type, tmdb_id))""")
@@ -62,7 +63,8 @@ def check_databases():
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS progress
 					(db_type text, media_id text, season integer, episode integer, resume_point text, curr_time text,
 					last_played text, resume_id integer, title text, unique(db_type, media_id, season, episode))""")
-	dbcon.execute("""CREATE INDEX IF NOT EXISTS pov_ws_media_season_episode ON watched_status (media_id, season DESC, episode DESC)""")
+	dbcon.execute("""DROP INDEX IF EXISTS pov_ws_media_season_episode""")
+	dbcon.execute("""CREATE INDEX IF NOT EXISTS pov_ws_in_progress_episodes ON watched_status (db_type, media_id, season DESC, episode DESC)""")
 	dbcon.close()
 	dbcon = database_connect(mdbl_db) # MDBList
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS mdbl_data (id text unique, data text)""")
@@ -71,7 +73,8 @@ def check_databases():
 	dbcon.execute("""CREATE TABLE IF NOT EXISTS progress
 					(db_type text, media_id text, season integer, episode integer, resume_point text, curr_time text,
 					last_played text, resume_id integer, title text, unique(db_type, media_id, season, episode))""")
-	dbcon.execute("""CREATE INDEX IF NOT EXISTS pov_ws_media_season_episode ON watched_status (media_id, season DESC, episode DESC)""")
+	dbcon.execute("""DROP INDEX IF EXISTS pov_ws_media_season_episode""")
+	dbcon.execute("""CREATE INDEX IF NOT EXISTS pov_ws_in_progress_episodes ON watched_status (db_type, media_id, season DESC, episode DESC)""")
 	dbcon.close()
 
 def remove_old_databases():
@@ -93,7 +96,7 @@ def clean_databases(current_time=None, database_check=True, silent=False):
 	remove_old_databases()
 	if database_check: check_databases()
 	current_time = current_time or get_current_time()
-	command_base = """DELETE from %s WHERE CAST(%s AS INT) <= ?"""
+	command_base = """DELETE FROM %s WHERE CAST(%s AS INT) <= ?"""
 	for db, sql in (
 		(external_db, command_base % ('results_data', 'expires')),
 		(debridcache_db, command_base % ('debrid_data', 'expires')),
@@ -197,22 +200,19 @@ def clear_cache(cache_type, silent=False):
 
 def clear_all_cache():
 	if not kodi_utils.confirm_dialog(): return
-	line = '[CR]%s: [B]%s[/B]'
+	line = '[CR]%s: [B]%s %s[/B]'
 	caches = (
-		('meta', '%s %s' % (ls(32527), ls(32524))),
-		('list', '%s %s' % (ls(32815), ls(32524))),
-		('trakt', ls(32087)),
-		('mdblist', 'MDBList'),
-		('imdb', '%s %s' % (ls(32064), ls(32524))),
-		('internal_scrapers', '%s %s' % (ls(32096), ls(32524))),
-		('external_scrapers', '%s %s' % (ls(32118), ls(32524)))
+		('external_scrapers', ls(32118)), ('internal_scrapers', ls(32096)),
+		('trakt', ls(32037)), ('mdblist', 'MDBList'), ('tmdblist', 'TMDBList'),
+		('imdb', ls(32064)), ('list', ls(32815)), ('meta', ls(32527))
 	)
 	len_caches = len(caches)
 	kodi_utils.progressDialog.create('POV', '')
 	for count, (cache_type, cache_label) in enumerate(caches, 1):
 		try:
 			if kodi_utils.progressDialog.iscanceled(): break
-			kodi_utils.progressDialog.update(int(count / len_caches * 100), line % (ls(32816), cache_label))
+			args = int(count / len_caches * 100), line % (ls(32816), cache_label, ls(32524))
+			kodi_utils.progressDialog.update(*args)
 			clear_cache(cache_type, silent=True)
 			kodi_utils.sleep(200)
 		except: kodi_utils.notification(32574, 1500)

@@ -16,6 +16,7 @@
 		<setting id="scraper_720p_display" label="720p Color Hightlight" type="action" default="[COLOR FF0000FF]blue[/COLOR]" action="RunPlugin(plugin://plugin.video.sallts/?mode=color_pick&amp;setting=scraper_720p_highlight)"/>
 		<setting id="scraper_SD_highlight" label="" type="text" default="green" visible="false" />
 		<setting id="scraper_SD_display" label="SD Color Hightlight" type="action" default="[COLOR FF008000]green[/COLOR]" action="RunPlugin(plugin://plugin.video.sallts/?mode=color_pick&amp;setting=scraper_SD_highlight)" />
+		<setting id="seekable_easynews" type="bool" label="Allow Seekable Easynews Streams" default="true" />
 		<setting id="results.language_filter" label="Hightlight Priority Language" type="bool" default="false" />
 			<setting id="results.language" label="Priority Language" type="select" default="English" values="English|Arabic|Bulgarian|Chinese|Croatian|Czech|Danish|Dutch|Estonian|Finnish|French|German|Greek|Hebrew|Hindi|Hungarian|Indonesian|Italian|Japanese|Korean|Latvian|Lithuanian|Malay|Norwegian|Persian|Polish|Portuguese|Romanian|Russian|Serbian|Slovakian|Slovenian|Spanish|Swedish|Taiwanese|Tamil|Telugu|Thai|Turkish|Ukrainian|Vietnamese" subsetting="true" visible="eq(-1,true)" />
 		<setting id="scraping_timeout" type="number" label="Scraping Timeout" default="30" />

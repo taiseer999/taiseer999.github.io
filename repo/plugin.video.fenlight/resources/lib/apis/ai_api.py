@@ -8,7 +8,7 @@ from modules.metadata import movie_meta, tvshow_meta
 from modules.kodi_utils import notification
 from modules.utils import TaskPool, normalize, get_datetime, get_current_timestamp
 from modules.settings import ai_model_order, ai_model_limit, max_threads, tmdb_api_key, mpaa_region
-from modules.kodi_utils import logger
+# from modules.kodi_utils import logger
 
 # GOOGLE_MODELS = ('gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash', 'gemma-3-27b-it', 'gemma-3-12b-it', 'gemma-3-1b-it', 'gemma-3-4b-it', 'gemini-3-flash-preview')
 # GROQ_MODELS = ('llama-3.1-8b-instant', 'llama-3.3-70b-versatile', 'openai/gpt-oss-120b')
@@ -76,11 +76,10 @@ def pick_best_tmdb_match(results, title, year):
 def get_currently_active_model():
 	model_id = None
 	try:
-		current_time = get_timestamp()
 		timeout_models = lists_cache.get('ai_model_failed') or []
 		model_order = [i for i in ai_model_order() for x in [google_api, groq_api] if x.model_present(i) and x.get_api() not in (None, 'None', '', 'empty_setting')]
 		if timeout_models:
-			timeout_ended_models = [i for i in timeout_models if i['timeout_ends'] <= current_time]
+			timeout_ended_models = [i for i in timeout_models if i['timeout_ends'] <= get_timestamp()]
 			if timeout_ended_models:
 				timeout_models = [i for i in timeout_models if i not in timeout_ended_models]
 				lists_cache.set('ai_model_failed', timeout_models, 24*365)
@@ -112,7 +111,6 @@ def ai_similar_call(media_type, tmdb_id, meta, limit, timeout=30):
 	response = requests.post(model_info['similar']['url'], headers=model_info['similar']['headers'], json=model_info['similar']['payload'], timeout=timeout)
 	headers = response.headers
 	status_code = response.status_code
-	logger(model_id, status_code)
 	if status_code != 200:
 		if set_currently_active_models(model_id, status_code): return ai_similar_call(media_type, tmdb_id, meta, limit, timeout)
 		return {}

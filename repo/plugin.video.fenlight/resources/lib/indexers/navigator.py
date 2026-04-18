@@ -104,20 +104,46 @@ class Navigator:
 	def my_content(self):
 		if s.trakt_user_active(): self.add({'mode': 'navigator.trakt_lists_personal'}, 'Trakt Lists', 'trakt')
 		self.add({'mode': 'navigator.trakt_lists_public'}, 'Trakt Public Lists', 'trakt')
-		if s.tmdblist_user_active(): self.add({'mode': 'tmdblist.get_tmdb_lists'}, 'TMDb Lists', 'tmdb')
+		if s.tmdblist_user_active(): self.add({'mode': 'navigator.tmdb_lists_personal'}, 'TMDb Lists', 'tmdb')
+		# if s.tmdblist_user_active(): self.add({'mode': 'tmdblist.get_tmdb_lists'}, 'TMDb Lists', 'tmdb')
 		self.add({'mode': 'personal_lists.get_personal_lists'}, 'Personal Lists', 'lists')
 		self.add({'mode': 'navigator.discover_contents', 'media_type': 'movie', 'show_new': 'false'}, 'Discover Lists (Movies)', 'movies')
 		self.add({'mode': 'navigator.discover_contents', 'media_type': 'tvshow', 'show_new': 'false'}, 'Discover Lists (TV Shows)', 'tv')
 		self.end_directory()
 
+	def tmdb_lists_personal(self):
+		self.add({'mode': 'navigator.tmdb_watchlists'}, 'Watchlist', 'tmdb')
+		self.add({'mode': 'navigator.tmdb_favorites'}, 'Favorites', 'tmdb')
+		self.add({'mode': 'navigator.tmdb_recommendations'}, 'Recommendations', 'tmdb')
+		self.add({'mode': 'tmdblist.get_tmdb_lists'}, 'My Lists', 'tmdb')
+		self.end_directory()
+
+	def tmdb_watchlists(self):
+		self.category_name = 'Watchlist'
+		self.add({'mode': 'tmdblist.build_tmdb_list', 'list_id': 'watchlist', 'media_type': 'movie', 'list_name': 'Movie Watchlist'}, 'Movies Watchlist', 'tmdb')
+		self.add({'mode': 'tmdblist.build_tmdb_list', 'list_id': 'watchlist', 'media_type': 'tv', 'list_name': 'TV Show Watchlist'}, 'TV Shows Watchlist', 'tmdb')
+		self.end_directory()
+
+	def tmdb_favorites(self):
+		self.category_name = 'Favorites'
+		self.add({'mode': 'tmdblist.build_tmdb_list', 'list_id': 'favorites', 'media_type': 'movie', 'list_name': 'Movie Favorites'}, 'Movie Favorites', 'tmdb')
+		self.add({'mode': 'tmdblist.build_tmdb_list', 'list_id': 'favorites', 'media_type': 'tv', 'list_name': 'TV Show Favorites'}, 'TV Show Favorites', 'tmdb')
+		self.end_directory()
+
+	def tmdb_recommendations(self):
+		self.category_name = 'Recommendations'
+		self.add({'mode': 'tmdblist.build_tmdb_list', 'list_id': 'recommendations', 'media_type': 'movie', 'list_name': 'Movie Recommendations'}, 'Movie Recommendations', 'tmdb')
+		self.add({'mode': 'tmdblist.build_tmdb_list', 'list_id': 'recommendations', 'media_type': 'tv', 'list_name': 'TV Show Recommendations'}, 'TV Show Recommendations', 'tmdb')
+		self.end_directory()
+
 	def trakt_lists_personal(self):
-		self.add({'mode': 'navigator.trakt_collections'}, 'Trakt Collection', 'trakt')
-		self.add({'mode': 'navigator.trakt_watchlists'}, 'Trakt Watchlist', 'trakt')
-		self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'category_name': 'My Lists'}, 'Trakt My Lists', 'trakt')
-		self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'category_name': 'Liked Lists'}, 'Trakt Liked Lists', 'trakt')
-		self.add({'mode': 'navigator.trakt_favorites', 'category_name': 'Favorites'}, 'Trakt Favorites', 'trakt')
-		self.add({'mode': 'navigator.trakt_recommendations', 'category_name': 'Recommended'}, 'Trakt Recommended', 'trakt')
-		self.add({'mode': 'build_my_calendar'}, 'Trakt Calendar', 'trakt')
+		self.add({'mode': 'navigator.trakt_collections'}, 'Collection', 'trakt')
+		self.add({'mode': 'navigator.trakt_watchlists'}, 'Watchlist', 'trakt')
+		self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'my_lists', 'category_name': 'My Lists'}, 'My Lists', 'trakt')
+		self.add({'mode': 'trakt.list.get_trakt_lists', 'list_type': 'liked_lists', 'category_name': 'Liked Lists'}, 'Liked Lists', 'trakt')
+		self.add({'mode': 'navigator.trakt_favorites', 'category_name': 'Favorites'}, 'Favorites', 'trakt')
+		self.add({'mode': 'navigator.trakt_recommendations', 'category_name': 'Recommended'}, 'Recommended', 'trakt')
+		self.add({'mode': 'build_my_calendar'}, 'Calendar', 'trakt')
 		self.end_directory()
 
 	def trakt_lists_public(self):
@@ -176,13 +202,13 @@ class Navigator:
 		self.end_directory()
 
 	def search(self):
-		self.add({'mode': 'navigator.search_history', 'action': 'movie', 'name': 'Search History Movies'}, 'Movies', 'movies')
-		self.add({'mode': 'navigator.search_history', 'action': 'tvshow', 'name': 'Search History TV Shows'}, 'TV Shows', 'tv')
-		self.add({'mode': 'navigator.search_history', 'action': 'anime', 'name': 'Search History Anime'}, 'Anime', 'anime')
-		self.add({'mode': 'navigator.search_history', 'action': 'tvshow_anime', 'name': 'Search History TV Show & Anime'}, 'TV Show & Anime', 'tv_anime')
-		self.add({'mode': 'navigator.search_history', 'action': 'people', 'name': 'Search History People'}, 'People', 'people')
-		self.add({'mode': 'navigator.search_history', 'action': 'tmdb_keyword_movie', 'name': 'Search History Keywords (Movies)'}, 'Keywords (Movies)', 'tmdb')
-		self.add({'mode': 'navigator.search_history', 'action': 'tmdb_keyword_tvshow', 'name': 'Search History Keywords (TV Shows)'}, 'Keywords (TV Shows)', 'tmdb')
+		self.add({'mode': 'navigator.search_history', 'action': 'movie', 'name': 'Search History Movies'}, 'Search Movies', 'movies')
+		self.add({'mode': 'navigator.search_history', 'action': 'tvshow', 'name': 'Search History TV Shows'}, 'Search TV Shows', 'tv')
+		self.add({'mode': 'navigator.search_history', 'action': 'anime', 'name': 'Search History Anime'}, 'Search Anime', 'anime')
+		self.add({'mode': 'navigator.search_history', 'action': 'tvshow_anime', 'name': 'Search History TV Show & Anime'}, 'Search TV Show & Anime', 'tv_anime')
+		self.add({'mode': 'navigator.search_history', 'action': 'people', 'name': 'Search History People'}, 'Search People', 'people')
+		self.add({'mode': 'navigator.search_history', 'action': 'tmdb_keyword_movie', 'name': 'Search History Keywords (Movies)'}, 'Search Keywords (Movies)', 'tmdb')
+		self.add({'mode': 'navigator.search_history', 'action': 'tmdb_keyword_tvshow', 'name': 'Search History Keywords (TV Shows)'}, 'Search Keywords (TV Shows)', 'tmdb')
 		self.add({'mode': 'navigator.search_history', 'action': 'trakt_lists'}, 'Search Trakt User Lists', 'trakt')
 		if s.easynews_authorized():
 			self.add({'mode': 'navigator.search_history', 'action': 'easynews_video'}, 'Search Easynews Videos', 'easynews')
@@ -506,8 +532,10 @@ class Navigator:
 		from modules.episode_tools import single_last_watched_episodes
 		recommend_type = s.recommend_service()
 		menu_type = self.params_get('menu_type')
-		action_dict = {'movie': {'mode': 'build_movie_list', 'action': {0: 'tmdb_movies_recommendations', 1: 'imdb_more_like_this', 2: 'ai_similar'}, 'media_type': 'movie'},
-						'tvshow': {'mode': 'build_tvshow_list', 'action': {0: 'tmdb_tv_recommendations', 1: 'imdb_more_like_this', 2: 'ai_similar'}, 'media_type': 'episode'}}
+		action_dict = {'movie':
+		{'mode': 'build_movie_list', 'action': {0: 'tmdb_movies_recommendations', 1: 'imdb_more_like_this', 2: 'ai_similar', 3: 'trakt_movies_related'}, 'media_type': 'movie'},
+						'tvshow':
+		{'mode': 'build_tvshow_list', 'action': {0: 'tmdb_tv_recommendations', 1: 'imdb_more_like_this', 2: 'ai_similar', 3: 'trakt_tv_related'}, 'media_type': 'episode'}}
 		action_params = action_dict[menu_type]
 		mode, action, media_type = action_params['mode'], action_params['action'][recommend_type], action_params['media_type']
 		recently_watched = get_recently_watched(media_type)
@@ -515,11 +543,11 @@ class Navigator:
 		for item in recently_watched:
 			if media_type == 'movie':
 				name = item['title']
-				tmdb_id = item['media_id'] if recommend_type in (0, 1) else 'movie|%s' % item['media_id']
+				key_id = item['media_id'] if recommend_type in (0, 1, 3) else 'movie|%s' % item['media_id']
 			else:
 				name = '%s - %sx%s' % (item['title'], str(item['season']), str(item['episode']))
-				tmdb_id = item['media_ids']['tmdb'] if recommend_type in (0, 1) else 'tvshow|%s' % item['media_ids']['tmdb']
-			params = {'mode': mode, 'action': action, 'key_id': tmdb_id, 'name': 'Because You Watched %s' % name}
+				key_id = item['media_ids']['tmdb'] if recommend_type in (0, 1, 3) else 'tvshow|%s' % item['media_ids']['tmdb']
+			params = {'mode': mode, 'action': action, 'key_id': key_id, 'name': 'Because You Watched %s' % name}
 			if recommend_type == 1: params['get_imdb'] = 'true'
 			self.add(params, name, 'because_you_watched')
 		self.end_directory()

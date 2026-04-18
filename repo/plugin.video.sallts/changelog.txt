@@ -2,6 +2,7 @@
 - downloader, select dialog
 
   [COLOR orange][B]Version 6.04[/B][/COLOR]
+- (Experimental) Added Settings/AIOStreams/Allow Seekable Easynews Streams.
 - Re-Added FlickList watched/resume points.
 - Fix for In-Progress Movies/Episodes.
 - Added Settings/Playback/Auto Play for Movies/Episodes.

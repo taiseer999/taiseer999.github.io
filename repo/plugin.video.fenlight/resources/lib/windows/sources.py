@@ -29,8 +29,8 @@ class SourcesResults(BaseDialog):
 		self.poster = self.meta_get('poster') or self.empty_poster
 		self.external_cache_check = kwargs.get('external_cache_check')
 		self.prerelease_values, self.prerelease_key = ('CAM', 'SCR', 'TELE'), 'CAM/SCR/TELE'
-		self.info_icons_dict = {'easynews': get_icon('easynews'), 'alldebrid': get_icon('alldebrid'), 'real-debrid': get_icon('realdebrid'), 'premiumize': get_icon('premiumize'),
-		'easydebrid': get_icon('easydebrid'), 'torbox': get_icon('torbox'), 'ad_cloud': get_icon('alldebrid'), 'rd_cloud': get_icon('realdebrid'),
+		self.info_icons_dict = {'easynews': get_icon('easynews'), 'alldebrid': get_icon('alldebrid'), 'real-debrid': get_icon('realdebrid'),
+		'premiumize': get_icon('premiumize'), 'torbox': get_icon('torbox'), 'ad_cloud': get_icon('alldebrid'), 'rd_cloud': get_icon('realdebrid'),
 		'pm_cloud': get_icon('premiumize'), 'tb_cloud': get_icon('torbox')}
 		self.info_quality_dict = {'4k': get_icon('flag_4k', 'flags'), '1080p': get_icon('flag_1080p', 'flags'), '720p': get_icon('flag_720p', 'flags'),
 		'sd': get_icon('flag_sd', 'flags'), 'cam': get_icon('flag_sd', 'flags'), 'tele': get_icon('flag_sd', 'flags'), 'scr': get_icon('flag_sd', 'flags')}
@@ -48,6 +48,7 @@ class SourcesResults(BaseDialog):
 	def run(self):
 		self.doModal()
 		self.clearProperties()
+		self.clear_home_property('window_theme.sources')
 		hide_busy_dialog()
 		return self.selected
 
@@ -238,6 +239,7 @@ class SourcesResults(BaseDialog):
 		self.filter_list = [i[0] for i in self.filter_list]
 
 	def set_properties(self):
+		self.set_home_property('window_theme.sources', self.get_home_property('window_theme'))
 		self.setProperty('window_format', self.window_format)
 		self.setProperty('fanart', self.meta_get('fanart') or self.addon_fanart)
 		self.setProperty('clearlogo', self.meta_get('clearlogo') or '')
@@ -260,13 +262,12 @@ class SourcesResults(BaseDialog):
 		if not uncached and scrape_provider != 'folders':
 			down_file_params = {'mode': 'downloader.runner', 'action': 'meta.single', 'name': self.meta.get('rootname', ''), 'source': source,
 								'url': None, 'provider': scrape_provider, 'meta': meta_json}
-		if 'package' in item and not uncached and cache_provider != 'EasyDebrid':
+		if 'package' in item and not uncached:
 			down_pack_params = {'mode': 'downloader.runner', 'action': 'meta.pack', 'name': self.meta.get('rootname', ''), 'source': source, 'url': None,
 								'provider': cache_provider, 'meta': meta_json, 'magnet_url': magnet_url, 'info_hash': info_hash}
 		if provider_source == 'torrent':
 			browse_pack_params = {'mode': 'debrid.browse_packs', 'provider': cache_provider, 'name': name,
 								'magnet_url': magnet_url, 'info_hash': info_hash}
-			if cache_provider != 'EasyDebrid': add_magnet_to_cloud_params = {'mode': 'manual_add_magnet_to_cloud', 'provider': cache_provider, 'magnet_url': magnet_url}
 		choices_append(('Info', 'results_info'))
 		if add_magnet_to_cloud_params: choices_append(('Add to Cloud', add_magnet_to_cloud_params))
 		if browse_pack_params: choices_append(('Browse', browse_pack_params))
@@ -356,7 +357,7 @@ class SourcesPlayback(BaseDialog):
 	def set_resolver_properties(self):
 		if self.meta_get('media_type') == 'movie': self.text = self.meta_get('plot')
 		else:
-			if avoid_episode_spoilers(): plot = self.meta_get('tvshow_plot') or '* Hidden to Prevent Spoilers *'
+			if avoid_episode_spoilers() and int(self.meta_get('playcount', '0')) == 0: plot = self.meta_get('tvshow_plot') or '* Hidden to Prevent Spoilers *'
 			else: plot = self.meta_get('plot', '') or self.meta_get('tvshow_plot', '')
 			self.text = '[B]%02dx%02d - %s[/B][CR][CR]%s' % (self.meta_get('season'), self.meta_get('episode'), self.meta_get('ep_name', 'N/A').upper(), plot)
 		self.setProperty('window_mode', self.window_mode)
@@ -416,34 +417,3 @@ class SourcesInfo(BaseDialog):
 		self.setProperty('quality', self.item_get_property('quality').lower())
 		self.setProperty('provider_icon', self.item_get_property('provider_icon'))
 		self.setProperty('quality_icon', self.item_get_property('quality_icon'))
-
-class SourcesChoice(BaseDialog):
-	def __init__(self, *args, **kwargs):
-		BaseDialog.__init__(self, *args)
-		self.window_id = 5001
-		self.item_list = []
-		self.make_items()
-
-	def onInit(self):
-		self.add_items(self.window_id, self.item_list)
-		self.setFocusId(self.window_id)
-
-	def run(self):
-		self.doModal()
-		return self.choice
-
-	def onAction(self, action):
-		if action in self.closing_actions:
-			self.choice = None
-			self.close()
-		if action in self.selection_actions:
-			chosen_listitem = self.get_listitem(self.window_id)
-			self.choice = chosen_listitem.getProperty('name')
-			self.close()
-
-	def make_items(self):
-		append = self.item_list.append
-		for item in [('List', get_icon('results_list', 'results')), ('Rows', get_icon('results_row', 'results')), ('WideList', get_icon('results_widelist', 'results'))]:
-			listitem = self.make_listitem()
-			listitem.setProperties({'name': item[0], 'image': item[1]})
-			append(listitem)

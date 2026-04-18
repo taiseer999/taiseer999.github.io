@@ -65,6 +65,7 @@ class MagnetoPlayer:
 		self.scraper_settings = scraping_settings()
 		self.scraper_timeout = settings.scraping_timeout()
 		self.sleep_time = 100
+		self.disable_easynews_seek = get_setting('seekable_easynews') == 'false'
 		self.filter_hevc, self.hevc_filter_key = filter_status('hevc'), '[B]HEVC[/B]'
 		self.filter_av1, self.av1_filter_key = filter_status('av1'), '[B]AV1[/B]'
 		self.filter_dv, self.dolby_vision_filter_key = filter_status('dv'), '[B]D/VISION[/B]'
@@ -336,7 +337,8 @@ class MagnetoPlayer:
 
 	def resolve_sources(self, item):
 		logger('aiostreams', f"resolve_sources\n{json.dumps(item, indent=2)}")
-		headers = item.get('requestHeaders')
+		headers = item.get('requestHeaders') or {}
+		if self.disable_easynews_seek and 'easynews' in str(item.get('service')).lower(): headers['seekable'] = 0
 		if headers: url = '|'.join((item.get('url'), kore.urlencode(headers)))
 		else: url = item.get('url')
 		return url

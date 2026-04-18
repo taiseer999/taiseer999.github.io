@@ -12,7 +12,7 @@ from indexers.seasons import single_seasons
 from indexers.episodes import build_single_episode
 from modules import kodi_utils
 from modules.utils import paginate_list, gen_md5, get_datetime, get_current_timestamp
-from modules.settings import paginate, page_limit, widget_hide_next_page, tmdb_api_key, mpaa_region
+from modules.settings import paginate, page_limit, widget_hide_next_page, tmdb_api_key, mpaa_region, jump_to_enabled
 # logger = kodi_utils.logger
 
 def search_trakt_lists(params):
@@ -162,7 +162,7 @@ def get_trakt_user_lists(params):
 				display = '%s | [I]%s (x%s)[/I]' % (list_name, user, str(item_count))
 				mode = 'random.build_trakt_lists_contents' if random else 'trakt.list.build_trakt_list'
 				url_params = {'mode': mode, 'user': user, 'slug': slug, 'list_id': list_id, 'list_type': 'user_lists', 'list_name': list_name, 'iconImage': 'trakt',
-				'name': list_name, 'sort_by': sort_by, 'sort_how': sort_how}
+								'name': list_name, 'sort_by': sort_by, 'sort_how': sort_how}
 				if random: url_params['random'] = 'true'
 				url = build_url(url_params)
 				listitem = make_listitem()
@@ -271,12 +271,16 @@ def build_trakt_list(params):
 		[i.join() for i in threads]
 		item_list.sort(key=lambda k: k[1])
 		if use_result: return content, [i[0] for i in item_list]
+		new_params = {'mode': 'trakt.list.build_trakt_list', 'list_type': list_type, 'list_name': list_name, 'user': user, 'slug': slug, 'paginate_start': paginate_start,
+						'sort_by': sort_by, 'sort_how': sort_how}
 		kodi_utils.add_items(handle, [i[0] for i in item_list])
+		if total_pages > 2 and jump_to_enabled() and not is_external:
+				kodi_utils.add_dir(handle, {'mode': 'navigate_to_page_choice', 'current_page': page_no, 'total_pages': total_pages, 'url_params': json.dumps(new_params)},
+											'Jump To...', 'item_jump', kodi_utils.get_icon('item_jump_landscape'), isFolder=False)
 		if total_pages > page_no and not hide_next_page:
 			new_page = str(page_no + 1)
-			new_params = {'mode': 'trakt.list.build_trakt_list', 'list_type': list_type, 'list_name': list_name,
-							'user': user, 'slug': slug, 'paginate_start': paginate_start, 'new_page': new_page}
-			kodi_utils.add_dir(handle, new_params, 'Next Page (%s) >>' % new_page, 'nextpage', kodi_utils.get_icon('nextpage_landscape'))
+			new_params['new_page'] = new_page
+			kodi_utils.add_dir(handle, new_params,  'Next Page (%s) >>' % new_page, 'nextpage', kodi_utils.get_icon('nextpage_landscape'))
 	except: pass
 	kodi_utils.set_content(handle, content)
 	kodi_utils.set_category(handle, list_name)

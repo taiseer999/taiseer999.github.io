@@ -27,7 +27,7 @@ class SetAddonConstants:
 			('fenlight.addon_icon', kodi_utils.translate_path(kodi_utils.addon_info('icon'))),
 			('fenlight.addon_icon_mini', os.path.join(kodi_utils.addon_info('path'), 'resources', 'media', 'addon_icons', 'minis',
 			os.path.basename(kodi_utils.translate_path(kodi_utils.addon_info('icon'))))),
-			('fenlight.addon_fanart', kodi_utils.translate_path(kodi_utils.addon_info('fanart')))
+			('fenlight.addon_fanart', kodi_utils.addon_fanart())
 					]
 		for item in addon_items: kodi_utils.set_property(*item)
 		return kodi_utils.logger('Fen Light', 'SetAddonConstants Service Finished')
@@ -35,8 +35,8 @@ class SetAddonConstants:
 class DatabaseMaintenance:
 	def run(self):
 		kodi_utils.logger('Fen Light', 'DatabaseMaintenance Service Starting')
-		from caches.base_cache import make_databases
-		make_databases()
+		from caches.base_cache import check_databases_integrity
+		check_databases_integrity(silent=True)
 		return kodi_utils.logger('Fen Light', 'DatabaseMaintenance Service Finished')
 
 class SyncSettings:
@@ -56,18 +56,36 @@ class OnUpdateChanges:
 		except: pass
 		return kodi_utils.logger('Fen Light', 'OnUpdateChanges Service Finished')
 
-	def clear_trakt_list_data(self):
-		# Active for 2.1.74 only.
-		from caches.trakt_cache import clear_daily_cache
-		clear_daily_cache()
+	def update_users_tmdblist_authentication(self):
+		# For update 2.1.94 - 96.
+		from apis.tmdblist_api import tmdb_list_api
+		empty_setting_check = ('', 'None', None, 'empty_setting')
+		account_id = get_setting('fenlight.tmdb.account_id', 'empty_setting')
+		if account_id in empty_setting_check: return
+		access_token = get_setting('fenlight.tmdb.token', 'empty_setting')
+		if access_token in empty_setting_check: return
+		account_session_id = get_setting('fenlight.tmdb.account_session_id', 'empty_setting')
+		if account_session_id not in empty_setting_check: return
+		kodi_utils.sleep(10000)
+		text = 'You currently have an authorized TMDb account with Fen Light. New features (Adding/Removing items from Watchlist & Favorites) requires Fen Light to link this to ' \
+		'v3 of the TMDb API.'
+		kodi_utils.ok_dialog(heading='TMDb Account Information', text=text, ok_label='Continue..')
+		text = 'Would you like Fen Light to do that now (automatically)? If you choose not to do this now, you will have to revoke your TMDb authorization and then ' \
+		're-authorize it in the settings.'
+		if not kodi_utils.confirm_dialog(heading='TMDb Account Information', text=text, ok_label='Do Now', cancel_label='Do Later', default_control=10): return
+		success = tmdb_list_api.add_tmdb3_to_session(access_token, account_id)
+		if success: text = 'Success!![CR]Your TMDb account can now use the v3 features for Watchlist & Favorites'
+		else: text = 'Something went wrong[CR]Please revoke your TMDb authorization in settings and then re-authorize'
+		kodi_utils.ok_dialog(heading='TMDb Account Information', text=text)
 
-class CustomFonts:
+class CustomWindowsPrepare:
 	def run(self):
-		kodi_utils.logger('Fen Light', 'CustomFonts Service Starting')
-		from windows.base_window import FontUtils
+		kodi_utils.logger('Fen Light', 'CustomWindowsPrepare Service Starting')
+		from windows.base_window import FontUtils, ExtrasUtils
 		monitor, player = kodi_utils.kodi_monitor(), kodi_utils.kodi_player()
 		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
 		kodi_utils.clear_property(current_skin_prop)
+		ExtrasUtils().run()
 		font_utils = FontUtils()
 		while not monitor.abortRequested():
 			font_utils.execute_custom_fonts()
@@ -76,13 +94,13 @@ class CustomFonts:
 		except: pass
 		try: del player
 		except: pass
-		return kodi_utils.logger('Fen Light', 'CustomFonts Service Finished')
+		return kodi_utils.logger('Fen Light', 'CustomWindowsPrepare Service Finished')
 
 class TraktMonitor:
 	def run(self):
 		kodi_utils.logger('Fen Light', 'TraktMonitor Service Starting')
 		from apis.trakt_api import trakt_sync_activities
-		from modules.settings import trakt_sync_interval
+		from modules.settings import trakt_user_active, trakt_sync_interval
 		monitor, player = kodi_utils.kodi_monitor(), kodi_utils.kodi_player()
 		wait_for_abort, is_playing = monitor.waitForAbort, player.isPlayingVideo
 		while not monitor.abortRequested():
@@ -91,12 +109,17 @@ class TraktMonitor:
 			try:
 				sync_interval, wait_time = trakt_sync_interval()
 				next_update_string = update_string % sync_interval
-				status = trakt_sync_activities()
+				if trakt_user_active: status = trakt_sync_activities()
+				else: status = 'no_auth'
 				if status == 'failed': kodi_utils.logger('Fen Light', trakt_service_string % ('Failed. Error from Trakt', next_update_string))
+				elif status == 'no_auth': kodi_utils.logger('Fen Light', trakt_service_string % ('Not Run. No Current Trakt Account', next_update_string))
 				else:
-					if status in ('success', 'no account'): kodi_utils.logger('Fen Light', trakt_service_string % ('Success. %s' % trakt_success_line_dict[status], next_update_string))
-					else: kodi_utils.logger('Fen Light', trakt_service_string % ('Success. No Changes Needed', next_update_string))# 'not needed'
-					if status == 'success' and get_setting('fenlight.trakt.refresh_widgets', 'false') == 'true': kodi_utils.run_plugin({'mode': 'kodi_refresh'})
+					if status in ('success', 'no account'):
+						kodi_utils.logger('Fen Light', trakt_service_string % ('Success. %s' % trakt_success_line_dict[status], next_update_string))
+					else:
+						kodi_utils.logger('Fen Light', trakt_service_string % ('Success. No Changes Needed', next_update_string))# 'not needed'
+					if status == 'success' and get_setting('fenlight.trakt.refresh_widgets', 'false') == 'true':
+						kodi_utils.run_plugin({'mode': 'kodi_refresh'})
 			except Exception as e: kodi_utils.logger('Fen Light', trakt_service_string % ('Failed', 'The following Error Occured: %s' % str(e)))
 			wait_for_abort(wait_time)
 		try: del monitor
@@ -221,16 +244,22 @@ class FenLightMonitor(Monitor):
 		self.startServices()
 
 	def startServices(self):
-		SetAddonConstants().run()
-		DatabaseMaintenance().run()
-		SyncSettings().run()
-		OnUpdateChanges().run()
-		AddonXMLCheck().run()
-		Thread(target=CustomFonts().run).start()
+		try: SetAddonConstants().run()
+		except Exception as e: logger('SetAddonConstants', str(e))
+		try: DatabaseMaintenance().run()
+		except Exception as e: logger('DatabaseMaintenance', str(e))
+		try: SyncSettings().run()
+		except Exception as e: logger('SyncSettings', str(e))
+		try: OnUpdateChanges().run()
+		except Exception as e: logger('OnUpdateChanges', str(e))
+		try: AddonXMLCheck().run()
+		except Exception as e: logger('AddonXMLCheck', str(e))
+		Thread(target=CustomWindowsPrepare().run).start()
 		Thread(target=TraktMonitor().run).start()
 		Thread(target=UpdateCheck().run).start()
 		Thread(target=WidgetRefresher().run).start()
-		AutoStart().run()
+		try: AutoStart().run()
+		except Exception as e: logger('AutoStart', str(e))
 
 	def onNotification(self, sender, method, data):
 		if method in ('GUI.OnScreensaverActivated', 'System.OnSleep'):
