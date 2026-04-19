@@ -32,7 +32,7 @@ description="بيلد خفيف للاجهزة المتوسطة."
 
 
 name="Select your skin"
-version="1.0"
+version="1.1"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=L%2BjGfKh9Dx4zv0no%2BFewwNtL1v3vbr8WSDL%2BUIpUkYAzVioYp3jQ%2BF2UYKdEtjvj&expiry=rPUcfRKWD2wwpPhzxq3GVA%3D%3D&mac=ee9961cfbc010493515f6d2019ef7dc1785ee7f05402634cbff53cbe373e9ccd"
 minor="http://"
 gui="http://"
