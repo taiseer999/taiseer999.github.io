@@ -747,7 +747,7 @@
                 <align>center</align>
                 <width>auto</width>
                 <font>font_title_huge</font>
-                <textcolor>$VAR[ColorHighlight]</textcolor>
+                <textcolor>main_fg_100</textcolor>
                 <label>[COLOR=main_logo]Arctic[/COLOR] Fuse</label>
             </control>
             <control type="label">
@@ -756,7 +756,7 @@
                 <align>center</align>
                 <width>auto</width>
                 <font>font_head_bold</font>
-                <textcolor>$VAR[ColorHighlight]</textcolor>
+                <textcolor>main_fg_100</textcolor>
                 <label>$NUMBER[3]</label>
             </control>
         </control>
