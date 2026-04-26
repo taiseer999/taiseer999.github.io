@@ -3379,7 +3379,7 @@ msgstr ""
 
 msgctxt "#31984"
 msgid "Show two-row information bar"
-msgstr "معلومات الفيديو"
+msgstr "عرض شريط المعلومات في صفين"
 
 msgctxt "#31985"
 msgid "Disc Art"

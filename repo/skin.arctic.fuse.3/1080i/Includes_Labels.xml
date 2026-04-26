@@ -1488,6 +1488,12 @@
         <value>$LOCALIZE[32079]</value>
     </variable>
 	
+    <variable name="ArtworkStyle">
+        <value condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),DiscArt)">$LOCALIZE[31985]</value>
+        <value condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),VHSArt)">$LOCALIZE[31980]</value>
+        <value>$LOCALIZE[31930]</value>
+    </variable>
+
     <variable name="VideoDecoder">
         <value condition="Player.Process(videohwdecoder)">HW</value>
         <value>SW</value>
