@@ -1,0 +1,47 @@
+{
+  "name": "Dex Hub",
+  "plugin": "plugin.video.dexhub",
+  "language": "en",
+  "priority": 250,
+  "assert": {
+    "play_movie": [
+      "title"
+    ],
+    "play_episode": [
+      "showname",
+      "season",
+      "episode"
+    ],
+    "search_movie": [
+      "title"
+    ],
+    "search_episode": [
+      "showname"
+    ]
+  },
+  "play_movie": [
+    "plugin://plugin.video.dexhub/?action=tmdb_player&video_type=movie&title={title_url}&year={year}&imdb_id={imdb}&tmdb_id={tmdb}",
+    {
+      "dialog": "false"
+    }
+  ],
+  "play_episode": [
+    "plugin://plugin.video.dexhub/?action=tmdb_player&video_type=episode&showname={showname_url}&title={title_url}&season={season}&episode={episode}&tvdb_id={tvdb}&tmdb_id={tmdb}&imdb_id={imdb}",
+    {
+      "dialog": "false"
+    }
+  ],
+  "search_movie": [
+    "plugin://plugin.video.dexhub/?action=tmdb_player&video_type=movie&title={title_url}&year={year}&imdb_id={imdb}&tmdb_id={tmdb}",
+    {
+      "dialog": "false"
+    }
+  ],
+  "search_episode": [
+    "plugin://plugin.video.dexhub/?action=tmdb_player&video_type=show&showname={showname_url}&tvdb_id={tvdb}&tmdb_id={tmdb}&imdb_id={imdb}",
+    {
+      "dialog": "false"
+    }
+  ],
+  "is_resolvable": "false"
+}

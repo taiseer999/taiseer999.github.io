@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.dexhub"
+       name="Dex Hub"
+       version="3.8.1"
+       provider-name="Dex Hub">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" start="startup"/>
+    <extension point="xbmc.addon.metadata">
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+        <platform>all</platform>
+        <license>MIT</license>
+        <language>ar en</language>
+        <summary lang="en_GB">Standalone Stremio-style catalog/stream client for Kodi with TMDb Helper player integration, Plex/Emby companion sync, Trakt PIN linking and scrobble.</summary>
+        <summary lang="ar">عميل مستقل لكتالوجات وروابط Stremio داخل Kodi مع دعم مشغّل TMDb Helper ومزامنة Plex/Emby وربط Trakt عبر PIN.</summary>
+        <description lang="en_GB">Standalone Dex Hub for Kodi. Add any compatible Stremio manifest URL, browse provider catalogs, play streams with external subtitles, search Stremio subtitle addons and pass them to Kodi, sync playback progress through built-in companion support for Plex and Emby, link Trakt via built-in PIN auth, scrobble, import progress with Trakt, reuse Dex Hub as a TMDb Helper player, and keep a unified local continue-watching list.</description>
+        <description lang="ar">Dex Hub نسخة مستقلة لـ Kodi. أضف أي رابط Stremio manifest متوافق، تصفح كتالوجات المزودين، شغّل الروابط مع ترجمات خارجية، ابحث في إضافات ترجمة Stremio ومرّرها إلى Kodi، زامِن التقدم عبر Plex وEmby، اربط Trakt عبر PIN وسجّل المشاهدة، استخدم Dex Hub كمشغّل لـ TMDb Helper، وحافظ على قائمة متابعة موحّدة محلياً.</description>
+        <disclaimer lang="en_GB">The author of this addon does not host any of the content which is found and has no affiliation with any of the content providers. The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.</disclaimer>
+        <disclaimer lang="ar">مؤلّف هذه الإضافة لا يستضيف أيًّا من المحتوى الذي يتم العثور عليه، وليس له أي ارتباط بأي من مزوّدي المحتوى. لا يرتبط المؤلّف بأي شكل مع Kodi أو فريق Kodi أو مؤسّسة XBMC.</disclaimer>
+        
+        <news>3.7.98
+- Fix AIOStreams/Torrentio source discovery: query all stream providers and preserve imdb/tmdb ids for torrent addons.
+- Source picker now waits for all stream providers instead of stopping after the first addon returns results.
+
+3.7.92
+- إصلاح الاستئناف المباشر من Continue Watching: صار يمرّر resume_percent و source_provider_id، ويشغل مسار Player.play عند وجود استئناف حتى يثبت seek مثل النسخ القديمة.
+- دعم resume_percent في التشغيل التلقائي للأفلام والحلقات، وليس فقط نافذة اختيار المصدر.
+- تحسين fanart الحقيقي للفيلم/المسلسل في Continue Watching وNext Up وFavorites، مع حفظ الخلفية في الكاش حتى تظهر في الزيارات التالية.
+3.7.91
+- إصلاح متابعة المشاهدة: عناصر Trakt كانت تُشغّل من بداية الفيديو بدل من الموضع المحفوظ. السبب جذرياً كان في `import_progress`: استدعاء `/sync/playback/movies` و `/sync/playback/episodes` بدون `?extended=full`، فـ Trakt ما يرجع `runtime`، ومنه `position = duration × progress / 100 = 0`. أضفت `?extended=full` لكلا الاستدعاءين.
+- حماية إضافية لصفوف قديمة في DB ما عندها position دقيق: تمرير `resume_percent` عبر URL/cache ctx، و`_post_start_chores` يحسب الموضع تلقائياً من `player.getTotalTime() × percent / 100` لمّا يبدأ التشغيل. يضمن أن أي صف فيه `percent > 1%` يتم استئنافه صح حتى لو `position` صفر.
+- استخدام expli­cit none-check بدل `or` للموضع، لتجنب اعتبار `0.0` فعلية كـ "غير محدد".
+3.7.90
+- إصلاح حرج: NameError "poster_source_mode" كان يفجّر فتح أي عنصر من Continue Watching أو streams (موجود من قبل، اللوج كشفه). الدالة كانت مستخدمة في `_meta_cache_discriminator` بدون استيراد. أُضيف لقائمة الـ imports من art.
+- إصلاح Next Up: البوسترات والبانرز ما تظهر — كان السبب أن `_trakt_art_bundle` و `_art_bundle_for_ids` يرجعون poster='' في وضع "محلي فقط" (وهو الافتراضي)، رغم أن صفوف Next Up افتراضية وما عندها provider محلي. الحل: تمرير `force_remote=True` لكل استدعاء من Next Up.
+- اكتشاف روابط Plex/Emby tokenized المنتهية في الكاش وتجاهلها — قبل كان البوستر القديم يعرض حتى لو ما يشتغل، يحجب البحث عن بديل.
+- نقل تحميل صور Next Up إلى inline بدل background thread، فالصور تظهر من أول فتح بدل ما تحتاج إعادة فتح للقائمة.
+- استمرار حفظ الصور المحلولة في playback_store حتى الفتحات اللاحقة تكون فورية.
+3.7.89
+- إصلاح حرج: تغيير مصدر الميتاداتا (Cinemeta/TMDb Helper/Trakt) لإضافات Plex/Plexio/Emby ما كان يأثر فعلياً، والبوسترات تطلع مكسورة. السبب: `_normalize_meta_art_urls` كان يلفّ بوستر TMDb داخل `/photo/:/transcode?url=...` التابع لخادم Plex، وPlex ما يقدر يحلّ URL خارجي.
+- الآن: لمّا تختار مصدر صريح، الإضافة تحترم البوستر الجديد كما هو وما تعيد كتابته عبر الخادم الأصلي.
+- إضافة فحص host مطابق لـ `_plexmod_transcode_url` كحماية ثانية: روابط من نطاقات خارجية ما تنلف أبداً عبر Plex transcode.
+- مسح فوري لطبقة الكاش `_META_MEM` بعد كل تغيير لمصدر الميتاداتا، حتى تظهر النتيجة بدون إعادة فتح Kodi.
+- إزالة تعريفات مكررة لـ `_meta_mem_key/get/put` من plugin.py.
+3.7.83
+- Added official DexWorld IPTV and DexWorld Subtitles public service links to Quick Start and support info.
+- Kept Plexio/StreamBridge as configured/private manifest services without embedding keys.
+
+3.7.82
+- DexWorld recommended sources now use public setup sites only (Plexio + StreamBridge/Emby); no private tokens are bundled
+- New DexHub fan art background
+- Added bilingual DexWorld support/trial info (@a6ahd)
+3.7.73
+- Wait screen v6: cinematic full-bleed fanart 45%, 3-layer amber glow poster, glassmorphism card
+- Wait screen v6: dual-layer progress bar (solid + glow), 12px wave bars, cyan pulse dot
+- Wait screen v6: cancel hint inline with wave bars, cleaner layout
+3.7.72
+- Sources: 8 badge slots (was 4), badges 26px tall (was 20px)
+- Sources: native badge fallback — HDR/DV/Atmos/4K always show without preset JSON
+- Sources: video_bits + audio_bits exposed as list properties + shown in row 3
+- Sources: size chip top-right, quality band redesigned with 100px height
+- wait screen: setImage() method for poster (fixes blank poster on CDN Plex)
+- Icons: full premium set — continue, nextup, favorites, sources, add, settings, accounts
+3.7.71
+- New premium icon set: continue, nextup, favorites, sources, add, settings, accounts, catalogs, search
+- Provider icons redesigned: Plex (gold), Emby (green), Trakt (red), TMDb (cyan-green)
+- Search screen fanart: custom DexHub hex-grid background
+- All icons match DexHub dark aesthetic (charcoal + amber + cyan + purple)
+3.7.70
+- Wait screen: poster/clearlogo/fanart now applied via setImage() — fixes blank poster with Plex/CDN URLs
+- Wait screen: clearlogo shown via setImage(), falls back to text title when absent
+- Resume: _post_start_chores always runs (not conditional); seek retries up to 6x with adaptive wait
+- Resume: 25s timeout (was 20s) for slow CDN streams to buffer before giving up on seek
+- HOTFIX: remove broken image:// wrapper that hid all provider icons in 3.7.69
+- provider_art: keep relative URL → base_url resolution (harmless, for edge cases)
+3.7.69
+- New fanart/background: DexHub brand artwork
+- Nextup: renders immediately, art backfill runs in background thread (no more waiting)
+- Provider icons: relative logo URLs resolved against base_url (fixes CDN Plex servers)
+- Provider icons: image:// wrapper for remote logos (Kodi image cache, no re-download)
+- Providers list: background manifest refresh for entries with missing logo
+- _clean_art_value: relative paths starting with / now accepted
+3.7.68
+- TMDb Helper source: hits local DB first (zero network), falls back to live API
+- Nextup: parallel art resolve + write-back to playback_store (instant on 2nd visit)
+- Favorites: shared _resolve_row_art chain: row → TMDb Helper DB → trakt → tmdb_direct
+- Clearlogo no longer overwritten when changing metadata source
+- _fetch_from_tmdb_helper now tries installed TMDb Helper DB before any API call
+3.7.67
+- Meta source picker now actually applies on every item (was skipped when item had a poster)
+- Meta cache purged on source change so the next listing reflects the new pick instantly
+- Continue Watching: stale-flag on Window(10000) so home rebuilds even after navigating away
+- Favorites posters: Trakt-only canonical IDs (trakt:N, slug:...) now resolved correctly
+- Wait screen: properties pushed to global Window(10000) so $INFO actually finds the poster
+- Wait screen: properties cleared on close to prevent leak between sessions
+3.7.66
+- Wait screen v4: clearer status text + real progress bar, ctx now wins over TMDb DB
+- Wait screen now shows on setResolvedUrl path too (was Player.play only)
+- Cross-invocation dispatch de-dup: TMDb Helper, play_item, play no longer fire twice on double-tap
+- Favorites posters: parallel resolve (8 threads) + write-back to SQLite for instant 2nd visit
+- Continue Watching now refreshes home/CW container automatically when playback ends
+- Sources window: skip TMDb backfill when meta complete; poll interval 750ms → 500ms
+- Wait window open stall 160ms → 60ms
+3.7.62
+- Fix: keep TMDb Helper handoff flag alive until real playback lifecycle events
+- Fix: source browser/wait/player now prefer TMDb Helper poster + clearlogo, with source/XML fallback
+- Tweak: playback wait layout refined for clearer logo + loader alignment</news>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

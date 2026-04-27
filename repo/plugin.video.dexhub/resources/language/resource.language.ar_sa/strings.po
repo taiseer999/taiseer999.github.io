@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.dexhub\n"
+"Language: ar_SA\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgctxt "#30000"
+msgid "Playback mode"
+msgstr "وضع التشغيل"
+
+msgctxt "#30001"
+msgid "Choose source"
+msgstr "اختيار المصدر"

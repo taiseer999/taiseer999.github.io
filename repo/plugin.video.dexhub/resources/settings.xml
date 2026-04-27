@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+    <!-- General -->
+    <category label="General">
+        <setting id="providers_json"        type="text"   default="[]" visible="false" />
+        <setting id="catalog_state_json"    type="text"   default="{}" visible="false" />
+        <setting id="provider_meta_map"     type="text"   default="{}" visible="false" />
+        <setting id="ui_language"           type="labelenum"
+                 label="Language"
+                 values="Arabic|English"
+                 default="English" />
+        <setting id="timeout"               type="number" label="Request timeout (seconds)"       default="20" />
+        <setting id="prefer_direct_play"    type="bool"   label="Use direct player (recommended)" default="true" />
+        <setting id="deep_meta_enrich"      type="bool"   label="Full metadata enrichment for listings (slower)" default="false" />
+        <setting id="poster_source_mode"    type="labelenum"
+                 label="Poster source for items"
+                 values="Local only|TMDb/Trakt"
+                 default="Local only" />
+        <setting id="catalog_click_mode"    type="labelenum"
+                 label="When pressing an item in the catalog"
+                 values="Dex Hub|TMDb Helper|Ask every time"
+                 default="TMDb Helper" />
+        <setting id="playback_open_mode"   type="labelenum"
+                 label="When pressing inside Dex Hub"
+                 values="Choose from sources|Best quality automatically"
+                 default="Choose from sources" />
+        <setting id="catalog_genre_folders" type="bool"
+                 label="Show catalog facets as folders (Genre/Year)"
+                 default="true" />
+        <setting id="hide_empty_collection_entries" type="bool"
+                 label="Hide empty collection entries"
+                 default="true" />
+        <setting id="show_nextup_home" type="bool"
+                 label="Show Next Up on the home screen"
+                 default="true" />
+        <setting id="show_favorites_home" type="bool"
+                 label="Show Favorites on the home screen"
+                 default="true" />
+        <setting id="dexworld_force_folders" type="bool"
+                 label="DexWorld Pro: force folder view for internal catalogs"
+                 default="true" />
+        <setting type="sep" />
+        <setting id="meta_sources_action"
+                 type="action"
+                 label="Manage metadata sources per addon..."
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=meta_sources_dialog)" />
+        <setting id="mdblist_api_key" type="text" label="MDBList API Key (optional for MDBList lists)" default="" />
+    </category>
+
+    <!-- Source preferences -->
+    <category label="Sources">
+        <setting id="min_quality" type="labelenum"
+                 label="Minimum source quality"
+                 values="No filter|480p+|720p+|1080p+|4K only"
+                 default="No filter" />
+        <setting id="hide_cam_ts" type="bool" label="Hide CAM / TS / TELESYNC / SCREENER sources" default="true" />
+        <setting id="prefer_debrid" type="bool" label="Prioritize RD / AD / Premiumize / TorBox sources" default="true" />
+        <setting id="prefer_hdr" type="bool" label="Prefer HDR10+ / Dolby Vision" default="true" />
+        <setting id="prefer_atmos" type="bool" label="Prefer Atmos / DTS-X / TrueHD" default="true" />
+        <setting id="remember_last_source" type="bool" label="Remember the last selected source for each movie/episode" default="false" />
+        <setting type="lsep" label="BetterFormatter" />
+        <setting id="enable_source_formatter" type="bool" label="Enable BetterFormatter-style source tags" default="true" />
+        <setting id="formatter_preset_url" type="text" label="Formatter preset URL or local JSON path" default="https://raw.githubusercontent.com/9mousaa/BetterFormatter/main/presets/colored-src-sep-always.json" enable="eq(-2,true)" />
+        <setting id="formatter_max_tags" type="slider" label="Maximum visible formatter tags" default="4" range="1,1,8" option="int" enable="eq(-3,true)" />
+        <setting id="formatter_refresh_action" type="action" label="Refresh formatter preset now" action="RunPlugin(plugin://plugin.video.dexhub/?action=formatter_refresh)" enable="eq(-4,true)" />
+        <setting type="lsep" label="AIOStreams" />
+        <setting id="aiostreams_direct_api" type="bool" label="Use AIOStreams direct API (advanced; requires credentials)" default="false" />
+        <setting id="aiostreams_username" type="text" label="AIOStreams username (optional)" default="" enable="eq(-1,true)" />
+        <setting id="aiostreams_password" type="text" label="AIOStreams password (optional)" option="hidden" default="" enable="eq(-2,true)" />
+    </category>
+
+    <!-- Subtitles -->
+    <category label="Subtitles">
+        <setting id="enable_stremio_subtitle_broker" type="bool"   label="Enable Stremio subtitle broker" default="true" />
+        <setting id="subtitle_search_mode" type="labelenum"
+                 label="When choosing a source"
+                 values="Play only|Play with subtitles"
+                 default="Play only" />
+        <setting id="subtitle_timeout"               type="number" label="Subtitle broker timeout (seconds)"   default="4" />
+        <setting id="preferred_subtitle_langs" type="text"
+                 label="Preferred subtitle languages (comma-separated, example: ar,en)"
+                 default="ar,en" />
+        <setting id="auto_next_episode" type="bool" label="Auto-play the next episode for TV shows" default="true" />
+        <setting id="auto_next_prompt_seconds" type="slider" label="Next episode window duration (seconds)"
+                 default="20" range="5,1,60" option="int" />
+    </category>
+
+    <!-- Plex / Emby sync -->
+    <category label="Plex / Emby">
+        <setting id="enable_companion_sync" type="bool"   label="Enable progress sync (Companion)" default="true" />
+        <setting id="companion_interval"    type="number" label="Progress sync interval (seconds)"        default="5"
+                 enable="eq(-1,true)" />
+    </category>
+
+    <!-- ─────────── Trakt ─────────── -->
+    <category label="Trakt">
+        <setting id="enable_trakt"        type="bool" label="Enable Trakt integration"          default="true" />
+        <setting type="lsep" label="Link via PIN" />
+        <setting id="trakt_auth_action"
+                 type="action"
+                 label="Connect Trakt via PIN"
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=trakt_auth)"
+                 enable="eq(-2,true)" />
+        <setting id="trakt_logout_action"
+                 type="action"
+                 label="Disconnect Trakt"
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=trakt_logout)"
+                 enable="eq(-3,true)" />
+        <setting id="trakt_import_action"
+                 type="action"
+                 label="Import Trakt progress now"
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=trakt_import)"
+                 enable="eq(-4,true)" />
+        <setting type="lsep" label="Sync" />
+        <setting id="trakt_scrobble"      type="bool" label="Send playback activity to Trakt (scrobble)" default="true" enable="eq(-6,true)" />
+        <setting id="trakt_sync_progress" type="bool" label="Import Trakt progress into Continue Watching" default="true" enable="eq(-7,true)" />
+        <setting id="trakt_fetch_art"     type="bool" label="Fetch posters for imported movies/shows" default="true" enable="eq(-8,true)" />
+        <setting id="trakt_sync_watchlist" type="bool" label="Sync Trakt watchlist into Favorites" default="true" enable="eq(-9,true)" />
+        <setting id="trakt_service_sync_interval" type="slider" label="Background Trakt sync interval (minutes)" default="10" range="2,1,60" option="int" enable="eq(-10,true)" />
+        <setting type="lsep" label="Advanced" />
+        <setting id="trakt_client_id"     type="text" label="Trakt Client ID (bundled)"     default="" visible="false" />
+        <setting id="trakt_client_secret" type="text" label="Trakt Client Secret (bundled)" option="hidden" default="" visible="false" />
+    </category>
+
+    <!-- ─────────── TMDb Helper ─────────── -->
+    <category label="TMDb Helper">
+        <setting id="tmdbh_install_action"
+                 type="action"
+                 label="Register Dex Hub as a TMDb Helper player"
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=tmdbh_install)" />
+        <setting id="tmdbh_uninstall_action"
+                 type="action"
+                 label="Remove Dex Hub from TMDb Helper players"
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=tmdbh_uninstall)" />
+        <setting type="sep" />
+        <setting id="tmdb_api_key" type="text"
+                 label="TMDb API Key (optional legacy fallback — not needed for TMDb Helper source)"
+                 default="" />
+        <setting id="tmdbh_auto_play_first" type="bool"
+                 label="Auto-play the first source when called from TMDb Helper"
+                 default="false" />
+    </category>
+
+    <!-- Performance & cache -->
+    <category label="Performance">
+        <setting id="parallel_workers"  type="slider" label="Parallel request workers" default="8" range="2,1,12" option="int" />
+        <setting id="large_section_limit" type="slider" label="Item limit per page in large sections" default="30" range="12,6,60" option="int" />
+        <setting id="http_gzip"         type="bool"   label="Use gzip compression (faster)"   default="true" />
+        <setting id="catalog_cache_ttl" type="slider" label="Catalog cache TTL (seconds)"  default="120" range="0,30,900" option="int" />
+        <setting id="meta_cache_ttl"    type="slider" label="Metadata cache TTL (seconds)" default="3600" range="300,300,14400" option="int" />
+        <setting id="clear_cache_action" type="action"
+                 label="Clear cache now"
+                 action="RunPlugin(plugin://plugin.video.dexhub/?action=clear_cache)" />
+    </category>
+
+</settings>
