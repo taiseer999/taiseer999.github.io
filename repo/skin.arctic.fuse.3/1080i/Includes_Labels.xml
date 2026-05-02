@@ -177,6 +177,12 @@
         <value>$LOCALIZE[584]</value>
     </variable>
 
+    <variable name="Label_Shortcut_Widget_Action">
+        <value condition="String.Contains(Container(22001).ListItem.Property(widget_action),VideoInfo)">VideoInfo</value>
+        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_action),play)">Play</value>
+        <value>$LOCALIZE[571]</value>
+    </variable>
+
     <variable name="Label_Shortcut_LabelTwo">
         <value condition="!String.IsEmpty(ListItem.Property(path))">$INFO[ListItem.Property(path)]</value>
         <value>$INFO[ListItem.FolderPath]</value>
