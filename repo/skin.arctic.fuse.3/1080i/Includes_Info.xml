@@ -398,7 +398,7 @@
         <param name="width">auto</param>
         <param name="min_width">60</param>
         <param name="textoffsetx">10</param>
-        <param name="font">font_infotag_bold</param>
+        <param name="font">font_infotag_reg</param>
         <param name="textoffsety">info_tag_offset_y</param>
         <definition>
             <control type="button">
