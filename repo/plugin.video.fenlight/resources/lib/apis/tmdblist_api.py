@@ -12,8 +12,8 @@ class TMDbListAPI:
 	def __init__(self):
 		self.base_url = 'https://api.themoviedb.org/4'
 		self.base_url_v3 = 'https://api.themoviedb.org/3'
-		self.read_access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMzcwYjYwNDQ3NzM3NzYyY2EzODQ1N2JkNzc1NzliMyIsIm5iZiI6MTY1MDIzNTExOS4wOSwic3ViIjoiNjI1Yzk2ZWZiYjI2MDIxMT'\
-								'gzNTQ0MTZhIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.8uevSMakSrdZb1t0ze4OIxq6PoL4N6DZN4VVkKUCayg'
+		self.read_access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMTRjMjY1NmY3MmU1YmFiMjMzZGVmMzY5MjhhMjAyYiIsIm5iZiI6MTc3NzU3Mzk1Mi41MjMsInN1YiI6IjY5ZjNhMDQwZTUzODE2ODAwY2Y3ZGN' \
+									'mNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.M7UJoYomkjrlJ4m1jJ7zBUAALt-xL7C4uml5cwJdxBk'
 	
 	def auth(self):
 		import requests
@@ -100,11 +100,12 @@ class TMDbListAPI:
 	def get_watchfavrecs_list_details(self, list_id, media_type):
 		def _process_multi(page_no):
 			try:
-				results_extend(self.request_data(url % (self.base_url, account_id, media_type, list_id, page_no))['results'])
+				results_extend([dict(i, **{'original_order': c}) for c, i in enumerate(self.request_data(url % (self.base_url, account_id, media_type, list_id, page_no))['results'],
+																													(page_no * 20) - 20)])
 			except: pass
 		def _process(dummy):
 			result = self.request_data(url % (self.base_url, account_id, media_type, list_id, 1))
-			results_extend(result['results'])
+			results_extend([dict(i, **{'original_order': c}) for c, i in enumerate(result['results'])])
 			total_pages = result['total_pages']
 			if list_id == 'recommendations': total_pages = 2
 			if total_pages > 1:
@@ -121,11 +122,11 @@ class TMDbListAPI:
 
 	def get_list_details(self, list_id):
 		def _process_multi(page_no):
-			try: results_extend(self.request_data(url % (self.base_url, list_id, page_no))['results'])
+			try: results_extend([dict(i, **{'original_order': c}) for c, i in enumerate(self.request_data(url % (self.base_url, list_id, page_no))['results'], (page_no * 20) - 20)])
 			except: pass
 		def _process(dummy):
 			result = self.request_data(url % (self.base_url, list_id, 1))
-			results_extend(result['results'])
+			results_extend([dict(i, **{'original_order': c}) for c, i in enumerate(result['results'])])
 			total_pages = result['total_pages']
 			if total_pages > 1:
 				threads = TaskPool().tasks(_process_multi, range(2, total_pages + 1), max_threads())

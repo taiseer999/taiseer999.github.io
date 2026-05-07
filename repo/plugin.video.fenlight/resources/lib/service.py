@@ -56,27 +56,38 @@ class OnUpdateChanges:
 		except: pass
 		return kodi_utils.logger('Fen Light', 'OnUpdateChanges Service Finished')
 
-	def update_users_tmdblist_authentication(self):
-		# For update 2.1.94 - 96.
-		from apis.tmdblist_api import tmdb_list_api
-		empty_setting_check = ('', 'None', None, 'empty_setting')
-		account_id = get_setting('fenlight.tmdb.account_id', 'empty_setting')
-		if account_id in empty_setting_check: return
-		access_token = get_setting('fenlight.tmdb.token', 'empty_setting')
-		if access_token in empty_setting_check: return
-		account_session_id = get_setting('fenlight.tmdb.account_session_id', 'empty_setting')
-		if account_session_id not in empty_setting_check: return
-		kodi_utils.sleep(10000)
-		text = 'You currently have an authorized TMDb account with Fen Light. New features (Adding/Removing items from Watchlist & Favorites) requires Fen Light to link this to ' \
-		'v3 of the TMDb API.'
-		kodi_utils.ok_dialog(heading='TMDb Account Information', text=text, ok_label='Continue..')
-		text = 'Would you like Fen Light to do that now (automatically)? If you choose not to do this now, you will have to revoke your TMDb authorization and then ' \
-		're-authorize it in the settings.'
-		if not kodi_utils.confirm_dialog(heading='TMDb Account Information', text=text, ok_label='Do Now', cancel_label='Do Later', default_control=10): return
-		success = tmdb_list_api.add_tmdb3_to_session(access_token, account_id)
-		if success: text = 'Success!![CR]Your TMDb account can now use the v3 features for Watchlist & Favorites'
-		else: text = 'Something went wrong[CR]Please revoke your TMDb authorization in settings and then re-authorize'
-		kodi_utils.ok_dialog(heading='TMDb Account Information', text=text)
+	def refresh_addon_keys(self):
+		# For update 2.2.01 - 03
+		from caches.trakt_cache import clear_all_trakt_cache_data
+		from caches.tmdb_lists import tmdb_lists_cache
+		from caches.settings_cache import restore_setting_default
+		show_dialog = False
+		if get_setting('fenlight.tmdb_api') == 'b370b60447737762ca38457bd77579b3':
+			restore_setting_default({'silent': 'true', 'setting_id': 'tmdb_api'})
+			set_setting('tmdb.token', 'empty_setting')
+			set_setting('tmdb.account_id', 'empty_setting')
+			set_setting('tmdb.username', 'empty_setting')
+			set_setting('tmdb.session_id', 'empty_setting')
+			set_setting('tmdb.account_session_id', 'empty_setting')
+			tmdb_lists_cache.clear_all()
+			show_dialog = True
+		if get_setting('fenlight.trakt.client') == '1038ef327e86e7f6d39d80d2eb5479bff66dd8394e813c5e0e387af0f84d89fb':
+			restore_setting_default({'silent': 'true', 'setting_id': 'trakt.client'})
+			set_setting('trakt.user', 'empty_setting')
+			set_setting('trakt.expires', '0')
+			set_setting('trakt.token', '0')
+			set_setting('trakt.refresh', '0')
+			set_setting('trakt.next_daily_clear', '0')
+			set_setting('watched_indicators', '0')
+			clear_all_trakt_cache_data(silent=True, refresh=False)
+			show_dialog = True
+		if show_dialog:
+			text = 'The original developer of Fen Light has revoked all keys (Trakt, TMDb) that have been used up until now '\
+			'within this addon, with permission, due to security concerns.'
+			kodi_utils.ok_dialog(heading='Addon Credentials Reset', text=text)
+			text = 'This unfortunately means you will need to re-authenticate your Trakt & TMDb accounts through Fen Light AM  if you are currently using them. ' \
+			'My apologies, but with the previous keys being revoked, this is necessary.'
+			kodi_utils.ok_dialog(heading='Addon Credentials Reset', text=text)
 
 class CustomWindowsPrepare:
 	def run(self):

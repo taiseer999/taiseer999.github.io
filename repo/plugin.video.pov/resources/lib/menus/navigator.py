@@ -98,11 +98,12 @@ class Navigator:
 		self._add_item({'mode': 'clear_cache', 'cache': 'oc_cloud', 'name': clca_str }, 'offcloud.png', n_ins, False)
 
 	def favorites(self):
-		fav_str = ls(32453)
+		fav_str, drop_str = ls(32453), 'Dropped'
 		clear_fav_str = ls(32497) % fav_str
-		n_ins, c_n_ins = _in_str % (fav_str.upper(), ''), _in_str % (ls(32524).upper(), '')
+		n_ins, d_ins, c_n_ins = _in_str % (fav_str.upper(), ''), _in_str % (drop_str.upper(), ''), _in_str % (ls(32524).upper(), '')
 		self._add_item({'mode': 'build_movie_list', 'action': 'favorites_movies',   'name': mov_str      }, 'movies.png', n_ins)
 		self._add_item({'mode': 'build_tvshow_list', 'action': 'favorites_tvshows', 'name': tv_str       }, 'tv.png'    , n_ins)
+		self._add_item({'mode': 'build_tvshow_list', 'action': 'dropped_tvshows',   'name': tv_str       }, 'tv.png'    , d_ins)
 		self._add_item({'mode': 'favorites_choice', 'cache': 'clear_favorites',     'name': clear_fav_str}, 'tools.png' , c_n_ins, False)
 		self._end_directory()
 
@@ -370,24 +371,21 @@ class Navigator:
 	def because_you_watched(self):
 		from caches.watched_cache import get_watched_info_movie, get_watched_info_tv
 		def _convert_pov_watched_episodes_info(watched_indicators):
-			seen = set()
 			_watched = get_watched_info_tv(watched_indicators)
-			_watched.sort(key=lambda x: (x[0], x[1], x[2]), reverse=True)
-			return [(i[0], i[3], i[4], [(i[1], i[2])]) for i in _watched if not (i[0] in seen or seen.add(i[0]))]
+#			_watched.sort(key=lambda x: (x[0], x[1], x[2]), reverse=True)
+			return {k: (v[0][0], v[0][1], v[0][2], v[0][3], v[0][4]) for k, v in _watched.items()}
 		watched_indicators = ks.watched_indicators()
 		mediatype = self.params_get('menu_type')
 		function = get_watched_info_movie if mediatype == 'movie' else _convert_pov_watched_episodes_info
 		mode = 'build_movie_list' if mediatype == 'movie' else 'build_tvshow_list'
 		action = 'tmdb_movies_recommendations' if mediatype == 'movie' else 'tmdb_tv_recommendations'
 		recently_watched = function(watched_indicators)
-		recently_watched = sorted(recently_watched, key=lambda k: k[2], reverse=True)
+		recently_watched = sorted(recently_watched.values(), key=lambda k: k[2], reverse=True)
 		because_ins = '[I]%s[/I]  [B]%s[/B]' % (ls(32474), '%s')
 		for item in recently_watched:
 			tmdb_id = item[0]
 			if mediatype == 'movie': name = because_ins % item[1]
-			else:
-				season, episode = item[3][-1]
-				name = because_ins % '%s - %sx%s' % (item[1], season, episode)
+			else: name = because_ins % '%s - %sx%s' % (item[1], item[3], item[4])
 			self._add_item({'mode': mode, 'action': action, 'tmdb_id': tmdb_id, 'exclude_external': 'true', 'name': name}, 'because_you_watched.png')
 		self._end_directory()
 
@@ -502,7 +500,7 @@ class Navigator:
 		listitem = make_listitem()
 		listitem.setLabel(f"{prefix}{url_params['name']}")
 		listitem.setArt({'icon': icon, 'poster': icon, 'thumb': icon, 'fanart': fanart, 'banner': icon, 'landscape': icon})
-		if not 'exclude_external' in url_params:
+		if 'exclude_external' not in url_params:
 			cm = []
 			cm_append = cm.append
 			if not list_name: list_name = f"{prefix}{url_params['name']}"
