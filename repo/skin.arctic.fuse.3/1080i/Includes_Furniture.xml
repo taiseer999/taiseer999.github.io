@@ -27,7 +27,7 @@
         <control type="group">
 
             <right>0</right>
-            <width>320
+            <width>360
             </width>
             <visible>$PARAM[visible_right]</visible>
             <include content="View_Line_Divider">
@@ -48,7 +48,7 @@
                 </control>
             </control>    
             <control type="label">
-                <label> $VAR[Furniture_Header_Right_Temperature,,] • $INFO[System.Time]</label>
+                <label> $VAR[Furniture_Header_Right_Temperature,,] • $INFO[System.Time] $VAR[NetworkVar] </label>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>main_fg_100</textcolor>
@@ -58,7 +58,7 @@
             </control>
             <control type="label">
                 <visible>Skin.HasSetting(Furniture.Network_RAM)</visible>
-                <label>$INFO[System.CPUTemperature,[COLOR lightgreen][/COLOR] ,]  $INFO[system.memory(used.percent),[COLOR darkorange][/COLOR] ,]  $VAR[NetworkVar]  </label>
+                <label>$INFO[System.CPUTemperature,[COLOR lightgreen][/COLOR] ,]  $INFO[system.memory(used.percent),[COLOR darkorange][/COLOR] ,]</label>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>main_fg_100</textcolor>

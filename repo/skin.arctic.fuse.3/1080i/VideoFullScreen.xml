@@ -416,6 +416,8 @@
                 <param name="imageId">49</param>
                 <param name="visible"></param>
                 <param name="texture">special://skin/extras/backgrounds/overlay/corner_small.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+
             </include>
 			
             <include content="SDR_Bypass_Flag1">
@@ -572,6 +574,8 @@
                 <param name="imageId">51</param>
                 <param name="visible"></param>
                 <param name="texture">special://skin/extras/backgrounds/overlay/corner_small.png</param>
+                <param name="colordiffuse">80FFFFFF</param>
+
             </include>
 
             <include content="PCM_Flag1">

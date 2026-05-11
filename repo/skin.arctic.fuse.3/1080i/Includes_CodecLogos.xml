@@ -18,7 +18,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80ffffff">special://skin/extras/backgrounds/overlay/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/backgrounds/overlay/corner.png</texture>
                 </control>
             </control>
             
@@ -29,7 +29,7 @@
                 <control type="image">
                    <width>150</width>
                     <height>52</height>
-                    <texture colordiffuse="80ffffff">codecs/SDR.png</texture>
+                    <texture colordiffuse="80FFFFFF">codecs/SDR.png</texture>
                 </control>
             </control>
             <control type="group">
@@ -333,7 +333,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80ffffff">special://skin/extras/backgrounds/overlay/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/backgrounds/overlay/corner.png</texture>
                 </control>
             </control>
             
@@ -645,7 +645,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80ffffff">special://skin/extras/backgrounds/overlay/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/backgrounds/overlay/corner.png</texture>
                 </control>
             </control>
             
@@ -960,7 +960,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80ffffff">special://skin/extras/backgrounds/overlay/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/backgrounds/overlay/corner.png</texture>
                 </control>
             </control>
             
@@ -1272,7 +1272,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80ffffff">special://skin/extras/backgrounds/overlay/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/backgrounds/overlay/corner.png</texture>
                 </control>
             </control>
             
@@ -1587,7 +1587,7 @@
                 <width>210</width>
                 <height>170</height>
                 <control type="image">
-                    <texture colordiffuse="80ffffff">special://skin/extras/backgrounds/overlay/corner.png</texture>
+                    <texture colordiffuse="80FFFFFF">special://skin/extras/backgrounds/overlay/corner.png</texture>
                 </control>
             </control>
             
