@@ -2363,6 +2363,23 @@ updated YouTube addon URL
         <summary>CocoScrapers Repository</summary>
         <description>Unofficial add-ons repository</description>
     </extension>
+</addon><addon id="repository.dexworld" name="DexWorld Repository" version="1.0.0" provider-name="DexWorld">
+  <extension point="xbmc.addon.repository" name="DexWorld Repository">
+    <dir>
+      <info compressed="false">https://dexworld.cc/kodi/addons.xml</info>
+      <checksum>https://dexworld.cc/kodi/addons.xml.md5</checksum>
+      <datadir zip="true">https://dexworld.cc/kodi/</datadir>
+      <hashes>false</hashes>
+    </dir>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">DexWorld Repository</summary>
+    <description lang="en">DexWorld private Kodi repository</description>
+    <platform>all</platform>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
 </addon><addon id="repository.easynewsx" name="EasyNews Repository" version="1.0.0" provider-name="Tetsuo">
 
     <extension point="xbmc.addon.repository">
