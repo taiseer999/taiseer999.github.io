@@ -93,43 +93,83 @@ def get_link_url(server, url, path_data):
     if path.startswith('rtmp'): return path
     return server.join_url(url, path)
 
-# ✅ الحل الجذري لمشكلة الـ 404 (تخطي الترانسكودر بالكامل لجلب الصور مباشرة)
-def get_thumb_image(context, server, data, width=720, height=720):
-    if context.settings.skip_images(): return ''
-    thumbnail = encode_utf8(data.get('thumb', '').split('?t')[0])
-    if thumbnail.startswith('http'): return thumbnail
-    if thumbnail.startswith('/'): return server.get_kodi_header_formatted_url(thumbnail)
-    return CONFIG['icon']
+def _build_plex_transcode_url(path, width, height, fmt='jpeg'):
+    """Build a Plex /photo/:/transcode URL with explicit JPEG output.
 
-def get_collection_thumb(context, server, data):
-    """Get collection poster: tries thumb → composite → /library/collections/{key}/composite"""
-    if context.settings.skip_images(): return ''
-    # Try thumb first
-    thumbnail = encode_utf8(data.get('thumb', '').split('?t')[0])
-    if thumbnail.startswith('http'): return thumbnail
-    if thumbnail.startswith('/'): return server.get_kodi_header_formatted_url(thumbnail)
-    # Try composite attribute
-    composite = encode_utf8(data.get('composite', '').split('?t')[0])
-    if composite.startswith('http'): return composite
-    if composite.startswith('/'): return server.get_image_url(composite)
-    # Build from ratingKey
-    rating_key = data.get('ratingKey', '')
-    if rating_key:
-        return server.get_image_url('/library/collections/%s/composite' % rating_key)
-    return CONFIG['icon']
+    `format=jpeg` overrides Plex's content negotiation so we always get JPEG
+    even on Plex builds that would otherwise serve WebP — Kodi's WebP support
+    is patchy across versions/skins and skin overlay drawing depends on the
+    underlying poster being decoded in time.
+
+    `minSize=1` + `upscale=0` keep aspect and avoid blurry upscaling.
+    """
+    return '/photo/:/transcode?url=%s&width=%s&height=%s&minSize=1&upscale=0&format=%s' % (
+        quote_plus('http://localhost:32400' + path), width, height, fmt
+    )
+
+
+def _is_plex_placeholder(path):
+    path = encode_utf8(path or '')
+    return path == '' or '/:/resources/' in path
+
+
+def get_thumb_image(context, server, data, width=720, height=720, fallback=None):
+    if context.settings.skip_images():
+        return ''
+
+    if fallback is None:
+        fallback = CONFIG['icon']
+
+    thumbnail = encode_utf8((data.get('thumb', '') or '').split('?t')[0])
+    if thumbnail.startswith('http'):
+        return thumbnail
+    if thumbnail.startswith('/') and not _is_plex_placeholder(thumbnail):
+        # Full-resolution thumbs (default ON in DPlex): hand back the raw
+        # path. Plex serves the original from cache — no server-side
+        # transcode load, full quality, fast. In practice almost all Plex
+        # posters are JPEG already; the rare uploaded WebP collection
+        # poster is the trade-off, but skin overlays still render because
+        # the network request is short and the image is decoded promptly.
+        if context.settings.full_resolution_thumbnails():
+            return server.get_kodi_header_formatted_url(thumbnail + '.jpg')
+        # Reduced-quality path: go through the transcoder. Pin format=jpeg
+        # so we don't get WebP back (that was the silent breakage cause for
+        # users who had full-res thumbs disabled).
+        return server.get_kodi_header_formatted_url(
+            _build_plex_transcode_url(thumbnail, width, height)
+        )
+    return fallback
+
 
 def get_banner_image(context, server, data, width=720, height=720):
-    if context.settings.skip_images(): return ''
+    if context.settings.skip_images():
+        return ''
+
     banner = encode_utf8(data.get('banner', '').split('?t')[0])
-    if banner.startswith('http'): return banner
-    if banner.startswith('/'): return server.get_kodi_header_formatted_url(banner)
+    if banner.startswith('http'):
+        return banner
+    if banner.startswith('/'):
+        if context.settings.full_resolution_thumbnails():
+            return server.get_kodi_header_formatted_url(banner + '.jpg')
+        return server.get_kodi_header_formatted_url(
+            _build_plex_transcode_url(banner, width, height)
+        )
     return ''
 
+
 def get_fanart_image(context, server, data, width=1280, height=720):
-    if context.settings.skip_images(): return ''
-    fanart = encode_utf8(data.get('art', ''))
-    if fanart.startswith('http'): return fanart
-    if fanart.startswith('/'): return server.get_kodi_header_formatted_url(fanart)
+    if context.settings.skip_images():
+        return ''
+
+    fanart = encode_utf8((data.get('art', '') or '').split('?t')[0])
+    if fanart.startswith('http'):
+        return fanart
+    if fanart.startswith('/') and not _is_plex_placeholder(fanart):
+        if context.settings.full_resolution_fanart():
+            return server.get_kodi_header_formatted_url(fanart + '.jpg')
+        return server.get_kodi_header_formatted_url(
+            _build_plex_transcode_url(fanart, width, height)
+        )
     return ''
 
 def get_media_data(tag_dict):
@@ -149,7 +189,25 @@ def get_media_data(tag_dict):
     channels = audio_channels_raw + '.0' if audio_channels_raw.isdigit() and len(audio_channels_raw) == 1 else audio_channels_raw
 
     audio_full = f"{codec_audio} {channels}".strip()
-    
+
+    # Pixel width: prefer Plex's explicit `width`. Fallback to a value derived
+    # from `videoResolution` so skins that key off stream info (Aura, Arctic
+    # Fuse, Estuary Mod) still see a non-zero width and render the resolution
+    # badge. Without this, Plex sources missing `width` would silently fail.
+    explicit_width = 0
+    try:
+        explicit_width = int(tag_dict.get('width', 0) or 0)
+    except (TypeError, ValueError):
+        explicit_width = 0
+    fallback_width = 0
+    _vr = (tag_dict.get('videoResolution', '') or '').lower().strip()
+    if _vr in ('4k', 'uhd', '2160', '2160p'): fallback_width = 3840
+    elif _vr in ('1440', '1440p', 'qhd', '2k'): fallback_width = 2560
+    elif _vr in ('1080', '1080p', 'fhd'): fallback_width = 1920
+    elif _vr in ('720', '720p', 'hd'): fallback_width = 1280
+    elif _vr in ('480', '480p', 'sd'): fallback_width = 720
+    final_width = explicit_width or fallback_width
+
     return {
         'VideoResolution': res_video or tag_dict.get('videoResolution', ''),
         'VideoCodec': codec_video or tag_dict.get('videoCodec', ''),
@@ -161,7 +219,7 @@ def get_media_data(tag_dict):
                 'codec': codec_video or tag_dict.get('videoCodec', ''),
                 'aspect': float(tag_dict.get('aspectRatio', '1.78') or '1.78'),
                 'height': int(tag_dict.get('height', 0) or 0),
-                'width': int(tag_dict.get('width', 0) or 0),
+                'width': final_width,
                 'duration': int(tag_dict.get('duration', 0) or 0) / 1000
             },
             'audio': {'codec': audio_full, 'channels': 0},

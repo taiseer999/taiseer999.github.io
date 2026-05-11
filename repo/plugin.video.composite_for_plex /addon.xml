@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.composite_for_plex" name="DPlex" version="17.0.1.0" provider-name="DPlex">
+<addon id="plugin.video.composite_for_plex" name="DPlex" version="17.0.5.2" provider-name="DPlex">
     <requires>
         <import addon="xbmc.python" version="3.0.1"/>
         <import addon="script.module.requests" version="2.12.4"/>
@@ -38,10 +38,12 @@
             <fanart>resources/media/fanart.png</fanart>
         </assets>
         <news>
+[fix] Continue Watching / Next Up now refresh immediately after playback like DexHub.
+[fix] Collections prefer real Plex art and no longer fall back to the add-on icon when poster art is missing.
+[fix] Handle missing directory thumbnails safely to prevent sections failing to open.
+[fix] Restore Plex transcode-based images when full resolution is disabled and improve collection poster fallback.
 [fix] Improve runtime stability for companion HTTP responses and corrupted state files.
 [fix] Safer JSON/pickle writes to reduce failures after interrupted shutdowns.
-[fix] Correct preferred master server selection.
-[fix] Remove bundled Python cache files from release package.
         </news>
         <platform>all</platform>
         <license>GPL-2.0-or-later</license>

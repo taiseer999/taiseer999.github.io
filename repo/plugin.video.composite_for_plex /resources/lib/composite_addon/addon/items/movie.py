@@ -136,12 +136,34 @@ def _inject_stream_info(list_item, item_data, duration, streams_cache=None):
             return
 
         video_res = media.get('videoResolution', '')
+        # Normalise — Plex uses several conventions: "4k", "1080", "720",
+        # "sd", or sometimes a numeric height. Map them all to a pixel width
+        # so Kodi/skin overlays (Arctic Fuse, Aura, etc.) can read it.
         v_width = 0
-        if video_res == '4k':     v_width = 3840
-        elif video_res == '1080': v_width = 1920
-        elif video_res == '720':  v_width = 1280
+        _vr = (video_res or '').lower().strip()
+        if _vr in ('4k', 'uhd', '2160', '2160p'):
+            v_width = 3840
+        elif _vr in ('1440', '1440p', 'qhd', '2k'):
+            v_width = 2560
+        elif _vr in ('1080', '1080p', 'fhd'):
+            v_width = 1920
+        elif _vr in ('720', '720p', 'hd'):
+            v_width = 1280
+        elif _vr in ('480', '480p', 'sd'):
+            v_width = 720
+        else:
+            try:
+                _h = int(_vr)
+                if _h >= 2160: v_width = 3840
+                elif _h >= 1440: v_width = 2560
+                elif _h >= 1080: v_width = 1920
+                elif _h >= 720: v_width = 1280
+                elif _h > 0: v_width = 720
+            except (TypeError, ValueError):
+                v_width = 0
 
-        # 🌟 الوشم الإجباري لسكين Arctic Fuse لكي يرى الجودة في جميع قوائم الويدجت
+        # الوشم الإجباري للسكنات (Arctic Fuse / Aura / Estuary Mod) لكي يرى
+        # الجودة في كل قوائم الويدجت
         list_item.setProperty('VideoResolution', video_res)
         list_item.setProperty('VideoCodec', media.get('videoCodec', ''))
         list_item.setProperty('AudioCodec', media.get('audioCodec', ''))

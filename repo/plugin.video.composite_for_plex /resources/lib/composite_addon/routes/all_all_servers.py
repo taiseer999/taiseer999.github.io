@@ -5,7 +5,6 @@ Copyright (C) 2020-2026 DPlex (plugin.video.composite_for_plex)
 """
 
 import xbmcplugin  # pylint: disable=import-error
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from ..addon.common import get_handle
 from ..addon.constants import MODES
@@ -34,19 +33,8 @@ def run(context):
             if content_type is None:
                 content_type = get_content_type(section)
 
-    def _fetch_section(sec):
-        try:
-            srv = context.plex_network.get_server_from_uuid(sec.get_server_uuid())
-            return _list_content(context, srv, sec.get_path())
-        except Exception:
-            return []
-
-    matching = [sec for sec in all_sections if sec.get_type() == section_type]
-    if matching:
-        with ThreadPoolExecutor(max_workers=min(6, len(matching))) as pool:
-            for r in as_completed([pool.submit(_fetch_section, sec) for sec in matching]):
-                try: items += r.result()
-                except Exception: pass
+            server = context.plex_network.get_server_from_uuid(section.get_server_uuid())
+            items += _list_content(context, server, section.get_path())
 
     if items:
         add_sort_methods(content_type)

@@ -20,16 +20,33 @@ from ..plex import plex
 def run(context, data):
     context.plex_network = plex.Plex(context.settings, load=True)
 
-    if data['transcode'] and data['transcode_profile'] is None:
-        data['transcode_profile'] = get_transcode_profile(context)
-    if data['transcode_profile'] is None:
-        data['transcode_profile'] = 0
+    # Defensive: not every caller passes every key (e.g. PLAYLIBRARY_TRANSCODE
+    # mode passes only url+transcode). Use .get() throughout instead of [].
+    transcode = bool(data.get('transcode'))
+    transcode_profile = data.get('transcode_profile')
 
-    if data['url'] is None and (data['server_uuid'] and data['media_id']):
+    if transcode and transcode_profile is None:
+        transcode_profile = get_transcode_profile(context)
+    if transcode_profile is None:
+        transcode_profile = 0
+
+    data['transcode'] = transcode
+    data['transcode_profile'] = transcode_profile
+
+    url = data.get('url')
+    server_uuid = data.get('server_uuid')
+    media_id = data.get('media_id')
+
+    # Note: do NOT wipe DATA_CACHE here. The previous behaviour
+    # (`DATA_CACHE.delete_cache(True)`) wiped every cached folder XML on
+    # every playback start, so pressing Back after watching meant every
+    # folder needed a full re-fetch from Plex. The 17.x player monitor
+    # already calls `Container.Refresh` after playback ends, which gives
+    # Continue Watching / Next Up the freshness they need without nuking
+    # unrelated section caches.
+    if not url and (server_uuid and media_id):
         play_media_id_from_uuid(context, data)
-        DATA_CACHE.delete_cache(True)
         return
 
-    if data['url']:
+    if url:
         play_library_media(context, data)
-        DATA_CACHE.delete_cache(True)

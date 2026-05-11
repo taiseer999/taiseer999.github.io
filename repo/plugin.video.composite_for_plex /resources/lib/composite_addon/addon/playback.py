@@ -40,6 +40,92 @@ LOG = Logger()
 _clearlogo_cache = {}
 _TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/original'
 
+# Subtitle codecs that are bitmap-based (image, not text). These cannot be
+# loaded via setSubtitles(); they must be transcoded server-side. Filter them
+# out from the external subtitle list to avoid silent failures.
+_BITMAP_SUB_CODECS = (
+    'pgs', 'hdmv_pgs_subtitle', 'hdmv-pgs-subtitle',
+    'vobsub', 'dvd_subtitle', 'dvd-subtitle', 'dvdsub',
+    'dvb_subtitle', 'dvb-subtitle', 'dvbsub',
+    'xsub',
+)
+
+_SUBS_TMP_DIRNAME = 'dplex_subs'
+
+
+def _is_bitmap_subtitle(sub):
+    """Return True if a Plex subtitle stream is bitmap-based (cannot be loaded as text)."""
+    codec = (sub.get('codec') or '').lower()
+    fmt = (sub.get('format') or '').lower()
+    return codec in _BITMAP_SUB_CODECS or fmt in _BITMAP_SUB_CODECS
+
+
+def _get_subs_tmp_dir():
+    """Return (and create) the temp directory used for cached subtitle files."""
+    tmp_dir = xbmcvfs.translatePath('special://temp/%s/' % _SUBS_TMP_DIRNAME)
+    try:
+        if not xbmcvfs.exists(tmp_dir):
+            xbmcvfs.mkdirs(tmp_dir)
+    except Exception:  # pylint: disable=broad-except
+        pass
+    return tmp_dir
+
+
+def _cleanup_old_subtitles(max_age_days=7):
+    """Delete cached subtitle files older than max_age_days. Best-effort, silent on error."""
+    import os
+    import time as _time
+    try:
+        tmp_dir = _get_subs_tmp_dir()
+        if not xbmcvfs.exists(tmp_dir):
+            return
+        cutoff = _time.time() - (max_age_days * 86400)
+        _dirs, files = xbmcvfs.listdir(tmp_dir)
+        for fname in files:
+            full = os.path.join(tmp_dir, fname)
+            try:
+                stat = xbmcvfs.Stat(full)
+                if stat.st_mtime() < cutoff:
+                    xbmcvfs.delete(full)
+            except Exception:  # pylint: disable=broad-except
+                continue
+    except Exception:  # pylint: disable=broad-except
+        pass
+
+
+def _download_subtitles_async(jobs):
+    """Download subtitle files in a background thread.
+
+    `jobs` is a list of (sub_url, local_path) tuples. Files already present on
+    disk are skipped. Errors are swallowed silently per file. We do not block
+    playback start; Kodi will pick up files that exist when the user opens the
+    subtitle dialog or via showSubtitles toggling.
+    """
+    import threading
+
+    def _worker():
+        for sub_url, local_path in jobs:
+            try:
+                if xbmcvfs.exists(local_path):
+                    continue
+                xbmcvfs.copy(sub_url, local_path)
+            except Exception:  # pylint: disable=broad-except
+                LOG.debug('Subtitle background download failed for %s' % local_path)
+
+    if not jobs:
+        return
+    t = threading.Thread(target=_worker, name='DPlexSubsDownload')
+    t.daemon = True
+    t.start()
+
+
+def _resolve_failed():
+    """Tell Kodi this plugin URL failed to resolve so it doesn't show a long error dialog."""
+    try:
+        xbmcplugin.setResolvedUrl(get_handle(), False, xbmcgui.ListItem())
+    except Exception:  # pylint: disable=broad-except
+        pass
+
 def _get_tmdbhelper_db_path():
     """Return the TMDbHelper database path using Kodi's special:// protocol."""
     return xbmcvfs.translatePath(
@@ -185,6 +271,9 @@ def play_media_id_from_uuid(context, data):
 
 
 def play_library_media(context, data):
+    # Trigger periodic cleanup of stale cached subtitle files. Best-effort.
+    _cleanup_old_subtitles()
+
     up_next = True
     if '&upnext=false' in data['url']:
         up_next = False
@@ -202,6 +291,7 @@ def play_library_media(context, data):
 
     tree = get_xml(context, data['url'])
     if tree is None:
+        _resolve_failed()
         return
 
     stream = StreamData(context, server, tree).stream
@@ -216,12 +306,15 @@ def play_library_media(context, data):
     url = MediaSelect(context, server, stream).media_url
 
     if url is None:
+        # User cancelled version selection or no playable media — tell Kodi
+        # to abort cleanly instead of timing out into an error dialog.
+        _resolve_failed()
         return
 
     transcode = is_transcode_required(context, stream.get('details', [{}]), data['transcode'])
     try:
-        transcode_profile = int(data['transcode_profile'])
-    except ValueError:
+        transcode_profile = int(data.get('transcode_profile') or 0)
+    except (ValueError, TypeError):
         transcode_profile = 0
 
     url, session = get_playback_url_and_session(server, url, stream, transcode, transcode_profile)
@@ -231,11 +324,15 @@ def play_library_media(context, data):
         'duration': int(int(stream_media.get('duration', 0)) / 1000),
     }
 
-    if isinstance(data.get('force'), int):
-        if int(data['force']) > 0:
-            details['resume'] = int(int(data['force']) / 1000)
-        else:
-            details['resume'] = data['force']
+    # `force` arrives as a string from URL parameters (Plex Companion sets
+    # &force=<resume_offset_ms>). Parse defensively so resume actually applies.
+    force_val = data.get('force')
+    if force_val is not None and force_val != '':
+        try:
+            force_int = int(force_val)
+            details['resume'] = int(force_int / 1000) if force_int > 0 else 0
+        except (ValueError, TypeError):
+            pass
 
     details['resuming'] = is_resuming_video()
 
@@ -327,41 +424,68 @@ def create_playback_item(url, streams, data, details):
     if guid_ids.get('tvdb_id'):
         list_item.setProperty('tvdb_id', guid_ids['tvdb_id'])
 
-    # --- التعديل الجذري للترجمات لضمان ظهور اللغات ---
+    # --- External subtitles: download synchronously so Kodi gets local
+    # files on disk with language-coded filenames (e.g. `12345.ar.srt`),
+    # which is how Kodi extracts the language flag/emoji shown in the
+    # subtitle dialog. Async download was faster but stripped the flags
+    # because the first playback handed Kodi raw URLs (no filename
+    # pattern → unknown language). The cache below means subsequent
+    # playbacks reuse the local copy with negligible cost.
     subtitles_all = streams.get('subtitles_all', [])
     LOG.debug('subtitles_all count: %d' % len(subtitles_all))
-    
+
     if subtitles_all:
         import os
-        tmp_dir = xbmcvfs.translatePath('special://temp/dplex_subs/')
-        try:
-            if not xbmcvfs.exists(tmp_dir):
-                xbmcvfs.mkdirs(tmp_dir)
-        except:
-            pass
+        tmp_dir = _get_subs_tmp_dir()
+
+        # Codec → extension Kodi recognises. Plex's `codec` for text subs is
+        # often "subrip" (which Kodi expects as `.srt`) or "ass"/"ssa"/"vtt".
+        _codec_ext = {
+            'subrip': 'srt',
+            'srt': 'srt',
+            'ass': 'ass',
+            'ssa': 'ssa',
+            'webvtt': 'vtt',
+            'vtt': 'vtt',
+            'mov_text': 'srt',
+        }
 
         sub_paths = []
         for sub in subtitles_all:
             sub_url = sub.get('key')
             if not sub_url:
                 continue
-                
-            lang = sub.get('language') or sub.get('languageCode') or 'und'
-            fmt = (sub.get('format') or sub.get('codec') or 'srt').lower()
+
+            # Skip bitmap subtitles — they cannot be loaded as external files.
+            if _is_bitmap_subtitle(sub):
+                LOG.debug('Skipping bitmap subtitle (codec=%s)' % sub.get('codec', ''))
+                continue
+
+            # Prefer ISO language code (e.g. "en", "ar", "eng") so Kodi can
+            # auto-detect the language from the filename. `language` is the
+            # human-readable name ("English") which Kodi cannot map to a flag.
+            lang = (sub.get('languageCode') or sub.get('languageTag')
+                    or sub.get('language') or 'und')
+            # Filename-safe: Kodi expects an alphanumeric language token.
+            lang = ''.join(ch for ch in str(lang) if ch.isalnum()) or 'und'
+
+            codec = (sub.get('codec') or '').lower()
+            fmt_attr = (sub.get('format') or '').lower()
+            fmt = _codec_ext.get(codec) or _codec_ext.get(fmt_attr) or codec or fmt_attr or 'srt'
+
             stream_id = sub.get('id', '0')
             filename = '%s.%s.%s' % (stream_id, lang, fmt)
             local_path = os.path.join(tmp_dir, filename)
 
             try:
-                # نحمل الترجمة فوراً لتمرير المسار المحلي الذي يحتوي على اسم اللغة لكودي
                 if not xbmcvfs.exists(local_path):
                     xbmcvfs.copy(sub_url, local_path)
-                
+
                 if xbmcvfs.exists(local_path):
                     sub_paths.append(local_path)
                 else:
                     sub_paths.append(sub_url)
-            except:
+            except Exception:  # pylint: disable=broad-except
                 sub_paths.append(sub_url)
 
         if sub_paths:
@@ -451,6 +575,7 @@ class StreamData:
             'guid_ids': {},
             'extra': {},
             'show_tmdb_id': '', # تمت إضافتها لتخزين ID المسلسل
+            'embedded_sub_count': 0, # عدد الترجمات المضمّنة لمعالجة index الصحيح
         }
 
         self.update_data()
@@ -678,6 +803,7 @@ class StreamData:
         self.data['audio_count'] = 0
         self.data['sub_count'] = 0
         self.data['subtitles_all'] = []
+        self.data['embedded_sub_count'] = 0
 
         forced_subtitle = False
 
@@ -692,6 +818,13 @@ class StreamData:
                     self.data['audio_offset'] = audio_offset
 
             elif stream['streamType'] == '3':
+                # Track embedded sub count regardless of forced/selected logic
+                # below — Kodi numbers embedded subs first, then any external
+                # subs added via setSubtitles(). We need this offset to map a
+                # selected external sub to the right Kodi stream index.
+                if not stream.get('key'):
+                    self.data['embedded_sub_count'] += 1
+
                 if forced_subtitle:
                     continue
 
@@ -704,9 +837,15 @@ class StreamData:
                 selected = stream.get('selected') == '1'
 
                 if stream.get('key'):
-                    sub_copy = dict(stream)
-                    sub_copy['key'] = self.server.get_formatted_url(stream['key'])
-                    self.data['subtitles_all'].append(sub_copy)
+                    # Skip bitmap subs (PGS / VobSub / DVD subs) — they cannot
+                    # be loaded as external text subtitles via setSubtitles().
+                    codec = (stream.get('codec') or '').lower()
+                    fmt = (stream.get('format') or '').lower()
+                    is_bitmap = codec in _BITMAP_SUB_CODECS or fmt in _BITMAP_SUB_CODECS
+                    if not is_bitmap:
+                        sub_copy = dict(stream)
+                        sub_copy['key'] = self.server.get_formatted_url(stream['key'])
+                        self.data['subtitles_all'].append(sub_copy)
 
                 if forced_subtitle or selected:
                     self.data['sub_count'] += 1

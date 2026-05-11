@@ -74,7 +74,8 @@ def run(context, url, prefix=None, indirect=None, transcode=False):
     xbmcplugin.setResolvedUrl(get_handle(), True, _list_item(url))
 
     _monitor_transcode(context, server, session, transcode)
-    DATA_CACHE.delete_cache(True)
+    # Cache wipe removed: it nuked every folder's cached XML on every play,
+    # making Back navigation slow because each folder had to re-fetch.
 
 
 def _list_item(url):

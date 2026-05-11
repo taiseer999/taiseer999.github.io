@@ -40,4 +40,5 @@ def run(context, url):
     list_item = xbmcgui.ListItem(path=playback_url, offscreen=True)
 
     xbmcplugin.setResolvedUrl(get_handle(), playback_url != '', list_item)
-    DATA_CACHE.delete_cache(True)
+    # Cache wipe removed: it nuked every folder's cached XML on every play,
+    # making Back navigation slow because each folder had to re-fetch.

@@ -268,6 +268,7 @@ def i18n(string_id):
 
 
 def directory_item_translate(title, thumb):
+    thumb = thumb or ''
     translation_map = {}
 
     if thumb.endswith('show.png'):

@@ -6,6 +6,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import threading
+import time
 
 import xbmc  # pylint: disable=import-error
 
@@ -202,6 +203,20 @@ class PlaybackMonitorThread(threading.Thread):
             elif self._dialog_skip_intro and self._get_time_ms() < self._intro_start():
                 self._dialog_skip_intro.close()
 
+    def _refresh_continue_sections(self, final=False):
+        try:
+            stamp = str(int(time.time()))
+            if self._window is not None:
+                self._window.setProperty('dplex.last_playback_update', stamp)
+                self._window.setProperty('dplex.last_playback_media', str(self.media_id() or ''))
+        except Exception:
+            pass
+        if final:
+            try:
+                xbmc.executebuiltin('Container.Refresh')
+            except Exception:
+                pass
+
     def run(self):
         current_time = 0
         played_time = 0
@@ -240,6 +255,8 @@ class PlaybackMonitorThread(threading.Thread):
                                                                 progress, played_time)
                 except Exception:
                     pass
+                if current_time >= 30:
+                    self._refresh_continue_sections(final=False)
             if current_time > 0:
                 if not resumed:
                     resumed = self.resume(current_time)
@@ -257,6 +274,8 @@ class PlaybackMonitorThread(threading.Thread):
             _ = self.report_playback_progress(current_time, total_time, progress)
         except Exception:
             pass
+        if current_time >= 5 or progress >= 1:
+            self._refresh_continue_sections(final=True)
 
         if self._dialog_skip_intro and self._dialog_skip_intro.showing:
             self._dialog_skip_intro.close()
@@ -270,6 +289,17 @@ class PlaybackMonitorThread(threading.Thread):
 
 
 class CallbackPlayer(xbmc.Player):
+    def _refresh_post_playback_ui(self):
+        try:
+            if self.window is not None:
+                self.window.setProperty('dplex.last_playback_update', str(int(time.time())))
+        except Exception:
+            pass
+        try:
+            xbmc.executebuiltin('Container.Refresh')
+        except Exception:
+            pass
+
     LOG = Logger('CallbackPlayer')
 
     def __init__(self, window, settings, *args, **kwargs):
@@ -327,6 +357,7 @@ class CallbackPlayer(xbmc.Player):
     def onPlayBackEnded(self):  # pylint: disable=invalid-name
         self.stop_threads()
         self.cleanup_threads()
+        self._refresh_post_playback_ui()
 
     def onPlayBackStopped(self):  # pylint: disable=invalid-name
         self.onPlayBackEnded()
@@ -360,27 +391,16 @@ def set_audio_subtitles(settings, stream):
     if control == StreamControl.PLEX:
         subtitle = stream.get('subtitle', {})
         all_subs = stream.get('subtitles_all', [])
+        # Kodi numbers embedded subtitle streams first, then external subs
+        # added via list_item.setSubtitles(). To select an external sub by
+        # its position in `all_subs`, we have to add the embedded count.
+        embedded_count = int(stream.get('embedded_sub_count', 0) or 0)
 
-        if all_subs:
-            # الترجمات الخارجية محملة عبر listitem.setSubtitles()
-            # نختار الترجمة المحددة في Plex بالـ index الصحيح
-            selected_key = subtitle.get('key', '') if subtitle else ''
-            selected_index = 0
-            for i, sub in enumerate(all_subs):
-                if sub.get('key') == selected_key:
-                    selected_index = i
-                    break
-
-            LOG.debug('External subs: %d total, selecting index %d' % (len(all_subs), selected_index))
-            try:
-                player.showSubtitles(False)
-                player.setSubtitleStream(selected_index)
-                player.showSubtitles(True)
-            except:  # pylint: disable=bare-except
-                LOG.debug('Error setting external subtitle stream')
-
-        elif subtitle and not subtitle.get('key'):
-            # embedded
+        # Case 1: an embedded sub is selected. Always use sub_offset (the
+        # position within the embedded list), regardless of whether external
+        # subs exist alongside it. This was previously masked when all_subs
+        # was non-empty.
+        if subtitle and not subtitle.get('key'):
             try:
                 player.showSubtitles(False)
                 player.setSubtitleStream(int(stream.get('sub_offset', 0)))
@@ -388,8 +408,29 @@ def set_audio_subtitles(settings, stream):
             except:  # pylint: disable=bare-except
                 LOG.debug('Error setting embedded subtitle')
 
+        # Case 2: external subs available — pick the selected one by matching
+        # its key against `all_subs`, then offset by embedded_count to get the
+        # right Kodi stream index.
+        elif all_subs:
+            selected_key = subtitle.get('key', '') if subtitle else ''
+            selected_index = 0
+            for i, sub in enumerate(all_subs):
+                if sub.get('key') == selected_key:
+                    selected_index = i
+                    break
+
+            kodi_index = selected_index + embedded_count
+            LOG.debug('External subs: %d total, embedded offset %d, selecting kodi index %d'
+                      % (len(all_subs), embedded_count, kodi_index))
+            try:
+                player.showSubtitles(False)
+                player.setSubtitleStream(kodi_index)
+                player.showSubtitles(True)
+            except:  # pylint: disable=bare-except
+                LOG.debug('Error setting external subtitle stream')
+
+        # Case 3: legacy single external sub via setSubtitles (no all_subs list)
         elif subtitle and subtitle.get('key'):
-            # ترجمة خارجية واحدة بدون subtitles_all (playback.py قديم)
             try:
                 player.showSubtitles(False)
                 player.setSubtitles(subtitle['key'])

@@ -118,15 +118,19 @@ def _get_info(item):
 
 def _get_art(item):
     fanart = item.extra.get('fanart_image', '')
-    thumb = item.extra.get('thumb', CONFIG['icon'])
+    suppress_default_icon = bool(item.extra.get('suppress_default_icon'))
+    thumb = item.extra.get('thumb', '' if suppress_default_icon else CONFIG['icon'])
     banner = item.extra.get('banner', '')
     poster = item.extra.get('season_thumb', '')
-    
-    if not poster:
-        if not item.is_folder: poster = item.extra.get('thumb', 'DefaultPoster.png')
-        else: poster = thumb
 
-    return {'fanart': fanart, 'poster': poster, 'banner': banner, 'thumb': thumb, 'icon': thumb}
+    if not poster:
+        if not item.is_folder:
+            poster = item.extra.get('thumb', 'DefaultPoster.png')
+        else:
+            poster = thumb or fanart or ''
+
+    icon = thumb or fanart or ('' if suppress_default_icon else CONFIG['icon'])
+    return {'fanart': fanart, 'poster': poster, 'banner': banner, 'thumb': thumb, 'icon': icon}
 
 
 def _get_properties(context, item):

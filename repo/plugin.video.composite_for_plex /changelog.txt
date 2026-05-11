@@ -1,3 +1,80 @@
+17.0.5.2
+- Subtitle handling: revert to synchronous download so Kodi extracts the
+  language flag from the local filename (`12345.ar.srt` → 🇸🇦). The async
+  optimisation in 17.0.4.0 stripped flags on first playback because Kodi
+  can't pull a language from a raw URL — it only reads filenames.
+- All other subtitle improvements kept: bitmap (PGS/VobSub/DVD) filter,
+  languageCode preferred over language, codec→extension mapping, cache
+  cleanup after 7 days. Subsequent playbacks of the same item still hit
+  the cache so cost is one-time per subtitle.
+
+17.0.5.1
+- Image handling: respect the `Full Resolution Thumbnails` and `Full
+  Resolution Fanart` settings (both default ON). When ON, posters and
+  fanart use the direct Plex path again — original quality, served from
+  Plex's cache, no extra transcode load. When OFF, the transcoder is
+  used with `format=jpeg` pinned so we never get WebP back.
+- This reverses the 17.0.5.0 behaviour of always routing through the
+  transcoder, which was unnecessary for users with the full-res settings
+  enabled (and hurt quality + Plex CPU). The WebP→JPEG fix only matters
+  on the reduced-quality path now.
+- Note: if your overlays still don't show, verify both
+  Settings → Look and Feel → Full Resolution Thumbnails AND
+  Full Resolution Fanart are enabled.
+
+17.0.5.0
+- Force JPEG image output via Plex /photo/:/transcode (ports plexio's
+  WebP→JPEG fix to the Kodi side):
+  * fixes skin badge overlays (4K / HDR / Atmos / DV) not showing because
+    the underlying poster came back as WebP and Kodi/skin couldn't decode
+    it in time for the overlay to render
+  * affects thumb, banner, fanart, and section fanart paths
+  * uses minSize=1, upscale=0, format=jpeg; high-res mode now requests
+    2048×2048 (posters) / 3840×2160 (fanart) instead of the raw image
+- Faster Back navigation after playback:
+  * removed DATA_CACHE.delete_cache(True) from play_library_media,
+    play_media_stream, and play_video_channel; the 17.0.3.0 player
+    monitor already calls Container.Refresh on stop, so wiping every
+    folder's cached XML on every play is redundant and was forcing a
+    full re-fetch on every Back press
+- Skin overlays (resolution badges) now render reliably across widget
+  sources by:
+  * normalising videoResolution lookups (4k/uhd/2160, 1440/qhd/2k,
+    1080/fhd, 720/hd, 480/sd, plus raw heights)
+  * deriving a fallback width from videoResolution when Plex omits the
+    explicit width attribute (Aura, Arctic Fuse, Estuary Mod read this)
+- All 17.0.4.0 playback hardening from previous build is included:
+  * external sub stream index accounts for embedded sub count
+  * languageCode preferred over language for sub filenames
+  * bitmap subs (PGS / VobSub / DVD) filtered out
+  * embedded selected sub respected when external subs also exist
+  * `force` resume from Plex Companion parsed correctly
+  * setResolvedUrl(False) on playback failure
+  * try/except restored around HTTP-calling functions in monitor thread
+  * external subs downloaded async; cache cleaned after 7 days
+
+17.0.3.3
+- Fixed folder and collection titles showing as Unknown by reading XML element titles safely.
+- Kept collection poster/fanart fixes and image transcode behavior from 17.0.3.x.
+
+17.0.3.2
+- Fix folder titles showing as Unknown by supporting XML element data sources when reading title/thumb metadata.
+
+17.0.3.1
+- Fixed section folders showing as Unknown by restoring title source from directory data while keeping collection artwork fixes.
+
+17.0.3.0
+[fix] refresh Continue Watching / Next Up immediately after playback stops or ends.
+[fix] collections prefer real Plex poster/fanart art and never fall back to the add-on icon.
+
+Version 17.0.2.1
+- fix missing directory thumbnails causing sections to fail to open
+- preserve collection poster fallback and transcode image handling
+
+17.0.2.0
+- Restore Plex transcode-based images when full resolution images are disabled.
+- Improve collection poster and fanart fallback handling.
+
 16.0.7.2
 - Reordered DPlex home with Continue Watching, Next Up and Watchlist on the main page
 - Improved settings labels/help and switched limits to direct numeric input
