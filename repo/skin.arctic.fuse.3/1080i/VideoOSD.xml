@@ -246,7 +246,7 @@
                 <control type="image">
                     <width>500</width>
                     <height>425</height>
-                    <texture colordiffuse="shadow_hard">common/discart.png</texture>
+                    <texture colordiffuse="shadow_hard">special://skin/extras/backgrounds/overlay/discart.png</texture>
                 </control>
 
                 <!-- Disc Art -->
@@ -292,7 +292,7 @@
                 <control type="image">
                     <width>538</width>
                     <height>300</height>
-                    <texture>common/vhs.png</texture>
+                    <texture>special://skin/extras/backgrounds/overlay/vhs.png</texture>
                 </control>
 
                 <control type="image">

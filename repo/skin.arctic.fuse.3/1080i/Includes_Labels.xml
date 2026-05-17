@@ -1462,35 +1462,35 @@
     </variable>
 	
     <variable name="OSDCodecLogosStartupLabel">
-        <value condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">$LOCALIZE[32057]</value>
-        <value condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">$LOCALIZE[32058]</value>
-        <value condition="Skin.HasSetting(osd.userightCodecStartupLogos)">$LOCALIZE[32059]</value>
+        <value condition="Skin.HasSetting(osd.useleftCodecStartupLogos)">left</value>
+        <value condition="Skin.HasSetting(osd.usecenterCodecStartupLogos)">center</value>
+        <value condition="Skin.HasSetting(osd.userightCodecStartupLogos)">right</value>
         <value>$LOCALIZE[591]</value>
     </variable>
 
     <variable name="OSDCodecLogosLabel">
-        <value condition="Skin.HasSetting(osd.useleftCodecLogos)">$LOCALIZE[32057]</value>
-        <value condition="Skin.HasSetting(osd.usecenterCodecLogos)">$LOCALIZE[32058]</value>
-        <value condition="Skin.HasSetting(osd.userightCodecLogos)">$LOCALIZE[32059]</value>
+        <value condition="Skin.HasSetting(osd.useleftCodecLogos)">left</value>
+        <value condition="Skin.HasSetting(osd.usecenterCodecLogos)">center</value>
+        <value condition="Skin.HasSetting(osd.userightCodecLogos)">right</value>
         <value>$LOCALIZE[591]</value>
     </variable>
 
     <variable name="PPICodecLogosLabel">
-        <value condition="Skin.HasSetting(ppi.useleftCodecLogos)">$LOCALIZE[32057]</value>
-        <value condition="Skin.HasSetting(ppi.usecenterCodecLogos)">$LOCALIZE[32058]</value>
-        <value condition="Skin.HasSetting(ppi.userightCodecLogos)">$LOCALIZE[32059]</value>
+        <value condition="Skin.HasSetting(ppi.useleftCodecLogos)">left</value>
+        <value condition="Skin.HasSetting(ppi.usecenterCodecLogos)">center</value>
+        <value condition="Skin.HasSetting(ppi.userightCodecLogos)">right</value>
         <value>$LOCALIZE[591]</value>
     </variable>
 	
     <variable name="PPIMode">
-        <value condition="Skin.HasSetting(ppi.classicMode)">$LOCALIZE[32078]</value>
-        <value condition="Skin.HasSetting(ppi.modernMode)">$LOCALIZE[32077]</value>
-        <value>$LOCALIZE[32079]</value>
+        <value condition="Skin.HasSetting(ppi.classicMode)">Classic</value>
+        <value condition="Skin.HasSetting(ppi.modernMode)">Modern</value>
+        <value>default</value>
     </variable>
 	
     <variable name="ArtworkStyle">
-        <value condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),DiscArt)">$LOCALIZE[31985]</value>
-        <value condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),VHSArt)">$LOCALIZE[31980]</value>
+        <value condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),DiscArt)">DiscArt</value>
+        <value condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),VHSArt)">VHSArt</value>
         <value>$LOCALIZE[31930]</value>
     </variable>
 

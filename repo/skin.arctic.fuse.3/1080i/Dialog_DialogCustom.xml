@@ -1833,7 +1833,7 @@
             <param name="dialog">true</param>
             <param name="id">8003</param>
             <param name="control">radiobutton</param>
-            <label> $LOCALIZE[31976]</label>
+            <label>Show file name</label>
             <onclick>Skin.ToggleSetting(Filename.PPI)</onclick>
             <selected>Skin.HasSetting(Filename.PPI)</selected>
             <visible>Skin.HasSetting(ppi.modernMode)</visible>
@@ -1842,7 +1842,7 @@
             <param name="dialog">true</param>
             <param name="id">8004</param>
             <param name="control">button</param>
-            <label>$LOCALIZE[31973]</label>
+            <label>Artwork Style</label>
             <label2>$VAR[ArtworkStyle]</label2>
             <onclick condition="String.IsEmpty(Skin.String(OSD.ArtworkStyle)) | String.IsEqual(Skin.String(OSD.ArtworkStyle),Off)">Skin.SetString(OSD.ArtworkStyle,DiscArt)</onclick>
             <onclick condition="String.IsEqual(Skin.String(OSD.ArtworkStyle),DiscArt)">Skin.SetString(OSD.ArtworkStyle,VHSArt)</onclick>
