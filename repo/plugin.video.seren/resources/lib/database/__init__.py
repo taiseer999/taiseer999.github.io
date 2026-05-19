@@ -19,6 +19,12 @@ try:
 except NameError:
     pickletype = bytes
 
+# Session-level set of (db_file, schema_checksum) pairs that have already passed
+# _integrity_check_db this session.  Skips the md5_hash + GlobalLock + xbmcvfs.exists +
+# file-read on every Database subclass instantiation after the first.  Ported from
+# Otaku's _tables_ready pattern (database.py _ensure_table).
+_DB_INITIALIZED: set = set()
+
 
 def _handle_single_item_or_list(func):
     @wraps(func)
@@ -106,14 +112,20 @@ class Database:
 
     def _integrity_check_db(self):
         db_file_checksum = tools.md5_hash(self._database_layout)
+        init_key = (self._db_file, db_file_checksum)
+        if init_key in _DB_INITIALIZED:
+            return  # already verified this session — skip md5_hash + GlobalLock + file I/O
         try:
             with GlobalLock(self.__class__.__name__, True, db_file_checksum):
                 if xbmcvfs.exists(self._db_file) and g.read_all_text(f"{self._db_file}.md5") == db_file_checksum:
+                    _DB_INITIALIZED.add(init_key)
                     return
                 g.log(f"Integrity checked failed - {self._db_file} - {db_file_checksum} - rebuilding db")
                 self.rebuild_database()
                 g.write_all_text(f"{self._db_file}.md5", db_file_checksum)
+                _DB_INITIALIZED.add(init_key)
         except RanOnceAlready:
+            _DB_INITIALIZED.add(init_key)  # concurrent check already handled it
             return
 
     # endregion
@@ -122,6 +134,14 @@ class Database:
     def rebuild_database(self):
         g.log(f"Rebuilding database: {self._db_file}")
         with SQLiteConnection(self._db_file) as sqlite:
+            # Switch to fast-bulk PRAGMAs: synchronous=OFF + journal_mode=MEMORY avoids
+            # repeated fsync and disk-journal writes during the heavy DROP + VACUUM + recreate.
+            # Ported from POV clean_databases() PRAGMA pattern.  Cache DBs are fully
+            # rebuildable so data-loss risk on crash is acceptable.
+            with sqlite.cursor() as cur:
+                cur.execute("PRAGMA synchronous = OFF")
+                cur.execute("PRAGMA journal_mode = MEMORY")
+
             with sqlite.transaction() as transaction:
                 transaction.execute("PRAGMA writable_schema = ON")
                 transaction.execute("DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger')")
@@ -132,6 +152,11 @@ class Database:
 
             with sqlite.transaction():
                 self._create_tables(sqlite._connection)
+
+            # Restore standard PRAGMAs so subsequent operations use normal durability.
+            with sqlite.cursor() as cur:
+                cur.execute("PRAGMA synchronous = NORMAL")
+                cur.execute("PRAGMA journal_mode = WAL")
 
     def fetchall(self, query, data=None):
         with SQLiteConnection(self._db_file) as connection:
@@ -301,7 +326,9 @@ class SQLiteConnection(_connection):
             retries += 1
         # If we reach here we have exceeded our retries so just raise the last exception
         g.log(f"Unable to connect to database '{self.path}' {exception=}", "error")
-        raise exception
+        if isinstance(exception, BaseException):
+            raise exception
+        raise RuntimeError(str(exception))
 
     def _retry_handler(self, exception):
         if isinstance(exception, sqlite3.OperationalError) and (  # pylint: disable=no-member

@@ -554,11 +554,11 @@ class TraktAPI(ApiBase):
     def _load_settings(self):
         self.client_id = g.get_setting(
             "trakt.clientid",
-            "0c9a30819e4af6ffaf3b954cbeae9b54499088513863c03c02911de00ac2de79",
+            "264f8ecd14c879e372548c61545f1d27ff56fccfc043c4fa2a49346df4b6e36f",
         )
         self.client_secret = g.get_setting(
             "trakt.secret",
-            "bf02417f27b514cee6a8d135f2ddc261a15eecfb6ed6289c36239826dcdd1842",
+            "435917b748d065e26786f5f9af20d1279269eb25aa16d51f4af14ee311d0247c",
         )
         self.access_token = g.get_setting("trakt.auth")
         self.refresh_token = g.get_setting("trakt.refresh")
@@ -938,6 +938,10 @@ class TraktAPI(ApiBase):
             g.log(f"Error detecting trakt item type for: {item}", "error")
         return item
 
+    # Asian drama countries for alias inclusion (Sessions 38-47 added JP for anime;
+    # Session 48 extends to all CJK/SEA countries for drama content)
+    ASIAN_ALIAS_COUNTRIES = {'cn', 'kr', 'tw', 'th', 'hk', 'vn', 'ph', 'my', 'in', 'sg', 'id'}
+
     def get_show_aliases(self, trakt_show_id):
         """
         Fetches aliases for a show
@@ -948,7 +952,7 @@ class TraktAPI(ApiBase):
             {
                 i["title"]
                 for i in self.get_json_cached(f"/shows/{trakt_show_id}/aliases")
-                if i["country"] in [self.country, 'us']
+                if i["country"] in {self.country, 'us', 'jp'} | self.ASIAN_ALIAS_COUNTRIES
             }
         )
 

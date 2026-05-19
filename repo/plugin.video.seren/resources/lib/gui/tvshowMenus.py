@@ -210,10 +210,10 @@ class Menus:
     @trakt_auth_guard
     def my_shows():
         g.add_directory_item(
-            g.get_language_string(30210),
-            action="showsNextUp",
-            description=g.get_language_string(30436),
-            menu_item=g.create_icon_dict("shows_nextup", g.ICONS_PATH),
+            g.get_language_string(30043),
+            action="onDeckShows",
+            description=g.get_language_string(30433),
+            menu_item=g.create_icon_dict("shows_progress", g.ICONS_PATH),
         )
         g.add_directory_item(
             g.get_language_string(30014),
@@ -234,10 +234,10 @@ class Menus:
             menu_item=g.create_icon_dict("shows_recent", g.ICONS_PATH),
         )
         g.add_directory_item(
-            g.get_language_string(30043),
-            action="onDeckShows",
-            description=g.get_language_string(30433),
-            menu_item=g.create_icon_dict("shows_progress", g.ICONS_PATH),
+            g.get_language_string(30210),
+            action="showsNextUp",
+            description=g.get_language_string(30436),
+            menu_item=g.create_icon_dict("shows_nextup", g.ICONS_PATH),
         )
         g.add_directory_item(
             g.get_language_string(30211),
@@ -603,3 +603,43 @@ class Menus:
     def my_watched_episode(self):
         watched_episodes = self.shows_database.get_watched_episodes(g.PAGE)
         self.list_builder.mixed_episode_builder(watched_episodes)
+
+    def anime_related_shows(self, anidb_id):
+        """Display related anime (sequels/prequels/side stories) for a given AniDB ID.
+
+        Resolves related AniDB IDs to Trakt IDs via Otaku-Mappings DB and
+        builds a standard show list. Items without Trakt IDs are shown as
+        unplayable directory items.
+        """
+        from resources.lib.modules.anime.anidb_relations import get_related_anime
+        relations = get_related_anime(anidb_id)
+        if not relations:
+            g.cancel_directory()
+            return
+
+        # Split into those with Trakt IDs (playable) and those without
+        trakt_shows = []
+        for rel in relations:
+            if rel.get("trakt_id"):
+                trakt_shows.append(rel)
+
+        if trakt_shows:
+            # Build using existing trakt show infrastructure
+            trakt_ids = [{"trakt_id": r["trakt_id"]} for r in trakt_shows]
+            trakt_list = self.shows_database.get_show_list(trakt_ids)
+            if trakt_list:
+                self.list_builder.show_list_builder(trakt_list)
+                return
+
+        # Fallback: plain directory items with relation info
+        for rel in relations:
+            label = f"[{rel['relation_type']}] {rel['title'] or 'Unknown'}"
+            if rel.get("trakt_id"):
+                g.add_directory_item(
+                    label,
+                    action="showSeasons",
+                    action_args=rel["trakt_id"],
+                )
+            else:
+                g.add_directory_item(label, is_folder=False)
+        g.close_directory(g.CONTENT_SHOWS)

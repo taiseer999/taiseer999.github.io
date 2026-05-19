@@ -96,7 +96,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
             last_activities_call = self.activities["last_activities_call"]
 
         if time.time() < (last_activities_call + (5 * 60)):
-            g.log("Activities endpoint called too frequently, skipping sync", 'debug')
+            g.log("Activities endpoint called too frequently, skipping sync", 'info')
             return None
         else:
             remote_activities = self.trakt_api.get_json("sync/last_activities")
@@ -111,14 +111,14 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
             update_time = str(self._get_datetime_now())
 
             if not trakt_auth:
-                g.log("WARNING: TraktSync: No Trakt auth present, no sync will occur", "debug")
+                g.log("TraktSync: No Trakt auth present, no sync will occur", "warning")
                 return
 
             self.refresh_activities()
             remote_activities = self.fetch_remote_activities(silent)
 
             if remote_activities is None:
-                g.log("ERROR: Activities Sync Failure: Unable to connect to Trakt or activities called too often", "debug")
+                g.log("Activities Sync Failure: Unable to connect to Trakt or activities called too often", "error")
                 return True
 
             if self.requires_update(remote_activities["all"], self.activities["all_activities"]):
