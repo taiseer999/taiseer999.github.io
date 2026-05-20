@@ -5,8 +5,6 @@
 
 <controls>
 
-<!-- CUSTOM BACKGROUND -->
-
 <control type="image">
     <left>0</left>
     <top>0</top>
@@ -16,35 +14,29 @@
     <aspectratio>stretch</aspectratio>
 </control>
 
-<!-- DARK OVERLAY -->
-
 <control type="image">
     <left>0</left>
     <top>0</top>
     <width>1920</width>
     <height>1080</height>
-    <colordiffuse>C0000000</colordiffuse>
+    <colordiffuse>B0000000</colordiffuse>
     <texture>white.png</texture>
 </control>
 
-<!-- TITLE -->
-
 <control type="label">
     <left>60</left>
-    <top>40</top>
+    <top>35</top>
     <width>1200</width>
     <height>60</height>
     <font>font30_title</font>
     <textcolor>FFFFFFFF</textcolor>
-    <label>PORTAL - SELECT YOUR SKIN</label>
+    <label>SKIN SELECTION</label>
 </control>
-
-<!-- PANEL -->
 
 <control type="panel" id="100">
 
     <left>60</left>
-    <top>120</top>
+    <top>150</top>
     <width>1800</width>
     <height>850</height>
 
@@ -55,7 +47,7 @@
             <top>0</top>
             <width>480</width>
             <height>320</height>
-            <colordiffuse>D9000000</colordiffuse>
+            <colordiffuse>D0000000</colordiffuse>
             <texture>white.png</texture>
         </control>
 
@@ -87,7 +79,7 @@
             <top>-5</top>
             <width>490</width>
             <height>330</height>
-            <colordiffuse>FF202020</colordiffuse>
+            <colordiffuse>FF303030</colordiffuse>
             <texture>white.png</texture>
         </control>
 

@@ -5173,29 +5173,26 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
-</addon><addon id="script.portal" name="Portal" version="1.4.0" provider-name="Taiseer">
+</addon><addon id="script.portal" name="Skin Selection" version="9.0.0" provider-name="Taiseer">
 
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-    </requires>
+<requires>
+    <import addon="xbmc.python" version="3.0.0" />
+</requires>
 
-    <extension point="xbmc.python.script" library="default.py">
-        <provides>executable</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
+<extension point="xbmc.python.script" library="default.py">
+    <provides>executable</provides>
+</extension>
+
+<extension point="xbmc.addon.metadata">
+    <summary>Silent Skin Installer</summary>
+    <description>Silent ZIP Extract Installer</description>
+    <platform>all</platform>
 
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
         </assets>
-    </extension>
-
-    <extension point="xbmc.addon.metadata">
-        <summary>Portal Skin Selector</summary>
-        <description>Select skins from Kodi or CoreELEC repositories</description>
-        <platform>all</platform>
-        
-    </extension>
+</extension>
 
 </addon><addon id="script.reboottoandroidtv" name="Reboot to Android TV" version="1.0.0" provider-name="U3knOwn">
   <requires>

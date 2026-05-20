@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 import xbmc
@@ -5,20 +6,32 @@ import xbmcgui
 import xbmcvfs
 import urllib.request
 import json
+import os
+import zipfile
 
 ADDON_PATH = xbmcvfs.translatePath(
     "special://home/addons/script.portal"
 )
 
-KODI_JSON = (
-    "https://raw.githubusercontent.com/"
-    "taiseer999/taiseer999.github.io/master/skins.json"
+PACKAGES_PATH = xbmcvfs.translatePath(
+    "special://home/addons/packages/"
 )
 
-CE_JSON = (
-    "https://raw.githubusercontent.com/"
-    "taiseer999/taiseer999ce.github.io/master/skins.json"
+ADDONS_PATH = xbmcvfs.translatePath(
+    "special://home/addons/"
 )
+
+KODI_JSON = "https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/skins.json"
+CE_JSON = "https://raw.githubusercontent.com/taiseer999/taiseer999ce.github.io/master/skins.json"
+
+def notify(msg):
+
+    xbmcgui.Dialog().notification(
+        "Skin Selection",
+        msg,
+        xbmcgui.NOTIFICATION_INFO,
+        3000
+    )
 
 def choose_source():
 
@@ -28,7 +41,7 @@ def choose_source():
     ]
 
     selected = xbmcgui.Dialog().select(
-        "Choose Skin Source",
+        "Select Repository",
         options
     )
 
@@ -51,7 +64,7 @@ def load_feed():
 
         req = urllib.request.Request(
             url,
-            headers={"User-Agent": "Kodi"}
+            headers={"User-Agent":"Kodi"}
         )
 
         response = urllib.request.urlopen(
@@ -66,11 +79,86 @@ def load_feed():
     except Exception as e:
 
         xbmcgui.Dialog().ok(
-            "Portal",
-            "Failed loading feed:\n%s" % str(e)
+            "Skin Selection",
+            "Feed Error:\\n%s" % str(e)
         )
 
         return []
+
+def download_zip(url, addonid):
+
+    try:
+
+        if not xbmcvfs.exists(PACKAGES_PATH):
+            xbmcvfs.mkdirs(PACKAGES_PATH)
+
+        zip_path = os.path.join(
+            PACKAGES_PATH,
+            "%s.zip" % addonid
+        )
+
+        notify("Downloading package...")
+
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent":"Kodi"}
+        )
+
+        response = urllib.request.urlopen(
+            req,
+            timeout=30
+        )
+
+        data = response.read()
+
+        f = xbmcvfs.File(zip_path, 'wb')
+        f.write(data)
+        f.close()
+
+        return zip_path
+
+    except Exception as e:
+
+        xbmcgui.Dialog().ok(
+            "Skin Selection",
+            "Download failed:\\n%s" % str(e)
+        )
+
+        return None
+
+def extract_zip(zip_path):
+
+    try:
+
+        notify("Extracting package...")
+
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(ADDONS_PATH)
+
+        xbmc.executebuiltin("UpdateLocalAddons")
+
+        xbmc.sleep(4000)
+
+        return True
+
+    except Exception as e:
+
+        xbmcgui.Dialog().ok(
+            "Skin Selection",
+            "Extraction failed:\\n%s" % str(e)
+        )
+
+        return False
+
+def apply_skin(addonid, title):
+
+    notify("Applying %s..." % title)
+
+    xbmc.executebuiltin(
+        "Skin.SetSkin(%s)" % addonid
+    )
+
+    xbmc.sleep(5000)
 
 class Portal(xbmcgui.WindowXMLDialog):
 
@@ -94,13 +182,17 @@ class Portal(xbmcgui.WindowXMLDialog):
 
             li.setArt({
                 "thumb": item.get("screenshot", ""),
-                "icon": item.get("screenshot", ""),
-                "fanart": item.get("screenshot", "")
+                "icon": item.get("screenshot", "")
             })
 
             li.setProperty(
                 "addonid",
                 item.get("id", "")
+            )
+
+            li.setProperty(
+                "zipurl",
+                item.get("zip", "")
             )
 
             panel.addItem(li)
@@ -117,40 +209,46 @@ class Portal(xbmcgui.WindowXMLDialog):
         item = panel.getSelectedItem()
 
         addonid = item.getProperty("addonid")
+        zipurl = item.getProperty("zipurl")
         title = item.getLabel()
 
+        if not zipurl:
+
+            xbmcgui.Dialog().ok(
+                "Skin Selection",
+                "Missing ZIP URL in skins.json"
+            )
+
+            return
+
         yes = xbmcgui.Dialog().yesno(
-            "Portal",
-            "Install and apply this skin?",
+            "Skin Selection",
+            "Install this skin silently?",
             title
         )
 
         if not yes:
             return
 
-        xbmc.executebuiltin(
-            "InstallAddon(%s)" % addonid
+        zip_path = download_zip(
+            zipurl,
+            addonid
         )
 
-        xbmcgui.Dialog().notification(
-            "Portal",
-            "Installing %s" % title,
-            xbmcgui.NOTIFICATION_INFO,
-            3000
+        if not zip_path:
+            return
+
+        success = extract_zip(zip_path)
+
+        if not success:
+            return
+
+        apply_skin(
+            addonid,
+            title
         )
 
-        xbmc.sleep(5000)
-
-        xbmc.executebuiltin(
-            "Skin.SetSkin(%s)" % addonid
-        )
-
-        xbmcgui.Dialog().notification(
-            "Portal",
-            "Applied %s" % title,
-            xbmcgui.NOTIFICATION_INFO,
-            3000
-        )
+        notify("Installation completed")
 
 items = load_feed()
 
