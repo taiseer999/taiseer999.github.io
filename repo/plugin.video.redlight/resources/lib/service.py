@@ -56,6 +56,11 @@ class OnUpdateChanges:
 		except: pass
 		return kodi_utils.logger('Red Light', 'OnUpdateChanges Service Finished')
 
+	def fix_media_github_username(self):
+		stored = get_setting('redlight.update.username', '')
+		if stored.replace('-', '').lower() == 'theredwizard' and stored != 'The-Red-Wizard':
+			set_setting('update.username', 'The-Red-Wizard')
+
 class CustomWindowsPrepare:
 	def run(self):
 		kodi_utils.logger('Red Light', 'CustomWindowsPrepare Service Starting')
