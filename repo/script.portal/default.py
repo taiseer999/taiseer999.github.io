@@ -185,9 +185,20 @@ def extract_zip(zip_path):
 # ─── skin activation ────────────────────────────────────────────────────────
 
 def apply_skin(addonid, title):
+    notify("Enabling %s…" % title)
+
+    # enable the freshly installed skin addon first
+    xbmc.executebuiltin('EnableAddon(%s)' % addonid)
+    xbmc.sleep(3000)
+
     notify("Applying %s…" % title)
+
+    # apply the skin
     xbmc.executebuiltin("Skin.SetSkin(%s)" % addonid)
     xbmc.sleep(5000)
+
+    # refresh UI state
+    xbmc.executebuiltin("ReloadSkin()")
 
 
 # ─── GUI window ─────────────────────────────────────────────────────────────

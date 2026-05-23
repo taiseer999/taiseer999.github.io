@@ -5173,7 +5173,7 @@ AMF3, the default serialization for ActionScript 3.0, provides various advantage
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
-</addon><addon id="script.portal" name="Skin Selection" version="9.0.1" provider-name="Taiseer">
+</addon><addon id="script.portal" name="Skin Selection" version="9.0.2" provider-name="Taiseer">
 
 <requires>
     <import addon="xbmc.python" version="3.0.0" />
