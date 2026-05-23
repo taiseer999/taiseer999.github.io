@@ -2300,10 +2300,9 @@ msgctxt "#31605"
 msgid "Next aired"
 msgstr ""
 
-msgctxt "#32306"
-msgid "Codecs / PPI"
+msgctxt "#52074"
+msgid "Video OSD extras"
 msgstr ""
-
 
 msgctxt "#52074"
 msgid "Video OSD extras"
@@ -2311,7 +2310,7 @@ msgstr ""
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#52077"
-msgid "Network and CPU + RAM above the clock"
+msgid "CPU + RAM above the clock"
 msgstr ""
 
 msgctxt "#52075"
@@ -2677,3 +2676,4 @@ msgstr ""
 msgctxt "#31990"
 msgid "L5 Offsets (detected)"
 msgstr ""
+

@@ -27,7 +27,7 @@
         <control type="group">
 
             <right>0</right>
-            <width>360
+            <width>370
             </width>
             <visible>$PARAM[visible_right]</visible>
             <include content="View_Line_Divider">
