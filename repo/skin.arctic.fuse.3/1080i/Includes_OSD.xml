@@ -320,7 +320,7 @@
         <control type="image">
             <bottom>0</bottom>
             <height>256</height>
-            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="panel_bg_50" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
         </control>
@@ -328,7 +328,7 @@
         <control type="image">
             <bottom>0</bottom>
             <height>768</height>
-            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="panel_bg_50" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
             <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)</visible>
@@ -645,22 +645,24 @@
     </include>
 
     <include name="OSD_Progress_Labels">
+        <!-- Elapsed time label - left aligned above progress bar -->
         <control type="label">
-            <height>12</height>
+            <height>40</height>
             <left>view_pad</left>
             <right>view_pad</right>
-            <centerbottom>182</centerbottom>
+            <centerbottom>172</centerbottom>
             <align>left</align>
             <aligny>center</aligny>
             <label>$VAR[Label_OSD_Time]</label>
             <textcolor>panel_fg_100</textcolor>
             <font>font_main</font>
         </control>
+        <!-- Total duration label - right aligned above progress bar -->
         <control type="label">
-            <height>12</height>
+            <height>40</height>
             <left>view_pad</left>
             <right>view_pad</right>
-            <centerbottom>182</centerbottom>
+            <centerbottom>172</centerbottom>
             <align>right</align>
             <aligny>center</aligny>
             <label>$VAR[Label_OSD_Duration]</label>
