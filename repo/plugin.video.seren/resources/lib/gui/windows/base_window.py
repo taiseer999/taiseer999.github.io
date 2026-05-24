@@ -90,7 +90,6 @@ class BaseWindow(xbmcgui.WindowXMLDialog):
         except RuntimeError as e:
             g.log(f'Control does not exist {control_id}', 'error')
             g.log(e)
-            raise AttributeError(f"Control with Id {control_id} does not exist") from e
         if not isinstance(control, xbmcgui.ControlList):
             raise AttributeError(f"Control with Id {control_id} should be of type ControlList")
 
@@ -189,7 +188,6 @@ class BaseWindow(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         action_id = action.getId()
         if action_id in self.action_exitkeys_id:
-            self.canceled = True  # Signal cancellation before close so pollers/subclasses can observe it
             self.close()
             return
         if action_id != 7:  # Enter(7) also fires an onClick event

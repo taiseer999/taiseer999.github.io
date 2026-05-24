@@ -161,11 +161,6 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="general.clearCacheOnUpgrade" type="boolean" label="30924" help="30925">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
 				<setting id="download.location" type="path" label="30594" help="">
 					<level>0</level>
 					<default/>
