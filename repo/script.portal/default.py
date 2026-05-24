@@ -22,6 +22,11 @@ CE_JSON = (
     "taiseer999ce.github.io/master/skins.json"
 )
 
+PIERS_JSON = (
+    "https://raw.githubusercontent.com/taiseer999/"
+    "taiseer999Piers.github.io/master/skins.json"
+)
+
 DIALOG_TITLE = "Skin Selection"
 
 
@@ -50,11 +55,15 @@ def _skin_installed(addonid):
 # ─── source / feed ──────────────────────────────────────────────────────────
 
 def choose_source():
-    options = ["KODI Repository", "CoreELEC Repository"]
+    options = ["KODI Repository", "CoreELEC Repository", "Piers Repository"]
     selected = xbmcgui.Dialog().select("Select Repository", options)
     if selected == -1:
         return None
-    return CE_JSON if selected == 1 else KODI_JSON
+    if selected == 1:
+        return CE_JSON
+    elif selected == 2:
+        return PIERS_JSON
+    return KODI_JSON
 
 
 def load_feed():
