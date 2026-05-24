@@ -31,7 +31,7 @@
                         <left>1590</left>
                         <width max="300">auto</width>
                         <height>20</height>
-                        <font>font16</font> <!-- REDLIGHT_38 -->
+                        <font>font37</font> <!-- REDLIGHT_38 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -998,7 +998,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FFCCCCCC</textcolor>
@@ -1017,7 +1017,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FF1F2020</textcolor>
@@ -1090,7 +1090,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FFCCCCCC</textcolor>
@@ -1109,7 +1109,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FF1F2020</textcolor>
@@ -1182,7 +1182,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FFCCCCCC</textcolor>
@@ -1201,7 +1201,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FF1F2020</textcolor>
@@ -1274,7 +1274,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FFCCCCCC</textcolor>
@@ -1293,7 +1293,7 @@
 				                    <left>20</left>
 				                    <width>540</width>
 				                    <height>308</height>
-				                    <font>font12</font> <!-- REDLIGHT_26 -->
+				                    <font>font10</font> <!-- REDLIGHT_26 -->
 				                    <align>center</align>
 				                    <aligny>top</aligny>
 				                    <textcolor>FF1F2020</textcolor>
@@ -1373,7 +1373,7 @@
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1385,7 +1385,7 @@
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1412,7 +1412,7 @@
                                     <top>6</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1424,7 +1424,7 @@
                                     <top>280</top>
                                     <width>224</width>
                                     <height>75</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1482,7 +1482,7 @@
                                     <top>10</top>
                                     <width>220</width>
                                     <height>340</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -1527,7 +1527,7 @@
                                     <top>10</top>
                                     <width>220</width>
                                     <height>340</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FF1F2020</textcolor>
@@ -1540,7 +1540,7 @@
                                     <top>10</top>
                                     <width>220</width>
                                     <height>340</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font10</font> <!-- REDLIGHT_26 -->
                                     <align>center</align>
                                     <aligny>center</aligny>
                                     <textcolor>FFCCCCCC</textcolor>
@@ -2032,7 +2032,7 @@
                                 <top>6</top>
                                 <width>218</width>
                                 <height>348</height>
-                                <font>font12</font> <!-- REDLIGHT_26 -->
+                                <font>font10</font> <!-- REDLIGHT_26 -->
                                 <align>center</align>
                                 <aligny>center</aligny>
                                 <textcolor>FFCCCCCC</textcolor>

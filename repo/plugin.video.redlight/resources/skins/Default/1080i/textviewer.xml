@@ -46,7 +46,7 @@
                     <top>114</top>
                     <width>1254</width>
                     <height>816</height>
-                    <font>font12</font> <!-- REDLIGHT_26 -->
+                    <font>font10</font> <!-- REDLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>$INFO[Window.Property(text)]</label>
                     <pagecontrol>2060</pagecontrol>

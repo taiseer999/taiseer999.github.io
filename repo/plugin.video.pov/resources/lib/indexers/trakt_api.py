@@ -1,6 +1,7 @@
 import requests
 from threading import Thread
 from operator import itemgetter
+from concurrent.futures import ThreadPoolExecutor
 from caches import trakt_cache
 from caches.main_cache import cache_object
 from indexers.metadata import movie_external_id, tvshow_external_id
@@ -9,10 +10,10 @@ from modules.cache import check_databases
 from modules.utils import sort_list, sort_for_article, make_thread_list, jsondate_to_datetime, paginate_list, get_datetime, TaskPool
 
 ls, logger, js2date = kodi_utils.local_string, kodi_utils.logger, jsondate_to_datetime
-get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
+get_setting, set_setting, addon = kodi_utils.get_setting, kodi_utils.set_setting, kodi_utils.addon()
 EXPIRES_2_DAYS = 48
-V2_API_KEY = get_setting('trakt.client_id')
-CLIENT_SECRET = get_setting('trakt.client_secret')
+V2_API_KEY = addon.getSetting('trakt.client_id')
+CLIENT_SECRET = addon.getSetting('trakt.client_secret')
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 user_agent = requests.utils.default_user_agent()
 base_url = 'https://api.trakt.tv/%s'
@@ -25,7 +26,7 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 	if isinstance(path, dict): return call_trakt(str(path.pop('path')), **path)
 	else: path = str(path)
 	headers = {'User-Agent': user_agent, 'trakt-api-key': V2_API_KEY, 'trakt-api-version': '2'}
-	if with_auth and (token := settings.trakt_token()): headers['Authorization'] = 'Bearer %s' % token
+	if with_auth and (token := get_setting('trakt.token')): headers['Authorization'] = 'Bearer %s' % token
 	try:
 		response = session.request(
 			'post' if data is not None else method or 'get',
@@ -41,10 +42,22 @@ def call_trakt(path, params=None, data=None, with_auth=True, method=None, pagina
 #			result = sort_list(sort_by, sort_how, result, settings.ignore_articles())
 			if sort_how in ('asc',) and sort_by in ('added', 'released'):
 				if isinstance(result, list) and get_setting('trakt.reverse') == 'true': result.reverse()
-		if pagination: result = (result, int(response.headers.get('X-Pagination-Page-Count', page)))
+		if pagination: return result, int(response.headers.get('X-Pagination-Page-Count', page))
 		return result
 	except requests.RequestException as e:
 		logger('trakt error', str(e))
+
+def _get_trakt_paginated_list(url):
+	try: params = {'limit': 250 if get_setting('trakt.limit') == 'true' else 1000, 'page': 1}
+	except: params = {'limit': 250, 'page': 1}
+	try: items, pages = call_trakt(url, params=params, pagination=True)
+	except: return []
+	if pages <= 1: return items
+	args = ({'path': url, 'params': {**params, 'page': page}} for page in range(2, pages + 1))
+	with ThreadPoolExecutor() as tpe: # keep max_workers as default, min(32, os.cpu_count() + 4)
+		for result in tpe.map(call_trakt, args): # ThreadPoolExecutor map preserves order
+			if isinstance(result, list): items.extend(result) # caution, hides thread exceptions
+	return items
 
 def trakt_refresh():
 	try:
@@ -72,21 +85,6 @@ def trakt_expires(func):
 		return func(*args, **kwargs)
 	return wrapper
 
-def _get_trakt_paginated_list(url):
-	def _process():
-		for page in range(2, pages + 1):
-			params['page'] = page
-			result = call_trakt(url, params=params)
-			if result is None: break
-			yield result
-	items = []
-	params = {'limit': 1000, 'page': 1}
-	try:
-		items, pages = call_trakt(url, params=params, pagination=True)
-		if pages > 1: items.extend((x for i in _process() for x in i))
-	except: pass
-	return items
-
 def trakt_movies_trending(page_no):
 	params = {'limit': 20, 'page': page_no}
 	string = 'trakt_movies_trending_%s' % page_no
@@ -95,7 +93,7 @@ def trakt_movies_trending(page_no):
 
 def trakt_movies_trending_recent(page_no):
 	year = get_datetime().year
-	params = {'limit': 20, 'page': page_no, 'years': '%s-%s' % (year-1, year)}
+	params = {'limit': 250, 'page': page_no, 'years': '%s-%s' % (year-1, year)}
 	string = 'trakt_movies_trending_recent_%s' % page_no
 	url = {'path': 'movies/trending', 'params': params, 'with_auth': False, 'pagination': True}
 	return cache_object(call_trakt, string, url, expiration=EXPIRES_2_DAYS)
@@ -114,7 +112,7 @@ def trakt_tv_trending(page_no):
 
 def trakt_tv_trending_recent(page_no):
 	year = get_datetime().year
-	params = {'limit': 20, 'page': page_no, 'years': '%s-%s' % (year-1, year)}
+	params = {'limit': 250, 'page': page_no, 'years': '%s-%s' % (year-1, year)}
 	string = 'trakt_tv_trending_recent_%s' % page_no
 	url = {'path': 'shows/trending', 'params': params , 'with_auth': False, 'pagination': True}
 	return cache_object(call_trakt, string, url, expiration=EXPIRES_2_DAYS)
@@ -155,7 +153,7 @@ def trakt_trending_popular_lists(list_type):
 	return cache_object(call_trakt, string, url)
 
 def trakt_search_lists(search_title, page):
-	params = {'query': search_title, 'limit': 100, 'page': page}
+	params = {'limit': 100, 'page': page, 'query': search_title}
 	return call_trakt('search/list', params=params, with_auth=False, pagination=True)
 
 def trakt_recommendations(mediatype):
@@ -204,15 +202,13 @@ def trakt_watchlist_lists(mediatype, param1, param2):
 	return trakt_collection_watchlist_lists(mediatype, param1, 'watchlist')
 
 def trakt_collection_watchlist_lists(mediatype, param1, param2):
-	# param1 = the type of list to be returned (from 'new_page' param), param2 is currently not used
-	limit = 20
 	data = trakt_fetch_collection_watchlist(param2, mediatype)
 	if param1 == 'recent':
 		data.sort(key=itemgetter('collected_at'), reverse=True)
 	elif param1 == 'random':
 		import random
 		random.shuffle(data)
-	data = data[:limit]
+	data = data[:20]
 	return data, 1
 
 def trakt_collection(mediatype, page_no, letter):
@@ -259,7 +255,8 @@ def trakt_fetch_collection_watchlist(list_type, mediatype):
 			 'title': i[key]['title'], 'media_ids': i[key]['ids']}
 			for i in _get_trakt_paginated_list(url)
 		]
-	if mediatype in ('movie', 'movies'): key, string_insert, path_insert = ('movie', 'movie', 'movies')
+	if mediatype in ('movie', 'movies'):
+		key, string_insert, path_insert = ('movie', 'movie', 'movies')
 	else: key, string_insert, path_insert = ('show', 'tvshow', 'shows')
 	premiered = 'released' if key == 'movie' else 'first_aired'
 	if list_type == 'collection':
@@ -318,7 +315,7 @@ def make_new_trakt_list(params):
 	list_title = kodi_utils.dialog.input('POV')
 	if not list_title: return
 	list_name = unquote(list_title)
-	data = {'name': list_name, 'privacy': 'public', 'allow_comments': False, 'sort_by': 'added', 'sort_how': 'desc'}
+	data = {'name': list_name, 'privacy': 'public', 'sort_by': 'added', 'sort_how': 'desc'}
 	call_trakt('users/me/lists', data=data)
 	trakt_sync_activities()
 	kodi_utils.notification(32576)
