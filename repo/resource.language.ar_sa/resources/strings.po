@@ -4434,7 +4434,7 @@ msgstr "شريط البحث"
 
 msgctxt "#10116"
 msgid "Player process info"
-msgstr "معلومات مشغل الوسائط"
+msgstr "Player process info"
 
 msgctxt "#10120"
 msgid "Music OSD"

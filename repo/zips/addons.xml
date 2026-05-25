@@ -3268,7 +3268,7 @@ By using or contributing to this repository, you agree that the developer is not
 		<description lang="en">White Weather Icons</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="resource.language.ar_sa" version="11.0.90.31" name="Arabic" provider-name="Team Kodi">
+</addon><addon id="resource.language.ar_sa" version="11.0.90.32" name="Arabic" provider-name="Team Kodi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
   </requires>
