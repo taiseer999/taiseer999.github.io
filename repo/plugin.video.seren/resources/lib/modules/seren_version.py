@@ -25,35 +25,17 @@ def do_version_change():
     except Exception as e:
         g.log(f"Version change: Failed to clear __pycache__: {e}", "warning")
 
-    g.clear_cache(silent=True)
-
-    # Also clear torrent cache and debrid cache to ensure fresh state
-    try:
-        from resources.lib.database.torrentCache import TorrentCache
-        TorrentCache().clear_all()
-        g.log("Version change: Cleared torrent cache", "info")
-    except Exception as e:
-        g.log(f"Version change: Failed to clear torrent cache: {e}", "warning")
-
-    try:
-        from resources.lib.database.debridCache import DebridCache
-        DebridCache().clear_all()
-        g.log("Version change: Cleared debrid hash cache", "info")
-    except Exception as e:
-        g.log(f"Version change: Failed to clear debrid cache: {e}", "warning")
-
-    try:
-        from resources.lib.database.providerPerformance import ProviderPerformance
-        ProviderPerformance().clear_all()
-        g.log("Version change: Cleared provider performance stats", "info")
-    except Exception as e:
-        g.log(f"Version change: Failed to clear provider performance stats: {e}", "warning")
-
-    # Clean stale Kodi texture cache entries to prevent thumbnail loading storm.
-    # After cache clear, skin widgets re-render and Kodi's CImageLoader tries loading
-    # hundreds of thumbnails whose cached files may no longer exist, flooding the log
-    # with errors and freezing the UI.
-    _clean_stale_textures()
+    if g.get_bool_setting("general.clearCacheOnUpgrade"):
+        g.clear_cache(silent=True)
+        # Clean stale Kodi texture cache entries to prevent thumbnail loading storm.
+        # After cache clear, skin widgets re-render and Kodi's CImageLoader tries loading
+        # hundreds of thumbnails whose cached files may no longer exist, flooding the log
+        # with errors and freezing the UI.
+        _clean_stale_textures()
+        import xbmcgui
+        xbmcgui.Dialog().notification(g.ADDON_NAME, g.get_language_string(30052))
+    else:
+        g.log("Version change: cache clear skipped (general.clearCacheOnUpgrade is disabled)", "info")
 
     g.set_setting("seren.version", g.CLEAN_VERSION)
 
@@ -61,7 +43,7 @@ def do_version_change():
     # Restore the user's reuselanguageinvoker preference after version change.
     # Default is disabled, but if the user previously enabled it, respect that choice.
     maintenance.toggle_reuselanguageinvoker(
-        True if g.get_setting("reuselanguageinvoker") == "Enabled" else False
+        True if g.get_setting("reuselanguageinvoker.status") == "Enabled" else False
     )
 
 

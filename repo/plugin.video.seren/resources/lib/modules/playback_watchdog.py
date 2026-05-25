@@ -51,7 +51,6 @@ class PlaybackWatchdog(xbmc.Player):
         # Playback state — set by Kodi callbacks
         self._playback_error = False
         self._playback_stopped = False
-        self._user_stopped = False  # True only when user explicitly stopped (backspace/stop)
         self._monitor = xbmc.Monitor()
 
         # AV change tracking — fires when subtitle/audio streams change
@@ -91,7 +90,6 @@ class PlaybackWatchdog(xbmc.Player):
 
     def onPlayBackStopped(self):
         self._playback_stopped = True
-        self._user_stopped = True  # Explicit stop — backspace, stop button, or OS signal
 
     def onPlayBackEnded(self):
         self._playback_stopped = True
@@ -220,18 +218,7 @@ class PlaybackWatchdog(xbmc.Player):
                 )
                 continue
 
-            # "error" — playback never started OR user explicitly stopped.
-            # If the user stopped and OpenInfo is managing this session, exit
-            # the retry loop immediately so OpenInfo can reopen its dialog.
-            if self._user_stopped:
-                if xbmcgui.Window(10000).getProperty("openinfo.watchdog.gen"):
-                    g.log(
-                        "Watchdog: User stopped playback in OpenInfo session — "
-                        "exiting retry loop to allow dialog reopen",
-                        "info",
-                    )
-                    return None, None
-
+            # "error" — playback never started
             failed_titles.add(src_title)
             g.log(
                 f"Watchdog: Playback error on attempt {attempts}, "
@@ -255,7 +242,6 @@ class PlaybackWatchdog(xbmc.Player):
         # Reset state
         self._playback_error = False
         self._playback_stopped = False
-        self._user_stopped = False
         self._last_av_change = time.time()
 
         # Build ListItem

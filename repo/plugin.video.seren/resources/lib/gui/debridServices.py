@@ -48,7 +48,7 @@ class Menus:
             g.add_directory_item(
                 "Current Debrid-Link Transfers",
                 action='debridlinkTransfers',
-                menu_item=g.create_icon_dict("cloud", g.ICONS_PATH),
+                menu_item=g.create_icon_dict("debrid_link", g.ICONS_PATH),
             )
         g.add_directory_item(
             "Clear All Debrid Transfers",
@@ -75,9 +75,7 @@ class Menus:
         g.close_directory(self.view_type)
 
     def assist_non_active_clear(self):
-        import xbmcplugin
         self.torrent_assist.clear_non_active_assist()
-        xbmcplugin.endOfDirectory(g.PLUGIN_HANDLE, succeeded=False, cacheToDisc=False)
 
     def list_premiumize_transfers(self):
         from resources.lib.debrid import premiumize
@@ -184,111 +182,103 @@ class Menus:
                 f"{name[:50]}..." if len(name) > 50 else name,
             )
             g.add_directory_item(title, is_playable=False, is_folder=False,
-                                 menu_item=g.create_icon_dict("cloud", g.ICONS_PATH))
+                                 menu_item=g.create_icon_dict("debrid_link", g.ICONS_PATH))
         g.close_directory(self.view_type)
 
     def clear_all_transfers(self):
         """Delete all transfers/torrents across all enabled debrid services."""
         import xbmcgui
-        import xbmcplugin
 
-        try:
-            if not xbmcgui.Dialog().yesno(
-                g.ADDON_NAME,
-                "Delete ALL transfers from ALL enabled debrid services?\n\n"
-                "This cannot be undone.",
-            ):
-                return
+        if not xbmcgui.Dialog().yesno(
+            g.ADDON_NAME,
+            "Delete ALL transfers from ALL enabled debrid services?\n\n"
+            "This cannot be undone.",
+        ):
+            return
 
-            progress = xbmcgui.DialogProgress()
-            progress.create(g.ADDON_NAME, "Clearing debrid transfers...")
-            total_deleted = 0
-            errors = []
+        progress = xbmcgui.DialogProgress()
+        progress.create(g.ADDON_NAME, "Clearing debrid transfers...")
+        total_deleted = 0
+        errors = []
 
-            services = []
-            if g.get_bool_setting('premiumize.enabled'):
-                services.append(('Premiumize', self._clear_pm_transfers))
-            if g.get_bool_setting('realdebrid.enabled'):
-                services.append(('Real-Debrid', self._clear_rd_transfers))
-            if g.get_bool_setting('alldebrid.enabled'):
-                services.append(('AllDebrid', self._clear_ad_transfers))
-            if g.get_bool_setting('torbox.enabled'):
-                services.append(('TorBox', self._clear_tb_transfers))
-            if g.get_bool_setting('debridlink.enabled'):
-                services.append(('Debrid-Link', self._clear_dl_transfers))
+        services = []
+        if g.get_bool_setting('premiumize.enabled'):
+            services.append(('Premiumize', self._clear_pm_transfers))
+        if g.get_bool_setting('realdebrid.enabled'):
+            services.append(('Real-Debrid', self._clear_rd_transfers))
+        if g.get_bool_setting('alldebrid.enabled'):
+            services.append(('AllDebrid', self._clear_ad_transfers))
+        if g.get_bool_setting('torbox.enabled'):
+            services.append(('TorBox', self._clear_tb_transfers))
+        if g.get_bool_setting('debridlink.enabled'):
+            services.append(('Debrid-Link', self._clear_dl_transfers))
 
-            for idx, (name, func) in enumerate(services):
-                if progress.iscanceled():
-                    break
-                pct = int((idx / max(len(services), 1)) * 100)
-                progress.update(pct, f"Clearing {name} transfers...")
-                try:
-                    count = func()
-                    total_deleted += count
-                    g.log(f"Cleared {count} transfers from {name}", "info")
-                except Exception as e:
-                    errors.append(f"{name}: {e}")
-                    g.log(f"Error clearing {name} transfers: {e}", "error")
+        for idx, (name, func) in enumerate(services):
+            if progress.iscanceled():
+                break
+            pct = int((idx / max(len(services), 1)) * 100)
+            progress.update(pct, f"Clearing {name} transfers...")
+            try:
+                count = func()
+                total_deleted += count
+                g.log(f"Cleared {count} transfers from {name}", "info")
+            except Exception as e:
+                errors.append(f"{name}: {e}")
+                g.log(f"Error clearing {name} transfers: {e}", "error")
 
-            progress.close()
-            msg = f"Deleted {total_deleted} transfers."
-            if errors:
-                msg += f"\n\nErrors: {', '.join(errors)}"
-            xbmcgui.Dialog().ok(g.ADDON_NAME, msg)
-        finally:
-            xbmcplugin.endOfDirectory(g.PLUGIN_HANDLE, succeeded=False, cacheToDisc=False)
+        progress.close()
+        msg = f"Deleted {total_deleted} transfers."
+        if errors:
+            msg += f"\n\nErrors: {', '.join(errors)}"
+        xbmcgui.Dialog().ok(g.ADDON_NAME, msg)
 
     def clear_all_cloud_files(self):
         """Delete all cloud files/items across all enabled debrid services."""
         import xbmcgui
-        import xbmcplugin
 
-        try:
-            if not xbmcgui.Dialog().yesno(
-                g.ADDON_NAME,
-                "Delete ALL cloud files from ALL enabled debrid services?\n\n"
-                "This includes torrents, downloads, and saved links.\n"
-                "This cannot be undone.",
-            ):
-                return
+        if not xbmcgui.Dialog().yesno(
+            g.ADDON_NAME,
+            "Delete ALL cloud files from ALL enabled debrid services?\n\n"
+            "This includes torrents, downloads, and saved links.\n"
+            "This cannot be undone.",
+        ):
+            return
 
-            progress = xbmcgui.DialogProgress()
-            progress.create(g.ADDON_NAME, "Clearing debrid cloud files...")
-            total_deleted = 0
-            errors = []
+        progress = xbmcgui.DialogProgress()
+        progress.create(g.ADDON_NAME, "Clearing debrid cloud files...")
+        total_deleted = 0
+        errors = []
 
-            services = []
-            if g.get_bool_setting('premiumize.enabled'):
-                services.append(('Premiumize', self._clear_pm_cloud))
-            if g.get_bool_setting('realdebrid.enabled'):
-                services.append(('Real-Debrid', self._clear_rd_cloud))
-            if g.get_bool_setting('alldebrid.enabled'):
-                services.append(('AllDebrid', self._clear_ad_cloud))
-            if g.get_bool_setting('torbox.enabled'):
-                services.append(('TorBox', self._clear_tb_cloud))
-            if g.get_bool_setting('debridlink.enabled'):
-                services.append(('Debrid-Link', self._clear_dl_cloud))
+        services = []
+        if g.get_bool_setting('premiumize.enabled'):
+            services.append(('Premiumize', self._clear_pm_cloud))
+        if g.get_bool_setting('realdebrid.enabled'):
+            services.append(('Real-Debrid', self._clear_rd_cloud))
+        if g.get_bool_setting('alldebrid.enabled'):
+            services.append(('AllDebrid', self._clear_ad_cloud))
+        if g.get_bool_setting('torbox.enabled'):
+            services.append(('TorBox', self._clear_tb_cloud))
+        if g.get_bool_setting('debridlink.enabled'):
+            services.append(('Debrid-Link', self._clear_dl_cloud))
 
-            for idx, (name, func) in enumerate(services):
-                if progress.iscanceled():
-                    break
-                pct = int((idx / max(len(services), 1)) * 100)
-                progress.update(pct, f"Clearing {name} cloud files...")
-                try:
-                    count = func()
-                    total_deleted += count
-                    g.log(f"Cleared {count} cloud files from {name}", "info")
-                except Exception as e:
-                    errors.append(f"{name}: {e}")
-                    g.log(f"Error clearing {name} cloud files: {e}", "error")
+        for idx, (name, func) in enumerate(services):
+            if progress.iscanceled():
+                break
+            pct = int((idx / max(len(services), 1)) * 100)
+            progress.update(pct, f"Clearing {name} cloud files...")
+            try:
+                count = func()
+                total_deleted += count
+                g.log(f"Cleared {count} cloud files from {name}", "info")
+            except Exception as e:
+                errors.append(f"{name}: {e}")
+                g.log(f"Error clearing {name} cloud files: {e}", "error")
 
-            progress.close()
-            msg = f"Deleted {total_deleted} cloud files."
-            if errors:
-                msg += f"\n\nErrors: {', '.join(errors)}"
-            xbmcgui.Dialog().ok(g.ADDON_NAME, msg)
-        finally:
-            xbmcplugin.endOfDirectory(g.PLUGIN_HANDLE, succeeded=False, cacheToDisc=False)
+        progress.close()
+        msg = f"Deleted {total_deleted} cloud files."
+        if errors:
+            msg += f"\n\nErrors: {', '.join(errors)}"
+        xbmcgui.Dialog().ok(g.ADDON_NAME, msg)
 
     # ── Per-service transfer clear ────────────────────────────────────────
 

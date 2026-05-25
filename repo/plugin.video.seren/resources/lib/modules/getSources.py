@@ -75,7 +75,7 @@ SCRAPER_TIERS = {
 }
 
 # Scrapers to skip entirely — these providers are ignored even if installed in the package
-SCRAPER_BLACKLIST = {'aiostreams'}
+SCRAPER_BLACKLIST = {'rutor', 'ytsmx', 'aiostreams'}
 
 _TORRENT_CLEAN_RE = re.compile(r"[:''\u2019\u2018\u2013\u2014&!★√…\?\.]")
 _PARENS_RE = re.compile(r"\s*\([^)]*\)")

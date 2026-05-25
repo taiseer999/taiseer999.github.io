@@ -368,10 +368,9 @@ class Resolver:
 
         if source["type"] == "cloud" and source["debrid_provider"] == "premiumize":
             selected_file = Premiumize().item_details(source["url"])
-            if not selected_file or selected_file.get("status") == "error":
-                return None
-            key = "stream_link" if g.get_bool_setting("premiumize.transcoded") else "link"
-            return selected_file.get(key)
+            return (
+                selected_file["stream_link"] if g.get_bool_setting("premiumize.transcoded") else selected_file["link"]
+            )
 
         if "provider_imports" in source:
             source = self._handle_provider_imports_resolving(source)

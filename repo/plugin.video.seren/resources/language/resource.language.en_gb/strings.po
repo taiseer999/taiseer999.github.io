@@ -4608,3 +4608,11 @@ msgstr "Production"
 msgctxt "#30923"
 msgid "Dev / Beta"
 msgstr "Dev / Beta"
+
+msgctxt "#30924"
+msgid "Clear cache on version upgrade"
+msgstr "Clear cache on version upgrade"
+
+msgctxt "#30925"
+msgid "When enabled, all Seren caches are cleared automatically after a version upgrade. Disable if you prefer to manage cache clearing manually."
+msgstr "When enabled, all Seren caches are cleared automatically after a version upgrade. Disable if you prefer to manage cache clearing manually."
