@@ -2,7 +2,10 @@ import xbmc, xbmcaddon, xbmcgui
 import xbmcvfs
 import os
 
-amgr = 'Account Manager ERROR'
+try:
+    amgr = xbmcaddon.Addon('script.module.accountmgr').getAddonInfo('name')
+except Exception:
+    amgr = 'Account Manager'
 addon_id = 'script.module.accountmgr'
 addon = xbmcaddon.Addon(addon_id)
 setting = addon.getSetting
@@ -13,6 +16,91 @@ addons = translatePath('special://home/addons/')
 addon_data = translatePath('special://profile/addon_data/')
 user_path = translatePath('special://profile/')
 backup_path = setting('backupfolder')
+
+
+def _resolve_backup_root():
+    """Return a usable filesystem path for backup root."""
+    try:
+        root = setting('backupfolder') or backup_path
+    except Exception:
+        root = backup_path
+    if not root:
+        root = 'special://userdata/addon_data/script.module.accountmgr/'
+    try:
+        return translatePath(root)
+    except Exception:
+        return root
+
+def refresh_settings_cache():
+    """Refresh cached settings values (this module was previously caching at import-time)."""
+    global backup_path, synclist_backup
+    global client_am, secret_am, chk_api
+    global chk_accountmgr_tk, chk_accountmgr_tk_rd, chk_accountmgr_tk_pm, chk_accountmgr_tk_ad
+    global chk_accountmgr_fanart, chk_accountmgr_omdb, chk_accountmgr_mdb, chk_accountmgr_imdb
+    global chk_accountmgr_tmdb, chk_accountmgr_tmdb_user, chk_accountmgr_tmdb_pass, chk_accountmgr_tmdb_session
+    global chk_accountmgr_tvdb, chk_accountmgr_trakt
+    global chk_accountmgr_tb, chk_accountmgr_ed, chk_accountmgr_offc, chk_accountmgr_easy, chk_accountmgr_file
+    global chk_accountmgr_ext
+    global rd_backup, pm_backup, ad_backup, trakt_backup, tb_backup, ed_backup, offc_backup, easy_backup, file_backup, meta_backup, ext_backup
+
+    try:
+        backup_path = setting('backupfolder')
+    except Exception:
+        pass
+
+    # Trakt API keys (custom/dev overrides respected)
+    try:
+        client_am = traktID()
+        secret_am = traktSecret()
+        chk_api = client_am
+    except Exception:
+        pass
+
+    # Cached Account Manager settings
+    try:
+        chk_accountmgr_tk = setting("trakt.token")
+        chk_accountmgr_tk_rd = setting("realdebrid.token")
+        chk_accountmgr_tk_pm = setting("premiumize.token")
+        chk_accountmgr_tk_ad = setting("alldebrid.token")
+
+        chk_accountmgr_fanart = setting("fanart.tv.api.key")
+        chk_accountmgr_omdb = setting("omdb.api.key")
+        chk_accountmgr_mdb = setting("mdb.api.key")
+        chk_accountmgr_imdb = setting("imdb.user")
+        chk_accountmgr_tmdb = setting("tmdb.api.key")
+        chk_accountmgr_tmdb_user = setting("tmdb.username")
+        chk_accountmgr_tmdb_pass = setting("tmdb.password")
+        chk_accountmgr_tmdb_session = setting("tmdb.session_id")
+        chk_accountmgr_tvdb = setting("tvdb.api.key")
+        chk_accountmgr_trakt = setting("trakt.api.key")
+
+        chk_accountmgr_tb = setting("torbox.token")
+        chk_accountmgr_ed = setting("easydebrid.token")
+        chk_accountmgr_offc = setting("offcloud.token")
+        chk_accountmgr_easy = setting("easynews.password")
+        chk_accountmgr_file = setting("filepursuit.api.key")
+
+        chk_accountmgr_ext = setting("ext.provider")
+    except Exception:
+        pass
+
+    # Backup directories (depend on backupfolder setting)
+    try:
+        root = _resolve_backup_root()
+        rd_backup = os.path.join(root, 'realdebrid') + os.sep
+        pm_backup = os.path.join(root, 'premiumize') + os.sep
+        ad_backup = os.path.join(root, 'alldebrid') + os.sep
+        trakt_backup = os.path.join(root, 'trakt') + os.sep
+        tb_backup = os.path.join(root, 'torbox') + os.sep
+        ed_backup = os.path.join(root, 'easydebrid') + os.sep
+        offc_backup = os.path.join(root, 'offcloud') + os.sep
+        easy_backup = os.path.join(root, 'easynews') + os.sep
+        file_backup = os.path.join(root, 'filepursuit') + os.sep
+        meta_backup = os.path.join(root, 'meta') + os.sep
+        ext_backup = os.path.join(root, 'extproviders') + os.sep
+        synclist_backup = os.path.join(trakt_backup, 'trakt_sync_list.json')
+    except Exception:
+        pass
 
 #Account Manager Custom Trakt API Check
 def traktID():
@@ -37,33 +125,55 @@ synclist_backup = translatePath(backup_path + 'trakt/trakt_sync_list.json')
 
 #Backup Trakt Sync List
 def backup_synclist():
-    if os.path.exists(os.path.join(synclist_file)) and os.path.exists(os.path.join(trakt_backup)):
-        try:
-                xbmcvfs.copy(synclist_file, synclist_backup)
-        except:
-            pass
+    refresh_settings_cache()
+    try:
+        if xbmcvfs.exists(synclist_file):
+            if trakt_backup and not xbmcvfs.exists(trakt_backup):
+                try:
+                    xbmcvfs.mkdirs(trakt_backup)
+                except:
+                    pass
+            xbmcvfs.copy(synclist_file, synclist_backup)
+    except:
+        pass
 
 #Restore Trakt Sync List
 def restore_synclist():
-    if os.path.exists(os.path.join(synclist_backup)):
-        try:
-                xbmcvfs.copy(synclist_backup, synclist_file)
-        except:
-            pass
+    refresh_settings_cache()
+    try:
+        if xbmcvfs.exists(synclist_backup):
+            # ensure destination folder exists
+            dest_dir = os.path.dirname(synclist_file)
+            if dest_dir and not xbmcvfs.exists(dest_dir):
+                try:
+                    xbmcvfs.mkdirs(dest_dir)
+                except:
+                    pass
+            xbmcvfs.copy(synclist_backup, synclist_file)
+    except:
+        pass
 
 #Delete Trakt Sync List
 def delete_synclist():
-    if os.path.exists(os.path.join(synclist_file)):
-        try:
-                os.unlink(synclist_file)
-        except:
-            pass
+    try:
+        if xbmcvfs.exists(synclist_file):
+            try:
+                xbmcvfs.delete(synclist_file)
+            except:
+                try:
+                    os.unlink(synclist_file)
+                except:
+                    pass
+    except:
+        pass
 
 #Acctview Open Add-on Settings
-def open_settings(who):
-    addonid = tools.get_addon_by_id(script.module.accountmgr)
-    addonid.openSettings()
-    xbmc.executebuiltin('Container.Refresh()')
+def open_settings(addonid=addon_id):
+    try:
+        xbmc.executebuiltin('Addon.OpenSettings(%s)' % addonid)
+        xbmc.executebuiltin('Container.Refresh()')
+    except:
+        pass
     
 def open_settings_fenlt():
     xbmc.executebuiltin('PlayMedia(plugin://plugin.video.fenlight/?mode=open_settings)')
@@ -437,3 +547,10 @@ crew_fan = '27bef29779bbffe947232dc310a91f0c'
 crew_tmdb = '0049795edb57568b95240bc9e61a9dfc'
 dradis_fan = 'fe073550acf157bdb8a4217f215c0882'
 dradis_tmdb = '7b2b174744f774ba48145e2859bb2e2c'
+
+
+# Initialize cached values
+try:
+    refresh_settings_cache()
+except:
+    pass

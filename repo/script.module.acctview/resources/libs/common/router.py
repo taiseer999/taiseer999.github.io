@@ -247,7 +247,7 @@ class Router:
                         xbmcgui.Dialog().notification('Account Manager', 'Trakt Data Restored!', trakt_icon, 3000)
                         xbmc.sleep(3000)
                         xbmcgui.Dialog().ok('Account Manager', 'To save changes, please close Kodi, Press OK to force close Kodi')
-                        os._exit(1)
+                        xbmc.executebuiltin('Quit')
                     else:
                         xbmcgui.Dialog().notification('Account Manager', 'No Trakt Data to Restore!', trakt_icon, 3000)
                         xbmc.sleep(3000)
@@ -547,7 +547,7 @@ class Router:
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', trakt_icon, 3000)
             xbmc.sleep(3000)
             xbmcgui.Dialog().ok('Account Manager', 'To save changes, please close Kodi, Press OK to force close Kodi')
-            os._exit(1)
+            xbmc.executebuiltin('Quit')
         elif mode == 'cleartrakt':  # Clear All Saved Trakt Data
             try:
                 if xbmcvfs.exists(var.trakt_backup): # Skip clearing data if no Trakt folder present in backup folder
@@ -1439,7 +1439,7 @@ class Router:
                         xbmcgui.Dialog().notification('Account Manager', 'Metadata Restored!', amgr_icon, 3000)
                         xbmc.sleep(3000)
                         xbmcgui.Dialog().ok('Account Manager', 'To save changes, please close Kodi, Press OK to force close Kodi')
-                        os._exit(1)
+                        xbmc.executebuiltin('Quit')
                     else:
                         xbmcgui.Dialog().notification('Account Manager', 'No Metadata to Restore!', amgr_icon, 3000)
                         xbmc.sleep(3000)
@@ -1468,7 +1468,7 @@ class Router:
             xbmcgui.Dialog().notification('Account Manager', 'All Add-ons Revoked!', amgr_icon, 3000)
             xbmc.sleep(3000)
             xbmcgui.Dialog().ok('Account Manager', 'To save changes, please close Kodi, Press OK to force close Kodi')
-            os._exit(1)
+            xbmc.executebuiltin('Quit')
         elif mode == 'clearmeta':  # Clear All Saved Meta Data
             try:
                 if xbmcvfs.exists(var.meta_backup): # Skip clearing data if no meta folder present in backup folder
