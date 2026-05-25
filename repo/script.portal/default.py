@@ -58,21 +58,21 @@ def choose_source():
     options = ["KODI Repository", "CoreELEC Repository", "Piers Repository"]
     selected = xbmcgui.Dialog().select("Select Repository", options)
     if selected == -1:
-        return None
+        return None, None
     if selected == 1:
-        return CE_JSON
+        return CE_JSON, "backgroundcoreelec.jpg"
     elif selected == 2:
-        return PIERS_JSON
-    return KODI_JSON
+        return PIERS_JSON, "backgroundpiers.jpg"
+    return KODI_JSON, "backgroundkodi.jpg"
 
 
 def load_feed():
-    url = choose_source()
+    url, background = choose_source()
     if not url:
-        return []
+        return [], None
 
     try:
-        return _fetch_json(url)
+        return _fetch_json(url), background
     except urllib.error.URLError as e:
         error_dialog("Network error:\n%s" % e.reason)
     except json.JSONDecodeError:
@@ -80,7 +80,7 @@ def load_feed():
     except Exception as e:
         error_dialog("Feed error:\n%s" % str(e))
 
-    return []
+    return [], None
 
 
 # ─── download ───────────────────────────────────────────────────────────────
@@ -217,8 +217,16 @@ class Portal(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.items = kwargs.get("items", [])
+        self.background = kwargs.get("background", "backgroundkodi.jpg")
 
     def onInit(self):
+        # Set the background image as a window property so the XML can reference it
+        bg_path = (
+            "special://home/addons/script.portal/resources/media/%s"
+            % self.background
+        )
+        self.setProperty("background", bg_path)
+
         panel = self.getControl(100)
         panel.reset()
 
@@ -293,7 +301,7 @@ class Portal(xbmcgui.WindowXMLDialog):
 # ─── entry point ────────────────────────────────────────────────────────────
 
 def main():
-    items = load_feed()
+    items, background = load_feed()
     if not items:
         return
 
@@ -303,6 +311,7 @@ def main():
         "Default",
         "1080i",
         items=items,
+        background=background,
     )
     win.doModal()
     del win
