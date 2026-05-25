@@ -36,7 +36,7 @@
                     <top>22</top>
                     <left>0</left>
                     <height>20</height>
-                    <font>font10</font> <!-- REDLIGHT_26 -->
+                    <font>font23_icon</font> <!-- REDLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -66,7 +66,7 @@
                         <width>390</width>
                         <height>85</height>
                         <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                        <font>font10</font> <!-- REDLIGHT_26 -->
+                        <font>font23_icon</font> <!-- REDLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <aligny>center</aligny>
                     </control>
@@ -83,7 +83,7 @@
                         <width>390</width>
                         <height>85</height>
                         <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                        <font>font10</font> <!-- REDLIGHT_26 -->
+                        <font>font23_icon</font> <!-- REDLIGHT_26 -->
                         <textcolor>FF1F2020</textcolor>
                         <aligny>center</aligny>
                         <scroll>Control.HasFocus(2000)</scroll>
@@ -142,7 +142,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font10</font> <!-- REDLIGHT_26 -->
+                            <font>font23_icon</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <aligny>center</aligny>
                             <align>center</align>
@@ -171,7 +171,7 @@
                         <width>630</width>
                         <height>85</height>
                         <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                        <font>font10</font> <!-- REDLIGHT_26 -->
+                        <font>font23_icon</font> <!-- REDLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <aligny>center</aligny>
                         <scroll>false</scroll>
@@ -210,7 +210,7 @@
                             <width>425</width>
                             <height>85</height>
                             <label>[B]...[/B]</label>
-                            <font>font10</font> <!-- REDLIGHT_26 -->
+                            <font>font23_icon</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>right</align>
                             <aligny>center</aligny>
@@ -223,7 +223,7 @@
                             <width>425</width>
                             <height>85</height>
                             <label>[UPPERCASE][B]$INFO[ListItem.Property(setting_value)][/B][/UPPERCASE]</label>
-                            <font>font10</font> <!-- REDLIGHT_26 -->
+                            <font>font23_icon</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>right</align>
                             <aligny>center</aligny>
@@ -247,7 +247,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font10</font> <!-- REDLIGHT_26 -->
+                            <font>font23_icon</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <aligny>center</aligny>
                             <align>center</align>
@@ -278,7 +278,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font10</font> <!-- REDLIGHT_26 -->
+                            <font>font23_icon</font> <!-- REDLIGHT_26 -->
                             <textcolor>FF1F2020</textcolor>
                             <aligny>center</aligny>
                             <scroll>Control.HasFocus(2100)</scroll>
@@ -289,7 +289,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font10</font> <!-- REDLIGHT_26 -->
+                            <font>font23_icon</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <aligny>center</aligny>
                             <scroll>false</scroll>
@@ -357,7 +357,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[B]...[/B]</label>
-                                <font>font10</font> <!-- REDLIGHT_26 -->
+                                <font>font23_icon</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FF1F2020</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -369,7 +369,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[B]...[/B]</label>
-                                <font>font10</font> <!-- REDLIGHT_26 -->
+                                <font>font23_icon</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -385,7 +385,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[UPPERCASE][B]$INFO[ListItem.Property(setting_value)][/B][/UPPERCASE]</label>
-                                <font>font10</font> <!-- REDLIGHT_26 -->
+                                <font>font23_icon</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FF1F2020</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -397,7 +397,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[UPPERCASE][B]$INFO[ListItem.Property(setting_value)][/B][/UPPERCASE]</label>
-                                <font>font10</font> <!-- REDLIGHT_26 -->
+                                <font>font23_icon</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -1613,6 +1613,17 @@
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
                           <visible>String.IsEqual(Window(10000).Property(redlight.provider.external),true)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(redlight.tb.enabled),true)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.tb.token),empty_setting)</visible>
+                          <property name="setting_label">Include uncached results (TorBox)</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.external.include_uncached_torbox)]</property>
+                          <property name="setting_description">When enabled, torrents not in TorBox shared cache appear in the main results list (subject to minimum seeders). Default off shows cached TorBox only. Selecting an uncached row adds it to your TorBox cloud.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=external.include_uncached_torbox)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(redlight.provider.external),true)</visible>
                           <visible>!String.IsEqual(Window(10000).Property(redlight.external_scraper.name),empty_setting)</visible>
                           <property name="setting_label">Open External Scraper Settings</property>
                           <property name="setting_type">action</property>
@@ -2005,6 +2016,16 @@
                           <property name="setting_value">$INFO[Window(10000).Property(redlight.store_resolved_to_cloud.torbox_name)]</property>
                           <property name="setting_description">Choose which resolved media is automatically added to your TorBox Cloud. All media or only show packs</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_from_list&amp;setting_id=store_resolved_to_cloud.torbox)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(60)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.tb.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(redlight.tb.enabled),true)</visible>
+                          <property name="setting_label">Notify when added torrents are ready in Cloud</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.tb.notify_cloud_ready)]</property>
+                          <property name="setting_description">Notify when a torrent you added to TorBox (uncached Add to Cloud, or kept via Store Resolved to Cloud) has finished and is available in Cloud Storage / History</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=tb.notify_cloud_ready)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
@@ -2965,7 +2986,7 @@
                     <left>30</left>
                     <width>200</width>
                     <height>20</height>
-                    <font>font10</font> <!-- REDLIGHT_26 -->
+                    <font>font23_icon</font> <!-- REDLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>[UPPERCASE][B]INFO: [/B][/UPPERCASE]</label>
                     <align>left</align>
@@ -2977,7 +2998,7 @@
                     <width>1530</width>
                     <height>70</height>
                     <control type="textbox">
-                        <font>font10</font> <!-- REDLIGHT_26 -->
+                        <font>font23_icon</font> <!-- REDLIGHT_26 -->
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFCCCCCC</textcolor>
@@ -2986,7 +3007,7 @@
                         <visible>Control.HasFocus(2100)</visible>
                     </control>
                     <control type="textbox">
-                        <font>font10</font> <!-- REDLIGHT_26 -->
+                        <font>font23_icon</font> <!-- REDLIGHT_26 -->
                         <align>left</align>
                         <aligny>center</aligny>
                         <textcolor>FFCCCCCC</textcolor>
