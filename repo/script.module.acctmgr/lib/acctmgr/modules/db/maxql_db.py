@@ -62,6 +62,16 @@ ADDONS = {
         ),
         "log": "Gears",
     },
+    "red": {
+        "db": var.red_settings_db,
+        "settings": (
+            'results_quality_movie',
+            'results_quality_episode',
+            'autoplay_quality_movie',
+            'autoplay_quality_episode',
+        ),
+        "log": "Red Light",
+    },
 }
 
 #################### Apply Quality #########################

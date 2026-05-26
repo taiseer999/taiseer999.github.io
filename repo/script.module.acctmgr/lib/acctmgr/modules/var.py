@@ -25,11 +25,17 @@ fenlt_settings_db = fenlt_path + translatePath('settings.db')
 gears_path = addon_data + translatePath('plugin.video.gears/databases/')
 gears_settings_db = gears_path + translatePath('settings.db')
 
+# Red Light Database Paths
+red_path = addon_data + translatePath('plugin.video.redlight/databases/')
+red_settings_db = red_path + translatePath('settings.db')
+
 # Remake Settings & Trakt Cache Variables
 fenlt_name = 'Fen Light'
 fenlt_id = 'plugin.video.fenlight'
-gears_name = 'Gears'
+gears_name = 'The Gears'
 gears_id = 'plugin.video.gears'
+red_name = 'Red Light'
+red_id = 'plugin.video.redlight'
 fen_name = 'Fen'
 fen_id = 'plugin.video.fen'
 coal_name = 'The Coalition'
@@ -43,7 +49,7 @@ tk_sync_list = translatePath(os.path.join(acctmgr_datapath, 'trakt_sync_list.jso
 realx_path = addon_data + translatePath('plugin.video.realizerx')
 realx_json_path = realx_path + translatePath('rdauth.json')
 
-#Skin Setting Paths
+# Skin Setting Paths
 path_fentastic = addon_data + translatePath('skin.fentastic/settings.xml')
 path_nimbus = addon_data + translatePath('skin.nimbus/settings.xml')
 
@@ -65,13 +71,13 @@ gears_plugin_id = 'script.module.gearsscrapers'
 mag_plugin_id = 'script.module.magneto'
 viper_plugin_id = 'script.module.viperscrapers'
 
-#External Scraper Names (Fen Light/Fen & Forks)
+# External Scraper Names (Fen Light/Fen & Forks)
 coco_sc_name = 'CocoScrapers Module'
 gears_sc_name = 'Gears Scrapers'
 mag_sc_name = 'Magneto Module'
 viper_sc_name = 'Viper Scrapers'
 
-#External Scraper Names (Umbrella & Forks)
+# External Scraper Names (Umbrella & Forks)
 coco_umb_name = 'cocoscrapers'
 gears_umb_name = 'gearsscrapers'
 mag_umb_name = 'magneto'
@@ -91,6 +97,7 @@ AUTO  = "auto"
 # Fen Light & Forks
 chk_fenlt = addons + translatePath('plugin.video.fenlight/')#--------------Fen Light
 chk_gears = addons + translatePath('plugin.video.gears/')#-----------------Fork / Gears
+chk_red = addons + translatePath('plugin.video.redlight/')#----------------Fork / Red Light
 # Uniques
 chk_umb = addons + translatePath('plugin.video.umbrella/')#----------------Umbrella
 chk_seren = addons + translatePath('plugin.video.seren/')#-----------------Seren
@@ -111,7 +118,7 @@ chk_night = addons + translatePath('plugin.video.nightwing/')#-------------Fork 
 chk_absol = addons + translatePath('plugin.video.absolution/')#------------Fork / Jokers Absolution
 # Scrubs V2 & Forks
 chk_scrubs = addons + translatePath('plugin.video.scrubsv2/')#-------------Scrubs V2
-chk_red = addons + translatePath('plugin.video.gratisred/')#---------------Fork / Gratis Red
+chk_redg = addons + translatePath('plugin.video.gratisred/')#--------------Fork / Gratis Red
 # Others
 chk_crew = addons + translatePath('plugin.video.thecrew/')#----------------The Crew
 chk_salts = addons + translatePath('plugin.video.salts/')#-----------------SALTS
@@ -120,6 +127,7 @@ chk_gen = addons + translatePath('plugin.video.genesis/')#-----------------Genes
 chk_sync = addons + translatePath('plugin.video.syncher/')#----------------Syncher
 chk_otaku = addons + translatePath('plugin.video.otaku/')#-----------------Otaku
 chk_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/')#-----TMDb Helper
+chk_easyv = addons + translatePath('plugin.video.easynewsx/')#-------------Easynews Video
 chk_tkplay = addons + translatePath('plugin.video.trakt_player/')#---------Trakt Player
 chk_trakt = addons + translatePath('script.trakt/')#-----------------------Trakt
 # Debrid Only
@@ -153,7 +161,7 @@ night_ud = addon_data + translatePath('plugin.video.nightwing/')
 absol_ud = addon_data + translatePath('plugin.video.absolution/')
 # Scrubs V2 & Forks
 scrubs_ud = addon_data + translatePath('plugin.video.scrubsv2/')
-red_ud = addon_data + translatePath('plugin.video.gratisred/')
+redg_ud = addon_data + translatePath('plugin.video.gratisred/')
 # Others
 crew_ud = addon_data + translatePath('plugin.video.thecrew/')
 salts_ud = addon_data + translatePath('plugin.video.salts/')
@@ -162,6 +170,7 @@ gen_ud = addon_data + translatePath('plugin.video.genesis/')
 sync_ud = addon_data + translatePath('plugin.video.syncher/')
 otaku_ud = addon_data + translatePath('plugin.video.otaku/')
 tmdbh_ud = addon_data + translatePath('plugin.video.themoviedb.helper/')
+easyv_ud = addon_data + translatePath('plugin.video.easynewsx/')
 tkplay_ud = addon_data + translatePath('plugin.video.trakt_player/')
 trakt_ud = addon_data + translatePath('script.trakt/')
 # Debrid Only
@@ -175,6 +184,7 @@ chkset_amlite = addon_data + translatePath('script.module.acctmgr/settings.xml')
 # Fen Light & Forks
 chkset_fenlt = addon_data + translatePath('plugin.video.fenlight/databases/settings.db')
 chkset_gears = addon_data + translatePath('plugin.video.gears/databases/settings.db')
+chkset_red = addon_data + translatePath('plugin.video.redlight/databases/settings.db')
 # Uniques
 chkset_umb = addon_data + translatePath('plugin.video.umbrella/settings.xml')
 chkset_seren = addon_data + translatePath('plugin.video.seren/settings.xml')
@@ -195,7 +205,7 @@ chkset_night = addon_data + translatePath('plugin.video.nightwing/settings.xml')
 chkset_absol = addon_data + translatePath('plugin.video.absolution/settings.xml')
 # Scrubs V2 & Forks
 chkset_scrubs = addon_data + translatePath('plugin.video.scrubsv2/settings.xml')
-chkset_red = addon_data + translatePath('plugin.video.gratisred/settings.xml')
+chkset_redg = addon_data + translatePath('plugin.video.gratisred/settings.xml')
 # Others
 chkset_crew = addon_data + translatePath('plugin.video.thecrew/settings.xml')
 chkset_salts = addon_data + translatePath('plugin.video.salts/settings.xml')
@@ -204,6 +214,7 @@ chkset_gen = addon_data + translatePath('plugin.video.genesis/settings.xml')
 chkset_sync = addon_data + translatePath('plugin.video.syncher/settings.xml')
 chkset_otaku = addon_data + translatePath('plugin.video.otaku/settings.xml')
 chkset_tmdbh = addon_data + translatePath('plugin.video.themoviedb.helper/settings.xml')
+chkset_easyv = addon_data + translatePath('plugin.video.easynewsx/settings.xml')
 chkset_tkplay = addon_data + translatePath('plugin.video.trakt_player/settings.xml')
 chkset_trakt = addon_data + translatePath('script.trakt/settings.xml')
 # Debrid Only
@@ -227,7 +238,7 @@ night = xmls + translatePath('plugin.video.nightwing/settings.xml')
 absol = xmls + translatePath('plugin.video.absolution/settings.xml')
 # Scrubs V2 & Forks
 scrubs = xmls + translatePath('plugin.video.scrubsv2/settings.xml')
-#red = xmls + translatePath('plugin.video.gratisred/settings.xml') # settings.xml created during install. Will check again after a few updates
+redg = xmls + translatePath('plugin.video.gratisred/settings.xml')
 # Others
 crew = xmls + translatePath('plugin.video.thecrew/settings.xml')
 salts = xmls + translatePath('plugin.video.salts/settings.xml')
@@ -235,6 +246,7 @@ orion = xmls + translatePath('plugin.video.orion/settings.xml')
 gen = xmls + translatePath('plugin.video.genesis/settings.xml')
 sync = xmls + translatePath('plugin.video.syncher/settings.xml')
 otaku = xmls + translatePath('plugin.video.otaku/settings.xml')
+easyv = xmls + translatePath('plugin.video.easynewsx/settings.xml')
 tmdbh = xmls + translatePath('plugin.video.themoviedb.helper/settings.xml')
 tkplay = xmls + translatePath('plugin.video.trakt_player/settings.xml')
 trakt = xmls + translatePath('script.trakt/settings.xml')
@@ -249,6 +261,7 @@ rurl = xmls + translatePath('script.module.resolveurl/settings.xml')
 # Fen Light & Forks
 path_fenlt_service = addons + translatePath('plugin.video.fenlight/resources/lib/service.py')
 path_gears_service = addons + translatePath('plugin.video.gears/resources/lib/service.py')
+path_red_service = addons + translatePath('plugin.video.redlight/resources/lib/service.py')
 # Uniques
 path_umb_service = addons + translatePath('plugin.video.umbrella/service.py')
 path_seren_service = addons + translatePath('plugin.video.seren/service.py')
@@ -265,7 +278,7 @@ path_night_service = addons + translatePath('plugin.video.nightwing/service.py')
 path_absol_service = addons + translatePath('plugin.video.absolution/service.py')
 # Scrubs V2 & Forks
 path_scrubs_service = addons + translatePath('plugin.video.scrubsv2/service.py')
-path_red_service = addons + translatePath('plugin.video.gratisred/service.py')
+path_redg_service = addons + translatePath('plugin.video.gratisred/service.py')
 # Others
 path_crew_service = addons + translatePath('plugin.video.thecrew/service.py')
 path_salts_service = addons + translatePath('plugin.video.salts/service.py')
@@ -288,7 +301,7 @@ path_ghost = addons + translatePath('plugin.video.ghost/resources/modules/genera
 path_chains = addons + translatePath('plugin.video.thechains/resources/menus.py')
 # Scrubs V2 & Forks
 path_scrubs = addons + translatePath('plugin.video.scrubsv2/resources/lib/modules/trakt.py')
-path_red = addons + translatePath('plugin.video.gratisred/resources/lib/modules/trakt.py')
+path_redg = addons + translatePath('plugin.video.gratisred/resources/lib/modules/trakt.py')
 # Others
 path_crew = addons + translatePath('script.module.thecrew/lib/resources/lib/modules/trakt.py')
 path_salts = addons + translatePath('plugin.video.salts/salts_lib/trakt_api.py')
@@ -302,9 +315,6 @@ path_trakt = addons + translatePath('script.trakt/resources/lib/traktapi.py')
 
 
 #================================ DEFAULT TRAKT API KEYS ==============================
-fenlt_client_obs = [33, 117, 122, 117, 112, 117, 122, 38, 39, 112, 39, 118, 32, 32, 35, 114, 35, 123, 112, 115, 112, 119, 118, 113, 113, 39, 122, 123, 39, 114, 38, 117, 115, 38, 122, 123, 35, 114, 123, 35, 112, 36, 123, 33, 118, 118, 38, 38, 116, 123, 33, 112, 36, 115, 113, 33, 122, 39, 122, 39, 39, 36, 114, 116]
-fenlt_secret_obs = [117, 112, 114, 115, 112, 39, 38, 114, 39, 119, 112, 113, 39, 116, 118, 112, 32, 116, 112, 39, 113, 115, 113, 117, 112, 114, 117, 38, 33, 116, 112, 114, 122, 32, 116, 32, 119, 32, 114, 118, 114, 119, 36, 117, 38, 115, 117, 38, 119, 117, 38, 113, 32, 113, 115, 119, 116, 117, 38, 116, 35, 119, 123, 33]
-
 umb_client_obs = [122, 117, 39, 113, 36, 114, 119, 119, 36, 33, 118, 38, 122, 36, 33, 36, 38, 123, 116, 39, 116, 115, 35, 118, 117, 118, 116, 113, 113, 112, 117, 33, 35, 122, 117, 117, 33, 119, 115, 39, 122, 119, 123, 117, 32, 118, 118, 122, 39, 115, 113, 112, 116, 115, 115, 33, 119, 35, 116, 117, 117, 32, 115, 113]
 umb_secret_obs = [118, 35, 115, 123, 119, 117, 35, 119, 112, 38, 119, 36, 39, 32, 123, 122, 36, 35, 36, 38, 39, 119, 113, 115, 123, 113, 39, 119, 115, 36, 116, 123, 112, 36, 35, 123, 32, 38, 33, 38, 114, 33, 33, 115, 113, 33, 36, 118, 118, 35, 119, 39, 113, 123, 123, 117, 119, 119, 113, 123, 39, 38, 36, 114]
 
@@ -344,8 +354,8 @@ syncher_secret_obs = [38, 123, 113, 33, 35, 115, 119, 116, 113, 115, 112, 117, 3
 scrubs_client_obs = [116, 113, 33, 119, 113, 39, 38, 33, 112, 123, 123, 32, 117, 35, 114, 119, 33, 33, 116, 39, 35, 112, 112, 117, 112, 39, 122, 35, 122, 118, 39, 115, 113, 35, 35, 38, 39, 114, 116, 117, 33, 115, 122, 35, 117, 123, 118, 113, 116, 112, 35, 32, 123, 35, 118, 35, 122, 118, 39, 35, 36, 32, 115, 116]
 scrubs_secret_obs = [123, 115, 116, 113, 39, 32, 38, 35, 123, 38, 113, 113, 35, 33, 38, 114, 116, 33, 117, 118, 38, 114, 115, 117, 39, 122, 116, 115, 118, 114, 118, 32, 117, 112, 115, 112, 39, 39, 113, 118, 116, 117, 119, 39, 114, 123, 39, 117, 113, 113, 116, 119, 38, 117, 119, 113, 116, 32, 122, 118, 39, 35, 32, 116]
 
-red_client_obs = [113, 113, 39, 35, 116, 32, 36, 35, 112, 32, 114, 116, 33, 123, 33, 36, 35, 113, 39, 118, 114, 122, 36, 33, 116, 32, 118, 33, 33, 113, 114, 118, 122, 118, 36, 113, 115, 32, 123, 114, 117, 113, 113, 38, 36, 113, 119, 114, 122, 36, 38, 114, 123, 33, 39, 119, 115, 112, 36, 118, 117, 123, 122, 112]
-red_secret_obs = [118, 35, 112, 123, 118, 35, 36, 38, 35, 32, 123, 119, 122, 123, 118, 32, 39, 123, 117, 117, 38, 33, 117, 123, 33, 123, 117, 115, 119, 112, 112, 118, 38, 33, 122, 117, 35, 118, 35, 122, 122, 38, 117, 118, 123, 118, 118, 119, 114, 117, 123, 118, 119, 33, 35, 119, 122, 32, 36, 117, 115, 123, 32, 112]
+redg_client_obs = [113, 113, 39, 35, 116, 32, 36, 35, 112, 32, 114, 116, 33, 123, 33, 36, 35, 113, 39, 118, 114, 122, 36, 33, 116, 32, 118, 33, 33, 113, 114, 118, 122, 118, 36, 113, 115, 32, 123, 114, 117, 113, 113, 38, 36, 113, 119, 114, 122, 36, 38, 114, 123, 33, 39, 119, 115, 112, 36, 118, 117, 123, 122, 112]
+redg_secret_obs = [118, 35, 112, 123, 118, 35, 36, 38, 35, 32, 123, 119, 122, 123, 118, 32, 39, 123, 117, 117, 38, 33, 117, 123, 33, 123, 117, 115, 119, 112, 112, 118, 38, 33, 122, 117, 35, 118, 35, 122, 122, 38, 117, 118, 123, 118, 118, 119, 114, 117, 123, 118, 119, 33, 35, 119, 122, 32, 36, 117, 115, 123, 32, 112]
 
 # Chains API Keys - Coalition / Gears / Genocide
 chains_client_obs = [115, 123, 122, 118, 123, 123, 114, 123, 35, 114, 36, 122, 33, 123, 38, 33, 116, 113, 112, 32, 33, 119, 36, 119, 33, 117, 33, 33, 35, 36, 38, 115, 123, 36, 113, 39, 118, 119, 112, 39, 112, 39, 118, 118, 36, 39, 39, 114, 119, 32, 122, 113, 36, 38, 119, 38, 33, 115, 39, 117, 117, 116, 117, 119]
@@ -365,9 +375,6 @@ trakt_secret_obs_str = '[35, 32, 33, 116, 36, 33, 123, 119, 119, 118, 114, 118, 
 
 
 #================ TRAKT API KEY VARIABLES ================
-fenlt_client = obfuscation.deobfuscate(fenlt_client_obs)
-fenlt_secret = obfuscation.deobfuscate(fenlt_secret_obs)
-
 umb_client = obfuscation.deobfuscate(umb_client_obs)
 umb_secret = obfuscation.deobfuscate(umb_secret_obs)
 
@@ -407,8 +414,8 @@ syncher_secret = obfuscation.deobfuscate(syncher_secret_obs)
 scrubs_client = obfuscation.deobfuscate(scrubs_client_obs)
 scrubs_secret = obfuscation.deobfuscate(scrubs_secret_obs)
 
-red_client = obfuscation.deobfuscate(red_client_obs)
-red_secret = obfuscation.deobfuscate(red_secret_obs)
+redg_client = obfuscation.deobfuscate(redg_client_obs)
+redg_secret = obfuscation.deobfuscate(redg_secret_obs)
 
 chains_client = obfuscation.deobfuscate(chains_client_obs)
 chains_secret = obfuscation.deobfuscate(chains_secret_obs)

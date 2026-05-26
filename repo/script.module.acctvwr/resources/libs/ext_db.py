@@ -29,7 +29,7 @@ def connect_db(actions, settings_db):
         with conn:
             update_settings(conn, actions)
     except Exception:
-        log_utils.error("Ext_db Fen Light Action Failed")
+        log_utils.error("Ext_db Action Failed")
 
 ######################## External Providers ####################
 def auth_ext(name, module, settings_db):

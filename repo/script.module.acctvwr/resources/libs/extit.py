@@ -11,14 +11,15 @@ from resources.libs.common import logging
 amgr = 'AM Lite ERROR'
 translatePath = xbmcvfs.translatePath
 
-# Fen Light Database Paths
+# Database Paths
 fenlt_settings_db = translatePath('special://profile/addon_data/plugin.video.fenlight/databases/settings.db')
-
-# Gears Database Paths
 gears_settings_db = translatePath('special://profile/addon_data/plugin.video.gears/databases/settings.db')
+red_settings_db = translatePath('special://profile/addon_data/plugin.video.redlight/databases/settings.db')
+
 
 ORDER = ['fenlt',
          'gears',
+         'redlt',
          #'fen',
          'umb']
 
@@ -33,12 +34,21 @@ EXTID = {
         'default'  : '',
         'data'     : []},
     'gears': {
-        'name'     : 'Gears',
+        'name'     : 'The Gears',
         'plugin'   : 'plugin.video.gears',
         'path'     : os.path.join(CONFIG.ADDONS, 'plugin.video.gears'),
         'icon'     : os.path.join(CONFIG.ADDONS, 'plugin.video.gears/resources/media/addon_icons/', 'icon.png'),
         'fanart'   : os.path.join(CONFIG.ADDONS, 'plugin.video.gears/', 'fanart.jpg'),
         'settings' : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.gears/databases', 'settings.db'),
+        'default'  : '',
+        'data'     : []},
+    'redlt': {
+        'name'     : 'Red Light',
+        'plugin'   : 'plugin.video.redlight',
+        'path'     : os.path.join(CONFIG.ADDONS, 'plugin.video.redlight'),
+        'icon'     : os.path.join(CONFIG.ADDONS, 'plugin.video.redlight/resources/media/addon_icons/', 'icon.png'),
+        'fanart'   : os.path.join(CONFIG.ADDONS, 'plugin.video.redlight/resources/media/', 'fanart.jpg'),
+        'settings' : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.redlight/databases', 'settings.db'),
         'default'  : '',
         'data'     : []},
     #'fen': {
@@ -136,8 +146,11 @@ def ext_user(who):
         if name == 'Fen Light':
             user = chk_auth(fenlt_settings_db)
 
-        elif name == 'Gears':
+        elif name == 'The Gears':
             user = chk_auth(gears_settings_db)
+
+        elif name == 'Red Light':
+            user = chk_auth(red_settings_db)
 
         else:
             try:

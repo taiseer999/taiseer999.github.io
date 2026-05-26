@@ -57,7 +57,7 @@ class Trakt():
 			headers = {'Content-Type': 'application/json', 'trakt-api-version': '2', 'trakt-api-key': self.traktClientID()}
 			response = send_query()
 
-			if not response:
+			if response is None:
 				return None
 
 			response.encoding = 'utf-8'
@@ -172,16 +172,13 @@ class Trakt():
 		}
 
 		response = self.call("oauth/token", data=data, with_auth=False, method='POST', return_str=True)
-		try:
-			code = str(response.status_code)
-		except Exception as e:
-			log_utils.error(f"Error extracting code: {e}")
-			code = ''
 
-		if not response:
+		if response is None:
 			log_utils.log('Temporary Trakt Server Problems', level=log_utils.LOGWARNING)
 			control.notification(title=32315, message=32685)
 			return False
+
+		code = str(response.status_code)
 
 		try:
 			response_text = response.text or ''
@@ -192,34 +189,49 @@ class Trakt():
 			log_utils.log('Temporary Trakt Server Problems', level=log_utils.LOGWARNING)
 			control.notification(title=32315, message=32685)
 			return False
-		elif response and code in ['423']:
+
+		if code == '423':
 			log_utils.log('Locked User Account - Contact Trakt Support', level=log_utils.LOGWARNING)
 			control.notification(title=32315, message=32686)
 			return False
 
-		if response and code == '200':
-			try:
-				response = response.json()
-			except Exception as e:
-				log_utils.error(f"Error parsing refresh token response: {e}")
-				return False
+		try:
+			response_json = response.json()
+		except Exception as e:
+			log_utils.error(f"Error parsing refresh token response: {e}")
+			return False
 
-			if 'error' in response and response['error'] == 'invalid_grant':
+		if code != '200':
+			error = response_json.get('error', '') if isinstance(response_json, dict) else ''
+
+			if error == 'invalid_grant':
 				log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
 				control.notification(title=32315, message=32687)
-				return False
+			else:
+				log_utils.error(f"Trakt refresh failed: HTTP {code} - {response_text}")
 
-			traktToken = response["access_token"]
-			traktRefresh = response["refresh_token"]
-			traktExpires = int(time.time()) + 86400
-			control.setSetting('trakt.token', traktToken)
-			control.setSetting('trakt.refresh', traktRefresh)
-			control.setSetting('trakt.expires', str(traktExpires))
-			self.token = traktToken
-			self.expires_at = str(traktExpires or '')
-			return True
+			return False
 
-		return False
+		if response_json.get('error') == 'invalid_grant':
+			log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
+			control.notification(title=32315, message=32687)
+			return False
+
+		traktToken = response_json.get("access_token")
+		traktRefresh = response_json.get("refresh_token")
+
+		if not traktToken or not traktRefresh:
+			log_utils.error(f"Trakt refresh failed: missing token data - {response_json}")
+			return False
+
+		traktExpires = int(time.time()) + 86400
+		control.setSetting('trakt.token', traktToken)
+		control.setSetting('trakt.refresh', traktRefresh)
+		control.setSetting('trakt.expires', str(traktExpires))
+		self.token = traktToken
+		self.expires_at = str(traktExpires or '')
+
+		return True
 
 	def auth(self):
 		try:

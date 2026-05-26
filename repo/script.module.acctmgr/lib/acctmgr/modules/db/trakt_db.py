@@ -59,28 +59,15 @@ def auth(settings_db):
 		('Trakt',       'watched_indicators_name'),
 	], settings_db)
 
-######################## Revoke Fen Light Trakt ##############
-def revoke_fenlt_trakt(settings_db):
-	connect_db([
-		(var.fenlt_client, 'trakt.client'),
-		(var.fenlt_secret, 'trakt.secret'),
-		('empty_setting',  'trakt.token'),
-		('empty_setting',  'trakt.user'),
-		('empty_setting',  'trakt.refresh'),
-		('empty_setting',  'trakt.expires'),
-		(0,                'watched_indicators'),
-		('Fen Light',      'watched_indicators_name'),
-	], settings_db)
-
-######################## Revoke Gears Trakt ##############
-def revoke_gears_trakt(settings_db):
-	connect_db([
-		(var.chains_client, 'trakt.client'),
-		(var.chains_secret, 'trakt.secret'),
-		('empty_setting',  'trakt.token'),
-		('empty_setting',  'trakt.user'),
-		('empty_setting',  'trakt.refresh'),
-		('empty_setting',  'trakt.expires'),
-		(0,                'watched_indicators'),
-		('Fen Light',      'watched_indicators_name'),
-	], settings_db)
+#################### Revoke Trakt ####################
+def revoke_trakt(settings_db, addon_name):
+    connect_db([
+        ('empty_setting', 'trakt.client'),
+        ('empty_setting', 'trakt.secret'),
+        ('empty_setting', 'trakt.token'),
+        ('empty_setting', 'trakt.user'),
+        ('empty_setting', 'trakt.refresh'),
+        ('empty_setting', 'trakt.expires'),
+        (0,               'watched_indicators'),
+        (addon_name,      'watched_indicators_name'),
+    ], settings_db)

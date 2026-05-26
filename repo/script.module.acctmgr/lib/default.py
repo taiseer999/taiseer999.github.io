@@ -177,18 +177,36 @@ elif action == 'traktRevoke':                                                   
                 if exists(var.chk_fenlt):                                                               # Do NOTHING, if Fen Light is NOT installed and authorized
                         chk_auth_fenlt = chk_auth_db.chk_auth(var.fenlt_settings_db, "trakt.token")
                         if chk_auth_fenlt not in ('empty_setting', '', None):                           
-                                trakt_db.revoke_fenlt_trakt(var.fenlt_settings_db)                      # Revoke Fen Light
+                                trakt_db.revoke_trakt(var.fenlt_settings_db, 'Fen Light')               # Revoke Fen Light
                                 xbmc.sleep(200)
-                                control.remake_fenlt_settings()                                         # Remake Fen Light settings
+                                control.restore_fenlt_tkclient()                                        # Restore default Trakt Client Key
+                                xbmc.sleep(200)
+                                control.restore_fenlt_tksecret()                                        # Restore default Trakt Secret Key
+                                xbmc.sleep(200)
+                                control.remake_fenlt_settings()                                         # Remake settings
                                 xbmc.sleep(1000)
                 if exists(var.chk_gears):                                                               # Do NOTHING, if The Gears is NOT installed and authorized
                         chk_auth_gears = chk_auth_db.chk_auth(var.gears_settings_db, "trakt.token")
                         if chk_auth_gears not in ('empty_setting', '', None):                           
-                                trakt_db.revoke_gears_trakt(var.gears_settings_db)                      # Revoke Gears
+                                trakt_db.revoke_trakt(var.gears_settings_db, 'The Gears')               # Revoke Gears
                                 xbmc.sleep(200)
-                                control.remake_gears_settings()                                         # Remake Gears settings
+                                control.restore_gears_tkclient()                                        # Restore default Trakt Client Key
+                                xbmc.sleep(200)
+                                control.restore_gears_tksecret()                                        # Restore default Trakt Secret Key
+                                xbmc.sleep(200)
+                                control.remake_gears_settings()                                         # Remake settings
                                 xbmc.sleep(1000)
-
+                if exists(var.chk_red):                                                                 # Do NOTHING, if Red Light is NOT installed and authorized
+                        chk_auth_red = chk_auth_db.chk_auth(var.red_settings_db, "trakt.token")
+                        if chk_auth_red not in ('empty_setting', '', None):                           
+                                trakt_db.revoke_trakt(var.red_settings_db, 'Red Light')                 # Revoke Red Light
+                                xbmc.sleep(200)
+                                control.restore_red_tkclient()                                          # Restore default Trakt Client Key
+                                xbmc.sleep(200)
+                                control.restore_red_tksecret()                                          # Restore default Trakt Secret Key
+                                xbmc.sleep(200)
+                                control.remake_red_settings()                                           # Remake settings
+                                xbmc.sleep(1000)
                 control.unpatch_all_services()                                                          # Unpatch services
                 control.apply_default_trakt_api_keys()                                                  # Apply default API Keys to all add-ons
                 control.delete_synclist()                                                               # Delete Trakt Sync List
@@ -329,6 +347,13 @@ elif action == 'realdebridRevoke':                                              
                                 xbmc.sleep(200)
                                 control.remake_gears_settings()                                         # Remake settings
                                 xbmc.sleep(1000)
+                if exists(var.chk_red) :                                                                # Do nothing if Gears is NOT installed and authorized
+                        chk_auth_red = chk_auth_db.chk_auth(var.red_settings_db, "rd.token")
+                        if chk_auth_red not in ('empty_setting', '', None):         
+                                debrid_db.revoke_rd(var.red_settings_db)                                # Revoke Gears
+                                xbmc.sleep(200)
+                                control.remake_red_settings()                                           # Remake settings
+                                xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_rd")')                   # Revoke all add-ons with a settings.xml
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', rd_icon, 3000)
                 xbmc.sleep(3000)
@@ -394,6 +419,13 @@ elif action == 'premiumizeRevoke':
                                 xbmc.sleep(200)
                                 control.remake_gears_settings()                           
                                 xbmc.sleep(1000)
+                if exists(var.chk_red):
+                        chk_auth_red = chk_auth_db.chk_auth(var.red_settings_db, "pm.token")
+                        if chk_auth_red not in ('empty_setting', '', None):
+                                debrid_db.revoke_pm(var.red_settings_db)                                                            
+                                xbmc.sleep(200)
+                                control.remake_red_settings()                           
+                                xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_pm")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', pm_icon, 3000)
                 xbmc.sleep(3000)
@@ -458,6 +490,13 @@ elif action == 'alldebridRevoke':
                                 debrid_db.revoke_ad(var.gears_settings_db)                                                            
                                 xbmc.sleep(200)
                                 control.remake_gears_settings()                           
+                                xbmc.sleep(1000)
+                if exists(var.chk_red):
+                        chk_auth_red = chk_auth_db.chk_auth(var.red_settings_db, "ad.token")
+                        if chk_auth_red not in ('empty_setting', '', None):
+                                debrid_db.revoke_ad(var.red_settings_db)                                                            
+                                xbmc.sleep(200)
+                                control.remake_red_settings()                           
                                 xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_ad")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', ad_icon, 3000)
@@ -577,6 +616,13 @@ elif action == 'torboxRevoke':
                                 xbmc.sleep(200)
                                 control.remake_gears_settings()                           
                                 xbmc.sleep(1000)
+                if exists(var.chk_red):
+                        chk_auth_red = chk_auth_db.chk_auth(var.red_settings_db, "tb.token")
+                        if chk_auth_red not in ('empty_setting', '', None):
+                                torbox_db.revoke(var.red_settings_db)                                                            
+                                xbmc.sleep(200)
+                                control.remake_red_settings()                           
+                                xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_tb")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', torbox_icon, 3000)
                 xbmc.sleep(3000)
@@ -691,6 +737,11 @@ elif action == 'easynewsRevoke':
                         xbmc.sleep(200)
                         control.remake_gears_settings()                           
                         xbmc.sleep(1000)
+                if exists(var.chk_red):
+                        easynews_db.revoke(var.red_settings_db)                                                            
+                        xbmc.sleep(200)
+                        control.remake_red_settings()                           
+                        xbmc.sleep(1000)
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_en")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', easynews_icon, 3000)
                 xbmc.sleep(3000)
@@ -702,7 +753,113 @@ elif action == 'easynewsViewer':
         control.closeAll()
         xbmc.sleep(300)
         execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=easynews",return)')
+             
+#REVOKE ALL SERVICES
+elif action == 'allRevoke':
+        token_keys = (
+                'trakt.token',
+                'mdblist.apikey',
+                'realdebrid.token',
+                'premiumize.token',
+                'alldebrid.token',
+                'torbox.token',
+                'easydebrid.token',
+                'offcloud.token',
+                'easynews.username',
+                'easynews.password'
+        )
+
+        has_any_auth = any((control.setting(k) or '') != '' for k in token_keys)
+
+        if not has_any_auth:
+                dialog.ok('AM Lite', 'No services are authorized. You have no data to revoke!')
+                raise SystemExit
+
+        yes = dialog.yesno(
+                'AM Lite',
+                'WARNING! This will completely wipe all settings applied by AM Lite. Would you like to proceed?',
+                nolabel='Cancel',
+                yeslabel='Proceed'
+        )
+        if not yes:
+                raise SystemExit
+
+        trakt_authed = bool(control.setting('trakt.token'))
         
+        def revoke_all_for_addon(settings_db, addon_name=None):
+                if trakt_authed and addon_name:
+                        trakt_db.revoke_trakt(settings_db, addon_name)
+
+                if trakt_authed and addon_name == 'Fen Light':
+                        control.restore_fenlt_tkclient()
+                        xbmc.sleep(200)
+                        control.restore_fenlt_tksecret()
+                        xbmc.sleep(200)
+                        control.remake_fenlt_settings()
+                        xbmc.sleep(500)
+
+                elif trakt_authed and addon_name == 'The Gears':
+                        control.restore_gears_tkclient()
+                        xbmc.sleep(200)
+                        control.restore_gears_tksecret()
+                        xbmc.sleep(200)
+                        control.remake_gears_settings()
+                        xbmc.sleep(500)
+
+                elif trakt_authed and addon_name == 'Red Light':
+                        control.restore_red_tkclient()
+                        xbmc.sleep(200)
+                        control.restore_red_tksecret()
+                        xbmc.sleep(200)
+                        control.remake_red_settings()
+                        xbmc.sleep(500)
+                        
+                if control.setting('realdebrid.token'):
+                        debrid_db.revoke_rd(settings_db)
+                        
+                if control.setting('premiumize.token'):
+                        debrid_db.revoke_pm(settings_db)
+                        
+                if control.setting('alldebrid.token'):
+                        debrid_db.revoke_ad(settings_db)
+                        
+                if control.setting('torbox.token'):
+                        torbox_db.revoke(settings_db)
+                        
+                if control.setting('easydebrid.token'):
+                        easydebrid_db.revoke(settings_db)
+                        
+                if control.setting('offcloud.token'):
+                        offcloud_db.revoke(settings_db)
+                        
+                if control.setting('easynews.username') or control.setting('easynews.password'):
+                        easynews_db.revoke(settings_db)
+
+        control.setSetting('api.stop', 'true')
+        xbmc.sleep(500)
+        control.closeAll()
+        xbmc.sleep(300)
+
+        # Revoke Fen Light / The Gears / Red Light
+        addons = (
+                (var.chk_fenlt, var.fenlt_settings_db, var.fenlt_name),
+                (var.chk_gears, var.gears_settings_db, var.gears_name),
+                (var.chk_red, var.red_settings_db, var.red_name),
+        )
+
+        for chk, settings_db, addon_name in addons:
+                if exists(chk):
+                        revoke_all_for_addon(settings_db, addon_name)
+                        xbmc.sleep(200)
+
+        if control.setting('trakt.token'):
+                control.unpatch_all_services()
+                control.apply_default_trakt_api_keys() # Apply default API keys to all add-ons
+                control.delete_synclist()
+                control.updates_on()
+
+        execute('RunPlugin("plugin://script.module.acctvwr/?mode=wipeclean")')  # Trakt Client/Secret are NOT revoked for (POV, The Coalition, Dradis, Genocide)
+
 #EXTERNAL PROVIDERS
 elif action == 'extInstall':
         for plugin_id, setting_id in (
@@ -968,69 +1125,6 @@ elif action == 'extViewer':
         control.closeAll()
         xbmc.sleep(300)
         execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=extscrapers",return)')
-                      
-#REVOKE ALL SERVICES                
-elif action == 'allRevoke':
-        token_keys = ('trakt.token', 'mdblist.apikey', 'realdebrid.token', 'premiumize.token', 'alldebrid.token', 'torbox.token', 'easydebrid.token', 'offcloud.token')
-
-        has_any_auth = any((control.setting(k) or '') != '' for k in token_keys)
-
-        if not has_any_auth:
-                dialog.ok('AM Lite', 'No services are authorized. You have no data to revoke!')
-                raise SystemExit
-
-        yes = dialog.yesno(
-                'AM Lite',
-                'WARNING! This will completely wipe all settings applied by AM Lite. Would you like to proceed?',
-                nolabel='Cancel',
-                yeslabel='Proceed'
-        )
-        if not yes:
-                raise SystemExit
-
-        def revoke_all_for_addon(settings_db, trakt_revoke=None):
-                if control.setting('trakt.token') and trakt_revoke:
-                        trakt_revoke(settings_db)
-                if control.setting('realdebrid.token'):
-                        debrid_db.revoke_rd(settings_db)
-                if control.setting('premiumize.token'):
-                        debrid_db.revoke_pm(settings_db)
-                if control.setting('alldebrid.token'):
-                        debrid_db.revoke_ad(settings_db)
-                if control.setting('torbox.token'):
-                        torbox_db.revoke(settings_db)
-                if control.setting('easydebrid.token'):
-                        easydebrid_db.revoke(settings_db)
-                if control.setting('offcloud.token'):
-                        offcloud_db.revoke(settings_db)
-                if control.setting('easynews.username'):
-                        easynews_db.revoke(settings_db)
-
-        control.setSetting('api.stop', 'true')
-        xbmc.sleep(500)
-        control.closeAll()
-        xbmc.sleep(300)
-
-        addons = (
-                (var.chk_fenlt, var.fenlt_settings_db, var.fenlt_id, var.fenlt_name, trakt_db.revoke_fenlt_trakt),
-                (var.chk_gears, var.gears_settings_db, var.gears_id, var.gears_name, trakt_db.revoke_gears_trakt),
-        )
-
-        for chk, settings_db, addon_id, addon_name, trakt_revoke in addons:
-                if exists(chk):
-                        revoke_all_for_addon(settings_db, trakt_revoke)
-                        xbmc.sleep(200)
-                        control.remake_fenlt_settings()
-                        xbmc.sleep(500)
-                        control.remake_gears_settings()
-
-        if control.setting('trakt.token'):
-                control.unpatch_all_services()
-                control.apply_default_trakt_api_keys()  # Apply default API Keys to all add-ons
-                control.delete_synclist()
-                control.updates_on()
-
-        execute('RunPlugin("plugin://script.module.acctvwr/?mode=wipeclean")')  # Trakt Client/Secret are NOT revoked for (POV, The Coalition, Dradis, Genocide) 
 
 #MAXQL
 elif action == 'setUHD':
@@ -1151,4 +1245,4 @@ elif action == 'viewLogFile':
 
 elif action == 'uploadLogFile':
 	from acctmgr.modules import log_utils
-	log_utils.upload_LogFile()       
+	log_utils.upload_LogFile()

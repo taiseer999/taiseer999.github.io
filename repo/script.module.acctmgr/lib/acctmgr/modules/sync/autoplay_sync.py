@@ -48,10 +48,11 @@ class AutoPlay:
             ("Absolution",  var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
             ("The Crew",    var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
             ("SALTS",       var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",       var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",     var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",     var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
+            #("Orion",      var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
+            #("Genesis",    var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
+            #("Syncher",    var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Scrubs V2",   var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
+            ("Gratis Red",  var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
             ("Otaku",       var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
         )
 
@@ -64,33 +65,27 @@ class AutoPlay:
                 base_path
             )
 
-        # ======================= Fen Light =======================
-        try:
-            if exists(var.chk_fenlt):
-                if not exists(var.chkset_fenlt):
-                    control.remake_fenlt_settings()
-                    xbmc.sleep(500)
+        # ======================= Fen Light / The Gears / Red Light =======================
+        addons = (
+            ("Fen Light", var.chk_fenlt, var.chkset_fenlt, control.remake_fenlt_settings),
+            ("Gears", var.chk_gears, var.chkset_gears, control.remake_gears_settings),
+            ("Red Light", var.chk_red, var.chkset_red, control.remake_red_settings),
+        )
 
-                if exists(var.chkset_fenlt):
-                    autoplay_db.apply_playback(mode)
-                    xbmc.sleep(300)
-                    control.remake_fenlt_settings()
-        except Exception as e:
-            log_utils.error(f"Fen Light Autoplay Failed: {e}")
+        for addon_name, chk_path, chkset_path, remake_func in addons:
+            try:
+                if exists(chk_path):
+                    if not exists(chkset_path):
+                        remake_func()
+                        xbmc.sleep(500)
 
-        # ======================= Gears =======================
-        try:
-            if exists(var.chk_gears):
-                if not exists(var.chkset_gears):
-                    control.remake_gears_settings()
-                    xbmc.sleep(500)
+                    if exists(chkset_path):
+                        autoplay_db.apply_playback(mode)
+                        xbmc.sleep(300)
+                        remake_func()
 
-                if exists(var.chkset_gears):
-                    autoplay_db.apply_playback(mode)
-                    xbmc.sleep(300)
-                    control.remake_gears_settings()
-        except Exception as e:
-            log_utils.error(f"Gears Autoplay Failed: {e}")
+            except Exception as e:
+                log_utils.error(f"{addon_name} Autoplay Failed: {e}")
 
         # ===================== Umbrella ======================
         try:
@@ -118,6 +113,14 @@ class AutoPlay:
             except Exception as e:
                 log_utils.error(f"{name} Autoplay Failed: {e}")
 
+        # ===================== Seren ======================
+        try:
+            if exists(var.chk_seren) and exists(var.chkset_seren):
+                xbmcaddon.Addon("plugin.video.seren").setSetting("general.playstyleMovie", otaku_playback)
+                xbmcaddon.Addon("plugin.video.seren").setSetting("general.playstyleEpisodes", otaku_playback)
+        except Exception as e:
+            log_utils.error(f"Seren Autoplay Failed: {e}")
+            
         # =========== The Crew / Homelander / Nightwing / Jokers Absolution / Scrubs V2 / Gratis Red ===========
         for name, plugin, chk_addon, chk_setting in (
             ("The Crew",          "plugin.video.thecrew", var.chk_crew,  var.chkset_crew),
@@ -125,7 +128,7 @@ class AutoPlay:
             ("Nightwing",         "plugin.video.nightwing",  var.chk_night, var.chkset_night),
             ("Jokers Absolution", "plugin.video.absolution", var.chk_absol, var.chkset_absol),
             ("Scrubs V2",         "plugin.video.scrubsv2", var.chk_scrubs,  var.chkset_scrubs),
-            ("Gratis Red",        "plugin.video.gratisred", var.chk_red,  var.chkset_red),
+            ("Gratis Red",        "plugin.video.gratisred", var.chk_redg,  var.chkset_redg),
         ):
             try:
                 if exists(chk_addon) and exists(chk_setting):

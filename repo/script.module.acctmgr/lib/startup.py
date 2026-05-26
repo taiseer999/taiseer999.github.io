@@ -1,53 +1,57 @@
 # -*- coding: utf-8 -*-
 import xbmc, xbmcgui, xbmcaddon, xbmcvfs
 import os
+import re
 import time
 import json
 import hashlib
+import requests
 
 from acctmgr.modules import var
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
 
-def am_masters(): # AM Lite token variables
-	acctmgr = xbmcaddon.Addon("script.module.acctmgr")
-	mdb_master_token = acctmgr.getSetting("mdblist.apikey")
-	rd_master_token = acctmgr.getSetting("realdebrid.token")
-	pm_master_token = acctmgr.getSetting("premiumize.token")
-	ad_master_token = acctmgr.getSetting("alldebrid.token")
-	tb_master_token = acctmgr.getSetting("torbox.token")
-	#ed_master_token = acctmgr.getSetting("easydebrid.token")
-	#oc_master_token = acctmgr.getSetting("offcloud.token")
-	en_master_user = acctmgr.getSetting("easynews.username")
-	en_master_pass = acctmgr.getSetting("easynews.password")
+def am_masters():  # AM Lite token variables
+	mdb_master_token = control.setting("mdblist.apikey")
+	rd_master_token = control.setting("realdebrid.token")
+	pm_master_token = control.setting("premiumize.token")
+	ad_master_token = control.setting("alldebrid.token")
+	tb_master_token = control.setting("torbox.token")
+	en_master_user = control.setting("easynews.username")
+	en_master_pass = control.setting("easynews.password")
 
 	return mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, en_master_user, en_master_pass
 
-mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, en_master_user, en_master_pass = am_masters()
-	
+def ScraperCheck(): # Check for installed scraper packages and update AML settings accordingly
+	for addon_id, setting_id in (
+		('script.module.cocoscrapers',   "ext.provider_coco"),
+                ('script.module.gearsscrapers',  "ext.provider_gears"),
+		('script.module.magneto',        "ext.provider_mag"),
+		('script.module.viperscrapers',  "ext.provider_vip"),
+	):
+		value = 'true' if xbmc.getCondVisibility(f'System.HasAddon({addon_id})') else 'false'
+		control.setSetting(setting_id, value)
+
 def am_trakt_startup_begin(): # Mark Trakt startup as NOT ready immediately on every Kodi startup.
 	try:
-		acctmgr = xbmcaddon.Addon("script.module.acctmgr")
-		acctmgr.setSetting("am_trakt_ready", "false")
-		acctmgr.setSetting("am_last_prepare", "0")
+		control.setSetting("am_trakt_ready", "false")
+		control.setSetting("am_last_prepare", "0")
 		xbmc.log('AM Lite: Trakt startup state set to NOT READY', xbmc.LOGINFO)
 	except Exception:
 		log_utils.error("AM Lite Trakt startup begin FAILED")
 
 def am_trakt_startup_complete(): # Mark Trakt startup as READY only after refresh/sync has completed safely.
 	try:
-		acctmgr = xbmcaddon.Addon("script.module.acctmgr")
-		acctmgr.setSetting("am_last_prepare", str(int(time.time())))
-		acctmgr.setSetting("am_trakt_ready", "true")
+		control.setSetting("am_last_prepare", str(int(time.time())))
+		control.setSetting("am_trakt_ready", "true")
 		xbmc.log('AM Lite: Trakt startup state set to READY', xbmc.LOGINFO)
 	except Exception:
 		log_utils.error("AM Lite Trakt startup complete FAILED")
 
 def am_trakt_startup_fail(): # Leave startup state as NOT ready when refresh/sync fails.
 	try:
-		acctmgr = xbmcaddon.Addon("script.module.acctmgr")
-		acctmgr.setSetting("am_trakt_ready", "false")
-		acctmgr.setSetting("am_last_prepare", "0")
+		control.setSetting("am_trakt_ready", "false")
+		control.setSetting("am_last_prepare", "0")
 		xbmc.log('AM Lite: Trakt startup FAILED - remaining NOT READY', xbmc.LOGINFO)
 	except Exception:
 		log_utils.error("AM Lite Trakt startup fail FAILED")
@@ -73,7 +77,7 @@ def ensure_defaults(): # Check if Trakt is authed. If not, ensure API keys/servi
 		if not token:
 			xbmc.log('AM Lite: No Trakt auth found - resetting services to defaults', xbmc.LOGINFO)
 			control.unpatch_all_services()
-			control.apply_default_trakt_api_keys_db()
+			#control.apply_default_trakt_api_keys_db() # NO LONGER USED (See control.py)
 			control.apply_default_trakt_api_keys()
 			return False
 		return True
@@ -152,7 +156,7 @@ def startup_tk_sync(mode="refresh"): # Sync Trakt tokens to add-ons
 		log_utils.error("Trakt sync FAILED")
 		return False
 
-def run_trakt_startup():
+def TraktStartup():
         
 	# Startup flow:
 	# 1. Force NOT ready
@@ -165,8 +169,8 @@ def run_trakt_startup():
 	startup_wait()
 
 	if not ensure_defaults(): # If Trakt NOT authed, end Trakt startup flow
-                am_trakt_startup_complete()
-                return
+		am_trakt_startup_complete()
+		return
 
 	status = trakt_refresh()
 
@@ -190,8 +194,11 @@ def run_trakt_startup():
 		return
 
 	am_trakt_startup_complete()
-
+        
 def SyncManager():  # Auto-sync credentials with recently installed/supported addons
+
+	mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, en_master_user, en_master_pass = am_masters()
+
 	try:
 		if control.setting('sync.mdb.service')=='true' and mdb_master_token:
 			from acctmgr.modules.sync import mdblist_sync
@@ -247,16 +254,6 @@ def SyncManager():  # Auto-sync credentials with recently installed/supported ad
 			easynews_sync.Auth().easynews_auth()
 	except Exception:
 		log_utils.error("Startup Easynews Startup Sync FAILED")
-
-def ScraperCheck(): # Check for installed scraper packages and update AML settings accordingly
-	for addon_id, setting_id in (
-		('script.module.cocoscrapers',   "ext.provider_coco"),
-                ('script.module.gearsscrapers',  "ext.provider_gears"),
-		('script.module.magneto',        "ext.provider_mag"),
-		('script.module.viperscrapers',  "ext.provider_vip"),
-	):
-		value = 'true' if xbmc.getCondVisibility(f'System.HasAddon({addon_id})') else 'false'
-		control.setSetting(setting_id, value)
 		
 def compute_file_hash(path): # Compute a simple hash of a file's contents to detect changes
 	if not os.path.exists(path):
@@ -286,12 +283,13 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 	service_paths = [
 		var.path_fenlt_service,
 		var.path_gears_service,
+                var.path_red_service,
 		var.path_umb_service,
 		#var.path_seren_service,
 		#var.path_fen_service,
 		var.path_pov_service,
 		var.path_coal_service,
-		var.path_dradis_service,
+		#var.path_dradis_service,
 		var.path_genocide_service,
 		var.path_home_service,
 		var.path_night_service,
@@ -300,7 +298,7 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 		var.path_salts_service,
 		#var.path_gen_service,
 		var.path_scrubs_service,
-                var.path_red_service,
+                var.path_redg_service,
 		var.path_tmdbh_service,
 		#var.path_tkplay_service,
 		var.path_trakt_service,
@@ -350,33 +348,41 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 		xbmc.sleep(500)  # Run every 500ms			
 				
 def AddonCheckUpdate(): # AM Lite Update Notification
-	if control.setting('check_for_update')=='true':
+	if control.setting('check_for_update') == 'true':
 		xbmc.log('AM Lite: Addon checking available updates', xbmc.LOGINFO)
 		try:
-			import re
-			import requests
-			repo_xml = requests.get('https://raw.githubusercontent.com/Zaxxon709/zaxxon/main/zips/script.module.acctmgr/addon.xml', timeout=10)
+			repo_xml = requests.get('https://raw.githubusercontent.com/Zaxxon709/zaxxon/main/zips/script.module.acctmgr/addon.xml',timeout=10)
+
 			if repo_xml.status_code != 200:
-				return xbmc.log('AM Lite: Could not connect to remote repo XML: status code = %s' % repo_xml.status_code, xbmc.LOGINFO)
-			repo_version = re.search(r'<addon id=\"script.module.acctmgr\".*version=\"(\d*\.\d*\.\d*)\"', repo_xml.text, re.I).group(1)
-			local_version = control.addonVersion()[:5]
+				return xbmc.log('AM Lite: Could not connect to remote repo XML: status code = %s' % repo_xml.status_code,xbmc.LOGINFO)
+
+			match = re.search(r'<addon\s+[^>]*id=["\']script\.module\.acctmgr["\'][^>]*version=["\']([^"\']+)["\']',repo_xml.text,re.I)
+
+			if not match:
+				return xbmc.log('AM Lite: Could not find version in remote addon.xml',xbmc.LOGINFO)
+
+			repo_version = match.group(1)
+			local_version = control.addonVersion()
+
 			def check_version_numbers(current, new):
-				current = current.split('.')
-				new = new.split('.')
-				step = 0
-				for i in current:
-					if int(new[step]) > int(i): return True
-					if int(i) > int(new[step]): return False
-					if int(i) == int(new[step]):
-						step += 1
-						continue
-				return False
+				current = [int(x) for x in current.split('.') if x.isdigit()]
+				new = [int(x) for x in new.split('.') if x.isdigit()]
+
+				length = max(len(current), len(new))
+				current += [0] * (length - len(current))
+				new += [0] * (length - len(new))
+
+				return new > current
+
 			if check_version_numbers(local_version, repo_version):
 				while control.condVisibility('Library.IsScanningVideo'):
 					control.sleep(10000)
-				xbmc.log('AM Lite: A newer version is available. Installed Version: v%s' % (local_version), xbmc.LOGINFO)
-				control.notification(message=control.lang(32072) % repo_version, time=5000)
-			return xbmc.log('AM Lite: Addon update check complete', xbmc.LOGINFO)
+
+				xbmc.log('AM Lite: A newer version is available. Installed Version: v%s' % local_version,xbmc.LOGINFO)
+
+				control.notification(message=control.lang(32072) % repo_version,time=5000)
+
+			return xbmc.log('AM Lite: Addon update check complete',xbmc.LOGINFO)
 		except Exception:
 			log_utils.error("Addon update check failed")
 
@@ -405,9 +411,9 @@ def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refr
 	xbmc.log('AM Lite: Trakt refresh monitor loop stopped', xbmc.LOGINFO)
        
 # START SERVICES
-run_trakt_startup()
-SyncManager()
 ScraperCheck()
+TraktStartup()
+SyncManager()
 StartupManager()
 AddonCheckUpdate()
 trakt_refresh_monitor()

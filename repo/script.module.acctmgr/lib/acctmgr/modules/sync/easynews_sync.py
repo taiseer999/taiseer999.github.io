@@ -22,43 +22,46 @@ class Auth:
         master_user = your_username
         master_pass = your_password
 
-        # ========================= Fen Light =========================
-        try:
-            if exists(var.chk_fenlt):
-                if not exists(var.chkset_fenlt):
-                    control.remake_fenlt_settings()
-                    xbmc.sleep(500)
-                    
-                if exists(var.chkset_fenlt):
-                    settings_db = var.fenlt_settings_db
-                    chk_auth_user = chk_auth_db.chk_auth(settings_db, "easynews_user")
-                    chk_auth_pass = chk_auth_db.chk_auth(settings_db, "easynews_password")
-                    
-                    if chk_auth_user != master_user or chk_auth_pass != master_pass:
-                        easynews_db.auth(settings_db)
-                        xbmc.sleep(300)
-                        control.remake_fenlt_settings()
-        except Exception as e:
-            log_utils.error(f"Fen Light Easynews Failed: {e}")
+        # =================== Copy Addon Data (settings.xml) ==================
+        addons = [
+            ("Easynews Video", var.chk_easyv,  var.easyv_ud,  var.chkset_easyv,  var.easyv),
+        ]
 
-        # ========================= Gears =========================
-        try:
-            if exists(var.chk_gears):
-                if not exists(var.chkset_gears):
-                    control.remake_gears_settings()
-                    xbmc.sleep(500)
-                    
-                if exists(var.chkset_gears):
-                    settings_db = var.gears_settings_db
-                    chk_auth_user = chk_auth_db.chk_auth(settings_db, "easynews_user")
-                    chk_auth_pass = chk_auth_db.chk_auth(settings_db, "easynews_password")
-                    
-                    if chk_auth_user != master_user or chk_auth_pass != master_pass:
-                        easynews_db.auth(settings_db)
-                        xbmc.sleep(300)
-                        control.remake_gears_settings()
-        except Exception as e:
-            log_utils.error(f"Gears Easynews Failed: {e}")
+        for name, chk_addon, ud_path, chk_setting, base_path in addons:
+            control.copy_addon_settings(
+                name,
+                chk_addon,
+                ud_path,
+                chk_setting,
+                base_path
+            )
+            
+        # ========================= Fen Light / The Gears / Red Light =========================
+        addons = (
+            ("Fen Light", var.chk_fenlt, var.chkset_fenlt, var.fenlt_settings_db, control.remake_fenlt_settings),
+            ("Gears", var.chk_gears, var.chkset_gears, var.gears_settings_db, control.remake_gears_settings),
+            ("Red Light", var.chk_red, var.chkset_red, var.red_settings_db, control.remake_red_settings),
+        )
+
+        for addon_name, chk_path, chkset_path, settings_db, remake_func in addons:
+            try:
+                if exists(chk_path):
+
+                    if not exists(chkset_path):
+                        remake_func()
+                        xbmc.sleep(500)
+
+                    if exists(chkset_path):
+                        chk_auth_user = chk_auth_db.chk_auth(settings_db, "easynews_user")
+                        chk_auth_pass = chk_auth_db.chk_auth(settings_db, "easynews_password")
+
+                        if chk_auth_user != master_user or chk_auth_pass != master_pass:
+                            easynews_db.auth(settings_db)
+                            xbmc.sleep(300)
+                            remake_func()
+
+            except Exception as e:
+                log_utils.error(f"{addon_name} Easynews Failed: {e}")
 
         # ========================= Umbrella =========================
         try:
@@ -107,7 +110,7 @@ class Auth:
 
         # ========================= Dradis / Genocide =========================
         addons = [
-            ("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
+            #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
             ("Genocide", "plugin.video.genocide", var.chk_genocide, var.chkset_genocide),
         ]
 
@@ -126,3 +129,18 @@ class Auth:
                             addon.setSetting(k, v)
             except Exception as e:
                 log_utils.error(f"{name} Easynews Failed: {e}")
+
+        # ========================= Easynews Video =========================
+        try:
+            if exists(var.chk_easyv) and exists(var.chkset_easyv):
+                addon = xbmcaddon.Addon("plugin.video.easynewsx")
+                chk_auth_user = addon.getSetting("general.username")
+                chk_auth_pass = addon.getSetting("general.password")
+                if chk_auth_user != master_user or chk_auth_pass != master_pass:
+                    for k, v in {
+                        "general.username": your_username,
+                        "general.password": your_password,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Easynews Video Addon Failed: {e}")

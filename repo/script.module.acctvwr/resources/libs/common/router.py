@@ -8,7 +8,7 @@ from resources.libs.gui import menu
 from resources.libs import ext_db
 
 #Variables
-amgr = 'AM Lite ERROR'
+amgr = 'AM Lite'
 execute = xbmc.executebuiltin
 joinPath = os.path.join
 exists = xbmcvfs.exists
@@ -37,6 +37,14 @@ gears_umb_name = 'gearsscrapers'
 mag_umb_name = 'magneto'
 viper_umb_name = 'viperscrapers'
 
+#Remake Settings & Trakt Cache Variables
+fenlt_name = 'Fen Light'
+fenlt_id = 'plugin.video.fenlight'
+gears_name = 'The Gears'
+gears_id = 'plugin.video.gears'
+red_name = 'Red Light'
+red_id = 'plugin.video.redlight'
+
 def addonInfo(key):
     return xbmcaddon.Addon('script.module.acctvwr').getAddonInfo(key)
 
@@ -53,11 +61,6 @@ ed_icon    = joinPath(icons_path, 'easydebrid.png')
 oc_icon    = joinPath(icons_path, 'offcloud.png')
 en_icon    = joinPath(icons_path, 'easynews.png')
 
-#Remake Settings & Trakt Cache Variables
-fenlt_name = 'Fen Light'
-fenlt_id = 'plugin.video.fenlight'
-gears_name = 'Gears'
-gears_id = 'plugin.video.gears'
 
 #AM Lite Service Settings
 ACCTMGR_AM = [
@@ -155,7 +158,7 @@ def remake_settings(plugin_id, name):   # Fen Light & Forks
         try:
             settings_cache = importlib.import_module('caches.settings_cache')
         except Exception as e:
-            xbmc.log(f'{amgr}: {name} settings_cache import failed {e}', xbmc.LOGINFO)
+            xbmc.log(f'{amgr}: {name} settings_cache import failed {e}', xbmc.LOGERROR)
             return
 
         if not hasattr(settings_cache, 'sync_settings'):
@@ -166,7 +169,7 @@ def remake_settings(plugin_id, name):   # Fen Light & Forks
         xbmc.log(f'{amgr}: {name} settings remade', xbmc.LOGINFO)
         
     except Exception as e:
-        xbmc.log(f'{amgr}: Failed to remake {name} settings {e}', xbmc.LOGINFO)
+        xbmc.log(f'{amgr}: Failed to remake {name} settings {e}', xbmc.LOGERROR)
         
 #ROUTER        
 class Router:
@@ -297,6 +300,10 @@ class Router:
         elif mode == 'opensettings_gears':
             xbmc.executebuiltin('PlayMedia(plugin://plugin.video.gears/?mode=open_settings)')       # Open Gears settings
             execute('Container.Refresh()')
+
+        elif mode == 'opensettings_red':
+            xbmc.executebuiltin('PlayMedia(plugin://plugin.video.redlight/?mode=open_settings)')    # Open Red Light settings
+            execute('Container.Refresh()')
            
         #TRAKT REVOKE
         elif mode == 'clear_tk':                                                                    # Clear All Addon Trakt Data
@@ -424,6 +431,38 @@ class Router:
             remake_settings(gears_id, gears_name)  
             xbmc.executebuiltin('Container.Refresh()')
 
+        elif mode == 'red_scrapers':  # Red Light
+            red_path = addon_data + translatePath('plugin.video.redlight/databases/')
+            settings_db = red_path + translatePath('settings.db')
+            scrapers = [
+                ('Coco Scrapers', coco_plugin_id, coco_sc_name, coco_plugin_id),
+                ('Gears Scrapers', gears_plugin_id, gears_sc_name, gears_plugin_id),
+                ('Magneto Scrapers', mag_plugin_id, mag_sc_name, mag_plugin_id),
+                ('Viper Scrapers', viper_plugin_id, viper_sc_name, viper_plugin_id),
+            ]
+
+            installed = []
+            for label, addon_id, disp_name, module_id in scrapers:
+                if xbmc.getCondVisibility(f'System.HasAddon({addon_id})'):
+                    installed.append((label, disp_name, module_id))
+
+            if not installed:
+                dialog.notification('AM Lite', 'No scraper modules are installed!', icon=amgr_icon)
+                raise SystemExit
+
+            labels = [name for name, _, _ in installed]
+
+            selection = dialog.select('Choose scraper package', labels)
+            if selection == -1:
+                raise SystemExit
+
+            selected_label, selected_disp, selected_module = installed[selection]
+            ext_db.auth_ext(selected_disp, selected_module, settings_db)
+            execute('Dialog.Close(all,true)')
+            xbmc.sleep(200)
+            remake_settings(red_id, red_name)  
+            xbmc.executebuiltin('Container.Refresh()')
+
         elif mode == 'fen_scrapers':    # Fen
             scrapers = [
                 ('Coco Scrapers', coco_plugin_id, coco_sc_name, coco_plugin_id),
@@ -493,8 +532,8 @@ class Router:
                 addon.setSetting(k, v)
             xbmc.executebuiltin('Container.Refresh()')
                  
-        #RESTORE ALL ADDON SETTINGS TO DEFAULT
-        elif mode == 'wipeclean':   # Revoke settings and restore default API Keys for all add-ons
+        #REVOKE ALL SERVICES
+        elif mode == 'wipeclean':   # Revoke all services and restore default add-on settings
             #Revoke MDBList
             try:
                 if get_setting("mdblist.apikey") not in (None, ""):
@@ -621,4 +660,4 @@ class Router:
         from resources.libs.common import directory
         directory.set_view()
         xbmcplugin.setContent(handle, 'files')
-        xbmcplugin.endOfDirectory(handle)
+        xbmcplugin.endOfDirectory(handle, succeeded=True, updateListing=True, cacheToDisc=False)

@@ -57,21 +57,22 @@ class Auth:
 
         # ===================== Copy Addon Data (settings.xml) =====================
         addons = (
-            ("Shadow",       var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
-            ("Ghost",        var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
-            ("The Chains",   var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
-            ("Homelander",   var.chk_home,   var.home_ud,    var.chkset_home,    var.home),
-            ("Nightwing",    var.chk_night,  var.night_ud,   var.chkset_night,   var.night),
-            ("Absolution",   var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
-            ("The Crew",     var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
-            ("SALTS",        var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
+            ("Shadow",        var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
+            ("Ghost",         var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
+            ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
+            ("Homelander",    var.chk_home,   var.home_ud,    var.chkset_home,    var.home),
+            ("Nightwing",     var.chk_night,  var.night_ud,   var.chkset_night,   var.night),
+            ("Absolution",    var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
+            ("The Crew",      var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
+            ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
             #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
             #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
             #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
-            ("Scrubs V2",    var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
-            ("TMDb Helper",  var.chk_tmdbh,  var.tmdbh_ud,   var.chkset_tmdbh,   var.tmdbh),
+            ("Scrubs V2",     var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
+            ("Gratis Red",    var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
+            ("TMDb Helper",   var.chk_tmdbh,  var.tmdbh_ud,   var.chkset_tmdbh,   var.tmdbh),
             #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
-            ("Trakt",        var.chk_trakt,  var.trakt_ud,   var.chkset_trakt,   var.trakt),
+            ("Trakt",         var.chk_trakt,  var.trakt_ud,   var.chkset_trakt,   var.trakt),
         )
 
         for name, chk_addon, ud_path, chk_setting, base_path in addons:
@@ -80,55 +81,40 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"Error copying settings for {name}: {e}")
                 
-        # ========================= Fen Light =========================
-        # ============== API Keys applied to settings.db ==============
-        try:
-            if "Fen Light" in current and exists(var.chk_fenlt):
-                if not exists(var.chkset_fenlt):
-                    control.remake_fenlt_settings()
-                    xbmc.sleep(500)
-                    
-                if exists(var.chkset_fenlt):
-                    settings_db = var.fenlt_settings_db
-                    chk_auth = chk_auth_db.chk_auth(settings_db, "trakt.token")
-                    
-                    if refresh_sync(mode, chk_auth, master_token):
-                        trakt_db.auth(settings_db)
-                        control.remake_fenlt_settings()
-                        patched, msg = control.startup_patch(var.path_fenlt_service, addon_name="Fen Light")
-                        if not patched:
-                            log_utils.log(f"Fen Light startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-                        
-                        if authorize(mode):
-                            xbmc.sleep(300)
-                            control.remake_fenlt_trakt_cache()
-        except Exception as e:
-            log_utils.error(f"Fen Light Trakt Failed: {e}")
-    
-        # =========================== Gears ===========================
-        # ============== API Keys applied to settings.db ==============
-        try:
-            if "Gears" in current and exists(var.chk_gears):
-                if not exists(var.chkset_gears):
-                    control.remake_gears_settings()
-                    xbmc.sleep(500)
-                    
-                if exists(var.chkset_gears):
-                    settings_db = var.gears_settings_db
-                    chk_auth = chk_auth_db.chk_auth(settings_db, "trakt.token")
-                    
-                    if refresh_sync(mode, chk_auth, master_token):
-                        trakt_db.auth(settings_db)
-                        control.remake_gears_settings()
-                        patched, msg = control.startup_patch(var.path_gears_service, addon_name="The Gears")
-                        if not patched:
-                            log_utils.log(f"The Gears startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-                        
-                        if authorize(mode):
-                            xbmc.sleep(300)
-                            control.remake_gears_trakt_cache()
-        except Exception as e:
-            log_utils.error(f"Gears Trakt Failed: {e}")
+        # ========================= Fen Light / The Gears / Red Light =========================
+        # ========================== API Keys applied to settings.db ==========================
+
+        addons = (
+            ("Fen Light", "Fen Light", var.chk_fenlt, var.chkset_fenlt, var.fenlt_settings_db, control.remake_fenlt_settings, var.path_fenlt_service, control.remake_fenlt_trakt_cache),
+            ("The Gears", "The Gears", var.chk_gears, var.chkset_gears, var.gears_settings_db, control.remake_gears_settings, var.path_gears_service, control.remake_gears_trakt_cache),
+            ("Red Light", "Red Light", var.chk_red, var.chkset_red, var.red_settings_db, control.remake_red_settings, var.path_red_service, control.remake_redlt_trakt_cache),
+        )
+
+        for current_name, addon_name, chk_path, chkset_path, settings_db, remake_settings_func, service_path, remake_cache_func in addons:
+            try:
+                if current_name in current and exists(chk_path):
+
+                    if not exists(chkset_path):
+                        remake_settings_func()
+                        xbmc.sleep(500)
+
+                    if exists(chkset_path):
+                        chk_auth = chk_auth_db.chk_auth(settings_db, "trakt.token")
+
+                        if refresh_sync(mode, chk_auth, master_token):
+                            trakt_db.auth(settings_db)
+                            remake_settings_func()
+
+                            patched, msg = control.startup_patch(service_path, addon_name=addon_name)
+                            if not patched:
+                                log_utils.log(f"{addon_name} startup patch failed, msg={msg}", level=log_utils.LOGERROR)
+
+                            if authorize(mode):
+                                xbmc.sleep(300)
+                                remake_cache_func()
+
+            except Exception as e:
+                log_utils.error(f"{current_name} Trakt Failed: {e}")
 
         # ========================= Umbrella =========================
         try:
@@ -161,9 +147,10 @@ class Auth:
                         "trakt.refreshtoken": your_refresh,
                         "trakt.token.expires": your_expires,
                         "trakt.authed.clientid": var.client_am,
-                        "trakt.isauthed": "true",
                         "indicators": "Trakt",
+                        "trakt.isauthed": "true",
                         "trakt.scrobble": "true",
+                        "indicators.alt": "1",
                         "scrobble.source": "1",
                         "resume.source": "1",
                     }.items():
@@ -305,7 +292,7 @@ class Auth:
         # =================== Dradis / Genocide ===================
         # ============ API Keys applied to settings.xml ===========
         addons = [
-            ("Dradis",        "plugin.video.dradis",    var.chk_dradis, var.chkset_dradis, var.path_dradis_service),
+            #("Dradis",        "plugin.video.dradis",    var.chk_dradis, var.chkset_dradis, var.path_dradis_service),
             ("Genocide",      "plugin.video.genocide",  var.chk_genocide, var.chkset_genocide, var.path_genocide_service),
         ]
         for name, plugin, chk_addon, chk_setting, path_service in addons:
@@ -627,17 +614,17 @@ class Auth:
         # ========================= Gratis Red =========================
         try:
             if "Gratis Red" in current:
-                if exists(var.chk_red) and exists(var.chkset_red):
+                if exists(var.chk_redg) and exists(var.chkset_redg):
                     addon = xbmcaddon.Addon("plugin.video.gratisred")
                     chk_auth = addon.getSetting("trakt.token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_red, "r") as f:
+                        with open(var.path_redg, "r") as f:
                             data = f.read()
 
                         patched_keys = False
-                        if var.red_client in data or var.red_secret in data:
-                            data = data.replace(var.red_client, var.client_am).replace(var.red_secret, var.secret_am)
-                            with open(var.path_red, "w") as f:
+                        if var.redg_client in data or var.redg_secret in data:
+                            data = data.replace(var.redg_client, var.client_am).replace(var.redg_secret, var.secret_am)
+                            with open(var.path_redg, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -646,7 +633,7 @@ class Auth:
                         if not patched_keys:
                             log_utils.log("Gratis Red Trakt keys NOT patched")
 
-                        patched, msg = control.startup_patch(var.path_red_service)
+                        patched, msg = control.startup_patch(var.path_redg_service)
                         if not patched:
                             log_utils.log(f"Gratis Red startup patch failed, msg={msg}", level=log_utils.LOGERROR)
 

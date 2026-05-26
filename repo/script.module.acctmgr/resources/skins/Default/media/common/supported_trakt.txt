@@ -1,10 +1,10 @@
 
 1.  Fen Light
-2.  Gears
-3.  Umbrella
-4.  POV
-5.  The Coalition
-6.  Dradis
+2.  The Gears
+3.  Red Light
+4.  Umbrella
+5.  POV
+6.  The Coalition
 7.  Genocide                  
 8.  Shadow
 9.  Ghost            

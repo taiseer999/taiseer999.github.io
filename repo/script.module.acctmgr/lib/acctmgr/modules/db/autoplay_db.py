@@ -55,7 +55,15 @@ ADDONS = {
             'auto_play_movie',
             'auto_play_episode',
         ),
-        "log": "Gears",
+        "log": "The Gears",
+    },
+    "red": {
+        "db": var.red_settings_db,
+        "settings": (
+            'auto_play_movie',
+            'auto_play_episode',
+        ),
+        "log": "Red Light",
     },
 }
 

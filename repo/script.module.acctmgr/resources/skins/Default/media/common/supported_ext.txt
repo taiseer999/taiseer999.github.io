@@ -8,5 +8,6 @@ Supported Scraper Packages:
 Supported Add-ons:
 1. Fen Light
 2. The Gears
-3. Umbrella
+3. Red Light
+4. Umbrella
 

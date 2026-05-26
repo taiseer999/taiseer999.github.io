@@ -26,14 +26,14 @@ class Auth:
 
         # =================== Copy Addon Data (settings.xml) ==================
         addons = [
-            ("Shadow",       var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
-            ("Ghost",        var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
-            ("The Chains",   var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
-            ("SALTS",        var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
+            ("Shadow",        var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
+            ("Ghost",         var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
+            ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
+            ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
             #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
             #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
             #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
-            ("Otaku",        var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
+            ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
             #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
         ]
 
@@ -46,41 +46,31 @@ class Auth:
                 base_path
             )
             
-        # ========================= Fen Light =========================
-        try:
-            if exists(var.chk_fenlt):
-                if not exists(var.chkset_fenlt):
-                    control.remake_fenlt_settings()
-                    xbmc.sleep(500)
-                    
-                if exists(var.chkset_fenlt):
-                    settings_db = var.fenlt_settings_db
-                    chk_auth = chk_auth_db.chk_auth(settings_db, "tb.token")
-                    
-                    if chk_auth != master_token:
-                        torbox_db.auth(settings_db)
-                        xbmc.sleep(300)
-                        control.remake_fenlt_settings()
-        except Exception as e:
-            log_utils.error(f"Fen Light TorBox Failed: {e}")
+        # ========================= Fen Light / The Gears / Red Light =========================
+        addons = (
+            ("Fen Light", var.chk_fenlt, var.chkset_fenlt, var.fenlt_settings_db, control.remake_fenlt_settings),
+            ("Gears", var.chk_gears, var.chkset_gears, var.gears_settings_db, control.remake_gears_settings),
+            ("Red Light", var.chk_red, var.chkset_red, var.red_settings_db, control.remake_red_settings),
+        )
 
-        # ========================= Gears =========================
-        try:
-            if exists(var.chk_gears):
-                if not exists(var.chkset_gears):
-                    control.remake_gears_settings()
-                    xbmc.sleep(500)
-                    
-                if exists(var.chkset_gears):
-                    settings_db = var.gears_settings_db
-                    chk_auth = chk_auth_db.chk_auth(settings_db, "tb.token")
-                    
-                    if chk_auth != master_token:
-                        torbox_db.auth(settings_db)
-                        xbmc.sleep(300)
-                        control.remake_gears_settings()
-        except Exception as e:
-            log_utils.error(f"Gears TorBox Failed: {e}")
+        for addon_name, chk_path, chkset_path, settings_db, remake_func in addons:
+            try:
+                if exists(chk_path):
+
+                    if not exists(chkset_path):
+                        remake_func()
+                        xbmc.sleep(500)
+
+                    if exists(chkset_path):
+                        chk_auth = chk_auth_db.chk_auth(settings_db, "tb.token")
+
+                        if chk_auth != master_token:
+                            torbox_db.auth(settings_db)
+                            xbmc.sleep(300)
+                            remake_func()
+
+            except Exception as e:
+                log_utils.error(f"{addon_name} TorBox Failed: {e}")
             
         # ========================= Umbrella =========================
         try:
@@ -117,7 +107,7 @@ class Auth:
 
         # =============== Dradis / Genocide ===============
         addons = [
-            ("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
+            #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
             ("Genocide", "plugin.video.genocide", var.chk_genocide, var.chkset_genocide),
         ]
 
@@ -153,6 +143,8 @@ class Auth:
                         for k, v in {
                             "tb.token": your_token,
                             "tb.account_id": your_acct_id,
+                            "debrid_use": 'true',
+                            "debrid_use_tr": 'true',
                         }.items():
                             addon.setSetting(k, v)
             except Exception as e:

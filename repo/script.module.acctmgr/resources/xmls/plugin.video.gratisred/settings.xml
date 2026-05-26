@@ -61,6 +61,7 @@
     <setting id="remove.hevc" default="true">false</setting>
     <setting id="remove.captcha" default="true">false</setting>
     <setting id="remove.dupes">true</setting>
+    <setting id="flaresolverr.url" default="true">http://127.0.0.1:8191/v1</setting>
     <setting id="lazy.spacer1" default="true" />
     <setting id="resolveURL.settings" default="true" />
     <setting id="filepursuit.api" default="true" />
@@ -111,11 +112,14 @@
     <setting id="provider.myvideolinks_net">true</setting>
     <setting id="provider.naijavault_com">true</setting>
     <setting id="provider.projectfreetv_cyou" default="true">false</setting>
+    <setting id="provider.projectfreetv_lol">true</setting>
     <setting id="provider.seriesloaded_ng">true</setting>
+    <setting id="provider.srstop_link">true</setting>
     <setting id="provider.stagatv_com">true</setting>
     <setting id="provider.tvmovieflix_com">true</setting>
     <setting id="provider.tvseries_in">true</setting>
     <setting id="provider.tvseries_video">true</setting>
+    <setting id="provider.watchseries_cyou">true</setting>
     <setting id="addon.caching">true</setting>
     <setting id="addon.caching_timeout">12</setting>
     <setting id="episode.thumbs" default="true">false</setting>
@@ -126,6 +130,6 @@
     <setting id="addon.debug_resolve" default="true">false</setting>
     <setting id="addon.log_providerdomains" default="true">false</setting>
     <setting id="dev.widget" default="true">false</setting>
-    <setting id="addon.lastversion" default="true">1.0.0</setting>
+    <setting id="addon.lastversion" default="true">1.1.0</setting>
     <setting id="addon.changelog.dismissed" default="true">true</setting>
 </settings>

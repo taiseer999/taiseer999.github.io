@@ -25,13 +25,16 @@ def check_api():
     
     current = get_trakt_sync_list()
 
-    # ================= Fen Light =================
-    if "Fen Light" in current and exists(var.chk_fenlt):
-        patched, msg = control.startup_patch(var.path_fenlt_service, addon_name="Fen Light")
+    # ================= Fen Light / The Gears / Red Light =================
+    patches = (
+        ("Fen Light", var.chk_fenlt, var.path_fenlt_service, "Fen Light"),
+        ("The Gears" or "Gears", var.chk_gears, var.path_gears_service, "The Gears"),
+        ("Red Light", var.chk_red, var.path_red_service, "Red Light"),
+    )
 
-    # ================= Gears =================
-    if "Gears" in current and exists(var.chk_gears):
-        patched, msg = control.startup_patch(var.path_gears_service, addon_name="The Gears")
+    for name, check_path, service_path, addon_name in patches:
+        if name in current and exists(check_path):
+            patched, msg = control.startup_patch(service_path, addon_name=addon_name)
 
     # ================= Umbrella =================
     if "Umbrella" in current and exists(var.chk_umb):
@@ -84,33 +87,20 @@ def check_api():
         except Exception as e:
             log_utils.error(f"Fen API Failed: {e}")'''
 
-    # ================= POV =================
-    if "POV" in current and exists(var.chk_pov):
-        patched, msg = control.startup_patch(var.path_pov_service)
-    
-    # ================= The Coalition =================
-    if "The Coalition" in current and exists(var.chk_coal):
-        patched, msg = control.startup_patch(var.path_coal_service)
+    # ================= POV / The Coalition / Dradis / Genocide / Homelander / Nightwing / Jokers Absolution =================
+    patches = (
+        ("POV", var.chk_pov, var.path_pov_service, "POV"),
+        ("The Coalition", var.chk_coal, var.path_coal_service, "The Coalition"),
+        #("Dradis", var.chk_dradis, var.path_dradis_service, "Dradis"),
+        ("Genocide", var.chk_genocide, var.path_genocide_service, "Genocide"),
+        ("Homelander", var.chk_home, var.path_home_service, "Homelander"),
+        ("Nightwing", var.chk_night, var.path_night_service, "Nightwing"),
+        ("Jokers Absolution", var.chk_absol, var.path_absol_service, "Jokers Absolution"),
+    )
 
-    # ================= Dradis =================
-    if "Dradis" in current and exists(var.chk_dradis):
-        patched, msg = control.startup_patch(var.path_dradis_service)
-
-    # ================= Genocide =================
-    if "Genocide" in current and exists(var.chk_genocide):
-        patched, msg = control.startup_patch(var.path_genocide_service)
-
-    # ================= Homelander =================
-    if "Homelander" in current and exists(var.chk_home):
-        patched, msg = control.startup_patch(var.path_home_service)
-
-    # ================= Nightwing =================
-    if "Nightwing" in current and exists(var.chk_night):
-        patched, msg = control.startup_patch(var.path_night_service)
-
-    # ================= Jokers Absolution =================
-    if "Jokers Absolution" in current and exists(var.chk_absol):
-        patched, msg = control.startup_patch(var.path_absol_service)
+    for name, check_path, service_path, addon_name in patches:
+        if name in current and exists(check_path):
+            patched, msg = control.startup_patch(service_path, addon_name=addon_name)
         
     # ================= Shadow =================
     if "Shadow" in current and exists(var.chk_shadow):
@@ -163,7 +153,7 @@ def check_api():
     # ================= The Crew =================
     if "The Crew" in current and exists(var.chk_crew):
         try:
-            patched, msg = control.startup_patch(var.path_crew_service)
+            patched, msg = control.startup_patch(var.path_crew_service, addon_name="The Crew")
             with open(var.path_crew, 'r') as f:
                 data = f.read()
             new_data = None
@@ -180,7 +170,7 @@ def check_api():
     # ================= SALTS =================
     if "SALTS" in current and exists(var.chk_salts):
         try:
-            patched, msg = control.startup_patch(var.path_salts_service)
+            patched, msg = control.startup_patch(var.path_salts_service, addon_name="SALTS")
             with open(var.path_salts, 'r') as f:
                 data = f.read()
             new_data = None
@@ -245,7 +235,7 @@ def check_api():
     # ================= Scrubs V2 =================
     if "Scrubs V2" in current and exists(var.chk_scrubs):
         try:
-            patched, msg = control.startup_patch(var.path_scrubs_service)
+            patched, msg = control.startup_patch(var.path_scrubs_service, addon_name="Scrubs V2")
             with open(var.path_scrubs, 'r') as f:
                 data = f.read()
             new_data = None
@@ -260,18 +250,18 @@ def check_api():
             log_utils.error(f"Scrubs V2 API Failed: {e}")
 
     # ================= Gratis Red =================
-    if "Gratis Red" in current and exists(var.chk_red):
+    if "Gratis Red" in current and exists(var.chk_redg):
         try:
-            patched, msg = control.startup_patch(var.path_red_service)
-            with open(var.path_red, 'r') as f:
+            patched, msg = control.startup_patch(var.path_redg_service, addon_name="Gratis Red")
+            with open(var.path_redg, 'r') as f:
                 data = f.read()
             new_data = None
             if var.client_am in data:
                 pass
             else:
-                new_data = data.replace(var.red_client, var.client_am).replace(var.red_secret, var.secret_am)
+                new_data = data.replace(var.redg_client, var.client_am).replace(var.redg_secret, var.secret_am)
             if new_data is not None:
-                with open(var.path_red, 'w') as f:
+                with open(var.path_redg, 'w') as f:
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"Gratis Red API Failed: {e}")
@@ -279,7 +269,7 @@ def check_api():
     # ================= TMDbH =================
     if "TMDb Helper" in current and exists(var.chk_tmdbh):
         try:
-            patched, msg = control.startup_patch(var.path_tmdbh_service)
+            patched, msg = control.startup_patch(var.path_tmdbh_service, addon_name="TMDb Helper")
             with open(var.path_tmdbh, 'r') as f:
                 data = f.read()
             new_data = None
@@ -313,7 +303,7 @@ def check_api():
     # ================= Trakt Add-on =================
     if "Trakt Addon" in current and exists(var.chk_trakt):
         try:
-            patched, msg = control.startup_patch(var.path_trakt_service)
+            patched, msg = control.startup_patch(var.path_trakt_service, addon_name="Trakt Add-on")
             with open(var.path_trakt, 'r') as f:
                 data = f.read()
             new_data = None

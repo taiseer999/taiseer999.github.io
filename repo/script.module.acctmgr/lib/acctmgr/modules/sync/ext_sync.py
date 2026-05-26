@@ -16,41 +16,31 @@ FEN_SUPPORTED_SCRAPERS = {var.coco_plugin_id,var.viper_plugin_id,}
 
 def auth_external(scraper_id, display_sc_name, display_umb_name, chk_scraper, log_name):
 
-    # ========================= Fen Light =========================
-    try:
-        if exists(var.chk_fenlt) and exists(chk_scraper):
-            if not exists(var.chkset_fenlt):
-                control.remake_fenlt_settings()
-                xbmc.sleep(500)
+    # ========================= Fen Light / The Gears / Red Light =========================
+    addons = (
+        ("Fen Light", var.chk_fenlt, var.chkset_fenlt, var.fenlt_settings_db, control.remake_fenlt_settings),
+        ("Gears", var.chk_gears, var.chkset_gears, var.gears_settings_db, control.remake_gears_settings),
+        ("Red Light", var.chk_red, var.chkset_red, var.red_settings_db, control.remake_red_settings),
+    )
 
-            if exists(var.chkset_fenlt):
-                settings_db = var.fenlt_settings_db
-                chk_auth = chk_auth_db.chk_auth(settings_db, "external_scraper.module")
+    for addon_name, chk_path, chkset_path, settings_db, remake_func in addons:
+        try:
+            if exists(chk_path) and exists(chk_scraper):
 
-                if chk_auth != scraper_id:
-                    ext_db.auth(display_sc_name, scraper_id, settings_db)
-                    xbmc.sleep(300)
-                    control.remake_fenlt_settings()
-    except Exception as e:
-        log_utils.error(f"Fen Light {log_name} External Provider Failed: {e}")
+                if not exists(chkset_path):
+                    remake_func()
+                    xbmc.sleep(500)
 
-    # ========================= Gears =========================
-    try:
-        if exists(var.chk_gears) and exists(chk_scraper):
-            if not exists(var.chkset_gears):
-                control.remake_gears_settings()
-                xbmc.sleep(500)
+                if exists(chkset_path):
+                    chk_auth = chk_auth_db.chk_auth(settings_db, "external_scraper.module")
 
-            if exists(var.chkset_gears):
-                settings_db = var.gears_settings_db
-                chk_auth = chk_auth_db.chk_auth(settings_db, "external_scraper.module")
+                    if chk_auth != scraper_id:
+                        ext_db.auth(display_sc_name, scraper_id, settings_db)
+                        xbmc.sleep(300)
+                        remake_func()
 
-                if chk_auth != scraper_id:
-                    ext_db.auth(display_sc_name, scraper_id, settings_db)
-                    xbmc.sleep(300)
-                    control.remake_gears_settings()
-    except Exception as e:
-        log_utils.error(f"Gears {log_name} External Provider Failed: {e}")
+        except Exception as e:
+            log_utils.error(f"{addon_name} {log_name} External Provider Failed: {e}")
 
     '''# ========================= Fen =========================
     try:

@@ -15,9 +15,8 @@ addon_id = 'script.module.acctmgr'
 
 # Scraper Variables
 coco_plugin_id = 'script.module.cocoscrapers'
-coco_mod_plugin_id = 'script.module.cocoscrapersmod'
+gears_plugin_id = 'script.module.gearsscrapers'
 mag_plugin_id = 'script.module.magneto'
-mag_mod_plugin_id = 'script.module.magnetomod'
 viper_plugin_id = 'script.module.viperscrapers'
 
 # Helpers
@@ -43,7 +42,6 @@ def trakt_menu():
                 name = acct_vwr.ADDONS[trakt]['name']
                 path = acct_vwr.ADDONS[trakt]['path']
                 auser = acct_vwr.addon_user_trakt(trakt)
-                set_user = acct_vwr.ADDONS[trakt]['name']
                 icon = acct_vwr.ADDONS[trakt]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[trakt]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('Trakt', trakt)
@@ -56,11 +54,13 @@ def trakt_menu():
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': trakt}, icon=icon, description='Your Trakt Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Fen Light[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Gears[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 else:
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_tk', 'name': trakt}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_tk', 'name': trakt}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
 
 def mdblist_menu():
@@ -84,7 +84,6 @@ def mdblist_menu():
                 name = acct_vwr.ADDONS[mdblist]['name']
                 path = acct_vwr.ADDONS[mdblist]['path']
                 auser = acct_vwr.addon_user_mdb(mdblist)
-                set_user = acct_vwr.ADDONS[mdblist]['name']
                 icon = acct_vwr.ADDONS[mdblist]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[mdblist]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('MDBList', mdblist)
@@ -96,7 +95,7 @@ def mdblist_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': mdblist}, icon=icon, description='Your MDBList Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
-                directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_mdb', 'name': mdblist}, icon=icon, fanart=fanart, menu=menu)
+                directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_mdb', 'name': mdblist}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
 
 def debrid_menu():
@@ -111,7 +110,6 @@ def debrid_menu():
                 name = acct_vwr.ADDONS[debrid]['name']
                 path = acct_vwr.ADDONS[debrid]['path']
                 auser = acct_vwr.addon_user_rd(debrid)
-                set_user = acct_vwr.ADDONS[debrid]['name']
                 icon = acct_vwr.ADDONS[debrid]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[debrid]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('Debrid', debrid)
@@ -124,9 +122,11 @@ def debrid_menu():
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': debrid}, icon=icon, description='Your Real-Debrid Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Fen Light[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Gears[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 else:
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_rd', 'name': debrid}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
@@ -144,7 +144,6 @@ def premiumize_menu():
                 name = acct_vwr.ADDONS[debrid]['name']
                 path = acct_vwr.ADDONS[debrid]['path']
                 auser = acct_vwr.addon_user_pm(debrid)
-                set_user = acct_vwr.ADDONS[debrid]['name']
                 icon = acct_vwr.ADDONS[debrid]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[debrid]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('Debrid', debrid)
@@ -157,9 +156,11 @@ def premiumize_menu():
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': debrid}, icon=icon, description='Your Premiumize Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Fen Light[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Gears[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 else:
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_pm', 'name': debrid}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
@@ -177,7 +178,6 @@ def alldebrid_menu():
                 name = acct_vwr.ADDONS[debrid]['name']
                 path = acct_vwr.ADDONS[debrid]['path']
                 auser = acct_vwr.addon_user_ad(debrid)
-                set_user = acct_vwr.ADDONS[debrid]['name']
                 icon = acct_vwr.ADDONS[debrid]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[debrid]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('Debrid', debrid)
@@ -190,9 +190,11 @@ def alldebrid_menu():
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': debrid}, icon=icon, description='Your All-Debrid Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
 
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Fen Light[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]Gears[/COLOR] Settings[/COLOR]', {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 else:
                     directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ad', 'name': debrid}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
@@ -209,7 +211,6 @@ def easydebrid_menu():
                 name = acct_vwr.ADDONS[ed]['name']
                 path = acct_vwr.ADDONS[ed]['path']
                 auser = acct_vwr.addon_user_ed(ed)
-                set_user = acct_vwr.ADDONS[ed]['name']
                 icon = acct_vwr.ADDONS[ed]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[ed]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('Easy Debrid', ed)
@@ -220,11 +221,11 @@ def easydebrid_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': ed}, icon=icon, description='Your Easy Debrid Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Fen Light'), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Gears'), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
                 else:
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_ed', 'name': ed}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ed', 'name': ed}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
                 
 def torbox_menu():
@@ -239,7 +240,6 @@ def torbox_menu():
                 name = acct_vwr.ADDONS[tb]['name']
                 path = acct_vwr.ADDONS[tb]['path']
                 auser = acct_vwr.addon_user_tb(tb)
-                set_user = acct_vwr.ADDONS[tb]['name']
                 icon = acct_vwr.ADDONS[tb]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[tb]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('TorBox', tb)
@@ -250,11 +250,13 @@ def torbox_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': tb}, icon=icon, description='Your TorBox Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Fen Light'), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Gears'), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 else:
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_tb', 'name': tb}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_tb', 'name': tb}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
                 
 def offcloud_menu():
@@ -269,7 +271,6 @@ def offcloud_menu():
                 name = acct_vwr.ADDONS[offc]['name']
                 path = acct_vwr.ADDONS[offc]['path']
                 auser = acct_vwr.addon_user_oc(oc)
-                set_user = acct_vwr.ADDONS[offc]['name']
                 icon = acct_vwr.ADDONS[offc]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[offc]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('OffCloud', offc)
@@ -280,11 +281,11 @@ def offcloud_menu():
                 else:
                     directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': offc}, icon=icon, description='Your Offcloud Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Fen Light'), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Gears'), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
                 else:
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_oc', 'name': offc}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_oc', 'name': offc}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
 
 def easynews_menu():
@@ -299,22 +300,23 @@ def easynews_menu():
                 name = acct_vwr.ADDONS[easy]['name']
                 path = acct_vwr.ADDONS[easy]['path']
                 auser = acct_vwr.addon_user_en(easy)
-                set_user = acct_vwr.ADDONS[easy]['name']
                 icon = acct_vwr.ADDONS[easy]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = acct_vwr.ADDONS[easy]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('OffCloud', easy)
                 menu.append((CONFIG.THEME1.format('{0} Settings'.format(name)), 'RunPlugin(plugin://{0}/?mode=opensettings&name={1}&url=easy)'.format(CONFIG.ADDON_ID, easy)))
 
                 if not auser:
-                    directory.add_file('{0} - [COLOR red]Not Authorized[/COLOR]'.format(name), {'name': easy}, icon=icon, description='Your Offcloud Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+                    directory.add_file('{0} - [COLOR red]Not Authorized[/COLOR]'.format(name), {'name': easy}, icon=icon, description='Your Easynews Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 else:
-                    directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': easy}, icon=icon, description='Your Offcloud Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
+                    directory.add_file('{0} - [COLOR springgreen]Authorized[/COLOR]'.format(name), {'name': easy}, icon=icon, description='Your Easynews Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Fen Light':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Fen Light'), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Gears'), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'The Gears'}, icon=icon, fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, fanart=fanart, menu=menu)
                 else:
-                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_oc', 'name': easy}, icon=icon, fanart=fanart, menu=menu)
+                    directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_en', 'name': easy}, icon=icon, fanart=fanart, menu=menu)
                 directory.add_separator()
 
 def ext_menu():
@@ -328,7 +330,6 @@ def ext_menu():
                 name = extit.EXTID[ext]['name']
                 path = extit.EXTID[ext]['path']
                 auser = extit.ext_user(ext)
-                set_user = extit.settings(ext)
                 icon = extit.EXTID[ext]['icon'] if os.path.exists(path) else CONFIG.ICON
                 fanart = extit.EXTID[ext]['fanart'] if os.path.exists(path) else CONFIG.ADDON_FANART
                 menu = create_addon_data_menu('External Providers', ext)
@@ -351,29 +352,35 @@ def ext_menu():
                     else:
                         directory.add_file('{0} - [COLOR springgreen]Viper Scrapers Synced[/COLOR]'.format(name), {'name': ext}, icon=icon, description='Your External Provider Authorizations', fanart=fanart, themeit=CONFIG.THEME2)
                 if name == 'Fen Light':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, coco_mod_plugin_id, mag_plugin_id, mag_mod_plugin_id,viper_plugin_id)):
-                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]'.format(set_user), {'mode': 'fenlt_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
-                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Fen Light'), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'fenlt_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
-                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Fen Light'), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
-                elif name == 'Gears':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, coco_mod_plugin_id, mag_plugin_id, mag_mod_plugin_id,viper_plugin_id)):
-                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]'.format(set_user), {'mode': 'gears_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
-                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Gears'), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_fenlt', 'name': 'Fen Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                elif name == 'The Gears':
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'gears_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
-                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format('Gears'), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_gears', 'name': 'Gears'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                elif name == 'Red Light':
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'red_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                    else:
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_red', 'name': 'Red Light'}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 #elif name == 'Fen':
-                    #if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, coco_mod_plugin_id, mag_plugin_id, mag_mod_plugin_id,viper_plugin_id)):
-                        #directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]'.format(set_user), {'mode': 'fen_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
-                        #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                    #if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                        #directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'fen_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
+                        #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     #else:
-                        #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                        #directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 elif name == 'Umbrella':
-                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, coco_mod_plugin_id, mag_plugin_id, mag_mod_plugin_id,viper_plugin_id)):
-                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]'.format(set_user), {'mode': 'umb_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
-                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                    if any(xbmc.getCondVisibility(f'System.HasAddon({addon_id})') for addon_id in (coco_plugin_id, gears_plugin_id, mag_plugin_id, viper_plugin_id)):
+                        directory.add_file('[COLOR goldenrod]Change [COLOR gold]Scraper[/COLOR] Package[/COLOR]', {'mode': 'umb_scrapers', 'name': ext}, icon=icon, description='Change External Scraper Package', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                     else:
-                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(set_user), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
+                        directory.add_file('[COLOR blue]Open [COLOR dodgerblue]{0}[/COLOR] Settings[/COLOR]'.format(name), {'mode': 'opensettings_ext', 'name': ext}, icon=icon, description='Open add-on settings menu', fanart=fanart, menu=menu)
                 directory.add_separator()
 
 def create_addon_data_menu(add='', name=''):

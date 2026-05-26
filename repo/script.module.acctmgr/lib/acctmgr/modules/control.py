@@ -12,10 +12,6 @@ from acctmgr.modules import var
 from acctmgr.modules import log_utils
 
 #Variables
-addon = xbmcaddon.Addon
-addonObject = addon('script.module.acctmgr')
-addonInfo = addonObject.getAddonInfo
-getLangString = xbmcaddon.Addon().getLocalizedString
 condVisibility = xbmc.getCondVisibility
 execute = xbmc.executebuiltin
 monitor = xbmc.Monitor()
@@ -39,19 +35,40 @@ def getKodiVersion():
 	return int(xbmc.getInfoLabel("System.BuildVersion")[:2])
 
 def _acctmgr():
-    return xbmcaddon.Addon("script.module.acctmgr")
+    try:
+        return xbmcaddon.Addon('script.module.acctmgr')
+    except RuntimeError:
+        return None
+
+def addonInfo(id):
+    addon = _acctmgr()
+    if addon is None:
+        return ''
+    return addon.getAddonInfo(id)
 
 def setting(id):
-    return _acctmgr().getSetting(id)
+    addon = _acctmgr()
+    if addon is None:
+        return ''
+    return addon.getSetting(id)
 
 def setSetting(id, value):
-    return _acctmgr().setSetting(id, value)
+    addon = _acctmgr()
+    if addon is None:
+        return None
+    return addon.setSetting(id, value)
 
 def setAddonSetting(addon_id, id, value):
     try:
         return xbmcaddon.Addon(addon_id).setSetting(id, value)
     except Exception:
         return None
+
+def getLangString(id):
+    addon = _acctmgr()
+    if addon is None:
+        return ''
+    return addon.getLocalizedString(id)
 
 def lang(language_id):
 	text = getLangString(language_id)
@@ -79,7 +96,7 @@ def addonPath():
 	except: return translatePath(addonInfo('path'))
 
 def artPath():
-	return os.path.join(xbmcaddon.Addon('script.module.acctmgr').getAddonInfo('path'), 'resources', 'icons')
+	return iconsPath()
 
 def openSettings(query=None, id=addonInfo('id')):
 	try:
@@ -183,7 +200,7 @@ def notification(title=None, message=None, icon=None, time=3000, sound=False):
 	elif icon == 'ERROR': icon = xbmcgui.NOTIFICATION_ERROR
 	dialog.notification(heading, body, icon, time, sound=sound)
 
-# COPY ADDON DATA (settings.xml)
+# COPY ADDON DATA (If required, copy the add-ons default settings.xml)
 def copy_addon_settings(name, chk_addon, ud_path, chk_setting, base_path):
     try:
         if not xbmcvfs.exists(chk_addon):
@@ -199,9 +216,9 @@ def copy_addon_settings(name, chk_addon, ud_path, chk_setting, base_path):
             xbmcvfs.copy(base_path, chk_setting)
 
     except Exception as e:
-        log_utils.error(f"{name} settings bootstrap failed: {e}")
+        log_utils.error(f"{name} copy addon settings.xml failed: {e}")
 
-# SETTINGS CACHE HELPERS
+# PLUGIN HELPERS - REMAKE SETTINGS / RESTORE DEFAULT TRAKT API KEYS
 def run_plugin_action(url, label=None):
     try:
         xbmc.executebuiltin(f'RunPlugin("{url}")')
@@ -212,18 +229,64 @@ def run_plugin_action(url, label=None):
         log_utils.error(f"Failed to run {label or url}: {e}")
         return False
 
+# Fen Light
 def remake_fenlt_settings():
     return run_plugin_action(
         'plugin://plugin.video.fenlight/?mode=sync_settings&silent=true&isFolder=false',
         'Fen Light settings remake'
     )
 
+def restore_fenlt_tkclient():
+    return run_plugin_action(
+        'plugin://plugin.video.fenlight/?mode=settings_manager.restore_setting_default&setting_id=trakt.client&silent=true',
+        'Fen Light Trakt Client restore'
+    )
+
+def restore_fenlt_tksecret():
+    return run_plugin_action(
+        'plugin://plugin.video.fenlight/?mode=settings_manager.restore_setting_default&setting_id=trakt.secret&silent=true',
+        'Fen Light Trakt Secret restore'
+    )
+
+# The Gears
 def remake_gears_settings():
     return run_plugin_action(
         'plugin://plugin.video.gears/?mode=sync_settings&silent=true&isFolder=false',
         'The Gears settings remake'
     )
 
+def restore_gears_tkclient():
+    return run_plugin_action(
+        'plugin://plugin.video.gears/?mode=settings_manager.restore_setting_default&setting_id=trakt.client&silent=true',
+        'The Gears Trakt Client restore'
+    )
+
+def restore_gears_tksecret():
+    return run_plugin_action(
+        'plugin://plugin.video.gears/?mode=settings_manager.restore_setting_default&setting_id=trakt.secret&silent=true',
+        'The Gears Trakt Secret restore'
+    )
+
+# Red Light
+def remake_red_settings():
+    return run_plugin_action(
+        'plugin://plugin.video.redlight/?mode=sync_settings&silent=true&isFolder=false',
+        'Red Light settings remake'
+    )
+
+def restore_red_tkclient():
+    return run_plugin_action(
+        'plugin://plugin.video.redlight/?mode=settings_manager.restore_setting_default&setting_id=trakt.client&silent=true',
+        'Red Light Trakt Client restore'
+    )
+
+def restore_red_tksecret():
+    return run_plugin_action(
+        'plugin://plugin.video.redlight/?mode=settings_manager.restore_setting_default&setting_id=trakt.secret&silent=true',
+        'Red Light Trakt Secret restore'
+    )
+
+# Others
 def remake_coal_settings():
     return run_plugin_action(
         'plugin://plugin.video.coalition/?mode=clean_settings_window_properties&name=Clean+Settings+Cache&isFolder=false',
@@ -237,7 +300,7 @@ def remake_pov_settings():
     )
 
 # FEN LIGHT TRAKT CACHE
-def remake_fenlight_trakt_cache(plugin_id, name):  # Fen Light & The Gears
+def remake_trakt_cache(plugin_id, name):  # Fen Light & The Gears
     main_conn = None
     trakt_conn = None
 
@@ -307,10 +370,13 @@ def remake_fenlight_trakt_cache(plugin_id, name):  # Fen Light & The Gears
 
 
 def remake_fenlt_trakt_cache():  # Fen Light
-    return remake_fenlight_trakt_cache('plugin.video.fenlight', 'Fen Light')
+    return remake_trakt_cache('plugin.video.fenlight', 'Fen Light')
 
 def remake_gears_trakt_cache():  # The Gears
-    return remake_fenlight_trakt_cache('plugin.video.gears', 'The Gears')
+    return remake_trakt_cache('plugin.video.gears', 'The Gears')
+
+def remake_redlt_trakt_cache():  # Red Light
+    return remake_trakt_cache('plugin.video.redlight', 'Red Light')
 
 
 # FEN & THE COALITION TRAKT CACHE
@@ -415,11 +481,12 @@ def remake_pov_trakt_cache():
         except Exception:
             pass
 
-# RESTORE DEFAULT API KEYS
+# RESTORE DEFAULT API KEYS - ***NO LONGER IN USE - Default keys are now restored via add-on builtin***
 def apply_default_trakt_api_keys_db(): # Restore default API keys for settings.db
     services = (
-        ("Fen Light", var.fenlt_settings_db, var.fenlt_client, var.fenlt_secret),
+        ("Fen Light", var.fenlt_settings_db, var.chains_client, var.chains_secret),
         ("The Gears", var.gears_settings_db, var.chains_client, var.chains_secret),
+        ("Red Light", var.red_settings_db, var.chains_client, var.chains_secret),
     )
 
     results = []
@@ -497,7 +564,7 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
         #(var.path_gen,    var.genesis_client,        var.genesis_secret,        "Genesis",      var.client_am,            var.secret_am),
         #(var.path_sync,   var.syncher_client,        var.syncher_secret,        "Syncher",      var.client_am,            var.secret_am),
         (var.path_scrubs,  var.scrubs_client,         var.scrubs_secret,         "Scrubs V2",    var.client_am,            var.secret_am),
-        (var.path_red,     var.red_client,            var.red_secret,            "Gratis Red",  var.client_am,             var.secret_am),
+        (var.path_redg,    var.redg_client,           var.redg_secret,           "Gratis Red",   var.client_am,            var.secret_am),
         (var.path_tmdbh,   var.tmdbh_client,          var.tmdbh_secret,          "TMDb Helper",  var.client_am,            var.secret_am),
         #(var.path_tkplay, var.tkplay_client,         var.tkplay_secret,         "Trakt Player", var.client_am,            var.secret_am),
         (var.path_trakt,   var.trakt_client_obs_str,  var.trakt_secret_obs_str,  "Trakt",        var.client_am_obs_str,    var.secret_am_obs_str),
@@ -539,7 +606,7 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
     settings_targets = (
         ("plugin.video.pov",        var.chk_pov,       var.pov_client,    var.pov_secret,    "POV"),
         ("plugin.video.coalition",  var.chk_coal,      var.chains_client, var.chains_secret, "The Coalition"),
-        ("plugin.video.dradis",     var.chk_dradis,    var.dradis_client, var.dradis_secret, "Dradis"),
+        #("plugin.video.dradis",     var.chk_dradis,    var.dradis_client, var.dradis_secret, "Dradis"),
         ("plugin.video.genocide",   var.chk_genocide,  var.chains_client, var.chains_secret, "Genocide"),
     )
 
@@ -963,6 +1030,7 @@ def unpatch_all_services():
         # Fen Light & Forks
         ("Fen Light", var.path_fenlt_service),
         ("The Gears", var.path_gears_service),
+        ("Red Light", var.path_red_service),
         
         # Uniques
         ("Umbrella", var.path_umb_service),
@@ -974,7 +1042,7 @@ def unpatch_all_services():
         ("The Coalition", var.path_coal_service),
         
         # Dradis & Forks
-        ("Dradis", var.path_dradis_service),
+        #("Dradis", var.path_dradis_service),
         ("Genocide", var.path_genocide_service),
         
         # Homelander & Forks
@@ -984,7 +1052,7 @@ def unpatch_all_services():
         
         #Scrubs V2 & Forks
         ("Scrubs V2", var.path_scrubs_service),
-        ("Gratis Red", var.path_red_service),
+        ("Gratis Red", var.path_redg_service),
         
         # Others
         ("The Crew", var.path_crew_service),

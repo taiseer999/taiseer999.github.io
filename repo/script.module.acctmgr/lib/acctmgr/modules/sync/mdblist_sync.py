@@ -48,7 +48,7 @@ class Auth:
         # ============================= Umbrella / Dradis / POV / Coalition / TMDbH =============================
         for addon_id, chk_addon, chk_settings, label, mdb_user_key, mdb_api_key, indicators_act, wtch_indicators, remake_settings in (
             ("plugin.video.umbrella",          var.chk_umb,    var.chkset_umb,    "Umbrella",   None,               "mdblist.api",    None,                     None,                 None),
-            ("plugin.video.dradis",            var.chk_dradis, var.chkset_dradis, "Dradis",     "mdblist.username", "mdblist.token",  None,                     None,                 None),
+            #("plugin.video.dradis",            var.chk_dradis, var.chkset_dradis, "Dradis",     "mdblist.username", "mdblist.token",  None,                     None,                 None),
             ("plugin.video.pov",               var.chk_pov,    var.chkset_pov,    "POV",        "mdblist_user",     "mdblist.token",  "mdbl_indicators_active", "watched_indicators", control.remake_pov_settings),
             ("plugin.video.coalition",         var.chk_coal,   var.chkset_coal,   "Coalition",  None,               "mdblist.token",  None,                     None,                 control.remake_coal_settings),
             ("plugin.video.themoviedb.helper", var.chk_tmdbh,  var.chkset_tmdbh,  "TMDbH",      None,               "mdblist_apikey", None,                     None,                 None),

@@ -72,10 +72,11 @@ class MaxQL:
             ("Absolution",  var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
             ("The Crew",    var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
             ("SALTS",       var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",       var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",     var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",     var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
+            #("Orion",      var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
+            #("Genesis",    var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
+            #("Syncher",    var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Scrubs V2",   var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
+            ("Gratis Red",  var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
             ("Otaku",       var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
         )
 
@@ -88,33 +89,29 @@ class MaxQL:
                 base_path
             )
 
-        # ======================= Fen Light =======================
-        try:
-            if exists(var.chk_fenlt):
-                if not exists(var.chkset_fenlt):
-                    control.remake_fenlt_settings()
-                    xbmc.sleep(500)
+        # ======================= Fen Light / The Gears / Red Light =======================
+        addons = (
+            ("Fen Light", var.chk_fenlt, var.chkset_fenlt, control.remake_fenlt_settings),
+            ("Gears", var.chk_gears, var.chkset_gears, control.remake_gears_settings),
+            ("Red Light", var.chk_red, var.chkset_red, control.remake_red_settings),
+        )
 
-                if exists(var.chkset_fenlt):
-                    maxql_db.apply_quality(mode)
-                    xbmc.sleep(300)
-                    control.remake_fenlt_settings()
-        except Exception as e:
-            log_utils.error(f"Fen Light MaxQL Failed: {e}")
+        for addon_name, chk_path, chkset_path, remake_func in addons:
+            try:
+                if exists(chk_path):
 
-        # ======================= Gears =======================
-        try:
-            if exists(var.chk_gears):
-                if not exists(var.chkset_gears):
-                    control.remake_gears_settings()
-                    xbmc.sleep(500)
+                    if not exists(chkset_path):
+                        remake_func()
+                        xbmc.sleep(500)
 
-                if exists(var.chkset_gears):
-                    maxql_db.apply_quality(mode)
-                    xbmc.sleep(300)
-                    control.remake_gears_settings()
-        except Exception as e:
-            log_utils.error(f"Gears MaxQL Failed: {e}")
+                    if exists(chkset_path):
+                        maxql_db.apply_quality(mode)
+                        xbmc.sleep(300)
+                        remake_func()
+
+            except Exception as e:
+                log_utils.error(f"{addon_name} MaxQL Failed: {e}")
+
 
         # ===================== Umbrella ======================
         try:
@@ -122,6 +119,7 @@ class MaxQL:
                 xbmcaddon.Addon("plugin.video.umbrella").setSetting("hosts.quality", num_quality)
         except Exception as e:
             log_utils.error(f"Umbrella MaxQL Failed: {e}")
+
 
         # ===================== Fen / POV / The Coalition =====================
         for name, plugin, chk_addon, chk_setting, remake_settings in (
@@ -142,9 +140,17 @@ class MaxQL:
             except Exception as e:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
+
+        # ===================== Seren ======================
+        try:
+            if exists(var.chk_seren) and exists(var.chkset_seren):
+                xbmcaddon.Addon("plugin.video.seren").setSetting("general.maxResolution", num_quality)
+        except Exception as e:
+            log_utils.error(f"Seren MaxQL Failed: {e}")
+            
         # ===================== Dradis / Genocide =====================
         for name, plugin, chk_addon, chk_setting in (
-            ("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
+            #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
             ("Genocide", "plugin.video.genocide", var.chk_genocide, var.chkset_genocide),
         ):
             try:
@@ -152,6 +158,7 @@ class MaxQL:
                     xbmcaddon.Addon(plugin).setSetting("hosts.quality", num_quality)
             except Exception as e:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
+
 
         # ===================== Shadow / Ghost =====================
         for name, plugin, chk_addon, chk_setting in (
@@ -166,6 +173,7 @@ class MaxQL:
             except Exception as e:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
+
         # =========== Homelander / Nightwing / Jokers Absolution ===========
         for name, plugin, chk_addon, chk_setting in (
             ("Homelander",        "plugin.video.homelander", var.chk_home,  var.chkset_home),
@@ -178,12 +186,14 @@ class MaxQL:
             except Exception as e:
                 log_utils.error(f"{name} MaxQL Failed: {e}")
 
+
         '''# ===================== Seren =====================
         try:
             if exists(var.chk_seren) and exists(var.chkset_seren):
                 xbmcaddon.Addon("plugin.video.seren").setSetting("general.maxResolution", num_quality)
         except Exception as e:
             log_utils.error("Seren MaxQL Failed")'''
+
 
         # ===================== The Crew =====================
         try:
@@ -192,12 +202,14 @@ class MaxQL:
         except Exception as e:
             log_utils.error(f"The Crew MaxQL Failed: {e}")
 
+
         # ===================== SALTS =====================
         try:
             if exists(var.chk_salts) and exists(var.chkset_salts):
                 xbmcaddon.Addon("plugin.video.salts").setSetting("min_quality", salts_quality)
         except Exception as e:
             log_utils.error(f"SALTS MaxQL Failed: {e}")
+
 
         '''# ===================== Orion =====================
         try:
@@ -206,12 +218,14 @@ class MaxQL:
         except Exception as e:
             log_utils.error("Orion MaxQL Failed")
 
+
         # ===================== Genesis =====================
         try:
             if exists(var.chk_gen) and exists(var.chkset_gen):
                 xbmcaddon.Addon("plugin.video.genesis").setSetting("playback_quality", genesis_quality)
         except Exception as e:
             log_utils.error("Genesis MaxQL Failed")
+
 
         # ===================== Syncher =====================
         try:
@@ -220,12 +234,14 @@ class MaxQL:
         except Exception as e:
             log_utils.error("Syncher MaxQL Failed")'''
 
+
         # ===================== Otaku =====================
         try:
             if exists(var.chk_otaku) and exists(var.chkset_otaku):
                 xbmcaddon.Addon("plugin.video.otaku").setSetting("general.maxResolution", otaku_quality)
         except Exception as e:
             log_utils.error(f"Otaku MaxQL Failed: {e}")
+
 
         # ===================== Scrubs V2 =====================
         try:
@@ -234,12 +250,14 @@ class MaxQL:
         except Exception as e:
             log_utils.error(f"Scrubs V2 MaxQL Failed: {e}")
 
+
         # ===================== Gratis Red =====================
         try:
-            if exists(var.chk_red) and exists(var.chkset_red):
+            if exists(var.chk_redg) and exists(var.chkset_redg):
                 xbmcaddon.Addon("plugin.video.gratisred").setSetting("quality.max", num_quality)
         except Exception as e:
             log_utils.error(f"Gratis Red MaxQL Failed: {e}")
+
             
         '''# ===================== Trakt Player =====================
         try:

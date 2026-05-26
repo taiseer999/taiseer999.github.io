@@ -29,7 +29,8 @@ class tk_list():
 
         # Fen Light & Forks
         add_if(var.chk_fenlt,       'Fen Light')
-        add_if(var.chk_gears,       'Gears')
+        add_if(var.chk_gears,       'The Gears')
+        add_if(var.chk_red,         'Red Light')
         
         # Uniques
         add_if(var.chk_umb,         'Umbrella')
@@ -41,7 +42,7 @@ class tk_list():
         add_if(var.chk_coal,        'The Coalition')
         
         # Dradis & Forks
-        add_if(var.chk_dradis,      'Dradis')
+        #add_if(var.chk_dradis,      'Dradis')
         add_if(var.chk_genocide,    'Genocide')
         
         # Shadow & Forks
@@ -55,7 +56,7 @@ class tk_list():
         add_if(var.chk_absol,       'Jokers Absolution')
         #Scrubs V2 & Forks
         add_if(var.chk_scrubs,      'Scrubs V2')
-        add_if(var.chk_red,         'Gratis Red')
+        add_if(var.chk_redg,        'Gratis Red')
         # Others
         add_if(var.chk_crew,        'The Crew')
         add_if(var.chk_salts,       'SALTS')
