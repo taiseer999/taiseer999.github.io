@@ -20,7 +20,11 @@ ADDONS = os.path.join(HOME, 'addons')
 USER_DATA = os.path.join(HOME,      'userdata')
 ADDON_DATA = xbmcvfs.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
 DIALOG = xbmcgui.Dialog()
-KODI_VER = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
+try:
+    _ver_str = xbmc.getInfoLabel("System.BuildVersion").split()[0]
+    KODI_VER = float(_ver_str[:4])
+except (ValueError, IndexError):
+    KODI_VER = 20.0
 repositoryurl = ''
 repositoryxml = ''
 
@@ -34,10 +38,11 @@ def MainMenu():
 
 def skinWIN():
 	xbmc.executebuiltin('Dialog.Close(busydialog)')
+	xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
 	fold = glob.glob(os.path.join(ADDONS, 'skin*'))
 	name = []; addonids = []
 	for folder in sorted(fold, key = lambda x: x):
-		foldername = os.path.split(folder[:-1])[1]
+		foldername = os.path.basename(folder.rstrip(os.sep))
 		xml = os.path.join(folder, 'addon.xml')
 		if os.path.exists(xml):
 			xbmc.log('xml = ' + str(xml), xbmc.LOGINFO)

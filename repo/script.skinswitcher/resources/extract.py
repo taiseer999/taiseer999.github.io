@@ -4,7 +4,11 @@ import sys
 COLOR1 = 'white'
 COLOR2 = 'white'
 
-KODIV = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
+try:
+    _ver_str = xbmc.getInfoLabel("System.BuildVersion").split()[0]
+    KODIV = float(_ver_str[:4])
+except (ValueError, IndexError):
+    KODIV = 20.0
 if KODIV > 17:
 	from . import zfile as zipfile
 else:
@@ -42,15 +46,12 @@ def allWithProgress(_in, _out, dp, ignore, title):
 		except UnicodeDecodeError:
 			continue
 		count += 1; prog = int(count / nFiles * 100); size += item.file_size
-		line1  = '%s [B][Errors:%s][/B]' % (title, errors)
-		line2  = '[B]File:[/B]%s/%s ' % (count, int(nFiles))
-		line2 += '[B]Size:[/B] %s/%s' % (convertSize(size), zipsize)
-		line3  = '%s' % item.filename
 		try:
 			zin.extract(item, _out)
 		except Exception as e:
 			pass
-		dp.update(prog, str(line1) + '\n' + str(line2) + '\n' + line3)
+		msg = '%s [B][Errors:%s][/B] | [B]File:[/B]%s/%s [B]Size:[/B] %s/%s | %s' % (title, errors, count, int(nFiles), convertSize(size), zipsize, item.filename)
+		dp.update(prog, msg)
 		if dp.iscanceled(): break
 	if dp.iscanceled():
 		dp.close()

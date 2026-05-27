@@ -28,7 +28,11 @@ PACKAGES         = os.path.join(ADDONS,    'packages')
 DATABASE       = os.path.join(USERDATA,  'Database')
 DIALOG           = xbmcgui.Dialog()
 DP               = xbmcgui.DialogProgress()
-KODIV            = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
+try:
+    _ver_str = xbmc.getInfoLabel("System.BuildVersion").split()[0]
+    KODIV = float(_ver_str[:4])
+except (ValueError, IndexError):
+    KODIV = 20.0
 
 
 def installFromKodi(plugin, over=True):
@@ -63,7 +67,7 @@ def installAddon(name, url):
 	try: os.remove(lib)
 	except: pass
 	downloader.download(url, lib, DP)
-	title = '[B]Installing:[/B]] %s' % (name)
+	title = '[B]Installing:[/B] %s' % (name)
 	DP.update(0, 'Please Wait')
 	percent, errors, error = extract.all(lib,ADDONS,DP, title=title)
 	DP.update(0, 'Installing Dependencies')
@@ -92,7 +96,7 @@ def installDep(name, DP=None):
 		for depends in match:
 			if not 'xbmc.python' in depends:
 				if not DP == None:
-					DP.update(0, '', '%s' % depends)
+					DP.update(0, '%s' % depends)
 				try:
 					add   = xbmcaddon.Addon(id=depends)
 					name2 = add.getAddonInfo('name')
@@ -118,17 +122,30 @@ def openURL(url):
 	return link
 
 def addonDatabase(addon=None, state=1, array=False):
+	"""Enable/disable addon(s) via JSON-RPC (Kodi 19+) with SQLite fallback."""
+	import json
+	if KODIV >= 19:
+		addons = addon if array else [addon]
+		for item in addons:
+			try:
+				enabled = (state != 2)
+				query = json.dumps({"jsonrpc": "2.0", "method": "Addons.SetAddonEnabled",
+					"params": {"addonid": item, "enabled": enabled}, "id": 1})
+				xbmc.executeJSONRPC(query)
+			except Exception as e:
+				xbmc.log("addonDatabase JSONRPC error for %s: %s" % (item, str(e)), xbmc.LOGINFO)
+		return True
+	# Legacy SQLite path for Kodi < 19
 	dbfile = latestDB('Addons')
 	dbfile = os.path.join(DATABASE, dbfile)
 	installedtime = str(datetime.now())[:-7]
-	if os.path.exists(dbfile):
-		try:
-			textdb = database.connect(dbfile)
-			textexe = textdb.cursor()
-		except Exception as e:
-			xbmc.log("DB Connection Error: %s" % str(e), xbmc.LOGINFO)
-			return False
-	else: return False
+	if not os.path.exists(dbfile): return False
+	try:
+		textdb = database.connect(dbfile)
+		textexe = textdb.cursor()
+	except Exception as e:
+		xbmc.log("DB Connection Error: %s" % str(e), xbmc.LOGINFO)
+		return False
 	if state == 2:
 		try:
 			textexe.execute("DELETE FROM installed WHERE addonID = ?", (addon,))
