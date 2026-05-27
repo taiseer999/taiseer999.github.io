@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.seren" version="3.3.132" name="Seren" provider-name="Nixgates">
+<addon id="plugin.video.seren" version="3.3.159" name="Seren" provider-name="Nixgates">
     <requires>
         <import addon="xbmc.addon" version="17.9.910" />
         <import addon="xbmc.python" version="3.0.0" />
@@ -9,6 +9,7 @@
         <import addon="script.module.inputstreamhelper" version="0.5.10" optional="true"/>
         <import addon="script.module.unidecode" version="1.1.1"/>
         <import addon="script.module.myconnpy" version="8.0.18"/>
+        <import addon="script.module.curl_cffi" version="0.15.0" optional="true"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="seren.py">
         <provides>video</provides>
@@ -65,6 +66,12 @@
             <screenshot>resources/screenshots/screenshot-04.jpg</screenshot>
         </assets>
         <news>
+            Changelog 3.3.141
+            [NEW] Add script.module.curl_cffi as optional dependency in addon.xml — enables Kodi native C-extension loader to mount the lib/ path, allowing curl_cffi Chrome120 TLS impersonation to initialise correctly in Kodi 22. Falls back gracefully to cloudscraper on platforms where the module is absent.
+
+            Changelog 3.3.133
+            [FIX] OpenInfo-aware watchdog stop: when user presses backspace/stop during playback and Seren was launched from an OpenInfo session (detected via openinfo.watchdog.gen window property), the PlaybackWatchdog now exits its retry loop immediately instead of auto-cycling to the next source up to maxRetries times. Non-OpenInfo sessions and genuine stream errors/stalls are unaffected.
+
             Changelog 3.3.94
             [NEW] OpenInfo integration — last-resolved quality memory: on every successful, content-verified resolution, write a tiny per-title record (imdb_id keyed) with quality / debrid_provider / release_title / season+episode / timestamp to addon_data/plugin.video.seren/openinfo_last_resolutions.json. OpenInfo's info dialog (7.0.19+) reads this file and surfaces "Last played: 4K HDR · Real-Debrid" before the user hits play. Self-contained: Seren writes its own data dir, OpenInfo reads cross-addon, Seren has no awareness of OpenInfo. Atomic write (tmp + os.replace), 200-row cap with oldest-first eviction, fully wrapped in try so a cache failure can never affect playback.
 
