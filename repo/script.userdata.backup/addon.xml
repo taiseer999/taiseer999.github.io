@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="script.userdata.backup"
+       name="ABUKARIM Backup"
+       version="1.0.1"
+       provider-name="Custom">
+
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="xbmc.gui" version="5.18.0"/>
+  </requires>
+
+  <extension point="xbmc.python.script"
+             library="default.py">
+    <provides>executable</provides>
+  </extension>
+
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">ABUKARIM Backup &amp; Restore</summary>
+    <description lang="en_GB">Backs up and restores all Kodi userdata/addon_data, excluding script.skinshortcuts, script.skinvariables, and all plugin.video.themoviedb.helper files except settings.xml.</description>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+    <platform>all</platform>
+  </extension>
+
+</addon>
