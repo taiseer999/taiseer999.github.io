@@ -1409,7 +1409,7 @@ Many thanks to those who assisted with the TMDb Helper patch and restoring the i
 		<news>INFO: For latest changes see Changelog within add-on.</news>
 		<assets><icon>salts.png</icon><fanart>salts_fanart.jpg</fanart></assets>
 	</extension>
-</addon><addon id="plugin.video.seren" version="3.3.159" name="Seren" provider-name="Nixgates">
+</addon><addon id="plugin.video.seren" version="3.3.159.1" name="Seren" provider-name="Nixgates">
     <requires>
         <import addon="xbmc.addon" version="17.9.910" />
         <import addon="xbmc.python" version="3.0.0" />
