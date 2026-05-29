@@ -6,6 +6,8 @@ from .config import KODI
 from .logger import logger
 from .accounts import KEYWORDS
 
+AUTH_STATE_SUFFIXES = ("enabled", "enable", "isauthed", "authorized", "authenticated")
+
 def _safe_member_parts(member):
     path = PurePosixPath(member)
     if path.is_absolute() or any(part in ("", "..") for part in path.parts):
@@ -27,6 +29,33 @@ def _is_auth_setting(setting_id):
     setting_id = (setting_id or "").lower()
     return any(keyword in setting_id for keyword in KEYWORDS)
 
+def _auth_prefix(setting_id):
+    setting_id = (setting_id or "").lower()
+    if "." in setting_id:
+        return setting_id.split(".", 1)[0]
+
+    for keyword in KEYWORDS:
+        if keyword in setting_id:
+            prefix = setting_id.split(keyword, 1)[0].strip("._-")
+            if prefix:
+                return prefix
+
+    return ""
+
+def _is_related_auth_state(setting_id, auth_prefixes):
+    setting_id = (setting_id or "").lower()
+    if not setting_id or not auth_prefixes:
+        return False
+
+    separator = "." if "." in setting_id else "_"
+    parts = setting_id.split(separator)
+    if len(parts) < 2:
+        return False
+
+    prefix = parts[0]
+    suffix = parts[-1]
+    return prefix in auth_prefixes and suffix in AUTH_STATE_SUFFIXES
+
 def _decode_xml(raw):
     try:
         return raw.decode("utf-8")
@@ -41,10 +70,19 @@ def _setting_value(setting):
 def _extract_auth_settings(xml_text):
     values = {}
     root = ET.fromstring(xml_text)
+    all_settings = []
+    auth_prefixes = set()
 
     for setting in root.findall("setting"):
         setting_id = setting.get("id")
-        if not _is_auth_setting(setting_id):
+        all_settings.append((setting_id, setting))
+        if _is_auth_setting(setting_id):
+            prefix = _auth_prefix(setting_id)
+            if prefix:
+                auth_prefixes.add(prefix)
+
+    for setting_id, setting in all_settings:
+        if not _is_auth_setting(setting_id) and not _is_related_auth_state(setting_id, auth_prefixes):
             continue
 
         value, storage = _setting_value(setting)
@@ -109,6 +147,20 @@ def _merge_auth_settings(z, addon, fallback_accounts):
         setting_id = setting.get("id")
         if setting_id:
             current[setting_id.lower()] = setting
+
+    auth_prefixes = set()
+    for backup_setting in auth_values.values():
+        prefix = _auth_prefix(backup_setting["id"])
+        if prefix:
+            auth_prefixes.add(prefix)
+
+    for setting_id in current:
+        if setting_id not in auth_values and _is_related_auth_state(setting_id, auth_prefixes):
+            auth_values[setting_id] = {
+                "id": current[setting_id].get("id"),
+                "value": "true",
+                "storage": "text"
+            }
 
     changed = False
     for setting_key, backup_setting in auth_values.items():

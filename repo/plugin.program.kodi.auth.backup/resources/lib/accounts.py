@@ -4,21 +4,63 @@ from pathlib import Path
 from .config import KODI
 
 KEYWORDS = ["token", "api", "key", "auth", "secret", "username", "password"]
+AUTH_STATE_SUFFIXES = ("enabled", "enable", "isauthed", "authorized", "authenticated")
+
+def auth_prefix(setting_id):
+    setting_id = (setting_id or "").lower()
+    if "." in setting_id:
+        return setting_id.split(".", 1)[0]
+
+    for keyword in KEYWORDS:
+        if keyword in setting_id:
+            prefix = setting_id.split(keyword, 1)[0].strip("._-")
+            if prefix:
+                return prefix
+
+    return ""
+
+def is_auth_setting(setting_id):
+    setting_id = (setting_id or "").lower()
+    return any(keyword in setting_id for keyword in KEYWORDS)
+
+def is_related_auth_state(setting_id, auth_prefixes):
+    setting_id = (setting_id or "").lower()
+    if not setting_id or not auth_prefixes:
+        return False
+
+    separator = "." if "." in setting_id else "_"
+    parts = setting_id.split(separator)
+    if len(parts) < 2:
+        return False
+
+    prefix = parts[0]
+    suffix = parts[-1]
+    return prefix in auth_prefixes and suffix in AUTH_STATE_SUFFIXES
 
 def extract_tokens(xml_text):
     result = {}
 
     try:
         root = ET.fromstring(xml_text)
+        all_settings = []
+        auth_prefixes = set()
 
         for setting in root.findall("setting"):
-            sid = setting.get("id", "").lower()
+            sid = setting.get("id", "")
+            all_settings.append((sid, setting))
+            if is_auth_setting(sid):
+                prefix = auth_prefix(sid)
+                if prefix:
+                    auth_prefixes.add(prefix)
+
+        for sid, setting in all_settings:
+            sid = (sid or "").lower()
             value = setting.get("value") if "value" in setting.attrib else setting.text
 
             if not value:
                 continue
 
-            if any(k in sid for k in KEYWORDS):
+            if is_auth_setting(sid) or is_related_auth_state(sid, auth_prefixes):
                 result[sid] = value
 
     except Exception as e:
