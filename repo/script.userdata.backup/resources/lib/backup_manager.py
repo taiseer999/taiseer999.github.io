@@ -35,13 +35,14 @@ def _log(msg, level=xbmc.LOGINFO):
 class BackupManager:
 
     def __init__(self):
+        self.userdata_path   = xbmcvfs.translatePath('special://userdata/')
         self.addon_data_path = xbmcvfs.translatePath('special://userdata/addon_data/')
         self.home_path       = xbmcvfs.translatePath('special://home/')
 
     # ------------------------------------------------------------------ UI ---
 
     def run(self):
-        choices = ['Backup addon_data', 'Restore addon_data', 'Cancel']
+        choices = ['Backup', 'Restore', 'Cancel']
         dialog  = xbmcgui.Dialog()
         idx     = dialog.select('%s – Main Menu' % ADDON_NAME, choices)
 
@@ -62,7 +63,7 @@ class BackupManager:
             return
 
         timestamp   = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-        zip_name    = 'kodi_addon_data_backup_%s.zip' % timestamp
+        zip_name    = 'kodi_userdata_backup_%s.zip' % timestamp
         zip_path    = os.path.join(dest_folder, zip_name)
 
         pbar = xbmcgui.DialogProgress()
@@ -122,7 +123,8 @@ class BackupManager:
 
         if not dialog.yesno(
             ADDON_NAME,
-            'This will overwrite existing addon_data files.\n\n'
+            'This will overwrite existing addon_data files, '
+            'guisettings.xml, and keymaps.\n\n'
             'Continue with restore?'
         ):
             return
@@ -141,7 +143,7 @@ class BackupManager:
                     pct = int((i + 1) / total * 100)
                     pbar.update(pct, 'Restoring… (%d / %d)\n%s' % (i + 1, total, member))
 
-                    dest = os.path.join(self.addon_data_path, member)
+                    dest = os.path.join(self.userdata_path, member)
                     dest_dir = os.path.dirname(dest)
 
                     if not xbmcvfs.exists(dest_dir):
@@ -172,14 +174,44 @@ class BackupManager:
 
     def _collect_files(self):
         """
-        Walk addon_data and return list of (absolute_path, archive_name) tuples
-        applying the exclusion rules at the top of this file.
+        Walk userdata and return list of (absolute_path, archive_name) tuples.
+
+        Included:
+          • userdata/addon_data/**  – with per-addon exclusion rules
+          • userdata/guisettings.xml
+          • userdata/keymaps/**
+
+        All archive names are relative to userdata/ so restore can place
+        every file back at the correct path under special://userdata/.
         """
         collected = []
 
+        # ── guisettings.xml ───────────────────────────────────────────────────
+        guisettings = os.path.join(self.userdata_path, 'guisettings.xml')
+        if os.path.isfile(guisettings):
+            arc_name = os.path.relpath(guisettings, self.userdata_path)
+            collected.append((guisettings, arc_name))
+            _log('Including guisettings.xml')
+        else:
+            _log('guisettings.xml not found, skipping.', xbmc.LOGWARNING)
+
+        # ── keymaps/ ──────────────────────────────────────────────────────────
+        keymaps_dir = os.path.join(self.userdata_path, 'keymaps')
+        if os.path.isdir(keymaps_dir):
+            for root, dirs, files in os.walk(keymaps_dir):
+                for fname in files:
+                    abs_path = os.path.join(root, fname)
+                    arc_name = os.path.relpath(abs_path, self.userdata_path)
+                    collected.append((abs_path, arc_name))
+            _log('Included keymaps/ directory.')
+        else:
+            _log('keymaps/ directory not found, skipping.', xbmc.LOGWARNING)
+
+        # ── addon_data/ ───────────────────────────────────────────────────────
         if not os.path.isdir(self.addon_data_path):
             _log('addon_data path not found: %s' % self.addon_data_path,
                  xbmc.LOGWARNING)
+            _log('Collected %d files for backup.' % len(collected))
             return collected
 
         for addon_id in os.listdir(self.addon_data_path):
@@ -203,7 +235,7 @@ class BackupManager:
                         if fname in allowed:
                             abs_path = os.path.join(root, fname)
                             arc_name = os.path.relpath(abs_path,
-                                                       self.addon_data_path)
+                                                       self.userdata_path)
                             collected.append((abs_path, arc_name))
                 continue
 
@@ -211,7 +243,7 @@ class BackupManager:
             for root, dirs, files in os.walk(addon_dir):
                 for fname in files:
                     abs_path = os.path.join(root, fname)
-                    arc_name = os.path.relpath(abs_path, self.addon_data_path)
+                    arc_name = os.path.relpath(abs_path, self.userdata_path)
                     collected.append((abs_path, arc_name))
 
         _log('Collected %d files for backup.' % len(collected))
