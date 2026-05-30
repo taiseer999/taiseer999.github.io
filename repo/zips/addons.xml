@@ -3311,6 +3311,16 @@ By using or contributing to this repository, you agree that the developer is not
       <icon>icon.png</icon>
     </assets>
   </extension>
+</addon><addon id="resource.uisounds.amber" version="1.0.0" name="Amber UI Sounds" provider-name="Jester">
+  <requires>
+    <import addon="kodi.resource" version="1.0.0" />
+  </requires>
+  <extension point="kodi.resource.uisounds" />
+  <extension point="kodi.addon.metadata">
+    <summary lang="en">Amber UI sounds</summary>
+    <description lang="en">Amber UI sounds</description>
+    <platform>all</platform>
+  </extension>
 </addon><addon id="resource.uisounds.androidtv" version="1.0.0" name="Android TV UI Sounds" provider-name="takoi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
@@ -5615,11 +5625,11 @@ v1.0.1 (2019-08-06)
             <screenshot>resources/screenshot-01.png</screenshot>
         </assets>
     </extension>
-</addon><addon id="script.userdata.backup" name="ABUKARIM Backup" version="1.0.2" provider-name="Custom">
+</addon><addon id="script.userdata.backup" name="ABUKARIM Backup" version="1.0.3" provider-name="Custom">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
-    <import addon="xbmc.gui" version="5.18.0" />
+    
   </requires>
 
   <extension point="xbmc.python.script" library="default.py">

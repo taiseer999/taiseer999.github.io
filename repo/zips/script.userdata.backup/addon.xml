@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="script.userdata.backup"
        name="ABUKARIM Backup"
-       version="1.0.2"
+       version="1.0.3"
        provider-name="Custom">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
-    <import addon="xbmc.gui" version="5.18.0"/>
+    
   </requires>
 
   <extension point="xbmc.python.script"
