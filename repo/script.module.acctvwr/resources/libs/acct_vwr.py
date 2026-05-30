@@ -28,7 +28,7 @@ ORDER = ['fenlt',
          'pov',
          #'dradis',
          'genocide',
-         'coal',    # Premiumize Only
+         #'coal',    # Premiumize Only
          'seren',
          'shadow',
          'ghost',
@@ -274,25 +274,6 @@ ADDONS = {
         #EN
         'default_en'  : 'easynews_password',
         'data_en'     : ['easynews_password', 'easynews_user', 'provider.easynews'],
-    },
-
-    #THE COALITION
-    'coal': {
-        'name'        : 'The Coalition',
-        'plugin'      : 'plugin.video.coalition',
-        'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition'),
-        'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition', 'icon.png'),
-        'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition', 'fanart.png'),
-        'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.coalition', 'settings.xml'),
-        #TK
-        'default_tk'  : 'trakt.token',
-        'data_tk'     : ['trakt.refresh', 'trakt.expires', 'trakt.token', 'trakt_user', 'trakt_indicators_active', 'watched_indicators'], # Trakt Client/Secret NOT required here for revoke due to default API keys being stored in the settings.xml
-        #MDB
-        'default_mdb'  : 'mdblist.token',
-        'data_mdb'     : ['mdblist.token'],
-        #PM
-        'default_pm'  : 'pm.token',
-        'data_pm'     : ['pm.account_id', 'pm.token', 'pm.enabled'],
     },
 
     #SHADOW
@@ -952,6 +933,25 @@ def wipe_addons(do, who, service):
     'data_en'     : ['easynews_password', 'easynews_user', 'provider.easynews'],
 },
 
+#THE COALITION
+'coal': {
+    'name'        : 'The Coalition',
+    'plugin'      : 'plugin.video.coalition',
+    'path'        : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition'),
+    'icon'        : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition', 'icon.png'),
+    'fanart'      : os.path.join(CONFIG.ADDONS, 'plugin.video.coalition', 'fanart.png'),
+    'settings'    : os.path.join(CONFIG.ADDON_DATA, 'plugin.video.coalition', 'settings.xml'),
+    #TK
+    'default_tk'  : 'trakt.token',
+    'data_tk'     : ['trakt.refresh', 'trakt.expires', 'trakt.token', 'trakt_user', 'trakt_indicators_active', 'watched_indicators'], # Trakt Client/Secret NOT required here for revoke due to default API keys being stored in the settings.xml
+    #MDB
+    'default_mdb'  : 'mdblist.token',
+    'data_mdb'     : ['mdblist.token'],
+    #PM
+    'default_pm'  : 'pm.token',
+    'data_pm'     : ['pm.account_id', 'pm.token', 'pm.enabled'],
+},
+    
 #SEREN
 'seren': {
     'name'        : 'Seren',

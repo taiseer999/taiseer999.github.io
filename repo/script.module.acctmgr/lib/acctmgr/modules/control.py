@@ -5,6 +5,7 @@ import os
 import re
 import json
 import sqlite3
+import shutil
 import importlib
 import datetime
 import textwrap
@@ -481,6 +482,167 @@ def remake_pov_trakt_cache():
         except Exception:
             pass
 
+# INSTALL TMDB HELPER PLAYERS
+def install_tmdbh_players():
+	dialog = xbmcgui.Dialog()
+	amgr_icon = joinPath(iconsPath(), 'acctmgr.png')
+	src = xbmcvfs.translatePath('special://home/addons/script.module.acctmgr/resources/players/')
+	players_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/players/')
+	reconfigured_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/reconfigured_players/')
+
+	if xbmcvfs.exists(players_path):
+		dst = players_path
+	else:
+		dst = reconfigured_path
+		if not xbmcvfs.exists(dst):
+			xbmcvfs.mkdirs(dst)
+
+	player_files = (
+		('Fen Light', 'plugin.video.fenlight', 'fenlight.json'),
+		('The Gears', 'plugin.video.gears', 'gears.json'),
+		('Red Light', 'plugin.video.redlight', 'redlight.json'),
+		('Umbrella', 'plugin.video.umbrella', 'umbrella.json'),
+		('POV', 'plugin.video.pov', 'pov.json'),
+		('Seren', 'plugin.video.seren', 'seren.json'),
+		('Genocide', 'plugin.video.genocide', 'genocide.json'),
+		('Shadow', 'plugin.video.shadow', 'shadow.json'),
+		('Ghost', 'plugin.video.ghost', 'ghost.json'),
+		('Homelander', 'plugin.video.homelander', 'homelander.json'),
+		('Nightwing', 'plugin.video.nightwing', 'nightwing.json'),
+		('Jokers Absolution', 'plugin.video.absolution', 'absolution.json'),
+		('The Crew', 'plugin.video.thecrew', 'thecrew.json'),
+		('Scrubs V2', 'plugin.video.scrubsv2', 'scrubsv2.json'),
+		('Gratis Red', 'plugin.video.gratisred', 'gratisred.json'),
+		('IMDb Trailers', 'plugin.video.imdb.trailers', 'imdbtrailers.json'),
+		('Magneto (AIO Streams)', 'script.module.magneto', 'magneto.json'),
+	)
+
+	players = []
+
+	for label, addon_id, file_name in player_files:
+		if not xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id):
+			continue
+
+		src_file = os.path.join(src, file_name)
+		dst_file = os.path.join(dst, file_name)
+
+		if xbmcvfs.exists(dst_file):
+			continue
+
+		if not xbmcvfs.exists(src_file):
+			xbmc.log('AM Lite: Missing TMDb Helper player file %s' % file_name, xbmc.LOGWARNING)
+			continue
+
+		players.append({'label': label, 'file_name': file_name, 'src': src_file, 'dst': dst_file})
+
+	if not players:
+		notification('AM Lite', 'No available players to install!', icon=amgr_icon)
+		return False
+
+	labels = ['Install All Players'] + [i['label'] for i in players]
+	selected = dialog.multiselect('Choose Players to Install', labels)
+
+	if selected is None:
+		return False
+
+	if 0 in selected:
+		selected_players = players
+	else:
+		selected_players = [players[index - 1] for index in selected]
+
+	copied = 0
+
+	for player in selected_players:
+		try:
+			if xbmcvfs.copy(player['src'], player['dst']):
+				copied += 1
+			else:
+				shutil.copy2(player['src'], player['dst'])
+				copied += 1
+
+		except Exception as e:
+			xbmc.log('AM Lite: Failed copying TMDb Helper player %s - %s' % (player['file_name'], e), xbmc.LOGERROR)
+
+	notification('AM Lite', 'Installed %s player(s)' % copied, icon=amgr_icon)
+
+	return copied > 0
+
+# DELETE TMDB HELPER PLAYERS
+def delete_tmdbh_players():
+	dialog = xbmcgui.Dialog()
+	amgr_icon = joinPath(iconsPath(), 'acctmgr.png')
+	players_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/players/')
+	reconfigured_path = xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/reconfigured_players/')
+
+	if xbmcvfs.exists(players_path):
+		dst = players_path
+	else:
+		dst = reconfigured_path
+
+	player_files = (
+		('Fen Light', 'fenlight.json'),
+		('The Gears', 'gears.json'),
+		('Red Light', 'redlight.json'),
+		('Umbrella', 'umbrella.json'),
+		('POV', 'pov.json'),
+		('Seren', 'seren.json'),
+		('Genocide', 'genocide.json'),
+		('Shadow', 'shadow.json'),
+		('Ghost', 'ghost.json'),
+		('Homelander', 'homelander.json'),
+		('Nightwing', 'nightwing.json'),
+		('Jokers Absolution', 'absolution.json'),
+		('The Crew', 'thecrew.json'),
+		('Scrubs V2', 'scrubsv2.json'),
+		('Gratis Red', 'gratisred.json'),
+		('IMDb Trailers', 'imdbtrailers.json'),
+		('Magneto (AIO Streams)', 'magneto.json'),
+	)
+
+	players = []
+
+	for label, file_name in player_files:
+		dst_file = os.path.join(dst, file_name)
+
+		if not xbmcvfs.exists(dst_file):
+			continue
+
+		players.append({'label': label, 'file_name': file_name, 'dst': dst_file})
+
+	if not players:
+		notification('AM Lite', 'No available players to uninstall!', icon=amgr_icon)
+		return False
+
+	labels = ['Uninstall All Players'] + [i['label'] for i in players]
+	selected = dialog.multiselect('Choose Players to Uninstall', labels)
+
+	if selected is None:
+		return False
+
+	if 0 in selected:
+		if not dialog.yesno('AM Lite', 'Uninstall all TMDb Helper players?'):
+			return False
+
+		selected_players = players
+	else:
+		selected_players = [players[index - 1] for index in selected]
+
+		if not dialog.yesno('AM Lite', 'Uninstall %s selected player(s)?' % len(selected_players)):
+			return False
+
+	deleted = 0
+
+	for player in selected_players:
+		try:
+			if xbmcvfs.delete(player['dst']):
+				deleted += 1
+		except Exception as e:
+			xbmc.log('AM Lite: Failed deleting TMDb Helper player %s - %s' % (player['file_name'], e), xbmc.LOGERROR)
+
+	notification('AM Lite', 'Uninstalled %s player(s)' % deleted, icon=amgr_icon)
+
+	return deleted > 0
+
 # RESTORE DEFAULT API KEYS - ***NO LONGER IN USE - Default keys are now restored via add-on builtin***
 def apply_default_trakt_api_keys_db(): # Restore default API keys for settings.db
     services = (
@@ -552,30 +714,36 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
 
     # Restore default keys in python files
     file_targets = (
-        (var.path_umb,     var.umb_client,            var.umb_secret,            "Umbrella",     var.client_am,            var.secret_am),
-        #(var.path_seren,  var.seren_client,          var.seren_secret,          "Seren",        var.client_am,            var.secret_am),
-        #(var.path_fen,    var.fen_client,            var.fen_secret,            "Fen",          var.client_am,            var.secret_am),
-        (var.path_shadow,  var.shadow_client,         var.shadow_secret,         "Shadow",       var.client_am,            var.secret_am),
-        (var.path_ghost,   var.ghost_client,          var.ghost_secret,          "Ghost",        var.client_am,            var.secret_am),
-        (var.path_chains,  var.thechains_client,      var.thechains_secret,      "The Chains",   var.client_am,            var.secret_am),
-        (var.path_crew,    var.crew_client,           var.crew_secret,           "The Crew",     var.client_am,            var.secret_am),
-        (var.path_salts,   var.salts_client,          var.salts_secret,          "SALTS",        var.client_am,            var.secret_am),
-        #(var.path_orion,  var.orion_client,          var.orion_secret,          "Orion",        var.client_am,            var.secret_am),
-        #(var.path_gen,    var.genesis_client,        var.genesis_secret,        "Genesis",      var.client_am,            var.secret_am),
-        #(var.path_sync,   var.syncher_client,        var.syncher_secret,        "Syncher",      var.client_am,            var.secret_am),
-        (var.path_scrubs,  var.scrubs_client,         var.scrubs_secret,         "Scrubs V2",    var.client_am,            var.secret_am),
-        (var.path_redg,    var.redg_client,           var.redg_secret,           "Gratis Red",   var.client_am,            var.secret_am),
-        (var.path_tmdbh,   var.tmdbh_client,          var.tmdbh_secret,          "TMDb Helper",  var.client_am,            var.secret_am),
-        #(var.path_tkplay, var.tkplay_client,         var.tkplay_secret,         "Trakt Player", var.client_am,            var.secret_am),
-        (var.path_trakt,   var.trakt_client_obs_str,  var.trakt_secret_obs_str,  "Trakt",        var.client_am_obs_str,    var.secret_am_obs_str),
+        (var.chk_umb,           var.path_umb,     var.umb_client,            var.umb_secret,            "Umbrella",     var.client_am,            var.secret_am),
+        #(var.chk_seren,        var.path_seren,  var.seren_client,          var.seren_secret,          "Seren",        var.client_am,            var.secret_am),
+        #(var.chk_fen,          var.path_fen,    var.fen_client,            var.fen_secret,            "Fen",          var.client_am,            var.secret_am),
+        (var.chk_shadow,        var.path_shadow,  var.shadow_client,         var.shadow_secret,         "Shadow",       var.client_am,            var.secret_am),
+        (var.chk_ghost,         var.path_ghost,   var.ghost_client,          var.ghost_secret,          "Ghost",        var.client_am,            var.secret_am),
+        (var.chk_chains,        var.path_chains,  var.thechains_client,      var.thechains_secret,      "The Chains",   var.client_am,            var.secret_am),
+        (var.chk_crew,          var.path_crew,    var.crew_client,           var.crew_secret,           "The Crew",     var.client_am,            var.secret_am),
+        (var.chk_salts,         var.path_salts,   var.salts_client,          var.salts_secret,          "SALTS",        var.client_am,            var.secret_am),
+        #(var.chk_orion,        var.path_orion,  var.orion_client,          var.orion_secret,          "Orion",        var.client_am,            var.secret_am),
+        #(var.chk_gen,          var.path_gen,    var.genesis_client,        var.genesis_secret,        "Genesis",      var.client_am,            var.secret_am),
+        #(var.chk_sync,         var.path_sync,   var.syncher_client,        var.syncher_secret,        "Syncher",      var.client_am,            var.secret_am),
+        (var.chk_scrubs,        var.path_scrubs,  var.scrubs_client,         var.scrubs_secret,         "Scrubs V2",    var.client_am,            var.secret_am),
+        (var.chk_redg,          var.path_redg,    var.redg_client,           var.redg_secret,           "Gratis Red",   var.client_am,            var.secret_am),
+        (var.chk_tmdbh,         var.path_tmdbh,   var.tmdbh_client,          var.tmdbh_secret,          "TMDb Helper",  var.client_am,            var.secret_am),
+        #(var.chk_tkplay,       var.path_tkplay, var.tkplay_client,         var.tkplay_secret,         "Trakt Player", var.client_am,            var.secret_am),
+        (var.chk_trakt,         var.path_trakt,   var.trakt_client_obs_str,  var.trakt_secret_obs_str,  "Trakt",        var.client_am_obs_str,    var.secret_am_obs_str),
     )
 
-    for path, default_client, default_secret, name, current_client, current_secret in file_targets:
+    for chk_path, path, default_client, default_secret, name, current_client, current_secret in file_targets:
         try:
-            if not xbmcvfs.exists(path):
-                xbmc.log(f"AM Lite: restore default API keys [{name}]: file not found -> {path}", xbmc.LOGINFO)
-                results.append((name, False, "file not found"))
+            if not xbmcvfs.exists(chk_path):
+                xbmc.log(f"AM Lite: restore default API keys [{name}]: addon not found", xbmc.LOGINFO)
+                results.append((name, False, "addon not found"))
                 continue
+
+            else:
+                if not xbmcvfs.exists(path):
+                        xbmc.log(f"AM Lite: restore default API keys [{name}]: file not found -> {path}", xbmc.LOGINFO)
+                        results.append((name, False, "file not found"))
+                        continue
 
             with open(path, "r", encoding="utf-8") as f:
                 data = f.read()
@@ -605,7 +773,7 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
     # Restore default keys in settings.xml only if AM Lite keys are currently applied
     settings_targets = (
         ("plugin.video.pov",        var.chk_pov,       var.pov_client,    var.pov_secret,    "POV"),
-        ("plugin.video.coalition",  var.chk_coal,      var.chains_client, var.chains_secret, "The Coalition"),
+        #("plugin.video.coalition",  var.chk_coal,      var.chains_client, var.chains_secret, "The Coalition"),
         #("plugin.video.dradis",     var.chk_dradis,    var.dradis_client, var.dradis_secret, "Dradis"),
         ("plugin.video.genocide",   var.chk_genocide,  var.chains_client, var.chains_secret, "Genocide"),
     )
@@ -1028,49 +1196,55 @@ def inject_startup_snippet(data, startup_snippet, addon_name=None):
 def unpatch_all_services():
     services = (
         # Fen Light & Forks
-        ("Fen Light", var.path_fenlt_service),
-        ("The Gears", var.path_gears_service),
-        ("Red Light", var.path_red_service),
+        ("Fen Light", var.chk_fenlt, var.path_fenlt_service),
+        ("The Gears", var.chk_gears, var.path_gears_service),
+        ("Red Light", var.chk_red, var.path_red_service),
         
         # Uniques
-        ("Umbrella", var.path_umb_service),
-        #("Seren", var.path_seren_service),
+        ("Umbrella", var.chk_umb, var.path_umb_service),
+        #("Seren", var.chk_seren, var.path_seren_service),
         
         # Fen & Forks
-        #("Fen", var.path_fen_service),
-        ("POV", var.path_pov_service),
-        ("The Coalition", var.path_coal_service),
+        #("Fen", var.chk_fen, var.path_fen_service),
+        ("POV", var.chk_pov, var.path_pov_service),
+        #("The Coalition", var.chk_coal, var.path_coal_service),
         
         # Dradis & Forks
-        #("Dradis", var.path_dradis_service),
-        ("Genocide", var.path_genocide_service),
+        #("Dradis", var.chk_dradis, var.path_dradis_service),
+        ("Genocide", var.chk_genocide, var.path_genocide_service),
         
         # Homelander & Forks
-        ("Homelander", var.path_home_service),
-        ("Nightwing", var.path_night_service),
-        ("Jokers Absolution", var.path_absol_service),
+        ("Homelander", var.chk_home, var.path_home_service),
+        ("Nightwing", var.chk_night, var.path_night_service),
+        ("Jokers Absolution", var.chk_absol, var.path_absol_service),
         
         #Scrubs V2 & Forks
-        ("Scrubs V2", var.path_scrubs_service),
-        ("Gratis Red", var.path_redg_service),
+        ("Scrubs V2", var.chk_scrubs, var.path_scrubs_service),
+        ("Gratis Red", var.chk_redg, var.path_redg_service),
         
         # Others
-        ("The Crew", var.path_crew_service),
-        ("SALTS", var.path_salts_service),
-        #("Genesis", var.path_gen_service),
-        ("TMDbH", var.path_tmdbh_service),
-        #("Trakt Player", var.path_tkplay_service),
-        ("Trakt Add-on", var.path_trakt_service),
+        ("The Crew", var.chk_crew, var.path_crew_service),
+        ("SALTS", var.chk_salts, var.path_salts_service),
+        #("Genesis", var.chk_gen, var.path_gen_service),
+        ("TMDbH", var.chk_tmdbh, var.path_tmdbh_service),
+        #("Trakt Player", var.chk_tkplay, var.path_tkplay_service),
+        ("Trakt Add-on", var.chk_trakt, var.path_trakt_service),
     )
 
     results = []
 
-    for name, path in services:
+    for name, chk_path, path in services:
         try:
-            if not xbmcvfs.exists(path):
-                xbmc.log(f"AM Lite: restore default service [{name}]: not found", xbmc.LOGWARNING)
-                results.append((name, path, False, "not found"))
+            if not xbmcvfs.exists(chk_path):
+                xbmc.log(f"AM Lite: restore default service [{name}]: addon not found", xbmc.LOGINFO)
+                results.append((name, False, "addon not found"))
                 continue
+        
+            else:
+                    if not xbmcvfs.exists(path):
+                        xbmc.log(f"AM Lite: restore default service [{name}]: not found", xbmc.LOGWARNING)
+                        results.append((name, path, False, "not found"))
+                        continue
 
             patched, msg = startup_unpatch(path)
             msg_l = msg.lower() if msg else ""

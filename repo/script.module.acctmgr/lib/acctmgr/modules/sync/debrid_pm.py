@@ -108,7 +108,7 @@ class Auth:
         for addon_id, chk_addon, chk_settings, label, remake_settings in (
             #("plugin.video.fen",        var.chk_fen,  var.chkset_fen,  "Fen", None),
             ("plugin.video.pov",        var.chk_pov,  var.chkset_pov,  "POV", control.remake_pov_settings),
-            ("plugin.video.coalition",  var.chk_coal, var.chkset_coal, "Coalition", control.remake_coal_settings),
+            #("plugin.video.coalition",  var.chk_coal, var.chkset_coal, "Coalition", control.remake_coal_settings),
         ):
             try:
                 if exists(chk_addon) and exists(chk_settings):

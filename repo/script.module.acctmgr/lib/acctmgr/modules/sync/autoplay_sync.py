@@ -98,7 +98,7 @@ class AutoPlay:
         # ===================== POV / The Coalition =====================
         for name, plugin, chk_addon, chk_setting, remake_settings in (
             ("POV", "plugin.video.pov", var.chk_pov, var.chkset_pov, control.remake_pov_settings),
-            ("The Coalition", "plugin.video.coalition", var.chk_coal, var.chkset_coal, control.remake_coal_settings),
+            #("The Coalition", "plugin.video.coalition", var.chk_coal, var.chkset_coal, control.remake_coal_settings),
         ):
             try:
                 if exists(chk_addon) and exists(chk_setting):

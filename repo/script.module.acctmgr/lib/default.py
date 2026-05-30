@@ -1122,9 +1122,12 @@ elif action == 'extReSync':
                 control.openSettings()
                 
 elif action == 'extViewer':
-        control.closeAll()
-        xbmc.sleep(300)
-        execute('ActivateWindow(10001,"plugin://script.module.acctvwr/?mode=extscrapers",return)')
+	if not any((exists(var.chk_fenlt), exists(var.chk_gears), exists(var.chk_umb), exists(var.chk_red))):
+                control.notification('AM Lite', 'No supported add-ons installed!', icon=amgr_icon)
+                raise SystemExit
+	control.closeAll()
+	xbmc.sleep(300)
+	execute('ActivateWindow(Videos,"plugin://script.module.acctvwr/?mode=extscrapers",return)')
 
 #MAXQL
 elif action == 'setUHD':
@@ -1166,6 +1169,24 @@ elif action == 'setAUTO':
         xbmc.sleep(500)
         control.notification('AM Lite', 'Autoplay Set!', icon=amgr_icon)
         xbmc.sleep(3000)
+        control.openSettings()
+
+#TMDB HELPER PLAYERS (Install)
+elif action == 'setPLAYER':
+        if not xbmcvfs.exists(var.chk_tmdbh):
+                control.notification('AM Lite', 'TMdb Helper is NOT installed!', icon=amgr_icon)
+                raise SystemExit
+        control.install_tmdbh_players()
+        xbmc.sleep(500)
+        control.openSettings()
+
+#TMDB HELPER PLAYERS (Remove)
+elif action == 'delPLAYER':
+        if not xbmcvfs.exists(var.chk_tmdbh):
+                control.notification('AM Lite', 'TMdb Helper is NOT installed!', icon=amgr_icon)
+                raise SystemExit
+        control.delete_tmdbh_players()
+        xbmc.sleep(500)
         control.openSettings()
         
 #VIEW SUPPORTED ADD-ONS

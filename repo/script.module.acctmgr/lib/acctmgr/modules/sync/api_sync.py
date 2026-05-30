@@ -90,7 +90,7 @@ def check_api():
     # ================= POV / The Coalition / Dradis / Genocide / Homelander / Nightwing / Jokers Absolution =================
     patches = (
         ("POV", var.chk_pov, var.path_pov_service, "POV"),
-        ("The Coalition", var.chk_coal, var.path_coal_service, "The Coalition"),
+        #("The Coalition", var.chk_coal, var.path_coal_service, "The Coalition"),
         #("Dradis", var.chk_dradis, var.path_dradis_service, "Dradis"),
         ("Genocide", var.chk_genocide, var.path_genocide_service, "Genocide"),
         ("Homelander", var.chk_home, var.path_home_service, "Homelander"),

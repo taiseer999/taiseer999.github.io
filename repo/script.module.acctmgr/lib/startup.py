@@ -288,7 +288,7 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 		#var.path_seren_service,
 		#var.path_fen_service,
 		var.path_pov_service,
-		var.path_coal_service,
+		#var.path_coal_service,
 		#var.path_dradis_service,
 		var.path_genocide_service,
 		var.path_home_service,

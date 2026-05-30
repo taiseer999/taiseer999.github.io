@@ -97,31 +97,8 @@
 		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=easynewsReSync)"  visible="!eq(-2,)" />
 		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=easynewsRevoke)"  visible="!eq(-3,)" />
 	</category>
-	<category label="Startup">
-		<setting type="lsep" label="Update Notifications" />
-		<setting id="check_for_update" type="bool" label="Enable Update Notification" default="true" />
-		<setting id="am_last_prepare" type="text" default="" visible="false" />
-		<setting id="am_trakt_ready" type="bool" default="false" visible="false" />
-		<setting id="api.service" type="bool" label="Trakt API Service" visible="false" default="false" />
-		<!-- Services -->
-		<setting type="lsep" label="Sync Authorization(s) with Supported Add-ons" />
-		<setting id="sync.mdb.service"  type="bool" label="MDBList" visible="true" default="false"/>
-      		<setting id="sync.rd.service"  type="bool" label="Real-Debrid" visible="true" default="false"/>
-      		<setting id="sync.pm.service"  type="bool" label="Premiumize" visible="true" default="false"/>
-      		<setting id="sync.ad.service"  type="bool" label="All-Debrid" visible="true" default="false"/>
-      		<setting id="sync.tb.service"  type="bool" label="TorBox" visible="true" default="false"/>
-      		<setting id="sync.en.service"  type="bool" label="Easynews" visible="true" default="false"/>
-	</category>
-	<category label="Tools">
-		<setting type="lsep" label="Set Max Resolution" />
-		<setting type="action" label="Set 4K Max" option="close" action="RunScript(script.module.acctmgr, action=setUHD)"  visible="true" />
-		<setting type="action" label="Set 1080P Max" option="close" action="RunScript(script.module.acctmgr, action=setHD)"  visible="true" />
-		<setting type="action" label="Set SD-720P Max" option="close" action="RunScript(script.module.acctmgr, action=setSD)"  visible="true" />
-
-		<setting type="lsep" label="Set Source Select/Autoplay" />
-		<setting type="action" label="Set Source Select" option="close" action="RunScript(script.module.acctmgr, action=setDIR)"  visible="true" />
-		<setting type="action" label="Set Autoplay" option="close" action="RunScript(script.module.acctmgr, action=setAUTO)"  visible="true" />
-
+	<category label="Scrapers">
+		<!-- External Scrapers -->
 		<setting type="lsep" label="Install External Scraper Packages" />
 		<setting type="action" label="Install Scraper Package(s)" option="close" action="RunScript(script.module.acctmgr, action=extInstall)" visible="true" />
 		<setting type="lsep" label="Installed External Scraper Packages" />
@@ -153,6 +130,38 @@
 		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true) + !eq(-9,true)" />
 		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true) + !eq(-9,true) + !eq(-10,true)" />	
 		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true) + !eq(-9,true) + !eq(-10,true) + !eq(-11,true)" />
+	</category>
+	<category label="Tools">
+		<!-- Set Max Resolution -->
+		<setting type="lsep" label="Set Max Resolution" />
+		<setting type="action" label="Set 4K Max" option="close" action="RunScript(script.module.acctmgr, action=setUHD)"  visible="true" />
+		<setting type="action" label="Set 1080P Max" option="close" action="RunScript(script.module.acctmgr, action=setHD)"  visible="true" />
+		<setting type="action" label="Set SD-720P Max" option="close" action="RunScript(script.module.acctmgr, action=setSD)"  visible="true" />
+		
+		<!-- Set Autoplay -->
+		<setting type="lsep" label="Set Source Select/Autoplay" />
+		<setting type="action" label="Set Source Select" option="close" action="RunScript(script.module.acctmgr, action=setDIR)"  visible="true" />
+		<setting type="action" label="Set Autoplay" option="close" action="RunScript(script.module.acctmgr, action=setAUTO)"  visible="true" />
+		
+		<!-- Install TMDbH Players -->
+		<setting type="lsep" label="Manage TMDb Helper Players" />
+		<setting type="action" label="Add Players" option="close" action="RunScript(script.module.acctmgr, action=setPLAYER)"  visible="true" />
+		<setting type="action" label="Remove Players" option="close" action="RunScript(script.module.acctmgr, action=delPLAYER)"  visible="true" />
+	</category>
+	<category label="Startup">
+		<setting type="lsep" label="Update Notifications" />
+		<setting id="check_for_update" type="bool" label="Enable Update Notification" default="true" />
+		<setting id="am_last_prepare" type="text" default="" visible="false" />
+		<setting id="am_trakt_ready" type="bool" default="false" visible="false" />
+		<setting id="api.service" type="bool" label="Trakt API Service" visible="false" default="false" />
+		<!-- Services -->
+		<setting type="lsep" label="Sync Authorization(s) with Supported Add-ons" />
+		<setting id="sync.mdb.service"  type="bool" label="MDBList" visible="true" default="false"/>
+      		<setting id="sync.rd.service"  type="bool" label="Real-Debrid" visible="true" default="false"/>
+      		<setting id="sync.pm.service"  type="bool" label="Premiumize" visible="true" default="false"/>
+      		<setting id="sync.ad.service"  type="bool" label="All-Debrid" visible="true" default="false"/>
+      		<setting id="sync.tb.service"  type="bool" label="TorBox" visible="true" default="false"/>
+      		<setting id="sync.en.service"  type="bool" label="Easynews" visible="true" default="false"/>
 	</category>
 	<category label="Logs">
 		<setting type="lsep" label="Error Logging" />

@@ -261,7 +261,7 @@ class Auth:
         except Exception as e:
             log_utils.error(f"POV Trakt Failed: {e}")
 
-        # ===================== The Coalition =====================
+        '''# ===================== The Coalition =====================
         # ============ API Keys applied to settings.xml ===========
         try:
             if "The Coalition" in current and exists(var.chk_coal) and exists(var.chkset_coal):
@@ -287,7 +287,7 @@ class Auth:
                         xbmc.sleep(500)
                         control.remake_coal_trakt_cache()
         except Exception as e:
-            log_utils.error(f"The Coalition Trakt Failed: {e}")
+            log_utils.error(f"The Coalition Trakt Failed: {e}")'''
             
         # =================== Dradis / Genocide ===================
         # ============ API Keys applied to settings.xml ===========

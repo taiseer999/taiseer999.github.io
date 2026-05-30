@@ -39,7 +39,7 @@ class tk_list():
         # Fen & Forks
         #add_if(var.chk_fen,         'Fen')
         add_if(var.chk_pov,         'POV')
-        add_if(var.chk_coal,        'The Coalition')
+        #add_if(var.chk_coal,        'The Coalition')
         
         # Dradis & Forks
         #add_if(var.chk_dradis,      'Dradis')
