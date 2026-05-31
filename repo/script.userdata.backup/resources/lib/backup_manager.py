@@ -13,11 +13,12 @@ ADDON_NAME = ADDON.getAddonInfo('name')
 
 # ─── Exclusion rules ──────────────────────────────────────────────────────────
 #
-#  Fully excluded addons (entire folder skipped):
-EXCLUDED_ADDONS = {
+#  Addons that are excluded by default but can be opted-in per run via the
+#  "Include skin data?" prompt shown before each backup / restore:
+SKIN_ADDONS = [
     'script.skinshortcuts',
     'script.skinvariables',
-}
+]
 
 #  Partial exclusion: for these addons only specific files are KEPT;
 #  everything else inside their folder is skipped.
@@ -47,13 +48,37 @@ class BackupManager:
         idx     = dialog.select('%s – Main Menu' % ADDON_NAME, choices)
 
         if idx == 0:
-            self._do_backup(dialog)
+            include_skin = self._ask_skin_addons(dialog)
+            if include_skin is None:
+                return
+            self._do_backup(dialog, include_skin)
         elif idx == 1:
-            self._do_restore(dialog)
+            include_skin = self._ask_skin_addons(dialog)
+            if include_skin is None:
+                return
+            self._do_restore(dialog, include_skin)
+
+    def _ask_skin_addons(self, dialog):
+        """
+        Ask the user whether to include skin customisations.
+        Returns a set of addon_ids to include (may be empty), or None if cancelled.
+        """
+        labels = [
+            'My customisation',
+            'My customisation',
+        ]
+        selected = dialog.multiselect(
+            'Include my customisations?',
+            labels,
+            preselect=[]
+        )
+        if selected is None:          # user pressed Back / cancelled
+            return None
+        return {SKIN_ADDONS[i] for i in selected}
 
     # --------------------------------------------------------------- Backup --
 
-    def _do_backup(self, dialog):
+    def _do_backup(self, dialog, include_skin):
         # Ask where to save
         dest_folder = dialog.browse(
             3, 'Choose backup destination folder', 'files', '', False, False,
@@ -70,7 +95,7 @@ class BackupManager:
         pbar.create(ADDON_NAME, 'Collecting files…')
 
         try:
-            file_list = self._collect_files()
+            file_list = self._collect_files(include_skin)
             total     = len(file_list)
 
             if total == 0:
@@ -105,6 +130,16 @@ class BackupManager:
                 dialog.ok(ADDON_NAME,
                           'Backup complete!\n\n%d files saved to:\n%s'
                           % (total, zip_path))
+                if (SKIN_ADDONS[0] in include_skin
+                        and SKIN_ADDONS[1] in include_skin):
+                    _log('Both skin addons included – triggering rebuild_shortcuts.')
+                    xbmc.executebuiltin(
+                        'AlarmClock(rebuild_shortcuts,'
+                        'RunScript(script.skinvariables,'
+                        'run_executebuiltin=special://skin/shortcuts/'
+                        'skinvariables-build-templates.json,use_rules),'
+                        '00:01,silent)'
+                    )
 
         except Exception as e:
             pbar.close()
@@ -113,7 +148,7 @@ class BackupManager:
 
     # -------------------------------------------------------------- Restore --
 
-    def _do_restore(self, dialog):
+    def _do_restore(self, dialog, include_skin):
         zip_path = dialog.browse(
             1, 'Select backup ZIP to restore', 'files', '*.zip', False, False,
             self.home_path
@@ -140,19 +175,30 @@ class BackupManager:
                 for i, member in enumerate(members):
                     if pbar.iscanceled():
                         break
+
+                    # Skip pure directory entries
+                    if member.endswith('/'):
+                        continue
+
+                    # Skip skin addon data unless the user opted in
+                    member_parts = member.replace('\\', '/').split('/')
+                    if (len(member_parts) >= 2
+                            and member_parts[0] == 'addon_data'
+                            and member_parts[1] in SKIN_ADDONS
+                            and member_parts[1] not in include_skin):
+                        continue
+
                     pct = int((i + 1) / total * 100)
                     pbar.update(pct, 'Restoring… (%d / %d)\n%s' % (i + 1, total, member))
 
-                    dest = os.path.join(self.userdata_path, member)
+                    dest     = os.path.join(self.userdata_path, member)
                     dest_dir = os.path.dirname(dest)
 
-                    if not xbmcvfs.exists(dest_dir):
-                        xbmcvfs.mkdirs(dest_dir)
-
                     try:
+                        os.makedirs(dest_dir, exist_ok=True)
                         data = zf.read(member)
-                        with xbmcvfs.File(dest, 'w') as fh:
-                            fh.write(bytes(data))
+                        with open(dest, 'wb') as fh:
+                            fh.write(data)
                     except Exception as e:
                         _log('Could not restore %s: %s' % (member, e),
                              xbmc.LOGWARNING)
@@ -163,7 +209,11 @@ class BackupManager:
                 dialog.ok(ADDON_NAME, 'Restore cancelled (partial restore may have occurred).')
             else:
                 _log('Restore completed from: %s' % zip_path)
-                dialog.ok(ADDON_NAME, 'Restore complete!\n\n%d files restored.' % total)
+                if dialog.yesno(ADDON_NAME,
+                                'Restore complete! %d files restored.\n\n'
+                                'Kodi must restart to apply the restored settings.\n\n'
+                                'Restart now?' % total):
+                    xbmc.executebuiltin('RestartApp')
 
         except Exception as e:
             pbar.close()
@@ -172,7 +222,7 @@ class BackupManager:
 
     # -------------------------------------------------------- File collection -
 
-    def _collect_files(self):
+    def _collect_files(self, include_skin):
         """
         Walk userdata and return list of (absolute_path, archive_name) tuples.
 
@@ -220,9 +270,9 @@ class BackupManager:
             if not os.path.isdir(addon_dir):
                 continue
 
-            # ── Fully excluded addons ──────────────────────────────────────
-            if addon_id in EXCLUDED_ADDONS:
-                _log('Skipping (fully excluded): %s' % addon_id)
+            # ── Skin addons – include only if user opted in ───────────────
+            if addon_id in SKIN_ADDONS and addon_id not in include_skin:
+                _log('Skipping (skin addon, not opted in): %s' % addon_id)
                 continue
 
             # ── Partially excluded addons ─────────────────────────────────
