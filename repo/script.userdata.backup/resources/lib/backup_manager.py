@@ -49,13 +49,9 @@ class BackupManager:
 
         if idx == 0:
             include_skin = self._ask_skin_addons(dialog)
-            if include_skin is None:
-                return
             self._do_backup(dialog, include_skin)
         elif idx == 1:
             include_skin = self._ask_skin_addons(dialog)
-            if include_skin is None:
-                return
             self._do_restore(dialog, include_skin)
 
     def _ask_skin_addons(self, dialog):
@@ -64,16 +60,18 @@ class BackupManager:
         Returns a set of addon_ids to include (may be empty), or None if cancelled.
         """
         labels = [
-            'My AF2/ AF3 widgets',
-            'My AH2/ others widgets',
+            'My AF2/ AF3 widgets-تعديلاتي وترتيباتي الشخصية في السكن',
+            'My AH2/ others widgets- تعديلاتي وترتيباتي الشخصية في السكن',
         ]
         selected = dialog.multiselect(
             'Include my customisations?',
             labels,
             preselect=[]
         )
-        if selected is None:          # user pressed Back / cancelled
-            return None
+        # multiselect returns None on Back/cancel or [] when confirmed with nothing ticked
+        # either way treat as empty selection — skin addons will be skipped
+        if not selected:
+            return set()
         return {SKIN_ADDONS[i] for i in selected}
 
     # --------------------------------------------------------------- Backup --
@@ -209,20 +207,19 @@ class BackupManager:
                 dialog.ok(ADDON_NAME, 'Restore cancelled (partial restore may have occurred).')
             else:
                 _log('Restore completed from: %s' % zip_path)
-                if dialog.yesno(ADDON_NAME,
-                                'Restore complete! %d files restored.\n\n'
-                                'Kodi must restart to apply the restored settings.\n\n'
-                                'Restart now?' % total):
-                    if (SKIN_ADDONS[0] in include_skin
-                            and SKIN_ADDONS[1] in include_skin):
-                        _log('Both skin addons restored – running rebuild_shortcuts then restarting.')
-                        xbmc.executebuiltin(
-                            'RunScript(script.skinvariables,'
-                            'run_executebuiltin=special://skin/shortcuts/'
-                            'skinvariables-build-templates.json,use_rules)'
-                        )
-                        xbmc.sleep(3000)
-                    xbmc.executebuiltin('RestartApp')
+                dialog.ok(ADDON_NAME,
+                          'Restore complete! %d files restored.\n\n'
+                          'Kodi will now restart.' % total)
+                if (SKIN_ADDONS[0] in include_skin
+                        and SKIN_ADDONS[1] in include_skin):
+                    _log('Both skin addons restored – running rebuild_shortcuts then restarting.')
+                    xbmc.executebuiltin(
+                        'RunScript(script.skinvariables,'
+                        'run_executebuiltin=special://skin/shortcuts/'
+                        'skinvariables-build-templates.json,use_rules)'
+                    )
+                    xbmc.sleep(3000)
+                xbmc.executebuiltin('PlayMedia(plugin://plugin.program.ABUKARIMwizard/?url=&mode=18&name=%5BB%5D%5BCOLOR+snow%5DForce+Close%5B%2FCOLOR%5D%5B%2FB%5D&icon=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fplugin.program.ABUKARIMwizard%2Fresources%2Ficon.png&fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fplugin.program.ABUKARIMwizard%2Fresources%2Ffanart.jpg&description=%5BB%5D%5BCOLOR+snow%5DForce+Close+Kodi%5B%2FCOLOR%5D%5B%2FB%5D&name2=&version=&kodi=)')
 
         except Exception as e:
             pbar.close()
