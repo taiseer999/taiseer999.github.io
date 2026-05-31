@@ -64,8 +64,8 @@ class BackupManager:
         Returns a set of addon_ids to include (may be empty), or None if cancelled.
         """
         labels = [
-            'My customisation',
-            'My customisation',
+            'My AF2/ AF3 widgets',
+            'My AH2/ others widgets',
         ]
         selected = dialog.multiselect(
             'Include my customisations?',
@@ -213,6 +213,15 @@ class BackupManager:
                                 'Restore complete! %d files restored.\n\n'
                                 'Kodi must restart to apply the restored settings.\n\n'
                                 'Restart now?' % total):
+                    if (SKIN_ADDONS[0] in include_skin
+                            and SKIN_ADDONS[1] in include_skin):
+                        _log('Both skin addons restored – running rebuild_shortcuts then restarting.')
+                        xbmc.executebuiltin(
+                            'RunScript(script.skinvariables,'
+                            'run_executebuiltin=special://skin/shortcuts/'
+                            'skinvariables-build-templates.json,use_rules)'
+                        )
+                        xbmc.sleep(3000)
                     xbmc.executebuiltin('RestartApp')
 
         except Exception as e:
