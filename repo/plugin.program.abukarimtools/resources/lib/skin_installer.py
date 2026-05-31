@@ -16,7 +16,10 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 
-ADDON_PATH    = xbmcvfs.translatePath('special://home/addons/plugin.program.abukarim/')
+import xbmcaddon as _xbmcaddon
+ADDON_PATH    = xbmcvfs.translatePath(_xbmcaddon.Addon('plugin.program.abukarimtools').getAddonInfo('path'))
+if not ADDON_PATH.endswith(os.sep):
+    ADDON_PATH += os.sep
 PACKAGES_PATH = xbmcvfs.translatePath('special://home/addons/packages/')
 ADDONS_PATH   = xbmcvfs.translatePath('special://home/addons/')
 
@@ -236,7 +239,7 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         self.background = kwargs.get('background', 'backgroundkodi.jpg')
 
     def onInit(self):
-        bg_path = ('special://home/addons/plugin.program.abukarim'
+        bg_path = ('special://home/addons/plugin.program.abukarimtools'
                    '/resources/media/%s' % self.background)
         self.setProperty('background', bg_path)
         panel = self.getControl(100)

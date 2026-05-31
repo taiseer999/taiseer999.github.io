@@ -15,7 +15,9 @@ import xbmcvfs
 ADDON      = xbmcaddon.Addon()
 ADDON_ID   = ADDON.getAddonInfo('id')
 HANDLE     = int(sys.argv[1]) if len(sys.argv) > 1 else -1
-ADDON_PATH = xbmcvfs.translatePath('special://home/addons/%s/' % ADDON_ID)
+ADDON_PATH = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
+if not ADDON_PATH.endswith('/') and not ADDON_PATH.endswith('\\'):
+    ADDON_PATH += '/'
 
 FANART = ADDON_PATH + 'fanart.jpg'
 ICONS  = {
@@ -53,7 +55,10 @@ def router():
         main_menu()
         return
 
-    xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+    # Non-directory modes: tell Kodi the directory listing succeeded but is empty,
+    # then run the actual script. This prevents GetDirectory errors.
+    xbmcplugin.setContent(HANDLE, 'files')
+    xbmcplugin.endOfDirectory(HANDLE, succeeded=True, updateListing=False, cacheToDisc=False)
 
     if mode == 'skin_install':
         from resources.lib import skin_installer
