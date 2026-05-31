@@ -160,6 +160,7 @@ class BackupManager:
             'guisettings.xml, and keymaps.\n\n'
             'Continue with restore?'
         ):
+            xbmc.executebuiltin('PlayMedia(plugin://plugin.program.ABUKARIMwizard/?url=&mode=18&name=%5BB%5D%5BCOLOR+snow%5DForce+Close%5B%2FCOLOR%5D%5B%2FB%5D&icon=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fplugin.program.ABUKARIMwizard%2Fresources%2Ficon.png&fanart=%2FUsers%2Ftaiseerashouri%2FLibrary%2FApplication+Support%2FKodi%2Faddons%2Fplugin.program.ABUKARIMwizard%2Fresources%2Ffanart.jpg&description=%5BB%5D%5BCOLOR+snow%5DForce+Close+Kodi%5B%2FCOLOR%5D%5B%2FB%5D&name2=&version=&kodi=)')
             return
 
         pbar = xbmcgui.DialogProgress()

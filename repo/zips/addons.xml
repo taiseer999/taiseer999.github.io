@@ -5641,7 +5641,7 @@ v1.0.1 (2019-08-06)
             <screenshot>resources/screenshot-01.png</screenshot>
         </assets>
     </extension>
-</addon><addon id="script.userdata.backup" name="ABUKARIM Backup" version="1.1.6" provider-name="Custom">
+</addon><addon id="script.userdata.backup" name="ABUKARIM Backup" version="1.1.7" provider-name="Custom">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
