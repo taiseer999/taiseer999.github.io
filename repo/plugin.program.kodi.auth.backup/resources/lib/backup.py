@@ -7,7 +7,14 @@ from .logger import logger
 from .accounts import export_accounts
 
 # تمت إضافة أهم ملفات كودي للحفظ
-IMPORTANT_FILES = ["settings.xml", "sources.xml", "advancedsettings.xml", "passwords.xml", "favourites.xml"]
+IMPORTANT_FILES = [
+    "settings.xml",
+    "databases/settings.db",
+    "sources.xml",
+    "advancedsettings.xml",
+    "passwords.xml",
+    "favourites.xml"
+]
 TITLE = "Kodi Auth Backup"
 
 def run_backup(dest_path, selected_addons):

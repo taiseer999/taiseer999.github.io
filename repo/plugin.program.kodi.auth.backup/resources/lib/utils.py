@@ -9,7 +9,7 @@ def detect_addons():
     results = []
     for f in base.iterdir():
         if f.is_dir() and not any(x in f.name.lower() for x in EXCLUDE):
-            if (f/"settings.xml").exists():
+            if (f/"settings.xml").exists() or (f/"databases"/"settings.db").exists():
                 results.append(f.name)
     return sorted(results)
 

@@ -20,11 +20,11 @@ https://github.com/i-Meshal/Kodi-Auth-Backup
 def run():
     while True:
         c = D.select(TITLE, [
-            " نسخ احتياطي سريع (الكل)",
-            " نسخ احتياطي مخصص",
-            " استعادة (Restore)",
-            " عن المطور",
-            " خروج"
+            "نسخ احتياطي سريع (الكل)",
+            "نسخ احتياطي مخصص",
+            "استعادة (Restore)",
+            "عن المطور",
+            "خروج"
         ])
 
         if c == 0:
@@ -60,9 +60,9 @@ def run():
             if mode < 0:
                 continue
 
-            restore_method = D.select("طريقة استعادة settings.xml", [
+            restore_method = D.select("طريقة استعادة التوثيقات", [
                 "دمج مفاتيح التوثيق فقط",
-                "استبدال ملف settings.xml كامل"
+                "استبدال ملف الإعدادات كامل"
             ])
             if restore_method < 0:
                 continue
@@ -74,7 +74,7 @@ def run():
                 if auth_only:
                     D.ok("تم بنجاح", "تم دمج مفاتيح التوثيق فقط. قد تحتاج لإعادة تشغيل كودي.")
                 else:
-                    D.ok("تم بنجاح", "تم استبدال ملفات settings.xml. قد تحتاج لإعادة تشغيل كودي.")
+                    D.ok("تم بنجاح", "تم استبدال ملفات الإعدادات. قد تحتاج لإعادة تشغيل كودي.")
             elif mode == 1:
                 addons = list_backup_addons(file)
                 if not addons:
@@ -92,7 +92,7 @@ def run():
                 if auth_only:
                     D.ok("تم بنجاح", "تم دمج مفاتيح التوثيق المحددة فقط.")
                 else:
-                    D.ok("تم بنجاح", "تم استبدال ملفات settings.xml المحددة.")
+                    D.ok("تم بنجاح", "تم استبدال ملفات الإعدادات المحددة.")
 
         elif c == 3:
             D.textviewer("عن المطور", ABOUT_TEXT)
