@@ -141,8 +141,10 @@ class Sources():
 		if self.active_folders: self.append_folder_scrapers(self.providers)
 		self.providers.extend(self.internal_sources())
 		if self.providers:
-			for i in self.providers: threads_append(Thread(target=self.activate_providers, args=(i[0], i[1], False), name=i[2]))
-			[i.start() for i in self.threads]
+			new_threads = [Thread(target=self.activate_providers, args=(i[0], i[1], False), name=i[2]) for i in self.providers]
+			for t in new_threads:
+				threads_append(t)
+				t.start()
 		if self.active_external or self.background:
 			if self.active_external:
 				self.external_args = (self.meta, self.external_providers, self.debrid_enabled, self.external_cache_check, self.internal_scraper_names,
