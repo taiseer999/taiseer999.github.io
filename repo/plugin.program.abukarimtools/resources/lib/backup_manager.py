@@ -12,6 +12,14 @@ import xbmcvfs
 ADDON = xbmcaddon.Addon()
 ADDON_NAME = ADDON.getAddonInfo('name')
 
+# guisettings.xml cannot be overwritten while Kodi is running — Kodi holds it
+# in memory and flushes it on exit, clobbering anything we write mid-session.
+# Instead we stage the file here; autostart.sh copies it into userdata before
+# Kodi starts on the next boot, then removes itself.
+GUISETTINGS_STAGING = '/storage/.guisettings_pending.xml'
+AUTOSTART_PATH      = '/storage/.config/autostart.sh'
+AUTOSTART_MARKER    = '# [abukarimtools] guisettings restore'
+
 # ─── Exclusion rules ──────────────────────────────────────────────────────────
 #
 #  Addons that are excluded by default but can be opted-in per run via the
@@ -187,8 +195,21 @@ class BackupManager:
                             and member_parts[1] not in include_skin):
                         continue
 
-                    pct = int((i + 1) / total * 100)
-                    pbar.update(pct, 'Restoring… (%d / %d)\n%s' % (i + 1, total, member))
+                    # guisettings.xml must be staged — writing it while Kodi
+                    # is running has no effect because Kodi overwrites it on exit.
+                    if norm_member == 'guisettings.xml':
+                        try:
+                            data = zf.read(member)
+                            with open(GUISETTINGS_STAGING, 'wb') as fh:
+                                fh.write(data)
+                            self._inject_autostart_restore()
+                            _log('guisettings.xml staged at %s' % GUISETTINGS_STAGING)
+                        except Exception as e:
+                            _log('Could not stage guisettings.xml: %s' % e,
+                                 xbmc.LOGWARNING)
+                        continue
+
+
 
                     # Normalise separators so Windows-created zips work on Linux
                     norm_member = member.replace('\\', '/').lstrip('/')
@@ -213,6 +234,7 @@ class BackupManager:
                 _log('Restore completed from: %s' % zip_path)
                 dialog.ok(ADDON_NAME,
                           'Restore complete! %d files restored.\n\n'
+                          'guisettings.xml will be applied on next boot.\n\n'
                           'Please restart Kodi manually for the changes to take effect.' % total)
                 if (SKIN_ADDONS[0] in include_skin
                         and SKIN_ADDONS[1] in include_skin):
@@ -227,6 +249,45 @@ class BackupManager:
             pbar.close()
             _log('Restore error: %s' % e, xbmc.LOGERROR)
             dialog.ok(ADDON_NAME, 'Restore failed!\n%s' % e)
+
+    # ------------------------------------------------- autostart.sh injection -
+
+    def _inject_autostart_restore(self):
+        """
+        Append a self-removing block to autostart.sh that copies the staged
+        guisettings.xml into userdata before Kodi starts, then deletes itself.
+        Does nothing if the block is already present.
+        """
+        block = (
+            '\n%(marker)s\n'
+            'if [ -f "%(staging)s" ]; then\n'
+            '    cp "%(staging)s" /storage/.kodi/userdata/guisettings.xml\n'
+            '    rm -f "%(staging)s"\n'
+            '    # Remove this block from autostart.sh\n'
+            '    sed -i "/%(marker)s/,/^fi$/d" "%(autostart)s"\n'
+            'fi\n'
+        ) % {
+            'marker':   AUTOSTART_MARKER,
+            'staging':  GUISETTINGS_STAGING,
+            'autostart': AUTOSTART_PATH,
+        }
+
+        # Read existing content (file may not exist yet)
+        try:
+            with open(AUTOSTART_PATH, 'r') as f:
+                content = f.read()
+        except IOError:
+            content = '#!/bin/sh\n'
+
+        if AUTOSTART_MARKER in content:
+            _log('autostart.sh already contains restore block, skipping inject.')
+            return
+
+        os.makedirs(os.path.dirname(AUTOSTART_PATH), exist_ok=True)
+        with open(AUTOSTART_PATH, 'w') as f:
+            f.write(content.rstrip('\n') + block)
+
+        _log('Injected guisettings restore block into %s' % AUTOSTART_PATH)
 
     # -------------------------------------------------------- File collection -
 
