@@ -160,7 +160,6 @@ class BackupManager:
             'guisettings.xml, and keymaps.\n\n'
             'Continue with restore?'
         ):
-            xbmc.executebuiltin('Quit')
             return
 
         pbar = xbmcgui.DialogProgress()
@@ -220,7 +219,7 @@ class BackupManager:
                         'skinvariables-build-templates.json,use_rules)'
                     )
                     xbmc.sleep(3000)
-                xbmc.executebuiltin('Quit')
+                xbmc.executebuiltin('RestartApp')
 
         except Exception as e:
             pbar.close()
