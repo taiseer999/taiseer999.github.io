@@ -187,8 +187,11 @@ class BackupManager:
                     if member.endswith('/'):
                         continue
 
+                    # Normalise separators so Windows-created zips work on Linux
+                    norm_member = member.replace('\\', '/').lstrip('/')
+
                     # Skip skin addon data unless the user opted in
-                    member_parts = member.replace('\\', '/').split('/')
+                    member_parts = norm_member.split('/')
                     if (len(member_parts) >= 2
                             and member_parts[0] == 'addon_data'
                             and member_parts[1] in SKIN_ADDONS
@@ -209,13 +212,9 @@ class BackupManager:
                                  xbmc.LOGWARNING)
                         continue
 
-
-
-                    # Normalise separators so Windows-created zips work on Linux
-                    norm_member = member.replace('\\', '/').lstrip('/')
-                    dest        = os.path.join(self.userdata_path,
-                                               *norm_member.split('/'))
-                    dest_dir    = os.path.dirname(dest)
+                    dest     = os.path.join(self.userdata_path,
+                                            *norm_member.split('/'))
+                    dest_dir = os.path.dirname(dest)
 
                     try:
                         os.makedirs(dest_dir, exist_ok=True)
