@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.0.4" provider-name="Custom">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.0.5" provider-name="Custom">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />

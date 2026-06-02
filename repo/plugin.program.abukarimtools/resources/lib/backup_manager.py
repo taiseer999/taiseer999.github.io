@@ -209,17 +209,15 @@ class BackupManager:
                 _log('Restore completed from: %s' % zip_path)
                 dialog.ok(ADDON_NAME,
                           'Restore complete! %d files restored.\n\n'
-                          'Kodi will now restart.' % total)
+                          'Please restart Kodi manually for the changes to take effect.' % total)
                 if (SKIN_ADDONS[0] in include_skin
                         and SKIN_ADDONS[1] in include_skin):
-                    _log('Both skin addons restored – running rebuild_shortcuts then restarting.')
+                    _log('Both skin addons restored – running rebuild_shortcuts.')
                     xbmc.executebuiltin(
                         'RunScript(script.skinvariables,'
                         'run_executebuiltin=special://skin/shortcuts/'
                         'skinvariables-build-templates.json,use_rules)'
                     )
-                    xbmc.sleep(3000)
-                xbmc.executebuiltin('RestartApp')
 
         except Exception as e:
             pbar.close()
