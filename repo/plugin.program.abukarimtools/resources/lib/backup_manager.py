@@ -2,6 +2,7 @@ import os
 import shutil
 import zipfile
 import datetime
+import posixpath
 
 import xbmc
 import xbmcgui
@@ -189,8 +190,11 @@ class BackupManager:
                     pct = int((i + 1) / total * 100)
                     pbar.update(pct, 'Restoring… (%d / %d)\n%s' % (i + 1, total, member))
 
-                    dest     = os.path.join(self.userdata_path, member)
-                    dest_dir = os.path.dirname(dest)
+                    # Normalise separators so Windows-created zips work on Linux
+                    norm_member = member.replace('\\', '/').lstrip('/')
+                    dest        = os.path.join(self.userdata_path,
+                                               *norm_member.split('/'))
+                    dest_dir    = os.path.dirname(dest)
 
                     try:
                         os.makedirs(dest_dir, exist_ok=True)
@@ -243,7 +247,7 @@ class BackupManager:
         # ── guisettings.xml ───────────────────────────────────────────────────
         guisettings = os.path.join(self.userdata_path, 'guisettings.xml')
         if os.path.isfile(guisettings):
-            arc_name = os.path.relpath(guisettings, self.userdata_path)
+            arc_name = 'guisettings.xml'
             collected.append((guisettings, arc_name))
             _log('Including guisettings.xml')
         else:
@@ -255,7 +259,8 @@ class BackupManager:
             for root, dirs, files in os.walk(keymaps_dir):
                 for fname in files:
                     abs_path = os.path.join(root, fname)
-                    arc_name = os.path.relpath(abs_path, self.userdata_path)
+                    rel      = os.path.relpath(abs_path, self.userdata_path)
+                    arc_name = rel.replace('\\', '/')
                     collected.append((abs_path, arc_name))
             _log('Included keymaps/ directory.')
         else:
@@ -288,8 +293,8 @@ class BackupManager:
                     for fname in files:
                         if fname in allowed:
                             abs_path = os.path.join(root, fname)
-                            arc_name = os.path.relpath(abs_path,
-                                                       self.userdata_path)
+                            rel      = os.path.relpath(abs_path, self.userdata_path)
+                            arc_name = rel.replace('\\', '/')
                             collected.append((abs_path, arc_name))
                 continue
 
@@ -297,7 +302,8 @@ class BackupManager:
             for root, dirs, files in os.walk(addon_dir):
                 for fname in files:
                     abs_path = os.path.join(root, fname)
-                    arc_name = os.path.relpath(abs_path, self.userdata_path)
+                    rel      = os.path.relpath(abs_path, self.userdata_path)
+                    arc_name = rel.replace('\\', '/')
                     collected.append((abs_path, arc_name))
 
         _log('Collected %d files for backup.' % len(collected))
