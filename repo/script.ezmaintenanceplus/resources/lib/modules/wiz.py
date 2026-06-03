@@ -26,7 +26,14 @@ if PY2:
     from io import open as open
     translatePath = xbmc.translatePath
 else:
-    FancyURLopener = urllib.request.FancyURLopener
+    import urllib.request as _urllib_request
+    class FancyURLopener:
+        version = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11'
+        def retrieve(self, url, filename=None, reporthook=None, data=None):
+            opener = _urllib_request.build_opener()
+            opener.addheaders = [('User-Agent', self.version)]
+            _urllib_request.install_opener(opener)
+            return _urllib_request.urlretrieve(url, filename, reporthook)
     translatePath = xbmcvfs.translatePath
     unicode = str
 

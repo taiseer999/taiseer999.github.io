@@ -3,16 +3,8 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import xbmc, xbmcaddon, xbmcgui, xbmcplugin, xbmcvfs,os,sys
+import xbmc, xbmcaddon, xbmcgui, xbmcplugin, xbmcvfs, os, sys
 import urllib
 import re
 import time
@@ -26,7 +18,14 @@ if PY2:
     FancyURLopener = urllib.FancyURLopener
     translatePath = xbmc.translatePath
 else:
-    FancyURLopener = urllib.request.FancyURLopener
+    # FancyURLopener removed in Python 3.12+ — provide a compatible replacement
+    import urllib.request as _urllib_request
+
+    class FancyURLopener:
+        """Minimal FancyURLopener shim for Python 3.12+."""
+        def retrieve(self, url, filename=None, reporthook=None, data=None):
+            return _urllib_request.urlretrieve(url, filename, reporthook)
+
     translatePath = xbmcvfs.translatePath
 
 dp           = xbmcgui.DialogProgress()
@@ -75,8 +74,6 @@ def advancedSettings():
     try: KODIV        =  float(xbmc.getInfoLabel("System.BuildVersion")[:4])
     except: KODIV = 16
 
-
-    """,customlabel='Cancel'"""
     choice = dialog.yesno(AddonTitle, 'Based on your free Memory your optimal buffersize is: \n' + str(BUFFERSIZE) + ' Bytes' + ' ('  + str(round(BUFFER_F)) + ' MB)' + '\n' + 'Note that your current advanced settings will be overwritten!' + '\n' + 'Choose an Option below or press ESC ESC to abort.', yeslabel='Use Optimal',nolabel='Input a Value' )
     if choice == 1:
         with open(XML_FILE, "w") as f:
@@ -108,6 +105,3 @@ def _get_keyboard( default="", heading="", hidden=False, cancel="" ):
     if ( keyboard.isConfirmed() ):
         return unicode( keyboard.getText())
     return cancel
-
-
-##############################    END    #########################################
