@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+  <!-- اجعل الصورة هي عنصر التركيز الافتراضي -->
+  <defaultcontrol>9000</defaultcontrol>
+
+  <controls>
+    <!-- صورة QR: سيقوم البايثون بتعيين المسار عبر getControl(9000).setImage(...) -->
+    <control id="9000" type="image">
+      <!-- تموضع وحجم مناسبين لـ 1080p؛ عدّل القيم إن رغبت -->
+      <posx>860</posx>
+      <posy>330</posy>
+      <width>200</width>
+      <height>200</height>
+      <visible>true</visible>
+      <aspectratio>keep</aspectratio>
+      <!-- نسيج افتراضي لحين استبداله بالصورة الفعلية -->
+      <texture>DefaultFolder.png</texture>
+    </control>
+  </controls>
+</window>
