@@ -613,10 +613,12 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.0.9" provider-name="Custom">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.2.0" provider-name="Custom">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
+    <import addon="script.module.requests" optional="true" />
+    <import addon="script.module.six" optional="true" />
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="default.py">
@@ -625,7 +627,7 @@ updated YouTube addon URL
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">ABUKARIM TOOLS</summary>
-    <description lang="en_GB">Unified plugin: Skin Installer, Skin Switcher, and Userdata Backup &amp; Restore.</description>
+    <description lang="en_GB">Unified plugin: Skin Installer, Skin Switcher, Userdata Backup &amp; Restore, OpenWizard, and ABUKARIM Wizard.</description>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
