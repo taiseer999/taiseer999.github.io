@@ -54,7 +54,7 @@
                     <left>5</left>
                     <height>20</height>
                     <align>center</align>
-                    <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                    <font>font12</font> <!-- REDLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                 </control>
                 <control type="textbox" id="2001">
@@ -62,7 +62,7 @@
                     <left>20</left>
                     <width>580</width>
                     <height>250</height>
-                    <font>font32</font> <!-- REDLIGHT_30 -->
+                    <font>font13</font> <!-- REDLIGHT_30 -->
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>FFCCCCCC</textcolor>

@@ -23,14 +23,18 @@ ICONS  = {
     'backup':         ADDON_PATH + 'resources/icons/backup.png',
     'openwizard':     ADDON_PATH + 'resources/icons/openwizard.png',
     'abukarimwizard': ADDON_PATH + 'resources/icons/abukarimwizard.png',
+    'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
+    'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
 }
 
 MENU = [
+    ('backup',         'Backup/Restore'),
+    ('abukarimwizard', 'Wizard'),
     ('skin_install',   'Skin Selection'),
-    ('skin_switch',    'Skin Switcher'),
-    ('backup',         'Userdata Backup'),
+    ('binary_install', 'New Build Tools'),
+    ('patcher',        'Apply Patches'),
     ('openwizard',     'OpenWizard'),
-    ('abukarimwizard', 'ABUKARIM Wizard'),
+    ('skin_switch',    'Skin Switcher'),
 ]
 
 
@@ -99,6 +103,16 @@ def router():
     elif mode == 'abukarimwizard':
         from resources.lib.wizard_runner import run_abukarimwizard
         run_abukarimwizard(HANDLE, ADDON_PATH)
+
+    elif mode == 'patcher':
+        _end_directory()
+        from resources.lib import patcher
+        patcher.run()
+
+    elif mode == 'binary_install':
+        _end_directory()
+        from resources.lib import binary_installer
+        binary_installer.run()
 
 
 router()

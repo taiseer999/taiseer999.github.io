@@ -5,8 +5,7 @@ import os
 from urllib.parse import urlencode, unquote
 
 def addon_themes():
-	return [{'name': 'Light', 'value': ('FF434343', 'FF2E2E2E'), 'icon': 'light'}, {'name': 'Medium', 'value': ('FF373737', 'FF4a4347'), 'icon': 'medium'},
-			{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]
+	return [{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]
 
 def addon_themes_opacity():
 	return [{'name': '100%', 'value': 'FF'}, {'name': '95%', 'value': 'F2'}, {'name': '90%', 'value': 'E6'}, {'name': '85%', 'value': 'D9'}, {'name': '80%', 'value': 'CC'},
@@ -436,6 +435,11 @@ def jsonrpc_get_system_setting(setting_id, setting_value=''):
 	try: result = get_jsonrpc(command)['value']
 	except: result = setting_value
 	return result
+
+def jsonrpc_set_system_setting(setting_id, value):
+	command = {'jsonrpc': '2.0', 'id': 1, 'method': 'Settings.SetSettingValue', 'params': {'setting': setting_id, 'value': value}}
+	try: return get_jsonrpc(command)
+	except: return None
 
 def open_settings():
 	try:

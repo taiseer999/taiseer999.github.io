@@ -36,7 +36,7 @@
                     <top>22</top>
                     <left>0</left>
                     <height>20</height>
-                    <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                    <font>font12</font> <!-- REDLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -66,7 +66,7 @@
                         <width>390</width>
                         <height>85</height>
                         <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                        <font>font12</font> <!-- REDLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <aligny>center</aligny>
                     </control>
@@ -83,7 +83,7 @@
                         <width>390</width>
                         <height>85</height>
                         <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                        <font>font12</font> <!-- REDLIGHT_26 -->
                         <textcolor>FF1F2020</textcolor>
                         <aligny>center</aligny>
                         <scroll>Control.HasFocus(2000)</scroll>
@@ -142,7 +142,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                            <font>font12</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <aligny>center</aligny>
                             <align>center</align>
@@ -171,7 +171,7 @@
                         <width>630</width>
                         <height>85</height>
                         <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                        <font>font12</font> <!-- REDLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <aligny>center</aligny>
                         <scroll>false</scroll>
@@ -210,7 +210,7 @@
                             <width>425</width>
                             <height>85</height>
                             <label>[B]...[/B]</label>
-                            <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                            <font>font12</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>right</align>
                             <aligny>center</aligny>
@@ -223,7 +223,7 @@
                             <width>425</width>
                             <height>85</height>
                             <label>[UPPERCASE][B]$INFO[ListItem.Property(setting_value)][/B][/UPPERCASE]</label>
-                            <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                            <font>font12</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <align>right</align>
                             <aligny>center</aligny>
@@ -247,7 +247,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                            <font>font12</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <aligny>center</aligny>
                             <align>center</align>
@@ -278,7 +278,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                            <font>font12</font> <!-- REDLIGHT_26 -->
                             <textcolor>FF1F2020</textcolor>
                             <aligny>center</aligny>
                             <scroll>Control.HasFocus(2100)</scroll>
@@ -289,7 +289,7 @@
                             <width>630</width>
                             <height>85</height>
                             <label>[UPPERCASE]$INFO[ListItem.Property(setting_label)][/UPPERCASE]</label>
-                            <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                            <font>font12</font> <!-- REDLIGHT_26 -->
                             <textcolor>FFCCCCCC</textcolor>
                             <aligny>center</aligny>
                             <scroll>false</scroll>
@@ -357,7 +357,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[B]...[/B]</label>
-                                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                                <font>font12</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FF1F2020</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -369,7 +369,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[B]...[/B]</label>
-                                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                                <font>font12</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -385,7 +385,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[UPPERCASE][B]$INFO[ListItem.Property(setting_value)][/B][/UPPERCASE]</label>
-                                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                                <font>font12</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FF1F2020</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -397,7 +397,7 @@
                                 <width>425</width>
                                 <height>85</height>
                                 <label>[UPPERCASE][B]$INFO[ListItem.Property(setting_value)][/B][/UPPERCASE]</label>
-                                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                                <font>font12</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>right</align>
                                 <aligny>center</aligny>
@@ -1628,12 +1628,12 @@
                       <item>
                           <visible>Container(2000).HasFocus(60)</visible>
                           <visible>String.IsEqual(Window(10000).Property(redlight.provider.external),true)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(redlight.rd.token),empty_setting)|!String.IsEqual(Window(10000).Property(redlight.ad.token),empty_setting)</visible>
-                          <visible>String.IsEqual(Window(10000).Property(redlight.rd.enabled),true)|String.IsEqual(Window(10000).Property(redlight.ad.enabled),true)</visible>
-                          <property name="setting_label">Check for cached status of Results (RD &amp; AD)</property>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.rd.token),empty_setting)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(redlight.rd.enabled),true)</visible>
+                          <property name="setting_label">Check for cached status of Results (Real Debrid)</property>
                           <property name="setting_type">boolean</property>
                           <property name="setting_value">$INFO[Window(10000).Property(redlight.external.cache_check)]</property>
-                          <property name="setting_description">Enable this and Red Light will get the cached status for Real Debrid and All Debrid results. This will lead to less results overall, but the results displayed SHOULD be cached on their servers. There will also be results filtered out that are cached. Use this knowing that you will get less results.</property>
+                          <property name="setting_description">When enabled, Red Light checks whether external torrent results are cached on your Real Debrid account before listing them. You may see fewer links, but those shown should be instant on RD. All Debrid is not included in this check.</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=external.cache_check)</onclick>
                       </item>
                       <item>
@@ -3200,7 +3200,7 @@
                     <left>30</left>
                     <width>200</width>
                     <height>24</height>
-                    <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                    <font>font12</font> <!-- REDLIGHT_26 -->
                     <textcolor>FFCCCCCC</textcolor>
                     <label>[UPPERCASE][B]INFO: [/B][/UPPERCASE]</label>
                     <align>left</align>
@@ -3216,7 +3216,7 @@
                         <top>0</top>
                         <width>1530</width>
                         <height>104</height>
-                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                        <font>font12</font> <!-- REDLIGHT_26 -->
                         <align>left</align>
                         <aligny>top</aligny>
                         <textcolor>FFCCCCCC</textcolor>
@@ -3230,7 +3230,7 @@
                         <top>0</top>
                         <width>1530</width>
                         <height>104</height>
-                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                        <font>font12</font> <!-- REDLIGHT_26 -->
                         <align>left</align>
                         <aligny>top</aligny>
                         <textcolor>FFCCCCCC</textcolor>

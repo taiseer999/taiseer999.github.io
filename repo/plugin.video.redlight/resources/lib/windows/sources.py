@@ -331,7 +331,9 @@ class SourcesPlayback(BaseDialog):
 		self.resume_choice = {10: 'resume', 11: 'start_over', 12: 'cancel'}[controlID]
 
 	def onAction(self, action):
-		if action in self.closing_actions: self.is_canceled = True
+		if action in self.closing_actions:
+			self.is_canceled = True
+			self.close()
 		elif action == self.right_action and self.window_mode == 'resolver': self.skip_resolve = True
 
 	def iscanceled(self):
@@ -351,6 +353,7 @@ class SourcesPlayback(BaseDialog):
 
 	def enable_resolver(self):
 		self.window_mode = 'resolver'
+		self.setProperty('percent', '0')
 		self.set_resolver_properties()
 
 	def enable_resume(self, percent):
@@ -359,6 +362,8 @@ class SourcesPlayback(BaseDialog):
 
 	def busy_spinner(self, toggle='true'):
 		self.setProperty('enable_busy_spinner', toggle)
+		if toggle == 'false':
+			self.setProperty('percent', '0')
 
 	def set_scraper_properties(self):
 		title, genre = self.meta_get('title'), self.meta_get('genre', '')
