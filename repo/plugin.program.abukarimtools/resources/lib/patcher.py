@@ -217,7 +217,8 @@ PATCHES = [
             '\n'
             '\n'
             '# ---------------------------------------------------------------------------\n'
-            '# Entry point'
+            '# Entry point  (called by Kodi via the xbmc.service extension point)\n'
+            '# ---------------------------------------------------------------------------'
         ),
         'new': (
             '            _log(f"sender={sender}  method={method}  type={mediatype!r}")\n'
@@ -280,7 +281,8 @@ PATCHES = [
             '\n'
             '\n'
             '# ---------------------------------------------------------------------------\n'
-            '# Entry point'
+            '# Entry point  (called by Kodi via the xbmc.service extension point)\n'
+            '# ---------------------------------------------------------------------------'
         ),
         'description': 'TinyPPI monitor.py – add HDR poll/update/clear methods',
         'fallback_pattern': None,
