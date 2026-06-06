@@ -170,6 +170,11 @@ class Startup:
             enable_addons()
             backup_gui_skin(gui_save_default)
             setting_set('firstrun', 'false')
+            # --- فتح Skin Installer تلقائياً عند أول تشغيل بعد تثبيت البيلد ---
+            xbmc.sleep(2000)
+            xbmc.executebuiltin(
+                'RunPlugin(plugin://plugin.program.abukarimtools/?mode=skin_install)'
+            )
         else:
             if setting('autoclearpackages') == 'true':
                 clear_packages_startup()
