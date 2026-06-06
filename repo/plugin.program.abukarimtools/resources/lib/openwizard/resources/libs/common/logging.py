@@ -115,7 +115,13 @@ def grab_log(file=False, old=False, wizard=False):
                 logsfound.append(os.path.join(CONFIG.LOGPATH, item))
 
     if len(logsfound) > 0:
-        logsfound.sort(key=lambda f: os.path.getmtime(f))
+        # نستخدم try/except في الـ lambda لتفادي FileNotFoundError
+        # إذا اختفى الملف بين listdir و getmtime (مثل kodi_crash.log)
+        logsfound.sort(key=lambda f: os.path.getmtime(f) if os.path.exists(f) else 0)
+        # نحذف أي ملف اختفى بعد الـ sort
+        logsfound = [f for f in logsfound if os.path.exists(f)]
+        if not logsfound:
+            return False
         if file:
             return logsfound[-1]
         else:

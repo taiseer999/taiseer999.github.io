@@ -135,15 +135,19 @@ def install_addon(plugin_id):
 # Binaries inspired Dr. Infernoo
 
 def enable_wizard():
+    # نسجّل كلاً من الويزرد والبلغن الرئيسي في قاعدة البيانات
+    # حتى لا يعتبرهما OptiKlean 'orphaned' ويحذفهما
+    ids_to_enable = [addon_id, 'plugin.program.abukarimtools']
     try:
         timestamp = str(datetime.now())[:-7]
 
         con = sqlite3.connect(addons_db)
         cursor = con.cursor()
-        cursor.execute('INSERT or IGNORE into installed (addonID , enabled, installDate) VALUES (?,?,?)', (addon_id, 1, timestamp,))
-
-        cursor.execute('UPDATE installed SET enabled = ? WHERE addonID = ? ', (1, addon_id,))
+        for aid in ids_to_enable:
+            cursor.execute('INSERT or IGNORE into installed (addonID, enabled, installDate) VALUES (?,?,?)', (aid, 1, timestamp,))
+            cursor.execute('UPDATE installed SET enabled = ? WHERE addonID = ?', (1, aid,))
         con.commit()
+        xbmc.log('AbukarimTools: registered in Addons DB: %s' % ids_to_enable, xbmc.LOGINFO)
     except sqlite3.Error as e:
         xbmc.log('There was an error writing to the database - %s' %e, xbmc.LOGINFO)
         return
