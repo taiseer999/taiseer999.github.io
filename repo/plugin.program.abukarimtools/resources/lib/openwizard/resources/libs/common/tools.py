@@ -253,7 +253,11 @@ def get_size(path, total=0):
     for dirpath, dirnames, filenames in os.walk(path):
         for f in filenames:
             fp = os.path.join(dirpath, f)
-            total += os.path.getsize(fp)
+            try:
+                total += os.path.getsize(fp)
+            except (OSError, FileNotFoundError):
+                # الملف اختفى بين os.walk وgetsize (مثل kodi_crash.log)
+                pass
     return total
 
 
