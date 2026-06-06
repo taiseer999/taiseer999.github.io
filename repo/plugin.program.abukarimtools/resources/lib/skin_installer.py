@@ -71,7 +71,10 @@ def _download_zip(url, addonid):
     if not xbmcvfs.exists(PACKAGES_PATH):
         xbmcvfs.mkdirs(PACKAGES_PATH)
 
-    tmp_fd, tmp_path = tempfile.mkstemp(suffix='.zip', prefix='abukarim_dl_')
+    # على Android لا توجد /tmp — نحدد المجلد صراحةً
+    _tmp_dir = xbmcvfs.translatePath('special://temp/')
+    os.makedirs(_tmp_dir, exist_ok=True)
+    tmp_fd, tmp_path = tempfile.mkstemp(suffix='.zip', prefix='abukarim_dl_', dir=_tmp_dir)
     progress = xbmcgui.DialogProgress()
     progress.create(TITLE, 'Connecting…')
 
