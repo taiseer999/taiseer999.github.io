@@ -5,7 +5,7 @@ buildfile = 'https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/r
 videos_url = 'http://CHANGEME'
 
 '''#####-----Notification File-----#####'''
-notify_url  = 'http://CHANGEME'
+notify_url  = 'notify_url = 'https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/refs/heads/main/notify.txt'
 
 '''#####-----Changelog Directory-----#####'''
 changelog_dir  = 'http://CHANGEME/'
