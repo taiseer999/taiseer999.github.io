@@ -7,6 +7,7 @@ import xbmcgui
 from requests.adapters import HTTPAdapter
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
+from acctmgr.modules.qr_utils import make_qr, remove_qr
 
 # Variables
 FormatDateTime = "%Y-%m-%dT%H:%M:%S.%fZ"
@@ -15,6 +16,32 @@ oauth_base_url = 'https://api.real-debrid.com/oauth/v2/'
 device_code_url = 'device/code?%s'
 credentials_url = 'device/credentials?%s'
 rd_icon = control.joinPath(control.artPath(), 'realdebrid.png')
+rd_bdr = control.joinPath(control.addonPath(), 'resources', 'images', 'white.png')
+rd_bg = control.joinPath(control.addonPath(), 'resources', 'images', 'dialog_background.png')
+
+class RealDebridAuthDialog(xbmcgui.WindowXMLDialog):
+	def __init__(self, *args, **kwargs):
+		self.user_code = kwargs.get('user_code')
+		self.bg_image = kwargs.get('bg_image')
+		self.qr_image = kwargs.get('qr_image')
+		self.bdr_image = kwargs.get('bdr_image')
+		self.is_active = True
+		super(RealDebridAuthDialog, self).__init__()
+
+	def onInit(self):
+		self.setProperty('user_code', self.user_code)
+		self.setProperty('bg_image', self.bg_image)
+		self.setProperty('qr_image', self.qr_image)
+		self.setProperty('bdr_image', self.bdr_image)
+
+	def onClick(self, controlId):
+		self.is_active = False
+		self.close()
+
+	def onAction(self, action):
+		if action.getId() in [10, 13, 92]:
+			self.is_active = False
+			self.close()
 
 class RealDebrid:
 	name = "Real-Debrid"
@@ -75,28 +102,6 @@ class RealDebrid:
 			log_utils.error(f"RealDebrid POST failed to parse response: {e}")
 			return response
 
-	def auth_loop(self):
-		control.sleep(self.auth_step * 1000)
-		url = 'client_id=%s&code=%s' % (self.client_ID, self.device_code)
-		url = oauth_base_url + credentials_url % url
-		try:
-			response = json.loads(requests.get(url).text)
-		except Exception as e:
-			log_utils.error(f"RealDebrid auth_loop failed: {e}")
-			return
-
-		if 'error' in response:
-			return
-		else:
-			try:
-				control.progressDialog.close()
-				self.client_ID = response['client_id']
-				self.secret = response['client_secret']
-			except Exception as e:
-				log_utils.error(f"RealDebrid auth_loop response handling failed: {e}")
-				control.okDialog(title='default', message=control.lang(40019))
-			return
-
 	def auth(self):
 		import time
 
@@ -124,50 +129,70 @@ class RealDebrid:
 			log_utils.error(f"RealDebrid device code parse failed: {e}")
 			return False
 
-		try:
-			control.progressDialog.create(control.lang(40055))
-		except Exception as e:
-			log_utils.error(f"RealDebrid progress dialog creation failed: {e}")
-			control.progressDialog.create("Real-Debrid Authorization")
+		qr_path = make_qr('https://real-debrid.com/device?code=%s' % user_code)
 
-		control.progressDialog.update(
-			-1,
-			control.progress_line % (control.lang(32513) % 'https://real-debrid.com/device',
-									 control.lang(32514) % user_code, '')
+		dialog = RealDebridAuthDialog(
+			'realdebrid_auth.xml',
+			str(control.addonPath()),
+			'default',
+			user_code=user_code,
+			bg_image=rd_bg,
+			qr_image=qr_path,
+			bdr_image=rd_bdr
 		)
+		dialog.show()
 
 		start = time.time()
 		timeout = self.auth_timeout or 300
 
 		while self.secret == '':
-			if control.progressDialog.iscanceled():
-				try:
-					control.progressDialog.close()
-				except Exception as e:
-					log_utils.error(f"RealDebrid progress dialog close failed: {e}")
+			if not dialog.is_active:
+				dialog.close()
+				del dialog
+				remove_qr(qr_path)
+				control.notification(message='Real-Debrid authorization cancelled!', icon=rd_icon)
 				return False
 
 			if time.time() - start > timeout:
-				try:
-					control.progressDialog.close()
-				except Exception as e:
-					log_utils.error(f"RealDebrid progress dialog close failed (timeout): {e}")
+				dialog.close()
+				del dialog
+				remove_qr(qr_path)
 				control.notification('Real-Debrid', 'Authorization timed out', icon=rd_icon)
 				return False
 
 			self.auth_loop()
 
-		try:
-			control.progressDialog.close()
-		except Exception as e:
-			log_utils.error(f"RealDebrid progress dialog close failed: {e}")
+		dialog.close()
+		del dialog
+		remove_qr(qr_path)
 
 		success, error = self.get_token()
 		if not success:
 			return False
 
-		control.notification(title='AM Lite',message='Successfully Authorized!',icon=rd_icon)
+		control.notification(title='AM Lite', message='Successfully Authorized!', icon=rd_icon)
 		return True
+
+	def auth_loop(self):
+		control.sleep(self.auth_step * 1000)
+		url = 'client_id=%s&code=%s' % (self.client_ID, self.device_code)
+		url = oauth_base_url + credentials_url % url
+		try:
+			response = json.loads(requests.get(url).text)
+		except Exception as e:
+			log_utils.error(f"RealDebrid auth_loop failed: {e}")
+			return
+
+		if 'error' in response:
+			return
+		else:
+			try:
+				self.client_ID = response['client_id']
+				self.secret = response['client_secret']
+			except Exception as e:
+				log_utils.error(f"RealDebrid auth_loop response handling failed: {e}")
+				control.okDialog(title='default', message=control.lang(40019))
+			return
 
 	def account_info(self):
 		return self._get('user')

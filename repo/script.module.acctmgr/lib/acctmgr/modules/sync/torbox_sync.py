@@ -7,7 +7,6 @@ from acctmgr.modules import control
 from acctmgr.modules import log_utils
 from acctmgr.modules.db import torbox_db
 from acctmgr.modules.db import chk_auth_db
-from acctmgr.modules.db import torbox_db
 
 # Variables
 joinPath = os.path.join
@@ -138,7 +137,7 @@ class Auth:
             try:
                 if exists(chk_addon):
                     addon = xbmcaddon.Addon(plugin)
-                    chk_auth = addon.getSetting("torbox.token")
+                    chk_auth = addon.getSetting("tb.token")
                     if chk_auth != master_token:
                         for k, v in {
                             "tb.token": your_token,

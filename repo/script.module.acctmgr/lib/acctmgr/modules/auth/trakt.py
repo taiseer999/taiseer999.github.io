@@ -1,13 +1,41 @@
 # -*- coding: utf-8 -*-
-import xbmc, xbmcaddon
-import os
 import requests
 import time
+import xbmc
+import xbmcaddon
+import xbmcgui
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
+from acctmgr.modules.qr_utils import make_qr, remove_qr
 
 # Variables
 trakt_icon = control.joinPath(control.artPath(), 'trakt.png')
+trakt_bdr = control.joinPath(control.addonPath(), 'resources', 'images', 'white.png')
+trakt_bg = control.joinPath(control.addonPath(), 'resources', 'images', 'dialog_background.png')
+
+class TraktAuthDialog(xbmcgui.WindowXMLDialog):
+	def __init__(self, *args, **kwargs):
+		self.user_code = kwargs.get('user_code')
+		self.bg_image = kwargs.get('bg_image')
+		self.qr_image = kwargs.get('qr_image')
+		self.bdr_image = kwargs.get('bdr_image')
+		self.is_active = True
+		super(TraktAuthDialog, self).__init__()
+
+	def onInit(self):
+		self.setProperty('user_code', self.user_code)
+		self.setProperty('bg_image', self.bg_image)
+		self.setProperty('qr_image', self.qr_image)
+		self.setProperty('bdr_image', self.bdr_image)
+
+	def onClick(self, controlId):
+		self.is_active = False
+		self.close()
+
+	def onAction(self, action):
+		if action.getId() in [10, 13, 92]:
+			self.is_active = False
+			self.close()
 
 class Trakt():
 	def __init__(self):
@@ -32,7 +60,6 @@ class Trakt():
 						except Exception as e:
 							log_utils.error(f"Error converting expires_at to float: {e}")
 							expires_at = 0
-
 						if expires_at > 0 and time.time() >= expires_at:
 							if not self.refresh_token():
 								return None
@@ -89,7 +116,7 @@ class Trakt():
 		data = {'client_id': self.traktClientID()}
 		return self.call("oauth/device/code", data=data, with_auth=False, method='POST')
 
-	def get_device_token(self, device_codes):
+	def get_device_token(self, device_codes, dialog):
 		try:
 			data = {
 				"code": device_codes["device_code"],
@@ -99,68 +126,100 @@ class Trakt():
 			start = time.time()
 			expires_in = int(device_codes.get('expires_in', 600))
 			interval = max(int(device_codes.get('interval', 5)), 1)
-			verification_url = control.lang(32513) % str(device_codes['verification_url'])
-			user_code = control.lang(32514) % str(device_codes['user_code'])
-			control.progressDialog.create(control.lang(32073), control.progress_line % (verification_url, user_code, ''))
-			try:
-				time_passed = 0
-				while not control.progressDialog.iscanceled() and time_passed < expires_in:
-					try:
-						headers = {
-							'Content-Type': 'application/json',
-							'trakt-api-version': '2',
-							'trakt-api-key': self.traktClientID()
-						}
-						response = requests.post(
-							self.api_endpoint % "oauth/device/token",
-							json=data,
-							headers=headers,
-							timeout=15.0
-						)
 
-						if response.status_code == 200:
-							token_data = response.json()
-							if token_data and token_data.get("access_token") and token_data.get("refresh_token"):
-								return token_data
+			time_passed = 0
+			while dialog.is_active and time_passed < expires_in:
+				try:
+					headers = {
+						'Content-Type': 'application/json',
+						'trakt-api-version': '2',
+						'trakt-api-key': self.traktClientID()
+					}
+					response = requests.post(
+						self.api_endpoint % "oauth/device/token",
+						json=data,
+						headers=headers,
+						timeout=15.0
+					)
+
+					if response.status_code == 200:
+						token_data = response.json()
+						if token_data and token_data.get("access_token") and token_data.get("refresh_token"):
+							return token_data
+						return None
+
+					if response.status_code == 400:
+						try:
+							error_data = response.json() or {}
+						except Exception:
+							error_data = {}
+						error_code = error_data.get('error', '')
+						if error_code == 'slow_down':
+							interval += 5
+						elif error_code in ('authorization_declined', 'expired_token', 'access_denied'):
 							return None
 
-						if response.status_code == 400:
-							try:
-								error_data = response.json() or {}
-							except Exception:
-								error_data = {}
+					xbmc.sleep(interval * 1000)
 
-							error_code = error_data.get('error', '')
-							if error_code == 'slow_down':
-								interval += 5
-							elif error_code in ('authorization_pending', 'authorization_declined', 'expired_token', 'access_denied'):
-								if error_code in ('authorization_declined', 'expired_token', 'access_denied'):
-									return None
+				except requests.RequestException as e:
+					log_utils.log('Request Error: %s' % str(e), __name__, log_utils.LOGDEBUG)
+					xbmc.sleep(interval * 1000)
 
-							progress = int(100 * time_passed / expires_in)
-							control.progressDialog.update(progress)
-							control.sleep(interval * 1000)
-						else:
-							try:
-								log_utils.log('Request Error: %s' % response.text, __name__, log_utils.LOGDEBUG)
-							except Exception:
-								pass
-							progress = int(100 * time_passed / expires_in)
-							control.progressDialog.update(progress)
-							control.sleep(interval * 1000)
+				time_passed = time.time() - start
 
-					except requests.RequestException as e:
-						log_utils.log('Request Error: %s' % str(e), __name__, log_utils.LOGDEBUG)
-						progress = int(100 * time_passed / expires_in)
-						control.progressDialog.update(progress)
-						control.sleep(interval * 1000)
-
-					time_passed = time.time() - start
-			finally:
-				control.progressDialog.close()
 			return None
 		except Exception as e:
 			log_utils.error(f"Trakt device token flow failed: {e}")
+
+	def auth(self):
+		try:
+			code = self.get_device_code()
+			if not code:
+				control.notification(message=40075, icon=trakt_icon)
+				return False
+
+			user_code = str(code.get('user_code', ''))
+			verification_url = str(code.get('verification_url', 'https://trakt.tv/activate'))
+			qr_path = make_qr('%s/%s' % (verification_url.rstrip('/'), user_code))
+
+			dialog = TraktAuthDialog(
+				'trakt_auth.xml',
+				str(control.addonPath()),
+				'default',
+				user_code=user_code,
+				bg_image=trakt_bg,
+				qr_image=qr_path,
+				bdr_image=trakt_bdr
+			)
+			dialog.show()
+
+			token = self.get_device_token(code, dialog)
+
+			dialog.close()
+			del dialog
+			remove_qr(qr_path)
+
+			if token and token.get("access_token") and token.get("refresh_token"):
+				expires_at = int(time.time()) + 86400
+				control.setSetting('trakt.expires', str(expires_at))
+				control.setSetting('trakt.token', token["access_token"])
+				control.setSetting('trakt.refresh', token["refresh_token"])
+				self.expires_at = str(expires_at)
+				self.token = token["access_token"]
+				control.sleep(1000)
+				try:
+					user = self.call("users/me", with_auth=True)
+					control.setSetting('trakt.username', str(user['username']))
+				except Exception as e:
+					log_utils.error(f"Error fetching user info: {e}")
+					pass
+				control.notification(title='AM Lite', message='Successfully Authorized!', icon=trakt_icon)
+				return True
+
+			control.notification(message=40075, icon=trakt_icon)
+			return False
+		except Exception as e:
+			log_utils.error(f"Trakt auth failed: {e}")
 
 	def refresh_token(self):
 		data = {
@@ -203,13 +262,11 @@ class Trakt():
 
 		if code != '200':
 			error = response_json.get('error', '') if isinstance(response_json, dict) else ''
-
 			if error == 'invalid_grant':
 				log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
 				control.notification(title=32315, message=32687)
 			else:
 				log_utils.error(f"Trakt refresh failed: HTTP {code} - {response_text}")
-
 			return False
 
 		if response_json.get('error') == 'invalid_grant':
@@ -230,33 +287,7 @@ class Trakt():
 		control.setSetting('trakt.expires', str(traktExpires))
 		self.token = traktToken
 		self.expires_at = str(traktExpires or '')
-
 		return True
-
-	def auth(self):
-		try:
-			code = self.get_device_code()
-			token = self.get_device_token(code)
-			if token and token.get("access_token") and token.get("refresh_token"):
-				expires_at = int(time.time()) + 86400
-				control.setSetting('trakt.expires', str(expires_at))
-				control.setSetting('trakt.token', token["access_token"])
-				control.setSetting('trakt.refresh', token["refresh_token"])
-				self.expires_at = str(expires_at)
-				self.token = token["access_token"]
-				control.sleep(1000)
-				try:
-					user = self.call("users/me", with_auth=True)
-					control.setSetting('trakt.username', str(user['username']))
-				except Exception as e:
-					log_utils.error(f"Error fetching user info: {e}")
-					pass
-				control.notification(title='AM Lite',message='Successfully Authorized!',icon=trakt_icon)
-				return True
-			control.notification(message=40075, icon=trakt_icon)
-			return False
-		except Exception as e:
-			log_utils.error(f"Trakt auth failed: {e}")
 
 	def revoke(self):
 		data = {"token": control.setting('trakt.token')}
@@ -272,8 +303,7 @@ class Trakt():
 		control.dialog.ok(control.lang(32315), control.lang(32314))
 
 	def account_info(self):
-		response = self.call("users/me", with_auth=True)
-		return response
+		return self.call("users/me", with_auth=True)
 
 	def extended_account_info(self):
 		account_info = self.call("users/settings", with_auth=True)
@@ -325,7 +355,6 @@ class Trakt():
 				vip = '%s Years' % str(account_info['user']['vip_years'])
 
 			total_given_ratings = stats['ratings']['total']
-
 			movies_collected = stats['movies']['collected']
 			movies_watched = stats['movies']['watched']
 			movie_minutes = stats['movies']['minutes']
@@ -345,7 +374,6 @@ class Trakt():
 
 			shows_collected = stats['shows']['collected']
 			shows_watched = stats['shows']['watched']
-
 			episodes_watched = stats['episodes']['watched']
 			episode_minutes = stats['episodes']['minutes']
 
@@ -380,9 +408,7 @@ class Trakt():
 			return
 
 	def traktClientID(self):
-		traktId = 'ce7457fe1e42f09919b57171e9196109717474bad5b13b2a70959aef2f8e5624'
-		return traktId
+		return 'ce7457fe1e42f09919b57171e9196109717474bad5b13b2a70959aef2f8e5624'
 
 	def traktClientSecret(self):
-		traktSecret = '004d641c35178c7d3c5798313919bec181e9a162bc84f16a2e78dc82a37150db'
-		return traktSecret
+		return '004d641c35178c7d3c5798313919bec181e9a162bc84f16a2e78dc82a37150db'

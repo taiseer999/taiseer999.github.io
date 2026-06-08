@@ -172,6 +172,7 @@ class Torbox:
 			control.setSetting("torbox.token", api)
 			control.setSetting("torbox.acct_id", str(acct_id))
 			control.setSetting("torbox.auth_status", auth_status)
+			control.setSetting("torbox.auth_expires", str(expires) if expires else "")
 
 			control.notification(title="AM Lite",message="Successfully Authorized!",icon=torbox_icon)
 
@@ -205,5 +206,6 @@ class Torbox:
 		control.setSetting("torbox.token", "")
 		control.setSetting("torbox.acct_id", "")
 		control.setSetting("torbox.auth_status", "")
+		control.setSetting("torbox.auth_expires", "")
 
 		control.notification("TorBox Authorization Revoked",icon=torbox_icon)
