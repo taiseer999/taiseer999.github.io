@@ -43,5 +43,15 @@ fanart="https://iili.io/BacbRgj.png"
 preview="http://"
 adult="no"
 info="http://your.info.url"
-description="اصنع الييلد كما تشاء"
+description="البيلد لا يحوي سكن راكب.
+
+الرجاء الانتقال إلى برنامج ABUKARIM TOOLS  بعد التنصيب
+
+1 استخدم Skin Selection لاختيار السكن المناسب لجهازك.
+
+2 استخدم New Build Tools لتفعيل الترجمات والإعدادات الإضافية.
+
+3 استخدم Apply Batches لتحسين الإضافات وتطبيق التعديلات الموصى بها.
+
+4 استخدم backup/ restore لاسترجاع معلوماتك السابقة"
 
