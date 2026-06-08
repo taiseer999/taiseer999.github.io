@@ -1,3 +1,10 @@
-Welcome - مرحبا
 
-This wizard will allow you to install ready made builds without bloat targeting Arab/ English users - هذا البرنامج يساعد في تركيب بيلدات خالية من الاضافات غير اللازمة
+Welcome to ABUKARIM Repository
+
+البيلد لا يحوي سكن راكب 
+
+الرجاء الانتقال إلى برنامج ABUKARIM TOOLS بعد التنصيب لاختيار السكن المناسب لجهازك.
+
+استخدم New Build Tools لتفعيل الترجمات والإعدادات الإضافية.
+
+واستخدم Apply Batches لتحسين الإضافات وتطبيق التعديلات الموصى بها.
