@@ -94,7 +94,7 @@ class RealDebrid:
 			response = self._post(original_url, data)
 		elif 'error' in response:
 			response = json.loads(response)
-			control.notification(title='default', message=response.get('error'), icon=rd_icon)
+			control.notification(title='Default', message=response.get('error'), icon=rd_icon)
 			return None
 		try:
 			return json.loads(response)
@@ -117,7 +117,7 @@ class RealDebrid:
 			response = json.loads(requests.get(url).text)
 		except Exception as e:
 			log_utils.error(f"RealDebrid device code request failed: {e}")
-			control.notification(title='default', message=control.lang(40019), icon=rd_icon)
+			control.notification(title='Default', message=control.lang(40019), icon=rd_icon)
 			return False
 
 		try:
@@ -134,7 +134,7 @@ class RealDebrid:
 		dialog = RealDebridAuthDialog(
 			'realdebrid_auth.xml',
 			str(control.addonPath()),
-			'default',
+			'Default',
 			user_code=user_code,
 			bg_image=rd_bg,
 			qr_image=qr_path,
@@ -191,7 +191,7 @@ class RealDebrid:
 				self.secret = response['client_secret']
 			except Exception as e:
 				log_utils.error(f"RealDebrid auth_loop response handling failed: {e}")
-				control.okDialog(title='default', message=control.lang(40019))
+				control.okDialog(title='Default', message=control.lang(40019))
 			return
 
 	def account_info(self):

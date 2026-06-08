@@ -49,7 +49,7 @@ class Trakt():
 		try:
 			def error_notification(line1, error):
 				if suppress_error_notification: return
-				return control.notification(title='default', message='%s: %s' % (line1, error), icon=trakt_icon)
+				return control.notification(title='Default', message='%s: %s' % (line1, error), icon=trakt_icon)
 
 			def send_query():
 				resp = None
@@ -185,7 +185,7 @@ class Trakt():
 			dialog = TraktAuthDialog(
 				'trakt_auth.xml',
 				str(control.addonPath()),
-				'default',
+				'Default',
 				user_code=user_code,
 				bg_image=trakt_bg,
 				qr_image=qr_path,

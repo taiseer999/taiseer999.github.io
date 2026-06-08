@@ -100,7 +100,7 @@ class AllDebrid:
 		dialog = AllDebridAuthDialog(
 			'alldebrid_auth.xml',
 			str(control.addonPath()),
-			'default',
+			'Default',
 			user_code=self.pin,
 			bg_image=ad_bg,
 			qr_image=qr_path,

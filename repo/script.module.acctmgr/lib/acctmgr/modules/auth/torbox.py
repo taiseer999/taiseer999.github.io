@@ -88,7 +88,7 @@ class Torbox:
 			dialog = TorboxAuthDialog(
 				"torbox_auth.xml",
 				str(control.addonPath()),
-				"default",
+				"Default",
 				user_code=user_code,
                                 bg_image=torbox_bg,
 				qr_image=torbox_qr,
