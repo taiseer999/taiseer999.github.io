@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.abukarimtools"
+       name="ABUKARIM TOOLS"
+       version="1.3.5.2"
+       provider-name="Abukarim">
+
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" optional="true"/>
+    <import addon="script.module.six" optional="true"/>
+  </requires>
+
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>executable</provides>
+  </extension>
+
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">ABUKARIM TOOLS</summary>
+    <description lang="en_GB">Unified plugin: Skin Installer, Skin Switcher, Userdata Backup &amp; Restore, OpenWizard, and ABUKARIM Wizard.</description>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <platform>all</platform>
+  </extension>
+
+</addon>
