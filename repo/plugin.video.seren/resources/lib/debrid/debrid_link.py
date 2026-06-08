@@ -71,6 +71,8 @@ def debridlink_guard_response(func):
                 response = func(*args, **kwarg)
                 if response is None:
                     return None
+                if response.status_code in [200, 201]:
+                    return response
 
             g.log(
                 f"Debrid-Link returned a {response.status_code} "

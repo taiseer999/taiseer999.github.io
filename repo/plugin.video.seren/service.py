@@ -36,10 +36,6 @@ _prewarm_count = g.SETTINGS_CACHE.pre_warm_settings(g.SETTINGS_PATH)
 # Store immutable state in window properties so plugin calls skip full re-init
 g._store_service_state()
 
-# Signal to Account Manager (and any other addon) that Seren's service is fully initialised
-# and its addon registry entry is safe to call.  Cleared in the finally block on deinit.
-xbmcgui.Window(10000).setProperty('seren.service.ready', g.VERSION)
-
 # Pre-warm studio icons into window property so first list render doesn't block on listdir
 _ = g.studio_icons
 
@@ -55,6 +51,9 @@ g.log("#############  SERVICE ENTERED KEEP ALIVE  #################")
 
 monitor = SerenMonitor()
 try:
+    # Signal to Account Manager (and any other addon) that Seren's service is ready.
+    # Inside try so clearProperty() in finally is always paired with this setProperty.
+    xbmcgui.Window(10000).setProperty('seren.service.ready', g.VERSION)
     xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=longLifeServiceManager")')
 
     do_update_news()

@@ -428,6 +428,8 @@ def dispatch(params):
                     if isinstance(stream_link, tuple):
                         stream_link, _release_title = stream_link
                     watchdog_used = bool(stream_link)
+                    if not stream_link and watchdog.user_stopped_early:
+                        return
                     # Set last resolved title for episode release group continuity
                     if watchdog_used and _release_title and ii['info']['mediatype'] == g.MEDIA_EPISODE:
                         g.set_runtime_setting(
@@ -491,6 +493,8 @@ def dispatch(params):
                             if isinstance(stream_link, tuple):
                                 stream_link, _release_title = stream_link
                             watchdog_used = bool(stream_link)
+                            if not stream_link and watchdog.user_stopped_early:
+                                return
                             if watchdog_used and _release_title and ii2['info']['mediatype'] == g.MEDIA_EPISODE:
                                 g.set_runtime_setting(
                                     f"last_resolved_release_title.{ii2['info']['trakt_show_id']}",
