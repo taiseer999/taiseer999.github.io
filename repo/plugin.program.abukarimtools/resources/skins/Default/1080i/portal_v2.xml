@@ -1,0 +1,26 @@
+<window>
+<defaultcontrol>50</defaultcontrol>
+<controls>
+<control type="label">
+<left>40</left><top>30</top><width>400</width><height>40</height>
+<label>ABUKARIM PORTAL V2</label>
+</control>
+
+<control type="list" id="50">
+<left>40</left><top>120</top><width>300</width><height>600</height>
+</control>
+
+<control type="image" id="200">
+<left>380</left><top>40</top><width>1400</width><height>260</height>
+</control>
+
+<control type="label" id="210">
+<left>400</left><top>280</top><width>800</width><height>40</height>
+<label>Selected Skin</label>
+</control>
+
+<control type="panel" id="100">
+<left>380</left><top>340</top><width>1450</width><height>650</height>
+</control>
+</controls>
+</window>
