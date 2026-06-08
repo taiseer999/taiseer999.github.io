@@ -1,14 +1,42 @@
 # -*- coding: utf-8 -*-
 import xbmc
+import xbmcgui
 import requests
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
+from acctmgr.modules.qr_utils import make_qr, remove_qr
 
 # Variables
-CLIENT_ID = '671951559'  # used to auth
+CLIENT_ID = '671951559'
 BaseUrl = 'https://www.premiumize.me/api'
 account_info_url = '%s/account/info' % BaseUrl
 pm_icon = control.joinPath(control.artPath(), 'premiumize.png')
+pm_bdr = control.joinPath(control.addonPath(), 'resources', 'images', 'white.png')
+pm_bg = control.joinPath(control.addonPath(), 'resources', 'images', 'dialog_background.png')
+
+class PremiumizeAuthDialog(xbmcgui.WindowXMLDialog):
+	def __init__(self, *args, **kwargs):
+		self.user_code = kwargs.get('user_code')
+		self.bg_image = kwargs.get('bg_image')
+		self.qr_image = kwargs.get('qr_image')
+		self.bdr_image = kwargs.get('bdr_image')
+		self.is_active = True
+		super(PremiumizeAuthDialog, self).__init__()
+
+	def onInit(self):
+		self.setProperty('user_code', self.user_code)
+		self.setProperty('bg_image', self.bg_image)
+		self.setProperty('qr_image', self.qr_image)
+		self.setProperty('bdr_image', self.bdr_image)
+
+	def onClick(self, controlId):
+		self.is_active = False
+		self.close()
+
+	def onAction(self, action):
+		if action.getId() in [10, 13, 92]:
+			self.is_active = False
+			self.close()
 
 class Premiumize:
 	name = "Premiumize.me"
@@ -23,43 +51,24 @@ class Premiumize:
 
 	def _get(self, url):
 		try:
-			response = requests.get(
-				url,
-				headers=self.headers,
-				timeout=15
-			).json()
-
+			response = requests.get(url, headers=self.headers, timeout=15).json()
 			if 'status' in response:
 				if response.get('status') == 'success':
 					return response
 				if response.get('status') == 'error' and self.server_notifications:
-					control.notification(
-						title='default',
-						message=response.get('message'),
-						icon=pm_icon
-					)
+					control.notification(title='default', message=response.get('message'), icon=pm_icon)
 		except Exception as e:
 			log_utils.error(f"Premiumize GET request failed: {e}")
 		return response
 
 	def _post(self, url, data={}):
 		try:
-			response = requests.post(
-				url,
-				data,
-				headers=self.headers,
-				timeout=15
-			).json()
-
+			response = requests.post(url, data, headers=self.headers, timeout=15).json()
 			if 'status' in response:
 				if response.get('status') == 'success':
 					return response
 				if response.get('status') == 'error' and self.server_notifications:
-					control.notification(
-						title='default',
-						message=response.get('message'),
-						icon=pm_icon
-					)
+					control.notification(title='default', message=response.get('message'), icon=pm_icon)
 		except Exception as e:
 			log_utils.error(f"Premiumize POST request failed: {e}")
 		return response
@@ -70,49 +79,36 @@ class Premiumize:
 		data = {'client_id': CLIENT_ID, 'response_type': 'device_code'}
 
 		try:
-			token = requests.post(
-				'https://www.premiumize.me/token',
-				data=data,
-				timeout=15
-			).json()
-
+			token = requests.post('https://www.premiumize.me/token', data=data, timeout=15).json()
 			expiry = float(token['expires_in'])
 			token_ttl = int(token['expires_in'])
 			interval = int(token['interval'])
 			device_code = token['device_code']
 			user_code = token['user_code']
-			verify_url = token['verification_uri']
-
+			verify_url = token.get('verification_uri', 'https://www.premiumize.me/device')
 		except Exception as e:
 			log_utils.error(f"Premiumize device code request failed: {e}")
-			control.notification(
-				title='default',
-				message=control.lang(40020),
-				icon=pm_icon
-			)
+			control.notification(title='default', message=control.lang(40020), icon=pm_icon)
 			return False
 
-		progressDialog = control.progressDialog
-		try:
-			progressDialog.create(
-				control.lang(40054),
-				control.progress_line % (
-					control.lang(32513) % verify_url,
-					control.lang(32514) % user_code,
-					''
-				)
-			)
-		except Exception as e:
-			log_utils.error(f"Premiumize progress dialog create failed: {e}")
-			progressDialog.create("Premiumize Authorization")
+		qr_path = make_qr(verify_url)
 
-		progressDialog.update(0)
+		dialog = PremiumizeAuthDialog(
+			'premiumize_auth.xml',
+			str(control.addonPath()),
+			'Default',
+			user_code=user_code,
+			bg_image=pm_bg,
+			qr_image=qr_path,
+			bdr_image=pm_bdr
+		)
+		dialog.show()
 
 		start = time.time()
 		timeout = expiry or 300
 		success = False
 
-		while not progressDialog.iscanceled():
+		while dialog.is_active:
 			if time.time() - start > timeout:
 				break
 
@@ -120,33 +116,20 @@ class Premiumize:
 			if success:
 				break
 
-			progress_percent = 100 - int(
-				(float((expiry - token_ttl) / expiry) * 100)
-			)
-			progressDialog.update(progress_percent)
-
-			control.sleep(interval * 1000)
+			xbmc.sleep(interval * 1000)
 			token_ttl -= interval
 			if token_ttl <= 0:
 				break
 
-		try:
-			progressDialog.close()
-		except Exception as e:
-			log_utils.error(f"Premiumize progress dialog close failed: {e}")
-
-		if progressDialog.iscanceled():
-			return False
+		dialog.close()
+		del dialog
+		remove_qr(qr_path)
 
 		if not success:
-			control.notification(
-				'Premiumize',
-				'Authorization failed or timed out',
-				icon=pm_icon
-			)
+			control.notification('Premiumize', 'Authorization failed or timed out', icon=pm_icon)
 			return False
 
-		control.notification(title='AM Lite',message='Successfully Authorized!',icon=pm_icon)
+		control.notification(title='AM Lite', message='Successfully Authorized!', icon=pm_icon)
 		return True
 
 	def poll_token(self, device_code):
@@ -157,21 +140,14 @@ class Premiumize:
 		}
 
 		try:
-			token = requests.post(
-				'https://www.premiumize.me/token',
-				data=data,
-				timeout=15
-			).json()
+			token = requests.post('https://www.premiumize.me/token', data=data, timeout=15).json()
 		except Exception as e:
 			log_utils.error(f"Premiumize poll token failed: {e}")
 			return True, False
 
 		if 'error' in token:
 			if token['error'] == "access_denied":
-				control.okDialog(
-					title='default',
-					message=control.lang(40020)
-				)
+				control.okDialog(title='default', message=control.lang(40020))
 				return False, False
 			return True, False
 
@@ -184,20 +160,14 @@ class Premiumize:
 		control.sleep(500)
 		account_info = self.account_info()
 		control.setSetting('premiumize.token', token['access_token'])
-		control.setSetting(
-			'premiumize.username',
-			str(account_info['customer_id'])
-		)
+		control.setSetting('premiumize.username', str(account_info['customer_id']))
 		return False, True
 
 	def revoke(self):
 		try:
 			control.setSetting('premiumize.token', '')
 			control.setSetting('premiumize.username', '')
-			control.dialog.ok(
-				control.lang(40057),
-				control.lang(32314)
-			)
+			control.dialog.ok(control.lang(40057), control.lang(32314))
 		except Exception as e:
 			log_utils.error(f"Premiumize revoke failed: {e}")
 
@@ -216,13 +186,9 @@ class Premiumize:
 			expires = datetime.fromtimestamp(accountInfo['premium_until'])
 			days_remaining = (expires - datetime.today()).days
 			expires = expires.strftime("%A, %B %d, %Y")
-			points_used = int(
-				math.floor(float(accountInfo['space_used']) / 1073741824.0)
-			)
+			points_used = int(math.floor(float(accountInfo['space_used']) / 1073741824.0))
 			space_used = float(int(accountInfo['space_used'])) / 1073741824
-			percentage_used = str(
-				round(float(accountInfo['limit_used']) * 100.0, 1)
-			)
+			percentage_used = str(round(float(accountInfo['limit_used']) * 100.0, 1))
 
 			items = []
 			items += [control.lang(40040) % accountInfo['customer_id']]
@@ -233,7 +199,6 @@ class Premiumize:
 			items += [control.lang(40045) % percentage_used]
 
 			return control.selectDialog(items, 'Premiumize')
-
 		except Exception as e:
 			log_utils.error(f"Premiumize account dialog failed: {e}")
 		return
