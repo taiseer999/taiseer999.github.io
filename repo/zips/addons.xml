@@ -6913,7 +6913,7 @@ Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, SubDL, Addic7ed
   * results ordering with preferred language ordered first
         </news>
     </extension>
-</addon><addon id="service.subtitles.dexworld" name="DexWorld AI Subtitles" version="5.0.0" provider-name="DexWorld">
+</addon><addon id="service.subtitles.dexworld" name="DexSubtitles" version="5.3.2" provider-name="DexSubtitles">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.0" />
