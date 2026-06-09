@@ -53,14 +53,6 @@ _WIZARD_META = {
         'entry': 'default.py',
         'slug': 'openwizard',
     },
-    'plugin.program.ABUKARIMwizard': {
-        'name': 'ABUKARIMwizard Wizard',
-        'version': '3.0.8.2',
-        'icon': 'resources/icon.png',
-        'fanart': 'resources/fanart.jpg',
-        'entry': 'addon.py',
-        'slug': 'abukarimwizard',
-    },
 }
 
 _OW_DEFAULTS = {
@@ -119,19 +111,9 @@ _OW_DEFAULTS = {
     'nextwizcleandate': '2019-01-01 00:00:00',
 }
 
-_AK_DEFAULTS = {
-    'buildname': 'No Build Installed', 'buildversion': '0',
-    'firstrun': 'false', 'firstrunNotify': 'false', 'firstrunSave': 'true',
-    'notifyversion': '0', 'autoclearpackages': 'true', 'update_passed': 'false',
-    'backupfolder': 'special://home/backups',
-    'color1': '36', 'color2': '124', 'color3': '98', 'color4': '125',
-    'savedata': 'false', 'saveyoutube': 'false', 'savefavs': 'false',
-    'savesources': 'false', 'saveadvanced': 'false', 'savegui': 'false',
-}
 
 _DEFAULTS = {
     'plugin.program.openwizard':     _OW_DEFAULTS,
-    'plugin.program.ABUKARIMwizard': _AK_DEFAULTS,
 }
 
 # ---------------------------------------------------------------------------
@@ -361,6 +343,3 @@ def run_openwizard(handle, addon_path, paramstring=''):
     _run_wizard('plugin.program.openwizard', wizard_dir, handle, paramstring)
 
 
-def run_abukarimwizard(handle, addon_path, paramstring=''):
-    wizard_dir = os.path.join(addon_path, 'resources', 'lib', 'ABUKARIMwizard')
-    _run_wizard('plugin.program.ABUKARIMwizard', wizard_dir, handle, paramstring)

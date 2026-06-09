@@ -22,14 +22,12 @@ ICONS  = {
     'skin_switch':    ADDON_PATH + 'resources/icons/skin_switcher.png',
     'backup':         ADDON_PATH + 'resources/icons/backup.png',
     'openwizard':     ADDON_PATH + 'resources/icons/openwizard.png',
-    'abukarimwizard': ADDON_PATH + 'resources/icons/abukarimwizard.png',
     'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
     'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
 }
 
 MENU = [
     ('backup',         'Backup/Restore'),
-    ('abukarimwizard', 'Wizard'),
     ('skin_install',   'Skin Selection'),
     ('binary_install', 'New Build Tools'),
     ('patcher',        'Apply Patches'),
@@ -69,11 +67,9 @@ def router():
         # Strip 'wizard' key; pass everything else back as the paramstring
         sub_params = {k: v for k, v in params.items() if k != 'wizard'}
         paramstring = urlencode(sub_params)
-        from resources.lib.wizard_runner import run_openwizard, run_abukarimwizard
+        from resources.lib.wizard_runner import run_openwizard
         if wizard == 'openwizard':
             run_openwizard(HANDLE, ADDON_PATH, paramstring)
-        elif wizard == 'abukarimwizard':
-            run_abukarimwizard(HANDLE, ADDON_PATH, paramstring)
         return
 
     # --- Top-level menu ---
@@ -99,10 +95,6 @@ def router():
     elif mode == 'openwizard':
         from resources.lib.wizard_runner import run_openwizard
         run_openwizard(HANDLE, ADDON_PATH)
-
-    elif mode == 'abukarimwizard':
-        from resources.lib.wizard_runner import run_abukarimwizard
-        run_abukarimwizard(HANDLE, ADDON_PATH)
 
     elif mode == 'patcher':
         _end_directory()
