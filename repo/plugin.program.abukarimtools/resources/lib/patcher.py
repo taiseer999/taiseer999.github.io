@@ -17,6 +17,9 @@ Applies patches to installed Kodi addons:
 
   5. script.tinyppi  –  resources/lib/monitor.py
      Add _update_hdr_properties() method to KodiMonitor class
+
+  6. plugin.video.redlight  –  resources/lib/modules/kodi_utils.py
+     volume_checker() – fix inverted enabled-check and broken dB→% conversion
 """
 
 import os
@@ -289,6 +292,41 @@ PATCHES = [
         'fallback_repl':    None,
         # already-patched check: shorter sentinel that only exists post-patch
         'already_patched_check': '_update_hdr_properties',
+    },
+    # ------------------------------------------------------------------
+    # Patch – RedLight kodi_utils.py: fix volume_checker() logic
+    #   1. Condition was inverted: fired when disabled, silent when enabled
+    #   2. dB-to-percent conversion ignored the negative sign on Player.Volume
+    # ------------------------------------------------------------------
+    {
+        'addon_id':    'plugin.video.redlight',
+        'rel_path':    os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
+        'old': (
+            "def volume_checker():\n"
+            "\t# 0% == -60db, 100% == 0db\n"
+            "\ttry:\n"
+            "\t\tif get_property('redlight.playback.volumecheck_enabled') == 'false' or get_visibility('Player.Muted'): return\n"
+            "\t\tfrom modules.utils import string_alphanum_to_num\n"
+            "\t\tmax_volume = min(int(get_property('redlight.playback.volumecheck_percent') or '50'), 100)\n"
+            "\t\tif int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)\n"
+            "\texcept: pass"
+        ),
+        'new': (
+            "def volume_checker():\n"
+            "\t# 0% == -60db, 100% == 0db\n"
+            "\ttry:\n"
+            "\t\tif get_property('redlight.playback.volumecheck_enabled') != 'true' or get_visibility('Player.Muted'): return\n"
+            "\t\tfrom modules.utils import string_alphanum_to_num\n"
+            "\t\tmax_volume = min(int(get_property('redlight.playback.volumecheck_percent') or '50'), 100)\n"
+            "\t\tcurrent_db = float(string_alphanum_to_num(get_infolabel('Player.Volume').replace('-', '').split('.')[0]) or '0')\n"
+            "\t\tcurrent_volume = int(100 - (current_db / 60) * 100)\n"
+            "\t\tif current_volume > max_volume: execute_builtin('SetVolume(%d)' % max_volume)\n"
+            "\texcept: pass"
+        ),
+        'description': 'RedLight kodi_utils.py – fix volume_checker() inverted condition and dB conversion',
+        'fallback_pattern': r"(def volume_checker\(\):[\s\S]*?volumecheck_enabled\'\s*)==\s*\'false\'",
+        'fallback_repl':    r"\g<1>!= \'true\'",
+        'already_patched_check': "volumecheck_enabled') != 'true'",
     },
 ]
 
