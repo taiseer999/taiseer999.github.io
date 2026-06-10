@@ -420,7 +420,7 @@ class TraktAPI(ApiBase):
 
     def auth(self):
         """
-        Performs OAuth with Trakt
+        Performs OAuth with Trakt using QR Code dialog
         :return: None
         """
         self.username = None
@@ -431,38 +431,52 @@ class TraktAPI(ApiBase):
         try:
             response = response.json()
             user_code = response["user_code"]
-            device = response["device_code"]
-            interval = int(response["interval"])
-            expiry = int(response["expires_in"])
+            device    = response["device_code"]
+            interval  = int(response["interval"])
+            expiry    = int(response["expires_in"])
             token_ttl = int(response["expires_in"])
         except (KeyError, ValueError):
             xbmcgui.Dialog().ok(g.ADDON_NAME, g.get_language_string(30023))
             raise
 
         tools.copy2clip(user_code)
+
+        # ── QR Code dialog ───────────────────────────────────────────
+        from resources.lib.qr_utils import make_qr, remove_qr
+
+        qr_url    = "https://trakt.tv/activate/" + user_code
+        qr_path   = make_qr(qr_url)
+        addon_path = g.ADDON.getAddonInfo("path")
+
+        qr_dialog = xbmcgui.WindowXMLDialog(
+            "trakt_auth_qr.xml",
+            addon_path,
+            "Default",
+        )
+        qr_dialog.setProperty("user_code",      user_code)
+        qr_dialog.setProperty("qr_image",       qr_path)
+        qr_dialog.setProperty("progress_width", "530")
+        qr_dialog.setProperty("expires_label",  f"Expires in {token_ttl}s")
+        qr_dialog.show()
+
         failed = False
         try:
-            progress_dialog = xbmcgui.DialogProgress()
-            progress_dialog.create(
-                f"{g.ADDON_NAME}: {g.get_language_string(30022)}",
-                tools.create_multiline_message(
-                    line1=g.get_language_string(30018).format(g.color_string("https://trakt.tv/activate")),
-                    line2=g.get_language_string(30019).format(g.color_string(user_code)),
-                    line3=g.get_language_string(30047),
-                ),
-            )
-            progress_dialog.update(100)
-            while not failed and self.username is None and token_ttl > 0 and not progress_dialog.iscanceled():
+            while not failed and self.username is None and token_ttl > 0:
                 xbmc.sleep(1000)
-                if token_ttl % interval == 0:
-                    failed = self._auth_poll(device)
-                progress_percent = int(float((token_ttl * 100) / expiry))
-                progress_dialog.update(progress_percent)
                 token_ttl -= 1
 
-            progress_dialog.close()
+                if token_ttl % interval == 0:
+                    failed = self._auth_poll(device)
+
+                progress_width = int(float(token_ttl * 530) / expiry)
+                qr_dialog.setProperty("progress_width", str(progress_width))
+                qr_dialog.setProperty("expires_label",  f"Expires in {token_ttl}s")
+
         finally:
-            del progress_dialog
+            qr_dialog.close()
+            del qr_dialog
+            remove_qr(qr_path)
+        # ──────────────────────────────────────────────────────────────
 
         if not failed:
             xbmcgui.Dialog().ok(g.ADDON_NAME, g.get_language_string(30273))

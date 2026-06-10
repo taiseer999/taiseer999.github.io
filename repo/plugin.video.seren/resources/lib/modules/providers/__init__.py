@@ -68,7 +68,7 @@ class CustomProviders(ProviderCache):
         for root, _, files in os.walk(self.meta_path):
             for filename in files:
                 if filename.endswith(".json"):
-                    with open(os.path.join(root, filename)) as f:
+                    with open(os.path.join(root, filename), encoding="utf-8-sig") as f:
                         meta = json.load(f)
                         try:
                             packages.append(
