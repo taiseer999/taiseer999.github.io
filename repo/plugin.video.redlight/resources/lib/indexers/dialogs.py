@@ -6,12 +6,9 @@ from modules import kodi_utils, settings
 
 def window_theme_choice(params):
 	if params['type'] == 'theme':
-		choices = kodi_utils.addon_themes()
-		list_items = [{'line1': i['name'], 'icon': kodi_utils.get_icon(i['icon'], 'themes')} for i in choices]
-		kwargs = {'items': json.dumps(list_items), 'heading': 'Assign a Theme', 'narrow_window': 'true'}
-		choice = kodi_utils.select_dialog(choices, **kwargs)
-		if choice == None: return
-		window_theme, window_theme_contrast, window_theme_name = choice['value'][0][2:], choice['value'][1], choice['name']
+		# PATCHED: Dark theme only
+		dark_theme = kodi_utils.addon_themes()[0]
+		window_theme, window_theme_contrast, window_theme_name = dark_theme['value'][0][2:], dark_theme['value'][1], dark_theme['name']
 		window_theme_opacity = get_setting('redlight.window_theme_opacity', 'CC')
 		set_setting('window_theme_name', window_theme_name)
 	else:

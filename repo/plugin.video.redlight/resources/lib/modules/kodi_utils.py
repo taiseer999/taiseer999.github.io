@@ -5,8 +5,7 @@ import os
 from urllib.parse import urlencode, unquote
 
 def addon_themes():
-	return [{'name': 'Light', 'value': ('FF434343', 'FF2E2E2E'), 'icon': 'light'}, {'name': 'Medium', 'value': ('FF373737', 'FF4a4347'), 'icon': 'medium'},
-			{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]
+	return [{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]
 
 def addon_themes_opacity():
 	return [{'name': '100%', 'value': 'FF'}, {'name': '95%', 'value': 'F2'}, {'name': '90%', 'value': 'E6'}, {'name': '85%', 'value': 'D9'}, {'name': '80%', 'value': 'CC'},
@@ -527,10 +526,12 @@ def timeIt(func):
 def volume_checker():
 	# 0% == -60db, 100% == 0db
 	try:
-		if get_property('redlight.playback.volumecheck_enabled') == 'false' or get_visibility('Player.Muted'): return
+		if get_property('redlight.playback.volumecheck_enabled') != 'true' or get_visibility('Player.Muted'): return
 		from modules.utils import string_alphanum_to_num
 		max_volume = min(int(get_property('redlight.playback.volumecheck_percent') or '50'), 100)
-		if int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
+		current_db = float(string_alphanum_to_num(get_infolabel('Player.Volume').replace('-', '').split('.')[0]) or '0')
+		current_volume = int(100 - (current_db / 60) * 100)
+		if current_volume > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
 	except: pass
 
 def focus_index(index):
@@ -573,30 +574,42 @@ def upload_logfile(params):
 	if log_file == None: return
 	log_name, log_file = log_file
 	if not confirm_dialog(heading=log_name): return
-	show_busy_dialog()
+	progressDialog = None
 	url = 'https://paste.kodi.tv/'
 	log_file = translate_path('special://logpath/%s' % log_file)
 	if not path_exists(log_file): return ok_dialog(text='Error. Log Upload Failed')
 	try:
-		with open_file(log_file) as f: text = f.read()
-		UserAgent = 'script.kodi.loguploader: 1.0'
-		response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
-		if 'key' in response:
-			user_code = response['key']
-			url = '%s%s' % (url, user_code)
-			copy2clip(url)
-			qr_code = make_qrcode(url) or ''
-			progressDialog = progress_dialog(heading='Kodi Log Uploader', icon=qr_code)
-			count, success = 20, None
-			while not progressDialog.iscanceled() and count >= 0 and success == None:
-				try:
-					count -= 1
-					progressDialog.update('Share or Access with this url: [B]%s[/B][CR]Or Access using this QR Code' % url, count)
-					sleep(2500)
-				except: success = False
-		else: ok_dialog(text='Error. Log Upload Failed')
-	except: ok_dialog(text='Error. Log Upload Failed')
-	hide_busy_dialog()
+		show_busy_dialog()
+		try:
+			with open_file(log_file) as f: text = f.read()
+			UserAgent = 'script.kodi.loguploader: 1.0'
+			response = requests.post('%s%s' % (url, 'documents'), data=text.encode('utf-8', errors='ignore'), headers={'User-Agent': UserAgent}).json()
+		finally:
+			hide_busy_dialog()
+		if 'key' not in response:
+			return ok_dialog(text='Error. Log Upload Failed')
+		user_code = response['key']
+		url = '%s%s' % (url, user_code)
+		copy2clip(url)
+		qr_code = make_qrcode(url) or ''
+		progressDialog = progress_dialog(heading='Kodi Log Uploader', icon=qr_code)
+		countdown_secs = 120
+		remaining = countdown_secs
+		while not progressDialog.iscanceled() and remaining > 0:
+			progressDialog.update(
+				'Share or Access with this url: [B]%s[/B][CR]Or scan the QR code on another device.[CR][CR]Auto-closes in [B]%d[/B] seconds (Back to dismiss now).' % (url, remaining),
+				int(100 * remaining / countdown_secs))
+			for _ in range(10):
+				if progressDialog.iscanceled(): break
+				sleep(100)
+			remaining -= 1
+	except:
+		ok_dialog(text='Error. Log Upload Failed')
+	finally:
+		hide_busy_dialog()
+		if progressDialog:
+			try: progressDialog.close()
+			except: pass
 
 def fetch_kodi_imagecache(image):
 	import sqlite3 as database

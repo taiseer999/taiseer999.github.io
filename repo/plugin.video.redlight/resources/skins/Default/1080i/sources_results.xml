@@ -43,6 +43,31 @@
                 <aligny>center</aligny>
                 <label>[B]$INFO[Window.Property(total_results)][/B] [UPPERCASE]Results $INFO[Window.Property(filters_ignored)] $INFO[Window.Property(filter_info)][/UPPERCASE]</label>
             </control>
+            <control type="group">
+                <visible>!String.IsEmpty(Window.Property(prescrape_empty_notice))</visible>
+                <control type="label">
+                    <left>70</left>
+                    <top>48</top>
+                    <width max="1780">auto</width>
+                    <height>22</height>
+                    <font>font12</font>
+                    <textcolor>FFFF8A65</textcolor>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>[B]$INFO[Window.Property(prescrape_empty_notice)][/B]</label>
+                </control>
+                <control type="label">
+                    <left>70</left>
+                    <top>72</top>
+                    <width max="1780">auto</width>
+                    <height>18</height>
+                    <font>font10</font>
+                    <textcolor>FFCCCCCC</textcolor>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <label>$INFO[Window.Property(prescrape_empty_notice_sub)]</label>
+                </control>
+            </control>
         </control>
         <!-- Results -->
         <control type="group">
@@ -110,7 +135,7 @@
                             <left>20</left>
                             <visible>String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             <control type="label">
-                                <font>font14</font> <!-- REDLIGHT_33 -->
+                                <font>font32</font> <!-- REDLIGHT_33 -->
                                 <align>left</align>
                                 <aligny>bottom</aligny>
                                 <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
@@ -180,11 +205,11 @@
                                 <left>230</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- REDLIGHT_33 -->
+                                <font>font32</font> <!-- REDLIGHT_33 -->
                                 <textcolor>FF9c9a9b</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
-                                <label>[B]RUN FULL SOURCE SEARCH[/B]</label>
+                                <label>[B]RUN EXTERNAL SCRAPER SEARCH[/B]</label>
                                 <scroll>false</scroll>
                                 <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             </control>
@@ -213,7 +238,7 @@
                                     <top>35</top>
                                     <left>20</left>
                                     <control type="label">
-                                        <font>font14</font> <!-- REDLIGHT_33 -->
+                                        <font>font32</font> <!-- REDLIGHT_33 -->
                                         <textcolor>FF1F2020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
@@ -281,11 +306,11 @@
                                     <left>210</left>
                                     <width max="860">auto</width>
                                     <height>40</height>
-                                    <font>font14</font> <!-- REDLIGHT_33 -->
+                                    <font>font32</font> <!-- REDLIGHT_33 -->
                                     <textcolor>FF1F2020</textcolor>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label>[B]RUN FULL SOURCE SEARCH[/B]</label>
+                                    <label>[B]RUN EXTERNAL SCRAPER SEARCH[/B]</label>
                                 </control>
                             </control>
                         </control>
@@ -381,7 +406,7 @@
                                 <top>35</top>
                                 <left>20</left>
                                 <control type="label">
-                                    <font>font14</font> <!-- REDLIGHT_33 -->
+                                    <font>font32</font> <!-- REDLIGHT_33 -->
                                     <align>left</align>
                                     <aligny>bottom</aligny>
                                     <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
@@ -449,11 +474,11 @@
                                 <left>40</left>
                                 <width max="860">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- REDLIGHT_33 -->
+                                <font>font32</font> <!-- REDLIGHT_33 -->
                                 <textcolor>FF9c9a9b</textcolor>
                                 <align>center</align>
                                 <aligny>center</aligny>
-                                <label>[B]RUN FULL SOURCE SEARCH[/B]</label>
+                                <label>[B]RUN EXTERNAL SCRAPER SEARCH[/B]</label>
                                 <scroll>false</scroll>
                                 <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                             </control>
@@ -482,7 +507,7 @@
                                     <top>35</top>
                                     <left>20</left>
                                     <control type="label">
-                                        <font>font14</font> <!-- REDLIGHT_33 -->
+                                        <font>font32</font> <!-- REDLIGHT_33 -->
                                         <textcolor>FF1F2020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
@@ -550,11 +575,11 @@
                                     <left>40</left>
                                     <width max="860">auto</width>
                                     <height>40</height>
-                                    <font>font14</font> <!-- REDLIGHT_33 -->
+                                    <font>font32</font> <!-- REDLIGHT_33 -->
                                     <textcolor>FF1F2020</textcolor>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label>[B]RUN FULL SOURCE SEARCH[/B]</label>
+                                    <label>[B]RUN EXTERNAL SCRAPER SEARCH[/B]</label>
                                     <scroll>false</scroll>
                                     <visible>!String.IsEmpty(ListItem.Property(perform_full_search))</visible>
                                 </control>
@@ -654,7 +679,7 @@
                                 <top>35</top>
                                 <left>20</left>
                                 <control type="label">
-                                    <font>font14</font> <!-- REDLIGHT_33 -->
+                                    <font>font32</font> <!-- REDLIGHT_33 -->
                                     <align>left</align>
                                     <aligny>bottom</aligny>
                                     <label>[COLOR $INFO[ListItem.Property(highlight)]][B]$INFO[ListItem.Property(quality)][/B][/COLOR]</label>
@@ -686,7 +711,7 @@
                                 <left>210</left>
                                 <width max="1460">auto</width>
                                 <height>12</height>
-                                <font>font12</font> <!-- REDLIGHT_26 -->
+                                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
                                 <textcolor>FFCCCCCC</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
@@ -710,11 +735,11 @@
                                 <left>600</left>
                                 <width max="1460">auto</width>
                                 <height>40</height>
-                                <font>font14</font> <!-- REDLIGHT_33 -->
+                                <font>font32</font> <!-- REDLIGHT_33 -->
                                 <textcolor>FF9c9a9b</textcolor>
                                 <align>left</align>
                                 <aligny>center</aligny>
-                                <label>[B]RUN FULL SOURCE SEARCH[/B]</label>
+                                <label>[B]RUN EXTERNAL SCRAPER SEARCH[/B]</label>
                                 <scroll>false</scroll>
                             </control>
                         </control>
@@ -742,7 +767,7 @@
                                     <top>35</top>
                                     <left>20</left>
                                     <control type="label">
-                                        <font>font14</font> <!-- REDLIGHT_33 -->
+                                        <font>font32</font> <!-- REDLIGHT_33 -->
                                         <textcolor>FF1F2020</textcolor>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
@@ -774,7 +799,7 @@
                                     <left>210</left>
                                     <width max="1460">auto</width>
                                     <height>12</height>
-                                    <font>font12</font> <!-- REDLIGHT_26 -->
+                                    <font>font23_narrow</font> <!-- REDLIGHT_26 -->
                                     <textcolor>FF1F2020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
@@ -798,11 +823,11 @@
                                     <left>600</left>
                                     <width max="1460">auto</width>
                                     <height>40</height>
-                                    <font>font14</font> <!-- REDLIGHT_33 -->
+                                    <font>font32</font> <!-- REDLIGHT_33 -->
                                     <textcolor>FF1F2020</textcolor>
                                     <align>left</align>
                                     <aligny>center</aligny>
-                                    <label>[B]RUN FULL SOURCE SEARCH[/B]</label>
+                                    <label>[B]RUN EXTERNAL SCRAPER SEARCH[/B]</label>
                                 </control>
                             </control>
                         </control>
@@ -872,7 +897,7 @@
                 <top>10</top>
                 <left>110</left>
                 <height>20</height>
-                <font>font12</font> <!-- REDLIGHT_26 -->
+                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
                 <align>center</align>
@@ -916,7 +941,7 @@
                         <left>70</left>
                         <top>45</top>
                         <height>5</height>
-                        <font>font12</font> <!-- REDLIGHT_26 -->
+                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
                         <textcolor>FFCCCCCC</textcolor>
                         <aligny>center</aligny>
                         <label>[UPPERCASE]$INFO[ListItem.Property(label)][/UPPERCASE]</label>
@@ -933,7 +958,7 @@
                         <top>45</top>
                         <height>5</height>
                         <width max="610">auto</width>
-                        <font>font12</font> <!-- REDLIGHT_26 -->
+                        <font>font23_narrow</font> <!-- REDLIGHT_26 -->
                         <textcolor>FF1F2020</textcolor>
                         <aligny>center</aligny>
                         <label>[UPPERCASE]$INFO[ListItem.Property(label)][/UPPERCASE]</label>
