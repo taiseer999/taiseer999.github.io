@@ -2939,7 +2939,7 @@ By using or contributing to this repository, you agree that the developer is not
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="repository.taiseerCE" name="ABUKARIMce repository" version="1.0.3" provider-name="taiseer999">
+</addon><addon id="repository.taiseerCE" name="ABUKARIMce repository" version="1.0.3.1" provider-name="taiseer999">
     <extension point="xbmc.addon.repository" name="Example Repository">
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/taiseer999/taiseer999ce.github.io/master/repo/zips/addons.xml</info>
