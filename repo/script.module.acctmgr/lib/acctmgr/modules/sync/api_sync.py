@@ -15,7 +15,7 @@ def get_trakt_sync_list():
     if not exists(var.tk_sync_list):
         return []
     try:
-        with open(var.tk_sync_list, "r") as f:
+        with open(var.tk_sync_list, "r", encoding="utf-8") as f:
             return json.load(f).get("addon_list", [])
     except Exception as e:
         log_utils.error(f"Error reading trakt sync list: {e}")

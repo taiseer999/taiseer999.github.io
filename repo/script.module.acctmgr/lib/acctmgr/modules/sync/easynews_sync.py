@@ -63,6 +63,21 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{addon_name} Easynews Failed: {e}")
 
+
+        # ========================= Seren =========================
+        try:
+            if exists(var.chk_seren) and exists(var.chkset_seren):
+                addon = xbmcaddon.Addon("plugin.video.seren")
+                chk_auth_user = addon.getSetting("easynews.username")
+                chk_auth_pass = addon.getSetting("easynews.password")
+                if chk_auth_user != master_user or chk_auth_pass != master_pass:
+                    for k, v in {
+                        "easynews.username": your_username,
+                        "easynews.password": your_password,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Seren Easynews Failed: {e}")
         # ========================= Umbrella =========================
         try:
             if exists(var.chk_umb) and exists(var.chkset_umb):

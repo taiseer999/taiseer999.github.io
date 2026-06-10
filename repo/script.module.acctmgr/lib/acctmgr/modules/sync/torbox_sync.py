@@ -71,6 +71,20 @@ class Auth:
             except Exception as e:
                 log_utils.error(f"{addon_name} TorBox Failed: {e}")
             
+
+        # ========================= Seren =========================
+        try:
+            if exists(var.chk_seren) and exists(var.chkset_seren):
+                addon = xbmcaddon.Addon("plugin.video.seren")
+                chk_auth = addon.getSetting("torbox.token")
+                if chk_auth != master_token:
+                    for k, v in {
+                        "torbox.token": your_token,
+                        "torbox.enabled": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Seren TorBox Failed: {e}")
         # ========================= Umbrella =========================
         try:
             if exists(var.chk_umb) and exists(var.chkset_umb):
