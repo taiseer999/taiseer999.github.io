@@ -51,20 +51,55 @@ def _skin_installed(addonid):
     return xbmcvfs.exists(os.path.join(ADDONS_PATH, addonid, ''))
 
 
+_REPO_ENTRIES = [
+    ('Kodi 21.3 Repository',              'repo_kodi.png',     KODI_JSON,  'backgroundkodi.jpg'),
+    ('CoreELEC 21.3 "NG" Repository',     'repo_coreelec.png', CE_JSON,    'backgroundcoreelec.jpg'),
+    ('Piers and Kodi 22 "NO" Repository', 'repo_piers.png',    PIERS_JSON, 'backgroundpiers.jpg'),
+]
+
+
+class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
+    """Custom dialog that shows icon + label for each repository option."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self._result = [-1]   # mutable so GUI thread writes, caller reads after doModal
+
+    def onInit(self):
+        try:
+            panel = self.getControl(100)
+            panel.reset()
+            icons_path = os.path.join(ADDON_PATH, 'resources', 'icons')
+            for label, icon_file, _json, _bg in _REPO_ENTRIES:
+                li = xbmcgui.ListItem(label)
+                icon_full = os.path.join(icons_path, icon_file)
+                li.setArt({'icon': icon_full, 'thumb': icon_full})
+                panel.addItem(li)
+            self.setFocusId(100)
+        except Exception as e:
+            xbmc.log('[AbukarimTools] onInit error: %s' % str(e), xbmc.LOGERROR)
+
+    def onClick(self, control_id):
+        if control_id == 100:
+            self._result[0] = self.getControl(100).getSelectedPosition()
+        self.close()
+
+    def onAction(self, action):
+        if action.getId() in (xbmcgui.ACTION_NAV_BACK,
+                               xbmcgui.ACTION_PREVIOUS_MENU,
+                               xbmcgui.ACTION_STOP):
+            self.close()
+
+
 def _choose_source():
-    options = [
-        'Kodi 21.3 Repository',
-        'CoreELEC 21.3 "NG" Repository',
-        'Piers and Kodi 22 "NO" Repository',
-    ]
-    idx = xbmcgui.Dialog().select('Select Repository', options)
-    if idx == -1:
+    dlg = _RepoSelectDialog('select_repo.xml', ADDON_PATH, 'Default', '1080i')
+    dlg.doModal()
+    idx = dlg._result[0]
+    del dlg
+    if idx < 0:
         return None, None
-    if idx == 1:
-        return CE_JSON, 'backgroundcoreelec.jpg'
-    if idx == 2:
-        return PIERS_JSON, 'backgroundpiers.jpg'
-    return KODI_JSON, 'backgroundkodi.jpg'
+    _label, _icon, json_url, bg = _REPO_ENTRIES[idx]
+    return json_url, bg
 
 
 def _download_zip(url, addonid):

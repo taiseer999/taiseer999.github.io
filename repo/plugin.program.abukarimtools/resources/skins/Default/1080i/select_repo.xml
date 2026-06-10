@@ -1,0 +1,141 @@
+<window type="dialog" id="13001">
+    <defaultcontrol always="true">100</defaultcontrol>
+    <zorder>1</zorder>
+
+    <controls>
+
+        <!-- Dimmed backdrop -->
+        <control type="image">
+            <left>0</left><top>0</top>
+            <width>1920</width><height>1080</height>
+            <colordiffuse>CC000000</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Dialog box -->
+        <control type="image">
+            <left>560</left><top>260</top>
+            <width>800</width><height>480</height>
+            <colordiffuse>F0111827</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Top gold border -->
+        <control type="image">
+            <left>560</left><top>260</top>
+            <width>800</width><height>4</height>
+            <colordiffuse>FFC8A86A</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Title bar -->
+        <control type="image">
+            <left>560</left><top>264</top>
+            <width>800</width><height>70</height>
+            <colordiffuse>E01A2030</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Title label -->
+        <control type="label">
+            <left>600</left><top>282</top>
+            <width>680</width><height>40</height>
+            <font>font20</font>
+            <textcolor>FFC8A86A</textcolor>
+            <shadowcolor>CC000000</shadowcolor>
+            <label>Select Repository</label>
+        </control>
+
+        <!-- Separator -->
+        <control type="image">
+            <left>560</left><top>334</top>
+            <width>800</width><height>2</height>
+            <colordiffuse>604433AA</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Repo list -->
+        <control type="list" id="100">
+            <left>560</left><top>336</top>
+            <width>800</width><height>360</height>
+            <onup>100</onup>
+            <ondown>100</ondown>
+            <onleft>100</onleft>
+            <onright>100</onright>
+            <pagecontrol>-</pagecontrol>
+            <scrolltime>200</scrolltime>
+            <itemlayout width="800" height="116">
+                <!-- row bg -->
+                <control type="image">
+                    <left>2</left><top>4</top>
+                    <width>796</width><height>108</height>
+                    <colordiffuse>301A2030</colordiffuse>
+                    <texture>white.png</texture>
+                </control>
+                <!-- icon -->
+                <control type="image">
+                    <left>16</left><top>14</top>
+                    <width>80</width><height>80</height>
+                    <texture>$INFO[ListItem.Art(icon)]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+                <!-- label -->
+                <control type="label">
+                    <left>114</left><top>38</top>
+                    <width>660</width><height>44</height>
+                    <font>font20</font>
+                    <textcolor>99C8A86A</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </itemlayout>
+            <focusedlayout width="800" height="116">
+                <!-- highlight bg -->
+                <control type="image">
+                    <left>2</left><top>4</top>
+                    <width>796</width><height>108</height>
+                    <colordiffuse>F0C8A86A</colordiffuse>
+                    <texture>white.png</texture>
+                </control>
+                <!-- left accent -->
+                <control type="image">
+                    <left>2</left><top>4</top>
+                    <width>5</width><height>108</height>
+                    <colordiffuse>FFFFD700</colordiffuse>
+                    <texture>white.png</texture>
+                </control>
+                <!-- icon -->
+                <control type="image">
+                    <left>16</left><top>14</top>
+                    <width>80</width><height>80</height>
+                    <texture>$INFO[ListItem.Art(icon)]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+                <!-- label -->
+                <control type="label">
+                    <left>114</left><top>38</top>
+                    <width>660</width><height>44</height>
+                    <font>font20</font>
+                    <textcolor>FF111827</textcolor>
+                    <shadowcolor>40FFFFFF</shadowcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </focusedlayout>
+        </control>
+
+        <!-- Bottom hint -->
+        <control type="image">
+            <left>560</left><top>696</top>
+            <width>800</width><height>44</height>
+            <colordiffuse>E01A2030</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+        <control type="label">
+            <left>580</left><top>707</top>
+            <width>760</width><height>24</height>
+            <font>font12</font>
+            <textcolor>70C8A86A</textcolor>
+            <label>OK to select  ·  Back to cancel</label>
+        </control>
+
+    </controls>
+</window>
