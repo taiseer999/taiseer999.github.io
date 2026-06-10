@@ -1,3 +1,5 @@
+1.1.5.2 - Authorization popups: PIN is now larger and perfectly centered inside its frame on all auth windows (Real-Debrid, AllDebrid, Premiumize, Trakt, TorBox).
+
 1.1.2 - Added a new section under tools for managing TMDb Helper players. Removed support for The Coalition add-on
 
 1.1.1 - Added RD, PM and AD support for Seren. Added Easynews Video by Tutsuo. Fixed an error that could occur during add-on updates while AML startup services were active.

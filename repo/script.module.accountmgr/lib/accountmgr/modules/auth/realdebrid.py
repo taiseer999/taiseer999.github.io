@@ -83,7 +83,7 @@ class RealDebrid:
 			return #
 		else:
 			try:
-				control.progressDialog.close()
+				self.progress_dialog.close()
 				self.client_ID = response['client_id']
 				self.secret = response['client_secret']
 			except:
@@ -92,21 +92,28 @@ class RealDebrid:
 			return
 
 	def auth(self):
+		from accountmgr.windows.qr_auth import QRProgressDialog
 		self.secret = ''
 		self.client_ID = 'X245A4XAIBGVM'
 		url = 'client_id=%s&new_credentials=yes' % self.client_ID
 		url = oauth_base_url + device_code_url % url
 		response = json.loads(requests.get(url).text)
-		control.progressDialog.create(control.lang(40055))
-		control.progressDialog.update(-1, control.progress_line % (control.lang(32513) % 'https://real-debrid.com/device', control.lang(32514) % response['user_code'], ''))
+		self.progress_dialog = QRProgressDialog()
+		self.progress_dialog.create('Real-Debrid Authorization', 'https://real-debrid.com/device', response['user_code'])
 		self.auth_timeout = int(response['expires_in'])
 		self.auth_step = int(response['interval'])
 		self.device_code = response['device_code']
+		time_passed = 0
 		while self.secret == '':
-			if control.progressDialog.iscanceled():
-				control.progressDialog.close()
+			if self.progress_dialog.iscanceled():
+				self.progress_dialog.close()
 				break
 			self.auth_loop()
+			time_passed += max(self.auth_step, 1)
+			self.progress_dialog.update(int(100 * time_passed / max(self.auth_timeout, 1)))
+			if time_passed >= self.auth_timeout:
+				self.progress_dialog.close()
+				break
 		if self.secret:
 			if self.get_token(): control.notification_rd(title=40058, message=40081, icon=rd_icon) #Authorization complete. Start sync process
 			else: return control.okDialog(title='default', message=control.lang(40019))

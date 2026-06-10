@@ -1,3 +1,5 @@
+2.6.6.2 - New QR code authorization windows for Real-Debrid, AllDebrid, Premiumize, and Trakt. Scan the QR code or visit the link and enter the PIN shown large and centered on screen.
+
 2.6.6 - Fen Light AM and Fen Light+ are supported. Due to the developers keeping the original plugin name this required no editing. Updated Umbrella Trakt settings. Add 24hr Trakt refresh.
 
 2.6.5 - Fix Auto-sync services that I broke in the last update. Update Trakt sync list authorization process.

@@ -57,31 +57,33 @@ class Trakt():
 
 	def get_device_token(self, device_codes):
 		try:
+			from accountmgr.windows.qr_auth import QRProgressDialog
 			data = {"code": device_codes["device_code"],
 					"client_id": self.traktClientID(),
 					"client_secret": self.traktClientSecret()}
 			start = time.time()
 			expires_in = device_codes['expires_in']
-			verification_url = control.lang(32513) % str(device_codes['verification_url'])
-			user_code = control.lang(32514) % str(device_codes['user_code'])
-			control.progressDialog.create(control.lang(32073), control.progress_line % (verification_url, user_code, ''))
+			verification_url = str(device_codes['verification_url'])
+			user_code = str(device_codes['user_code'])
+			progress_dialog = QRProgressDialog()
+			progress_dialog.create('Trakt Authorization', verification_url, user_code, qr_url='%s/%s' % (verification_url.rstrip('/'), user_code))
 			try:
 				time_passed = 0
-				while not control.progressDialog.iscanceled() and time_passed < expires_in:
+				while not progress_dialog.iscanceled() and time_passed < expires_in:
 					try:
 						response = self.call("oauth/device/token", data=data, with_auth=False, suppress_error_notification=True)
 					except requests.HTTPError as e:
 						log_utils.log('Request Error: %s' % str(e), __name__, log_utils.LOGDEBUG)
 						if e.response.status_code != 400: raise e
 						progress = int(100 * time_passed / expires_in)
-						control.progressDialog.update(progress)
+						progress_dialog.update(progress)
 						control.sleep(max(device_codes['interval'], 1)*1000)
 					else:
 						if not response: continue
 						else: return response
 					time_passed = time.time() - start
 			finally:
-				control.progressDialog.close()
+				progress_dialog.close()
 			return None
 		except:
 			log_utils.error()

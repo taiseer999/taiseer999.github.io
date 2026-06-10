@@ -93,12 +93,13 @@
 			</control>
 			<!-- PIN -->
 			<control type="label">
-				<posx>680</posx>
-				<posy>438</posy>
-				<width>340</width>
-				<height>80</height>
+				<posx>705</posx>
+				<posy>422</posy>
+				<width>290</width>
+				<height>71</height>
 				<align>center</align>
-				<font>font18</font>
+				<aligny>center</aligny>
+				<font>font30_title</font>
 				<textcolor>FF4CAF50</textcolor>
 				<label>$INFO[Window.Property(user_code)]</label>
 			</control>

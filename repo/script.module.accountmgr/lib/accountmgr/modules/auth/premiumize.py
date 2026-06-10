@@ -45,14 +45,15 @@ class Premiumize:
 		return response
 
 	def auth(self):
+		from accountmgr.windows.qr_auth import QRProgressDialog
 		data = {'client_id': CLIENT_ID, 'response_type': 'device_code'}
 		token = requests.post('https://www.premiumize.me/token', data=data, timeout=15).json()
 		expiry = float(token['expires_in'])
 		token_ttl = token['expires_in']
 		poll_again = True
 		success = False
-		progressDialog = control.progressDialog
-		progressDialog.create(control.lang(40054), control.progress_line % (control.lang(32513) % token['verification_uri'], control.lang(32514) % token['user_code'], ''))
+		progressDialog = QRProgressDialog()
+		progressDialog.create('Premiumize Authorization', token['verification_uri'], token['user_code'])
 		progressDialog.update(0)
 		while poll_again and not token_ttl <= 0 and not progressDialog.iscanceled():
 			poll_again, success = self.poll_token(token['device_code'])

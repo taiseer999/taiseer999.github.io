@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+	<controls>
+		<control type="group">
+			<left>210</left>
+			<top>110</top>
+			<!-- Dialog background -->
+			<control type="image">
+				<width>1500</width>
+				<height>860</height>
+				<texture colordiffuse="FF12356F">common/white.png</texture>
+			</control>
+			<!-- Title -->
+			<control type="label">
+				<top>30</top>
+				<width>1500</width>
+				<height>70</height>
+				<font>font45</font>
+				<textcolor>FFFFC400</textcolor>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label>$INFO[Window().Property(qrauth.heading)]</label>
+			</control>
+			<!-- QR code: yellow frame -->
+			<control type="image">
+				<left>60</left>
+				<top>140</top>
+				<width>620</width>
+				<height>620</height>
+				<texture colordiffuse="FFFFC400">common/white.png</texture>
+			</control>
+			<!-- QR code: white inner panel -->
+			<control type="image">
+				<left>72</left>
+				<top>152</top>
+				<width>596</width>
+				<height>596</height>
+				<texture colordiffuse="FFFFFFFF">common/white.png</texture>
+			</control>
+			<!-- QR code image -->
+			<control type="image">
+				<left>82</left>
+				<top>162</top>
+				<width>576</width>
+				<height>576</height>
+				<aspectratio>keep</aspectratio>
+				<texture background="true">$INFO[Window().Property(qrauth.qr)]</texture>
+			</control>
+			<!-- Instructions -->
+			<control type="label">
+				<left>740</left>
+				<top>210</top>
+				<width>720</width>
+				<height>60</height>
+				<font>font37</font>
+				<textcolor>FFFFFFFF</textcolor>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>Scan QR code or visit:</label>
+			</control>
+			<control type="label">
+				<left>740</left>
+				<top>290</top>
+				<width>720</width>
+				<height>60</height>
+				<font>font37</font>
+				<textcolor>FFFFC400</textcolor>
+				<align>left</align>
+				<aligny>center</aligny>
+				<scroll>true</scroll>
+				<label>$INFO[Window().Property(qrauth.url)]</label>
+			</control>
+			<!-- PIN row -->
+			<control type="label">
+				<left>740</left>
+				<top>470</top>
+				<width>230</width>
+				<height>150</height>
+				<font>font37</font>
+				<textcolor>FFFFFFFF</textcolor>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>Enter PIN:</label>
+			</control>
+			<!-- PIN box: yellow frame -->
+			<control type="image">
+				<left>990</left>
+				<top>470</top>
+				<width>460</width>
+				<height>150</height>
+				<texture colordiffuse="FFFFC400">common/white.png</texture>
+			</control>
+			<!-- PIN box: navy inner panel -->
+			<control type="image">
+				<left>996</left>
+				<top>476</top>
+				<width>448</width>
+				<height>138</height>
+				<texture colordiffuse="FF0C2A5C">common/white.png</texture>
+			</control>
+			<!-- PIN value: large and centered in the frame -->
+			<control type="label">
+				<left>996</left>
+				<top>476</top>
+				<width>448</width>
+				<height>138</height>
+				<font>font60</font>
+				<textcolor>FFFFFFFF</textcolor>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label>$INFO[Window().Property(qrauth.pin)]</label>
+			</control>
+			<!-- Progress bar -->
+			<control type="progress" id="3002">
+				<left>60</left>
+				<top>804</top>
+				<width>1140</width>
+				<height>14</height>
+				<texturebg colordiffuse="FF1E3F7A">common/white.png</texturebg>
+				<midtexture colordiffuse="FFFFC400">common/white.png</midtexture>
+			</control>
+			<!-- Cancel button -->
+			<control type="button" id="3001">
+				<left>1250</left>
+				<top>775</top>
+				<width>190</width>
+				<height>60</height>
+				<font>font30</font>
+				<texturefocus colordiffuse="FFFFC400">common/white.png</texturefocus>
+				<texturenofocus colordiffuse="FF2A4A85">common/white.png</texturenofocus>
+				<textcolor>FFFFFFFF</textcolor>
+				<focusedcolor>FF0C2A5C</focusedcolor>
+				<align>center</align>
+				<aligny>center</aligny>
+				<label>Cancel</label>
+				<onleft>3001</onleft>
+				<onright>3001</onright>
+				<onup>3001</onup>
+				<ondown>3001</ondown>
+			</control>
+		</control>
+	</controls>
+</window>

@@ -41,7 +41,7 @@ class AllDebrid:
 			return control.notification(title='default', message=40021, icon=ad_icon)
 		if response['activated']:
 			try:
-				control.progressDialog.close()
+				self.progress_dialog.close()
 				self.token = str(response['apikey'])
 				control.setSetting('alldebrid.token', self.token)
 			except:
@@ -50,19 +50,27 @@ class AllDebrid:
 		return
 
 	def auth(self):
+		from accountmgr.windows.qr_auth import QRProgressDialog
 		self.token = ''
 		url = base_url + 'pin/get?agent=%s' % user_agent
 		response = requests.get(url, timeout=self.timeout).json()
 		response = response['data']
-		control.progressDialog.create(control.lang(40056))
-		control.progressDialog.update(-1, control.progress_line % (control.lang(32513) % 'https://alldebrid.com/pin/', control.lang(32514) % response['pin'], ''))
+		self.progress_dialog = QRProgressDialog()
+		self.progress_dialog.create('AllDebrid Authorization', 'https://alldebrid.com/pin/', response['pin'], qr_url=response.get('user_url'))
 		self.check_url = response.get('check_url')
+		auth_timeout = int(response.get('expires_in', 600))
+		time_passed = 0
 		control.sleep(2000)
 		while not self.token:
-			if control.progressDialog.iscanceled():
-				control.progressDialog.close()
+			if self.progress_dialog.iscanceled():
+				self.progress_dialog.close()
 				break
 			self.auth_loop()
+			time_passed += 5
+			self.progress_dialog.update(int(100 * time_passed / max(auth_timeout, 1)))
+			if time_passed >= auth_timeout:
+				self.progress_dialog.close()
+				break
 		if self.token in (None, '', 'failed'): return
 		control.sleep(2000)
 		account_info = self.account_info()
