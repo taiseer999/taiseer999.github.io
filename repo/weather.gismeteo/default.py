@@ -24,6 +24,51 @@ MAX_WEEKENDS = 2
 
 WEATHER_ICON = weather.weather_icon
 
+# Gismeteo's API does not support Arabic, so when the Kodi interface
+# language is Arabic we translate the (English) condition descriptions
+# locally. Unknown phrases are left unchanged.
+ARABIC_CONDITIONS = {
+    'clear': 'صافٍ',
+    'partly cloudy': 'غائم جزئياً',
+    'mainly cloudy': 'غائم في الغالب',
+    'mostly cloudy': 'غائم في الغالب',
+    'variable cloudiness': 'غيوم متفرقة',
+    'cloudy': 'غائم',
+    'overcast': 'ملبد بالغيوم',
+    'drizzle': 'رذاذ',
+    'light rain': 'مطر خفيف',
+    'rain': 'مطر',
+    'heavy rain': 'مطر غزير',
+    'shower': 'زخات مطر',
+    'showers': 'زخات مطر',
+    'rain shower': 'زخات مطر',
+    'light snow': 'ثلج خفيف',
+    'snow': 'ثلج',
+    'heavy snow': 'ثلج كثيف',
+    'wet snow': 'ثلج مبتل',
+    'light sleet': 'مطر ثلجي خفيف',
+    'sleet': 'مطر ثلجي',
+    'hail': 'بَرَد',
+    'thunderstorm': 'عاصفة رعدية',
+    'possible thunderstorm': 'احتمال عاصفة رعدية',
+    'thunderstorm possible': 'احتمال عاصفة رعدية',
+    'storm': 'عاصفة',
+    'mist': 'سديم',
+    'fog': 'ضباب',
+    'windy': 'عاصف',
+    'not available': 'غير متوفر',
+    'n/a': 'غير متوفر',
+}
+
+
+def localize_description(text):
+    if not text or 'arab' not in weather.KODILANGUAGE:
+        return text
+
+    parts = [p.strip() for p in text.split(',')]
+    translated = [ARABIC_CONDITIONS.get(p.lower(), p) for p in parts]
+    return '، '.join(translated)
+
 CURRENT_TIME = {'unix': time.time()}
 
 
@@ -57,10 +102,10 @@ def set_item_info(props, item, item_type, icon='%s.png', day_temp=None):
     weather_code = weather.get_weather_code(item)
 
     if 'Outlook' in keys:
-        props['Outlook'] = item['description']
+        props['Outlook'] = localize_description(item['description'])
 
     if 'Condition' in keys:
-        props['Condition'] = item['description']
+        props['Condition'] = localize_description(item['description'])
 
     if 'OutlookIcon' in keys:
         props['OutlookIcon'] = icon % weather_code

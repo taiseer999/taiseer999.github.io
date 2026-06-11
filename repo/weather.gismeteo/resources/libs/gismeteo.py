@@ -18,6 +18,24 @@ except TypeError:
 __all__ = ['GismeteoError', 'GismeteoClient']
 
 
+
+# Gismeteo sometimes returns "English" text containing Cyrillic
+# homoglyph letters (e.g. "\u0421lear" instead of "Clear"), which
+# render as missing glyphs in fonts without Cyrillic coverage.
+_HOMOGLYPHS = {
+    '\u0410': 'A', '\u0412': 'B', '\u0421': 'C', '\u0415': 'E',
+    '\u041d': 'H', '\u041a': 'K', '\u041c': 'M', '\u041e': 'O',
+    '\u0420': 'P', '\u0422': 'T', '\u0425': 'X', '\u0430': 'a',
+    '\u0441': 'c', '\u0435': 'e', '\u043e': 'o', '\u0440': 'p',
+    '\u0443': 'y', '\u0445': 'x',
+}
+
+
+def _fix_homoglyphs(text):
+    if text and any(ch in _HOMOGLYPHS for ch in text):
+        text = ''.join(_HOMOGLYPHS.get(ch, ch) for ch in text)
+    return text
+
 class GismeteoError(Exception):
     pass
 
@@ -92,7 +110,20 @@ class GismeteoClient(object):
 
     def _get_forecast_info(self, root):
 
+        if len(root) == 0:
+            raise GismeteoError('Empty forecast response from server')
+
         xml_location = root[0]
+
+        if 'name' not in xml_location.attrib:
+            raise GismeteoError(
+                'Unexpected forecast response from server: '
+                '<{0} {1}>'.format(
+                    xml_location.tag,
+                    ' '.join('{0}="{1}"'.format(k, v)
+                             for k, v in xml_location.attrib.items())
+                )
+            )
 
         return {'name': xml_location.attrib['name'],
                 'id': xml_location.attrib['id'],
@@ -123,7 +154,7 @@ class GismeteoClient(object):
                                  }
         if xml_values.attrib.get('water_t') is not None:
             result['temperature']['water'] = self._get_int(xml_values.attrib['water_t']),
-        result['description'] = xml_values.attrib['descr']
+        result['description'] = _fix_homoglyphs(xml_values.attrib['descr'])
         result['humidity'] = self._get_int(xml_values.attrib['hum'])
         result['pressure'] = self._get_int(xml_values.attrib['p'])
         result['cloudiness'] = xml_values.attrib['cl']
@@ -164,7 +195,7 @@ class GismeteoClient(object):
                    'temperature': {'min': self._get_int(xml_day.attrib['tmin']),
                                    'max': self._get_int(xml_day.attrib['tmax']),
                                    },
-                   'description': xml_day.attrib['descr'],
+                   'description': _fix_homoglyphs(xml_day.attrib['descr']),
                    'humidity': {'min': self._get_int(xml_day.attrib['hummin']),
                                 'max': self._get_int(xml_day.attrib['hummax']),
                                 'avg': self._get_int(xml_day.attrib['hum']),

@@ -7519,7 +7519,7 @@ Added arabic fonts
         <icon>icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="weather.gismeteo" version="0.6.4+matrix.1.1" name="Gismeteo" provider-name="vl.maksime">
+</addon><addon id="weather.gismeteo" version="0.6.4+matrix.4" name="Gismeteo" provider-name="vl.maksime">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.simpleplugin3" version="3.0.5" />
