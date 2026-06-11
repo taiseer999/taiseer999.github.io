@@ -67,13 +67,21 @@ class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         try:
+            media_base = ('special://home/addons/plugin.program.abukarimtools'
+                          '/resources/media/')
+            # Static fallback background (first repo's image) shown before the
+            # list gains focus or if a per-item background can't be resolved.
+            self.setProperty('background', media_base + _REPO_ENTRIES[0][3])
+
             panel = self.getControl(100)
             panel.reset()
             icons_path = os.path.join(ADDON_PATH, 'resources', 'icons')
-            for label, icon_file, _json, _bg in _REPO_ENTRIES:
+            for label, icon_file, _json, bg in _REPO_ENTRIES:
                 li = xbmcgui.ListItem(label)
                 icon_full = os.path.join(icons_path, icon_file)
                 li.setArt({'icon': icon_full, 'thumb': icon_full})
+                # Per-repo background so the window photo follows the focus.
+                li.setProperty('repo_bg', media_base + bg)
                 panel.addItem(li)
             self.setFocusId(100)
         except Exception as e:
