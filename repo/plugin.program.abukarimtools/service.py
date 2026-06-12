@@ -13,11 +13,10 @@ on the first Kodi start after a fresh build install. The service then:
     1. Waits for Kodi's home window and for the ABUKARIM wizard to finish
        its own first-run work (enable_addons / backup_gui_skin).
     2. Deletes the flag (guarantees the sequence never repeats).
-    3. Opens the Skin Installer (resources/lib/skin_installer.py).
-    4. Opens the Binary Installer (resources/lib/binary_installer.py).
-    5. Shows a popup: Restore Backup / Auth Addons / Skip.
-         - Restore     -> backup_manager.py restore flow
-         - Auth Addons -> RunScript(script.module.acctmgr)
+    3. Runs the Binary Installer silently (resources/lib/binary_installer.py).
+    4. Shows a popup: Restore Backup / Skip.
+         - Restore -> backup_manager.py restore flow
+    5. Opens the Skin Installer last (resources/lib/skin_installer.py).
 """
 
 import os
@@ -35,7 +34,6 @@ PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
-ACCTMGR_ID  = 'script.module.acctmgr'
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
 STARTUP_TIMEOUT = 180
@@ -171,48 +169,29 @@ def _step_restore():
                             'You can run it later from ABUKARIM TOOLS → Backup/Restore.')
 
 
-def _step_auth_addons():
-    _log('Launching Account Manager…')
-    if not _addon_enabled(ACCTMGR_ID):
-        # try to enable it first (it ships with the build but may be disabled)
-        xbmc.executebuiltin('EnableAddon(%s)' % ACCTMGR_ID)
-        xbmc.sleep(2000)
-    xbmc.executebuiltin('RunScript(%s)' % ACCTMGR_ID)
-    # RunScript is asynchronous — give the Account Manager a few seconds to
-    # open its window so the next step's no-modal wait holds until the user
-    # is done with it.
-    xbmc.sleep(5000)
-
-
 def _final_choice(monitor):
-    """Popup: Restore Backup / Auth Addons / Skip."""
-    # yesnocustom returns: 1 = yes, 0 = no, 2 = custom, -1 = back/cancel
-    choice = -1
+    """Popup: Restore Backup / Skip."""
+    choice = False
     for attempt in (1, 2, 3):
         _wait_no_modal(monitor)
         started = time.time()
-        choice = xbmcgui.Dialog().yesnocustom(
+        choice = xbmcgui.Dialog().yesno(
             ADDON_NAME,
             'Setup is almost complete.\n\n'
-            'Would you like to restore a previous backup, '
-            'or authorize your accounts (Trakt / Debrid)?',
-            customlabel='Skip',
-            nolabel='Auth Addons',
+            'Would you like to restore a previous backup?',
             yeslabel='Restore Backup',
-            defaultbutton=xbmcgui.DLG_YESNO_YES_BTN,
+            nolabel='Skip',
         )
         # An answer in under 1.5 s almost certainly means our dialog was
         # swallowed by another addon's popup — wait for the screen to clear
         # and ask again.
         if time.time() - started > 1.5:
             break
-        _log('Restore/Auth popup was dismissed instantly — retrying.')
-    if choice == 1:
+        _log('Restore popup was dismissed instantly — retrying.')
+    if choice:
         _step_restore()
-    elif choice == 0:
-        _step_auth_addons()
     else:
-        _log('User skipped restore/auth step.')
+        _log('User skipped the restore step.')
 
 
 # --------------------------------------------------------------------------
@@ -234,7 +213,7 @@ def run_first_run_sequence(monitor):
     _log('Step 1 — Binary Installer.')
     _step_binary_installer(monitor)
 
-    _log('Step 2 — Restore/Auth popup.')
+    _log('Step 2 — Restore popup.')
     _final_choice(monitor)
 
     _log('Step 3 — Skin Installer (last).')
