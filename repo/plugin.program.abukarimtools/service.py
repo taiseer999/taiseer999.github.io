@@ -143,22 +143,16 @@ def _wait_no_modal(monitor, timeout=600, stable=2):
 def _step_binary_installer(monitor):
     try:
         from resources.lib import binary_installer
-        for attempt in (1, 2):
-            _wait_no_modal(monitor)
-            _log('Opening Binary Installer… (attempt %d)' % attempt)
-            started = time.time()
-            binary_installer.run()   # shows its own confirm + progress + summary
-            # If it came back almost instantly, our confirm dialog was most
-            # likely swallowed by another addon's popup — wait and retry once.
-            if time.time() - started > 2 or attempt == 2:
-                break
-            _log('Binary Installer dialog was dismissed instantly — retrying.')
+        _log('Running Binary Installer (auto, no prompt)…')
+        # auto=True: installs inputstream.adaptive / vfs.libarchive silently —
+        # progress bar + finishing notification only, no confirmation dialog.
+        binary_installer.run(auto=True)
         return True
     except Exception:
         _log('Binary Installer failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
-        xbmcgui.Dialog().ok(ADDON_NAME,
-                            'Binary Installer could not be started.\n'
-                            'You can run it later from ABUKARIM TOOLS.')
+        xbmcgui.Dialog().notification(ADDON_NAME,
+                                      'Binary installer failed — run it from ABUKARIM TOOLS',
+                                      xbmcgui.NOTIFICATION_ERROR, 6000)
         return False
 
 

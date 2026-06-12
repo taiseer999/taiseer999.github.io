@@ -117,23 +117,31 @@ def _ensure_repo(repo_id):
 
 
 # ---------------------------------------------------------------------------
-def run():
-    """Entry point called from default.py router."""
+def run(auto=False):
+    """
+    Entry point called from default.py router.
+
+    auto=True (used by the first-run service): install silently —
+    no confirmation prompt and no blocking summary dialog; only the
+    progress bar and a finishing notification are shown.
+    """
     on_coreelec = _is_coreelec()
     repo_id     = REPO_COREELEC if on_coreelec else REPO_KODI
     platform    = 'CoreELEC' if on_coreelec else 'Kodi'
 
-    _log('Platform detected: %s  →  using repo: %s' % (platform, repo_id))
+    _log('Platform detected: %s  →  using repo: %s  (auto=%s)'
+         % (platform, repo_id, auto))
 
-    # Confirm with user
-    msg = ('Platform: [B]%s[/B][CR]'
-           'Repo: [B]%s[/B][CR][CR]'
-           'Install the following binary add-ons?[CR][CR]%s'
-           % (platform, repo_id, '[CR]'.join('  • ' + b for b in BINARIES)))
+    # Confirm with user (interactive mode only)
+    if not auto:
+        msg = ('Platform: [B]%s[/B][CR]'
+               'Repo: [B]%s[/B][CR][CR]'
+               'Install the following binary add-ons?[CR][CR]%s'
+               % (platform, repo_id, '[CR]'.join('  • ' + b for b in BINARIES)))
 
-    if not DIALOG.yesno(ADDON_NAME, msg):
-        _log('User cancelled.')
-        return
+        if not DIALOG.yesno(ADDON_NAME, msg):
+            _log('User cancelled.')
+            return
 
     # Ensure the repo is available
     DP.create(ADDON_NAME, 'Checking repository…')
@@ -143,10 +151,16 @@ def run():
 
     if not repo_ok:
         DP.close()
-        DIALOG.ok(ADDON_NAME,
-                  '[COLOR red]✘[/COLOR]  Could not reach [B]%s[/B].[CR][CR]'
-                  'Check your internet connection and that the repo is available '
-                  'for your platform.' % repo_id)
+        if auto:
+            xbmcgui.Dialog().notification(
+                ADDON_NAME,
+                'Binary add-ons: repo %s unreachable' % repo_id,
+                xbmcgui.NOTIFICATION_ERROR, 6000)
+        else:
+            DIALOG.ok(ADDON_NAME,
+                      '[COLOR red]✘[/COLOR]  Could not reach [B]%s[/B].[CR][CR]'
+                      'Check your internet connection and that the repo is available '
+                      'for your platform.' % repo_id)
         return
 
     # Install each binary
@@ -180,12 +194,22 @@ def run():
     # Refresh addon list
     xbmc.executebuiltin('UpdateLocalAddons()')
 
-    # Summary dialog
+    # Summary
     succeeded = sum(1 for ok, _ in results if ok)
     failed    = len(results) - succeeded
-    body      = '[B]Binary Install Results[/B] ([I]%s[/I])[CR][CR]' % platform
-    body     += '[CR]'.join(m for _, m in results)
-    body     += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
 
-    DIALOG.ok(ADDON_NAME, body)
+    if auto:
+        if failed:
+            note = 'Binary add-ons: %d OK, %d failed' % (succeeded, failed)
+            icon = xbmcgui.NOTIFICATION_WARNING
+        else:
+            note = 'Binary add-ons installed (%d/%d)' % (succeeded, len(results))
+            icon = xbmcgui.NOTIFICATION_INFO
+        xbmcgui.Dialog().notification(ADDON_NAME, note, icon, 5000)
+    else:
+        body  = '[B]Binary Install Results[/B] ([I]%s[/I])[CR][CR]' % platform
+        body += '[CR]'.join(m for _, m in results)
+        body += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
+        DIALOG.ok(ADDON_NAME, body)
+
     _log('Binary install run complete: %d OK, %d failed.' % (succeeded, failed))
