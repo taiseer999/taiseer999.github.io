@@ -5,7 +5,8 @@ import os
 from urllib.parse import urlencode, unquote
 
 def addon_themes():
-	return [{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]
+	return [{'name': 'Light', 'value': ('FF434343', 'FF2E2E2E'), 'icon': 'light'}, {'name': 'Medium', 'value': ('FF373737', 'FF4a4347'), 'icon': 'medium'},
+			{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]
 
 def addon_themes_opacity():
 	return [{'name': '100%', 'value': 'FF'}, {'name': '95%', 'value': 'F2'}, {'name': '90%', 'value': 'E6'}, {'name': '85%', 'value': 'D9'}, {'name': '80%', 'value': 'CC'},
@@ -526,12 +527,10 @@ def timeIt(func):
 def volume_checker():
 	# 0% == -60db, 100% == 0db
 	try:
-		if get_property('redlight.playback.volumecheck_enabled') != 'true' or get_visibility('Player.Muted'): return
+		if get_property('redlight.playback.volumecheck_enabled') == 'false' or get_visibility('Player.Muted'): return
 		from modules.utils import string_alphanum_to_num
 		max_volume = min(int(get_property('redlight.playback.volumecheck_percent') or '50'), 100)
-		current_db = float(string_alphanum_to_num(get_infolabel('Player.Volume').replace('-', '').split('.')[0]) or '0')
-		current_volume = int(100 - (current_db / 60) * 100)
-		if current_volume > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
+		if int(100 - (float(string_alphanum_to_num(get_infolabel('Player.Volume').split('.')[0]))/60)*100) > max_volume: execute_builtin('SetVolume(%d)' % max_volume)
 	except: pass
 
 def focus_index(index):

@@ -283,6 +283,11 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         super().__init__()
         self.items      = kwargs.get('items', [])
         self.background = kwargs.get('background', 'backgroundkodi.jpg')
+        # first_run mode: close the portal right after a successful install
+        # and let the caller apply the skin AFTER the modal is gone, so
+        # ReloadSkin never fires while this window is still open.
+        self.first_run  = kwargs.get('first_run', False)
+        self.pending    = None      # (addonid, title) applied by run() afterwards
 
     def onInit(self):
         bg_path = ('special://home/addons/plugin.program.abukarimtools'
@@ -327,6 +332,16 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             return
         if not _extract_zip(zip_path):
             return
+
+        if self.first_run:
+            # Defer the actual skin switch until the modal is closed:
+            # _apply_skin() triggers ReloadSkin, which must not happen while
+            # this WindowXMLDialog is still open. Close now, apply in run().
+            self.pending = (addonid, title)
+            item.setProperty('installed', 'true')
+            self.close()
+            return
+
         _apply_skin(addonid, title)
         _notify('✓ %s installed successfully.' % title)
         item.setProperty('installed', 'true')
@@ -337,25 +352,25 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             self.close()
 
 
-def run():
+def run(first_run=False):
     url, background = _choose_source()
     if not url:
-        return
+        return False
 
     try:
         items = _fetch_json(url)
     except urllib.error.URLError as e:
         _error('Network error:\n%s' % e.reason)
-        return
+        return False
     except json.JSONDecodeError:
         _error('The feed returned invalid JSON.')
-        return
+        return False
     except Exception as e:
         _error('Feed error:\n%s' % e)
-        return
+        return False
 
     if not items:
-        return
+        return False
 
     win = SkinPortal(
         'portal.xml',
@@ -364,6 +379,17 @@ def run():
         '1080i',
         items=items,
         background=background,
+        first_run=first_run,
     )
     win.doModal()
+    pending = win.pending
     del win
+
+    # first_run mode: the portal closed itself after a successful install;
+    # apply the skin now that no custom modal window is open.
+    if pending:
+        addonid, title = pending
+        _apply_skin(addonid, title)
+        _notify('✓ %s installed successfully.' % title)
+        return True
+    return False

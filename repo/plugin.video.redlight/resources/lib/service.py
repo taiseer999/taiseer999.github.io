@@ -286,34 +286,6 @@ class RedLightMonitor(Monitor):
 			kodi_utils.logger('OnNotificationActions', 'UNPAUSING Red Light Services Due to Device Awake')
 
 if __name__ == '__main__':
-	# ----- AM Lite Trakt startup sync patch BEGIN -----
-	def wait_for_am_trakt(timeout=5, max_age=300):
-		import time
-		import xbmc
-		import xbmcaddon
-
-		waited = 0
-
-		while waited < timeout:
-			try:
-				am = xbmcaddon.Addon('script.module.acctmgr')
-				ready = am.getSetting('am_trakt_ready')
-				last_prepare = am.getSetting('am_last_prepare')
-
-				if ready == 'true' and last_prepare:
-					age = int(time.time()) - int(last_prepare)
-					if 0 <= age <= max_age:
-						return True
-			except Exception:
-				pass
-
-			xbmc.sleep(1000)
-			waited += 1
-
-		return False
-
-	wait_for_am_trakt()
-	# ----- AM Lite Trakt startup sync patch END -----
 	kodi_utils.logger('Red Light', 'Main Monitor Service Starting')
 	RedLightMonitor().waitForAbort()
 	kodi_utils.logger('Red Light', 'Main Monitor Service Finished')
