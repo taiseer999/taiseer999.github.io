@@ -28,10 +28,26 @@ import xbmcaddon
 import xbmcgui
 import xbmcvfs
 
+
+def _is_elec():
+    """True only on CoreELEC / LibreELEC, where autostart.sh applies the file."""
+    return os.path.isdir('/storage/.config') or os.path.isdir('/storage/.kodi')
+
 ADDON       = xbmcaddon.Addon()
 ADDON_NAME  = 'ABUKARIM TOOLS'
 PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
+
+# Staged guisettings.xml produced by a restore (backup_manager.py). How it is
+# applied depends on the platform and is handled by backup_manager, NOT here:
+#   • *ELEC : autostart.sh copies it in before Kodi starts.
+#   • desktop (macOS/Win/Linux): a one-click helper script the user runs while
+#     Kodi is closed copies it in and relaunches Kodi.
+#   • Android: not applied (skipped at restore time).
+# This service only cleans up a leftover staged file on *ELEC after the
+# autostart block has already consumed it, so it can't linger. On desktop we
+# intentionally LEAVE the staged file in place until the helper script runs.
+GUISETTINGS_STAGING = os.path.join(PROFILE, 'guisettings_pending.xml')
 
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
@@ -41,6 +57,22 @@ STARTUP_TIMEOUT = 180
 
 def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('[AbukarimTools FirstRun] %s' % msg, level)
+
+
+def _cleanup_elec_staged():
+    """
+    On *ELEC the autostart.sh block applies the staged guisettings.xml before
+    Kodi starts. If a staged file is still present here, autostart already
+    handled (or will handle) it — remove our copy so it doesn't linger.
+    Desktop platforms must NOT do this: the helper script needs the file.
+    """
+    if _is_elec() and os.path.isfile(GUISETTINGS_STAGING):
+        try:
+            os.remove(GUISETTINGS_STAGING)
+            _log('On *ELEC — staged guisettings.xml cleaned up (autostart.sh '
+                 'handles application).')
+        except OSError:
+            pass
 
 
 # --------------------------------------------------------------------------
@@ -226,11 +258,15 @@ def run_first_run_sequence(monitor):
 def main():
     monitor = xbmc.Monitor()
 
-    if not os.path.exists(FLAG_FILE):
-        return                       # normal boot — nothing to do
+    # On *ELEC, tidy up any staged guisettings.xml that autostart.sh has
+    # already applied. On desktop the staged file is intentionally left for
+    # the user's one-click helper script, so we don't touch it here.
+    _cleanup_elec_staged()
 
-    _log('First-run flag detected: %s' % FLAG_FILE)
-    run_first_run_sequence(monitor)
+    # First-run automation (one-shot), if the flag is present.
+    if os.path.exists(FLAG_FILE):
+        _log('First-run flag detected: %s' % FLAG_FILE)
+        run_first_run_sequence(monitor)
 
 
 if __name__ == '__main__':
