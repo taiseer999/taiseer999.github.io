@@ -61,18 +61,21 @@ def _log(msg, level=xbmc.LOGINFO):
 
 def _cleanup_elec_staged():
     """
-    On *ELEC the autostart.sh block applies the staged guisettings.xml before
-    Kodi starts. If a staged file is still present here, autostart already
-    handled (or will handle) it — remove our copy so it doesn't linger.
-    Desktop platforms must NOT do this: the helper script needs the file.
+    On *ELEC the autostart.sh block is the ONLY thing that should touch the
+    staged guisettings.xml: it copies the file into userdata *before* Kodi
+    starts and removes the staged file itself on success.
+
+    This function must therefore NOT delete the staged file. Doing so caused
+    restores to be lost: if autostart.sh hadn't run yet (timing, not-yet
+    executable, etc.), deleting the staged file here destroyed the pending
+    restore and prevented any retry.
+
+    We only LOG the state for diagnostics. If a staged file is still present,
+    autostart.sh has not yet consumed it — it will on the next real reboot.
     """
     if _is_elec() and os.path.isfile(GUISETTINGS_STAGING):
-        try:
-            os.remove(GUISETTINGS_STAGING)
-            _log('On *ELEC — staged guisettings.xml cleaned up (autostart.sh '
-                 'handles application).')
-        except OSError:
-            pass
+        _log('On *ELEC — staged guisettings.xml still present; autostart.sh '
+             'will apply it on the next reboot. Leaving it in place.')
 
 
 # --------------------------------------------------------------------------

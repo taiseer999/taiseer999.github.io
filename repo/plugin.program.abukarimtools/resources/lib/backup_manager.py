@@ -421,10 +421,21 @@ class BackupManager:
             return
 
         os.makedirs(os.path.dirname(AUTOSTART_PATH), exist_ok=True)
+        # Ensure a shebang is present if the file was freshly created.
+        if not content.lstrip().startswith('#!'):
+            content = '#!/bin/sh\n' + content
         with open(AUTOSTART_PATH, 'w') as f:
             f.write(content.rstrip('\n') + block)
 
-        _log('Injected guisettings restore block into %s' % AUTOSTART_PATH)
+        # CRITICAL: CoreELEC/LibreELEC silently ignore autostart.sh unless it
+        # is executable. Without this the restore block never runs.
+        try:
+            os.chmod(AUTOSTART_PATH, 0o755)
+        except OSError as e:
+            _log('Could not chmod autostart.sh: %s' % e, xbmc.LOGWARNING)
+
+        _log('Injected guisettings restore block into %s (chmod 755)'
+             % AUTOSTART_PATH)
 
     # ------------------------------------------- desktop helper-script writer -
 
