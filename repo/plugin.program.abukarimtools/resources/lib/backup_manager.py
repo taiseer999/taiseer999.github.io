@@ -83,9 +83,8 @@ PARTIAL_ADDONS = {
 
 #  Hard exclusion: these addons are ALWAYS skipped during both backup and
 #  restore. Unlike SKIN_ADDONS there is no opt-in — their data is never
-#  collected and never written back.
+#  collected and never written back. (Currently empty.)
 EXCLUDE_ADDONS = [
-    'skin.arctic.fuse.3',
 ]
 # ─────────────────────────────────────────────────────────────────────────────
 
