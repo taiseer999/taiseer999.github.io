@@ -380,7 +380,7 @@ def dispatch(params):
                 source_select_style = "Movie"
 
             watchdog_used = False
-            used_source_select = g.get_int_setting(f"general.playstyle{source_select_style}") == 1 or source_select
+            used_source_select = (g.get_int_setting(f"general.playstyle{source_select_style}") == 1 or source_select) and not smart_url_arg
             if used_source_select:
 
                 if background:
