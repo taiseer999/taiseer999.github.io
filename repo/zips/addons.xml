@@ -2559,6 +2559,29 @@ I am grateful to Tikipeter and his various pseudonyms and aliases for creating a
         <platform>all</platform>
     </extension>
 
+</addon><addon id="repository.anxdpanic" name="anxdpanic Add-on Repository" version="2.0.4" provider-name="anxdpanic">
+	<extension point="xbmc.addon.repository" name="anxdpanic Add-on Repository">
+        <dir maxversion="18.9.0">
+            <info compressed="false">https://download.osmc.tv/dev/anxdpanic/kodi/anxdpanic/python2/addons.xml</info>
+            <checksum>https://download.osmc.tv/dev/anxdpanic/kodi/anxdpanic/python2/addons.xml.md5</checksum>
+            <datadir zip="true">https://download.osmc.tv/dev/anxdpanic/kodi/anxdpanic/python2/zips/</datadir>
+            <hashes>false</hashes>
+        </dir>
+        <dir minversion="19.0.0">
+            <info compressed="false">https://download.osmc.tv/dev/anxdpanic/kodi/anxdpanic/python3/addons.xml</info>
+            <checksum>https://download.osmc.tv/dev/anxdpanic/kodi/anxdpanic/python3/addons.xml.md5</checksum>
+            <datadir zip="true">https://download.osmc.tv/dev/anxdpanic/kodi/anxdpanic/python3/zips/</datadir>
+            <hashes>false</hashes>           
+        </dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Install add-ons from anxdpanic's repository.</summary>
+		<description>Install add-ons from anxdpanic's repository.</description>
+		<platform>all</platform>
+        <assets>
+			<icon>icon.png</icon>
+        </assets>
+	</extension>
 </addon><addon id="repository.cocoscrapers" name="CocoScrapers Repository" version="1.0.1.1" provider-name="CocoScrapers">
     <extension point="xbmc.addon.repository" name="CocoScrapers Repository">
         <dir minversion="19.0">
@@ -2589,6 +2612,26 @@ I am grateful to Tikipeter and his various pseudonyms and aliases for creating a
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
+</addon><addon id="repository.composite_development" name="Composite Development Repository" version="1.0.5" provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1" />
+    </requires>
+	<extension point="xbmc.addon.repository" name="Composite Development Repository">
+        <dir minversion="20.0.0">
+            <info compressed="false">https://download.osmc.tv/dev/anxdpanic/kodi/composite/python3/addons.xml</info>
+            <checksum>https://download.osmc.tv/dev/anxdpanic/kodi/composite/python3/addons.xml.md5</checksum>
+            <datadir zip="true">https://download.osmc.tv/dev/anxdpanic/kodi/composite/python3/zips/</datadir>
+            <hashes>false</hashes>           
+        </dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Repository for in-developement versions of Composite</summary>
+		<description>Install in-developement versions of Composite for testing</description>
+		<platform>all</platform>
+        <assets>
+			<icon>icon.png</icon>
+        </assets>
+	</extension>
 </addon><addon id="repository.dexworld" name="DexWorld Repository" version="1.0.0" provider-name="DexWorld">
   <extension point="xbmc.addon.repository" name="DexWorld Repository">
     <dir>
@@ -3078,6 +3121,26 @@ By using or contributing to this repository, you agree that the developer is not
             <icon>resources/icon.png</icon>
         </assets>
     </extension>
+</addon><addon id="repository.tubed_development" name="Tubed Development Repository" version="1.0.5" provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1" />
+    </requires>
+	<extension point="xbmc.addon.repository" name="Tubed Development Repository">
+        <dir minversion="20.0.0">
+            <info compressed="false">https://download.osmc.tv/dev/anxdpanic/kodi/tubed/addons.xml</info>
+            <checksum>https://download.osmc.tv/dev/anxdpanic/kodi/tubed/addons.xml.md5</checksum>
+            <datadir zip="true">https://download.osmc.tv/dev/anxdpanic/kodi/tubed/zips/</datadir>
+            <hashes>false</hashes>           
+        </dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Repository for in-developement versions of the Tubed and Tubed API add-ons</summary>
+		<description>Install in-developement versions of the Tubed and Tubed API add-ons for testing</description>
+		<platform>all</platform>
+        <assets>
+			<icon>icon.png</icon>
+        </assets>
+	</extension>
 </addon><addon id="repository.umbrella" name="Umbrella Repository" version="2.2.4" provider-name="Umbrella">
     <extension point="xbmc.addon.repository" name="Umbrella Repository">
         <dir minversion="18.9.701" maxversion="19.5">
@@ -3101,6 +3164,24 @@ By using or contributing to this repository, you agree that the developer is not
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
+</addon><addon id="repository.yt.testing_official" name="YouTube Test Repo (Official)" version="2.0.7" provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+	<extension point="xbmc.addon.repository" name="YouTube Test Repo (Official)">
+        <dir minversion="19.0.0">
+            <info compressed="false">https://download.osmc.tv/dev/anxdpanic/kodi/youtube/official_testing/addons.xml</info>
+            <checksum>https://download.osmc.tv/dev/anxdpanic/kodi/youtube/official_testing/addons.xml.md5</checksum>
+            <datadir zip="true">https://download.osmc.tv/dev/anxdpanic/kodi/youtube/official_testing/zips</datadir>
+            <hashes>false</hashes>        
+        </dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Install alpha and beta versions of the YouTube add-on.</summary>
+		<description>Install alpha and beta versions of the YouTube add-on.</description>
+		<disclaimer>This add-on is not supported or endorsed by Google/YouTube.</disclaimer>
+		<platform>all</platform>
+	</extension>
 </addon><addon id="repository.yt.testing_unofficial" name="YouTube Test Repo (Unofficial)" version="2.0.7" provider-name="anxdpanic">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
@@ -3116,6 +3197,24 @@ By using or contributing to this repository, you agree that the developer is not
 	<extension point="xbmc.addon.metadata">
 		<summary>Install alpha and beta versions of the YouTube add-on.</summary>
 		<description>Install alpha and beta versions of the YouTube add-on.</description>
+		<disclaimer>This add-on is not supported or endorsed by Google/YouTube.</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon><addon id="repository.yt.unofficial" name="YouTube (Unofficial)" version="2.0.7" provider-name="anxdpanic">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+    </requires>
+	<extension point="xbmc.addon.repository" name="YouTube (Unofficial)">
+        <dir minversion="19.0.0">
+            <info compressed="false">https://download.osmc.tv/dev/anxdpanic/kodi/youtube/unofficial/addons.xml</info>
+            <checksum>https://download.osmc.tv/dev/anxdpanic/kodi/youtube/unofficial/addons.xml.md5</checksum>
+            <datadir zip="true">https://download.osmc.tv/dev/anxdpanic/kodi/youtube/unofficial/zips</datadir>
+            <hashes>false</hashes>           
+        </dir>        
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Install the unofficial versions of the YouTube add-on.</summary>
+		<description>Install unofficial versions of the YouTube add-on.</description>
 		<disclaimer>This add-on is not supported or endorsed by Google/YouTube.</disclaimer>
 		<platform>all</platform>
 	</extension>
