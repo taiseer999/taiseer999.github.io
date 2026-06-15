@@ -40,13 +40,15 @@ def get_version():
 
 
 def get_language():
-    x = KODIPLUGIN.get_setting('language', 'int')
-    return LANGUAGES[x] if x else 'en-US'
+    if ADDON.getSettingInt('language'):
+        return LANGUAGES[ADDON.getSettingInt('language')]
+    return 'en-US'
 
 
 def get_mpaa_prefix():
-    x = KODIPLUGIN.get_setting('mpaa_prefix', 'str')
-    return f'{x} ' if x else ''
+    if ADDON.getSettingString('mpaa_prefix'):
+        return f'{ADDON.getSettingString("mpaa_prefix")} '
+    return ''
 
 
 def get_flatseasons_info_param():
