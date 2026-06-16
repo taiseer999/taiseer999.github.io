@@ -37,6 +37,10 @@ def _notify(msg, icon=xbmcgui.NOTIFICATION_INFO, ms=3000):
     xbmcgui.Dialog().notification(TITLE, msg, icon, ms)
 
 
+def _log(msg):
+    xbmc.log('[AbukarimTools SkinInstaller] %s' % msg, xbmc.LOGINFO)
+
+
 def _error(msg):
     xbmcgui.Dialog().ok(TITLE, msg)
 
@@ -267,14 +271,113 @@ def _extract_zip(zip_path):
     return True
 
 
+def _wait_addon_enabled(addonid, timeout_ms=10000):
+    """Poll until Kodi reports the addon as installed+enabled, or timeout."""
+    waited = 0
+    step = 500
+    while waited < timeout_ms:
+        if xbmc.getCondVisibility('System.HasAddon(%s)' % addonid):
+            return True
+        xbmc.sleep(step)
+        waited += step
+    return xbmc.getCondVisibility('System.HasAddon(%s)' % addonid)
+
+
+def _set_skin_setting(addonid):
+    """Set the active skin via JSON-RPC (same method the Skin Switcher uses)."""
+    try:
+        query = ('{"jsonrpc":"2.0","method":"Settings.SetSettingValue",'
+                 '"params":{"setting":"lookandfeel.skin","value":"%s"},"id":1}'
+                 % addonid)
+        xbmc.executeJSONRPC(query)
+        return True
+    except Exception as e:
+        xbmc.log('[AbukarimTools] set skin setting failed: %s' % e, xbmc.LOGERROR)
+        return False
+
+
+def _current_skin():
+    """Return the currently active skin addon id, or '' if unknown."""
+    try:
+        return xbmc.getSkinDir() or ''
+    except Exception:
+        pass
+    try:
+        import json as _json
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Settings.GetSettingValue",'
+            '"params":{"setting":"lookandfeel.skin"},"id":1}')
+        return _json.loads(resp).get('result', {}).get('value', '') or ''
+    except Exception:
+        return ''
+
+
 def _apply_skin(addonid, title):
+    _log('apply start: %s (%s)' % (title, addonid))
     _notify('Enabling %s…' % title)
     xbmc.executebuiltin('EnableAddon(%s)' % addonid)
-    xbmc.sleep(3000)
+
+    # Ensure the skin is registered + enabled before switching, otherwise the
+    # skin setting silently fails to apply and Kodi keeps the current skin.
+    if not _wait_addon_enabled(addonid):
+        _log('addon never became enabled: %s' % addonid)
+        _error('Could not enable %s. Try selecting it manually in '
+               'Settings > Interface > Skin.' % title)
+        return False
+    _log('addon enabled: %s' % addonid)
+
+    # A freshly-installed skin is not immediately a valid value for
+    # lookandfeel.skin — Kodi needs time to load its addon.xml into the
+    # settings/addon system. Refreshing local addons and pausing lets the
+    # skin become selectable before we switch (this is why running the swap
+    # as a deferred step succeeds where an immediate set was rejected).
+    xbmc.executebuiltin('UpdateLocalAddons')
+    xbmc.sleep(2000)
+
     _notify('Applying %s…' % title)
-    xbmc.executebuiltin('Skin.SetSkin(%s)' % addonid)
-    xbmc.sleep(5000)
-    xbmc.executebuiltin('ReloadSkin()')
+
+    # Use the build's proven Skin Switcher routine to perform the swap
+    # (sets lookandfeel.skin via JSON-RPC + answers the keep-skin dialog).
+    try:
+        from resources.lib import skin_switcher
+    except Exception as e:
+        _log('skin_switcher import failed: %s' % e)
+        skin_switcher = None
+
+    for attempt in range(1, 7):
+        if _current_skin() == addonid:
+            _log('skin active after %d attempt(s): %s' % (attempt - 1, addonid))
+            break
+
+        if skin_switcher is not None:
+            skin_switcher._swap_skin(addonid)
+        else:
+            _set_skin_setting(addonid)
+            waited = 0
+            while waited < 3000:
+                if xbmc.getCondVisibility('Window.isVisible(yesnodialog)'):
+                    xbmc.executebuiltin('SendClick(11)')
+                    break
+                xbmc.sleep(200)
+                waited += 200
+        _log('swap attempt %d: lookandfeel.skin=%s' % (attempt, addonid))
+
+        xbmc.sleep(1500)
+        if _current_skin() == addonid:
+            _log('verified active after attempt %d: %s' % (attempt, addonid))
+            break
+        _log('not active yet after attempt %d (current=%s)'
+             % (attempt, _current_skin()))
+        xbmc.sleep(1500)
+
+    if _current_skin() != addonid:
+        _log('FAILED to activate %s (current=%s)' % (addonid, _current_skin()))
+        _error('%s was installed but could not be selected automatically.\n'
+               'Select it in Settings > Interface > Skin.' % title)
+        return False
+
+    _log('skin activated: %s' % addonid)
+    return True
 
 
 class SkinPortal(xbmcgui.WindowXMLDialog):
@@ -332,11 +435,12 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             return
         if not _extract_zip(zip_path):
             return
+        _log('installed via portal: %s (first_run=%s)' % (addonid, self.first_run))
 
         if self.first_run:
-            # Defer the actual skin switch until the modal is closed:
-            # _apply_skin() triggers ReloadSkin, which must not happen while
-            # this WindowXMLDialog is still open. Close now, apply in run().
+            # Defer the skin switch until this modal is closed: the keep-skin
+            # confirmation must be handled with no custom WindowXMLDialog open.
+            # Close now, apply in run().
             self.pending = (addonid, title)
             item.setProperty('installed', 'true')
             self.close()
@@ -389,7 +493,11 @@ def run(first_run=False):
     # apply the skin now that no custom modal window is open.
     if pending:
         addonid, title = pending
-        _apply_skin(addonid, title)
-        _notify('✓ %s installed successfully.' % title)
-        return True
+        _log('deferred apply (first_run): %s' % addonid)
+        ok = _apply_skin(addonid, title)
+        if ok:
+            _notify('✓ %s installed successfully.' % title)
+        return ok
+
+    _log('portal closed with no pending skin to apply')
     return False
