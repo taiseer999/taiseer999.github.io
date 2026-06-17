@@ -29,6 +29,13 @@ SKIN_ADDONS = [
     'script.skinvariables',
 ]
 
+#  Addons whose addon_data is ALWAYS excluded from backups/restores.
+#  These hold machine-/build-specific first-run state that should not travel
+#  between installs (e.g. the ABUKARIM build wizard's firstrun flag).
+EXCLUDED_ADDONS = [
+    'plugin.program.ABUKARIMwizard',
+]
+
 #  Partial exclusion: for these addons only specific files are KEPT;
 #  everything else inside their folder is skipped.
 #  Format:  { addon_id: set_of_filenames_to_keep }
@@ -198,6 +205,14 @@ class BackupManager:
                             and member_parts[1] not in include_skin):
                         continue
 
+                    # Skip always-excluded addons (e.g. the ABUKARIM wizard's
+                    # first-run state) even if an older backup still contains
+                    # them, so machine-specific setup data isn't carried over.
+                    if (len(member_parts) >= 2
+                            and member_parts[0] == 'addon_data'
+                            and member_parts[1] in EXCLUDED_ADDONS):
+                        continue
+
                     # guisettings.xml must be staged — writing it while Kodi
                     # is running has no effect because Kodi overwrites it on exit.
                     if norm_member == 'guisettings.xml':
@@ -342,6 +357,11 @@ class BackupManager:
             # ── Skin addons – include only if user opted in ───────────────
             if addon_id in SKIN_ADDONS and addon_id not in include_skin:
                 _log('Skipping (skin addon, not opted in): %s' % addon_id)
+                continue
+
+            # ── Always-excluded addons ────────────────────────────────────
+            if addon_id in EXCLUDED_ADDONS:
+                _log('Skipping (always excluded): %s' % addon_id)
                 continue
 
             # ── Partially excluded addons ─────────────────────────────────
