@@ -29,11 +29,6 @@ SKIN_ADDONS = [
     'script.skinvariables',
 ]
 
-#  Fully excluded: these addons are never included in a backup.
-EXCLUDED_ADDONS = [
-    'plugin.program.ABUKARIMwizard',
-]
-
 #  Partial exclusion: for these addons only specific files are KEPT;
 #  everything else inside their folder is skipped.
 #  Format:  { addon_id: set_of_filenames_to_keep }
@@ -342,11 +337,6 @@ class BackupManager:
             addon_dir = os.path.join(self.addon_data_path, addon_id)
 
             if not os.path.isdir(addon_dir):
-                continue
-
-            # ── Fully excluded addons – never back up ─────────────────────
-            if addon_id in EXCLUDED_ADDONS:
-                _log('Skipping (excluded addon): %s' % addon_id)
                 continue
 
             # ── Skin addons – include only if user opted in ───────────────

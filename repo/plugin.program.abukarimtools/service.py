@@ -36,7 +36,7 @@ FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
-STARTUP_TIMEOUT = 240
+STARTUP_TIMEOUT = 180
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -46,28 +46,6 @@ def _log(msg, level=xbmc.LOGINFO):
 # --------------------------------------------------------------------------
 # Readiness helpers
 # --------------------------------------------------------------------------
-def _home_ready(monitor, stable_secs=3):
-    """True once the Home window has been visible AND no modal dialog is up
-    for `stable_secs` consecutive seconds.
-
-    This is the reliable 'the boot wizards are done and we're sitting on the
-    home screen' signal: while the CoreELEC/LibreELEC first-boot wizard (or any
-    other startup dialog) is on screen, Home is not the active visible window,
-    so we simply wait for Home to be stably visible and clear.
-    """
-    clear = 0
-    while not monitor.abortRequested() and clear < stable_secs:
-        home = xbmc.getCondVisibility('Window.IsVisible(home)')
-        modal = xbmc.getCondVisibility('System.HasModalDialog')
-        if home and not modal:
-            clear += 1
-        else:
-            clear = 0
-        if monitor.waitForAbort(1):
-            return False
-    return not monitor.abortRequested()
-
-
 def _wizard_first_run_done():
     """
     True when the ABUKARIM wizard has finished (or will not run) its own
@@ -86,31 +64,20 @@ def _addon_enabled(addon_id):
 
 
 def _wait_until_ready(monitor):
-    """Wait until we're sitting on a clear Home screen with the ABUKARIM wizard
-    finished.
-
-    Returns:
-        'ready'    -> safe to run now
-        'abort'    -> Kodi is shutting down
-        'timeout'  -> waited the maximum but never reached a clear home screen
-    """
+    """Wait for home window + wizard first-run completion (with timeout)."""
     waited = 0
     while not monitor.abortRequested() and waited < STARTUP_TIMEOUT:
-        if xbmc.getCondVisibility('Window.IsVisible(home)') \
-                and not xbmc.getCondVisibility('System.HasModalDialog') \
-                and _wizard_first_run_done():
-            # Confirm it stays clear for a few seconds (wizard fully gone),
-            # then a short settle so any closing animation / notification ends.
-            if _home_ready(monitor, stable_secs=3):
-                if monitor.waitForAbort(3):
-                    return 'abort'
-                return 'ready'
+        home_visible = xbmc.getCondVisibility('Window.IsVisible(home)')
+        if home_visible and _wizard_first_run_done():
+            # extra settle time so the wizard's notifications clear
+            if monitor.waitForAbort(5):
+                return False
+            return True
         if monitor.waitForAbort(2):
-            return 'abort'
+            return False
         waited += 2
-    if monitor.abortRequested():
-        return 'abort'
-    return 'timeout'
+    # Timeout: continue anyway unless Kodi is shutting down
+    return not monitor.abortRequested()
 
 
 # --------------------------------------------------------------------------
@@ -188,7 +155,6 @@ def _step_binary_installer(monitor):
 
 
 def _step_restore():
-    """Run the restore flow. Returns True only after restore fully finishes."""
     try:
         from resources.lib import backup_manager
         _log('Opening Backup Manager (restore)…')
@@ -196,18 +162,15 @@ def _step_restore():
         dialog = xbmcgui.Dialog()
         include_skin = bm._ask_skin_addons(dialog)
         bm._do_restore(dialog, include_skin)
-        _log('Backup Manager restore flow returned.')
-        return True
     except Exception:
         _log('Restore failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
         xbmcgui.Dialog().ok(ADDON_NAME,
                             'Restore could not be started.\n'
                             'You can run it later from ABUKARIM TOOLS → Backup/Restore.')
-        return False
 
 
 def _final_choice(monitor):
-    """Popup: Restore Backup / Skip. Returns True if a restore was performed."""
+    """Popup: Restore Backup / Skip."""
     choice = False
     for attempt in (1, 2, 3):
         _wait_no_modal(monitor)
@@ -226,24 +189,17 @@ def _final_choice(monitor):
             break
         _log('Restore popup was dismissed instantly — retrying.')
     if choice:
-        return _step_restore()
-    _log('User skipped the restore step.')
-    return False
+        _step_restore()
+    else:
+        _log('User skipped the restore step.')
 
 
 # --------------------------------------------------------------------------
 def run_first_run_sequence(monitor):
-    status = _wait_until_ready(monitor)
-    if status == 'abort':
+    if not _wait_until_ready(monitor):
         _log('Kodi shutting down before sequence could start — flag kept '
              'so it will run on next boot.')
         return
-    if status == 'timeout':
-        # Never reached a clean home screen within the wait window. Proceed
-        # anyway (the modal-aware waits inside each step will still avoid
-        # fighting other dialogs) rather than deferring forever.
-        _log('Home screen not confirmed clear after %ss — proceeding anyway.'
-             % STARTUP_TIMEOUT)
 
     # Remove the flag *before* running so the sequence is strictly one-shot
     # even if the user aborts Kodi half-way through.
@@ -256,29 +212,12 @@ def run_first_run_sequence(monitor):
 
     _log('Step 1 — Binary Installer.')
     _step_binary_installer(monitor)
-    # Binary installer runs its own progress dialog; make sure it and any
-    # Kodi install prompts are fully gone before we move on.
-    _wait_no_modal(monitor, stable=3)
 
     _log('Step 2 — Restore popup.')
-    restored = _final_choice(monitor)
-
-    # Critical: the Skin Installer must NEVER open until the restore step has
-    # completely finished. Restore opens file-browse + confirm dialogs and
-    # writes files; opening the skin portal on top of that corrupts both
-    # flows. Wait for the screen to be clear and stable, with a longer settle
-    # when a restore actually ran.
-    if restored:
-        _log('Restore performed — waiting for it to settle before skin step.')
-        _wait_no_modal(monitor, stable=4)
-        # extra fixed settle for disk writes / addon refresh to finish
-        if not monitor.waitForAbort(5):
-            pass
-    else:
-        _wait_no_modal(monitor, stable=3)
+    _final_choice(monitor)
 
     _log('Step 3 — Skin Installer (last).')
-    _wait_no_modal(monitor, stable=3)
+    _wait_no_modal(monitor)
     _step_skin_installer()
 
     _log('First-run sequence finished.')
