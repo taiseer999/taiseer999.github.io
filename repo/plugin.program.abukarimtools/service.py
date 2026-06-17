@@ -36,7 +36,7 @@ FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
-STARTUP_TIMEOUT = 300
+STARTUP_TIMEOUT = 240
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -46,23 +46,26 @@ def _log(msg, level=xbmc.LOGINFO):
 # --------------------------------------------------------------------------
 # Readiness helpers
 # --------------------------------------------------------------------------
-def _coreelec_wizard_active():
-    """True while the CoreELEC/LibreELEC first-boot settings wizard is on screen.
+def _home_ready(monitor, stable_secs=3):
+    """True once the Home window has been visible AND no modal dialog is up
+    for `stable_secs` consecutive seconds.
 
-    On a fresh *ELEC install this wizard runs before the home screen and holds
-    a modal window. Our first-run sequence must wait for it to finish, or our
-    dialogs get dismissed underneath it (and the skin step fights the wizard).
+    This is the reliable 'the boot wizards are done and we're sitting on the
+    home screen' signal: while the CoreELEC/LibreELEC first-boot wizard (or any
+    other startup dialog) is on screen, Home is not the active visible window,
+    so we simply wait for Home to be stably visible and clear.
     """
-    try:
-        if not xbmc.getCondVisibility('System.HasAddon(service.coreelec.settings)') \
-                and not xbmc.getCondVisibility('System.HasAddon(service.libreelec.settings)'):
+    clear = 0
+    while not monitor.abortRequested() and clear < stable_secs:
+        home = xbmc.getCondVisibility('Window.IsVisible(home)')
+        modal = xbmc.getCondVisibility('System.HasModalDialog')
+        if home and not modal:
+            clear += 1
+        else:
+            clear = 0
+        if monitor.waitForAbort(1):
             return False
-        # The wizard is a modal window owned by the *ELEC settings service. If
-        # any modal dialog is up before the home screen has ever appeared, treat
-        # it as the wizard still running.
-        return xbmc.getCondVisibility('System.HasModalDialog')
-    except Exception:
-        return False
+    return not monitor.abortRequested()
 
 
 def _wizard_first_run_done():
@@ -83,22 +86,25 @@ def _addon_enabled(addon_id):
 
 
 def _wait_until_ready(monitor):
-    """Wait for home window + both wizards (ABUKARIM + CoreELEC) to finish.
+    """Wait until we're sitting on a clear Home screen with the ABUKARIM wizard
+    finished.
 
     Returns:
-        'ready'    -> screen is clear, safe to run now
+        'ready'    -> safe to run now
         'abort'    -> Kodi is shutting down
-        'timeout'  -> waited the maximum but a wizard/modal is still up
+        'timeout'  -> waited the maximum but never reached a clear home screen
     """
     waited = 0
     while not monitor.abortRequested() and waited < STARTUP_TIMEOUT:
-        home_visible = xbmc.getCondVisibility('Window.IsVisible(home)')
-        if home_visible and _wizard_first_run_done() \
-                and not _coreelec_wizard_active():
-            # extra settle time so the wizard's notifications clear
-            if monitor.waitForAbort(5):
-                return 'abort'
-            return 'ready'
+        if xbmc.getCondVisibility('Window.IsVisible(home)') \
+                and not xbmc.getCondVisibility('System.HasModalDialog') \
+                and _wizard_first_run_done():
+            # Confirm it stays clear for a few seconds (wizard fully gone),
+            # then a short settle so any closing animation / notification ends.
+            if _home_ready(monitor, stable_secs=3):
+                if monitor.waitForAbort(3):
+                    return 'abort'
+                return 'ready'
         if monitor.waitForAbort(2):
             return 'abort'
         waited += 2
@@ -233,12 +239,11 @@ def run_first_run_sequence(monitor):
              'so it will run on next boot.')
         return
     if status == 'timeout':
-        # A wizard / modal was still on screen after the max wait. Rather than
-        # run on top of it (and burn the one-shot flag on a doomed attempt),
-        # keep the flag and let it run cleanly on the next boot.
-        _log('Wizard/modal still active after %ss — keeping flag for next '
-             'boot instead of fighting it.' % STARTUP_TIMEOUT)
-        return
+        # Never reached a clean home screen within the wait window. Proceed
+        # anyway (the modal-aware waits inside each step will still avoid
+        # fighting other dialogs) rather than deferring forever.
+        _log('Home screen not confirmed clear after %ss — proceeding anyway.'
+             % STARTUP_TIMEOUT)
 
     # Remove the flag *before* running so the sequence is strictly one-shot
     # even if the user aborts Kodi half-way through.
