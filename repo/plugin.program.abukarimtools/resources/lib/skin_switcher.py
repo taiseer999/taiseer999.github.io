@@ -46,14 +46,46 @@ def _set_setting(key, value):
         pass
 
 
+def _confirm_keep_dialog(timeout_ms=8000):
+    """Answer Kodi's 'Keep this skin?' confirmation with Yes.
+
+    When lookandfeel.skin changes, Kodi loads the new skin and shows a yes/no
+    dialog that auto-reverts to the previous skin after ~10s if not confirmed.
+    The affirmative button is not reliably control 11 across Kodi versions, so
+    rather than SendClick a fixed id we move focus to the Yes side and select
+    it, and keep doing so until the dialog is gone. This is what stops the
+    silent revert back to Estuary.
+    """
+    waited = 0
+    answered = False
+    while waited < timeout_ms:
+        if xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)') \
+                or xbmc.getCondVisibility('Window.isVisible(yesnodialog)') \
+                or xbmc.getCondVisibility('System.HasModalDialog'):
+            # 'Yes'/keep is the right-hand button (control 11). Answer it by
+            # every reliable means, targeting the dialog window explicitly so
+            # the click can't land on the wrong window.
+            xbmc.executebuiltin('SendClick(10100,11)')   # DialogYesNo window id
+            xbmc.executebuiltin('SetFocus(11)')
+            xbmc.sleep(40)
+            xbmc.executebuiltin('SendClick(11)')
+            xbmc.sleep(40)
+            xbmc.executebuiltin('Action(Select)')
+            answered = True
+            xbmc.sleep(250)
+            if not (xbmc.getCondVisibility('Window.isVisible(yesnodialog)')
+                    or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)')):
+                break
+        elif answered:
+            break
+        xbmc.sleep(100)
+        waited += 100
+    return answered
+
+
 def _swap_skin(addonid):
     _set_setting('lookandfeel.skin', addonid)
-    count = 0
-    while not xbmc.getCondVisibility('Window.isVisible(yesnodialog)') and count < 100:
-        count += 1
-        xbmc.sleep(100)
-    if xbmc.getCondVisibility('Window.isVisible(yesnodialog)'):
-        xbmc.executebuiltin('SendClick(11)')
+    _confirm_keep_dialog()
 
 
 def run():

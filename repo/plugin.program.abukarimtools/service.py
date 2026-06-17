@@ -155,6 +155,7 @@ def _step_binary_installer(monitor):
 
 
 def _step_restore():
+    """Run the restore flow. Returns True only after restore fully finishes."""
     try:
         from resources.lib import backup_manager
         _log('Opening Backup Manager (restore)…')
@@ -162,15 +163,18 @@ def _step_restore():
         dialog = xbmcgui.Dialog()
         include_skin = bm._ask_skin_addons(dialog)
         bm._do_restore(dialog, include_skin)
+        _log('Backup Manager restore flow returned.')
+        return True
     except Exception:
         _log('Restore failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
         xbmcgui.Dialog().ok(ADDON_NAME,
                             'Restore could not be started.\n'
                             'You can run it later from ABUKARIM TOOLS → Backup/Restore.')
+        return False
 
 
 def _final_choice(monitor):
-    """Popup: Restore Backup / Skip."""
+    """Popup: Restore Backup / Skip. Returns True if a restore was performed."""
     choice = False
     for attempt in (1, 2, 3):
         _wait_no_modal(monitor)
@@ -189,9 +193,9 @@ def _final_choice(monitor):
             break
         _log('Restore popup was dismissed instantly — retrying.')
     if choice:
-        _step_restore()
-    else:
-        _log('User skipped the restore step.')
+        return _step_restore()
+    _log('User skipped the restore step.')
+    return False
 
 
 # --------------------------------------------------------------------------
@@ -212,12 +216,29 @@ def run_first_run_sequence(monitor):
 
     _log('Step 1 — Binary Installer.')
     _step_binary_installer(monitor)
+    # Binary installer runs its own progress dialog; make sure it and any
+    # Kodi install prompts are fully gone before we move on.
+    _wait_no_modal(monitor, stable=3)
 
     _log('Step 2 — Restore popup.')
-    _final_choice(monitor)
+    restored = _final_choice(monitor)
+
+    # Critical: the Skin Installer must NEVER open until the restore step has
+    # completely finished. Restore opens file-browse + confirm dialogs and
+    # writes files; opening the skin portal on top of that corrupts both
+    # flows. Wait for the screen to be clear and stable, with a longer settle
+    # when a restore actually ran.
+    if restored:
+        _log('Restore performed — waiting for it to settle before skin step.')
+        _wait_no_modal(monitor, stable=4)
+        # extra fixed settle for disk writes / addon refresh to finish
+        if not monitor.waitForAbort(5):
+            pass
+    else:
+        _wait_no_modal(monitor, stable=3)
 
     _log('Step 3 — Skin Installer (last).')
-    _wait_no_modal(monitor)
+    _wait_no_modal(monitor, stable=3)
     _step_skin_installer()
 
     _log('First-run sequence finished.')

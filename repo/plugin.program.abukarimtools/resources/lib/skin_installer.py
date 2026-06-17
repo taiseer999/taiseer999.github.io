@@ -271,29 +271,76 @@ def _extract_zip(zip_path):
     return True
 
 
+def _addon_is_enabled(addonid):
+    """True only when Kodi reports the addon as ENABLED (not merely installed).
+
+    System.HasAddon() is true even for disabled addons, which is why the skin
+    apply used to proceed while the skin was still disabled — Kodi then threw
+    the 'Add-on required / enable this add-on?' prompt and reverted. We query
+    the real enabled state via JSON-RPC instead.
+    """
+    try:
+        query = ('{"jsonrpc":"2.0","method":"Addons.GetAddonDetails",'
+                 '"params":{"addonid":"%s","properties":["enabled"]},"id":1}'
+                 % addonid)
+        resp = json.loads(xbmc.executeJSONRPC(query))
+        return resp.get('result', {}).get('addon', {}).get('enabled', False)
+    except Exception:
+        return False
+
+
+def _enable_addon(addonid):
+    """Enable the addon via JSON-RPC (reliable/synchronous) and verify it."""
+    try:
+        query = ('{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
+                 '"params":{"addonid":"%s","enabled":true},"id":1}' % addonid)
+        resp = xbmc.executeJSONRPC(query)
+        _log('SetAddonEnabled(%s) -> %s' % (addonid, resp))
+    except Exception as e:
+        _log('SetAddonEnabled failed: %s' % e)
+    # Builtin as a secondary path.
+    xbmc.executebuiltin('EnableAddon(%s)' % addonid)
+
+
 def _wait_addon_enabled(addonid, timeout_ms=10000):
-    """Poll until Kodi reports the addon as installed+enabled, or timeout."""
+    """Poll until Kodi reports the addon as ENABLED, or timeout."""
     waited = 0
-    step = 500
+    step = 400
     while waited < timeout_ms:
-        if xbmc.getCondVisibility('System.HasAddon(%s)' % addonid):
+        if _addon_is_enabled(addonid):
             return True
         xbmc.sleep(step)
         waited += step
-    return xbmc.getCondVisibility('System.HasAddon(%s)' % addonid)
+    return _addon_is_enabled(addonid)
 
 
 def _set_skin_setting(addonid):
-    """Set the active skin via JSON-RPC (same method the Skin Switcher uses)."""
+    """Set the active skin.
+
+    The JSON-RPC Settings.SetSettingValue write is silently ignored when the
+    skin is not yet considered a settable value, or when called off the GUI
+    thread (which is what was happening on first-run: the setting was written
+    but Kodi never loaded the skin and stayed on Estuary). We therefore:
+      1) try JSON-RPC and actually read the result,
+    Returns True if the JSON-RPC call reported success. (Kodi may still
+    show a 'keep this skin?' confirmation afterwards which the caller
+    handles.)
+    """
+    ok = False
     try:
         query = ('{"jsonrpc":"2.0","method":"Settings.SetSettingValue",'
                  '"params":{"setting":"lookandfeel.skin","value":"%s"},"id":1}'
                  % addonid)
-        xbmc.executeJSONRPC(query)
-        return True
+        resp = xbmc.executeJSONRPC(query)
+        try:
+            ok = json.loads(resp).get('result') is True
+        except Exception:
+            ok = False
+        _log('SetSettingValue(lookandfeel.skin=%s) -> %s' % (addonid, resp))
     except Exception as e:
         xbmc.log('[AbukarimTools] set skin setting failed: %s' % e, xbmc.LOGERROR)
-        return False
+    return ok
+
 
 
 def _current_skin():
@@ -315,7 +362,12 @@ def _current_skin():
 def _apply_skin(addonid, title):
     _log('apply start: %s (%s)' % (title, addonid))
     _notify('Enabling %s…' % title)
-    xbmc.executebuiltin('EnableAddon(%s)' % addonid)
+    # Enable via JSON-RPC (reliable) BEFORE touching the skin setting. If the
+    # skin is still disabled when we set it, Kodi pops an 'Add-on required /
+    # enable this add-on?' prompt (defaulting to No) and reverts to Estuary —
+    # that was the prompt the user kept seeing flash by. Enabling it up front
+    # means that prompt never appears.
+    _enable_addon(addonid)
 
     # Ensure the skin is registered + enabled before switching, otherwise the
     # skin setting silently fails to apply and Kodi keeps the current skin.
@@ -324,7 +376,7 @@ def _apply_skin(addonid, title):
         _error('Could not enable %s. Try selecting it manually in '
                'Settings > Interface > Skin.' % title)
         return False
-    _log('addon enabled: %s' % addonid)
+    _log('addon enabled (verified): %s' % addonid)
 
     # A freshly-installed skin is not immediately a valid value for
     # lookandfeel.skin — Kodi needs time to load its addon.xml into the
@@ -336,8 +388,7 @@ def _apply_skin(addonid, title):
 
     _notify('Applying %s…' % title)
 
-    # Use the build's proven Skin Switcher routine to perform the swap
-    # (sets lookandfeel.skin via JSON-RPC + answers the keep-skin dialog).
+    # Use the build's proven Skin Switcher routine to perform the swap.
     try:
         from resources.lib import skin_switcher
     except Exception as e:
@@ -349,26 +400,50 @@ def _apply_skin(addonid, title):
             _log('skin active after %d attempt(s): %s' % (attempt - 1, addonid))
             break
 
-        if skin_switcher is not None:
-            skin_switcher._swap_skin(addonid)
-        else:
-            _set_skin_setting(addonid)
-            waited = 0
-            while waited < 3000:
-                if xbmc.getCondVisibility('Window.isVisible(yesnodialog)'):
-                    xbmc.executebuiltin('SendClick(11)')
-                    break
-                xbmc.sleep(200)
-                waited += 200
-        _log('swap attempt %d: lookandfeel.skin=%s' % (attempt, addonid))
+        # Apply the skin. Kodi then shows its own 'Keep this skin?' yes/no
+        # confirmation with a ~5s countdown that reverts to the previous skin
+        # if it isn't answered in time. The user shouldn't have to catch that
+        # prompt — selecting the skin already IS the confirmation. So from the
+        # instant we apply, we relentlessly answer that dialog 'Yes' (keep)
+        # the moment it appears, for long enough to outlast the countdown, and
+        # treat the skin as confirmed without any user interaction.
+        rpc_ok = _set_skin_setting(addonid)
+        _log('swap attempt %d: lookandfeel.skin=%s (rpc_ok=%s)'
+             % (attempt, addonid, rpc_ok))
 
-        xbmc.sleep(1500)
+        watched = 0
+        confirmed_click = False
+        while watched < 10000:
+            # Safety net: if any yes/no prompt appears (e.g. 'Add-on required /
+            # enable this add-on?' or a keep-skin confirmation), answer YES.
+            # IMPORTANT: on the 'Add-on required' dialog the Yes button is the
+            # LEFT one (control 10); on other yes/no dialogs Yes can be control
+            # 11. We click both so we always land on Yes regardless of layout.
+            if xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)') \
+                    or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
+                    or xbmc.getCondVisibility('System.HasModalDialog'):
+                xbmc.executebuiltin('SendClick(10100,10)')   # Yes (left) on enable prompt
+                xbmc.executebuiltin('SendClick(11)')         # Yes on keep-skin prompt
+                xbmc.sleep(40)
+                xbmc.executebuiltin('SendClick(10)')
+                confirmed_click = True
+                xbmc.sleep(200)
+
+            if _current_skin() == addonid:
+                if not (xbmc.getCondVisibility('Window.IsVisible(yesnodialog)')
+                        or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)')):
+                    break
+            xbmc.sleep(100)
+            watched += 100
+
         if _current_skin() == addonid:
-            _log('verified active after attempt %d: %s' % (attempt, addonid))
+            _log('verified active after attempt %d (confirmed=%s): %s'
+                 % (attempt, confirmed_click, addonid))
             break
+
         _log('not active yet after attempt %d (current=%s)'
              % (attempt, _current_skin()))
-        xbmc.sleep(1500)
+        xbmc.sleep(1000)
 
     if _current_skin() != addonid:
         _log('FAILED to activate %s (current=%s)' % (addonid, _current_skin()))
@@ -425,11 +500,9 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             _error('No ZIP URL found for this skin.')
             return
 
-        msg = ('This skin is already installed.\nReinstall %s?' % title
-               if already else 'Install %s?' % title)
-        if not xbmcgui.Dialog().yesno(TITLE, msg):
-            return
-
+        # Selecting a skin is treated as confirmation — no prompt. The previous
+        # yesno() dialog was dismissed too quickly to be usable, so the click
+        # on the skin itself now goes straight to install/apply.
         zip_path = _download_zip(zipurl, addonid)
         if not zip_path:
             return
