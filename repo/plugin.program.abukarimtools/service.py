@@ -37,6 +37,11 @@ WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
 STARTUP_TIMEOUT = 180
+# If the Home window still isn't visible after this many seconds (e.g. the
+# CoreELEC first-boot wizard is on screen), start anyway instead of waiting
+# the full STARTUP_TIMEOUT. macOS/normal boots start the moment Home appears,
+# so this only affects the *ELEC 'takes forever' case.
+STARTUP_GRACE = 30
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -64,13 +69,32 @@ def _addon_enabled(addon_id):
 
 
 def _wait_until_ready(monitor):
-    """Wait for home window + wizard first-run completion (with timeout)."""
+    """Decide when it's safe to start the first-run sequence.
+
+    Fast path (macOS / normal boot): start as soon as the Home window is
+    visible and the ABUKARIM wizard has finished — usually only a few seconds.
+
+    CoreELEC/LibreELEC: on a fresh box the *ELEC first-boot wizard owns the
+    screen, so Home never reports visible for a long time and the old code sat
+    here for the full STARTUP_TIMEOUT (that's the 'takes forever to start').
+    To avoid that, we also start after a short GRACE period even if Home isn't
+    detected — the sequence's own per-step modal waits keep it from colliding
+    with anything still on screen.
+    """
     waited = 0
     while not monitor.abortRequested() and waited < STARTUP_TIMEOUT:
         home_visible = xbmc.getCondVisibility('Window.IsVisible(home)')
         if home_visible and _wizard_first_run_done():
             # extra settle time so the wizard's notifications clear
             if monitor.waitForAbort(5):
+                return False
+            return True
+        # Fallback: don't wait the whole timeout. Once the short grace period
+        # has elapsed, proceed even if Home hasn't reported visible (CoreELEC).
+        if waited >= STARTUP_GRACE and _wizard_first_run_done():
+            _log('Home not visible after %ss — starting anyway (CoreELEC '
+                 'first-boot wizard likely owns the screen).' % STARTUP_GRACE)
+            if monitor.waitForAbort(2):
                 return False
             return True
         if monitor.waitForAbort(2):
