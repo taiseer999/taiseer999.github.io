@@ -82,18 +82,27 @@ def _wait_until_ready(monitor):
     with anything still on screen.
     """
     waited = 0
+    _log('Waiting for system to settle before first-run (grace=%ss, '
+         'max=%ss)…' % (STARTUP_GRACE, STARTUP_TIMEOUT))
     while not monitor.abortRequested() and waited < STARTUP_TIMEOUT:
         home_visible = xbmc.getCondVisibility('Window.IsVisible(home)')
         if home_visible and _wizard_first_run_done():
-            # extra settle time so the wizard's notifications clear
+            # Fast path (macOS / normal boot): wizard already done and we're on
+            # the home screen — start right away after a short settle.
+            _log('Home screen ready — starting first-run now.')
             if monitor.waitForAbort(5):
                 return False
             return True
-        # Fallback: don't wait the whole timeout. Once the short grace period
-        # has elapsed, proceed even if Home hasn't reported visible (CoreELEC).
-        if waited >= STARTUP_GRACE and _wizard_first_run_done():
-            _log('Home not visible after %ss — starting anyway (CoreELEC '
-                 'first-boot wizard likely owns the screen).' % STARTUP_GRACE)
+        # Fallback for CoreELEC/LibreELEC: the ABUKARIM build wizard can run a
+        # long first-boot routine, and Home stays hidden behind it, so neither
+        # condition above becomes true for a long time. After the grace period,
+        # start anyway. We no longer require the wizard to report 'done' here —
+        # the sequence's own per-step modal waits keep it from colliding with
+        # any wizard dialog still on screen, and it stops the skin step from
+        # being blocked indefinitely.
+        if waited >= STARTUP_GRACE:
+            _log('Grace period (%ss) elapsed without a clear home screen — '
+                 'starting the first-run sequence anyway.' % STARTUP_GRACE)
             if monitor.waitForAbort(2):
                 return False
             return True
@@ -107,6 +116,21 @@ def _wait_until_ready(monitor):
 # --------------------------------------------------------------------------
 # Sequence steps
 # --------------------------------------------------------------------------
+def _step_patcher(monitor):
+    try:
+        from resources.lib import patcher
+        _log('Applying patches…')
+        patcher.run()
+        return True
+    except Exception:
+        _log('Patcher failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(
+            ADDON_NAME,
+            'Apply Patches failed — run it from ABUKARIM TOOLS',
+            xbmcgui.NOTIFICATION_ERROR, 6000)
+        return False
+
+
 def _step_skin_installer():
     try:
         from resources.lib import skin_installer
@@ -232,6 +256,28 @@ def run_first_run_sequence(monitor):
     except OSError:
         pass
 
+    _run_steps(monitor)
+
+
+def run_now(monitor=None, remove_flag=True):
+    """Run the first-run steps immediately, skipping the boot-time wait.
+
+    This is what the manual shortcut (run.py) calls. It does NOT wait for the
+    home screen / wizard — the user has chosen to run it on purpose — and by
+    default it also clears the one-shot flag so a later boot won't repeat it.
+    """
+    if monitor is None:
+        monitor = xbmc.Monitor()
+    if remove_flag:
+        try:
+            os.remove(FLAG_FILE)
+        except OSError:
+            pass
+    _log('Manual run requested.')
+    _run_steps(monitor)
+
+
+def _run_steps(monitor):
     _log('Starting first-run sequence.')
 
     _log('Step 1 — Binary Installer.')
@@ -240,7 +286,11 @@ def run_first_run_sequence(monitor):
     _log('Step 2 — Restore popup.')
     _final_choice(monitor)
 
-    _log('Step 3 — Skin Installer (last).')
+    _log('Step 3 — Apply Patches.')
+    _wait_no_modal(monitor)
+    _step_patcher(monitor)
+
+    _log('Step 4 — Skin Installer (last).')
     _wait_no_modal(monitor)
     _step_skin_installer()
 

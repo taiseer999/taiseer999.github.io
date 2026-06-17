@@ -24,9 +24,11 @@ ICONS  = {
     'openwizard':     ADDON_PATH + 'resources/icons/openwizard.png',
     'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
     'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
+    'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
 }
 
 MENU = [
+    ('first_run',      'Run First-Time Setup'),
     ('backup',         'Backup/Restore'),
     ('skin_install',   'Skin Selection'),
     ('binary_install', 'New Build Tools'),
@@ -75,6 +77,23 @@ def router():
     # --- Top-level menu ---
     if mode is None:
         main_menu()
+        return
+
+    if mode == 'first_run':
+        _end_directory()
+        # Run the same first-run sequence the service runs on first boot,
+        # on demand. Confirm first so it isn't triggered by accident.
+        if xbmcgui.Dialog().yesno(
+                'ABUKARIM TOOLS',
+                'Run first-time setup now?\n\n'
+                'This installs binaries, offers a backup restore, '
+                'then opens the Skin Installer.',
+                yeslabel='Run setup', nolabel='Cancel'):
+            import_root = ADDON_PATH.rstrip('/\\')
+            if import_root not in sys.path:
+                sys.path.insert(0, import_root)
+            import service
+            service.run_now(remove_flag=True)
         return
 
     if mode == 'skin_install':
