@@ -49,7 +49,7 @@ class Auth:
             return
 
         try:
-            with open(var.tk_sync_list, "r", encoding="utf-8") as synclist:
+            with open(var.tk_sync_list, "r") as synclist:
                 current = json.load(synclist)["addon_list"]
         except Exception as e:
             log_utils.error(f"Error reading sync list: {e}")
@@ -122,13 +122,13 @@ class Auth:
                 addon = xbmcaddon.Addon("plugin.video.umbrella")
                 chk_auth = addon.getSetting("trakt.user.token")
                 if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_umb, "r", encoding="utf-8") as f:
+                    with open(var.path_umb, "r") as f:
                         data = f.read()
 
                     patched_keys = False
                     if var.umb_client in data or var.umb_secret in data:
                         data = data.replace(var.umb_client, var.client_am).replace(var.umb_secret, var.secret_am)
-                        with open(var.path_umb, "w", encoding="utf-8") as f:
+                        with open(var.path_umb, "w") as f:
                             f.write(data)
                         patched_keys = True
                     elif var.client_am in data and var.secret_am in data:
@@ -158,19 +158,19 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Umbrella Trakt Failed: {e}")
 
-        # ========================= Seren =========================
+        '''# ========================= Seren =========================
         try:
             if "Seren" in current and exists(var.chk_seren) and exists(var.chkset_seren):
                 addon = xbmcaddon.Addon("plugin.video.seren")
                 chk_auth = addon.getSetting("trakt.auth")
                 if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_seren, "r", encoding="utf-8") as f:
+                    with open(var.path_seren, "r") as f:
                         data = f.read()
 
                     patched_keys = False
                     if var.seren_client in data or var.seren_secret in data:
                         data = data.replace(var.seren_client, var.client_am).replace(var.seren_secret, var.secret_am)
-                        with open(var.path_seren, "w", encoding="utf-8") as f:
+                        with open(var.path_seren, "w") as f:
                             f.write(data)
                         patched_keys = True
                     elif var.client_am in data and var.secret_am in data:
@@ -200,13 +200,13 @@ class Auth:
                 addon = xbmcaddon.Addon("plugin.video.fen")
                 chk_auth = addon.getSetting("trakt.token")
                 if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_fen, "r", encoding="utf-8") as f:
+                    with open(var.path_fen, "r") as f:
                         data = f.read()
 
                     patched_keys = False
                     if var.fen_client in data or var.fen_secret in data:
                         data = data.replace(var.fen_client, var.client_am).replace(var.fen_secret, var.secret_am)
-                        with open(var.path_fen, "w", encoding="utf-8") as f:
+                        with open(var.path_fen, "w") as f:
                             f.write(data)
                         patched_keys = True
                     elif var.client_am in data and var.secret_am in data:
@@ -232,7 +232,7 @@ class Auth:
                     if authorize(mode):
                         control.remake_fen_trakt_cache()
         except Exception as e:
-            log_utils.error(f"Fen Trakt Failed: {e}")
+            log_utils.error(f"Fen Trakt Failed: {e}")'''
 
         # ========================== POV ==========================
         # ============ API Keys applied to settings.xml ===========
@@ -413,13 +413,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.thecrew")
                     chk_auth = addon.getSetting("trakt.token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_crew, "r", encoding="utf-8") as f:
+                        with open(var.path_crew, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.crew_client in data or var.crew_secret in data:
                             data = data.replace(var.crew_client, var.client_am).replace(var.crew_secret, var.secret_am)
-                            with open(var.path_crew, "w", encoding="utf-8") as f:
+                            with open(var.path_crew, "w") as f:
                                 f.write(data)
                             patched_keys = True
 
@@ -449,13 +449,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.salts")
                     chk_auth = addon.getSetting("trakt_access_token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_salts, "r", encoding="utf-8") as f:
+                        with open(var.path_salts, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.salts_client in data or var.salts_secret in data:
                             data = data.replace(var.salts_client, var.client_am).replace(var.salts_secret, var.secret_am)
-                            with open(var.path_salts, "w", encoding="utf-8") as f:
+                            with open(var.path_salts, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -485,13 +485,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.orion")
                     chk_auth = addon.getSetting("trakt_token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_orion, "r", encoding="utf-8") as f:
+                        with open(var.path_orion, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.orion_client in data or var.orion_secret in data:
                             data = data.replace(var.orion_client, var.client_am).replace(var.orion_secret, var.secret_am)
-                            with open(var.path_orion, "w", encoding="utf-8") as f:
+                            with open(var.path_orion, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -516,13 +516,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.genesis")
                     chk_auth = addon.getSetting("trakt.token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_gen, "r", encoding="utf-8") as f:
+                        with open(var.path_gen, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.genesis_client in data or var.genesis_secret in data:
                             data = data.replace(var.genesis_client, var.client_am).replace(var.genesis_secret, var.secret_am)
-                            with open(var.path_gen, "w", encoding="utf-8") as f:
+                            with open(var.path_gen, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -551,13 +551,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.syncher")
                     chk_auth = addon.getSetting("trakt.token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_sync, "r", encoding="utf-8") as f:
+                        with open(var.path_sync, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.syncher_client in data or var.syncher_secret in data:
                             data = data.replace(var.syncher_client, var.client_am).replace(var.syncher_secret, var.secret_am)
-                            with open(var.path_sync, "w", encoding="utf-8") as f:
+                            with open(var.path_sync, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -582,13 +582,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.scrubsv2")
                     chk_auth = addon.getSetting("trakt.token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_scrubs, "r", encoding="utf-8") as f:
+                        with open(var.path_scrubs, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.scrubs_client in data or var.scrubs_secret in data:
                             data = data.replace(var.scrubs_client, var.client_am).replace(var.scrubs_secret, var.secret_am)
-                            with open(var.path_scrubs, "w", encoding="utf-8") as f:
+                            with open(var.path_scrubs, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -618,13 +618,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.gratisred")
                     chk_auth = addon.getSetting("trakt.token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_redg, "r", encoding="utf-8") as f:
+                        with open(var.path_redg, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.redg_client in data or var.redg_secret in data:
                             data = data.replace(var.redg_client, var.client_am).replace(var.redg_secret, var.secret_am)
-                            with open(var.path_redg, "w", encoding="utf-8") as f:
+                            with open(var.path_redg, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -654,14 +654,14 @@ class Auth:
                 chk_auth = addon.getSetting("trakt_token")
 
                 if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_tmdbh, "r", encoding="utf-8") as f:
+                    with open(var.path_tmdbh, "r") as f:
                         data = f.read()
 
                     patched_keys = False
                     if var.tmdbh_client in data or var.tmdbh_secret in data:
                         # Replace old keys
                         data = data.replace(var.tmdbh_client, var.client_am).replace(var.tmdbh_secret, var.secret_am)
-                        with open(var.path_tmdbh, "w", encoding="utf-8") as f:
+                        with open(var.path_tmdbh, "w") as f:
                             f.write(data)
                         patched_keys = True
                     elif var.client_am in data and var.secret_am in data:
@@ -695,13 +695,13 @@ class Auth:
                     addon = xbmcaddon.Addon("plugin.video.trakt_player")
                     chk_auth = addon.getSetting("trakt_access_token")
                     if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_tkplay, "r", encoding="utf-8") as f:
+                        with open(var.path_tkplay, "r") as f:
                             data = f.read()
 
                         patched_keys = False
                         if var.tkplay_client in data or var.tkplay_secret in data:
                             data = data.replace(var.tkplay_client, var.client_am).replace(var.tkplay_secret, var.secret_am)
-                            with open(var.path_tkplay, "w", encoding="utf-8") as f:
+                            with open(var.path_tkplay, "w") as f:
                                 f.write(data)
                             patched_keys = True
                         elif var.client_am in data and var.secret_am in data:
@@ -730,13 +730,13 @@ class Auth:
                 chk_auth = addon.getSetting("trakt_token")
 
                 if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_trakt, "r", encoding="utf-8") as f:
+                    with open(var.path_trakt, "r") as f:
                         data = f.read()
 
                     patched_keys = False
                     if var.trakt_client_obs_str in data or var.trakt_secret_obs_str in data:
                         data = data.replace(var.trakt_client_obs_str, var.client_am_obs_str).replace(var.trakt_secret_obs_str, var.secret_am_obs_str)
-                        with open(var.path_trakt, "w", encoding="utf-8") as f:
+                        with open(var.path_trakt, "w") as f:
                             f.write(data)
                         patched_keys = True
                     elif var.client_am_obs_str in data and var.secret_am_obs_str in data:

@@ -47,31 +47,6 @@ class TorboxAuthDialog(xbmcgui.WindowXMLDialog):
 
 class Torbox:
 	def auth(self):
-		choices = ["Connect with device code", "Enter API key manually"]
-		selection = control.selectDialog(choices, heading="TorBox Authorization")
-
-		if selection < 0:
-			return False
-		elif selection == 1:
-			return self._auth_manual()
-		else:
-			return self._auth_device()
-
-	def _auth_manual(self):
-		api = xbmcgui.Dialog().input("Enter your TorBox API Key")
-
-		if not api:
-			control.notification(message="TorBox authorization cancelled!", icon=torbox_icon)
-			return False
-
-		api = api.strip().replace("\n", "").replace("\r", "")
-		if not api:
-			control.notification(message="TorBox authorization failed!", icon=torbox_icon)
-			return False
-
-		return self._finalize(api)
-
-	def _auth_device(self):
 		def _json_request(url, data=None, timeout=10):
 			headers = {
 				"User-Agent": "Kodi/21 acctmgr",
@@ -115,9 +90,9 @@ class Torbox:
 				str(control.addonPath()),
 				"Default",
 				user_code=user_code,
-				bg_image=torbox_bg,
+                                bg_image=torbox_bg,
 				qr_image=torbox_qr,
-				bdr_image=torbox_bdr
+                                bdr_image=torbox_bdr
 			)
 
 			dialog.show()
@@ -168,15 +143,6 @@ class Torbox:
 				control.notification(message="TorBox authorization failed!",icon=torbox_icon)
 				return False
 
-			return self._finalize(api)
-
-		except Exception as e:
-			log_utils.error(f"TorBox authorization failed: {e}")
-			control.notification(message="TorBox Authorization Failed",icon=torbox_icon)
-			return False
-
-	def _finalize(self, api):
-		try:
 			url = f"{API_BASE}{USER_PATH}"
 			req = urllib.request.Request(url)
 
@@ -206,7 +172,6 @@ class Torbox:
 			control.setSetting("torbox.token", api)
 			control.setSetting("torbox.acct_id", str(acct_id))
 			control.setSetting("torbox.auth_status", auth_status)
-			control.setSetting("torbox.auth_expires", str(expires) if expires else "")
 
 			control.notification(title="AM Lite",message="Successfully Authorized!",icon=torbox_icon)
 
@@ -240,6 +205,5 @@ class Torbox:
 		control.setSetting("torbox.token", "")
 		control.setSetting("torbox.acct_id", "")
 		control.setSetting("torbox.auth_status", "")
-		control.setSetting("torbox.auth_expires", "")
 
 		control.notification("TorBox Authorization Revoked",icon=torbox_icon)

@@ -1,6 +1,6 @@
-# Addon Name: Your Accounts
+# Addon Name: Account Manager Lite
 # Addon id: script.module.acctmgr
-# Addon Provider: Your Accounts
+# Addon Provider: Zaxxon709
 # Translators:
 # Translators:
 # Translators:
@@ -9,7 +9,7 @@
 # Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Your Accounts\n"
+"Project-Id-Version: Account Manager Lite\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: 2016-08-01 02:03+0000\n"
 "Last-Translator: lambda81\n"
@@ -145,23 +145,23 @@ msgid "Password"
 msgstr ""
 
 msgctxt "#32345"
-msgid "Write Your Accounts log in reverse order"
+msgid "Write log in reverse order"
 msgstr ""
 
 msgctxt "#32346"
-msgid "Clear Your Accounts log file"
+msgid "Clear log file"
 msgstr ""
 
 msgctxt "#32347"
-msgid "View Your Accounts log file"
+msgid "View log file"
 msgstr ""
 
 msgctxt "#32348"
-msgid "Upload Your Accounts log file to pastebin"
+msgid "Upload log file to pastebin"
 msgstr ""
 
 msgctxt "#32349"
-msgid "Your Accounts log file uploaded to:"
+msgid "Log file uploaded to:"
 msgstr ""
 
 msgctxt "#32513"

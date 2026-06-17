@@ -1073,7 +1073,7 @@ def startup_patch(path, addon_name=None):
         if startup_marker in data:
             return True, "already patched"
 
-        # Pass addon_name so inject_startup_snippet can handle Umbrella, The Gears, Fen Light
+        # Pass addon_name so inject_startup_snippet can handle Umbrella, The Gears, Fen Light, Red Light
         new_data = inject_startup_snippet(data, startup_snippet, addon_name)
 
         if new_data == data:
@@ -1141,12 +1141,14 @@ def startup_unpatch(path):
 def inject_startup_snippet(data, startup_snippet, addon_name=None):
     lines = data.splitlines(True)
 
-    # Special handling for Umbrella, Fen Light and The Gears
+    # Special handling for Umbrella, Fen Light, Red Light and The Gears
     if addon_name:
         addon_name_lower = addon_name.lower()
         if addon_name_lower == "umbrella":
             idx, indent = find_def_block(lines, "main")
         elif addon_name_lower == "fen light":
+            idx, indent = find_def_block(lines, "startServices")
+        elif addon_name_lower == "red light":
             idx, indent = find_def_block(lines, "startServices")
         elif addon_name_lower == "the gears":
             idx, indent = find_def_block(lines, "startServices")
