@@ -48,36 +48,12 @@ def _set_setting(key, value):
 
 def _swap_skin(addonid):
     _set_setting('lookandfeel.skin', addonid)
-    # When the skin is set, CoreELEC shows the 'Add-on required / enable this
-    # add-on?' (or a keep-skin) yes/no dialog. On this dialog YES is the
-    # FOCUSED/default button, so the reliable answer is to activate the focused
-    # control with Select — clicking a fixed control id (the old SendClick(11))
-    # hit the wrong button and sent the switch into a loop. We keep answering
-    # for several seconds, because the dialog can appear slightly after the set
-    # and must be confirmed before its short countdown reverts it.
-    waited = 0
-    answered = False
-    while waited < 9000:
-        if xbmc.getCondVisibility('Window.IsVisible(10100)') \
-                or xbmc.getCondVisibility('Window.IsVisible(DialogConfirm.xml)') \
-                or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
-                or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)'):
-            xbmc.executebuiltin('Action(Select)')   # activate focused = Yes
-            xbmc.sleep(40)
-            xbmc.executebuiltin('SendClick(10100,11)')
-            xbmc.executebuiltin('SendClick(10100,10)')
-            xbmc.executebuiltin('SendClick(11)')
-            answered = True
-            xbmc.sleep(250)
-            if not (xbmc.getCondVisibility('Window.IsVisible(10100)')
-                    or xbmc.getCondVisibility('Window.IsVisible(DialogConfirm.xml)')
-                    or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)')
-                    or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)')):
-                break
-        elif answered:
-            break
-        xbmc.sleep(80)
-        waited += 80
+    count = 0
+    while not xbmc.getCondVisibility('Window.isVisible(yesnodialog)') and count < 100:
+        count += 1
+        xbmc.sleep(100)
+    if xbmc.getCondVisibility('Window.isVisible(yesnodialog)'):
+        xbmc.executebuiltin('SendClick(11)')
 
 
 def run():

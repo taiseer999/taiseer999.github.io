@@ -290,10 +290,6 @@ def _run_steps(monitor):
     _wait_no_modal(monitor)
     _step_patcher(monitor)
 
-    _log('Step 4 — Skin Installer (last).')
-    _wait_no_modal(monitor)
-    _step_skin_installer()
-
     _log('First-run sequence finished.')
 
 
