@@ -55,7 +55,7 @@ def main():
     monitor = xbmc.Monitor()
     # remove_flag=True keeps it one-shot on the next boot too; the manual run
     # has effectively done first-run already.
-    service.run_now(monitor, remove_flag=True)
+    service.run_now(monitor, remove_flag=True, force=False)
 
 
 if __name__ == '__main__':

@@ -93,7 +93,7 @@ def router():
             if import_root not in sys.path:
                 sys.path.insert(0, import_root)
             import service
-            service.run_now(remove_flag=True)
+            service.run_now(remove_flag=True, force=True)
         return
 
     if mode == 'skin_install':

@@ -37,6 +37,12 @@ FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 WELCOME_IMAGE = os.path.join(ADDON_PATH, 'resources', 'media', 'welcome.jpg')
 WELCOME_SECONDS = 7
 
+# Marker written once first-run has completed, so it can never repeat (this is
+# what stops the skin's startup from re-triggering the whole sequence in a
+# loop). A separate lock guards against two launches overlapping.
+DONE_FILE = os.path.join(PROFILE, 'first_run.done')
+LOCK_FILE = os.path.join(PROFILE, 'first_run.lock')
+
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
@@ -253,6 +259,24 @@ def run_first_run_sequence(monitor):
              'so it will run on next boot.')
         return
 
+    # Already completed (e.g. skin reload re-fired the service) → stop.
+    if os.path.exists(DONE_FILE):
+        _log('First-run already completed (done marker present) — skipping.')
+        try:
+            os.remove(FLAG_FILE)
+        except OSError:
+            pass
+        return
+    if os.path.exists(LOCK_FILE):
+        _log('First-run already running (lock present) — skipping duplicate.')
+        return
+
+    try:
+        with open(LOCK_FILE, 'w') as f:
+            f.write('running')
+    except OSError:
+        pass
+
     # Remove the flag *before* running so the sequence is strictly one-shot
     # even if the user aborts Kodi half-way through.
     try:
@@ -260,25 +284,69 @@ def run_first_run_sequence(monitor):
     except OSError:
         pass
 
-    _run_steps(monitor)
+    try:
+        _run_steps(monitor)
+    finally:
+        try:
+            with open(DONE_FILE, 'w') as f:
+                f.write('done')
+        except OSError:
+            pass
+        try:
+            os.remove(LOCK_FILE)
+        except OSError:
+            pass
 
 
-def run_now(monitor=None, remove_flag=True):
+def run_now(monitor=None, remove_flag=True, force=False):
     """Run the first-run steps immediately, skipping the boot-time wait.
 
-    This is what the manual shortcut (run.py) calls. It does NOT wait for the
-    home screen / wizard — the user has chosen to run it on purpose — and by
-    default it also clears the one-shot flag so a later boot won't repeat it.
+    Guards against the loop where the skin's startup re-launches first-run on
+    every skin load:
+      • If first-run already completed (DONE_FILE exists) we refuse to run
+        again unless force=True (the menu item passes force=True so the user
+        can deliberately re-run setup).
+      • A LOCK_FILE prevents two launches from overlapping.
     """
     if monitor is None:
         monitor = xbmc.Monitor()
+
+    # Already completed → do nothing (this breaks the skin-startup loop).
+    if not force and os.path.exists(DONE_FILE):
+        _log('First-run already completed (done marker present) — skipping.')
+        return
+
+    # Another run in progress → do nothing.
+    if os.path.exists(LOCK_FILE):
+        _log('First-run already running (lock present) — skipping duplicate.')
+        return
+
+    try:
+        with open(LOCK_FILE, 'w') as f:
+            f.write('running')
+    except OSError:
+        pass
+
     if remove_flag:
         try:
             os.remove(FLAG_FILE)
         except OSError:
             pass
+
     _log('Manual run requested.')
-    _run_steps(monitor)
+    try:
+        _run_steps(monitor)
+    finally:
+        # Mark complete and release the lock.
+        try:
+            with open(DONE_FILE, 'w') as f:
+                f.write('done')
+        except OSError:
+            pass
+        try:
+            os.remove(LOCK_FILE)
+        except OSError:
+            pass
 
 
 class _WelcomeWindow(xbmcgui.WindowDialog):

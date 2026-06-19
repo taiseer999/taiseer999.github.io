@@ -625,7 +625,7 @@ updated YouTube addon URL
     <provides>executable</provides>
   </extension>
 
-  
+  <extension point="xbmc.service" library="service.py" />
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">ABUKARIM TOOLS</summary>
