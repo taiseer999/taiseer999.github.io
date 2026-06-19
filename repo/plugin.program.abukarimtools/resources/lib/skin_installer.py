@@ -271,16 +271,70 @@ def _extract_zip(zip_path):
     return True
 
 
+def _addon_is_enabled(addonid):
+    """True only when Kodi reports the addon as ENABLED (not just installed).
+
+    System.HasAddon() is true even for a DISABLED addon, so relying on it let
+    the skin be selected while still disabled — which is exactly what makes
+    Kodi throw the 'Add-on required / enable this add-on?' popup. We query the
+    real enabled flag instead.
+    """
+    try:
+        import json as _json
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Addons.GetAddonDetails",'
+            '"params":{"addonid":"%s","properties":["enabled"]},"id":1}' % addonid)
+        return _json.loads(resp).get('result', {}).get('addon', {}).get('enabled', False)
+    except Exception:
+        return False
+
+
+def _enable_addon(addonid):
+    """Enable the addon reliably via JSON-RPC (synchronous), plus the builtin
+    as a secondary path."""
+    try:
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
+            '"params":{"addonid":"%s","enabled":true},"id":1}' % addonid)
+        _log('SetAddonEnabled(%s) -> %s' % (addonid, resp))
+    except Exception as e:
+        _log('SetAddonEnabled failed: %s' % e)
+    xbmc.executebuiltin('EnableAddon(%s)' % addonid)
+
+
 def _wait_addon_enabled(addonid, timeout_ms=10000):
-    """Poll until Kodi reports the addon as installed+enabled, or timeout."""
+    """Poll until Kodi reports the addon as ENABLED, or timeout."""
     waited = 0
-    step = 500
+    step = 400
     while waited < timeout_ms:
-        if xbmc.getCondVisibility('System.HasAddon(%s)' % addonid):
+        if _addon_is_enabled(addonid):
             return True
         xbmc.sleep(step)
         waited += step
-    return xbmc.getCondVisibility('System.HasAddon(%s)' % addonid)
+    return _addon_is_enabled(addonid)
+
+
+def _answer_enable_prompt_once():
+    """If the 'Add-on required / enable this add-on?' (or a keep-skin) yes/no
+    dialog is showing, answer YES immediately.
+
+    On this dialog (confirmed from a CoreELEC/Arctic Fuse screenshot) the YES
+    button is already the focused/default option, so the most reliable answer
+    is simply to activate the focused control with Select — this works no
+    matter which control id or screen position the skin uses for Yes. We also
+    fire the common Yes control ids as a backup for skins where Yes is not the
+    default focus. Returns True if a dialog was present.
+    """
+    if xbmc.getCondVisibility('Window.IsActive(yesnodialog)') \
+            or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)') \
+            or xbmc.getCondVisibility('Window.IsActive(10100)'):
+        # YES is control 11 (NO is the focused control 10 — do NOT use
+        # Action(Select), which would activate No). Click control 11 only.
+        xbmc.executebuiltin('SendClick(yesnodialog, 11)')
+        xbmc.sleep(60)
+        xbmc.executebuiltin('SendClick(11)')
+        return True
+    return False
 
 
 def _set_skin_setting(addonid):
@@ -312,32 +366,70 @@ def _current_skin():
         return ''
 
 
+def _start_yes_watchdog():
+    """Start a background thread that clicks YES on any enable/keep yes-no
+    dialog for a short while. Returns a stop() callable.
+
+    The popup fires at the exact moment the skin is set, and on CoreELEC it
+    appears even when the addon already reports enabled. Watching from a
+    background thread guarantees we answer it no matter which code path does
+    the set (and even when the main loop short-circuits because the skin
+    already reads active).
+    """
+    import threading
+
+    stop_flag = {'stop': False}
+
+    def _worker():
+        waited = 0
+        while not stop_flag['stop'] and waited < 15000:
+            # Use the SAME detection + click that the working binary installer
+            # uses: IsActive(yesnodialog) + SendClick(yesnodialog, 11).
+            if xbmc.getCondVisibility('Window.IsActive(yesnodialog)') \
+                    or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)') \
+                    or xbmc.getCondVisibility('Window.IsActive(10100)'):
+                xbmc.executebuiltin('SendClick(yesnodialog, 11)')   # 11 = Yes
+                xbmc.sleep(60)
+                xbmc.executebuiltin('SendClick(11)')
+                _log('watchdog: answered enable/confirm popup (Yes)')
+            xbmc.sleep(80)
+            waited += 80
+
+    t = threading.Thread(target=_worker)
+    t.daemon = True
+    t.start()
+
+    def _stop():
+        stop_flag['stop'] = True
+    return _stop
+
+
 def _apply_skin(addonid, title):
     _log('apply start: %s (%s)' % (title, addonid))
     _notify('Enabling %s…' % title)
-    xbmc.executebuiltin('EnableAddon(%s)' % addonid)
+    # Enable RELIABLY before touching the skin setting.
+    _enable_addon(addonid)
 
-    # Ensure the skin is registered + enabled before switching, otherwise the
-    # skin setting silently fails to apply and Kodi keeps the current skin.
     if not _wait_addon_enabled(addonid):
         _log('addon never became enabled: %s' % addonid)
         _error('Could not enable %s. Try selecting it manually in '
                'Settings > Interface > Skin.' % title)
         return False
-    _log('addon enabled: %s' % addonid)
+    _log('addon enabled (verified): %s' % addonid)
 
     # A freshly-installed skin is not immediately a valid value for
     # lookandfeel.skin — Kodi needs time to load its addon.xml into the
     # settings/addon system. Refreshing local addons and pausing lets the
-    # skin become selectable before we switch (this is why running the swap
-    # as a deferred step succeeds where an immediate set was rejected).
+    # skin become selectable before we switch.
     xbmc.executebuiltin('UpdateLocalAddons')
     xbmc.sleep(2000)
 
     _notify('Applying %s…' % title)
 
-    # Use the build's proven Skin Switcher routine to perform the swap
-    # (sets lookandfeel.skin via JSON-RPC + answers the keep-skin dialog).
+    # Start answering the enable/keep popup in the background BEFORE we set the
+    # skin, so it's caught the instant it appears (it fires right at the set,
+    # even when the addon already reports enabled — confirmed on CoreELEC).
+    stop_watchdog = _start_yes_watchdog()
     try:
         from resources.lib import skin_switcher
     except Exception as e:
@@ -353,29 +445,37 @@ def _apply_skin(addonid, title):
             skin_switcher._swap_skin(addonid)
         else:
             _set_skin_setting(addonid)
-            waited = 0
-            while waited < 3000:
-                if xbmc.getCondVisibility('Window.isVisible(yesnodialog)'):
-                    xbmc.executebuiltin('SendClick(11)')
-                    break
-                xbmc.sleep(200)
-                waited += 200
         _log('swap attempt %d: lookandfeel.skin=%s' % (attempt, addonid))
 
-        xbmc.sleep(1500)
+        # Safety net: for a few seconds after the swap, auto-answer YES to any
+        # enable/keep popup the instant it appears, and stop as soon as the
+        # skin is actually active. This is what removes the need for the user
+        # to catch the 2-3s popup, and prevents the endless retry loop.
+        watched = 0
+        while watched < 8000:
+            _answer_enable_prompt_once()
+            if _current_skin() == addonid \
+                    and not xbmc.getCondVisibility('Window.IsActive(yesnodialog)') \
+                    and not xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)'):
+                break
+            xbmc.sleep(100)
+            watched += 100
+
         if _current_skin() == addonid:
             _log('verified active after attempt %d: %s' % (attempt, addonid))
             break
         _log('not active yet after attempt %d (current=%s)'
              % (attempt, _current_skin()))
-        xbmc.sleep(1500)
+        xbmc.sleep(1000)
 
     if _current_skin() != addonid:
+        stop_watchdog()
         _log('FAILED to activate %s (current=%s)' % (addonid, _current_skin()))
         _error('%s was installed but could not be selected automatically.\n'
                'Select it in Settings > Interface > Skin.' % title)
         return False
 
+    stop_watchdog()
     _log('skin activated: %s' % addonid)
     return True
 
@@ -437,18 +537,28 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             return
         _log('installed via portal: %s (first_run=%s)' % (addonid, self.first_run))
 
-        if self.first_run:
-            # Defer the skin switch until this modal is closed: the keep-skin
-            # confirmation must be handled with no custom WindowXMLDialog open.
-            # Close now, apply in run().
-            self.pending = (addonid, title)
-            item.setProperty('installed', 'true')
-            self.close()
-            return
+        # Enable the freshly-extracted skin RIGHT NOW, before anything else
+        # touches it. If it's left disabled, Kodi throws the 'Add-on required /
+        # enable this add-on?' popup the moment the skin is referenced — which
+        # is the dialog the user keeps seeing. UpdateLocalAddons registers the
+        # new addon so SetAddonEnabled can take effect.
+        xbmc.executebuiltin('UpdateLocalAddons')
+        xbmc.sleep(1500)
+        _enable_addon(addonid)
+        _wait_addon_enabled(addonid, timeout_ms=8000)
+        _log('skin pre-enabled in portal: %s (enabled=%s)'
+             % (addonid, _addon_is_enabled(addonid)))
 
-        _apply_skin(addonid, title)
-        _notify('✓ %s installed successfully.' % title)
+        # Always defer the skin switch until AFTER this portal (window 13001)
+        # has closed. Applying while the portal is still open leaves it
+        # lingering on top of the new skin (and the keep/enable confirmation
+        # must be handled with no custom WindowXMLDialog open). So in every
+        # mode: record the pending skin, close the portal, and let run() apply
+        # it on a clean screen.
+        self.pending = (addonid, title)
         item.setProperty('installed', 'true')
+        self.close()
+        return
 
     def onAction(self, action):
         if action.getId() in (xbmcgui.ACTION_NAV_BACK,
@@ -489,11 +599,11 @@ def run(first_run=False):
     pending = win.pending
     del win
 
-    # first_run mode: the portal closed itself after a successful install;
-    # apply the skin now that no custom modal window is open.
+    # The portal closed itself after a successful install; apply the skin now
+    # that no custom modal window is open (applies in all modes).
     if pending:
         addonid, title = pending
-        _log('deferred apply (first_run): %s' % addonid)
+        _log('deferred apply: %s' % addonid)
         ok = _apply_skin(addonid, title)
         if ok:
             _notify('✓ %s installed successfully.' % title)

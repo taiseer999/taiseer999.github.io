@@ -48,12 +48,43 @@ def _set_setting(key, value):
 
 def _swap_skin(addonid):
     _set_setting('lookandfeel.skin', addonid)
-    count = 0
-    while not xbmc.getCondVisibility('Window.isVisible(yesnodialog)') and count < 100:
-        count += 1
-        xbmc.sleep(100)
-    if xbmc.getCondVisibility('Window.isVisible(yesnodialog)'):
-        xbmc.executebuiltin('SendClick(11)')
+    # Confirm the 'Add-on required / enable this add-on?' dialog the SAME way
+    # the (working) binary installer does: detect with IsActive(yesnodialog)
+    # and click control 11 (Yes) on the named yesnodialog window. The build's
+    # confirm dialog responds to this; targeting it by numeric id / bare Select
+    # did not. We keep trying for several seconds in case it appears slightly
+    # after the set and needs a moment to accept input.
+    waited = 0
+    answered = False
+    while waited < 12000:
+        active = (xbmc.getCondVisibility('Window.IsActive(yesnodialog)')
+                  or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)')
+                  or xbmc.getCondVisibility('Window.IsActive(10100)'))
+        if active:
+            try:
+                fc  = xbmc.getInfoLabel('System.CurrentControlId')
+                win = xbmc.getInfoLabel('System.CurrentWindow')
+                xbmc.log('[AbukarimTools SkinSwitcher] confirm dialog up '
+                         '(window=%s focusedControl=%s)' % (win, fc), xbmc.LOGINFO)
+            except Exception:
+                pass
+            # YES is control 11 on this 'Yes / No dialog' (NO is the focused
+            # control 10 — so we must NOT use Action(Select), which would
+            # activate No and cause the revert/loop). Click control 11 only.
+            xbmc.executebuiltin('SendClick(yesnodialog, 11)')   # 11 = Yes
+            xbmc.sleep(60)
+            xbmc.executebuiltin('SendClick(11)')                # backup, same id
+            answered = True
+            xbmc.sleep(250)
+            still = (xbmc.getCondVisibility('Window.IsActive(yesnodialog)')
+                     or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)')
+                     or xbmc.getCondVisibility('Window.IsActive(10100)'))
+            if not still:
+                break
+        elif answered:
+            break
+        xbmc.sleep(80)
+        waited += 80
 
 
 def run():

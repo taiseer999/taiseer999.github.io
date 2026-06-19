@@ -30,8 +30,12 @@ import xbmcvfs
 
 ADDON       = xbmcaddon.Addon()
 ADDON_NAME  = 'ABUKARIM TOOLS'
+ADDON_PATH  = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
 PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
+
+WELCOME_IMAGE = os.path.join(ADDON_PATH, 'resources', 'media', 'welcome.jpg')
+WELCOME_SECONDS = 7
 
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
@@ -277,8 +281,51 @@ def run_now(monitor=None, remove_flag=True):
     _run_steps(monitor)
 
 
+class _WelcomeWindow(xbmcgui.WindowDialog):
+    """Fullscreen welcome image shown at the start of first-run.
+
+    Closes automatically after WELCOME_SECONDS, or immediately on any key /
+    click so the user is never stuck waiting on it.
+    """
+    def __init__(self, image_path):
+        super(_WelcomeWindow, self).__init__()
+        # Fullscreen image (coordinates are in Kodi's 1280x720 skin space).
+        img = xbmcgui.ControlImage(0, 0, 1280, 720, image_path,
+                                   aspectRatio=0)
+        self.addControl(img)
+
+    def onAction(self, action):
+        # Any Back/Select/nav key closes the splash early.
+        self.close()
+
+
+def _show_welcome(monitor):
+    """Show the welcome image for WELCOME_SECONDS, then continue."""
+    if not os.path.exists(WELCOME_IMAGE):
+        _log('Welcome image not found, skipping splash: %s' % WELCOME_IMAGE)
+        return
+    try:
+        win = _WelcomeWindow(WELCOME_IMAGE)
+        win.show()
+        # Keep it up for the requested duration (abort early if Kodi quits).
+        waited = 0
+        while waited < WELCOME_SECONDS * 1000:
+            if monitor.abortRequested():
+                break
+            xbmc.sleep(200)
+            waited += 200
+        win.close()
+        del win
+        _log('Welcome splash shown for %ss.' % WELCOME_SECONDS)
+    except Exception:
+        _log('Welcome splash failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
+
+
 def _run_steps(monitor):
     _log('Starting first-run sequence.')
+
+    # Welcome splash first — shown for a few seconds before setup begins.
+    _show_welcome(monitor)
 
     _log('Step 1 — Binary Installer.')
     _step_binary_installer(monitor)
@@ -289,6 +336,10 @@ def _run_steps(monitor):
     _log('Step 3 — Apply Patches.')
     _wait_no_modal(monitor)
     _step_patcher(monitor)
+
+    _log('Step 4 — Skin Installer (last).')
+    _wait_no_modal(monitor)
+    _step_skin_installer()
 
     _log('First-run sequence finished.')
 
