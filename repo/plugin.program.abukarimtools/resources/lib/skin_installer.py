@@ -325,14 +325,17 @@ def _answer_enable_prompt_once():
     fire the common Yes control ids as a backup for skins where Yes is not the
     default focus. Returns True if a dialog was present.
     """
-    if xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
+    if xbmc.getCondVisibility('Window.IsVisible(10100)') \
+            or xbmc.getCondVisibility('Window.IsVisible(DialogConfirm.xml)') \
+            or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
             or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)'):
         # Primary: activate whatever is focused (Yes is the default here).
         xbmc.executebuiltin('Action(Select)')
         xbmc.sleep(40)
-        # Backup for layouts where Yes isn't the default focus:
-        xbmc.executebuiltin('SendClick(11)')   # Yes (right) — Estuary keep-skin
-        xbmc.executebuiltin('SendClick(10)')   # Yes (left)  — other layouts
+        # Backups for layouts where Yes isn't the default focus:
+        xbmc.executebuiltin('SendClick(10100,11)')
+        xbmc.executebuiltin('SendClick(10100,10)')
+        xbmc.executebuiltin('SendClick(11)')
         return True
     return False
 
@@ -383,14 +386,23 @@ def _start_yes_watchdog():
     def _worker():
         waited = 0
         while not stop_flag['stop'] and waited < 15000:
-            if xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
+            # The 'Add-on required / enable this add-on?' prompt is rendered as
+            # DialogConfirm (window id 10100) on this build — NOT the standard
+            # yesnodialog. Detect any of these so we don't miss it.
+            if xbmc.getCondVisibility('Window.IsVisible(10100)') \
+                    or xbmc.getCondVisibility('Window.IsVisible(DialogConfirm.xml)') \
+                    or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
                     or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)'):
-                xbmc.executebuiltin('Action(Select)')   # activate focused = Yes
+                # Yes is the focused/default button → activate it. Also click
+                # the common Yes control ids directly on window 10100 as backup.
+                xbmc.executebuiltin('Action(Select)')
                 xbmc.sleep(40)
+                xbmc.executebuiltin('SendClick(10100,11)')
+                xbmc.executebuiltin('SendClick(10100,10)')
                 xbmc.executebuiltin('SendClick(11)')
-                xbmc.executebuiltin('SendClick(10)')
-            xbmc.sleep(100)
-            waited += 100
+                _log('watchdog: answered enable/confirm popup (Yes)')
+            xbmc.sleep(80)
+            waited += 80
 
     t = threading.Thread(target=_worker)
     t.daemon = True

@@ -58,22 +58,26 @@ def _swap_skin(addonid):
     waited = 0
     answered = False
     while waited < 9000:
-        if xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
+        if xbmc.getCondVisibility('Window.IsVisible(10100)') \
+                or xbmc.getCondVisibility('Window.IsVisible(DialogConfirm.xml)') \
+                or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)') \
                 or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)'):
             xbmc.executebuiltin('Action(Select)')   # activate focused = Yes
             xbmc.sleep(40)
-            xbmc.executebuiltin('SendClick(11)')    # backup: Yes (right) Estuary
-            xbmc.executebuiltin('SendClick(10)')    # backup: Yes (left) other
+            xbmc.executebuiltin('SendClick(10100,11)')
+            xbmc.executebuiltin('SendClick(10100,10)')
+            xbmc.executebuiltin('SendClick(11)')
             answered = True
             xbmc.sleep(250)
-            # Once the dialog is gone and the skin took, stop.
-            if not (xbmc.getCondVisibility('Window.IsVisible(yesnodialog)')
+            if not (xbmc.getCondVisibility('Window.IsVisible(10100)')
+                    or xbmc.getCondVisibility('Window.IsVisible(DialogConfirm.xml)')
+                    or xbmc.getCondVisibility('Window.IsVisible(yesnodialog)')
                     or xbmc.getCondVisibility('Window.IsVisible(DialogYesNo.xml)')):
                 break
         elif answered:
             break
-        xbmc.sleep(100)
-        waited += 100
+        xbmc.sleep(80)
+        waited += 80
 
 
 def run():
