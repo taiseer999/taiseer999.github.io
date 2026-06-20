@@ -30,7 +30,7 @@ def extras_button_label_values():
 				'show_director': 'Director', 'show_options': 'Options', 'show_recommended': 'Recommended', 'show_related': 'Related', 'show_more_like_this': 'More Like This',
 				'show_similar': 'Similar', 'show_reviews': 'Reviews', 'show_comments': 'Comments', 'show_trivia': 'Trivia', 'show_blunders': 'Blunders',
 				'show_year': 'More Year', 'show_genre': 'More Genres', 'show_network': 'More Network',
-				'show_trakt_manager': 'Trakt Lists', 'show_personallists_manager': 'Personal Lists', 'show_tmdb_manager': 'TMDb Lists',
+				'show_trakt_manager': 'Trakt Lists', 'show_simkl_manager': 'Simkl Lists', 'show_tmdb_manager': 'TMDb Lists', 'show_personallists_manager': 'Personal Lists',
 				'show_favorites_manager': 'Favorites Lists', 'playback_choice': 'Play Options', 'show_plot': 'Plot', 'show_keywords': 'Keywords',
 				'show_in_trakt_lists': 'In Trakt Lists', 'close_all': 'Close'},
 			'tvshow':
@@ -38,7 +38,7 @@ def extras_button_label_values():
 				'play_nextep': 'Play Next', 'show_options': 'Options', 'show_recommended': 'Recommended', 'show_related': 'Related', 'show_more_like_this': 'More Like This',
 				'show_similar': 'Similar', 'show_reviews': 'Reviews', 'show_comments': 'Comments', 'show_trivia': 'Trivia', 'show_blunders': 'Blunders',
 				'show_year': 'More Year', 'show_genre': 'More Genres', 'show_network': 'More Network',
-				'show_trakt_manager': 'Trakt Lists', 'show_personallists_manager': 'Personal Lists', 'show_tmdb_manager': 'TMDb Lists',
+				'show_trakt_manager': 'Trakt Lists', 'show_simkl_manager': 'Simkl Lists', 'show_tmdb_manager': 'TMDb Lists', 'show_personallists_manager': 'Personal Lists',
 				'show_favorites_manager': 'Favorites Lists', 'play_random_episode': 'Play Random', 'show_plot': 'Plot', 'show_keywords': 'Keywords',
 				'show_in_trakt_lists': 'In Trakt Lists', 'close_all': 'Close'}}
 
@@ -55,8 +55,8 @@ def context_menu_items():
 	{'name': 'Browse Movie Set', 'value': 'browse_movie_set'}, {'name': 'Browse TV Seasons', 'value': 'browse_seasons'},
 	{'name': 'Browse Season Episodes', 'value': 'browse_episodes'}, {'name': 'Browse Recommended', 'value': 'recommended'}, {'name': 'Browse Related', 'value': 'related'},
 	{'name': 'Browse More Like This', 'value': 'more_like_this'}, {'name': 'Browse Similar', 'value': 'similar'}, {'name': 'In Trakt Lists', 'value': 'in_trakt_list'},
-	{'name': 'Trakt Lists Manager', 'value': 'trakt_manager'}, {'name': 'Personal Lists Manager', 'value': 'personal_manager'},
-	{'name': 'TMDb Lists Manager', 'value': 'tmdb_manager'}, {'name': 'Favorites Manager', 'value': 'favorites_manager'}, {'name': 'Mark Watched/Unwatched', 'value': 'mark_watched'},
+	{'name': 'Simkl Lists Manager', 'value': 'simkl_manager'}, {'name': 'Trakt Lists Manager', 'value': 'trakt_manager'}, {'name': 'TMDb Lists Manager', 'value': 'tmdb_manager'},
+	{'name': 'Personal Lists Manager', 'value': 'personal_manager'}, {'name': 'Favorites Manager', 'value': 'favorites_manager'}, {'name': 'Mark Watched/Unwatched', 'value': 'mark_watched'},
 	{'name': 'Unmark Previous Watched Episode', 'value': 'unmark_previous_episode'}, {'name': 'Exit List', 'value': 'exit'}, {'name': 'Refresh Widgets', 'value': 'refresh'},
 	{'name': 'Reload Widgets', 'value': 'reload'}]
 
@@ -102,6 +102,33 @@ def kodi_player():
 
 def kodi_dialog():
 	return xbmcgui.Dialog()
+
+def is_android():
+	return get_visibility('System.Platform.Android')
+
+def _folder_has_entries(path):
+	try:
+		tpath = translate_path(path)
+		if not path_exists(tpath) or not os.path.isdir(tpath):
+			return False
+		with os.scandir(tpath) as scan:
+			return any(True for _ in scan)
+	except:
+		return False
+
+def safe_browse_defaultt(path):
+	# Kodi on Android can block parent navigation when browse opens inside a non-empty folder.
+	if not is_android() or not path or path in ('None', ''):
+		return path
+	if _folder_has_entries(path):
+		return ''
+	return path
+
+def browse_directory(defaultt=''):
+	return kodi_dialog().browse(0, '', '', defaultt=safe_browse_defaultt(defaultt) or None)
+
+def browse_file(mask='', defaultt=''):
+	return kodi_dialog().browse(1, '', '', mask, defaultt=safe_browse_defaultt(defaultt) or None)
 
 def addon_info(info):
 	return xbmcaddon.Addon('plugin.video.redlight').getAddonInfo(info)
@@ -191,8 +218,8 @@ def set_content(handle, content):
 def set_category(handle, label):
 	xbmcplugin.setPluginCategory(handle, label)
 
-def end_directory(handle, cacheToDisc=True):
-	xbmcplugin.endOfDirectory(handle, cacheToDisc=cacheToDisc)
+def end_directory(handle, updateListing=False, cacheToDisc=True):
+	xbmcplugin.endOfDirectory(handle, updateListing=updateListing, cacheToDisc=cacheToDisc)
 
 def set_view_mode(view_type, content='files', is_external=None):
 	if not get_property('redlight.use_viewtypes') == 'true': return
@@ -263,6 +290,16 @@ def make_session(url='https://'):
 
 def make_playlist(playlist_type='video'):
 	return xbmc.PlayList({'music': 0, 'video': 1}[playlist_type])
+
+def clear_video_playlist():
+	'''Drop episode plugin URLs left on the video playlist when browse/direct play starts during a scrape.'''
+	try:
+		make_playlist('video').clear()
+	except:
+		try:
+			execute_builtin('Playlist.Clear')
+		except:
+			pass
 
 def supported_media():
 	return xbmc.getSupportedMedia('video')
@@ -401,7 +438,7 @@ def disable_enable_addon(addon_name='plugin.video.redlight'):
 def update_local_addons():
 	execute_builtin('UpdateLocalAddons', True)
 	sleep(2500)
- 
+
 def update_kodi_addons_db(addon_name='plugin.video.redlight'):
 	import time
 	import sqlite3 as database
@@ -462,6 +499,7 @@ def progress_dialog(heading='', icon=None):
 	from windows.base_window import create_window
 	progress_dialog = create_window(('windows.progress', 'Progress'), 'progress.xml', heading=heading, icon=icon or addon_icon())
 	Thread(target=progress_dialog.run).start()
+	sleep(150)
 	return progress_dialog
 
 def select_dialog(function_list, **kwargs):
@@ -471,14 +509,30 @@ def select_dialog(function_list, **kwargs):
 	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
 	return function_list[selection]
 
-def confirm_dialog(heading='', text='Are you sure?', ok_label='OK', cancel_label='Cancel', default_control=11):
+_DIALOG_CONFIRM_CHARS_PER_LINE = 42
+_DIALOG_CONFIRM_VISIBLE_LINES = 5
+
+def _dialog_needs_scroll(text):
+	if not text: return False
+	plain = text
+	for tag in ('[B]', '[/B]', '[I]', '[/I]', '[COLOR yellow]', '[/COLOR]'):
+		plain = plain.replace(tag, '')
+	lines = [i.strip() for i in plain.split('[CR]') if i.strip()]
+	wrapped = sum(max(1, (len(line) + _DIALOG_CONFIRM_CHARS_PER_LINE - 1) // _DIALOG_CONFIRM_CHARS_PER_LINE) for line in lines)
+	return wrapped > _DIALOG_CONFIRM_VISIBLE_LINES
+
+def confirm_dialog(heading='', text='Are you sure?', ok_label='OK', cancel_label='Cancel', default_control=11, scroll=False):
 	from windows.base_window import open_window
-	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label, 'cancel_label': cancel_label, 'default_control': default_control}
+	needs_scroll = scroll and _dialog_needs_scroll(text)
+	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label, 'cancel_label': cancel_label, 'default_control': default_control,
+				'scroll': 'true' if needs_scroll else 'false', 'scroll_focus': 'true' if needs_scroll else 'false'}
 	return open_window(('windows.default_dialogs', 'Confirm'), 'confirm.xml', **kwargs)
 
-def ok_dialog(heading='', text='No Results', ok_label='OK'):
+def ok_dialog(heading='', text='No Results', ok_label='OK', scroll=False):
 	from windows.base_window import open_window
-	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label}
+	needs_scroll = scroll and _dialog_needs_scroll(text)
+	kwargs = {'heading': heading, 'text': text, 'ok_label': ok_label,
+				'scroll': 'true' if needs_scroll else 'false', 'scroll_focus': 'true' if needs_scroll else 'false'}
 	return open_window(('windows.default_dialogs', 'OK'), 'ok.xml', **kwargs)
 
 def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):

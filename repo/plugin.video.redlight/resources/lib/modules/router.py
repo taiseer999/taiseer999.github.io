@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 from xbmc import getInfoLabel
 from urllib.parse import parse_qsl
 from modules import kodi_utils
@@ -13,14 +14,16 @@ def sys_exit_check():
 def routing(sys):
 	params = dict(parse_qsl(sys.argv[2][1:], keep_blank_values=True))
 	if not external():
-		from caches.settings_cache import bootstrap_settings_properties, refresh_widgets_after_db_migration, run_deferred_setup_if_needed
+		from caches.settings_cache import bootstrap_settings_properties, refresh_widgets_after_db_migration
+		from caches.settings_cache import run_deferred_setup_if_needed, run_deferred_setup_background_if_needed, is_directory_listing_mode
 		try: bootstrap_settings_properties()
 		except Exception as e: kodi_utils.logger('routing', 'bootstrap: %s' % e)
 		try: refresh_widgets_after_db_migration()
 		except Exception as e: kodi_utils.logger('routing', 'refresh widgets: %s' % e)
+	mode = params.get('mode', 'navigator.main')
+	if not external():
 		try: run_deferred_setup_if_needed()
 		except Exception as e: kodi_utils.logger('routing', 'deferred: %s' % e)
-	mode = params.get('mode', 'navigator.main')
 	if 'navigator.' in mode:
 		from indexers.navigator import Navigator
 		return exec('Navigator(params).%s()' % mode.split('.')[1])
@@ -45,6 +48,12 @@ def routing(sys):
 	elif 'custom_key.' in mode:
 		from modules import custom_keys
 		return exec('custom_keys.%s()' % mode.split('custom_key.')[1])
+	elif 'simkl.' in mode:
+		if '.list.' in mode:
+			from indexers import simkl_lists
+			return exec('simkl_lists.%s(params)' % mode.split('.')[2])
+		from apis import simkl_api
+		return exec('simkl_api.%s(params)' % mode.split('.')[1])
 	elif 'trakt.' in mode:
 		if '.list' in mode:
 			from indexers import trakt_lists
@@ -286,6 +295,9 @@ def routing(sys):
 		from modules import updater
 		return exec('updater.%s()' % mode.split('.')[1])
 	##EXTRA modes##
+	elif 'local_backup.' in mode:
+		from modules import local_backup
+		return getattr(local_backup, mode.split('.', 1)[1])(params)
 	elif mode == 'set_view':
 		from modules.kodi_utils import set_view
 		return kodi_utils.set_view(params.get('view_type'))
@@ -318,7 +330,13 @@ def routing(sys):
 		return runner(params)
 	elif mode == 'debrid.browse_packs':
 		from modules.sources import Sources
-		return Sources().debridPacks(params.get('provider'), params.get('name'), params.get('magnet_url'), params.get('info_hash'))
+		source_item = params.get('source_item')
+		if isinstance(source_item, str):
+			try:
+				source_item = json.loads(source_item)
+			except:
+				source_item = None
+		return Sources().debridPacks(params.get('provider'), params.get('name'), params.get('magnet_url'), params.get('info_hash'), source_item=source_item)
 	elif mode == 'open_settings':
 		from modules.kodi_utils import open_settings
 		return open_settings()

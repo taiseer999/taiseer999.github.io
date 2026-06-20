@@ -32,22 +32,39 @@
                 <top>10</top>
                 <left>110</left>
                 <height>20</height>
-                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                <font>font12</font> <!-- REDLIGHT_26 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <shadowcolor>FF000000</shadowcolor>
                 <align>center</align>
                 <label>[UPPERCASE][B]$INFO[Window.Property(heading)][/B][/UPPERCASE]</label>
             </control>
-            <control type="textbox">
+            <control type="textbox" id="2000">
                 <left>40</left>
                 <top>60</top>
-                <width>720</width>
-                <height>280</height>
-                <font>font32</font> <!-- REDLIGHT_30 -->
+                <width>690</width>
+                <height>300</height>
+                <font>font13</font> <!-- REDLIGHT_30 -->
                 <textcolor>FFCCCCCC</textcolor>
-                <align>center</align>
-                <aligny>center</aligny>
+                <align>left</align>
+                <aligny>top</aligny>
                 <label>$INFO[Window.Property(text)]</label>
+                <pagecontrol>2070</pagecontrol>
+                <autoscroll>false</autoscroll>
+            </control>
+            <control type="scrollbar" id="2070">
+                <visible>String.IsEqual(Window.Property(scroll),true)</visible>
+                <left>735</left>
+                <top>60</top>
+                <width>10</width>
+                <height>300</height>
+                <texturesliderbackground colordiffuse="FF1F2020">redlight_common/white.png</texturesliderbackground>
+                <texturesliderbar colordiffuse="FF555556">redlight_common/white.png</texturesliderbar>
+                <texturesliderbarfocus colordiffuse="FFCCCCCC">redlight_common/white.png</texturesliderbarfocus>
+                <onleft>2070</onleft>
+                <onright>2070</onright>
+                <ondown>10</ondown>
+                <showonepage>false</showonepage>
+                <orientation>vertical</orientation>
             </control>
             <control type="button" id="10">
                 <description>True</description>
@@ -57,8 +74,10 @@
                 <height>70</height>
                 <onleft>11</onleft>
                 <onright>11</onright>
+                <onup>2070</onup>
+                <ondown>10</ondown>
                 <label>$INFO[Window.Property(ok_label)]</label>
-                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                <font>font12</font> <!-- REDLIGHT_26 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <focusedcolor>FF1F2020</focusedcolor>
                 <texturefocus colordiffuse="CCCCCCCC" border="30">redlight_common/circle.png</texturefocus>
@@ -74,8 +93,10 @@
                 <height>70</height>
                 <onleft>10</onleft>
                 <onright>10</onright>
+                <onup>2070</onup>
+                <ondown>11</ondown>
                 <label>$INFO[Window.Property(cancel_label)]</label>
-                <font>font23_narrow</font> <!-- REDLIGHT_26 -->
+                <font>font12</font> <!-- REDLIGHT_26 -->
                 <textcolor>FFCCCCCC</textcolor>
                 <focusedcolor>FF1F2020</focusedcolor>
                 <texturefocus colordiffuse="CCCCCCCC" border="30">redlight_common/circle.png</texturefocus>
