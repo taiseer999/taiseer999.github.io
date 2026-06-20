@@ -35,6 +35,10 @@ PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 
 WELCOME_IMAGE = os.path.join(ADDON_PATH, 'resources', 'media', 'welcome.jpg')
+# Kodi-native VFS path form — more reliable for ControlImage than an absolute
+# OS path that may contain spaces (e.g. macOS "Application Support").
+WELCOME_IMAGE_VFS = 'special://home/addons/%s/resources/media/welcome.jpg' % (
+    ADDON.getAddonInfo('id'),)
 WELCOME_SECONDS = 7
 
 # Marker written once first-run has completed, so it can never repeat (this is
@@ -369,12 +373,24 @@ class _WelcomeWindow(xbmcgui.WindowDialog):
 
 def _show_welcome(monitor):
     """Show the welcome image for WELCOME_SECONDS, then continue."""
+    if monitor is None:
+        monitor = xbmc.Monitor()
+
+    _log('Welcome splash: preparing (image=%s).' % WELCOME_IMAGE)
     if not os.path.exists(WELCOME_IMAGE):
         _log('Welcome image not found, skipping splash: %s' % WELCOME_IMAGE)
         return
+
+    win = None
     try:
-        win = _WelcomeWindow(WELCOME_IMAGE)
+        win = _WelcomeWindow(WELCOME_IMAGE_VFS)
         win.show()
+        # Give Kodi a moment to actually draw the window before we start the
+        # countdown — without this the dialog can open and close in the same
+        # frame on slower / first-boot systems and never become visible.
+        xbmc.sleep(300)
+        _log('Welcome splash shown — holding for %ss.' % WELCOME_SECONDS)
+
         # Keep it up for the requested duration (abort early if Kodi quits).
         waited = 0
         while waited < WELCOME_SECONDS * 1000:
@@ -382,11 +398,16 @@ def _show_welcome(monitor):
                 break
             xbmc.sleep(200)
             waited += 200
-        win.close()
-        del win
-        _log('Welcome splash shown for %ss.' % WELCOME_SECONDS)
     except Exception:
         _log('Welcome splash failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
+    finally:
+        try:
+            if win is not None:
+                win.close()
+                del win
+        except Exception:
+            pass
+        _log('Welcome splash closed.')
 
 
 def _run_steps(monitor):

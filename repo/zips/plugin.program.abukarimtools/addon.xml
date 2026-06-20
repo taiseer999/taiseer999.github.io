@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.6.2"
+       version="1.6.3"
        provider-name="Abukarim">
 
   <requires>
@@ -24,6 +24,9 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
+    <news>v1.6.3
+- Fixed: welcome splash image not appearing at the start of first-run setup.
+- More reliable fullscreen welcome display on first boot.</news>
   </extension>
 
 </addon>
