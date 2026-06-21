@@ -5,18 +5,6 @@ Applies patches to installed Kodi addons:
 
   1. plugin.video.redlight  –  kodi_utils.py
      addon_themes() → Dark only (removes Light & Medium options)
-
-  2. script.tinyppi  –  overlay.py
-     _ALLOW_NON_COREELEC = False  →  True
-
-  3. script.tinyppi  –  resources/lib/properties.py
-     get_DoviProfileVar() → strip "Dolby Vision " prefix, return profile part only
-
-  4. script.tinyppi  –  resources/lib/monitor.py
-     onNotification() → add _update_hdr_properties() trigger on Player.OnPlay
-
-  5. script.tinyppi  –  resources/lib/monitor.py
-     Add _update_hdr_properties() method to KodiMonitor class
 """
 
 import base64
@@ -113,15 +101,6 @@ PATCHES = [
             r"\g<1>{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}\g<2>"
         ),
     },
-    {
-        'addon_id':    'script.tinyppi',
-        'rel_path':    os.path.join('resources', 'lib', 'overlay.py'),
-        'old':         '_ALLOW_NON_COREELEC = False',
-        'new':         '_ALLOW_NON_COREELEC = True',
-        'description': 'TinyPPI – _ALLOW_NON_COREELEC enabled',
-        'fallback_pattern': r'_ALLOW_NON_COREELEC\s*=\s*False',
-        'fallback_repl':    '_ALLOW_NON_COREELEC = True',
-    },
     # ------------------------------------------------------------------
     # Patch – RedLight dialogs.py: remove theme selection dialog,
     # silently apply Dark when type='theme' is triggered
@@ -176,169 +155,6 @@ PATCHES = [
         'fallback_repl':    '',
         'already_patched_check': None,
         'not_found_ok': True,
-    },
-    # ------------------------------------------------------------------
-    # Patch 3 – properties.py: strip "Dolby Vision " prefix from
-    # get_DoviProfileVar() so it returns e.g. "Profile 7 FEL" instead of
-    # "Dolby Vision Profile 7 FEL".  The skin uses the DVProfileELVar XML
-    # variable to show FEL/MEL colours separately.
-    # ------------------------------------------------------------------
-    {
-        'addon_id':    'script.tinyppi',
-        'rel_path':    os.path.join('resources', 'lib', 'properties.py'),
-        'old': (
-            '        return "Dolby Vision Profile 8.1"\n\n    prof = re.search'
-        ),
-        'new': (
-            '        return "Profile 8.1"\n\n    prof = re.search'
-        ),
-        'description': 'TinyPPI properties.py – DoviProfileVar strips "Dolby Vision " prefix (fallback)',
-        # regex covers all four return statements in get_DoviProfileVar()
-        'fallback_pattern': r'"Dolby Vision (Profile [^"]*)"',
-        'fallback_repl':    r'"\1"',
-    },
-    # ------------------------------------------------------------------
-    # Patch 4 – monitor.py: replace the entire original KodiMonitor class
-    # with the updated version that includes _start_hdr_poll,
-    # _poll_hdr_properties, _clear_hdr_properties, and
-    # _update_hdr_properties.
-    # ------------------------------------------------------------------
-    {
-        'addon_id':    'script.tinyppi',
-        'rel_path':    os.path.join('resources', 'lib', 'monitor.py'),
-        'old': (
-            'import json\n'
-            'import os\n'
-            'import sys\n'
-            '\n'
-            'import xbmc\n'
-            'import xbmcaddon\n'
-            'import xbmcgui'
-        ),
-        'new': (
-            'import json\n'
-            'import os\n'
-            'import sys\n'
-            'import threading\n'
-            '\n'
-            'import xbmc\n'
-            'import xbmcaddon\n'
-            'import xbmcgui'
-        ),
-        'description': 'TinyPPI monitor.py – add threading import',
-        'fallback_pattern': r'(import json\nimport os\nimport sys\n)(\nimport xbmc)',
-        'fallback_repl':    r'\1import threading\n\2',
-    },
-    # ------------------------------------------------------------------
-    # Patch 5 – monitor.py: add __init__ poll_thread attribute
-    # ------------------------------------------------------------------
-    {
-        'addon_id':    'script.tinyppi',
-        'rel_path':    os.path.join('resources', 'lib', 'monitor.py'),
-        'old': (
-            '        self.win   = win\n'
-            '        self.addon = addon\n'
-            '\n'
-            '    def onNotification'
-        ),
-        'new': (
-            '        self.win   = win\n'
-            '        self.addon = addon\n'
-            '        self._poll_thread = None\n'
-            '\n'
-            '    def onNotification'
-        ),
-        'description': 'TinyPPI monitor.py – add _poll_thread attribute to __init__',
-        'fallback_pattern': r'(self\.win\s+=\s+win\n\s+self\.addon\s+=\s+addon\n)(\n\s+def onNotification)',
-        'fallback_repl':    r'\1        self._poll_thread = None\n\2',
-    },
-    # ------------------------------------------------------------------
-    # Patch 6 – monitor.py: replace bare onNotification body with the
-    # full version that triggers HDR polling on Player.OnPlay/OnStop
-    # ------------------------------------------------------------------
-    {
-        'addon_id':    'script.tinyppi',
-        'rel_path':    os.path.join('resources', 'lib', 'monitor.py'),
-        'old': (
-            '            _log(f"sender={sender}  method={method}  type={mediatype!r}")\n'
-            '\n'
-            '        except Exception as exc:\n'
-            '            _log(f"Exception in KodiMonitor.onNotification: {exc}", xbmc.LOGERROR)\n'
-            '\n'
-            '\n'
-            '# ---------------------------------------------------------------------------\n'
-            '# Entry point  (called by Kodi via the xbmc.service extension point)\n'
-            '# ---------------------------------------------------------------------------'
-        ),
-        'new': (
-            '            _log(f"sender={sender}  method={method}  type={mediatype!r}")\n'
-            '\n'
-            '            if method == "Player.OnPlay":\n'
-            '                self._start_hdr_poll()\n'
-            '                self._update_hdr_properties()\n'
-            '\n'
-            '            if method == "Player.OnStop":\n'
-            '                self._clear_hdr_properties()\n'
-            '\n'
-            '        except Exception as exc:\n'
-            '            _log(f"Exception in KodiMonitor.onNotification: {exc}", xbmc.LOGERROR)\n'
-            '\n'
-            '    def _update_hdr_properties(self) -> None:\n'
-            '        """Immediately read and publish HDR/DV properties after playback starts."""\n'
-            '        xbmc.sleep(3000)  # wait for player to initialise\n'
-            '        _addon_path = xbmcaddon.Addon(_ADDON_ID).getAddonInfo("path")\n'
-            '        sys.path.insert(0, os.path.join(_addon_path, "resources", "lib"))\n'
-            '        try:\n'
-            '            from properties import get_HdmiHdrStatusVar, get_DoviProfileVar\n'
-            '            hdr  = get_HdmiHdrStatusVar()\n'
-            '            dovi = get_DoviProfileVar()\n'
-            '            xbmc.executebuiltin(f"SetProperty(HdmiHdrStatusVar,{hdr},Home)")\n'
-            '            xbmc.executebuiltin(f"SetProperty(DoviProfileVar,{dovi},Home)")\n'
-            '            _log(f"_update_hdr_properties: hdr={hdr!r}  dovi={dovi!r}", xbmc.LOGINFO)\n'
-            '        except Exception as exc:\n'
-            '            _log(f"_update_hdr_properties failed: {exc}", xbmc.LOGERROR)\n'
-            '\n'
-            '    def _start_hdr_poll(self) -> None:\n'
-            '        """Start a background thread that polls HDR properties for 30 seconds."""\n'
-            '        if self._poll_thread and self._poll_thread.is_alive():\n'
-            '            return\n'
-            '        self._poll_thread = threading.Thread(target=self._poll_hdr_properties, daemon=True)\n'
-            '        self._poll_thread.start()\n'
-            '\n'
-            '    def _poll_hdr_properties(self) -> None:\n'
-            '        """Poll every 2 seconds for 30 seconds until DV profile is found."""\n'
-            '        _addon_path = xbmcaddon.Addon(_ADDON_ID).getAddonInfo("path")\n'
-            '        sys.path.insert(0, os.path.join(_addon_path, "resources", "lib"))\n'
-            '        try:\n'
-            '            from properties import get_HdmiHdrStatusVar, get_DoviProfileVar\n'
-            '            for _ in range(15):  # 15 attempts x 2 seconds = 30 seconds\n'
-            '                xbmc.sleep(2000)\n'
-            '                hdr  = get_HdmiHdrStatusVar()\n'
-            '                dovi = get_DoviProfileVar()\n'
-            '                xbmc.executebuiltin(f"SetProperty(HdmiHdrStatusVar,{hdr},Home)")\n'
-            '                xbmc.executebuiltin(f"SetProperty(DoviProfileVar,{dovi},Home)")\n'
-            '                _log(f"HDR poll: HdmiHdrStatusVar={hdr!r}  DoviProfileVar={dovi!r}", xbmc.LOGINFO)\n'
-            '                if dovi:\n'
-            '                    _log("DV profile found — stopping poll", xbmc.LOGINFO)\n'
-            '                    break\n'
-            '        except Exception as exc:\n'
-            '            _log(f"_poll_hdr_properties failed: {exc}", xbmc.LOGERROR)\n'
-            '\n'
-            '    def _clear_hdr_properties(self) -> None:\n'
-            '        """Clear HDR properties from Window(Home) when playback stops."""\n'
-            '        xbmc.executebuiltin("ClearProperty(HdmiHdrStatusVar,Home)")\n'
-            '        xbmc.executebuiltin("ClearProperty(DoviProfileVar,Home)")\n'
-            '\n'
-            '\n'
-            '# ---------------------------------------------------------------------------\n'
-            '# Entry point  (called by Kodi via the xbmc.service extension point)\n'
-            '# ---------------------------------------------------------------------------'
-        ),
-        'description': 'TinyPPI monitor.py – add HDR poll/update/clear methods',
-        'fallback_pattern': None,
-        'fallback_repl':    None,
-        # already-patched check: shorter sentinel that only exists post-patch
-        'already_patched_check': '_update_hdr_properties',
     },
     # ── Seren QR Auth ──
     {
