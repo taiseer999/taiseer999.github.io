@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 patcher.py  –  ABUKARIM TOOLS
-Applies patches to installed Kodi addons:
-
-  1. plugin.video.redlight  –  kodi_utils.py
-     addon_themes() → Dark only (removes Light & Medium options)
+Applies patches to installed Kodi addons.
 """
 
 import base64
@@ -88,82 +85,6 @@ DIALOG      = xbmcgui.Dialog()
 #   description – shown to user in notifications
 # ---------------------------------------------------------------------------
 PATCHES = [
-    {
-        'addon_id':    'plugin.video.redlight',
-        'rel_path':    os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
-        'old':         (
-            "def addon_themes():\n"
-            "\treturn [{'name': 'Light', 'value': ('FF434343', 'FF2E2E2E'), 'icon': 'light'}, "
-            "{'name': 'Medium', 'value': ('FF373737', 'FF4a4347'), 'icon': 'medium'},\n"
-            "\t\t\t{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]"
-        ),
-        'new':         (
-            "def addon_themes():\n"
-            "\treturn [{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}]"
-        ),
-        'description': 'RedLight – window theme locked to Dark only',
-        # fallback: if the exact string isn't found (already patched or different
-        # version) we fall back to a regex that handles any variant
-        'fallback_pattern': r"(def addon_themes\(\):\s*\n\s*return\s*\[).*?(\])",
-        'fallback_repl':    (
-            r"\g<1>{'name': 'Dark', 'value': ('FF1F2020', 'FF4F4F4F'), 'icon': 'dark'}\g<2>"
-        ),
-    },
-    # ------------------------------------------------------------------
-    # Patch – RedLight dialogs.py: remove theme selection dialog,
-    # silently apply Dark when type='theme' is triggered
-    # ------------------------------------------------------------------
-    {
-        'addon_id':    'plugin.video.redlight',
-        'rel_path':    os.path.join('resources', 'lib', 'indexers', 'dialogs.py'),
-        'old': (
-            "\tif params['type'] == 'theme':\n"
-            "\t\tchoices = kodi_utils.addon_themes()\n"
-            "\t\tlist_items = [{'line1': i['name'], 'icon': kodi_utils.get_icon(i['icon'], 'themes')} for i in choices]\n"
-            "\t\tkwargs = {'items': json.dumps(list_items), 'heading': 'Assign a Theme', 'narrow_window': 'true'}\n"
-            "\t\tchoice = kodi_utils.select_dialog(choices, **kwargs)\n"
-            "\t\tif choice == None: return\n"
-            "\t\twindow_theme, window_theme_contrast, window_theme_name = choice['value'][0][2:], choice['value'][1], choice['name']\n"
-            "\t\twindow_theme_opacity = get_setting('redlight.window_theme_opacity', 'CC')\n"
-            "\t\tset_setting('window_theme_name', window_theme_name)"
-        ),
-        'new': (
-            "\tif params['type'] == 'theme':\n"
-            "\t\t# PATCHED: Dark theme only\n"
-            "\t\tdark_theme = kodi_utils.addon_themes()[0]\n"
-            "\t\twindow_theme, window_theme_contrast, window_theme_name = dark_theme['value'][0][2:], dark_theme['value'][1], dark_theme['name']\n"
-            "\t\twindow_theme_opacity = get_setting('redlight.window_theme_opacity', 'CC')\n"
-            "\t\tset_setting('window_theme_name', window_theme_name)"
-        ),
-        'description': 'RedLight dialogs.py – remove theme picker, auto-apply Dark',
-        'fallback_pattern': None,
-        'fallback_repl':    None,
-        'already_patched_check': 'PATCHED: Dark theme only',
-    },
-    # ------------------------------------------------------------------
-    # Patch – RedLight settings_manager.xml: remove 'Assign Window Theme'
-    # clickable item (only Dark theme exists)
-    # ------------------------------------------------------------------
-    {
-        'addon_id':    'plugin.video.redlight',
-        'rel_path':    os.path.join('resources', 'skins', 'Default', '1080i', 'settings_manager.xml'),
-        'old': (
-            '                      <item>\r\n'
-            '                          <visible>Container(2000).HasFocus(10)</visible>\r\n'
-            '                          <property name="setting_label">Assign Window Theme</property>\r\n'
-            '                          <property name="setting_type">action</property>\r\n'
-            '                          <property name="setting_value">$INFO[Window(10000).Property(redlight.window_theme_name)]</property>\r\n'
-            '                          <property name="setting_description">Choose the theme Red Light will use for custom windows. Choices are Light, Medium and Dark</property>\r\n'
-            '                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=window_theme_choice&amp;type=theme)</onclick>\r\n'
-            '                      </item>\r\n'
-        ),
-        'new': '',
-        'description': 'RedLight settings_manager.xml – remove Assign Window Theme item',
-        'fallback_pattern': r'[ \t]*<item>[\s\S]*?<property name="setting_label">Assign Window Theme</property>[\s\S]*?</item>\r?\n',
-        'fallback_repl':    '',
-        'already_patched_check': None,
-        'not_found_ok': True,
-    },
     # ── Seren QR Auth ──
     {
         'addon_id': 'plugin.video.seren',
@@ -469,44 +390,6 @@ def _apply_patch(patch):
 
 
 # ---------------------------------------------------------------------------
-def _reset_redlight_theme():
-    DARK_THEME    = 'CC1F2020'
-    DARK_CONTRAST = 'FF4a4347'
-    try:
-        import sqlite3
-        db_path = xbmcvfs.translatePath(
-            'special://profile/addon_data/plugin.video.redlight/databases/settings.db'
-        )
-        if xbmcvfs.exists(db_path):
-            con = sqlite3.connect(db_path, timeout=10, isolation_level=None)
-            con.execute('PRAGMA synchronous = OFF')
-            rows = [
-                ('window_theme',             'string', 'CC1F2020', DARK_THEME),
-                ('window_theme_contrast',    'string', 'FF4a4347', DARK_CONTRAST),
-                ('window_theme_name',        'string', 'Dark',     'Dark'),
-                ('window_theme_opacity',     'string', 'CC',       'CC'),
-                ('window_theme_opacity_name','string', '80%',      '80%'),
-            ]
-            for row in rows:
-                con.execute('INSERT OR REPLACE INTO settings VALUES (?, ?, ?, ?)', row)
-            con.close()
-            _log('RedLight settings.db updated to Dark theme')
-    except Exception as e:
-        _log('settings.db write failed: %s' % e)
-    try:
-        win = xbmcgui.Window(10000)
-        win.setProperty('redlight.window_theme',          DARK_THEME)
-        win.setProperty('redlight.window_theme_contrast', DARK_CONTRAST)
-        win.setProperty('redlight.window_theme_name',     'Dark')
-        win.setProperty('redlight.window_theme_opacity',  'CC')
-        win.setProperty('redlight.window_theme_opacity_name', '80%')
-        _log('RedLight window properties set to Dark theme')
-    except Exception as e:
-        _log('Window property write failed: %s' % e)
-
-
-
-# ---------------------------------------------------------------------------
 def run():
     """Entry point called from default.py router."""
     _log('Starting patch run …')
@@ -537,5 +420,3 @@ def run():
 
     DIALOG.ok(ADDON_NAME, summary)
     _log('Patch run complete: %d OK, %d failed.' % (succeeded, failed))
-
-    _reset_redlight_theme()
