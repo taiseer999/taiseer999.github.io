@@ -93,15 +93,24 @@
 			</control>
 			<!-- PIN -->
 			<control type="label">
-				<posx>705</posx>
-				<posy>422</posy>
-				<width>290</width>
-				<height>71</height>
+				<posx>680</posx>
+				<posy>438</posy>
+				<width>340</width>
+				<height>80</height>
 				<align>center</align>
-				<aligny>center</aligny>
-				<font>font30_title</font>
+				<font>font18</font>
 				<textcolor>FFFFC400</textcolor>
 				<label>$INFO[Window.Property(user_code)]</label>
+			</control>
+			<!-- LOGIN -->
+			<control type="label">
+				<posx>75</posx>
+				<posy>625</posy>
+				<width>1000</width>
+				<height>40</height>
+				<font>font12</font>
+				<textcolor>FFFFC400</textcolor>
+				<label>[ Log in to your TorBox account on the scanning device before entering the pin ]</label>
 			</control>
 		</control>
 	</controls>

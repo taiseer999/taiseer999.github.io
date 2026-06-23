@@ -29,10 +29,10 @@ class RealDebridAuthDialog(xbmcgui.WindowXMLDialog):
 		super(RealDebridAuthDialog, self).__init__()
 
 	def onInit(self):
-		self.setProperty('user_code', self.user_code)
-		self.setProperty('bg_image', self.bg_image)
-		self.setProperty('qr_image', self.qr_image)
-		self.setProperty('bdr_image', self.bdr_image)
+		self.setProperty('user_code', str(self.user_code or ''))
+		self.setProperty('bg_image', str(self.bg_image or ''))
+		self.setProperty('qr_image', str(self.qr_image or ''))
+		self.setProperty('bdr_image', str(self.bdr_image or ''))
 
 	def onClick(self, controlId):
 		self.is_active = False
@@ -94,13 +94,34 @@ class RealDebrid:
 			response = self._post(original_url, data)
 		elif 'error' in response:
 			response = json.loads(response)
-			control.notification(title='Default', message=response.get('error'), icon=rd_icon)
+			control.notification(title='default', message=response.get('error'), icon=rd_icon)
 			return None
 		try:
 			return json.loads(response)
 		except Exception as e:
 			log_utils.error(f"RealDebrid POST failed to parse response: {e}")
 			return response
+
+	def auth_loop(self):
+		control.sleep(self.auth_step * 1000)
+		url = 'client_id=%s&code=%s' % (self.client_ID, self.device_code)
+		url = oauth_base_url + credentials_url % url
+		try:
+			response = json.loads(requests.get(url).text)
+		except Exception as e:
+			log_utils.error(f"RealDebrid auth_loop failed: {e}")
+			return
+
+		if 'error' in response:
+			return
+		else:
+			try:
+				self.client_ID = response['client_id']
+				self.secret = response['client_secret']
+			except Exception as e:
+				log_utils.error(f"RealDebrid auth_loop response handling failed: {e}")
+				control.okDialog(title='default', message=control.lang(40019))
+			return
 
 	def auth(self):
 		import time
@@ -117,7 +138,7 @@ class RealDebrid:
 			response = json.loads(requests.get(url).text)
 		except Exception as e:
 			log_utils.error(f"RealDebrid device code request failed: {e}")
-			control.notification(title='Default', message=control.lang(40019), icon=rd_icon)
+			control.notification(title='default', message=control.lang(40019), icon=rd_icon)
 			return False
 
 		try:
@@ -170,29 +191,8 @@ class RealDebrid:
 		if not success:
 			return False
 
-		control.notification(title='AM Lite', message='Successfully Authorized!', icon=rd_icon)
+		control.notification(title='AM Lite',message='Successfully Authorized!',icon=rd_icon)
 		return True
-
-	def auth_loop(self):
-		control.sleep(self.auth_step * 1000)
-		url = 'client_id=%s&code=%s' % (self.client_ID, self.device_code)
-		url = oauth_base_url + credentials_url % url
-		try:
-			response = json.loads(requests.get(url).text)
-		except Exception as e:
-			log_utils.error(f"RealDebrid auth_loop failed: {e}")
-			return
-
-		if 'error' in response:
-			return
-		else:
-			try:
-				self.client_ID = response['client_id']
-				self.secret = response['client_secret']
-			except Exception as e:
-				log_utils.error(f"RealDebrid auth_loop response handling failed: {e}")
-				control.okDialog(title='Default', message=control.lang(40019))
-			return
 
 	def account_info(self):
 		return self._get('user')

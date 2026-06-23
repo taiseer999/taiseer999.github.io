@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import xbmc, xbmcaddon
+import os
+import xbmcgui
 import requests
 import time
-import xbmc
-import xbmcaddon
-import xbmcgui
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
 from acctmgr.modules.qr_utils import make_qr, remove_qr
@@ -23,10 +23,10 @@ class TraktAuthDialog(xbmcgui.WindowXMLDialog):
 		super(TraktAuthDialog, self).__init__()
 
 	def onInit(self):
-		self.setProperty('user_code', self.user_code)
-		self.setProperty('bg_image', self.bg_image)
-		self.setProperty('qr_image', self.qr_image)
-		self.setProperty('bdr_image', self.bdr_image)
+		self.setProperty('user_code', str(self.user_code or ''))
+		self.setProperty('bg_image', str(self.bg_image or ''))
+		self.setProperty('qr_image', str(self.qr_image or ''))
+		self.setProperty('bdr_image', str(self.bdr_image or ''))
 
 	def onClick(self, controlId):
 		self.is_active = False
@@ -49,7 +49,7 @@ class Trakt():
 		try:
 			def error_notification(line1, error):
 				if suppress_error_notification: return
-				return control.notification(title='Default', message='%s: %s' % (line1, error), icon=trakt_icon)
+				return control.notification(title='default', message='%s: %s' % (line1, error), icon=trakt_icon)
 
 			def send_query():
 				resp = None
@@ -60,6 +60,7 @@ class Trakt():
 						except Exception as e:
 							log_utils.error(f"Error converting expires_at to float: {e}")
 							expires_at = 0
+
 						if expires_at > 0 and time.time() >= expires_at:
 							if not self.refresh_token():
 								return None
@@ -153,23 +154,114 @@ class Trakt():
 							error_data = response.json() or {}
 						except Exception:
 							error_data = {}
+
 						error_code = error_data.get('error', '')
 						if error_code == 'slow_down':
 							interval += 5
-						elif error_code in ('authorization_declined', 'expired_token', 'access_denied'):
-							return None
+						elif error_code in ('authorization_pending', 'authorization_declined', 'expired_token', 'access_denied'):
+							if error_code in ('authorization_declined', 'expired_token', 'access_denied'):
+								return None
 
-					xbmc.sleep(interval * 1000)
+						control.sleep(interval * 1000)
+					else:
+						try:
+							log_utils.log('Request Error: %s' % response.text, __name__, log_utils.LOGDEBUG)
+						except Exception:
+							pass
+						control.sleep(interval * 1000)
 
 				except requests.RequestException as e:
 					log_utils.log('Request Error: %s' % str(e), __name__, log_utils.LOGDEBUG)
-					xbmc.sleep(interval * 1000)
+					control.sleep(interval * 1000)
 
 				time_passed = time.time() - start
 
 			return None
 		except Exception as e:
 			log_utils.error(f"Trakt device token flow failed: {e}")
+
+	def refresh_token(self):
+		data = {
+			"client_id": self.traktClientID(),
+			"client_secret": self.traktClientSecret(),
+			"redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
+			"grant_type": "refresh_token",
+			"refresh_token": control.setting('trakt.refresh')
+		}
+
+		response = self.call("oauth/token", data=data, with_auth=False, method='POST', return_str=True)
+
+		if response is None:
+			log_utils.log('Temporary Trakt Server Problems', level=log_utils.LOGWARNING)
+			control.notification(title=32315, message=32685)
+			return False
+
+		code = str(response.status_code)
+
+		try:
+			response_text = response.text or ''
+		except Exception:
+			response_text = ''
+
+		xbmc.log(f'AM Lite: Trakt refresh HTTP {code}', xbmc.LOGINFO)
+		xbmc.log(f'AM Lite: Trakt refresh response: {response_text[:500]}', xbmc.LOGINFO)
+
+		if not response_text.strip():
+			log_utils.error('Trakt refresh returned empty response body')
+			return False
+
+		if code.startswith('5') or '<html' in response_text.lower():
+			log_utils.log('Temporary Trakt Server Problems', level=log_utils.LOGWARNING)
+			control.notification(title=32315, message=32685)
+			return False
+
+		if code == '423':
+			log_utils.log('Locked User Account - Contact Trakt Support', level=log_utils.LOGWARNING)
+			control.notification(title=32315, message=32686)
+			return False
+
+		if code == '429':
+			log_utils.log('Trakt rate limit hit - refresh suppressed', level=log_utils.LOGWARNING)
+			control.notification(title=32315, message='Trakt rate limit hit. Try again later.')
+			return False
+
+		try:
+			response_json = response.json()
+		except Exception as e:
+			log_utils.error(f"Error parsing refresh token response: {e}")
+			return False
+
+		if code != '200':
+			error = response_json.get('error', '') if isinstance(response_json, dict) else ''
+
+			if error == 'invalid_grant':
+				log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
+				control.notification(title=32315, message=32687)
+			else:
+				log_utils.error(f"Trakt refresh failed: HTTP {code} - {response_text}")
+
+			return False
+
+		if response_json.get('error') == 'invalid_grant':
+			log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
+			control.notification(title=32315, message=32687)
+			return False
+
+		traktToken = response_json.get("access_token")
+		traktRefresh = response_json.get("refresh_token")
+
+		if not traktToken or not traktRefresh:
+			log_utils.error(f"Trakt refresh failed: missing token data - {response_json}")
+			return False
+
+		traktExpires = int(time.time()) + 86400
+		control.setSetting('trakt.token', traktToken)
+		control.setSetting('trakt.refresh', traktRefresh)
+		control.setSetting('trakt.expires', str(traktExpires))
+		self.token = traktToken
+		self.expires_at = str(traktExpires or '')
+
+		return True
 
 	def auth(self):
 		try:
@@ -213,81 +305,12 @@ class Trakt():
 				except Exception as e:
 					log_utils.error(f"Error fetching user info: {e}")
 					pass
-				control.notification(title='AM Lite', message='Successfully Authorized!', icon=trakt_icon)
+				control.notification(title='AM Lite',message='Successfully Authorized!',icon=trakt_icon)
 				return True
-
 			control.notification(message=40075, icon=trakt_icon)
 			return False
 		except Exception as e:
 			log_utils.error(f"Trakt auth failed: {e}")
-
-	def refresh_token(self):
-		data = {
-			"client_id": self.traktClientID(),
-			"client_secret": self.traktClientSecret(),
-			"redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
-			"grant_type": "refresh_token",
-			"refresh_token": control.setting('trakt.refresh')
-		}
-
-		response = self.call("oauth/token", data=data, with_auth=False, method='POST', return_str=True)
-
-		if response is None:
-			log_utils.log('Temporary Trakt Server Problems', level=log_utils.LOGWARNING)
-			control.notification(title=32315, message=32685)
-			return False
-
-		code = str(response.status_code)
-
-		try:
-			response_text = response.text or ''
-		except Exception:
-			response_text = ''
-
-		if code.startswith('5') or '<html' in response_text.lower():
-			log_utils.log('Temporary Trakt Server Problems', level=log_utils.LOGWARNING)
-			control.notification(title=32315, message=32685)
-			return False
-
-		if code == '423':
-			log_utils.log('Locked User Account - Contact Trakt Support', level=log_utils.LOGWARNING)
-			control.notification(title=32315, message=32686)
-			return False
-
-		try:
-			response_json = response.json()
-		except Exception as e:
-			log_utils.error(f"Error parsing refresh token response: {e}")
-			return False
-
-		if code != '200':
-			error = response_json.get('error', '') if isinstance(response_json, dict) else ''
-			if error == 'invalid_grant':
-				log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
-				control.notification(title=32315, message=32687)
-			else:
-				log_utils.error(f"Trakt refresh failed: HTTP {code} - {response_text}")
-			return False
-
-		if response_json.get('error') == 'invalid_grant':
-			log_utils.log('Please Re-Authorize your Trakt Account', level=log_utils.LOGWARNING)
-			control.notification(title=32315, message=32687)
-			return False
-
-		traktToken = response_json.get("access_token")
-		traktRefresh = response_json.get("refresh_token")
-
-		if not traktToken or not traktRefresh:
-			log_utils.error(f"Trakt refresh failed: missing token data - {response_json}")
-			return False
-
-		traktExpires = int(time.time()) + 86400
-		control.setSetting('trakt.token', traktToken)
-		control.setSetting('trakt.refresh', traktRefresh)
-		control.setSetting('trakt.expires', str(traktExpires))
-		self.token = traktToken
-		self.expires_at = str(traktExpires or '')
-		return True
 
 	def revoke(self):
 		data = {"token": control.setting('trakt.token')}
@@ -303,7 +326,8 @@ class Trakt():
 		control.dialog.ok(control.lang(32315), control.lang(32314))
 
 	def account_info(self):
-		return self.call("users/me", with_auth=True)
+		response = self.call("users/me", with_auth=True)
+		return response
 
 	def extended_account_info(self):
 		account_info = self.call("users/settings", with_auth=True)
@@ -355,6 +379,7 @@ class Trakt():
 				vip = '%s Years' % str(account_info['user']['vip_years'])
 
 			total_given_ratings = stats['ratings']['total']
+
 			movies_collected = stats['movies']['collected']
 			movies_watched = stats['movies']['watched']
 			movie_minutes = stats['movies']['minutes']
@@ -374,6 +399,7 @@ class Trakt():
 
 			shows_collected = stats['shows']['collected']
 			shows_watched = stats['shows']['watched']
+
 			episodes_watched = stats['episodes']['watched']
 			episode_minutes = stats['episodes']['minutes']
 
@@ -408,7 +434,9 @@ class Trakt():
 			return
 
 	def traktClientID(self):
-		return 'ce7457fe1e42f09919b57171e9196109717474bad5b13b2a70959aef2f8e5624'
+		traktId = 'ce7457fe1e42f09919b57171e9196109717474bad5b13b2a70959aef2f8e5624'
+		return traktId
 
 	def traktClientSecret(self):
-		return '004d641c35178c7d3c5798313919bec181e9a162bc84f16a2e78dc82a37150db'
+		traktSecret = '004d641c35178c7d3c5798313919bec181e9a162bc84f16a2e78dc82a37150db'
+		return traktSecret

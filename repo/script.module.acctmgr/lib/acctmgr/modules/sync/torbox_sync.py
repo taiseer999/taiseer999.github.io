@@ -235,3 +235,17 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"Trakt Player TorBox Failed: {e}")'''
+
+        # ========================= ResolveURL =========================
+        try:
+            if exists(var.chk_rurl):
+                addon = xbmcaddon.Addon("script.module.resolveurl")
+                chk_auth = addon.getSetting("TorBoxResolver_apikey")
+                if chk_auth != master_token:
+                    for k, v in {
+                        "TorBoxResolver_apikey": your_token,
+                        "TorBoxResolver_enabled": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"ResolveURL TorBox Failed: {e}")

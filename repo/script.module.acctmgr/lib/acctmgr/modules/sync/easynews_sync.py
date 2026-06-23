@@ -39,7 +39,7 @@ class Auth:
         # ========================= Fen Light / The Gears / Red Light =========================
         addons = (
             ("Fen Light", var.chk_fenlt, var.chkset_fenlt, var.fenlt_settings_db, control.remake_fenlt_settings),
-            ("Gears", var.chk_gears, var.chkset_gears, var.gears_settings_db, control.remake_gears_settings),
+            ("The Gears", var.chk_gears, var.chkset_gears, var.gears_settings_db, control.remake_gears_settings),
             ("Red Light", var.chk_red, var.chkset_red, var.red_settings_db, control.remake_red_settings),
         )
 

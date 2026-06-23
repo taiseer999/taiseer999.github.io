@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import requests
 import xbmc
 import xbmcgui
+import requests
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
 from acctmgr.modules.qr_utils import make_qr, remove_qr
@@ -24,10 +24,10 @@ class AllDebridAuthDialog(xbmcgui.WindowXMLDialog):
 		super(AllDebridAuthDialog, self).__init__()
 
 	def onInit(self):
-		self.setProperty('user_code', self.user_code)
-		self.setProperty('bg_image', self.bg_image)
-		self.setProperty('qr_image', self.qr_image)
-		self.setProperty('bdr_image', self.bdr_image)
+		self.setProperty('user_code', str(self.user_code or ''))
+		self.setProperty('bg_image', str(self.bg_image or ''))
+		self.setProperty('qr_image', str(self.qr_image or ''))
+		self.setProperty('bdr_image', str(self.bdr_image or ''))
 
 	def onClick(self, controlId):
 		self.is_active = False
@@ -57,10 +57,17 @@ class AllDebrid:
 	def _get(self, endpoint, params=None):
 		if not self.token:
 			return None
+
 		url = base_url_41 + endpoint
 		params = params or {}
+
 		try:
-			r = requests.get(url, headers=self._headers(), params=params, timeout=self.timeout)
+			r = requests.get(
+				url,
+				headers=self._headers(),
+				params=params,
+				timeout=self.timeout
+			)
 			result = r.json()
 			if result.get("status") == "success":
 				return result.get("data")
@@ -78,7 +85,11 @@ class AllDebrid:
 
 		# Request PIN
 		try:
-			r = requests.get(base_url_v4 + "pin/get", params={"agent": user_agent}, timeout=self.timeout)
+			r = requests.get(
+				base_url_v4 + "pin/get",
+				params={"agent": user_agent},
+				timeout=self.timeout
+			)
 			payload = r.json()
 		except Exception as e:
 			log_utils.error(f"AllDebrid pin/get request failed: {e}")
@@ -110,7 +121,6 @@ class AllDebrid:
 
 		start = time.time()
 		timeout = data.get("expires_in", 300)
-		interval = 5000  # 5 seconds in ms for xbmc.sleep
 
 		while not self.token and time.time() - start < timeout:
 			if not dialog.is_active:
@@ -120,7 +130,7 @@ class AllDebrid:
 				control.notification(message='AllDebrid authorization cancelled!', icon=ad_icon)
 				return False
 			self.auth_loop()
-			xbmc.sleep(interval)
+			control.sleep(5000)
 
 		dialog.close()
 		del dialog
@@ -132,9 +142,12 @@ class AllDebrid:
 
 		account = self.account_info()
 		if account and "user" in account:
-			control.setSetting("alldebrid.username", str(account["user"].get("username", "")))
+			control.setSetting(
+				"alldebrid.username",
+				str(account["user"].get("username", ""))
+			)
 
-		control.notification(title='AM Lite', message='Successfully Authorized!', icon=ad_icon)
+		control.notification(title='AM Lite',message='Successfully Authorized!',icon=ad_icon)
 		return True
 
 	def auth_loop(self):
@@ -146,6 +159,7 @@ class AllDebrid:
 			return
 
 		data = result.get("data", {}) if isinstance(result, dict) else {}
+
 		api_key = data.get("apikey")
 		if api_key:
 			self.token = str(api_key)
@@ -165,12 +179,14 @@ class AllDebrid:
 			data = self.account_info()
 			if not data or "user" not in data:
 				return
+
 			user = data["user"]
 			username = user.get("username", "")
 			email = user.get("email", "")
 			status = "Premium" if user.get("isPremium") else "Not Active"
 			expires = datetime.fromtimestamp(user["premiumUntil"])
 			days_remaining = (expires - datetime.today()).days
+
 			items = [
 				control.lang(40036) % username,
 				control.lang(40035) % email,
