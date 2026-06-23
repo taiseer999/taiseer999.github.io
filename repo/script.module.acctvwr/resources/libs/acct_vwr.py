@@ -506,6 +506,9 @@ ADDONS = {
         #AD
         'default_ad'  : 'AllDebridResolver_token',
         'data_ad'     : ['AllDebridResolver_token', 'AllDebridResolver_cached_only'],
+        #TB
+        'default_tb'  : 'TorBoxResolver_apikey',
+        'data_tb'     : ['TorBoxResolver_apikey'],
     },
 
     #TMDb HELPER
