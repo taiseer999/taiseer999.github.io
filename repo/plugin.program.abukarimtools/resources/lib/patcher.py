@@ -300,6 +300,55 @@ PATCHES = [
         'already_patched_check': '# -- TMDbHelper Trakt QR Auth patch (by ABUKARIM TOOLS) --',
         'fallback_pattern': None, 'fallback_repl': None,
     },
+    # ── TinyPPI: use Arctic Fuse 3 skin fonts (by ABUKARIM TOOLS) ──
+    # font23_narrow → font_tiny  (driven by AF3 size_tiny of the active fontset)
+    # font32        → font_main_bold (driven by AF3 size_main)
+    # These names resolve live per fontset, so switching the AF3 font follows.
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-dialog.xml'),
+        'old': '', 'new': '',
+        'description': 'TinyPPI dialog - map fonts to AF3 (font_tiny / font_main_bold)',
+        'regex_only': True,
+        'fallback_pattern': r'<font>font23_narrow</font>',
+        'fallback_repl': '<font>font_tiny</font>',
+        'count': 0,
+        'already_patched_check': '<font>font_tiny</font>',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-dialog.xml'),
+        'old': '', 'new': '',
+        'description': 'TinyPPI dialog - title font to AF3 font_main_bold',
+        'regex_only': True,
+        'fallback_pattern': r'<font>font32</font>',
+        'fallback_repl': '<font>font_main_bold</font>',
+        'count': 0,
+        'already_patched_check': '<font>font_main_bold</font>',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '',
+        'description': 'TinyPPI main - map fonts to AF3 (font_tiny / font_main_bold)',
+        'regex_only': True,
+        'fallback_pattern': r'<font>font23_narrow</font>',
+        'fallback_repl': '<font>font_tiny</font>',
+        'count': 0,
+        'already_patched_check': '<font>font_tiny</font>',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '',
+        'description': 'TinyPPI main - title font to AF3 font_main_bold',
+        'regex_only': True,
+        'fallback_pattern': r'<font>font32</font>',
+        'fallback_repl': '<font>font_main_bold</font>',
+        'count': 0,
+        'already_patched_check': '<font>font_main_bold</font>',
+        'not_found_ok': True,
+    },
 ]
 
 
@@ -378,7 +427,8 @@ def _apply_patch(patch):
     pattern = patch.get('fallback_pattern')
     repl    = patch.get('fallback_repl')
     if pattern and repl:
-        new_content, n = re.subn(pattern, repl, content, count=1, flags=re.DOTALL)
+        _count = patch.get('count', 1)
+        new_content, n = re.subn(pattern, repl, content, count=_count, flags=re.DOTALL)
         if n:
             _write(target, new_content)
             return True, '[%s] Patched OK (regex): %s' % (patch['addon_id'], patch['description'])
