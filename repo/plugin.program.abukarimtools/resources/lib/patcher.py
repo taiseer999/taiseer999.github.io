@@ -84,6 +84,73 @@ DIALOG      = xbmcgui.Dialog()
 #   new        – replacement string
 #   description – shown to user in notifications
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# TinyPPI crash-fix blobs (by ABUKARIM TOOLS)
+#   helpers.py  - thread-safe / guarded set_ui_position (fixes setPosition SIGSEGV)
+#   properties.py - drop set_ui_position from the background polling path
+#   overlay.py  - run set_ui_position once in onInit (GUI thread)
+# ---------------------------------------------------------------------------
+_TINYPPI_HELPERS_OLD_B64 = (
+    'ZGVmIHNldF91aV9wb3NpdGlvbih3aW5kb3cpIC0+IE5vbmU6CiAgICAiIiJBZGp1c3QgdGhlIG92'
+    'ZXJsYXkgZ3JvdXAgcG9zaXRpb24gYmFzZWQgb24gdGhlIGFjdGl2ZSBVSSBzdHlsZSBzZXR0aW5n'
+    'LiIiIgogICAgdWlfc3R5bGUgPSB4Ym1jZ3VpLldpbmRvdygxMDAwMCkuZ2V0UHJvcGVydHkoIlRp'
+    'bnlQUEkuVUlTdHlsZSIpCiAgICBsZWZ0LCB0b3AgPSAoMjAsIDU0NSkgaWYgdWlfc3R5bGUgPT0g'
+    'IjEiIGVsc2UgKDAsIDU4MCkKICAgIHdpbmRvdy5nZXRDb250cm9sKDkwMDApLnNldFBvc2l0aW9u'
+    'KGxlZnQsIHRvcCkK'
+)
+
+_TINYPPI_HELPERS_NEW_B64 = (
+    'ZGVmIHNldF91aV9wb3NpdGlvbih3aW5kb3cpIC0+IE5vbmU6CiAgICAiIiJBZGp1c3QgdGhlIG92'
+    'ZXJsYXkgZ3JvdXAgcG9zaXRpb24gYmFzZWQgb24gdGhlIGFjdGl2ZSBVSSBzdHlsZSBzZXR0aW5n'
+    'LgoKICAgIEd1YXJkZWQgc28gaXQgbmV2ZXIgY3Jhc2hlcyBLb2RpOiBvbmx5IHRvdWNoZXMgdGhl'
+    'IGNvbnRyb2wgd2hlbiB0aGUgd2luZG93CiAgICBzdGlsbCByZXBvcnRzIGFjdGl2ZSwgYW5kIHdy'
+    'YXBzIGdldENvbnRyb2woKS9zZXRQb3NpdGlvbigpIHNvIGEgbWlzc2luZwogICAgY29udHJvbCBp'
+    'ZCByYWlzZXMgYSBjYXVnaHQsIGxvZ2dlZCB3YXJuaW5nIGluc3RlYWQgb2YgYSBoYXJkIFNJR1NF'
+    'R1YuCiAgICAiIiIKICAgIHRyeToKICAgICAgICBpZiBub3Qgd2luZG93LmdldFByb3BlcnR5KCJU'
+    'aW55UFBJLkFjdGl2ZSIpID09ICJ0cnVlIjoKICAgICAgICAgICAgcmV0dXJuCiAgICAgICAgdWlf'
+    'c3R5bGUgPSB4Ym1jZ3VpLldpbmRvdygxMDAwMCkuZ2V0UHJvcGVydHkoIlRpbnlQUEkuVUlTdHls'
+    'ZSIpCiAgICAgICAgbGVmdCwgdG9wID0gKDIwLCA1NDUpIGlmIHVpX3N0eWxlID09ICIxIiBlbHNl'
+    'ICgwLCA1ODApCiAgICAgICAgY29udHJvbCA9IHdpbmRvdy5nZXRDb250cm9sKDkwMDApCiAgICAg'
+    'ICAgaWYgY29udHJvbCBpcyBub3QgTm9uZToKICAgICAgICAgICAgY29udHJvbC5zZXRQb3NpdGlv'
+    'bihsZWZ0LCB0b3ApCiAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGV4YzogICMgY29udHJvbCBtaXNz'
+    'aW5nIC8gd2luZG93IGdvbmUKICAgICAgICB4Ym1jLmxvZygiVGlueVBQSTogc2V0X3VpX3Bvc2l0'
+    'aW9uIHNraXBwZWQ6ICVzIiAlIGV4YywgeGJtYy5MT0dXQVJOSU5HKQo='
+)
+
+_TINYPPI_PROPS_OLD_B64 = (
+    'ICAgIENhbGwgdGhpcyBmcm9tIGBgb25Jbml0KClgYCBhbmQgZnJvbSBhIHBvbGxpbmcgbG9vcCBp'
+    'biB5b3VyCiAgICBgYFdpbmRvd1hNTERpYWxvZ2BgIHN1YmNsYXNzLgogICAgIiIiCiAgICBzZXRf'
+    'dWlfcG9zaXRpb24od2luZG93KQo='
+)
+
+_TINYPPI_PROPS_NEW_B64 = (
+    'ICAgIENhbGwgdGhpcyBmcm9tIGBgb25Jbml0KClgYCBhbmQgZnJvbSBhIHBvbGxpbmcgbG9vcCBp'
+    'biB5b3VyCiAgICBgYFdpbmRvd1hNTERpYWxvZ2BgIHN1YmNsYXNzLgoKICAgIE5PVEU6IFRoaXMg'
+    'b25seSBtdXRhdGVzIHdpbmRvdyAqcHJvcGVydGllcyogKHRocmVhZC1zYWZlKS4gSXQgbXVzdCBO'
+    'T1QKICAgIHRvdWNoIEdVSSBjb250cm9scyBiZWNhdXNlIGl0IHJ1bnMgZnJvbSBhIGJhY2tncm91'
+    'bmQgcG9sbGluZyB0aHJlYWQuCiAgICBDb250cm9sIHBvc2l0aW9uaW5nIGlzIGhhbmRsZWQgaW4g'
+    'b25Jbml0KCkgb24gdGhlIEdVSSB0aHJlYWQuCiAgICAiIiIK'
+)
+
+_TINYPPI_OVERLAY_OLD_B64 = (
+    'ICAgIGRlZiBvbkluaXQoc2VsZikgLT4gTm9uZToKICAgICAgICBzZWxmLl9ydW5uaW5nICAgPSBU'
+    'cnVlCiAgICAgICAgc2VsZi5fb3BlbmVkX2F0ID0gdGltZS50aW1lKCkKCiAgICAgICAgcHJvcGVy'
+    'dGllcy51cGRhdGVfcHJvcGVydGllcyhzZWxmKQogICAgICAgIHNlbGYuX3N0YXJ0X3VwZGF0ZV9s'
+    'b29wKCkK'
+)
+
+_TINYPPI_OVERLAY_NEW_B64 = (
+    'ICAgIGRlZiBvbkluaXQoc2VsZikgLT4gTm9uZToKICAgICAgICBzZWxmLl9ydW5uaW5nICAgPSBU'
+    'cnVlCiAgICAgICAgc2VsZi5fb3BlbmVkX2F0ID0gdGltZS50aW1lKCkKCiAgICAgICAgIyBQb3Np'
+    'dGlvbiB0aGUgb3ZlcmxheSBncm91cCBvbiB0aGUgR1VJIHRocmVhZCAoc2FmZSBoZXJlKTsgdGhl'
+    'CiAgICAgICAgIyBiYWNrZ3JvdW5kIHBvbGxpbmcgbG9vcCBtdXN0IG5ldmVyIHRvdWNoIGNvbnRy'
+    'b2xzLgogICAgICAgIHRyeToKICAgICAgICAgICAgcHJvcGVydGllcy5zZXRfdWlfcG9zaXRpb24o'
+    'c2VsZikKICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGV4YzoKICAgICAgICAgICAgeGJtYy5s'
+    'b2coIlRpbnlQUEk6IG9uSW5pdCBzZXRfdWlfcG9zaXRpb24gZmFpbGVkOiAlcyIgJSBleGMsCiAg'
+    'ICAgICAgICAgICAgICAgICAgIHhibWMuTE9HV0FSTklORykKCiAgICAgICAgcHJvcGVydGllcy51'
+    'cGRhdGVfcHJvcGVydGllcyhzZWxmKQogICAgICAgIHNlbGYuX3N0YXJ0X3VwZGF0ZV9sb29wKCkK'
+)
+
 PATCHES = [
     # ── Seren QR Auth ──
     {
@@ -348,6 +415,49 @@ PATCHES = [
         'count': 0,
         'already_patched_check': '<font>font_main_bold</font>',
         'not_found_ok': True,
+    },
+    # ── TinyPPI: crash fixes (by ABUKARIM TOOLS) ──────────────────────────
+    # 1) helpers.py  - guard set_ui_position (control may be missing / off-thread)
+    # 2) properties.py - stop calling set_ui_position from the polling thread
+    # 3) overlay.py  - call set_ui_position once in onInit (GUI thread)
+    # 4) main.xml    - close the unmatched paren in CpuTopUsageVar info label
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'helpers.py'),
+        'old': base64.b64decode(_TINYPPI_HELPERS_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_HELPERS_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI - guard set_ui_position against SIGSEGV',
+        'fallback_pattern': None, 'fallback_repl': None,
+        'already_patched_check': 'set_ui_position skipped',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'properties.py'),
+        'old': base64.b64decode(_TINYPPI_PROPS_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_PROPS_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI - remove control mutation from polling thread',
+        'fallback_pattern': None, 'fallback_repl': None,
+        'already_patched_check': 'must NOT',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'overlay.py'),
+        'old': base64.b64decode(_TINYPPI_OVERLAY_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_OVERLAY_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI - position overlay on GUI thread in onInit',
+        'fallback_pattern': None, 'fallback_repl': None,
+        'already_patched_check': 'onInit set_ui_position failed',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '',
+        'description': 'TinyPPI main - fix unmatched paren in CpuTopUsageVar label',
+        'regex_only': True,
+        'fallback_pattern': r'Window\(\)\.Property\(CpuTopUsageVar\]',
+        'fallback_repl': 'Window().Property(CpuTopUsageVar)]',
+        'count': 0,
+        'already_patched_check': 'Window().Property(CpuTopUsageVar)]',
     },
 ]
 
