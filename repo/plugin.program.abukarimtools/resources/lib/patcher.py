@@ -490,6 +490,15 @@ PATCHES = [
         'description': 'RedLight - hardcode dark unfocused source card (FF1F2020) so empty window_theme.sources no longer renders white',
         'already_patched_check': '<texture colordiffuse="FF1F2020" border="30">redlight_common/circle.png</texture>',
     },
+    # ── TMDbHelper – suppress "not playable" popup for player-hack (is_resolvable:false) players ──
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'player', 'action', 'dummy.py'),
+        'old': "        if not self.resolver.is_strm and get_setting('only_resolve_strm'):",
+        'new': "        if False and not self.resolver.is_strm and get_setting('only_resolve_strm'):  # ABUKARIM: always run dummy to suppress not-playable popup",
+        'description': 'TMDbHelper - neutralize only_resolve_strm dummy-skip so source-select players do not trigger not-playable popup',
+        'already_patched_check': 'ABUKARIM: always run dummy to suppress not-playable popup',
+    },
 ]
 
 
