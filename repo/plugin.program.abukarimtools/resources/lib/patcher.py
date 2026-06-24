@@ -72,6 +72,7 @@ _TMDBH_POLLER_NEW_B64 = 'ICAgIGRlZiBwb2xsZXIoc2VsZik6CgogICAgICAgICMgLS0gVE1EYkh
 ADDON_NAME  = 'ABUKARIM TOOLS'
 HOME        = xbmcvfs.translatePath('special://home/')
 ADDONS_DIR  = os.path.join(HOME, 'addons')
+ADDON_DATA  = xbmcvfs.translatePath('special://profile/addon_data/')
 
 DIALOG      = xbmcgui.Dialog()
 
@@ -499,6 +500,47 @@ PATCHES = [
         'description': 'TMDbHelper - neutralize only_resolve_strm dummy-skip so source-select players do not trigger not-playable popup',
         'already_patched_check': 'ABUKARIM: always run dummy to suppress not-playable popup',
     },
+    # ── TMDbHelper player JSONs (deploy to addon_data so source-select players work post-restore) ──
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': os.path.join('players', 'gears.json'),
+        'old': '', 'new': '',
+        'description': 'TMDbHelper - deploy Gears player (RunPlugin source-select)',
+        'inject_file': True,
+        'inject_content_b64': "ewogICAgIm5hbWUiOiAiR2VhcnMgLSBTb3VyY2UgU2VsZWN0IiwKICAgICJwbHVnaW4iOiAicGx1Z2luLnZpZGVvLmdlYXJzIiwKICAgICJwcmlvcml0eSI6IDIwMCwKICAgICJpc19yZXNvbHZhYmxlIjogImZhbHNlIiwKICAgICJwbGF5X21vdmllIjogImV4ZWN1dGVidWlsdGluOi8vUnVuUGx1Z2luKHBsdWdpbjovL3BsdWdpbi52aWRlby5nZWFycy8/bW9kZT1wbGF5YmFjay5tZXRhJm1lZGlhX3R5cGU9bW92aWUmdG1kYl9pZD17dG1kYn0mYXV0b3BsYXk9ZmFsc2UpIiwKICAgICJwbGF5X2VwaXNvZGUiOiAiZXhlY3V0ZWJ1aWx0aW46Ly9SdW5QbHVnaW4ocGx1Z2luOi8vcGx1Z2luLnZpZGVvLmdlYXJzLz9tb2RlPXBsYXliYWNrLm1ldGEmbWVkaWFfdHlwZT1lcGlzb2RlJnRtZGJfaWQ9e3RtZGJ9JnNlYXNvbj17c2Vhc29ufSZlcGlzb2RlPXtlcGlzb2RlfSZhdXRvcGxheT1mYWxzZSkiCn0K",
+        'already_patched_check': None,
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': os.path.join('players', 'redlight.select.json'),
+        'old': '', 'new': '',
+        'description': 'TMDbHelper - deploy RedLight player (RunPlugin source-select)',
+        'inject_file': True,
+        'inject_content_b64': "ewogICAgIm5hbWUiOiAiUmVkIExpZ2h0IC0gU291cmNlIFNlbGVjdCIsCiAgICAicGx1Z2luIjogInBsdWdpbi52aWRlby5yZWRsaWdodCIsCiAgICAicHJpb3JpdHkiOiA1MCwgICAgIAogICAgImlzX3Jlc29sdmFibGUiIDogImZhbHNlIiwgCiAgICAicGxheV9tb3ZpZSI6ICJleGVjdXRlYnVpbHRpbjovL1J1blBsdWdpbihwbHVnaW46Ly9wbHVnaW4udmlkZW8ucmVkbGlnaHQvP21vZGU9cGxheWJhY2subWVkaWEmbWVkaWFfdHlwZT1tb3ZpZSZ0bWRiX2lkPXt0bWRifSZhdXRvcGxheT1mYWxzZSkiLAogICAgInBsYXlfZXBpc29kZSI6ICJleGVjdXRlYnVpbHRpbjovL1J1blBsdWdpbihwbHVnaW46Ly9wbHVnaW4udmlkZW8ucmVkbGlnaHQvP21vZGU9cGxheWJhY2subWVkaWEmbWVkaWFfdHlwZT1lcGlzb2RlJnRtZGJfaWQ9e3RtZGJ9JnNlYXNvbj17c2Vhc29ufSZlcGlzb2RlPXtlcGlzb2RlfSZhdXRvcGxheT1mYWxzZSkiCn0K",
+        'already_patched_check': None,
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': os.path.join('players', 'direct.pov.select.json'),
+        'old': '', 'new': '',
+        'description': 'TMDbHelper - deploy POV player (search-mode source-select)',
+        'inject_file': True,
+        'inject_content_b64': "ewogICAgIm5hbWUiOiAiUE9WIFNvdXJjZSBTZWxlY3QiLAogICAgInBsdWdpbiI6ICJwbHVnaW4udmlkZW8ucG92IiwKICAgICJwcmlvcml0eSI6IDE1MCwKICAgICJpc19yZXNvbHZhYmxlIjogImZhbHNlIiwKICAgICJzZWFyY2hfbW92aWUiOiAicGx1Z2luOi8vcGx1Z2luLnZpZGVvLnBvdi8/bW9kZT1wbGF5X21lZGlhJm1lZGlhX3R5cGU9bW92aWUmcXVlcnk9e25hbWV9JnllYXI9e3llYXJ9JnBvc3Rlcj17cG9zdGVyfSZ0aXRsZT17dGl0bGV9JnRtZGJfaWQ9e2lkfSZhdXRvcGxheT1mYWxzZSIsCiAgICAic2VhcmNoX2VwaXNvZGUiOiAicGx1Z2luOi8vcGx1Z2luLnZpZGVvLnBvdi8/bW9kZT1wbGF5X21lZGlhJm1lZGlhX3R5cGU9ZXBpc29kZSZxdWVyeT17c2hvd25hbWV9JnllYXI9e3llYXJ9JnNlYXNvbj17c2Vhc29ufSZlcGlzb2RlPXtlcGlzb2RlfSZlcF9uYW1lPXt0aXRsZX0mdG1kYl9pZD17dG1kYn0mcHJlbWllcmVkPXtmaXJzdGFpcmVkfSZhdXRvcGxheT1mYWxzZSIKfQ==",
+        'already_patched_check': None,
+    },
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': os.path.join('players', 'umbrella.select.json'),
+        'old': '', 'new': '',
+        'description': 'TMDbHelper - deploy Umbrella player (search-mode source-select)',
+        'inject_file': True,
+        'inject_content_b64': "ewogICAgIm5hbWUiOiAiW0NPTE9SIHJlZF1VbWJyZWxsYVsvQ09MT1JdIiwKICAgICJwbHVnaW4iOiAicGx1Z2luLnZpZGVvLnVtYnJlbGxhIiwKICAgICJwcmlvcml0eSI6IDMwMCwKICAgICJpc19yZXNvbHZhYmxlIjogImZhbHNlIiwKICAgICJzZWFyY2hfZXBpc29kZSI6ICJwbHVnaW46Ly9wbHVnaW4udmlkZW8udW1icmVsbGEvP2FjdGlvbj1wbGF5JnRpdGxlPXt0aXRsZV91cmx9JnllYXI9e3Nob3d5ZWFyfSZpbWRiPXtpbWRifSZ0bWRiPXt0bWRifSZ0dmRiPXt0dmRifSZzZWFzb249e3NlYXNvbn0mZXBpc29kZT17ZXBpc29kZX0mdHZzaG93dGl0bGU9e3Nob3duYW1lX3VybH0mcHJlbWllcmVkPXtmaXJzdGFpcmVkfSZtZXRhPSU3QiUyMnJhdGluZyUyMiUzQSslMjIlMjIlMkMrJTIyY29kZSUyMiUzQSslMjJ7aW1kYn0lMjIlMkMrJTIydG1kYiUyMiUzQSt7dG1kYn0lMkMrJTIyaW1kYiUyMiUzQSslMjJ7aW1kYn0lMjIlMkMrJTIyeWVhciUyMiUzQSslMjJ7c2hvd3llYXJ9JTIyJTJDKyUyMmR1cmF0aW9uJTIyJTNBKyUyMiUyMiUyQyslMjJwbG90JTIyJTNBKyUyMntwbG90X2VzY2FwZWR9JTIyJTJDKyUyMnZvdGVzJTIyJTNBKyUyMiUyMiUyQyslMjJ0aHVtYiUyMiUzQSslMjJ7dGh1bWJuYWlsfSUyMiUyQyslMjJ0aXRsZSUyMiUzQSslMjJ7dGl0bGVfdXJsfSUyMiUyQyslMjJ0dmRiJTIyJTNBKyUyMnt0dmRifSUyMiUyQyslMjJsYWJlbCUyMiUzQSslMjJ7dGl0bGVfdXJsfSUyMiUyQyslMjJzZWFzb24lMjIlM0ErJTIye3NlYXNvbn0lMjIlMkMrJTIyc3RhdHVzJTIyJTNBKyUyMiUyMiUyQyslMjJwb3N0ZXIlMjIlM0ErJTIye3Bvc3Rlcn0lMjIlMkMrJTIydHZzaG93dGl0bGUlMjIlM0ErJTIye3Nob3duYW1lX3VybH0lMjIlMkMrJTIybWVkaWF0eXBlJTIyJTNBKyUyMmVwaXNvZGUlMjIlMkMrJTIyZXBpc29kZSUyMiUzQSslMjJ7ZXBpc29kZX0lMjIlMkMrJTIyc3R1ZGlvJTIyJTNBKyUyMiUyMiUyQyslMjJnZW5yZSUyMiUzQSslMjIlMjIlMkMrJTIyYmFubmVyJTIyJTNBKyUyMnt0aHVtYm5haWx9JTIyJTJDKyUyMnByZW1pZXJlZCUyMiUzQSslMjJ7Zmlyc3RhaXJlZH0lMjIlMkMrJTIyZmFuYXJ0JTIyJTNBKyUyMntmYW5hcnR9JTIyJTdEIiwKICAgICJzZWFyY2hfbW92aWUiOiAicGx1Z2luOi8vcGx1Z2luLnZpZGVvLnVtYnJlbGxhLz9hY3Rpb249cGxheSZ0aXRsZT17dGl0bGVfdXJsfSZ5ZWFyPXt5ZWFyfSZpbWRiPXtpbWRifSZ0bWRiPXt0bWRifSZtZXRhPSU3QiUyMnJhdGluZyUyMiUzQSslMjIlMjIlMkMrJTIyY29kZSUyMiUzQSslMjJ7aW1kYn0lMjIlMkMrJTIydG1kYiUyMiUzQSslMjJ7aWR9JTIyJTJDKyUyMmltZGIlMjIlM0ErJTIye2ltZGJ9JTIyJTJDKyUyMnllYXIlMjIlM0ErJTIye3llYXJ9JTIyJTJDKyUyMmR1cmF0aW9uJTIyJTNBKyUyMiUyMiUyQyslMjJwbG90JTIyJTNBKyUyMntwbG90X2VzY2FwZWR9JTIyJTJDKyUyMnZvdGVzJTIyJTNBKyUyMiUyMiUyQyslMjJ0aXRsZSUyMiUzQSslMjJ7dGl0bGVfdXJsfSUyMiUyQyslMjJmYW5hcnQlMjIlM0ErJTIye2ZhbmFydH0lMjIlMkMrJTIydGFnbGluZSUyMiUzQSslMjIlMjIlMkMrJTIyd3JpdGVyJTIyJTNBKyUyMiUyMiUyQyslMjJuZXh0JTIyJTNBKyUyMiUyMiUyQyslMjJwb3N0ZXIlMjIlM0ErJTIye3Bvc3Rlcn0lMjIlMkMrJTIybWVkaWF0eXBlJTIyJTNBKyUyMm1vdmllJTIyJTJDKyUyMmRpcmVjdG9yJTIyJTNBKyUyMiUyMiUyQyslMjJzdHVkaW8lMjIlM0ErJTIyJTIyJTJDKyUyMmdlbnJlJTIyJTNBKyUyMiUyMiUyQyslMjJtZXRhY2FjaGUlMjIlM0ErdHJ1ZSUyQyslMjJwcmVtaWVyZWQlMjIlM0ErJTIye3ByZW1pZXJlZH0lMjIlMkMrJTIyb3JpZ2luYWx0aXRsZSUyMiUzQSslMjJ7dGl0bGVfdXJsfSUyMiUyQyslMjJjYXN0JTIyJTNBKyU1QiUyMnthY3RvcnN9JTIyJTVEJTJDKyUyMm1wYWElMjIlM0ErJTIyJTIyJTdEIiwKICAgICJyZXF1aXJlc19pZHMiOiB0cnVlCn0=",
+        'already_patched_check': None,
+    },
 ]
 
 
@@ -522,9 +564,16 @@ def _apply_patch(patch):
     Apply a single patch dict.
     Returns (success: bool, message: str)
     """
-    addon_path = os.path.join(ADDONS_DIR, patch['addon_id'])
-    if not os.path.isdir(addon_path):
-        return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
+    # Resolve base dir: default is addons/, optionally addon_data/ for userdata targets.
+    if patch.get('base') == 'addon_data':
+        addon_path = os.path.join(ADDON_DATA, patch['addon_id'])
+        # addon_data dir may not exist yet (addon never run); inject_file creates it.
+        if not os.path.isdir(addon_path) and not patch.get('inject_file'):
+            return False, '[%s] addon_data not found: %s' % (patch['addon_id'], addon_path)
+    else:
+        addon_path = os.path.join(ADDONS_DIR, patch['addon_id'])
+        if not os.path.isdir(addon_path):
+            return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
 
     target = os.path.join(addon_path, patch['rel_path'])
     # inject_file: ينشئ الملف مباشرة قبل أي فحص
