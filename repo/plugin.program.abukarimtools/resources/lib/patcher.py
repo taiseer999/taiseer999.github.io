@@ -458,6 +458,38 @@ PATCHES = [
         'count': 0,
         'already_patched_check': 'Window().Property(CpuTopUsageVar)]',
     },
+    # ── Arctic Fuse 3 – dark focused-row highlight (fix white DialogSelect cards) ──
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Colors.xml'),
+        'old': (
+            '    <variable name="ColorHighlight">\n'
+            '        <value condition="!String.IsEmpty(Skin.String(focuscolor.name))">$INFO[Skin.String(focuscolor.name)]</value>\n'
+            '        <value>ffffffff</value>\n'
+            '    </variable>'
+        ),
+        'new': (
+            '    <variable name="ColorHighlight">\n'
+            '        <value condition="!String.IsEmpty(Skin.String(focuscolor.name))">$INFO[Skin.String(focuscolor.name)]</value>\n'
+            '        <value>ff202020</value>\n'
+            '    </variable>'
+        ),
+        'description': 'AF3 - dark focus highlight fallback (ff202020) so unfocused/focused select rows are not white',
+        'already_patched_check': '<value>ff202020</value>',
+    },
+    # ── RedLight sources_results – dark unfocused card (fixes white rows in TIDB-borrowed window) ──
+    {
+        'addon_id': 'plugin.video.redlight',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
+        'old': '',
+        'new': '',
+        'regex_only': True,
+        'fallback_pattern': r'<texture colordiffuse="\$INFO\[Window\(10000\)\.Property\(redlight\.window_theme\.sources\)\]" border="30">redlight_common/circle\.png</texture>',
+        'fallback_repl': '<texture colordiffuse="FF1F2020" border="30">redlight_common/circle.png</texture>',
+        'count': 0,
+        'description': 'RedLight - hardcode dark unfocused source card (FF1F2020) so empty window_theme.sources no longer renders white',
+        'already_patched_check': '<texture colordiffuse="FF1F2020" border="30">redlight_common/circle.png</texture>',
+    },
 ]
 
 

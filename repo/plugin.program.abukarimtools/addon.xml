@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.6.8.1"
+       version="1.6.8.3"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,11 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.6
+    <news>v1.6.8.3
+- RedLight sources_results: dark unfocused card (FF1F2020) - fixes white rows in TIDB results window.
+v1.6.8.2
+- AF3: dark focus highlight (ff202020) fixes white select-dialog rows (TIDB/Seren etc).
+v1.6.6
 - Removed all RedLight patch entries and theme-reset logic.</news>
   </extension>
 
