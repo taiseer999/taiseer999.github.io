@@ -477,6 +477,31 @@ def _apply_skin(addonid, title):
 
     stop_watchdog()
     _log('skin activated: %s' % addonid)
+
+    # The "Keep this skin?" confirmation (yesnodialog with a ~15s revert
+    # countdown) fires right as the skin becomes active — i.e. exactly when the
+    # watchdog above tends to stop. Without an explicit answer the countdown
+    # expires and Kodi REVERTS to the previous skin. So after activation, spend
+    # a dedicated window aggressively clicking YES (control 11) until the keep
+    # dialog is gone and the skin is still our target. This is the final
+    # auto-confirm the user asked for.
+    confirmed = 0
+    while confirmed < 16000:
+        if xbmc.getCondVisibility('Window.IsActive(yesnodialog)') \
+                or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)') \
+                or xbmc.getCondVisibility('Window.IsActive(10100)'):
+            xbmc.executebuiltin('SendClick(yesnodialog, 11)')   # 11 = Yes/Keep
+            xbmc.sleep(60)
+            xbmc.executebuiltin('SendClick(11)')
+            _log('keep-skin dialog auto-confirmed (Yes)')
+            xbmc.sleep(400)
+            # once answered and no dialog remains, we're done
+            if not (xbmc.getCondVisibility('Window.IsActive(yesnodialog)')
+                    or xbmc.getCondVisibility('Window.IsActive(10100)')):
+                break
+        xbmc.sleep(120)
+        confirmed += 120
+
     return True
 
 

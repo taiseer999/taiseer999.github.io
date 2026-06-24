@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.8.7" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.8.8" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -635,7 +635,9 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.8.7
+    <news>v1.6.8.8
+- Skin installer (first-run + manual): auto-confirm YES on the final "Keep this skin?" dialog.
+v1.6.8.7
 - Removed AF3 ColorHighlight patch entry.
 v1.6.8.6
 - POV/Umbrella players switched to RunPlugin (search-mode caused GetDirectory loop). All 4 players now consistent.
