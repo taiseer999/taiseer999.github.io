@@ -12,6 +12,11 @@
             <size>18</size>
         </font>
         <font>
+            <name>font_tiny</name>
+            <filename>monadi-reg.ttf</filename>
+            <size>18</size>
+        </font>
+        <font>
             <name>font12</name>
             <filename>monadi-reg.ttf</filename>
             <size>22</size>
