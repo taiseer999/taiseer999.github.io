@@ -47,6 +47,16 @@ WELCOME_SECONDS = 7
 DONE_FILE = os.path.join(PROFILE, 'first_run.done')
 LOCK_FILE = os.path.join(PROFILE, 'first_run.lock')
 
+# Self-trigger: a new build apply replaces the addons/ folder wholesale, so a
+# version string shipped INSIDE the addon is always fresh after an install.
+# We compare it against a copy stored in addon_data; if they differ (or the
+# addon_data copy is missing — e.g. wiped by the build's restore), a new build
+# was applied and we (re)create the first-run flag. The wipe can only REMOVE
+# LAST_BUILD_FILE, which makes first-run more likely to fire, never less, so the
+# trigger is immune to the addon_data wipe.
+BUILD_ID_FILE   = os.path.join(ADDON_PATH, 'resources', 'build.id')   # shipped
+LAST_BUILD_FILE = os.path.join(PROFILE, 'last_build.id')              # addon_data
+
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
@@ -432,9 +442,105 @@ def _run_steps(monitor):
 
     _log('First-run sequence finished.')
 
+    # On CoreELEC, prompt to reboot so autostart.sh runs on a clean boot
+    # (e.g. the staged guisettings restore). Wait ~10s after the skin loads so
+    # the prompt doesn't fight the skin reload, then ask; YES reboots.
+    _prompt_reboot_if_coreelec(monitor)
+
+
+def _is_coreelec():
+    """True on a CoreELEC installation (same check the binary installer uses)."""
+    if os.path.isdir('/etc/coreelec'):
+        return True
+    try:
+        with open('/etc/os-release') as f:
+            return any('coreelec' in line.lower() for line in f)
+    except OSError:
+        return False
+
+
+def _prompt_reboot_if_coreelec(monitor):
+    if not _is_coreelec():
+        _log('Reboot prompt skipped (not CoreELEC).')
+        return
+    # Let the freshly-loaded skin settle before showing the dialog.
+    if monitor.waitForAbort(10):
+        return  # Kodi is shutting down anyway
+    # Make sure no modal is in the way.
+    _wait_no_modal(monitor)
+    try:
+        yes = xbmcgui.Dialog().yesno(
+            ADDON_NAME,
+            'تم إكمال الإعداد.\n'
+            'يُنصح بإعادة التشغيل لإكمال تطبيق البناء.\n'
+            'هل تريد إعادة التشغيل الآن؟\n\n'
+            'Setup is complete. A reboot is recommended to finish '
+            'applying your build. Reboot now?',
+            nolabel='لاحقاً / Later', yeslabel='إعادة التشغيل / Reboot')
+    except Exception as e:
+        _log('Reboot dialog failed: %s' % e)
+        return
+    if yes:
+        _log('User chose reboot — rebooting system.')
+        xbmc.executebuiltin('Reboot')
+    else:
+        _log('User postponed reboot.')
+
+
+def _read_text(path):
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return f.read().strip()
+    except Exception:
+        return ''
+
+
+def _new_build_applied():
+    """True if the shipped build.id differs from the addon_data copy.
+
+    Returns (changed: bool, build_id: str). If no build.id ships with the addon
+    we return (False, '') so behaviour is unchanged for builds that don't use
+    this mechanism.
+    """
+    build_id = _read_text(BUILD_ID_FILE)
+    if not build_id:
+        return False, ''
+    return (build_id != _read_text(LAST_BUILD_FILE)), build_id
+
+
+def _record_build(build_id):
+    try:
+        os.makedirs(PROFILE, exist_ok=True)
+        with open(LAST_BUILD_FILE, 'w', encoding='utf-8') as f:
+            f.write(build_id)
+        _log('Recorded build id: %s' % build_id)
+    except Exception as e:
+        _log('Could not record build id: %s' % e)
+
 
 def main():
     monitor = xbmc.Monitor()
+
+    # Self-trigger: if a new build was applied (shipped build.id != stored copy),
+    # (re)create the first-run flag and clear the stale done/lock so the full
+    # sequence runs for this build. Manual first_run.flag still works as before.
+    changed, build_id = _new_build_applied()
+    if changed:
+        _log('New build detected (%s) — arming first-run.' % build_id)
+        for stale in (DONE_FILE, LOCK_FILE):
+            try:
+                if os.path.exists(stale):
+                    os.remove(stale)
+            except Exception as e:
+                _log('Could not clear %s: %s' % (stale, e))
+        try:
+            os.makedirs(PROFILE, exist_ok=True)
+            open(FLAG_FILE, 'w').close()
+        except Exception as e:
+            _log('Could not create first-run flag: %s' % e)
+        # Record now so a mid-sequence reboot doesn't re-arm endlessly; the
+        # done marker (written on completion) is the real repeat guard.
+        _record_build(build_id)
 
     if not os.path.exists(FLAG_FILE):
         return                       # normal boot — nothing to do

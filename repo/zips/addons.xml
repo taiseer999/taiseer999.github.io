@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.8.8" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.9.0" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -625,7 +625,7 @@ updated YouTube addon URL
     <provides>executable</provides>
   </extension>
 
-  
+  <extension point="xbmc.service" library="service.py" />
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">ABUKARIM TOOLS</summary>
@@ -635,7 +635,12 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.8.8
+    <news>v1.6.9.0
+- First-run: CoreELEC reboot prompt 10s after skin loads (YES reboots so autostart.sh runs).
+v1.6.8.9
+- Auto-run first-run on new build apply via shipped resources/build.id (wipe-proof self-trigger).
+- Re-enabled xbmc.service so first-run triggers automatically on boot.
+v1.6.8.8
 - Skin installer (first-run + manual): auto-confirm YES on the final "Keep this skin?" dialog.
 v1.6.8.7
 - Removed AF3 ColorHighlight patch entry.
