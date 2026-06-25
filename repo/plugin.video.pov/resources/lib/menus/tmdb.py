@@ -1,5 +1,4 @@
 import sys
-import json
 from queue import SimpleQueue
 from threading import Thread
 from indexers import tmdb_api
@@ -68,9 +67,9 @@ def build_tmdb_list(params):
 	max_threads = int(kodi_utils.get_setting('pov.max_threads', '100'))
 	use_alphabet = nav_jump_use_alphabet() > 0
 	user, name, list_id = params.get('user'), params.get('name'), params.get('list_id')
-	letter, page = params.get('new_letter', 'None'), int(params.get('new_page', '1'))
+	page = int(params.get('new_page', '1'))
 	results = tmdb_api.list_details(list_id)
-	if paginate() and results: process_list, total_pages = paginate_list(results, page, letter, page_limit())
+	if paginate() and results: process_list, total_pages = paginate_list(results, page, page_limit())
 	else: process_list, total_pages = results, 1
 	movies, tvshows = Movies({'id_type': 'tmdb_id'}), TVShows({'id_type': 'tmdb_id'})
 	for idx, tag in enumerate(process_list, 1):
@@ -95,75 +94,11 @@ def build_tmdb_list(params):
 		kodi_utils.add_dir(__handle__, url, jump2_str, iconImage=item_jump, isFolder=False)
 	kodi_utils.add_items(__handle__, items)
 	if total_pages > page:
-		url = {'mode': 'build_tmdb_list', 'new_page': page + 1, 'new_letter': letter,
+		url = {'mode': 'build_tmdb_list', 'new_page': page + 1,
 				'user': user, 'name': name, 'list_id': list_id}
 		kodi_utils.add_dir(__handle__, url, nextpage_str)
 	kodi_utils.set_category(__handle__, name)
 	kodi_utils.set_content(__handle__, content)
 	kodi_utils.end_directory(__handle__, False if is_widget else None)
 	kodi_utils.set_view_mode('view.%s' % content, content)
-
-def update_tmdb_list(params):
-	if params.get('action', '') == 'delete':
-		if not kodi_utils.confirm_dialog(): return
-		tmdb_api.list_delete(params['list_id'])
-	tmdb_api.clear_tmdbl_cache()
-	kodi_utils.container_refresh()
-
-def edit_tmdb_list(params):
-	image_resolution = get_resolution()
-	heading = ls(tmdb_api.tmdb_list_heading).replace('[B]', '').replace('[/B]', '')
-	choices = [
-		('name', params['name']),
-		('poster', params['poster']),
-		('fanart', params['fanart']),
-		('public', 'true' if params['public'] in ('true', '1') else 'false'),
-		('save', 'Save and Exit'),
-		('cancel', 'Cancel')
-	]
-	list_items = [
-		{'line1': i[1], 'line2': i[0], 'icon':
-		tmdb_image_base % (image_resolution['poster' if i[0] == 'poster' else 'fanart'], i[1])
-		if i[0] in ('poster', 'fanart') and i[1] not in ('clear', 'None') else
-		default_icon}
-		for i in choices
-	]
-	kwargs = {'items': json.dumps(list_items), 'heading': heading, 'multi_line': 'true'}
-	choice = kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
-	if choice in ('cancel', None): return
-	if   'name' in choice:
-		name = kodi_utils.dialog.input('New List Name', defaultt=params['name'])
-		params['name'] = name.strip() or params['name']
-	elif 'public' in choice:
-		text = 'Make %s Private?' % params['name']
-		params['public'] = 'true' if not kodi_utils.confirm_dialog(text=text, top_space=True) else 'false'
-	elif choice in ('poster', 'fanart'):
-		art = artwork_choice_tmdb_list(choice, params['list_id'], params['name'], image_resolution, default_icon)
-		params[choice] = params[choice] if art is None else art
-	else:
-		data = {
-			'name': params['name'],
-			'poster_path': '' if params['poster'] == 'clear' else params['poster'],
-			'backdrop_path': '' if params['fanart'] == 'clear' else params['fanart'],
-			'public': 'true' if params.get('public') in ('true', '1') else 'false',
-		}
-		data = {k: v for k, v in data.items() if v not in ('None', None)}
-		if tmdb_api.list_update(params['list_id'], data)['success']:
-			tmdb_api.clear_tmdbl_cache()
-			kodi_utils.container_refresh()
-			return kodi_utils.notification(32576)
-		else: return kodi_utils.notification(32574)
-	return edit_tmdb_list(params)
-
-def artwork_choice_tmdb_list(key, list_id, list_title, resolution, icon):
-	path = 'poster_path' if key == 'poster' else 'backdrop_path'
-	choices = [
-		(item[path], item['title'] if item['media_type'] == 'movie' else item['name'],
-		tmdb_image_base % (resolution[key], item[path]) if item[path] else icon)
-		for item in tmdb_api.list_details(list_id)
-	]
-	choices += [('clear', 'Clear', icon)]
-	list_items = [{'line1': item[1], 'line2': item[0], 'icon': item[2]} for item in choices]
-	kwargs = {'items': json.dumps(list_items), 'heading': list_title, 'enumerate': 'true', 'multi_line': 'true'}
-	return kodi_utils.select_dialog([i[0] for i in choices], **kwargs)
 

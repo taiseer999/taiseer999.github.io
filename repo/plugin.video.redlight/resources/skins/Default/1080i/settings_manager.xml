@@ -481,48 +481,6 @@
                           <property name="setting_description">Choose the Opacity Red Light will use for custom window themes. Choose between 10% - 100%</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=window_theme_choice&amp;type=opacity)</onclick>
                       </item>
-        <!-- Manage Addon Updates
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <property name="setting_label">Manage Addon Updates</property>
-                          <property name="setting_type">separator</property>
-                          <onclick>noop</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <property name="setting_label">Update Action</property>
-                          <property name="setting_type">action</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.update.action_name)]</property>
-                          <property name="setting_description">Choose the manner in which Red Light handles updates</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_from_list&amp;setting_id=update.action)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(redlight.update.action),3)</visible>
-                          <property name="setting_label">    - Delay Before Running (secs)</property>
-                          <property name="setting_type">numeric</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.update.delay)]</property>
-                          <property name="setting_description">Choose the delay time before Red Light checks for updates after Kodi start</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_numeric&amp;setting_id=update.delay)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(redlight.update.action),3)</visible>
-                          <property name="setting_label">    - Github Username</property>
-                          <property name="setting_type">numeric</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.update.username)]</property>
-                          <property name="setting_description">Leave this setting as default unless you wsh to update Red Light through a different user repository. If you do, enter the Github Username of the new github location</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_string&amp;setting_id=update.username)</onclick>
-                      </item>
-                      <item>
-                          <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(redlight.update.action),3)</visible>
-                          <property name="setting_label">    - Github Repo Address</property>
-                          <property name="setting_type">numeric</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.update.location)]</property>
-                          <property name="setting_description">Leave this setting as default unless you wsh to update Red Light through a different user repository. If you do, enter the Github Repo Address of the new github location</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_string&amp;setting_id=update.location)</onclick>
-                      </item> -->
         <!-- Watched Indicators -->
                       <item>
                           <visible>Container(2000).HasFocus(10)</visible>
@@ -532,12 +490,55 @@
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(10)</visible>
-                          <visible>!String.IsEqual(Window(10000).Property(redlight.trakt.user),empty_setting) | !String.IsEqual(Window(10000).Property(redlight.simkl.user),empty_setting)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.trakt.user),empty_setting) | !String.IsEqual(Window(10000).Property(redlight.simkl.user),empty_setting) | !String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
                           <property name="setting_label">Watched Status Provider</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(redlight.watched_indicators_name)]</property>
-                          <property name="setting_description">Watched ticks, resume bars, scrobble, Next Episodes, and In Progress lists. Red Light (local), Simkl, or Trakt (authorise under Meta Accounts).</property>
+                          <property name="setting_description">Watched ticks, resume bars, scrobble, Next Episodes, and In Progress lists. MDBList, Red Light (local), Simkl, or Trakt (authorise under Meta Accounts).</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_from_list&amp;setting_id=watched_indicators)</onclick>
+                      </item>
+        <!-- MDBList Cache -->
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <property name="setting_label">MDBList Cache</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
+                          <property name="setting_label">Resync Interval (mins)</property>
+                          <property name="setting_type">numeric</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.mdblist.sync_interval)]</property>
+                          <property name="setting_description">Choose how often Red Light polls MDBList for watched status and progress changes</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_numeric&amp;setting_id=mdblist.sync_interval)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
+                          <property name="setting_label">Refresh Widgets After MDBList Sync</property>
+                          <property name="setting_type">boolean</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.mdblist.refresh_widgets)]</property>
+                          <property name="setting_description">Refresh widgets after an MDBList sync when changes were detected</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=mdblist.refresh_widgets)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
+                          <property name="setting_label">Force MDBList Sync</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Pull watched status and playback progress from MDBList now</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=mdblist.mdblist_force_sync)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
+                          <property name="setting_label">Clear MDBList Cache</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Clear cached MDBList lists and sync data, then resync from MDBList</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=clear_cache&amp;cache=mdblist)</onclick>
                       </item>
         <!-- Simkl Cache -->
                       <item>
@@ -573,6 +574,15 @@
                           <property name="setting_description">Pull watched status and playback progress from Simkl now</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=simkl.simkl_force_sync)</onclick>
                       </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.simkl.user),empty_setting)</visible>
+                          <property name="setting_label">Clear Simkl Cache</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Clear cached Simkl lists and sync data, then resync from Simkl</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=clear_cache&amp;cache=simkl)</onclick>
+                      </item>
         <!-- Trakt Cache -->
                       <item>
                           <visible>Container(2000).HasFocus(10)</visible>
@@ -606,6 +616,15 @@
                           <property name="setting_value">...</property>
                           <property name="setting_description">Pull watched status and playback progress from Trakt now</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=trakt.trakt_force_sync)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(10)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.trakt.user),empty_setting)</visible>
+                          <property name="setting_label">Clear Trakt Cache</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Clear cached Trakt lists and sync data, then resync from Trakt</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=clear_cache&amp;cache=trakt)</onclick>
                       </item>
         <!-- UTC Time Offset -->
                       <item>
@@ -673,7 +692,7 @@
                           <property name="setting_label">Import &amp; Export Directory</property>
                           <property name="setting_type">action</property>
                           <property name="setting_value">$INFO[Window(10000).Property(redlight.import_export_directory)]</property>
-                          <property name="setting_description">Choose your default location for Red Light favorites and progress backup files</property>
+                          <property name="setting_description">Default folder for Tools > Import &amp; Export backups. Import and export file browsers open here. You can also save a new folder as the default when prompted after export</property>
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_path&amp;setting_id=import_export_directory)</onclick>
                       </item>
 <!-- FEATURES 20-->
@@ -1462,6 +1481,31 @@
                           <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_numeric&amp;setting_id=trakt.calendar_future_days)</onclick>
                       </item>
 <!-- META ACCOUNTS 50 -->
+        <!-- MDBList -->
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <property name="setting_label">MDBList</property>
+                          <property name="setting_type">separator</property>
+                          <onclick>noop</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <visible>String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
+                          <property name="setting_label">Authorise</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">...</property>
+                          <property name="setting_description">Authorise your MDBList account. Enter the code on screen or scan the QR code — same flow as Trakt and Simkl.</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=mdblist.mdblist_authenticate)</onclick>
+                      </item>
+                      <item>
+                          <visible>Container(2000).HasFocus(50)</visible>
+                          <visible>!String.IsEqual(Window(10000).Property(redlight.mdblist.user),empty_setting)</visible>
+                          <property name="setting_label">Revoke Authorisation</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.mdblist.user)]</property>
+                          <property name="setting_description">Revoke authorisation of your MDBList account</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=mdblist.mdblist_revoke_authentication)</onclick>
+                      </item>
         <!-- Simkl -->
                       <item>
                           <visible>Container(2000).HasFocus(50)</visible>
@@ -3235,11 +3279,11 @@
                       <item>
                           <visible>Container(2000).HasFocus(80)</visible>
                           <visible>String.IsEqual(Window(10000).Property(redlight.stinger_alert.show),true)</visible>
-                          <property name="setting_label">    - Use Chapter Info For Alert When Available</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.stinger_alert.use_chapters)]</property>
-                          <property name="setting_description">Enable this and Red Light will attempt to use video file Chapter information to ascertain when to show the Credit Stingers Alert. If unsuccessful, then the percentage of playback value will be used instead</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=stinger_alert.use_chapters)</onclick>
+                          <property name="setting_label">    - Alert Timing Source</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.stinger_alert.alert_timing_name)]</property>
+                          <property name="setting_description">Choose how Red Light decides when to show the Credit Stingers Alert. Off uses the playback percentage only. Chapter Info uses video chapter markers when available. Subtitles Info uses timing from active subtitles when a subtitle file is available (bundled sidecar, Kodi or A4KSubtitles download, SubMaker, or other external .srt). If the selected method is unavailable, the playback percentage setting is used instead</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_from_list&amp;setting_id=stinger_alert.alert_timing)</onclick>
                       </item>
         <!-- Playback Episodes -->
                       <item>
@@ -3314,11 +3358,11 @@
                       <item>
                           <visible>Container(2000).HasFocus(80)</visible>
                           <visible>String.IsEqual(Window(10000).Property(redlight.auto_play_episode),true) + String.IsEqual(Window(10000).Property(redlight.autoplay_next_episode),true)</visible>
-                          <property name="setting_label">    - Use Chapter Info For Alert When Available</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.autoplay_use_chapters)]</property>
-                          <property name="setting_description">Enable this and Red Light will attempt to use video file Chapter information to ascertain when to show the Next Episode alert. If unsuccessful, then the percentage of playback value will be used instead</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=autoplay_use_chapters)</onclick>
+                          <property name="setting_label">    - Alert Timing Source</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.autoplay_alert_timing_name)]</property>
+                          <property name="setting_description">Choose how Red Light decides when to show the Next Episode alert. Off uses the playback percentage only. Chapter Info uses video chapter markers when available. Subtitles Info uses timing from active subtitles when a subtitle file is available (bundled sidecar, Kodi or A4KSubtitles download, SubMaker, or other external .srt). If the selected method is unavailable, the playback percentage setting is used instead</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_from_list&amp;setting_id=autoplay_alert_timing)</onclick>
                       </item>
                       <item>
                           <visible>Container(2000).HasFocus(80)</visible>
@@ -3350,11 +3394,11 @@
                       <item>
                           <visible>Container(2000).HasFocus(80)</visible>
                           <visible>String.IsEqual(Window(10000).Property(redlight.auto_play_episode),false) + String.IsEqual(Window(10000).Property(redlight.autoscrape_next_episode),true)</visible>
-                          <property name="setting_label">    - Use Chapter Info For Alert When Available</property>
-                          <property name="setting_type">boolean</property>
-                          <property name="setting_value">$INFO[Window(10000).Property(redlight.autoscrape_use_chapters)]</property>
-                          <property name="setting_description">Enable this and Red Light will attempt to use video file Chapter information to ascertain when to show the Next Episode alert. If unsuccessful, then the percentage of playback value will be used instead</property>
-                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_boolean&amp;setting_id=autoscrape_use_chapters)</onclick>
+                          <property name="setting_label">    - Alert Timing Source</property>
+                          <property name="setting_type">action</property>
+                          <property name="setting_value">$INFO[Window(10000).Property(redlight.autoscrape_alert_timing_name)]</property>
+                          <property name="setting_description">Choose how Red Light decides when to show the Next Episode alert. Off uses the playback percentage only. Chapter Info uses video chapter markers when available. Subtitles Info uses timing from active subtitles when a subtitle file is available (bundled sidecar, Kodi or A4KSubtitles download, SubMaker, or other external .srt). If the selected method is unavailable, the playback percentage setting is used instead</property>
+                          <onclick>RunPlugin(plugin://plugin.video.redlight/?mode=settings_manager.set_from_list&amp;setting_id=autoscrape_alert_timing)</onclick>
                       </item>
                       
                       <item>

@@ -1,10 +1,19 @@
-  removal pending: download, tmdblist
+
+  [COLOR dodgerblue][B]Version 6.06[/B][/COLOR]
+- Changed cloud scrapers to "Filter Results with Aliases".
+- Used AI to tune some of the regex patterns.
+- Added introdb.app / theintrodb.org integration to Next Episodes.
+- Pack downloader preselects all files.
+- Refactored downloader for TorBox.
+- Refactored datetime parsing.
 
   [COLOR dodgerblue][B]Version 6.05[/B][/COLOR]
+- Added Settings/Metadata/Preferred Content Rating Region, defaults to US.
+  Requires manual Clear Meta Cache after setting change.
 - Changed subtitles provider to SubMaker - https://submaker.elfhosted.com.
   Submaker requires complete manifest url in settings, i.e. https://.../manifest.json
-- Added temporary Settings/My Lists/Trakt/Limit Trakt Requests for impending api
-  change mandating 250 maximum.  Disabled by default.
+- Added temporary Settings/My Lists/Trakt/Limit Trakt Requests.
+  Enforces impending api change mandating 250 maximum.  Disabled by default.
 - Updated torboxnews.  Users api key will be passed through TorBox whitelisted project.
   Do not use torboxnews if you have concerns about api key security.
 - Fix for format change in mediafusion results, next time will just remove it.

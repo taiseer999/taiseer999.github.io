@@ -18,17 +18,17 @@ class OffcloudAPI:
 		session.headers.update(self.headers())
 
 	def _request(self, method, path, params=None, data=None):
-		url = (base_url + path) if not path.startswith('http') else path
+		url = base_url + path
 		try: response = session.request(method, url, params=params, json=data, timeout=timeout)
 		except session.custom_errors: return kodi_utils.notification('%s timeout' % __name__)
 		if not response.ok: kodi_utils.logger(__name__, f"{response.reason}\n{response.url}")
 		return response.json() if 'json' in response.headers.get('Content-Type', '') else response
 
-	def _get(self, url, params=None):
-		return self._request('get', url, params=params)
+	def _get(self, path, params=None):
+		return self._request('get', path, params=params)
 
-	def _post(self, url, data=None):
-		return self._request('post', url, data=data)
+	def _post(self, path, data=None):
+		return self._request('post', path, data=data)
 
 	def headers(self):
 		return {'Authorization': 'Bearer %s' % self.token}
@@ -39,8 +39,9 @@ class OffcloudAPI:
 		return result
 
 	def torrent_info(self, request_id):
-		url = 'cloud/explore/%s?format=detailed' % request_id
-		result = self._get(url)
+		params = {'format': 'detailed'}
+		url = 'cloud/explore/%s' % request_id
+		result = self._get(url, params=params)
 		return result
 
 	def delete_torrent(self, request_id):

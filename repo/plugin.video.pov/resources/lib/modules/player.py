@@ -46,20 +46,23 @@ class POVPlayer(kodi_utils.xbmc_player):
 			listitem.setLabel(self.title)
 			listitem.setPath(url)
 			listitem.setProperty('StartPercent', str(bookmark))
+			self.playback_event = False
+			self.play(url, listitem)
+
 			try:
 				trakt_ids = {'tmdb': self.tmdb_id, 'imdb': self.imdb_id, 'slug': make_title_slug(self.title)}
 				if self.mediatype == 'episode': trakt_ids['tvdb'] = self.tvdb_id
 				kodi_utils.clear_property('script.trakt.ids')
 				kodi_utils.set_property('script.trakt.ids', json.dumps(trakt_ids))
 			except: pass
-			self.playback_event = False
-			self.play(url, listitem)
-
 			if self.mediatype == 'episode':
 				self.play_random_continual = 'random_continual' in self.meta
-				if not self.play_random_continual and self.autoplay_nextep: self.autoplay_next_episode = 'random' not in self.meta
-				if not self.play_random_continual and self.autoscrape_nextep: self.autoscrape_next_episode = 'random' not in self.meta
-				if not self.play_random_continual and self.autoplay_nextep and self.autoscrape_nextep: self.autoscrape_next_episode = False
+				if not self.play_random_continual and self.autoplay_nextep:
+					self.autoplay_next_episode = 'random' not in self.meta
+				if not self.play_random_continual and self.autoscrape_nextep:
+					self.autoscrape_next_episode = 'random' not in self.meta
+				if not self.play_random_continual and self.autoplay_nextep and self.autoscrape_nextep:
+					self.autoscrape_next_episode = False
 			while not self.playback_event: kodi_utils.sleep(100)
 			if callable(progress_media): progress_media()
 			kodi_utils.close_all_dialog()
@@ -70,53 +73,48 @@ class POVPlayer(kodi_utils.xbmc_player):
 					kodi_utils.sleep(1000)
 					self.total_time, self.curr_time = self.getTotalTime(), self.getTime()
 					self.current_point = round(float(self.curr_time/self.total_time * 100), 1)
-					if self.curr_time > self.stinger_check and not self.stingers_checked:
-						self.run_stingers()
-					if self.current_point >= self.set_watched and not self.media_marked:
-						self.media_watched_marker()
-					if self.play_random_continual:
-						if not self.nextep_info_gathered: self.info_next_ep()
-						self.remaining_time = round(self.total_time - self.curr_time)
-						if self.remaining_time <= self.start_prep:
-							if not self.nextep_started: self.run_random_continual()
-					if self.autoplay_next_episode:
-						if not self.nextep_info_gathered: self.info_next_ep()
-						self.remaining_time = round(self.total_time - self.curr_time)
-						if self.remaining_time <= self.start_prep:
-							if not self.nextep_started and self.autoplay_nextep: self.run_next_ep()
-					if self.autoscrape_next_episode:
-						if not self.nextep_info_gathered: self.info_next_ep()
-						self.remaining_time = round(self.total_time - self.curr_time)
-						if self.remaining_time <= self.autoscrape_next_window_time:
-							if not self.nextep_started and self.autoscrape_nextep: self.run_scrape_next_ep()
+					self.remaining_time = round(self.total_time - self.curr_time)
+					if not self.subs_searched: self.run_subtitles()
+					if not self.stingers_checked and self.mediatype == 'movie':
+						if self.stinger_enabled and self.curr_time > self.stinger_check:
+							self.run_stingers()
+					if not self.nextep_info_gathered and self.mediatype == 'episode':
+						if self.play_random_continual or self.autoplay_nextep or self.autoscrape_nextep:
+							Thread(target=self.info_next_ep).start()
+					if not self.media_marked:
+						if self.current_point >= self.set_watched:
+							self.media_watched_marker()
+					if self.nextep_info_gathered and not self.nextep_started:
+						if self.play_random_continual and self.remaining_time <= self.start_prep:
+							self.run_random_continual()
+						elif self.autoplay_next_episode and self.remaining_time <= self.start_prep:
+							if self.autoplay_nextep: self.run_next_ep()
+						elif self.autoscrape_next_episode and self.remaining_time <= self.autoscrape_next_window_time:
+							if self.autoscrape_nextep: self.run_scrape_next_ep()
 				except: pass
-				if not self.subs_searched: self.run_subtitles()
 			if not self.media_marked: self.media_watched_marker()
 			ws.clear_local_bookmarks()
+			kodi_utils.clear_property('script.trakt.ids')
 		except: pass
 
 	def _make_listitem(self):
 		listitem = kodi_utils.make_listitem()
 		try:
-			listitem.setArt(art_infodict(self.meta, (*get_art_provider(), poster_empty, fanart_empty), meta_user_info()))
 			if self.mediatype == 'movie':
-				if KODI_VERSION < 20:
-					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
-					listitem.setInfo('video', movie_show_infodict(self.meta))
-					listitem.setCast(self.meta_get('cast', []))
-				else:
-					infotag = info_tagger(listitem, movie_show_infodict(self.meta))
-					infotag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)})
-					infotag.setCast(make_cast_list(self.meta_get('cast', [])))
+				info = movie_show_infodict(self.meta)
+				uids = {'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id)}
 			else:
-				if KODI_VERSION < 20:
-					listitem.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-					listitem.setInfo('video', {**episode_infodict(self.meta), 'title': self.meta_get('ep_name')})
-					listitem.setCast(self.meta_get('cast', []))
-				else:
-					infotag = info_tagger(listitem, {**episode_infodict(self.meta), 'title': self.meta_get('ep_name')})
-					infotag.setUniqueIDs({'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)})
-					infotag.setCast(make_cast_list(self.meta_get('cast', [])))
+				info = {**episode_infodict(self.meta), 'title': self.meta_get('ep_name')}
+				uids = {'imdb': self.imdb_id, 'tmdb': str(self.tmdb_id), 'tvdb': str(self.tvdb_id)}
+			if KODI_VERSION < 20:
+				listitem.setInfo('video', info)
+				listitem.setUniqueIDs(uids)
+				listitem.setCast(self.meta_get('cast', []))
+			else:
+				infotag = info_tagger(listitem, info)
+				infotag.setUniqueIDs(uids)
+				infotag.setCast(make_cast_list(self.meta_get('cast', [])))
+			listitem.setArt(art_infodict(self.meta, (*get_art_provider(), poster_empty, fanart_empty), meta_user_info()))
 		except: pass
 		return listitem
 
@@ -160,6 +158,26 @@ class POVPlayer(kodi_utils.xbmc_player):
 		else: stinger = next((v for k, v in stingers.items() if k in keywords), None)
 		return kodi_utils.notification(stinger, time=6000, icon=poster) if stinger else ''
 
+	def getCredits(self):
+		from requests import request
+		timeout = (3.05, 6.05)
+		params = {'imdb_id': self.imdb_id, 'season': self.season, 'episode': self.episode}
+		try:
+			response = request('get', 'https://api.introdb.app/segments', params=params, timeout=timeout)
+			credits = response.json().get('outro') or {}
+			if credits.get('start_sec') is not None: credits_init = int(credits['start_sec'])
+			elif credits.get('start_ms') is not None: credits_init = int(credits['start_ms'] / 1000)
+			else: credits_init = None
+			if credits_init and credits_init <= self.getTotalTime(): return credits_init
+		except: pass
+		try:
+			response = request('get', 'https://api.theintrodb.org/v3/media', params=params, timeout=timeout)
+			credits = next(iter(response.json().get('credits') or []))
+			if credits.get('start_ms') is not None: credits_init = int(credits['start_ms'] / 1000)
+			else: credits_init = None
+			if credits_init and credits_init <= self.getTotalTime(): return credits_init
+		except: pass
+
 	def media_watched_marker(self):
 		self.media_marked = True
 		try:
@@ -172,7 +190,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 					'mode': 'mark_as_watched_unwatched_episode', 'action': 'mark_as_watched', 'refresh': 'false', 'from_playback': 'true',
 					'tmdb_id': self.tmdb_id, 'title': self.title, 'year': self.year, 'tvdb_id': self.tvdb_id, 'season': self.season, 'episode': self.episode
 				}
-				Thread(target=self.run_media_watched, args=(watched_function, watched_params)).start()
+				self.run_media_watched(watched_function, watched_params)
 			else:
 				kodi_utils.clear_property('pov_total_autoplays')
 				if not self.current_point >= self.set_resume: return
@@ -180,7 +198,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 		except: pass
 
 	def run_media_watched(self, function, params):
-		try: function(params)
+		try: Thread(target=function, args=(params,)).start()
 		except: pass
 
 	def run_scrape_next_ep(self):
@@ -223,15 +241,18 @@ class POVPlayer(kodi_utils.xbmc_player):
 		except: pass
 
 	def info_next_ep(self):
-		self.nextep_info_gathered = True
 		try:
 			self.nextep_settings = settings.autoplay_next_settings()
-			if not self.nextep_settings['run_popup']:
-				window_time = round(0.02 * self.total_time)
+			if window_time := self.getCredits():
+				window_time = round(self.getTotalTime() - window_time + 5)
+				self.nextep_settings['window_time'] = window_time
+				self.nextep_settings['autoscrape_next_window_time'] = window_time
+			elif not self.nextep_settings['run_popup']:
+				window_time = round(0.02 * self.getTotalTime())
 				self.nextep_settings['window_time'] = window_time
 			elif self.nextep_settings['timer_method'] == 'percentage':
 				percentage = self.nextep_settings['window_percentage']
-				window_time = round((percentage/100) * self.total_time)
+				window_time = round((percentage/100) * self.getTotalTime())
 				self.nextep_settings['window_time'] = window_time
 			else:
 				window_time = self.nextep_settings['window_time']
@@ -240,6 +261,7 @@ class POVPlayer(kodi_utils.xbmc_player):
 			self.nextep_settings.update({'threshold_check': threshold_check, 'start_prep': self.start_prep})
 			self.autoscrape_next_window_time = self.nextep_settings['autoscrape_next_window_time']
 		except: pass
+		finally: self.nextep_info_gathered = True
 
 	def onAVStarted(self):
 		self.playback_event = True

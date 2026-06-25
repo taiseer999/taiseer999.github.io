@@ -115,7 +115,7 @@ class MetaCache(BaseCache):
 		except: pass
 
 	def delete_all_seasons_memory_cache(self, media_id, total_seasons=None):
-		if not total_seasons: total_seasons = 101
+		if not total_seasons: total_seasons = 100
 		for item in range(total_seasons + 1):
 			clear_property('%s_%s' % (prop_dict.get('meta_season') % str(media_id), str(item)))
 
@@ -154,7 +154,7 @@ def cache_function(function, prop_string, url, expiration=96, json=False):
 	if data: return data
 	if json: result = function(url).json()
 	else: result = function(url)
-	if isinstance(expiration, int): expiration = timedelta(hours=expiration)
+	if isinstance(expiration, (int, float)): expiration = timedelta(hours=expiration)
 	metacache.set_function(prop_string, result, expiration)
 	return result
 

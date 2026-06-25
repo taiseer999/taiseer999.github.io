@@ -25,6 +25,7 @@ maincache_db   = 'special://profile/addon_data/plugin.video.pov/maincache.db'
 metacache_db   = 'special://profile/addon_data/plugin.video.pov/metacache.db'
 debridcache_db = 'special://profile/addon_data/plugin.video.pov/debridcache.db'
 external_db    = 'special://profile/addon_data/plugin.video.pov/providerscache.db'
+scrapers_path  = 'special://home/addons/plugin.video.pov/resources/lib/scrapers/'
 databases_path = 'special://profile/addon_data/plugin.video.pov/'
 packages_path  = 'special://home/addons/packages/'
 
@@ -177,48 +178,65 @@ def widget_refresh():
 def container_refresh():
 	return execute_builtin('Container.Refresh')
 
-def ok_dialog(heading='POV', text='', highlight='dodgerblue', ok_label=local_string(32839), top_space=False):
-#	from windows import open_window
+def ok_dialog(heading='POV', text='', highlight='dodgerblue', ok_label=local_string(32839), top_space=True):
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
 	if not text: top_space, text = True, local_string(32760)
 	if top_space: text = '[CR]%s' % text
-#	kwargs = {'heading': heading, 'text': text, 'highlight': highlight, 'ok_label': ok_label}
-#	return open_window(('windows.select_ok', 'OK'), 'select_ok.xml', **kwargs)
 	return dialog.ok(heading, text)
 
-def confirm_dialog(heading='POV', text='', highlight='dodgerblue', ok_label=local_string(32839), cancel_label=local_string(32840), top_space=False, default_control=11):
-#	from windows import open_window
+def confirm_dialog(heading='POV', text='', highlight='dodgerblue', ok_label=local_string(32839), cancel_label=local_string(32840), top_space=True, default_control=11):
 	if isinstance(heading, int): heading = local_string(heading)
 	if isinstance(text, int): text = local_string(text)
 	if isinstance(ok_label, int): ok_label = local_string(ok_label)
 	if isinstance(cancel_label, int): cancel_label = local_string(cancel_label)
 	if not text: text = '[CR]%s' % local_string(32580)
 	elif top_space: text = '[CR]%s' % text
-#	kwargs = {'heading': heading, 'text': text, 'highlight': highlight, 'ok_label': ok_label, 'cancel_label': cancel_label, 'default_control': default_control}
-#	return open_window(('windows.select_ok', 'YesNo'), 'select_ok.xml', **kwargs)
 	return dialog.yesno(heading, text, cancel_label, ok_label)
 
 def select_dialog(function_list, **kwargs):
-	from windows import open_window
-	selection = open_window(('windows.select_ok', 'Select'), 'select.xml', **kwargs)
-	if selection in ([], None): return None
-	if kwargs.get('multi_choice', 'false') == 'true': return [function_list[i] for i in selection]
+	def _builder():
+		for count, item in enumerate(items, 1):
+			line1 = '%s. %s' % (count, item['line1']) if enum else item['line1']
+			line2 = '[I]%s[/I]' % (item.get('line2') or item['line1'])
+			listitem = make_listitem()
+			listitem.setLabel(line1.upper())
+			listitem.setLabel2(line2.upper())
+			listitem.setArt({'icon': item.get('icon') or default_icon})
+			yield listitem
+	default_icon = '%s%s' % (get_addoninfo('path'), 'pov_poster.png')
+	items = json.loads(kwargs.get('items') or '[]')
+	heading = kwargs.get('heading') or get_addoninfo('name')
+	enum = kwargs.get('enumerate', 'false') == 'true'
+	details = kwargs.get('multi_line', 'true') == 'true'
+	multi_choice = kwargs.get('multi_choice', 'false') == 'true'
+	if multi_choice:
+		preselect = kwargs.get('preselect') or []
+		selection = dialog.multiselect(heading, list(_builder()), preselect=preselect, useDetails=details)
+	else:
+		preselect = kwargs.get('preselect') if kwargs.get('preselect') is not None else -1
+		selection = dialog.select(heading, list(_builder()), preselect=preselect, useDetails=details)
+	if selection in ([], -1, None): return None
+	if multi_choice: return [function_list[i] for i in selection]
 	return function_list[selection]
 
 def show_text(heading, text=None, file=None, font_size='small', kodi_log=False):
-	from windows import open_window
 	if isinstance(heading, int): heading = local_string(heading)
 	heading = heading.replace('[B]', '').replace('[/B]', '')
 	if file:
 		with open_file(file) as f: text = f.readBytes().decode('utf-8-sig')
-	if kodi_log and confirm_dialog(text=local_string(32855), ok_label=local_string(32824), cancel_label=local_string(32828), top_space=True):
+	if kodi_log and confirm_dialog(
+		text=local_string(32855),
+		ok_label=local_string(32824),
+		cancel_label=local_string(32828)
+	):
 		lines = []
 		for line in text.splitlines(keepends=True):
 			if line[0].isdigit(): lines += [line]
 			else: lines[-1] += line
 		text = ''.join(i for i in reversed(lines) if any(x in i.lower() for x in ('exception', 'error')))
-	return open_window(('windows.textviewer', 'TextViewer'), 'textviewer.xml', heading=heading, text=text, font_size=font_size)
+	if not text: return notification(32760)
+	return dialog.textviewer(heading, text)
 
 def notification(line1, time=3000, icon=None, sound=False):
 	if isinstance(line1, int): line1 = local_string(line1)
@@ -260,25 +278,17 @@ def set_view_properties():
 	view_ids = dbcur.fetchall()
 	for item in view_ids: set_property('pov_%s' % item[0], item[1])
 
-def set_view_mode(view_type, content='files'):
-	if external_browse(): return
+def set_view_mode(view_type, content='files', is_widget=None):
+	if is_widget is True or (is_widget is None and external_browse()): return
 	view_id = get_property('pov_%s' % view_type)
-	hold = 0
-	if not view_id:
-		try:
-			dbcon = database_connect(views_db, isolation_level=None)
-			dbcur = dbcon.cursor()
-			dbcur.execute("""SELECT view_id FROM views WHERE view_type = ?""", (str(view_type),))
-			view_id = dbcur.fetchone()[0]
-		except: return
+	if not view_id: return
 	try:
-		sleep(100)
-		while container_content() != content:
-			hold += 1
-			if hold < 5000: sleep(1)
-			else: return
-		if view_id: execute_builtin('Container.SetViewMode(%s)' % view_id)
-	except: return
+		for _ in range(60):
+			if container_content() == content: break
+			sleep(50)
+		else: return
+		execute_builtin('Container.SetViewMode(%s)' % view_id)
+	except: pass
 
 def clear_view(view_type):
 	if not confirm_dialog(): return
@@ -405,15 +415,14 @@ def clean_settings():
 
 def open_settings(query, addon='plugin.video.pov'):
 	hide_busy_dialog()
-	if query:
-		try:
-			button, control = 100, 80
-			menu, function = query.split('.')
-			execute_builtin('Addon.OpenSettings(%s)' % addon)
-			execute_builtin('SetFocus(%i)' % (int(menu) - button))
-			execute_builtin('SetFocus(%i)' % (int(function) - control))
-		except: execute_builtin('Addon.OpenSettings(%s)' % addon)
-	else: execute_builtin('Addon.OpenSettings(%s)' % addon)
+	execute_builtin('Addon.OpenSettings(%s)' % addon)
+	if not query: return
+	try:
+		button, control = 100, 80
+		menu, function = query.split('.')
+		execute_builtin('SetFocus(%i)' % (int(menu) - button))
+		execute_builtin('SetFocus(%i)' % (int(function) - control))
+	except: notification(32574)
 
 def toggle_language_invoker():
 	import xml.etree.ElementTree as ET
@@ -422,7 +431,7 @@ def toggle_language_invoker():
 	current_addon_setting = get_setting('reuse_language_invoker', 'true')
 	new_value = 'false' if current_addon_setting == 'true' else 'true'
 	if not confirm_dialog(text=local_string(32979) % (current_addon_setting.upper(), new_value.upper())): return
-	if new_value == 'true' and not confirm_dialog(text=32980, top_space=True): return
+	if new_value == 'true' and not confirm_dialog(text=32980): return
 	addon_xml = translate_path('special://home/addons/plugin.video.pov/addon.xml')
 	tree = ET.parse(addon_xml)
 	root = tree.getroot()
@@ -431,23 +440,23 @@ def toggle_language_invoker():
 	item.text = new_value
 	tree.write(addon_xml)
 	set_setting('reuse_language_invoker', new_value)
-	ok_dialog(text=32981, top_space=True)
+	ok_dialog(text=32981)
 	execute_builtin('LoadProfile(%s)' % get_infolabel('system.profilename'))
 
 def upload_logfile():
 	# Thanks 123Venom
 	log_file, url = 'special://logpath/kodi.log', 'https://paste.kodi.tv/'
-	if not path_exists(log_file): return ok_dialog(text='Error. Log File Not Found.', top_space=True)
+	if not path_exists(log_file): return ok_dialog(text='Error. Log File Not Found.')
 	from platform import python_version
 	text = f"Kodi: {get_infolabel('System.BuildVersion')}[CR]Python: {python_version()}[CR]{local_string(32580)}"
-	if not confirm_dialog(text=text): return
-	import requests
+	if not confirm_dialog(text=text, top_space=False): return
 	show_busy_dialog()
+	import requests
 	try:
-		with open_file(log_file) as f: text = f.read().encode('utf-8', errors='ignore')
+		with open_file(log_file) as f: text = f.readBytes().decode('utf-8-sig')
 		response = requests.post('%s%s' % (url, 'documents'), data=text, timeout=10.0).json()
-		if 'key' in response: ok_dialog(text=url + response['key'], top_space=True)
-		else: ok_dialog(text='Error. Log Upload Failed', top_space=True)
+		if 'key' in response: ok_dialog(text=url + response['key'])
+		else: ok_dialog(text='Error. Log Upload Failed')
 	except: notification(32574, 1500)
 	hide_busy_dialog()
 

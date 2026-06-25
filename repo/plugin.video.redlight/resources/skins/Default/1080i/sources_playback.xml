@@ -69,7 +69,7 @@
                     <top>400</top>
                     <width>1920</width>
                     <height>30</height>
-                    <font>font60</font> <!-- REDLIGHT_60_BOLD -->
+                    <font>Bold60</font> <!-- REDLIGHT_60_BOLD -->
                     <textcolor>FFCCCCCC</textcolor>
                     <align>center</align>
                     <aligny>bottom</aligny>

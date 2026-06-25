@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from caches.settings_cache import get_setting, set_setting, default_setting_values, _EXTRAS_LIST_DEFAULT
-from modules.kodi_utils import translate_path, get_property, addon_profile
+from modules.kodi_utils import translate_path, get_property, addon_profile, make_directory
 from modules.kodi_utils import logger
 
 def tmdb_api_key():
@@ -11,6 +11,9 @@ def tmdb_lists_read_token():
 
 def trakt_client():
 	return get_setting('redlight.trakt.client', '')
+
+def mdblist_client():
+	return get_setting('redlight.mdblist.client', '')
 
 def trakt_secret():
 	return get_setting('redlight.trakt.secret', '')
@@ -25,6 +28,18 @@ def simkl_user_active():
 	user = settings_cache.read_db_value('simkl.user')
 	token = settings_cache.read_db_value('simkl.token')
 	return user not in (None, 'empty_setting', '') and token not in (None, '0', '', 'empty_setting')
+
+def mdblist_user_active():
+	from caches.settings_cache import settings_cache
+	user = settings_cache.read_db_value('mdblist.user')
+	token = settings_cache.read_db_value('mdblist.token')
+	return user not in (None, 'empty_setting', '') and token not in (None, '0', '', 'empty_setting')
+
+def mdblist_sync_interval():
+	setting = get_setting('redlight.mdblist.sync_interval', '60')
+	try: interval = max(5, int(setting))
+	except: interval = 60
+	return interval, interval * 60
 
 def simkl_sync_interval():
 	setting = get_setting('redlight.simkl.sync_interval', '60')
@@ -77,11 +92,23 @@ def download_directory(media_type):
 								None: 'redlight.premium_download_directory', 'None': False}
 	return translate_path(get_setting(download_directories_dict[media_type]))
 
-def import_export_directory():
+_IMPORT_EXPORT_DIR_DEFAULT = 'special://profile/addon_data/plugin.video.redlight/Import Export/'
+
+def import_export_directory_setting():
+	# Virtual path for Kodi browse dialogs (works on all platforms).
 	path = get_setting('redlight.import_export_directory', '')
-	if path in ('', 'None', None):
-		return translate_path(addon_profile())
-	return translate_path(path)
+	if path in ('', 'None', None, 'empty_setting'):
+		return _IMPORT_EXPORT_DIR_DEFAULT
+	return path
+
+def import_export_directory():
+	# Filesystem path for os.path / file I/O.
+	return translate_path(import_export_directory_setting())
+
+def ensure_import_export_directory():
+	path = import_export_directory()
+	make_directory(path)
+	return path
 
 def ai_model_active():
 	if get_setting('redlight.google_api', 'empty_setting') not in (None, 'None', '', 'empty_setting'): return True
@@ -149,7 +176,8 @@ def submaker_enabled():
 
 def submaker_manifest():
 	manifest = get_setting('redlight.playback.submaker_manifest', 'empty_setting')
-	return '' if manifest == 'empty_setting' else manifest
+	if manifest == 'empty_setting': return ''
+	return manifest.strip()
 
 def submaker_language():
 	return get_setting('redlight.playback.submaker_language_name', 'English')
@@ -160,8 +188,15 @@ def submaker_prefer_local():
 def stingers_show():
 	return get_setting('redlight.stinger_alert.show', 'false') == 'true'
 
+def _alert_timing_mode(setting_id, default='1'):
+	value = get_setting('redlight.%s' % setting_id, default)
+	return {'0': 'off', '1': 'chapters', '2': 'subtitles'}.get(str(value), 'chapters')
+
+def stingers_alert_timing():
+	return _alert_timing_mode('stinger_alert.alert_timing', '1')
+
 def stingers_use_chapters():
-	return get_setting('redlight.stinger_alert.use_chapters', 'false') == 'true'
+	return stingers_alert_timing() == 'chapters'
 
 def stingers_percentage():
 	return int(get_setting('redlight.stinger_alert.window_percentage', '90'))
@@ -189,7 +224,7 @@ def autoplay_prescrape(scrape_provider):
 def auto_nextep_settings(play_type):
 	play_type = 'autoplay' if play_type == 'autoplay_nextep' else 'autoscrape'
 	window_percentage = 100 - int(get_setting('redlight.%s_next_window_percentage' % play_type, '95'))
-	use_chapters = get_setting('redlight.%s_use_chapters' % play_type, 'true') == 'true'
+	alert_timing = _alert_timing_mode('%s_alert_timing' % play_type, '1')
 	watching_check = int(get_setting('redlight.autoplay_watching_check', '3'))
 	scraper_time = int(get_setting('redlight.results.timeout', '60')) + 20
 	if play_type == 'autoplay':
@@ -197,7 +232,7 @@ def auto_nextep_settings(play_type):
 		default_action = {'0': 'play', '1': 'cancel', '2': 'pause'}[get_setting('redlight.autoplay_default_action', '1')]
 	else: alert_method, default_action = '', ''
 	return {'scraper_time': scraper_time, 'window_percentage': window_percentage, 'alert_method': alert_method,
-			'default_action': default_action, 'use_chapters': use_chapters, 'watching_check': watching_check}
+			'default_action': default_action, 'alert_timing': alert_timing, 'watching_check': watching_check}
 
 def filter_status(filter_type):
 	return int(get_setting('redlight.filter.%s' % filter_type, '0'))
@@ -544,10 +579,13 @@ def _resolve_watched_provider():
 	ind = int(get_setting('redlight.watched_indicators', '0'))
 	if ind == 1 and not trakt_user_active(): return 0
 	if ind == 2 and not simkl_user_active(): return 0
+	if ind == 3 and not mdblist_user_active(): return 0
 	return ind
 
 def watched_provider_options():
-	options = {'0': 'Red Light'}
+	options = {}
+	if mdblist_user_active(): options['3'] = 'MDBList'
+	options['0'] = 'Red Light'
 	if simkl_user_active(): options['2'] = 'Simkl'
 	if trakt_user_active(): options['1'] = 'Trakt'
 	return options
@@ -574,9 +612,11 @@ def fallback_watched_provider_on_revoke(revoked_index):
 	current = int(get_setting('redlight.watched_indicators', '0'))
 	if current != revoked_index: return
 	if revoked_index == 1:
-		set_setting('watched_indicators', '2' if simkl_user_active() else '0')
+		set_setting('watched_indicators', '2' if simkl_user_active() else ('3' if mdblist_user_active() else '0'))
 	elif revoked_index == 2:
-		set_setting('watched_indicators', '1' if trakt_user_active() else '0')
+		set_setting('watched_indicators', '1' if trakt_user_active() else ('3' if mdblist_user_active() else '0'))
+	elif revoked_index == 3:
+		set_setting('watched_indicators', '2' if simkl_user_active() else ('1' if trakt_user_active() else '0'))
 
 def watched_indicators():
 	return _resolve_watched_provider()
@@ -614,12 +654,6 @@ def nextep_sort_key():
 def nextep_sort_direction():
 	return int(get_setting('redlight.nextep.sort_order', '0')) == 0
 
-def update_delay():
-	return int(get_setting('redlight.update.delay', '45'))
-
-def update_action():
-	return int(get_setting('redlight.update.action', '2'))
-
 def _rescrape_defaults():
 	return [('cache_ignored', '1', '0'), ('imdb_year', '0', '1'), ('with_all', '0', '2'), ('episode_group', '0', '3'), ('ignore_filters', '0', '4'), ('full_scrape', '2', '5')]
 
@@ -635,26 +669,37 @@ def rescrape_action_value(action, default='0'):
 
 def cm_enabled():
 	default = 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
-				'simkl_manager,trakt_manager,tmdb_manager,personal_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
+				'mdblist_manager,simkl_manager,trakt_manager,tmdb_manager,personal_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
 	setting = get_setting('redlight.context_menu.enabled', default)
 	if setting in ('', None, 'noop', '[]'): return default.split(',')
 	return setting.split(',')
 
 def _merge_cm_order_with_enabled(order, enabled):
 	order = [i for i in order if i]
+	manager_insert = {
+		'mdblist_manager': ('simkl_manager', 'trakt_manager'),
+		'simkl_manager': ('trakt_manager',),
+	}
 	for item in enabled:
 		if item in order: continue
-		if item == 'simkl_manager' and 'trakt_manager' in order:
-			order.insert(order.index('trakt_manager'), item)
-		else:
-			order.append(item)
+		inserted = False
+		for anchor in manager_insert.get(item, ()):
+			if anchor in order:
+				order.insert(order.index(anchor), item)
+				inserted = True
+				break
+		if not inserted: order.append(item)
 	return order
 
 def _normalize_cm_list_order(order):
 	order = list(order)
-	if 'simkl_manager' in order and 'trakt_manager' in order:
-		si, ti = order.index('simkl_manager'), order.index('trakt_manager')
-		if ti < si: order[si], order[ti] = order[ti], order[si]
+	managers = ('mdblist_manager', 'simkl_manager', 'trakt_manager')
+	present = [m for m in managers if m in order]
+	if present:
+		insert_at = min(order.index(m) for m in present)
+		order = [i for i in order if i not in managers]
+		for offset, manager in enumerate([m for m in managers if m in present]):
+			order.insert(insert_at + offset, manager)
 	if 'tmdb_manager' in order and 'personal_manager' in order:
 		ti, pi = order.index('tmdb_manager'), order.index('personal_manager')
 		if pi < ti: order[ti], order[pi] = order[pi], order[ti]
@@ -679,8 +724,28 @@ def migrate_simkl_context_menu_for_upgrade(had_existing_settings):
 			changed = True
 	return changed
 
+def migrate_mdblist_context_menu_for_upgrade(had_existing_settings):
+	if get_setting('redlight.mdblist.cm_menu_migrated', 'false') == 'true': return False
+	set_setting('mdblist.cm_menu_migrated', 'true')
+	if not had_existing_settings: return False
+	item, changed = 'mdblist_manager', False
+	raw = get_setting('redlight.context_menu.enabled', '')
+	if raw and raw not in ('noop', '[]'):
+		parts = [p for p in raw.split(',') if p]
+		if item not in parts:
+			set_setting('context_menu.enabled', ','.join([item] + parts))
+			changed = True
+	raw = get_setting('redlight.context_menu.order', '')
+	if raw and raw not in ('noop', '[]'):
+		parts = _merge_cm_order_with_enabled([p for p in raw.split(',') if p], cm_enabled())
+		if item not in raw.split(','):
+			set_setting('context_menu.order', ','.join(parts))
+			changed = True
+	return changed
+
 def migrate_cm_manager_order_for_upgrade():
-	if get_setting('redlight.cm_manager_order_migrated', 'false') == 'true': return False
+	if get_setting('redlight.cm_manager_order_migrated_v2', 'false') == 'true': return False
+	set_setting('cm_manager_order_migrated_v2', 'true')
 	set_setting('cm_manager_order_migrated', 'true')
 	before = get_setting('redlight.context_menu.order', '')
 	cm_current_order()
@@ -688,7 +753,7 @@ def migrate_cm_manager_order_for_upgrade():
 
 def cm_current_order():
 	default = 'extras,options,playback_options,browse_movie_set,browse_seasons,browse_episodes,recommended,related,more_like_this,similar,in_trakt_list,' \
-				'simkl_manager,trakt_manager,tmdb_manager,personal_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
+				'mdblist_manager,simkl_manager,trakt_manager,tmdb_manager,personal_manager,favorites_manager,mark_watched,unmark_previous_episode,exit,refresh,reload'
 	setting = get_setting('redlight.context_menu.order', default)
 	if setting in ('', None, 'noop', '[]'): order = default.split(',')
 	else: order = setting.split(',')

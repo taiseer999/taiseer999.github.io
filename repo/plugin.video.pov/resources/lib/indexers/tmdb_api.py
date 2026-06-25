@@ -7,14 +7,13 @@ from modules import kodi_utils
 from modules.settings import get_language, show_unaired_watchlist, ignore_articles, lists_sort_order, paginate, page_limit
 from modules.utils import paginate_list, sort_for_article, jsondate_to_datetime, get_datetime, chunks, TaskPool
 
-ls, logger, js2date = kodi_utils.local_string, kodi_utils.logger, jsondate_to_datetime
+ls, logger = kodi_utils.local_string, kodi_utils.logger
 get_setting, set_setting = kodi_utils.get_setting, kodi_utils.set_setting
 EXPIRES_4_HOURS, EXPIRES_2_DAYS, EXPIRES_1_WEEK, EXPIRES_1_MONTH = 4, 48, 168, 672
 READ_TOKEN = kodi_utils.addon().getSetting('tmdb_read_token')
 movies_append = 'external_ids,videos,credits,release_dates,alternative_titles,translations,images'
 tvshows_append = 'external_ids,videos,credits,content_ratings,alternative_titles,translations,images'
-eps_map = {1: 'Original air date', 2: 'Absolute', 3: 'DVD', 4: 'Digital', 5: 'Story arc', 6: 'Production', 7: 'TV'}
-tmdb_image_base, tmdb_list_heading = 'https://image.tmdb.org/t/p/%s%s', 'TMDB Lists'
+tmdb_image_base, tmdblist_heading = 'https://image.tmdb.org/t/p/%s%s', 'TMDB Lists'
 list_url = 'https://api.themoviedb.org/4'
 base_url = 'https://api.themoviedb.org/3'
 timeout = 3.05
@@ -342,6 +341,7 @@ def english_translation(mediatype, tmdb_id):
 
 def episode_groups(tmdb_id):
 	def _process(dummy):
+		eps_map = (dummy, 'Original air date', 'Absolute', 'DVD', 'Digital', 'Story arc', 'Production', 'TV')
 		result = get_tmdb(url)['results']
 		for i in result: i['type'] = eps_map[i['type']]
 		return result
@@ -357,6 +357,21 @@ def episode_group_details(group_id):
 	string = 'tmdb_episode_group_details_%s' % group_id
 	url = '%s/tv/episode_group/%s' % (base_url, group_id)
 	return cache_function(_process, string, url, EXPIRES_1_WEEK)
+
+def tmdb_region_ids():
+	def _process(dummy):
+		region_list = (
+			'AF,AL,DZ,AQ,AR,AM,AU,AT,BD,BY,BE,BR,BG,KH,CA,CL,CN,HR,CZ,DK,EG,FI,FR,DE,'
+			'GR,HK,HU,IS,IN,ID,IR,IQ,IE,IL,IT,JP,MY,NP,NL,NZ,NO,PK,PY,PE,PH,PL,PT,PR,'
+			'RO,RU,SA,RS,SG,SK,SI,ZA,ES,LK,SE,CH,TH,TR,UA,AE,GB,US,UY,VE,VN,YE,ZW'
+		)
+		return sorted((
+			{'code': i['iso_3166_1'], 'name': i['english_name']}
+			for i in get_tmdb(url) if i['iso_3166_1'] in region_list
+		), key=lambda k: k['name'])
+	string = 'tmdb_region_ids'
+	url = '%s/configuration/countries' % base_url
+	return cache_object(_process, string, url, expiration=EXPIRES_1_MONTH)
 
 def get_tmdblist(url, params=None, data=None, method=None):
 	if isinstance(url, dict): return get_tmdblist(str(url.pop('path')), **url)
@@ -386,33 +401,32 @@ def _get_tmdblist_paginated_list(url):
 	args = ({'path': url, 'params': {**params, 'page': page}} for page in range(2, pages + 1))
 	with ThreadPoolExecutor() as tpe: # keep max_workers as default, min(32, os.cpu_count() + 4)
 		for result in tpe.map(get_tmdblist, args): # ThreadPoolExecutor map preserves order
-			if isinstance(result, dict): items.extend(result['results'])
+			if isinstance(result, dict): items.extend(result['results']) # caution, hides thread exceptions
 	return items
 
-def tmdb_watchlist(mediatype, page, letter):
+def tmdb_watchlist(mediatype, page_no):
 	def first_aired(item):
 		if not item.get(premiered): return False
-		return js2date(item.get(premiered), str_format, remove_time=True) <= current_date
-	title, premiered = ('name', 'first_air_date') if mediatype == 'tv' else ('title', 'release_date')
+		return jsondate_to_datetime(item[premiered]).astimezone().date() <= current_date
+	title, premiered = ('title', 'release_date') if mediatype == 'movie' else ('name', 'first_air_date')
 	original_list = watchlist(mediatype)
 	if not show_unaired_watchlist():
 		current_date = get_datetime()
-		str_format = '%Y-%m-%d'
 		original_list = [i for i in original_list if first_aired(i)]
 	sort_key = lists_sort_order('watchlist')
 	if   sort_key == 2: original_list.sort(key=lambda k: k[premiered], reverse=True)
 	elif sort_key == 1: pass # api call for list specifies params created_at.desc
 	else: original_list = sort_for_article(original_list, title, ignore_articles())
-	if paginate(): return paginate_list(original_list, page, letter, page_limit())
+	if paginate(): return paginate_list(original_list, page_no, page_limit())
 	return original_list, 1
 
-def tmdb_favorites(mediatype, page, letter):
+def tmdb_favorites(mediatype, page_no):
 	original_list = favorites(mediatype)
-	if paginate(): return paginate_list(original_list, page, letter, page_limit())
+	if paginate(): return paginate_list(original_list, page_no, page_limit())
 	return original_list, 1
 
-def tmdb_recommendations(mediatype, page, letter):
-	original_list = recommendations(mediatype, page)
+def tmdb_recommendations(mediatype, page_no):
+	original_list = recommendations(mediatype, page_no)
 	final_list, total_pages = original_list['results'], original_list['total_pages']
 	return final_list, total_pages
 
@@ -435,11 +449,11 @@ def favorites(mediatype):
 	url += '?language=en-US&sort_by=created_at.desc'
 	return cache_object(_get_tmdblist_paginated_list, string, url)
 
-def recommendations(mediatype, page=1):
+def recommendations(mediatype, page_no=1):
 	account_id = get_setting('tmdb.account_id')
-	string = 'tmdblist_recommendations_%s_%s_%s' % (account_id, mediatype, page)
+	string = 'tmdblist_recommendations_%s_%s_%s' % (account_id, mediatype, page_no)
 	url = '%s/account/%s/%s/recommendations' % (list_url, account_id, mediatype)
-	url += '?language=en-US&page=%s' % page
+	url += '?language=en-US&page=%s' % page_no
 	return cache_object(get_tmdblist, string, url)
 
 def user_lists():
@@ -524,7 +538,7 @@ def import_trakt_list(params):
 	send_str = 'Sending items to TMDB...'
 	try:
 		progressBG = kodi_utils.progressDialogBG
-		progressBG.create(send_str, tmdb_list_heading)
+		progressBG.create(send_str, tmdblist_heading)
 		list_id, user, slug = params['trakt_list_id'], params['user'], params['list_slug']
 		items = get_trakt_list_contents(params.get('list_type'), list_id, user, slug)
 		len_items, wait = len(items), sum(1000 for i in chunks(items, 500))
@@ -546,7 +560,7 @@ def import_mdbl_list(params):
 	send_str = 'Sending list to TMDB...'
 	try:
 		progressBG = kodi_utils.progressDialogBG
-		progressBG.create(send_str, tmdb_list_heading)
+		progressBG.create(send_str, tmdblist_heading)
 		items = get_mdbl_list_contents(params['mdbl_list_id'], None)
 		len_items, wait = len(items), sum(1000 for i in chunks(items, 500))
 		for count, item in enumerate(items, 1):

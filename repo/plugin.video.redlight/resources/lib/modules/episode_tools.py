@@ -137,15 +137,16 @@ def build_next_episode_manager():
 	hidden_list = get_hidden_progress_items(indicators)
 	if indicators == 0: icon, mode = kodi_utils.get_icon('folder'), 'hide_unhide_progress_items'
 	elif indicators == 2: icon, mode = kodi_utils.get_icon('simkl'), 'simkl.simkl_hide_unhide_progress_items'
+	elif indicators == 3: icon, mode = kodi_utils.get_icon('mdblist'), 'mdblist.mdblist_hide_unhide_progress_items'
 	else: icon, mode = kodi_utils.get_icon('trakt'), 'trakt.hide_unhide_progress_items'
 	threads = TaskPool().tasks(_process, show_list, min(len(show_list), max_threads()))
 	[i.join() for i in threads]
 	item_list = sorted(list_items, key=lambda k: (title_key(k['sort_title'], ignore_articles())), reverse=False)
 	item_list = [i['listitem'] for i in item_list]
 	kodi_utils.add_items(handle, item_list)
-	kodi_utils.set_content(handle, '')
+	kodi_utils.set_content(handle, 'files')
 	kodi_utils.end_directory(handle, cacheToDisc=False)
-	kodi_utils.set_view_mode('view.main', '')
+	kodi_utils.set_view_mode('view.main', 'files', False)
 
 def single_last_watched_episodes(data):
 	seen = set()

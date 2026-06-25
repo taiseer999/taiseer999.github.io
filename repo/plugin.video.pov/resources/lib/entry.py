@@ -37,13 +37,15 @@ class Router:
 			from menus.discover import Discover
 			runmode(Discover(params), mode.split('.')[1])
 		elif mode == 'media_play':
-			from modules.kodi_utils import player, close_all_dialog
-			close_all_dialog()
-			player.play(params['url'])
+			from modules.debrid import Source
+			source = Source.fromcloud(params)
+			url = source.resolve_internal_sources(source.direct_debrid_link)
+			return kodi_utils.execute_builtin('PlayMedia(%s)' % url)
 		elif mode == 'play_media':
 			from modules.sources import Sources
 			Sources.factory(params)
 		elif 'choice' in mode:
+			from indexers import list_manager
 			from modules import dialogs
 			if mode == 'scraper_color_choice':
 				dialogs.scraper_color_choice(params['setting'])
@@ -66,11 +68,11 @@ class Router:
 			elif mode == 'favorites_choice':
 				dialogs.favorites_choice(params)
 			elif mode == 'trakt_manager_choice':
-				dialogs.trakt_manager_choice(params)
-			elif mode == 'tmdb_manager_choice':
-				dialogs.tmdb_manager_choice(params)
+				list_manager.TraktManager(params).manage()
 			elif mode == 'mdbl_manager_choice':
-				dialogs.mdbl_manager_choice(params)
+				list_manager.MdbListManager(params).manage()
+			elif mode == 'tmdb_manager_choice':
+				list_manager.TmdbManager(params).manage()
 			elif mode == 'set_language_filter_choice':
 				dialogs.set_language_filter_choice(params['filter_setting'])
 			elif mode == 'extras_lists_choice':
@@ -95,10 +97,10 @@ class Router:
 				function(params)
 		elif 'tmdb.' in mode:
 			if 'edit_tmdb_list' in mode:
-				from menus.tmdb import edit_tmdb_list
+				from indexers.list_manager import edit_tmdb_list
 				edit_tmdb_list(params)
 			elif 'update_tmdb_list' in mode:
-				from menus.tmdb import update_tmdb_list
+				from indexers.list_manager import update_tmdb_list
 				update_tmdb_list(params)
 			else:
 				from modules.utils import manual_function_import
@@ -198,20 +200,17 @@ class Router:
 			function = manual_function_import('menus.easynews', mode.split('.')[-1])
 			function(params)
 		elif 'alldebrid' in mode:
-			from menus.alldebrid import Menu, resolve_ad
-			if 'resolve_' in mode: resolve_ad(params)
-			else: Menu().run(params)
+			from menus.alldebrid import Menu
+			Menu().run(params)
 		elif 'premiumize' in mode:
 			from menus.premiumize import Menu
 			Menu().run(params)
 		elif 'real_debrid' in mode:
-			from menus.real_debrid import Menu, resolve_rd
-			if 'resolve_' in mode: resolve_rd(params)
-			else: Menu().run(params)
+			from menus.real_debrid import Menu
+			Menu().run(params)
 		elif 'torbox' in mode:
-			from menus.torbox import Menu, resolve_tb
-			if 'resolve_' in mode: resolve_tb(params)
-			else: Menu().run(params)
+			from menus.torbox import Menu
+			Menu().run(params)
 		elif 'offcloud' in mode:
 			from menus.offcloud import Menu
 			Menu().run(params)
@@ -259,8 +258,8 @@ class Router:
 			from menus.people import person_data_dialog
 			person_data_dialog(params)
 		elif mode == 'downloader':
-			from modules.downloader import runner
-			runner(params)
+			from modules.downloader import factory
+			factory(params)
 		elif mode == 'clean_databases':
 			from modules.cache import clean_databases
 			clean_databases()
@@ -300,6 +299,9 @@ class POVMonitor(kodi_utils.xbmc_monitor):
 
 	def __exit__(self, exc_type, exc_value, traceback):
 		for i in self.threads: i.join()
+
+	def ver(*args):
+		return f"{kodi_utils.get_addoninfo('id')}-{kodi_utils.get_addoninfo('version')}"
 
 	def startUpServices(self):
 		try: initializeDatabases()
@@ -426,7 +428,7 @@ def traktMonitor():
 			monitor.waitForAbort(5)
 		value, interval = settings.trakt_sync_interval()
 		next_update_string = update_string % value
-		try: status = trakt_sync_activities()
+		try: status = trakt_sync_activities(init_callback=True)
 		except: status = 'failed'
 		if status == 'success':
 			logger('POV', trakt_service_string % ('POV TraktMonitor - Success', 'Trakt Update Performed'))

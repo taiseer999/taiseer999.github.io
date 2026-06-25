@@ -73,15 +73,16 @@ def language_invoker_choice(params):
 	addon_xml = kodi_utils.translate_path('special://home/addons/plugin.video.redlight/addon.xml')
 	root = mdParse(addon_xml)
 	invoker_instance = root.getElementsByTagName('reuselanguageinvoker')[0].firstChild
-	current_invoker_setting = invoker_instance.data
+	current_invoker_setting = (invoker_instance.data or 'true').strip().lower()
 	new_value = {'true': 'false', 'false': 'true'}[current_invoker_setting]
-	if not kodi_utils.confirm_dialog(text='Turn [B]Reuse Langauage Invoker[/B] %s?' % ('On' if new_value == 'true' else 'Off')): return
+	if not kodi_utils.confirm_dialog(text='Turn [B]Reuse Language Invoker[/B] %s?' % ('On' if new_value == 'true' else 'Off')): return
+	if new_value == 'true' and not kodi_utils.confirm_dialog(text='Enabling this setting may cause instability on some devices.[CR][CR]Continue?'): return
 	invoker_instance.data = new_value
 	new_xml = str(root.toxml()).replace('<?xml version="1.0" ?>', '')
 	with open(addon_xml, 'w') as f: f.write(new_xml)
 	set_setting('reuse_language_invoker', new_value)
-	kodi_utils.update_local_addons()
-	kodi_utils.disable_enable_addon()
+	kodi_utils.finish_addon_xml_sync()
+	kodi_utils.restart_addon_for_addon_xml_change(notify=False)
 
 def addon_icon_choice(params):
 	import os
@@ -633,6 +634,10 @@ def simkl_manager_choice(params):
 	from apis import simkl_api
 	return simkl_api.simkl_manager_choice(params)
 
+def mdblist_manager_choice(params):
+	from apis import mdblist_api
+	return mdblist_api.mdblist_manager_choice(params)
+
 def episode_groups_choice(params):
 	from modules.metadata import episode_groups
 	episode_group_types = {1: 'Original Air Date', 2: 'Absolute', 3: 'DVD', 4: 'Digital', 5: 'Story Arc', 6: 'Production', 7: 'TV'}
@@ -1032,6 +1037,8 @@ def options_menu_choice(params, meta=None):
 	listing_append = listing.append
 	if from_extras:
 		if menu_type in ('movie', 'episode'): listing_append(('Playback Options', 'Scrapers Options', 'playback_choice'))
+	if menu_type in ('movie', 'tvshow'):
+		if settings.mdblist_user_active(): listing_append(('MDBList Manager', '', 'mdblist_manager'))
 		if settings.simkl_user_active(): listing_append(('Simkl Lists Manager', '', 'simkl_manager'))
 		if settings.trakt_user_active(): listing_append(('Trakt Lists Manager', '', 'trakt_manager'))
 		listing_append(('TMDb Lists Manager', '', 'tmdblists_manager_choice'))
@@ -1106,6 +1113,9 @@ def options_menu_choice(params, meta=None):
 		return trakt_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id or 'None', 'media_type': content, 'icon': poster})
 	if choice == 'simkl_manager':
 		return simkl_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id or 'None', 'media_type': content, 'icon': poster,
+									'title': title, 'season': season, 'episode': episode})
+	if choice == 'mdblist_manager':
+		return mdblist_manager_choice({'tmdb_id': tmdb_id, 'imdb_id': imdb_id, 'tvdb_id': tvdb_id or 'None', 'media_type': content, 'icon': poster,
 									'title': title, 'season': season, 'episode': episode})
 	if choice == 'personallists_manager_choice':
 		from modules.utils import get_current_timestamp

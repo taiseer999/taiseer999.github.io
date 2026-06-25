@@ -4,7 +4,7 @@
 """
 
 import ctypes, random, time
-import re, requests
+import requests
 from fenom import client, source_utils
 
 
@@ -28,7 +28,7 @@ class source:
 		try:
 			self.title = data['tvshowtitle'] if 'tvshowtitle' in data else data['title']
 			self.title = self.title.replace('&', 'and').replace('Special Victims Unit', 'SVU').replace('/', ' ')
-			self.aliases = data['aliases']
+			self.aliases = source_utils.aliases_to_array(data['aliases'])
 			self.episode_title = data['title'] if 'tvshowtitle' in data else None
 			self.total_seasons = data['total_seasons'] if 'tvshowtitle' in data else None
 			self.year = data['year']
@@ -73,13 +73,15 @@ class source:
 
 				if not source_utils.check_title(self.title, self.aliases, name, self.hdlr, self.year):
 					if self.total_seasons is None: continue
-					valid, last_season = source_utils.filter_show_pack(self.title, self.aliases, self.imdb, self.year, self.season_x, name, self.total_seasons)
+					valid, episode_start, episode_end = source_utils.filter_season_pack(self.title, self.aliases, self.year, self.season_x, name)
 					if not valid:
-						valid, episode_start, episode_end = source_utils.filter_season_pack(self.title, self.aliases, self.year, self.season_x, name)
+						valid, last_season = source_utils.filter_show_pack(self.title, self.aliases, self.imdb, self.year, self.season_x, name, self.total_seasons)
 						if not valid: continue
-						else: package = 'season'
-					else: package = 'show'
-				name_info = source_utils.info_from_name(name, self.title, self.year, self.hdlr, self.episode_title)
+						else: package = 'show'
+					else: package = 'season'
+				if package in ('season', 'show'):
+					name_info = source_utils.info_from_name(name, self.title, self.year, season=self.season_x, pack=package)
+				else: name_info = source_utils.info_from_name(name, self.title, self.year, self.hdlr, self.episode_title)
 				if source_utils.remove_lang(name_info, self.check_foreign_audio): continue
 				if self.undesirables and source_utils.remove_undesirables(name_info, self.undesirables): continue
 
