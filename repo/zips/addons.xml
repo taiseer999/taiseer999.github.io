@@ -2184,6 +2184,37 @@ v1.6.6
         </assets>
         <news lang="en_GB">v1.7.0 - Added chinese translations and other bug fixes.</news>
     </extension>
+</addon><addon id="plugin.video.tmdb.bingie.helper" version="1.0.2" name="TMDb Bingie Helper" provider-name="jurialmunkey,matke">
+<requires>
+  <import addon="xbmc.python" version="3.0.1" />
+  <import addon="script.module.requests" version="2.9.1" />
+  <import addon="script.module.pil" version="1.1.7" />
+  <import addon="script.module.addon.signals" version="0.0.6" />
+  <import addon="script.module.bingie" version="1.0.0" />
+  <import addon="script.module.infotagger" version="0.0.5" />
+  <import addon="script.module.beautifulsoup4" version="4.9.3" />
+  <import addon="script.module.qrcode" version="6.1.0" />
+</requires>
+<extension point="xbmc.python.pluginsource" library="resources/plugin.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.python.script" library="resources/script.py" />
+<extension point="xbmc.service" library="resources/service.py" />
+<extension point="xbmc.python.module" library="resources/modules" />
+<extension point="xbmc.addon.metadata">
+  <reuselanguageinvoker>false</reuselanguageinvoker>
+  <summary lang="en_GB">TMDb Bingie Helper</summary>
+  <description lang="en_GB">TMDb Bingie Helper provides details about movies, tvshows and actors from TMDb. Users can access a variety of lists from TMDb TVDb MDbList and Trakt.</description>
+  <disclaimer lang="en_GB">Data provided by TMDb TVDb MDbList OMDb FanartTV and Trakt. Some of the information is provided by TheTVDB.com. Please consider supporting them. https://thetvdb.com/subscribe</disclaimer>
+  <license>GPL-3.0-or-later</license>
+  <website>https://github.com/matke-84/plugin.video.tmdb.bingie.helper</website>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+    <screenshot>resources/screenshot-01.jpg</screenshot>
+    <screenshot>resources/screenshot-02.jpg</screenshot>
+  </assets>
+</extension>
 </addon><addon id="plugin.video.umbrella" name="Umbrella" provider-name="Umbrella" version="6.7.53">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -3125,6 +3156,23 @@ By using or contributing to this repository, you agree that the developer is not
       <fanart>fanart.jpg</fanart>
     </assets> 
   </extension>
+</addon><addon id="repository.signde" name="signde Repository" version="1.1" provider-name="signde">
+    <extension point="xbmc.addon.repository" name="signde Repository">
+        <dir minversion="21.0.0" maxversion="21.99.99">
+            <info compressed="false">https://signde.github.io/repository.signde/addons/zips/addons.xml</info>
+            <checksum>https://signde.github.io/repository.signde/addons/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://signde.github.io/repository.signde/addons/zips/</datadir>
+        </dir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>signde Repository</summary>
+        <description>Repository of skins for cpm/avdvplus/p3i based CoreELEC builds formerly maintained by jamal2362.</description>
+        <disclaimer />
+        <platform>all</platform>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+    </extension>
 </addon><addon id="repository.slyguy" name="SlyGuy Repository" provider-name="SlyGuy" version="0.0.9">
   <extension point="xbmc.addon.repository" name="SlyGuy Repository">
     <dir>
@@ -3432,6 +3480,18 @@ By using or contributing to this repository, you agree that the developer is not
 		<description lang="en">Skin Backgrounds Pack - Titanium</description>
 		<platform>all</platform>
 	</extension>
+</addon><addon id="resource.images.skinicons.classicwhite" name="Skin Icons - Classic White Design" version="1.0.1" provider-name="Orna Post, Benny Buchnik">
+	<extension point="kodi.resource.images" compile="false" type="skinicons" />
+	<requires>
+		<import addon="kodi.resource" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Skin Icons Pack - Classic White Design</summary>
+		<description lang="en">Skin Icons Pack - Classic White Design</description>
+		<summary lang="he">חבילת אייקונים - לבן קלאסי</summary>
+		<description lang="he"> חבילת אייקונים - לבן קלאסי</description>
+		<platform>all</platform>
+	</extension>
 </addon><addon id="resource.images.skinicons.wide" name="Skin Icons - Wide" version="1.0.5" provider-name="marcelveldt, cartman.dos">
 	<extension point="kodi.resource.images" compile="false" type="skinicons" />
 	<requires>
@@ -3719,6 +3779,79 @@ v.3.3.7
 		<assets>
 				<icon>icon.png</icon>
 		</assets>
+    </extension>
+</addon><addon id="script.bingie.helper" name="Bingie Helper" version="1.1.2" provider-name="cartman.dos, matke">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.simplejson" version="3.17.0" />
+	</requires>
+	<extension point="xbmc.python.script" library="default.py" />
+	<extension point="xbmc.addon.metadata">
+		<language />
+		<summary lang="en">Bingie Helper</summary>
+		<description lang="en">Helper for some of Bingie skin features.</description>
+		<platform>all</platform>
+		<license>GPL v3.0</license>
+		<forum />
+		<website />
+		<source>https://github.com/matke-84/script.bingie.helper/</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+		</assets>
+	</extension>
+</addon><addon id="script.bingie.toolbox" name="Bingie Toolbox" version="1.0.0" provider-name="matke">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0" />
+        <import addon="xbmc.addon" version="12.0.0" />
+        <import addon="script.module.simplejson" version="3.3.0" />
+		<import addon="script.module.simplecache" version="1.0.0" />
+    </requires>
+
+    <extension point="xbmc.python.library" library="default.py" />
+    <extension point="xbmc.python.pluginsource" library="plugin.py" />
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Bingie Toolbox</summary>
+        <description>Toolbox for Bingie skin.</description>
+		<assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+        <language />
+        <platform>all</platform>
+        <license>GPL v2.0</license>
+        <forum />
+        <website />
+        <source />
+    </extension>
+</addon><addon id="script.bingie.widgets" name="Bingie Widgets" version="1.0.1" provider-name="matke">
+    <requires>
+		<import addon="xbmc.python" version="3.0.0" />
+        <import addon="xbmc.addon" version="12.0.0" />
+        <import addon="script.module.simplecache" version="2.0.2" />
+		<import addon="script.module.requests" version="2.9.1" />
+        <import addon="script.module.infotagger" version="0.0.4" />
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+        <provides>video</provides>
+    </extension>
+    <extension library="service.py" point="xbmc.service" start="login" />
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Bingie Widgets</summary>
+        <description>Widgets for Bingie skin.</description>
+		<assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+        <language />
+        <platform>all</platform>
+        <license>GPL v2.0</license>
+        <forum />
+        <website />
+        <source />
     </extension>
 </addon><addon id="script.colorbox" name="colorbox Script" version="2.0.8" provider-name="BADMS, drinfernoo">
 	<requires>
@@ -4289,6 +4422,21 @@ v.3.3.7
 	<source>https://code.launchpad.net/beautifulsoup</source>
     <assets>
       <icon>resources/icon.png</icon>
+    </assets>
+  </extension>
+</addon><addon id="script.module.bingie" name="bingie common" provider-name="jurialmunkey,matke" version="1.0.0">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1" />
+    <import addon="script.module.requests" version="2.9.1" />
+    <import addon="script.module.infotagger" version="0.0.5" />
+  </requires>
+  <extension point="xbmc.python.module" library="resources/modules" />
+  <extension point="xbmc.addon.metadata">
+    <description lang="en_GB">Common code required by TMDb Bingie Helper.</description>
+    <license>GPL-3.0-or-later</license>
+    <website>https://github.com/matke-84/script.module.bingie</website>
+    <assets>
+      <icon>icon.png</icon>
     </assets>
   </extension>
 </addon><addon id="script.module.bottle" name="Bottle" version="0.12.23" provider-name="Marcel Hellkamp">
@@ -7767,6 +7915,40 @@ Added arabic fonts
         <description lang="fr">Arctic: Zephyr - Martian est basé sur le skin original Arctic: Zephyr, créé par jurialmunkey et son extension par beatmasterRS. Arctic se focalise sur le fait d'être simple, claire et minimaliste.</description>
         <description lang="zh_CN">Arctic: Zephyr - Martian 是基于 jurialmunkey 所创 Arctic 皮肤的第三个版本，以及 beatmasterRS 对该皮肤的扩展版本。Arctic 系列皮肤主打简洁、干净且简约的风格，并略带独特设计巧思。</description>
     </extension>
+</addon><addon id="skin.bingie" version="33.2.0.2" name="Bingie (p3i)" provider-name="matke, signde">
+	<requires>
+		<import version="5.17.0" addon="xbmc.gui" />
+		<import addon="script.bingie.helper" version="1.1.2" />
+		<import addon="script.bingie.toolbox" version="1.0.0" />
+		<import addon="script.bingie.widgets" version="1.0.1" />
+		<import addon="script.skinshortcuts" version="2.0.3" />
+		<import addon="resource.images.studios.coloured" version="1.0.0" />
+		<import addon="plugin.video.tmdb.bingie.helper" version="1.0.1" />
+		<import addon="plugin.program.autocompletion" version="2.1.3" />
+	</requires>
+	<extension debugging="false" defaultthemename="Textures.xbt" effectslowdown="1" point="xbmc.gui.skin">
+        <res aspect="16:9" default="true" folder="1080i" height="1080" width="1920" />
+    </extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Kodi skin with Netflix layout.</summary>
+		<summary lang="zh_CN">Netflix 布局 Kodi 皮肤。</summary>
+		<summary lang="es_ES">Kodi con diseño Netflix.</summary>
+		<summary lang="es_AR">Kodi con diseño Netflix.</summary>
+		<summary lang="es_MX">Kodi con diseño Netflix.</summary>
+		<description lang="en_GB">Bingie – The home of your favorite movies and shows!</description>
+		<description lang="zh_CN">Bingie -你最喜欢的电影和节目的主界面！</description>
+		<description lang="es_ES">Bingie - tu hogar de películas y series favoritas!</description>
+		<description lang="es_AR">Bingie - tu hogar de películas y series favoritas!</description>
+		<description lang="es_MX">Bingie - tu hogar de películas y series favoritas!</description>
+		<platform>all</platform>
+		<license>GPL v2.0</license>
+		<forum />
+		<source />
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>			
+		</assets>
+	</extension>
 </addon><addon id="slyguy.trailers" name="SlyGuy Trailers" provider-name="SlyGuy" version="0.0.34">
     <requires>
         <import addon="script.module.slyguy" version="0.86.20" />
