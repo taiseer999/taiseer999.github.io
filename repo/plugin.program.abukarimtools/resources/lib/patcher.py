@@ -531,6 +531,34 @@ PATCHES = [
         'inject_content_b64': "ewogICAgIm5hbWUiOiAiW0NPTE9SIHJlZF1VbWJyZWxsYVsvQ09MT1JdIiwKICAgICJwbHVnaW4iOiAicGx1Z2luLnZpZGVvLnVtYnJlbGxhIiwKICAgICJwcmlvcml0eSI6IDMwMCwKICAgICJpc19yZXNvbHZhYmxlIjogImZhbHNlIiwKICAgICJwbGF5X2VwaXNvZGUiOiAiZXhlY3V0ZWJ1aWx0aW46Ly9SdW5QbHVnaW4ocGx1Z2luOi8vcGx1Z2luLnZpZGVvLnVtYnJlbGxhLz9hY3Rpb249cGxheSZ0aXRsZT17dGl0bGVfdXJsfSZ5ZWFyPXtzaG93eWVhcn0maW1kYj17aW1kYn0mdG1kYj17dG1kYn0mdHZkYj17dHZkYn0mc2Vhc29uPXtzZWFzb259JmVwaXNvZGU9e2VwaXNvZGV9JnR2c2hvd3RpdGxlPXtzaG93bmFtZV91cmx9JnByZW1pZXJlZD17Zmlyc3RhaXJlZH0mbWV0YT0lN0IlMjJyYXRpbmclMjIlM0ErJTIyJTIyJTJDKyUyMmNvZGUlMjIlM0ErJTIye2ltZGJ9JTIyJTJDKyUyMnRtZGIlMjIlM0Ere3RtZGJ9JTJDKyUyMmltZGIlMjIlM0ErJTIye2ltZGJ9JTIyJTJDKyUyMnllYXIlMjIlM0ErJTIye3Nob3d5ZWFyfSUyMiUyQyslMjJkdXJhdGlvbiUyMiUzQSslMjIlMjIlMkMrJTIycGxvdCUyMiUzQSslMjJ7cGxvdF9lc2NhcGVkfSUyMiUyQyslMjJ2b3RlcyUyMiUzQSslMjIlMjIlMkMrJTIydGh1bWIlMjIlM0ErJTIye3RodW1ibmFpbH0lMjIlMkMrJTIydGl0bGUlMjIlM0ErJTIye3RpdGxlX3VybH0lMjIlMkMrJTIydHZkYiUyMiUzQSslMjJ7dHZkYn0lMjIlMkMrJTIybGFiZWwlMjIlM0ErJTIye3RpdGxlX3VybH0lMjIlMkMrJTIyc2Vhc29uJTIyJTNBKyUyMntzZWFzb259JTIyJTJDKyUyMnN0YXR1cyUyMiUzQSslMjIlMjIlMkMrJTIycG9zdGVyJTIyJTNBKyUyMntwb3N0ZXJ9JTIyJTJDKyUyMnR2c2hvd3RpdGxlJTIyJTNBKyUyMntzaG93bmFtZV91cmx9JTIyJTJDKyUyMm1lZGlhdHlwZSUyMiUzQSslMjJlcGlzb2RlJTIyJTJDKyUyMmVwaXNvZGUlMjIlM0ErJTIye2VwaXNvZGV9JTIyJTJDKyUyMnN0dWRpbyUyMiUzQSslMjIlMjIlMkMrJTIyZ2VucmUlMjIlM0ErJTIyJTIyJTJDKyUyMmJhbm5lciUyMiUzQSslMjJ7dGh1bWJuYWlsfSUyMiUyQyslMjJwcmVtaWVyZWQlMjIlM0ErJTIye2ZpcnN0YWlyZWR9JTIyJTJDKyUyMmZhbmFydCUyMiUzQSslMjJ7ZmFuYXJ0fSUyMiU3RCkiLAogICAgInBsYXlfbW92aWUiOiAiZXhlY3V0ZWJ1aWx0aW46Ly9SdW5QbHVnaW4ocGx1Z2luOi8vcGx1Z2luLnZpZGVvLnVtYnJlbGxhLz9hY3Rpb249cGxheSZ0aXRsZT17dGl0bGVfdXJsfSZ5ZWFyPXt5ZWFyfSZpbWRiPXtpbWRifSZ0bWRiPXt0bWRifSZtZXRhPSU3QiUyMnJhdGluZyUyMiUzQSslMjIlMjIlMkMrJTIyY29kZSUyMiUzQSslMjJ7aW1kYn0lMjIlMkMrJTIydG1kYiUyMiUzQSslMjJ7aWR9JTIyJTJDKyUyMmltZGIlMjIlM0ErJTIye2ltZGJ9JTIyJTJDKyUyMnllYXIlMjIlM0ErJTIye3llYXJ9JTIyJTJDKyUyMmR1cmF0aW9uJTIyJTNBKyUyMiUyMiUyQyslMjJwbG90JTIyJTNBKyUyMntwbG90X2VzY2FwZWR9JTIyJTJDKyUyMnZvdGVzJTIyJTNBKyUyMiUyMiUyQyslMjJ0aXRsZSUyMiUzQSslMjJ7dGl0bGVfdXJsfSUyMiUyQyslMjJmYW5hcnQlMjIlM0ErJTIye2ZhbmFydH0lMjIlMkMrJTIydGFnbGluZSUyMiUzQSslMjIlMjIlMkMrJTIyd3JpdGVyJTIyJTNBKyUyMiUyMiUyQyslMjJuZXh0JTIyJTNBKyUyMiUyMiUyQyslMjJwb3N0ZXIlMjIlM0ErJTIye3Bvc3Rlcn0lMjIlMkMrJTIybWVkaWF0eXBlJTIyJTNBKyUyMm1vdmllJTIyJTJDKyUyMmRpcmVjdG9yJTIyJTNBKyUyMiUyMiUyQyslMjJzdHVkaW8lMjIlM0ErJTIyJTIyJTJDKyUyMmdlbnJlJTIyJTNBKyUyMiUyMiUyQyslMjJtZXRhY2FjaGUlMjIlM0ErdHJ1ZSUyQyslMjJwcmVtaWVyZWQlMjIlM0ErJTIye3ByZW1pZXJlZH0lMjIlMkMrJTIyb3JpZ2luYWx0aXRsZSUyMiUzQSslMjJ7dGl0bGVfdXJsfSUyMiUyQyslMjJjYXN0JTIyJTNBKyU1QiUyMnthY3RvcnN9JTIyJTVEJTJDKyUyMm1wYWElMjIlM0ErJTIyJTIyJTdEKSIsCiAgICAicmVxdWlyZXNfaWRzIjogdHJ1ZQp9",
         'already_patched_check': None,
     },
+    # ── TMDbHelper – pin max_threads=3 in addon_data settings.xml (prevents CPythonInvoker storm / UI freeze on AM6B) ──
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'old': '', 'new': '',
+        'regex_only': True,
+        'not_found_ok': True,
+        'fallback_pattern': r'<setting id="max_threads">[^<]*</setting>',
+        'fallback_repl': '<setting id="max_threads">3</setting>',
+        'count': 0,
+        'description': 'TMDbHelper - pin max_threads=3 (cap concurrent CPythonInvoker threads to stop UI freeze on AM6B)',
+        'already_patched_check': '<setting id="max_threads">3</setting>',
+    },
+    # ── TMDbHelper – add max_threads=3 if the key is missing from settings.xml (first-run schema gap) ──
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'base': 'addon_data',
+        'rel_path': 'settings.xml',
+        'old': '', 'new': '',
+        'regex_only': True,
+        'not_found_ok': True,
+        'fallback_pattern': r'(</settings>)',
+        'fallback_repl': '    <setting id="max_threads">3</setting>\n\\1',
+        'count': 1,
+        'description': 'TMDbHelper - insert max_threads=3 before </settings> when key absent',
+        'already_patched_check': '<setting id="max_threads">',
+    },
 ]
 
 
