@@ -472,6 +472,15 @@ PATCHES = [
         'description': 'RedLight - hardcode dark unfocused source card (FF1F2020) so empty window_theme.sources no longer renders white',
         'already_patched_check': '<texture colordiffuse="FF1F2020" border="30">redlight_common/circle.png</texture>',
     },
+    # ── RedLight – kill volume_checker (stops ~30% playback volume drop via forced SetVolume) ──
+    {
+        'addon_id': 'plugin.video.redlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
+        'old': "def volume_checker():\n\t# 0% == -60db, 100% == 0db",
+        'new': "def volume_checker():\n\treturn  # ABUKARIM: disabled - was forcing SetVolume() and dropping playback volume\n\t# 0% == -60db, 100% == 0db",
+        'description': 'RedLight - neutralize volume_checker so it no longer forces SetVolume() and drops playback volume',
+        'already_patched_check': 'ABUKARIM: disabled - was forcing SetVolume()',
+    },
     # ── TMDbHelper – suppress "not playable" popup for player-hack (is_resolvable:false) players ──
     {
         'addon_id': 'plugin.video.themoviedb.helper',

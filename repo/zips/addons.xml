@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.9.2" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.9.3" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -635,7 +635,9 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.9.0
+    <news>v1.6.9.3
+- RedLight: patch kills volume_checker (was forcing SetVolume() and dropping playback volume ~30%).
+v1.6.9.0
 - First-run: CoreELEC reboot prompt 10s after skin loads (YES reboots so autostart.sh runs).
 v1.6.8.9
 - Auto-run first-run on new build apply via shipped resources/build.id (wipe-proof self-trigger).
