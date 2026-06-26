@@ -33,6 +33,19 @@ PIERS_JSON = ('https://raw.githubusercontent.com/taiseer999/'
 TITLE = 'ABUKARIM – Skin Installer'
 
 
+# ---------------------------------------------------------------------------
+# Companion add-ons: when a given skin is installed, silently pull one or more
+# companion add-ons from the SAME repo (same repo/zips/<id>/ path) with no
+# prompt and without switching skins. Each companion's current version is read
+# from its own addon.xml in the repo, so the versioned zip name resolves
+# automatically without hardcoding it here.
+# ---------------------------------------------------------------------------
+_SKIN_COMPANIONS = {
+    'skin.arctic.fuse.3': ['plugin.video.themoviedb.helper'],
+    'skin.bingie':        ['script.skinshortcuts'],
+}
+
+
 def _notify(msg, icon=xbmcgui.NOTIFICATION_INFO, ms=3000):
     xbmcgui.Dialog().notification(TITLE, msg, icon, ms)
 
@@ -505,6 +518,159 @@ def _apply_skin(addonid, title):
     return True
 
 
+def _repo_base_from_zipurl(zipurl):
+    """Derive the repo's '.../repo/zips/' base from a skin's own zip URL.
+
+    A skins.json zip entry looks like:
+      https://.../taiseer999Piers.github.io/master/repo/zips/skin.x/skin.x-1.2.3.zip
+    Everything up to and including 'repo/zips/' is the shared base from which
+    companion add-ons are fetched, so the companion comes from the SAME repo
+    the user just selected (Piers / CE / Kodi) without hardcoding which one.
+    """
+    marker = '/repo/zips/'
+    idx = zipurl.find(marker)
+    if idx < 0:
+        return None
+    return zipurl[:idx + len(marker)]
+
+
+def _companion_version(repo_base, addonid):
+    """Read a companion add-on's current version from its addon.xml in the repo
+    so the versioned zip filename can be built. Returns '' on failure."""
+    url = '%s%s/addon.xml' % (repo_base, addonid)
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Kodi'})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = resp.read().decode('utf-8', 'replace')
+        import re
+        # The <addon ...> tag's own version (skip the xml prolog's version="1.0").
+        m = re.search(r'<addon\b[^>]*\bversion="([^"]+)"', data)
+        if m:
+            return m.group(1)
+    except Exception as e:
+        _log('companion version lookup failed for %s: %s' % (addonid, e))
+    return ''
+
+
+def _download_zip_silent(url):
+    """Download a zip with no progress dialog. Returns a temp path or None."""
+    _tmp_dir = xbmcvfs.translatePath('special://temp/')
+    os.makedirs(_tmp_dir, exist_ok=True)
+    tmp_fd, tmp_path = tempfile.mkstemp(suffix='.zip', prefix='abukarim_comp_',
+                                        dir=_tmp_dir)
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Kodi'})
+        with urllib.request.urlopen(req, timeout=30) as resp, \
+                os.fdopen(tmp_fd, 'wb') as fh:
+            tmp_fd = None
+            shutil.copyfileobj(resp, fh, 65536)
+        if not zipfile.is_zipfile(tmp_path):
+            _log('companion download corrupt: %s' % url)
+            os.remove(tmp_path)
+            return None
+        return tmp_path
+    except Exception as e:
+        _log('companion download failed (%s): %s' % (url, e))
+        if tmp_fd is not None:
+            try:
+                os.close(tmp_fd)
+            except OSError:
+                pass
+        try:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+        except OSError:
+            pass
+        return None
+
+
+def _extract_zip_silent(zip_path):
+    """Extract an add-on zip into the addons dir with no dialogs. The archive's
+    top-level folder is the add-on id, matching the main installer's layout."""
+    staging_parent = os.path.join(ADDONS_PATH, '.abukarim_staging')
+    staging_dir = None
+    try:
+        os.makedirs(staging_parent, exist_ok=True)
+        staging_dir = tempfile.mkdtemp(dir=staging_parent, prefix='comp_')
+        with zipfile.ZipFile(zip_path, 'r') as zf:
+            if zf.testzip():
+                return False
+            zf.extractall(staging_dir)
+        for top_name in os.listdir(staging_dir):
+            src = os.path.join(staging_dir, top_name)
+            dest = os.path.join(ADDONS_PATH, top_name)
+            if os.path.exists(dest):
+                shutil.rmtree(dest) if os.path.isdir(dest) else os.remove(dest)
+            try:
+                os.rename(src, dest)
+            except OSError:
+                (shutil.copytree(src, dest) if os.path.isdir(src)
+                 else shutil.copy2(src, dest))
+        return True
+    except Exception as e:
+        _log('companion extract failed: %s' % e)
+        return False
+    finally:
+        if staging_dir and os.path.exists(staging_dir):
+            try:
+                shutil.rmtree(staging_dir)
+            except Exception:
+                pass
+        try:
+            if os.path.exists(staging_parent) and not os.listdir(staging_parent):
+                os.rmdir(staging_parent)
+        except Exception:
+            pass
+        try:
+            os.remove(zip_path)
+        except OSError:
+            pass
+
+
+def _install_companions(skin_id, skin_zipurl):
+    """Silently install every companion mapped to skin_id, from the same repo.
+
+    Runs with no user-facing prompts and never changes the active skin. Any
+    failure is logged and skipped so it can never block the skin install the
+    user actually asked for.
+    """
+    companions = _SKIN_COMPANIONS.get(skin_id)
+    if not companions:
+        return
+
+    repo_base = _repo_base_from_zipurl(skin_zipurl)
+    if not repo_base:
+        _log('could not derive repo base from: %s' % skin_zipurl)
+        return
+
+    for addonid in companions:
+        try:
+            version = _companion_version(repo_base, addonid)
+            if version:
+                zip_url = '%s%s/%s-%s.zip' % (repo_base, addonid, addonid, version)
+            else:
+                # Fall back to an unversioned name if addon.xml couldn't be read.
+                zip_url = '%s%s/%s.zip' % (repo_base, addonid, addonid)
+
+            _log('silent companion install: %s <- %s' % (addonid, zip_url))
+            tmp = _download_zip_silent(zip_url)
+            if not tmp:
+                continue
+            if not _extract_zip_silent(tmp):
+                continue
+
+            # Register and enable it (skins like AF3 expect the companion ready,
+            # but we never switch the skin to it).
+            xbmc.executebuiltin('UpdateLocalAddons')
+            xbmc.sleep(1200)
+            _enable_addon(addonid)
+            _wait_addon_enabled(addonid, timeout_ms=8000)
+            _log('companion ready: %s (enabled=%s)'
+                 % (addonid, _addon_is_enabled(addonid)))
+        except Exception as e:
+            _log('companion install error for %s: %s' % (addonid, e))
+
+
 class SkinPortal(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
@@ -561,6 +727,11 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         if not _extract_zip(zip_path):
             return
         _log('installed via portal: %s (first_run=%s)' % (addonid, self.first_run))
+
+        # Silently pull any companion add-on(s) mapped to this skin from the
+        # SAME repo (e.g. AF3 -> TMDbHelper, Bingie -> skinshortcuts). No
+        # prompts, no skin switch — runs before we defer the skin apply.
+        _install_companions(addonid, zipurl)
 
         # Enable the freshly-extracted skin RIGHT NOW, before anything else
         # touches it. If it's left disabled, Kodi throws the 'Add-on required /
