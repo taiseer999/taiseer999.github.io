@@ -73,7 +73,7 @@
                     <aligny>center</aligny>
                     <height>40</height>
                     <label>[B]Next Episode In $INFO[Window.Property(nextep_remaining)][/B]</label>
-                    <font>font14</font> <!-- REDLIGHT_33 -->
+                    <font>font32</font> <!-- REDLIGHT_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
                 <!-- Waiting For Input -->
@@ -83,7 +83,7 @@
                     <aligny>center</aligny>
                     <height>40</height>
                     <label>[B]Waiting for Input $INFO[Window.Property(pause_timer)][/B]</label>
-                    <font>font14</font> <!-- REDLIGHT_33 -->
+                    <font>font32</font> <!-- REDLIGHT_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
             </control>
@@ -97,7 +97,7 @@
                     <aligny>center</aligny>
                     <height>40</height>
                     <label>[B]$INFO[Window.Property(still_watching_heading)]...$INFO[Window.Property(pause_timer)][/B]</label>
-                    <font>font14</font> <!-- REDLIGHT_33 -->
+                    <font>font32</font> <!-- REDLIGHT_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
             </control>
@@ -110,7 +110,7 @@
                     <aligny>center</aligny>
                     <height>40</height>
                     <label>[B]$INFO[Window.Property(still_watching_heading)]...$INFO[Window.Property(pause_timer)][/B]</label>
-                    <font>font14</font> <!-- REDLIGHT_33 -->
+                    <font>font32</font> <!-- REDLIGHT_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
             </control>
@@ -124,7 +124,7 @@
                     <aligny>center</aligny>
                     <height>40</height>
                     <label>[B]Keep Watching During Credits....[/B]</label>
-                    <font>font14</font> <!-- REDLIGHT_33 -->
+                    <font>font32</font> <!-- REDLIGHT_33 -->
                     <textcolor>FFB7B4BB</textcolor>
                 </control>
             </control>
@@ -333,7 +333,7 @@
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>During Credits Stinger</label>
-                        <font>font14</font> <!-- REDLIGHT_33 -->
+                        <font>font32</font> <!-- REDLIGHT_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                     </control>
                     <control type="image" id="201">
@@ -354,7 +354,7 @@
                         <align>left</align>
                         <aligny>center</aligny>
                         <label>After Credits Stinger</label>
-                        <font>font14</font> <!-- REDLIGHT_33 -->
+                        <font>font32</font> <!-- REDLIGHT_33 -->
                         <textcolor>FFB7B4BB</textcolor>
                     </control>
                 </control>
