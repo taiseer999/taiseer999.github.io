@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.9.6" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.6.9.7" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -635,7 +635,9 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.9.6
+    <news>v1.6.9.7
+- Backup Manager: exclude plugin.video.tmdb.bingie.helper and script.autoruns from backups (added to OpenWizard EXCLUDES).
+v1.6.9.6
 - Skin Switcher: skin.bingie disables stock TMDbHelper &amp; enables Bingie helper fork; any other skin does the reverse.
 v1.6.9.5
 - Removed Umbrella player deploy entry from patcher.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.6.9.6"
+       version="1.6.9.7"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,9 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.9.6
+    <news>v1.6.9.7
+- Backup Manager: exclude plugin.video.tmdb.bingie.helper and script.autoruns from backups (added to OpenWizard EXCLUDES).
+v1.6.9.6
 - Skin Switcher: skin.bingie disables stock TMDbHelper &amp; enables Bingie helper fork; any other skin does the reverse.
 v1.6.9.5
 - Removed Umbrella player deploy entry from patcher.
