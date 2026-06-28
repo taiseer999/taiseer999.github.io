@@ -46,6 +46,32 @@ def _set_setting(key, value):
         pass
 
 
+def _set_addon_enabled(addonid, enabled):
+    try:
+        query = ('{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
+                 '"params":{"addonid":"%s","enabled":%s},"id":1}'
+                 % (addonid, 'true' if enabled else 'false'))
+        xbmc.executeJSONRPC(query)
+        xbmc.log('[AbukarimTools SkinSwitcher] %s -> enabled=%s'
+                 % (addonid, enabled), xbmc.LOGINFO)
+    except Exception:
+        pass
+
+
+def _apply_helper_for_skin(skin_id):
+    # skin.bingie uses the Bingie TMDbHelper fork; every other skin uses the
+    # stock TMDbHelper. Disable the one NOT in use so only one is active.
+    BINGIE_SKIN  = 'skin.bingie'
+    STOCK_HELPER = 'plugin.video.themoviedb.helper'
+    BINGIE_HELPER = 'plugin.video.tmdb.bingie.helper'
+    if skin_id == BINGIE_SKIN:
+        _set_addon_enabled(STOCK_HELPER, False)
+        _set_addon_enabled(BINGIE_HELPER, True)
+    else:
+        _set_addon_enabled(BINGIE_HELPER, False)
+        _set_addon_enabled(STOCK_HELPER, True)
+
+
 def _swap_skin(addonid):
     _set_setting('lookandfeel.skin', addonid)
     # Confirm the 'Add-on required / enable this add-on?' dialog the SAME way
@@ -127,4 +153,5 @@ def run():
         return
 
     chosen_id = addon_ids[idx - 1]
+    _apply_helper_for_skin(chosen_id)
     _swap_skin(chosen_id)
