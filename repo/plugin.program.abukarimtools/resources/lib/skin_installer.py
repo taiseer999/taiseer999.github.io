@@ -427,18 +427,50 @@ def _disable_addon(addonid):
     except Exception as e:
         _log('SetAddonEnabled disable failed: %s' % e)
 
+
+def _wait_addon_disabled(addonid, timeout_ms=8000):
+    """Poll until Kodi reports the addon as DISABLED, or timeout."""
+    waited = 0
+    step = 200
+    while waited < timeout_ms:
+        if not _addon_is_enabled(addonid):
+            return True
+        xbmc.sleep(step)
+        waited += step
+    return not _addon_is_enabled(addonid)
+
+
 def _apply_helper_for_skin(skin_id):
     """skin.bingie uses the Bingie TMDbHelper fork; every other skin uses
-    the stock TMDbHelper. Keep only the matching one enabled."""
+    the stock TMDbHelper. Only ONE may be active at a time.
+
+    Running both forks together makes them fight over the dummy-file/RunPlugin
+    player handoff and hard-freezes playback. SetAddonEnabled is async (a
+    disabled addon's running service.py keeps going until it next checks the
+    abort flag), so we enable the wanted fork, disable the other, then BLOCK
+    until Kodi confirms the other is off and its service has had time to wind
+    down — before returning.
+    """
     BINGIE_SKIN   = 'skin.bingie'
     STOCK_HELPER  = 'plugin.video.themoviedb.helper'
     BINGIE_HELPER = 'plugin.video.tmdb.bingie.helper'
+
     if skin_id == BINGIE_SKIN:
-        _disable_addon(STOCK_HELPER)
-        _enable_addon(BINGIE_HELPER)
+        want, drop = BINGIE_HELPER, STOCK_HELPER
     else:
-        _disable_addon(BINGIE_HELPER)
-        _enable_addon(STOCK_HELPER)
+        want, drop = STOCK_HELPER, BINGIE_HELPER
+
+    _enable_addon(want)
+    _wait_addon_enabled(want, timeout_ms=8000)
+
+    _disable_addon(drop)
+    if _wait_addon_disabled(drop, timeout_ms=8000):
+        _log('inactive helper disabled: %s' % drop)
+    else:
+        _log('WARNING: %s still enabled after timeout' % drop)
+
+    # Give the disabled fork's service.py time to observe the abort and exit.
+    xbmc.sleep(1500)
 
 
 def _apply_skin(addonid, title):

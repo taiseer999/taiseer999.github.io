@@ -58,18 +58,68 @@ def _set_addon_enabled(addonid, enabled):
         pass
 
 
+def _addon_enabled_state(addonid):
+    """Return True only if Kodi reports the addon as ENABLED."""
+    try:
+        import json as _json
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Addons.GetAddonDetails",'
+            '"params":{"addonid":"%s","properties":["enabled"]},"id":1}' % addonid)
+        return _json.loads(resp).get('result', {}).get('addon', {}).get('enabled', False)
+    except Exception:
+        return False
+
+
+def _wait_enabled_state(addonid, want_enabled, timeout_ms=8000):
+    """Poll until the addon reaches the desired enabled/disabled state."""
+    waited = 0
+    step = 200
+    while waited < timeout_ms:
+        if _addon_enabled_state(addonid) == want_enabled:
+            return True
+        xbmc.sleep(step)
+        waited += step
+    return _addon_enabled_state(addonid) == want_enabled
+
+
 def _apply_helper_for_skin(skin_id):
     # skin.bingie uses the Bingie TMDbHelper fork; every other skin uses the
-    # stock TMDbHelper. Disable the one NOT in use so only one is active.
-    BINGIE_SKIN  = 'skin.bingie'
-    STOCK_HELPER = 'plugin.video.themoviedb.helper'
+    # stock TMDbHelper. Only ONE may be active at a time: running both forks at
+    # once makes them fight over the dummy-file/RunPlugin player handoff, which
+    # hard-freezes playback (the stock fork grabs a play action meant for the
+    # Bingie fork, calls the resolver, and deadlocks waiting for a handback).
+    #
+    # SetAddonEnabled is asynchronous: a disabled addon's already-running
+    # service.py keeps executing until it next checks the abort flag, so we must
+    # (1) enable the WANTED fork first, (2) disable the OTHER fork, then
+    # (3) BLOCK until Kodi confirms the other fork is actually disabled and give
+    # its service a moment to wind down — before returning so the skin swap (and
+    # any subsequent playback) happens with exactly one fork live.
+    BINGIE_SKIN   = 'skin.bingie'
+    STOCK_HELPER  = 'plugin.video.themoviedb.helper'
     BINGIE_HELPER = 'plugin.video.tmdb.bingie.helper'
+
     if skin_id == BINGIE_SKIN:
-        _set_addon_enabled(STOCK_HELPER, False)
-        _set_addon_enabled(BINGIE_HELPER, True)
+        want, drop = BINGIE_HELPER, STOCK_HELPER
     else:
-        _set_addon_enabled(BINGIE_HELPER, False)
-        _set_addon_enabled(STOCK_HELPER, True)
+        want, drop = STOCK_HELPER, BINGIE_HELPER
+
+    # 1) Enable the one we want and confirm it's on.
+    _set_addon_enabled(want, True)
+    _wait_enabled_state(want, True, timeout_ms=8000)
+
+    # 2) Disable the other and BLOCK until Kodi confirms it's off.
+    _set_addon_enabled(drop, False)
+    if _wait_enabled_state(drop, False, timeout_ms=8000):
+        xbmc.log('[AbukarimTools SkinSwitcher] inactive helper disabled: %s'
+                 % drop, xbmc.LOGINFO)
+    else:
+        xbmc.log('[AbukarimTools SkinSwitcher] WARNING: %s still enabled after '
+                 'timeout' % drop, xbmc.LOGWARNING)
+
+    # 3) Let the disabled fork's service.py observe the abort and exit before
+    #    we hand control back (services poll their monitor roughly once/second).
+    xbmc.sleep(1500)
 
 
 def _swap_skin(addonid):
@@ -153,5 +203,17 @@ def run():
         return
 
     chosen_id = addon_ids[idx - 1]
+
+    # Switching the active TMDbHelper fork while a video (or its dummy-file
+    # resolver) is mid-playback is exactly what deadlocks the player handoff.
+    # Stop any playback and let it fully tear down before we touch the forks.
+    if xbmc.Player().isPlaying():
+        xbmc.Player().stop()
+        waited = 0
+        while xbmc.Player().isPlaying() and waited < 5000:
+            xbmc.sleep(200)
+            waited += 200
+        xbmc.sleep(500)
+
     _apply_helper_for_skin(chosen_id)
     _swap_skin(chosen_id)
