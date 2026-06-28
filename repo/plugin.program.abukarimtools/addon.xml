@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.6.9.7"
+       version="1.6.9.11"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,16 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.9.7
+    <news>v1.6.9.11
+- Bingie helper Trakt QR FIX: corrected fork paths to resources/tmdbbingiehelper/lib/api/trakt/ (authenticator.py + qr_utils.py) and poller import to tmdbbingiehelper.lib... — the fork renames the package root to tmdbbingiehelper, so the stock tmdbhelper path was 'target not found'.
+v1.6.9.10
+- TMDbHelper/Bingie Trakt QR ROOT-CAUSE FIX: QR window injected to resources/skins/Default (capital D) and dialog now loads from 'Default' — was lowercase 'default', which works on macOS but NOT on case-sensitive CoreELEC, so the device silently fell back to the stock code+URL dialog (no QR).
+v1.6.9.9
+- TMDbHelper Trakt QR: poller patch now has a version-resilient regex fallback (re-applies after TMDbHelper updates / reinstalls; was silently reverting to the stock code+URL dialog).
+- Bingie helper (plugin.video.tmdb.bingie.helper): full Trakt QR auth ported (qr_utils.py, trakt_auth_qr.xml, authenticator.py poller swap), addon-id-corrected.
+v1.6.9.8
+- Skin Installer: installing skin.bingie disables stock TMDbHelper &amp; enables Bingie helper fork; installing any other skin does the reverse.
+v1.6.9.7
 - Backup Manager: exclude plugin.video.tmdb.bingie.helper and script.autoruns from backups (added to OpenWizard EXCLUDES).
 v1.6.9.6
 - Skin Switcher: skin.bingie disables stock TMDbHelper &amp; enables Bingie helper fork; any other skin does the reverse.

@@ -417,8 +417,33 @@ def _start_yes_watchdog():
     return _stop
 
 
+def _disable_addon(addonid):
+    """Disable the addon via JSON-RPC."""
+    try:
+        resp = xbmc.executeJSONRPC(
+            '{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
+            '"params":{"addonid":"%s","enabled":false},"id":1}' % addonid)
+        _log('SetAddonEnabled(%s, false) -> %s' % (addonid, resp))
+    except Exception as e:
+        _log('SetAddonEnabled disable failed: %s' % e)
+
+def _apply_helper_for_skin(skin_id):
+    """skin.bingie uses the Bingie TMDbHelper fork; every other skin uses
+    the stock TMDbHelper. Keep only the matching one enabled."""
+    BINGIE_SKIN   = 'skin.bingie'
+    STOCK_HELPER  = 'plugin.video.themoviedb.helper'
+    BINGIE_HELPER = 'plugin.video.tmdb.bingie.helper'
+    if skin_id == BINGIE_SKIN:
+        _disable_addon(STOCK_HELPER)
+        _enable_addon(BINGIE_HELPER)
+    else:
+        _disable_addon(BINGIE_HELPER)
+        _enable_addon(STOCK_HELPER)
+
+
 def _apply_skin(addonid, title):
     _log('apply start: %s (%s)' % (title, addonid))
+    _apply_helper_for_skin(addonid)
     _notify('Enabling %s…' % title)
     # Enable RELIABLY before touching the skin setting.
     _enable_addon(addonid)
