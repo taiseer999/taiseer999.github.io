@@ -518,8 +518,40 @@ def _record_build(build_id):
         _log('Could not record build id: %s' % e)
 
 
+def _reconcile_helper_forks():
+    """Enforce the one-fork-live rule on EVERY boot, independent of first-run.
+
+    The skin switcher only toggles the two TMDbHelper forks at the moment the
+    user switches skins. But nothing else holds that state: the build's restore
+    can re-enable a previously-disabled fork (addon enabled-state lives outside
+    our control), and if the user simply boots into an existing skin without
+    switching, the switcher never runs. The result is BOTH forks enabled at once
+    — their onAVChange monitors both fire, they fight over the dummy-file /
+    RunPlugin handoff, and playback freezes (plus a CPythonInvoker thread storm).
+
+    So on each boot we read the current skin and apply the correct fork once,
+    reusing the switcher's already-synchronous toggle (it enables the wanted
+    fork, disables the other, and BLOCKS until Kodi confirms the disable).
+    """
+    try:
+        skin_id = xbmc.getSkinDir()
+        if not skin_id:
+            return
+        from resources.lib import skin_switcher
+        _log('Reconciling TMDbHelper forks for skin: %s' % skin_id)
+        skin_switcher._apply_helper_for_skin(skin_id)
+    except Exception as e:
+        _log('Helper-fork reconcile failed: %s' % e, xbmc.LOGWARNING)
+
+
 def main():
     monitor = xbmc.Monitor()
+
+    # Enforce exactly one TMDbHelper fork live, matched to the current skin.
+    # Runs on EVERY boot (before the first-run early-return below), because a
+    # normal boot otherwise never touches the forks and the build's restore can
+    # leave both enabled — the dual-fork conflict that freezes playback.
+    _reconcile_helper_forks()
 
     # Self-trigger: if a new build was applied (shipped build.id != stored copy),
     # (re)create the first-run flag and clear the stale done/lock so the full

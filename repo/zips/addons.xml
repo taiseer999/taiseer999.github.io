@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.7" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.7.1" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -635,7 +635,9 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.6.9.11
+    <news>v1.7.1
+- DUAL-FORK FREEZE FIX (boot reconcile): service.py now enforces the one-TMDbHelper-fork-live rule on EVERY boot, not just on a skin switch. Reads the current skin and runs the switcher's synchronous fork toggle, so the inactive fork (stock vs Bingie) is disabled before any playback. Closes the gap where a normal boot — or a restore re-enabling a fork — left both live, causing the onAVChange double-crash and CPythonInvoker thread storm.
+v1.6.9.11
 - Bingie helper Trakt QR FIX: corrected fork paths to resources/tmdbbingiehelper/lib/api/trakt/ (authenticator.py + qr_utils.py) and poller import to tmdbbingiehelper.lib... — the fork renames the package root to tmdbbingiehelper, so the stock tmdbhelper path was 'target not found'.
 v1.6.9.10
 - TMDbHelper/Bingie Trakt QR ROOT-CAUSE FIX: QR window injected to resources/skins/Default (capital D) and dialog now loads from 'Default' — was lowercase 'default', which works on macOS but NOT on case-sensitive CoreELEC, so the device silently fell back to the stock code+URL dialog (no QR).
