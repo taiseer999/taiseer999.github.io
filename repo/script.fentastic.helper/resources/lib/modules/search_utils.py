@@ -1,198 +1,270 @@
 # -*- coding: utf-8 -*-
-
-import xbmc, xbmcgui, xbmcvfs
+import xbmc
+import xbmcgui
+import xbmcvfs
+import sys
 import sqlite3 as database
-from modules import xmls
 from urllib.parse import quote
-from threading import Thread, Event
+from urllib.parse import quote_plus
 
-# from modules.logger import logger
+# Variables
+MAX_HISTORY_ITEMS = 20
 
-settings_path = xbmcvfs.translatePath(
+WINDOW_HOME = 10000
+WINDOW_SEARCH = 10025
+WINDOW_SEARCH_RESULTS = 1121
+
+ADDON_DATA = xbmcvfs.translatePath(
     "special://profile/addon_data/script.fentastic.helper/"
 )
-
-spath_database_path = xbmcvfs.translatePath(
+DB_PATH = xbmcvfs.translatePath(
     "special://profile/addon_data/script.fentastic.helper/spath_cache.db"
 )
 
-search_history_xml = "script-fentastic-search_history"
-
-default_xmls = {
-    "search_history": (search_history_xml, xmls.default_history, "SearchHistory")
-}
-
-default_path = "addons://sources/video"
-
 
 class SPaths:
-    def __init__(self, spaths=None):
-        self.connect_database()
-        if spaths is None:
-            self.spaths = []
-        else:
-            self.spaths = spaths
-        self.refresh_spaths = False
+    def __init__(self):
+        self._connect_database()
 
-    def connect_database(self):
-        if not xbmcvfs.exists(settings_path):
-            xbmcvfs.mkdir(settings_path)
-        self.dbcon = database.connect(spath_database_path, timeout=20)
-        self.dbcon.execute(
-            "CREATE TABLE IF NOT EXISTS spath (spath_id INTEGER PRIMARY KEY AUTOINCREMENT, spath text)"
-        )
+    # -----------------------------------------------------------------
+    # Database Helpers
+    # -----------------------------------------------------------------
+    def _connect_database(self):
+        if not xbmcvfs.exists(ADDON_DATA):
+            xbmcvfs.mkdir(ADDON_DATA)
+
+        self.dbcon = database.connect(DB_PATH, timeout=20)
         self.dbcur = self.dbcon.cursor()
-
-    def add_spath_to_database(self, spath):
-        self.refresh_spaths = True
         self.dbcur.execute(
-            "INSERT INTO spath (spath) VALUES (?)",
-            (spath,),
+            "CREATE TABLE IF NOT EXISTS spath ("
+            "spath_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "spath TEXT)"
         )
         self.dbcon.commit()
-
-    def remove_spath_from_database(self, spath_id):
-        self.refresh_spaths = True
-        self.dbcur.execute("DELETE FROM spath WHERE spath_id = ?", (spath_id,))
-        self.dbcon.commit()
-
-    def is_database_empty(self):
-        self.dbcur.execute("SELECT COUNT(*) FROM spath")
-        rows = self.dbcur.fetchone()[0]
-        return rows == 0
-
-    def remove_all_spaths(self):
-        dialog = xbmcgui.Dialog()
-        title = "FENtastic"
-        prompt = "Are you sure you want to clear all search history? Once cleared, these items cannot be recovered. Proceed?"
-        self.fetch_all_spaths()
-        if dialog.yesno(title, prompt):
-            self.refresh_spaths = True
-            self.dbcur.execute("DELETE FROM spath")
-            self.dbcur.execute("DELETE FROM sqlite_sequence WHERE name='spath'")
-            self.dbcon.commit()
-            self.make_default_xml()
-            Thread(target=self.update_settings_and_reload_skin).start()
 
     def fetch_all_spaths(self):
-        results = self.dbcur.execute(
-            "SELECT * FROM spath ORDER BY spath_id DESC"
+        return self.dbcur.execute(
+            "SELECT spath_id, spath FROM spath ORDER BY spath_id DESC"
         ).fetchall()
-        return results
 
-    def update_settings_and_reload_skin(self):
-        xbmc.executebuiltin("Skin.SetString(SearchInput,)")
-        xbmc.executebuiltin("Skin.SetString(SearchInputEncoded,)")
-        xbmc.executebuiltin("Skin.SetString(SearchInputTraktEncoded, 'none')")
-        xbmc.executebuiltin("Skin.SetString(DatabaseStatus, 'Empty')")
-        xbmc.sleep(300)
-        xbmc.executebuiltin("ReloadSkin()")
-        xbmc.sleep(200)
-        xbmc.executebuiltin("SetFocus(27400)")
+    def add_spath(self, term):
+        self.dbcur.execute("DELETE FROM spath WHERE spath = ?", (term,))
+        self.dbcur.execute("INSERT INTO spath (spath) VALUES (?)", (term,))
+        self.dbcon.commit()
 
-    def make_search_history_xml(self, active_spaths, event=None):
-        if not self.refresh_spaths:
-            return
-        if not active_spaths:
-            self.make_default_xml()
-        xml_file = "special://skin/xml/%s.xml" % (search_history_xml)
-        final_format = xmls.media_xml_start.format(main_include="SearchHistory")
-        for _, spath in active_spaths:
-            body = xmls.history_xml_body
-            body = body.format(spath=spath)
-            final_format += body
-        final_format += xmls.media_xml_end
-        self.write_xml(xml_file, final_format)
-        xbmc.executebuiltin("ReloadSkin()")
-        if event is not None:
-            event.set()
+    def clear_all(self):
+        self.dbcur.execute("DELETE FROM spath")
+        self.dbcur.execute("DELETE FROM sqlite_sequence WHERE name='spath'")
+        self.dbcon.commit()
 
-    def write_xml(self, xml_file, final_format):
-        with xbmcvfs.File(xml_file, "w") as f:
-            f.write(final_format)
+    # -----------------------------------------------------------------
+    # SEARCH HISTORY
+    # -----------------------------------------------------------------
+    def apply_search_history_to_skin(self, rows=None):
+        if rows is None:
+            rows = self.fetch_all_spaths()
 
-    def make_default_xml(self):
-        item = default_xmls["search_history"]
-        final_format = item[1].format(includes_type=item[2])
-        xml_file = "special://skin/xml/%s.xml" % item[0]
-        with xbmcvfs.File(xml_file, "w") as f:
-            f.write(final_format)
+        rows = rows[:MAX_HISTORY_ITEMS]
 
-    def check_spath_exists(self, spath):
-        result = self.dbcur.execute(
-            "SELECT spath_id FROM spath WHERE spath = ?", (spath,)
-        ).fetchone()
-        return result[0] if result else None
+        # Read skin setting
+        limit = xbmc.getInfoLabel("Skin.String(searchhistory.limit)")
+        try:
+            limit = int(limit)
+        except ValueError:
+            limit = 5  # fallback default
 
+        labels = [term for _, term in rows[:limit]]
+
+        # Populate fixed items
+        for i in range(MAX_HISTORY_ITEMS):
+            slot = i + 1
+            if i < len(labels):
+                xbmc.executebuiltin(
+                    f"Skin.SetString(SearchHistory.{slot},{labels[i]})"
+                )
+            else:
+                xbmc.executebuiltin(f"Skin.Reset(SearchHistory.{slot})")
+
+        xbmc.executebuiltin(
+            f"Skin.SetString(SearchHistoryCount,{len(labels)})"
+        )
+
+    # -----------------------------------------------------------------
+    # SEARCH TOOLS
+    # -----------------------------------------------------------------
     def open_search_window(self):
-        if xbmcgui.getCurrentWindowId() == 10000:
-            xbmc.executebuiltin("ActivateWindow(1121)")
-        if self.is_database_empty():
-            xbmc.executebuiltin("Skin.SetString(DatabaseStatus, 'Empty')")
-            xbmc.executebuiltin("Skin.SetString(SearchInputTraktEncoded, 'none')")
-            xbmc.executebuiltin("ReloadSkin()")
-            xbmc.sleep(200)
-            xbmc.executebuiltin("SetFocus(27400)")
+        xbmc.executebuiltin("Skin.Reset(SearchInput)")
+        xbmc.executebuiltin("Skin.Reset(SearchInputEncoded)")
+        xbmc.executebuiltin("Skin.SetString(SearchInputTraktEncoded,none)")
+        xbmc.executebuiltin("ClearProperty(fentastic.results,1121)")
+
+        xbmc.executebuiltin("ActivateWindow(1121)")
+        xbmc.sleep(150)  # allow skin conditions to evaluate
+
+        count = int(xbmc.getInfoLabel("Skin.String(SearchHistoryCount)") or 0)
+
+        if count > 0:
+            xbmc.executebuiltin("SetFocus(9000)")
         else:
-            self.remake_search_history()
-            xbmc.executebuiltin("Skin.Reset(DatabaseStatus)")
-            xbmc.executebuiltin("Skin.SetString(SearchInput,)")
-            xbmc.executebuiltin("Skin.SetString(SearchInputEncoded,)")
-            xbmc.executebuiltin("Skin.SetString(SearchInputTraktEncoded, 'none')")
-            xbmc.executebuiltin("ReloadSkin()")
-            xbmc.sleep(200)
-            xbmc.executebuiltin("SetFocus(803)")
+            xbmc.executebuiltin("SetFocus(27400)")
+
 
     def search_input(self, search_term=None):
-        if search_term is None or not search_term.strip():
-            prompt = "Search" if xbmcgui.getCurrentWindowId() == 10000 else "New Search"
-            keyboard = xbmc.Keyboard("", prompt, False)
-            keyboard.doModal()
-            if keyboard.isConfirmed():
-                xbmc.executebuiltin("Skin.Reset(DatabaseStatus)")
-                search_term = keyboard.getText()
-                if not search_term or not search_term.strip():
-                    return
-            else:
+        if not search_term or not search_term.strip():
+            title = ("Search" if xbmcgui.getCurrentWindowId() == WINDOW_HOME else "New Search")
+            kb = xbmc.Keyboard("", title)
+            kb.doModal()
+            if not kb.isConfirmed():
                 return
-        encoded_search_term = quote(search_term)
-        if xbmcgui.getCurrentWindowId() == 10000:
-            xbmc.executebuiltin("ActivateWindow(1121)")
-        existing_spath = self.check_spath_exists(search_term)
-        if existing_spath:
-            self.remove_spath_from_database(existing_spath)
-        self.add_spath_to_database(search_term)
-        if xbmcgui.getCurrentWindowId() == 10000:
-            self.make_search_history_xml(self.fetch_all_spaths())
-        else:
-            event = Event()
-            Thread(
-                target=self.make_search_history_xml,
-                args=(self.fetch_all_spaths(), event),
-            ).start()
-            event.wait()
-        xbmc.executebuiltin(f"Skin.SetString(SearchInputEncoded,{encoded_search_term})")
-        xbmc.executebuiltin(
-            f"Skin.SetString(SearchInputTraktEncoded,{encoded_search_term})"
-        )
+            search_term = kb.getText().strip()
+            if not search_term:
+                return
+
+        search_term = search_term.strip()
+        encoded = quote(search_term)
+
+        # Set search strings FIRST
         xbmc.executebuiltin(f"Skin.SetString(SearchInput,{search_term})")
-        xbmc.executebuiltin("SetFocus(2000)")
+        xbmc.executebuiltin(f"Skin.SetString(SearchInputEncoded,{encoded})")
+        xbmc.executebuiltin(f"Skin.SetString(SearchInputTraktEncoded,{encoded})")
+
+        # Show spinner
+        xbmc.executebuiltin("Skin.SetString(SearchBusy,1)")
+
+        # Open results window if needed
+        if xbmcgui.getCurrentWindowId() != WINDOW_SEARCH_RESULTS:
+            xbmc.executebuiltin(f"ActivateWindow({WINDOW_SEARCH_RESULTS})")
+            xbmc.sleep(150)
+
+        self.add_spath(search_term)
+        self.apply_search_history_to_skin()
+
+        xbmc.executebuiltin("SetProperty(fentastic.results,1,1121)")
+
+        # Trigger widget refresh
+        xbmc.executebuiltin("Skin.SetString(SearchBusy,1)")
+        xbmc.executebuiltin("Container(27001).Update()")
+
+        # Wait for widgets to settle
+        xbmc.executebuiltin("Skin.Reset(SearchBusy)")
 
     def re_search(self):
-        search_term = xbmc.getInfoLabel("ListItem.Label")
-        self.search_input(search_term)
+        term = ""
 
-    def remake_search_history(self):
-        self.refresh_spaths = True
-        active_spaths = self.fetch_all_spaths()
-        if active_spaths:
-            self.make_search_history_xml(active_spaths)
-        else:
-            self.make_default_xml()
+        # RunScript arguments are comma-separated
+        for arg in sys.argv:
+            if arg.startswith("query="):
+                term = arg.replace("query=", "", 1)
+                break
 
+        if not term:
+            xbmc.log("FENtastic+: re_search called with empty query", xbmc.LOGWARNING)
+            return
 
-# def remake_all_spaths(silent=False):
-#     for item in "search_history":
-#         SPaths(item).remake_search_history()
-#     if not silent:
-#         xbmcgui.Dialog().ok("FENtastic", "Search history remade")
+        self.search_input(term)
+
+    def search_from_history(self):
+        query = ''
+
+        for arg in sys.argv:
+            if arg.startswith('query='):
+                query = arg.replace('query=', '', 1).strip()
+                break
+
+        if not query:
+            xbmc.log('FENtastic+: search_from_history called with empty query', xbmc.LOGWARNING)
+            return
+
+        self.search_input(query)
+        
+    def run_last_search(self):
+        search_term = xbmc.getInfoLabel('Skin.String(SearchInput)')
+
+        if not search_term:
+            xbmc.executebuiltin('RunScript(script.fentastic.helper,mode=search_input)')
+            return
+
+        # Reopen the search results window using the existing SearchInput/SearchInputEncoded
+        xbmc.executebuiltin('ActivateWindow(1121)')
+
+    def change_search_provider(self):
+        providers = [
+            ('0', 'TMDb Helper', 'plugin.video.themoviedb.helper'),
+            ('1', 'Fen Light', 'plugin.video.fenlight'),
+            ('2', 'Umbrella', 'plugin.video.umbrella'),
+            ('3', 'POV', 'plugin.video.pov'),
+            ('4', 'The Gears', 'plugin.video.gears'),
+            ('5', 'Red Light', 'plugin.video.redlight'),
+        ]
+
+        installed = [
+            (pid, name, addon_id)
+            for pid, name, addon_id in providers
+            if xbmc.getCondVisibility(
+                'System.HasAddon({0})'.format(addon_id)
+            )
+        ]
+
+        if not installed:
+            xbmcgui.Dialog().notification(
+                'FENtastic',
+                'No search providers are installed'
+            )
+            return
+
+        current = xbmc.getInfoLabel(
+            'Skin.String(current_search_provider)'
+        )
+
+        labels = [name for pid, name, addon_id in installed]
+
+        preselect = 0
+        for idx, (pid, name, addon_id) in enumerate(installed):
+            if pid == current:
+                preselect = idx
+                break
+
+        choice = xbmcgui.Dialog().select(
+            'Choose Search Provider',
+            labels,
+            preselect=preselect
+        )
+
+        if choice < 0:
+            return
+
+        provider_id, provider_name, addon_id = installed[choice]
+
+        # No change
+        if provider_id == current:
+            return
+
+        # Set provider
+        xbmc.executebuiltin(
+            'Skin.SetString(current_search_provider,{0})'
+            .format(provider_id)
+        )
+
+        # Close SearchResults window
+        xbmc.executebuiltin('ActivateWindow(home)')
+
+        # Run last search term again with new provider
+        self.run_last_search()
+
+        
+    def remove_all_spaths(self):    # Clear search history
+        dialog = xbmcgui.Dialog()
+        if not dialog.yesno("FENtastic","Are you sure you want to clear all search history?"):
+            return
+
+        self.clear_all()
+        self.apply_search_history_to_skin([])
+
+        xbmc.executebuiltin("ClearProperty(fentastic.results,1121)")
+        xbmc.executebuiltin("Skin.SetString(SearchHistoryCount,0)")
+        xbmc.executebuiltin("Skin.Reset(SearchInput)")
+        xbmc.executebuiltin("Skin.Reset(SearchInputEncoded)")
+        xbmc.executebuiltin("Skin.SetString(SearchInputTraktEncoded,none)")
+
+        # Exit search UI entirely
+        xbmc.executebuiltin("ActivateWindow(home)")

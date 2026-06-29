@@ -24,7 +24,10 @@ def widget_monitor(list_id):
             break
         else:
             window = xbmcgui.Window(window_id)
-            stack_control = window.getControl(int(stack_id))
+            try:
+                stack_control = window.getControl(int(stack_id))
+            except RuntimeError:
+                return
             stack_label_control = (
                 window.getControl(int(stack_id + "666"))
                 or window.getControl(int(stack_id + "667"))

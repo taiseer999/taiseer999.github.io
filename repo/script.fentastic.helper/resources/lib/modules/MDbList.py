@@ -7,7 +7,7 @@ import json
 import re
 
 # logger = xbmc.log
-
+dialog = xbmcgui.Dialog()
 settings_path = xbmcvfs.translatePath(
     "special://profile/addon_data/script.fentastic.helper/"
 )
@@ -201,3 +201,5 @@ def set_api_key():
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
         xbmc.executebuiltin(f"Skin.SetString(mdblist_api_key,{keyboard.getText()})")
+        from modules.custom_actions import addon_icon
+        dialog.notification('FENtastic Plus', 'mdblist API key set!', addon_icon, 3000)
