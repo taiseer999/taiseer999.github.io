@@ -67,6 +67,45 @@ STARTUP_TIMEOUT = 180
 # so this only affects the *ELEC 'takes forever' case.
 STARTUP_GRACE = 30
 
+# A LOCK_FILE older than this is treated as abandoned rather than "another
+# run in progress". Nothing in _run_steps legitimately runs anywhere close to
+# this long even counting the _wait_no_modal(timeout=600) worst case, so a
+# lock still present past this ceiling means the process that wrote it died
+# without reaching the finally block that clears it — a Kodi crash, kernel
+# panic, or hard power-cycle mid-sequence, all of which this box is prone to.
+# Without this, one interrupted run wedges every future automatic AND manual
+# attempt forever, silently (see [AbukarimTools FirstRun] "lock present"
+# repeating in the log with no user-visible symptom at all).
+STALE_LOCK_SECONDS = 1800  # 30 minutes
+
+
+def _lock_is_stale():
+    """True if LOCK_FILE exists but is old enough to be an abandoned lock
+    from an interrupted run rather than one that's genuinely still active."""
+    try:
+        age = time.time() - os.path.getmtime(LOCK_FILE)
+    except OSError:
+        return False  # doesn't exist -> not stale, just absent
+    return age > STALE_LOCK_SECONDS
+
+
+def _clear_stale_lock(context):
+    """If LOCK_FILE is stale, remove it and log why. Returns True if a lock
+    remains (still fresh, a run is genuinely in progress)."""
+    if not os.path.exists(LOCK_FILE):
+        return False
+    if _lock_is_stale():
+        age = time.time() - os.path.getmtime(LOCK_FILE)
+        _log('%s: stale lock (%.0fs old) found — a previous run was likely '
+             'interrupted (crash/reboot) before it could finish. Clearing '
+             'it and proceeding.' % (context, age), xbmc.LOGWARNING)
+        try:
+            os.remove(LOCK_FILE)
+        except OSError:
+            pass
+        return False
+    return True
+
 
 def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('[AbukarimTools FirstRun] %s' % msg, level)
@@ -281,7 +320,7 @@ def run_first_run_sequence(monitor):
         except OSError:
             pass
         return
-    if os.path.exists(LOCK_FILE):
+    if _clear_stale_lock('Automatic first-run'):
         _log('First-run already running (lock present) — skipping duplicate.')
         return
 
@@ -330,8 +369,20 @@ def run_now(monitor=None, remove_flag=True, force=False):
         _log('First-run already completed (done marker present) — skipping.')
         return
 
-    # Another run in progress → do nothing.
-    if os.path.exists(LOCK_FILE):
+    # Another run in progress → do nothing, unless the caller is explicitly
+    # forcing a retry (the menu item passes force=True) — in that case a
+    # stuck lock is exactly the thing the user is trying to override, so
+    # clear it unconditionally instead of deferring to it. Without force,
+    # still honor a genuinely fresh lock but drop a stale/abandoned one.
+    if force:
+        if os.path.exists(LOCK_FILE):
+            _log('Manual run forced — clearing existing lock '
+                 '(stale or not) before proceeding.', xbmc.LOGWARNING)
+            try:
+                os.remove(LOCK_FILE)
+            except OSError:
+                pass
+    elif _clear_stale_lock('Manual first-run'):
         _log('First-run already running (lock present) — skipping duplicate.')
         return
 
