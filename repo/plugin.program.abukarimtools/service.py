@@ -595,8 +595,61 @@ def _reconcile_helper_forks():
         _log('Helper-fork reconcile failed: %s' % e, xbmc.LOGWARNING)
 
 
+# autostart.sh restore cleanup:
+#
+# backup_manager.py writes a one-shot block into /storage/.config/autostart.sh
+# to restore guisettings.xml/oe_settings.xml on the next boot (Kodi can't
+# write those itself mid-session — Kodi and CoreELEC's settings service both
+# hold their own copies in memory and flush them back over any external edit).
+#
+# autostart.sh used to try to remove that block from itself via `sed -i`
+# once it had run. That is unsafe: autostart.sh runs as a shell script, and
+# rewriting the very file a shell is still reading from, from inside that
+# same running script, is undefined territory on BusyBox ash (the shell used
+# by CoreELEC) — it corrupted/deleted the file outright in practice.
+#
+# The safe fix: autostart.sh no longer touches itself at all. Cleanup happens
+# here instead, in a completely different, later-starting process. By the
+# time this Python code runs, autostart.sh (a boot-time init script) has
+# already executed to completion and exited — it is not "the same running
+# script" from Kodi's point of view, so deleting it here carries none of that
+# risk. If it's present when Kodi starts, its one-shot job for this boot is
+# already done, so it's always safe and correct to remove it now.
+AUTOSTART_PATH   = '/storage/.config/autostart.sh'
+AUTOSTART_MARKER = '# [abukarimtools] guisettings restore'
+
+
+def _cleanup_stale_autostart():
+    if not os.path.exists(AUTOSTART_PATH):
+        return
+    try:
+        with open(AUTOSTART_PATH, 'r') as f:
+            content = f.read()
+    except OSError as e:
+        _log('Could not read %s for cleanup: %s' % (AUTOSTART_PATH, e))
+        return
+
+    if AUTOSTART_MARKER not in content:
+        # Present but not ours — leave it alone.
+        return
+
+    try:
+        os.remove(AUTOSTART_PATH)
+        _log('Removed one-shot %s after restore (safe: this runs from a '
+             'separate process, after the script itself already finished '
+             'executing).' % AUTOSTART_PATH)
+    except OSError as e:
+        _log('Could not remove %s: %s' % (AUTOSTART_PATH, e),
+             xbmc.LOGWARNING)
+
+
 def main():
     monitor = xbmc.Monitor()
+
+    # Runs on every boot, unconditionally, same reasoning as
+    # _reconcile_helper_forks() below: autostart.sh's job (if it ran at all
+    # this boot) is already finished by the time Kodi is up.
+    _cleanup_stale_autostart()
 
     # Enforce exactly one TMDbHelper fork live, matched to the current skin.
     # Runs on EVERY boot (before the first-run early-return below), because a

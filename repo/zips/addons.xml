@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.7.2" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.7.3" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -635,7 +635,10 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.7.1
+    <news>v1.7.3
+- AUTOSTART SELF-EDIT FIX: autostart.sh's guisettings-restore block no longer removes itself via sed -i on its own file — rewriting a running shell script's own file mid-read is unsafe on BusyBox ash and could corrupt/delete autostart.sh outright. Cleanup now happens from service.py on the next Kodi start instead (a separate, already-exited process by that point, so it's safe).
+- OE_SETTINGS.XML RESTORE: the autostart restore now also stages and restores /storage/.kodi/userdata/addon_data/service.coreelec.settings/oe_settings.xml, not just guisettings.xml. CoreELEC's own settings service re-syncs its remembered audiooutput.audiodevice etc. from oe_settings.xml back over guisettings.xml during the session, so restoring guisettings.xml alone didn't stick — a stale device value in oe_settings.xml (e.g. a dev-machine placeholder) kept reappearing every boot regardless.
+v1.7.1
 - DUAL-FORK FREEZE FIX (boot reconcile): service.py now enforces the one-TMDbHelper-fork-live rule on EVERY boot, not just on a skin switch. Reads the current skin and runs the switcher's synchronous fork toggle, so the inactive fork (stock vs Bingie) is disabled before any playback. Closes the gap where a normal boot — or a restore re-enabling a fork — left both live, causing the onAVChange double-crash and CPythonInvoker thread storm.
 v1.6.9.11
 - Bingie helper Trakt QR FIX: corrected fork paths to resources/tmdbbingiehelper/lib/api/trakt/ (authenticator.py + qr_utils.py) and poller import to tmdbbingiehelper.lib... — the fork renames the package root to tmdbbingiehelper, so the stock tmdbhelper path was 'target not found'.

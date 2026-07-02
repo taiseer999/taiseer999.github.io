@@ -14,9 +14,18 @@ ADDON_NAME = ADDON.getAddonInfo('name')
 
 # guisettings.xml cannot be overwritten while Kodi is running — Kodi holds it
 # in memory and flushes it on exit, clobbering anything we write mid-session.
-# Instead we stage the file here; autostart.sh copies it into userdata before
-# Kodi starts on the next boot, then removes itself.
-GUISETTINGS_STAGING = '/storage/.guisettings_pending.xml'
+# oe_settings.xml (CoreELEC's own settings service) behaves the same way —
+# service.coreelec.settings periodically re-syncs its own remembered values
+# (e.g. audiooutput.audiodevice) back over guisettings.xml, so restoring
+# guisettings.xml alone doesn't stick if oe_settings.xml still holds the old
+# value; it gets pushed straight back on the next sync.
+# Instead we stage both files here; autostart.sh copies them into place
+# before Kodi/CoreELEC's settings service starts on the next boot.
+GUISETTINGS_STAGING  = '/storage/.guisettings_pending.xml'
+OE_SETTINGS_STAGING  = '/storage/.oe_settings_pending.xml'
+OE_SETTINGS_DEST     = ('/storage/.kodi/userdata/addon_data/'
+                         'service.coreelec.settings/oe_settings.xml')
+OE_SETTINGS_MEMBER   = 'addon_data/service.coreelec.settings/oe_settings.xml'
 AUTOSTART_PATH      = '/storage/.config/autostart.sh'
 AUTOSTART_MARKER    = '# [abukarimtools] guisettings restore'
 
@@ -227,6 +236,22 @@ class BackupManager:
                                  xbmc.LOGWARNING)
                         continue
 
+                    # Same reasoning as guisettings.xml above — CoreELEC's own
+                    # settings service re-syncs this file's values back over
+                    # guisettings.xml during the session, so it needs the same
+                    # stage-and-restore-on-boot treatment or the fix doesn't stick.
+                    if norm_member == OE_SETTINGS_MEMBER:
+                        try:
+                            data = zf.read(member)
+                            with open(OE_SETTINGS_STAGING, 'wb') as fh:
+                                fh.write(data)
+                            self._inject_autostart_restore()
+                            _log('oe_settings.xml staged at %s' % OE_SETTINGS_STAGING)
+                        except Exception as e:
+                            _log('Could not stage oe_settings.xml: %s' % e,
+                                 xbmc.LOGWARNING)
+                        continue
+
                     dest     = os.path.join(self.userdata_path,
                                             *norm_member.split('/'))
                     dest_dir = os.path.dirname(dest)
@@ -268,22 +293,38 @@ class BackupManager:
 
     def _inject_autostart_restore(self):
         """
-        Append a self-removing block to autostart.sh that copies the staged
-        guisettings.xml into userdata before Kodi starts, then deletes itself.
-        Does nothing if the block is already present.
+        Append a one-shot restore block to autostart.sh that copies staged
+        guisettings.xml / oe_settings.xml into place before Kodi and
+        CoreELEC's settings service start on the next boot.
+
+        This block does NOT remove itself. An earlier version tried to via
+        `sed -i` on autostart.sh from inside autostart.sh while it was still
+        executing — rewriting a running shell script's own file mid-read is
+        unsafe on BusyBox ash and corrupted/deleted the file in practice.
+        Cleanup instead happens from service.py, in a separate process that
+        only runs after this script has already finished and exited — see
+        _cleanup_stale_autostart() there for the reasoning.
+
+        Does nothing if the block is already present (idempotent — may be
+        called once for guisettings.xml and again for oe_settings.xml in the
+        same restore; the `if [ -f ... ]` guards make re-running harmless
+        even so).
         """
         block = (
             '\n%(marker)s\n'
-            'if [ -f "%(staging)s" ]; then\n'
-            '    cp "%(staging)s" /storage/.kodi/userdata/guisettings.xml\n'
-            '    rm -f "%(staging)s"\n'
-            '    # Remove this block from autostart.sh\n'
-            '    sed -i "/%(marker)s/,/^fi$/d" "%(autostart)s"\n'
+            'if [ -f "%(gui_staging)s" ]; then\n'
+            '    cp "%(gui_staging)s" /storage/.kodi/userdata/guisettings.xml\n'
+            '    rm -f "%(gui_staging)s"\n'
+            'fi\n'
+            'if [ -f "%(oe_staging)s" ]; then\n'
+            '    cp "%(oe_staging)s" "%(oe_dest)s"\n'
+            '    rm -f "%(oe_staging)s"\n'
             'fi\n'
         ) % {
-            'marker':   AUTOSTART_MARKER,
-            'staging':  GUISETTINGS_STAGING,
-            'autostart': AUTOSTART_PATH,
+            'marker':      AUTOSTART_MARKER,
+            'gui_staging': GUISETTINGS_STAGING,
+            'oe_staging':  OE_SETTINGS_STAGING,
+            'oe_dest':     OE_SETTINGS_DEST,
         }
 
         # Read existing content (file may not exist yet)
@@ -301,7 +342,7 @@ class BackupManager:
         with open(AUTOSTART_PATH, 'w') as f:
             f.write(content.rstrip('\n') + block)
 
-        _log('Injected guisettings restore block into %s' % AUTOSTART_PATH)
+        _log('Injected guisettings/oe_settings restore block into %s' % AUTOSTART_PATH)
 
     # -------------------------------------------------------- File collection -
 
