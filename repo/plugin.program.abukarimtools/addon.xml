@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.7.3"
+       version="1.7.3.1"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,9 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.7.3
+    <news>v1.7.3.1
+- Removed all script.tinyppi patch entries: the AF3 font remap (TinyPPI 1.6.1.1 now manages its own Noto fonts via tools.tinyppi) and the set_ui_position crash fixes + CpuTopUsageVar paren fix (both fixed upstream in 1.6.1; old code paths no longer exist).
+v1.7.3
 - AUTOSTART SELF-EDIT FIX: autostart.sh's guisettings-restore block no longer removes itself via sed -i on its own file — rewriting a running shell script's own file mid-read is unsafe on BusyBox ash and could corrupt/delete autostart.sh outright. Cleanup now happens from service.py on the next Kodi start instead (a separate, already-exited process by that point, so it's safe).
 - OE_SETTINGS.XML RESTORE: the autostart restore now also stages and restores /storage/.kodi/userdata/addon_data/service.coreelec.settings/oe_settings.xml, not just guisettings.xml. CoreELEC's own settings service re-syncs its remembered audiooutput.audiodevice etc. from oe_settings.xml back over guisettings.xml during the session, so restoring guisettings.xml alone didn't stick — a stale device value in oe_settings.xml (e.g. a dev-machine placeholder) kept reappearing every boot regardless.
 v1.7.1
