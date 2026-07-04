@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.7.3.2"
+       version="1.7.3.3"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,12 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.7.3.1
+    <news>v1.7.3.3
+- FIRST-RUN "sometimes does not auto start" FIX (3 root causes):
+  1) Crash-resilient trigger: the self-trigger now keys off first_run.done (written only on COMPLETION, storing the build id) instead of last_build.id (written at ARM time). Previously a kernel panic / power-cycle mid-sequence (flag already consumed, done never written) left the trigger permanently satisfied and first-run silently never ran again. An interrupted run now simply re-arms on the next boot. Legacy 'done' markers are migrated in place, so devices that already completed first-run do NOT re-run it.
+  2) Service-killing UnicodeDecodeError: _cleanup_stale_autostart read autostart.sh as strict UTF-8 catching only OSError; corrupted bytes (a possible leftover of the pre-1.7.3 sed self-edit bug) raised UnicodeDecodeError, killed service.py before the first-run trigger was ever evaluated. Now reads with errors='replace', and both boot chores (autostart cleanup + fork reconcile) are individually fenced so nothing can block the trigger.
+  3) Reboot race: the CoreELEC reboot prompt moved out of _run_steps to AFTER the done marker is written — a user-approved Reboot could previously race the finally block and (with the new done-keyed trigger) would have re-run the whole sequence next boot.
+v1.7.3.1
 - Removed all script.tinyppi patch entries: the AF3 font remap (TinyPPI 1.6.1.1 now manages its own Noto fonts via tools.tinyppi) and the set_ui_position crash fixes + CpuTopUsageVar paren fix (both fixed upstream in 1.6.1; old code paths no longer exist).
 v1.7.3
 - AUTOSTART SELF-EDIT FIX: autostart.sh's guisettings-restore block no longer removes itself via sed -i on its own file — rewriting a running shell script's own file mid-read is unsafe on BusyBox ash and could corrupt/delete autostart.sh outright. Cleanup now happens from service.py on the next Kodi start instead (a separate, already-exited process by that point, so it's safe).

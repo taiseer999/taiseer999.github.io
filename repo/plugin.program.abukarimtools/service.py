@@ -340,15 +340,16 @@ def run_first_run_sequence(monitor):
     try:
         _run_steps(monitor)
     finally:
-        try:
-            with open(DONE_FILE, 'w') as f:
-                f.write('done')
-        except OSError:
-            pass
+        _mark_done()
         try:
             os.remove(LOCK_FILE)
         except OSError:
             pass
+
+    # Reboot prompt LAST — only after the done marker is safely on disk, so a
+    # user-approved reboot can never cut the completion record short and
+    # re-trigger the sequence on the next boot.
+    _prompt_reboot_if_coreelec(monitor)
 
 
 def run_now(monitor=None, remove_flag=True, force=False):
@@ -402,16 +403,16 @@ def run_now(monitor=None, remove_flag=True, force=False):
     try:
         _run_steps(monitor)
     finally:
-        # Mark complete and release the lock.
-        try:
-            with open(DONE_FILE, 'w') as f:
-                f.write('done')
-        except OSError:
-            pass
+        # Mark complete (with the shipped build id) and release the lock.
+        _mark_done()
         try:
             os.remove(LOCK_FILE)
         except OSError:
             pass
+
+    # Same ordering rule as the automatic path: done marker first, reboot
+    # prompt second.
+    _prompt_reboot_if_coreelec(monitor)
 
 
 class _WelcomeWindow(xbmcgui.WindowDialog):
@@ -493,10 +494,11 @@ def _run_steps(monitor):
 
     _log('First-run sequence finished.')
 
-    # On CoreELEC, prompt to reboot so autostart.sh runs on a clean boot
-    # (e.g. the staged guisettings restore). Wait ~10s after the skin loads so
-    # the prompt doesn't fight the skin reload, then ask; YES reboots.
-    _prompt_reboot_if_coreelec(monitor)
+    # NOTE: the CoreELEC reboot prompt is deliberately NOT here any more.
+    # It is issued by the callers AFTER the done marker has been written —
+    # the Reboot builtin races the finally block, and if the system went
+    # down before DONE_FILE landed, the (now DONE-keyed) trigger would
+    # re-run the whole sequence on the next boot.
 
 
 def _is_coreelec():
@@ -546,17 +548,52 @@ def _read_text(path):
         return ''
 
 
-def _new_build_applied():
-    """True if the shipped build.id differs from the addon_data copy.
+def _first_run_pending():
+    """True if first-run has NOT completed for the currently shipped build.
 
-    Returns (changed: bool, build_id: str). If no build.id ships with the addon
-    we return (False, '') so behaviour is unchanged for builds that don't use
-    this mechanism.
+    Returns (pending: bool, build_id: str). If no build.id ships with the
+    addon we return (False, '') so behaviour is unchanged for builds that
+    don't use this mechanism.
+
+    The check is keyed off DONE_FILE, which stores the build id of the last
+    COMPLETED first-run (written only after _run_steps finishes). This is what
+    makes the trigger crash-resilient: the old code compared build.id against
+    LAST_BUILD_FILE, which was recorded at ARM time — so a kernel panic /
+    power-cycle mid-sequence (FLAG already consumed, DONE never written) left
+    changed=False on every subsequent boot and first-run silently never ran
+    again. Now an interrupted run simply re-arms on the next boot until a run
+    actually completes.
+
+    Legacy migration: pre-1.7.3.2 installs wrote the literal string 'done'
+    into DONE_FILE and the build id into LAST_BUILD_FILE. If both match the
+    old completed state, migrate DONE_FILE to the new format instead of
+    re-running first-run on devices that already finished it.
     """
     build_id = _read_text(BUILD_ID_FILE)
     if not build_id:
         return False, ''
-    return (build_id != _read_text(LAST_BUILD_FILE)), build_id
+    done = _read_text(DONE_FILE)
+    if done == build_id:
+        return False, build_id
+    if done == 'done' and _read_text(LAST_BUILD_FILE) == build_id:
+        # Old-format completion for this same build — migrate, don't re-run.
+        _mark_done(build_id)
+        _log('Migrated legacy done marker for build %s.' % build_id)
+        return False, build_id
+    return True, build_id
+
+
+def _mark_done(build_id=None):
+    """Write DONE_FILE with the completed build id (repeat guard)."""
+    if build_id is None:
+        build_id = _read_text(BUILD_ID_FILE) or 'done'
+    try:
+        os.makedirs(PROFILE, exist_ok=True)
+        with open(DONE_FILE, 'w', encoding='utf-8') as f:
+            f.write(build_id)
+    except OSError as e:
+        _log('Could not write done marker (%s) — first-run may re-arm on '
+             'next boot.' % e, xbmc.LOGWARNING)
 
 
 def _record_build(build_id):
@@ -623,9 +660,15 @@ def _cleanup_stale_autostart():
     if not os.path.exists(AUTOSTART_PATH):
         return
     try:
-        with open(AUTOSTART_PATH, 'r') as f:
+        # errors='replace': the pre-1.7.3 sed self-edit bug could leave
+        # autostart.sh with corrupted (non-UTF-8) bytes. A strict read then
+        # raises UnicodeDecodeError — which is NOT an OSError — and before
+        # this fix that exception escaped, killed the whole service process,
+        # and the build.id first-run trigger further down in main() never
+        # ran at all ("first run sometimes does not auto start").
+        with open(AUTOSTART_PATH, 'r', encoding='utf-8', errors='replace') as f:
             content = f.read()
-    except OSError as e:
+    except Exception as e:
         _log('Could not read %s for cleanup: %s' % (AUTOSTART_PATH, e))
         return
 
@@ -646,23 +689,38 @@ def _cleanup_stale_autostart():
 def main():
     monitor = xbmc.Monitor()
 
+    # The two boot chores below are strictly best-effort: neither is allowed
+    # to prevent the first-run trigger further down from being evaluated.
+    # Each is fenced individually so an unexpected exception in one is logged
+    # and skipped rather than killing the service process.
+
     # Runs on every boot, unconditionally, same reasoning as
     # _reconcile_helper_forks() below: autostart.sh's job (if it ran at all
     # this boot) is already finished by the time Kodi is up.
-    _cleanup_stale_autostart()
+    try:
+        _cleanup_stale_autostart()
+    except Exception:
+        _log('autostart cleanup crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
     # Enforce exactly one TMDbHelper fork live, matched to the current skin.
     # Runs on EVERY boot (before the first-run early-return below), because a
     # normal boot otherwise never touches the forks and the build's restore can
     # leave both enabled — the dual-fork conflict that freezes playback.
-    _reconcile_helper_forks()
+    try:
+        _reconcile_helper_forks()
+    except Exception:
+        _log('Helper-fork reconcile crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
-    # Self-trigger: if a new build was applied (shipped build.id != stored copy),
-    # (re)create the first-run flag and clear the stale done/lock so the full
-    # sequence runs for this build. Manual first_run.flag still works as before.
-    changed, build_id = _new_build_applied()
-    if changed:
-        _log('New build detected (%s) — arming first-run.' % build_id)
+    # Self-trigger: arm first-run whenever the shipped build.id has no
+    # matching COMPLETED marker (DONE_FILE). This covers both a fresh build
+    # apply and a previous run that was interrupted (crash / power-cycle)
+    # before it could finish — the old last_build.id comparison covered only
+    # the former. Manual first_run.flag still works as before.
+    pending, build_id = _first_run_pending()
+    if pending:
+        _log('First-run pending for build %s — arming.' % build_id)
         for stale in (DONE_FILE, LOCK_FILE):
             try:
                 if os.path.exists(stale):
@@ -674,8 +732,8 @@ def main():
             open(FLAG_FILE, 'w').close()
         except Exception as e:
             _log('Could not create first-run flag: %s' % e)
-        # Record now so a mid-sequence reboot doesn't re-arm endlessly; the
-        # done marker (written on completion) is the real repeat guard.
+        # Kept for logging/diagnostics only — completion is tracked in
+        # DONE_FILE now, not here.
         _record_build(build_id)
 
     if not os.path.exists(FLAG_FILE):
