@@ -42,7 +42,6 @@ TITLE = 'ABUKARIM – Skin Installer'
 # ---------------------------------------------------------------------------
 _SKIN_COMPANIONS = {
     'skin.arctic.fuse.3': ['plugin.video.themoviedb.helper'],
-    'skin.bingie':        ['script.skinshortcuts'],
 }
 
 
@@ -417,65 +416,9 @@ def _start_yes_watchdog():
     return _stop
 
 
-def _disable_addon(addonid):
-    """Disable the addon via JSON-RPC."""
-    try:
-        resp = xbmc.executeJSONRPC(
-            '{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
-            '"params":{"addonid":"%s","enabled":false},"id":1}' % addonid)
-        _log('SetAddonEnabled(%s, false) -> %s' % (addonid, resp))
-    except Exception as e:
-        _log('SetAddonEnabled disable failed: %s' % e)
-
-
-def _wait_addon_disabled(addonid, timeout_ms=8000):
-    """Poll until Kodi reports the addon as DISABLED, or timeout."""
-    waited = 0
-    step = 200
-    while waited < timeout_ms:
-        if not _addon_is_enabled(addonid):
-            return True
-        xbmc.sleep(step)
-        waited += step
-    return not _addon_is_enabled(addonid)
-
-
-def _apply_helper_for_skin(skin_id):
-    """skin.bingie uses the Bingie TMDbHelper fork; every other skin uses
-    the stock TMDbHelper. Only ONE may be active at a time.
-
-    Running both forks together makes them fight over the dummy-file/RunPlugin
-    player handoff and hard-freezes playback. SetAddonEnabled is async (a
-    disabled addon's running service.py keeps going until it next checks the
-    abort flag), so we enable the wanted fork, disable the other, then BLOCK
-    until Kodi confirms the other is off and its service has had time to wind
-    down — before returning.
-    """
-    BINGIE_SKIN   = 'skin.bingie'
-    STOCK_HELPER  = 'plugin.video.themoviedb.helper'
-    BINGIE_HELPER = 'plugin.video.tmdb.bingie.helper'
-
-    if skin_id == BINGIE_SKIN:
-        want, drop = BINGIE_HELPER, STOCK_HELPER
-    else:
-        want, drop = STOCK_HELPER, BINGIE_HELPER
-
-    _enable_addon(want)
-    _wait_addon_enabled(want, timeout_ms=8000)
-
-    _disable_addon(drop)
-    if _wait_addon_disabled(drop, timeout_ms=8000):
-        _log('inactive helper disabled: %s' % drop)
-    else:
-        _log('WARNING: %s still enabled after timeout' % drop)
-
-    # Give the disabled fork's service.py time to observe the abort and exit.
-    xbmc.sleep(1500)
-
 
 def _apply_skin(addonid, title):
     _log('apply start: %s (%s)' % (title, addonid))
-    _apply_helper_for_skin(addonid)
     _notify('Enabling %s…' % title)
     # Enable RELIABLY before touching the skin setting.
     _enable_addon(addonid)
@@ -786,7 +729,7 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         _log('installed via portal: %s (first_run=%s)' % (addonid, self.first_run))
 
         # Silently pull any companion add-on(s) mapped to this skin from the
-        # SAME repo (e.g. AF3 -> TMDbHelper, Bingie -> skinshortcuts). No
+        # SAME repo (e.g. AF3 -> TMDbHelper). No
         # prompts, no skin switch — runs before we defer the skin apply.
         _install_companions(addonid, zipurl)
 

@@ -606,31 +606,6 @@ def _record_build(build_id):
         _log('Could not record build id: %s' % e)
 
 
-def _reconcile_helper_forks():
-    """Enforce the one-fork-live rule on EVERY boot, independent of first-run.
-
-    The skin switcher only toggles the two TMDbHelper forks at the moment the
-    user switches skins. But nothing else holds that state: the build's restore
-    can re-enable a previously-disabled fork (addon enabled-state lives outside
-    our control), and if the user simply boots into an existing skin without
-    switching, the switcher never runs. The result is BOTH forks enabled at once
-    — their onAVChange monitors both fire, they fight over the dummy-file /
-    RunPlugin handoff, and playback freezes (plus a CPythonInvoker thread storm).
-
-    So on each boot we read the current skin and apply the correct fork once,
-    reusing the switcher's already-synchronous toggle (it enables the wanted
-    fork, disables the other, and BLOCKS until Kodi confirms the disable).
-    """
-    try:
-        skin_id = xbmc.getSkinDir()
-        if not skin_id:
-            return
-        from resources.lib import skin_switcher
-        _log('Reconciling TMDbHelper forks for skin: %s' % skin_id)
-        skin_switcher._apply_helper_for_skin(skin_id)
-    except Exception as e:
-        _log('Helper-fork reconcile failed: %s' % e, xbmc.LOGWARNING)
-
 
 # autostart.sh restore cleanup:
 #
@@ -689,28 +664,17 @@ def _cleanup_stale_autostart():
 def main():
     monitor = xbmc.Monitor()
 
-    # The two boot chores below are strictly best-effort: neither is allowed
-    # to prevent the first-run trigger further down from being evaluated.
-    # Each is fenced individually so an unexpected exception in one is logged
-    # and skipped rather than killing the service process.
+    # The boot chore below is strictly best-effort: it is not allowed to
+    # prevent the first-run trigger further down from being evaluated. It is
+    # fenced so an unexpected exception is logged and skipped rather than
+    # killing the service process.
 
-    # Runs on every boot, unconditionally, same reasoning as
-    # _reconcile_helper_forks() below: autostart.sh's job (if it ran at all
-    # this boot) is already finished by the time Kodi is up.
+    # Runs on every boot, unconditionally: autostart.sh's job (if it ran at
+    # all this boot) is already finished by the time Kodi is up.
     try:
         _cleanup_stale_autostart()
     except Exception:
         _log('autostart cleanup crashed (ignored):\n%s'
-             % traceback.format_exc(), xbmc.LOGERROR)
-
-    # Enforce exactly one TMDbHelper fork live, matched to the current skin.
-    # Runs on EVERY boot (before the first-run early-return below), because a
-    # normal boot otherwise never touches the forks and the build's restore can
-    # leave both enabled — the dual-fork conflict that freezes playback.
-    try:
-        _reconcile_helper_forks()
-    except Exception:
-        _log('Helper-fork reconcile crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # Self-trigger: arm first-run whenever the shipped build.id has no
