@@ -1,3 +1,6 @@
+v1.1.5.2
+- QR rendering fix for all auth dialogs: make_qr() now falls back to api.qrserver.com when script.module.qrcode/PIL are unavailable, and every provider (Real-Debrid, AllDebrid, Premiumize, Trakt, Offcloud) now bundles a static QR image as final fallback so the dialog never shows an empty square.
+
 v1.1.5.1
 - Re-added QR authorization (ported from 1.1.3.6) for Real-Debrid, AllDebrid, Premiumize, and Trakt on top of upstream 1.1.5 (upstream had reverted them to plain dialogs).
 - Converted Offcloud device-code auth to the QR dialog (same design as TorBox); bundled static offcloud_qr.png used when dynamic QR generation is unavailable on the device.

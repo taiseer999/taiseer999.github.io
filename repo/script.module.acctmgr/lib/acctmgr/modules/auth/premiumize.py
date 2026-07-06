@@ -123,6 +123,8 @@ class Premiumize:
 			return False
 
 		qr_path = make_qr(verify_url_qr)
+		pm_static_qr = control.joinPath(control.addonPath(), 'resources', 'images', 'premiumize_qr.png')
+		qr_image = qr_path if qr_path else pm_static_qr
 
 		dialog = PremiumizeAuthDialog(
 			'premiumize_auth.xml',
@@ -130,7 +132,7 @@ class Premiumize:
 			'Default',
 			user_code=user_code,
 			bg_image=pm_bg,
-			qr_image=qr_path,
+			qr_image=qr_image,
 			bdr_image=pm_bdr
 		)
 		dialog.show()

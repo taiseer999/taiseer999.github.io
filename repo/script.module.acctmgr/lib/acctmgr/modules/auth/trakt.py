@@ -273,6 +273,8 @@ class Trakt():
 			user_code = str(code.get('user_code', ''))
 			verification_url = str(code.get('verification_url', 'https://trakt.tv/activate'))
 			qr_path = make_qr('%s/%s' % (verification_url.rstrip('/'), user_code))
+			trakt_static_qr = control.joinPath(control.addonPath(), 'resources', 'images', 'trakt_qr.png')
+			qr_image = qr_path if qr_path else trakt_static_qr
 
 			dialog = TraktAuthDialog(
 				'trakt_auth.xml',
@@ -280,7 +282,7 @@ class Trakt():
 				'Default',
 				user_code=user_code,
 				bg_image=trakt_bg,
-				qr_image=qr_path,
+				qr_image=qr_image,
 				bdr_image=trakt_bdr
 			)
 			dialog.show()

@@ -151,6 +151,8 @@ class RealDebrid:
 			return False
 
 		qr_path = make_qr('https://real-debrid.com/device?code=%s' % user_code)
+		rd_static_qr = control.joinPath(control.addonPath(), 'resources', 'images', 'realdebrid_qr.png')
+		qr_image = qr_path if qr_path else rd_static_qr
 
 		dialog = RealDebridAuthDialog(
 			'realdebrid_auth.xml',
@@ -158,7 +160,7 @@ class RealDebrid:
 			'Default',
 			user_code=user_code,
 			bg_image=rd_bg,
-			qr_image=qr_path,
+			qr_image=qr_image,
 			bdr_image=rd_bdr
 		)
 		dialog.show()

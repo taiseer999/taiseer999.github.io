@@ -107,6 +107,8 @@ class AllDebrid:
 			return False
 
 		qr_path = make_qr(self.user_url)
+		ad_static_qr = control.joinPath(control.addonPath(), 'resources', 'images', 'alldebrid_qr.png')
+		qr_image = qr_path if qr_path else ad_static_qr
 
 		dialog = AllDebridAuthDialog(
 			'alldebrid_auth.xml',
@@ -114,7 +116,7 @@ class AllDebrid:
 			'Default',
 			user_code=self.pin,
 			bg_image=ad_bg,
-			qr_image=qr_path,
+			qr_image=qr_image,
 			bdr_image=ad_bdr
 		)
 		dialog.show()
