@@ -44,6 +44,13 @@
 		<setting id="torbox.auth_status" type="text" label="Account Tier" enable="false" default="" visible="false" />
 		<setting type="action" label="32319" option="close" action="RunScript(script.module.acctmgr, action=torboxAuth)" visible="eq(-4,)" />
 
+		<setting type="lsep" label="OffCloud" />
+		<setting id="offcloud.enabled" type="bool" visible="true" label="Enable" default="false" />
+		<setting id="offcloud.token" label="40115" type="text" default="" visible="false" />
+		<setting id="offcloud.userid" type="text" label="Offcloud User ID" enable="false" default="" visible="!eq(-1,) + eq(-2,true)" />
+		<setting id="offcloud.token" type="text" label="Offcloud APi Key" enable="false" default="" visible="!eq(-2,) + eq(-3,true)" />
+		<setting type="action" label="32319" option="close" action="RunScript(script.module.acctmgr, action=offcloudAuth)" visible="eq(-3,) + eq(-4,true)" />
+
 		<setting type="lsep" label="Easynews" />
 		<setting id="easynews.username" type="text" visible="false" label="" default="" />
 		<setting id="easynews.password" type="text" visible="false" label="" default="" />
@@ -91,45 +98,17 @@
 		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=torboxReSync)"  visible="!eq(-2,)" />
 		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=torboxRevoke)"  visible="!eq(-3,)" />
 
+		<setting type="lsep" label="OffCloud" />
+		<setting id="offcloud.token" label="" type="text" default="" visible="false" enable="false" />
+		<setting type="action" label="View Authorizations" option="close" action="RunScript(script.module.acctmgr, action=offcloudViewer)" visible="!eq(-1,)" />
+		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=offcloudReSync)"  visible="!eq(-2,)" />
+		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=offcloudRevoke)"  visible="!eq(-3,)" />
+
 		<setting type="lsep" label="Easynews" />
 		<setting id="easynews.password" label="" type="text" default="" visible="false" enable="false" />
 		<setting type="action" label="View Authorizations" option="close" action="RunScript(script.module.acctmgr, action=easynewsViewer)" visible="!eq(-1,)" />
 		<setting type="action" label="Sync Add-ons" option="close" action="RunScript(script.module.acctmgr, action=easynewsReSync)"  visible="!eq(-2,)" />
 		<setting type="action" label="Revoke" option="close" action="RunScript(script.module.acctmgr, action=easynewsRevoke)"  visible="!eq(-3,)" />
-	</category>
-	<category label="Scrapers">
-		<!-- External Scrapers -->
-		<setting type="lsep" label="Install External Scraper Packages" />
-		<setting type="action" label="Install Scraper Package(s)" option="close" action="RunScript(script.module.acctmgr, action=extInstall)" visible="true" />
-		<setting type="lsep" label="Installed External Scraper Packages" />
-		<!-- Coco -->
-		<setting id="ext.provider_coco" type="bool" visible="false" label="" default="false" />
-		<setting id="coco.text" subsetting="true" type="text" label="Coco Scrapers" enable="false" visible="eq(-1,true)" />
-		<!-- Gears -->
-		<setting id="ext.provider_gears" type="bool" visible="false" label="" default="false" />
-		<setting id="gears.text" subsetting="true" type="text" label="Gears Scrapers" enable="false" visible="eq(-1,true)" />
-		<!-- Magneto -->
-		<setting id="ext.provider_mag" type="bool" visible="false" label="" default="false" />
-		<setting id="mag.text" subsetting="true" type="text" label="Magneto Scrapers" enable="false" visible="eq(-1,true)" />
-		<!-- Viper -->
-		<setting id="ext.provider_vip" type="bool" visible="false" label="" default="false" />
-		<setting id="vip.text" subsetting="true" type="text" label="Viper Scrapers" enable="false" visible="eq(-1,true)" />
-		<setting type="lsep" label="Manage External Scraper Packages" />
-		<!-- Mirrors -->
-		<setting id="ext.provider_coco" type="bool" visible="false" />
-		<setting id="ext.provider_gears" type="bool" visible="false" />
-		<setting id="ext.provider_vip" type="bool" visible="false" />
-		<setting id="ext.provider_mag" type="bool" visible="false" />
-		<!-- View Synced Data -->
-		<setting type="action" label="View/Configure Synced Data" option="close" action="RunScript(script.module.acctmgr, action=extViewer)" visible="eq(-4,true)" />
-		<setting type="action" label="View/Configure Synced Data" option="close" action="RunScript(script.module.acctmgr, action=extViewer)" visible="eq(-4,true) + !eq(-5,true)" />
-		<setting type="action" label="View/Configure Synced Data" option="close" action="RunScript(script.module.acctmgr, action=extViewer)" visible="eq(-4,true) + !eq(-5,true) + !eq(-6,true)" />
-		<setting type="action" label="View/Configure Synced Data" option="close" action="RunScript(script.module.acctmgr, action=extViewer)" visible="eq(-4,true) + !eq(-5,true) + !eq(-6,true) + !eq(-7,true)" />
-		<!-- Sync Data -->
-		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true)" />
-		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true) + !eq(-9,true)" />
-		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true) + !eq(-9,true) + !eq(-10,true)" />	
-		<setting type="action" label="Sync Scraper Package" option="close" action="RunScript(script.module.acctmgr, action=extReSync)" visible="eq(-8,true) + !eq(-9,true) + !eq(-10,true) + !eq(-11,true)" />
 	</category>
 	<category label="Tools">
 		<!-- Set Max Resolution -->
@@ -161,6 +140,7 @@
       		<setting id="sync.pm.service"  type="bool" label="Premiumize" visible="true" default="false"/>
       		<setting id="sync.ad.service"  type="bool" label="All-Debrid" visible="true" default="false"/>
       		<setting id="sync.tb.service"  type="bool" label="TorBox" visible="true" default="false"/>
+		<setting id="sync.oc.service"  type="bool" label="OffCloud" visible="true" default="false"/>
       		<setting id="sync.en.service"  type="bool" label="Easynews" visible="true" default="false"/>
 	</category>
 	<category label="Logs">
@@ -178,8 +158,8 @@
 		<setting label="40104" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_MDBList)" />
 		<setting label="40099" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Debrid)" />
 		<setting label="40196" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Torbox)" />
+		<setting label="40100" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Offcloud)" />
 		<setting label="40101" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Easynews)" />
-		<setting label="40195" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Ext_Scrapers)" />
 		<setting label="40102" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_MaxQL)" />
 		<setting label="40103" type="action" action="RunScript(script.module.acctmgr, action=ShowSupported_Autoplay)" />
 		<setting type="lsep" label="View Changelog" />

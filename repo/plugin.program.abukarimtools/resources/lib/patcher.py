@@ -91,6 +91,17 @@ DIALOG      = xbmcgui.Dialog()
 # ---------------------------------------------------------------------------
 
 PATCHES = [
+    # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'overlay.py'),
+        'old': '_ALLOW_NON_COREELEC = False',
+        'new': '_ALLOW_NON_COREELEC = True',
+        'description': 'TinyPPI overlay.py – allow launch on non-CoreELEC (dev/testing)',
+        'already_patched_check': '_ALLOW_NON_COREELEC = True',
+        'fallback_pattern': r'_ALLOW_NON_COREELEC\s*=\s*False',
+        'fallback_repl': lambda m: '_ALLOW_NON_COREELEC = True',
+    },
     # ── Seren QR Auth ──
     {
         'addon_id': 'plugin.video.seren',

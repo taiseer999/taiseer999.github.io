@@ -72,9 +72,6 @@ class MaxQL:
             ("Absolution",  var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
             ("The Crew",    var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
             ("SALTS",       var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",      var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",    var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",    var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Scrubs V2",   var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
             ("Gratis Red",  var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
             ("Otaku",       var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
@@ -210,31 +207,6 @@ class MaxQL:
         except Exception as e:
             log_utils.error(f"SALTS MaxQL Failed: {e}")
 
-
-        '''# ===================== Orion =====================
-        try:
-            if exists(var.chk_orion) and exists(var.chkset_orion):
-                xbmcaddon.Addon("plugin.video.orion").setSetting("prefered_quality", salts_quality)
-        except Exception as e:
-            log_utils.error("Orion MaxQL Failed")
-
-
-        # ===================== Genesis =====================
-        try:
-            if exists(var.chk_gen) and exists(var.chkset_gen):
-                xbmcaddon.Addon("plugin.video.genesis").setSetting("playback_quality", genesis_quality)
-        except Exception as e:
-            log_utils.error("Genesis MaxQL Failed")
-
-
-        # ===================== Syncher =====================
-        try:
-            if exists(var.chk_sync) and exists(var.chkset_sync):
-                xbmcaddon.Addon("plugin.video.syncher").setSetting("quality_max", num_quality)
-        except Exception as e:
-            log_utils.error("Syncher MaxQL Failed")'''
-
-
         # ===================== Otaku =====================
         try:
             if exists(var.chk_otaku) and exists(var.chkset_otaku):
@@ -257,11 +229,3 @@ class MaxQL:
                 xbmcaddon.Addon("plugin.video.gratisred").setSetting("quality.max", num_quality)
         except Exception as e:
             log_utils.error(f"Gratis Red MaxQL Failed: {e}")
-
-            
-        '''# ===================== Trakt Player =====================
-        try:
-            if exists(var.chk_tkplay) and exists(var.chkset_tkplay):
-                xbmcaddon.Addon("plugin.video.trakt_player").setSetting("preferred_quality", salts_quality)
-        except Exception as e:
-            log_utils.error("Trakt Player MaxQL Failed")'''

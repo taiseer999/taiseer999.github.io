@@ -20,31 +20,6 @@ class Auth:
         your_mdb_apikey = acctmgr.getSetting("mdblist.apikey")
         mdb_master_apikey = your_mdb_apikey
 
-        '''# =================== Copy Addon Data (settings.xml) ==================
-        addons = [
-            ("Shadow",       var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
-            ("Ghost",        var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
-            ("The Chains",   var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
-            ("Otaku",        var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            ("SALTS",        var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
-            ("Otaku",        var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
-            ("Realizer",     var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
-            ("ResolveURL",   var.chk_rurl,   var.rurl_ud,    var.chkset_rurl,    var.rurl),
-        ]
-
-        for name, chk_addon, ud_path, chk_setting, base_path in addons:
-            control.copy_addon_settings(
-                name,
-                chk_addon,
-                ud_path,
-                chk_setting,
-                base_path
-            )'''
-
         # ============================= Umbrella / Dradis / POV / Coalition / TMDbH =============================
         for addon_id, chk_addon, chk_settings, label, mdb_user_key, mdb_api_key, indicators_act, wtch_indicators, remake_settings in (
             ("plugin.video.umbrella",          var.chk_umb,    var.chkset_umb,    "Umbrella",   None,               "mdblist.api",    None,                     None,                 None),

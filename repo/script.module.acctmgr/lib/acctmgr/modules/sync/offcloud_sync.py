@@ -21,42 +21,24 @@ class Auth:
         your_token = acctmgr.getSetting("offcloud.token")
         master_token = your_token
 
-        '''
-        # ========================= Fen Light =========================
+        # ========================= Red Light =========================
         try:
-            if exists(var.chk_fenlt):
-                if not exists(var.chkset_fenlt):
-                    control.remake_settings(var.fenlt_id, var.fenlt_name)
+            if exists(var.chk_red):
+                if not exists(var.chkset_red):
+                    control.remake_settings(var.red_id, var.red_name)
                     xbmc.sleep(500)
 
-                if exists(var.chkset_fenlt):
-                    settings_db = var.fenlt_settings_db
+                if exists(var.chkset_red):
+                    settings_db = var.red_settings_db
                     chk_auth = chk_auth_db.chk_auth(settings_db, "oc.token")
 
                     if chk_auth != master_token:
                         offcloud_db.auth(settings_db)
                         xbmc.sleep(300)
-                        control.remake_settings(var.fenlt_id, var.fenlt_name)
+                        control.remake_settings(var.red_id, var.red_name)
         except Exception as e:
-            log_utils.error("Fen Light OffCloud Failed")
+            log_utils.error("Red Light OffCloud Failed")
 
-        # ========================= Gears =========================
-        try:
-            if exists(var.chk_gears):
-                if not exists(var.chkset_gears):
-                    control.remake_settings(var.gears_id, var.gears_name)
-                    xbmc.sleep(500)
-
-                if exists(var.chkset_gears):
-                    settings_db = var.gears_settings_db
-                    chk_auth = chk_auth_db.chk_auth(settings_db, "oc.token")
-
-                    if chk_auth != master_token:
-                        offcloud_db.auth(settings_db)
-                        xbmc.sleep(300)
-                        control.remake_settings(var.gears_id, var.gears_name)
-        except Exception as e:
-            log_utils.error("Gears OffCloud Failed")
 
         # ========================= Umbrella =========================
         try:
@@ -71,7 +53,7 @@ class Auth:
                     }.items():
                         addon.setSetting(k, v)
         except Exception as e:
-            log_utils.error("Umbrella OffCloud Failed")'''
+            log_utils.error("Umbrella OffCloud Failed")
 
         # ========================= POV =========================
         try:
@@ -92,8 +74,8 @@ class Auth:
 
         # ========================= Dradis / Genocide =========================
         addons = [
-            ("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
-            #("Genocide", "plugin.video.genocide", var.chk_genocide, var.chkset_genocide),
+            #("Dradis",   "plugin.video.dradis",   var.chk_dradis,   var.chkset_dradis),
+            ("Genocide", "plugin.video.genocide", var.chk_genocide, var.chkset_genocide),
         ]
 
         for name, plugin, chk_addon, chk_setting in addons:

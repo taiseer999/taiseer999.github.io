@@ -26,13 +26,8 @@ class Auth:
             ("Shadow",        var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
             ("Ghost",         var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
             ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
-            ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
             ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
             ("Realizer",      var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
             ("ResolveURL",    var.chk_rurl,   var.rurl_ud,    var.chkset_rurl,    var.rurl),
         ]
@@ -217,48 +212,6 @@ class Auth:
         except Exception as e:
             log_utils.error(f"SALTS Premiumize Failed: {e}")
 
-        '''# ========================= Orion =========================
-        try:
-            if exists(var.chk_orion):
-                addon = xbmcaddon.Addon("plugin.video.orion")
-                chk_auth = addon.getSetting("pm_token")
-                if chk_auth != pm_master_token:
-                    for k, v in {
-                        "pm_token": your_pm_token,
-                        "pm_enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Orion Premiumize Failed")
-
-        # ========================= Genesis =========================
-        try:
-            if exists(var.chk_gen):
-                addon = xbmcaddon.Addon("plugin.video.genesis")
-                chk_auth = addon.getSetting("premiumize_token")
-                if chk_auth != pm_master_token:
-                    for k, v in {
-                        "premiumize_token": your_pm_token,
-                        "premiumize_user": your_pm_username,
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Genesis Premiumize Failed")
-
-        # ========================= Syncher =========================
-        try:
-            if exists(var.chk_sync):
-                addon = xbmcaddon.Addon("plugin.video.syncher")
-                chk_auth = addon.getSetting("pm.token")
-                if chk_auth != pm_master_token:
-                    for k, v in {
-                        "pm.token": your_pm_token,
-                        "pm.enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Syncher Premiumize Failed")'''
-
         # ========================= Otaku =========================
         try:
             if exists(var.chk_otaku):
@@ -302,17 +255,3 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL Premiumize Failed: {e}")
-
-        '''# ========================= Trakt Player =========================
-        try:
-            if exists(var.chk_tkplay):
-                addon = xbmcaddon.Addon("plugin.video.trakt_player")
-                chk_auth = addon.getSetting("pm_access_token")
-                if chk_auth != pm_master_token:
-                    for k, v in {
-                        "pm_access_token": your_pm_token,
-                        "pm_auth_done": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Trakt Player Premiumize Failed")'''

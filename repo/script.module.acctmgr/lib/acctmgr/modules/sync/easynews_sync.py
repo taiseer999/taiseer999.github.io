@@ -24,6 +24,8 @@ class Auth:
 
         # =================== Copy Addon Data (settings.xml) ==================
         addons = [
+            ("The Crew",       var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
+            ("Otaku",          var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
             ("Easynews Video", var.chk_easyv,  var.easyv_ud,  var.chkset_easyv,  var.easyv),
         ]
 
@@ -129,6 +131,37 @@ class Auth:
                             addon.setSetting(k, v)
             except Exception as e:
                 log_utils.error(f"{name} Easynews Failed: {e}")
+
+        # ========================= The Crew =========================
+        try:
+            if exists(var.chk_crew) and exists(var.chkset_crew):
+                addon = xbmcaddon.Addon("plugin.video.thecrew")
+                chk_auth_user = addon.getSetting("easynews.user")
+                chk_auth_pass = addon.getSetting("easynews.password")
+                if chk_auth_user != master_user or chk_auth_pass != master_pass:
+                    for k, v in {
+                        "easynews.user": your_username,
+                        "easynews.password": your_password,
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"The Crew Easynews Failed: {e}")
+
+        # ========================= Otaku =========================
+        try:
+            if exists(var.chk_otaku) and exists(var.chkset_otaku):
+                addon = xbmcaddon.Addon("plugin.video.otaku")
+                chk_auth_user = addon.getSetting("easynews.user")
+                chk_auth_pass = addon.getSetting("easynews.password")
+                if chk_auth_user != master_user or chk_auth_pass != master_pass:
+                    for k, v in {
+                        "easynews.user": your_username,
+                        "easynews.password": your_password,
+                        "easynews.enabled": "true",
+                    }.items():
+                        addon.setSetting(k, v)
+        except Exception as e:
+            log_utils.error(f"Otaku Easynews Failed: {e}")
 
         # ========================= Easynews Video =========================
         try:

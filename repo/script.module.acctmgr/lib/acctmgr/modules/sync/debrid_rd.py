@@ -30,13 +30,8 @@ class Auth:
             ("Shadow",        var.chk_shadow, var.shadow_ud,  var.chkset_shadow,  var.shadow),
             ("Ghost",         var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
             ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
-            ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
             ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
             ("Realizer",      var.chk_realx,  var.realx_ud,   var.chkset_realx,   var.realx),
             ("ResolveURL",    var.chk_rurl,   var.rurl_ud,    var.chkset_rurl,    var.rurl),
         ]
@@ -238,53 +233,6 @@ class Auth:
         except Exception as e:
             log_utils.error(f"SALTS Real-Debrid Failed: {e}")
 
-        '''# ========================= Orion =========================
-        try:
-            if exists(var.chk_orion):
-                addon = xbmcaddon.Addon("plugin.video.orion")
-                chk_auth = addon.getSetting("rd_token")
-                if chk_auth != rd_master_token:
-                    for k, v in {
-                        "rd_token": your_rd_token,
-                        "rd_refresh": your_rd_refresh,
-                        "rd_enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Orion Real-Debrid Failed")
-
-        # ========================= Genesis =========================
-        try:
-            if exists(var.chk_gen):
-                addon = xbmcaddon.Addon("plugin.video.genesis")
-                chk_auth = addon.getSetting("realdebrid_token")
-                if chk_auth != rd_master_token:
-                    for k, v in {
-                        "realdebrid_token": your_rd_token,
-                        "realdebrid_refresh": your_rd_refresh,
-                        #"realdebrid_tokenExpireIn": your_rd_expires,
-                        "realdebrid_auth": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Genesis Real-Debrid Failed")
-
-        # ========================= Syncher =========================
-        try:
-            if exists(var.chk_sync):
-                addon = xbmcaddon.Addon("plugin.video.syncher")
-                chk_auth = addon.getSetting("rd.token")
-                if chk_auth != rd_master_token:
-                    for k, v in {
-                        "rd.token": your_rd_token,
-                        "rd.refresh": your_rd_refresh,
-                        #"rd.expiry": your_rd_expires,
-                        "rd.enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Syncher Real-Debrid Failed")'''
-
         # ========================= Otaku =========================
         try:
             if exists(var.chk_otaku):
@@ -302,21 +250,6 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"Otaku Real-Debrid Failed: {e}")
-
-        '''# ========================= Trakt Player =========================
-        try:
-            if exists(var.chk_tkplay):
-                addon = xbmcaddon.Addon("plugin.video.trakt_player")
-                chk_auth = addon.getSetting("rd_access_token")
-                if chk_auth != rd_master_token:
-                    for k, v in {
-                        "rd_access_token": your_rd_token,
-                        "rd_refresh_token": your_rd_refresh,
-                        "rd_auth_done": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error("Trakt Player Real-Debrid Failed")'''
 
         # ========================= Realizer =========================
         try:

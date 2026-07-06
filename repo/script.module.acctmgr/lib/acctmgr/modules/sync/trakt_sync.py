@@ -65,13 +65,9 @@ class Auth:
             ("Absolution",    var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
             ("The Crew",      var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
             ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Scrubs V2",     var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
             ("Gratis Red",    var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
             ("TMDb Helper",   var.chk_tmdbh,  var.tmdbh_ud,   var.chkset_tmdbh,   var.tmdbh),
-            #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
             ("Trakt",         var.chk_trakt,  var.trakt_ud,   var.chkset_trakt,   var.trakt),
         )
 
@@ -418,12 +414,12 @@ class Auth:
 
                         patched_keys = False
                         if var.crew_client in data or var.crew_secret in data:
-                            data = data.replace(var.crew_client, var.client_am).replace(var.crew_secret, var.secret_am)
+                            data = data.replace(var.crew_client, var.client_am_x).replace(var.crew_secret, var.secret_am_x)
                             with open(var.path_crew, "w") as f:
                                 f.write(data)
                             patched_keys = True
 
-                        elif var.client_am in data and var.secret_am in data:
+                        elif var.client_am_x in data and var.secret_am_x in data:
                             patched_keys = True
 
                         if not patched_keys:
@@ -437,6 +433,8 @@ class Auth:
                             "trakt.user": your_username,
                             "trakt.token": your_token,
                             "trakt.refresh": your_refresh,
+                            "trakt.expires_at": your_expires,
+                            "silent.boot": "true",
                         }.items():
                             addon.setSetting(k, v)
         except Exception as e:
@@ -477,103 +475,6 @@ class Auth:
                             addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"SALTS Trakt Failed: {e}")
-
-        '''# ========================= Orion =========================
-        try:
-            if "Orion" in current:
-                if exists(var.chk_orion) and exists(var.chkset_orion):
-                    addon = xbmcaddon.Addon("plugin.video.orion")
-                    chk_auth = addon.getSetting("trakt_token")
-                    if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_orion, "r") as f:
-                            data = f.read()
-
-                        patched_keys = False
-                        if var.orion_client in data or var.orion_secret in data:
-                            data = data.replace(var.orion_client, var.client_am).replace(var.orion_secret, var.secret_am)
-                            with open(var.path_orion, "w") as f:
-                                f.write(data)
-                            patched_keys = True
-                        elif var.client_am in data and var.secret_am in data:
-                            patched_keys = True
-
-                        if not patched_keys:
-                            log_utils.log("Orion Trakt keys NOT patched")
-
-                        for k, v in {
-                            "trakt_token": your_token,
-                            "trakt_refresh": your_refresh,
-                            "trakt_enabled": "true",
-                        }.items():
-                            addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Orion Trakt Failed: {e}")
-
-        # ========================= Genesis =========================
-        try:
-            if "Genesis" in current:
-                if exists(var.chk_gen) and exists(var.chkset_gen):
-                    addon = xbmcaddon.Addon("plugin.video.genesis")
-                    chk_auth = addon.getSetting("trakt.token")
-                    if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_gen, "r") as f:
-                            data = f.read()
-
-                        patched_keys = False
-                        if var.genesis_client in data or var.genesis_secret in data:
-                            data = data.replace(var.genesis_client, var.client_am).replace(var.genesis_secret, var.secret_am)
-                            with open(var.path_gen, "w") as f:
-                                f.write(data)
-                            patched_keys = True
-                        elif var.client_am in data and var.secret_am in data:
-                            patched_keys = True
-
-                        if not patched_keys:
-                            log_utils.log("Genesis Trakt keys NOT patched")
-
-                        patched, msg = control.startup_patch(var.path_gen_service)
-                        if not patched:
-                            log_utils.log(f"Genesis startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-
-                        for k, v in {
-                            "trakt.user": your_username,
-                            "trakt.token": your_token,
-                            "trakt.refresh": your_refresh,
-                        }.items():
-                            addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Genesis Trakt Failed: {e}")
-
-        # ========================= Syncher =========================
-        try:
-            if "Syncher" in current:
-                if exists(var.chk_sync) and exists(var.chkset_sync):
-                    addon = xbmcaddon.Addon("plugin.video.syncher")
-                    chk_auth = addon.getSetting("trakt.token")
-                    if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_sync, "r") as f:
-                            data = f.read()
-
-                        patched_keys = False
-                        if var.syncher_client in data or var.syncher_secret in data:
-                            data = data.replace(var.syncher_client, var.client_am).replace(var.syncher_secret, var.secret_am)
-                            with open(var.path_sync, "w") as f:
-                                f.write(data)
-                            patched_keys = True
-                        elif var.client_am in data and var.secret_am in data:
-                            patched_keys = True
-
-                        if not patched_keys:
-                            log_utils.log("Syncher Trakt keys NOT patched")
-
-                        for k, v in {
-                            "trakt.user": your_username,
-                            "trakt.token": your_token,
-                            "trakt.refresh": your_refresh,
-                        }.items():
-                            addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Syncher Trakt Failed: {e}")'''
 
         # ========================= Scrubs V2 =========================
         try:
@@ -687,41 +588,6 @@ class Auth:
                     addon.setSetting("startup_notifications", "false")
         except Exception as e:
             log_utils.error(f"TMDBh Trakt Failed: {e}")
-
-        '''# ========================= Trakt Player =========================
-        try:
-            if "Trakt Player" in current:
-                if exists(var.chk_tkplay) and exists(var.chkset_tkplay):
-                    addon = xbmcaddon.Addon("plugin.video.trakt_player")
-                    chk_auth = addon.getSetting("trakt_access_token")
-                    if refresh_sync(mode, chk_auth, master_token):
-                        with open(var.path_tkplay, "r") as f:
-                            data = f.read()
-
-                        patched_keys = False
-                        if var.tkplay_client in data or var.tkplay_secret in data:
-                            data = data.replace(var.tkplay_client, var.client_am).replace(var.tkplay_secret, var.secret_am)
-                            with open(var.path_tkplay, "w") as f:
-                                f.write(data)
-                            patched_keys = True
-                        elif var.client_am in data and var.secret_am in data:
-                            patched_keys = True
-
-                        if not patched_keys:
-                            log_utils.log("Trakt Player Trakt keys NOT patched")
-
-                        patched, msg = control.startup_patch(var.path_tkplay_service)
-                        if not patched:
-                            log_utils.log(f"Trakt Player startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-
-                        for k, v in {
-                            "trakt_access_token": your_token,
-                            "trakt_refresh_token": your_refresh,
-                            "trakt_auth_done": "true",
-                        }.items():
-                            addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Trakt Player Trakt Failed: {e}")'''
 
         # ========================= Trakt Addon =========================
         try:

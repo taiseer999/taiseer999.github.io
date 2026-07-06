@@ -14,6 +14,8 @@ client_am_obs = [33, 39, 117, 118, 119, 117, 36, 39, 115, 39, 118, 112, 36, 114,
 secret_am_obs = [114, 114, 118, 38, 116, 118, 115, 33, 113, 119, 115, 117, 122, 33, 117, 38, 113, 33, 119, 117, 123, 122, 113, 115, 113, 123, 115, 123, 32, 39, 33, 115, 122, 115, 39, 123, 35, 115, 116, 112, 32, 33, 122, 118, 36, 115, 116, 35, 112, 39, 117, 122, 38, 33, 122, 112, 35, 113, 117, 115, 119, 114, 38, 32]
 client_am_obs_str = '[33, 39, 117, 118, 119, 117, 36, 39, 115, 39, 118, 112, 36, 114, 123, 123, 115, 123, 32, 119, 117, 115, 117, 115, 39, 123, 115, 123, 116, 115, 114, 123, 117, 115, 117, 118, 117, 118, 32, 35, 38, 119, 32, 115, 113, 32, 112, 35, 117, 114, 123, 119, 123, 35, 39, 36, 112, 36, 122, 39, 119, 116, 112, 118]'
 secret_am_obs_str = '[114, 114, 118, 38, 116, 118, 115, 33, 113, 119, 115, 117, 122, 33, 117, 38, 113, 33, 119, 117, 123, 122, 113, 115, 113, 123, 115, 123, 32, 39, 33, 115, 122, 115, 39, 123, 35, 115, 116, 112, 32, 33, 122, 118, 36, 115, 116, 35, 112, 39, 117, 122, 38, 33, 122, 112, 35, 113, 117, 115, 119, 114, 38, 32]'
+client_am_x = 'Nw5cdEtZG14JXAhpGlgEOiQ9Rnh5cBkgGBE5MSV8fmphBjEyGCvt/75uvmoL5wXTFQQcWl2krckC+jHSFARCQw=='
+secret_am_x = 'ZFlTJEhcQFgLDA0WLBUGASYDdXp/ex0gLhE5MQmwsWJuBu85xiQ5Lri8UGnGNgHTEPMeWaiqWD3xCTIeFBqQkQ=='
 client_am = obfuscation.deobfuscate(client_am_obs)
 secret_am = obfuscation.deobfuscate(secret_am_obs)
 
@@ -122,13 +124,9 @@ chk_redg = addons + translatePath('plugin.video.gratisred/')#--------------Fork 
 # Others
 chk_crew = addons + translatePath('plugin.video.thecrew/')#----------------The Crew
 chk_salts = addons + translatePath('plugin.video.salts/')#-----------------SALTS
-chk_orion = addons + translatePath('plugin.video.orion/')#-----------------Orion
-chk_gen = addons + translatePath('plugin.video.genesis/')#-----------------Genesis
-chk_sync = addons + translatePath('plugin.video.syncher/')#----------------Syncher
 chk_otaku = addons + translatePath('plugin.video.otaku/')#-----------------Otaku
 chk_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/')#-----TMDb Helper
 chk_easyv = addons + translatePath('plugin.video.easynewsx/')#-------------Easynews Video
-chk_tkplay = addons + translatePath('plugin.video.trakt_player/')#---------Trakt Player
 chk_trakt = addons + translatePath('script.trakt/')#-----------------------Trakt
 # Debrid Only
 chk_realx = addons + translatePath('plugin.video.realizerx/')#-------------Realizer
@@ -165,13 +163,9 @@ redg_ud = addon_data + translatePath('plugin.video.gratisred/')
 # Others
 crew_ud = addon_data + translatePath('plugin.video.thecrew/')
 salts_ud = addon_data + translatePath('plugin.video.salts/')
-orion_ud = addon_data + translatePath('plugin.video.orion/')
-gen_ud = addon_data + translatePath('plugin.video.genesis/')
-sync_ud = addon_data + translatePath('plugin.video.syncher/')
 otaku_ud = addon_data + translatePath('plugin.video.otaku/')
 tmdbh_ud = addon_data + translatePath('plugin.video.themoviedb.helper/')
 easyv_ud = addon_data + translatePath('plugin.video.easynewsx/')
-tkplay_ud = addon_data + translatePath('plugin.video.trakt_player/')
 trakt_ud = addon_data + translatePath('script.trakt/')
 # Debrid Only
 realx_ud = addon_data + translatePath('plugin.video.realizerx/')
@@ -209,13 +203,9 @@ chkset_redg = addon_data + translatePath('plugin.video.gratisred/settings.xml')
 # Others
 chkset_crew = addon_data + translatePath('plugin.video.thecrew/settings.xml')
 chkset_salts = addon_data + translatePath('plugin.video.salts/settings.xml')
-chkset_orion = addon_data + translatePath('plugin.video.orion/settings.xml')
-chkset_gen = addon_data + translatePath('plugin.video.genesis/settings.xml')
-chkset_sync = addon_data + translatePath('plugin.video.syncher/settings.xml')
 chkset_otaku = addon_data + translatePath('plugin.video.otaku/settings.xml')
 chkset_tmdbh = addon_data + translatePath('plugin.video.themoviedb.helper/settings.xml')
 chkset_easyv = addon_data + translatePath('plugin.video.easynewsx/settings.xml')
-chkset_tkplay = addon_data + translatePath('plugin.video.trakt_player/settings.xml')
 chkset_trakt = addon_data + translatePath('script.trakt/settings.xml')
 # Debrid Only
 chkset_realx = addon_data + translatePath('plugin.video.realizerx/settings.xml')
@@ -242,13 +232,9 @@ redg = xmls + translatePath('plugin.video.gratisred/settings.xml')
 # Others
 crew = xmls + translatePath('plugin.video.thecrew/settings.xml')
 salts = xmls + translatePath('plugin.video.salts/settings.xml')
-orion = xmls + translatePath('plugin.video.orion/settings.xml')
-gen = xmls + translatePath('plugin.video.genesis/settings.xml')
-sync = xmls + translatePath('plugin.video.syncher/settings.xml')
 otaku = xmls + translatePath('plugin.video.otaku/settings.xml')
 easyv = xmls + translatePath('plugin.video.easynewsx/settings.xml')
 tmdbh = xmls + translatePath('plugin.video.themoviedb.helper/settings.xml')
-tkplay = xmls + translatePath('plugin.video.trakt_player/settings.xml')
 trakt = xmls + translatePath('script.trakt/settings.xml')
 # Debrid Only
 realx = xmls + translatePath('plugin.video.realizerx/settings.xml')
@@ -282,10 +268,8 @@ path_redg_service = addons + translatePath('plugin.video.gratisred/service.py')
 # Others
 path_crew_service = addons + translatePath('plugin.video.thecrew/service.py')
 path_salts_service = addons + translatePath('plugin.video.salts/service.py')
-path_gen_service = addons + translatePath('plugin.video.genesis/service.py')
 path_scrubs_service = addons + translatePath('plugin.video.scrubsv2/service.py')
 path_tmdbh_service = addons + translatePath('plugin.video.themoviedb.helper/resources/service.py')
-path_tkplay_service = addons + translatePath('plugin.video.trakt_player/service.py')
 path_trakt_service = addons + translatePath('script.trakt/resources/lib/service.py')
 
 
@@ -303,14 +287,10 @@ path_chains = addons + translatePath('plugin.video.thechains/resources/menus.py'
 path_scrubs = addons + translatePath('plugin.video.scrubsv2/resources/lib/modules/trakt.py')
 path_redg = addons + translatePath('plugin.video.gratisred/resources/lib/modules/trakt.py')
 # Others
-path_crew = addons + translatePath('script.module.thecrew/lib/resources/lib/modules/trakt.py')
+path_crew = addons + translatePath('script.module.thecrew/lib/resources/lib/modules/keys.py')
 path_salts = addons + translatePath('plugin.video.salts/salts_lib/trakt_api.py')
-path_orion = addons + translatePath('plugin.video.orion/resources/lib/trakt.py')
-path_gen = addons + translatePath('plugin.video.genesis/resources/lib/libraries/control.py')
-path_sync = addons + translatePath('plugin.video.syncher/resources/lib/modules/control.py')
 path_scrubs = addons + translatePath('plugin.video.scrubsv2/resources/lib/modules/trakt.py')
 path_tmdbh = addons + translatePath('plugin.video.themoviedb.helper/resources/tmdbhelper/lib/api/api_keys/trakt.py')
-path_tkplay = addons + translatePath('plugin.video.trakt_player/resources/lib/trakt_auth.py')
 path_trakt = addons + translatePath('script.trakt/resources/lib/traktapi.py')
 
 
@@ -336,21 +316,9 @@ shadow_secret_obs = [115, 39, 33, 118, 36, 113, 117, 39, 119, 117, 118, 113, 39,
 ghost_client_obs = [35, 118, 39, 117, 115, 116, 32, 118, 32, 112, 112, 32, 116, 112, 39, 119, 123, 32, 123, 39, 114, 123, 118, 119, 118, 118, 113, 119, 33, 122, 117, 115, 114, 32, 116, 119, 114, 32, 113, 115, 118, 113, 38, 33, 33, 39, 119, 119, 113, 38, 112, 119, 112, 32, 116, 35, 116, 116, 32, 35, 116, 114, 33, 122]
 ghost_secret_obs = [33, 116, 38, 123, 35, 32, 35, 117, 112, 112, 115, 118, 35, 115, 33, 35, 113, 33, 116, 38, 118, 119, 38, 114, 113, 119, 115, 39, 119, 123, 36, 112, 115, 32, 32, 39, 118, 113, 38, 36, 123, 32, 32, 35, 33, 117, 33, 119, 32, 117, 118, 114, 114, 122, 123, 113, 117, 123, 36, 122, 33, 119, 33, 38]
 
-crew_client_obs = [118, 122, 112, 36, 123, 38, 32, 119, 112, 39, 39, 112, 116, 115, 115, 114, 123, 123, 33, 39, 113, 35, 35, 115, 35, 32, 36, 123, 32, 114, 36, 117, 39, 38, 122, 123, 113, 33, 116, 38, 113, 33, 116, 32, 119, 36, 35, 33, 39, 123, 119, 115, 116, 118, 39, 35, 33, 117, 32, 114, 115, 36, 117, 115]
-crew_secret_obs = [122, 114, 35, 112, 117, 112, 123, 117, 112, 122, 32, 119, 113, 32, 35, 115, 33, 33, 113, 122, 115, 113, 117, 32, 112, 112, 36, 112, 115, 36, 113, 118, 38, 119, 123, 114, 39, 38, 38, 113, 119, 118, 119, 118, 118, 116, 116, 33, 118, 32, 122, 123, 112, 114, 123, 119, 116, 119, 115, 113, 38, 123, 116, 117]
-
 salts_client_obs = [118, 112, 39, 32, 35, 116, 123, 35, 115, 122, 117, 123, 119, 35, 39, 118, 122, 36, 33, 119, 38, 116, 38, 32, 38, 38, 123, 123, 113, 123, 116, 39, 123, 39, 113, 122, 123, 118, 38, 33, 118, 36, 115, 122, 123, 113, 114, 39, 116, 115, 122, 117, 38, 113, 116, 33, 122, 32, 118, 113, 118, 116, 38, 113]
 salts_secret_obs = [39, 119, 32, 33, 117, 39, 112, 114, 116, 116, 114, 39, 117, 113, 116, 112, 112, 113, 118, 118, 39, 32, 36, 123, 113, 33, 112, 119, 114, 35, 122, 36, 33, 112, 122, 115, 118, 35, 122, 36, 117, 33, 112, 32, 114, 122, 112, 32, 38, 39, 39, 119, 115, 119, 118, 119, 38, 119, 36, 117, 115, 123, 116, 123]
                                                    
-orion_client_obs = [119, 118, 122, 123, 113, 115, 36, 36, 39, 115, 36, 117, 32, 36, 33, 123, 32, 119, 119, 122, 116, 118, 113, 116, 112, 112, 116, 122, 119, 117, 32, 38, 114, 123, 123, 36, 119, 119, 39, 114, 35, 118, 115, 123, 33, 122, 112, 115, 39, 117, 35, 32, 117, 112, 123, 35, 116, 38, 114, 114, 114, 119, 36, 122]
-orion_secret_obs = [116, 36, 38, 112, 123, 113, 123, 36, 33, 36, 116, 39, 123, 119, 114, 114, 116, 38, 39, 119, 33, 113, 118, 114, 112, 114, 116, 38, 113, 38, 113, 112, 112, 117, 32, 38, 36, 36, 119, 118, 117, 118, 38, 112, 112, 38, 39, 122, 114, 39, 35, 122, 123, 39, 115, 117, 33, 112, 116, 113, 116, 33, 122, 117]
-
-genesis_client_obs = [112, 115, 119, 118, 113, 116, 39, 112, 117, 113, 117, 117, 35, 112, 39, 113, 113, 114, 33, 38, 122, 118, 114, 116, 35, 33, 115, 33, 38, 115, 123, 38, 39, 123, 113, 39, 32, 123, 119, 116, 33, 113, 35, 36, 119, 114, 112, 118, 112, 38, 38, 36, 123, 112, 33, 112, 114, 39, 116, 114, 118, 36, 117, 116]
-genesis_secret_obs = [123, 33, 33, 122, 116, 36, 114, 33, 114, 35, 35, 118, 36, 32, 122, 38, 113, 122, 36, 35, 115, 36, 38, 123, 38, 119, 38, 35, 39, 33, 33, 39, 32, 117, 38, 112, 119, 117, 114, 114, 33, 35, 115, 113, 115, 123, 118, 115, 116, 119, 118, 113, 35, 114, 116, 119, 123, 115, 117, 118, 116, 118, 116, 122]
-
-syncher_client_obs = [38, 113, 112, 32, 115, 114, 119, 113, 39, 116, 38, 113, 114, 119, 35, 122, 33, 38, 112, 114, 122, 119, 35, 112, 36, 112, 113, 119, 116, 33, 118, 36, 116, 38, 36, 35, 35, 118, 38, 123, 38, 113, 112, 117, 33, 115, 33, 116, 36, 35, 117, 35, 116, 114, 38, 117, 33, 35, 116, 32, 39, 33, 35, 123]
-syncher_secret_obs = [38, 123, 113, 33, 35, 115, 119, 116, 113, 115, 112, 117, 36, 112, 112, 33, 122, 123, 36, 113, 32, 117, 114, 113, 33, 32, 123, 118, 36, 32, 117, 115, 115, 118, 32, 118, 123, 113, 113, 122, 115, 123, 112, 113, 115, 115, 115, 33, 112, 33, 39, 115, 33, 113, 119, 118, 118, 32, 117, 114, 115, 123, 39, 32]
-
 scrubs_client_obs = [116, 113, 33, 119, 113, 39, 38, 33, 112, 123, 123, 32, 117, 35, 114, 119, 33, 33, 116, 39, 35, 112, 112, 117, 112, 39, 122, 35, 122, 118, 39, 115, 113, 35, 35, 38, 39, 114, 116, 117, 33, 115, 122, 35, 117, 123, 118, 113, 116, 112, 35, 32, 123, 35, 118, 35, 122, 118, 39, 35, 36, 32, 115, 116]
 scrubs_secret_obs = [123, 115, 116, 113, 39, 32, 38, 35, 123, 38, 113, 113, 35, 33, 38, 114, 116, 33, 117, 118, 38, 114, 115, 117, 39, 122, 116, 115, 118, 114, 118, 32, 117, 112, 115, 112, 39, 39, 113, 118, 116, 117, 119, 39, 114, 123, 39, 117, 113, 113, 116, 119, 38, 117, 119, 113, 116, 32, 122, 118, 39, 35, 32, 116]
 
@@ -366,9 +334,6 @@ thechains_secret_obs = [112, 113, 117, 114, 38, 114, 118, 112, 119, 39, 118, 114
 
 tmdbh_client_obs = [39, 116, 36, 38, 39, 116, 115, 117, 113, 35, 38, 36, 113, 33, 116, 35, 36, 122, 36, 38, 115, 32, 114, 116, 123, 118, 32, 123, 32, 122, 118, 38, 117, 33, 119, 115, 123, 33, 39, 36, 33, 112, 118, 118, 122, 112, 113, 115, 114, 39, 115, 38, 39, 114, 116, 33, 116, 35, 32, 39, 119, 118, 116, 117]
 tmdbh_secret_obs = [115, 119, 115, 115, 123, 113, 122, 118, 113, 118, 115, 38, 123, 35, 116, 115, 33, 117, 119, 115, 38, 122, 38, 119, 115, 119, 35, 33, 32, 33, 114, 38, 38, 122, 114, 115, 114, 114, 115, 38, 118, 39, 32, 39, 122, 119, 38, 113, 39, 39, 36, 123, 122, 122, 119, 38, 36, 122, 114, 39, 39, 118, 38, 123]
-
-tkplay_client_obs = [38, 112, 35, 122, 39, 122, 112, 114, 36, 39, 33, 114, 38, 118, 116, 114, 117, 123, 33, 32, 32, 33, 39, 35, 33, 35, 122, 119, 115, 116, 118, 122, 38, 36, 123, 118, 113, 115, 33, 32, 33, 117, 113, 39, 38, 39, 112, 33, 115, 114, 38, 113, 119, 38, 36, 32, 115, 33, 117, 35, 113, 116, 39, 112]
-tkplay_secret_obs = [123, 33, 117, 33, 112, 123, 39, 117, 116, 115, 116, 116, 118, 116, 119, 122, 122, 112, 32, 35, 116, 117, 112, 113, 38, 119, 117, 122, 39, 123, 117, 36, 33, 39, 118, 116, 116, 33, 36, 118, 116, 116, 118, 115, 118, 35, 117, 116, 33, 113, 116, 115, 122, 118, 119, 118, 114, 32, 113, 115, 39, 123, 35, 116]
 
 trakt_client_obs_str = '[123, 39, 116, 119, 33, 117, 32, 32, 118, 35, 119, 32, 117, 122, 116, 35, 119, 32, 119, 38, 36, 113, 39, 117, 113, 117, 115, 33, 113, 32, 33, 38, 36, 35, 114, 114, 39, 112, 116, 35, 118, 123, 114, 117, 122, 39, 35, 112, 114, 112, 122, 122, 38, 116, 115, 116, 36, 39, 122, 113, 38, 122, 118, 38]'
 trakt_secret_obs_str = '[35, 32, 33, 116, 36, 33, 123, 119, 119, 118, 114, 118, 123, 123, 38, 114, 113, 114, 122, 39, 119, 117, 32, 33, 112, 117, 39, 33, 35, 36, 123, 35, 38, 39, 33, 117, 36, 123, 38, 118, 114, 35, 122, 123, 112, 116, 36, 113, 117, 123, 118, 115, 36, 36, 119, 117, 123, 123, 32, 35, 119, 35, 32, 113]'
@@ -396,20 +361,11 @@ shadow_secret = obfuscation.deobfuscate(shadow_secret_obs)
 ghost_client = obfuscation.deobfuscate(ghost_client_obs)
 ghost_secret = obfuscation.deobfuscate(ghost_secret_obs)
 
-crew_client = obfuscation.deobfuscate(crew_client_obs)
-crew_secret = obfuscation.deobfuscate(crew_secret_obs)
+crew_client = 'YFFRKk8MHw4KXFlpKlt8TSw9R0h1QCMgHDjyMQl/tGSz0TI5FPo5/Gm8Urs1++rR5w8QVlpbrczzFd8ZCNRHQA=='
+crew_secret = 'bFkGdklSSAwKc1oUVwosMhYDd3t3fhkRLwjyKDqxYWGyAjM2yvvvLW9tbWk0CwHRFvYdXlZXWTgGCygcxQFGRg=='
 
 salts_client = obfuscation.deobfuscate(salts_client_obs)
 salts_secret = obfuscation.deobfuscate(salts_secret_obs)
-
-orion_client = obfuscation.deobfuscate(orion_client_obs)
-orion_secret = obfuscation.deobfuscate(orion_secret_obs)
-
-genesis_client = obfuscation.deobfuscate(genesis_client_obs)
-genesis_secret = obfuscation.deobfuscate(genesis_secret_obs)
-
-syncher_client = obfuscation.deobfuscate(syncher_client_obs)
-syncher_secret = obfuscation.deobfuscate(syncher_secret_obs)
 
 scrubs_client = obfuscation.deobfuscate(scrubs_client_obs)
 scrubs_secret = obfuscation.deobfuscate(scrubs_secret_obs)
@@ -425,6 +381,3 @@ thechains_secret = obfuscation.deobfuscate(thechains_secret_obs)
 
 tmdbh_client = obfuscation.deobfuscate(tmdbh_client_obs)
 tmdbh_secret = obfuscation.deobfuscate(tmdbh_secret_obs)
-
-tkplay_client = obfuscation.deobfuscate(tkplay_client_obs)
-tkplay_secret = obfuscation.deobfuscate(tkplay_secret_obs)

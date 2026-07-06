@@ -7,10 +7,41 @@ from requests.adapters import HTTPAdapter
 
 from acctmgr.modules import control
 from acctmgr.modules import log_utils
+from acctmgr.modules.qr_utils import make_qr, remove_qr
 
 
 # Variables
 OFFCLOUD_ICON = control.joinPath(control.artPath(), "offcloud.png")
+OFFCLOUD_BDR = control.joinPath(control.addonPath(), "resources", "images", "white.png")
+OFFCLOUD_BG = control.joinPath(control.addonPath(), "resources", "images", "dialog_background.png")
+OFFCLOUD_QR = control.joinPath(control.addonPath(), "resources", "images", "offcloud_qr.png")
+
+
+class OffcloudAuthDialog(xbmcgui.WindowXMLDialog):
+    def __init__(self, *args, **kwargs):
+        self.user_code = kwargs.get("user_code")
+        self.verify_url = kwargs.get("verify_url")
+        self.bg_image = kwargs.get("bg_image")
+        self.qr_image = kwargs.get("qr_image")
+        self.bdr_image = kwargs.get("bdr_image")
+        self.is_active = True
+        super(OffcloudAuthDialog, self).__init__()
+
+    def onInit(self):
+        self.setProperty("user_code", self.user_code)
+        self.setProperty("verify_url", self.verify_url)
+        self.setProperty("bg_image", self.bg_image)
+        self.setProperty("qr_image", self.qr_image)
+        self.setProperty("bdr_image", self.bdr_image)
+
+    def onClick(self, controlId):
+        self.is_active = False
+        self.close()
+
+    def onAction(self, action):
+        if action.getId() in [10, 13, 92]:
+            self.is_active = False
+            self.close()
 
 BASE_HOST = "https://offcloud.com"
 API_BASE = f"{BASE_HOST}/api"
@@ -51,9 +82,21 @@ class Offcloud:
             control.notification(message="Offcloud authorization failed!",icon=OFFCLOUD_ICON)
             return False
 
-        # Progress dialog
-        progress = xbmcgui.DialogProgress()
-        progress.create("Offcloud Authorization",f"Go to:\n{verification_uri}\n\n"f"Enter code:\n{user_code}\n\n""Waiting for authorization...")
+        # QR auth dialog: try dynamic QR, fall back to the bundled static QR
+        # (points at the fixed activate page) when qrcode/PIL are unavailable
+        qr_path = make_qr(verification_uri)
+        qr_image = qr_path if qr_path else OFFCLOUD_QR
+        dialog = OffcloudAuthDialog(
+            "offcloud_auth.xml",
+            str(control.addonPath()),
+            "Default",
+            user_code=user_code,
+            verify_url=verification_uri,
+            bg_image=OFFCLOUD_BG,
+            qr_image=qr_image,
+            bdr_image=OFFCLOUD_BDR
+        )
+        dialog.show()
 
         # Poll for access token
         data = {"device_code": device_code,"grant_type": "urn:ietf:params:oauth:grant-type:device_code",}
@@ -65,16 +108,9 @@ class Offcloud:
         try:
             while time.monotonic() < end:
 
-                if progress.iscanceled() or xbmc.Monitor().abortRequested():
-                    progress.close()
+                if not dialog.is_active or xbmc.Monitor().abortRequested():
                     control.notification(message="Offcloud authorization cancelled!",icon=OFFCLOUD_ICON)
                     return False
-
-                remaining = int(end - time.monotonic())
-                mins, secs = divmod(max(0, remaining), 60)
-                pct = int(100 * (1.0 - (remaining / float(expires_in)))) if expires_in else 0
-
-                progress.update(pct,f"Go to: {verification_uri}[CR]"f"Enter code: {user_code}[CR]"f"Remaining: {mins:02d}:{secs:02d}")
 
                 try:
                     r = session.post(OAUTH_TOKEN_URL, json=data, timeout=TIMEOUT)
@@ -89,7 +125,13 @@ class Offcloud:
                 control.sleep(interval * 1000)
 
         finally:
-            progress.close()
+            try:
+                if dialog.is_active:
+                    dialog.close()
+                del dialog
+            except Exception:
+                pass
+            remove_qr(qr_path)
 
         if not token:
             control.notification(message="Offcloud authorization timed out!",icon=OFFCLOUD_ICON)

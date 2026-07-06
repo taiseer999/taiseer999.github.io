@@ -613,7 +613,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.7.3.7" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.7.3.8" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -635,7 +635,9 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.7.3.7
+    <news>v1.7.3.8
+- Added TinyPPI patch: set _ALLOW_NON_COREELEC = True in resources/lib/overlay.py so the overlay can launch on non-CoreELEC platforms (macOS dev/testing).
+v1.7.3.7
 - BINGIE REMOVAL: removed everything pertaining to the Bingie TMDbHelper fork (plugin.video.tmdb.bingie.helper / skin.bingie). Patcher: dropped the 3 Bingie Trakt QR patch entries and both Bingie blobs. Skin Switcher + Skin Installer: removed the stock/Bingie fork toggle (_apply_helper_for_skin) and its enable/disable helpers; skin.bingie companion mapping removed. service.py: removed the boot-time _reconcile_helper_forks() one-fork rule (moot with a single helper). Backup Manager: bingie helper removed from OpenWizard EXCLUDES.
 v1.7.3.3
 - FIRST-RUN "sometimes does not auto start" FIX (3 root causes):
@@ -4330,13 +4332,11 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.acctmgr" version="1.1.3.6" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
+</addon><addon id="script.module.acctmgr" version="1.1.5.1" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.pil" version="5.1.0" />
-		<import addon="script.module.qrcode" version="6.1.0" />
 		<import addon="script.module.requests" version="2.19.1" />
-            	<import addon="script.module.acctvwr" version="1.1.2" />
+            	<import addon="script.module.acctvwr" version="1.1.4" />
 	</requires>
 	<extension point="xbmc.service" library="lib/startup.py" start="startup" />
 	<extension point="xbmc.python.script" library="lib/default.py">
@@ -4355,7 +4355,7 @@ v.3.3.7
 			<fanart>fanart.png</fanart>
 		</assets>
 	</extension>
-</addon><addon id="script.module.acctvwr" name="[COLOR FF32D3FE][B]Account[/B][/COLOR][COLOR gold] [B]Viewer[/B][/COLOR]" version="1.1.2" provider-name="Zaxxon709">
+</addon><addon id="script.module.acctvwr" name="[COLOR FF32D3FE][B]Account[/B][/COLOR][COLOR gold] [B]Viewer[/B][/COLOR]" version="1.1.4" provider-name="Zaxxon709">
     <extension point="xbmc.python.pluginsource" library="default.py">
     </extension>
     <extension point="xbmc.python.module" library="resources" />

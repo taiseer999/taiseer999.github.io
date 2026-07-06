@@ -95,7 +95,7 @@ def check_api():
         ("Genocide", var.chk_genocide, var.path_genocide_service, "Genocide"),
         ("Homelander", var.chk_home, var.path_home_service, "Homelander"),
         ("Nightwing", var.chk_night, var.path_night_service, "Nightwing"),
-        ("Jokers Absolution", var.chk_absol, var.path_absol_service, "Jokers Absolution"),
+        ("Absolution", var.chk_absol, var.path_absol_service, "Jokers Absolution"),
     )
 
     for name, check_path, service_path, addon_name in patches:
@@ -160,7 +160,7 @@ def check_api():
             if var.client_am in data:
                 pass
             else:
-                new_data = data.replace(var.crew_client, var.client_am).replace(var.crew_secret, var.secret_am)
+                new_data = data.replace(var.crew_client, var.client_am_x).replace(var.crew_secret, var.secret_am_x)
             if new_data is not None:
                 with open(var.path_crew, 'w') as f:
                     f.write(new_data)
@@ -183,54 +183,6 @@ def check_api():
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"SALTS API Failed: {e}")
-
-    '''# ================= Orion =================
-    if "Orion" in current and exists(var.chk_orion):
-        try:
-            with open(var.path_orion, 'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.orion_client, var.client_am).replace(var.orion_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_orion, 'w') as f:
-                    f.write(new_data)
-        except Exception as e:
-            log_utils.error(f"Orion API Failed: {e}")
-
-    # ================= Genesis =================
-    if "Genesis" in current and exists(var.chk_gen):
-        try:
-            with open(var.path_gen, 'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.genesis_client, var.client_am).replace(var.genesis_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_gen, 'w') as f:
-                    f.write(new_data)
-        except Exception as e:
-            log_utils.error(f"Genesis API Failed: {e}")
-
-    # ================= Syncher =================
-    if "Syncher" in current and exists(var.chk_sync):
-        try:
-            with open(var.path_sync, 'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.syncher_client, var.client_am).replace(var.syncher_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_sync, 'w') as f:
-                    f.write(new_data)
-        except Exception as e:
-            log_utils.error(f"Syncher API Failed: {e}")'''
 
     # ================= Scrubs V2 =================
     if "Scrubs V2" in current and exists(var.chk_scrubs):
@@ -282,23 +234,6 @@ def check_api():
                     f.write(new_data)
         except Exception as e:
             log_utils.error(f"TMDbH API Failed: {e}")
-
-    '''# ================= Trakt Player =================
-    if "Trakt Player" in current and exists(var.chk_tkplay):
-        try:
-            patched, msg = control.startup_patch(var.path_tkplay_service)
-            with open(var.path_tkplay, 'r') as f:
-                data = f.read()
-            new_data = None
-            if var.client_am in data:
-                pass
-            else:
-                new_data = data.replace(var.tkplay_client, var.client_am).replace(var.tkplay_secret, var.secret_am)
-            if new_data is not None:
-                with open(var.path_tkplay, 'w') as f:
-                    f.write(new_data)
-        except Exception as e:
-            log_utils.error(f"Trakt Player API Failed: {e}")'''
 
     # ================= Trakt Add-on =================
     if "Trakt Addon" in current and exists(var.chk_trakt):

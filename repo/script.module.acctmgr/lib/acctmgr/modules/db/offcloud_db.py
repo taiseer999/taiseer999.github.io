@@ -34,20 +34,25 @@ def connect_db(actions, settings_db):
 
 ###################### Get AM Lite Settings ################
 def get():
-    acctmgr = xbmcaddon.Addon("script.module.acctmgr")
-    return acctmgr.getSetting("offcloud.token") or ''
+	acctmgr = xbmcaddon.Addon("script.module.acctmgr")
+	return (
+		acctmgr.getSetting("offcloud.token") or '',
+		acctmgr.getSetting("offcloud.userid") or '',
+	)
 
 #################### Auth Offcloud ##################
 def auth(settings_db):
-    token = get()
-    connect_db([
-        ('true', 'oc.enabled'),
-        (token, 'oc.token'),
-    ], settings_db)
+	token, user_id = get()
+	connect_db([
+		('true', 'oc.enabled'),
+		(token, 'oc.token'),
+		(user_id, 'oc.account_id'),
+	], settings_db)
 
 ######################## Revoke Offcloud ############
 def revoke(settings_db):
     connect_db([
         ('false', 'oc.enabled'),
         ('empty_setting', 'oc.token'),
+        ('empty_setting', 'oc.account_id'),
     ], settings_db)

@@ -720,7 +720,7 @@ def apply_default_trakt_api_keys(): # Restore default API keys for python files 
         (var.chk_shadow,        var.path_shadow,  var.shadow_client,         var.shadow_secret,         "Shadow",       var.client_am,            var.secret_am),
         (var.chk_ghost,         var.path_ghost,   var.ghost_client,          var.ghost_secret,          "Ghost",        var.client_am,            var.secret_am),
         (var.chk_chains,        var.path_chains,  var.thechains_client,      var.thechains_secret,      "The Chains",   var.client_am,            var.secret_am),
-        (var.chk_crew,          var.path_crew,    var.crew_client,           var.crew_secret,           "The Crew",     var.client_am,            var.secret_am),
+        (var.chk_crew,          var.path_crew,    var.crew_client,           var.crew_secret,           "The Crew",     var.client_am_x,         var.secret_am_x),
         (var.chk_salts,         var.path_salts,   var.salts_client,          var.salts_secret,          "SALTS",        var.client_am,            var.secret_am),
         #(var.chk_orion,        var.path_orion,  var.orion_client,          var.orion_secret,          "Orion",        var.client_am,            var.secret_am),
         #(var.chk_gen,          var.path_gen,    var.genesis_client,        var.genesis_secret,        "Genesis",      var.client_am,            var.secret_am),

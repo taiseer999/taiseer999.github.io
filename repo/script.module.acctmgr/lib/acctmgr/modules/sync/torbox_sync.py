@@ -30,11 +30,7 @@ class Auth:
             ("Ghost",         var.chk_ghost,  var.ghost_ud,   var.chkset_ghost,   var.ghost),
             ("The Chains",    var.chk_chains, var.chains_ud,  var.chkset_chains,  var.chains),
             ("SALTS",         var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",        var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",      var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",      var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Otaku",         var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            #("Trakt Player", var.chk_tkplay, var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
         ]
 
         for name, chk_addon, ud_path, chk_setting, base_path in addons:
@@ -164,48 +160,6 @@ class Auth:
         except Exception as e:
             log_utils.error(f"SALTS TorBox Failed: {e}")
 
-        '''# ========================= Orion =========================
-        try:
-            if exists(var.chk_orion):
-                addon = xbmcaddon.Addon("plugin.video.orion")
-                chk_auth = addon.getSetting("tb_token")
-                if chk_auth != master_token:
-                    for k, v in {
-                        "tb_token": your_token,
-                        "tb_enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Orion TorBox Failed: {e}")
-
-        # ========================= Genesis =========================
-        try:
-            if exists(var.chk_gen):
-                addon = xbmcaddon.Addon("plugin.video.genesis")
-                chk_auth = addon.getSetting("torbox_api_key")
-                if chk_auth != master_token:
-                    for k, v in {
-                        "torbox_api_key": your_token,
-                        "torbox_auth": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Genesis TorBox Failed: {e}")
-
-        # ========================= Syncher =========================
-        try:
-            if exists(var.chk_sync):
-                addon = xbmcaddon.Addon("plugin.video.syncher")
-                chk_auth = addon.getSetting("tb.apikey")
-                if chk_auth != master_token:
-                    for k, v in {
-                        "tb.apikey": your_token,
-                        "tb.enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Syncher TorBox Failed: {e}")'''
-
         # ========================= Otaku =========================
         try:
             if exists(var.chk_otaku):
@@ -221,20 +175,6 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"Otaku TorBox Failed: {e}")
-
-        '''# ========================= Trakt Player =========================
-        try:
-            if exists(var.chk_tkplay):
-                addon = xbmcaddon.Addon("plugin.video.trakt_player")
-                chk_auth = addon.getSetting("tb_api_key")
-                if chk_auth != master_token:
-                    for k, v in {
-                        "tb_api_key": your_token,
-                        "tb_auth_done": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception as e:
-            log_utils.error(f"Trakt Player TorBox Failed: {e}")'''
 
         # ========================= ResolveURL =========================
         try:

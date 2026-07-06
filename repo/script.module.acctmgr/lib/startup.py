@@ -17,10 +17,11 @@ def am_masters():  # AM Lite token variables
 	pm_master_token = control.setting("premiumize.token")
 	ad_master_token = control.setting("alldebrid.token")
 	tb_master_token = control.setting("torbox.token")
+	oc_master_token = control.setting("offcloud.token")
 	en_master_user = control.setting("easynews.username")
 	en_master_pass = control.setting("easynews.password")
 
-	return mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, en_master_user, en_master_pass
+	return mdb_master_token, rd_master_token, pm_master_token, ad_master_token, oc_master_token, tb_master_token, en_master_user, en_master_pass
 
 def ScraperCheck(): # Check for installed scraper packages and update AML settings accordingly
 	for addon_id, setting_id in (
@@ -197,7 +198,7 @@ def TraktStartup():
         
 def SyncManager():  # Auto-sync credentials with recently installed/supported addons
 
-	mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, en_master_user, en_master_pass = am_masters()
+	mdb_master_token, rd_master_token, pm_master_token, ad_master_token, tb_master_token, oc_master_user, en_master_user, en_master_pass = am_masters()
 
 	try:
 		if control.setting('sync.mdb.service')=='true' and mdb_master_token:
@@ -241,12 +242,12 @@ def SyncManager():  # Auto-sync credentials with recently installed/supported ad
 	except Exception:
 		log_utils.error("Startup Torbox Startup Sync FAILED")
 
-	'''try:	
+	try:	
 		if control.setting('sync.oc.service')=='true' and oc_master_token:
 			from acctmgr.modules.sync import offcloud_sync
 			offcloud_sync.Auth().offcloud_auth()
 	except Exception:
-		log_utils.error("Startup OffCloud Startup Sync FAILED")'''
+		log_utils.error("Startup OffCloud Startup Sync FAILED")
 
 	try:	
 		if control.setting('sync.en.service')=='true' and en_master_user and en_master_pass:
@@ -296,11 +297,9 @@ def StartupManager():  # Compare and restore Trakt API keys / Run add-on updates
 		var.path_absol_service,
 		var.path_crew_service,
 		var.path_salts_service,
-		#var.path_gen_service,
 		var.path_scrubs_service,
                 var.path_redg_service,
 		var.path_tmdbh_service,
-		#var.path_tkplay_service,
 		var.path_trakt_service,
 	]
 
@@ -409,9 +408,9 @@ def trakt_refresh_monitor(interval=300): # Trakt background monitor loop to refr
 			break
 
 	xbmc.log('AM Lite: Trakt refresh monitor loop stopped', xbmc.LOGINFO)
-       
+
 # START SERVICES
-ScraperCheck()
+#ScraperCheck()
 TraktStartup()
 SyncManager()
 StartupManager()

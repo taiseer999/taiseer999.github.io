@@ -29,11 +29,7 @@ class Auth:
             ("Ghost",         var.chk_ghost,   var.ghost_ud,   var.chkset_ghost,   var.ghost),
             ("The Chains",    var.chk_chains,  var.chains_ud,  var.chkset_chains,  var.chains),
             ("SALTS",         var.chk_salts,   var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",        var.chk_orion,   var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",      var.chk_gen,     var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",      var.chk_sync,    var.sync_ud,    var.chkset_sync,    var.sync),
             ("Otaku",         var.chk_otaku,   var.otaku_ud,   var.chkset_otaku,   var.otaku),
-            #("Trakt Player", var.chk_tkplay,  var.tkplay_ud,  var.chkset_tkplay,  var.tkplay),
             ("ResolveURL",    var.chk_rurl,    var.rurl_ud,    var.chkset_rurl,    var.rurl),
         ]
 
@@ -218,49 +214,6 @@ class Auth:
         except Exception as e:
             log_utils.error(f"SALTS All-Debrid Failed: {e}")
 
-        '''# ========================= Orion =========================
-        try:
-            if exists(var.chk_orion):
-                addon = xbmcaddon.Addon("plugin.video.orion")
-                chk_auth = addon.getSetting("ad_token")
-                if chk_auth != ad_master_token:
-                    for k, v in {
-                        "ad_token": your_ad_token,
-                        "ad_enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception:
-            log_utils.error("Orion All-Debrid Failed")
-
-        # ========================= Genesis =========================
-        try:
-            if exists(var.chk_gen):
-                addon = xbmcaddon.Addon("plugin.video.genesis")
-                chk_auth = addon.getSetting("alldebrid_api_key")
-                if chk_auth != ad_master_token:
-                    for k, v in {
-                        "alldebrid_api_key": your_ad_token,
-                        "alldebrid_username": your_ad_username,
-                        "ad_enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception:
-            log_utils.error("Genesis All-Debrid Failed")
-
-        # ========================= Syncher =========================
-        try:
-            if exists(var.chk_sync):
-                addon = xbmcaddon.Addon("plugin.video.syncher")
-                chk_auth = addon.getSetting("ad.apikey")
-                if chk_auth != ad_master_token:
-                    for k, v in {
-                        "ad.apikey": your_ad_token,
-                        "ad.enabled": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception:
-            log_utils.error("Syncher All-Debrid Failed")'''
-
         # ========================= Otaku =========================
         try:
             if exists(var.chk_otaku):
@@ -289,17 +242,3 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL All-Debrid Failed: {e}")
-
-        '''# ========================= Trakt Player =========================
-        try:
-            if exists(var.chk_tkplay):
-                addon = xbmcaddon.Addon("plugin.video.trakt_player")
-                chk_auth = addon.getSetting("ad_api_key")
-                if chk_auth != ad_master_token:
-                    for k, v in {
-                        "ad_api_key": your_ad_token,
-                        "ad_auth_done": "true",
-                    }.items():
-                        addon.setSetting(k, v)
-        except Exception:
-            log_utils.error("Trakt Player All-Debrid Failed")'''

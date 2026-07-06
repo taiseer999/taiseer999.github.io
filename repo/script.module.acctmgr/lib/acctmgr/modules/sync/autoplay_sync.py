@@ -48,9 +48,6 @@ class AutoPlay:
             ("Absolution",  var.chk_absol,  var.absol_ud,   var.chkset_absol,   var.absol),
             ("The Crew",    var.chk_crew,   var.crew_ud,    var.chkset_crew,    var.crew),
             ("SALTS",       var.chk_salts,  var.salts_ud,   var.chkset_salts,   var.salts),
-            #("Orion",      var.chk_orion,  var.orion_ud,   var.chkset_orion,   var.orion),
-            #("Genesis",    var.chk_gen,    var.gen_ud,     var.chkset_gen,     var.gen),
-            #("Syncher",    var.chk_sync,   var.sync_ud,    var.chkset_sync,    var.sync),
             ("Scrubs V2",   var.chk_scrubs, var.scrubs_ud,  var.chkset_scrubs,  var.scrubs),
             ("Gratis Red",  var.chk_redg,   var.redg_ud,    var.chkset_redg,    var.redg),
             ("Otaku",       var.chk_otaku,  var.otaku_ud,   var.chkset_otaku,   var.otaku),
@@ -126,7 +123,7 @@ class AutoPlay:
             ("The Crew",          "plugin.video.thecrew", var.chk_crew,  var.chkset_crew),
             ("Homelander",        "plugin.video.homelander", var.chk_home,  var.chkset_home),
             ("Nightwing",         "plugin.video.nightwing",  var.chk_night, var.chkset_night),
-            ("Jokers Absolution", "plugin.video.absolution", var.chk_absol, var.chkset_absol),
+            ("Absolution",        "plugin.video.absolution", var.chk_absol, var.chkset_absol),
             ("Scrubs V2",         "plugin.video.scrubsv2", var.chk_scrubs,  var.chkset_scrubs),
             ("Gratis Red",        "plugin.video.gratisred", var.chk_redg,  var.chkset_redg),
         ):

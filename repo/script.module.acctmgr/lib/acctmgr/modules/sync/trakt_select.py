@@ -60,11 +60,7 @@ class tk_list():
         # Others
         add_if(var.chk_crew,        'The Crew')
         add_if(var.chk_salts,       'SALTS')
-        #add_if(var.chk_orion,       'Orion')
-        #add_if(var.chk_gen,         'Genesis')
-        #add_if(var.chk_sync,        'Syncher')
         add_if(var.chk_tmdbh,       'TMDb Helper')
-        #add_if(var.chk_tkplay,      'Trakt Player')
         add_if(var.chk_trakt,       'Trakt Addon')
 
         if not menu:
