@@ -102,6 +102,48 @@ PATCHES = [
         'fallback_pattern': r'_ALLOW_NON_COREELEC\s*=\s*False',
         'fallback_repl': lambda m: '_ALLOW_NON_COREELEC = True',
     },
+    # ── TinyPPI: fix unbalanced parens in convert-indicator <visible> conditions ──
+    # (main.xml lines ~1027/1037 — Kodi logged "unmatched parentheses in
+    #  string.isempty(window(10000).property(tinyppi.hdrtype)" so both icons never showed)
+    # NOTE: already_patched_check is None on purpose — the natural sentinels also
+    # occur in the BROKEN file (line 1037 has ",dolby)] + …HDR)" pre-fix), so we
+    # rely on the regexes, which cannot match fixed text → not_found_ok keeps it idempotent.
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '',
+        'regex_only': True,
+        'not_found_ok': True,
+        'fallback_pattern': r'String\.IsEmpty\(Window\(10000\)\.Property\(TinyPPI\.HdrType\)\] \+ String\.Contains\(Player\.Process\(amlogic\.eoft_gamut\),DV\)',
+        'fallback_repl': 'String.IsEmpty(Window(10000).Property(TinyPPI.HdrType))] + String.Contains(Player.Process(amlogic.eoft_gamut),DV)',
+        'count': 0,
+        'description': 'TinyPPI main.xml - close IsEmpty paren before ]+DV (convert indicators, 2 lines)',
+        'already_patched_check': None,
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '',
+        'regex_only': True,
+        'not_found_ok': True,
+        'fallback_pattern': r'\[\[String\.IsEmpty\(Window\(10000\)\.Property\(TinyPPI\.HdrType\) \| String\.Contains\(Window\(10000\)\.Property\(TinyPPI\.HdrType\),dolby',
+        'fallback_repl': '[[String.IsEmpty(Window(10000).Property(TinyPPI.HdrType)) | String.Contains(Window(10000).Property(TinyPPI.HdrType),dolby',
+        'count': 0,
+        'description': 'TinyPPI main.xml - close IsEmpty paren before |Contains(dolby (convert indicators, 2 lines)',
+        'already_patched_check': None,
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '',
+        'regex_only': True,
+        'not_found_ok': True,
+        'fallback_pattern': r',dolby\] \+ String\.Contains\(Player\.Process\(amlogic\.eoft_gamut\),HDR\)',
+        'fallback_repl': ',dolby)] + String.Contains(Player.Process(amlogic.eoft_gamut),HDR)',
+        'count': 0,
+        'description': 'TinyPPI main.xml - close Contains(dolby paren before ]+HDR (check-circle line)',
+        'already_patched_check': None,
+    },
     # ── Seren QR Auth ──
     {
         'addon_id': 'plugin.video.seren',
