@@ -90,6 +90,13 @@ DIALOG      = xbmcgui.Dialog()
 #   description – shown to user in notifications
 # ---------------------------------------------------------------------------
 
+
+# ── AF3 studio icon blink fix blobs (by ABUKARIM TOOLS) ──
+_AF3_STUDIO_CIRCLE_OLD_B64 = 'ICAgIDxpbmNsdWRlIG5hbWU9Ik9iamVjdF9JbmZvQ2lyY2xlX0ltYWdlIj4KICAgICAgICA8cGFyYW0gbmFtZT0iYm9yZGVyc2l6ZSI+MjwvcGFyYW0+CiAgICAgICAgPHBhcmFtIG5hbWU9ImFzcGVjdHJhdGlvIj5zY2FsZTwvcGFyYW0+'
+_AF3_STUDIO_CIRCLE_NEW_B64 = 'ICAgIDxpbmNsdWRlIG5hbWU9Ik9iamVjdF9JbmZvQ2lyY2xlX0ltYWdlIj4KICAgICAgICA8cGFyYW0gbmFtZT0iYm9yZGVyc2l6ZSI+MjwvcGFyYW0+CiAgICAgICAgPHBhcmFtIG5hbWU9ImZhbGxiYWNrIj5jb21tb24vX25vbmUucG5nPC9wYXJhbT4KICAgICAgICA8cGFyYW0gbmFtZT0iYXNwZWN0cmF0aW8iPnNjYWxlPC9wYXJhbT4='
+_AF3_STUDIO_FURNITURE_OLD_B64 = 'ICAgICAgICAgICAgICAgIDx0ZXh0dXJlIGJhY2tncm91bmQ9InRydWUiPiRWQVJbSW1hZ2VfQ29tYmluZWRTdHVkaW9dPC90ZXh0dXJlPg=='
+_AF3_STUDIO_FURNITURE_NEW_B64 = 'ICAgICAgICAgICAgICAgIDx0ZXh0dXJlIGJhY2tncm91bmQ9InRydWUiIGZhbGxiYWNrPSJjb21tb24vX25vbmUucG5nIj4kVkFSW0ltYWdlX0NvbWJpbmVkU3R1ZGlvXTwvdGV4dHVyZT4='
+
 PATCHES = [
     # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
@@ -462,6 +469,27 @@ PATCHES = [
         'already_patched_check': '# -- TMDbHelper sync NoneType guard (by ABUKARIM TOOLS) --',
         'fallback_pattern': r'if aired_episodes <= watched_episodes:',
         'fallback_repl': 'if aired_episodes is not None and aired_episodes <= (watched_episodes or 0):',
+    },
+    # ── AF3 studio icon blink fix - stable transparent fallback for missing resource images (by ABUKARIM TOOLS) ──
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Objects.xml'),
+        'old': base64.b64decode(_AF3_STUDIO_CIRCLE_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_AF3_STUDIO_CIRCLE_NEW_B64).decode('utf-8'),
+        'description': 'AF3 - Object_InfoCircle_Image: default transparent fallback so missing studio/person icons fail silently (no blink)',
+        'already_patched_check': base64.b64decode('PHBhcmFtIG5hbWU9ImZhbGxiYWNrIj5jb21tb24vX25vbmUucG5nPC9wYXJhbT4KICAgICAgICA8cGFyYW0gbmFtZT0iYXNwZWN0cmF0aW8iPnNjYWxlPC9wYXJhbT4=').decode('utf-8'),
+        'fallback_pattern': None,
+        'fallback_repl': None,
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'old': base64.b64decode(_AF3_STUDIO_FURNITURE_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_AF3_STUDIO_FURNITURE_NEW_B64).decode('utf-8'),
+        'description': 'AF3 - Furniture_Studio: transparent fallback for missing studio logos (no blink)',
+        'already_patched_check': base64.b64decode('ZmFsbGJhY2s9ImNvbW1vbi9fbm9uZS5wbmciPiRWQVJbSW1hZ2VfQ29tYmluZWRTdHVkaW9d').decode('utf-8'),
+        'fallback_pattern': None,
+        'fallback_repl': None,
     },
 ]
 
