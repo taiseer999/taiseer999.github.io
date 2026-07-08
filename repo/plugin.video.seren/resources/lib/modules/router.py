@@ -56,6 +56,7 @@ _ROUTE_TABLE = {
     "myMovies":             _menu("resources.lib.gui.movieMenus", "my_movies"),
     "moviesMyCollection":   _menu("resources.lib.gui.movieMenus", "my_movie_collection"),
     "moviesMyWatchlist":    _menu("resources.lib.gui.movieMenus", "my_movie_watchlist"),
+    "moviesMyFavorites":    _menu("resources.lib.gui.movieMenus", "my_movie_favorites"),
     "moviesRelated":        _menu("resources.lib.gui.movieMenus", "movies_related", "action_args"),
     "movieGenres":          _menu("resources.lib.gui.movieMenus", "movies_genres"),
     "movieGenresGet":       _menu("resources.lib.gui.movieMenus", "movies_genre_list", "action_args"),
@@ -72,6 +73,7 @@ _ROUTE_TABLE = {
     "myShows":              _menu("resources.lib.gui.tvshowMenus", "my_shows"),
     "showsMyCollection":    _menu("resources.lib.gui.tvshowMenus", "my_shows_collection"),
     "showsMyWatchlist":     _menu("resources.lib.gui.tvshowMenus", "my_shows_watchlist"),
+    "showsMyFavorites":     _menu("resources.lib.gui.tvshowMenus", "my_shows_favorites"),
     "showsMyProgress":      _menu("resources.lib.gui.tvshowMenus", "my_show_progress"),
     "showsMyRecentEpisodes": _menu("resources.lib.gui.tvshowMenus", "my_recent_episodes"),
     "showsRecommended":     _menu("resources.lib.gui.tvshowMenus", "shows_recommended"),
@@ -113,6 +115,7 @@ _ROUTE_TABLE = {
     "alldebridTransfers":   _menu("resources.lib.gui.debridServices", "list_ad_transfers"),
     "torboxTransfers":      _menu("resources.lib.gui.debridServices", "list_tb_transfers"),
     "debridlinkTransfers":  _menu("resources.lib.gui.debridServices", "list_dl_transfers"),
+    "offcloudTransfers":    _menu("resources.lib.gui.debridServices", "list_oc_transfers"),
     "nonActiveAssistClear": _menu("resources.lib.gui.debridServices", "assist_non_active_clear"),
     "clearAllDebridTransfers": _menu("resources.lib.gui.debridServices", "clear_all_transfers"),
     "clearAllDebridCloudFiles": _menu("resources.lib.gui.debridServices", "clear_all_cloud_files"),
@@ -134,6 +137,21 @@ _ROUTE_TABLE = {
     "flushTraktActivities": _call("resources.lib.database.trakt_sync", "TraktSyncDatabase", "flush_activities"),
     "rebuildTraktDatabase": _call("resources.lib.database.trakt_sync", "TraktSyncDatabase", "re_build_database"),
     "cleanOrphanedMetadata": _call("resources.lib.database.trakt_sync", "TraktSyncDatabase", "clean_orphaned_metadata"),
+
+    # --- MDBList sync ---
+    "syncMDBListActivities": _call("resources.lib.database.mdblist_sync.activities", "MDBListSyncDatabase", "sync_activities"),
+
+    # --- MDBList menus ---
+    "mdblistRecentMovies":       _menu("resources.lib.gui.mdblistMenus", "recent_movies"),
+    "mdblistRecentShows":        _menu("resources.lib.gui.mdblistMenus", "recent_shows"),
+    "mdblistInProgressMovies":   _menu("resources.lib.gui.mdblistMenus", "in_progress_movies"),
+    "mdblistInProgressEpisodes": _menu("resources.lib.gui.mdblistMenus", "in_progress_episodes"),
+
+    # --- Merge menus ---
+    "mergeWatchedMovies":       _menu("resources.lib.gui.mergeMenus", "watched_movies"),
+    "mergeWatchedShows":        _menu("resources.lib.gui.mergeMenus", "watched_shows"),
+    "mergeInProgressMovies":    _menu("resources.lib.gui.mergeMenus", "in_progress_movies"),
+    "mergeInProgressShows":     _menu("resources.lib.gui.mergeMenus", "in_progress_episodes"),
 
     # --- Cache management ---
     "clearTorrentCache":    _call("resources.lib.database.torrentCache", "TorrentCache", "clear_all"),
@@ -319,6 +337,18 @@ def dispatch(params):
 
         trakt.TraktAPI().revoke_auth()
         g.open_addon_settings(3, 5)
+
+    elif action == "authMDBList":
+        from resources.lib.indexers import mdblist
+
+        mdblist.MDBListAPI().authorize()
+        g.open_addon_settings(3, 10)
+
+    elif action == "revokeMDBList":
+        from resources.lib.indexers import mdblist
+
+        mdblist.MDBListAPI().revoke_auth()
+        g.open_addon_settings(3, 9)
 
     elif action == "getSources":
         from resources.lib.modules.smartPlay import SmartPlay
@@ -819,7 +849,13 @@ def dispatch(params):
         from resources.lib.gui.trakt_context_menu import TraktContextMenu
         from resources.lib.common import tools
 
-        TraktContextMenu(tools.get_item_information(action_args))
+        TraktContextMenu(tools.get_item_information(action_args), "trakt")
+
+    elif action == "mdblistManager":
+        from resources.lib.gui.trakt_context_menu import TraktContextMenu
+        from resources.lib.common import tools
+
+        TraktContextMenu(tools.get_item_information(action_args), "mdblist")
 
     elif action == "onDeckShows":
         from resources.lib.gui import tvshowMenus
@@ -1324,6 +1360,22 @@ def dispatch(params):
         from resources.lib.debrid.debrid_link import DebridLink
 
         DebridLink().account_info_to_dialog()
+
+    elif action == "connectOffCloud":
+        from resources.lib.debrid.offcloud import OffCloud
+
+        OffCloud().store_user_info()
+        g.open_addon_settings(3, 39)
+
+    elif action == "ocAccountInfo":
+        from resources.lib.debrid.offcloud import OffCloud
+
+        OffCloud().account_info_to_dialog()
+
+    elif action == "revokeOffCloud":
+        from resources.lib.debrid.offcloud import OffCloud
+
+        OffCloud().revoke_auth()
 
     elif action == "checkSkinUpdates":
         from resources.lib.database.skinManager import SkinManager
