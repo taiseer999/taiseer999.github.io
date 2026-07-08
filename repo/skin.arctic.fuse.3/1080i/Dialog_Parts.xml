@@ -536,6 +536,26 @@
         </definition>
     </include>
 
+    <include name="Part_Background_Blur_Standard">
+        <param name="shadow">true</param>
+        <param name="border">20</param>
+        <param name="transparency">false</param>
+        <definition>
+            <control type="group">
+                <include condition="$PARAM[transparency]">Part_Background_Transparency</include>
+                <control type="image">
+                    <texture border="20">$VAR[Image_SimpleDialogBackground]</texture>
+                    <include condition="$PARAM[shadow]">Texture_Shadow_80</include>
+                </control>
+                <control type="image">
+                    <visible>!Skin.String(Background.DialogImage,Onyx)</visible>
+                    <texture colordiffuse="dialog_overlay" border="20">common/dialog.png</texture>
+                </control>
+            </control>
+            <include>Part_Background_Glass_Border</include>
+        </definition>
+    </include>
+
     <include name="Part_Background_Blur_Adaptive">
         <param name="shadow">true</param>
         <param name="transparency">false</param>
@@ -568,6 +588,7 @@
 
     <include name="Part_Background_Glass">
         <control type="image">
+            <visible>!Skin.String(Background.DialogImage,Onyx)</visible>
             <texture colordiffuse="dialog_fg_06" border="20">common/dialog.png</texture>
         </control>
     </include>
