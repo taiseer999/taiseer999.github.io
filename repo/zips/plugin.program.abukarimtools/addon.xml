@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.7.4.1"
+       version="1.7.5"
        provider-name="Abukarim">
 
   <requires>
@@ -14,7 +14,7 @@
     <provides>executable</provides>
   </extension>
 
-  <extension point="xbmc.service" library="service.py"/>
+  <!--<extension point="xbmc.service" library="service.py"/>-->
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">ABUKARIM TOOLS</summary>
@@ -24,7 +24,7 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.7.4.1[CR]- Patcher: AF3 studio icon blink fix - transparent fallback for missing resource://studios.coloured images (InfoCircle + Furniture_Studio)[CR][CR]v1.7.4.0[CR]- New tool: AM6B CoreELEC Fix - applies/reverts the AF3 GBM poster flicker workaround (bordersize inset on Layout_Poster, same as Aeon Nox Silvo)[CR][CR]v1.7.3.8
+    <news>v1.7.4.0[CR]- New tool: AM6B CoreELEC Fix - applies/reverts the AF3 GBM poster flicker workaround (bordersize inset on Layout_Poster, same as Aeon Nox Silvo)[CR][CR]v1.7.3.8
 - Added TinyPPI patch: set _ALLOW_NON_COREELEC = True in resources/lib/overlay.py so the overlay can launch on non-CoreELEC platforms (macOS dev/testing).
 v1.7.3.7
 - BINGIE REMOVAL: removed everything pertaining to the Bingie TMDbHelper fork (plugin.video.tmdb.bingie.helper / skin.bingie). Patcher: dropped the 3 Bingie Trakt QR patch entries and both Bingie blobs. Skin Switcher + Skin Installer: removed the stock/Bingie fork toggle (_apply_helper_for_skin) and its enable/disable helpers; skin.bingie companion mapping removed. service.py: removed the boot-time _reconcile_helper_forks() one-fork rule (moot with a single helper). Backup Manager: bingie helper removed from OpenWizard EXCLUDES.
