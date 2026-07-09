@@ -25,6 +25,7 @@ ICONS  = {
     'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
     'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
+    'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
 }
 
 MENU = [
@@ -35,6 +36,7 @@ MENU = [
     ('patcher',        'Apply Patches'),
     ('openwizard',     'OpenWizard'),
     ('skin_switch',    'Skin Switcher'),
+    ('dplex_toggle',   'DPlex Tab On/Off'),
 ]
 
 
@@ -124,6 +126,11 @@ def router():
         _end_directory()
         from resources.lib import binary_installer
         binary_installer.run()
+
+    elif mode == 'dplex_toggle':
+        _end_directory()
+        from resources.lib import dplex_toggle
+        dplex_toggle.run()
 
 
 router()
