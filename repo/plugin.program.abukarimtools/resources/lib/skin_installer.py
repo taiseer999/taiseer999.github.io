@@ -74,33 +74,12 @@ _REPO_ENTRIES = [
 ]
 
 
-_REPO_COLOR_NORMAL  = 'FFFFFFFF'   # white  (unfocused repo names)
-_REPO_COLOR_FOCUSED = 'FFFF8C00'   # orange (highlighted / focused repo name)
-
-
 class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
     """Custom dialog that shows icon + label for each repository option."""
 
     def __init__(self, *args, **kwargs):
         super().__init__()
         self._result = [-1]   # mutable so GUI thread writes, caller reads after doModal
-
-    def _paint_labels(self):
-        """Repaint repo names: white for all, orange for the focused one.
-
-        Color BBCode on the label overrides whatever textcolor/focusedcolor
-        the skin XML declares, so this works with any select_repo.xml.
-        """
-        try:
-            panel = self.getControl(100)
-            sel = panel.getSelectedPosition()
-            for i, (label, _icon, _json, _bg) in enumerate(_REPO_ENTRIES):
-                color = _REPO_COLOR_FOCUSED if i == sel else _REPO_COLOR_NORMAL
-                panel.getListItem(i).setLabel(
-                    '[COLOR %s]%s[/COLOR]' % (color, label))
-        except Exception as e:
-            xbmc.log('[AbukarimTools] _paint_labels error: %s' % str(e),
-                     xbmc.LOGERROR)
 
     def onInit(self):
         try:
@@ -121,7 +100,6 @@ class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
                 li.setProperty('repo_bg', media_base + bg)
                 panel.addItem(li)
             self.setFocusId(100)
-            self._paint_labels()
         except Exception as e:
             xbmc.log('[AbukarimTools] onInit error: %s' % str(e), xbmc.LOGERROR)
 
@@ -135,10 +113,6 @@ class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
                                xbmcgui.ACTION_PREVIOUS_MENU,
                                xbmcgui.ACTION_STOP):
             self.close()
-            return
-        # Selection may have moved (up/down/left/right/mouse) — repaint so
-        # the focused repo name is orange and the rest stay white.
-        self._paint_labels()
 
 
 def _choose_source():

@@ -25,7 +25,6 @@ ICONS  = {
     'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
     'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
-    'am6b_fix':       ADDON_PATH + 'resources/icons/am6b_fix.png',
 }
 
 MENU = [
@@ -34,7 +33,6 @@ MENU = [
     ('skin_install',   'Skin Selection'),
     ('binary_install', 'New Build Tools'),
     ('patcher',        'Apply Patches'),
-    ('am6b_fix',       'AM6B CoreELEC Fix (AF3 GBM Flicker)'),
     ('openwizard',     'OpenWizard'),
     ('skin_switch',    'Skin Switcher'),
 ]
@@ -121,11 +119,6 @@ def router():
         _end_directory()
         from resources.lib import patcher
         patcher.run()
-
-    elif mode == 'am6b_fix':
-        _end_directory()
-        from resources.lib import af3_gbm_fix
-        af3_gbm_fix.run()
 
     elif mode == 'binary_install':
         _end_directory()
