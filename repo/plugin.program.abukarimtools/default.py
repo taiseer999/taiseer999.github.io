@@ -26,6 +26,7 @@ ICONS  = {
     'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
+    'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
 }
 
 MENU = [
@@ -37,6 +38,7 @@ MENU = [
     ('openwizard',     'OpenWizard'),
     ('skin_switch',    'Skin Switcher'),
     ('dplex_toggle',   'DPlex Tab On/Off'),
+    ('korean_toggle',  'Korean Media Tab On/Off'),
 ]
 
 
@@ -131,6 +133,11 @@ def router():
         _end_directory()
         from resources.lib import dplex_toggle
         dplex_toggle.run()
+
+    elif mode == 'korean_toggle':
+        _end_directory()
+        from resources.lib import korean_toggle
+        korean_toggle.run()
 
 
 router()
