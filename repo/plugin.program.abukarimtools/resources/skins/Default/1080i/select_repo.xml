@@ -32,7 +32,7 @@
         <!-- Dialog box -->
         <control type="image">
             <left>560</left><top>260</top>
-            <width>800</width><height>480</height>
+            <width>800</width><height>570</height>
             <colordiffuse>F0111827</colordiffuse>
             <texture>white.png</texture>
         </control>
@@ -74,62 +74,62 @@
         <!-- Repo list -->
         <control type="list" id="100">
             <left>560</left><top>336</top>
-            <width>800</width><height>360</height>
+            <width>800</width><height>450</height>
             <onup>100</onup>
             <ondown>100</ondown>
             <onleft>100</onleft>
             <onright>100</onright>
             <pagecontrol>-</pagecontrol>
             <scrolltime>200</scrolltime>
-            <itemlayout width="800" height="116">
+            <itemlayout width="800" height="150">
                 <!-- row bg -->
                 <control type="image">
                     <left>2</left><top>4</top>
-                    <width>796</width><height>108</height>
+                    <width>796</width><height>142</height>
                     <colordiffuse>301A2030</colordiffuse>
                     <texture>white.png</texture>
                 </control>
                 <!-- icon -->
                 <control type="image">
-                    <left>16</left><top>14</top>
-                    <width>80</width><height>80</height>
+                    <left>16</left><top>15</top>
+                    <width>120</width><height>120</height>
                     <texture>$INFO[ListItem.Art(icon)]</texture>
                     <aspectratio>keep</aspectratio>
                 </control>
                 <!-- label -->
                 <control type="label">
-                    <left>114</left><top>38</top>
+                    <left>154</left><top>53</top>
                     <width>660</width><height>44</height>
                     <font>font20</font>
                     <textcolor>99C8A86A</textcolor>
                     <label>$INFO[ListItem.Label]</label>
                 </control>
             </itemlayout>
-            <focusedlayout width="800" height="116">
+            <focusedlayout width="800" height="150">
                 <!-- highlight bg -->
                 <control type="image">
                     <left>2</left><top>4</top>
-                    <width>796</width><height>108</height>
+                    <width>796</width><height>142</height>
                     <colordiffuse>F0C8A86A</colordiffuse>
                     <texture>white.png</texture>
                 </control>
                 <!-- left accent -->
                 <control type="image">
                     <left>2</left><top>4</top>
-                    <width>5</width><height>108</height>
+                    <width>5</width><height>142</height>
                     <colordiffuse>FFFFD700</colordiffuse>
                     <texture>white.png</texture>
                 </control>
                 <!-- icon -->
                 <control type="image">
-                    <left>16</left><top>14</top>
-                    <width>80</width><height>80</height>
+                    <left>16</left><top>15</top>
+                    <width>120</width><height>120</height>
                     <texture>$INFO[ListItem.Art(icon)]</texture>
                     <aspectratio>keep</aspectratio>
                 </control>
                 <!-- label -->
                 <control type="label">
-                    <left>114</left><top>38</top>
+                    <left>154</left><top>53</top>
                     <width>660</width><height>44</height>
                     <font>font20</font>
                     <textcolor>FF111827</textcolor>
@@ -141,13 +141,13 @@
 
         <!-- Bottom hint -->
         <control type="image">
-            <left>560</left><top>696</top>
+            <left>560</left><top>786</top>
             <width>800</width><height>44</height>
             <colordiffuse>E01A2030</colordiffuse>
             <texture>white.png</texture>
         </control>
         <control type="label">
-            <left>580</left><top>707</top>
+            <left>580</left><top>797</top>
             <width>760</width><height>24</height>
             <font>font12</font>
             <textcolor>70C8A86A</textcolor>
