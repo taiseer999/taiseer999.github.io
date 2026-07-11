@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.abukarimtools"
+       name="ABUKARIM TOOLS"
+       version="1.8.5"
+       provider-name="Abukarim">
+
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" optional="true"/>
+    <import addon="script.module.six" optional="true"/>
+  </requires>
+
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>executable</provides>
+  </extension>
+
+  <!--<extension point="xbmc.service" library="service.py"/>-->
+
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">ABUKARIM TOOLS</summary>
+    <description lang="en_GB">Unified plugin: Skin Installer, Skin Switcher, Userdata Backup &amp; Restore, OpenWizard, and ABUKARIM Wizard.</description>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <platform>all</platform>
+    <news>v1.8.5[CR]- New tool: Fix Add-on Update Origins - links zip/portal-installed add-ons back to their repository in the Addons DB so they show as installed and auto-update again[CR]- Skin Installer now sets the repository origin automatically after every skin/companion install[CR][CR]v1.7.4.0[CR]- New tool: AM6B CoreELEC Fix - applies/reverts the AF3 GBM poster flicker workaround (bordersize inset on Layout_Poster, same as Aeon Nox Silvo)[CR][CR]v1.7.3.8
+- Added TinyPPI patch: set _ALLOW_NON_COREELEC = True in resources/lib/overlay.py so the overlay can launch on non-CoreELEC platforms (macOS dev/testing).
+v1.7.3.7
+- BINGIE REMOVAL: removed everything pertaining to the Bingie TMDbHelper fork (plugin.video.tmdb.bingie.helper / skin.bingie). Patcher: dropped the 3 Bingie Trakt QR patch entries and both Bingie blobs. Skin Switcher + Skin Installer: removed the stock/Bingie fork toggle (_apply_helper_for_skin) and its enable/disable helpers; skin.bingie companion mapping removed. service.py: removed the boot-time _reconcile_helper_forks() one-fork rule (moot with a single helper). Backup Manager: bingie helper removed from OpenWizard EXCLUDES.
+v1.7.3.3
+- FIRST-RUN "sometimes does not auto start" FIX (3 root causes):
+  1) Crash-resilient trigger: the self-trigger now keys off first_run.done (written only on COMPLETION, storing the build id) instead of last_build.id (written at ARM time). Previously a kernel panic / power-cycle mid-sequence (flag already consumed, done never written) left the trigger permanently satisfied and first-run silently never ran again. An interrupted run now simply re-arms on the next boot. Legacy 'done' markers are migrated in place, so devices that already completed first-run do NOT re-run it.
+  2) Service-killing UnicodeDecodeError: _cleanup_stale_autostart read autostart.sh as strict UTF-8 catching only OSError; corrupted bytes (a possible leftover of the pre-1.7.3 sed self-edit bug) raised UnicodeDecodeError, killed service.py before the first-run trigger was ever evaluated. Now reads with errors='replace', and the boot chores are individually fenced so nothing can block the trigger.
+  3) Reboot race: the CoreELEC reboot prompt moved out of _run_steps to AFTER the done marker is written — a user-approved Reboot could previously race the finally block and (with the new done-keyed trigger) would have re-run the whole sequence next boot.
+v1.7.3.1
+- Removed all script.tinyppi patch entries: the AF3 font remap (TinyPPI 1.6.1.1 now manages its own Noto fonts via tools.tinyppi) and the set_ui_position crash fixes + CpuTopUsageVar paren fix (both fixed upstream in 1.6.1; old code paths no longer exist).
+v1.7.3
+- AUTOSTART SELF-EDIT FIX: autostart.sh's guisettings-restore block no longer removes itself via sed -i on its own file — rewriting a running shell script's own file mid-read is unsafe on BusyBox ash and could corrupt/delete autostart.sh outright. Cleanup now happens from service.py on the next Kodi start instead (a separate, already-exited process by that point, so it's safe).
+- OE_SETTINGS.XML RESTORE: the autostart restore now also stages and restores /storage/.kodi/userdata/addon_data/service.coreelec.settings/oe_settings.xml, not just guisettings.xml. CoreELEC's own settings service re-syncs its remembered audiooutput.audiodevice etc. from oe_settings.xml back over guisettings.xml during the session, so restoring guisettings.xml alone didn't stick — a stale device value in oe_settings.xml (e.g. a dev-machine placeholder) kept reappearing every boot regardless.
+v1.6.9.10
+- TMDbHelper Trakt QR ROOT-CAUSE FIX: QR window injected to resources/skins/Default (capital D) and dialog now loads from 'Default' — was lowercase 'default', which works on macOS but NOT on case-sensitive CoreELEC, so the device silently fell back to the stock code+URL dialog (no QR).
+v1.6.9.9
+- TMDbHelper Trakt QR: poller patch now has a version-resilient regex fallback (re-applies after TMDbHelper updates / reinstalls; was silently reverting to the stock code+URL dialog).
+v1.6.9.7
+- Backup Manager: exclude script.autoruns from backups (added to OpenWizard EXCLUDES).
+v1.6.9.5
+- Removed Umbrella player deploy entry from patcher.
+v1.6.9.4
+- TMDbHelper: patch pins max_threads=3 in addon_data settings.xml (caps CPythonInvoker storm causing UI freeze on AM6B; survives restore).
+v1.6.9.3
+- RedLight: patch kills volume_checker (was forcing SetVolume() and dropping playback volume ~30%).
+v1.6.9.0
+- First-run: CoreELEC reboot prompt 10s after skin loads (YES reboots so autostart.sh runs).
+v1.6.8.9
+- Auto-run first-run on new build apply via shipped resources/build.id (wipe-proof self-trigger).
+- Re-enabled xbmc.service so first-run triggers automatically on boot.
+v1.6.8.8
+- Skin installer (first-run + manual): auto-confirm YES on the final "Keep this skin?" dialog.
+v1.6.8.7
+- Removed AF3 ColorHighlight patch entry.
+v1.6.8.6
+- POV/Umbrella players switched to RunPlugin (search-mode caused GetDirectory loop). All 4 players now consistent.
+v1.6.8.5
+- Patcher: addon_data target support. Deploy 4 TMDbHelper player JSONs (POV/Umbrella search-mode) post-restore.
+v1.6.8.4
+- TMDbHelper: suppress "not playable" popup for source-select players (dummy strm-gate fix).
+v1.6.8.3
+- RedLight sources_results: dark unfocused card (FF1F2020) - fixes white rows in TIDB results window.
+v1.6.8.2
+- AF3: dark focus highlight (ff202020) fixes white select-dialog rows (TIDB/Seren etc).
+v1.6.6
+- Removed all RedLight patch entries and theme-reset logic.</news>
+  </extension>
+
+</addon>
