@@ -1501,7 +1501,7 @@ v1.6.6
     </assets>
 
   </extension>
-</addon><addon id="plugin.video.seren" version="3.3.211" name="Seren" provider-name="Nixgates">
+</addon><addon id="plugin.video.seren" version="3.3.214" name="Seren" provider-name="Nixgates">
     <requires>
         <import addon="xbmc.addon" version="17.9.910" />
         <import addon="xbmc.python" version="3.0.0" />
@@ -1568,6 +1568,9 @@ v1.6.6
             <screenshot>resources/screenshots/screenshot-04.jpg</screenshot>
         </assets>
         <news>
+            Changelog 3.3.212
+            [FIX] Most TV Shows menus (Discover charts, Collection, Watchlist, Favorites, Recent Episodes, Search Results, By Actor, On Deck) were rendering with no container content type at all instead of "TV Shows"/"Episodes", causing skins to treat them as generic "Videos" and lose TV-Show-specific view options. This was an unintended side effect of a 3.3.199 workaround for what was believed to be a skin issue hiding fully-watched items - that turned out to actually be Kodi's own per-profile "Watched" filter (Settings/Filter on any TV Shows view), not a skin defect. Proper content-type identification is now restored across all 12 affected menus. Note: "Trakt - Recently Watched Shows", "My Watched Episodes", "Merge - Watched Shows", and "MDBList - Recently Watched Shows" are watched-content by design - if Kodi's Watched filter for TV Shows is set to "Unwatched only", these may now show fewer items; set it to "All" to see everything.
+
             Changelog 3.3.211
             [FIX] Background Trakt sync for Episode Ratings could silently un-mark a user's own rating on older episodes once a single star-rating tier (e.g. every episode rated "10") grew past Trakt's new page-size limit - the same root cause as 3.3.210, found while double-checking for any other spot with the identical pattern. Episode Ratings sync now pages through each rating tier completely, so this can no longer happen.
 
