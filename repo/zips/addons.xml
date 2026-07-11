@@ -7175,7 +7175,7 @@ Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, SubDL, Addic7ed
   * results ordering with preferred language ordered first
         </news>
     </extension>
-</addon><addon id="service.subtitles.dexworld" name="DexSubtitles" version="5.4.5" provider-name="DexSubtitles">
+</addon><addon id="service.subtitles.dexworld" name="DexSubtitles" version="5.4.5.1" provider-name="DexSubtitles">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" version="2.25.0" />

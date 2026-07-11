@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <category label="DexWorld">
-    <setting id="server_url" type="text" label="Server URL" default="https://dexworld.cc/" />
+    <setting id="server_url" type="text" label="Server URL" default="https://dexworld.cc" />
     <setting id="api_key" type="text" label="API Key" default="TV-BOX" />
     <setting id="search_timeout" type="number" label="Search Timeout (seconds)" default="18" />
     <setting id="ai_search_timeout" type="number" label="AI Search Timeout (seconds)" default="25" />
