@@ -27,6 +27,7 @@ ICONS  = {
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
+    'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
 }
 
 MENU = [
@@ -35,6 +36,7 @@ MENU = [
     ('skin_install',   'Skin Selection'),
     ('binary_install', 'New Build Tools'),
     ('patcher',        'Apply Patches'),
+    ('origin_fix',     'Fix Add-on Update Origins'),
     ('openwizard',     'OpenWizard'),
     ('skin_switch',    'Skin Switcher'),
     ('dplex_toggle',   'DPlex Tab On/Off'),
@@ -138,6 +140,11 @@ def router():
         _end_directory()
         from resources.lib import korean_toggle
         korean_toggle.run()
+
+    elif mode == 'origin_fix':
+        _end_directory()
+        from resources.lib import origin_fix
+        origin_fix.run()
 
 
 router()

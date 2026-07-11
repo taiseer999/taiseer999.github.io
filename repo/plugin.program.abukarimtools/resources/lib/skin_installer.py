@@ -667,6 +667,12 @@ def _install_companions(skin_id, skin_zipurl):
             _wait_addon_enabled(addonid, timeout_ms=8000)
             _log('companion ready: %s (enabled=%s)'
                  % (addonid, _addon_is_enabled(addonid)))
+
+            # Link the companion back to its repository so it shows as
+            # repo-installed and keeps receiving auto-updates. Staged
+            # extraction leaves origin empty, which blocks updates.
+            from resources.lib import origin_fix
+            origin_fix.fix_addons_silent([addonid])
         except Exception as e:
             _log('companion install error for %s: %s' % (addonid, e))
 
@@ -744,6 +750,13 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         _wait_addon_enabled(addonid, timeout_ms=8000)
         _log('skin pre-enabled in portal: %s (enabled=%s)'
              % (addonid, _addon_is_enabled(addonid)))
+
+        # Link the skin back to its repository (origin) so it shows as
+        # repo-installed and auto-updates. Best-effort: needs the repo's
+        # cached listing to already contain the skin; the standalone
+        # 'Fix Add-on Origins' menu tool can repair it later otherwise.
+        from resources.lib import origin_fix
+        origin_fix.fix_addons_silent([addonid])
 
         # Always defer the skin switch until AFTER this portal (window 13001)
         # has closed. Applying while the portal is still open leaves it

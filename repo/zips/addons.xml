@@ -627,7 +627,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.8.4" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.8.5" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -649,7 +649,7 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.7.4.0[CR]- New tool: AM6B CoreELEC Fix - applies/reverts the AF3 GBM poster flicker workaround (bordersize inset on Layout_Poster, same as Aeon Nox Silvo)[CR][CR]v1.7.3.8
+    <news>v1.8.5[CR]- New tool: Fix Add-on Update Origins - links zip/portal-installed add-ons back to their repository in the Addons DB so they show as installed and auto-update again[CR]- Skin Installer now sets the repository origin automatically after every skin/companion install[CR][CR]v1.7.4.0[CR]- New tool: AM6B CoreELEC Fix - applies/reverts the AF3 GBM poster flicker workaround (bordersize inset on Layout_Poster, same as Aeon Nox Silvo)[CR][CR]v1.7.3.8
 - Added TinyPPI patch: set _ALLOW_NON_COREELEC = True in resources/lib/overlay.py so the overlay can launch on non-CoreELEC platforms (macOS dev/testing).
 v1.7.3.7
 - BINGIE REMOVAL: removed everything pertaining to the Bingie TMDbHelper fork (plugin.video.tmdb.bingie.helper / skin.bingie). Patcher: dropped the 3 Bingie Trakt QR patch entries and both Bingie blobs. Skin Switcher + Skin Installer: removed the stock/Bingie fork toggle (_apply_helper_for_skin) and its enable/disable helpers; skin.bingie companion mapping removed. service.py: removed the boot-time _reconcile_helper_forks() one-fork rule (moot with a single helper). Backup Manager: bingie helper removed from OpenWizard EXCLUDES.
