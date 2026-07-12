@@ -130,6 +130,27 @@ PATCHES = [
         'already_patched_check': '# -- Seren QR Auth patch (by ABUKARIM TOOLS) --',
         'fallback_pattern': None, 'fallback_repl': None,
     },
+    # ── Seren maintenance.py – UTF-8 addon.xml I/O (py3.14 C-locale opens ascii; 0xe2 in addon.xml crashes service at boot) ──
+    {
+        'addon_id': 'plugin.video.seren',
+        'rel_path': os.path.join('resources', 'lib', 'common', 'maintenance.py'),
+        'old': '    file_path = os.path.join(g.ADDON_DATA_PATH, "addon.xml")\n\n    with open(file_path) as addon_xml:',
+        'new': '    file_path = os.path.join(g.ADDON_DATA_PATH, "addon.xml")\n\n    with open(file_path, encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
+        'description': 'Seren maintenance.py – read addon.xml as UTF-8 (fixes boot UnicodeDecodeError in toggle_reuselanguageinvoker)',
+        'already_patched_check': 'with open(file_path, encoding="utf-8") as addon_xml:',
+        'fallback_pattern': r'with open\(file_path\) as addon_xml:',
+        'fallback_repl': 'with open(file_path, encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
+    },
+    {
+        'addon_id': 'plugin.video.seren',
+        'rel_path': os.path.join('resources', 'lib', 'common', 'maintenance.py'),
+        'old': '    def _store_and_reload(output):\n        with open(file_path, "w+") as addon_xml:',
+        'new': '    def _store_and_reload(output):\n        with open(file_path, "w+", encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
+        'description': 'Seren maintenance.py – write addon.xml as UTF-8',
+        'already_patched_check': 'with open(file_path, "w+", encoding="utf-8") as addon_xml:',
+        'fallback_pattern': r'with open\(file_path, "w\+"\) as addon_xml:',
+        'fallback_repl': 'with open(file_path, "w+", encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
+    },
     # ── DPlex (Plex) QR Auth (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'plugin.video.dplex',
@@ -319,28 +340,6 @@ PATCHES = [
         # regardless of minor whitespace/line drift between TMDbHelper releases.
         'fallback_pattern': r'    def poller\(self\):\n[\s\S]*?\n(?=    mutex_lockname)',
         'fallback_repl': (lambda _b: (lambda m: base64.b64decode(_b).decode('utf-8') + '\n'))(_TMDBH_POLLER_NEW_B64),
-    },
-    # ── RedLight sources_results – dark unfocused card (fixes white rows in TIDB-borrowed window) ──
-    {
-        'addon_id': 'plugin.video.redlight',
-        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
-        'old': '',
-        'new': '',
-        'regex_only': True,
-        'fallback_pattern': r'<texture colordiffuse="\$INFO\[Window\(10000\)\.Property\(redlight\.window_theme\.sources\)\]" border="30">redlight_common/circle\.png</texture>',
-        'fallback_repl': '<texture colordiffuse="FF1F2020" border="30">redlight_common/circle.png</texture>',
-        'count': 0,
-        'description': 'RedLight - hardcode dark unfocused source card (FF1F2020) so empty window_theme.sources no longer renders white',
-        'already_patched_check': '<texture colordiffuse="FF1F2020" border="30">redlight_common/circle.png</texture>',
-    },
-    # ── RedLight – kill volume_checker (stops ~30% playback volume drop via forced SetVolume) ──
-    {
-        'addon_id': 'plugin.video.redlight',
-        'rel_path': os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
-        'old': "def volume_checker():\n\t# 0% == -60db, 100% == 0db",
-        'new': "def volume_checker():\n\treturn  # ABUKARIM: disabled - was forcing SetVolume() and dropping playback volume\n\t# 0% == -60db, 100% == 0db",
-        'description': 'RedLight - neutralize volume_checker so it no longer forces SetVolume() and drops playback volume',
-        'already_patched_check': 'ABUKARIM: disabled - was forcing SetVolume()',
     },
     # ── TMDbHelper – suppress "not playable" popup for player-hack (is_resolvable:false) players ──
     {
