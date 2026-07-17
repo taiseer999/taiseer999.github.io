@@ -60,7 +60,6 @@ class tk_list():
         # Others
         add_if(var.chk_crew,        'The Crew')
         add_if(var.chk_salts,       'SALTS')
-        add_if(var.chk_tmdbh,       'TMDb Helper')
         add_if(var.chk_trakt,       'Trakt Addon')
 
         if not menu:

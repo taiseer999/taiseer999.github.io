@@ -1,3 +1,6 @@
+v1.1.5.5
+- Removed TMDb Helper from the Trakt sync selection dialog (trakt_select.py). Combined with 1.1.5.4 this removes both the option to pick TMDbHelper as a Trakt sync target and the token-write block that would have run afterwards.
+
 v1.1.5.4
 - Removed TMDbHelper Trakt authorization block from trakt_sync.py; acctmgr no longer writes Trakt tokens into plugin.video.themoviedb.helper (client-key patch, service startup patch, and trakt_token setting). The addon still appears in the general settings-copy loop and elsewhere unchanged, so other TMDbHelper-related syncs (MDBList, players, etc.) continue to work.
 
