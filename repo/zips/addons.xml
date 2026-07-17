@@ -3923,7 +3923,7 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.acctmgr" version="1.1.5.3" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709،AK">
+</addon><addon id="script.module.acctmgr" version="1.1.5.4" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709،AK">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.19.1" />
@@ -4291,24 +4291,6 @@ v9.5.0 (2020-04-02)
       <icon>resources/icon.png</icon>
     </assets>
   </extension>
-</addon><addon id="script.module.gearsscrapers" version="1.3.5" name="Gears Scrapers" provider-name="gearsscrapers">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.requests" />
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="lib/default.py">
-		<provides>executable</provides>
-	</extension>
-	<extension point="xbmc.service" library="lib/service.py" />
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.addon.metadata">
-		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-		<summary>gearsscrapers</summary>
-		<description>A module to query magnet providers.[CR][CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</description>
-		<disclaimer>The author does not host or own any content found within this addon. The author is not responsible for the content found using this addon. The author is not responsible for the use of this addon.</disclaimer>
-		<assets><icon>icon.png</icon></assets>
-		<assets><fanart>fanart.jpg</fanart></assets>
-	</extension>
 </addon><addon id="script.module.idna" name="idna" version="3.10.0" provider-name="Kim Davies">
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -4458,23 +4440,6 @@ v0.5.9 (2022-03-22)
     <news>0.1.3:
 - Fix non-UTF-8 byte string decoding in Python 2.</news>
   </extension>
-</addon><addon id="script.module.magneto" version="6.04.02" name="Magneto Module" provider-name="Magneto">
-	<requires>
-		<import addon="xbmc.python" version="3.0.0" />
-		<import addon="script.module.requests" />
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="lib/router.py">
-		<provides>executable video</provides>
-	</extension>
-	<extension point="xbmc.service" library="lib/service.py" />
-	<extension point="xbmc.python.module" library="lib" />
-	<extension point="xbmc.addon.metadata">
-		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-		<summary>Magneto Module</summary>
-		<description>A module to query magnet providers.[CR][CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</description>
-		<disclaimer>The author does not host or own any content found within this addon. The author is not responsible for the content found using this addon. The author is not responsible for the use of this addon.</disclaimer>
-		<assets><icon>resources/magneto.png</icon></assets>
-	</extension>
 </addon><addon id="script.module.metadatautils" name="Metadata and Artwork module" version="1.30.0" provider-name="marcelveldt and others">
     <requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -6680,27 +6645,6 @@ Supports: OpenSubtitles, BSPlayer, Podnadpisi.NET, SubDL, Addic7ed
   * OpenSubtitles support with optional authentication
   * results ordering with preferred language ordered first
         </news>
-    </extension>
-</addon><addon id="service.subtitles.dexworld" name="DexSubtitles" version="5.4.5.1" provider-name="DexSubtitles">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0" />
-        <import addon="script.module.requests" version="2.25.0" />
-    </requires>
-
-    <extension point="xbmc.subtitle.module" library="service.py">
-        <provides>subtitles</provides>
-    </extension>
-
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <language>ar,en</language>
-        <summary lang="ar">ترجمات عربية ذكية من مصادر متعددة مع ترجمة AI</summary>
-        <summary lang="en">Smart subtitles with AI translation</summary>
-        <description lang="ar">إضافة ترجمة عربية تدعم مزودات متعددة مع وسم واضح لنتائج AI.</description>
-        <description lang="en">Subtitle addon with multiple providers and clear AI tagging.</description>
-        <assets>
-            <icon>icon.png</icon>
-        </assets>
     </extension>
 </addon><addon id="service.subtitles.localsubtitle" name="LocalSubtitle" version="1.12.5" provider-name="peno">
   <requires>

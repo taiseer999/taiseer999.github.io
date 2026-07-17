@@ -1,3 +1,6 @@
+v1.1.5.4
+- Removed TMDbHelper Trakt authorization block from trakt_sync.py; acctmgr no longer writes Trakt tokens into plugin.video.themoviedb.helper (client-key patch, service startup patch, and trakt_token setting). The addon still appears in the general settings-copy loop and elsewhere unchanged, so other TMDbHelper-related syncs (MDBList, players, etc.) continue to work.
+
 v1.1.5.2
 - QR rendering fix for all auth dialogs: make_qr() now falls back to api.qrserver.com when script.module.qrcode/PIL are unavailable, and every provider (Real-Debrid, AllDebrid, Premiumize, Trakt, Offcloud) now bundles a static QR image as final fallback so the dialog never shows an empty square.
 

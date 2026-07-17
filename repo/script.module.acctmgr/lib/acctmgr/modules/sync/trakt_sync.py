@@ -548,47 +548,6 @@ class Auth:
         except Exception as e:
             log_utils.error(f"Gratis Red Trakt Failed: {e}")
 
-        # ========================= TMDb Helper =========================
-        try:
-            if "TMDb Helper" in current and exists(var.chk_tmdbh):
-                addon = xbmcaddon.Addon("plugin.video.themoviedb.helper")
-                chk_auth = addon.getSetting("trakt_token")
-
-                if refresh_sync(mode, chk_auth, master_token):
-                    with open(var.path_tmdbh, "r") as f:
-                        data = f.read()
-
-                    patched_keys = False
-                    if var.tmdbh_client in data or var.tmdbh_secret in data:
-                        # Replace old keys
-                        data = data.replace(var.tmdbh_client, var.client_am).replace(var.tmdbh_secret, var.secret_am)
-                        with open(var.path_tmdbh, "w") as f:
-                            f.write(data)
-                        patched_keys = True
-                    elif var.client_am in data and var.secret_am in data:
-                        # Keys are already correct
-                        patched_keys = True
-
-                    if not patched_keys:
-                        log_utils.log("TMDbH Trakt keys NOT patched")
-
-                    patched, msg = control.startup_patch(var.path_tmdbh_service)
-                    if not patched:
-                        log_utils.log(f"TMDbH startup patch failed, msg={msg}", level=log_utils.LOGERROR)
-
-                    expires_int = int(float(your_expires or 0))
-                    tmdbh_data = (
-                        '{"access_token":"%s","token_type":"bearer",'
-                        '"expires_in":7776000,"refresh_token":"%s",'
-                        '"scope":"public","created_at":%s}'
-                        % (your_token, your_refresh, expires_int)
-                    )
-
-                    addon.setSettingString("trakt_token", tmdbh_data)
-                    addon.setSetting("startup_notifications", "false")
-        except Exception as e:
-            log_utils.error(f"TMDBh Trakt Failed: {e}")
-
         # ========================= Trakt Addon =========================
         try:
             if "Trakt Addon" in current and exists(var.chk_trakt) and exists(var.chkset_trakt):
