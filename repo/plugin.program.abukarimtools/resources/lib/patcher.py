@@ -94,10 +94,13 @@ PATCHES = [
     # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'overlay.py'),
+        'rel_path': os.path.join('resources', 'lib', 'ui', 'overlay.py'),
+        'rel_path_alternates': [
+            os.path.join('resources', 'lib', 'overlay.py'),  # TinyPPI <= 1.8.6 (flat layout)
+        ],
         'old': '_ALLOW_NON_COREELEC = False',
         'new': '_ALLOW_NON_COREELEC = True',
-        'description': 'TinyPPI overlay.py – allow launch on non-CoreELEC (dev/testing)',
+        'description': 'TinyPPI overlay.py \u2013 allow launch on non-CoreELEC (1.9.7+ ui/ layout with pre-1.9.7 fallback)',
         'already_patched_check': '_ALLOW_NON_COREELEC = True',
         'fallback_pattern': r'_ALLOW_NON_COREELEC\s*(?::[^=\n]+)?=\s*False',
         'fallback_repl': lambda m: '_ALLOW_NON_COREELEC = True',
@@ -463,7 +466,21 @@ def _apply_patch(patch):
         if not os.path.isdir(addon_path):
             return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
 
-    target = os.path.join(addon_path, patch['rel_path'])
+    # Resolve target: support a list of candidate paths (rel_path_alternates)
+    # so a single entry can cover multiple upstream file layouts.  When a list
+    # is given, use the first candidate whose file exists; when none exist,
+    # fall back to the primary rel_path so the "not found" error still names
+    # the primary location.
+    candidates = list(patch.get('rel_path_alternates') or ())
+    candidates.insert(0, patch['rel_path'])
+    target = None
+    for cand in candidates:
+        c = os.path.join(addon_path, cand)
+        if os.path.isfile(c):
+            target = c
+            break
+    if target is None:
+        target = os.path.join(addon_path, patch['rel_path'])
     # inject_file: ينشئ الملف مباشرة قبل أي فحص
     if patch.get('inject_file'):
         b64 = patch.get('inject_content_b64', '')
