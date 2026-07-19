@@ -314,6 +314,35 @@ PATCHES = [
         'fallback_pattern': r'if aired_episodes <= watched_episodes:',
         'fallback_repl': 'if aired_episodes is not None and aired_episodes <= (watched_episodes or 0):',
     },
+    # ── RedLight – busy-player fix (separate patch, group 'redlight') ──
+    # Root cause (kodi.log): clicking a widget item while the previous video is
+    # still playing / tearing down trips _playback_already_active() in
+    # playback_prep(), which bailed with a silent `return`.  The plugin then
+    # exits without starting playback, Kodi's pending play item stays
+    # unresolved -> "One or more items failed to play" popup right after the
+    # player stops.  Fix: wait (bounded) for the player to finish tearing down,
+    # then continue into the normal scrape/play flow instead of bailing.
+    {
+        'group': 'redlight',
+        'addon_id': 'plugin.video.redlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
+        'old': '\t\tif self._playback_already_active() and not self.background:\n\t\t\treturn\n',
+        'new': ('\t\tif self._playback_already_active() and not self.background:\n'
+                '\t\t\t# -- RedLight busy-player fix (by ABUKARIM TOOLS): wait for teardown instead of silent bail --\n'
+                '\t\t\t_pw = 0\n'
+                '\t\t\twhile self._playback_already_active() and _pw < 8000:\n'
+                '\t\t\t\tkodi_utils.sleep(200)\n'
+                '\t\t\t\t_pw += 200\n'),
+        'description': 'RedLight sources.py - wait for player teardown instead of silent bail (kills "Playback failed" popup on widget clicks)',
+        'already_patched_check': '# -- RedLight busy-player fix (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'\t\tif self\._playback_already_active\(\) and not self\.background:\r?\n\t\t\treturn\r?\n',
+        'fallback_repl': ('\t\tif self._playback_already_active() and not self.background:\n'
+                          '\t\t\t# -- RedLight busy-player fix (by ABUKARIM TOOLS): wait for teardown instead of silent bail --\n'
+                          '\t\t\t_pw = 0\n'
+                          '\t\t\twhile self._playback_already_active() and _pw < 8000:\n'
+                          '\t\t\t\tkodi_utils.sleep(200)\n'
+                          '\t\t\t\t_pw += 200\n'),
+    },
 ]
 
 
@@ -435,15 +464,22 @@ def _apply_patch(patch):
 
 
 # ---------------------------------------------------------------------------
-def run():
-    """Entry point called from default.py router."""
-    _log('Starting patch run …')
+def run(group=None):
+    """Entry point called from default.py router.
+
+    group=None  -> apply the standard (ungrouped) patch set.
+    group='x'   -> apply only patches tagged with that group
+                   (e.g. 'redlight' for the separate RedLight patch).
+    """
+    _log('Starting patch run … (group=%s)' % (group or 'default'))
 
     results   = []
     succeeded = 0
     failed    = 0
 
-    for patch in PATCHES:
+    selected = [p for p in PATCHES if p.get('group') == group]
+
+    for patch in selected:
         ok, msg = _apply_patch(patch)
         _log(msg)
         results.append((ok, msg))
