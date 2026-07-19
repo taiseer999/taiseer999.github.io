@@ -20,7 +20,6 @@
     "screenshot": "https://iili.io/C9FQy79.png",
     "id": "skin.arctic.fuse.3",
     "zip": "https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/skin.arctic.fuse.3/skin.arctic.fuse.3-5.4.3.zip"
-
   },
   {
     "name": "[B][COLOR gold]NETFLIX[/COLOR][/B]",
@@ -28,7 +27,6 @@
     "screenshot": "https://iili.io/CuDJ6YB.png",
     "id": "skin.bingie",
     "zip": "https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/skin.bingie/skin.bingie-2.0.2.2.zip"
-
   },
   {
     "name": "[B][COLOR gold]FENtastic Plus[/COLOR][/B]",
@@ -36,6 +34,12 @@
     "screenshot": "https://iili.io/CRp8frF.png",
     "id": "skin.fentastic",
     "zip": "https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/skin.fentastic/skin.fentastic-100.0.30i.zip"
-
+  },
+  {
+    "name": "[B][COLOR gold]nimbus[/COLOR][/B]",
+    "description": "KODI",
+    "screenshot": "https://iili.io/CwJ77LP.png",
+    "id": "skin.nimbus",
+    "zip": "https://raw.githubusercontent.com/taiseer999/taiseer999.github.io/master/repo/zips/skin.nimbus/skin.nimbus-0.1.44.zip"
   }
 ]
