@@ -14,6 +14,8 @@ media_xml_body = '''
       <param name="widget_header" value="{cpath_header}"/>
       <param name="widget_target" value="videos"/>
       <param name="list_id" value="{cpath_list_id}"/>
+      <param name="widget_slot" value="{widget_slot}"/>
+      <param name="widget_menu" value="{widget_menu}"/>
     </include>'''
 
 history_xml_body = '''

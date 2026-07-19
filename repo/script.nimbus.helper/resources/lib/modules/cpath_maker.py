@@ -309,6 +309,8 @@ class CPaths:
                 cpath_path=cpath_path,
                 cpath_header=cpath_header,
                 cpath_list_id=cpath_list_id,
+                widget_slot=k,
+                widget_menu=self.media_type,
             )
             if not "&amp;" in body:
                 final_format += body.replace("&", "&amp;")
@@ -333,7 +335,7 @@ class CPaths:
             if not cpath_header:
                 return None
             self.create_and_update_widget(cpath_setting, cpath_path, cpath_header)
-        else:  # context == 'main_menu'
+        else:
             cpath_header = self.main_menu_header(default_header)
             if not cpath_header:
                 return None
@@ -471,7 +473,9 @@ class CPaths:
                 ("Move up", "move_up"),
                 ("Move down", "move_down"),
                 ("Display type", "display_type"),
+                ("Set widget limit", "set_widget_limit"),
             ] + choices
+
         if xbmc.getCondVisibility("Window.IsActive(home)"):
             selected_label = xbmc.getInfoLabel("Container(9000).ListItem.Label")
             title = "%s options ({})".format(
@@ -479,13 +483,13 @@ class CPaths:
             ) % self.path_type.capitalize().replace("_", " ")
         else:
             title = "%s options" % self.path_type.capitalize().replace("_", " ")
-        choice = dialog.select(
-            title,
-            [i[0] for i in choices],
-        )
+
+        choice = dialog.select(title, [i[0] for i in choices])
         if choice == -1:
             return None
+
         action = choices[choice][1]
+
         if action in ["move_up", "move_down"]:
             parts = cpath_setting.split(".")
             current_order = int(parts[-1])
@@ -501,6 +505,50 @@ class CPaths:
                     current_order - 1 if action == "move_up" else current_order + 1
                 )
             self.swap_widgets(parts, current_order, new_order)
+
+        elif action == "set_widget_limit":
+            parts = cpath_setting.split(".")
+            # expected: movie.widget.1 etc.
+            if len(parts) < 3 or not parts[-1].isdigit():
+                dialog.ok("Nimbus", "Unable to determine widget slot")
+                return None
+
+            menu_key = parts[0]  # movie/tvshow/custom1/custom2/custom3
+            slot = parts[-1]
+            limit_key = f"WidgetLimit.{menu_key}.{slot}"
+
+            current_value = xbmc.getInfoLabel(f"Skin.String({limit_key})")
+            if not current_value:
+                current_value = xbmc.getInfoLabel("Skin.String(WidgetItemLimit)") or "20"
+
+            value = dialog.numeric(
+                0, f"Set item limit ({menu_key} widget {slot})", current_value
+            )
+
+            if value is None:
+                return None
+
+            # Empty = clear override and use global default
+            if value == "":
+                xbmc.executebuiltin(f"Skin.Reset({limit_key})")
+                dialog.ok("Nimbus", "Widget limit reset to global default")
+                return None
+
+            try:
+                ivalue = int(value)
+            except ValueError:
+                dialog.ok("Nimbus", "Please enter a valid number")
+                return None
+
+            if ivalue < 1:
+                ivalue = 1
+            elif ivalue > 200:
+                ivalue = 200
+
+            xbmc.executebuiltin(f"Skin.SetString({limit_key},{ivalue})")
+            dialog.ok("Nimbus", f"Widget limit set to {ivalue}")
+            return None
+
         elif action == "remake_path":
             self.remove_cpath_from_database(cpath_setting)
             result = self.path_browser()
@@ -518,6 +566,7 @@ class CPaths:
                     )
                     self.make_main_menu_xml(self.fetch_current_cpaths())
                     dialog.ok("Nimbus", "Main menu remade")
+
         elif action == "rename_path":
             result = self.fetch_one_cpath(cpath_setting)
             if not result:
@@ -560,6 +609,7 @@ class CPaths:
                     cpath_setting, cpath_path, cpath_header, "", ""
                 )
                 self.make_main_menu_xml(self.fetch_current_cpaths())
+
         elif action == "display_type":
             result = self.fetch_one_cpath(cpath_setting)
             if not result:
@@ -572,11 +622,13 @@ class CPaths:
             self.create_and_update_widget(
                 cpath_setting, cpath_path, cpath_header, add_to_db=False
             )
+
         elif action == "clear_path":
             self.remove_cpath_from_database(cpath_setting)
             if context == "main_menu":
                 self.make_default_xml()
                 dialog.ok("Nimbus", "Path cleared")
+
         return None
 
     def swap_widgets(self, parts, current_order, new_order):
