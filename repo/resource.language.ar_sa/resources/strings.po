@@ -7569,7 +7569,7 @@ msgstr "جميع مقاطع الفيديو"
 
 msgctxt "#16101"
 msgid "Unwatched"
-msgstr "لم تشاهد"
+msgstr "جديد"
 
 msgctxt "#16102"
 msgid "Watched"
