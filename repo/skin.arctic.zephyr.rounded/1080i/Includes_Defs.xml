@@ -1321,7 +1321,7 @@
             <height>55</height>
             <aspectratio align="left" aligny="center">keep</aspectratio>
             <colordiffuse>Dark2</colordiffuse>
-            <texture>genreicons/Action.png</texture>
+             <texture>genreicons/Action.png</texture>
             <visible>Skin.HasSetting(home.genre.icons)</visible>
             <visible>String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre),Action) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre),حركة) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre),أكشن) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre),اكشن) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.1.Name),Action) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.1.Name),حركة) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.1.Name),أكشن) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.1.Name),اكشن) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.2.Name),Action) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.2.Name),حركة) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.2.Name),أكشن) | String.Contains(Window(Home).Property(TMDbHelper.ListItem.Genre.2.Name),اكشن) | String.Contains(Container($PARAM[id]).ListItem.Genre,Action) | String.Contains(Container($PARAM[id]).ListItem.Genre,حركة) | String.Contains(Container($PARAM[id]).ListItem.Genre,أكشن) | String.Contains(Container($PARAM[id]).ListItem.Genre,اكشن)</visible>
         </control>
@@ -1524,17 +1524,15 @@
 
     <include name="Def_Home_Label_Widget_Sub_Title_Mpaa">
         <control type="label">
-            <textcolor>FFE50914</textcolor>
             <include>Widgets_Item_Sub_Title_Definition</include>
             <left>20</left>
-            <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.Mpaa),,]</label>
+            <label>($INFO[Window(Home).Property(TMDbHelper.ListItem.Mpaa),,])</label>
             <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Mpaa))</visible>
         </control>
         <control type="label">
-            <textcolor>FFE50914</textcolor>
             <include>Widgets_Item_Sub_Title_Definition</include>
             <left>20</left>
-            <label>$INFO[Container($PARAM[id]).ListItem.Mpaa,,]</label>
+            <label>($INFO[Container($PARAM[id]).ListItem.Mpaa,,])</label>
             <visible>String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Mpaa)) + !String.IsEmpty(Container($PARAM[id]).ListItem.Mpaa)</visible>
         </control>
     </include>
@@ -1543,8 +1541,8 @@
         <control type="image">
             <left>23</left>
             <top>2</top>
-            <width min="0" max="200">auto</width>
-            <height>36</height>
+            <width min="0" max="250">auto</width>
+            <height>40</height>
             <aspectratio align="left" aligny="center">keep</aspectratio>
             <texture>$VAR[Image_Dialog_Info_Video_Studio]</texture>
             <visible>Skin.HasSetting(home.style.flix) | Skin.HasSetting(home.style.horizontal.clean)</visible>
@@ -1553,8 +1551,8 @@
         <control type="image">
             <left>23</left>
             <top>2</top>
-            <width min="0" max="200">auto</width>
-            <height>36</height>
+            <width min="0" max="250">auto</width>
+            <height>40</height>
             <aspectratio align="left" aligny="center">keep</aspectratio>
             <texture>$INFO[Container($PARAM[id]).ListItem.Studio,resource://resource.images.studios.coloured/,.png]</texture>
             <visible>Skin.HasSetting(home.style.flix) | Skin.HasSetting(home.style.horizontal.clean)</visible>
