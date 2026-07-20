@@ -7015,7 +7015,7 @@ Added arabic fonts
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.zephyr.rounded" version="2.7.11" name="Arctic: Zephyr - Rounded" provider-name="jurialmunkey, beatmasterrs, nanomani">
+</addon><addon id="skin.arctic.zephyr.rounded" version="2.7.12" name="Arctic: Zephyr - Rounded" provider-name="jurialmunkey, beatmasterrs, nanomani">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinshortcuts" version="3.0.0" />
@@ -7029,7 +7029,7 @@ Added arabic fonts
         <import addon="resource.images.studios.coloured" version="0.0.1" />
         <import addon="resource.images.moviecountryicons.flags" version="0.0.1" />
         <import addon="resource.images.weathericons.white" version="0.0.6" />
-        <import addon="resource.images.weatherfanart.single" version="0.0.6" />
+        <import addon="resource.images.weatherfanart.single" version="0.0.6" />t.single" version="0.0.6"/&gt;
     </requires>
     <extension point="xbmc.gui.skin" defaultthemename="Textures.xbt" debugging="false" effectslowdown="1">
         <res width="1920" height="1080" aspect="16:9" default="true" folder="1080i" />
