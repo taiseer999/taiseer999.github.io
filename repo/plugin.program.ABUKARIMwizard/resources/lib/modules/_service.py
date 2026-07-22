@@ -157,15 +157,22 @@ class Startup:
         current_notify = int(setting('notifyversion'))
         notify_version = info[0]
         message = info[1]
-        if setting('firstrunNotify') != 'true' or notify_version > current_notify:
+
+        # Pop the notification whenever a new build update is available,
+        # once per new build version.
+        update_available = bool(UPDATE_VERSION) and UPDATE_VERSION > CURRENT_VERSION
+        update_not_announced = update_available and setting('notifiedupdate') != str(UPDATE_VERSION)
+
+        if setting('firstrunNotify') != 'true' or notify_version > current_notify or update_not_announced:
             notify.notification(message)
             setting_set('firstrunNotify', 'true')
             setting_set('notifyversion', str(notify_version))
+            if update_available:
+                setting_set('notifiedupdate', str(UPDATE_VERSION))
     
     def run_startup(self):
-        if setting('firstrunSave') != 'true':
-            self.save_menu()
-            xbmc.sleep(2000)
+        # Save-items multiselect no longer auto-pops at startup;
+        # the same options remain available in the addon Settings.
         if setting('firstrun') == 'true':
             enable_addons()
             backup_gui_skin(gui_save_default)

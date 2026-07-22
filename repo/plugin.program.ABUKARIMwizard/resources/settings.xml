@@ -7,6 +7,7 @@
 		<setting id="firstrun" type="bool" label="First Run" visible="false"/>
 		<setting id="firstrunNotify" type="bool" label="First Run" visible="false"/>
 		<setting id="notifyversion" type="text" label="Notify Version: " visible="false" default="0"/>
+		<setting id="notifiedupdate" type="text" label="Notified Update: " visible="false" default=""/>
 		<setting id="autoclearpackages" type="bool" label="30057" visible="true" default = "true" />
 		<setting id="update_passed" type="bool" label="Disable Update Notification" visible="true" default="false"/>
 		<setting label="Backup Folder" type="folder" id="backupfolder" source="" option="writeable" default="special://home/backups" />
@@ -17,7 +18,7 @@
 	</category>
 	<category label="30059">
 		<setting type="lsep" label="30058"/>
-      		<setting id="savedata"  type="bool" label="Save Trakt & Debrid Data" default="false"/>
+      		<setting id="savedata"  type="bool" label="Save Trakt &amp; Debrid Data" default="false"/>
       		<setting id="saveyoutube" type="bool" label="Save Youtube API Keys" default="false"/>
 		<setting id="savefavs" type="bool" label="Save Favourites" default="false"/>
 		<setting id="savesources" type="bool" label="Save Sources" default="false"/>

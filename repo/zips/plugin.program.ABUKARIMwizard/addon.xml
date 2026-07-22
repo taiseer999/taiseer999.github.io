@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.ABUKARIMwizard" name="ABUKARIMwizard Wizard" version="3.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+<addon id="plugin.program.ABUKARIMwizard" name="ABUKARIMwizard Wizard" version="3.2" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1"/>
 	</requires>
@@ -18,7 +18,7 @@
 		<website></website> 
 		<email></email>
 		<source></source>
-		<news></news>
+		<news>v3.2: Notify uses Arial font (Arabic support); notify pops automatically on build updates; startup save-items window removed; fixed Build Update menu item opening Advanced Settings</news>
 		<assets>
 				<icon>resources/icon.png</icon>
 				<fanart>resources/fanart.jpg</fanart>

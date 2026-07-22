@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fonts>
+	<fontset id="Default">
+		<font>
+			<name>WizNotify</name>
+			<filename>arial.ttf</filename>
+			<size>26</size>
+		</font>
+		<font>
+			<name>WizNotifyBold</name>
+			<filename>arial.ttf</filename>
+			<size>30</size>
+			<style>bold</style>
+		</font>
+	</fontset>
+</fonts>
