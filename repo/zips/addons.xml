@@ -627,7 +627,7 @@ updated YouTube addon URL
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.3" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.4" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -649,7 +649,11 @@ updated YouTube addon URL
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.8.9.2
+    <news>v1.9.4
+- Added Fenlight patch: disables the built-in volume_checker() so playback
+  no longer auto-drops Kodi volume to -30 dB on every start.
+
+v1.8.9.2
 - Removed all DPlex patch entries and blob constants from the patcher (8 constants + 8 entries covering QR auth injection, geometry, controls layout, v2 PIN, and display flow).
 v1.8.9.1
 - Patcher: TinyPPI _ALLOW_NON_COREELEC entry now targets resources/lib/ui/overlay.py (the 1.9.7+ package layout) with resources/lib/overlay.py kept as a fallback for TinyPPI &lt;= 1.8.6.  Adds general rel_path_alternates support to any patch entry (first existing candidate wins).

@@ -47,6 +47,14 @@ _TMDBH_POLLER_NEW_B64 = 'ICAgIGRlZiBwb2xsZXIoc2VsZik6CgogICAgICAgICMgLS0gVE1EYkh
 _TMDBH_SYNCGUARD_OLD_B64 = 'ICAgIGRlZiBpc19pbnByb2dyZXNzX3Nob3coc2VsZiwgdG1kYl9pZCwgYWlyZWRfZXBpc29kZXMsIHdhdGNoZWRfZXBpc29kZXMpOgogICAgICAgIGlmIGFpcmVkX2VwaXNvZGVzIDw9IHdhdGNoZWRfZXBpc29kZXM6CiAgICAgICAgICAgIGlmIHNlbGYuaXNfY2FsZW5kYXJfd2F0Y2hlZCh0bWRiX2lkKToKICAgICAgICAgICAgICAgIHJldHVybiBGYWxzZQogICAgICAgIHJldHVybiBUcnVlCg=='
 _TMDBH_SYNCGUARD_NEW_B64 = 'ICAgIGRlZiBpc19pbnByb2dyZXNzX3Nob3coc2VsZiwgdG1kYl9pZCwgYWlyZWRfZXBpc29kZXMsIHdhdGNoZWRfZXBpc29kZXMpOgogICAgICAgICMgLS0gVE1EYkhlbHBlciBzeW5jIE5vbmVUeXBlIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICBpZiBhaXJlZF9lcGlzb2RlcyBpcyBub3QgTm9uZSBhbmQgYWlyZWRfZXBpc29kZXMgPD0gKHdhdGNoZWRfZXBpc29kZXMgb3IgMCk6CiAgICAgICAgICAgIGlmIHNlbGYuaXNfY2FsZW5kYXJfd2F0Y2hlZCh0bWRiX2lkKToKICAgICAgICAgICAgICAgIHJldHVybiBGYWxzZQogICAgICAgIHJldHVybiBUcnVlCg=='
 
+# ── Fenlight volume auto-drop kill (by ABUKARIM TOOLS) ──
+# Fenlight's volume_checker() runs at every play_video() and clamps Kodi volume
+# down to volumecheck_percent (default 50 → -30 dB) unless the user has flipped
+# volumecheck_enabled off in-app. Replace the body with an immediate `return`
+# so playback never touches the volume.
+_FENLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgnZmVubGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgnZmVubGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNz'
+_FENLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBGZW5saWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4='
+
 # ---------------------------------------------------------------------------
 ADDON_NAME  = 'ABUKARIM TOOLS'
 HOME        = xbmcvfs.translatePath('special://home/')
@@ -313,6 +321,24 @@ PATCHES = [
         'already_patched_check': '# -- TMDbHelper sync NoneType guard (by ABUKARIM TOOLS) --',
         'fallback_pattern': r'if aired_episodes <= watched_episodes:',
         'fallback_repl': 'if aired_episodes is not None and aired_episodes <= (watched_episodes or 0):',
+    },
+    # ── Fenlight – kill automatic volume drop to -30 dB on playback start ──
+    # Root cause (resources/lib/modules/kodi_utils.py:405 → called from
+    # resources/lib/modules/player.py:32 in play_video()): volume_checker()
+    # clamps Kodi's player volume to volumecheck_percent (default 50 → -30 dB)
+    # every single playback unless the user manually turns off the internal
+    # setting. Neuter the function body with an immediate `return`.
+    {
+        'addon_id': 'plugin.video.fenlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
+        'old': base64.b64decode(_FENLIGHT_VOLCHECKER_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_FENLIGHT_VOLCHECKER_NEW_B64).decode('utf-8'),
+        'description': 'Fenlight kodi_utils.py - disable auto volume drop to -30 dB on every playback',
+        'already_patched_check': '-- Fenlight volume auto-drop disabled (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'def volume_checker\(\):[\s\S]*?except:\s*pass',
+        'fallback_repl': ("def volume_checker():\r\n"
+                          "\t# -- Fenlight volume auto-drop disabled (by ABUKARIM TOOLS) --\r\n"
+                          "\treturn"),
     },
     # ── RedLight – busy-player fix (separate patch, group 'redlight') ──
     # Root cause (kodi.log): clicking a widget item while the previous video is
