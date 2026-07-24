@@ -52,6 +52,12 @@ _TMDBH_SYNCGUARD_NEW_B64 = 'ICAgIGRlZiBpc19pbnByb2dyZXNzX3Nob3coc2VsZiwgdG1kYl9p
 # down to volumecheck_percent (default 50 → -30 dB) unless the user has flipped
 # volumecheck_enabled off in-app. Replace the body with an immediate `return`
 # so playback never touches the volume.
+# TMDbHelper trakt_stats.py - Trakt /users/me/stats now returns scalar values at the
+# top level; GetTraktStatsRequest.items assumed every base value was a dict and blew up
+# with AttributeError: 'int' object has no attribute 'items', killing the whole Cron Thread.
+_TMDBH_TRAKTSTATS_OLD_B64 = 'ICAgICAgICAgICAgZm9yIGJhc2VfaywgYmFzZV92IGluIHNlbGYucmVzcG9uc2VfanNvbi5pdGVtcygpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
+_TMDBH_TRAKTSTATS_NEW_B64 = 'ICAgICAgICAgICAgIyAtLSBUTURiSGVscGVyIFRyYWt0IHN0YXRzIGRpY3QgZ3VhcmQgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgICAgICAgICBmb3IgYmFzZV9rLCBiYXNlX3YgaW4gc2VsZi5yZXNwb25zZV9qc29uLml0ZW1zKCkKICAgICAgICAgICAgaWYgaXNpbnN0YW5jZShiYXNlX3YsIGRpY3QpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
+
 _FENLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgnZmVubGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgnZmVubGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNz'
 _FENLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBGZW5saWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4='
 
@@ -321,6 +327,29 @@ PATCHES = [
         'already_patched_check': '# -- TMDbHelper sync NoneType guard (by ABUKARIM TOOLS) --',
         'fallback_pattern': r'if aired_episodes <= watched_episodes:',
         'fallback_repl': 'if aired_episodes is not None and aired_episodes <= (watched_episodes or 0):',
+    },
+    # ── TMDbHelper – Trakt stats dict guard (fixes Cron Thread dying at startup) ──
+    # Root cause (kodi.log): cronjob.py _on_startup() → _do_trakt_authorization() →
+    # get_stats() → trakt_stats.py:81 iterates base_v.items() over every top-level value
+    # of the Trakt users/me/stats payload. Trakt now returns plain ints there, so the
+    # comprehension raises AttributeError and the entire Cron Thread aborts — no periodic
+    # Trakt sync, no cache housekeeping for the rest of the session.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py'),
+        'old': base64.b64decode(_TMDBH_TRAKTSTATS_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TMDBH_TRAKTSTATS_NEW_B64).decode('utf-8'),
+        'description': 'TMDbHelper trakt_stats.py - skip non-dict values in Trakt stats (int payload killed the Cron Thread at startup)',
+        'already_patched_check': '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'for base_k, base_v in self\.response_json\.items\(\)\r?\n(\s*)for item_k, item_v in base_v\.items\(\)',
+        'fallback_repl': (
+            lambda m: (
+                '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --\n'
+                + m.group(1) + 'for base_k, base_v in self.response_json.items()\n'
+                + m.group(1) + 'if isinstance(base_v, dict)\n'
+                + m.group(1) + 'for item_k, item_v in base_v.items()'
+            )
+        ),
     },
     # ── Fenlight – kill automatic volume drop to -30 dB on playback start ──
     # Root cause (resources/lib/modules/kodi_utils.py:405 → called from

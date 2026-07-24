@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.5" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.6" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -656,7 +656,15 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.5
+    <news>v1.9.6
+- Added TMDbHelper trakt_stats.py patch: Trakt's users/me/stats payload now
+  carries plain numbers at the top level, and TMDbHelper assumed every value was
+  a dict - AttributeError: 'int' object has no attribute 'items' killed the whole
+  Cron Thread at startup, so no periodic Trakt sync or cache housekeeping for the
+  rest of the session. The patch skips non-dict values in the comprehension.
+  Picked up automatically by the v1.9.5 auto-patch watchdog.
+
+v1.9.5
 - AUTO-PATCH: the patcher no longer has to be run by hand. service.py now stays
   alive for the whole session and watches every add-on the patcher targets
   (version + addon.xml stat, once every 30s). When one is updated or reinstalled
