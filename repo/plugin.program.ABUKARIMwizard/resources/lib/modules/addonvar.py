@@ -112,6 +112,7 @@ def get_version():
        url = None
     version = ''
     url = ''
+    gui_url = ''
     builds = []
 
     if '"builds"' in response or "'builds'" in response:
@@ -129,6 +130,7 @@ def get_version():
        if build.get('name') == CURRENT_BUILD:
            version = str(build.get('version'))
            url = (build.get('url', ''))
+           gui_url = (build.get('gui', ''))
            break
-    return version, url
-UPDATE_VERSION, BUILD_URL = get_version()
+    return version, url, gui_url
+UPDATE_VERSION, BUILD_URL, GUI_URL = get_version()

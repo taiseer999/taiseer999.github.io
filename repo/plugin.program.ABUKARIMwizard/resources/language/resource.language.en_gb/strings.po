@@ -428,3 +428,23 @@ msgstr ""
 msgctxt "#30112"
 msgid "Advanced Settings K22"
 msgstr ""
+
+msgctxt "#30113"
+msgid "Patch GUI"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Update your current build's GUI/skin files in place, then reset the skin"
+msgstr ""
+
+msgctxt "#30115"
+msgid "This will update your GUI/skin files in place without wiping your current build. Continue?"
+msgstr ""
+
+msgctxt "#30116"
+msgid "No GUI Patch Available For This Build!"
+msgstr ""
+
+msgctxt "#30117"
+msgid "GUI Patch Applied Successfully!"
+msgstr ""

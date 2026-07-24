@@ -53,6 +53,54 @@ def build_install(name, name2, version, url):
     dialog.ok(addon_name, local_string(30036))  # Install Complete
     os._exit(1)
 
+def patch_gui(url):
+    if not url or url in ('', 'http://', None):
+        dialog.ok(addon_name, local_string(30116))  # No GUI Patch Available For This Build!
+        return
+
+    # Patch GUI, Cancel, Continue
+    if not dialog.yesno(
+        COLOR2(local_string(30113)),  # Patch GUI
+        COLOR2(local_string(30115)),  # This will update your GUI/skin files in place...
+        nolabel=local_string(30029),
+        yeslabel=local_string(30030)
+    ):
+        return
+
+    download_build(local_string(30113), url)
+    extract_gui_patch()
+
+    # Some skins (e.g. Arctic Fuse 3, via script.skinvariables) only rebuild
+    # their home menu/widgets on skin load if this skin string has changed
+    # since they last processed it - exactly what happens when a user opens
+    # and exits that skin's own shortcuts/variables editor. Bumping it here
+    # mirrors that, so the rebuild fires automatically as part of ReloadSkin()
+    # below. Harmless no-op on skins that don't use this convention.
+    xbmc.executebuiltin('Skin.SetString(Shortcuts.RebuildDateTime,{0})'.format(datetime.now().strftime('%Y-%m-%d_%H:%M:%S')))
+    xbmc.executebuiltin('ReloadSkin()')
+
+    dialog.ok(addon_name, local_string(30117))  # GUI Patch Applied Successfully!
+
+def extract_gui_patch():
+    if os.path.exists(zippath):
+        dp.create(addon_name, 'Patching GUI')
+        counter = 1
+        with ZipFile(zippath, 'r') as z:
+            files = z.infolist()
+            for file in files:
+                filename = file.filename
+                progress_percentage = int(counter/len(files)*100)
+                try:
+                    z.extract(file, home)
+                except Exception as e:
+                    xbmc.log(f'Error extracting {filename} - {e}', xbmc.LOGINFO)
+                dp.update(progress_percentage, f'Patching GUI...\n{progress_percentage}%\n{filename}')
+                counter += 1
+        dp.update(100, local_string(30035))  # Done Extracting
+        xbmc.sleep(500)
+        dp.close()
+        os.unlink(zippath)
+
 def download_build(name, url):
     if os.path.exists(zippath):
         os.unlink(zippath)

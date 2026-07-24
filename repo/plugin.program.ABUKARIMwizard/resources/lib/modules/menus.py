@@ -1,3 +1,4 @@
+import os
 import sys
 import json
 import xbmc
@@ -6,8 +7,10 @@ import xbmcplugin
 from .utils import add_dir
 from uservar import buildfile, videos_url
 from .parser import XmlParser, TextParser, get_page
-from .addonvar import addon_name, setting, addon_icon, addon_fanart, local_string, authorize, kodi_ver, kodi_versions, UPDATE_VERSION, CURRENT_BUILD, BUILD_VERSION
+from .addonvar import addon_name, setting, addon_icon, addon_fanart, local_string, authorize, kodi_ver, kodi_versions, UPDATE_VERSION, CURRENT_BUILD, BUILD_VERSION, GUI_URL, resources
 from .colors import colors
+
+PATCH_GUI_ICON = os.path.join(resources, 'media', 'patch_gui.png')
 
 HANDLE = int(sys.argv[1])
 
@@ -28,6 +31,9 @@ def main_menu():
         add_dir(COLOR4(f'Installed Build:   {CURRENT_BUILD} v{BUILD_VERSION}'), '', '', addon_icon, addon_fanart, COLOR2(local_string(30111)), isFolder=False)  # Installed Build
     
     add_dir(COLOR2(local_string(30010)), '', 1, addon_icon, addon_fanart, COLOR2(local_string(30001)), isFolder=True)  # Build Menu
+    
+    if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and GUI_URL not in ('', 'http://', None):
+        add_dir(COLOR2(local_string(30113)), GUI_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30114)), isFolder=False)  # Patch GUI
     
     add_dir(COLOR2(local_string(30011)), '', 5, addon_icon, addon_fanart, COLOR2(local_string(30002)), isFolder=True)  # Maintenance Menu
     
