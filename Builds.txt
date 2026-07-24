@@ -4,10 +4,10 @@ zip="url.to.wizard"
 
 
 name="Select your skin"
-version="2.3"
+version="2.4"
 url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=L%2BjGfKh9Dx4zv0no%2BFewwNtL1v3vbr8WSDL%2BUIpUkYAzVioYp3jQ%2BF2UYKdEtjvj&expiry=rPUcfRKWD2wwpPhzxq3GVA%3D%3D&mac=ee9961cfbc010493515f6d2019ef7dc1785ee7f05402634cbff53cbe373e9ccd"
 minor="http://"
-gui="http://"
+gui="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=fKuTTspvrub0XBjfizpX2JUzpQr3ZOtRcjA4yH%2BOUPh%2BU4evJ%2Bl7v3fOIV32ySHI&expiry=cHJJE8kXjMGsZzckyl4Jxg%3D%3D&mac=d32c5c0d7729007b0f15b2fc00a4204c4c3222f6d7432bffa29e763388be96fa"
 kodi="21"
 theme="http://your.themes.url"
 icon="https://iili.io/BacbRgj.png"
