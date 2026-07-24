@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.4" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.5" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -656,7 +656,18 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.4
+    <news>v1.9.5
+- AUTO-PATCH: the patcher no longer has to be run by hand. service.py now stays
+  alive for the whole session and watches every add-on the patcher targets
+  (version + addon.xml stat, once every 30s). When one is updated or reinstalled
+  - which replaces the folder and silently wipes our patches - the watchdog waits
+  for the unpack to settle, then re-applies only that add-on's entries, silently.
+  Also: a boot sweep (catches updates made while Kodi was closed) and a 30-minute
+  verify sweep. All entries are idempotent so an unchanged system writes nothing.
+  New menu item "Auto-Patch On Update: On/Off" (kill switch: addon_data/autopatch.off).
+  Optional groups (RedLight) stay manual by design.
+
+v1.9.4
 - Added Fenlight patch: disables the built-in volume_checker() so playback
   no longer auto-drops Kodi volume to -30 dB on every start.
 

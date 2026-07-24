@@ -490,6 +490,65 @@ def _apply_patch(patch):
 
 
 # ---------------------------------------------------------------------------
+def _select(group=None, addon_ids=None):
+    """Return the patch entries for a group, optionally narrowed to addon ids."""
+    selected = [p for p in PATCHES if p.get('group') == group]
+    if addon_ids:
+        wanted   = set(addon_ids)
+        selected = [p for p in selected if p['addon_id'] in wanted]
+    return selected
+
+
+def target_addon_ids(group=None):
+    """Ordered, de-duplicated list of addon ids this patch group targets.
+
+    Used by the auto-patch watchdog to know which addons to watch, so the
+    watch list can never drift out of sync with PATCHES.
+    """
+    seen = []
+    for patch in PATCHES:
+        if patch.get('group') != group:
+            continue
+        if patch['addon_id'] not in seen:
+            seen.append(patch['addon_id'])
+    return seen
+
+
+def apply_set(group=None, addon_ids=None):
+    """Silent patch core — no dialogs, safe to call from the service thread.
+
+    Returns (succeeded, failed, changed, results) where `changed` counts only
+    the entries that actually WROTE something this pass. Entries that were
+    already patched are counted as succeeded but not as changed, so a caller
+    can tell "nothing to do" from "an update wiped the patches and we just
+    put them back".
+    """
+    _log('Starting patch run … (group=%s, ids=%s)'
+         % (group or 'default', ','.join(addon_ids) if addon_ids else 'all'))
+
+    results   = []
+    succeeded = 0
+    failed    = 0
+    changed   = 0
+
+    for patch in _select(group, addon_ids):
+        ok, msg = _apply_patch(patch)
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+            # _apply_patch signals a no-op with 'Already patched' /
+            # 'Already present'; anything else means the file was written.
+            if 'Already' not in msg:
+                changed += 1
+        else:
+            failed += 1
+
+    _log('Patch run complete: %d OK, %d failed, %d written.'
+         % (succeeded, failed, changed))
+    return succeeded, failed, changed, results
+
+
 def run(group=None):
     """Entry point called from default.py router.
 
@@ -497,22 +556,7 @@ def run(group=None):
     group='x'   -> apply only patches tagged with that group
                    (e.g. 'redlight' for the separate RedLight patch).
     """
-    _log('Starting patch run … (group=%s)' % (group or 'default'))
-
-    results   = []
-    succeeded = 0
-    failed    = 0
-
-    selected = [p for p in PATCHES if p.get('group') == group]
-
-    for patch in selected:
-        ok, msg = _apply_patch(patch)
-        _log(msg)
-        results.append((ok, msg))
-        if ok:
-            succeeded += 1
-        else:
-            failed += 1
+    succeeded, failed, _changed, results = apply_set(group)
 
     # Build summary dialog
     lines = []
@@ -526,4 +570,3 @@ def run(group=None):
     summary += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
 
     DIALOG.ok(ADDON_NAME, summary)
-    _log('Patch run complete: %d OK, %d failed.' % (succeeded, failed))

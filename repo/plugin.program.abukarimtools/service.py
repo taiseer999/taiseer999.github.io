@@ -700,11 +700,21 @@ def main():
         # DONE_FILE now, not here.
         _record_build(build_id)
 
-    if not os.path.exists(FLAG_FILE):
-        return                       # normal boot — nothing to do
+    if os.path.exists(FLAG_FILE):
+        _log('First-run flag detected: %s' % FLAG_FILE)
+        run_first_run_sequence(monitor)
 
-    _log('First-run flag detected: %s' % FLAG_FILE)
-    run_first_run_sequence(monitor)
+    # From here the service stays alive for the rest of the Kodi session and
+    # watches the patch targets: a Kodi add-on update replaces the add-on
+    # folder wholesale, which silently wipes every patch we applied to it.
+    # The watchdog notices and puts them straight back. Fenced so a fault in
+    # it can never take the service (and therefore first-run) down with it.
+    try:
+        from resources.lib import patch_watchdog
+        patch_watchdog.watch(monitor)
+    except Exception:
+        _log('Auto-patch watchdog crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
 
 if __name__ == '__main__':
