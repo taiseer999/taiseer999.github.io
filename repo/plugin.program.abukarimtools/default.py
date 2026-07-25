@@ -138,7 +138,7 @@ def router():
     elif mode == 'redlight_patch':
         _end_directory()
         from resources.lib import patcher
-        patcher.run(group='redlight')
+        patcher.run(addon_ids=['plugin.video.redlight'])
 
     elif mode == 'binary_install':
         _end_directory()

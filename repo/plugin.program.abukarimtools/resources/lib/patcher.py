@@ -285,7 +285,6 @@ PATCHES = [
     },
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
     {
-        'group': 'redlight',
         'addon_id': 'plugin.video.redlight',
         'rel_path': os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
         'old': base64.b64decode(_REDLIGHT_VOLCHECKER_OLD_B64).decode('utf-8'),
@@ -314,7 +313,6 @@ PATCHES = [
     # the stray white is covered. When the property IS set the twin stays hidden and the
     # add-on's own theming is untouched.
     {
-        'group': 'redlight',
         'addon_id': 'plugin.video.redlight',
         'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml'),
         'old': '',   # regex-only: one entry covers all four sites
@@ -352,7 +350,6 @@ PATCHES = [
     # player stops.  Fix: wait (bounded) for the player to finish tearing down,
     # then continue into the normal scrape/play flow instead of bailing.
     {
-        'group': 'redlight',
         'addon_id': 'plugin.video.redlight',
         'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
         'old': '\t\tif self._playback_already_active() and not self.background:\n\t\t\treturn\n',
@@ -552,14 +549,20 @@ def apply_set(group=None, addon_ids=None):
     return succeeded, failed, changed, results
 
 
-def run(group=None):
+def run(group=None, addon_ids=None):
     """Entry point called from default.py router.
 
-    group=None  -> apply the standard (ungrouped) patch set.
-    group='x'   -> apply only patches tagged with that group
-                   (e.g. 'redlight' for the separate RedLight patch).
+    group=None      -> apply the standard (ungrouped) patch set.
+    group='x'       -> apply only patches tagged with that group.
+    addon_ids=[...] -> apply only the entries targeting those add-ons.
+
+    The RedLight menu item used to select by group, which quietly meant its
+    patches were skipped by "Apply Patches" and by the update watchdog - they
+    only ran if you remembered the second menu item.  RedLight entries are now
+    part of the default set (absent add-ons are filtered out anyway), and this
+    menu item just narrows the same set to RedLight for a one-off re-apply.
     """
-    succeeded, failed, _changed, results = apply_set(group)
+    succeeded, failed, _changed, results = apply_set(group, addon_ids=addon_ids)
 
     # Build summary dialog
     lines = []
