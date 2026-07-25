@@ -2,10 +2,16 @@
 """
 Skin Switcher – switch between installed skins.
 Adapted from script.skinswitcher.
+
+Behaviour: pick a skin from the list, the switcher closes, the chosen skin
+applies with no visible prompts. Kodi's own "Keep this change?" revert dialog
+is what causes the flicker/loop; we avoid it by confirming any add-on-enable
+prompt ourselves and dismissing the revert dialog immediately if it appears.
 """
 
 import os
 import glob
+import json
 
 import xbmc
 import xbmcgui
@@ -22,70 +28,96 @@ HOME   = xbmcvfs.translatePath('special://home/')
 ADDONS = os.path.join(HOME, 'addons')
 TITLE  = 'ABUKARIM – Skin Switcher'
 
-try:
-    _ver_str = xbmc.getInfoLabel('System.BuildVersion').split()[0]
-    KODI_VER = float(_ver_str[:4])
-except (ValueError, IndexError):
-    KODI_VER = 20.0
+
+def _log(msg):
+    xbmc.log('[AbukarimTools SkinSwitcher] %s' % msg, xbmc.LOGINFO)
 
 
-def _curr_skin():
-    skin_id   = xbmc.getSkinDir()
+def _jsonrpc(method, params=None):
+    payload = {'jsonrpc': '2.0', 'method': method, 'id': 1}
+    if params is not None:
+        payload['params'] = params
+    try:
+        return json.loads(xbmc.executeJSONRPC(json.dumps(payload)))
+    except Exception as exc:
+        _log('jsonrpc %s failed: %r' % (method, exc))
+        return {}
+
+
+def _curr_skin_id():
+    return xbmc.getSkinDir()
+
+
+def _curr_skin_name():
+    skin_id = _curr_skin_id()
     try:
         return xbmcaddon.Addon(skin_id).getAddonInfo('name')
     except Exception:
         return skin_id
 
 
-def _set_setting(key, value):
+def _is_enabled(addon_id):
+    r = _jsonrpc('Addons.GetAddonDetails',
+                 {'addonid': addon_id, 'properties': ['enabled']})
     try:
-        query = ('{"jsonrpc":"2.0","method":"Settings.SetSettingValue",'
-                 '"params":{"setting":"%s","value":"%s"},"id":1}' % (key, value))
-        xbmc.executeJSONRPC(query)
+        return bool(r['result']['addon']['enabled'])
     except Exception:
-        pass
+        return False
 
 
+def _enable(addon_id):
+    _jsonrpc('Addons.SetAddonEnabled', {'addonid': addon_id, 'enabled': True})
 
-def _swap_skin(addonid):
-    _set_setting('lookandfeel.skin', addonid)
-    # Confirm the 'Add-on required / enable this add-on?' dialog the SAME way
-    # the (working) binary installer does: detect with IsActive(yesnodialog)
-    # and click control 11 (Yes) on the named yesnodialog window. The build's
-    # confirm dialog responds to this; targeting it by numeric id / bare Select
-    # did not. We keep trying for several seconds in case it appears slightly
-    # after the set and needs a moment to accept input.
+
+def _dismiss_confirm_dialogs(deadline_ms):
+    """
+    While waiting for the skin to load, silently handle the two dialogs Kodi
+    can throw up:
+      * "Add-on needs to be enabled" yes/no  -> Yes = control 11
+      * "Keep this skin change?" revert timer -> Yes = control 11 (No is the
+        default focus, so a bare Select would revert; we click 11 explicitly)
+    """
     waited = 0
-    answered = False
-    while waited < 12000:
+    while waited < deadline_ms:
         active = (xbmc.getCondVisibility('Window.IsActive(yesnodialog)')
-                  or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)')
                   or xbmc.getCondVisibility('Window.IsActive(10100)'))
         if active:
-            try:
-                fc  = xbmc.getInfoLabel('System.CurrentControlId')
-                win = xbmc.getInfoLabel('System.CurrentWindow')
-                xbmc.log('[AbukarimTools SkinSwitcher] confirm dialog up '
-                         '(window=%s focusedControl=%s)' % (win, fc), xbmc.LOGINFO)
-            except Exception:
-                pass
-            # YES is control 11 on this 'Yes / No dialog' (NO is the focused
-            # control 10 — so we must NOT use Action(Select), which would
-            # activate No and cause the revert/loop). Click control 11 only.
             xbmc.executebuiltin('SendClick(yesnodialog, 11)')   # 11 = Yes
             xbmc.sleep(60)
             xbmc.executebuiltin('SendClick(11)')                # backup, same id
-            answered = True
-            xbmc.sleep(250)
-            still = (xbmc.getCondVisibility('Window.IsActive(yesnodialog)')
-                     or xbmc.getCondVisibility('Window.IsActive(DialogConfirm.xml)')
-                     or xbmc.getCondVisibility('Window.IsActive(10100)'))
-            if not still:
-                break
-        elif answered:
-            break
+            xbmc.sleep(200)
         xbmc.sleep(80)
         waited += 80
+
+
+def _swap_skin(addon_id):
+    # Make sure the target skin is enabled first — a disabled skin is what
+    # triggers the extra "enable this add-on?" prompt.
+    if not _is_enabled(addon_id):
+        _enable(addon_id)
+        xbmc.sleep(300)
+
+    current = _curr_skin_id()
+    if current == addon_id:
+        return
+
+    # Set the skin via JSON-RPC. This does not block, and Kodi begins loading
+    # the new skin immediately; any confirm/revert dialog is answered below.
+    _jsonrpc('Settings.SetSettingValue',
+             {'setting': 'lookandfeel.skin', 'value': addon_id})
+
+    # Answer prompts and wait for the skin to actually change over.
+    waited = 0
+    while waited < 12000:
+        _dismiss_confirm_dialogs(240)
+        if xbmc.getSkinDir() == addon_id:
+            break
+        waited += 240
+
+    # Belt-and-braces: if the skin loaded but a revert timer is still counting
+    # down, confirm once more so it can't flip back.
+    _dismiss_confirm_dialogs(500)
+    _log('active skin now: %s (wanted %s)' % (xbmc.getSkinDir(), addon_id))
 
 
 def run():
@@ -122,12 +154,25 @@ def run():
         xbmcgui.Dialog().ok(TITLE, 'No installed skins found.')
         return
 
-    choices = ['Current Skin — %s' % _curr_skin()] + names
-    idx     = xbmcgui.Dialog().select('Choose a skin', choices)
-    if idx <= 0:
+    current_id = _curr_skin_id()
+
+    # Mark the active skin in the list, and don't offer it as a switch target.
+    choices    = []
+    selectable = []
+    for name, aid in zip(names, addon_ids):
+        if aid == current_id:
+            choices.append('%s  [active]' % name)
+        else:
+            choices.append(name)
+        selectable.append(aid)
+
+    idx = xbmcgui.Dialog().select('Choose a skin', choices)
+    if idx < 0:
         return
 
-    chosen_id = addon_ids[idx - 1]
+    chosen_id = selectable[idx]
+    if chosen_id == current_id:
+        return
 
     # Stop any playback and let it fully tear down before swapping skins.
     if xbmc.Player().isPlaying():

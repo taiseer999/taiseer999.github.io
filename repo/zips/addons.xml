@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.6" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.0" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -663,6 +663,12 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
   Cron Thread at startup, so no periodic Trakt sync or cache housekeeping for the
   rest of the session. The patch skips non-dict values in the comprehension.
   Picked up automatically by the v1.9.5 auto-patch watchdog.
+- Skin Switcher: selecting a skin now closes the dialog and applies the skin
+  directly. The active skin is marked [active] and re-selecting it is a no-op
+  (the old 'Current Skin' placeholder row is gone). The skin is enabled first
+  via JSON-RPC so the 'enable this add-on?' prompt never appears, and Kodi's
+  'Keep this change?' revert timer is confirmed automatically (control 11 =
+  Yes) so the skin can no longer flip back.
 
 v1.9.5
 - AUTO-PATCH: the patcher no longer has to be run by hand. service.py now stays
@@ -7009,7 +7015,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="5.4.7">
+</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="5.4.8">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.2.1" />
@@ -7077,7 +7083,7 @@ Added arabic fonts
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.zephyr.rounded" version="3.2" name="Arctic: Zephyr - Rounded" provider-name="jurialmunkey, beatmasterrs, nanomani">
+</addon><addon id="skin.arctic.zephyr.rounded" version="3.2.1" name="Arctic: Zephyr - Rounded" provider-name="jurialmunkey, beatmasterrs, nanomani">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinshortcuts" version="3.0.0" />
