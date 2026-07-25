@@ -70,8 +70,30 @@ def _notify(message, seconds=6000):
 
 
 # ---------------------------------------------------------------------------
+_MISSING_ADDONS = set()   # ids Kodi has already told us it does not know
+
+
 def _addon_path(addon_id):
-    """Resolve an add-on's folder, preferring Kodi's own registry."""
+    """Resolve an add-on's folder, preferring Kodi's own registry.
+
+    Ordering matters for the log, not just for speed.  xbmcaddon.Addon() on an
+    id Kodi does not know writes "EXCEPTION: Unknown addon id '<x>'" into
+    kodi.log from the C++ side *before* the Python exception reaches our
+    except: clause, so catching it is not enough to keep the log clean.  With a
+    30s poll and two uninstalled targets that was ~2 lines every sweep, which
+    buries real errors.
+
+    So: try the standard folder first (cheap, silent, and the answer in almost
+    every case), and only consult the registry when it is absent - that still
+    covers portable installs and non-default addon directories.  Once Kodi has
+    disowned an id, remember it and stop asking, so a genuinely missing add-on
+    costs one log line per session instead of one per sweep.
+    """
+    local = os.path.join(ADDONS_DIR, addon_id)
+    if os.path.isdir(local):
+        return local
+    if addon_id in _MISSING_ADDONS:
+        return None
     try:
         path = xbmcaddon.Addon(addon_id).getAddonInfo('path')
         path = xbmcvfs.translatePath(path)
@@ -79,8 +101,8 @@ def _addon_path(addon_id):
             return path
     except Exception:
         pass
-    path = os.path.join(ADDONS_DIR, addon_id)
-    return path if os.path.isdir(path) else None
+    _MISSING_ADDONS.add(addon_id)
+    return None
 
 
 def _signature(addon_id):

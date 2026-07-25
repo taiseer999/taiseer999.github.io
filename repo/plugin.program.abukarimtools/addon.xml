@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.9.7"
+       version="1.9.10"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,40 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.7
+    <news>v1.9.10
+- Added RedLight volume patch: volume_checker() in resources/lib/modules/kodi_utils.py
+  clamps the player to redlight.playback.volumecheck_percent (default '50') on every
+  playback start, and SetVolume(50) on Kodi's 0..-60 dB scale is -30 dB - so every
+  title began at half volume. Its only opt-out is an internal property with no
+  settings-screen exposure. Body replaced with an immediate return. Group 'redlight'.
+  Verified against the installed RedLight 1.4.9 copy: exact blob match, patched file
+  ast-clean, regex fallback also matches, idempotent via sentinel.
+- Composite for Plex and Fenlight patches stay removed (neither add-on is installed).
+
+v1.9.9
+- Removed all Composite for Plex patches (7 entries: QR auth, PIN layout, v2
+  sign-in, strong=false fix) and the Fenlight patch (1 entry), plus the 18
+  base64 blobs they used. Neither add-on is installed. patcher.py drops from
+  95k to 62k; 20 entries remain across tinyppi, seren, TMDbHelper and RedLight.
+- NOTE: the Fenlight entry WAS the -30 dB volume fix. Removing it means no
+  volume patch is left in the patcher at all. RedLight keeps only two entries
+  (sources window theme fallback, busy-player fix) - neither touches volume.
+
+v1.9.8
+- RedLight sources window: fixed the white background that showed up at random.
+  sources_results.xml tints a WHITE texture (redlight_common/circle.png) with a
+  window property; when that property is empty Kodi applies no tint at all and the
+  white texture renders as-is. It was never a light theme - it was the theme colour
+  going missing, which is why it came and went. Each of the four themed controls now
+  has a twin pinned to the correct dark value, shown only while the property is
+  empty. Group 'redlight', so run it from the RedLight patch menu.
+- Watchdog no longer spams kodi.log with "Unknown addon id" for targets that are
+  not installed. Catching the Python exception was never enough: Kodi writes that
+  line from the C++ side before it reaches us. _addon_path now checks the addons
+  folder first and remembers ids Kodi has disowned, so a missing target costs one
+  line per session instead of one per 30s sweep.
+
+v1.9.7
 - Added TMDbHelper certification fallback: with the language set to Arabic (Saudi
   Arabia) the MPAA badge was blank on nearly every title. TMDbHelper selects the
   certification with iso_country=? taken from the last 2 letters of the language
