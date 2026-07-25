@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.13" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.14" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -656,7 +656,16 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.13
+    <news>v1.9.14
+- Removed the standalone "Patch RedLight" menu item. It existed only because the
+  RedLight entries used to be tagged group='redlight', which kept them out of every
+  automatic path - that separate button was the ONLY way to run them, and forgetting
+  it is exactly why the RedLight patches appeared not to work. Since 1.9.11 they are
+  part of the normal set, so "Apply Patches", the boot sweep and the update watchdog
+  all cover them and the extra button was a redundant duplicate. Menu is one item
+  shorter; no patch coverage is lost.
+
+v1.9.13
 - Stopped the false "Patches re-applied after add-on update" toast. The four
   sentinel-less injections (Seren trakt_auth_qr.xml and the three TMDbHelper player
   JSONs) were rewritten on every pass, so every sweep reported "4 written" and the

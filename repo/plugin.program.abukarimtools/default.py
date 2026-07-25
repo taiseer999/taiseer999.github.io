@@ -28,7 +28,6 @@ ICONS  = {
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
-    'redlight_patch': ADDON_PATH + 'resources/icons/redlight_patch.png',
     'autopatch':      ADDON_PATH + 'resources/icons/patcher.png',
 }
 
@@ -39,7 +38,6 @@ MENU = [
     ('binary_install', 'New Build Tools'),
     ('patcher',        'Apply Patches'),
     ('autopatch',      'Auto-Patch On Update: On/Off'),
-    ('redlight_patch', 'Patch RedLight'),
     ('origin_fix',     'Fix Add-on Update Origins'),
     ('openwizard',     'OpenWizard'),
     ('skin_switch',    'Skin Switcher'),
@@ -134,11 +132,6 @@ def router():
         _end_directory()
         from resources.lib import patch_watchdog
         patch_watchdog.run()
-
-    elif mode == 'redlight_patch':
-        _end_directory()
-        from resources.lib import patcher
-        patcher.run(addon_ids=['plugin.video.redlight'])
 
     elif mode == 'binary_install':
         _end_directory()
