@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.0" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.7" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -656,7 +656,17 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.6
+    <news>v1.9.7
+- Added TMDbHelper certification fallback: with the language set to Arabic (Saudi
+  Arabia) the MPAA badge was blank on nearly every title. TMDbHelper selects the
+  certification with iso_country=? taken from the last 2 letters of the language
+  setting ('SA'), and TMDb carries almost no Saudi certifications. It already
+  caches every country's certification in the same table, so the patch widens the
+  query to fall back to the US value when the configured country has none. Covers
+  movies and tv (both feed the one certification table). Your own country still
+  wins when it has a rating; US users see no change; no cache flush needed.
+
+v1.9.6
 - Added TMDbHelper trakt_stats.py patch: Trakt's users/me/stats payload now
   carries plain numbers at the top level, and TMDbHelper assumed every value was
   a dict - AttributeError: 'int' object has no attribute 'items' killed the whole
