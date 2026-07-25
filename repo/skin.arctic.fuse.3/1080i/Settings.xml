@@ -88,7 +88,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[32034]: ,]</label>
+                                                <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[31149]: ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -109,7 +109,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$LOCALIZE[32014]: $INFO[System.CPUTemperature] | $INFO[System.CpuAltUsage]</label>
+                                                <label fallback="19055">$INFO[System.CPUUsage,$LOCALIZE[13271] ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -162,7 +162,6 @@
                             </control>
                         </control>
 
-
                         <control type="group">
                             <visible>Container(3).HasFocus(3)</visible>
                             <include content="List_DialogSelect">
@@ -198,13 +197,12 @@
                                         <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
                                     </item>
                                     <item>
-                                        <label>Codecs / PPI</label>
+                                        <label>Codec Logos</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/configure.png</icon>
-                                        <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Hybrid_Items,Home)</onclick>
-                                        <onclick>SetProperty(CustomDialogSettingsTitle,PPI And Codecs,Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_u3k_Items,Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,u3k,Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
-                                        <visible></visible>
                                     </item>
                                     <item>
                                         <label>TMDbHelper</label>
@@ -250,7 +248,7 @@
                                         <onclick>ActivateWindow(1116)</onclick>
                                     </item>
                                     <item>
-                                        <label>Customise video osd</label>
+                                        <label>$LOCALIZE[31151]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/gauge.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoOSD_Items,Home)</onclick>
@@ -258,7 +256,7 @@
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                     <item>
-                                        <label>Customise video info</label>
+                                        <label>[CAPITALIZE]$LOCALIZE[31203] $LOCALIZE[12003][/CAPITALIZE]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/circle-info.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoInfo_Items,Home)</onclick>
@@ -266,17 +264,17 @@
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                     <item>
-                                        <label>$LOCALIZE[31538]</label>
+                                        <label>$LOCALIZE[31234]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/table.png</icon>
                                         <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
                                     </item>
                                     <item>
-                                        <label>$LOCALIZE[31234]</label>
+                                        <label>[CAPITALIZE]$LOCALIZE[31234][/CAPITALIZE]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/cube.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_Indicators,Home)</onclick>
-                                        <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31235],Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31234],Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                 </content>
