@@ -2017,6 +2017,11 @@ msgctxt "#32382"
 msgid "Hide Episode Groups"
 msgstr ""
 
+#: /resources/tmdbhelper/lib/script/method/image_functions.py
+msgctxt "#32399"
+msgid "Retrieving Artwork"
+msgstr ""
+
 #: /resources/settings.xml
 msgctxt "#32383"
 msgid "Hide Episode Groups and Specials"
@@ -2025,6 +2030,11 @@ msgstr ""
 #: /resources/settings.xml
 msgctxt "#32384"
 msgid "Hide Episode Groups and Up Next"
+msgstr ""
+
+#: /resources/settings.xml
+msgctxt "#32402"
+msgid "Scrobble items on MDbList while watching"
 msgstr ""
 
 #: /resources/settings.xml
@@ -2835,6 +2845,10 @@ msgstr ""
 
 msgctxt "#30067"
 msgid "Zulu (South Africa)"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Croatian (Croatia)"
 msgstr ""
 
 #: /resources/settings.xml
