@@ -471,6 +471,12 @@ def _apply_patch(patch):
         already_check = patch.get('already_patched_check', '')
         if os.path.isfile(target) and already_check and already_check in _read(target):
             return True, '[%s] Already patched – skipping.' % patch['addon_id']
+        # Sentinel-less injections (the player JSONs, trakt_auth_qr.xml) used to be
+        # rewritten on EVERY pass, so each sweep reported "4 written" and the watchdog
+        # popped "Patches re-applied after add-on update" every 30 minutes even though
+        # nothing had changed. Compare the content instead: identical file, nothing to do.
+        if os.path.isfile(target) and _read(target) == inject_content:
+            return True, '[%s] Already patched – skipping.' % patch['addon_id']
         os.makedirs(os.path.dirname(target), exist_ok=True)
         _write(target, inject_content)
         return True, '[%s] File injected OK: %s' % (patch['addon_id'], patch['description'])

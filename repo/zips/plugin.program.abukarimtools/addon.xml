@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.9.12"
+       version="1.9.13"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,16 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.12
+    <news>v1.9.13
+- Stopped the false "Patches re-applied after add-on update" toast. The four
+  sentinel-less injections (Seren trakt_auth_qr.xml and the three TMDbHelper player
+  JSONs) were rewritten on every pass, so every sweep reported "4 written" and the
+  watchdog notified every 30 minutes even though nothing had changed. They are now
+  compared by content first: identical file, nothing written. A real add-on update
+  that wipes them still re-applies them, and a missing file is still injected - so
+  "re-applied" in the log finally means something actually happened.
+
+v1.9.12
 - Fixed the RedLight busy-player entry reporting "1 failed" on every sweep. Its
   already_patched_check was '... (by ABUKARIM TOOLS) --' but the comment it writes
   is '... (by ABUKARIM TOOLS): wait for teardown instead of silent bail --', so the
