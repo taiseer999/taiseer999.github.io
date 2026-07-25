@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.11" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.12" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -656,7 +656,18 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.11
+    <news>v1.9.12
+- Fixed the RedLight busy-player entry reporting "1 failed" on every sweep. Its
+  already_patched_check was '... (by ABUKARIM TOOLS) --' but the comment it writes
+  is '... (by ABUKARIM TOOLS): wait for teardown instead of silent bail --', so the
+  sentinel was never a substring of its own output. The patch applied fine, it just
+  could not recognise its own work: every sweep retried, could not find 'old' (already
+  replaced), and logged a permanent failure. A latent bug that only surfaced once
+  RedLight joined the automatic sweeps in 1.9.11.
+- Added _audit_sentinels(): apply_set() now warns in kodi.log about any entry whose
+  sentinel cannot match what it writes, so this can never fail silently again.
+
+v1.9.11
 - FIX: the three RedLight patches (volume, sources-window background, busy-player)
   were tagged group='redlight', which meant "Apply Patches", the boot sweep and the
   update watchdog ALL skipped them - they only ran from the separate "Patch RedLight"

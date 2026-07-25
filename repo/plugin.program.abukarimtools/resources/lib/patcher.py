@@ -360,7 +360,11 @@ PATCHES = [
                 '\t\t\t\tkodi_utils.sleep(200)\n'
                 '\t\t\t\t_pw += 200\n'),
         'description': 'RedLight sources.py - wait for player teardown instead of silent bail (kills "Playback failed" popup on widget clicks)',
-        'already_patched_check': '# -- RedLight busy-player fix (by ABUKARIM TOOLS) --',
+        # Sentinel must be a SUBSTRING of what 'new' writes. The written comment is
+        # "... (by ABUKARIM TOOLS): wait for teardown instead of silent bail --", so a
+        # sentinel ending in ') --' never matched and the entry could not recognise its
+        # own work: every sweep retried, failed to find 'old', and logged 1 failed.
+        'already_patched_check': '# -- RedLight busy-player fix (by ABUKARIM TOOLS)',
         'fallback_pattern': r'\t\tif self\._playback_already_active\(\) and not self\.background:\r?\n\t\t\treturn\r?\n',
         'fallback_repl': ('\t\tif self._playback_already_active() and not self.background:\n'
                           '\t\t\t# -- RedLight busy-player fix (by ABUKARIM TOOLS): wait for teardown instead of silent bail --\n'
@@ -385,6 +389,28 @@ def _read(path):
 def _write(path, content):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
+
+
+def _audit_sentinels():
+    """Warn about entries whose already_patched_check can never match their own output.
+
+    A sentinel that is not a substring of what the entry writes means the patch can
+    never recognise its own work: every sweep retries it, fails to find 'old' (it was
+    already replaced), and reports a failure forever. That is exactly what the RedLight
+    busy-player entry did once RedLight joined the automatic sweeps. Cheap enough to run
+    on every pass, and it turns a silent permanent failure into one obvious log line.
+    """
+    for patch in PATCHES:
+        sentinel = patch.get('already_patched_check')
+        if not sentinel:
+            continue
+        written = patch.get('new') or ''
+        if not written and isinstance(patch.get('fallback_repl'), str):
+            written = patch['fallback_repl']
+        if written and sentinel not in written:
+            _log('SENTINEL BUG: %s - already_patched_check is not a substring of what '
+                 'this entry writes, so it will re-run and fail on every sweep.'
+                 % patch['rel_path'], xbmc.LOGWARNING)
 
 
 def _apply_patch(patch):
@@ -523,6 +549,7 @@ def apply_set(group=None, addon_ids=None):
     can tell "nothing to do" from "an update wiped the patches and we just
     put them back".
     """
+    _audit_sentinels()
     _log('Starting patch run … (group=%s, ids=%s)'
          % (group or 'default', ','.join(addon_ids) if addon_ids else 'all'))
 
