@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="1.9.14"
+       version="1.9.15"
        provider-name="Abukarim">
 
   <requires>
@@ -24,7 +24,23 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.14
+    <news>v1.9.15
+- Two dead-player guards, both for the same crash: a player callback fires while the
+  player is tearing down, getPlayingFile() raises RuntimeError, and Kodi warns
+  "IGNORING THIS CAN LEAD TO MEMORY LEAKS" as the callback thread dies. Seen every
+  time the TMDbHelper dummy splash file is closed before it resolves (Amlogic
+  CRenderManager::Configure timeout).
+  * TMDbHelper monitor/player.py get_playingitem(): now checks isPlaying() and
+    catches RuntimeError. Also collapses a duplicated getPlayingFile() call.
+  * Last Played default.py onPlayBackStarted(): its Player.HasMedia check is a GUI
+    condition that can read true after teardown, so the same guard is applied.
+    Long-standing upstream bug (5-star/plugin.video.last_played issue #23), verified
+    against v6.4.0 where the offending line is default.py:274.
+  Neither patch changes behaviour during normal playback - all four/three simulated
+  states were checked. This stops the leak and the log noise; it does NOT fix the
+  underlying renderer timeout that makes playback fail.
+
+v1.9.14
 - Removed the standalone "Patch RedLight" menu item. It existed only because the
   RedLight entries used to be tagged group='redlight', which kept them out of every
   automatic path - that separate button was the ONLY way to run them, and forgetting

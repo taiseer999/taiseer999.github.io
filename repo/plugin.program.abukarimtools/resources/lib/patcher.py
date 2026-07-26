@@ -66,6 +66,25 @@ DIALOG      = xbmcgui.Dialog()
 _REDLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNzDQo='
 _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
+# TMDbHelper monitor/player.py - get_playingitem() calls getPlayingFile() with no
+# guard.  onAVChange fires during teardown, and getPlayingFile() raises RuntimeError
+# once nothing is playing, so the callback thread dies with
+#   'NOTE: IGNORING THIS CAN LEAD TO MEMORY LEAKS!'
+# Seen whenever the dummy splash file is closed before it resolves (Amlogic
+# CRenderManager::Configure timeout).  Also collapses a duplicated call: the stock
+# line invoked getPlayingFile() twice.
+_TMDBH_PLAYERGUARD_OLD_B64 = 'ICAgIGRlZiBnZXRfcGxheWluZ2l0ZW0oc2VsZik6CiAgICAgICAgIyBDaGVjayB0aGF0IHZpZGVvIG90aGVyIHRoYW4gZHVtbXkgc3BsYXNoIHZpZGVvIGlzIHBsYXlpbmcKICAgICAgICBpZiBzZWxmLmdldFBsYXlpbmdGaWxlKCkgYW5kIHNlbGYuZ2V0UGxheWluZ0ZpbGUoKS5lbmRzd2l0aCgnZHVtbXkubXA0Jyk6CiAgICAgICAgICAgIHNlbGYucmVzZXRfcHJvcGVydGllcygpCiAgICAgICAgICAgIHJldHVybgo='
+_TMDBH_PLAYERGUARD_NEW_B64 = 'ICAgIGRlZiBnZXRfcGxheWluZ2l0ZW0oc2VsZik6CiAgICAgICAgIyBDaGVjayB0aGF0IHZpZGVvIG90aGVyIHRoYW4gZHVtbXkgc3BsYXNoIHZpZGVvIGlzIHBsYXlpbmcKICAgICAgICAjIC0tIERlYWQtcGxheWVyIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAjIG9uQVZDaGFuZ2UgY2FuIGZpcmUgYWZ0ZXIgdGhlIHBsYXllciBoYXMgYWxyZWFkeSB0b3JuIGRvd24gKHNlZW4gb24gQW1sb2dpYwogICAgICAgICMgd2hlbiBDUmVuZGVyTWFuYWdlcjo6Q29uZmlndXJlIHRpbWVzIG91dCBhbmQgdGhlIGR1bW15IGZpbGUgaXMgY2xvc2VkIGJlZm9yZQogICAgICAgICMgaXQgcmVzb2x2ZXMpLiBnZXRQbGF5aW5nRmlsZSgpIHJhaXNlcyBSdW50aW1lRXJyb3Igb25jZSBub3RoaW5nIGlzIHBsYXlpbmcsCiAgICAgICAgIyB3aGljaCBraWxscyB0aGUgY2FsbGJhY2sgdGhyZWFkIGFuZCBsZWFrcyBpdC4gaXNQbGF5aW5nKCkgaXMgdGhlIGNoZWFwIGd1YXJkOwogICAgICAgICMgdGhlIHRyeS9leGNlcHQgY292ZXJzIHBsYXliYWNrIGVuZGluZyBiZXR3ZWVuIHRoYXQgY2hlY2sgYW5kIHRoZSBjYWxsLgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgbm90IHNlbGYuaXNQbGF5aW5nKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgcGxheWluZ19maWxlID0gc2VsZi5nZXRQbGF5aW5nRmlsZSgpCiAgICAgICAgZXhjZXB0IFJ1bnRpbWVFcnJvcjoKICAgICAgICAgICAgcmV0dXJuCiAgICAgICAgaWYgcGxheWluZ19maWxlIGFuZCBwbGF5aW5nX2ZpbGUuZW5kc3dpdGgoJ2R1bW15Lm1wNCcpOgogICAgICAgICAgICBzZWxmLnJlc2V0X3Byb3BlcnRpZXMoKQogICAgICAgICAgICByZXR1cm4K'
+
+# Last Played default.py - onPlayBackStarted() guards with Player.HasMedia, which is a
+# GUI condition and can still read true after the player has torn down.  getPlayingFile()
+# then raises RuntimeError, the callback thread dies, and Kodi warns that the script
+# 'has left several classes in memory that we couldn't clean up'.  Long-standing upstream
+# bug (5-star/plugin.video.last_played issue #23).  Verified against v6.4.0, where the
+# offending line is default.py:274 - exactly the line in the user's traceback.
+_LASTPLAYED_GUARD_OLD_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkK'
+_LASTPLAYED_GUARD_NEW_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICAjIC0tIERlYWQtcGxheWVyIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAjIFBsYXllci5IYXNNZWRpYSBpcyBhIEdVSSBjb25kaXRpb24gYW5kIGNhbiBzdGlsbCByZWFkIHRydWUgYWZ0ZXIgdGhlIHBsYXllcgogICAgICAgICMgaGFzIHRvcm4gZG93biwgc28gZ2V0UGxheWluZ0ZpbGUoKSByYWlzZXMgUnVudGltZUVycm9yLCBraWxscyB0aGlzIGNhbGxiYWNrCiAgICAgICAgIyB0aHJlYWQgYW5kIGxlYXZlcyBjbGFzc2VzIGluIG1lbW9yeSAoS29kaSB3YXJucyBhYm91dCB0aGUgbGVhaykuIGlzUGxheWluZygpCiAgICAgICAgIyBpcyB0aGUgcmVhbCBjaGVjazsgdGhlIHRyeS9leGNlcHQgY292ZXJzIHBsYXliYWNrIGVuZGluZyBpbiBiZXR3ZWVuLgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgbm90IHNlbGYuaXNQbGF5aW5nKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgX2Fia19wbGF5aW5nX2ZpbGUgPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkKICAgICAgICBleGNlcHQgUnVudGltZUVycm9yOgogICAgICAgICAgICByZXR1cm4KICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBfYWJrX3BsYXlpbmdfZmlsZQo='
+
 PATCHES = [
     # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
@@ -283,6 +302,53 @@ PATCHES = [
             'conditions = \'parent_id=? AND iso_country IN (?, \"US\") AND name IS NOT NULL'
         ),
     },
+    # ── Last Played – guard onPlayBackStarted() against a torn-down player ──
+    {
+        'addon_id': 'plugin.video.last_played',
+        'rel_path': 'default.py',
+        'old': base64.b64decode(_LASTPLAYED_GUARD_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_LASTPLAYED_GUARD_NEW_B64).decode('utf-8'),
+        'description': 'Last Played default.py - stop RuntimeError/thread leak when playback ends during onPlayBackStarted',
+        'already_patched_check': '# -- Dead-player guard (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'( *)if xbmc\.getCondVisibility\(.Player\.HasMedia.\):\n( *)lp\.video = self\.getPlayingFile\(\)',
+        'fallback_repl': (
+            lambda m: (
+                m.group(1) + '# -- Dead-player guard (by ABUKARIM TOOLS) --\n'
+                + m.group(1) + 'try:\n'
+                + m.group(1) + '    if not self.isPlaying():\n'
+                + m.group(1) + '        return\n'
+                + m.group(1) + '    _abk_playing_file = self.getPlayingFile()\n'
+                + m.group(1) + 'except RuntimeError:\n'
+                + m.group(1) + '    return\n'
+                + m.group(0).split('\n')[0] + '\n'
+                + m.group(2) + 'lp.video = _abk_playing_file'
+            )
+        ),
+    },
+
+    # ── TMDbHelper – guard get_playingitem() against a torn-down player ──
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py'),
+        'old': base64.b64decode(_TMDBH_PLAYERGUARD_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TMDBH_PLAYERGUARD_NEW_B64).decode('utf-8'),
+        'description': 'TMDbHelper player.py - stop RuntimeError/thread leak when onAVChange fires after playback ends',
+        'already_patched_check': '# -- Dead-player guard (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'( *)if self\.getPlayingFile\(\) and self\.getPlayingFile\(\)\.endswith\(.dummy\.mp4.\):',
+        'fallback_repl': (
+            lambda m: (
+                m.group(1) + '# -- Dead-player guard (by ABUKARIM TOOLS) --\n'
+                + m.group(1) + 'try:\n'
+                + m.group(1) + '    if not self.isPlaying():\n'
+                + m.group(1) + '        return\n'
+                + m.group(1) + '    playing_file = self.getPlayingFile()\n'
+                + m.group(1) + 'except RuntimeError:\n'
+                + m.group(1) + '    return\n'
+                + m.group(1) + "if playing_file and playing_file.endswith('dummy.mp4'):"
+            )
+        ),
+    },
+
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
     {
         'addon_id': 'plugin.video.redlight',
