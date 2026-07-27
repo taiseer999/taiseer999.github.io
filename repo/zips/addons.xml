@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.17" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.18" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -3001,7 +3001,7 @@ By using or contributing to this repository, you agree that the developer is not
 		<description lang="en">White Weather Icons</description>
 		<platform>all</platform>
 	</extension>
-</addon><addon id="resource.language.ar_sa" version="11.0.90.33" name="Arabic" provider-name="Team Kodi">
+</addon><addon id="resource.language.ar_sa" version="11.0.90.34" name="Arabic" provider-name="Team Kodi">
   <requires>
     <import addon="kodi.resource" version="1.0.0" />
   </requires>

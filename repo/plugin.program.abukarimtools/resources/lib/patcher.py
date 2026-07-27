@@ -85,7 +85,35 @@ _TMDBH_PLAYERGUARD_NEW_B64 = 'ICAgIGRlZiBnZXRfcGxheWluZ2l0ZW0oc2VsZik6CiAgICAgIC
 _LASTPLAYED_GUARD_OLD_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkK'
 _LASTPLAYED_GUARD_NEW_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICAjIC0tIERlYWQtcGxheWVyIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAjIFBsYXllci5IYXNNZWRpYSBpcyBhIEdVSSBjb25kaXRpb24gYW5kIGNhbiBzdGlsbCByZWFkIHRydWUgYWZ0ZXIgdGhlIHBsYXllcgogICAgICAgICMgaGFzIHRvcm4gZG93biwgc28gZ2V0UGxheWluZ0ZpbGUoKSByYWlzZXMgUnVudGltZUVycm9yLCBraWxscyB0aGlzIGNhbGxiYWNrCiAgICAgICAgIyB0aHJlYWQgYW5kIGxlYXZlcyBjbGFzc2VzIGluIG1lbW9yeSAoS29kaSB3YXJucyBhYm91dCB0aGUgbGVhaykuIGlzUGxheWluZygpCiAgICAgICAgIyBpcyB0aGUgcmVhbCBjaGVjazsgdGhlIHRyeS9leGNlcHQgY292ZXJzIHBsYXliYWNrIGVuZGluZyBpbiBiZXR3ZWVuLgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgbm90IHNlbGYuaXNQbGF5aW5nKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgX2Fia19wbGF5aW5nX2ZpbGUgPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkKICAgICAgICBleGNlcHQgUnVudGltZUVycm9yOgogICAgICAgICAgICByZXR1cm4KICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBfYWJrX3BsYXlpbmdfZmlsZQo='
 
+# ── TinyPPI: force skin fonts (by ABUKARIM TOOLS) ──
+# fonts.py injects TinyPPI's own font23_narrow/font32 (Noto) into the active
+# skin's Font.xml, copies the .ttf, and ReloadSkin()s on import / skin change /
+# Kodi update.  We disable install_fonts() with an early return so nothing is
+# injected; with those two names unregistered, Kodi falls back to the skin's
+# own font13 for all 132 overlay labels, i.e. the overlay uses the current
+# skin's font.  Early return + unreachable body is valid Python (ast-clean).
+_TINYPPI_FONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+_TINYPPI_FONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIEZvcmNlIHNraW4gZm9udHMgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBEbyBub3QgaW5qZWN0IFRpbnlQUEkncyBvd24gZm9udHMgaW50byB0aGUgYWN0aXZlIHNraW4ncyBGb250LnhtbCwgY29weQogICAgIyBhbnkgLnR0Ziwgb3IgcmVsb2FkIHRoZSBza2luLiBXaXRoIG5vIGZvbnQyM19uYXJyb3cvZm9udDMyIHJlZ2lzdGVyZWQsCiAgICAjIEtvZGkgZmFsbHMgYmFjayB0byB0aGUgc2tpbidzIG93biBmb250MTMgZm9yIGV2ZXJ5IG92ZXJsYXkgbGFiZWwsIHNvIHRoZQogICAgIyBvdmVybGF5IHJlbmRlcnMgaW4gdGhlIGN1cnJlbnQgc2tpbidzIGZvbnQuCiAgICBfbG9nKCJGb3JjZSBza2luIGZvbnRzIChBQlVLQVJJTSk6IGluc3RhbGxfZm9udHMgZGlzYWJsZWQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+
+
 PATCHES = [
+    # ── TinyPPI: force skin fonts (by ABUKARIM TOOLS) ──
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
+        'old': base64.b64decode(_TINYPPI_FONTS_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_FONTS_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI fonts.py \u2013 disable font injection so the overlay uses the current skin\'s fonts (font13 fallback)',
+        'already_patched_check': '# -- Force skin fonts (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'(def install_fonts\(\) -> None:\n(?:    .*\n|\n)*?    """[^"]*?installed\.""")\n(    skin_path = _get_skin_path\(\))',
+        'fallback_repl': (
+            r'\1\n'
+            '    # -- Force skin fonts (by ABUKARIM TOOLS) --\n'
+            '    _log("Force skin fonts (ABUKARIM): install_fonts disabled")\n'
+            '    return\n'
+            r'\2'
+        ),
+    },
     # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'script.tinyppi',
