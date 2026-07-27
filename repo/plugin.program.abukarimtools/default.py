@@ -46,16 +46,18 @@ MENU = [
 ]
 
 
-def _add_item(label, mode):
+def _add_item(label, mode, is_folder=True):
     url = sys.argv[0] + '?mode=' + mode
     li  = xbmcgui.ListItem(label)
     li.setArt({'icon': ICONS[mode], 'thumb': ICONS[mode], 'fanart': FANART})
-    xbmcplugin.addDirectoryItem(HANDLE, url, li, True)
+    if not is_folder:
+        li.setProperty('IsPlayable', 'false')
+    xbmcplugin.addDirectoryItem(HANDLE, url, li, is_folder)
 
 
 def main_menu():
     for mode, label in MENU:
-        _add_item(label, mode)
+        _add_item(label, mode, is_folder=(mode != 'skin_switch'))
     xbmcplugin.setContent(HANDLE, 'files')
     xbmcplugin.endOfDirectory(HANDLE)
 
@@ -110,7 +112,9 @@ def router():
         skin_installer.run()
 
     elif mode == 'skin_switch':
-        _end_directory()
+        # Non-folder action: don't open/close a plugin listing (that leaves an
+        # empty container with a back arrow). Just run; the switcher returns to
+        # the main menu itself via _return_to_abukarim().
         from resources.lib import skin_switcher
         skin_switcher.run()
 

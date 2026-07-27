@@ -90,12 +90,15 @@ def _dismiss_confirm_dialogs(deadline_ms):
         waited += 80
 
 
-def _return_to_abukarim():
+def _return_to_abukarim(settle=True):
     """
     After the skin has changed, Kodi shows the new skin's Home window. Bring the
     user back to the AbukarimTools main menu silently — no dialogs, no flicker.
     We reopen the plugin's root inside the Programs window so it looks like the
     menu the switch was launched from.
+
+    settle=True waits for a freshly loaded skin to settle before reactivating;
+    pass settle=False on cancel/no-change where no skin reload happened.
     """
     try:
         xbmc.executebuiltin('Dialog.Close(all, true)')
@@ -103,7 +106,8 @@ def _return_to_abukarim():
         pass
     # Give the freshly loaded skin a moment to settle its Home window first,
     # otherwise the ActivateWindow can be swallowed during the skin reload.
-    xbmc.sleep(1200)
+    if settle:
+        xbmc.sleep(1200)
     xbmc.executebuiltin(
         'ActivateWindow(Programs,plugin://plugin.program.abukarimtools/,return)')
 
@@ -186,10 +190,12 @@ def run():
 
     idx = xbmcgui.Dialog().select('Choose a skin', choices)
     if idx < 0:
+        _return_to_abukarim(settle=False)
         return
 
     chosen_id = selectable[idx]
     if chosen_id == current_id:
+        _return_to_abukarim(settle=False)
         return
 
     # Stop any playback and let it fully tear down before swapping skins.
