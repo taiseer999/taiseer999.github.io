@@ -85,33 +85,35 @@ _TMDBH_PLAYERGUARD_NEW_B64 = 'ICAgIGRlZiBnZXRfcGxheWluZ2l0ZW0oc2VsZik6CiAgICAgIC
 _LASTPLAYED_GUARD_OLD_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkK'
 _LASTPLAYED_GUARD_NEW_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICAjIC0tIERlYWQtcGxheWVyIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAjIFBsYXllci5IYXNNZWRpYSBpcyBhIEdVSSBjb25kaXRpb24gYW5kIGNhbiBzdGlsbCByZWFkIHRydWUgYWZ0ZXIgdGhlIHBsYXllcgogICAgICAgICMgaGFzIHRvcm4gZG93biwgc28gZ2V0UGxheWluZ0ZpbGUoKSByYWlzZXMgUnVudGltZUVycm9yLCBraWxscyB0aGlzIGNhbGxiYWNrCiAgICAgICAgIyB0aHJlYWQgYW5kIGxlYXZlcyBjbGFzc2VzIGluIG1lbW9yeSAoS29kaSB3YXJucyBhYm91dCB0aGUgbGVhaykuIGlzUGxheWluZygpCiAgICAgICAgIyBpcyB0aGUgcmVhbCBjaGVjazsgdGhlIHRyeS9leGNlcHQgY292ZXJzIHBsYXliYWNrIGVuZGluZyBpbiBiZXR3ZWVuLgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgbm90IHNlbGYuaXNQbGF5aW5nKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgX2Fia19wbGF5aW5nX2ZpbGUgPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkKICAgICAgICBleGNlcHQgUnVudGltZUVycm9yOgogICAgICAgICAgICByZXR1cm4KICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBfYWJrX3BsYXlpbmdfZmlsZQo='
 
-# ── TinyPPI: force skin fonts (by ABUKARIM TOOLS) ──
-# fonts.py injects TinyPPI's own font23_narrow/font32 (Noto) into the active
-# skin's Font.xml, copies the .ttf, and ReloadSkin()s on import / skin change /
-# Kodi update.  We disable install_fonts() with an early return so nothing is
-# injected; with those two names unregistered, Kodi falls back to the skin's
-# own font13 for all 132 overlay labels, i.e. the overlay uses the current
-# skin's font.  Early return + unreachable body is valid Python (ast-clean).
-_TINYPPI_FONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
-_TINYPPI_FONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIEZvcmNlIHNraW4gZm9udHMgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBEbyBub3QgaW5qZWN0IFRpbnlQUEkncyBvd24gZm9udHMgaW50byB0aGUgYWN0aXZlIHNraW4ncyBGb250LnhtbCwgY29weQogICAgIyBhbnkgLnR0Ziwgb3IgcmVsb2FkIHRoZSBza2luLiBXaXRoIG5vIGZvbnQyM19uYXJyb3cvZm9udDMyIHJlZ2lzdGVyZWQsCiAgICAjIEtvZGkgZmFsbHMgYmFjayB0byB0aGUgc2tpbidzIG93biBmb250MTMgZm9yIGV2ZXJ5IG92ZXJsYXkgbGFiZWwsIHNvIHRoZQogICAgIyBvdmVybGF5IHJlbmRlcnMgaW4gdGhlIGN1cnJlbnQgc2tpbidzIGZvbnQuCiAgICBfbG9nKCJGb3JjZSBza2luIGZvbnRzIChBQlVLQVJJTSk6IGluc3RhbGxfZm9udHMgZGlzYWJsZWQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+# ── TinyPPI: Arabic-capable overlay font (by ABUKARIM TOOLS) ──
+# TinyPPI's install_fonts() injects font23_narrow/font32 into the active skin's
+# Font.xml and copies its own Noto-Regular/Bold.ttf in.  That Noto has no Arabic
+# glyphs, so Arabic overlay labels fell back to Arial.  We rewrite _REQUIRED_FONTS
+# to use monadit.ttf (Figtree+Arabic: Latin, digits AND Arabic in one file) and
+# point the copy source at plugin.program.abukarimtools/resources/fonts (which
+# ships monadit.ttf), falling back to tools.tinyppi.  TinyPPI's own machinery then
+# registers both names to monadit.ttf and copies it into whichever skin is active,
+# so Arabic renders correctly on every skin with no per-skin Font.xml surgery.
+_TINYPPI_FONTS_OLD_B64 = 'X1JFUVVJUkVEX0ZPTlRTID0gKAogICAgeyJuYW1lIjogImZvbnQyM19uYXJyb3ciLCAiZmlsZW5hbWUiOiAiTm90by1SZWd1bGFyLnR0ZiIsICJzaXplIjogIjIxIn0sCiAgICB7Im5hbWUiOiAiZm9udDMyIiwgICAgICAgICJmaWxlbmFtZSI6ICJOb3RvLUJvbGQudHRmIiwgICAgInNpemUiOiAiMzIifSwKKQoKIyBGb250cyBzaGlwIGluIHRoZSB0b29scy50aW55cHBpIGFkZG9uOyByZXNvbHZlIGRlZmVuc2l2ZWx5IHNvIGEgbWlzc2luZwojIHRvb2xzIGFkZG9uIG5ldmVyIGJyZWFrcyBpbXBvcnQuCnRyeToKICAgIF9UT09MU19ESVIgPSB4Ym1jYWRkb24uQWRkb24oInRvb2xzLnRpbnlwcGkiKS5nZXRBZGRvbkluZm8oInBhdGgiKQpleGNlcHQgRXhjZXB0aW9uOgogICAgX1RPT0xTX0RJUiA9ICIiCgpfQURET05fRk9OVFNfRElSID0gKG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKF9UT09MU19ESVIsICJ0b29scyIsICJmb250cyIpKQogICAgICAgICAgICAgICAgICAgIGlmIF9UT09MU19ESVIgZWxzZSAiIik='
+_TINYPPI_FONTS_NEW_B64 = 'IyAtLSBBcmFiaWMtY2FwYWJsZSBvdmVybGF5IGZvbnQgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQojIEJvdGggb3ZlcmxheSBmb250IG5hbWVzIG5vdyB1c2UgbW9uYWRpdC50dGYgKEZpZ3RyZWUrQXJhYmljKSwgd2hpY2ggY292ZXJzCiMgTGF0aW4sIGRpZ2l0cyBhbmQgQXJhYmljIGluIG9uZSBmaWxlLCBzbyBBcmFiaWMgbGFiZWxzIG5vIGxvbmdlciBmYWxsIGJhY2sgdG8KIyBBcmlhbC4gIFRoZSAudHRmIGlzIHNoaXBwZWQgYnkgcGx1Z2luLnByb2dyYW0uYWJ1a2FyaW10b29sczsgd2Ugc291cmNlIHRoZQojIGNvcHkgZnJvbSB0aGVyZSBhbmQgZmFsbCBiYWNrIHRvIHRoZSB0b29scy50aW55cHBpIGZvbnRzIGRpciBpZiBhYnNlbnQuCl9SRVFVSVJFRF9GT05UUyA9ICgKICAgIHsibmFtZSI6ICJmb250MjNfbmFycm93IiwgImZpbGVuYW1lIjogIm1vbmFkaXQudHRmIiwgInNpemUiOiAiMjEifSwKICAgIHsibmFtZSI6ICJmb250MzIiLCAgICAgICAgImZpbGVuYW1lIjogIm1vbmFkaXQudHRmIiwgInNpemUiOiAiMzIifSwKKQoKIyBGb250cyBzaGlwIGluIHRoZSB0b29scy50aW55cHBpIGFkZG9uOyByZXNvbHZlIGRlZmVuc2l2ZWx5IHNvIGEgbWlzc2luZwojIHRvb2xzIGFkZG9uIG5ldmVyIGJyZWFrcyBpbXBvcnQuCnRyeToKICAgIF9UT09MU19ESVIgPSB4Ym1jYWRkb24uQWRkb24oInRvb2xzLnRpbnlwcGkiKS5nZXRBZGRvbkluZm8oInBhdGgiKQpleGNlcHQgRXhjZXB0aW9uOgogICAgX1RPT0xTX0RJUiA9ICIiCgojIC0tIEFyYWJpYy1jYXBhYmxlIG92ZXJsYXkgZm9udCAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiMgUHJlZmVyIHRoZSBtb25hZGl0LnR0ZiBzaGlwcGVkIGluIHBsdWdpbi5wcm9ncmFtLmFidWthcmltdG9vbHM7IGZhbGwgYmFjayB0bwojIHRoZSB0b29scy50aW55cHBpIGZvbnRzIGRpciBzbyBhIG1pc3NpbmcgYWJ1a2FyaW10b29scyBuZXZlciBicmVha3MgaW1wb3J0Lgp0cnk6CiAgICBfQUJLX0RJUiA9IHhibWNhZGRvbi5BZGRvbigicGx1Z2luLnByb2dyYW0uYWJ1a2FyaW10b29scyIpLmdldEFkZG9uSW5mbygicGF0aCIpCmV4Y2VwdCBFeGNlcHRpb246CiAgICBfQUJLX0RJUiA9ICIiCgpfQUJLX0ZPTlRTX0RJUiA9IChvcy5wYXRoLm5vcm1wYXRoKG9zLnBhdGguam9pbihfQUJLX0RJUiwgInJlc291cmNlcyIsICJmb250cyIpKQogICAgICAgICAgICAgICAgICBpZiBfQUJLX0RJUiBlbHNlICIiKQoKaWYgX0FCS19GT05UU19ESVIgYW5kIG9zLnBhdGguaXNkaXIoX0FCS19GT05UU19ESVIpOgogICAgX0FERE9OX0ZPTlRTX0RJUiA9IF9BQktfRk9OVFNfRElSCmVsc2U6CiAgICBfQURET05fRk9OVFNfRElSID0gKG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKF9UT09MU19ESVIsICJ0b29scyIsICJmb250cyIpKQogICAgICAgICAgICAgICAgICAgICAgICBpZiBfVE9PTFNfRElSIGVsc2UgIiIp'
 
 
 PATCHES = [
-    # ── TinyPPI: force skin fonts (by ABUKARIM TOOLS) ──
+    # ── TinyPPI: Arabic-capable overlay font (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
         'old': base64.b64decode(_TINYPPI_FONTS_OLD_B64).decode('utf-8'),
         'new': base64.b64decode(_TINYPPI_FONTS_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 disable font injection so the overlay uses the current skin\'s fonts (font13 fallback)',
-        'already_patched_check': '# -- Force skin fonts (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'(def install_fonts\(\) -> None:\n(?:    .*\n|\n)*?    """[^"]*?installed\.""")\n(    skin_path = _get_skin_path\(\))',
+        'description': 'TinyPPI fonts.py \u2013 use monadit.ttf (Arabic+Latin) for the overlay so Arabic no longer falls back to Arial',
+        'already_patched_check': '# -- Arabic-capable overlay font (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'_REQUIRED_FONTS = \(\s*\{"name": "font23_narrow"[^)]*?"Noto-Bold\.ttf"[^)]*?\)',
         'fallback_repl': (
-            r'\1\n'
-            '    # -- Force skin fonts (by ABUKARIM TOOLS) --\n'
-            '    _log("Force skin fonts (ABUKARIM): install_fonts disabled")\n'
-            '    return\n'
-            r'\2'
+            '# -- Arabic-capable overlay font (by ABUKARIM TOOLS) --\n'
+            '_REQUIRED_FONTS = (\n'
+            '    {"name": "font23_narrow", "filename": "monadit.ttf", "size": "21"},\n'
+            '    {"name": "font32",        "filename": "monadit.ttf", "size": "32"},\n'
+            ')'
         ),
     },
     # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
