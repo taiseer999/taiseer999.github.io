@@ -90,6 +90,24 @@ def _dismiss_confirm_dialogs(deadline_ms):
         waited += 80
 
 
+def _return_to_abukarim():
+    """
+    After the skin has changed, Kodi shows the new skin's Home window. Bring the
+    user back to the AbukarimTools main menu silently — no dialogs, no flicker.
+    We reopen the plugin's root inside the Programs window so it looks like the
+    menu the switch was launched from.
+    """
+    try:
+        xbmc.executebuiltin('Dialog.Close(all, true)')
+    except Exception:
+        pass
+    # Give the freshly loaded skin a moment to settle its Home window first,
+    # otherwise the ActivateWindow can be swallowed during the skin reload.
+    xbmc.sleep(1200)
+    xbmc.executebuiltin(
+        'ActivateWindow(Programs,plugin://plugin.program.abukarimtools/,return)')
+
+
 def _swap_skin(addon_id):
     # Make sure the target skin is enabled first — a disabled skin is what
     # triggers the extra "enable this add-on?" prompt.
@@ -184,3 +202,8 @@ def run():
         xbmc.sleep(500)
 
     _swap_skin(chosen_id)
+
+    # Skin is now active and confirmed. Drop the user back onto the
+    # AbukarimTools main menu silently instead of leaving them on the new
+    # skin's Home screen.
+    _return_to_abukarim()

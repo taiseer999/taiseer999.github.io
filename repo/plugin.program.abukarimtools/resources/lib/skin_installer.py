@@ -816,6 +816,11 @@ def run(first_run=False):
         ok = _apply_skin(addonid, title)
         if ok:
             _notify('✓ %s installed successfully.' % title)
+            try:
+                from resources.lib import skin_switcher
+                skin_switcher._return_to_abukarim()
+            except Exception as e:
+                _log('return-to-main failed: %s' % e)
         return ok
 
     _log('portal closed with no pending skin to apply')
