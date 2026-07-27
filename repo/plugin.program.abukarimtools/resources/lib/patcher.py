@@ -95,26 +95,69 @@ _LASTPLAYED_GUARD_NEW_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICA
 # registers both names to monadit.ttf and copies it into whichever skin is active,
 # so Arabic renders correctly on every skin with no per-skin Font.xml surgery.
 _TINYPPI_FONTS_OLD_B64 = 'X1JFUVVJUkVEX0ZPTlRTID0gKAogICAgeyJuYW1lIjogImZvbnQyM19uYXJyb3ciLCAiZmlsZW5hbWUiOiAiTm90by1SZWd1bGFyLnR0ZiIsICJzaXplIjogIjIxIn0sCiAgICB7Im5hbWUiOiAiZm9udDMyIiwgICAgICAgICJmaWxlbmFtZSI6ICJOb3RvLUJvbGQudHRmIiwgICAgInNpemUiOiAiMzIifSwKKQoKIyBGb250cyBzaGlwIGluIHRoZSB0b29scy50aW55cHBpIGFkZG9uOyByZXNvbHZlIGRlZmVuc2l2ZWx5IHNvIGEgbWlzc2luZwojIHRvb2xzIGFkZG9uIG5ldmVyIGJyZWFrcyBpbXBvcnQuCnRyeToKICAgIF9UT09MU19ESVIgPSB4Ym1jYWRkb24uQWRkb24oInRvb2xzLnRpbnlwcGkiKS5nZXRBZGRvbkluZm8oInBhdGgiKQpleGNlcHQgRXhjZXB0aW9uOgogICAgX1RPT0xTX0RJUiA9ICIiCgpfQURET05fRk9OVFNfRElSID0gKG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKF9UT09MU19ESVIsICJ0b29scyIsICJmb250cyIpKQogICAgICAgICAgICAgICAgICAgIGlmIF9UT09MU19ESVIgZWxzZSAiIik='
-_TINYPPI_FONTS_NEW_B64 = 'IyAtLSBBcmFiaWMtY2FwYWJsZSBvdmVybGF5IGZvbnQgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQojIEJvdGggb3ZlcmxheSBmb250IG5hbWVzIG5vdyB1c2UgbW9uYWRpdC50dGYgKEZpZ3RyZWUrQXJhYmljKSwgd2hpY2ggY292ZXJzCiMgTGF0aW4sIGRpZ2l0cyBhbmQgQXJhYmljIGluIG9uZSBmaWxlLCBzbyBBcmFiaWMgbGFiZWxzIG5vIGxvbmdlciBmYWxsIGJhY2sgdG8KIyBBcmlhbC4gIFRoZSAudHRmIGlzIHNoaXBwZWQgYnkgcGx1Z2luLnByb2dyYW0uYWJ1a2FyaW10b29sczsgd2Ugc291cmNlIHRoZQojIGNvcHkgZnJvbSB0aGVyZSBhbmQgZmFsbCBiYWNrIHRvIHRoZSB0b29scy50aW55cHBpIGZvbnRzIGRpciBpZiBhYnNlbnQuCl9SRVFVSVJFRF9GT05UUyA9ICgKICAgIHsibmFtZSI6ICJmb250MjNfbmFycm93IiwgImZpbGVuYW1lIjogIm1vbmFkaXQudHRmIiwgInNpemUiOiAiMjEifSwKICAgIHsibmFtZSI6ICJmb250MzIiLCAgICAgICAgImZpbGVuYW1lIjogIm1vbmFkaXQudHRmIiwgInNpemUiOiAiMzIifSwKKQoKIyBGb250cyBzaGlwIGluIHRoZSB0b29scy50aW55cHBpIGFkZG9uOyByZXNvbHZlIGRlZmVuc2l2ZWx5IHNvIGEgbWlzc2luZwojIHRvb2xzIGFkZG9uIG5ldmVyIGJyZWFrcyBpbXBvcnQuCnRyeToKICAgIF9UT09MU19ESVIgPSB4Ym1jYWRkb24uQWRkb24oInRvb2xzLnRpbnlwcGkiKS5nZXRBZGRvbkluZm8oInBhdGgiKQpleGNlcHQgRXhjZXB0aW9uOgogICAgX1RPT0xTX0RJUiA9ICIiCgojIC0tIEFyYWJpYy1jYXBhYmxlIG92ZXJsYXkgZm9udCAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiMgUHJlZmVyIHRoZSBtb25hZGl0LnR0ZiBzaGlwcGVkIGluIHBsdWdpbi5wcm9ncmFtLmFidWthcmltdG9vbHM7IGZhbGwgYmFjayB0bwojIHRoZSB0b29scy50aW55cHBpIGZvbnRzIGRpciBzbyBhIG1pc3NpbmcgYWJ1a2FyaW10b29scyBuZXZlciBicmVha3MgaW1wb3J0Lgp0cnk6CiAgICBfQUJLX0RJUiA9IHhibWNhZGRvbi5BZGRvbigicGx1Z2luLnByb2dyYW0uYWJ1a2FyaW10b29scyIpLmdldEFkZG9uSW5mbygicGF0aCIpCmV4Y2VwdCBFeGNlcHRpb246CiAgICBfQUJLX0RJUiA9ICIiCgpfQUJLX0ZPTlRTX0RJUiA9IChvcy5wYXRoLm5vcm1wYXRoKG9zLnBhdGguam9pbihfQUJLX0RJUiwgInJlc291cmNlcyIsICJmb250cyIpKQogICAgICAgICAgICAgICAgICBpZiBfQUJLX0RJUiBlbHNlICIiKQoKaWYgX0FCS19GT05UU19ESVIgYW5kIG9zLnBhdGguaXNkaXIoX0FCS19GT05UU19ESVIpOgogICAgX0FERE9OX0ZPTlRTX0RJUiA9IF9BQktfRk9OVFNfRElSCmVsc2U6CiAgICBfQURET05fRk9OVFNfRElSID0gKG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKF9UT09MU19ESVIsICJ0b29scyIsICJmb250cyIpKQogICAgICAgICAgICAgICAgICAgICAgICBpZiBfVE9PTFNfRElSIGVsc2UgIiIp'
+_TINYPPI_FONTS_NEW_B64 = 'X1JFUVVJUkVEX0ZPTlRTID0gKAogICAgeyJuYW1lIjogImZvbnQyM19uYXJyb3ciLCAiZmlsZW5hbWUiOiAiTm90by1SZWd1bGFyLnR0ZiIsICJzaXplIjogIjIxIn0sCiAgICB7Im5hbWUiOiAiZm9udDMyIiwgICAgICAgICJmaWxlbmFtZSI6ICJOb3RvLUJvbGQudHRmIiwgICAgInNpemUiOiAiMzIifSwKKQoKIyBGb250cyBzaGlwIGluIHRoZSB0b29scy50aW55cHBpIGFkZG9uOyByZXNvbHZlIGRlZmVuc2l2ZWx5IHNvIGEgbWlzc2luZwojIHRvb2xzIGFkZG9uIG5ldmVyIGJyZWFrcyBpbXBvcnQuCnRyeToKICAgIF9UT09MU19ESVIgPSB4Ym1jYWRkb24uQWRkb24oInRvb2xzLnRpbnlwcGkiKS5nZXRBZGRvbkluZm8oInBhdGgiKQpleGNlcHQgRXhjZXB0aW9uOgogICAgX1RPT0xTX0RJUiA9ICIiCgojIC0tIEFyYWJpYy1jYXBhYmxlIG92ZXJsYXkgZm9udCAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiMgVGhlIE5vdG8tUmVndWxhci9Cb2xkLnR0ZiB0aGF0IHNoaXAgaW4gdG9vbHMudGlueXBwaSBoYXZlIG5vIEFyYWJpYyBnbHlwaHMsIHNvCiMgQXJhYmljIG92ZXJsYXkgbGFiZWxzIGZlbGwgYmFjayB0byBBcmlhbC4gIHBsdWdpbi5wcm9ncmFtLmFidWthcmltdG9vbHMgc2hpcHMKIyBBcmFiaWMtY2FwYWJsZSBOb3RvLVJlZ3VsYXIudHRmIC8gTm90by1Cb2xkLnR0ZiAoc2FtZSBmaWxlbmFtZXMgdGhlIHNraW5zIGFscmVhZHkKIyByZWZlcmVuY2UgZm9yIGZvbnQyM19uYXJyb3cvZm9udDMyKTsgcHJlZmVyIGNvcHlpbmcgdGhvc2Ugc28gQXJhYmljIHJlbmRlcnMgaW4gdGhlCiMgb3ZlcmxheS4gIEZhbGwgYmFjayB0byB0aGUgdG9vbHMudGlueXBwaSBmb250cyBkaXIgaWYgYWJ1a2FyaW10b29scyBpcyBhYnNlbnQuCnRyeToKICAgIF9BQktfRElSID0geGJtY2FkZG9uLkFkZG9uKCJwbHVnaW4ucHJvZ3JhbS5hYnVrYXJpbXRvb2xzIikuZ2V0QWRkb25JbmZvKCJwYXRoIikKZXhjZXB0IEV4Y2VwdGlvbjoKICAgIF9BQktfRElSID0gIiIKCl9BQktfRk9OVFNfRElSID0gKG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKF9BQktfRElSLCAicmVzb3VyY2VzIiwgImZvbnRzIikpCiAgICAgICAgICAgICAgICAgIGlmIF9BQktfRElSIGVsc2UgIiIpCgppZiBfQUJLX0ZPTlRTX0RJUiBhbmQgb3MucGF0aC5pc2RpcihfQUJLX0ZPTlRTX0RJUik6CiAgICBfQURET05fRk9OVFNfRElSID0gX0FCS19GT05UU19ESVIKZWxzZToKICAgIF9BRERPTl9GT05UU19ESVIgPSAob3MucGF0aC5ub3JtcGF0aChvcy5wYXRoLmpvaW4oX1RPT0xTX0RJUiwgInRvb2xzIiwgImZvbnRzIikpCiAgICAgICAgICAgICAgICAgICAgICAgIGlmIF9UT09MU19ESVIgZWxzZSAiIik='
+# ── TinyPPI: undo the v1.9.18 install_fonts disable (by ABUKARIM TOOLS) ──
+# The device may still carry the v1.9.18 early-return that neutered install_fonts();
+# restore the pristine head so injection runs and monadit.ttf actually gets applied.
+_TINYPPI_UNDISABLE_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIEZvcmNlIHNraW4gZm9udHMgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBEbyBub3QgaW5qZWN0IFRpbnlQUEkncyBvd24gZm9udHMgaW50byB0aGUgYWN0aXZlIHNraW4ncyBGb250LnhtbCwgY29weQogICAgIyBhbnkgLnR0Ziwgb3IgcmVsb2FkIHRoZSBza2luLiBXaXRoIG5vIGZvbnQyM19uYXJyb3cvZm9udDMyIHJlZ2lzdGVyZWQsCiAgICAjIEtvZGkgZmFsbHMgYmFjayB0byB0aGUgc2tpbidzIG93biBmb250MTMgZm9yIGV2ZXJ5IG92ZXJsYXkgbGFiZWwsIHNvIHRoZQogICAgIyBvdmVybGF5IHJlbmRlcnMgaW4gdGhlIGN1cnJlbnQgc2tpbidzIGZvbnQuCiAgICBfbG9nKCJGb3JjZSBza2luIGZvbnRzIChBQlVLQVJJTSk6IGluc3RhbGxfZm9udHMgZGlzYWJsZWQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+_TINYPPI_UNDISABLE_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+# ── TinyPPI: overwrite stale overlay TTFs (by ABUKARIM TOOLS) ──
+# _install_ttf only copies when the dest is absent; make it overwrite on a
+# size mismatch so a stale non-Arabic Noto is replaced by the Arabic copy.
+_TINYPPI_TTFOVERWRITE_OLD_B64 = 'ICAgIG1vZGlmaWVkID0gRmFsc2UKICAgIGZvciBfcm9vdCwgX2RpcnMsIGZpbGVzIGluIG9zLndhbGsoX0FERE9OX0ZPTlRTX0RJUik6CiAgICAgICAgZm9yIGZuYW1lIGluIGZpbGVzOgogICAgICAgICAgICBzcmMgID0gb3MucGF0aC5ub3JtcGF0aChvcy5wYXRoLmpvaW4oX3Jvb3QsIGZuYW1lKSkKICAgICAgICAgICAgZGVzdCA9IG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKHR0Zl9kZXN0X2RpciwgZm5hbWUpKQogICAgICAgICAgICBpZiBub3Qgb3MucGF0aC5leGlzdHMoZGVzdCk6CiAgICAgICAgICAgICAgICBzaHV0aWwuY29weShzcmMsIGRlc3QpCiAgICAgICAgICAgICAgICBfbG9nKGYiVFRGIGNvcGllZDoge2ZuYW1lfSIpCiAgICAgICAgICAgICAgICBtb2RpZmllZCA9IFRydWUKICAgICAgICAgICAgZWxzZToKICAgICAgICAgICAgICAgIF9sb2coZiJUVEYgYWxyZWFkeSBleGlzdHM6IHtmbmFtZX0iKQoKICAgIHJldHVybiBtb2RpZmllZA=='
+_TINYPPI_TTFOVERWRITE_NEW_B64 = 'ICAgIG1vZGlmaWVkID0gRmFsc2UKICAgIGZvciBfcm9vdCwgX2RpcnMsIGZpbGVzIGluIG9zLndhbGsoX0FERE9OX0ZPTlRTX0RJUik6CiAgICAgICAgZm9yIGZuYW1lIGluIGZpbGVzOgogICAgICAgICAgICBzcmMgID0gb3MucGF0aC5ub3JtcGF0aChvcy5wYXRoLmpvaW4oX3Jvb3QsIGZuYW1lKSkKICAgICAgICAgICAgZGVzdCA9IG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKHR0Zl9kZXN0X2RpciwgZm5hbWUpKQogICAgICAgICAgICAjIC0tIEFyYWJpYy1jYXBhYmxlIG92ZXJsYXkgZm9udCAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiAgICAgICAgICAgICMgT3ZlcndyaXRlIHdoZW4gdGhlIHNvdXJjZSBkaWZmZXJzIGZyb20gYW4gZXhpc3RpbmcgZGVzdCwgc28gYSBzdGFsZQogICAgICAgICAgICAjIG5vbi1BcmFiaWMgTm90by1SZWd1bGFyL0JvbGQudHRmIGxlZnQgYnkgYW4gZWFybGllciBydW4gaXMgcmVwbGFjZWQKICAgICAgICAgICAgIyBieSB0aGUgQXJhYmljLWNhcGFibGUgY29weSBpbnN0ZWFkIG9mIGJlaW5nIGtlcHQgZm9yZXZlci4KICAgICAgICAgICAgdHJ5OgogICAgICAgICAgICAgICAgX25lZWQgPSAobm90IG9zLnBhdGguZXhpc3RzKGRlc3QpCiAgICAgICAgICAgICAgICAgICAgICAgICBvciBvcy5wYXRoLmdldHNpemUoZGVzdCkgIT0gb3MucGF0aC5nZXRzaXplKHNyYykpCiAgICAgICAgICAgIGV4Y2VwdCBPU0Vycm9yOgogICAgICAgICAgICAgICAgX25lZWQgPSBUcnVlCiAgICAgICAgICAgIGlmIF9uZWVkOgogICAgICAgICAgICAgICAgc2h1dGlsLmNvcHkoc3JjLCBkZXN0KQogICAgICAgICAgICAgICAgX2xvZyhmIlRURiBjb3BpZWQ6IHtmbmFtZX0iKQogICAgICAgICAgICAgICAgbW9kaWZpZWQgPSBUcnVlCiAgICAgICAgICAgIGVsc2U6CiAgICAgICAgICAgICAgICBfbG9nKGYiVFRGIGFscmVhZHkgZXhpc3RzOiB7Zm5hbWV9IikKCiAgICByZXR1cm4gbW9kaWZpZWQ='
 
 
 PATCHES = [
+    # ── TinyPPI: undo v1.9.18 install_fonts disable (by ABUKARIM TOOLS) ──
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
+        'old': base64.b64decode(_TINYPPI_UNDISABLE_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_UNDISABLE_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI fonts.py \u2013 remove the v1.9.18 install_fonts() early-return so injection runs again',
+        # No positive sentinel: the pristine head has no unique marker. Idempotent via
+        # not_found_ok — once the disable block is gone, nothing matches and we skip clean.
+        'already_patched_check': None,
+        'fallback_pattern': r'    _log\("Force skin fonts \(ABUKARIM\): install_fonts disabled"\)\n    return\n',
+        'fallback_repl': '',
+        'not_found_ok': True,
+    },
     # ── TinyPPI: Arabic-capable overlay font (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
         'old': base64.b64decode(_TINYPPI_FONTS_OLD_B64).decode('utf-8'),
         'new': base64.b64decode(_TINYPPI_FONTS_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 use monadit.ttf (Arabic+Latin) for the overlay so Arabic no longer falls back to Arial',
+        'description': 'TinyPPI fonts.py \u2013 copy Arabic-capable Noto-Regular/Bold.ttf from abukarimtools so overlay Arabic renders (no Arial)',
         'already_patched_check': '# -- Arabic-capable overlay font (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'_REQUIRED_FONTS = \(\s*\{"name": "font23_narrow"[^)]*?"Noto-Bold\.ttf"[^)]*?\)',
+        # Fallback: append the ABK repoint block right after the _ADDON_FONTS_DIR
+        # definition if the exact block drifted.  Sentinel keeps it idempotent.
+        'fallback_pattern': r'(_ADDON_FONTS_DIR = \(os\.path\.normpath\(os\.path\.join\(_TOOLS_DIR, "tools", "fonts"\)\)\n +if _TOOLS_DIR else ""\))',
         'fallback_repl': (
+            r'\1' + '\n\n'
             '# -- Arabic-capable overlay font (by ABUKARIM TOOLS) --\n'
-            '_REQUIRED_FONTS = (\n'
-            '    {"name": "font23_narrow", "filename": "monadit.ttf", "size": "21"},\n'
-            '    {"name": "font32",        "filename": "monadit.ttf", "size": "32"},\n'
-            ')'
+            'try:\n'
+            '    _ABK_DIR = xbmcaddon.Addon("plugin.program.abukarimtools").getAddonInfo("path")\n'
+            'except Exception:\n'
+            '    _ABK_DIR = ""\n'
+            '_ABK_FONTS_DIR = (os.path.normpath(os.path.join(_ABK_DIR, "resources", "fonts"))\n'
+            '                  if _ABK_DIR else "")\n'
+            'if _ABK_FONTS_DIR and os.path.isdir(_ABK_FONTS_DIR):\n'
+            '    _ADDON_FONTS_DIR = _ABK_FONTS_DIR\n'
         ),
+    },
+    # ── TinyPPI: overwrite stale overlay TTFs (by ABUKARIM TOOLS) ──
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
+        'old': base64.b64decode(_TINYPPI_TTFOVERWRITE_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_TTFOVERWRITE_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI fonts.py \u2013 _install_ttf overwrites a stale non-Arabic Noto instead of keeping it',
+        'already_patched_check': 'Overwrite when the source differs from an existing dest',
+        'fallback_pattern': None,
+        'fallback_repl': None,
+        'not_found_ok': True,
     },
     # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
