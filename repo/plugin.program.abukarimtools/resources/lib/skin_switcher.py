@@ -112,6 +112,27 @@ def _return_to_abukarim(settle=True):
         'ActivateWindow(Programs,plugin://plugin.program.abukarimtools/,return)')
 
 
+def _close_to_home(settle=True):
+    """
+    After the skin has changed, leave the user on the NEW skin's Home window
+    instead of reopening AbukarimTools. Close every dialog/plugin container
+    silently so nothing of the switcher is left on screen.
+
+    settle=True waits for a freshly loaded skin to settle before the final
+    close; pass settle=False on cancel/no-change where no skin reload happened.
+    """
+    try:
+        xbmc.executebuiltin('Dialog.Close(all, true)')
+    except Exception:
+        pass
+    # Let a freshly loaded skin settle its Home window first, then make sure we
+    # are actually sitting on Home (not an empty plugin container) before the
+    # switcher script exits.
+    if settle:
+        xbmc.sleep(1200)
+    xbmc.executebuiltin('ActivateWindow(Home)')
+
+
 def _swap_skin(addon_id):
     # Make sure the target skin is enabled first — a disabled skin is what
     # triggers the extra "enable this add-on?" prompt.
@@ -190,12 +211,12 @@ def run():
 
     idx = xbmcgui.Dialog().select('Choose a skin', choices)
     if idx < 0:
-        _return_to_abukarim(settle=False)
+        _close_to_home(settle=False)
         return
 
     chosen_id = selectable[idx]
     if chosen_id == current_id:
-        _return_to_abukarim(settle=False)
+        _close_to_home(settle=False)
         return
 
     # Stop any playback and let it fully tear down before swapping skins.
@@ -209,7 +230,6 @@ def run():
 
     _swap_skin(chosen_id)
 
-    # Skin is now active and confirmed. Drop the user back onto the
-    # AbukarimTools main menu silently instead of leaving them on the new
-    # skin's Home screen.
-    _return_to_abukarim()
+    # Skin is now active and confirmed. Leave the user on the new skin's Home
+    # screen silently instead of reopening the AbukarimTools menu.
+    _close_to_home()

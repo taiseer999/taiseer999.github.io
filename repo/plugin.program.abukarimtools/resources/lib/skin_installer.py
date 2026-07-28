@@ -818,9 +818,9 @@ def run(first_run=False):
             _notify('✓ %s installed successfully.' % title)
             try:
                 from resources.lib import skin_switcher
-                skin_switcher._return_to_abukarim()
+                skin_switcher._close_to_home()
             except Exception as e:
-                _log('return-to-main failed: %s' % e)
+                _log('close-to-home failed: %s' % e)
         return ok
 
     _log('portal closed with no pending skin to apply')
