@@ -101,6 +101,13 @@ _TINYPPI_FONTS_NEW_B64 = 'X1JFUVVJUkVEX0ZPTlRTID0gKAogICAgeyJuYW1lIjogImZvbnQyM1
 # restore the pristine head so injection runs and monadit.ttf actually gets applied.
 _TINYPPI_UNDISABLE_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIEZvcmNlIHNraW4gZm9udHMgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBEbyBub3QgaW5qZWN0IFRpbnlQUEkncyBvd24gZm9udHMgaW50byB0aGUgYWN0aXZlIHNraW4ncyBGb250LnhtbCwgY29weQogICAgIyBhbnkgLnR0Ziwgb3IgcmVsb2FkIHRoZSBza2luLiBXaXRoIG5vIGZvbnQyM19uYXJyb3cvZm9udDMyIHJlZ2lzdGVyZWQsCiAgICAjIEtvZGkgZmFsbHMgYmFjayB0byB0aGUgc2tpbidzIG93biBmb250MTMgZm9yIGV2ZXJ5IG92ZXJsYXkgbGFiZWwsIHNvIHRoZQogICAgIyBvdmVybGF5IHJlbmRlcnMgaW4gdGhlIGN1cnJlbnQgc2tpbidzIGZvbnQuCiAgICBfbG9nKCJGb3JjZSBza2luIGZvbnRzIChBQlVLQVJJTSk6IGluc3RhbGxfZm9udHMgZGlzYWJsZWQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
 _TINYPPI_UNDISABLE_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+# ── TinyPPI: revert v1.9.19 monadit font NAMES back to Noto (by ABUKARIM TOOLS) ──
+# v1.9.19 rewrote _REQUIRED_FONTS to monadit.ttf; devices that took v1.9.19 still
+# carry those names, and the repoint entry below skips on them (sentinel already
+# present), so the skin gets font23_narrow->monadit.ttf which doesn't exist -> Arial.
+# Flip the two filenames back to Noto-Regular/Bold.ttf (the Arabic-capable copies we ship).
+_TINYPPI_UNMONADIT_OLD_B64 = 'X1JFUVVJUkVEX0ZPTlRTID0gKAogICAgeyJuYW1lIjogImZvbnQyM19uYXJyb3ciLCAiZmlsZW5hbWUiOiAibW9uYWRpdC50dGYiLCAic2l6ZSI6ICIyMSJ9LAogICAgeyJuYW1lIjogImZvbnQzMiIsICAgICAgICAiZmlsZW5hbWUiOiAibW9uYWRpdC50dGYiLCAic2l6ZSI6ICIzMiJ9LAop'
+_TINYPPI_UNMONADIT_NEW_B64 = 'X1JFUVVJUkVEX0ZPTlRTID0gKAogICAgeyJuYW1lIjogImZvbnQyM19uYXJyb3ciLCAiZmlsZW5hbWUiOiAiTm90by1SZWd1bGFyLnR0ZiIsICJzaXplIjogIjIxIn0sCiAgICB7Im5hbWUiOiAiZm9udDMyIiwgICAgICAgICJmaWxlbmFtZSI6ICJOb3RvLUJvbGQudHRmIiwgICAgInNpemUiOiAiMzIifSwKKQ=='
 # ── TinyPPI: overwrite stale overlay TTFs (by ABUKARIM TOOLS) ──
 # _install_ttf only copies when the dest is absent; make it overwrite on a
 # size mismatch so a stale non-Arabic Noto is replaced by the Arabic copy.
@@ -121,6 +128,20 @@ PATCHES = [
         'already_patched_check': None,
         'fallback_pattern': r'    _log\("Force skin fonts \(ABUKARIM\): install_fonts disabled"\)\n    return\n',
         'fallback_repl': '',
+        'not_found_ok': True,
+    },
+    # ── TinyPPI: revert v1.9.19 monadit font names -> Noto (by ABUKARIM TOOLS) ──
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
+        'old': base64.b64decode(_TINYPPI_UNMONADIT_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_UNMONADIT_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI fonts.py \u2013 revert v1.9.19 monadit font names back to Noto-Regular/Bold.ttf',
+        # No shared sentinel (the Arabic-capable comment is present regardless). Idempotent
+        # via not_found_ok: once names are Noto, the monadit 'old' no longer matches.
+        'already_patched_check': None,
+        'fallback_pattern': None,
+        'fallback_repl': None,
         'not_found_ok': True,
     },
     # ── TinyPPI: Arabic-capable overlay font (by ABUKARIM TOOLS) ──

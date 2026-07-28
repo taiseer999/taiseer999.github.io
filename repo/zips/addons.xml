@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.20" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="1.9.21" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -656,7 +656,15 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v1.9.20
+    <news>v1.9.21
+- Fixes AZR Arabic still showing Arial after 1.9.20. Devices that took 1.9.19 still
+  had _REQUIRED_FONTS pointing at monadit.ttf (a name the skin never ships), and the
+  1.9.20 repoint entry skipped them because its sentinel was already present. New entry
+  flips those names back to Noto-Regular/Bold.ttf (the Arabic-capable copies we ship).
+  AZR needs a clean Font.xml (reinstall from repo) + reboot so TinyPPI re-injects with
+  the Noto names instead of the stale monadit ones.
+
+v1.9.20
 - TinyPPI overlay: Arabic labels no longer fall back to Arial. The Noto-Regular/
   Bold.ttf that TinyPPI copies into the skin had no Arabic glyphs; abukarimtools now
   ships Arabic-capable Noto-Regular/Bold.ttf and TinyPPI copies those instead, so the
