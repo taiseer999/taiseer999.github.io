@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.0" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.1" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -646,11 +646,13 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
     <provides>executable</provides>
   </extension>
 
-  <extension point="xbmc.service" library="service.py" />
+  
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">ABUKARIM TOOLS</summary>
     <description lang="en_GB">Unified plugin: Skin Installer, Skin Switcher, Userdata Backup &amp; Restore, OpenWizard, and ABUKARIM Wizard.</description>
+    <summary lang="ar_SA">أدوات أبوكريم</summary>
+    <description lang="ar_SA">إضافة موحّدة: مثبّت الواجهات، مبدّل الواجهات، النسخ الاحتياطي واستعادة بيانات المستخدم، OpenWizard، ومعالج ABUKARIM.</description>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>

@@ -32,17 +32,17 @@ ICONS  = {
 }
 
 MENU = [
-    ('first_run',      'Run First-Time Setup'),
-    ('backup',         'Backup/Restore'),
-    ('skin_install',   'Skin Selection'),
-    ('binary_install', 'New Build Tools'),
-    ('patcher',        'Apply Patches'),
-    ('autopatch',      'Auto-Patch On Update: On/Off'),
-    ('origin_fix',     'Fix Add-on Update Origins'),
-    ('openwizard',     'OpenWizard'),
-    ('skin_switch',    'Skin Switcher'),
-    ('dplex_toggle',   'DPlex Tab On/Off'),
-    ('korean_toggle',  'Korean Media Tab On/Off'),
+    ('first_run',      30001),
+    ('backup',         30002),
+    ('skin_install',   30003),
+    ('binary_install', 30004),
+    ('patcher',        30005),
+    ('autopatch',      30006),
+    ('origin_fix',     30007),
+    ('openwizard',     30008),
+    ('skin_switch',    30009),
+    ('dplex_toggle',   30010),
+    ('korean_toggle',  30011),
 ]
 
 
@@ -56,8 +56,9 @@ def _add_item(label, mode, is_folder=True):
 
 
 def main_menu():
-    for mode, label in MENU:
-        _add_item(label, mode, is_folder=(mode != 'skin_switch'))
+    from resources.lib.i18n import T
+    for mode, label_id in MENU:
+        _add_item(T(label_id), mode, is_folder=(mode != 'skin_switch'))
     xbmcplugin.setContent(HANDLE, 'files')
     xbmcplugin.endOfDirectory(HANDLE)
 
@@ -93,12 +94,11 @@ def router():
         _end_directory()
         # Run the same first-run sequence the service runs on first boot,
         # on demand. Confirm first so it isn't triggered by accident.
+        from resources.lib.i18n import T
         if xbmcgui.Dialog().yesno(
                 'ABUKARIM TOOLS',
-                'Run first-time setup now?\n\n'
-                'This installs binaries, offers a backup restore, '
-                'then opens the Skin Installer.',
-                yeslabel='Run setup', nolabel='Cancel'):
+                T(30050),
+                yeslabel=T(30051), nolabel=T(30052)):
             import_root = ADDON_PATH.rstrip('/\\')
             if import_root not in sys.path:
                 sys.path.insert(0, import_root)

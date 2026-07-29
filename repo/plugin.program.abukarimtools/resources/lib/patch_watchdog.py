@@ -37,6 +37,8 @@ import time
 import xbmc
 import xbmcaddon
 import xbmcgui
+
+from resources.lib.i18n import T
 import xbmcvfs
 
 from resources.lib import patcher
@@ -199,7 +201,7 @@ def _run_pass(addon_ids=None, reason=''):
 
     if changed:
         _log('%s: re-applied %d patch(es), %d failed.' % (reason, changed, failed))
-        _notify('Patches re-applied after add-on update')
+        _notify(T(30290))
     elif failed:
         _log('%s: %d patch(es) FAILED, %d OK.' % (reason, failed, ok),
              xbmc.LOGWARNING)
@@ -276,18 +278,14 @@ def toggle():
         except Exception as e:
             _log('Could not write kill switch: %s' % e, xbmc.LOGWARNING)
         state = 'OFF'
-        body  = ('Auto-patching is now [B]OFF[/B].[CR][CR]'
-                 'Patches will no longer be re-applied automatically after an '
-                 'add-on update - use Apply Patches manually.')
+        body  = T(30292)
     else:
         try:
             os.remove(DISABLE_FILE)
         except Exception:
             pass
         state = 'ON'
-        body  = ('Auto-patching is now [B]ON[/B].[CR][CR]'
-                 'Patches are re-applied automatically whenever a patched '
-                 'add-on is updated or reinstalled.')
+        body  = T(30291)
     _log('Auto-patch toggled %s by user.' % state)
     xbmcgui.Dialog().ok(ADDON_NAME, body)
 

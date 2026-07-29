@@ -8,6 +8,8 @@ import urllib.error
 import urllib.parse
 import glob
 import re
+
+from resources.lib.i18n import T
 import zipfile
 from resources import downloader, extract
 from datetime import datetime
@@ -61,16 +63,16 @@ def whileWindow(window, active=False, count=0, counter=15):
 	return active
 	
 def installAddon(name, url):
-	DP.create(ADDON_NAME, '[B]Downloading:[/B] %s' % name + '[COLOR red]Please Wait[/COLOR]')
+	DP.create(ADDON_NAME, T(30300) % name + '[COLOR red]' + T(30301) + '[/COLOR]')
 	urlsplits = url.split('/')
 	lib=os.path.join(PACKAGES, urlsplits[-1])
 	try: os.remove(lib)
 	except: pass
 	downloader.download(url, lib, DP)
-	title = '[B]Installing:[/B] %s' % (name)
-	DP.update(0, 'Please Wait')
+	title = T(30303) % (name)
+	DP.update(0, T(30301))
 	percent, errors, error = extract.all(lib,ADDONS,DP, title=title)
-	DP.update(0, 'Installing Dependencies')
+	DP.update(0, T(30302))
 	installlist = grabAddons(lib)
 	if KODIV >= 17: addonDatabase(installlist, 1, True)
 	installDep(name, DP)

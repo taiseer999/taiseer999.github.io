@@ -1,6 +1,8 @@
 import os
 import shutil
 import zipfile
+
+from resources.lib.i18n import T
 import datetime
 import posixpath
 
@@ -115,7 +117,7 @@ class BackupManager:
         zip_path    = os.path.join(dest_folder, zip_name)
 
         pbar = xbmcgui.DialogProgress()
-        pbar.create(ADDON_NAME, 'Collecting files…')
+        pbar.create(ADDON_NAME, T(30220))
 
         try:
             file_list = self._collect_files(include_skin)
@@ -123,7 +125,7 @@ class BackupManager:
 
             if total == 0:
                 pbar.close()
-                dialog.ok(ADDON_NAME, 'No files found to back up.')
+                dialog.ok(ADDON_NAME, T(30221))
                 return
 
             with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
@@ -147,12 +149,10 @@ class BackupManager:
                     os.remove(zip_path)
                 except Exception:
                     pass
-                dialog.ok(ADDON_NAME, 'Backup cancelled.')
+                dialog.ok(ADDON_NAME, T(30222))
             else:
                 _log('Backup written to: %s' % zip_path)
-                dialog.ok(ADDON_NAME,
-                          'Backup complete!\n\n%d files saved to:\n%s'
-                          % (total, zip_path))
+                dialog.ok(ADDON_NAME, T(30223) % (total, zip_path))
                 if (SKIN_ADDONS[0] in include_skin
                         and SKIN_ADDONS[1] in include_skin):
                     _log('Both skin addons included – triggering rebuild_shortcuts.')
@@ -167,28 +167,23 @@ class BackupManager:
         except Exception as e:
             pbar.close()
             _log('Backup error: %s' % e, xbmc.LOGERROR)
-            dialog.ok(ADDON_NAME, 'Backup failed!\n%s' % e)
+            dialog.ok(ADDON_NAME, T(30224) % e)
 
     # -------------------------------------------------------------- Restore --
 
     def _do_restore(self, dialog, include_skin):
         zip_path = dialog.browse(
-            1, 'Select backup ZIP to restore', 'files', '*.zip', False, False,
+            1, T(30225), 'files', '*.zip', False, False,
             self.home_path
         )
         if not zip_path or not zip_path.lower().endswith('.zip'):
             return
 
-        if not dialog.yesno(
-            ADDON_NAME,
-            'This will overwrite existing addon_data files, '
-            'guisettings.xml, and keymaps.\n\n'
-            'Continue with restore?'
-        ):
+        if not dialog.yesno(ADDON_NAME, T(30231)):
             return
 
         pbar = xbmcgui.DialogProgress()
-        pbar.create(ADDON_NAME, 'Restoring…')
+        pbar.create(ADDON_NAME, T(30226))
 
         try:
             with zipfile.ZipFile(zip_path, 'r') as zf:
@@ -268,13 +263,10 @@ class BackupManager:
             pbar.close()
 
             if pbar.iscanceled():
-                dialog.ok(ADDON_NAME, 'Restore cancelled (partial restore may have occurred).')
+                dialog.ok(ADDON_NAME, T(30227))
             else:
                 _log('Restore completed from: %s' % zip_path)
-                dialog.ok(ADDON_NAME,
-                          'Restore complete! %d files restored.\n\n'
-                          'guisettings.xml will be applied on next boot.\n\n'
-                          'Please restart Kodi manually for the changes to take effect.' % total)
+                dialog.ok(ADDON_NAME, T(30228) % total)
                 if (SKIN_ADDONS[0] in include_skin
                         and SKIN_ADDONS[1] in include_skin):
                     _log('Both skin addons restored – running rebuild_shortcuts.')
@@ -287,7 +279,7 @@ class BackupManager:
         except Exception as e:
             pbar.close()
             _log('Restore error: %s' % e, xbmc.LOGERROR)
-            dialog.ok(ADDON_NAME, 'Restore failed!\n%s' % e)
+            dialog.ok(ADDON_NAME, T(30229) % e)
 
     # ------------------------------------------------- autostart.sh injection -
 

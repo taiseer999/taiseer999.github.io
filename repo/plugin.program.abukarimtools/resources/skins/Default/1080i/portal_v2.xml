@@ -1,9 +1,9 @@
 <window>
 <defaultcontrol>50</defaultcontrol>
 <controls>
-<control type="label">
+<control type="label" id="9001">
 <left>40</left><top>30</top><width>400</width><height>40</height>
-<label>ABUKARIM PORTAL V2</label>
+<label></label>
 </control>
 
 <control type="list" id="50">
@@ -16,7 +16,7 @@
 
 <control type="label" id="210">
 <left>400</left><top>280</top><width>800</width><height>40</height>
-<label>Selected Skin</label>
+<label></label>
 </control>
 
 <control type="panel" id="100">

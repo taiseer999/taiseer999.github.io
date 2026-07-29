@@ -18,6 +18,8 @@ import os
 import json
 import xbmc
 import xbmcgui
+
+from resources.lib.i18n import T
 import xbmcvfs
 
 # ---------------------------------------------------------------------------
@@ -145,9 +147,7 @@ def run(auto=False):
 
     # Confirm with user (interactive mode only)
     if not auto:
-        msg = ('Platform: [B]%s[/B][CR]'
-               'Repo: [B]%s[/B][CR][CR]'
-               'Install the following binary add-ons?[CR][CR]%s'
+        msg = (T(30180)
                % (platform, repo_id, '[CR]'.join('  • ' + b for b in BINARIES)))
 
         if not DIALOG.yesno(ADDON_NAME, msg):
@@ -155,7 +155,7 @@ def run(auto=False):
             return
 
     # Ensure the repo is available
-    DP.create(ADDON_NAME, 'Checking repository…')
+    DP.create(ADDON_NAME, T(30181))
     DP.update(5)
     repo_ok, repo_msg = _ensure_repo(repo_id, auto=auto)
     _log(repo_msg)
@@ -165,13 +165,10 @@ def run(auto=False):
         if auto:
             xbmcgui.Dialog().notification(
                 ADDON_NAME,
-                'Binary add-ons: repo %s unreachable' % repo_id,
+                T(30182) % repo_id,
                 xbmcgui.NOTIFICATION_ERROR, 6000)
         else:
-            DIALOG.ok(ADDON_NAME,
-                      '[COLOR red]✘[/COLOR]  Could not reach [B]%s[/B].[CR][CR]'
-                      'Check your internet connection and that the repo is available '
-                      'for your platform.' % repo_id)
+            DIALOG.ok(ADDON_NAME, T(30183) % repo_id)
         return
 
     # Install each binary
@@ -180,25 +177,25 @@ def run(auto=False):
 
     for idx, addon_id in enumerate(BINARIES):
         pct = 10 + int(((idx) / total) * 85)
-        DP.update(pct, 'Installing [B]%s[/B]…' % addon_id)
+        DP.update(pct, T(30184) % addon_id)
         _log('Processing: %s' % addon_id)
 
         if _addon_installed(addon_id):
-            msg_line = '[COLOR lime]✔[/COLOR]  %s – already installed' % addon_id
+            msg_line = T(30185) % addon_id
             _log('%s already installed, skipping.' % addon_id)
             results.append((True, msg_line))
             continue
 
         ok = _install_via_jsonrpc(addon_id, auto=auto)
         if ok:
-            msg_line = '[COLOR lime]✔[/COLOR]  %s – installed OK' % addon_id
+            msg_line = T(30186) % addon_id
             _log('%s installed successfully.' % addon_id)
         else:
-            msg_line = '[COLOR red]✘[/COLOR]  %s – install failed' % addon_id
+            msg_line = T(30187) % addon_id
             _log('%s install FAILED.' % addon_id)
         results.append((ok, msg_line))
 
-    DP.update(100, 'Done.')
+    DP.update(100, T(30113))
     xbmc.sleep(400)
     DP.close()
 
@@ -211,16 +208,16 @@ def run(auto=False):
 
     if auto:
         if failed:
-            note = 'Binary add-ons: %d OK, %d failed' % (succeeded, failed)
+            note = T(30188) % (succeeded, failed)
             icon = xbmcgui.NOTIFICATION_WARNING
         else:
-            note = 'Binary add-ons installed (%d/%d)' % (succeeded, len(results))
+            note = T(30189) % (succeeded, len(results))
             icon = xbmcgui.NOTIFICATION_INFO
         xbmcgui.Dialog().notification(ADDON_NAME, note, icon, 5000)
     else:
-        body  = '[B]Binary Install Results[/B] ([I]%s[/I])[CR][CR]' % platform
+        body  = T(30190) % platform
         body += '[CR]'.join(m for _, m in results)
-        body += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
+        body += T(30191) % (succeeded, failed)
         DIALOG.ok(ADDON_NAME, body)
 
     _log('Binary install run complete: %d OK, %d failed.' % (succeeded, failed))

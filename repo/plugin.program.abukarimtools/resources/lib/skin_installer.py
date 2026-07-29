@@ -16,6 +16,8 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 
+from resources.lib.i18n import T
+
 import xbmcaddon as _xbmcaddon
 ADDON_PATH    = xbmcvfs.translatePath(_xbmcaddon.Addon('plugin.program.abukarimtools').getAddonInfo('path'))
 if not ADDON_PATH.endswith(os.sep):
@@ -100,6 +102,13 @@ class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
                 li.setProperty('repo_bg', media_base + bg)
                 panel.addItem(li)
             self.setFocusId(100)
+            # Static labels set from Python: $LOCALIZE resolves against the
+            # active skin, not this addon, so it comes back blank for our ids.
+            try:
+                self.getControl(9001).setLabel(T(30322))  # title
+                self.getControl(9002).setLabel(T(30323))  # hint
+            except Exception:
+                pass
         except Exception as e:
             xbmc.log('[AbukarimTools] onInit error: %s' % str(e), xbmc.LOGERROR)
 
@@ -173,7 +182,7 @@ def _download_zip(url, addonid):
     os.makedirs(_tmp_dir, exist_ok=True)
     tmp_fd, tmp_path = tempfile.mkstemp(suffix='.zip', prefix='abukarim_dl_', dir=_tmp_dir)
     progress = xbmcgui.DialogProgress()
-    progress.create(TITLE, 'Connecting…')
+    progress.create(TITLE, T(30100))
 
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'Kodi'})
@@ -186,7 +195,7 @@ def _download_zip(url, addonid):
                 while True:
                     if progress.iscanceled():
                         progress.close()
-                        _notify('Download cancelled.', xbmcgui.NOTIFICATION_WARNING)
+                        _notify(T(30101), xbmcgui.NOTIFICATION_WARNING)
                         return None
                     chunk = resp.read(chunk_size)
                     if not chunk:
@@ -195,14 +204,14 @@ def _download_zip(url, addonid):
                     downloaded += len(chunk)
                     if total:
                         pct = int(downloaded * 100 / total)
-                        progress.update(pct, 'Downloading… %d / %d KB'
+                        progress.update(pct, T(30102)
                                         % (downloaded // 1024, total // 1024))
                     else:
-                        progress.update(0, 'Downloading… %d KB' % (downloaded // 1024))
+                        progress.update(0, T(30103) % (downloaded // 1024))
 
-        progress.update(100, 'Verifying…')
+        progress.update(100, T(30104))
         if not _verify_zip(tmp_path, expected_bytes=(total or None)):
-            _error('Download incomplete or corrupt. Please try again.')
+            _error(T(30105))
             return None
 
         zip_path = os.path.join(PACKAGES_PATH, '%s.zip' % addonid)
@@ -217,10 +226,10 @@ def _download_zip(url, addonid):
 
     except urllib.error.URLError as e:
         progress.close()
-        _error('Download failed:\n%s' % e.reason)
+        _error(T(30106) % e.reason)
     except Exception as e:
         progress.close()
-        _error('Download failed:\n%s' % e)
+        _error(T(30106) % e)
     finally:
         if tmp_fd is not None:
             try:
@@ -237,7 +246,7 @@ def _download_zip(url, addonid):
 
 def _extract_zip(zip_path):
     progress = xbmcgui.DialogProgress()
-    progress.create(TITLE, 'Preparing extraction…')
+    progress.create(TITLE, T(30107))
     staging_parent = os.path.join(ADDONS_PATH, '.abukarim_staging')
     staging_dir    = None
 
@@ -246,11 +255,11 @@ def _extract_zip(zip_path):
         staging_dir = tempfile.mkdtemp(dir=staging_parent, prefix='extract_')
 
         with zipfile.ZipFile(zip_path, 'r') as zf:
-            progress.update(0, 'Checking archive integrity…')
+            progress.update(0, T(30108))
             bad = zf.testzip()
             if bad:
                 progress.close()
-                _error('ZIP integrity check failed.\nFirst bad file: %s' % bad)
+                _error(T(30109) % bad)
                 return False
 
             members     = zf.infolist()
@@ -260,7 +269,7 @@ def _extract_zip(zip_path):
             for info in members:
                 if progress.iscanceled():
                     progress.close()
-                    _notify('Extraction cancelled.', xbmcgui.NOTIFICATION_WARNING)
+                    _notify(T(30110), xbmcgui.NOTIFICATION_WARNING)
                     return False
                 zf.extract(info, staging_dir)
                 if not info.filename.endswith('/'):
@@ -268,13 +277,13 @@ def _extract_zip(zip_path):
                     actual = os.path.getsize(dest) if os.path.exists(dest) else -1
                     if actual != info.file_size:
                         progress.close()
-                        _error('Extraction error: size mismatch for\n%s' % info.filename)
+                        _error(T(30111) % info.filename)
                         return False
                 done_bytes += info.file_size
                 progress.update(int(done_bytes * 100 / total_bytes),
                                 'Extracting: %s' % os.path.basename(info.filename))
 
-        progress.update(99, 'Installing…')
+        progress.update(99, T(30112))
         for top_name in os.listdir(staging_dir):
             src  = os.path.join(staging_dir, top_name)
             dest = os.path.join(ADDONS_PATH, top_name)
@@ -285,16 +294,16 @@ def _extract_zip(zip_path):
             except OSError:
                 shutil.copytree(src, dest) if os.path.isdir(src) else shutil.copy2(src, dest)
 
-        progress.update(100, 'Done.')
+        progress.update(100, T(30113))
         progress.close()
 
     except zipfile.BadZipFile:
         progress.close()
-        _error('The downloaded file is not a valid ZIP archive.')
+        _error(T(30114))
         return False
     except Exception as e:
         progress.close()
-        _error('Extraction failed:\n%s' % e)
+        _error(T(30115) % e)
         return False
     finally:
         if staging_dir and os.path.exists(staging_dir):
@@ -457,14 +466,13 @@ def _start_yes_watchdog():
 
 def _apply_skin(addonid, title):
     _log('apply start: %s (%s)' % (title, addonid))
-    _notify('Enabling %s…' % title)
+    _notify(T(30116) % title)
     # Enable RELIABLY before touching the skin setting.
     _enable_addon(addonid)
 
     if not _wait_addon_enabled(addonid):
         _log('addon never became enabled: %s' % addonid)
-        _error('Could not enable %s. Try selecting it manually in '
-               'Settings > Interface > Skin.' % title)
+        _error(T(30117) % title)
         return False
     _log('addon enabled (verified): %s' % addonid)
 
@@ -475,7 +483,7 @@ def _apply_skin(addonid, title):
     xbmc.executebuiltin('UpdateLocalAddons')
     xbmc.sleep(2000)
 
-    _notify('Applying %s…' % title)
+    _notify(T(30118) % title)
 
     # Start answering the enable/keep popup in the background BEFORE we set the
     # skin, so it's caught the instant it appears (it fires right at the set,
@@ -522,8 +530,7 @@ def _apply_skin(addonid, title):
     if _current_skin() != addonid:
         stop_watchdog()
         _log('FAILED to activate %s (current=%s)' % (addonid, _current_skin()))
-        _error('%s was installed but could not be selected automatically.\n'
-               'Select it in Settings > Interface > Skin.' % title)
+        _error(T(30119) % title)
         return False
 
     stop_watchdog()
@@ -746,6 +753,13 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             panel.addItem(li)
         if self.items:
             self.setFocusId(100)
+        # Static labels set from Python: $LOCALIZE resolves against the active
+        # skin, not this addon, so our custom ids come back blank in the XML.
+        for ctl_id, strid in ((9001, 30320), (9002, 30321), (210, 30325)):
+            try:
+                self.getControl(ctl_id).setLabel(T(strid))
+            except Exception:
+                pass
 
     def onClick(self, controlId):
         if controlId != 100:
@@ -758,11 +772,10 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         already = item.getProperty('installed') == 'true'
 
         if not zipurl:
-            _error('No ZIP URL found for this skin.')
+            _error(T(30120))
             return
 
-        msg = ('This skin is already installed.\nReinstall %s?' % title
-               if already else 'Install %s?' % title)
+        msg = (T(30121) % title if already else T(30122) % title)
         if not xbmcgui.Dialog().yesno(TITLE, msg):
             return
 
@@ -822,13 +835,13 @@ def run(first_run=False):
     try:
         items = _fetch_json(url)
     except urllib.error.URLError as e:
-        _error('Network error:\n%s' % e.reason)
+        _error(T(30123) % e.reason)
         return False
     except json.JSONDecodeError:
-        _error('The feed returned invalid JSON.')
+        _error(T(30124))
         return False
     except Exception as e:
-        _error('Feed error:\n%s' % e)
+        _error(T(30125) % e)
         return False
 
     if not items:
@@ -854,7 +867,7 @@ def run(first_run=False):
         _log('deferred apply: %s' % addonid)
         ok = _apply_skin(addonid, title)
         if ok:
-            _notify('✓ %s installed successfully.' % title)
+            _notify(T(30126) % title)
             try:
                 from resources.lib import skin_switcher
                 skin_switcher._close_to_home()

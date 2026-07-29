@@ -54,14 +54,14 @@
         </control>
 
         <!-- Title label -->
-        <control type="label">
+        <control type="label" id="9001">
             <left>260</left><top>108</top>
             <width>1400</width><height>84</height>
             <font>AbkTitle</font>
             <align>center</align>
             <textcolor>FFC8A86A</textcolor>
             <shadowcolor>CC000000</shadowcolor>
-            <label>Select Repository</label>
+            <label></label>
         </control>
 
         <!-- Separator -->
@@ -148,13 +148,13 @@
             <colordiffuse>E01A2030</colordiffuse>
             <texture>white.png</texture>
         </control>
-        <control type="label">
+        <control type="label" id="9002">
             <left>260</left><top>880</top>
             <width>1400</width><height>32</height>
             <font>AbkHint</font>
             <align>center</align>
             <textcolor>70C8A86A</textcolor>
-            <label>OK to select  ·  Back to cancel</label>
+            <label></label>
         </control>
 
     </controls>

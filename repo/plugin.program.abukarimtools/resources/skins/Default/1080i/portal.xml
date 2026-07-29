@@ -85,7 +85,7 @@
 </control>
 
 <!-- ── Title ─────────────────────────────────────────────────────────────── -->
-<control type="label">
+<control type="label" id="9001">
     <left>60</left>
     <top>35</top>
     <width>1200</width>
@@ -93,7 +93,7 @@
     <font>font30_title</font>
     <textcolor>FFFFFFFF</textcolor>
     <shadowcolor>CC000000</shadowcolor>
-    <label>SKIN SELECTION</label>
+    <label></label>
 </control>
 
 <!-- ── Decorative short accent line under the title ─────────────────────── -->
@@ -107,14 +107,14 @@
 </control>
 
 <!-- ── Hint label in the bottom bar ─────────────────────────────────────── -->
-<control type="label">
+<control type="label" id="9002">
     <left>60</left>
     <top>1047</top>
     <width>1800</width>
     <height>30</height>
     <font>font12</font>
     <textcolor>A0FFFFFF</textcolor>
-    <label>Select a skin to install · Press Back to exit</label>
+    <label></label>
 </control>
 
 <!-- ── Grid panel ────────────────────────────────────────────────────────── -->

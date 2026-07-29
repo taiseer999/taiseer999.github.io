@@ -15,6 +15,8 @@ import json
 
 import xbmc
 import xbmcgui
+
+from resources.lib.i18n import T
 import xbmcaddon
 import xbmcvfs
 
@@ -194,7 +196,7 @@ def run():
             pass
 
     if not names:
-        xbmcgui.Dialog().ok(TITLE, 'No installed skins found.')
+        xbmcgui.Dialog().ok(TITLE, T(30150))
         return
 
     current_id = _curr_skin_id()
@@ -209,7 +211,7 @@ def run():
             choices.append(name)
         selectable.append(aid)
 
-    idx = xbmcgui.Dialog().select('Choose a skin', choices)
+    idx = xbmcgui.Dialog().select(T(30151), choices)
     if idx < 0:
         _close_to_home(settle=False)
         return

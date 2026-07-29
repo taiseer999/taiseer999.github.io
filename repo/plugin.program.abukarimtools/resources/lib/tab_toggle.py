@@ -32,6 +32,8 @@ import re
 import shutil
 import xbmc
 import xbmcgui
+
+from resources.lib.i18n import T
 import xbmcvfs
 import xbmcaddon
 
@@ -127,23 +129,21 @@ def run(key, slot, label):
 
     for src in (src_on, src_off):
         if not os.path.isfile(src):
-            DIALOG.ok(ADDON_NAME,
-                      '[COLOR red]✘[/COLOR]  Missing bundled file:[CR]'
-                      '[I]%s[/I]' % src)
+            DIALOG.ok(ADDON_NAME, T(30260) % src)
             return
 
     state = _current_state(slot)
     if state is True:
-        state_lbl = '[COLOR lime]ENABLED[/COLOR]'
+        state_lbl = T(30261)
     elif state is False:
-        state_lbl = '[COLOR red]DISABLED[/COLOR]'
+        state_lbl = T(30262)
     else:
-        state_lbl = '[COLOR gray]UNKNOWN[/COLOR]'
+        state_lbl = T(30263)
 
     choice = DIALOG.select(
-        '%s Tab  –  currently %s' % (label, state_lbl),
-        ['[COLOR lime]Enable[/COLOR]  %s tab' % label,
-         '[COLOR red]Disable[/COLOR]  %s tab' % label],
+        T(30264) % (label, state_lbl),
+        [T(30265) % label,
+         T(30266) % label],
         preselect=1 if state is True else 0)
     if choice == -1:
         return
@@ -153,11 +153,9 @@ def run(key, slot, label):
 
     if not DIALOG.yesno(
             ADDON_NAME,
-            'This will %s the %s tab and[CR]'
-            '[B]restart Kodi[/B] to apply the change.[CR][CR]Continue?'
-            % ('[COLOR lime]enable[/COLOR]' if enable
-               else '[COLOR red]disable[/COLOR]', label),
-            yeslabel='Apply && Restart', nolabel='Cancel'):
+            T(30267)
+            % (T(30268) if enable else T(30269), label),
+            yeslabel=T(30270), nolabel=T(30052)):
         return
 
     try:
@@ -174,9 +172,7 @@ def run(key, slot, label):
                  % (os.path.basename(src), TARGET))
     except OSError as e:
         _log('Write failed: %s' % e)
-        DIALOG.ok(ADDON_NAME,
-                  '[COLOR red]✘[/COLOR]  Failed to write:[CR][I]%s[/I]'
-                  '[CR][CR]%s' % (TARGET, e))
+        DIALOG.ok(ADDON_NAME, T(30271) % (TARGET, e))
         return
 
     # Sync the in-memory skin setting so the shutdown flush cannot
@@ -191,8 +187,8 @@ def run(key, slot, label):
 
     xbmcgui.Dialog().notification(
         ADDON_NAME,
-        '%s tab %s – restarting Kodi…'
-        % (label, 'enabled' if enable else 'disabled'),
+        T(30272)
+        % (label, T(30273) if enable else T(30274)),
         xbmcgui.NOTIFICATION_INFO, 3000)
     xbmc.sleep(1500)
     _restart_kodi()

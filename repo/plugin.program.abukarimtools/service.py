@@ -28,6 +28,8 @@ import xbmcaddon
 import xbmcgui
 import xbmcvfs
 
+from resources.lib.i18n import T
+
 ADDON       = xbmcaddon.Addon()
 ADDON_NAME  = 'ABUKARIM TOOLS'
 ADDON_PATH  = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
@@ -188,8 +190,7 @@ def _step_patcher(monitor):
     except Exception:
         _log('Patcher failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
         xbmcgui.Dialog().notification(
-            ADDON_NAME,
-            'Apply Patches failed — run it from ABUKARIM TOOLS',
+            ADDON_NAME, T(30053),
             xbmcgui.NOTIFICATION_ERROR, 6000)
         return False
 
@@ -206,9 +207,7 @@ def _step_skin_installer():
         return True
     except Exception:
         _log('Skin Installer failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
-        xbmcgui.Dialog().ok(ADDON_NAME,
-                            'Skin Installer could not be started.\n'
-                            'You can run it later from ABUKARIM TOOLS.')
+        xbmcgui.Dialog().ok(ADDON_NAME, T(30054))
         return False
 
 
@@ -259,8 +258,7 @@ def _step_binary_installer(monitor):
         return True
     except Exception:
         _log('Binary Installer failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
-        xbmcgui.Dialog().notification(ADDON_NAME,
-                                      'Binary installer failed — run it from ABUKARIM TOOLS',
+        xbmcgui.Dialog().notification(ADDON_NAME, T(30055),
                                       xbmcgui.NOTIFICATION_ERROR, 6000)
         return False
 
@@ -275,9 +273,7 @@ def _step_restore():
         bm._do_restore(dialog, include_skin)
     except Exception:
         _log('Restore failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
-        xbmcgui.Dialog().ok(ADDON_NAME,
-                            'Restore could not be started.\n'
-                            'You can run it later from ABUKARIM TOOLS → Backup/Restore.')
+        xbmcgui.Dialog().ok(ADDON_NAME, T(30056))
 
 
 def _final_choice(monitor):
@@ -287,11 +283,9 @@ def _final_choice(monitor):
         _wait_no_modal(monitor)
         started = time.time()
         choice = xbmcgui.Dialog().yesno(
-            ADDON_NAME,
-            'Setup is almost complete.\n\n'
-            'Would you like to restore a previous backup?',
-            yeslabel='Restore Backup',
-            nolabel='Skip',
+            ADDON_NAME, T(30057),
+            yeslabel=T(30058),
+            nolabel=T(30059),
         )
         # An answer in under 1.5 s almost certainly means our dialog was
         # swallowed by another addon's popup — wait for the screen to clear
