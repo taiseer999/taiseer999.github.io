@@ -10,7 +10,7 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Run First-Time Setup"
-msgstr "اعداد البيلد بعد التنصيب يدويا"
+msgstr "تشغيل الإعداد لأول مرة"
 
 msgctxt "#30002"
 msgid "Backup/Restore"
@@ -18,19 +18,19 @@ msgstr "نسخ احتياطي / استعادة"
 
 msgctxt "#30003"
 msgid "Skin Selection"
-msgstr "تنصيب skins"
+msgstr "اختيار الواجهة"
 
 msgctxt "#30004"
 msgid "New Build Tools"
-msgstr "أدوات البناء للتنصيب الجديد"
+msgstr "أدوات البناء الجديد"
 
 msgctxt "#30005"
 msgid "Apply Patches"
-msgstr "تطبيق التحسينات"
+msgstr "تطبيق الترقيعات"
 
 msgctxt "#30006"
 msgid "Auto-Patch On Update: On/Off"
-msgstr "تطبيق التحسينات التلقائي عند التحديث: تشغيل/إيقاف"
+msgstr "الترقيع التلقائي عند التحديث: تشغيل/إيقاف"
 
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
@@ -42,7 +42,7 @@ msgstr "OpenWizard"
 
 msgctxt "#30009"
 msgid "Skin Switcher"
-msgstr "التنقل بين skins"
+msgstr "مبدل الواجهات"
 
 msgctxt "#30010"
 msgid "DPlex Tab On/Off"
@@ -50,7 +50,15 @@ msgstr "تبويب DPlex تشغيل/إيقاف"
 
 msgctxt "#30011"
 msgid "Korean Media Tab On/Off"
-msgstr "المحتوى الكوري تشغيل/إيقاف"
+msgstr "تبويب المحتوى الكوري تشغيل/إيقاف"
+
+msgctxt "#30012"
+msgid "Total Clean (Cache, Packages, Thumbnails)"
+msgstr "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
+
+msgctxt "#30013"
+msgid "Clear Old Thumbnails"
+msgstr "حذف الصور المصغرة القديمة"
 
 msgctxt "#30050"
 msgid "Run first-time setup now?\\n\\nThis installs binaries, offers a backup restore, then opens the Skin Installer."
@@ -66,7 +74,7 @@ msgstr "إلغاء"
 
 msgctxt "#30053"
 msgid "Apply Patches failed — run it from ABUKARIM TOOLS"
-msgstr "فشل تطبيق التحسينات — شغّله من ABUKARIM TOOLS"
+msgstr "فشل تطبيق الترقيعات — شغّله من ABUKARIM TOOLS"
 
 msgctxt "#30054"
 msgid "Skin Installer could not be started.\\nYou can run it later from ABUKARIM TOOLS."

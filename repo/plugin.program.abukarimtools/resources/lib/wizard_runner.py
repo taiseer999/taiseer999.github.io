@@ -343,3 +343,67 @@ def run_openwizard(handle, addon_path, paramstring=''):
     _run_wizard('plugin.program.openwizard', wizard_dir, handle, paramstring)
 
 
+def _call_wizard_function(addon_id, wizard_dir, module_name, func_name, *args, **kwargs):
+    """Import an OpenWizard submodule and call one function inside the same
+    patched environment _run_wizard sets up (Addon shim + module finder +
+    resources.* eviction), then restore everything. Returns the function's
+    return value.
+
+    This lets the addon expose individual wizard maintenance actions (e.g.
+    clear.total_clean, clear.old_thumbs) as standalone menu items without
+    launching the wizard's own UI/router.
+    """
+    # 1. Patch xbmcaddon.Addon with the wizard shim
+    _real_Addon = xbmcaddon.Addon
+    shim = _AddonShim(addon_id, wizard_dir)
+
+    def _patched_Addon(id=None):
+        if id is None or id == addon_id:
+            return shim
+        try:
+            return _real_Addon(id)
+        except Exception:
+            return shim
+
+    xbmcaddon.Addon = _patched_Addon
+
+    # 2. Evict conflicting cached modules (same set _run_wizard guards)
+    stale = [k for k in sys.modules
+             if k == 'resources' or k.startswith('resources.')
+             or k == 'uservar']
+    saved_modules = {k: sys.modules.pop(k) for k in stale}
+
+    # 3. Install the wizard's import finder
+    finder = _WizardFinder(wizard_dir)
+    sys.meta_path.insert(0, finder)
+
+    try:
+        mod = importlib.import_module(module_name)
+        func = getattr(mod, func_name)
+        return func(*args, **kwargs)
+    finally:
+        xbmcaddon.Addon = _real_Addon
+        if finder in sys.meta_path:
+            sys.meta_path.remove(finder)
+        for k in list(sys.modules):
+            if k == 'resources' or k.startswith('resources.') or k == 'uservar':
+                del sys.modules[k]
+        sys.modules.update(saved_modules)
+
+
+def run_openwizard_total_clean(addon_path):
+    """OpenWizard 'Total Clean' — clears archive, cache, function cache,
+    packages and thumbnails (shows its own confirm dialog)."""
+    wizard_dir = os.path.join(addon_path, 'resources', 'lib', 'openwizard')
+    return _call_wizard_function('plugin.program.openwizard', wizard_dir,
+                                 'resources.libs.clear', 'total_clean')
+
+
+def run_openwizard_old_thumbs(addon_path):
+    """OpenWizard 'Clear Old Thumbnails' — deletes cached textures unused for
+    7+ days and notifies with the freed size."""
+    wizard_dir = os.path.join(addon_path, 'resources', 'lib', 'openwizard')
+    return _call_wizard_function('plugin.program.openwizard', wizard_dir,
+                                 'resources.libs.clear', 'old_thumbs')
+
+

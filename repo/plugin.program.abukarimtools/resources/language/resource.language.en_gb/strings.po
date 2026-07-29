@@ -52,6 +52,14 @@ msgctxt "#30011"
 msgid "Korean Media Tab On/Off"
 msgstr ""
 
+msgctxt "#30012"
+msgid "Total Clean (Cache, Packages, Thumbnails)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Clear Old Thumbnails"
+msgstr ""
+
 msgctxt "#30050"
 msgid "Run first-time setup now?\\n\\nThis installs binaries, offers a backup restore, then opens the Skin Installer."
 msgstr ""

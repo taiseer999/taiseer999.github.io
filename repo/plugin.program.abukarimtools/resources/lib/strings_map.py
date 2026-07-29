@@ -34,6 +34,8 @@ STRINGS = {
     30009: ("Skin Switcher",                   "\u0645\u0628\u062f\u0644 \u0627\u0644\u0648\u0627\u062c\u0647\u0627\u062a"),
     30010: ("DPlex Tab On/Off",                "\u062a\u0628\u0648\u064a\u0628 DPlex \u062a\u0634\u063a\u064a\u0644/\u0625\u064a\u0642\u0627\u0641"),
     30011: ("Korean Media Tab On/Off",         "\u062a\u0628\u0648\u064a\u0628 \u0627\u0644\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0643\u0648\u0631\u064a \u062a\u0634\u063a\u064a\u0644/\u0625\u064a\u0642\u0627\u0641"),
+    30012: ("Total Clean (Cache, Packages, Thumbnails)",  "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"),
+    30013: ("Clear Old Thumbnails",             "حذف الصور المصغرة القديمة"),
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?\n\nThis installs binaries, offers a backup restore, then opens the Skin Installer.",
