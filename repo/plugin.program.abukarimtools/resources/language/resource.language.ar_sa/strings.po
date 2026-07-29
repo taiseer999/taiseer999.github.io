@@ -10,7 +10,7 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Run First-Time Setup"
-msgstr "تشغيل الإعداد لأول مرة"
+msgstr "اعداد البيلد بعد التنصيب يدويا"
 
 msgctxt "#30002"
 msgid "Backup/Restore"
@@ -18,7 +18,7 @@ msgstr "نسخ احتياطي / استعادة"
 
 msgctxt "#30003"
 msgid "Skin Selection"
-msgstr "اختيار الواجهة"
+msgstr "تنصيب skins"
 
 msgctxt "#30004"
 msgid "New Build Tools"
@@ -26,11 +26,11 @@ msgstr "أدوات البناء الجديد"
 
 msgctxt "#30005"
 msgid "Apply Patches"
-msgstr "تطبيق الترقيعات"
+msgstr "تطبيق التعديلات"
 
 msgctxt "#30006"
 msgid "Auto-Patch On Update: On/Off"
-msgstr "الترقيع التلقائي عند التحديث: تشغيل/إيقاف"
+msgstr "تطبيق التحسينات التلقائي عند التحديث: تشغيل/إيقاف"
 
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
@@ -42,19 +42,19 @@ msgstr "OpenWizard"
 
 msgctxt "#30009"
 msgid "Skin Switcher"
-msgstr "مبدل الواجهات"
+msgstr "التنقل بين skins"
 
 msgctxt "#30010"
 msgid "DPlex Tab On/Off"
-msgstr "تبويب DPlex تشغيل/إيقاف"
+msgstr "DPlex تشغيل/إيقاف تبويب"
 
 msgctxt "#30011"
 msgid "Korean Media Tab On/Off"
-msgstr "تبويب المحتوى الكوري تشغيل/إيقاف"
+msgstr " تشغيل/إيقاف تبويب المحتوى الكوري"
 
 msgctxt "#30012"
 msgid "Total Clean (Cache, Packages, Thumbnails)"
-msgstr "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
+msgstr "تنظيف (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
 
 msgctxt "#30013"
 msgid "Clear Old Thumbnails"
@@ -74,7 +74,7 @@ msgstr "إلغاء"
 
 msgctxt "#30053"
 msgid "Apply Patches failed — run it from ABUKARIM TOOLS"
-msgstr "فشل تطبيق الترقيعات — شغّله من ABUKARIM TOOLS"
+msgstr "فشل تطبيق التعديلات — شغّله من ABUKARIM TOOLS"
 
 msgctxt "#30054"
 msgid "Skin Installer could not be started.\\nYou can run it later from ABUKARIM TOOLS."
@@ -374,11 +374,11 @@ msgstr "أُعيد تطبيق الترقيعات بعد تحديث الإضاف�
 
 msgctxt "#30291"
 msgid "Auto-patching is now [B]ON[/B].[CR][CR]Patches are re-applied automatically whenever a patched add-on is updated or reinstalled."
-msgstr "الترقيع التلقائي الآن [B]مُفعّل[/B].[CR][CR]تُعاد الترقيعات تلقائياً كلما تم تحديث أو إعادة تثبيت إضافة مُرقّعة."
+msgstr "التحسين التلقائي الآن [B]مُفعّل[/B].[CR][CR]تُعاد التحسينات تلقائياً كلما تم تحديث أو إعادة تثبيت إضافة مُرقّعة."
 
 msgctxt "#30292"
 msgid "Auto-patching is now [B]OFF[/B].[CR][CR]Patches will no longer be re-applied automatically after an add-on update - use Apply Patches manually."
-msgstr "الترقيع التلقائي الآن [B]معطّل[/B].[CR][CR]لن تُعاد الترقيعات تلقائياً بعد تحديث الإضافة - استخدم تطبيق الترقيعات يدوياً."
+msgstr "التحسين التلقائي الآن [B]معطّل[/B].[CR][CR]لن تُعاد التحسينات تلقائياً بعد تحديث الإضافة - استخدم تطبيق التحسينات يدوياً."
 
 msgctxt "#30300"
 msgid "[B]Downloading:[/B] %s"
