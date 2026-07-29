@@ -126,6 +126,44 @@ def _choose_source():
     return json_url, bg
 
 
+def _verify_zip(path, expected_bytes=None):
+    """Strict integrity check for a downloaded zip.
+
+    is_zipfile() only proves the End-Of-Central-Directory record exists, so a
+    file truncated mid-stream (dropped connection, short read, an HTML error
+    page saved as .zip) can still slip through and only blow up later inside
+    Kodi's CZipManager::GetZipList. This checks, in order:
+      1. the file exists and is non-empty;
+      2. if the server sent Content-Length, that we actually got every byte;
+      3. that it is a zip at all (EOCD present);
+      4. that every member's CRC is intact (testzip) — the real truncation catch.
+    Returns True only if all pass.
+    """
+    try:
+        if not path or not os.path.isfile(path):
+            return False
+        actual = os.path.getsize(path)
+        if actual == 0:
+            _log('zip verify: empty file %s' % path)
+            return False
+        if expected_bytes and actual != expected_bytes:
+            _log('zip verify: size mismatch %s (%d of %d bytes)'
+                 % (path, actual, expected_bytes))
+            return False
+        if not zipfile.is_zipfile(path):
+            _log('zip verify: not a zip archive %s' % path)
+            return False
+        with zipfile.ZipFile(path, 'r') as zf:
+            bad = zf.testzip()
+            if bad is not None:
+                _log('zip verify: CRC/truncation failure, first bad member %s' % bad)
+                return False
+        return True
+    except Exception as e:
+        _log('zip verify: exception on %s: %s' % (path, e))
+        return False
+
+
 def _download_zip(url, addonid):
     if not xbmcvfs.exists(PACKAGES_PATH):
         xbmcvfs.mkdirs(PACKAGES_PATH)
@@ -163,7 +201,7 @@ def _download_zip(url, addonid):
                         progress.update(0, 'Downloading… %d KB' % (downloaded // 1024))
 
         progress.update(100, 'Verifying…')
-        if not zipfile.is_zipfile(tmp_path):
+        if not _verify_zip(tmp_path, expected_bytes=(total or None)):
             _error('Download incomplete or corrupt. Please try again.')
             return None
 
@@ -563,8 +601,9 @@ def _download_zip_silent(url):
         with urllib.request.urlopen(req, timeout=30) as resp, \
                 os.fdopen(tmp_fd, 'wb') as fh:
             tmp_fd = None
+            expected = int(resp.headers.get('Content-Length', 0)) or None
             shutil.copyfileobj(resp, fh, 65536)
-        if not zipfile.is_zipfile(tmp_path):
+        if not _verify_zip(tmp_path, expected_bytes=expected):
             _log('companion download corrupt: %s' % url)
             os.remove(tmp_path)
             return None
