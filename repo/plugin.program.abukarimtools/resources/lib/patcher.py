@@ -342,6 +342,27 @@ PATCHES = [
         'description': 'TMDbHelper - insert max_threads=3 before </settings> when key absent',
         'already_patched_check': '<setting id="max_threads">',
     },
+    # ── TMDbHelper – reuselanguageinvoker=true (fixes the real AM6B UI freeze) ──
+    # Root cause (kodi.log): with reuselanguageinvoker=false every script.py call spawns a
+    # BRAND-NEW Python interpreter. Under Py3.14's stricter import lock, two invocations that
+    # start within ~ms of each other (home-widget refresh + info action) deadlock on the
+    # import/interpreter lock — log shows CPythonInvoker(43) and (44) both "waiting on thread
+    # 544275819936", the main GUI thread blocks on that call, and the UI freezes ~6 min until
+    # the invoker times out. max_threads=3 does NOT fix this: it caps threads INSIDE one
+    # invocation, not the separate interpreter spawns that actually race. Flipping this flag
+    # gives TMDbHelper ONE persistent, serialized interpreter — no parallel spawns, no
+    # import-lock deadlock. Kodi reads the flag at addon-load, so it takes effect next restart;
+    # patch_watchdog re-applies it after any TMDbHelper update rewrites addon.xml.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': 'addon.xml',
+        'old': '  <reuselanguageinvoker>false</reuselanguageinvoker>',
+        'new': '  <reuselanguageinvoker>true</reuselanguageinvoker>',
+        'description': 'TMDbHelper addon.xml - reuselanguageinvoker=true (serialize interpreter; stops Py3.14 CPythonInvoker import-lock deadlock/UI freeze on AM6B)',
+        'already_patched_check': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'fallback_pattern': r'<reuselanguageinvoker>\s*false\s*</reuselanguageinvoker>',
+        'fallback_repl': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+    },
     # ── TMDbHelper – NoneType guard in is_inprogress_show (fixes trakt_inprogress / trakt_nextepisodes widget TypeError) ──
     {
         'addon_id': 'plugin.video.themoviedb.helper',
