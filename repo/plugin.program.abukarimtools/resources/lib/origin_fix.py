@@ -210,6 +210,79 @@ def fix_addons_silent(addon_ids):
         return {'fixed': {}, 'unmatched': list(addon_ids), 'error': str(e)}
 
 
+def set_origin(addon_id, repo_id):
+    """Deterministically write installed.origin for a single add-on.
+
+    Unlike fix_addons(), this does NOT require the repository's listing to be
+    cached in addonlinkrepo/addons — the caller already knows which repo the
+    add-on came from (e.g. the skin portal knows the user picked Kodi/CE/Piers),
+    so we write that repo id straight into the origin column. This is the
+    robust path for portal/zip installs where the repo listing may never have
+    been fetched, which otherwise leaves origin empty and blocks all updates.
+
+    Only touches a row whose origin is currently empty and whose add-on is
+    physically present in the writable addons dir. Returns True on write.
+    """
+    if not addon_id or not repo_id:
+        return False
+    if not _locally_installed(addon_id):
+        _log('set_origin skipped (not local): %s' % addon_id)
+        return False
+
+    db_path = _find_addons_db()
+    if not db_path:
+        _log('set_origin: no Addons database found')
+        return False
+
+    conn = None
+    try:
+        conn = _connect(db_path)
+        cur = conn.cursor()
+        if 'installed' not in _tables(cur):
+            _log('set_origin: no installed table')
+            return False
+        cur.execute('SELECT origin FROM installed WHERE addonID = ?',
+                    (addon_id,))
+        row = cur.fetchone()
+        if row is None:
+            _log('set_origin: %s not yet registered' % addon_id)
+            return False
+        if (row[0] or '') != '':
+            _log('set_origin: %s already has origin %s' % (addon_id, row[0]))
+            return False
+        cur.execute("UPDATE installed SET origin = ? "
+                    "WHERE addonID = ? AND (origin IS NULL OR origin = '')",
+                    (repo_id, addon_id))
+        conn.commit()
+        if cur.rowcount:
+            _log('set_origin: %s -> %s' % (addon_id, repo_id))
+            return True
+        return False
+    except sqlite3.DatabaseError as e:
+        _log('set_origin db error: %s' % e)
+        try:
+            if conn:
+                conn.rollback()
+        except sqlite3.Error:
+            pass
+        return False
+    finally:
+        try:
+            if conn:
+                conn.close()
+        except sqlite3.Error:
+            pass
+
+
+def set_origin_silent(addon_id, repo_id):
+    """Exception-proof wrapper for set_origin — never raises."""
+    try:
+        return set_origin(addon_id, repo_id)
+    except Exception as e:  # noqa: BLE001
+        _log('set_origin crashed: %s' % e)
+        return False
+
+
 # ---------------------------------------------------------------------------
 # Interactive runner (menu entry)
 # ---------------------------------------------------------------------------

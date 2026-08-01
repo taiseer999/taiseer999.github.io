@@ -208,6 +208,22 @@ msgctxt "#30126"
 msgid "✓ %s installed successfully."
 msgstr "✓ تم تثبيت %s بنجاح."
 
+msgctxt "#30127"
+msgid ""
+"The skin was linked to its repository so it can auto-update.\n"
+"Kodi must restart before updates take effect. Restart now?"
+msgstr ""
+"تم ربط الواجهة بمستودعها لتصلها التحديثات تلقائياً.\n"
+"يجب إعادة تشغيل Kodi لتفعيل التحديثات. إعادة التشغيل الآن؟"
+
+msgctxt "#30128"
+msgid "Restart"
+msgstr "إعادة التشغيل"
+
+msgctxt "#30129"
+msgid "Later"
+msgstr "لاحقاً"
+
 msgctxt "#30150"
 msgid "No installed skins found."
 msgstr "لم يُعثر على واجهات مثبتة."

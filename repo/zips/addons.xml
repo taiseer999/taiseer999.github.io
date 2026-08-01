@@ -634,7 +634,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.2.2" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.2.3" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -658,7 +658,15 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.2
+    <news>v2.2.3
+- Skin installer: skins installed via the portal now register their repository
+  origin deterministically (from the chosen Kodi/CoreELEC/Piers repo) instead of
+  depending on a cached repo listing, so they show in Add-on browser and receive
+  updates. Forces a real repo-listing refresh (UpdateAddonRepos) before linking,
+  applies the same fix to silently-installed companions (e.g. TMDbHelper), and
+  offers a Kodi restart afterwards so the new origins take effect for updates.
+
+v2.2
 - Added two OpenWizard maintenance shortcuts to the main menu: Total Clean (cache, packages, thumbnails) and Clear Old Thumbnails, both run directly without opening the wizard UI.
 - New clear_cache icon.
 

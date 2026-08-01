@@ -208,6 +208,20 @@ msgctxt "#30126"
 msgid "✓ %s installed successfully."
 msgstr ""
 
+msgctxt "#30127"
+msgid ""
+"The skin was linked to its repository so it can auto-update.\n"
+"Kodi must restart before updates take effect. Restart now?"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Restart"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Later"
+msgstr ""
+
 msgctxt "#30150"
 msgid "No installed skins found."
 msgstr ""
