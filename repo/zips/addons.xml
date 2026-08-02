@@ -5218,7 +5218,7 @@ Version 1.30.0
         <description lang="zh_CN">皮肤加载项，提供简单的用户快捷方式管理和列表（需要皮肤支持）</description>
         <description lang="zh_TW">插件为皮肤提供了简单的管理和用户连接方式列表 (需要皮肤支持)</description>
     </extension>
-</addon><addon id="script.skinvariables" version="2.2.1" name="Skin Variables" provider-name="jurialmunkey">
+</addon><addon id="script.skinvariables" version="2.2.2" name="Skin Variables" provider-name="jurialmunkey">
 <requires>
   <import addon="xbmc.python" version="3.0.0" />
   <import addon="script.module.jurialmunkey" version="0.2.28" />
