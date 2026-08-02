@@ -115,72 +115,30 @@ _TINYPPI_TTFOVERWRITE_OLD_B64 = 'ICAgIG1vZGlmaWVkID0gRmFsc2UKICAgIGZvciBfcm9vdCw
 _TINYPPI_TTFOVERWRITE_NEW_B64 = 'ICAgIG1vZGlmaWVkID0gRmFsc2UKICAgIGZvciBfcm9vdCwgX2RpcnMsIGZpbGVzIGluIG9zLndhbGsoX0FERE9OX0ZPTlRTX0RJUik6CiAgICAgICAgZm9yIGZuYW1lIGluIGZpbGVzOgogICAgICAgICAgICBzcmMgID0gb3MucGF0aC5ub3JtcGF0aChvcy5wYXRoLmpvaW4oX3Jvb3QsIGZuYW1lKSkKICAgICAgICAgICAgZGVzdCA9IG9zLnBhdGgubm9ybXBhdGgob3MucGF0aC5qb2luKHR0Zl9kZXN0X2RpciwgZm5hbWUpKQogICAgICAgICAgICAjIC0tIEFyYWJpYy1jYXBhYmxlIG92ZXJsYXkgZm9udCAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiAgICAgICAgICAgICMgT3ZlcndyaXRlIHdoZW4gdGhlIHNvdXJjZSBkaWZmZXJzIGZyb20gYW4gZXhpc3RpbmcgZGVzdCwgc28gYSBzdGFsZQogICAgICAgICAgICAjIG5vbi1BcmFiaWMgTm90by1SZWd1bGFyL0JvbGQudHRmIGxlZnQgYnkgYW4gZWFybGllciBydW4gaXMgcmVwbGFjZWQKICAgICAgICAgICAgIyBieSB0aGUgQXJhYmljLWNhcGFibGUgY29weSBpbnN0ZWFkIG9mIGJlaW5nIGtlcHQgZm9yZXZlci4KICAgICAgICAgICAgdHJ5OgogICAgICAgICAgICAgICAgX25lZWQgPSAobm90IG9zLnBhdGguZXhpc3RzKGRlc3QpCiAgICAgICAgICAgICAgICAgICAgICAgICBvciBvcy5wYXRoLmdldHNpemUoZGVzdCkgIT0gb3MucGF0aC5nZXRzaXplKHNyYykpCiAgICAgICAgICAgIGV4Y2VwdCBPU0Vycm9yOgogICAgICAgICAgICAgICAgX25lZWQgPSBUcnVlCiAgICAgICAgICAgIGlmIF9uZWVkOgogICAgICAgICAgICAgICAgc2h1dGlsLmNvcHkoc3JjLCBkZXN0KQogICAgICAgICAgICAgICAgX2xvZyhmIlRURiBjb3BpZWQ6IHtmbmFtZX0iKQogICAgICAgICAgICAgICAgbW9kaWZpZWQgPSBUcnVlCiAgICAgICAgICAgIGVsc2U6CiAgICAgICAgICAgICAgICBfbG9nKGYiVFRGIGFscmVhZHkgZXhpc3RzOiB7Zm5hbWV9IikKCiAgICByZXR1cm4gbW9kaWZpZWQ='
 
 
+# ── TinyPPI: disable font install entirely (freeze-on-stop fix, by ABUKARIM TOOLS) ──
+_TINYPPI_NOFONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+_TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIFRpbnlQUEkgZm9udHMgZGlzYWJsZWQgZW50aXJlbHkgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBpbnN0YWxsX2ZvbnRzKCkgd2Fsa2VkIHRoZSBhY3RpdmUgc2tpbiBkaXIgYW5kIGNvdWxkIGNhbGwgUmVsb2FkU2tpbigpOyB3aGVuIHRoYXQKICAgICMgbGFuZGVkIG9uIGEgcGxheWJhY2sgc3RvcC9lbmQgaXQgY29sbGlkZWQgd2l0aCBDVmlkZW9QbGF5ZXI6OkNsb3NlRmlsZSgpICsgdGhlIEFMU0EKICAgICMgcGFzc3Rocm91Z2gtPlBDTSBzd2l0Y2ggb24gdGhlIEdVSSB0aHJlYWQgYW5kIGZyb3plIHRoZSBwaWN0dXJlIG9uIHN0b3AuIFRoZSBmb250CiAgICAjIGZlYXR1cmUgaXMgZHJvcHBlZDogb3ZlcmxheSBsYWJlbHMgZmFsbCBiYWNrIHRvIHRoZSBhY3RpdmUgc2tpbidzIG93biBmb250LiBObyBza2luCiAgICAjIHdhbGssIG5vIFJlbG9hZFNraW4sIG5vdGhpbmcgb24gdGhlIHBsYXllciB0aHJlYWQgLT4gbm8gZnJlZXplLgogICAgX2xvZygiRm9udCBpbnN0YWxsIGRpc2FibGVkIChBQlVLQVJJTSkgLSB1c2luZyBza2luIGZvbnQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+
+
 PATCHES = [
-    # ── TinyPPI: undo v1.9.18 install_fonts disable (by ABUKARIM TOOLS) ──
+    # ── TinyPPI: disable install_fonts() entirely – fixes picture freeze on playback stop ──
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
-        'old': base64.b64decode(_TINYPPI_UNDISABLE_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TINYPPI_UNDISABLE_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 remove the v1.9.18 install_fonts() early-return so injection runs again',
-        # No positive sentinel: the pristine head has no unique marker. Idempotent via
-        # not_found_ok — once the disable block is gone, nothing matches and we skip clean.
-        'already_patched_check': None,
-        'fallback_pattern': r'    _log\("Force skin fonts \(ABUKARIM\): install_fonts disabled"\)\n    return\n',
-        'fallback_repl': '',
-        'not_found_ok': True,
-    },
-    # ── TinyPPI: revert v1.9.19 monadit font names -> Noto (by ABUKARIM TOOLS) ──
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
-        'old': base64.b64decode(_TINYPPI_UNMONADIT_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TINYPPI_UNMONADIT_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 revert v1.9.19 monadit font names back to Noto-Regular/Bold.ttf',
-        # No shared sentinel (the Arabic-capable comment is present regardless). Idempotent
-        # via not_found_ok: once names are Noto, the monadit 'old' no longer matches.
-        'already_patched_check': None,
-        'fallback_pattern': None,
-        'fallback_repl': None,
-        'not_found_ok': True,
-    },
-    # ── TinyPPI: Arabic-capable overlay font (by ABUKARIM TOOLS) ──
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
-        'old': base64.b64decode(_TINYPPI_FONTS_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TINYPPI_FONTS_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 copy Arabic-capable Noto-Regular/Bold.ttf from abukarimtools so overlay Arabic renders (no Arial)',
-        'already_patched_check': '# -- Arabic-capable overlay font (by ABUKARIM TOOLS) --',
-        # Fallback: append the ABK repoint block right after the _ADDON_FONTS_DIR
-        # definition if the exact block drifted.  Sentinel keeps it idempotent.
-        'fallback_pattern': r'(_ADDON_FONTS_DIR = \(os\.path\.normpath\(os\.path\.join\(_TOOLS_DIR, "tools", "fonts"\)\)\n +if _TOOLS_DIR else ""\))',
+        'old': base64.b64decode(_TINYPPI_NOFONTS_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TINYPPI_NOFONTS_NEW_B64).decode('utf-8'),
+        'description': 'TinyPPI fonts.py \u2013 disable install_fonts() entirely (overlay uses skin font; stops freeze on stop)',
+        'already_patched_check': '# -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'(def install_fonts\(\) -> None:\n(?:    .*\n)*?)    skin_path = _get_skin_path\(\)',
         'fallback_repl': (
-            r'\1' + '\n\n'
-            '# -- Arabic-capable overlay font (by ABUKARIM TOOLS) --\n'
-            'try:\n'
-            '    _ABK_DIR = xbmcaddon.Addon("plugin.program.abukarimtools").getAddonInfo("path")\n'
-            'except Exception:\n'
-            '    _ABK_DIR = ""\n'
-            '_ABK_FONTS_DIR = (os.path.normpath(os.path.join(_ABK_DIR, "resources", "fonts"))\n'
-            '                  if _ABK_DIR else "")\n'
-            'if _ABK_FONTS_DIR and os.path.isdir(_ABK_FONTS_DIR):\n'
-            '    _ADDON_FONTS_DIR = _ABK_FONTS_DIR\n'
+            r'\1'
+            '    # -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --\n'
+            '    _log("Font install disabled (ABUKARIM) - using skin font")\n'
+            '    return\n'
+            '    skin_path = _get_skin_path()'
         ),
     },
-    # ── TinyPPI: overwrite stale overlay TTFs (by ABUKARIM TOOLS) ──
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
-        'old': base64.b64decode(_TINYPPI_TTFOVERWRITE_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TINYPPI_TTFOVERWRITE_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 _install_ttf overwrites a stale non-Arabic Noto instead of keeping it',
-        'already_patched_check': 'Overwrite when the source differs from an existing dest',
-        'fallback_pattern': None,
-        'fallback_repl': None,
-        'not_found_ok': True,
-    },
-    # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
+# ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'lib', 'ui', 'overlay.py'),
