@@ -34,6 +34,8 @@ STRINGS = {
     30009: ("Skin Switcher",                   "\u0645\u0628\u062f\u0644 \u0627\u0644\u0648\u0627\u062c\u0647\u0627\u062a"),
     30010: ("DPlex Tab On/Off",                "\u062a\u0628\u0648\u064a\u0628 DPlex \u062a\u0634\u063a\u064a\u0644/\u0625\u064a\u0642\u0627\u0641"),
     30011: ("Korean Media Tab On/Off",         "\u062a\u0628\u0648\u064a\u0628 \u0627\u0644\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0643\u0648\u0631\u064a \u062a\u0634\u063a\u064a\u0644/\u0625\u064a\u0642\u0627\u0641"),
+    30012: ("Total Clean (Cache, Packages, Thumbnails)",  "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"),
+    30013: ("Clear Old Thumbnails",             "حذف الصور المصغرة القديمة"),
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?\n\nThis installs binaries, offers a backup restore, then opens the Skin Installer.",
@@ -90,6 +92,12 @@ STRINGS = {
     30125: ("Feed error:\n%s",                 "\u062e\u0637\u0623 \u0641\u064a \u0627\u0644\u0645\u0635\u062f\u0631:\n%s"),
     30126: ("\u2713 %s installed successfully.",
             "\u2713 \u062a\u0645 \u062a\u062b\u0628\u064a\u062a %s \u0628\u0646\u062c\u0627\u062d."),
+    30127: ("The skin was linked to its repository so it can auto-update.\n"
+            "Kodi must restart before updates take effect. Restart now?",
+            "\u062a\u0645 \u0631\u0628\u0637 \u0627\u0644\u0648\u0627\u062c\u0647\u0629 \u0628\u0645\u0633\u062a\u0648\u062f\u0639\u0647\u0627 \u0644\u062a\u0635\u0644\u0647\u0627 \u0627\u0644\u062a\u062d\u062f\u064a\u062b\u0627\u062a \u062a\u0644\u0642\u0627\u0626\u064a\u0627\u064b.\n"
+            "\u064a\u062c\u0628 \u0625\u0639\u0627\u062f\u0629 \u062a\u0634\u063a\u064a\u0644 Kodi \u0644\u062a\u0641\u0639\u064a\u0644 \u0627\u0644\u062a\u062d\u062f\u064a\u062b\u0627\u062a. \u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0622\u0646\u061f"),
+    30128: ("Restart", "\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u062a\u0634\u063a\u064a\u0644"),
+    30129: ("Later",   "\u0644\u0627\u062d\u0642\u0627\u064b"),
 
     # ---- skin switcher (30150-30179) ----
     30150: ("No installed skins found.",       "\u0644\u0645 \u064a\u064f\u0639\u062b\u0631 \u0639\u0644\u0649 \u0648\u0627\u062c\u0647\u0627\u062a \u0645\u062b\u0628\u062a\u0629."),

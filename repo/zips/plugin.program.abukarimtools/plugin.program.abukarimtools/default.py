@@ -29,6 +29,8 @@ ICONS  = {
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
     'autopatch':      ADDON_PATH + 'resources/icons/patcher.png',
+    'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
+    'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
 }
 
 MENU = [
@@ -40,6 +42,8 @@ MENU = [
     ('autopatch',      30006),
     ('origin_fix',     30007),
     ('openwizard',     30008),
+    ('total_clean',    30012),
+    ('old_thumbs',     30013),
     ('skin_switch',    30009),
     ('dplex_toggle',   30010),
     ('korean_toggle',  30011),
@@ -126,6 +130,16 @@ def router():
     elif mode == 'openwizard':
         from resources.lib.wizard_runner import run_openwizard
         run_openwizard(HANDLE, ADDON_PATH)
+
+    elif mode == 'total_clean':
+        _end_directory()
+        from resources.lib.wizard_runner import run_openwizard_total_clean
+        run_openwizard_total_clean(ADDON_PATH)
+
+    elif mode == 'old_thumbs':
+        _end_directory()
+        from resources.lib.wizard_runner import run_openwizard_old_thumbs
+        run_openwizard_old_thumbs(ADDON_PATH)
 
     elif mode == 'patcher':
         _end_directory()

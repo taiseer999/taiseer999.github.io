@@ -32,6 +32,16 @@ CE_JSON    = ('https://raw.githubusercontent.com/taiseer999/'
 PIERS_JSON = ('https://raw.githubusercontent.com/taiseer999/'
               'taiseer999Piers.github.io/master/skins.json')
 
+# Each skins.json source maps to the repository add-on id that carries its
+# skins. The origin column is written deterministically from this so a portal
+# install links to its repo (and thus receives updates) even when the repo's
+# listing was never cached into the Addons DB.
+_REPO_ID_FOR_JSON = {
+    KODI_JSON:  'repository.taiseer',
+    CE_JSON:    'repository.taiseerce',
+    PIERS_JSON: 'repository.taiseerkodi22',
+}
+
 TITLE = 'ABUKARIM – Skin Installer'
 
 
@@ -673,12 +683,13 @@ def _extract_zip_silent(zip_path):
             pass
 
 
-def _install_companions(skin_id, skin_zipurl):
+def _install_companions(skin_id, skin_zipurl, repo_id=''):
     """Silently install every companion mapped to skin_id, from the same repo.
 
     Runs with no user-facing prompts and never changes the active skin. Any
     failure is logged and skipped so it can never block the skin install the
-    user actually asked for.
+    user actually asked for. repo_id, when supplied, is the repository add-on
+    id the companion should be linked to for updates.
     """
     companions = _SKIN_COMPANIONS.get(skin_id)
     if not companions:
@@ -716,9 +727,17 @@ def _install_companions(skin_id, skin_zipurl):
 
             # Link the companion back to its repository so it shows as
             # repo-installed and keeps receiving auto-updates. Staged
-            # extraction leaves origin empty, which blocks updates.
+            # extraction leaves origin empty, which blocks updates. Force a
+            # real repo listing refresh, then write the origin deterministically
+            # from the same repo the skin came from (fallback to the lookup).
             from resources.lib import origin_fix
-            origin_fix.fix_addons_silent([addonid])
+            xbmc.executebuiltin('UpdateAddonRepos')
+            xbmc.sleep(3000)
+            wrote = False
+            if repo_id:
+                wrote = origin_fix.set_origin_silent(addonid, repo_id)
+            if not wrote:
+                origin_fix.fix_addons_silent([addonid])
         except Exception as e:
             _log('companion install error for %s: %s' % (addonid, e))
 
@@ -729,6 +748,9 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         super().__init__()
         self.items      = kwargs.get('items', [])
         self.background = kwargs.get('background', 'backgroundkodi.jpg')
+        # Repository add-on id that carries this source's skins, used to write
+        # the origin deterministically so the skin auto-updates.
+        self.repo_id    = kwargs.get('repo_id', '')
         # first_run mode: close the portal right after a successful install
         # and let the caller apply the skin AFTER the modal is gone, so
         # ReloadSkin never fires while this window is still open.
@@ -789,7 +811,7 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         # Silently pull any companion add-on(s) mapped to this skin from the
         # SAME repo (e.g. AF3 -> TMDbHelper). No
         # prompts, no skin switch — runs before we defer the skin apply.
-        _install_companions(addonid, zipurl)
+        _install_companions(addonid, zipurl, self.repo_id)
 
         # Enable the freshly-extracted skin RIGHT NOW, before anything else
         # touches it. If it's left disabled, Kodi throws the 'Add-on required /
@@ -804,11 +826,20 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
              % (addonid, _addon_is_enabled(addonid)))
 
         # Link the skin back to its repository (origin) so it shows as
-        # repo-installed and auto-updates. Best-effort: needs the repo's
-        # cached listing to already contain the skin; the standalone
-        # 'Fix Add-on Origins' menu tool can repair it later otherwise.
+        # repo-installed and auto-updates. UpdateLocalAddons only rescans
+        # local folders — it does NOT populate the repo listing tables that
+        # the join-based fix depends on — so we (1) force a real repo listing
+        # refresh, then (2) write the origin deterministically from the repo
+        # the user picked, which works even if that listing is still empty.
         from resources.lib import origin_fix
-        origin_fix.fix_addons_silent([addonid])
+        xbmc.executebuiltin('UpdateAddonRepos')
+        xbmc.sleep(3000)
+        wrote = False
+        if self.repo_id:
+            wrote = origin_fix.set_origin_silent(addonid, self.repo_id)
+        if not wrote:
+            # Fallback: look the skin up in whatever repo listing is cached.
+            origin_fix.fix_addons_silent([addonid])
 
         # Always defer the skin switch until AFTER this portal (window 13001)
         # has closed. Applying while the portal is still open leaves it
@@ -847,6 +878,8 @@ def run(first_run=False):
     if not items:
         return False
 
+    repo_id = _REPO_ID_FOR_JSON.get(url, '')
+
     win = SkinPortal(
         'portal.xml',
         ADDON_PATH,
@@ -855,6 +888,7 @@ def run(first_run=False):
         items=items,
         background=background,
         first_run=first_run,
+        repo_id=repo_id,
     )
     win.doModal()
     pending = win.pending
@@ -873,6 +907,19 @@ def run(first_run=False):
                 skin_switcher._close_to_home()
             except Exception as e:
                 _log('close-to-home failed: %s' % e)
+            # Kodi keeps add-on origins in memory and only uses them for update
+            # checks after a restart. The skin (and any companion) was just
+            # linked to its repo, so offer a restart to make updates active now.
+            try:
+                from resources.lib import origin_fix
+                if xbmcgui.Dialog().yesno(
+                        TITLE,
+                        T(30127),
+                        yeslabel=T(30128), nolabel=T(30129)):
+                    xbmc.sleep(500)
+                    origin_fix._restart_kodi()
+            except Exception as e:
+                _log('post-install restart prompt failed: %s' % e)
         return ok
 
     _log('portal closed with no pending skin to apply')
