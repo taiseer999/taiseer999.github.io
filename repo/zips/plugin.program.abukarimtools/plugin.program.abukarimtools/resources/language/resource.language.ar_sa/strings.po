@@ -1,0 +1,438 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.program.abukarimtools\n"
+"Report-Msgid-Bugs-To: ABUKARIM TOOLS\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30001"
+msgid "Run First-Time Setup"
+msgstr "اعداد البيلد بعد التنصيب يدويا"
+
+msgctxt "#30002"
+msgid "Backup/Restore"
+msgstr "نسخ احتياطي / استعادة"
+
+msgctxt "#30003"
+msgid "Skin Selection"
+msgstr "تنصيب skins"
+
+msgctxt "#30004"
+msgid "New Build Tools"
+msgstr "أدوات البناء الجديد"
+
+msgctxt "#30005"
+msgid "Apply Patches"
+msgstr "تطبيق التعديلات"
+
+msgctxt "#30006"
+msgid "Auto-Patch On Update: On/Off"
+msgstr "تطبيق التحسينات التلقائي عند التحديث: تشغيل/إيقاف"
+
+msgctxt "#30007"
+msgid "Fix Add-on Update Origins"
+msgstr "إصلاح مصادر تحديث الإضافات"
+
+msgctxt "#30008"
+msgid "OpenWizard"
+msgstr "OpenWizard"
+
+msgctxt "#30009"
+msgid "Skin Switcher"
+msgstr "التنقل بين skins"
+
+msgctxt "#30010"
+msgid "DPlex Tab On/Off"
+msgstr "DPlex تشغيل/إيقاف تبويب"
+
+msgctxt "#30011"
+msgid "Korean Media Tab On/Off"
+msgstr " تشغيل/إيقاف تبويب المحتوى الكوري"
+
+msgctxt "#30012"
+msgid "Total Clean (Cache, Packages, Thumbnails)"
+msgstr "تنظيف (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
+
+msgctxt "#30013"
+msgid "Clear Old Thumbnails"
+msgstr "حذف الصور المصغرة القديمة"
+
+msgctxt "#30050"
+msgid "Run first-time setup now?\\n\\nThis installs binaries, offers a backup restore, then opens the Skin Installer."
+msgstr "تشغيل الإعداد لأول مرة الآن؟\\n\\nسيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، ثم فتح مثبت الواجهات."
+
+msgctxt "#30051"
+msgid "Run setup"
+msgstr "تشغيل الإعداد"
+
+msgctxt "#30052"
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgctxt "#30053"
+msgid "Apply Patches failed — run it from ABUKARIM TOOLS"
+msgstr "فشل تطبيق التعديلات — شغّله من ABUKARIM TOOLS"
+
+msgctxt "#30054"
+msgid "Skin Installer could not be started.\\nYou can run it later from ABUKARIM TOOLS."
+msgstr "تعذر بدء مثبت الواجهات.\\nيمكنك تشغيله لاحقاً من ABUKARIM TOOLS."
+
+msgctxt "#30055"
+msgid "Binary installer failed — run it from ABUKARIM TOOLS"
+msgstr "فشل مثبت الملفات الثنائية — شغّله من ABUKARIM TOOLS"
+
+msgctxt "#30056"
+msgid "Restore could not be started.\\nYou can run it later from ABUKARIM TOOLS → Backup/Restore."
+msgstr "تعذر بدء الاستعادة.\\nيمكنك تشغيلها لاحقاً من ABUKARIM TOOLS ← نسخ احتياطي/استعادة."
+
+msgctxt "#30057"
+msgid "Setup is almost complete.\\n\\nWould you like to restore a previous backup?"
+msgstr "الإعداد أوشك على الاكتمال.\\n\\nهل تريد استعادة نسخة احتياطية سابقة؟"
+
+msgctxt "#30058"
+msgid "Restore Backup"
+msgstr "استعادة نسخة"
+
+msgctxt "#30059"
+msgid "Skip"
+msgstr "تخطي"
+
+msgctxt "#30100"
+msgid "Connecting…"
+msgstr "جارٍ الاتصال…"
+
+msgctxt "#30101"
+msgid "Download cancelled."
+msgstr "تم إلغاء التنزيل."
+
+msgctxt "#30102"
+msgid "Downloading… %d / %d KB"
+msgstr "جارٍ التنزيل… %d / %d ك.ب"
+
+msgctxt "#30103"
+msgid "Downloading… %d KB"
+msgstr "جارٍ التنزيل… %d ك.ب"
+
+msgctxt "#30104"
+msgid "Verifying…"
+msgstr "جارٍ التحقق…"
+
+msgctxt "#30105"
+msgid "Download incomplete or corrupt. Please try again."
+msgstr "التنزيل غير مكتمل أو تالف. الرجاء المحاولة مرة أخرى."
+
+msgctxt "#30106"
+msgid "Download failed:\\n%s"
+msgstr "فشل التنزيل:\\n%s"
+
+msgctxt "#30107"
+msgid "Preparing extraction…"
+msgstr "جارٍ التحضير للاستخراج…"
+
+msgctxt "#30108"
+msgid "Checking archive integrity…"
+msgstr "جارٍ التحقق من سلامة الأرشيف…"
+
+msgctxt "#30109"
+msgid "ZIP integrity check failed.\\nFirst bad file: %s"
+msgstr "فشل فحص سلامة الملف المضغوط.\\nأول ملف تالف: %s"
+
+msgctxt "#30110"
+msgid "Extraction cancelled."
+msgstr "تم إلغاء الاستخراج."
+
+msgctxt "#30111"
+msgid "Extraction error: size mismatch for\\n%s"
+msgstr "خطأ في الاستخراج: عدم تطابق الحجم لـ\\n%s"
+
+msgctxt "#30112"
+msgid "Installing…"
+msgstr "جارٍ التثبيت…"
+
+msgctxt "#30113"
+msgid "Done."
+msgstr "تم."
+
+msgctxt "#30114"
+msgid "The downloaded file is not a valid ZIP archive."
+msgstr "الملف المُنزّل ليس أرشيف ZIP صالحاً."
+
+msgctxt "#30115"
+msgid "Extraction failed:\\n%s"
+msgstr "فشل الاستخراج:\\n%s"
+
+msgctxt "#30116"
+msgid "Enabling %s…"
+msgstr "جارٍ تفعيل %s…"
+
+msgctxt "#30117"
+msgid "Could not enable %s. Try selecting it manually in Settings."
+msgstr "تعذر تفعيل %s. حاول اختياره يدوياً من الإعدادات."
+
+msgctxt "#30118"
+msgid "Applying %s…"
+msgstr "جارٍ تطبيق %s…"
+
+msgctxt "#30119"
+msgid "%s was installed but could not be selected automatically.\\nSelect it manually from Settings > Interface > Skin."
+msgstr "تم تثبيت %s لكن تعذر اختياره تلقائياً.\\nاختره يدوياً من الإعدادات > الواجهة > المظهر."
+
+msgctxt "#30120"
+msgid "No ZIP URL found for this skin."
+msgstr "لم يُعثر على رابط ZIP لهذه الواجهة."
+
+msgctxt "#30121"
+msgid "This skin is already installed.\\nReinstall %s?"
+msgstr "هذه الواجهة مثبتة بالفعل.\\nإعادة تثبيت %s؟"
+
+msgctxt "#30122"
+msgid "Install %s?"
+msgstr "تثبيت %s؟"
+
+msgctxt "#30123"
+msgid "Network error:\\n%s"
+msgstr "خطأ في الشبكة:\\n%s"
+
+msgctxt "#30124"
+msgid "The feed returned invalid JSON."
+msgstr "أرجع المصدر JSON غير صالح."
+
+msgctxt "#30125"
+msgid "Feed error:\\n%s"
+msgstr "خطأ في المصدر:\\n%s"
+
+msgctxt "#30126"
+msgid "✓ %s installed successfully."
+msgstr "✓ تم تثبيت %s بنجاح."
+
+msgctxt "#30127"
+msgid ""
+"The skin was linked to its repository so it can auto-update.\n"
+"Kodi must restart before updates take effect. Restart now?"
+msgstr ""
+"تم ربط الواجهة بمستودعها لتصلها التحديثات تلقائياً.\n"
+"يجب إعادة تشغيل Kodi لتفعيل التحديثات. إعادة التشغيل الآن؟"
+
+msgctxt "#30128"
+msgid "Restart"
+msgstr "إعادة التشغيل"
+
+msgctxt "#30129"
+msgid "Later"
+msgstr "لاحقاً"
+
+msgctxt "#30150"
+msgid "No installed skins found."
+msgstr "لم يُعثر على واجهات مثبتة."
+
+msgctxt "#30151"
+msgid "Choose a skin"
+msgstr "اختر واجهة"
+
+msgctxt "#30180"
+msgid "Platform: [B]%s[/B][CR]Repo: [B]%s[/B][CR][CR]Install the following binary add-ons?[CR][CR]%s"
+msgstr "المنصة: [B]%s[/B][CR]المستودع: [B]%s[/B][CR][CR]تثبيت الإضافات الثنائية التالية؟[CR][CR]%s"
+
+msgctxt "#30181"
+msgid "Checking repository…"
+msgstr "جارٍ التحقق من المستودع…"
+
+msgctxt "#30182"
+msgid "Binary add-ons: repo %s unreachable"
+msgstr "الإضافات الثنائية: المستودع %s غير متاح"
+
+msgctxt "#30183"
+msgid "[COLOR red]✘[/COLOR]  Could not reach [B]%s[/B].[CR][CR]Check your internet connection and that the repo is available for your platform."
+msgstr "[COLOR red]✘[/COLOR]  تعذر الوصول إلى [B]%s[/B].[CR][CR]تحقق من اتصالك بالإنترنت ومن توفر المستودع لمنصتك."
+
+msgctxt "#30184"
+msgid "Installing [B]%s[/B]…"
+msgstr "جارٍ تثبيت [B]%s[/B]…"
+
+msgctxt "#30185"
+msgid "[COLOR lime]✔[/COLOR]  %s – already installed"
+msgstr "[COLOR lime]✔[/COLOR]  %s – مثبت بالفعل"
+
+msgctxt "#30186"
+msgid "[COLOR lime]✔[/COLOR]  %s – installed OK"
+msgstr "[COLOR lime]✔[/COLOR]  %s – تم التثبيت"
+
+msgctxt "#30187"
+msgid "[COLOR red]✘[/COLOR]  %s – install failed"
+msgstr "[COLOR red]✘[/COLOR]  %s – فشل التثبيت"
+
+msgctxt "#30188"
+msgid "Binary add-ons: %d OK, %d failed"
+msgstr "الإضافات الثنائية: %d نجح، %d فشل"
+
+msgctxt "#30189"
+msgid "Binary add-ons installed (%d/%d)"
+msgstr "تم تثبيت الإضافات الثنائية (%d/%d)"
+
+msgctxt "#30190"
+msgid "[B]Binary Install Results[/B] ([I]%s[/I])[CR][CR]"
+msgstr "[B]نتائج تثبيت الملفات الثنائية[/B] ([I]%s[/I])[CR][CR]"
+
+msgctxt "#30191"
+msgid "[CR][CR]%d succeeded,  %d failed."
+msgstr "[CR][CR]%d نجح،  %d فشل."
+
+msgctxt "#30220"
+msgid "Collecting files…"
+msgstr "جارٍ جمع الملفات…"
+
+msgctxt "#30221"
+msgid "No files found to back up."
+msgstr "لا توجد ملفات للنسخ الاحتياطي."
+
+msgctxt "#30222"
+msgid "Backup cancelled."
+msgstr "تم إلغاء النسخ الاحتياطي."
+
+msgctxt "#30223"
+msgid "Backup complete!\\n\\n%d files saved to:\\n%s"
+msgstr "اكتمل النسخ الاحتياطي!\\n\\nتم حفظ %d ملف في:\\n%s"
+
+msgctxt "#30224"
+msgid "Backup failed!\\n%s"
+msgstr "فشل النسخ الاحتياطي!\\n%s"
+
+msgctxt "#30225"
+msgid "Select backup ZIP to restore"
+msgstr "اختر ملف النسخة الاحتياطية (ZIP) للاستعادة"
+
+msgctxt "#30226"
+msgid "Restoring…"
+msgstr "جارٍ الاستعادة…"
+
+msgctxt "#30227"
+msgid "Restore cancelled (partial restore may have occurred)."
+msgstr "تم إلغاء الاستعادة (قد تكون تمت استعادة جزئية)."
+
+msgctxt "#30228"
+msgid "Restore complete! %d files restored.\\n\\nguisettings.xml will be applied on next boot.\\n\\nPlease restart Kodi manually for the changes to take effect."
+msgstr "اكتملت الاستعادة! تمت استعادة %d ملف.\\n\\nسيُطبّق guisettings.xml عند الإقلاع التالي.\\n\\nالرجاء إعادة تشغيل Kodi يدوياً لتطبيق التغييرات."
+
+msgctxt "#30229"
+msgid "Restore failed!\\n%s"
+msgstr "فشلت الاستعادة!\\n%s"
+
+msgctxt "#30231"
+msgid "This will overwrite existing addon_data files, guisettings.xml, and keymaps.\\n\\nContinue with restore?"
+msgstr "سيؤدي هذا إلى الكتابة فوق ملفات addon_data وguisettings.xml وkeymaps الحالية.\\n\\nالمتابعة مع الاستعادة؟"
+
+msgctxt "#30260"
+msgid "[COLOR red]✘[/COLOR]  Missing bundled file:[CR][I]%s[/I]"
+msgstr "[COLOR red]✘[/COLOR]  ملف مرفق مفقود:[CR][I]%s[/I]"
+
+msgctxt "#30261"
+msgid "[COLOR lime]ENABLED[/COLOR]"
+msgstr "[COLOR lime]مُفعّل[/COLOR]"
+
+msgctxt "#30262"
+msgid "[COLOR red]DISABLED[/COLOR]"
+msgstr "[COLOR red]معطّل[/COLOR]"
+
+msgctxt "#30263"
+msgid "[COLOR gray]UNKNOWN[/COLOR]"
+msgstr "[COLOR gray]غير معروف[/COLOR]"
+
+msgctxt "#30264"
+msgid "%s Tab  –  currently %s"
+msgstr "تبويب %s  –  الحالة %s"
+
+msgctxt "#30265"
+msgid "[COLOR lime]Enable[/COLOR]  %s tab"
+msgstr "[COLOR lime]تفعيل[/COLOR]  تبويب %s"
+
+msgctxt "#30266"
+msgid "[COLOR red]Disable[/COLOR]  %s tab"
+msgstr "[COLOR red]تعطيل[/COLOR]  تبويب %s"
+
+msgctxt "#30267"
+msgid "This will %s the %s tab and[CR][B]restart Kodi[/B] to apply the change.[CR][CR]Continue?"
+msgstr "سيؤدي هذا إلى %s تبويب %s و[CR][B]إعادة تشغيل Kodi[/B] لتطبيق التغيير.[CR][CR]متابعة؟"
+
+msgctxt "#30268"
+msgid "[COLOR lime]enable[/COLOR]"
+msgstr "[COLOR lime]تفعيل[/COLOR]"
+
+msgctxt "#30269"
+msgid "[COLOR red]disable[/COLOR]"
+msgstr "[COLOR red]تعطيل[/COLOR]"
+
+msgctxt "#30270"
+msgid "Apply && Restart"
+msgstr "تطبيق وإعادة تشغيل"
+
+msgctxt "#30271"
+msgid "[COLOR red]✘[/COLOR]  Failed to write:[CR][I]%s[/I][CR][CR]%s"
+msgstr "[COLOR red]✘[/COLOR]  فشل الكتابة:[CR][I]%s[/I][CR][CR]%s"
+
+msgctxt "#30272"
+msgid "%s tab %s – restarting Kodi…"
+msgstr "تبويب %s %s – جارٍ إعادة تشغيل Kodi…"
+
+msgctxt "#30273"
+msgid "enabled"
+msgstr "مُفعّل"
+
+msgctxt "#30274"
+msgid "disabled"
+msgstr "معطّل"
+
+msgctxt "#30290"
+msgid "Patches re-applied after add-on update"
+msgstr "أُعيد تطبيق الترقيعات بعد تحديث الإضافة"
+
+msgctxt "#30291"
+msgid "Auto-patching is now [B]ON[/B].[CR][CR]Patches are re-applied automatically whenever a patched add-on is updated or reinstalled."
+msgstr "التحسين التلقائي الآن [B]مُفعّل[/B].[CR][CR]تُعاد التحسينات تلقائياً كلما تم تحديث أو إعادة تثبيت إضافة مُرقّعة."
+
+msgctxt "#30292"
+msgid "Auto-patching is now [B]OFF[/B].[CR][CR]Patches will no longer be re-applied automatically after an add-on update - use Apply Patches manually."
+msgstr "التحسين التلقائي الآن [B]معطّل[/B].[CR][CR]لن تُعاد التحسينات تلقائياً بعد تحديث الإضافة - استخدم تطبيق التحسينات يدوياً."
+
+msgctxt "#30300"
+msgid "[B]Downloading:[/B] %s"
+msgstr "[B]جارٍ التنزيل:[/B] %s"
+
+msgctxt "#30301"
+msgid "Please Wait"
+msgstr "الرجاء الانتظار"
+
+msgctxt "#30302"
+msgid "Installing Dependencies"
+msgstr "جارٍ تثبيت الاعتماديات"
+
+msgctxt "#30303"
+msgid "[B]Installing:[/B] %s"
+msgstr "[B]جارٍ التثبيت:[/B] %s"
+
+msgctxt "#30320"
+msgid "SKIN SELECTION"
+msgstr "اختيار الواجهة"
+
+msgctxt "#30321"
+msgid "Select a skin to install · Press Back to exit"
+msgstr "اختر واجهة لتثبيتها · اضغط رجوع للخروج"
+
+msgctxt "#30322"
+msgid "Select Repository"
+msgstr "اختر المستودع"
+
+msgctxt "#30323"
+msgid "OK to select  ·  Back to cancel"
+msgstr "موافق للاختيار  ·  رجوع للإلغاء"
+
+msgctxt "#30324"
+msgid "ABUKARIM PORTAL V2"
+msgstr "بوابة أبوكريم V2"
+
+msgctxt "#30325"
+msgid "Selected Skin"
+msgstr "الواجهة المختارة"
+
