@@ -402,6 +402,36 @@ PATCHES = [
         'inject_source': os.path.join('resources', 'tinyppi_codecs', 'Dolby_TrueHD_Atmos.png'),
         'description': 'TinyPPI codecs - replace Dolby_TrueHD_Atmos.png badge',
     },
+
+    # ── TinyPPI – PPI Arabic: full ar_sa translation + remove label colons ──
+    # Two whole-file replacements shipped under resources/tinyppi_arabic/:
+    #  (1) resources/language/resource.language.ar_sa/strings.po — every empty
+    #      msgstr filled in (the 38 overlay field labels were untranslated).
+    #  (2) resources/skins/Default/1080i/script-tinyppi-main.xml — the trailing
+    #      ':' after each $ADDON[script.tinyppi NNNNN] label removed (44 labels).
+    # inject_source + replace + byte-compare idempotency (same as the badges).
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'language',
+                                 'resource.language.ar_sa', 'strings.po'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_arabic',
+                                      'language', 'strings.po'),
+        'description': 'TinyPPI PPI Arabic - full ar_sa translation',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
+                                 'script-tinyppi-main.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_arabic',
+                                      'skin', 'script-tinyppi-main.xml'),
+        'description': 'TinyPPI PPI Arabic - remove label colons',
+    },
 ]
 
 
@@ -608,6 +638,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
+    ('tinyppi_arabic',   'PPI Arabic'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
@@ -660,6 +691,11 @@ _TOGGLE_OF = {
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD.png')):               'tinyppi_audio',
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD_Atmos.png')):         'tinyppi_audio',
+    # PPI Arabic — ar_sa translation + colon removal
+    ('script.tinyppi',
+     os.path.join('resources', 'language', 'resource.language.ar_sa', 'strings.po')):  'tinyppi_arabic',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml')): 'tinyppi_arabic',
     # RedLight: Fix Sound & Theme — all three RedLight entries
     ('plugin.video.redlight',
      os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'redlight_fixes',
