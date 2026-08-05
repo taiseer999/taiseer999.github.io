@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.4" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.4.1" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -659,7 +659,24 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.3.3
+    <news>v2.3.5
+- Patch selection is now a checklist of 6 named toggles shown at the start of "Apply
+  Patches" (mandatory pre-step; the standalone Select Patches item was removed):
+  Seren Trakt Auth, TMDbHelper Trakt Auth QR, MPAA for KSA, TinyPPI: Run on non-CE,
+  TinyPPI: Fix Font, RedLight: Fix Sound &amp; Theme. Only toggles whose add-on is
+  installed are shown; the choice is remembered and honoured by the auto-patch
+  watchdog too.
+- Removed 3 crash/thread-leak patches: TMDbHelper trakt_stats.py, TMDbHelper
+  player.py, and Last Played default.py. TMDbHelper now carries only the Trakt QR
+  auth (3 files) and the MPAA-for-KSA certification fix. Patch set is 14 entries.
+
+v2.3.4
+- Removed the 3 TMDbHelper AM6B/Py3.14 stability patches: reuselanguageinvoker=true
+  in addon.xml, and the two settings.xml max_threads=3 entries (pin + insert). The
+  patch set is now 17 entries; TMDbHelper keeps its 3 Trakt-QR entries and the
+  info.py / trakt_stats.py / player.py fixes.
+
+v2.3.3
 - Patches are now individually selectable. New "Select Patches" menu item (اختيار
   التعديلات) opens a checklist of every patch; untick any you don't want and only
   the ticked ones are applied. The choice is remembered and honoured everywhere -

@@ -29,7 +29,6 @@ ICONS  = {
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
     'autopatch':      ADDON_PATH + 'resources/icons/patcher.png',
-    'select_patches': ADDON_PATH + 'resources/icons/patcher.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
 }
@@ -40,7 +39,6 @@ MENU = [
     ('skin_install',   30003),
     ('binary_install', 30004),
     ('patcher',        30005),
-    ('select_patches', 30326),
     ('autopatch',      30006),
     ('origin_fix',     30007),
     ('openwizard',     30008),
@@ -160,10 +158,6 @@ def router():
         _end_directory()
         from resources.lib import patcher
         patcher.run()
-
-    elif mode == 'select_patches':
-        from resources.lib import patcher
-        patcher.run_selectable()
 
     elif mode == 'autopatch':
         _end_directory()

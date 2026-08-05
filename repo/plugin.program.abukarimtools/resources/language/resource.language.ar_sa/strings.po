@@ -436,6 +436,3 @@ msgctxt "#30325"
 msgid "Selected Skin"
 msgstr "الواجهة المختارة"
 
-msgctxt "#30326"
-msgid "Select Patches"
-msgstr "اختيار التعديلات"

@@ -24,22 +24,6 @@ _TMDBH_TRAKT_XML_B64 = 'PHdpbmRvdyB0eXBlPSJkaWFsb2ciPgogICAgPGNvb3JkaW5hdGVzPgog
 _TMDBH_POLLER_OLD_B64 = 'ICAgIGRlZiBwb2xsZXIoc2VsZik6CgogICAgICAgIHdoaWxlIFRydWU6CgogICAgICAgICAgICBpZiBzZWxmLnhibWNfbW9uaXRvci5hYm9ydFJlcXVlc3RlZCgpOgogICAgICAgICAgICAgICAgc2VsZi5zdGF0ZSA9ICdhYm9ydGVkJwogICAgICAgICAgICAgICAgYnJlYWsKCiAgICAgICAgICAgIGlmIHNlbGYuYXV0aF9kaWFsb2cuaXNjYW5jZWxlZCgpOgogICAgICAgICAgICAgICAgc2VsZi5zdGF0ZSA9ICdhYm9ydGVkJwogICAgICAgICAgICAgICAgYnJlYWsKCiAgICAgICAgICAgIHNlbGYuYXV0aF9kaWFsb2dfdXBkYXRlKCkKCiAgICAgICAgICAgIGlmIHNlbGYuZXhwaXJlc19pbiA8PSBzZWxmLnByb2dyZXNzOgogICAgICAgICAgICAgICAgc2VsZi5zdGF0ZSA9ICdleHBpcmVkJwogICAgICAgICAgICAgICAgYnJlYWsKCiAgICAgICAgICAgIHNlbGYuYXV0aG9yaXphdGlvbiA9IHNlbGYudHJha3RfYXBpLmdldF9hdXRob3Jpc2F0aW9uX3Rva2VuKHNlbGYuZGV2aWNlX2NvZGUpCgogICAgICAgICAgICBpZiBzZWxmLmF1dGhvcml6YXRpb246CiAgICAgICAgICAgICAgICBzZWxmLnN0YXRlID0gJ3N1Y2Nlc3MnCiAgICAgICAgICAgICAgICBicmVhawoKICAgICAgICAgICAgc2VsZi54Ym1jX21vbml0b3Iud2FpdEZvckFib3J0KHNlbGYuaW50ZXJ2YWwpCgogICAgICAgIHNlbGYuYXV0aF9kaWFsb2dfY2xvc2UoKQo='
 _TMDBH_POLLER_NEW_B64 = 'ICAgIGRlZiBwb2xsZXIoc2VsZik6CgogICAgICAgICMgLS0gVE1EYkhlbHBlciBUcmFrdCBRUiBBdXRoIHBhdGNoIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICBpbXBvcnQgeGJtY2FkZG9uIGFzIF94Ym1jYWRkb24KICAgICAgICBmcm9tIHRtZGJoZWxwZXIubGliLmFwaS50cmFrdC5xcl91dGlscyBpbXBvcnQgbWFrZV9xciwgcmVtb3ZlX3FyLCBnZXRfcXJfZGlhbG9nCgogICAgICAgIHFyX3VybCAgPSAnaHR0cHM6Ly90cmFrdC50di9hY3RpdmF0ZS8nICsgc3RyKHNlbGYudXNlcl9jb2RlKQogICAgICAgIHFyX3BhdGggPSBtYWtlX3FyKHFyX3VybCkKICAgICAgICBhZGRvbl9wYXRoID0gX3hibWNhZGRvbi5BZGRvbigncGx1Z2luLnZpZGVvLnRoZW1vdmllZGIuaGVscGVyJykuZ2V0QWRkb25JbmZvKCdwYXRoJykKCiAgICAgICAgcXJfZGlhbG9nID0gZ2V0X3FyX2RpYWxvZyhhZGRvbl9wYXRoKQogICAgICAgIHFyX2RpYWxvZy5zaG93KCkKICAgICAgICBxcl9kaWFsb2cuc2V0UHJvcGVydHkoJ3VzZXJfY29kZScsICAgICAgc3RyKHNlbGYudXNlcl9jb2RlKSkKICAgICAgICBxcl9kaWFsb2cuc2V0UHJvcGVydHkoJ3FyX2ltYWdlJywgICAgICAgcXJfcGF0aCkKICAgICAgICBxcl9kaWFsb2cuc2V0UHJvcGVydHkoJ3Byb2dyZXNzX3dpZHRoJywgJzUzMCcpCiAgICAgICAgcXJfZGlhbG9nLnNldFByb3BlcnR5KCdleHBpcmVzX2xhYmVsJywgICdFeHBpcmVzIGluICVzcycgJSBpbnQoc2VsZi5leHBpcmVzX2luKSkKCiAgICAgICAgdHJ5OgogICAgICAgICAgICB3aGlsZSBUcnVlOgoKICAgICAgICAgICAgICAgIGlmIHNlbGYueGJtY19tb25pdG9yLmFib3J0UmVxdWVzdGVkKCk6CiAgICAgICAgICAgICAgICAgICAgc2VsZi5zdGF0ZSA9ICdhYm9ydGVkJwogICAgICAgICAgICAgICAgICAgIGJyZWFrCgogICAgICAgICAgICAgICAgaWYgZ2V0YXR0cihxcl9kaWFsb2csICdpc19jYW5jZWxlZCcsIEZhbHNlKToKICAgICAgICAgICAgICAgICAgICBzZWxmLnN0YXRlID0gJ2Fib3J0ZWQnCiAgICAgICAgICAgICAgICAgICAgYnJlYWsKCiAgICAgICAgICAgICAgICBzZWxmLnByb2dyZXNzICs9IHNlbGYuaW50ZXJ2YWwKICAgICAgICAgICAgICAgIF9yZW1haW5pbmcgPSBtYXgoaW50KHNlbGYuZXhwaXJlc19pbikgLSBzZWxmLnByb2dyZXNzLCAwKQogICAgICAgICAgICAgICAgX3dpZHRoID0gaW50KGZsb2F0KF9yZW1haW5pbmcgKiA1MzApIC8gc2VsZi5leHBpcmVzX2luKSBpZiBzZWxmLmV4cGlyZXNfaW4gZWxzZSAwCiAgICAgICAgICAgICAgICBxcl9kaWFsb2cuc2V0UHJvcGVydHkoJ3Byb2dyZXNzX3dpZHRoJywgc3RyKF93aWR0aCkpCiAgICAgICAgICAgICAgICBxcl9kaWFsb2cuc2V0UHJvcGVydHkoJ2V4cGlyZXNfbGFiZWwnLCAgJ0V4cGlyZXMgaW4gJXNzJyAlIF9yZW1haW5pbmcpCgogICAgICAgICAgICAgICAgaWYgc2VsZi5leHBpcmVzX2luIDw9IHNlbGYucHJvZ3Jlc3M6CiAgICAgICAgICAgICAgICAgICAgc2VsZi5zdGF0ZSA9ICdleHBpcmVkJwogICAgICAgICAgICAgICAgICAgIGJyZWFrCgogICAgICAgICAgICAgICAgc2VsZi5hdXRob3JpemF0aW9uID0gc2VsZi50cmFrdF9hcGkuZ2V0X2F1dGhvcmlzYXRpb25fdG9rZW4oc2VsZi5kZXZpY2VfY29kZSkKCiAgICAgICAgICAgICAgICBpZiBzZWxmLmF1dGhvcml6YXRpb246CiAgICAgICAgICAgICAgICAgICAgc2VsZi5zdGF0ZSA9ICdzdWNjZXNzJwogICAgICAgICAgICAgICAgICAgIGJyZWFrCgogICAgICAgICAgICAgICAgc2VsZi54Ym1jX21vbml0b3Iud2FpdEZvckFib3J0KHNlbGYuaW50ZXJ2YWwpCiAgICAgICAgZmluYWxseToKICAgICAgICAgICAgdHJ5OgogICAgICAgICAgICAgICAgcXJfZGlhbG9nLmNsb3NlKCkKICAgICAgICAgICAgZXhjZXB0IEV4Y2VwdGlvbjoKICAgICAgICAgICAgICAgIHBhc3MKICAgICAgICAgICAgZGVsIHFyX2RpYWxvZwogICAgICAgICAgICByZW1vdmVfcXIocXJfcGF0aCkKCiAgICAgICAgc2VsZi5hdXRoX2RpYWxvZ19yb3V0ZSgpCiAgICAgICAgIyAtLSBlbmQgVE1EYkhlbHBlciBUcmFrdCBRUiBBdXRoIHBhdGNoIC0tCg=='
 
-# TMDbHelper trakt_stats.py - get_stats() iterates base_v.items() over every top-level
-# value of the Trakt users/me/stats payload. Trakt now returns plain ints there, so the
-# comprehension raises AttributeError('int' object has no attribute 'items') and the
-# entire Cron Thread aborts at startup - no periodic Trakt sync / cache housekeeping.
-_TMDBH_TRAKTSTATS_OLD_B64 = 'ICAgICAgICAgICAgZm9yIGJhc2VfaywgYmFzZV92IGluIHNlbGYucmVzcG9uc2VfanNvbi5pdGVtcygpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
-_TMDBH_TRAKTSTATS_NEW_B64 = 'ICAgICAgICAgICAgIyAtLSBUTURiSGVscGVyIFRyYWt0IHN0YXRzIGRpY3QgZ3VhcmQgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgICAgICAgICBmb3IgYmFzZV9rLCBiYXNlX3YgaW4gc2VsZi5yZXNwb25zZV9qc29uLml0ZW1zKCkKICAgICAgICAgICAgaWYgaXNpbnN0YW5jZShiYXNlX3YsIGRpY3QpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
-
-# TMDbHelper monitor/player.py - get_playingitem() calls getPlayingFile() with no
-# guard.  onAVChange fires during teardown, and getPlayingFile() raises RuntimeError
-# once nothing is playing, so the callback thread dies with
-#   'NOTE: IGNORING THIS CAN LEAD TO MEMORY LEAKS!'
-# Seen whenever the dummy splash file is closed before it resolves (Amlogic
-# CRenderManager::Configure timeout).  Also collapses a duplicated call: the stock
-# line invoked getPlayingFile() twice.
-_TMDBH_PLAYERGUARD_OLD_B64 = 'ICAgIGRlZiBnZXRfcGxheWluZ2l0ZW0oc2VsZik6CiAgICAgICAgIyBDaGVjayB0aGF0IHZpZGVvIG90aGVyIHRoYW4gZHVtbXkgc3BsYXNoIHZpZGVvIGlzIHBsYXlpbmcKICAgICAgICBpZiBzZWxmLmdldFBsYXlpbmdGaWxlKCkgYW5kIHNlbGYuZ2V0UGxheWluZ0ZpbGUoKS5lbmRzd2l0aCgnZHVtbXkubXA0Jyk6CiAgICAgICAgICAgIHNlbGYucmVzZXRfcHJvcGVydGllcygpCiAgICAgICAgICAgIHJldHVybgo='
-_TMDBH_PLAYERGUARD_NEW_B64 = 'ICAgIGRlZiBnZXRfcGxheWluZ2l0ZW0oc2VsZik6CiAgICAgICAgIyBDaGVjayB0aGF0IHZpZGVvIG90aGVyIHRoYW4gZHVtbXkgc3BsYXNoIHZpZGVvIGlzIHBsYXlpbmcKICAgICAgICAjIC0tIERlYWQtcGxheWVyIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAjIG9uQVZDaGFuZ2UgY2FuIGZpcmUgYWZ0ZXIgdGhlIHBsYXllciBoYXMgYWxyZWFkeSB0b3JuIGRvd24gKHNlZW4gb24gQW1sb2dpYwogICAgICAgICMgd2hlbiBDUmVuZGVyTWFuYWdlcjo6Q29uZmlndXJlIHRpbWVzIG91dCBhbmQgdGhlIGR1bW15IGZpbGUgaXMgY2xvc2VkIGJlZm9yZQogICAgICAgICMgaXQgcmVzb2x2ZXMpLiBnZXRQbGF5aW5nRmlsZSgpIHJhaXNlcyBSdW50aW1lRXJyb3Igb25jZSBub3RoaW5nIGlzIHBsYXlpbmcsCiAgICAgICAgIyB3aGljaCBraWxscyB0aGUgY2FsbGJhY2sgdGhyZWFkIGFuZCBsZWFrcyBpdC4gaXNQbGF5aW5nKCkgaXMgdGhlIGNoZWFwIGd1YXJkOwogICAgICAgICMgdGhlIHRyeS9leGNlcHQgY292ZXJzIHBsYXliYWNrIGVuZGluZyBiZXR3ZWVuIHRoYXQgY2hlY2sgYW5kIHRoZSBjYWxsLgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgbm90IHNlbGYuaXNQbGF5aW5nKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgcGxheWluZ19maWxlID0gc2VsZi5nZXRQbGF5aW5nRmlsZSgpCiAgICAgICAgZXhjZXB0IFJ1bnRpbWVFcnJvcjoKICAgICAgICAgICAgcmV0dXJuCiAgICAgICAgaWYgcGxheWluZ19maWxlIGFuZCBwbGF5aW5nX2ZpbGUuZW5kc3dpdGgoJ2R1bW15Lm1wNCcpOgogICAgICAgICAgICBzZWxmLnJlc2V0X3Byb3BlcnRpZXMoKQogICAgICAgICAgICByZXR1cm4K'
 
 # TMDbHelper info.py - the Certification row is selected with iso_country=? where
 # iso_country is the last 2 chars of the TMDbHelper language setting. With ar-SA that
@@ -76,15 +60,6 @@ DIALOG      = xbmcgui.Dialog()
 _REDLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNzDQo='
 _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
-
-# Last Played default.py - onPlayBackStarted() guards with Player.HasMedia, which is a
-# GUI condition and can still read true after the player has torn down.  getPlayingFile()
-# then raises RuntimeError, the callback thread dies, and Kodi warns that the script
-# 'has left several classes in memory that we couldn't clean up'.  Long-standing upstream
-# bug (5-star/plugin.video.last_played issue #23).  Verified against v6.4.0, where the
-# offending line is default.py:274 - exactly the line in the user's traceback.
-_LASTPLAYED_GUARD_OLD_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkK'
-_LASTPLAYED_GUARD_NEW_B64 = 'ICAgIGRlZiBvblBsYXlCYWNrU3RhcnRlZChzZWxmKToKICAgICAgICAjIC0tIERlYWQtcGxheWVyIGd1YXJkIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAjIFBsYXllci5IYXNNZWRpYSBpcyBhIEdVSSBjb25kaXRpb24gYW5kIGNhbiBzdGlsbCByZWFkIHRydWUgYWZ0ZXIgdGhlIHBsYXllcgogICAgICAgICMgaGFzIHRvcm4gZG93biwgc28gZ2V0UGxheWluZ0ZpbGUoKSByYWlzZXMgUnVudGltZUVycm9yLCBraWxscyB0aGlzIGNhbGxiYWNrCiAgICAgICAgIyB0aHJlYWQgYW5kIGxlYXZlcyBjbGFzc2VzIGluIG1lbW9yeSAoS29kaSB3YXJucyBhYm91dCB0aGUgbGVhaykuIGlzUGxheWluZygpCiAgICAgICAgIyBpcyB0aGUgcmVhbCBjaGVjazsgdGhlIHRyeS9leGNlcHQgY292ZXJzIHBsYXliYWNrIGVuZGluZyBpbiBiZXR3ZWVuLgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgbm90IHNlbGYuaXNQbGF5aW5nKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgX2Fia19wbGF5aW5nX2ZpbGUgPSBzZWxmLmdldFBsYXlpbmdGaWxlKCkKICAgICAgICBleGNlcHQgUnVudGltZUVycm9yOgogICAgICAgICAgICByZXR1cm4KICAgICAgICBpZiB4Ym1jLmdldENvbmRWaXNpYmlsaXR5KCdQbGF5ZXIuSGFzTWVkaWEnKToKICAgICAgICAgICAgbHAudmlkZW8gPSBfYWJrX3BsYXlpbmdfZmlsZQo='
 
 # ── TinyPPI: Arabic-capable overlay font (by ABUKARIM TOOLS) ──
 # TinyPPI's install_fonts() injects font23_narrow/font32 into the active skin's
@@ -233,53 +208,6 @@ PATCHES = [
         'fallback_pattern': r'    def poller\(self\):\n[\s\S]*?\n(?=    mutex_lockname)',
         'fallback_repl': (lambda _b: (lambda m: base64.b64decode(_b).decode('utf-8') + '\n'))(_TMDBH_POLLER_NEW_B64),
     },
-    # ── TMDbHelper – reuselanguageinvoker=true (fixes the real AM6B UI freeze) ──
-    # Root cause (kodi.log): with reuselanguageinvoker=false every script.py call spawns a
-    # BRAND-NEW Python interpreter. Under Py3.14 on AM6B the teardown+respawn serializes
-    # badly — between one playback ending and the next play action's script starting there
-    # is a dead-air gap of up to ~38s on the main GUI thread (seen as a long silence then
-    # "Skipped N duplicate messages" + a fresh CPythonInvoker). Flipping this flag gives
-    # TMDbHelper ONE persistent, serialized interpreter — no per-play respawn, no gap.
-    # Kodi reads the flag at addon-load, so it takes effect next restart; patch_watchdog
-    # re-applies it after any TMDbHelper update rewrites addon.xml.
-    {
-        'addon_id': 'plugin.video.themoviedb.helper',
-        'rel_path': 'addon.xml',
-        'old': '  <reuselanguageinvoker>false</reuselanguageinvoker>',
-        'new': '  <reuselanguageinvoker>true</reuselanguageinvoker>',
-        'description': 'TMDbHelper addon.xml - reuselanguageinvoker=true (serialize interpreter; stops Py3.14 per-play interpreter-respawn UI freeze on AM6B)',
-        'already_patched_check': '<reuselanguageinvoker>true</reuselanguageinvoker>',
-        'fallback_pattern': r'<reuselanguageinvoker>\s*false\s*</reuselanguageinvoker>',
-        'fallback_repl': '<reuselanguageinvoker>true</reuselanguageinvoker>',
-    },
-    # ── TMDbHelper – pin max_threads=3 in addon_data settings.xml (caps concurrent CPythonInvoker threads) ──
-    {
-        'addon_id': 'plugin.video.themoviedb.helper',
-        'base': 'addon_data',
-        'rel_path': 'settings.xml',
-        'old': '', 'new': '',
-        'regex_only': True,
-        'not_found_ok': True,
-        'fallback_pattern': r'<setting id="max_threads">[^<]*</setting>',
-        'fallback_repl': '<setting id="max_threads">3</setting>',
-        'count': 0,
-        'description': 'TMDbHelper - pin max_threads=3 (cap concurrent CPythonInvoker threads to reduce thread storm on AM6B)',
-        'already_patched_check': '<setting id="max_threads">3</setting>',
-    },
-    # ── TMDbHelper – add max_threads=3 if the key is missing from settings.xml (first-run schema gap) ──
-    {
-        'addon_id': 'plugin.video.themoviedb.helper',
-        'base': 'addon_data',
-        'rel_path': 'settings.xml',
-        'old': '', 'new': '',
-        'regex_only': True,
-        'not_found_ok': True,
-        'fallback_pattern': r'(</settings>)',
-        'fallback_repl': '    <setting id="max_threads">3</setting>\n\\1',
-        'count': 1,
-        'description': 'TMDbHelper - insert max_threads=3 before </settings> when key absent',
-        'already_patched_check': '<setting id="max_threads">',
-    },
     # ── TMDbHelper – fall back to the USA certification (MPAA) ──
     # Applies to movies AND tv: release_dates (movies) and content_ratings (tv) are both
     # stored in the one 'certification' table keyed by iso_country, and this single query
@@ -300,75 +228,6 @@ PATCHES = [
             'conditions = \'parent_id=? AND iso_country IN (?, \"US\") AND name IS NOT NULL'
         ),
     },
-    # ── TMDbHelper – Trakt stats dict guard (fixes Cron Thread dying at startup) ──
-    # Root cause (kodi.log): cronjob.py _on_startup() → _do_trakt_authorization() →
-    # get_stats() → trakt_stats.py:81 iterates base_v.items() over every top-level value
-    # of the Trakt users/me/stats payload. Trakt now returns plain ints there, so the
-    # comprehension raises AttributeError and the entire Cron Thread aborts — no periodic
-    # Trakt sync, no cache housekeeping for the rest of the session.
-    {
-        'addon_id': 'plugin.video.themoviedb.helper',
-        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py'),
-        'old': base64.b64decode(_TMDBH_TRAKTSTATS_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TMDBH_TRAKTSTATS_NEW_B64).decode('utf-8'),
-        'description': 'TMDbHelper trakt_stats.py - skip non-dict values in Trakt stats (int payload killed the Cron Thread at startup)',
-        'already_patched_check': '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'for base_k, base_v in self\.response_json\.items\(\)\r?\n(\s*)for item_k, item_v in base_v\.items\(\)',
-        'fallback_repl': (
-            lambda m: (
-                '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --\n'
-                + m.group(1) + 'for base_k, base_v in self.response_json.items()\n'
-                + m.group(1) + 'if isinstance(base_v, dict)\n'
-                + m.group(1) + 'for item_k, item_v in base_v.items()'
-            )
-        ),
-    },
-    # ── TMDbHelper – guard get_playingitem() against a torn-down player ──
-    {
-        'addon_id': 'plugin.video.themoviedb.helper',
-        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py'),
-        'old': base64.b64decode(_TMDBH_PLAYERGUARD_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TMDBH_PLAYERGUARD_NEW_B64).decode('utf-8'),
-        'description': 'TMDbHelper player.py - stop RuntimeError/thread leak when onAVChange fires after playback ends',
-        'already_patched_check': '# -- Dead-player guard (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'( *)if self\.getPlayingFile\(\) and self\.getPlayingFile\(\)\.endswith\(.dummy\.mp4.\):',
-        'fallback_repl': (
-            lambda m: (
-                m.group(1) + '# -- Dead-player guard (by ABUKARIM TOOLS) --\n'
-                + m.group(1) + 'try:\n'
-                + m.group(1) + '    if not self.isPlaying():\n'
-                + m.group(1) + '        return\n'
-                + m.group(1) + '    playing_file = self.getPlayingFile()\n'
-                + m.group(1) + 'except RuntimeError:\n'
-                + m.group(1) + '    return\n'
-                + m.group(1) + "if playing_file and playing_file.endswith('dummy.mp4'):"
-            )
-        ),
-    },
-    # ── Last Played – guard onPlayBackStarted() against a torn-down player ──
-    {
-        'addon_id': 'plugin.video.last_played',
-        'rel_path': 'default.py',
-        'old': base64.b64decode(_LASTPLAYED_GUARD_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_LASTPLAYED_GUARD_NEW_B64).decode('utf-8'),
-        'description': 'Last Played default.py - stop RuntimeError/thread leak when playback ends during onPlayBackStarted',
-        'already_patched_check': '# -- Dead-player guard (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'( *)if xbmc\.getCondVisibility\(.Player\.HasMedia.\):\n( *)lp\.video = self\.getPlayingFile\(\)',
-        'fallback_repl': (
-            lambda m: (
-                m.group(1) + '# -- Dead-player guard (by ABUKARIM TOOLS) --\n'
-                + m.group(1) + 'try:\n'
-                + m.group(1) + '    if not self.isPlaying():\n'
-                + m.group(1) + '        return\n'
-                + m.group(1) + '    _abk_playing_file = self.getPlayingFile()\n'
-                + m.group(1) + 'except RuntimeError:\n'
-                + m.group(1) + '    return\n'
-                + m.group(0).split('\n')[0] + '\n'
-                + m.group(2) + 'lp.video = _abk_playing_file'
-            )
-        ),
-    },
-
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
     {
         'addon_id': 'plugin.video.redlight',
@@ -608,50 +467,89 @@ def _apply_patch(patch):
 
 
 # ---------------------------------------------------------------------------
-# Selectable patches
+# Toggle groups
 # ---------------------------------------------------------------------------
-# Each patch can be individually enabled/disabled by the user. The choice is
-# persisted to addon_data as a JSON list of DISABLED patch keys (storing the
-# disabled set means new patches added in a future build default to ENABLED
-# without the user having to re-tick them). Every code path that applies
-# patches — the "Apply Patches" menu item, the selectable dialog, and the
-# auto-patch watchdog — funnels through _select(), which filters out disabled
-# keys, so a patch the user turned off stays off everywhere, including after an
-# add-on update re-triggers the watchdog.
+# Patches are grouped into a small number of user-facing TOGGLES. The user
+# picks which toggles to apply from a checklist shown at the start of the
+# "Apply Patches" run (the toggle step is a mandatory pre-step to patching —
+# there is no separate menu item). Their choice is persisted to addon_data as a
+# JSON list of DISABLED toggle ids (storing the disabled set means a toggle
+# added in a future build defaults to ENABLED without the user re-ticking it).
+#
+# Each patch is mapped to a toggle by (addon_id, rel_path) in _TOGGLE_OF below.
+# Patches NOT in that map have no toggle: they would be ALWAYS-ON fixes that
+# apply on every run regardless of the checklist and are never shown as toggles.
+# (Currently every patch belongs to a toggle, so there are none; the mechanism
+# stays so a future always-on fix can be added just by omitting it from the map.)
+#
+# Every apply path — "Apply Patches" and the auto-patch watchdog — funnels
+# through _select(), which drops patches whose toggle is disabled, so a toggle
+# the user turned off stays off everywhere, including after an add-on update
+# re-triggers the watchdog.
 
 import json
 
+# Ordered list of (toggle_id, display label). Order = order shown in the dialog.
+TOGGLE_GROUPS = [
+    ('seren_trakt_auth', 'Seren Trakt Auth'),
+    ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
+    ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
+    ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
+    ('tinyppi_font',     'TinyPPI: Fix Font'),
+    ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
+]
+_TOGGLE_LABELS = dict(TOGGLE_GROUPS)
+
+# (addon_id, rel_path) -> toggle_id. rel_path uses os.path.join so it matches
+# the same construction in PATCHES on every platform. Any patch not listed here
+# is always-on (no toggle).
+_TOGGLE_OF = {
+    # Seren Trakt Auth — every Seren entry
+    ('plugin.video.seren',
+     os.path.join('resources', 'lib', 'qr_utils.py')):                       'seren_trakt_auth',
+    ('plugin.video.seren',
+     os.path.join('resources', 'skins', 'Default', '1080i', 'trakt_auth_qr.xml')): 'seren_trakt_auth',
+    ('plugin.video.seren',
+     os.path.join('resources', 'lib', 'indexers', 'trakt.py')):              'seren_trakt_auth',
+    ('plugin.video.seren',
+     os.path.join('resources', 'lib', 'common', 'maintenance.py')):          'seren_trakt_auth',
+    # TMDbHelper Trakt Auth QR — the three QR entries
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'qr_utils.py')):      'tmdbh_trakt_auth',
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'skins', 'Default', '1080i', 'trakt_auth_qr.xml')):        'tmdbh_trakt_auth',
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'authenticator.py')): 'tmdbh_trakt_auth',
+    # MPAA for KSA — the certification fallback
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database',
+                  'basemeta_factories', 'concrete_classes', 'info.py')):     'tmdbh_mpaa_ksa',
+    # TinyPPI: Run on non-CE
+    ('script.tinyppi',
+     os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',
+    # TinyPPI: Fix Font
+    ('script.tinyppi',
+     os.path.join('resources', 'lib', 'ui', 'fonts.py')):                    'tinyppi_font',
+    # RedLight: Fix Sound & Theme — all three RedLight entries
+    ('plugin.video.redlight',
+     os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'redlight_fixes',
+    ('plugin.video.redlight',
+     os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml')): 'redlight_fixes',
+    ('plugin.video.redlight',
+     os.path.join('resources', 'lib', 'modules', 'sources.py')):             'redlight_fixes',
+}
+
 _SELECTION_FILE = os.path.join(
-    ADDON_DATA, 'plugin.program.abukarimtools', 'patch_selection.json')
+    ADDON_DATA, 'plugin.program.abukarimtools', 'patch_toggles.json')
 
 
-def _dup_rel_paths():
-    """rel_paths that more than one patch targets — these need a sentinel in
-    their key to stay unique (e.g. Seren maintenance.py has a read-UTF8 and a
-    write-UTF8 entry; settings.xml has two max_threads entries)."""
-    seen  = {}
-    for p in PATCHES:
-        rp = (p['addon_id'], p.get('rel_path', ''))
-        seen[rp] = seen.get(rp, 0) + 1
-    return {rp for rp, n in seen.items() if n > 1}
-
-
-def _patch_key(patch):
-    """Stable identifier for a patch, independent of its position in PATCHES.
-
-    Built from addon_id + rel_path so it survives description edits and
-    reordering. When several entries target the SAME file (Seren maintenance.py,
-    the two settings.xml max_threads entries), rel_path alone isn't unique, so
-    the already_patched_check sentinel is appended to tell them apart.
-    """
-    key = '%s::%s' % (patch['addon_id'], patch.get('rel_path', ''))
-    if (patch['addon_id'], patch.get('rel_path', '')) in _dup_rel_paths():
-        key += '::' + (patch.get('already_patched_check') or '')
-    return key
+def _toggle_of(patch):
+    """Return the toggle id for a patch, or None if it is an always-on fix."""
+    return _TOGGLE_OF.get((patch['addon_id'], patch.get('rel_path', '')))
 
 
 def _load_disabled():
-    """Return the set of disabled patch keys (empty set on any problem)."""
+    """Return the set of disabled TOGGLE ids (empty set on any problem)."""
     try:
         with open(_SELECTION_FILE, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -662,34 +560,36 @@ def _load_disabled():
     return set()
 
 
-def _save_disabled(disabled_keys):
-    """Persist the disabled-key set. Best-effort; never raises."""
+def _save_disabled(disabled_toggles):
+    """Persist the disabled-toggle set. Best-effort; never raises."""
     try:
         os.makedirs(os.path.dirname(_SELECTION_FILE), exist_ok=True)
         with open(_SELECTION_FILE, 'w', encoding='utf-8') as f:
-            json.dump(sorted(disabled_keys), f, indent=2)
+            json.dump(sorted(disabled_toggles), f, indent=2)
         return True
     except Exception as e:
-        _log('Could not save patch selection: %s' % e, xbmc.LOGWARNING)
+        _log('Could not save patch toggles: %s' % e, xbmc.LOGWARNING)
         return False
 
 
 def _select(group=None, addon_ids=None, respect_selection=True):
-    """Return the patch entries for a group, optionally narrowed to addon ids.
+    """Return the patch entries to apply, optionally narrowed to addon ids.
 
-    When respect_selection is True (the default), patches the user has disabled
-    are filtered out. Pass respect_selection=False to get the full set
-    regardless of the saved selection (used by the selectable dialog itself,
-    which needs to show disabled entries so they can be re-enabled).
+    Always-on fixes (no toggle) are always included. Grouped patches are
+    included only when their toggle is enabled. When respect_selection is False
+    the toggle filter is skipped (the full set is returned); the `group`
+    parameter is kept for signature compatibility but is unused now that
+    grouping is derived from _TOGGLE_OF rather than a per-entry 'group' key.
     """
-    selected = [p for p in PATCHES if p.get('group') == group]
+    selected = list(PATCHES)
     if addon_ids:
         wanted   = set(addon_ids)
         selected = [p for p in selected if p['addon_id'] in wanted]
     if respect_selection:
         disabled = _load_disabled()
         if disabled:
-            selected = [p for p in selected if _patch_key(p) not in disabled]
+            selected = [p for p in selected
+                        if _toggle_of(p) is None or _toggle_of(p) not in disabled]
     return selected
 
 
@@ -744,100 +644,79 @@ def apply_set(group=None, addon_ids=None):
     return succeeded, failed, changed, results
 
 
-def run(group=None, addon_ids=None):
-    """Entry point called from default.py router.
+def _choose_toggles():
+    """Show the toggle checklist and persist the choice.
 
-    group=None      -> apply the standard (ungrouped) patch set.
-    group='x'       -> apply only patches tagged with that group.
-    addon_ids=[...] -> apply only the entries targeting those add-ons.
-
-    The RedLight menu item used to select by group, which quietly meant its
-    patches were skipped by "Apply Patches" and by the update watchdog - they
-    only ran if you remembered the second menu item.  RedLight entries are now
-    part of the default set (absent add-ons are filtered out anyway), and this
-    menu item just narrows the same set to RedLight for a one-off re-apply.
+    Returns True to proceed with patching, False if the user cancelled. Only
+    toggles whose add-on is installed are shown, so the list never offers a
+    group that can't do anything. The checklist is pre-ticked from the saved
+    state (a toggle with no saved state defaults to ON).
     """
-    succeeded, failed, _changed, results = apply_set(group, addon_ids=addon_ids)
-
-    # Build summary dialog
-    lines = []
-    for ok, msg in results:
-        icon   = '[COLOR lime]✔[/COLOR]' if ok else '[COLOR red]✘[/COLOR]'
-        # strip the leading [addon_id] prefix for display
-        display = re.sub(r'^\[.*?\]\s*', '', msg)
-        lines.append('%s  %s' % (icon, display))
-
-    summary = '[B]Patch Results[/B][CR][CR]' + '[CR]'.join(lines)
-    summary += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
-
-    DIALOG.ok(ADDON_NAME, summary)
-
-
-# ---------------------------------------------------------------------------
-def run_selectable(group=None):
-    """Menu entry point: let the user tick which patches to apply.
-
-    Shows a multiselect pre-ticked from the saved selection (a brand-new patch
-    with no saved state defaults to ticked/enabled). Applies only the ticked
-    entries, and persists the choice so every other path — "Apply Patches" and
-    the auto-patch watchdog — honours the same on/off state via _select().
-    """
-    entries = _select(group, respect_selection=False)
-    if not entries:
-        DIALOG.ok(ADDON_NAME, 'No patches are defined.')
-        return
-
     disabled = _load_disabled()
 
-    # Build display labels: "[addon] description", grouped visually by addon.
-    labels      = []
-    preselected = []
-    for i, patch in enumerate(entries):
-        short_addon = patch['addon_id'].split('.')[-1]
-        desc        = patch.get('description', patch.get('rel_path', '?'))
-        labels.append('[%s] %s' % (short_addon, desc))
-        if _patch_key(patch) not in disabled:
-            preselected.append(i)
+    # Which add-ons are actually present, so we only show usable toggles.
+    present = set()
+    for patch in PATCHES:
+        try:
+            import xbmcaddon
+            xbmcaddon.Addon(patch['addon_id'])
+            present.add(patch['addon_id'])
+        except Exception:
+            if os.path.isdir(os.path.join(ADDONS_DIR, patch['addon_id'])):
+                present.add(patch['addon_id'])
+
+    toggle_has_installed = set()
+    for patch in PATCHES:
+        tid = _toggle_of(patch)
+        if tid and patch['addon_id'] in present:
+            toggle_has_installed.add(tid)
+
+    shown = [(tid, label) for tid, label in TOGGLE_GROUPS
+             if tid in toggle_has_installed]
+
+    # No installed add-on maps to any toggle: nothing to choose, just proceed
+    # (the always-on fixes and any present grouped patches still apply).
+    if not shown:
+        return True
+
+    labels      = [label for _tid, label in shown]
+    preselect   = [i for i, (tid, _l) in enumerate(shown) if tid not in disabled]
 
     chosen = DIALOG.multiselect(
-        '%s – select patches to apply' % ADDON_NAME,
-        labels, preselect=preselected)
+        '%s – choose what to patch' % ADDON_NAME, labels, preselect=preselect)
 
-    # Cancelled: leave the saved selection untouched, apply nothing.
+    # Cancelled -> abort the whole run, leave saved toggles untouched.
     if chosen is None:
-        return
+        return False
 
-    chosen_set = set(chosen)
-
-    # Recompute the disabled set from what the user left UN-ticked, so turning a
-    # patch back on removes it from the disabled file.
-    new_disabled = {
-        _patch_key(patch)
-        for i, patch in enumerate(entries)
-        if i not in chosen_set
-    }
-    _save_disabled(new_disabled)
-
-    if not chosen_set:
-        DIALOG.ok(ADDON_NAME, 'No patches selected – nothing was applied.')
-        return
-
-    # Apply only the ticked entries. Reuse _apply_patch directly so we honour
-    # the exact selection the user just made (not the on-disk file, which we
-    # only just wrote and _select would read back identically anyway).
-    results   = []
-    succeeded = 0
-    failed    = 0
-    for i, patch in enumerate(entries):
-        if i not in chosen_set:
-            continue
-        ok, msg = _apply_patch(patch)
-        _log(msg)
-        results.append((ok, msg))
-        if ok:
-            succeeded += 1
+    chosen_set   = set(chosen)
+    # Rebuild the disabled set: any SHOWN toggle left un-ticked is disabled.
+    # Toggles not shown (add-on absent) keep their previous state so a temporary
+    # uninstall doesn't silently flip them.
+    new_disabled = set(disabled)
+    for i, (tid, _l) in enumerate(shown):
+        if i in chosen_set:
+            new_disabled.discard(tid)
         else:
-            failed += 1
+            new_disabled.add(tid)
+    _save_disabled(new_disabled)
+    return True
+
+
+def run(group=None, addon_ids=None):
+    """Entry point called from default.py router ("Apply Patches").
+
+    The toggle checklist is a MANDATORY pre-step: it always runs first, and the
+    user's choice decides which grouped patches get applied. Always-on stability
+    fixes apply regardless. Cancelling the checklist aborts the run entirely.
+
+    addon_ids=[...] still narrows to specific add-ons (used by callers that want
+    a one-off re-apply); the toggle filter in _select() applies on top of it.
+    """
+    if not _choose_toggles():
+        return  # user cancelled the checklist
+
+    succeeded, failed, _changed, results = apply_set(group, addon_ids=addon_ids)
 
     lines = []
     for ok, msg in results:
@@ -845,9 +724,11 @@ def run_selectable(group=None):
         display = re.sub(r'^\[.*?\]\s*', '', msg)
         lines.append('%s  %s' % (icon, display))
 
+    disabled = _load_disabled()
     summary = '[B]Patch Results[/B][CR][CR]' + '[CR]'.join(lines)
     summary += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
-    if new_disabled:
-        summary += '[CR]%d patch(es) left disabled.' % len(new_disabled)
+    if disabled:
+        off = ', '.join(_TOGGLE_LABELS.get(t, t) for t in sorted(disabled))
+        summary += '[CR]Disabled: %s' % off
 
     DIALOG.ok(ADDON_NAME, summary)
