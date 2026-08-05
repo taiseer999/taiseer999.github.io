@@ -9,7 +9,7 @@ msgstr ""
 
 msgctxt "#32000"
 msgid "Display output"
-msgstr "مخرج العرض"
+msgstr "إخراج العرض"
 
 msgctxt "#32001"
 msgid "Video stream"
@@ -25,7 +25,7 @@ msgstr "إعدادات TinyPPI"
 
 msgctxt "#32005"
 msgid "Decoder"
-msgstr "المفكِّك"
+msgstr "فك الترميز"
 
 msgctxt "#32007"
 msgid "Processing"
@@ -37,7 +37,7 @@ msgstr "سمات 720p غير مدعومة"
 
 msgctxt "#32013"
 msgid "Playback time"
-msgstr "زمن التشغيل"
+msgstr "وقت التشغيل"
 
 msgctxt "#32014"
 msgid "Processor"
@@ -69,7 +69,7 @@ msgstr "عرض اسم الملف الجاري تشغيله في TinyPPI."
 
 msgctxt "#32022"
 msgid "Video queue / data"
-msgstr "طابور / بيانات الفيديو"
+msgstr "قائمة انتظار / بيانات الفيديو"
 
 msgctxt "#32023"
 msgid "Pixel format"
@@ -81,7 +81,7 @@ msgstr "نسبة العرض إلى الارتفاع"
 
 msgctxt "#32025"
 msgid "Audio queue / data"
-msgstr "طابور / بيانات الصوت"
+msgstr "قائمة انتظار / بيانات الصوت"
 
 msgctxt "#32027"
 msgid "Output mode"
@@ -213,7 +213,7 @@ msgstr "لون عناوين الأقسام."
 
 msgctxt "#32107"
 msgid "Description"
-msgstr "الوصف
+msgstr "الوصف"
 
 msgctxt "#32108"
 msgid "Color of the label descriptions."
@@ -221,7 +221,7 @@ msgstr "لون أوصاف التسميات."
 
 msgctxt "#32109"
 msgid "Output"
-msgstr "المخرج"
+msgstr "الإخراج"
 
 msgctxt "#32110"
 msgid "Color of the output values."
