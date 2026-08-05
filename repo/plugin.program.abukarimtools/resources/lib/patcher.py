@@ -352,6 +352,56 @@ PATCHES = [
         'inject_source': os.path.join('resources', 'tinyppi_codecs', 'HDR10Plus.png'),
         'description': 'TinyPPI codecs - replace HDR10Plus.png badge',
     },
+
+    # ── TinyPPI – replace the Dolby audio codec badge graphics ──
+    # Same binary texture-swap mechanism as the HDR badges above (inject_source
+    # + replace + byte-compare idempotency). Five Dolby audio badges shipped as
+    # real files under resources/tinyppi_codecs/ and written verbatim.
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_Digital.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'Dolby_Digital.png'),
+        'description': 'TinyPPI codecs - replace Dolby_Digital.png badge',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_Digital_Plus.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'Dolby_Digital_Plus.png'),
+        'description': 'TinyPPI codecs - replace Dolby_Digital_Plus.png badge',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_Digital_Plus_Atmos.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'Dolby_Digital_Plus_Atmos.png'),
+        'description': 'TinyPPI codecs - replace Dolby_Digital_Plus_Atmos.png badge',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'Dolby_TrueHD.png'),
+        'description': 'TinyPPI codecs - replace Dolby_TrueHD.png badge',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD_Atmos.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'Dolby_TrueHD_Atmos.png'),
+        'description': 'TinyPPI codecs - replace Dolby_TrueHD_Atmos.png badge',
+    },
 ]
 
 
@@ -557,6 +607,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
+    ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
@@ -598,6 +649,17 @@ _TOGGLE_OF = {
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'HDR10.png')):      'tinyppi_codecs',
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'HDR10Plus.png')):  'tinyppi_codecs',
+    # TinyPPI: Audio Badges — the five Dolby audio badges
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_Digital.png')):             'tinyppi_audio',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_Digital_Plus.png')):        'tinyppi_audio',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_Digital_Plus_Atmos.png')):  'tinyppi_audio',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD.png')):               'tinyppi_audio',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD_Atmos.png')):         'tinyppi_audio',
     # RedLight: Fix Sound & Theme — all three RedLight entries
     ('plugin.video.redlight',
      os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'redlight_fixes',
