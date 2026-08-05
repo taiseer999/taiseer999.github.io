@@ -318,6 +318,40 @@ PATCHES = [
                           '\t\t\t\tkodi_utils.sleep(200)\n'
                           '\t\t\t\t_pw += 200\n'),
     },
+
+    # ── TinyPPI – replace the SDR/HDR10/HDR10+ codec badge graphics ──
+    # Binary texture swap: overwrite the three HDR-badge PNGs in the overlay's
+    # media/codecs folder with ABUKARIM TOOLS artwork. Shipped as real files
+    # under resources/tinyppi_codecs/ (not inline base64) and written verbatim.
+    # 'replace': True overwrites the stock art; the byte-compare in _apply_patch
+    # makes it idempotent (a re-run / watchdog sweep skips once installed).
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'SDR.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'SDR.png'),
+        'description': 'TinyPPI codecs - replace SDR.png badge',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'HDR10.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'HDR10.png'),
+        'description': 'TinyPPI codecs - replace HDR10.png badge',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'HDR10Plus.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_codecs', 'HDR10Plus.png'),
+        'description': 'TinyPPI codecs - replace HDR10Plus.png badge',
+    },
 ]
 
 
@@ -401,16 +435,42 @@ def _apply_patch(patch):
     # inject_file: ينشئ الملف مباشرة قبل أي فحص
     if patch.get('inject_file'):
         b64 = patch.get('inject_content_b64', '')
-        # Binary payloads (e.g. PNG textures) must be written as raw bytes
+        # Binary payloads (e.g. PNG textures) must be written as raw bytes.
+        # Source is either an inline base64 blob (inject_content_b64) or, for
+        # large assets, a file shipped inside this add-on (inject_source, a path
+        # relative to the add-on root) so patcher.py stays readable.
         if patch.get('binary'):
-            already_check = patch.get('already_patched_check')
-            if already_check is None and os.path.isfile(target):
-                # for binary with no sentinel, skip if a non-empty file already exists
-                if os.path.getsize(target) > 0:
+            src_rel = patch.get('inject_source')
+            if src_rel:
+                src_abs = os.path.join(
+                    xbmcvfs.translatePath('special://home/addons/'
+                                          'plugin.program.abukarimtools/'),
+                    src_rel)
+                try:
+                    with open(src_abs, 'rb') as _sf:
+                        payload = _sf.read()
+                except Exception as e:
+                    return False, ('[%s] Source asset missing (%s): %s'
+                                   % (patch['addon_id'], src_rel, e))
+            else:
+                payload = base64.b64decode(b64)
+            # Idempotent replacement: if the target already holds exactly this
+            # payload, skip (so the watchdog doesn't rewrite it every sweep).
+            # 'replace' patches overwrite differing content; without 'replace'
+            # an existing non-empty file is left as-is (create-only behaviour).
+            if os.path.isfile(target):
+                try:
+                    with open(target, 'rb') as _cur:
+                        current = _cur.read()
+                except Exception:
+                    current = None
+                if current == payload:
+                    return True, '[%s] Already present – skipping.' % patch['addon_id']
+                if not patch.get('replace') and current:
                     return True, '[%s] Already present – skipping.' % patch['addon_id']
             os.makedirs(os.path.dirname(target), exist_ok=True)
             with open(target, 'wb') as _bf:
-                _bf.write(base64.b64decode(b64))
+                _bf.write(payload)
             return True, '[%s] File injected OK: %s' % (patch['addon_id'], patch['description'])
         inject_content = base64.b64decode(b64).decode('utf-8') if b64 else patch.get('inject_content', '')
         already_check = patch.get('already_patched_check', '')
@@ -496,6 +556,7 @@ TOGGLE_GROUPS = [
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
     ('tinyppi_font',     'TinyPPI: Fix Font'),
+    ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
@@ -530,6 +591,13 @@ _TOGGLE_OF = {
     # TinyPPI: Fix Font
     ('script.tinyppi',
      os.path.join('resources', 'lib', 'ui', 'fonts.py')):                    'tinyppi_font',
+    # TinyPPI: Codec Badges — the three HDR badge PNGs
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'SDR.png')):        'tinyppi_codecs',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'HDR10.png')):      'tinyppi_codecs',
+    ('script.tinyppi',
+     os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'HDR10Plus.png')):  'tinyppi_codecs',
     # RedLight: Fix Sound & Theme — all three RedLight entries
     ('plugin.video.redlight',
      os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'redlight_fixes',
