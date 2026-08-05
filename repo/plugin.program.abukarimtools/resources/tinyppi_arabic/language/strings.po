@@ -97,7 +97,7 @@ msgstr "منطقة L5 النشطة"
 
 msgctxt "#32032"
 msgid "Player cache"
-msgstr "ذاكرة التخزين المؤقت للمشغّل"
+msgstr "كاش المشغّل"
 
 msgctxt "#32033"
 msgid "N/A"
