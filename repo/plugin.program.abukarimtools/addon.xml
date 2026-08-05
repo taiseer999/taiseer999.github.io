@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="2.3.1"
+       version="2.3.2"
        provider-name="Abukarim">
 
   <requires>
@@ -26,7 +26,21 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.2.3
+    <news>v2.3.2
+- Arabic no longer shows as empty boxes on a fresh install. The main menu and
+  the ABUKARIM wizard menu are plugin directory listings whose font is set by
+  the active skin, not by the add-on; when that skin's font (or Kodi's default
+  fallback arial.ttf) has no Arabic glyphs the labels render as tofu. The
+  add-on now installs an Arabic-capable global fallback font into
+  media/fonts/arial.ttf on boot (and when the menu is first opened, so it works
+  even before a restart), which every skin falls back to - so both menus, the
+  wizard's popups, and any other skin surface become readable at once. Takes
+  effect on the next Kodi start; only rewritten when it actually differs.
+- Fixed the add-on's own portal/repo-select windows: their NotoSans fonts had
+  no Arabic glyphs, so Arabic there was tofu too. Replaced with the
+  Arabic-capable copies the add-on already ships.
+
+v2.2.3
 - Skin installer: skins installed via the portal now register their repository
   origin deterministically (from the chosen Kodi/CoreELEC/Piers repo) instead of
   depending on a cached repo listing, so they show in Add-on browser and receive

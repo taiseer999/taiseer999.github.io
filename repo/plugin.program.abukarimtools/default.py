@@ -59,8 +59,21 @@ def _add_item(label, mode, is_folder=True):
     xbmcplugin.addDirectoryItem(HANDLE, url, li, is_folder)
 
 
+def _ensure_fallback_font():
+    """Self-heal: install the Arabic-capable global fallback font when the menu
+    is opened, so Arabic is readable even if the boot service didn't run (e.g.
+    service disabled, or on the very first open before a restart). Best-effort;
+    a change only takes effect on the next Kodi start."""
+    try:
+        from resources.lib import font_fallback
+        font_fallback.install()
+    except Exception:
+        pass
+
+
 def main_menu():
     from resources.lib.i18n import T
+    _ensure_fallback_font()
     for mode, label_id in MENU:
         _add_item(T(label_id), mode, is_folder=(mode != 'skin_switch'))
     xbmcplugin.setContent(HANDLE, 'files')

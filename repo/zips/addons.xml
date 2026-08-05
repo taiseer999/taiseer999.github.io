@@ -599,7 +599,7 @@ updated YouTube addon URL
     <description lang="tr_TR">The Movie Database (TMDb), topluluk tarafından oluşturulmuş bir film ve TV veritabanıdır. Her bir veri parçası, 2008 yılına dayanan muhteşem topluluğumuz tarafından eklenmiştir. TMDb'nin güçlü uluslararası odağı ve veri genişliği büyük ölçüde benzersizdir ve inanılmaz derecede gurur duyduğumuz bir şeydir. Basitçe söylemek gerekirse, topluluk içinde yaşıyor ve nefes alıyoruz ve bizi farklı kılan da tam olarak bu.</description>
     <description lang="zh_CN">TMDb 是一个由网络社区创建的影视数据库。每一条数据都是由我们令人惊叹的社区添加的，可以追溯到2008年。TMDb 强大的国际关注度和数据广度在很大程度上是无与伦比的，我们对此感到无比自豪。简单地说，我们生活在社区中，呼吸着社区的气息，这正是我们与众不同的原因。</description>
   </extension>
-</addon><addon id="plugin.program.ABUKARIMwizard" name="ABUKARIMwizard Wizard" version="3.9" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
+</addon><addon id="plugin.program.ABUKARIMwizard" name="ABUKARIMwizard Wizard" version="3.9.1" provider-name="Slam, Sarge, Funsterbe, BYB، ABUKARIM">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0.1" />
 	</requires>
@@ -618,7 +618,8 @@ updated YouTube addon URL
 		<website /> 
 		<email />
 		<source />
-		<news>v3.9: Fixed shortcuts/widgets not refreshing on Arctic Fuse 3 - traced to AF3's own Home.xml onload (Action_BuildShortcuts_OnLoad), which already calls script.skinvariables to rebuild on every skin load, but only actually rebuilds if the Shortcuts.RebuildDateTime skin string has changed since it last checked (same mechanism as exiting AF3's shortcuts editor). Patch GUI now bumps that skin string to a fresh timestamp before ReloadSkin(), so the existing rebuild path fires correctly. Harmless no-op on skins that don't use this string
+		<news>v3.9.1: Arabic no longer shows as empty boxes on a fresh install. The wizard Main Menu is a plugin directory listing whose font is set by the active skin, not the wizard; when that skin's font (or Kodi's default fallback arial.ttf) has no Arabic glyphs the labels render as tofu. The wizard now installs an Arabic-capable global fallback font into media/fonts/arial.ttf at startup (and when the menu is opened, so it works even before a restart) - every skin falls back to it, so the menu and the wizard's popups become readable. Self-sufficient: prefers the font shipped by ABUKARIM TOOLS when present, else uses the copy now shipped inside the wizard. Takes effect on the next Kodi start; only rewritten when it actually differs.
+v3.9: Fixed shortcuts/widgets not refreshing on Arctic Fuse 3 - traced to AF3's own Home.xml onload (Action_BuildShortcuts_OnLoad), which already calls script.skinvariables to rebuild on every skin load, but only actually rebuilds if the Shortcuts.RebuildDateTime skin string has changed since it last checked (same mechanism as exiting AF3's shortcuts editor). Patch GUI now bumps that skin string to a fresh timestamp before ReloadSkin(), so the existing rebuild path fires correctly. Harmless no-op on skins that don't use this string
 v3.8: Removed the generated-includes cache-clear entirely. Inspection of Arctic Fuse 3's actual skin source showed script-skinvariables-includes.xml / script-skinviewtypes-includes.xml ship as real, static skin content (viewtype rules, percent-played variables) already correct at install - not a stale cache - so deleting them was destroying working skin files, not refreshing anything. Patch GUI now only extracts the patch zip and calls ReloadSkin(); any regeneration need is a packaging concern for the GUI patch zip itself, not something the wizard should force
 v3.7: Reverted the v3.6 script.skinvariables/skinviewtypes cache-delete - that addon only rebuilds when its own source template hash changes, not because its output file is missing, so deleting it was actively breaking Arctic Fuse 3 (missing includes/parse errors) until manually fixed via the shortcuts editor. Only the script.skinshortcuts cache-clear (confirmed safe) remains
 v3.6: Patch GUI's generated-includes cache clear now also covers script.skinvariables (script-skinvariables-includes.xml, script-skinviewtypes-includes.xml) in addition to script.skinshortcuts, since Arctic Fuse 3 uses skinvariables rather than skinshortcuts for its menu/widgets
@@ -634,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.3.1" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.3.2" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -658,7 +659,21 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.2.3
+    <news>v2.3.2
+- Arabic no longer shows as empty boxes on a fresh install. The main menu and
+  the ABUKARIM wizard menu are plugin directory listings whose font is set by
+  the active skin, not by the add-on; when that skin's font (or Kodi's default
+  fallback arial.ttf) has no Arabic glyphs the labels render as tofu. The
+  add-on now installs an Arabic-capable global fallback font into
+  media/fonts/arial.ttf on boot (and when the menu is first opened, so it works
+  even before a restart), which every skin falls back to - so both menus, the
+  wizard's popups, and any other skin surface become readable at once. Takes
+  effect on the next Kodi start; only rewritten when it actually differs.
+- Fixed the add-on's own portal/repo-select windows: their NotoSans fonts had
+  no Arabic glyphs, so Arabic there was tofu too. Replaced with the
+  Arabic-capable copies the add-on already ships.
+
+v2.2.3
 - Skin installer: skins installed via the portal now register their repository
   origin deterministically (from the chosen Kodi/CoreELEC/Piers repo) instead of
   depending on a cached repo listing, so they show in Add-on browser and receive

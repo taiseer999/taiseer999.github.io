@@ -671,6 +671,16 @@ def main():
         _log('autostart cleanup crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
+    # Make Arabic readable in every skin (including plugin directory listings
+    # this add-on can't otherwise control) by installing an Arabic-capable
+    # global fallback font. Best-effort and fully fenced, like the chore above.
+    try:
+        from resources.lib import font_fallback
+        font_fallback.install()
+    except Exception:
+        _log('Fallback font install crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # Self-trigger: arm first-run whenever the shipped build.id has no
     # matching COMPLETED marker (DONE_FILE). This covers both a fresh build
     # apply and a previous run that was interrupted (crash / power-cycle)

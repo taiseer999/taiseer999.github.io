@@ -35,6 +35,11 @@ def router(paramstring):
     xbmcplugin.setContent(HANDLE, 'files')
 
     if mode is None:
+        try:
+            from .font_fallback import install as _install_fallback_font
+            _install_fallback_font()
+        except Exception:
+            pass
         main_menu()
     
     elif mode == 1:

@@ -171,6 +171,14 @@ class Startup:
                 setting_set('notifiedupdate', str(UPDATE_VERSION))
     
     def run_startup(self):
+        # Make Arabic readable in the wizard menu (and every skin surface) by
+        # installing an Arabic-capable global fallback font. Best-effort and
+        # fully fenced - must never stop startup. Takes effect next Kodi start.
+        try:
+            from .font_fallback import install as _install_fallback_font
+            _install_fallback_font()
+        except Exception:
+            pass
         # Save-items multiselect no longer auto-pops at startup;
         # the same options remain available in the addon Settings.
         if setting('firstrun') == 'true':
