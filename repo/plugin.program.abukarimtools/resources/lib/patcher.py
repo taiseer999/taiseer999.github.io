@@ -30,6 +30,8 @@ _TMDBH_POLLER_NEW_B64 = 'ICAgIGRlZiBwb2xsZXIoc2VsZik6CgogICAgICAgICMgLS0gVE1EYkh
 # is 'SA', and TMDb carries almost no Saudi certifications, so mpaa came back empty for
 # nearly every movie and show. TMDbHelper already caches EVERY country's certification
 # in the same table, so the US value is present locally - only the WHERE clause hid it.
+_TMDBH_TRAKTSTATS_OLD_B64 = 'ICAgICAgICAgICAgZm9yIGJhc2VfaywgYmFzZV92IGluIHNlbGYucmVzcG9uc2VfanNvbi5pdGVtcygpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
+_TMDBH_TRAKTSTATS_NEW_B64 = 'ICAgICAgICAgICAgIyAtLSBUTURiSGVscGVyIFRyYWt0IHN0YXRzIGRpY3QgZ3VhcmQgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgICAgICAgICBmb3IgYmFzZV9rLCBiYXNlX3YgaW4gc2VsZi5yZXNwb25zZV9qc29uLml0ZW1zKCkKICAgICAgICAgICAgaWYgaXNpbnN0YW5jZShiYXNlX3YsIGRpY3QpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
 _TMDBH_CERTFALLBACK_OLD_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpOgogICAgdGFibGUgPSAnY2VydGlmaWNhdGlvbicKICAgIGtleXMgPSB0dXBsZShDRVJUSUZJQ0FUSU9OX0NPTFVNTlMua2V5cygpKQogICAgY29uZGl0aW9ucyA9ICdwYXJlbnRfaWQ9PyBBTkQgaXNvX2NvdW50cnk9PyBBTkQgbmFtZSBJUyBOT1QgTlVMTCBBTkQgbmFtZSAhPSAiIiBPUkRFUiBCWSBJRk5VTEwocmVsZWFzZV9kYXRlLCAiOTk5OS05OS05OSIpIEFTQyBMSU1JVCAxJyAgIyBXSEVSRSBjb25kaXRpb25zCiAgICBjb25mbGljdF9jb25zdHJhaW50ID0gJ2lzb19jb3VudHJ5LCBpc29fbGFuZ3VhZ2UsIHJlbGVhc2VfZGF0ZSwgcmVsZWFzZV90eXBlLCBwYXJlbnRfaWQnCgogICAgQHByb3BlcnR5CiAgICBkZWYgdmFsdWVzKHNlbGYpOiAgIyBXSEVSRSBjb25kaXRpb25zIHZhbHVlcyBmb3IgPwogICAgICAgIHJldHVybiAoc2VsZi5wYXJlbnRfaWQsIHNlbGYuY29tbW9uX2FwaXMudG1kYl9hcGkuaXNvX2NvdW50cnkpCg=='
 _TMDBH_CERTFALLBACK_NEW_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpOgogICAgIyAtLSBVU0EgY2VydGlmaWNhdGlvbiBmYWxsYmFjayAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiAgICB0YWJsZSA9ICdjZXJ0aWZpY2F0aW9uJwogICAga2V5cyA9IHR1cGxlKENFUlRJRklDQVRJT05fQ09MVU1OUy5rZXlzKCkpCiAgICBjb25kaXRpb25zID0gJ3BhcmVudF9pZD0/IEFORCBpc29fY291bnRyeSBJTiAoPywgIlVTIikgQU5EIG5hbWUgSVMgTk9UIE5VTEwgQU5EIG5hbWUgIT0gIiIgT1JERVIgQlkgaXNvX2NvdW50cnk9PyBERVNDLCBJRk5VTEwocmVsZWFzZV9kYXRlLCAiOTk5OS05OS05OSIpIEFTQyBMSU1JVCAxJyAgIyBXSEVSRSBjb25kaXRpb25zCiAgICBjb25mbGljdF9jb25zdHJhaW50ID0gJ2lzb19jb3VudHJ5LCBpc29fbGFuZ3VhZ2UsIHJlbGVhc2VfZGF0ZSwgcmVsZWFzZV90eXBlLCBwYXJlbnRfaWQnCgogICAgQHByb3BlcnR5CiAgICBkZWYgdmFsdWVzKHNlbGYpOiAgIyBXSEVSRSBjb25kaXRpb25zIHZhbHVlcyBmb3IgPwogICAgICAgIGlzb19jb3VudHJ5ID0gc2VsZi5jb21tb25fYXBpcy50bWRiX2FwaS5pc29fY291bnRyeQogICAgICAgIHJldHVybiAoc2VsZi5wYXJlbnRfaWQsIGlzb19jb3VudHJ5LCBpc29fY291bnRyeSkK'
 
@@ -226,6 +228,29 @@ PATCHES = [
         'fallback_pattern': r"conditions = 'parent_id=\? AND iso_country=\? AND name IS NOT NULL",
         'fallback_repl': (
             'conditions = \'parent_id=? AND iso_country IN (?, \"US\") AND name IS NOT NULL'
+        ),
+    },
+    # ── TMDbHelper – Trakt stats dict guard (fixes Cron Thread dying + ~40s freeze) ──
+    # Root cause (kodi.log): cronjob.py _do_trakt_authorization() -> get_stats() ->
+    # trakt_stats.py get_trakt_stats() iterates base_v.items() over every top-level value
+    # of the Trakt users/me/stats payload. Trakt returns plain ints there, so the
+    # comprehension raises AttributeError: 'int' object has no attribute 'items', the
+    # Cron Thread aborts, and Kodi stalls for ~30-40s. Guard skips non-dict values.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py'),
+        'old': base64.b64decode(_TMDBH_TRAKTSTATS_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_TMDBH_TRAKTSTATS_NEW_B64).decode('utf-8'),
+        'description': 'TMDbHelper trakt_stats.py - skip non-dict values in Trakt stats (int payload killed the Cron Thread + caused ~40s freeze)',
+        'already_patched_check': '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'for base_k, base_v in self\.response_json\.items\(\)\r?\n(\s*)for item_k, item_v in base_v\.items\(\)',
+        'fallback_repl': (
+            lambda m: (
+                '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --\n'
+                + m.group(1) + 'for base_k, base_v in self.response_json.items()\n'
+                + m.group(1) + 'if isinstance(base_v, dict)\n'
+                + m.group(1) + 'for item_k, item_v in base_v.items()'
+            )
         ),
     },
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
@@ -634,6 +659,7 @@ TOGGLE_GROUPS = [
     ('seren_trakt_auth', 'Seren Trakt Auth'),
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
+    ('tmdbh_stability',  'TMDbHelper: Stability'),
     ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
@@ -667,6 +693,9 @@ _TOGGLE_OF = {
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database',
                   'basemeta_factories', 'concrete_classes', 'info.py')):     'tmdbh_mpaa_ksa',
+    # TMDbHelper: Stability — Trakt stats dict guard (freeze fix)
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py')): 'tmdbh_stability',
     # TinyPPI: Run on non-CE
     ('script.tinyppi',
      os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',

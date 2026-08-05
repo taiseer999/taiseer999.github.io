@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.4.4" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.4.5" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -659,7 +659,14 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.4.4
+    <news>v2.4.5
+- Restored the TMDbHelper Trakt-stats guard (removed in v2.3.5). kodi.log showed it
+  was the cause of the ~40s UI freeze: Trakt returns a plain int where a dict is
+  expected, trakt_stats.py raises 'int object has no attribute items', the Cron
+  Thread aborts and Kodi stalls. The guard skips non-dict values. Under a new
+  "TMDbHelper: Stability" toggle (on by default).
+
+v2.4.4
 - New patch "PPI Arabic": fully translates TinyPPI's Arabic (ar_sa) - the 38
   untranslated overlay field labels (Display output, Audio codec, Bit depth, etc.)
   are now translated - and removes the trailing colon after every overlay label in
