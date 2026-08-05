@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.3.2" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.3.3" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -659,7 +659,15 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.3.2
+    <news>v2.3.3
+- Patches are now individually selectable. New "Select Patches" menu item (اختيار
+  التعديلات) opens a checklist of every patch; untick any you don't want and only
+  the ticked ones are applied. The choice is remembered and honoured everywhere -
+  "Apply Patches" and the automatic post-update re-patch watchdog both skip patches
+  you've turned off, so a disabled patch stays off even after an add-on updates.
+  New patches added in future builds default to enabled.
+
+v2.3.2
 - Arabic no longer shows as empty boxes on a fresh install. The main menu and
   the ABUKARIM wizard menu are plugin directory listings whose font is set by
   the active skin, not by the add-on; when that skin's font (or Kodi's default

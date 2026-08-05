@@ -434,3 +434,7 @@ msgctxt "#30325"
 msgid "Selected Skin"
 msgstr ""
 
+
+msgctxt "#30326"
+msgid "Select Patches"
+msgstr ""

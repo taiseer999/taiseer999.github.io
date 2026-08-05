@@ -608,12 +608,88 @@ def _apply_patch(patch):
 
 
 # ---------------------------------------------------------------------------
-def _select(group=None, addon_ids=None):
-    """Return the patch entries for a group, optionally narrowed to addon ids."""
+# Selectable patches
+# ---------------------------------------------------------------------------
+# Each patch can be individually enabled/disabled by the user. The choice is
+# persisted to addon_data as a JSON list of DISABLED patch keys (storing the
+# disabled set means new patches added in a future build default to ENABLED
+# without the user having to re-tick them). Every code path that applies
+# patches — the "Apply Patches" menu item, the selectable dialog, and the
+# auto-patch watchdog — funnels through _select(), which filters out disabled
+# keys, so a patch the user turned off stays off everywhere, including after an
+# add-on update re-triggers the watchdog.
+
+import json
+
+_SELECTION_FILE = os.path.join(
+    ADDON_DATA, 'plugin.program.abukarimtools', 'patch_selection.json')
+
+
+def _dup_rel_paths():
+    """rel_paths that more than one patch targets — these need a sentinel in
+    their key to stay unique (e.g. Seren maintenance.py has a read-UTF8 and a
+    write-UTF8 entry; settings.xml has two max_threads entries)."""
+    seen  = {}
+    for p in PATCHES:
+        rp = (p['addon_id'], p.get('rel_path', ''))
+        seen[rp] = seen.get(rp, 0) + 1
+    return {rp for rp, n in seen.items() if n > 1}
+
+
+def _patch_key(patch):
+    """Stable identifier for a patch, independent of its position in PATCHES.
+
+    Built from addon_id + rel_path so it survives description edits and
+    reordering. When several entries target the SAME file (Seren maintenance.py,
+    the two settings.xml max_threads entries), rel_path alone isn't unique, so
+    the already_patched_check sentinel is appended to tell them apart.
+    """
+    key = '%s::%s' % (patch['addon_id'], patch.get('rel_path', ''))
+    if (patch['addon_id'], patch.get('rel_path', '')) in _dup_rel_paths():
+        key += '::' + (patch.get('already_patched_check') or '')
+    return key
+
+
+def _load_disabled():
+    """Return the set of disabled patch keys (empty set on any problem)."""
+    try:
+        with open(_SELECTION_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return set(data)
+    except Exception:
+        pass
+    return set()
+
+
+def _save_disabled(disabled_keys):
+    """Persist the disabled-key set. Best-effort; never raises."""
+    try:
+        os.makedirs(os.path.dirname(_SELECTION_FILE), exist_ok=True)
+        with open(_SELECTION_FILE, 'w', encoding='utf-8') as f:
+            json.dump(sorted(disabled_keys), f, indent=2)
+        return True
+    except Exception as e:
+        _log('Could not save patch selection: %s' % e, xbmc.LOGWARNING)
+        return False
+
+
+def _select(group=None, addon_ids=None, respect_selection=True):
+    """Return the patch entries for a group, optionally narrowed to addon ids.
+
+    When respect_selection is True (the default), patches the user has disabled
+    are filtered out. Pass respect_selection=False to get the full set
+    regardless of the saved selection (used by the selectable dialog itself,
+    which needs to show disabled entries so they can be re-enabled).
+    """
     selected = [p for p in PATCHES if p.get('group') == group]
     if addon_ids:
         wanted   = set(addon_ids)
         selected = [p for p in selected if p['addon_id'] in wanted]
+    if respect_selection:
+        disabled = _load_disabled()
+        if disabled:
+            selected = [p for p in selected if _patch_key(p) not in disabled]
     return selected
 
 
@@ -693,5 +769,85 @@ def run(group=None, addon_ids=None):
 
     summary = '[B]Patch Results[/B][CR][CR]' + '[CR]'.join(lines)
     summary += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
+
+    DIALOG.ok(ADDON_NAME, summary)
+
+
+# ---------------------------------------------------------------------------
+def run_selectable(group=None):
+    """Menu entry point: let the user tick which patches to apply.
+
+    Shows a multiselect pre-ticked from the saved selection (a brand-new patch
+    with no saved state defaults to ticked/enabled). Applies only the ticked
+    entries, and persists the choice so every other path — "Apply Patches" and
+    the auto-patch watchdog — honours the same on/off state via _select().
+    """
+    entries = _select(group, respect_selection=False)
+    if not entries:
+        DIALOG.ok(ADDON_NAME, 'No patches are defined.')
+        return
+
+    disabled = _load_disabled()
+
+    # Build display labels: "[addon] description", grouped visually by addon.
+    labels      = []
+    preselected = []
+    for i, patch in enumerate(entries):
+        short_addon = patch['addon_id'].split('.')[-1]
+        desc        = patch.get('description', patch.get('rel_path', '?'))
+        labels.append('[%s] %s' % (short_addon, desc))
+        if _patch_key(patch) not in disabled:
+            preselected.append(i)
+
+    chosen = DIALOG.multiselect(
+        '%s – select patches to apply' % ADDON_NAME,
+        labels, preselect=preselected)
+
+    # Cancelled: leave the saved selection untouched, apply nothing.
+    if chosen is None:
+        return
+
+    chosen_set = set(chosen)
+
+    # Recompute the disabled set from what the user left UN-ticked, so turning a
+    # patch back on removes it from the disabled file.
+    new_disabled = {
+        _patch_key(patch)
+        for i, patch in enumerate(entries)
+        if i not in chosen_set
+    }
+    _save_disabled(new_disabled)
+
+    if not chosen_set:
+        DIALOG.ok(ADDON_NAME, 'No patches selected – nothing was applied.')
+        return
+
+    # Apply only the ticked entries. Reuse _apply_patch directly so we honour
+    # the exact selection the user just made (not the on-disk file, which we
+    # only just wrote and _select would read back identically anyway).
+    results   = []
+    succeeded = 0
+    failed    = 0
+    for i, patch in enumerate(entries):
+        if i not in chosen_set:
+            continue
+        ok, msg = _apply_patch(patch)
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+        else:
+            failed += 1
+
+    lines = []
+    for ok, msg in results:
+        icon    = '[COLOR lime]\u2714[/COLOR]' if ok else '[COLOR red]\u2718[/COLOR]'
+        display = re.sub(r'^\[.*?\]\s*', '', msg)
+        lines.append('%s  %s' % (icon, display))
+
+    summary = '[B]Patch Results[/B][CR][CR]' + '[CR]'.join(lines)
+    summary += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
+    if new_disabled:
+        summary += '[CR]%d patch(es) left disabled.' % len(new_disabled)
 
     DIALOG.ok(ADDON_NAME, summary)
