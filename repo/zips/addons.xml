@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.3.3" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.4" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
