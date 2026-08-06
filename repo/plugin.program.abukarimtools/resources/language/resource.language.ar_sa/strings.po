@@ -10,7 +10,7 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Run First-Time Setup"
-msgstr "اعداد البيلد بعد التنصيب يدويا"
+msgstr "تشغيل الإعداد لأول مرة"
 
 msgctxt "#30002"
 msgid "Backup/Restore"
@@ -18,7 +18,7 @@ msgstr "نسخ احتياطي / استعادة"
 
 msgctxt "#30003"
 msgid "Skin Selection"
-msgstr "تنصيب skins"
+msgstr "اختيار الواجهة"
 
 msgctxt "#30004"
 msgid "New Build Tools"
@@ -26,11 +26,11 @@ msgstr "أدوات البناء الجديد"
 
 msgctxt "#30005"
 msgid "Apply Patches"
-msgstr "تطبيق التعديلات"
+msgstr "تطبيق الترقيعات"
 
 msgctxt "#30006"
 msgid "Auto-Patch On Update: On/Off"
-msgstr "تطبيق التحسينات التلقائي عند التحديث: تشغيل/إيقاف"
+msgstr "الترقيع التلقائي عند التحديث: تشغيل/إيقاف"
 
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
@@ -42,23 +42,39 @@ msgstr "OpenWizard"
 
 msgctxt "#30009"
 msgid "Skin Switcher"
-msgstr "التنقل بين skins"
+msgstr "مبدل الواجهات"
 
 msgctxt "#30010"
 msgid "DPlex Tab On/Off"
-msgstr "DPlex تشغيل/إيقاف تبويب"
+msgstr "تبويب DPlex تشغيل/إيقاف"
 
 msgctxt "#30011"
 msgid "Korean Media Tab On/Off"
-msgstr " تشغيل/إيقاف تبويب المحتوى الكوري"
+msgstr "تبويب المحتوى الكوري تشغيل/إيقاف"
 
 msgctxt "#30012"
 msgid "Total Clean (Cache, Packages, Thumbnails)"
-msgstr "تنظيف (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
+msgstr "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
 
 msgctxt "#30013"
 msgid "Clear Old Thumbnails"
 msgstr "حذف الصور المصغرة القديمة"
+
+msgctxt "#30014"
+msgid "Setup & Install"
+msgstr "الإعداد والتنصيب"
+
+msgctxt "#30015"
+msgid "Patching"
+msgstr "التعديلات والترقيعات"
+
+msgctxt "#30016"
+msgid "Maintenance"
+msgstr "الصيانة والتنظيف"
+
+msgctxt "#30017"
+msgid "Toggles"
+msgstr "التبديلات"
 
 msgctxt "#30050"
 msgid "Run first-time setup now?\\n\\nThis installs binaries, offers a backup restore, then opens the Skin Installer."
@@ -74,7 +90,7 @@ msgstr "إلغاء"
 
 msgctxt "#30053"
 msgid "Apply Patches failed — run it from ABUKARIM TOOLS"
-msgstr "فشل تطبيق التعديلات — شغّله من ABUKARIM TOOLS"
+msgstr "فشل تطبيق الترقيعات — شغّله من ABUKARIM TOOLS"
 
 msgctxt "#30054"
 msgid "Skin Installer could not be started.\\nYou can run it later from ABUKARIM TOOLS."
@@ -209,12 +225,8 @@ msgid "✓ %s installed successfully."
 msgstr "✓ تم تثبيت %s بنجاح."
 
 msgctxt "#30127"
-msgid ""
-"The skin was linked to its repository so it can auto-update.\n"
-"Kodi must restart before updates take effect. Restart now?"
-msgstr ""
-"تم ربط الواجهة بمستودعها لتصلها التحديثات تلقائياً.\n"
-"يجب إعادة تشغيل Kodi لتفعيل التحديثات. إعادة التشغيل الآن؟"
+msgid "The skin was linked to its repository so it can auto-update.\\nKodi must restart before updates take effect. Restart now?"
+msgstr "تم ربط الواجهة بمستودعها لتصلها التحديثات تلقائياً.\\nيجب إعادة تشغيل Kodi لتفعيل التحديثات. إعادة التشغيل الآن؟"
 
 msgctxt "#30128"
 msgid "Restart"
@@ -390,11 +402,11 @@ msgstr "أُعيد تطبيق الترقيعات بعد تحديث الإضاف�
 
 msgctxt "#30291"
 msgid "Auto-patching is now [B]ON[/B].[CR][CR]Patches are re-applied automatically whenever a patched add-on is updated or reinstalled."
-msgstr "التحسين التلقائي الآن [B]مُفعّل[/B].[CR][CR]تُعاد التحسينات تلقائياً كلما تم تحديث أو إعادة تثبيت إضافة مُرقّعة."
+msgstr "الترقيع التلقائي الآن [B]مُفعّل[/B].[CR][CR]تُعاد الترقيعات تلقائياً كلما تم تحديث أو إعادة تثبيت إضافة مُرقّعة."
 
 msgctxt "#30292"
 msgid "Auto-patching is now [B]OFF[/B].[CR][CR]Patches will no longer be re-applied automatically after an add-on update - use Apply Patches manually."
-msgstr "التحسين التلقائي الآن [B]معطّل[/B].[CR][CR]لن تُعاد التحسينات تلقائياً بعد تحديث الإضافة - استخدم تطبيق التحسينات يدوياً."
+msgstr "الترقيع التلقائي الآن [B]معطّل[/B].[CR][CR]لن تُعاد الترقيعات تلقائياً بعد تحديث الإضافة - استخدم تطبيق الترقيعات يدوياً."
 
 msgctxt "#30300"
 msgid "[B]Downloading:[/B] %s"

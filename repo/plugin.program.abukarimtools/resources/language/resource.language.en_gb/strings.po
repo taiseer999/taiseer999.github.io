@@ -60,6 +60,22 @@ msgctxt "#30013"
 msgid "Clear Old Thumbnails"
 msgstr ""
 
+msgctxt "#30014"
+msgid "Setup & Install"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Patching"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Maintenance"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Toggles"
+msgstr ""
+
 msgctxt "#30050"
 msgid "Run first-time setup now?\\n\\nThis installs binaries, offers a backup restore, then opens the Skin Installer."
 msgstr ""
@@ -209,9 +225,7 @@ msgid "✓ %s installed successfully."
 msgstr ""
 
 msgctxt "#30127"
-msgid ""
-"The skin was linked to its repository so it can auto-update.\n"
-"Kodi must restart before updates take effect. Restart now?"
+msgid "The skin was linked to its repository so it can auto-update.\\nKodi must restart before updates take effect. Restart now?"
 msgstr ""
 
 msgctxt "#30128"
@@ -433,5 +447,4 @@ msgstr ""
 msgctxt "#30325"
 msgid "Selected Skin"
 msgstr ""
-
 

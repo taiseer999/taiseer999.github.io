@@ -31,23 +31,50 @@ ICONS  = {
     'autopatch':      ADDON_PATH + 'resources/icons/patcher.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
+    # category folder icons
+    'cat_setup':      ADDON_PATH + 'resources/icons/first_run.png',
+    'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
+    'cat_maint':      ADDON_PATH + 'resources/icons/clear_cache.png',
+    'cat_toggle':     ADDON_PATH + 'resources/icons/skin_switcher.png',
 }
 
-MENU = [
-    ('first_run',      30001),
-    ('backup',         30002),
-    ('skin_install',   30003),
-    ('binary_install', 30004),
-    ('patcher',        30005),
-    ('autopatch',      30006),
-    ('origin_fix',     30007),
-    ('openwizard',     30008),
-    ('total_clean',    30012),
-    ('old_thumbs',     30013),
-    ('skin_switch',    30009),
-    ('dplex_toggle',   30010),
-    ('korean_toggle',  30011),
+# Grouped menu: each category is (cat_key, category_label_id, icon_key, [items])
+# where each item is (mode, label_id). Folder vs. action is decided per-mode
+# below (only 'skin_switch' is a non-folder top-level action historically;
+# inside a category, every entry is a leaf action).
+CATEGORIES = [
+    ('setup',  30014, 'cat_setup', [
+        ('first_run',      30001),
+        ('backup',         30002),
+        ('skin_install',   30003),
+        ('binary_install', 30004),
+    ]),
+    ('patch',  30015, 'cat_patch', [
+        ('patcher',        30005),
+        ('autopatch',      30006),
+        ('origin_fix',     30007),
+    ]),
+    ('maint',  30016, 'cat_maint', [
+        ('openwizard',     30008),
+        ('total_clean',    30012),
+        ('old_thumbs',     30013),
+    ]),
+    ('toggle', 30017, 'cat_toggle', [
+        ('skin_switch',    30009),
+        ('dplex_toggle',   30010),
+        ('korean_toggle',  30011),
+    ]),
 ]
+
+# Modes that are leaf actions (run then return), not plugin folders.
+ACTION_MODES = {'skin_switch'}
+
+
+def _add_folder(label, cat_key, icon_key):
+    url = sys.argv[0] + '?cat=' + cat_key
+    li  = xbmcgui.ListItem(label)
+    li.setArt({'icon': ICONS[icon_key], 'thumb': ICONS[icon_key], 'fanart': FANART})
+    xbmcplugin.addDirectoryItem(HANDLE, url, li, isFolder=True)
 
 
 def _add_item(label, mode, is_folder=True):
@@ -74,8 +101,20 @@ def _ensure_fallback_font():
 def main_menu():
     from resources.lib.i18n import T
     _ensure_fallback_font()
-    for mode, label_id in MENU:
-        _add_item(T(label_id), mode, is_folder=(mode != 'skin_switch'))
+    for cat_key, label_id, icon_key, _items in CATEGORIES:
+        _add_folder(T(label_id), cat_key, icon_key)
+    xbmcplugin.setContent(HANDLE, 'files')
+    xbmcplugin.endOfDirectory(HANDLE)
+
+
+def category_menu(cat_key):
+    from resources.lib.i18n import T
+    for c_key, _label_id, _icon, items in CATEGORIES:
+        if c_key != cat_key:
+            continue
+        for mode, label_id in items:
+            _add_item(T(label_id), mode, is_folder=(mode not in ACTION_MODES))
+        break
     xbmcplugin.setContent(HANDLE, 'files')
     xbmcplugin.endOfDirectory(HANDLE)
 
@@ -90,6 +129,7 @@ def router():
     raw     = sys.argv[2][1:] if len(sys.argv) > 2 else ''
     params  = dict(parse_qsl(raw))
     mode    = params.get('mode')
+    cat     = params.get('cat')      # set when a category folder is opened
     wizard  = params.get('wizard')   # set when a wizard sub-page is clicked
 
     # --- Wizard sub-navigation (re-entry from a wizard menu item click) ---
@@ -100,6 +140,11 @@ def router():
         from resources.lib.wizard_runner import run_openwizard
         if wizard == 'openwizard':
             run_openwizard(HANDLE, ADDON_PATH, paramstring)
+        return
+
+    # --- Category folder ---
+    if cat is not None and mode is None:
+        category_menu(cat)
         return
 
     # --- Top-level menu ---

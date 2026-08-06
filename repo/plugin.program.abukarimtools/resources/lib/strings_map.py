@@ -37,6 +37,12 @@ STRINGS = {
     30012: ("Total Clean (Cache, Packages, Thumbnails)",  "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"),
     30013: ("Clear Old Thumbnails",             "حذف الصور المصغرة القديمة"),
 
+    # ---- menu categories (30014-30017) ----
+    30014: ("Setup & Install",                  "الإعداد والتنصيب"),
+    30015: ("Patching",                         "التعديلات والترقيعات"),
+    30016: ("Maintenance",                      "الصيانة والتنظيف"),
+    30017: ("Toggles",                          "التبديلات"),
+
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?\n\nThis installs binaries, offers a backup restore, then opens the Skin Installer.",
             "\u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0625\u0639\u062f\u0627\u062f \u0644\u0623\u0648\u0644 \u0645\u0631\u0629 \u0627\u0644\u0622\u0646\u061f\n\n\u0633\u064a\u062a\u0645 \u062a\u062b\u0628\u064a\u062a \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0627\u0644\u062b\u0646\u0627\u0626\u064a\u0629\u060c \u0648\u0639\u0631\u0636 \u0627\u0633\u062a\u0639\u0627\u062f\u0629 \u0646\u0633\u062e\u0629 \u0627\u062d\u062a\u064a\u0627\u0637\u064a\u0629\u060c \u062b\u0645 \u0641\u062a\u062d \u0645\u062b\u0628\u062a \u0627\u0644\u0648\u0627\u062c\u0647\u0627\u062a."),
