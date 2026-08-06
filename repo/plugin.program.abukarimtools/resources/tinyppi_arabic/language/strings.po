@@ -97,7 +97,7 @@ msgstr "منطقة L5 النشطة"
 
 msgctxt "#32032"
 msgid "Player cache"
-msgstr "كاش المشغّل"
+msgstr "الكاش"
 
 msgctxt "#32033"
 msgid "N/A"
@@ -105,7 +105,7 @@ msgstr "غير متوفّر"
 
 msgctxt "#32034"
 msgid "Memory usage"
-msgstr "استخدام الذاكرة"
+msgstr "الذاكرة"
 
 msgctxt "#32035"
 msgid "Passthrough"
@@ -881,12 +881,12 @@ msgstr "الملف الشخصي"
 
 msgctxt "#32291"
 msgid "Level"
-msgstr "msgstr ""
+msgstr "المستوى"
 "
 
 msgctxt "#32292"
 msgid "RPU"
-msgstr "RPU"
+msgstr " RPU وحدة المعالجة المرجعية"
 
 msgctxt "#32293"
 msgid "Base Layer"
