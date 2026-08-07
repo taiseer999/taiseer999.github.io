@@ -478,18 +478,66 @@ PATCHES = [
         'supersedes': ['tinyppi_arabic'],
         'description': 'TinyPPI classic PPI - AF3 dialog look (incl. colon removal)',
     },
-    # ── PPI AF3: legacy Arctic Fuse 3 DialogPlayerProcessInfo (native) ─────────
+    # ── PPI AF3: legacy Arctic Fuse 3 DialogPlayerProcessInfo (native + bridge) ─
     # AF3 5.7.x REWROTE its PlayerProcessInfo into a list dialog and DROPPED the
     # old PPI_Classic/PPI_Modern variant system. The user wants the RICH legacy
-    # dialog (from AF3 5.4.28) back. Rather than bloat the patcher with dozens of
-    # string-injects, we ship the legacy dialog + its includes as whole FILES the
-    # skin gains, and add ONE registration line to Includes.xml. The legacy vars
-    # read native Kodi Player.Process/VideoPlayer infolabels (incl. DV/HDR RPU
-    # metadata) — so NO TinyPPI Python is involved at all. Bundling Includes_p3i
-    # also fixes the "Skin has invalid include: CodecLogos*/*_Flag" log warnings
-    # 5.7.x left behind. All under toggle 'ppi_af3'. Files are create-only binary
-    # (byte-compare refresh); the one Includes.xml edit is idempotent string-inject.
-    # not_found_ok so a non-AF3 skin is a clean skip.
+    # dialog (from AF3 5.4.28) back. We ship the legacy dialog + its includes as
+    # whole FILES the skin gains, plus ONE registration line in Includes.xml.
+    # Most legacy vars read native Kodi Player.Process/VideoPlayer infolabels
+    # (incl. DV/HDR RPU metadata). A HANDFUL of fields have NO native source and
+    # only TinyPPI's probe binaries (audioprobe/hdrprobe) can supply them — audio
+    # sample rate, live A|V bitrate, DV L5 offsets. For those we BRIDGE: two small
+    # Python entries make TinyPPI publish all its *Var onto Home(10000) (via the
+    # version-agnostic home_publish.py + a monitor.py string-inject), and the
+    # shipped skin vars (BridgeAudioSampling/BridgeAVBitrate/L5StateVar/
+    # VideoPixelFormat) prefer that Home data, falling back to native when TinyPPI
+    # isn't running. Bundling Includes_p3i also fixes the "invalid include:
+    # CodecLogos*/*_Flag" log warnings 5.7.x left behind. All under toggle
+    # 'ppi_af3'. Skin files are create-only binary (byte-compare refresh); the
+    # Includes.xml + monitor.py edits are idempotent string-inject; not_found_ok
+    # so a missing skin/addon is a clean skip.
+    {
+        # Bridge half 1: version-agnostic module that publishes TinyPPI's *Var
+        # onto Home(10000) so the AF3 dialog can read probe-only fields. Reuses
+        # the installed TinyPPI's OWN update_properties via a Home proxy — no
+        # dependency on TinyPPI internals (verified against v2.1.4). Create-only.
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'info', 'home_publish.py'),
+        'toggle': 'ppi_af3',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'ppi_af3', 'tinyppi_lib',
+                                      'home_publish.py'),
+        'description': 'PPI AF3 - TinyPPI home_publish.py (Home bridge module)',
+    },
+    {
+        # Bridge half 2: start the publisher from the service, anchored on the
+        # stable "KodiMonitor started" log line. Idempotent + regex fallback;
+        # import fenced so a missing module never breaks the service.
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'lib', 'service', 'monitor.py'),
+        'toggle': 'ppi_af3',
+        'not_found_ok': True,
+        'old': '    xbmc.log("TinyPPI: KodiMonitor started", xbmc.LOGINFO)',
+        'new': ('    xbmc.log("TinyPPI: KodiMonitor started", xbmc.LOGINFO)\n'
+                '    # -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --\n'
+                '    try:\n'
+                '        from info import home_publish as _abk_home_publish\n'
+                '        _abk_home_publish.start(monitor)\n'
+                '    except Exception as _abk_exc:\n'
+                '        xbmc.log("TinyPPI: PPI AF3 home publisher failed: %s" % _abk_exc, xbmc.LOGWARNING)'),
+        'already_patched_check': '# -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'(xbmc\.log\("TinyPPI: KodiMonitor started", xbmc\.LOGINFO\))',
+        'fallback_repl': ('\\1\n    # -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --\n'
+                          '    try:\n'
+                          '        from info import home_publish as _abk_home_publish\n'
+                          '        _abk_home_publish.start(monitor)\n'
+                          '    except Exception as _abk_exc:\n'
+                          '        xbmc.log("TinyPPI: PPI AF3 home publisher failed: %s" % _abk_exc, xbmc.LOGWARNING)'),
+        'description': 'PPI AF3 - start Home publisher from monitor.py',
+    },
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'DialogPlayerProcessInfo.xml'),

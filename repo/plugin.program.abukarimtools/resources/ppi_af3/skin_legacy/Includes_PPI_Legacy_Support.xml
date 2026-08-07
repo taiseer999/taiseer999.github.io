@@ -200,4 +200,51 @@
             </control>
         </definition>
     </include>
+
+    <!-- ABUKARIM TOOLS: definitions for the 3 vars the legacy dialog left
+         dangling (blank/"-bit] xp" without these). Read native Kodi 22 /
+         Amlogic Player.Process infolabels — no TinyPPI dependency. -->
+    <variable name="VideoBitDepth">
+        <value condition="!String.IsEmpty(Player.Process(video.bitdepth))">$INFO[Player.Process(video.bitdepth)]</value>
+        <value condition="String.Contains(Player.Process(amlogic.pixformat),12bit)">12</value>
+        <value condition="String.Contains(Player.Process(amlogic.pixformat),10bit)">10</value>
+        <value condition="String.Contains(Player.Process(amlogic.pixformat),8bit)">8</value>
+        <value condition="!String.IsEmpty(Player.Process(video.source.hdr.type)) + !String.Contains(Player.Process(video.source.hdr.type),SDR)">10</value>
+        <value>8</value>
+    </variable>
+    <variable name="VideoPixelFormat">
+        <value condition="!String.IsEmpty(Window(10000).Property(VideoPixelFormatVar))">$INFO[Window(10000).Property(VideoPixelFormatVar)]</value>
+        <value condition="!String.IsEmpty(Player.Process(amlogic.pixformat))">$INFO[Player.Process(amlogic.pixformat)]</value>
+        <value condition="!String.IsEmpty(Player.Process(pixformat))">$INFO[Player.Process(pixformat)]</value>
+    </variable>
+    <variable name="DVSourceELVar">
+        <value condition="String.Contains(Player.Process(video.dovi.el.present),true) | Integer.IsGreater(Player.Process(video.dovi.el.type),0)">EL</value>
+    </variable>
+
+
+    <variable name="|">
+        <!-- Separator between sub-values. Kept minimal (a space) so empty
+             sides never leave a dangling glyph, matching how these rows
+             rendered originally (the var was undefined = nothing). -->
+        <value> </value>
+    </variable>
+
+    <!-- ABUKARIM TOOLS bridge vars: prefer TinyPPI's probe-sourced Home
+         properties (published by home_publish.py onto Window 10000); fall back
+         to native Kodi infolabels when TinyPPI isn't running. TinyPPI values
+         are already fully formatted (e.g. "96 kHz", "24-bit"). -->
+    <variable name="BridgeAudioSampling">
+        <value condition="!String.IsEmpty(Window(10000).Property(AudioSampleRateVar))">$INFO[Window(10000).Property(AudioSampleRateVar)]$VAR[|]$INFO[Window(10000).Property(AudioBitDepthVar)]</value>
+        <value>$INFO[Player.Process(audio.sample.rate),, kHz]$VAR[|]$INFO[Player.Process(audiobitspersample),,-bit]</value>
+    </variable>
+    <variable name="BridgeAVBitrate">
+        <value condition="!String.IsEmpty(Window(10000).Property(AudioLiveBitrateVar)) | !String.IsEmpty(Window(10000).Property(VideoLiveBitrateVar))">$INFO[Window(10000).Property(AudioLiveBitrateVar)]$VAR[|]$INFO[Window(10000).Property(VideoLiveBitrateVar)]</value>
+        <value>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]]$VAR[|]$INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</value>
+    </variable>
+
+
+    <variable name="L5StateVar">
+        <value condition="!String.IsEmpty(Window(10000).Property(DoviLevel5OffsetsVar))">$INFO[Window(10000).Property(DoviLevel5OffsetsVar)]</value>
+        <value>L5</value>
+    </variable>
 </includes>

@@ -1178,7 +1178,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[VideoPlayer.AudioMibitRate,[COLOR dimgrey],[/COLOR]] $VAR[|] $INFO[VideoPlayer.VideoMibitRate,[COLOR dimgrey],[/COLOR]]</label>
+						<label>$VAR[BridgeAVBitrate]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 						<visible>!String.IsEmpty(VideoPlayer.AudioMibitRate)</visible>
@@ -1397,7 +1397,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[VideoBitDepth]-bit] $VAR[|] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)]</label>
+						<label>$VAR[VideoBitDepth]-bit $VAR[|] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1485,7 +1485,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(audio.sample.rate),, kHz] $VAR[|] $INFO[Player.Process(audiobitspersample),,-bit]</label>
+						<label>$VAR[BridgeAudioSampling]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
