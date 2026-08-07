@@ -457,6 +457,121 @@ PATCHES = [
                                       'skin', 'script-tinyppi-main.xml'),
         'description': 'TinyPPI PPI Arabic - remove label colons',
     },
+    # ── TinyPPI – "classic PPI": Arctic Fuse 3 / DialogPlayerProcessInfo look ──
+    # Whole-file replacement of the overlay skin (same inject_source + replace +
+    # byte-compare mechanism as PPI Arabic / the badges). The shipped file is the
+    # AF3 restyle (flat DPPI floor scrim + dialog-bg caps + TinyPPI.Dialog* colour
+    # tokens) built ON TOP OF the PPI Arabic base, so it ALSO carries the colon
+    # removal. Because it targets the SAME rel_path as the PPI Arabic XML entry,
+    # 'supersedes' makes classic PPI win when both toggles are on: _select drops
+    # the superseded entry so the two never thrash rewriting the same file.
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
+                                 'script-tinyppi-main.xml'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tinyppi_classic',
+                                      'skin', 'script-tinyppi-main.xml'),
+        'toggle': 'tinyppi_classic',
+        'supersedes': ['tinyppi_arabic'],
+        'description': 'TinyPPI classic PPI - AF3 dialog look (incl. colon removal)',
+    },
+    # ── PPI AF3: legacy Arctic Fuse 3 DialogPlayerProcessInfo (native) ─────────
+    # AF3 5.7.x REWROTE its PlayerProcessInfo into a list dialog and DROPPED the
+    # old PPI_Classic/PPI_Modern variant system. The user wants the RICH legacy
+    # dialog (from AF3 5.4.28) back. Rather than bloat the patcher with dozens of
+    # string-injects, we ship the legacy dialog + its includes as whole FILES the
+    # skin gains, and add ONE registration line to Includes.xml. The legacy vars
+    # read native Kodi Player.Process/VideoPlayer infolabels (incl. DV/HDR RPU
+    # metadata) — so NO TinyPPI Python is involved at all. Bundling Includes_p3i
+    # also fixes the "Skin has invalid include: CodecLogos*/*_Flag" log warnings
+    # 5.7.x left behind. All under toggle 'ppi_af3'. Files are create-only binary
+    # (byte-compare refresh); the one Includes.xml edit is idempotent string-inject.
+    # not_found_ok so a non-AF3 skin is a clean skip.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'DialogPlayerProcessInfo.xml'),
+        'toggle': 'ppi_af3',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'ppi_af3', 'skin_legacy',
+                                      'DialogPlayerProcessInfo.xml'),
+        'description': 'PPI AF3 - legacy DialogPlayerProcessInfo.xml',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_PPI_Classic.xml'),
+        'toggle': 'ppi_af3',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'ppi_af3', 'skin_legacy',
+                                      'Includes_PPI_Classic.xml'),
+        'description': 'PPI AF3 - legacy Includes_PPI_Classic.xml',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_PPI_Modern.xml'),
+        'toggle': 'ppi_af3',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'ppi_af3', 'skin_legacy',
+                                      'Includes_PPI_Modern.xml'),
+        'description': 'PPI AF3 - legacy Includes_PPI_Modern.xml',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_PPI_Legacy_Support.xml'),
+        'toggle': 'ppi_af3',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'ppi_af3', 'skin_legacy',
+                                      'Includes_PPI_Legacy_Support.xml'),
+        'description': 'PPI AF3 - legacy PPI variable defs + Part_ChartButton',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_p3i.xml'),
+        'toggle': 'ppi_af3',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'ppi_af3', 'skin_legacy',
+                                      'Includes_p3i.xml'),
+        'description': 'PPI AF3 - legacy Includes_p3i.xml (codec logos + flags)',
+    },
+    {
+        # Register the 5 legacy includes. One idempotent string-inject after the
+        # existing Includes_Labels.xml registration.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes.xml'),
+        'toggle': 'ppi_af3',
+        'not_found_ok': True,
+        'old': '    <include file="Includes_Labels.xml" />',
+        'new': ('    <include file="Includes_Labels.xml" />\n'
+                '    <include file="Includes_PPI_Legacy_Support.xml" />  <!-- ABUKARIM: PPI AF3 -->\n'
+                '    <include file="Includes_PPI_Classic.xml" />  <!-- ABUKARIM: PPI AF3 -->\n'
+                '    <include file="Includes_PPI_Modern.xml" />  <!-- ABUKARIM: PPI AF3 -->\n'
+                '    <include file="Includes_p3i.xml" />  <!-- ABUKARIM: PPI AF3 -->'),
+        'already_patched_check': 'Includes_PPI_Legacy_Support.xml',
+        'fallback_pattern': r'(<include file="Includes_Labels\.xml" />)',
+        'fallback_repl': (r'\1\n    <include file="Includes_PPI_Legacy_Support.xml" />  <!-- ABUKARIM: PPI AF3 -->'
+                          r'\n    <include file="Includes_PPI_Classic.xml" />  <!-- ABUKARIM: PPI AF3 -->'
+                          r'\n    <include file="Includes_PPI_Modern.xml" />  <!-- ABUKARIM: PPI AF3 -->'
+                          r'\n    <include file="Includes_p3i.xml" />  <!-- ABUKARIM: PPI AF3 -->'),
+        'description': 'PPI AF3 - register legacy PPI includes',
+    },
+
 ]
 
 
@@ -520,6 +635,11 @@ def _apply_patch(patch):
         if not addon_path or not os.path.isdir(addon_path):
             addon_path = os.path.join(ADDONS_DIR, patch['addon_id'])
         if not os.path.isdir(addon_path):
+            # Optional target (e.g. a skin that may not be installed): skip
+            # cleanly instead of counting a failure, so a toggle spanning two
+            # addons doesn't report errors when only one is present.
+            if patch.get('not_found_ok'):
+                return True, '[%s] Addon not present – skipping (optional).' % patch['addon_id']
             return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
 
     # Resolve target: support a list of candidate paths (rel_path_alternates)
@@ -665,6 +785,8 @@ TOGGLE_GROUPS = [
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('tinyppi_arabic',   'PPI Arabic'),
+    ('tinyppi_classic',  'classic PPI'),
+    ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
@@ -739,7 +861,16 @@ _SELECTION_FILE = os.path.join(
 
 
 def _toggle_of(patch):
-    """Return the toggle id for a patch, or None if it is an always-on fix."""
+    """Return the toggle id for a patch, or None if it is an always-on fix.
+
+    An explicit ``'toggle'`` on the entry wins, so two entries that share the
+    same (addon_id, rel_path) — e.g. the PPI Arabic and classic PPI whole-file
+    replacements of script-tinyppi-main.xml — can each carry their own toggle
+    (the (addon_id, rel_path) map below can only hold one value per path).
+    Legacy entries with no 'toggle' fall back to the path map.
+    """
+    if patch.get('toggle'):
+        return patch['toggle']
     return _TOGGLE_OF.get((patch['addon_id'], patch.get('rel_path', '')))
 
 
@@ -785,6 +916,28 @@ def _select(group=None, addon_ids=None, respect_selection=True):
         if disabled:
             selected = [p for p in selected
                         if _toggle_of(p) is None or _toggle_of(p) not in disabled]
+    # Supersede: when an ACTIVE entry declares 'supersedes', drop any other
+    # still-selected entry that writes the SAME (addon_id, rel_path) and belongs
+    # to one of the superseded toggles. This stops two whole-file 'replace'
+    # entries for one file (classic PPI vs PPI Arabic on script-tinyppi-main.xml)
+    # from thrashing each other every sweep — the superseding file already
+    # contains the superseded one's edits.
+    superseded = {}  # (addon_id, rel_path) -> set of toggle ids it supersedes
+    for p in selected:
+        for tid in p.get('supersedes', ()):
+            key = (p['addon_id'], p.get('rel_path', ''))
+            superseded.setdefault(key, set()).add(tid)
+    if superseded:
+        kept = []
+        for p in selected:
+            key = (p['addon_id'], p.get('rel_path', ''))
+            losing = superseded.get(key)
+            # Drop p only if it is the superseded party (its toggle is in the
+            # set) AND it is not itself the superseding entry.
+            if losing and not p.get('supersedes') and _toggle_of(p) in losing:
+                continue
+            kept.append(p)
+        selected = kept
     return selected
 
 
