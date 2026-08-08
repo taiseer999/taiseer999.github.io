@@ -99,6 +99,25 @@ _TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5z
 
 
 PATCHES = [
+    # ── DPlex: disable reuselanguageinvoker (Kodi 22 / Python 3.14 crash fix, by ABUKARIM TOOLS) ──
+    # DPlex ships <reuselanguageinvoker>true</reuselanguageinvoker>. On Kodi 22
+    # (Python 3.14) the reused sub-interpreter is not thread-safe when the home
+    # screen fires many DPlex widget invocations at once (library/sections/*,
+    # myplexqueue, channels/all). Concurrent imports on the shared interpreter
+    # race inside PyThreadState_Swap / PyImport_ImportModuleLevelObject and
+    # segfault kodi.bin (SIGSEGV in libpython3.14, Py_NewInterpreter path).
+    # Forcing a fresh invoker per call removes the shared-state race.
+    {
+        'addon_id': 'plugin.video.dplex',
+        'rel_path': os.path.join('addon.xml'),
+        'old': '<reuselanguageinvoker>true</reuselanguageinvoker>',
+        'new': '<reuselanguageinvoker>false</reuselanguageinvoker>',
+        'description': 'DPlex addon.xml \u2013 reuselanguageinvoker=false (fixes Py3.14 sub-interpreter SIGSEGV on widget burst)',
+        'already_patched_check': '<reuselanguageinvoker>false</reuselanguageinvoker>',
+        'fallback_pattern': r'<reuselanguageinvoker>\s*true\s*</reuselanguageinvoker>',
+        'fallback_repl': '<reuselanguageinvoker>false</reuselanguageinvoker>',
+        'toggle': 'dplex_stability',
+    },
     # ── TinyPPI: disable install_fonts() entirely – fixes picture freeze on playback stop ──
     {
         'addon_id': 'script.tinyppi',
@@ -824,6 +843,7 @@ import json
 
 # Ordered list of (toggle_id, display label). Order = order shown in the dialog.
 TOGGLE_GROUPS = [
+    ('dplex_stability',  'DPlex: Stability (Py3.14 crash fix)'),
     ('seren_trakt_auth', 'Seren Trakt Auth'),
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
