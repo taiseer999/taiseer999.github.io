@@ -447,24 +447,13 @@ PATCHES = [
         'description': 'TinyPPI codecs - replace Dolby_TrueHD_Atmos.png badge',
     },
 
-    # ── TinyPPI – PPI Arabic: full ar_sa translation + remove label colons ──
-    # Two whole-file replacements shipped under resources/tinyppi_arabic/:
-    #  (1) resources/language/resource.language.ar_sa/strings.po — every empty
-    #      msgstr filled in (the 38 overlay field labels were untranslated).
-    #  (2) resources/skins/Default/1080i/script-tinyppi-main.xml — the trailing
-    #      ':' after each $ADDON[script.tinyppi NNNNN] label removed (44 labels).
+    # ── TinyPPI – PPI Arabic: remove label colons ──
+    # NOTE: the ar_sa strings.po whole-file replacement was REMOVED — the TinyPPI
+    # Arabic translation is now fixed at source upstream, so we must NOT overwrite
+    # it. Only the colon-removal XML entry remains under the tinyppi_arabic toggle.
+    #  resources/skins/Default/1080i/script-tinyppi-main.xml — the trailing ':'
+    #  after each $ADDON[script.tinyppi NNNNN] label removed (44 labels).
     # inject_source + replace + byte-compare idempotency (same as the badges).
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'language',
-                                 'resource.language.ar_sa', 'strings.po'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'inject_source': os.path.join('resources', 'tinyppi_arabic',
-                                      'language', 'strings.po'),
-        'description': 'TinyPPI PPI Arabic - full ar_sa translation',
-    },
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
@@ -910,9 +899,7 @@ _TOGGLE_OF = {
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD.png')):               'tinyppi_audio',
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD_Atmos.png')):         'tinyppi_audio',
-    # PPI Arabic — ar_sa translation + colon removal
-    ('script.tinyppi',
-     os.path.join('resources', 'language', 'resource.language.ar_sa', 'strings.po')):  'tinyppi_arabic',
+    # PPI Arabic — colon removal only (ar_sa strings.po fixed at source, not patched)
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml')): 'tinyppi_arabic',
     # RedLight: Fix Sound & Theme — all three RedLight entries
