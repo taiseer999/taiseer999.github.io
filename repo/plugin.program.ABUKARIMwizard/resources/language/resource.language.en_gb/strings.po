@@ -448,3 +448,11 @@ msgstr ""
 msgctxt "#30117"
 msgid "GUI Patch Applied Successfully!"
 msgstr ""
+
+msgctxt "#30118"
+msgid "Install without wiping current data?"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Install (Option 2 - No Wipe)"
+msgstr ""

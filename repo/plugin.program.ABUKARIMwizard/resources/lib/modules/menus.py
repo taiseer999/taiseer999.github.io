@@ -78,6 +78,10 @@ def build_menu():
         url = (build.get('url', ''))
         if url.startswith('https://www.dropbox.com'):
             url = url.replace('dl=0', 'dl=1')
+        gui = (build.get('gui', '') or '')
+        if gui.startswith('https://www.dropbox.com'):
+            gui = gui.replace('dl=0', 'dl=1')
+        gui_valid = gui not in ('', 'http://', 'https://', 'url.to.guisettings', None)
         icon = (build.get('icon', addon_icon))
         fanart = (build.get('fanart', addon_fanart))
         description = (build.get('description', local_string(30019)))  # No Description Available.
@@ -95,21 +99,29 @@ def build_menu():
             
         elif '20' in kodi_ver and kodiversion == 'K20':
             add_dir(COLOR2(f'{name}  (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, kodi=kodiversion, isFolder=False) # K20 Build Menu
+            if gui_valid:
+                add_dir(COLOR2(f'{name}  (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, kodi=kodiversion, isFolder=False) # K20 No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False)  # Video Previews
                 
         elif '21' in kodi_ver and kodiversion == 'K21':
             add_dir(COLOR2(f'{name}  (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, kodi=kodiversion, isFolder=False) # K21 Build Menu
+            if gui_valid:
+                add_dir(COLOR2(f'{name}  (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, kodi=kodiversion, isFolder=False) # K21 No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False)  # Video Previews
                 
         elif '22' in kodi_ver and kodiversion == 'K22':
             add_dir(COLOR2(f'{name}  (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, kodi=kodiversion, isFolder=False) # K22 Build Menu
+            if gui_valid:
+                add_dir(COLOR2(f'{name}  (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, kodi=kodiversion, isFolder=False) # K22 No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False)  # Video Previews
 
         elif kodiversion == None or not any(x in kodiversion for x in kodi_versions):
             add_dir(COLOR2(f'{name} (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, isFolder=False)  # Standard Build Menu
+            if gui_valid:
+                add_dir(COLOR2(f'{name} (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, isFolder=False)  # Standard No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False) 
 

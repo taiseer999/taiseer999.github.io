@@ -53,6 +53,35 @@ def build_install(name, name2, version, url):
     dialog.ok(addon_name, local_string(30036))  # Install Complete
     os._exit(1)
 
+def build_install_no_wipe(name, name2, version, url):
+    # Option 2 - install without wiping current data (no fresh_start)
+    if not dialog.yesno(
+        COLOR2(name),
+        COLOR2(local_string(30118)),  # Install without wiping current data?
+        nolabel=local_string(30029),
+        yeslabel=local_string(30030)
+    ):
+        return
+
+    download_build(name, url)
+    save_backup_restore('backup')
+    extract_build()
+    if name2 == setting('buildname'):
+        save_backup_restore('restore_gui')
+    else:
+        save_backup_restore('restore')
+    clean_backups()
+    setting_set('buildname', name2)
+    setting_set('buildversion', version)
+    setting_set('update_passed', 'false')
+    setting_set('firstrun', 'true')
+    check_binary()
+    enable_wizard()
+    truncate_tables()
+
+    dialog.ok(addon_name, local_string(30036))  # Install Complete
+    os._exit(1)
+
 def patch_gui(url):
     if not url or url in ('', 'http://', None):
         dialog.ok(addon_name, local_string(30116))  # No GUI Patch Available For This Build!

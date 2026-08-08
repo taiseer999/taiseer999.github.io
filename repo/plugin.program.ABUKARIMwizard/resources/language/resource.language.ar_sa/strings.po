@@ -478,3 +478,11 @@ msgstr "لا يتوفر تحديث واجهة لهذا البيلد!"
 msgctxt "#30117"
 msgid "GUI Patch Applied Successfully!"
 msgstr "تم تطبيق تحديث الواجهة بنجاح!"
+
+msgctxt "#30118"
+msgid "Install without wiping current data?"
+msgstr "تثبيت بدون مسح البيانات الحالية؟"
+
+msgctxt "#30119"
+msgid "Install (Option 2 - No Wipe)"
+msgstr "تثبيت (الخيار 2 - بدون مسح)"
