@@ -113,6 +113,7 @@ def get_version():
     version = ''
     url = ''
     gui_url = ''
+    theme_url = ''
     builds = []
 
     if '"builds"' in response or "'builds'" in response:
@@ -131,6 +132,7 @@ def get_version():
            version = str(build.get('version'))
            url = (build.get('url', ''))
            gui_url = (build.get('gui', ''))
+           theme_url = (build.get('theme', ''))
            break
-    return version, url, gui_url
-UPDATE_VERSION, BUILD_URL, GUI_URL = get_version()
+    return version, url, gui_url, theme_url
+UPDATE_VERSION, BUILD_URL, GUI_URL, THEME_URL = get_version()

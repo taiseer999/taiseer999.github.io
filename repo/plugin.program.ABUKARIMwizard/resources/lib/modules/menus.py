@@ -7,7 +7,7 @@ import xbmcplugin
 from .utils import add_dir
 from uservar import buildfile, videos_url
 from .parser import XmlParser, TextParser, get_page
-from .addonvar import addon_name, setting, addon_icon, addon_fanart, local_string, authorize, kodi_ver, kodi_versions, UPDATE_VERSION, CURRENT_BUILD, BUILD_VERSION, GUI_URL, resources
+from .addonvar import addon_name, setting, addon_icon, addon_fanart, local_string, authorize, kodi_ver, kodi_versions, UPDATE_VERSION, CURRENT_BUILD, BUILD_VERSION, GUI_URL, THEME_URL, resources
 from .colors import colors
 
 PATCH_GUI_ICON = os.path.join(resources, 'media', 'patch_gui.png')
@@ -34,6 +34,9 @@ def main_menu():
     
     if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and GUI_URL not in ('', 'http://', None):
         add_dir(COLOR2(local_string(30113)), GUI_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30114)), isFolder=False)  # Patch GUI
+
+    if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and THEME_URL not in ('', 'http://', 'http://your.themes.url', None):
+        add_dir(COLOR2(local_string(30118)), THEME_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30118)), isFolder=False)  # Patch GUI - Option 2
     
     add_dir(COLOR2(local_string(30011)), '', 5, addon_icon, addon_fanart, COLOR2(local_string(30002)), isFolder=True)  # Maintenance Menu
     
@@ -78,10 +81,6 @@ def build_menu():
         url = (build.get('url', ''))
         if url.startswith('https://www.dropbox.com'):
             url = url.replace('dl=0', 'dl=1')
-        gui = (build.get('gui', '') or '')
-        if gui.startswith('https://www.dropbox.com'):
-            gui = gui.replace('dl=0', 'dl=1')
-        gui_valid = gui not in ('', 'http://', 'https://', 'url.to.guisettings', None)
         icon = (build.get('icon', addon_icon))
         fanart = (build.get('fanart', addon_fanart))
         description = (build.get('description', local_string(30019)))  # No Description Available.
@@ -99,29 +98,21 @@ def build_menu():
             
         elif '20' in kodi_ver and kodiversion == 'K20':
             add_dir(COLOR2(f'{name}  (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, kodi=kodiversion, isFolder=False) # K20 Build Menu
-            if gui_valid:
-                add_dir(COLOR2(f'{name}  (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, kodi=kodiversion, isFolder=False) # K20 No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False)  # Video Previews
                 
         elif '21' in kodi_ver and kodiversion == 'K21':
             add_dir(COLOR2(f'{name}  (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, kodi=kodiversion, isFolder=False) # K21 Build Menu
-            if gui_valid:
-                add_dir(COLOR2(f'{name}  (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, kodi=kodiversion, isFolder=False) # K21 No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False)  # Video Previews
                 
         elif '22' in kodi_ver and kodiversion == 'K22':
             add_dir(COLOR2(f'{name}  (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, kodi=kodiversion, isFolder=False) # K22 Build Menu
-            if gui_valid:
-                add_dir(COLOR2(f'{name}  (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, kodi=kodiversion, isFolder=False) # K22 No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False)  # Video Previews
 
         elif kodiversion == None or not any(x in kodiversion for x in kodi_versions):
             add_dir(COLOR2(f'{name} (v{version})'), url, 3, icon, fanart, description, name2=name, version=version, isFolder=False)  # Standard Build Menu
-            if gui_valid:
-                add_dir(COLOR2(f'{name} (v{version})  {local_string(30119)}'), gui, 34, icon, fanart, COLOR2(local_string(30118)), name2=name, version=version, isFolder=False)  # Standard No Wipe (GUI)
             if preview not in (None, '', 'http://', 'https://'):
                 add_dir(COLOR1(local_string(30021) + ' ' + name + ' ' + local_string(30020) + ' ' + version), preview, 2, icon, fanart, COLOR2(description), name2=name, version=version, isFolder=False) 
 
