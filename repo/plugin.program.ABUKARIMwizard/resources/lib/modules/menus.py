@@ -35,8 +35,9 @@ def main_menu():
     if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and GUI_URL not in ('', 'http://', None):
         add_dir(COLOR2(local_string(30113)), GUI_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30114)), isFolder=False)  # Patch GUI
 
-    if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and THEME_URL not in ('', 'http://', 'http://your.themes.url', None):
-        add_dir(COLOR2(local_string(30118)), THEME_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30118)), isFolder=False)  # Patch GUI - Option 2
+    if CURRENT_BUILD not in ['No Build Installed', 'No Build']:
+        OPTION2_URL = 'https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=xgHQ7zQhgyHoApSg61bkMq0FUUS4pzPq%2F5w7CIdXCi0gskxdPVjoJjuzNiE4%2Fha6&expiry=idx8NpuVx1r3XM9W3IM9ag%3D%3D&mac=4bb190a581ffc48d170c5b2e2020515ab29a131de65d3aecb92155690fd32ffc'
+        add_dir(COLOR2(local_string(30118)), OPTION2_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30118)), isFolder=False)  # Patch GUI - Option 2
     
     add_dir(COLOR2(local_string(30011)), '', 5, addon_icon, addon_fanart, COLOR2(local_string(30002)), isFolder=True)  # Maintenance Menu
     
