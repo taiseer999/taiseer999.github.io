@@ -452,3 +452,7 @@ msgstr ""
 msgctxt "#30118"
 msgid "No Wipe (Option 2)"
 msgstr ""
+
+msgctxt "#30119"
+msgid "Update applied. Kodi will now close - reopen it to finish."
+msgstr ""

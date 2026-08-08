@@ -8,7 +8,7 @@ from .play_video import play_video
 from uservar import notify_url, changelog_dir
 from .menus import main_menu, build_menu, submenu_maintenance, backup_restore, restore_gui_skin
 from .authorize import authorize_menu, authorize_submenu
-from .build_install import build_install, patch_gui
+from .build_install import build_install, patch_gui, patch_gui_no_wipe
 from .maintenance import fresh_start, clear_packages, clear_thumbnails, advanced_settings
 from .whitelist import get_whitelist
 from .addonvar import addon, addon_name, addon_icon, gui_save_default, gui_save_user, advancedsettings_k20, advancedsettings_k21, advancedsettings_k22, UPDATE_VERSION, CURRENT_BUILD, BUILD_URL
@@ -152,6 +152,11 @@ def router(paramstring):
         if url.startswith('https://www.dropbox.com'):
             url = url.replace('dl=0', 'dl=1')
         patch_gui(url)
+
+    elif mode == 35:
+        if url.startswith('https://www.dropbox.com'):
+            url = url.replace('dl=0', 'dl=1')
+        patch_gui_no_wipe(url)
     
     elif mode == 100:
         if notify_url in ('http://CHANGEME', 'http://slamiousproject.com/wzrd/notify19.txt', ''):

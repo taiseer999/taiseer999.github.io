@@ -482,3 +482,7 @@ msgstr "تم تطبيق تحديث الواجهة بنجاح!"
 msgctxt "#30118"
 msgid "No Wipe (Option 2)"
 msgstr "تحديث البيلد دون مسح (الخيار 2)"
+
+msgctxt "#30119"
+msgid "Update applied. Kodi will now close - reopen it to finish."
+msgstr "تم تطبيق التحديث. سيتم إغلاق كودي - أعد فتحه لإكمال العملية."

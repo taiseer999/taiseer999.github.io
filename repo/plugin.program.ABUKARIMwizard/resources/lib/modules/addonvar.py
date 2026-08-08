@@ -127,6 +127,7 @@ def get_version():
        text = TextParser(response)
        builds = text.parse_builds()
 
+    option2_url = ''
     for build in builds:
        if build.get('name') == CURRENT_BUILD:
            version = str(build.get('version'))
@@ -134,5 +135,9 @@ def get_version():
            gui_url = (build.get('gui', ''))
            theme_url = (build.get('theme', ''))
            break
-    return version, url, gui_url, theme_url
-UPDATE_VERSION, BUILD_URL, GUI_URL, THEME_URL = get_version()
+    for build in builds:
+       if build.get('name') == 'test':
+           option2_url = (build.get('gui', ''))
+           break
+    return version, url, gui_url, theme_url, option2_url
+UPDATE_VERSION, BUILD_URL, GUI_URL, THEME_URL, OPTION2_URL = get_version()

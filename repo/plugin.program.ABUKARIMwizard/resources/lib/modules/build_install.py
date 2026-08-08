@@ -101,6 +101,52 @@ def extract_gui_patch():
         dp.close()
         os.unlink(zippath)
 
+def patch_gui_no_wipe(url):
+    if not url or url in ('', 'http://', 'https://', None):
+        dialog.ok(addon_name, local_string(30116))  # No GUI Patch Available For This Build!
+        return
+
+    # No Wipe (Option 2), Cancel, Continue
+    if not dialog.yesno(
+        COLOR2(local_string(30118)),  # No Wipe (Option 2)
+        COLOR2(local_string(30115)),  # This will update your files in place without wiping. Continue?
+        nolabel=local_string(30029),
+        yeslabel=local_string(30030)
+    ):
+        return
+
+    download_build(local_string(30118), url)
+    extract_userdata_patch()
+
+    # This zip patches userdata (guisettings.xml, Database, addon_data). Kodi
+    # holds these in memory and writes them back to disk on exit, which would
+    # overwrite the freshly extracted files. A ReloadSkin() (as Option 1 uses)
+    # won't reload them either. So force-close Kodi: on next start it loads the
+    # patched userdata fresh instead of clobbering it.
+    dialog.ok(addon_name, local_string(30119))  # Update applied. Kodi will now close - reopen it to finish.
+    os._exit(1)
+
+def extract_userdata_patch():
+    if os.path.exists(zippath):
+        dp.create(addon_name, 'Updating')
+        target = str(user_data)  # special://userdata -> home/userdata
+        counter = 1
+        with ZipFile(zippath, 'r') as z:
+            files = z.infolist()
+            for file in files:
+                filename = file.filename
+                progress_percentage = int(counter/len(files)*100)
+                try:
+                    z.extract(file, target)
+                except Exception as e:
+                    xbmc.log(f'Error extracting {filename} - {e}', xbmc.LOGINFO)
+                dp.update(progress_percentage, f'Updating...\\n{progress_percentage}%\\n{filename}')
+                counter += 1
+        dp.update(100, local_string(30035))  # Done Extracting
+        xbmc.sleep(500)
+        dp.close()
+        os.unlink(zippath)
+
 def download_build(name, url):
     if os.path.exists(zippath):
         os.unlink(zippath)
