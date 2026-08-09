@@ -118,23 +118,52 @@ def patch_gui_no_wipe(url):
     download_build(local_string(30118), url)
     extract_userdata_patch()
 
-    # This zip patches userdata (guisettings.xml, Database, addon_data). Kodi
-    # holds these in memory and writes them back to disk on exit, which would
-    # overwrite the freshly extracted files. A ReloadSkin() (as Option 1 uses)
-    # won't reload them either. So force-close Kodi: on next start it loads the
-    # patched userdata fresh instead of clobbering it.
+    # Option 2 patches both the skin/menu templates (addons/skin.../shortcuts/)
+    # and userdata (guisettings.xml, Database, addon_data). Kodi holds userdata
+    # in memory and writes it back on exit, which would overwrite the freshly
+    # extracted files, and ReloadSkin() won't reload them. So force-close: on
+    # next start Kodi loads the patched userdata fresh AND script.skinvariables
+    # rebuilds the menu from the updated templates under addons/.
     dialog.ok(addon_name, local_string(30119))  # Update applied. Kodi will now close - reopen it to finish.
     os._exit(1)
 
 def extract_userdata_patch():
     if os.path.exists(zippath):
         dp.create(addon_name, 'Updating')
-        target = str(user_data)  # special://userdata -> home/userdata
         counter = 1
         with ZipFile(zippath, 'r') as z:
             files = z.infolist()
+
+            # Decide the extract target from the zip's own structure so files
+            # never land in the wrong place:
+            #   - entries prefixed with 'userdata/'  -> extract to special://home
+            #       (home + userdata/... = home/userdata/...)
+            #   - entries already relative to userdata (addon_data/..., *.xml)
+            #       -> extract to special://userdata
+            names = [f.filename for f in files if f.filename and not f.filename.startswith('__MACOSX')]
+            top_levels = sorted({ (n.split('/', 1)[0] if '/' in n else n) for n in names })
+
+            # Option 2 now patches BOTH the skin/menu (addons/) and settings
+            # (userdata/) so it can update menus too. Pick the target from the
+            # zip's own top-level folders:
+            #   - if entries are rooted at 'addons/' and/or 'userdata/', they are
+            #     already relative to the Kodi home dir -> extract to
+            #     special://home so addons/... and userdata/... both land right.
+            #   - otherwise the entries are relative to userdata itself
+            #     (addon_data/..., *.xml) -> extract to special://userdata.
+            rooted_at_home = any(
+                n == 'addons/' or n.startswith('addons/') or
+                n == 'userdata/' or n.startswith('userdata/')
+                for n in names
+            )
+            target = str(home) if rooted_at_home else str(user_data)
+            xbmc.log(f'ABUKARIMwizard extract_userdata_patch: top_levels={top_levels} rooted_at_home={rooted_at_home} target={target}', xbmc.LOGINFO)
+
             for file in files:
                 filename = file.filename
+                if not filename or filename.startswith('__MACOSX'):
+                    counter += 1
+                    continue
                 progress_percentage = int(counter/len(files)*100)
                 try:
                     z.extract(file, target)
