@@ -87,7 +87,7 @@ class Menus:
             description=g.get_language_string(30417),
             menu_item=g.create_icon_dict("shows_recent", g.ICONS_PATH),
         )
-        if g.get_setting("trakt.auth") and g.get_bool_setting("trakt.enabled", True):
+        if g.get_setting("trakt.auth") and g.get_bool_setting("trakt.enabled", False):
             g.add_directory_item(
                 g.get_language_string(30005),
                 action="showsRecommended",
@@ -218,7 +218,18 @@ class Menus:
 
     @staticmethod
     def my_shows():
-        if g.get_setting('trakt.auth') and g.get_bool_setting('trakt.enabled', True) and g.get_setting('mdblist.enabled') == "true" and g.get_setting('mdblist.apikey'):
+        trakt_active = bool(g.get_setting('trakt.auth')) and g.get_bool_setting('trakt.enabled', False)
+        mdblist_active = g.get_setting('mdblist.enabled') == "true" and bool(g.get_setting('mdblist.auth') or g.get_setting('mdblist.apikey'))
+        simkl_active = bool(g.get_setting('simkl.auth')) and g.get_bool_setting('simkl.enabled')
+        if trakt_active or mdblist_active or simkl_active:
+            g.add_directory_item(
+                g.get_language_string(31472),
+                action="calendarBrowse",
+                description=g.get_language_string(31475),
+                menu_item=g.create_icon_dict("shows_update", g.ICONS_PATH),
+                is_folder=False,
+            )
+        if sum((trakt_active, mdblist_active, simkl_active)) >= 2:
             g.add_directory_item(
                 g.get_language_string(30977),
                 action="mergeInProgressShows",
@@ -231,7 +242,7 @@ class Menus:
                 description=g.get_language_string(30980),
                 menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
             )
-        if g.get_setting('trakt.auth') and g.get_bool_setting('trakt.enabled', True):
+        if g.get_setting('trakt.auth') and g.get_bool_setting('trakt.enabled', False):
             g.add_directory_item(
                 g.get_language_string(30043),
                 action="onDeckShows",
@@ -306,7 +317,7 @@ class Menus:
                 description=g.get_language_string(30442),
                 menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
             )
-        if g.get_setting('mdblist.enabled') == "true" and g.get_setting('mdblist.apikey'):
+        if g.get_setting('mdblist.enabled') == "true" and (g.get_setting('mdblist.auth') or g.get_setting('mdblist.apikey')):
             g.add_directory_item(
                 g.get_language_string(30970),
                 action="mdblistInProgressEpisodes",
@@ -314,9 +325,84 @@ class Menus:
                 menu_item=g.create_icon_dict("shows_progress", g.ICONS_PATH),
             )
             g.add_directory_item(
+                g.get_language_string(31476),
+                action="mdblistNextUp",
+                description=g.get_language_string(31477),
+                menu_item=g.create_icon_dict("shows_nextup", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31159),
+                action="mdblistCollectionShows",
+                description=g.get_language_string(31160),
+                menu_item=g.create_icon_dict("shows_collected", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31161),
+                action="mdblistDroppedShows",
+                description=g.get_language_string(31162),
+                menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
                 g.get_language_string(30966),
                 action="mdblistRecentShows",
                 description=g.get_language_string(30967),
+                menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(30996),
+                action="mdblistMyLists",
+                mediatype="shows",
+                description=g.get_language_string(30997),
+                menu_item=g.create_icon_dict("list_trakt", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31063),
+                action="mdblistDiscover",
+                mediatype="shows",
+                description=g.get_language_string(31064),
+                menu_item=g.create_icon_dict("list_trakt", g.ICONS_PATH),
+            )
+        if g.get_setting('simkl.auth') and g.get_bool_setting('simkl.enabled'):
+            g.add_directory_item(
+                g.get_language_string(31111),
+                action="simklInProgressEpisodes",
+                description=g.get_language_string(31112),
+                menu_item=g.create_icon_dict("shows_progress", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31147),
+                action="simklWatchingShows",
+                description=g.get_language_string(31148),
+                menu_item=g.create_icon_dict("shows_progress", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31149),
+                action="simklPlanToWatchShows",
+                description=g.get_language_string(31150),
+                menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31151),
+                action="simklHoldShows",
+                description=g.get_language_string(31152),
+                menu_item=g.create_icon_dict("shows_collected", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31153),
+                action="simklCompletedShows",
+                description=g.get_language_string(31154),
+                menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31155),
+                action="simklDroppedShows",
+                description=g.get_language_string(31156),
+                menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31107),
+                action="simklRecentShows",
+                description=g.get_language_string(31108),
                 menu_item=g.create_icon_dict("shows_watched", g.ICONS_PATH),
             )
         g.close_directory(g.CONTENT_MENU)
@@ -422,7 +508,7 @@ class Menus:
         self.list_builder.show_list_builder(trakt_list)
 
     def shows_new(self):
-        hidden_items = self.hidden_database.get_hidden_items("recommendations", "shows")
+        hidden_items = self.hidden_database.get_hidden_items("recommendations", "tvshow")
         date_string = datetime.datetime.now() - datetime.timedelta(days=29)
         trakt_list = self.shows_database.extract_trakt_page(
             f"calendars/all/shows/new/{date_string.strftime('%Y-%m-%d')}/30",
@@ -450,7 +536,7 @@ class Menus:
 
     @trakt_auth_guard
     def my_recent_episodes(self):
-        hidden_shows = self.hidden_database.get_hidden_items("calendar", "shows")
+        hidden_shows = self.hidden_database.get_hidden_items("calendar", "tvshow")
         date_string = datetime.datetime.now() - datetime.timedelta(days=13)
         trakt_list = self.trakt_api.get_json(
             f"calendars/my/shows/{date_string.strftime('%Y-%m-%d')}/14", extended="full", pull_all=True
@@ -473,9 +559,13 @@ class Menus:
         )
         if upcoming_episodes is None:
             upcoming_episodes = []
-        upcoming_episodes = upcoming_episodes[: self.page_limit]
+        start = (g.PAGE - 1) * self.page_limit
+        page_slice = upcoming_episodes[start : start + self.page_limit]
         self.list_builder.mixed_episode_builder(
-            upcoming_episodes, prepend_date=True, no_paging=True, hide_unaired=False
+            page_slice,
+            prepend_date=True,
+            hide_unaired=False,
+            force_next_page=len(upcoming_episodes) > start + self.page_limit,
         )
 
     def shows_networks(self):

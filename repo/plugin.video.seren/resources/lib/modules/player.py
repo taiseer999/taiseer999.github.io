@@ -13,7 +13,7 @@ import xbmcplugin
 from resources.lib.common import tools
 from resources.lib.database.trakt_sync import bookmark
 from resources.lib.indexers import trakt
-from resources.lib.modules import smartPlay
+from resources.lib.modules import catalog_profiles, locale_playback, smartPlay
 from resources.lib.modules.globals import g
 
 
@@ -42,12 +42,15 @@ class SerenPlayer(xbmc.Player):
         self.mdblist_ignoreSecondsAtStart = g.get_int_setting("mdblist.ignoreSecondsAtStart")
         self.mdblist_playCountMinimumPercent = g.get_int_setting("mdblist.playCountMinimumPercent")
         self.mdblist_scrobbling_enabled = g.get_bool_setting("mdblist.scrobbling", True)
+        self.simkl_ignoreSecondsAtStart = g.get_int_setting("simkl.ignoreSecondsAtStart")
+        self.simkl_playCountMinimumPercent = g.get_int_setting("simkl.playCountMinimumPercent")
+        self.simkl_scrobbling_enabled = g.get_bool_setting("simkl.scrobbling", True)
         self.dialogs_enabled = g.get_bool_setting("smartplay.playingnextdialog") or g.get_bool_setting(
             "smartplay.stillwatching"
         )
         self.pre_scrape_enabled = g.get_bool_setting("smartPlay.preScrape")
         self.playing_next_time = g.get_int_setting("playingnext.time")
-        self.trakt_enabled = bool(g.get_setting("trakt.auth", "")) and g.get_bool_setting("trakt.enabled", True)
+        self.trakt_enabled = bool(g.get_setting("trakt.auth", "")) and g.get_bool_setting("trakt.enabled", False)
         self._running_path = None
 
         # Flags
@@ -58,14 +61,20 @@ class SerenPlayer(xbmc.Player):
         self.playback_stopped = False
         self.stop_event_received = False  # Set by onPlayBackStopped regardless of playback_started
         self._end_playback_done = False  # Guard: prevents double-execution of _end_playback()
+        self._locale_backup = None  # Pre-override Kodi locale snapshot from apply_catalog_locale()
         self.scrobbled = False
         self.scrobble_started = False
         self.last_attempted_scrobble_stop = 0
         self.last_attempted_scrobble_pause = 0
-        self.mdblist_enabled = g.get_bool_setting("mdblist.enabled") and bool(g.get_setting("mdblist.apikey"))
+        self.mdblist_enabled = g.get_bool_setting("mdblist.enabled") and bool(g.get_setting("mdblist.auth") or g.get_setting("mdblist.apikey"))
         self.mdblist_scrobbled = False
         self.last_attempted_mdblist_stop = 0
         self.last_attempted_mdblist_pause = 0
+        self.simkl_enabled = bool(g.get_setting("simkl.auth", "")) and g.get_bool_setting("simkl.enabled", True)
+        self.simkl_scrobbled = False
+        self.simkl_scrobble_started = False
+        self.last_attempted_simkl_stop = 0
+        self.last_attempted_simkl_pause = 0
         self.marked_watched = False
         self.dialogs_triggered = False
         self.pre_scrape_initiated = False
@@ -112,6 +121,12 @@ class SerenPlayer(xbmc.Player):
         return MDBListAPI()
 
     @cached_property
+    def _simkl_api(self):
+        from resources.lib.indexers.simkl import SimklAPI
+
+        return SimklAPI()
+
+    @cached_property
     def bookmark_sync(self):
         return bookmark.TraktSyncDatabase()
 
@@ -140,6 +155,10 @@ class SerenPlayer(xbmc.Player):
         self.smart_module = smartPlay.SmartPlay(item_information)
         self.mediatype = self.item_information["info"]["mediatype"]
         self.trakt_id = self.item_information["info"]["trakt_id"]
+
+        self._locale_backup = locale_playback.apply_catalog_locale(
+            catalog_profiles.resolve_catalog_from_item_information(self.item_information)
+        )
 
         if self.item_information.get("resume", "false") == "true":
             self._try_get_bookmark()
@@ -192,6 +211,10 @@ class SerenPlayer(xbmc.Player):
         self.smart_module = smartPlay.SmartPlay(item_information)
         self.mediatype = self.item_information["info"]["mediatype"]
         self.trakt_id = self.item_information["info"]["trakt_id"]
+
+        self._locale_backup = locale_playback.apply_catalog_locale(
+            catalog_profiles.resolve_catalog_from_item_information(self.item_information)
+        )
 
         if self.item_information.get("resume", "false") == "true":
             self._try_get_bookmark()
@@ -382,6 +405,7 @@ class SerenPlayer(xbmc.Player):
         :rtype: None
         """
         self._trakt_start_watching(re_scrobble=True)
+        self._simkl_start_watching(re_scrobble=True)
 
     def onPlayBackEnded(self):
         """
@@ -416,6 +440,7 @@ class SerenPlayer(xbmc.Player):
         self._handle_bookmark()
         self._trakt_stop_watching()
         self._mdblist_stop_watching()
+        self._simkl_stop_watching()
 
     def onPlayBackError(self):
         """
@@ -453,9 +478,11 @@ class SerenPlayer(xbmc.Player):
         if self._end_playback_done:
             return
         self._end_playback_done = True
+        locale_playback.restore_catalog_locale(self._locale_backup)
         self._handle_bookmark()
         self._trakt_stop_watching()
         self._mdblist_stop_watching()
+        self._simkl_stop_watching()
         self._trakt_mark_playing_item_watched()
         self._debrid_post_playback_cleanup()
         if g.get_bool_setting("general.force.widget.refresh.playback"):
@@ -813,6 +840,115 @@ class SerenPlayer(xbmc.Player):
 
         MDBListSyncDatabase().write_watched_locally(self.mediatype, self.item_information["info"])
 
+        # Clear L1 list cache so watched status reflects immediately on next list build
+        try:
+            from resources.lib.database.trakt_sync import clear_list_cache
+            clear_list_cache()
+        except Exception:
+            pass
+
+    # endregion
+
+    # region Simkl
+    def _build_simkl_object(self):
+        info = self.item_information["info"]
+        if self.mediatype == "movie":
+            tmdb_id = info.get("tmdb_id")
+            if not tmdb_id:
+                return None
+            return {"progress": self.watched_percentage, "movie": {"ids": {"tmdb": tmdb_id}}}
+        if self.mediatype == "episode":
+            tmdb_show_id = info.get("tmdb_show_id")
+            season = info.get("season")
+            episode = info.get("episode")
+            if not tmdb_show_id or season is None or episode is None:
+                return None
+            return {
+                "progress": self.watched_percentage,
+                "show": {"ids": {"tmdb": tmdb_show_id}},
+                "episode": {"season": season, "number": episode},
+            }
+        return None
+
+    def _simkl_start_watching(self, re_scrobble=False):
+        # Never call this from a seek callback - Simkl's docs explicitly forbid
+        # scrobble/start on seek events, and the 20s per-user write lock would
+        # 400 on rapid seeks. Only wire this to real play/resume events.
+        if (
+            not self.simkl_enabled
+            or not self.simkl_scrobbling_enabled
+            or (self.simkl_scrobbled and not re_scrobble)
+            or (self.simkl_scrobble_started and not re_scrobble)
+        ):
+            return
+
+        if (
+            self.watched_percentage >= self.simkl_playCountMinimumPercent
+            or self.current_time < self.simkl_ignoreSecondsAtStart
+        ):
+            return
+
+        post_data = self._build_simkl_object()
+        if post_data is not None:
+            try:
+                self._simkl_api.post("scrobble/start", post_data)
+            except Exception:
+                g.log_stacktrace()
+        # Set even on failure/missing-metadata so the keep_alive loop doesn't
+        # retry this every 0.5s for the rest of the playback.
+        self.simkl_scrobble_started = True
+
+    def _simkl_stop_watching(self):
+        if (
+            not self.simkl_enabled
+            or not self.simkl_scrobbling_enabled
+            or self.simkl_scrobbled
+            or self.current_time < self.simkl_ignoreSecondsAtStart
+        ):
+            return
+
+        post_data = self._build_simkl_object()
+        if post_data is None:
+            return
+
+        if post_data["progress"] >= self.simkl_playCountMinimumPercent:
+            if time.time() - self.last_attempted_simkl_stop < 30 and not g.abort_requested():
+                return
+            post_data["progress"] = max(post_data["progress"], 80)
+            try:
+                response = self._simkl_api.post("scrobble/stop", post_data)
+            except Exception:
+                g.log_stacktrace()
+                return
+            finally:
+                self.last_attempted_simkl_stop = time.time()
+            # simkl.apib doesn't pin the write endpoints to one status code the way
+            # Trakt's does (201) - check .ok rather than hardcoding a number. 409
+            # means "already marked watched in the last hour" - treat as success.
+            if response.ok or response.status_code == 409:
+                self.simkl_scrobbled = True
+                if response.ok:
+                    try:
+                        action = response.json().get("action")
+                        if action != "scrobble":
+                            g.log(f"Simkl scrobble/stop returned action: {action}", "warning")
+                    except Exception:
+                        g.log_stacktrace()
+            else:
+                g.log(f"Simkl scrobble/stop returned status code: {response.status_code}", "warning")
+        elif self.current_time > self.simkl_ignoreSecondsAtStart:
+            if (pause_time := time.time() - self.last_attempted_simkl_pause) < 5:
+                g.log(f"Simkl scrobble/pause repeat called: {pause_time}s", "warning")
+            try:
+                response = self._simkl_api.post("scrobble/pause", post_data)
+            except Exception:
+                g.log_stacktrace()
+                return
+            finally:
+                self.last_attempted_simkl_pause = time.time()
+            if not response.ok:
+                g.log(f"Simkl scrobble/pause returned status code: {response.status_code}", "warning")
+
     # endregion
 
     def _keep_alive(self):
@@ -835,6 +971,9 @@ class SerenPlayer(xbmc.Player):
             if not self.scrobble_started:
                 self._trakt_start_watching()
 
+            if not self.simkl_scrobble_started:
+                self._simkl_start_watching()
+
             time_left = int(self.total_time) - int(self.current_time)
 
             # Skip-segment check (intro/recap/credits/preview)
@@ -853,6 +992,13 @@ class SerenPlayer(xbmc.Player):
                 and not self.mdblist_scrobbled
             ):
                 self._mdblist_stop_watching()
+
+            if (
+                self.watched_percentage >= self.simkl_playCountMinimumPercent
+                and self.simkl_scrobble_started
+                and not self.simkl_scrobbled
+            ):
+                self._simkl_stop_watching()
 
             if self.dialogs_enabled and not self.dialogs_triggered and time_left <= self.playing_next_time:
                 xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=runPlayerDialogs")')

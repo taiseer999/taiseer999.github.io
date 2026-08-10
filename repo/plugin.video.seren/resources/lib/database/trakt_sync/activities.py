@@ -80,6 +80,14 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
             ),
         ]
 
+    def clear_last_sync(self):
+        """Clear-button counterpart to forceTraktSync's flush_activities()+sync_activities()
+        pair (see router.py). Notifies here rather than in flush_activities() itself, since
+        that method is also called by forceTraktSync and by trakt.py's account-switch flow -
+        notifying there would fire a misleading "cleared" toast on those paths too."""
+        self.flush_activities()
+        g.notification(self.notification_prefix, g.get_language_string(31121), time=5000)
+
     def fetch_remote_activities(self, silent=False):
         """
         Enforces a timeout for the activities call to Trakt based on database timestamp of last pull.
@@ -114,7 +122,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
                 g.log("TraktSync: No Trakt auth present, no sync will occur", "warning")
                 return
 
-            if not g.get_bool_setting("trakt.enabled", True):
+            if not g.get_bool_setting("trakt.enabled", False):
                 g.log("TraktSync: Trakt is disabled, no sync will occur", "warning")
                 return
 

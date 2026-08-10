@@ -9,39 +9,6 @@ from resources.lib.database.trakt_sync import movies
 from resources.lib.database.trakt_sync import shows
 from resources.lib.modules.globals import g
 
-# L1 metadata cache — persists across plugin calls with reuselanguageinvoker.
-# Key: plugin URL string (action + page + params), Value: formatted list from DB.
-# Navigating back to a previously viewed list returns instantly from this cache
-# instead of re-running the 5-table SQL JOIN + metadata update.
-_L1_CACHE = {}
-_L1_CACHE_MAX = 30  # Max cached list results (roughly 30 pages × 20 items each)
-
-
-def _l1_key():
-    """Generate cache key from current request — uniquely identifies each list page."""
-    return f"{g.PATH}?{g.PARAM_STRING}"
-
-
-def _l1_get():
-    """Return cached list result or None."""
-    return _L1_CACHE.get(_l1_key())
-
-
-def _l1_set(result):
-    """Store list result in L1 cache, evicting oldest if over limit."""
-    if len(_L1_CACHE) >= _L1_CACHE_MAX:
-        # Remove the oldest entry (first inserted)
-        try:
-            _L1_CACHE.pop(next(iter(_L1_CACHE)))
-        except (StopIteration, RuntimeError):
-            pass
-    _L1_CACHE[_l1_key()] = result
-
-
-def clear_l1_cache():
-    """Clear the L1 metadata cache. Called when metadata settings change."""
-    _L1_CACHE.clear()
-
 
 class ListBuilder:
     """
@@ -147,12 +114,21 @@ class ListBuilder:
         :param params: Parameters to send to common_menu_builder method
         :return: List list_items if smart_play Kwarg is True else None
         """
+        action = params.pop("action", "traktList")
         self._common_menu_builder(
             [dict(item, art=g.create_icon_dict("list", g.ICONS_PATH)['art']) for item in trakt_list],
             g.CONTENT_MENU,
-            "traktList",
+            action,
             **params,
         )
+
+    @staticmethod
+    def _cast_cm(item):
+        cm = list(item.get("cm") or [])
+        if item.get("cast") and item.get("args"):
+            url = g.create_url(g.BASE_URL, {"action": "castBrowse", "action_args": item.get("args")})
+            cm.append((g.get_language_string(31200), f'RunPlugin("{url}")'))
+        return cm
 
     def _common_menu_builder(self, trakt_list, content_type, action="getSources", **params):
         # Background prefetch call (RunPlugin, PLUGIN_HANDLE=-1): data loading already done
@@ -172,6 +148,7 @@ class ListBuilder:
         prepend_date = params.pop("prepend_date", False)
         mixed_list = params.pop("mixed_list", False)
         next_args = params.pop("next_args", None)
+        force_next_page = params.pop("force_next_page", None)
 
         params.pop("hide_unaired", None)
         params.pop("hide_watched", None)
@@ -181,7 +158,12 @@ class ListBuilder:
             params["bulk_add"] = True
             list_items = [
                 g.add_directory_item(
-                    item.get("name"), action=action, menu_item=item, action_args=item.get("args"), **params
+                    item.get("name"),
+                    action=action,
+                    menu_item=item,
+                    action_args=item.get("args"),
+                    cm=self._cast_cm(item),
+                    **params,
                 )
                 for item in self._post_process_list(trakt_list, prepend_date, mixed_list)
                 if item is not None
@@ -199,10 +181,11 @@ class ListBuilder:
 
         finally:
             if not smart_play:
+                paginate = len(list_items) >= self.page_limit if force_next_page is None else force_next_page
                 has_next_page = (
                     not (g.FROM_WIDGET and g.get_bool_setting("general.widget.hide_next"))
                     and not no_paging
-                    and len(list_items) >= self.page_limit
+                    and paginate
                 )
                 if has_next_page:
                     g.REQUEST_PARAMS["page"] = g.PAGE + 1

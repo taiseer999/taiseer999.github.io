@@ -250,6 +250,34 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
         """
         return self.fetchall("""SELECT trakt_id as trakt_id FROM episodes WHERE collected=1""")
 
+    def get_all_watched_episode_tmdb_keys(self):
+        """bridgeSync's read-side for the Watched/episode domain - show_tmdb_id +
+        season + number per watched episode. watched > 0, not =1: same
+        play-count column shape as movies.get_all_watched_movie_tmdb_ids."""
+        return self.fetchall(
+            """
+            SELECT s.tmdb_id AS show_tmdb_id, e.season, e.number
+            FROM episodes AS e
+                     JOIN shows AS s ON s.trakt_id = e.trakt_show_id
+            WHERE e.watched > 0 AND s.tmdb_id IS NOT NULL
+            """
+        )
+
+    def get_all_collected_show_tmdb_ids(self):
+        """bridgeSync's read-side for the Collection domain. Collection is
+        tracked per-episode (see mark_show_collected cascading an UPDATE across
+        every episode of a show) - a show counts as collected here the same way
+        get_collected_shows() already derives it: at least one collected
+        episode, not a separate show-level flag."""
+        return self.fetchall(
+            """
+            SELECT DISTINCT s.tmdb_id
+            FROM episodes AS e
+                     JOIN shows AS s ON s.trakt_id = e.trakt_show_id
+            WHERE e.collected = 1 AND s.tmdb_id IS NOT NULL
+            """
+        )
+
     @guard_against_none(list)
     def get_show_list(self, trakt_list, **params):
         """
@@ -276,7 +304,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
             WHERE s.trakt_id IN ({','.join(str(i.get('trakt_id')) for i in trakt_list)})
             """
         if params.pop("hide_unaired", self.hide_unaired):
-            statement += f" AND (s.air_date IS NULL OR Datetime(s.air_date) < Datetime('{self._get_datetime_now()}'))"
+            statement += f" AND (s.air_date IS NULL OR Datetime(s.air_date) < Datetime('{self._get_aired_cutoff()}'))"
         if params.pop("hide_watched", self.hide_watched):
             statement += " AND s.watched_episodes < s.episode_count"
 
@@ -305,7 +333,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
         else:
             statement += f"s.trakt_show_id = {trakt_show_id}"
         if params.pop("hide_unaired", self.hide_unaired):
-            statement += f" AND Datetime(s.air_date) < Datetime('{self._get_datetime_now()}')"
+            statement += f" AND Datetime(s.air_date) < Datetime('{self._get_aired_cutoff()}')"
         if params.pop("self.hide_specials", self.hide_specials):
             statement += " AND s.season != 0"
         if params.pop("hide_watched", self.hide_watched):
@@ -344,7 +372,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
         else:
             statement += f"e.trakt_show_id = {trakt_show_id} "
         if params.pop("hide_unaired", self.hide_unaired):
-            statement += f" AND Datetime(e.air_date) < Datetime('{self._get_datetime_now()}') "
+            statement += f" AND Datetime(e.air_date) < Datetime('{self._get_aired_cutoff()}') "
         if params.pop("self.hide_specials", self.hide_specials):
             statement += " AND e.season != 0"
         if params.pop("hide_watched", self.hide_watched):
@@ -395,7 +423,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
                 WHERE e.trakt_id IN ({in_predicate})
                 """
         if params.pop("hide_unaired", self.hide_unaired):
-            query += f" AND Datetime(e.air_date) < Datetime('{self._get_datetime_now()}') "
+            query += f" AND Datetime(e.air_date) < Datetime('{self._get_aired_cutoff()}') "
         if params.pop("hide_specials", self.hide_specials):
             query += " AND e.season != 0"
         if params.pop("hide_watched", self.hide_watched):
@@ -986,7 +1014,7 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
                                    AND e.trakt_show_id NOT IN (SELECT trakt_id AS trakt_show_id
                                                                FROM hidden
                                                                WHERE SECTION IN ('progress_watched'))
-                                   AND Datetime(air_date) < Datetime('{self._get_datetime_now()}')
+                                   AND Datetime(air_date) < Datetime('{self._get_aired_cutoff()}')
                                  GROUP BY e.trakt_show_id) AS inner_episodes
                             ON e.trakt_show_id == inner_episodes.trakt_show_id
                                 AND e.season == inner_episodes.season

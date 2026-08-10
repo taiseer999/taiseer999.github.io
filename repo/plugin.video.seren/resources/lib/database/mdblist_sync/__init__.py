@@ -99,10 +99,11 @@ class MDBListSyncDatabase(Database):
     def write_watched_locally(self, mediatype, info):
         """Writes a movie/episode watched mark directly to the local sync tables and
         clears any matching stale bookmark. Shared by the scrobbler (player.py) and the
-        context-menu mark-watched action, since MDBList's GET /sync/watched never
-        returns movies and a mark made via either path would otherwise be invisible
-        in Seren's own local view until the next full sync (movies: never, since the
-        remote endpoint never returns them at all)."""
+        context-menu mark-watched action, so a mark made via either path is reflected
+        in Seren's own local view immediately instead of waiting for the next periodic
+        activities sync (both movies and episodes are otherwise fully repopulated from
+        MDBList's remote GET /sync/watched by _sync_watched() - live-confirmed
+        2026-07-18 that this endpoint does return movies)."""
         try:
             now = self._get_datetime_now()
             if mediatype == "movie":
@@ -132,8 +133,10 @@ class MDBListSyncDatabase(Database):
             g.log_stacktrace()
 
     def get_recent_movies(self, limit, offset=0, force_all=False):
-        """Locally-synced watched movies, newest first. Scrobbler/context-menu-written
-        only - MDBList's own GET /sync/watched never returns movies (Phase B/D gap)."""
+        """Locally-synced watched movies, newest first. Populated both by
+        write_watched_locally() (scrobbler/context-menu, immediate) and by
+        _sync_watched()'s periodic remote reconciliation (MDBList's GET
+        /sync/watched - live-confirmed 2026-07-18 to return movies)."""
         query = """
             SELECT tmdb_id, last_watched_at
             FROM movies
@@ -157,3 +160,19 @@ class MDBListSyncDatabase(Database):
         if not force_all:
             query += f" LIMIT {limit} OFFSET {offset}"
         return self.fetchall(query)
+
+    def get_all_watched_movie_tmdb_ids(self):
+        """bridgeSync's read-side for the Watched/movie domain. Reflects both
+        locally-authored writes (write_watched_locally, immediate) and MDBList's
+        own remote state (_sync_watched()'s periodic reconciliation - live-
+        confirmed 2026-07-18 that GET /sync/watched does return movies), so
+        MDBList is now a genuine out-of-band source for this media_type too,
+        not just a push target."""
+        return self.fetchall("SELECT tmdb_id FROM movies WHERE watched = 1")
+
+    def get_all_watched_episode_tmdb_keys(self):
+        """bridgeSync's read-side for the Watched/episode domain. Unlike movies,
+        this table IS kept in sync with MDBList's real remote state on every
+        activities cycle (see activities.py's _sync_watched), so it's safe to
+        treat as a genuine out-of-band source, not just a target."""
+        return self.fetchall("SELECT show_tmdb_id, season, number FROM episodes WHERE watched = 1")

@@ -75,7 +75,7 @@ class Menus:
             description=g.get_language_string(30396),
             menu_item=g.create_icon_dict("movies_recent", g.ICONS_PATH),
         )
-        if g.get_setting("trakt.auth") and g.get_bool_setting("trakt.enabled", True):
+        if g.get_setting("trakt.auth") and g.get_bool_setting("trakt.enabled", False):
             g.add_directory_item(
                 g.get_language_string(30005),
                 action="moviesRecommended",
@@ -201,7 +201,10 @@ class Menus:
 
     @staticmethod
     def my_movies():
-        if g.get_setting('trakt.auth') and g.get_bool_setting('trakt.enabled', True) and g.get_setting('mdblist.enabled') == "true" and g.get_setting('mdblist.apikey'):
+        trakt_active = bool(g.get_setting('trakt.auth')) and g.get_bool_setting('trakt.enabled', False)
+        mdblist_active = g.get_setting('mdblist.enabled') == "true" and bool(g.get_setting('mdblist.auth') or g.get_setting('mdblist.apikey'))
+        simkl_active = bool(g.get_setting('simkl.auth')) and g.get_bool_setting('simkl.enabled')
+        if sum((trakt_active, mdblist_active, simkl_active)) >= 2:
             g.add_directory_item(
                 g.get_language_string(30973),
                 action="mergeInProgressMovies",
@@ -214,7 +217,7 @@ class Menus:
                 description=g.get_language_string(30976),
                 menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
             )
-        if g.get_setting('trakt.auth') and g.get_bool_setting('trakt.enabled', True):
+        if g.get_setting('trakt.auth') and g.get_bool_setting('trakt.enabled', False):
             g.add_directory_item(
                 g.get_language_string(30043),
                 action="onDeckMovies",
@@ -259,7 +262,7 @@ class Menus:
                 description=g.get_language_string(30415),
                 menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
             )
-        if g.get_setting('mdblist.enabled') == "true" and g.get_setting('mdblist.apikey'):
+        if g.get_setting('mdblist.enabled') == "true" and (g.get_setting('mdblist.auth') or g.get_setting('mdblist.apikey')):
             g.add_directory_item(
                 g.get_language_string(30968),
                 action="mdblistInProgressMovies",
@@ -267,9 +270,60 @@ class Menus:
                 menu_item=g.create_icon_dict("movies_progress", g.ICONS_PATH),
             )
             g.add_directory_item(
+                g.get_language_string(31157),
+                action="mdblistCollectionMovies",
+                description=g.get_language_string(31158),
+                menu_item=g.create_icon_dict("movies_collected", g.ICONS_PATH),
+            )
+            g.add_directory_item(
                 g.get_language_string(30964),
                 action="mdblistRecentMovies",
                 description=g.get_language_string(30965),
+                menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(30994),
+                action="mdblistMyLists",
+                mediatype="movies",
+                description=g.get_language_string(30995),
+                menu_item=g.create_icon_dict("list_trakt", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31063),
+                action="mdblistDiscover",
+                mediatype="movies",
+                description=g.get_language_string(31064),
+                menu_item=g.create_icon_dict("list_trakt", g.ICONS_PATH),
+            )
+        if g.get_setting('simkl.auth') and g.get_bool_setting('simkl.enabled'):
+            g.add_directory_item(
+                g.get_language_string(31109),
+                action="simklInProgressMovies",
+                description=g.get_language_string(31110),
+                menu_item=g.create_icon_dict("movies_progress", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31141),
+                action="simklPlanToWatchMovies",
+                description=g.get_language_string(31142),
+                menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31143),
+                action="simklCompletedMovies",
+                description=g.get_language_string(31144),
+                menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31145),
+                action="simklDroppedMovies",
+                description=g.get_language_string(31146),
+                menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
+            )
+            g.add_directory_item(
+                g.get_language_string(31105),
+                action="simklRecentMovies",
+                description=g.get_language_string(31106),
                 menu_item=g.create_icon_dict("movies_watched", g.ICONS_PATH),
             )
         g.close_directory(g.CONTENT_MENU)
@@ -297,7 +351,7 @@ class Menus:
 
     @trakt_auth_guard
     def on_deck_movies(self):
-        hidden_movies = self.hidden_database.get_hidden_items("progress_watched", "movies")
+        hidden_movies = self.hidden_database.get_hidden_items("progress_watched", "movie")
         bookmarked_items = [
             i for i in self.bookmark_database.get_all_bookmark_items("movie") if i["trakt_id"] not in hidden_movies
         ][self.page_start : self.page_end]

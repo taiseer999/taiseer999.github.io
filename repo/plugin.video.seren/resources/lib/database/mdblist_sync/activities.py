@@ -21,10 +21,30 @@ class MDBListSyncDatabase(mdblist_sync.MDBListSyncDatabase):
     def _update_activity_record(self, record, value):
         self.execute_sql(f"UPDATE activities SET {record}=? WHERE sync_id=1", (value,))
 
+    def clear_last_sync(self):
+        """Clear-button counterpart to force_sync(). Notifies here rather than in
+        set_base_activities() itself, since force_sync() also calls that as its
+        first step - notifying there would fire a misleading "cleared" toast on
+        every Force Sync click too."""
+        self.set_base_activities()
+        g.notification(g.ADDON_NAME, g.get_language_string(31121))
+
+    def force_sync(self):
+        """Resets the sync cursor to base_date and re-runs a full sync. Uses
+        set_base_activities() rather than a destructive table wipe - movies and
+        episodes are both fully repopulated by the subsequent sync_activities()
+        call (see _sync_watched()), so a direct wipe here would be redundant,
+        not safer."""
+        from resources.lib.database.trakt_sync import clear_list_cache
+
+        self.set_base_activities()
+        clear_list_cache()
+        self.sync_activities()
+
     def sync_activities(self):
         with GlobalLock("mdblist.sync"):
-            if not g.get_setting("mdblist.apikey"):
-                g.log("MDBListSync: No MDBList auth present, no sync will occur", "warning")
+            if not g.get_bool_setting("mdblist.enabled") or not (g.get_setting("mdblist.auth") or g.get_setting("mdblist.apikey")):
+                g.log("MDBListSync: MDBList disabled or no auth present, no sync will occur", "warning")
                 return
 
             self.refresh_activities()
@@ -63,72 +83,99 @@ class MDBListSyncDatabase(mdblist_sync.MDBListSyncDatabase):
                 except ActivitySyncFailure as e:
                     g.log(f"Failed to sync MDBList playback: {e}", "error")
 
-            g.notification(g.ADDON_NAME, g.get_language_string(30953).format(watched_count, playback_count))
-            xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=widgetRefresh&playing=False")')
+            if watched_count or playback_count:
+                g.notification(g.ADDON_NAME, g.get_language_string(30953).format(watched_count, playback_count))
+                xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=widgetRefresh&playing=False")')
 
     def _sync_watched(self):
-        """Pulls GET /sync/watched (cursor-paginated). Movies section is
-        currently always empty per MDBList's own documented gap, but the
-        insert path is kept schema-complete for when that changes."""
-        total = 0
-        cursor = None
-        self.execute_sql("UPDATE episodes SET watched=0")
+        """Pulls GET /sync/watched (offset/limit-paginated per mdblist.apib - the
+        response's pagination object has no cursor/next_cursor field, only
+        offset/limit/has_more; a prior version of this method assumed a cursor
+        that never existed, so pagination always silently stopped after page 1).
+
+        Every page is collected into memory first; movies and episodes are
+        each reset and repopulated as a unit only once pagination has cleanly
+        finished (has_more went false). A page fetch failing mid-loop raises
+        ActivitySyncFailure before any table is touched, instead of leaving
+        either table wiped with only a partial repopulate.
+
+        Movies were previously always empty due to a nesting bug (reading
+        m["ids"]["tmdb"] instead of m["movie"]["ids"]["tmdb"], which meant
+        every real entry failed its own tmdb-id filter) - now fixed. Live-
+        confirmed 2026-07-18 against a real account (417 movies returned,
+        correctly nested) that MDBList's API does populate this endpoint's
+        movies list, so - like episodes - movies are now reset before
+        repopulating: this is a complete paginated fetch of current server
+        state, not a delta, so a clean-finish reset+repopulate reflects
+        reality, and it makes a movie removed/unmarked on MDBList (or a
+        cross_sync push whose local write got skipped, see cross_sync.py)
+        self-healing on the next sync instead of a permanent local phantom.
+        A locally-authored write (write_watched_locally(), scrobbler/context-
+        menu) can be transiently overwritten if a full sync lands in the
+        narrow window before MDBList's backend surfaces that same write back
+        through this endpoint; that's a bounded, self-correcting risk (next
+        sync repopulates it once MDBList catches up), the same risk profile
+        already accepted for Simkl's removal reconciliation."""
+        movie_rows = []
+        episode_rows = []
+        offset = 0
+        limit = 100
         try:
-            while True:
-                params = {"limit": 100}
-                if cursor:
-                    params["cursor"] = cursor
-                page = self.mdblist_api.get_json("sync/watched", **params)
-                if not page:
-                    break
+            for _ in range(500):  # safety cap well above any realistic page count
+                page = self.mdblist_api.get_json("sync/watched", offset=offset, limit=limit)
+                if page is None:
+                    raise ActivitySyncFailure("empty response from MDBList (sync/watched)")
 
                 movies = page.get("movies") or []
                 episodes = page.get("episodes") or []
 
-                if movies:
-                    movie_rows = [
-                        (m["ids"]["tmdb"], m["ids"].get("imdb"), m.get("last_watched_at"))
-                        for m in movies
-                        if m.get("ids", {}).get("tmdb")
-                    ]
-                    if movie_rows:
-                        self.execute_sql(
-                            "REPLACE INTO movies (tmdb_id, imdb_id, watched, last_watched_at) VALUES (?, ?, 1, ?)",
-                            movie_rows,
-                        )
-                    total += len(movie_rows)
-
-                if episodes:
-                    episode_rows = [
-                        (
-                            e["episode"]["show"]["ids"]["tmdb"],
-                            e["episode"]["season"],
-                            e["episode"]["number"],
-                            e.get("last_watched_at"),
-                        )
-                        for e in episodes
-                        if e.get("episode", {}).get("show", {}).get("ids", {}).get("tmdb")
-                    ]
-                    if episode_rows:
-                        self.execute_sql(
-                            "REPLACE INTO episodes (show_tmdb_id, season, number, watched, last_watched_at) "
-                            "VALUES (?, ?, ?, 1, ?)",
-                            episode_rows,
-                        )
-                    total += len(episode_rows)
+                movie_rows.extend(
+                    (m["movie"]["ids"]["tmdb"], m["movie"]["ids"].get("imdb"), m.get("last_watched_at"))
+                    for m in movies
+                    if m.get("movie", {}).get("ids", {}).get("tmdb")
+                )
+                episode_rows.extend(
+                    (
+                        e["episode"]["show"]["ids"]["tmdb"],
+                        e["episode"]["season"],
+                        e["episode"]["number"],
+                        e.get("last_watched_at"),
+                    )
+                    for e in episodes
+                    if e.get("episode", {}).get("show", {}).get("ids", {}).get("tmdb")
+                )
 
                 pagination = page.get("pagination") or {}
-                if pagination.get("has_more") and pagination.get("next_cursor"):
-                    cursor = pagination["next_cursor"]
-                else:
+                if not pagination.get("has_more"):
                     break
+                offset += limit
+
+            self.execute_sql("UPDATE episodes SET watched=0")
+            if episode_rows:
+                self.execute_sql(
+                    "REPLACE INTO episodes (show_tmdb_id, season, number, watched, last_watched_at) "
+                    "VALUES (?, ?, ?, 1, ?)",
+                    episode_rows,
+                )
+            self.execute_sql("UPDATE movies SET watched=0")
+            if movie_rows:
+                self.execute_sql(
+                    "REPLACE INTO movies (tmdb_id, imdb_id, watched, last_watched_at) VALUES (?, ?, 1, ?)",
+                    movie_rows,
+                )
+        except ActivitySyncFailure:
+            raise
         except Exception as e:
             raise ActivitySyncFailure(e) from e
-        return total
+        return len(movie_rows) + len(episode_rows)
 
     def _sync_playback(self):
         """Pulls GET /sync/playback (flat array, not paginated per the
-        live-confirmed response for accounts of this size)."""
+        live-confirmed response for accounts of this size). ids block uses
+        key "tmdb" for both movie and show entries - same convention as
+        sync/watched, live-confirmed 2026-07-18 (a prior fix here assumed
+        "tmdbid" per a spec reading that turned out not to match the live
+        API; that would have silently zeroed every bookmark row)."""
         try:
             entries = self.mdblist_api.get_json("sync/playback") or []
             if isinstance(entries, dict):

@@ -17,6 +17,7 @@ from resources.lib.modules.seren_version import do_version_change
 from resources.lib.modules.serenMonitor import SerenMonitor
 from resources.lib.modules.update_news import do_update_news
 from resources.lib.modules.manual_timezone import validate_timezone_detected
+from resources.lib.modules.locale_playback import recover_orphaned_locale_override
 from resources.lib.modules.accountmgr_sync import sync_accountmgr_credentials, snapshot_enabled_flags, protect_enabled_flags
 
 g.init_globals(sys.argv)
@@ -58,6 +59,7 @@ try:
 
     do_update_news()
     validate_timezone_detected()
+    recover_orphaned_locale_override()
     try:
         g.clear_kodi_bookmarks()
     except TypeError:
@@ -80,6 +82,10 @@ try:
         xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=runMaintenance")')
         if not g.wait_for_abort(15):  # Sleep to make sure tokens refreshed during maintenance
             xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=syncTraktActivities")')
+            xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=syncMDBListActivities")')
+            xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=syncSimklActivities")')
+        if not g.wait_for_abort(15):  # Sleep to let the provider syncs above actually complete first
+            xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=bridgeSync")')
         if not g.wait_for_abort(15):  # Sleep to make sure we don't possibly clobber settings
             xbmc.executebuiltin('RunPlugin("plugin://plugin.video.seren/?action=cleanOrphanedMetadata")')
         if not g.wait_for_abort(15):  # Sleep to make sure we don't possibly clobber settings

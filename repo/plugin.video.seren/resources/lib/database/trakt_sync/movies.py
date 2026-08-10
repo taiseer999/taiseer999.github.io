@@ -86,6 +86,16 @@ class TraktSyncDatabase(trakt_sync.TraktSyncDatabase):
             """
         )
 
+    def get_all_watched_movie_tmdb_ids(self):
+        """bridgeSync's read-side for the Watched domain - bare tmdb_ids only,
+        no metadata join. watched > 0, not =1: the column is a play-count, not
+        a boolean (see mark_movie_watched below)."""
+        return self.fetchall("SELECT tmdb_id FROM movies WHERE watched > 0 AND tmdb_id IS NOT NULL")
+
+    def get_all_collected_movie_tmdb_ids(self):
+        """bridgeSync's read-side for the Collection domain."""
+        return self.fetchall("SELECT tmdb_id FROM movies WHERE collected = TRUE AND tmdb_id IS NOT NULL")
+
     @guard_against_none()
     def mark_movie_watched(self, trakt_id):
         play_count = self.fetchone("SELECT watched FROM movies WHERE trakt_id=?", (trakt_id,))["watched"]
