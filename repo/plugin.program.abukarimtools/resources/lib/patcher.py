@@ -98,13 +98,6 @@ _TINYPPI_NOFONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5z
 _TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIFRpbnlQUEkgZm9udHMgZGlzYWJsZWQgZW50aXJlbHkgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBpbnN0YWxsX2ZvbnRzKCkgd2Fsa2VkIHRoZSBhY3RpdmUgc2tpbiBkaXIgYW5kIGNvdWxkIGNhbGwgUmVsb2FkU2tpbigpOyB3aGVuIHRoYXQKICAgICMgbGFuZGVkIG9uIGEgcGxheWJhY2sgc3RvcC9lbmQgaXQgY29sbGlkZWQgd2l0aCBDVmlkZW9QbGF5ZXI6OkNsb3NlRmlsZSgpICsgdGhlIEFMU0EKICAgICMgcGFzc3Rocm91Z2gtPlBDTSBzd2l0Y2ggb24gdGhlIEdVSSB0aHJlYWQgYW5kIGZyb3plIHRoZSBwaWN0dXJlIG9uIHN0b3AuIFRoZSBmb250CiAgICAjIGZlYXR1cmUgaXMgZHJvcHBlZDogb3ZlcmxheSBsYWJlbHMgZmFsbCBiYWNrIHRvIHRoZSBhY3RpdmUgc2tpbidzIG93biBmb250LiBObyBza2luCiAgICAjIHdhbGssIG5vIFJlbG9hZFNraW4sIG5vdGhpbmcgb24gdGhlIHBsYXllciB0aHJlYWQgLT4gbm8gZnJlZXplLgogICAgX2xvZygiRm9udCBpbnN0YWxsIGRpc2FibGVkIChBQlVLQVJJTSkgLSB1c2luZyBza2luIGZvbnQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
 
 
-# ── Skin font protection: AF3 Font_Static overlay-pin blob (by ABUKARIM TOOLS) ──
-# Re-inserts the font23_narrow/font32 pins (Arabic-capable Noto) into AF3's
-# Font_Static so a skin update that wipes them is self-healed on the next sweep.
-_AF3_FONTPIN_OLD_B64 = 'ICAgICAgICA8ZGVmaW5pdGlvbj4K'
-_AF3_FONTPIN_NEW_B64 = 'ICAgICAgICA8ZGVmaW5pdGlvbj4KICAgICAgICAgICAgPCEtLSBUaW55UFBJIG92ZXJsYXkgZm9udHMgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLT4KICAgICAgICAgICAgPGZvbnQ+CiAgICAgICAgICAgICAgICA8bmFtZT5mb250MjNfbmFycm93PC9uYW1lPgogICAgICAgICAgICAgICAgPGZpbGVuYW1lPk5vdG8tUmVndWxhci50dGY8L2ZpbGVuYW1lPgogICAgICAgICAgICAgICAgPHNpemU+MTg8L3NpemU+CiAgICAgICAgICAgIDwvZm9udD4KICAgICAgICAgICAgPGZvbnQ+CiAgICAgICAgICAgICAgICA8bmFtZT5mb250MzI8L25hbWU+CiAgICAgICAgICAgICAgICA8ZmlsZW5hbWU+Tm90by1Cb2xkLnR0ZjwvZmlsZW5hbWU+CiAgICAgICAgICAgICAgICA8c2l6ZT4yNzwvc2l6ZT4KICAgICAgICAgICAgPC9mb250Pgo='
-
-
 PATCHES = [
     # ── DPlex: disable reuselanguageinvoker (Kodi 22 / Python 3.14 crash fix, by ABUKARIM TOOLS) ──
     # DPlex ships <reuselanguageinvoker>true</reuselanguageinvoker>. On Kodi 22
@@ -635,85 +628,6 @@ PATCHES = [
         'description': 'PPI AF3 - register legacy PPI includes',
     },
 
-    # ── Skin font protection: re-assert Arabic Noto + overlay pins (by ABUKARIM TOOLS) ──
-    # The TinyPPI overlay font (font23_narrow/font32) is pinned skin-side because the
-    # patcher disables tinyppi's own install_fonts(). An upstream skin update can clobber
-    # fonts/ or the Font XML and silently revert the overlay to Arial; disabled-tinyppi
-    # won't self-heal it. These six entries re-ship the two Arabic-capable Noto TTFs
-    # (from this add-on's resources/fonts/) and re-insert the pins every sweep.
-    # not_found_ok so a skin that isn't installed is a clean skip.
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('fonts', 'Noto-Regular.ttf'),
-        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'fonts', 'Noto-Regular.ttf'),
-        'toggle': 'skin_font_guard',
-        'description': 'AF3 - ship Arabic-capable Noto-Regular.ttf',
-    },
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('fonts', 'Noto-Bold.ttf'),
-        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'fonts', 'Noto-Bold.ttf'),
-        'toggle': 'skin_font_guard',
-        'description': 'AF3 - ship Arabic-capable Noto-Bold.ttf',
-    },
-    {
-        'addon_id': 'skin.arctic.fuse.3',
-        'rel_path': os.path.join('1080i', 'Includes_Font.xml'),
-        'old': base64.b64decode(_AF3_FONTPIN_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_AF3_FONTPIN_NEW_B64).decode('utf-8'),
-        'already_patched_check': '<!-- TinyPPI overlay fonts (by ABUKARIM TOOLS) -->',
-        'fallback_pattern': r'(<include name="Font_Static">\s*<param[^>]*>[^<]*</param>\s*<definition>\n)',
-        'fallback_repl': (lambda m: m.group(1)
-            + '            <!-- TinyPPI overlay fonts (by ABUKARIM TOOLS) -->\n'
-              '            <font>\n                <name>font23_narrow</name>\n'
-              '                <filename>Noto-Regular.ttf</filename>\n                <size>18</size>\n            </font>\n'
-              '            <font>\n                <name>font32</name>\n'
-              '                <filename>Noto-Bold.ttf</filename>\n                <size>27</size>\n            </font>\n'),
-        'not_found_ok': True,
-        'toggle': 'skin_font_guard',
-        'description': 'AF3 - pin font23_narrow/font32 to Arabic Noto in Font_Static',
-    },
-    {
-        'addon_id': 'skin.arctic.zephyr.rounded',
-        'rel_path': os.path.join('fonts', 'Noto-Regular.ttf'),
-        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'fonts', 'Noto-Regular.ttf'),
-        'toggle': 'skin_font_guard',
-        'description': 'AZR - ship Arabic-capable Noto-Regular.ttf',
-    },
-    {
-        'addon_id': 'skin.arctic.zephyr.rounded',
-        'rel_path': os.path.join('fonts', 'Noto-Bold.ttf'),
-        'inject_file': True, 'binary': True, 'replace': True, 'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'fonts', 'Noto-Bold.ttf'),
-        'toggle': 'skin_font_guard',
-        'description': 'AZR - ship Arabic-capable Noto-Bold.ttf',
-    },
-    {
-        # Regex-only, count=0 (all fontsets). No single sentinel: the per-fontset
-        # negative-lookahead in the pattern gives idempotency (inserts only where
-        # the ABUKARIM comment is not already the next line), so a file where only
-        # SOME fontsets were clobbered still gets the missing ones filled.
-        # already_patched_check is None so _apply_patch never short-circuits it.
-        'addon_id': 'skin.arctic.zephyr.rounded',
-        'rel_path': os.path.join('1080i', 'Font.xml'),
-        'old': '', 'new': '',
-        'count': 0,
-        'already_patched_check': None,
-        'fallback_pattern': r'([ \t]*<include>VideoLyrics_Fonts</include>\n)(?!\s*<!-- TinyPPI overlay fonts \(by ABUKARIM TOOLS\))',
-        'fallback_repl': (lambda m: m.group(1)
-            + '        <!-- TinyPPI overlay fonts (by ABUKARIM TOOLS) - fixed Noto, Arabic-capable, size-compensated -->\n'
-              '        <font>\n            <name>font23_narrow</name>\n'
-              '            <filename>Noto-Regular.ttf</filename>\n            <size>18</size>\n        </font>\n'
-              '        <font>\n            <name>font32</name>\n'
-              '            <filename>Noto-Bold.ttf</filename>\n            <size>27</size>\n        </font>\n'),
-        'not_found_ok': True,
-        'toggle': 'skin_font_guard',
-        'description': 'AZR - pin font23_narrow/font32 to Arabic Noto in all fontsets',
-    },
-
 ]
 
 
@@ -931,7 +845,6 @@ TOGGLE_GROUPS = [
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
-    ('skin_font_guard',  'Skin: Protect Arabic Overlay Font'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
