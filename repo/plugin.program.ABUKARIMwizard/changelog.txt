@@ -1,3 +1,7 @@
+v3.9.19
+- Merged upstream Simple Wizard 3.0.9 into the fork. Kept all ABUKARIM features (Arabic fallback font, Patch GUI, No-Wipe Option 2, custom background/artwork, Kodi 22 xbmc.python 3.0.0.1).
+- From 3.0.9: adaptive video cache read factor for Omega/Piers advancedsettings; build install and fresh start auto-close Kodi instead of showing confirm dialogs; startup package cleanup is now an enum (Disabled / every startup / 10 / 20 packages) and only runs at threshold; Build Menu shows a build count; Kodi system stats added to the main menu (new settings toggles showinstalledbuild / showkodistats); refined binary add-on handling and targeted DB truncation; Fresh Start and Skip Swap fixes; whitelist add-on name formatting cleanup; general code cleanup.
+
 v3.9.18
 - Option 2 (No Wipe) now extracts to the Kodi home root when the zip is rooted at addons/ or userdata/, so it patches BOTH the skin/menu templates (addons/) and settings (userdata/) in one run - it can now update menus too. Still force-closes so skinvariables rebuilds the menu on restart.
 

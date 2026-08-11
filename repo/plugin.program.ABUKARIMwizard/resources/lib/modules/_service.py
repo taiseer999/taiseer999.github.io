@@ -4,8 +4,10 @@ import xbmc
 import xbmcgui
 from uservar import notify_url, changelog_dir
 from .maintenance import clear_packages_startup
-from .addonvar import setting, setting_set, addon_name, addon_icon, isBase64, headers, dialog, local_string, addon_id, gui_save_default, UPDATE_VERSION, CURRENT_BUILD, CURRENT_VERSION, BUILD_URL
-from .build_install import restore_binary, binaries_path, build_install
+from .addonvar import (setting, setting_set, addon_name, addon_icon, isBase64, headers,
+                       dialog, local_string, addon_id, gui_save_default, UPDATE_VERSION,
+                       CURRENT_BUILD, CURRENT_VERSION, BUILD_URL)
+from .build_install import build_install
 from .addons_enable import enable_addons
 from .save_data import backup_gui_skin
 from . import  notify
@@ -52,7 +54,7 @@ class Startup:
                            setting_set('update_passed', 'true')
                        
                    elif update_available == 2:
-                       if changelog_dir == 'http://CHANGEME' or '':
+                       if changelog_dir in ('', 'http://', 'http://CHANGEME/'):
                            xbmcgui.Dialog().notification(addon_name, 'No Changelog to Display!!', addon_icon, 3000)
                            Startup().check_updates()
                        else:
@@ -186,11 +188,8 @@ class Startup:
             backup_gui_skin(gui_save_default)
             setting_set('firstrun', 'false')
         else:
-            if setting('autoclearpackages') == 'true':
-                clear_packages_startup()
+            clear_packages_startup()
             xbmc.sleep(1000)
             self.notify_check()
             xbmc.sleep(3000)  # Delay Build Update Notification
             self.check_updates()
-        if binaries_path.exists():
-            restore_binary()
