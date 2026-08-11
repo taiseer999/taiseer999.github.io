@@ -606,7 +606,10 @@ def _companion_version(repo_base, addonid):
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = resp.read().decode('utf-8', 'replace')
         import re
-        # The <addon ...> tag's own version (skip the xml prolog's version="1.0").
+        # The <addon ...> opening tag's own version. [^>] also matches the
+        # newlines Kodi addon.xml files often put between attributes, and stops
+        # at the first '>', so this won't wander into a <requires> import's
+        # version. Anchored on '<addon' to skip the xml prolog's version="1.0".
         m = re.search(r'<addon\b[^>]*\bversion="([^"]+)"', data)
         if m:
             return m.group(1)
@@ -691,31 +694,70 @@ def _extract_zip_silent(zip_path):
             pass
 
 
+# Every known repo's '.../repo/zips/' base, paired with the repository add-on
+# id that carries it. A companion is not always present in the same repo as the
+# skin the user picked (e.g. TMDb Helper lives in the Kodi repo but Arctic Fuse
+# 3 is installed from the Piers repo), so companion resolution tries the skin's
+# own repo first and then falls back across these until the add-on is found.
+_ALL_REPO_BASES = [
+    ('https://raw.githubusercontent.com/taiseer999/'
+     'taiseer999.github.io/master/repo/zips/',      'repository.taiseer'),
+    ('https://raw.githubusercontent.com/taiseer999/'
+     'taiseer999ce.github.io/master/repo/zips/',    'repository.taiseerce'),
+    ('https://raw.githubusercontent.com/taiseer999/'
+     'taiseer999Piers.github.io/master/repo/zips/', 'repository.taiseerkodi22'),
+]
+
+
+def _resolve_companion(repo_base_first, addonid):
+    """Find a companion's zip across the known repos.
+
+    Tries repo_base_first (the repo the skin came from) first, then every other
+    known repo base, since a companion may live in a different repo than the
+    skin. Returns (zip_url, version, repo_base, repo_id) for the first repo that
+    actually has the add-on's addon.xml, or (None, '', None, '') if none do.
+    """
+    # Ordered, de-duplicated: the skin's own repo first, then the rest.
+    ordered = []
+    seen = set()
+    for base in [repo_base_first] + [b for b, _ in _ALL_REPO_BASES]:
+        if base and base not in seen:
+            seen.add(base)
+            ordered.append(base)
+
+    base_to_repo = dict((b, r) for b, r in _ALL_REPO_BASES)
+
+    for base in ordered:
+        version = _companion_version(base, addonid)
+        if version:
+            zip_url = '%s%s/%s-%s.zip' % (base, addonid, addonid, version)
+            return zip_url, version, base, base_to_repo.get(base, '')
+    return None, '', None, ''
+
+
 def _install_companions(skin_id, skin_zipurl, repo_id=''):
-    """Silently install every companion mapped to skin_id, from the same repo.
+    """Silently install every companion mapped to skin_id.
 
     Runs with no user-facing prompts and never changes the active skin. Any
     failure is logged and skipped so it can never block the skin install the
-    user actually asked for. repo_id, when supplied, is the repository add-on
-    id the companion should be linked to for updates.
+    user actually asked for. A companion is fetched from whichever known repo
+    actually carries it (not assumed to be the skin's repo), and linked for
+    updates to THAT repo.
     """
     companions = _SKIN_COMPANIONS.get(skin_id)
     if not companions:
         return
 
-    repo_base = _repo_base_from_zipurl(skin_zipurl)
-    if not repo_base:
-        _log('could not derive repo base from: %s' % skin_zipurl)
-        return
+    skin_repo_base = _repo_base_from_zipurl(skin_zipurl)  # may be None
 
     for addonid in companions:
         try:
-            version = _companion_version(repo_base, addonid)
-            if version:
-                zip_url = '%s%s/%s-%s.zip' % (repo_base, addonid, addonid, version)
-            else:
-                # Fall back to an unversioned name if addon.xml couldn't be read.
-                zip_url = '%s%s/%s.zip' % (repo_base, addonid, addonid)
+            zip_url, version, found_base, found_repo_id = _resolve_companion(
+                skin_repo_base, addonid)
+            if not zip_url:
+                _log('companion %s not found in any known repo — skipping.'
+                     % addonid)
+                continue
 
             _log('silent companion install: %s <- %s' % (addonid, zip_url))
             tmp = _download_zip_silent(zip_url)
@@ -733,17 +775,18 @@ def _install_companions(skin_id, skin_zipurl, repo_id=''):
             _log('companion ready: %s (enabled=%s)'
                  % (addonid, _addon_is_enabled(addonid)))
 
-            # Link the companion back to its repository so it shows as
-            # repo-installed and keeps receiving auto-updates. Staged
-            # extraction leaves origin empty, which blocks updates. Force a
-            # real repo listing refresh, then write the origin deterministically
-            # from the same repo the skin came from (fallback to the lookup).
+            # Link the companion back to the repository it actually came from,
+            # so it shows as repo-installed and keeps receiving auto-updates.
+            # Staged extraction leaves origin empty, which blocks updates. Prefer
+            # the repo we found the companion in; fall back to the skin's repo id
+            # and then the DB-listing lookup.
             from resources.lib import origin_fix
             xbmc.executebuiltin('UpdateAddonRepos')
             xbmc.sleep(3000)
             wrote = False
-            if repo_id:
-                wrote = origin_fix.set_origin_silent(addonid, repo_id)
+            link_repo = found_repo_id or repo_id
+            if link_repo:
+                wrote = origin_fix.set_origin_silent(addonid, link_repo)
             if not wrote:
                 origin_fix.fix_addons_silent([addonid])
         except Exception as e:
