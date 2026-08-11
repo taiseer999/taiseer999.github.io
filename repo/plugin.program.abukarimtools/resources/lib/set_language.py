@@ -60,6 +60,31 @@ def _current_language():
         return ''
 
 
+def _flush():
+    """Persist settings to guisettings.xml and give the write time to land.
+
+    Settings.SetSettingValue updates the value in memory; Kodi flushes it to
+    disk asynchronously. If a hard restart follows quickly - the interactive
+    Origin Fix uses RestartApp, and on CoreELEC 'systemctl restart kodi' is a
+    hard kill with no clean-shutdown flush - the language change can be lost.
+    We force a save and wait briefly so the new value is on disk before any
+    such restart. Best-effort: never raises.
+    """
+    try:
+        # Ask Kodi to write settings now. Not all builds expose SaveSettings as
+        # a builtin; if it is a no-op the sleep below still covers the normal
+        # async flush window.
+        xbmc.executebuiltin('SaveSettings')
+    except Exception as exc:
+        _log('SaveSettings builtin failed (ignored): %r' % exc,
+             xbmc.LOGWARNING)
+    # Give the write time to reach disk before the caller restarts Kodi.
+    try:
+        xbmc.sleep(1500)
+    except Exception:
+        pass
+
+
 def force_english(only_if_arabic=True):
     """Set Kodi's UI language to English (en_gb).
 
@@ -86,6 +111,7 @@ def force_english(only_if_arabic=True):
         resp = _jsonrpc('Settings.SetSettingValue',
                         {'setting': _SETTING, 'value': _ENGLISH})
         if resp.get('result') is True:
+            _flush()
             _log('UI language switched to English (was %r).' % current)
             return True
         _log('SetSettingValue did not confirm the change (resp=%r). The '
@@ -119,6 +145,7 @@ def force_arabic():
         resp = _jsonrpc('Settings.SetSettingValue',
                         {'setting': _SETTING, 'value': _ARABIC})
         if resp.get('result') is True:
+            _flush()
             _log('UI language switched to Arabic (was %r).' % current)
             return True
         _log('SetSettingValue did not confirm the switch to Arabic '

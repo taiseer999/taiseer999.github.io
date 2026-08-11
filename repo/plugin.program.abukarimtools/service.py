@@ -533,30 +533,27 @@ def _is_coreelec():
 
 def _prompt_reboot_if_coreelec(monitor):
     if not _is_coreelec():
-        _log('Reboot prompt skipped (not CoreELEC).')
+        _log('Reboot skipped (not CoreELEC).')
         return
-    # Let the freshly-loaded skin settle before showing the dialog.
+    # Let the freshly-loaded skin settle before rebooting.
     if monitor.waitForAbort(10):
         return  # Kodi is shutting down anyway
     # Make sure no modal is in the way.
     _wait_no_modal(monitor)
+    # Reboot automatically (no prompt) to finish applying the build. Show a
+    # brief heads-up first so the reboot isn't mistaken for a crash.
     try:
-        yes = xbmcgui.Dialog().yesno(
-            ADDON_NAME,
-            'تم إكمال الإعداد.\n'
-            'يُنصح بإعادة التشغيل لإكمال تطبيق البناء.\n'
-            'هل تريد إعادة التشغيل الآن؟\n\n'
-            'Setup is complete. A reboot is recommended to finish '
-            'applying your build. Reboot now?',
-            nolabel='لاحقاً / Later', yeslabel='إعادة التشغيل / Reboot')
-    except Exception as e:
-        _log('Reboot dialog failed: %s' % e)
+        xbmc.executebuiltin(
+            'Notification(%s, %s, 5000)'
+            % (ADDON_NAME,
+               'Setup complete — rebooting to finish. / '
+               'اكتمل الإعداد — سيُعاد التشغيل.'))
+    except Exception:
+        pass
+    if monitor.waitForAbort(5):
         return
-    if yes:
-        _log('User chose reboot — rebooting system.')
-        xbmc.executebuiltin('Reboot')
-    else:
-        _log('User postponed reboot.')
+    _log('First-run complete — rebooting system automatically.')
+    xbmc.executebuiltin('Reboot')
 
 
 def _read_text(path):

@@ -24,6 +24,7 @@ origins take effect for update checks. The interactive runner offers one.
 
 import os
 import re
+import sys
 import sqlite3
 
 import xbmc
@@ -297,13 +298,58 @@ def _is_coreelec():
         return False
 
 
+def _is_macos():
+    try:
+        return sys.platform == 'darwin'
+    except Exception:
+        return False
+
+
 def _restart_kodi():
+    """Restart (or on desktop, cleanly quit) Kodi as reliably as the platform
+    allows.
+
+    CoreELEC: 'systemctl restart kodi' genuinely restarts the service.
+
+    macOS / desktop Linux: the RestartApp builtin is effectively a no-op off
+    Windows, which is why the old prompt appeared to do nothing. There is no
+    in-process way to relaunch a macOS .app from inside Kodi without an
+    external helper, so we do the next best thing that always works: quit Kodi
+    cleanly via the Quit builtin. The user relaunches it. A clean Quit also
+    flushes settings/databases, so nothing pending is lost.
+    """
     if _is_coreelec():
         _log('Restarting Kodi via systemctl (CoreELEC).')
         os.system('systemctl restart kodi &')
-    else:
-        _log('Restarting Kodi via RestartApp builtin.')
-        xbmc.executebuiltin('RestartApp')
+        return
+
+    if _is_macos():
+        _log('Quitting Kodi via Quit builtin (macOS — reopen to finish).')
+        _notify_quit()
+        xbmc.sleep(400)
+        xbmc.executebuiltin('Quit')
+        return
+
+    # Other desktop Linux / Windows: try the native restart first; if the
+    # build ignores it, a clean Quit is the dependable fallback.
+    _log('Restarting Kodi via RestartApp builtin (desktop).')
+    xbmc.executebuiltin('RestartApp')
+    xbmc.sleep(2000)
+    # If RestartApp did nothing (common off Windows), fall back to a clean quit.
+    _log('RestartApp may be unsupported here — falling back to Quit.')
+    _notify_quit()
+    xbmc.sleep(400)
+    xbmc.executebuiltin('Quit')
+
+
+def _notify_quit():
+    """Best-effort heads-up so a bare quit isn't mistaken for a crash."""
+    try:
+        xbmc.executebuiltin(
+            'Notification(%s, %s, 4000)'
+            % (TITLE, 'Closing Kodi to finish — please reopen it.'))
+    except Exception:
+        pass
 
 
 def run():
@@ -343,10 +389,10 @@ def run():
         lines += sorted(unmatched)
     dialog.textviewer(TITLE, '\n'.join(lines))
 
-    if fixed and dialog.yesno(
-            TITLE,
-            'Kodi must restart before the new origins are used for\n'
-            'update checks. Restart now?',
-            yeslabel='Restart', nolabel='Later'):
+    if fixed:
+        # Kodi only uses the repaired origins for update checks after a
+        # restart, so restart automatically (no prompt) once something was
+        # actually fixed.
+        _log('Origins fixed — restarting automatically.')
         xbmc.sleep(500)
         _restart_kodi()

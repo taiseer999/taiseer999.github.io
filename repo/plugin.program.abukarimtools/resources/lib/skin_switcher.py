@@ -135,6 +135,37 @@ def _close_to_home(settle=True):
     xbmc.executebuiltin('ActivateWindow(Home)')
 
 
+_SKIN_BUSY_PROP = 'abukarimtools.skinop.busy'
+
+
+def skin_op_busy():
+    """True if a skin install/switch is already in progress.
+
+    Both the skin installer and the skin switcher change lookandfeel.skin,
+    which reloads every window. If one runs while the other has a custom modal
+    dialog open, the reload tears that window down and re-creates it under a
+    new id — the script's handle goes stale and the dialog freezes. The two
+    flows serialise on this single Home-window property so they can never
+    overlap. The property is in-memory, so a Kodi restart always clears it (no
+    stale-lock risk across restarts).
+    """
+    try:
+        return xbmcgui.Window(10000).getProperty(_SKIN_BUSY_PROP) == '1'
+    except Exception:
+        return False
+
+
+def set_skin_op_busy(on):
+    try:
+        win = xbmcgui.Window(10000)
+        if on:
+            win.setProperty(_SKIN_BUSY_PROP, '1')
+        else:
+            win.clearProperty(_SKIN_BUSY_PROP)
+    except Exception:
+        pass
+
+
 def _swap_skin(addon_id):
     # Make sure the target skin is enabled first — a disabled skin is what
     # triggers the extra "enable this add-on?" prompt.
@@ -166,6 +197,19 @@ def _swap_skin(addon_id):
 
 
 def run():
+    if skin_op_busy():
+        _log('skin operation already in progress — refusing skin switch.')
+        xbmc.executebuiltin('Dialog.Close(busydialog)')
+        xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
+        return
+    set_skin_op_busy(True)
+    try:
+        _run_impl()
+    finally:
+        set_skin_op_busy(False)
+
+
+def _run_impl():
     xbmc.executebuiltin('Dialog.Close(busydialog)')
     xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
 

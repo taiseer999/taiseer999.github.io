@@ -111,7 +111,15 @@ class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
                 # Per-repo background so the window photo follows the focus.
                 li.setProperty('repo_bg', media_base + bg)
                 panel.addItem(li)
-            self.setFocusId(100)
+            # Focus the list. Right after a skin reload the control can briefly
+            # refuse focus ("Control 100 ... asked to focus, but it can't"),
+            # which leaves the dialog visible but non-interactive. Retry a few
+            # times with a short wait so focus lands once the control is ready.
+            for _attempt in range(10):
+                self.setFocusId(100)
+                if self.getFocusId() == 100:
+                    break
+                xbmc.sleep(100)
             # Static labels set from Python: $LOCALIZE resolves against the
             # active skin, not this addon, so it comes back blank for our ids.
             try:
@@ -859,6 +867,27 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
 
 
 def run(first_run=False):
+    """Guarded entry point for the skin installer.
+
+    Serialises with the skin switcher on a single shared lock: a skin swap
+    starting while this flow has a custom modal dialog open (or vice-versa)
+    reloads every window, tearing the dialog down and re-creating it under a
+    new id — the handle goes stale and the dialog freezes ("Window id does not
+    exist"; the repo-select screen stuck and non-interactive). Only one skin
+    operation runs at a time; a colliding trigger is refused.
+    """
+    from resources.lib import skin_switcher
+    if skin_switcher.skin_op_busy():
+        _log('skin operation already in progress — refusing installer run.')
+        return False
+    skin_switcher.set_skin_op_busy(True)
+    try:
+        return _run_impl(first_run=first_run)
+    finally:
+        skin_switcher.set_skin_op_busy(False)
+
+
+def _run_impl(first_run=False):
     url, background = _choose_source()
     if not url:
         return False
@@ -909,17 +938,22 @@ def run(first_run=False):
                 _log('close-to-home failed: %s' % e)
             # Kodi keeps add-on origins in memory and only uses them for update
             # checks after a restart. The skin (and any companion) was just
-            # linked to its repo, so offer a restart to make updates active now.
-            try:
-                from resources.lib import origin_fix
-                if xbmcgui.Dialog().yesno(
-                        TITLE,
-                        T(30127),
-                        yeslabel=T(30128), nolabel=T(30129)):
+            # linked to its repo. On a MANUAL install, restart automatically to
+            # make updates active now. During first-run we must NOT restart
+            # here — the service still has to flip the UI language and (on
+            # CoreELEC) reboot the box after this step; restarting now would
+            # cut that off. First-run does its own single restart at the end.
+            if first_run:
+                _log('skin installed (first-run) — deferring restart to the '
+                     'end of the first-run sequence.')
+            else:
+                try:
+                    from resources.lib import origin_fix
+                    _log('skin installed — restarting automatically.')
                     xbmc.sleep(500)
                     origin_fix._restart_kodi()
-            except Exception as e:
-                _log('post-install restart prompt failed: %s' % e)
+                except Exception as e:
+                    _log('post-install auto-restart failed: %s' % e)
         return ok
 
     _log('portal closed with no pending skin to apply')
