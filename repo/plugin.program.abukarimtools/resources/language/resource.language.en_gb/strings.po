@@ -77,7 +77,7 @@ msgid "Toggles"
 msgstr ""
 
 msgctxt "#30050"
-msgid "Run first-time setup now?\\n\\nThis installs binaries, offers a backup restore, then opens the Skin Installer."
+msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer."
 msgstr ""
 
 msgctxt "#30051"
@@ -93,7 +93,7 @@ msgid "Apply Patches failed — run it from ABUKARIM TOOLS"
 msgstr ""
 
 msgctxt "#30054"
-msgid "Skin Installer could not be started.\\nYou can run it later from ABUKARIM TOOLS."
+msgid "Skin Installer could not be started.[CR]You can run it later from ABUKARIM TOOLS."
 msgstr ""
 
 msgctxt "#30055"
@@ -101,11 +101,11 @@ msgid "Binary installer failed — run it from ABUKARIM TOOLS"
 msgstr ""
 
 msgctxt "#30056"
-msgid "Restore could not be started.\\nYou can run it later from ABUKARIM TOOLS → Backup/Restore."
+msgid "Restore could not be started.[CR]You can run it later from ABUKARIM TOOLS → Backup/Restore."
 msgstr ""
 
 msgctxt "#30057"
-msgid "Setup is almost complete.\\n\\nWould you like to restore a previous backup?"
+msgid "Setup is almost complete.[CR][CR]Would you like to restore a previous backup?"
 msgstr ""
 
 msgctxt "#30058"
@@ -141,7 +141,7 @@ msgid "Download incomplete or corrupt. Please try again."
 msgstr ""
 
 msgctxt "#30106"
-msgid "Download failed:\\n%s"
+msgid "Download failed:[CR]%s"
 msgstr ""
 
 msgctxt "#30107"
@@ -153,7 +153,7 @@ msgid "Checking archive integrity…"
 msgstr ""
 
 msgctxt "#30109"
-msgid "ZIP integrity check failed.\\nFirst bad file: %s"
+msgid "ZIP integrity check failed.[CR]First bad file: %s"
 msgstr ""
 
 msgctxt "#30110"
@@ -161,7 +161,7 @@ msgid "Extraction cancelled."
 msgstr ""
 
 msgctxt "#30111"
-msgid "Extraction error: size mismatch for\\n%s"
+msgid "Extraction error: size mismatch for[CR]%s"
 msgstr ""
 
 msgctxt "#30112"
@@ -177,7 +177,7 @@ msgid "The downloaded file is not a valid ZIP archive."
 msgstr ""
 
 msgctxt "#30115"
-msgid "Extraction failed:\\n%s"
+msgid "Extraction failed:[CR]%s"
 msgstr ""
 
 msgctxt "#30116"
@@ -193,7 +193,7 @@ msgid "Applying %s…"
 msgstr ""
 
 msgctxt "#30119"
-msgid "%s was installed but could not be selected automatically.\\nSelect it manually from Settings > Interface > Skin."
+msgid "%s was installed but could not be selected automatically.[CR]Select it manually from Settings > Interface > Skin."
 msgstr ""
 
 msgctxt "#30120"
@@ -201,7 +201,7 @@ msgid "No ZIP URL found for this skin."
 msgstr ""
 
 msgctxt "#30121"
-msgid "This skin is already installed.\\nReinstall %s?"
+msgid "This skin is already installed.[CR]Reinstall %s?"
 msgstr ""
 
 msgctxt "#30122"
@@ -209,7 +209,7 @@ msgid "Install %s?"
 msgstr ""
 
 msgctxt "#30123"
-msgid "Network error:\\n%s"
+msgid "Network error:[CR]%s"
 msgstr ""
 
 msgctxt "#30124"
@@ -217,7 +217,7 @@ msgid "The feed returned invalid JSON."
 msgstr ""
 
 msgctxt "#30125"
-msgid "Feed error:\\n%s"
+msgid "Feed error:[CR]%s"
 msgstr ""
 
 msgctxt "#30126"
@@ -225,7 +225,7 @@ msgid "✓ %s installed successfully."
 msgstr ""
 
 msgctxt "#30127"
-msgid "The skin was linked to its repository so it can auto-update.\\nKodi must restart before updates take effect. Restart now?"
+msgid "The skin was linked to its repository so it can auto-update.[CR]Kodi must restart before updates take effect. Restart now?"
 msgstr ""
 
 msgctxt "#30128"
@@ -305,11 +305,11 @@ msgid "Backup cancelled."
 msgstr ""
 
 msgctxt "#30223"
-msgid "Backup complete!\\n\\n%d files saved to:\\n%s"
+msgid "Backup complete![CR][CR]%d files saved to:[CR]%s"
 msgstr ""
 
 msgctxt "#30224"
-msgid "Backup failed!\\n%s"
+msgid "Backup failed![CR]%s"
 msgstr ""
 
 msgctxt "#30225"
@@ -325,15 +325,15 @@ msgid "Restore cancelled (partial restore may have occurred)."
 msgstr ""
 
 msgctxt "#30228"
-msgid "Restore complete! %d files restored.\\n\\nguisettings.xml will be applied on next boot.\\n\\nPlease restart Kodi manually for the changes to take effect."
+msgid "Restore complete! %d files restored.[CR][CR]guisettings.xml will be applied on next boot.[CR][CR]Please restart Kodi manually for the changes to take effect."
 msgstr ""
 
 msgctxt "#30229"
-msgid "Restore failed!\\n%s"
+msgid "Restore failed![CR]%s"
 msgstr ""
 
 msgctxt "#30231"
-msgid "This will overwrite existing addon_data files, guisettings.xml, and keymaps.\\n\\nContinue with restore?"
+msgid "This will overwrite existing addon_data files, guisettings.xml, and keymaps.[CR][CR]Continue with restore?"
 msgstr ""
 
 msgctxt "#30260"

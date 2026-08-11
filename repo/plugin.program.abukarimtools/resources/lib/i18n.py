@@ -20,7 +20,12 @@ _ADDON = xbmcaddon.Addon('plugin.program.abukarimtools')
 
 
 def T(string_id):
-    """Return the localized string for the given id (int)."""
+    """Return the localized string for the given id (int).
+
+    Reads via getLocalizedString so the add-on follows Kodi's UI language:
+    Arabic .po when the box is Arabic, English otherwise. Falls back to the
+    English source of truth in strings_map if Kodi returns nothing for the id.
+    """
     try:
         s = _ADDON.getLocalizedString(int(string_id))
         if s:

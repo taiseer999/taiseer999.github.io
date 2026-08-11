@@ -87,8 +87,8 @@ class BackupManager:
         Returns a set of addon_ids to include (may be empty), or None if cancelled.
         """
         labels = [
-            'My AF2/ AF3 widgets-تعديلاتي وترتيباتي الشخصية في السكن',
-            'My AH2/ others widgets- تعديلاتي وترتيباتي الشخصية في السكن',
+            'My AF2/AF3 widgets — تعديلاتي وترتيباتي الشخصية في السكن',
+            'My AH2/other widgets — تعديلاتي وترتيباتي الشخصية في السكن',
         ]
         selected = dialog.multiselect(
             'Include my customisations?',

@@ -469,6 +469,17 @@ def _show_welcome(monitor):
 def _run_steps(monitor):
     _log('Starting first-run sequence.')
 
+    # Make Kodi's core dialogs readable before we show any: force the UI
+    # language to English when the box is on Arabic (skin fonts have no Arabic
+    # glyphs, so core dialog text would otherwise be tofu). No-op if already
+    # English or on a deliberately-chosen non-Arabic language.
+    try:
+        from resources.lib import set_language
+        set_language.force_english(only_if_arabic=True)
+    except Exception:
+        _log('UI language switch crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # Welcome splash first — shown for a few seconds before setup begins.
     _show_welcome(monitor)
 
@@ -487,6 +498,20 @@ def _run_steps(monitor):
     _step_skin_installer()
 
     _log('First-run sequence finished.')
+
+    # All steps done — hand the box back to Arabic. Setup ran in English so its
+    # dialogs were readable; day-to-day use is Arabic. (Whether Arabic renders
+    # cleanly afterward depends on the active skin's font — Arctic Fuse 3, just
+    # installed, ships Arabic fonts; Estuary does not.) Done AFTER the last
+    # setup dialog so nothing shown during setup is affected, and BEFORE the
+    # caller's reboot prompt — that prompt uses a hardcoded English Python
+    # string, so it stays readable regardless of UI language.
+    try:
+        from resources.lib import set_language
+        set_language.force_arabic()
+    except Exception:
+        _log('Switch back to Arabic crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
     # NOTE: the CoreELEC reboot prompt is deliberately NOT here any more.
     # It is issued by the callers AFTER the done marker has been written —
@@ -679,6 +704,23 @@ def main():
         font_fallback.install()
     except Exception:
         _log('Fallback font install crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # Force Kodi's UI language to English while first-run setup is still
+    # pending, so the setup dialogs (and Kodi's own core dialogs) are readable
+    # under a skin whose font lacks Arabic glyphs. Once first-run has completed
+    # (_run_steps hands the box back to Arabic at the end), we must NOT keep
+    # flipping it back to English on every boot — so this is gated on first-run
+    # still being pending. Only switches away from Arabic; a deliberately-chosen
+    # non-English language is left alone. Best-effort and fully fenced.
+    try:
+        if not os.path.exists(DONE_FILE):
+            from resources.lib import set_language
+            set_language.force_english(only_if_arabic=True)
+        else:
+            _log('First-run complete — leaving UI language as set.')
+    except Exception:
+        _log('UI language switch crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # Self-trigger: arm first-run whenever the shipped build.id has no
