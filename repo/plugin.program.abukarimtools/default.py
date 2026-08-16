@@ -98,9 +98,39 @@ def _ensure_fallback_font():
         pass
 
 
+def _ensure_patches():
+    """Self-heal: re-apply the automatic patch set when the menu is opened, in
+    case the background watchdog service never ran this session (e.g. Kodi did
+    not launch the freshly-registered xbmc.service after an in-place update, or
+    the kill switch/service was disabled). Runs in a daemon thread so opening
+    the menu is never blocked; every patch is idempotent, so a redundant sweep
+    writes nothing. Honours the same autopatch.off kill switch as the watchdog.
+    """
+    try:
+        from resources.lib import patch_watchdog
+        if not patch_watchdog.is_enabled():
+            return
+        import threading
+        from resources.lib import patcher
+
+        def _sweep():
+            try:
+                ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
+                if ids:
+                    patcher.apply_set(addon_ids=ids)
+            except Exception:
+                pass
+
+        threading.Thread(target=_sweep, name='AbukarimMenuPatchSweep',
+                         daemon=True).start()
+    except Exception:
+        pass
+
+
 def main_menu():
     from resources.lib.i18n import T
     _ensure_fallback_font()
+    _ensure_patches()
     for cat_key, label_id, icon_key, _items in CATEGORIES:
         _add_folder(T(label_id), cat_key, icon_key)
     xbmcplugin.setContent(HANDLE, 'files')

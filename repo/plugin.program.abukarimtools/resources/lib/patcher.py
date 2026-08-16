@@ -628,6 +628,46 @@ PATCHES = [
         'description': 'PPI AF3 - register legacy PPI includes',
     },
 
+    # ── a4kSubtitles: disable OpenSubtitles (by ABUKARIM TOOLS) ──
+    # search.py skips a service when get_bool_setting(service_name, 'enabled') is
+    # False. That value is addon.getSetting('opensubtitles.enabled'), which Kodi
+    # reads from userdata/addon_data/service.subtitles.a4ksubtitles/settings.xml,
+    # falling back to the default in the addon's own resources/settings.xml.
+    # Disable in BOTH places: the addon default covers a fresh profile / cleared
+    # userdata, and the userdata edit covers the live device where the user already
+    # has a stored 'true'. Nothing else in settings.xml is touched (no whole-file
+    # rewrite), so the OpenSubtitles account fields and every other service stay
+    # intact; a4kSubtitles simply never queries OpenSubtitles.
+    {
+        'addon_id': 'service.subtitles.a4ksubtitles',
+        'rel_path': os.path.join('resources', 'settings.xml'),
+        'old': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="true"/>',
+        'new': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="false"/>  <!-- ABUKARIM: OpenSubtitles disabled -->',
+        'already_patched_check': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="false"/>',
+        'fallback_pattern': r'(<setting id="opensubtitles\.enabled"[^>]*?)default="true"([^>]*/>)',
+        'fallback_repl': r'\1default="false"\2',
+        'toggle': 'a4k_no_opensubtitles',
+        'description': 'a4kSubtitles settings.xml \u2013 OpenSubtitles default OFF',
+    },
+    {
+        # userdata copy: the value Kodi actually reads on the live device. Kodi
+        # writes the enabled flag as an element (<setting id="opensubtitles.enabled">true</setting>).
+        # Exact-match the true form; regex fallback tolerates attributes/whitespace.
+        # not_found_ok: if the addon was never opened (no userdata settings.xml) or
+        # the key is absent, the addon default (now false) governs — nothing to do.
+        'addon_id': 'service.subtitles.a4ksubtitles',
+        'base': 'addon_data',
+        'rel_path': os.path.join('settings.xml'),
+        'old': '<setting id="opensubtitles.enabled">true</setting>',
+        'new': '<setting id="opensubtitles.enabled">false</setting>',
+        'already_patched_check': '<setting id="opensubtitles.enabled">false</setting>',
+        'fallback_pattern': r'(<setting id="opensubtitles\.enabled"[^>]*>)true(</setting>)',
+        'fallback_repl': r'\1false\2',
+        'not_found_ok': True,
+        'toggle': 'a4k_no_opensubtitles',
+        'description': 'a4kSubtitles userdata settings.xml \u2013 OpenSubtitles OFF',
+    },
+
 ]
 
 
@@ -678,6 +718,11 @@ def _apply_patch(patch):
         addon_path = os.path.join(ADDON_DATA, patch['addon_id'])
         # addon_data dir may not exist yet (addon never run); inject_file creates it.
         if not os.path.isdir(addon_path) and not patch.get('inject_file'):
+            # Optional userdata target (e.g. a4kSubtitles never opened, so no
+            # addon_data settings.xml yet): the addon default governs, so skip
+            # cleanly instead of counting a failure.
+            if patch.get('not_found_ok'):
+                return True, '[%s] addon_data not present \u2013 skipping (optional).' % patch['addon_id']
             return False, '[%s] addon_data not found: %s' % (patch['addon_id'], addon_path)
     else:
         # Prefer Kodi's own registry: robust across platforms, portable installs,
@@ -845,6 +890,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
+    ('a4k_no_opensubtitles', 'a4kSubtitles: Disable OpenSubtitles'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 

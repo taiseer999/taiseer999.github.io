@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="2.9"
+       version="2.9.1"
        provider-name="Abukarim">
 
   <requires>
@@ -26,7 +26,11 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.8.0
+    <news>v2.9.1
+- A4KSUBTITLES: restored the "Disable OpenSubtitles" patch (ported from 2.8.5, dropped in 2.9). Two idempotent entries under a new 'a4kSubtitles: Disable OpenSubtitles' toggle — the addon's own resources/settings.xml default (fresh profiles) and the userdata addon_data settings.xml (live devices). service.subtitles.a4ksubtitles is now a watched patch target, so the change survives a4kSubtitles updates. Also restored the not_found_ok guard in the addon_data base resolver so the userdata edit skips cleanly (not a failure) when a4kSubtitles was never opened.
+- AUTO-PATCH RELIABILITY: opening ABUKARIM TOOLS now kicks off a background patch sweep (daemon thread, honours the autopatch.off kill switch) as a self-heal, mirroring the existing font self-heal. Fixes patches not re-applying after an add-on update on sessions where Kodi never launched the background service (e.g. the xbmc.service extension not started after an in-place update). Every patch is idempotent so a redundant sweep writes nothing. NOTE: for the always-on background watchdog itself, a full Kodi restart after updating this add-on is still required the first time, because Kodi only starts a newly-registered service on restart.
+
+v2.8.0
 - Patcher refreshed for TinyPPI 2.3.1 (new upstream resources/lib/{core,info,
   service,ui} layout). The PPI Arabic (colon-removal) and classic PPI (Arctic
   Fuse 3 dialog recolor) whole-file overlay skins were rebuilt from the 2.3.1
