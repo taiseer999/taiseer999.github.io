@@ -94,8 +94,8 @@ _TINYPPI_TTFOVERWRITE_NEW_B64 = 'ICAgIG1vZGlmaWVkID0gRmFsc2UKICAgIGZvciBfcm9vdCw
 
 
 # ── TinyPPI: disable font install entirely (freeze-on-stop fix, by ABUKARIM TOOLS) ──
-_TINYPPI_NOFONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
-_TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiSW5zdGFsbCBtaXNzaW5nIGZvbnRzIGludG8gdGhlIGFjdGl2ZSBza2luLCByZWxvYWRpbmcgaXQgaWYgYW55dGhpbmcKICAgIGNoYW5nZWQuICBOby1vcCB3aGVuIHRoZSBmb250cyBhcmUgYWxyZWFkeSBpbnN0YWxsZWQuIiIiCiAgICAjIC0tIFRpbnlQUEkgZm9udHMgZGlzYWJsZWQgZW50aXJlbHkgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgIyBpbnN0YWxsX2ZvbnRzKCkgd2Fsa2VkIHRoZSBhY3RpdmUgc2tpbiBkaXIgYW5kIGNvdWxkIGNhbGwgUmVsb2FkU2tpbigpOyB3aGVuIHRoYXQKICAgICMgbGFuZGVkIG9uIGEgcGxheWJhY2sgc3RvcC9lbmQgaXQgY29sbGlkZWQgd2l0aCBDVmlkZW9QbGF5ZXI6OkNsb3NlRmlsZSgpICsgdGhlIEFMU0EKICAgICMgcGFzc3Rocm91Z2gtPlBDTSBzd2l0Y2ggb24gdGhlIEdVSSB0aHJlYWQgYW5kIGZyb3plIHRoZSBwaWN0dXJlIG9uIHN0b3AuIFRoZSBmb250CiAgICAjIGZlYXR1cmUgaXMgZHJvcHBlZDogb3ZlcmxheSBsYWJlbHMgZmFsbCBiYWNrIHRvIHRoZSBhY3RpdmUgc2tpbidzIG93biBmb250LiBObyBza2luCiAgICAjIHdhbGssIG5vIFJlbG9hZFNraW4sIG5vdGhpbmcgb24gdGhlIHBsYXllciB0aHJlYWQgLT4gbm8gZnJlZXplLgogICAgX2xvZygiRm9udCBpbnN0YWxsIGRpc2FibGVkIChBQlVLQVJJTSkgLSB1c2luZyBza2luIGZvbnQiKQogICAgcmV0dXJuCiAgICBza2luX3BhdGggPSBfZ2V0X3NraW5fcGF0aCgp'
+_TINYPPI_NOFONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiUmVnaXN0ZXIgdGhlIG1pc3NpbmcgZm9udCBlbnRyaWVzIGluIHRoZSBhY3RpdmUgc2tpbiwgcmVsb2FkaW5nIGl0IGlmCiAgICBhbnl0aGluZyBjaGFuZ2VkLiAgTm8tb3Agd2hlbiB0aGV5IGFyZSBhbHJlYWR5IHRoZXJlLiIiIgogICAgc2tpbl9wYXRoID0gX2dldF9za2luX3BhdGgoKQ=='
+_TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiUmVnaXN0ZXIgdGhlIG1pc3NpbmcgZm9udCBlbnRyaWVzIGluIHRoZSBhY3RpdmUgc2tpbiwgcmVsb2FkaW5nIGl0IGlmCiAgICBhbnl0aGluZyBjaGFuZ2VkLiAgTm8tb3Agd2hlbiB0aGV5IGFyZSBhbHJlYWR5IHRoZXJlLiIiIgogICAgIyAtLSBUaW55UFBJIGZvbnRzIGRpc2FibGVkIGVudGlyZWx5IChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICMgaW5zdGFsbF9mb250cygpIHdhbGtlZCB0aGUgYWN0aXZlIHNraW4gZGlyIGFuZCBjb3VsZCBjYWxsIFJlbG9hZFNraW4oKTsgd2hlbiB0aGF0CiAgICAjIGxhbmRlZCBvbiBhIHBsYXliYWNrIHN0b3AvZW5kIGl0IGNvbGxpZGVkIHdpdGggQ1ZpZGVvUGxheWVyOjpDbG9zZUZpbGUoKSArIHRoZSBBTFNBCiAgICAjIHBhc3N0aHJvdWdoLT5QQ00gc3dpdGNoIG9uIHRoZSBHVUkgdGhyZWFkIGFuZCBmcm96ZSB0aGUgcGljdHVyZSBvbiBzdG9wLiBUaGUgZm9udAogICAgIyBmZWF0dXJlIGlzIGRyb3BwZWQ6IG92ZXJsYXkgbGFiZWxzIGZhbGwgYmFjayB0byB0aGUgYWN0aXZlIHNraW4ncyBvd24gZm9udC4gTm8gc2tpbgogICAgIyB3YWxrLCBubyBSZWxvYWRTa2luLCBub3RoaW5nIG9uIHRoZSBwbGF5ZXIgdGhyZWFkIC0+IG5vIGZyZWV6ZS4KICAgIF9sb2coIkZvbnQgaW5zdGFsbCBkaXNhYmxlZCAoQUJVS0FSSU0pIC0gdXNpbmcgc2tpbiBmb250IikKICAgIHJldHVybgogICAgc2tpbl9wYXRoID0gX2dldF9za2luX3BhdGgoKQ=='
 
 
 PATCHES = [
@@ -628,46 +628,6 @@ PATCHES = [
         'description': 'PPI AF3 - register legacy PPI includes',
     },
 
-    # ── a4kSubtitles: disable OpenSubtitles (by ABUKARIM TOOLS) ──
-    # search.py skips a service when get_bool_setting(service_name, 'enabled') is
-    # False. That value is addon.getSetting('opensubtitles.enabled'), which Kodi
-    # reads from userdata/addon_data/service.subtitles.a4ksubtitles/settings.xml,
-    # falling back to the default in the addon's own resources/settings.xml.
-    # Disable in BOTH places: the addon default covers a fresh profile / cleared
-    # userdata, and the userdata edit covers the live device where the user already
-    # has a stored 'true'. Nothing else in settings.xml is touched (no whole-file
-    # rewrite), so the OpenSubtitles account fields and every other service stay
-    # intact; a4kSubtitles simply never queries OpenSubtitles.
-    {
-        'addon_id': 'service.subtitles.a4ksubtitles',
-        'rel_path': os.path.join('resources', 'settings.xml'),
-        'old': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="true"/>',
-        'new': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="false"/>  <!-- ABUKARIM: OpenSubtitles disabled -->',
-        'already_patched_check': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="false"/>',
-        'fallback_pattern': r'(<setting id="opensubtitles\.enabled"[^>]*?)default="true"([^>]*/>)',
-        'fallback_repl': r'\1default="false"\2',
-        'toggle': 'a4k_no_opensubtitles',
-        'description': 'a4kSubtitles settings.xml \u2013 OpenSubtitles default OFF',
-    },
-    {
-        # userdata copy: the value Kodi actually reads on the live device. Kodi
-        # writes the enabled flag as an element (<setting id="opensubtitles.enabled">true</setting>).
-        # Exact-match the true form; regex fallback tolerates attributes/whitespace.
-        # not_found_ok: if the addon was never opened (no userdata settings.xml) or
-        # the key is absent, the addon default (now false) governs — nothing to do.
-        'addon_id': 'service.subtitles.a4ksubtitles',
-        'base': 'addon_data',
-        'rel_path': os.path.join('settings.xml'),
-        'old': '<setting id="opensubtitles.enabled">true</setting>',
-        'new': '<setting id="opensubtitles.enabled">false</setting>',
-        'already_patched_check': '<setting id="opensubtitles.enabled">false</setting>',
-        'fallback_pattern': r'(<setting id="opensubtitles\.enabled"[^>]*>)true(</setting>)',
-        'fallback_repl': r'\1false\2',
-        'not_found_ok': True,
-        'toggle': 'a4k_no_opensubtitles',
-        'description': 'a4kSubtitles userdata settings.xml \u2013 OpenSubtitles OFF',
-    },
-
 ]
 
 
@@ -718,8 +678,6 @@ def _apply_patch(patch):
         addon_path = os.path.join(ADDON_DATA, patch['addon_id'])
         # addon_data dir may not exist yet (addon never run); inject_file creates it.
         if not os.path.isdir(addon_path) and not patch.get('inject_file'):
-            if patch.get('not_found_ok'):
-                return True, '[%s] addon_data not present \u2013 skipping (optional).' % patch['addon_id']
             return False, '[%s] addon_data not found: %s' % (patch['addon_id'], addon_path)
     else:
         # Prefer Kodi's own registry: robust across platforms, portable installs,
@@ -887,7 +845,6 @@ TOGGLE_GROUPS = [
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
-    ('a4k_no_opensubtitles', 'a4kSubtitles: Disable OpenSubtitles'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 

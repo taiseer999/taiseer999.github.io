@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="2.8.5"
+       version="2.9"
        provider-name="Abukarim">
 
   <requires>
@@ -26,7 +26,22 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.7.0
+    <news>v2.8.0
+- Patcher refreshed for TinyPPI 2.3.1 (new upstream resources/lib/{core,info,
+  service,ui} layout). The PPI Arabic (colon-removal) and classic PPI (Arctic
+  Fuse 3 dialog recolor) whole-file overlay skins were rebuilt from the 2.3.1
+  base, so applying them no longer reverts the new script-tinyppi-main.xml to an
+  older copy. Arabic strips the trailing ':' from all 45 $ADDON labels; classic
+  adds the Dialog* colour tokens + dialog-bg caps on top.
+- TinyPPI fonts.py freeze-on-stop patch: exact-match blob updated to the 2.3.1
+  install_fonts() (upstream reworded its docstring), so it matches on the primary
+  path again instead of relying on the regex fallback.
+- Verified against 2.3.1: non-CE launch flag, codec/audio badge swaps, and the
+  PPI AF3 Home-bridge (home_publish.py + monitor.py inject) all still apply and
+  are idempotent; update_properties/get_CpuTemperatureProgressVar and the
+  "KodiMonitor started" anchor are unchanged upstream.
+
+v2.7.0
 - TinyPPI overlay font is now fully handled skin-side: Arctic Fuse 3 and Arctic
   Zephyr Rounded each ship the Arabic-capable Noto-Regular/Bold.ttf and pin
   font23_narrow/font32 themselves, so the patcher no longer installs or manages any
