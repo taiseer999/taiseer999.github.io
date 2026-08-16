@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="2.9.2"
+       version="2.9.3"
        provider-name="Abukarim">
 
   <requires>
@@ -26,7 +26,10 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.9.2
+    <news>v2.9.3
+- PATCHER: removed the DPlex patch entry (plugin.video.dplex addon.xml reuselanguageinvoker=false) and its 'dplex_stability' toggle. plugin.video.dplex is no longer a watched/patched target. The DPlex tab toggle, its data files, menu entry, and strings are unchanged — only the patcher stops touching DPlex.
+
+v2.9.2
 - SEREN 3.4.25 QR AUTH: Seren now ships native Trakt QR auth (QRAuthWindow + qr_auth_window.xml + common/tools.make_qr), and its trakt.py auth() was restructured so the old DialogProgress block our patch targeted no longer exists — that was the "Patch string not found in resources/lib/indexers/trakt.py" failure the watchdog reported. All three QR injection entries (qr_utils.py, trakt_auth_qr.xml, trakt.py) now carry skip_if_present: when Seren's native qr_auth_window.xml is on disk they skip cleanly as obsolete instead of failing or injecting unused files. New generic 'skip_if_present' patch mechanism added for exactly this "upstream absorbed the feature" case. The two Seren maintenance.py py3.14 UTF-8 fixes still apply as before. Result on 3.4.25: 3 skipped, 2 applied, 0 failed.
 - SEREN QR TROUBLESHOOTING FALLBACK: for builds between the old and native layouts, the trakt.py QR entry also gained a line-ending/edit-tolerant regex fallback (anchored on copy2clip(user_code)…del progress_dialog) so an upstream edit inside the block no longer silently drops the patch.
 - WATCHDOG OBSERVABILITY: the auto-patch watchdog now logs "Watchdog started…" immediately on boot (before the boot delay), and the boot sweep logs even when nothing needed doing, so a short boot log can distinguish "watchdog alive, nothing to do" from "watchdog never ran". Boot delay 60s→20s and poll 30s→15s so update re-patching is quicker to observe.
