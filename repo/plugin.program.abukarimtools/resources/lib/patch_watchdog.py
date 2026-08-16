@@ -53,11 +53,11 @@ ADDONS_DIR  = os.path.join(xbmcvfs.translatePath('special://home/'), 'addons')
 # Kill switch: create this file to stop auto-patching without uninstalling.
 DISABLE_FILE = os.path.join(PROFILE, 'autopatch.off')
 
-POLL_SECONDS        = 30      # signature check — stat() only
+POLL_SECONDS        = 15      # signature check — stat() only
 SETTLE_SECONDS      = 5       # gap between stability probes after a change
 SETTLE_MAX_SECONDS  = 120     # give up waiting for a folder to go quiet
 FULL_VERIFY_SECONDS = 1800    # 30 min belt-and-braces sweep
-BOOT_DELAY_SECONDS  = 60      # let Kodi's own startup add-on updates finish
+BOOT_DELAY_SECONDS  = 20      # let Kodi's own startup add-on updates finish
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -210,11 +210,16 @@ def _run_pass(addon_ids=None, reason=''):
 
 def watch(monitor):
     """Main loop. Returns when Kodi asks the service to abort."""
+    # Log immediately, BEFORE the boot delay, so the log proves the watchdog
+    # is alive even if the log is captured in the first minute. (Previously the
+    # first line appeared only after BOOT_DELAY_SECONDS, so a short boot log
+    # looked identical to a watchdog that never started.)
+    targets = patcher.target_addon_ids()
+    _log('Watchdog started. Watching %d add-on(s): %s. Boot delay %ds before '
+         'first sweep.' % (len(targets), ', '.join(targets), BOOT_DELAY_SECONDS))
+
     if monitor.waitForAbort(BOOT_DELAY_SECONDS):
         return
-
-    targets = patcher.target_addon_ids()
-    _log('Watching %d add-on(s): %s' % (len(targets), ', '.join(targets)))
 
     state       = _load_state()
     last_verify = 0.0
@@ -222,10 +227,14 @@ def watch(monitor):
     # Boot sweep: catches updates that happened while Kodi was closed, and
     # any patch that went missing for a reason we never saw.
     if not os.path.exists(DISABLE_FILE):
-        _run_pass(reason='boot sweep')
+        changed, failed = _run_pass(reason='boot sweep')
+        if not changed and not failed:
+            _log('Boot sweep: all patches already in place (nothing to do).')
         state = _signatures(targets)
         _save_state(state)
         last_verify = time.time()
+    else:
+        _log('Boot sweep skipped: auto-patch kill switch (autopatch.off) is set.')
 
     while not monitor.abortRequested():
         if monitor.waitForAbort(POLL_SECONDS):

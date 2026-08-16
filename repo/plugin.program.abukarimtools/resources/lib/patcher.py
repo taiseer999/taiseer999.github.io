@@ -158,6 +158,8 @@ PATCHES = [
         'inject_file': True,
         'inject_content_b64': _SEREN_QR_UTILS_B64,
         'already_patched_check': 'api.qrserver.com',
+        # Obsolete on Seren 3.4.25+ (native QR auth) — don't inject an unused helper.
+        'skip_if_present': (os.path.join('resources', 'skins', 'Default', '1080i', 'qr_auth_window.xml'),),
     },
     {
         'addon_id': 'plugin.video.seren',
@@ -167,6 +169,8 @@ PATCHES = [
         'inject_file': True,
         'inject_content_b64': _SEREN_XML_B64,
         'already_patched_check': 'trakt_auth_qr',
+        # Obsolete on Seren 3.4.25+ (native QR auth) — don't inject an unused dialog.
+        'skip_if_present': (os.path.join('resources', 'skins', 'Default', '1080i', 'qr_auth_window.xml'),),
     },
     {
         'addon_id': 'plugin.video.seren',
@@ -175,7 +179,25 @@ PATCHES = [
         'new': base64.b64decode(_SEREN_NEW_B64).decode('utf-8'),
         'description': 'Seren trakt.py – QR auth dialog',
         'already_patched_check': '# -- Seren QR Auth patch (by ABUKARIM TOOLS) --',
-        'fallback_pattern': None, 'fallback_repl': None,
+        # Seren 3.4.25+ ships native Trakt QR auth (QRAuthWindow +
+        # qr_auth_window.xml + common/tools.make_qr), which fully replaces this
+        # injection. On those builds the old DialogProgress block this patch
+        # targeted no longer exists, so skip cleanly rather than fail.
+        'skip_if_present': (os.path.join('resources', 'skins', 'Default', '1080i', 'qr_auth_window.xml'),),
+        # Resilient fallback: the exact 'old' blob breaks the moment Seren edits
+        # ANY line inside the auth block (a new upstream build did exactly that,
+        # so a device on that build silently lost the QR dialog). This regex
+        # anchors only on the two stable boundary lines — copy2clip(user_code)
+        # at the top and 'del progress_dialog' at the bottom — and swallows
+        # everything between them regardless of what upstream changed in the
+        # middle or which line endings the file uses (\r?\n). The replacement
+        # is the full QR block (LF); it contains no 'del progress_dialog' line,
+        # so it can never re-match — the pass is idempotent and the sentinel
+        # above short-circuits it anyway once applied.
+        'fallback_pattern': (r'[ \t]*tools\.copy2clip\(user_code\)[^\n]*\r?\n'
+                             r'[\s\S]*?'
+                             r'[ \t]*del progress_dialog[^\n]*\r?\n'),
+        'fallback_repl': base64.b64decode(_SEREN_NEW_B64).decode('utf-8').replace('\r\n', '\n'),
     },
     # ── Seren maintenance.py – UTF-8 addon.xml I/O (py3.14 C-locale opens ascii; 0xe2 in addon.xml crashes service at boot) ──
     {
@@ -742,6 +764,18 @@ def _apply_patch(patch):
             if patch.get('not_found_ok'):
                 return True, '[%s] Addon not present – skipping (optional).' % patch['addon_id']
             return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
+
+    # skip_if_present: the upstream add-on has since shipped the feature this
+    # patch used to inject, so the patch is obsolete on this build. When the
+    # named file exists inside the add-on, treat the patch as already satisfied
+    # and skip cleanly (not a failure) instead of hunting for a match string
+    # that no longer exists. Example: Seren 3.4.25+ ships native Trakt QR auth
+    # (resources/skins/Default/1080i/qr_auth_window.xml), replacing our
+    # trakt.py injection entirely.
+    for rel in (patch.get('skip_if_present') or ()):
+        if os.path.isfile(os.path.join(addon_path, rel)):
+            return True, ('[%s] Native support present (%s) – patch obsolete, '
+                          'skipping.' % (patch['addon_id'], rel))
 
     # Resolve target: support a list of candidate paths (rel_path_alternates)
     # so a single entry can cover multiple upstream file layouts.  When a list

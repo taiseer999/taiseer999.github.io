@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="2.9.1"
+       version="2.9.2"
        provider-name="Abukarim">
 
   <requires>
@@ -26,7 +26,12 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.9.1
+    <news>v2.9.2
+- SEREN 3.4.25 QR AUTH: Seren now ships native Trakt QR auth (QRAuthWindow + qr_auth_window.xml + common/tools.make_qr), and its trakt.py auth() was restructured so the old DialogProgress block our patch targeted no longer exists — that was the "Patch string not found in resources/lib/indexers/trakt.py" failure the watchdog reported. All three QR injection entries (qr_utils.py, trakt_auth_qr.xml, trakt.py) now carry skip_if_present: when Seren's native qr_auth_window.xml is on disk they skip cleanly as obsolete instead of failing or injecting unused files. New generic 'skip_if_present' patch mechanism added for exactly this "upstream absorbed the feature" case. The two Seren maintenance.py py3.14 UTF-8 fixes still apply as before. Result on 3.4.25: 3 skipped, 2 applied, 0 failed.
+- SEREN QR TROUBLESHOOTING FALLBACK: for builds between the old and native layouts, the trakt.py QR entry also gained a line-ending/edit-tolerant regex fallback (anchored on copy2clip(user_code)…del progress_dialog) so an upstream edit inside the block no longer silently drops the patch.
+- WATCHDOG OBSERVABILITY: the auto-patch watchdog now logs "Watchdog started…" immediately on boot (before the boot delay), and the boot sweep logs even when nothing needed doing, so a short boot log can distinguish "watchdog alive, nothing to do" from "watchdog never ran". Boot delay 60s→20s and poll 30s→15s so update re-patching is quicker to observe.
+
+v2.9.1
 - A4KSUBTITLES: restored the "Disable OpenSubtitles" patch (ported from 2.8.5, dropped in 2.9). Two idempotent entries under a new 'a4kSubtitles: Disable OpenSubtitles' toggle — the addon's own resources/settings.xml default (fresh profiles) and the userdata addon_data settings.xml (live devices). service.subtitles.a4ksubtitles is now a watched patch target, so the change survives a4kSubtitles updates. Also restored the not_found_ok guard in the addon_data base resolver so the userdata edit skips cleanly (not a failure) when a4kSubtitles was never opened.
 - AUTO-PATCH RELIABILITY: opening ABUKARIM TOOLS now kicks off a background patch sweep (daemon thread, honours the autopatch.off kill switch) as a self-heal, mirroring the existing font self-heal. Fixes patches not re-applying after an add-on update on sessions where Kodi never launched the background service (e.g. the xbmc.service extension not started after an in-place update). Every patch is idempotent so a redundant sweep writes nothing. NOTE: for the always-on background watchdog itself, a full Kodi restart after updating this add-on is still required the first time, because Kodi only starts a newly-registered service on restart.
 
