@@ -58,13 +58,35 @@
 
     <variable name="Def_Dialog_Info_Currently_Playing_Item_VideoOSD">
 
-        <!-- search episode -->
+        <!-- search episode (library item with DBID) -->
 
-        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(plugin.video.themoviedb.helper,add_dbid=$INFO[VideoPlayer.DBID],tmdb_type=episode,call_auto=1190)</value>
+        <value condition="!String.IsEmpty(VideoPlayer.DBID) + !String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(plugin.video.themoviedb.helper,add_dbid=$INFO[VideoPlayer.DBID],tmdb_type=episode,call_auto=1190)</value>
 
-        <!-- search movie -->
+        <!-- search movie (library item with DBID) -->
 
-        <value condition="String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(plugin.video.themoviedb.helper,add_dbid=$INFO[VideoPlayer.DBID],tmdb_type=movie,call_auto=1190)</value>
+        <value condition="!String.IsEmpty(VideoPlayer.DBID) + String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(plugin.video.themoviedb.helper,add_dbid=$INFO[VideoPlayer.DBID],tmdb_type=movie,call_auto=1190)</value>
+
+        <!-- ============ NO DBID (streamed / plugin playback) ============ -->
+
+        <!-- episode by TMDb uniqueid -->
+
+        <value condition="String.IsEmpty(VideoPlayer.DBID) + !String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.UniqueID(tmdb))">RunScript(plugin.video.themoviedb.helper,add_query=$INFO[VideoPlayer.TvShowTitle],tmdb_type=tv,season=$INFO[VideoPlayer.Season],episode=$INFO[VideoPlayer.Episode],call_auto=1190)</value>
+
+        <!-- episode by show title fallback -->
+
+        <value condition="String.IsEmpty(VideoPlayer.DBID) + !String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(plugin.video.themoviedb.helper,add_query=$INFO[VideoPlayer.TvShowTitle],tmdb_type=tv,season=$INFO[VideoPlayer.Season],episode=$INFO[VideoPlayer.Episode],call_auto=1190)</value>
+
+        <!-- movie by TMDb uniqueid -->
+
+        <value condition="String.IsEmpty(VideoPlayer.DBID) + String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.UniqueID(tmdb))">RunScript(plugin.video.themoviedb.helper,add_tmdb=$INFO[VideoPlayer.UniqueID(tmdb)],tmdb_type=movie,call_auto=1190)</value>
+
+        <!-- movie by IMDb number -->
+
+        <value condition="String.IsEmpty(VideoPlayer.DBID) + String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.IMDBNumber)">RunScript(plugin.video.themoviedb.helper,add_imdbnumber=$INFO[VideoPlayer.IMDBNumber],tmdb_type=movie,call_auto=1190)</value>
+
+        <!-- movie by title fallback -->
+
+        <value condition="String.IsEmpty(VideoPlayer.DBID) + String.IsEmpty(VideoPlayer.TvShowTitle) + !String.IsEmpty(VideoPlayer.Title)">RunScript(plugin.video.themoviedb.helper,add_query=$INFO[VideoPlayer.Title],year=$INFO[VideoPlayer.Year],tmdb_type=movie,call_auto=1190)</value>
     </variable>
 
     <!-- =================================== -->
@@ -144,14 +166,18 @@
         <value>$INFO[ListItem.Label]</value>
     </variable>
 
-    <variable name="Path_Wikipedia_Language">
-        <value condition="!String.IsEmpty(Skin.String(Value_Wiki_Language))">$INFO[Skin.String(Value_Wiki_Language)]</value>
-        <value>en</value>
-    </variable>
+    <!-- DIALOG INFO -->
 
     <variable name="Path_Dialog_Info_Wikipedia">
         <value condition="Window.IsVisible(DialogVideoInfo.xml)">RunScript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Query],tmdb_type=$VAR[Path_Dialog_Info_TMDbType])</value>
         <value condition="Window.IsVisible(DialogMusicInfo.xml)">RunScript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Query])</value>
+    </variable>
+
+    <!-- PLAYER - VIDEO -->
+
+    <variable name="Path_Player_Wikipedia">
+        <value condition="!String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(script.wikipedia,wikipedia=$INFO[VideoPlayer.TvShowTitle],tmdb_type=movie)</value>
+        <value condition="String.IsEmpty(VideoPlayer.TvShowTitle)">RunScript(script.wikipedia,wikipedia=$INFO[VideoPlayer.Title],tmdb_type=movie)</value>
     </variable>
 
     <!-- =================================== -->
@@ -402,6 +428,8 @@
         <!-- DEFAULT -->
 
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.tmdb_id))">$INFO[Window(Home).Property(TMDbHelper.ListItem.tmdb_id)]</value>
+
+        <value condition="!String.IsEmpty(ListItem.UniqueID(tmdb))">$INFO[ListItem.UniqueID(tmdb)]</value>
     </variable>
 
 

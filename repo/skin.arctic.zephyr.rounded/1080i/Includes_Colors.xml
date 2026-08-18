@@ -89,19 +89,43 @@
     </variable>
 
     <variable name="Color_Indicator_Set">
-        <value>FFD402AA</value>
+        <value>FFAB47BC</value>
     </variable>
 
     <variable name="Color_Indicator_Version">
-        <value>FFD402AA</value>
+        <value>FFAB47BC</value>
     </variable>
 
     <variable name="Color_Indicator_DBType">
-        <value>FFD402AA</value>
+        <value>FFAB47BC</value>
     </variable>
 
     <variable name="Color_Indicator_JLOM">
-        <value>FFD402AA</value>
+        <value>FFAB47BC</value>
+    </variable>
+
+    <variable name="Color_Background_IMDb">
+        <value>FFF1C40F</value>
+    </variable>
+
+    <variable name="Color_Background_Kodi">
+        <value>FF222F3E</value>
+    </variable>
+
+    <variable name="Color_Label_Kodi">
+        <value>FF0ABDE3</value>
+    </variable>
+
+    <variable name="Color_Background_TMDb">
+        <value>FF48DBFB</value>
+    </variable>
+
+    <variable name="Color_Background_Others">
+        <value>FF081C24</value>
+    </variable>
+
+    <variable name="Color_Background_Flag">
+        <value>BackgroundFlag</value>
     </variable>
 
     <!-- HIGHLIGHT COLOR -->
@@ -121,10 +145,6 @@
     </variable>
 
     <!-- OTHERS COLOR  -->
-
-    <variable name="Color_Background">
-        <value>405F5F5F</value>
-    </variable>
 
     <variable name="Color_Rating_Kodi_Star">
         <value condition="String.IsEqual(Skin.String(KodiRatingStarColor.name),none)">ColoredStars</value>
@@ -277,7 +297,7 @@
 
     <variable name="KodiRatingStarColor.name.own">
         <value condition="!String.IsEmpty(Skin.String(KodiRatingStarColor.name.own))">$INFO[Skin.String(KodiRatingStarColor.name.own)]</value>
-        <value>FFD402AA</value>
+        <value>FFAB47BC</value>
     </variable>
 
     <variable name="UserRatingStarColor.name.own">
@@ -396,6 +416,10 @@
         <value>FF2D2E2E</value>
     </variable>
 
+    <variable name="Color_OSD_Background_Button">
+        <value>405F5F5F</value>
+    </variable>
+
     <variable name="Color_OSD_Dialog_Header">
         <value>CCC5C5C5</value>
     </variable>
@@ -430,5 +454,47 @@
 
     <variable name="Color_OSD_Button_Background">
         <value>33ffffff</value>
+    </variable>
+
+    <variable name="Color_OSD_Background_Bookmarks">
+        <value>FF081C24</value>
+    </variable>
+
+    <variable name="Color_OSD_Icon_Bookmarks">
+        <value>FFD6AD05</value>
+    </variable>
+
+    <!-- MEDIA FLAG - COLOR -->
+
+    <variable name="Color_Flag_Episode">
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored)">FF8E44AD</value>
+		<value>Dark1</value>
+    </variable>
+
+    <variable name="Color_Flag_Next_Aired">
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Ended)">FF1ABC9C</value>
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Canceled)">FFC0392B</value>
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored)">FF3498DB</value>
+		<value>Dark1</value>
+    </variable>
+
+    <variable name="Color_Flag_Set">
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored)">FF3498DB</value>
+		<value>Dark1</value>
+    </variable>
+
+    <variable name="Color_Flag_Duration">
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored)">FF2980B9</value>
+		<value>Dark1</value>
+    </variable>
+
+    <variable name="Color_Flag_Songs">
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored)">FF16A085</value>
+		<value>Dark1</value>
+    </variable>
+
+    <variable name="Color_Flag_Discs">
+		<value condition="Skin.HasSetting(enable.furniture.flags.colored)">FF3498DB</value>
+		<value>Dark1</value>
     </variable>
 </includes>

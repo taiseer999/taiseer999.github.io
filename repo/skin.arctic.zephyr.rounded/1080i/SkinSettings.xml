@@ -287,6 +287,17 @@
                     <onclick>RunScript(script.skinshortcuts,type=manage&amp;menu=powermenu)</onclick>
                 </control>
 
+                <!-- HOME - CUSTOM SEARCH MENU -->
+
+                <control type="button" id="9876">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(2)</visible>
+                    <include>Def_Skin_Settings_Level_base</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[31635]</label>
+                    <onclick>RunScript(script.skinshortcuts,type=manage&amp;menu=searchmenu)</onclick>
+                </control>
+                
                 <!-- SETTING LANGUAGE DIALOG WIKIPEDIA -->
 
                 <control type="button" id="12042">
@@ -361,6 +372,19 @@
                     <enable>Skin.HasSetting(show.furniture.clock.date.weather)</enable>
                 </control>
 
+                <!-- SHOW CoreELEC LOGO ABOVE DATE - HOME CLOCK LEFT ONLY -->
+
+                <control type="radiobutton" id="9269" description="CoreELEC Logo Above Date">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(2)</visible>
+                    <include>Def_Skin_Settings_Level_standard</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[31993]</label>
+                    <selected>!Skin.HasSetting(Header.DisableLogo)</selected>
+                    <onclick>Skin.ToggleSetting(Header.DisableLogo)</onclick>
+                    <enable>Skin.HasSetting(show.furniture.clock.date.weather) + Skin.HasSetting(show.home.header.clock.left)</enable>
+                </control>
+
                 <!-- ENABLE HOME HEADER LEFT CLOCK WEATHER - HOME ONLY -->
 
                 <control type="radiobutton" id="9268" description="Weather Bottom Clock Left">
@@ -371,6 +395,19 @@
                     <label>$LOCALIZE[31219]$LOCALIZE[31494]</label>
                     <selected>Skin.HasSetting(show.clock.date.weather.home.only)</selected>
                     <onclick>Skin.ToggleSetting(show.clock.date.weather.home.only)</onclick>
+                    <enable>Skin.HasSetting(show.furniture.clock.date.weather)</enable>
+                </control>
+
+                <!-- SYSTEM STATS ICONS - COLORED / MONOCHROME -->
+
+                <control type="radiobutton" id="9270" description="Colored System Stats Icons">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(2)</visible>
+                    <include>Def_Skin_Settings_Level_standard</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[31994]</label>
+                    <selected>!Skin.HasSetting(sysstats.icons.mono)</selected>
+                    <onclick>Skin.ToggleSetting(sysstats.icons.mono)</onclick>
                     <enable>Skin.HasSetting(show.furniture.clock.date.weather)</enable>
                 </control>
 
@@ -845,7 +882,6 @@
                     <label>$LOCALIZE[166] - $LOCALIZE[14078]</label>
                     <label2>$VAR[Label_Skin_Settings_Theme_Color_Selected]</label2>
                     <onfocus>ClearProperty(launchsetupwizard,Home)</onfocus>
-                    <onclick condition="!System.HasAddon(script.skin.info.service)">InstallAddon(script.skin.info.service)</onclick>
                     <onclick condition="!System.HasAddon(script.arctic.zephyr.rounded.autocolors)">InstallAddon(script.arctic.zephyr.rounded.autocolors)</onclick>
                     <onclick>ActivateWindow(1155)</onclick>
                 </control>
@@ -861,6 +897,20 @@
                     <label2>$VAR[Label_Skin_Settings_Perf_Selected]</label2>
                     <onfocus>ClearProperty(launchsetupwizard,Home)</onfocus>
                     <onclick>ActivateWindow(1154)</onclick>
+                </control>
+
+                <!-- SETTINGS FONT -->
+
+                <control type="button" id="9815" description="Settings to Defaults">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(3)</visible>
+                    <include>Def_Skin_Settings_Level_base</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[166] - $LOCALIZE[288]</label>
+                    <label2>$VAR[Label_Skin_Settings_Skin_Font_Selected]</label2>
+                    <!-- <label2>$VAR[Label_Skin_Settings_Skin_Font_Selected] - $INFO[Skin.Font]</label2> -->
+                    <onfocus>ClearProperty(launchsetupwizard,Home)</onfocus>
+                    <onclick>ActivateWindow(1159)</onclick>
                 </control>
 
                 <!-- HOME - SET VIEW TYPE -->
@@ -895,7 +945,6 @@
                     <include>Def_Settings_Button_Focus_Select_Right_Side</include>
                     <label>$LOCALIZE[13306]</label>
                     <selected>System.GetBool(filelists.showparentdiritems)</selected>
-                    <onclick condition="!System.HasAddon(script.skin.info.service)">InstallAddon(script.skin.info.service)</onclick>
                     <onclick>RunScript(script.skin.info.service,action=toggle_setting,setting=filelists.showparentdiritems)</onclick>
                 </control>
 
@@ -908,7 +957,6 @@
                     <include>Def_Settings_Button_Focus_Select_Right_Side</include>
                     <label>$LOCALIZE[21369]</label>
                     <selected>System.GetBool(input.enablemouse)</selected>
-                    <onclick condition="!System.HasAddon(script.skin.info.service)">InstallAddon(script.skin.info.service)</onclick>
                     <onclick>RunScript(script.skin.info.service,action=toggle_setting,setting=input.enablemouse)</onclick>
                 </control>
 
@@ -1223,6 +1271,8 @@
                     <label>$LOCALIZE[31126]</label>
                 </control>
 
+                <!-- ANIMATE FANART -->
+
                 <control type="radiobutton" id="9715" description="Animate Fanart">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(4)</visible>
@@ -1244,6 +1294,7 @@
                     <selected>Skin.HasSetting(show.global.visualisation.background.video)</selected>
                     <onclick>Skin.ToggleSetting(show.global.visualisation.background.video)</onclick>
                     <onclick condition="!Skin.HasSetting(show.global.visualisation.background.video)">Skin.Reset(show.home.nowplaying.extended.video.windows)</onclick>
+                    <onclick condition="Skin.HasSetting(show.global.visualisation.background.video)">Skin.SetBool(show.home.nowplaying.extended.video.windows)</onclick>
                     <onclick>SetProperty(reloadskin,1,Home)</onclick>
                 </control>
 
@@ -1302,6 +1353,8 @@
                     <label>$LOCALIZE[14227]</label>
                 </control>
 
+                <!-- DISABLE STARTUP WINDOW -->
+
                 <control type="radiobutton" id="120140" description="Startup Video">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(4)</visible>
@@ -1311,6 +1364,9 @@
                     <selected>!Skin.HasSetting(disable.startup.window)</selected>
                     <onclick>Skin.ToggleSetting(disable.startup.window)</onclick>
                 </control>
+
+                <!-- CHOOSE STARTUP BACKGROUND -->
+
                 <control type="button" id="12015" description="Set Fallback Image">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(4)</visible>
@@ -1321,6 +1377,9 @@
                     <onclick>Skin.SetImage(fanart.fallback.startup)</onclick>
                     <enable>!Skin.HasSetting(disable.startup.window)</enable>
                 </control>
+
+                <!-- STARTUP VIDEO / MUSIC PLAYLIST -->
+
                 <control type="button" id="12014" description="Startup Video">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(4)</visible>
@@ -1367,32 +1426,6 @@
                     <include>Def_Settings_Button_Focus_Select_Right_Side</include>
                     <selected>Skin.HasSetting(show.time.format.hh.mm)</selected>
                     <onclick>Skin.ToggleSetting(show.time.format.hh.mm)</onclick>
-                </control>
-
-                <!-- SHOW GENRE ICONS BAR ON HOME -->
-
-                <control type="radiobutton" id="12005">
-                    <width>1278</width>
-                    <align>left</align>
-                    <label>$LOCALIZE[31991]</label>
-                    <visible>Container(3000).HasFocus(5)</visible>
-                    <include>Def_Skin_Settings_Level_standard</include>
-                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
-                    <selected>!Skin.HasSetting(hide.home.genre.icons)</selected>
-                    <onclick>Skin.ToggleSetting(hide.home.genre.icons)</onclick>
-                </control>
-
-                <!-- SHOW STUDIO LOGO ON HOME -->
-
-                <control type="radiobutton" id="12006">
-                    <width>1278</width>
-                    <align>left</align>
-                    <label>$LOCALIZE[31992]</label>
-                    <visible>Container(3000).HasFocus(5)</visible>
-                    <include>Def_Skin_Settings_Level_standard</include>
-                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
-                    <selected>!Skin.HasSetting(hide.home.studio.logo)</selected>
-                    <onclick>Skin.ToggleSetting(hide.home.studio.logo)</onclick>
                 </control>
 
                 <!-- SHOW WEATHER ALL VIEW -->
@@ -1897,7 +1930,7 @@
                     <label>$LOCALIZE[10000]</label>
                 </control>
 
-                <!-- TYPE INFORMATION ? -->
+                <!-- TYPE INFORMATION - NONE / YES / DETAILLED -->
 
                 <control type="button" id="9720">
                     <width>1278</width>
@@ -1914,6 +1947,8 @@
                     <onclick>SetProperty(reloadskin,1,Home)</onclick>
                 </control>
 
+                <!-- SHOW PLAYER OSD BUTTON -->
+
                 <control type="radiobutton" id="97428">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -1925,6 +1960,9 @@
                     <onclick condition="!Skin.HasSetting(hide.home.nowplaying.extended.osd.control.button)">Skin.Reset(hide.home.menu.with.nowplaying.extended)</onclick>
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                 </control>
+
+                <!-- HIDE HOME MENU AND HEADER -->
+
                 <control type="radiobutton" id="98095">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -1937,6 +1975,9 @@
                     <onclick condition="Skin.HasSetting(hide.home.menu.with.nowplaying.extended)">Skin.Reset(hide.home.nowplaying.extended.osd.control.button)</onclick>
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                 </control>
+
+                <!-- AUTO SHOW NOW PLAYING AFTER 5S -->
+
                 <control type="radiobutton" id="97231">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -1968,9 +2009,12 @@
                     <label>$LOCALIZE[31545]</label>
                     <selected>Skin.HasSetting(show.nowplaying.video.home.flix)</selected>
                     <onclick>Skin.ToggleSetting(show.nowplaying.video.home.flix)</onclick>
-                    <enable>Skin.HasSetting(home.style.flix)</enable>
+                    <enable>Skin.HasSetting(home.style.flix) + !$EXP[Home_Is_Horizontal_Clean]</enable>
                     <visible>!Skin.HasSetting(hide.furniture.nowplaying.home)</visible>
                 </control>
+
+                <!-- HIDE VIDEO BLACK BAR IN HOME FLIX -->
+
                 <control type="button" id="97429" description="Auto Trailer Black Bars">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -1985,6 +2029,8 @@
                     <visible>!Skin.HasSetting(hide.furniture.nowplaying.home) + $EXP[Home_Show_NowPlaying_Video_In_Window_Flix]</visible>
                 </control>
 
+                <!-- SHOW / HIDE DISCART -->
+
                 <control type="radiobutton" id="9723">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -1995,6 +2041,9 @@
                     <onclick>Skin.ToggleSetting(hide.home.nowplaying.extended.video.cd)</onclick>
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home) + !$EXP[Home_Show_NowPlaying_Video_In_Window_Flix]</visible>
                 </control>
+
+                <!-- CHOOSE DISCART FALLBACK -->
+
                 <control type="button" id="9725">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2009,6 +2058,9 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home) + !$EXP[Home_Show_NowPlaying_Video_In_Window_Flix]</visible>
                     <visible>!Skin.HasSetting(hide.home.nowplaying.extended.video.cd)</visible>
                 </control>
+
+                <!-- SHOW DISCART FALLBACK ONLY -->
+
                 <control type="radiobutton" id="9729">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2020,6 +2072,9 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home) + !$EXP[Home_Show_NowPlaying_Video_In_Window_Flix]</visible>
                     <visible>!Skin.HasSetting(hide.home.nowplaying.extended.video.cd)</visible>
                 </control>
+
+                <!-- SHOW CLEARART -->
+
                 <control type="radiobutton" id="9722">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2031,6 +2086,9 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home) + !$EXP[Home_Show_NowPlaying_Video_In_Window_Flix]</visible>
                     <enable>![Skin.HasSetting(show.home.nowplaying.extended.video.windows) + !Skin.HasSetting(hide.home.nowplaying.extended.video.cd)]</enable>
                 </control>
+
+                <!-- CLEARLOGO INSTEAD TITLE -->
+
                 <control type="radiobutton" id="9731">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2043,6 +2101,9 @@
                     <onclick>SetProperty(reloadskin,1,Home)</onclick>
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home) + !$EXP[Home_Show_NowPlaying_Video_In_Window_Flix]</visible>
                 </control>
+
+                <!-- SHOW VIDEO PREVIEW -->
+
                 <control type="radiobutton" id="9721">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2065,6 +2126,8 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                 </control>
 
+                <!-- SHOW / HIDE DISCART -->
+
                 <control type="radiobutton" id="9727">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2075,6 +2138,9 @@
                     <onclick>Skin.ToggleSetting(hide.home.nowplaying.extended.music.cd)</onclick>
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                 </control>
+
+                <!-- CHOOSE DISCART FALLBACK -->
+
                 <control type="button" id="9724">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2089,6 +2155,9 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                     <visible>!Skin.HasSetting(hide.home.nowplaying.extended.music.cd)</visible>
                 </control>
+
+                <!-- SHOW DISCART FALLBACK ONLY -->
+
                 <control type="radiobutton" id="9728">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2100,6 +2169,9 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                     <visible>!Skin.HasSetting(hide.home.nowplaying.extended.music.cd)</visible>
                 </control>
+
+                <!-- SHOW CLEARLOGO -->
+
                 <control type="radiobutton" id="9733" description="SELECT ART">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2110,6 +2182,9 @@
                     <onclick>Skin.ToggleSetting(show.home.nowplaying.extended.music.clearlogo)</onclick>
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                 </control>
+
+                <!-- CHOOSE EXTRA INFO TRACK LIST / BIO / SCROLLING TEXT -->
+
                 <control type="button" id="9726">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2124,7 +2199,7 @@
                     <visible>Skin.HasSetting(show.furniture.nowplaying.extended.home)</visible>
                 </control>
 
-            <!-- MENU - Views -->
+            <!-- MENU - VIEWS -->
 
                 <control type="label" id="9730" description="Backup">
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2132,6 +2207,9 @@
                     <include>Def_Settings_Label_Title_Right_Side</include>
                     <label>$LOCALIZE[31226]</label>
                 </control>
+
+                <!-- SHOW NOW PLAYING IN HEADER -->
+
                 <control type="radiobutton" id="9741" description="Now Playing">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2142,6 +2220,9 @@
                     <onclick>Skin.ToggleSetting(hide.furniture.nowplaying.views)</onclick>
                     <onclick>SetProperty(reloadskin,1,Home)</onclick>
                 </control>
+
+                <!-- SHOW NOW PLAYING VIDEO IN VIEWS FLIX -->
+
                 <control type="radiobutton" id="9743">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2151,6 +2232,9 @@
                     <selected>Skin.HasSetting(show.nowplaying.video.view.flix)</selected>
                     <onclick>Skin.ToggleSetting(show.nowplaying.video.view.flix)</onclick>
                 </control>
+
+                <!-- HIDE VIDEO BLACK BAR IN VIEWS FLIX -->
+
                 <control type="button" id="97430" description="Auto Trailer Black Bars">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(6)</visible>
@@ -2829,6 +2913,8 @@
     <!--         MENU - BACKUP        -->
     <!-- ============================ -->
 
+            <!--  SKIN - RESTORE / BACKUP -->
+
                 <control type="label" id="9430" description="Backup">
                     <visible>Container(3000).HasFocus(10)</visible>
                     <include>Def_Skin_Settings_Level_advanced</include>
@@ -2836,15 +2922,8 @@
                     <label>$LOCALIZE[31053]</label>
                 </control>
 
-                <control type="button" id="9439" description="Backup">
-                    <width>1278</width>
-                    <visible>Container(3000).HasFocus(10)</visible>
-                    <include>Def_Skin_Settings_Level_advanced</include>
-                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
-                    <label>$LOCALIZE[31001]</label>
-                    <onclick condition="!System.HasAddon(script.xbmcbackup)">InstallAddon(script.xbmcbackup)</onclick>
-                    <onclick>RunScript(script.xbmcbackup)</onclick>
-                </control>
+                <!-- SETTINGS -->
+
                 <control type="button" id="9440" description="Restore">
                     <width>1278</width>
                     <visible>Container(3000).HasFocus(10)</visible>
@@ -2855,22 +2934,25 @@
                     <onclick condition="System.HasAddon(script.xbmcbackup)">Addon.OpenSettings(script.xbmcbackup)</onclick>
                 </control>
 
+                <!-- RESTORE / BACKUP -->
+
+                <control type="button" id="9439" description="Backup">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(10)</visible>
+                    <include>Def_Skin_Settings_Level_advanced</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[31001]</label>
+                    <onclick condition="!System.HasAddon(script.xbmcbackup)">InstallAddon(script.xbmcbackup)</onclick>
+                    <onclick>RunScript(script.xbmcbackup)</onclick>
+                </control>
+
+            <!--  SKIN - SETTINGS -->
+
                 <control type="label" id="9431" description="Backup">
                     <visible>Container(3000).HasFocus(10)</visible>
                     <include>Def_Skin_Settings_Level_advanced</include>
                     <include>Def_Settings_Label_Title_Right_Side</include>
                     <label>$LOCALIZE[20077]</label>
-                </control>
-
-                <!--  SKIN - RESET SKINSHORTCUTS MENU -->
-
-                <control type="button" id="9444" description="Settings to Defaults">
-                    <width>1278</width>
-                    <visible>Container(3000).HasFocus(10)</visible>
-                    <include>Def_Skin_Settings_Level_advanced</include>
-                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
-                    <label>$LOCALIZE[31616]</label>
-                    <onclick>RunScript(script.skinshortcuts,type=resetall)</onclick>
                 </control>
 
                 <!--  SKIN - SETUP WIZARD -->
@@ -2884,7 +2966,30 @@
                     <onfocus condition="String.IsEmpty(Window(Home).Property(launchsetupwizard))">ClearProperty(launchsetupwizard,Home)</onfocus>
                     <onunfocus condition="String.IsEmpty(Window(Home).Property(launchsetupwizard))">ClearProperty(launchsetupwizard,Home)</onunfocus>
                     <onclick>SetProperty(launchsetupwizard,1,Home)</onclick>
+                    <onclick>SetProperty(SetupWizardDirection,Next,Home)</onclick>
                     <onclick>ActivateWindow(1153)</onclick>
+                </control>
+
+                <!--  SKIN - RESET SETTINGS TO DEFAULT -->
+
+                <control type="button" id="9445" description="Settings to Defaults">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(10)</visible>
+                    <include>Def_Skin_Settings_Level_advanced</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[31238]</label>
+                    <onclick>RunScript(script.skinvariables,run_dialog=yesno,heading=$LOCALIZE[31238],message=$LOCALIZE[750],yeslabel=$LOCALIZE[107],nolabel=$LOCALIZE[106],defaultbutton=10,"executebuiltin=Skin.ResetSettings || ClearProperty(FullInitStarted,home) || ClearProperty(FullInitEnded,home) || SetProperty(StartupReplaceWindow,skinsettings,home) || ActivateWindow(startup)")</onclick>
+                </control>
+
+                <!--  SKIN - RESET SKINSHORTCUTS MENU -->
+
+                <control type="button" id="9444" description="Settings to Defaults">
+                    <width>1278</width>
+                    <visible>Container(3000).HasFocus(10)</visible>
+                    <include>Def_Skin_Settings_Level_advanced</include>
+                    <include>Def_Settings_Button_Focus_Select_Right_Side</include>
+                    <label>$LOCALIZE[31616]</label>
+                    <onclick>RunScript(script.skinshortcuts,type=resetall)</onclick>
                 </control>
             </control>
 

@@ -270,6 +270,41 @@
         </definition>
     </include>
 
+    <include name="Def_Dialog_Setting_Background">
+        <param name="height" default="882" />
+        <param name="width" default="1320" />
+        <param name="centerleft" default="50%" />
+        <param name="centertop" default="50%" />
+        <param name="colordiffuse" default="White100" />
+        <param name="colordiffuse_border" value="$PARAM[colordiffuse_border]" default="$VAR[Color_Border]" />
+        <param name="colordiffuse_shadow" value="$PARAM[colordiffuse_shadow]" default="$VAR[Color_Dialog_Shadow]" />
+        <param name="pad_shadow" value="$PARAM[pad_shadow]" default="-9" />
+        <param name="pad_image" value="$PARAM[pad_image]" default="0" />
+        <param name="condition_fade" value="$PARAM[condition_fade]" default="false" />
+        <param name="visible" default="true" />
+
+        <definition>
+            <visible>$PARAM[visible]</visible>
+
+            <include condition="!$EXP[Condition_Show_Button_Setup_Wizard]">Animation_Dialog_Menu_Right_Side</include>
+            <include condition="$EXP[Condition_Show_Button_Setup_Wizard]">Animation_Dialog_Menu_Prec_Next_Side</include>
+
+            <centerleft>$PARAM[centerleft]</centerleft>
+            <centertop>$PARAM[centertop]</centertop>
+            <height>$PARAM[height]</height>
+            <width>$PARAM[width]</width>
+
+           <include content="Def_Dialog_Image_Background">
+                <param name="colordiffuse" value="$PARAM[colordiffuse]" />
+                <param name="colordiffuse_border" value="$PARAM[colordiffuse_border]" />
+                <param name="colordiffuse_shadow" value="$PARAM[colordiffuse_shadow]" />
+                <param name="pad_shadow" value="$PARAM[pad_shadow]" />
+                <param name="pad_image" value="$PARAM[pad_image]" />
+                <param name="condition_fade" value="$PARAM[condition_fade]" />
+            </include>
+        </definition>
+    </include>
+
     <include name="Def_Dialog_Image_Background">
         <param name="pad_shadow" value="$PARAM[pad_shadow]" default="-9" />
         <param name="border_shadow" value="$PARAM[border_shadow]" default="34" />
@@ -2037,7 +2072,6 @@
 
              <control type="radiobutton" id="90122">
                 <visible>String.IsEqual(ListItem.Property(tmdb_type),person) | [ListItem.IsCollection + !String.IsEmpty(ListItem.DBID)]</visible>
-                <visible>System.AddonIsEnabled(plugin.video.themoviedb.helper) + Skin.HasSetting(enabled.tmdb.helper.service)</visible>
 
                 <onfocus>SetProperty(last_video_focus,90122,Home)</onfocus>
                 <onfocus condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">ClearProperty(moviecontent,Home)</onfocus>
@@ -2056,30 +2090,6 @@
 
                 <onclick>Skin.ToggleSetting(filter.video.only.local)</onclick>
                 <include>Def_Cleanup_On_Click</include>
-            </control>
-
-            <!-- LOCAL ONLY IF TMDB HELPER DISABLE -->
-
-             <control type="radiobutton" id="90123">
-                <visible>String.IsEqual(ListItem.Property(tmdb_type),person) | String.IsEqual(ListItem.DBType,set)</visible>
-                <visible>![System.AddonIsEnabled(plugin.video.themoviedb.helper) + Skin.HasSetting(enabled.tmdb.helper.service)]</visible>
-
-                <onfocus>SetProperty(last_video_focus,90123,Home)</onfocus>
-                <onfocus condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">ClearProperty(moviecontent,Home)</onfocus>
-                <onfocus condition="String.IsEqual(ListItem.Property(tmdb_type),person)">SetProperty(moviecontent,13,Home)</onfocus>
-
-                <include>Def_Clear_TMDbHelper_WidgetContainer_On_Focus</include>
-                <onfocus>ClearProperty(Show_Disc,Home)</onfocus>
-
-                <include>Def_Button_Dimensions_Poster</include>
-                <include>Texture_Button_Dialog_Info</include>
-                <textureradioonfocus colordiffuse="FFFFFFFF">buttonsdialogs/tmdb.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="Dark2">buttonsdialogs/tmdb.png</textureradioonnofocus>
-                <textureradioofffocus colordiffuse="FFFFFFFF">buttonsdialogs/storageinfo.png</textureradioofffocus>
-                <textureradiooffnofocus colordiffuse="Dark2">buttonsdialogs/storageinfo.png</textureradiooffnofocus>
-                <usealttexture>Skin.HasSetting(filter.video.only.local)</usealttexture>
-
-                <onfocus condition="!Skin.HasSetting(filter.video.only.local)">Skin.ToggleSetting(filter.video.only.local)</onfocus>
             </control>
 
             <!-- MOVIES LIST BY DIRECTOR -->
@@ -2424,7 +2434,6 @@
             <!-- LOCAL ONLY / ON LINE -->
 
              <control type="radiobutton" id="9012">
-                <visible>System.AddonIsEnabled(plugin.video.themoviedb.helper) + Skin.HasSetting(enabled.tmdb.helper.service)</visible>
                 <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)</visible>
 
                 <!-- PLUGINS ALLOWED -->
@@ -2447,29 +2456,6 @@
 
                 <include>Def_Cleanup_On_Click</include>
                 <onclick>Skin.ToggleSetting(filter.video.only.local)</onclick>
-            </control>
-
-            <!-- LOCAL ONLY IF TMDB HELPER DISABLE -->
-
-             <control type="radiobutton" id="90124">
-                <visible>![String.IsEqual(ListItem.Property(tmdb_type),person) | String.IsEqual(ListItem.DBType,set)]</visible>
-                <visible>![System.AddonIsEnabled(plugin.video.themoviedb.helper) + Skin.HasSetting(enabled.tmdb.helper.service)]</visible>
-
-                <onfocus>SetProperty(last_video_focus,90124,Home)</onfocus>
-                <onfocus>ClearProperty(moviecontent,Home)</onfocus>
-
-                <include>Def_Clear_TMDbHelper_WidgetContainer_On_Focus</include>
-                <onfocus>ClearProperty(Show_Disc,Home)</onfocus>
-
-                <include>Def_Button_Dimensions_Poster</include>
-                <include>Texture_Button_Dialog_Info</include>
-                <textureradioonfocus colordiffuse="FFFFFFFF">buttonsdialogs/tmdb.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="Dark2">buttonsdialogs/tmdb.png</textureradioonnofocus>
-                <textureradioofffocus colordiffuse="FFFFFFFF">buttonsdialogs/storageinfo.png</textureradioofffocus>
-                <textureradiooffnofocus colordiffuse="Dark2">buttonsdialogs/storageinfo.png</textureradiooffnofocus>
-                <usealttexture>Skin.HasSetting(filter.video.only.local)</usealttexture>
-
-                <onfocus condition="!Skin.HasSetting(filter.video.only.local)">Skin.ToggleSetting(filter.video.only.local)</onfocus>
             </control>
 
         <!-- TVSOWS -->
@@ -3310,26 +3296,5 @@
             <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Provider.$PARAM[icon].Icon))</visible>
             <aspectratio align="center">keep</aspectratio>
         </control>
-    </include>
-
-    <!-- SCRIPT SKINSHORTCUTS -->
-
-    <include name="Def_Skinshortcuts_Button_Title_Right_Side">
-        <width>100%</width>
-        <height>66</height>
-        <align>left</align>
-        <textoffsetx>20</textoffsetx>
-        <disabledcolor>Black70</disabledcolor>
-        <font>Button</font>
-        <enable>false</enable>
-    </include>
-
-    <include name="Def_Skinshortcuts_Button_Menu_Right_Side">
-        <width>100%</width>
-        <height>66</height>
-        <align>left</align>
-        <font>Small</font>
-        <textcolor>Black70</textcolor>
-        <include>Texture_Button_Dialog_Settings</include>
     </include>
 </includes>

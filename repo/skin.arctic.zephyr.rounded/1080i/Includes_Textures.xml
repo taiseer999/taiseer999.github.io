@@ -121,6 +121,20 @@
         </definition>
     </include>
 
+    <include name="Texture_Arrow_Left">
+        <param name="colordiffuse" value="$PARAM[colordiffuse]" default="Dark2" />
+        <definition>
+             <texture colordiffuse="$PARAM[colordiffuse]" flipx="true">common/arrow_small_right.png</texture>
+        </definition>
+    </include>
+
+    <include name="Texture_Arrow_Right">
+        <param name="colordiffuse" value="$PARAM[colordiffuse]" default="Dark2" />
+        <definition>
+             <texture colordiffuse="$PARAM[colordiffuse]" flipx="false">common/arrow_small_right.png</texture>
+        </definition>
+    </include>
+
     <include name="Texture_Dialog_Search">
         <texture border="40" colordiffuse="$VAR[Color_Focus]">common/menu.png</texture>
     </include>
@@ -204,7 +218,7 @@
     <!-- OSD -->
 
     <include name="Texture_OSD_Button">
-        <param name="back_colordiffuse" value="$PARAM[back_colordiffuse]" default="$VAR[Color_Background]" />
+        <param name="back_colordiffuse" value="$PARAM[back_colordiffuse]" default="$VAR[Color_OSD_Background_Button]" />
         <definition>
             <texturefocus flipy="true" colordiffuse="$VAR[Color_Focus]">common/circle80.png</texturefocus>
             <texturenofocus colordiffuse="$PARAM[back_colordiffuse]">common/circle80.png</texturenofocus>

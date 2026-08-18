@@ -11,7 +11,10 @@
         <include>Hidden_Button_ReloadSkin</include>
 
         <control type="group">
-            <include content="Def_Dialog_Background"><param name="height" value="842" /><param name="width" value="1760" /></include>
+            <include content="Def_Dialog_Setting_Background">
+                <param name="height" value="842" />
+                <param name="width" value="1760" />
+            </include>
 
             <include content="Def_Dialog_Header">
                 <param name="label" value="31334" />
@@ -125,7 +128,6 @@
                     <label>$LOCALIZE[14078] $LOCALIZE[15111] $LOCALIZE[14013] $LOCALIZE[33027]/$LOCALIZE[33028]</label>
                     <selected>Skin.HasSetting(daynight.autocolor)</selected>
 
-                    <onclick condition="!System.HasAddon(script.skin.info.service)">InstallAddon(script.skin.info.service)</onclick>
                     <onclick condition="!System.HasAddon(script.arctic.zephyr.rounded.autocolors)">InstallAddon(script.arctic.zephyr.rounded.autocolors)</onclick>
                     <onclick condition="!Skin.HasSetting(daynight.autocolor)">Skin.SetString(settingthemecolor,3)</onclick>
 
@@ -318,9 +320,10 @@
 
                 <control type="button" id="9441" description="Settings to Defaults">
                     <include>Def_Custom_Settings_Button_Focus_Select_Left_Side</include>
-                    <label>31238</label>
-                    <onclick>ActivateWindow(1253)</onclick>
-                    <onclick>SetProperty(reloadskin,1,Home)</onclick>
+                    <label>$LOCALIZE[31238]</label>
+                    <onclick>Dialog.Close(all,false)</onclick>
+                    <onclick>RunScript(script.skinvariables,run_dialog=yesno,heading=$LOCALIZE[31238],message=$LOCALIZE[750],yeslabel=$LOCALIZE[107],nolabel=$LOCALIZE[106],defaultbutton=10,"executebuiltin=Skin.ResetSettings || ClearProperty(FullInitStarted,home) || ClearProperty(FullInitEnded,home) || SetProperty(StartupReplaceWindow,skinsettings,home) || ActivateWindow(startup)")</onclick>
+                    <!-- <onclick>SetProperty(reloadskin,1,Home)</onclick> -->
                 </control>
 
                 <!-- PERF SETTINGS -->

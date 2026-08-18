@@ -2,7 +2,9 @@
 <window>
 	<defaultcontrol always="true">9000</defaultcontrol>
 
+    <onload>CancelAlarm(power_menu_setfocus_399,true)</onload>
     <onload condition="$EXP[Has_Home_Menu_Auto_Slide_Out_Animation]">CancelAlarm(slide_out_setfocus_2011,true)</onload>
+
     <onunload condition="Window.IsVisible(script-globalsearch.xml)">ClearProperty(GlobalSearchWindowOpen,Home)</onunload>
 
     <controls>
@@ -11,12 +13,13 @@
         <control type="group">
             <include content="Def_Dialog_Background">
                 <param name="height" value="442" />
-                <param name="width" value="1320" />
+                <param name="width" value="1060" />
                 <param name="colordiffuse" value="Panel" />
             </include>
 
             <include content="Def_Dialog_Header">
                 <param name="label" value="" />
+                <param name="label_width" value="956" />
                 <param name="label_id" value="1" />
                 <param name="icon" value="kodi" />
             </include>

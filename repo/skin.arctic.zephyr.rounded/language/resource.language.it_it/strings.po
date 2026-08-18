@@ -247,6 +247,7 @@ msgstr "Doppio Flix"
 
 msgctxt "#31057"
 msgid "Flip poster/fanart"
+msgstr "Capovolgi poster/fanart"
 msgstr "Scambia poster/fanart"
 
 msgctxt "#31058"
@@ -970,8 +971,8 @@ msgid "Top 20 User Rated Movies"
 msgstr "Top 20 Film votati dall'utente"
 
 msgctxt "#31238"
-msgid "Reset skin settings to defaults?"
-msgstr "Reimpostare impostazioni della skin ai valori predefiniti?"
+msgid "Reset skin settings to defaults"
+msgstr "Reimpostare impostazioni della skin ai valori predefiniti"
 
 msgctxt "#31239"
 msgid "Reset skin settings to defaults? WARNING: This will also reset your home menu to skin defaults!"
@@ -2050,7 +2051,7 @@ msgid "Background presets"
 msgstr ""
 
 msgctxt "#31508"
-msgid "Autoscrolling"
+msgid "Auto-scrolling"
 msgstr ""
 
 msgctxt "#31509"
@@ -2544,3 +2545,19 @@ msgstr "In onda"
 msgctxt "#31631"
 msgid "Last aired"
 msgstr "Ultima volta in onda"
+
+msgctxt "#31632"
+msgid "Rewind"
+msgstr "Indietro veloce"
+
+msgctxt "#31633"
+msgid "Fast forward"
+msgstr "Avanti veloce"
+
+msgctxt "#31634"
+msgid "Bookmark"
+msgstr "Segnalibro"
+
+msgctxt "#31635"
+msgid "Customise search menu"
+msgstr ""

@@ -40,10 +40,6 @@
 
     <expression name="Icon_Container_Addons">[[Container.Content() + String.StartsWith(ListItem.Icon,Default)] | String.IsEqual(ListItem.FolderPath,addons://all/) | String.IsEqual(ListItem.Icon,DefaultFolder.png) | String.IsEqual(ListItem.Icon,DefaultFile.png) | [String.StartsWith(Container.FolderPath,addons://) + String.IsEqual(ListItem.Icon,DefaultAddon.png)]]</expression>
 
-    <!-- SHOW SCRIPT SKINSHORTCUTS WIDGET MENU -->
-
-    <expression name="Script_SkinShortcuts_Widget">[String.EndsWith(Window.Property(menuname),.1) | String.EndsWith(Window.Property(menuname),.3) | String.EndsWith(Window.Property(menuname),.4) | String.EndsWith(Window.Property(menuname),.5) | String.EndsWith(Window.Property(menuname),.6) | String.EndsWith(Window.Property(menuname),.7) | String.EndsWith(Window.Property(menuname),.8) | String.EndsWith(Window.Property(menuname),.9) | String.EndsWith(Window.Property(menuname),.10)]</expression>
-
     <!-- AUTOCOMPLETION IS ENABLED ? -->
 
     <expression name="Is_AutoCompletion_Enabled">[System.HasAddon(plugin.program.autocompletion) + System.AddonIsEnabled(plugin.program.autocompletion) + !Skin.HasSetting(Keyboard.DisableAutoCompletion)]</expression>
@@ -164,8 +160,12 @@
     <!-- PLUGIN - JUST LISTS OF MOVIES - LISTITEM -->
 
     <expression name="IsJlomItem">String.Contains(ListItem.FolderPath,plugin://plugin.video.jlom)</expression>
+
     <expression name="IsJlomFolder">[String.Contains(Container.FolderPath,plugin://plugin.video.jlom/?action=list_folders) | String.IsEqual(Container.FolderPath,plugin://plugin.video.jlom/) | String.Contains(ListItem.FolderPath,plugin://plugin.video.jlom/?action=list_folders)]</expression>
+
     <expression name="IsJlomMovie">[$EXP[IsJlomItem] + String.IsEqual(ListItem.DBType,movie)]</expression>
+
+    <expression name="IsJlomMovieBDID">[String.Contains(ListItem.FolderPath,videodb://movies/titles) + String.IsEqual(ListItem.DBType,movie) + $EXP[IsPluginJLOM]]</expression>
 
     <!-- PLUGIN RADIO_DE - LISTITEM -->
 
@@ -183,6 +183,9 @@
 
     <expression name="IsAnSource">String.StartsWith(Container.FolderPath,sources://)</expression>
 
+    <!-- IS SOURCE ? -->
+
+    <expression name="IsTMDbServiceEnable">[System.AddonIsEnabled(plugin.video.themoviedb.helper) + Skin.HasSetting(enabled.tmdb.helper.service)]</expression>
 
 
     <!-- ================================== -->
@@ -206,7 +209,7 @@
 
     <expression name="View_Settings">[$EXP[View_Kodi_Settings] | Window.IsVisible(MyPVRRecordings.xml) | Window.IsVisible(MyPVRSearch.xml) | Window.IsVisible(MyWeather.xml) | Window.IsVisible(MyPVRTimers.xml) | [Window.IsVisible(MyPVRChannels.xml) + !Control.IsVisible(526) + !Window.IsVisible(DialogPVRInfo.xml)] | Window.IsVisible(MyPVRProviders.xml) | Window.IsVisible(MyMusicPlaylistEditor.xml) | [Window.IsVisible(MyPVRGuide.xml) + !Window.IsVisible(DialogPVRInfo.xml)]]</expression>
 
-    <expression name="View_Kodi_Settings">[Window.IsVisible(AddonBrowser.xml) | Window.IsVisible(SettingsSystemInfo.xml) | Window.IsVisible(SettingsCategory.xml) | Window.IsVisible(Settings.xml) | Window.IsVisible(SkinSettings.xml) | Window.IsVisible(service-CoreELEC-Settings-mainWindow.xml) | Window.IsVisible(service-LibreELEC-Settings-mainWindow.xml) | Window.IsVisible(SettingsProfile.xml) | Window.IsVisible(EventLog.xml)]</expression>
+    <expression name="View_Kodi_Settings">[Window.IsVisible(AddonBrowser.xml) | Window.IsVisible(SettingsSystemInfo.xml) | Window.IsVisible(SettingsCategory.xml) | Window.IsVisible(Settings.xml) | Window.IsVisible(SkinSettings.xml) | Window.IsVisible(service-CoreELEC-Settings-mainWindow.xml) | Window.IsVisible(service-LibreELEC-Settings-mainWindow.xml) | Window.IsVisible(SettingsProfile.xml) | Window.IsVisible(EventLog.xml) | Window.IsVisible(FileManager.xml)]</expression>
 
     <expression name="View_Blur_Disable">[$EXP[View_Settings] | Window.IsVisible(FileManager.xml) | Container.Content(images) | Window.IsVisible(MyPics.xml) | Window.IsVisible(script-globalsearch.xml)]</expression>
 
@@ -220,7 +223,7 @@
     <!--               HOME                 -->
     <!-- ================================== -->
 
-    <expression name="Home_Dialog_Button_Menu_Focus_On_Exit">[Window.IsVisible(Home) + !$EXP[View_Info_Dialog] + !Window.IsVisible(DialogSelect.xml) + !Window.IsVisible(DialogConfirm.xml) + !Window.IsVisible(Custom_1146_Home_SearchDialog.xml) + !Window.IsVisible(FileManager.xml) + !$EXP[View_Settings] + String.IsEmpty(Window(Home).Property(Trailer_Fade_Background)) + !Window.IsVisible(DialogKeyboard.xml) + !Window.IsVisible(DialogNumeric.xml) + !Window.IsVisible(Custom_1201_Dialog_Custom_Font_Code.xml) + !Window.IsVisible(script.audioprofiles-apmenu.xml)]</expression>
+    <expression name="Home_Dialog_Button_Menu_Focus_On_Exit">[Window.IsVisible(Home) + !$EXP[View_Info_Dialog] + !Window.IsVisible(DialogSelect.xml) + !Window.IsVisible(DialogConfirm.xml) + !Window.IsVisible(Custom_1146_Home_SearchDialog.xml) + !Window.IsVisible(Custom_1147_Home_SearchDialog.xml) + !Window.IsVisible(FileManager.xml) + !$EXP[View_Settings] + String.IsEmpty(Window(Home).Property(Trailer_Fade_Background)) + !Window.IsVisible(DialogKeyboard.xml) + !Window.IsVisible(DialogNumeric.xml) + !Window.IsVisible(Custom_1201_Dialog_Custom_Font_Code.xml) + !Window.IsVisible(script.audioprofiles-apmenu.xml)]</expression>
 
     <expression name="Home_Widget_Item_PVR">[Window.IsVisible(Home) + String.Contains(Window(Home).Property(ListItem_FolderPath),pvr://channels)]</expression>
 
@@ -296,6 +299,8 @@
 
     <!-- DISPLAY NOWPLAYING IF WIDGET IS FOCUS -->
 
+    <expression name="Now_Playing_Audio_Show_Tracklist">[Skin.HasSetting(home.extended.nowplaying.tracklist) | [!Skin.HasSetting(home.extended.nowplaying.tracklist) + String.IsEmpty(MusicPlayer.Property(Artist_Description)) + String.IsEmpty(MusicPlayer.Property(Album_Description))]]</expression>
+
     <expression name="Has_Home_Menu_Auto_Slide_Out_Animation_Only_If_Widget_Is_Focused">[Skin.HasSetting(hide.home.menu) + [$EXP[Home_Is_Horizontal] + Skin.HasSetting(home.style.horizontal.clean)] | [$EXP[Home_Is_Vertical] + Skin.HasSetting(hide.home.menu)] + Skin.HasSetting(hide.only.if.widgetcontainer.gets.focus)]</expression>
 
     <!-- AUTO SHOW NOWPLAYING HELPER -->
@@ -327,11 +332,11 @@
 
     <!-- ENABLE SHOW VIDEO IN HOME IN WINDOWS FLIX -->
 
-    <expression name="Home_Show_NowPlaying_Video_In_Window_Flix">[Skin.HasSetting(show.nowplaying.video.home.flix) + Skin.HasSetting(home.style.flix)]</expression>
+    <expression name="Home_Show_NowPlaying_Video_In_Window_Flix">[Skin.HasSetting(show.nowplaying.video.home.flix) + Skin.HasSetting(home.style.flix) + !$EXP[Home_Is_Horizontal_Clean]]</expression>
 
     <!-- SHOW VIDEO IN HOME IN WINDOWS FLIX -->
 
-    <expression name="Video_Window_Home_Flix_Is_Active">!$EXP[Extended_Now_Playing_Is_Enable] + $EXP[Home_Show_NowPlaying_Video_In_Window_Flix] + !Skin.HasSetting(hide.furniture.nowplaying.home)  + [[Window.IsVisible(Home) + [$EXP[Home_Is_Horizontal_Flix] | $EXP[Home_Is_Horizontal_Clean] | $EXP[Home_Is_Vertical_Flix]]] | Control.IsVisible(521) | Control.IsVisible(522) | Control.IsVisible(524)] + !$EXP[View_Info_Dialog] + !$EXP[Trailer_Window_Is_Active] + !$EXP[Context_Menu_Trailer_Is_Launched]</expression>
+    <expression name="Video_Window_Home_Flix_Is_Active">!$EXP[Extended_Now_Playing_Is_Enable] + $EXP[Home_Show_NowPlaying_Video_In_Window_Flix] + !Skin.HasSetting(hide.furniture.nowplaying.home)  + [Window.IsVisible(Home) + [$EXP[Home_Is_Horizontal_Flix] | $EXP[Home_Is_Vertical_Flix]]] + !$EXP[View_Info_Dialog] + !$EXP[Trailer_Window_Is_Active] + !$EXP[Context_Menu_Trailer_Is_Launched]</expression>
 
     <!-- SHOW VIDEO IN WINDOWS VIEWS FLIX -->
 
@@ -439,6 +444,12 @@
     <!--               FEATURE              -->
     <!-- ================================== -->
 
+    <!-- VIEW FLIX - HIDE HEADER INFO -->
+
+    <expression name="View_Flix_Hide_Header_Info">[Skin.HasSetting(hide.view.flix.furniture.header) | Skin.HasSetting(hide.furniture.header)]</expression>
+
+    <expression name="View_Flix_Is_Visible">[String.IsEqual(Container.ViewMode,$LOCALIZE[31366]) + String.IsEmpty(Window(Home).Property(WallMode))] | [String.IsEqual(Container.ViewMode,$LOCALIZE[31392]) + String.IsEmpty(Window(Home).Property(WallMode))] | [String.IsEqual(Container.ViewMode,$LOCALIZE[31315]) + String.IsEmpty(Window(Home).Property(WallMode))] | [String.IsEqual(Container.ViewMode,$LOCALIZE[31556]) + String.IsEmpty(Window(Home).Property(WallMode))] | [Window.IsVisible(MyPVRChannels.xml) + String.IsEqual(Container.ViewMode,$LOCALIZE[31556]) + String.IsEmpty(Window(Home).Property(WallMode))]</expression>
+
     <!-- VIEW WITH CLOCK IN FOOTER -->
 
     <expression name="View_Clock_In_Footer_Always">$EXP[View_Flix] | $EXP[View_Settings]</expression>
@@ -524,7 +535,7 @@
 
     <!-- VIEW DIALOG SELECT -->
 
-    <expression name="Label2_Dialog_Select_Empty">[!String.IsEmpty(Window(home).Property(skinshortcuts-picker)) + String.IsEmpty(ListItem.Property(path)) + String.IsEmpty(ListItem.Property(count) + String.IsEmpty(ListItem.Property(type) + String.IsEmpty(ListItem.Label2)] | [String.IsEmpty(Window(home).Property(skinshortcuts-picker)) + String.IsEmpty(ListItem.Label2)]</expression>
+    <expression name="Label2_Dialog_Select_Empty">[!String.IsEmpty(Window(home).Property(skinshortcuts-picker)) + String.IsEmpty(ListItem.Property(path)) + String.IsEmpty(ListItem.Property(count)) + String.IsEmpty(ListItem.Property(type)) + String.IsEmpty(ListItem.Label2)] | [String.IsEmpty(Window(home).Property(skinshortcuts-picker)) + String.IsEmpty(ListItem.Label2)]</expression>
 
     <!-- VIEW DIALOG SELECT -->
 
@@ -559,6 +570,10 @@
     <expression name="View_List_Not_Focus">[Window.IsVisible(DialogPVRChannelsOSD.xml) + !Control.HasFocus(11)]</expression>
 
     <expression name="View_List_Dialog_Info_Settings">![Control.IsVisible(521) | Control.IsVisible(522) | Control.IsVisible(523) | Control.IsVisible(524)]</expression>
+
+    <!-- LAYOUT LIST NOT FOCUS -->
+
+    <expression name="View_List_Music_Hide_Status">[!Skin.HasSetting(show.markers.watched.music) | Skin.HasSetting(hide.markers)]</expression>
 
     <!-- SHOW MUSIC VISUALISATION -->
 
@@ -628,36 +643,55 @@
     </expression>
 
 
-
     <!-- ================================== -->
     <!--             CODEC VIDEO            -->
     <!-- ================================== -->
 
     <expression name="IsVideoHDR10Plus">
-        [String.IsEmpty(ListItem.HdrType) + String.IsEmpty(VideoPlayer.HdrType) + [String.Contains(ListItem.FileNameAndPath,hdr10plus) | [VideoPlayer.IsFullscreen + String.Contains(Player.FileNameAndPath,hdr10plus)]]]
-    </expression>
-    <expression name="IsVideoHDR10Plus2">
-        [String.IsEmpty(Container($PARAM[controlid]).ListItem.HdrType) + String.IsEmpty(VideoPlayer.HdrType) + [String.Contains(Container($PARAM[controlid]).ListItem.FileNameAndPath,.hdr10plus.)]
+        [String.IsEqual(ListItem.HdrType,hdr10) + String.Contains(ListItem.FileNameAndPath,hdr10plus)]
+        | [VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HdrType,hdr10) + String.Contains(Player.FileNameAndPath,hdr10plus)]
     </expression>
 
     <expression name="IsVideoHDR10">
-        [String.IsEqual(ListItem.HdrType,hdr10) | String.Contains(ListItem.FileNameAndPath,hdr10)
-        | [VideoPlayer.IsFullscreen + [String.IsEqual(VideoPlayer.HdrType,hdr10) | String.Contains(Player.FileNameAndPath,hdr10)]]] + !$EXP[IsVideoHDR10Plus]
-    </expression>
-
-    <expression name="IsVideoHDR">
-        [String.IsEmpty(ListItem.HdrType) + String.IsEmpty(VideoPlayer.HdrType) + [String.Contains(ListItem.FileNameAndPath,hdr)
-        | [VideoPlayer.IsFullscreen + String.Contains(Player.FileNameAndPath,hdr)]]] + !$EXP[IsVideoHDR10Plus] + !$EXP[IsVideoHDR10]
+        [String.IsEqual(ListItem.HdrType,hdr10) + !String.Contains(ListItem.FileNameAndPath,hdr10plus)]
+        | [VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HdrType,hdr10) + !String.Contains(Player.FileNameAndPath,hdr10plus)]
     </expression>
 
     <expression name="IsVideoHLG">
-        String.IsEqual(ListItem.HdrType,hlg) | String.Contains(ListItem.FileNameAndPath,hlg) | [VideoPlayer.IsFullscreen + [String.IsEqual(VideoPlayer.HdrType,hlg) | String.Contains(Player.FileNameAndPath,hlg)]]
+        String.IsEqual(ListItem.HdrType,hlg)
+        | [VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HdrType,hlg)]
     </expression>
 
     <expression name="IsVideoDolbyVision">
-        String.IsEqual(ListItem.HdrType,dolbyvision) | String.Contains(ListItem.FileNameAndPath,.dv.) | String.Contains(ListItem.FileNameAndPath,dolbyvision) | String.Contains(ListItem.FileNameAndPath,dolby-vision) | String.Contains(ListItem.FileNameAndPath,dolby vision) | [VideoPlayer.IsFullscreen + [String.IsEqual(VideoPlayer.HdrType, dolbyvision) | String.Contains(Player.FileNameAndPath,.dv.) | String.Contains(Player.FileNameAndPath,dolbyvision) | String.Contains(Player.FileNameAndPath,dolby-vision) | String.Contains(Player.FileNameAndPath,dolby vision)]]
+        String.IsEqual(ListItem.HdrType,dolbyvision)
+        | [VideoPlayer.IsFullscreen + String.IsEqual(VideoPlayer.HdrType, dolbyvision)]
     </expression>
 
+
+    <!-- ===================================== -->
+    <!--        VIDEO TYPE WITH KEYWORDS       -->
+    <!-- ===================================== -->
+
+    <expression name="IsVideo3D">
+        [ListItem.IsStereoscopic | String.Contains(ListItem.FilenameAndPath,.3D) | String.Contains(ListItem.FilenameAndPath,-3D)
+        | String.Contains(ListItem.FilenameAndPath,_3D)]
+    </expression>
+
+    <expression name="IsVideoBluray">
+        [String.Contains(ListItem.FilenameAndPath,bluray) | String.Contains(ListItem.FilenameAndPath,bdrip) | String.Contains(ListItem.FilenameAndPath,bd25) | String.Contains(ListItem.FilenameAndPath,bd50) | String.Contains(ListItem.FilenameAndPath,blu-ray)] + !$EXP[IsVideo3D]
+    </expression>
+
+    <expression name="IsVideoHDDVD">
+        String.Contains(ListItem.FilenameAndPath,hddvd)
+    </expression>
+
+    <expression name="IsVideoDVD">
+        String.Contains(ListItem.FilenameAndPath,dvd) + !$EXP[IsVideoHDDVD]
+    </expression>
+
+    <expression name="IsVideoWebDL">
+        [String.Contains(ListItem.Filenameandpath,.web.) | String.Contains(ListItem.Filenameandpath,web-dl) | String.Contains(ListItem.Filenameandpath,webdl) | String.Contains(ListItem.Filenameandpath,webrip)]
+    </expression>
 
 
     <!-- ================================== -->
@@ -695,6 +729,7 @@
             | String.IsEqual(Window(Home).Property(LatestEpisode.10.ShowTitle),ListItem.TvShowTitle)
           ]
     </expression>
+
     <expression name="IsNewEpisode">
         [Container.Content(episodes) | Window.isVisible(Home.xml)]
         + [

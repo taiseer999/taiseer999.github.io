@@ -9,6 +9,7 @@
             <param name="visible" value="$PARAM[visible]" default="true" />
 
             <control type="label">
+                <visible>$PARAM[visible]</visible>
 
                 <include content="Def_Height" condition="Player.HasVideo + Skin.HasSetting(show.home.nowplaying.extended.video.title.clearlogo) + $EXP[Title_Clearlogo_PlayingNow_Available]">
                     <param name="height" value="ClearLogoTitleMaxHeight" />
@@ -19,6 +20,7 @@
                 <include content="Def_Font">
                     <param name="font" value="LargeNetflix" />
                 </include>
+
                 <width>100%</width>
                 <left>$PARAM[left]</left>
                 <align>left</align>
@@ -26,7 +28,6 @@
                 <textcolor>Dark1</textcolor>
                 <label>$PARAM[label]</label>
                 <include condition="Skin.HasSetting(labels.autoscroll)">LabelScroll</include>
-                <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
@@ -205,59 +206,7 @@
 
                         <!-- FLAG BLACK / WHITE -->
 
-                        <control type="grouplist">
-                            <visible>[VideoPlayer.Content(files) + !VideoPlayer.Content(livetv)] | [VideoPlayer.Content(livetv) + !$EXP[Label_PVR_Info_Available]]</visible>
-
-                            <top>55</top>
-                            <left>-2</left>
-                            <width>450</width>
-                            <height>64</height>
-                            <align>left</align>
-
-                            <itemgap>10</itemgap>
-                            <orientation>horizontal</orientation>
-                            <usecontrolcoords>true</usecontrolcoords>
-
-                            <!-- VIDEO - RESOLUTION -->
-
-                            <control type="image" description="Video Resolution">
-                                <width min="20" max="80">auto</width>
-                                <include>Def_Flag_Image_Without_Label</include>
-                                <texture colordiffuse="Dark1" fallback="flags/fallback.png">$INFO[VideoPlayer.VideoResolution,flags/video/white/resolution/,.png]</texture>
-                                <visible>!String.IsEmpty(VideoPlayer.VideoResolution)</visible>
-                            </control>
-
-                            <!-- VIDEO -->
-
-                            <control type="image" description="Video Codec">
-                                <width min="20" max="100">auto</width>
-                                <include>Def_Flag_Image_Without_Label</include>
-                                <texture colordiffuse="Dark1" fallback="flags/fallback.png">$INFO[VideoPlayer.VideoCodec,flags/video/white/videocodec/,.png]</texture>
-                                <visible>!String.IsEmpty(VideoPlayer.VideoCodec)</visible>
-                            </control>
-                            <control type="image" description="Aspect Ratio">
-                                <width min="20" max="70">auto</width>
-                                <include>Def_Flag_Image_Without_Label</include>
-                                <texture colordiffuse="Dark1" fallback="flags/fallback.png">$INFO[VideoPlayer.VideoAspect,flags/video/white/aspectratio/,.png]</texture>
-                                <visible>!String.IsEmpty(VideoPlayer.VideoAspect)</visible>
-                            </control>
-
-                            <!-- AUDIO -->
-
-                            <control type="image" description="Audio Codec">
-                                <width min="20" max="100">auto</width>
-                                <aspectratio aligny="center" align="center">keep</aspectratio>
-                                <include>Def_Flag_Image_Without_Label</include>
-                                <texture colordiffuse="Dark1" fallback="flags/fallback.png">$VAR[Image_Media_Flag_Audio_Codec,flags/video/white/audiocodec/,.png]</texture>
-                                <visible>!String.IsEmpty(VideoPlayer.AudioCodec)</visible>
-                            </control>
-                            <control type="image" description="Audio Channels">
-                                <width>80</width>
-                                <include>Def_Flag_Image_Without_Label</include>
-                                <texture colordiffuse="Dark1" fallback="flags/fallback.png">$INFO[VideoPlayer.AudioChannels,flags/video/white/audiochannels/,.png]</texture>
-                                <visible>!String.IsEmpty(VideoPlayer.AudioChannels)</visible>
-                            </control>
-                        </control>
+                        <include>Furniture_NowPlaying_Video_Flags</include>
                     </control>
                     <control type="group">
                         <width>452</width>
@@ -322,72 +271,7 @@
 
                         <!-- FLAG BLACK / WHITE -->
 
-                        <control type="grouplist">
-                            <visible>!Skin.HasSetting(enable.furniture.flags.colored)</visible>
-                            <visible>String.IsEmpty(MusicPlayer.Album)</visible>
-                            <top>55</top>
-                            <left>-12</left>
-                            <width>450</width>
-                            <height>64</height>
-                            <orientation>horizontal</orientation>
-                            <align>left</align>
-                            <itemgap>12</itemgap>
-                            <usecontrolcoords>true</usecontrolcoords>
-
-                            <control type="image">
-                                <width min="20" max="100">auto</width>
-                                <centertop>50%</centertop>
-                                <texture colordiffuse="Dark1" fallback="flags/fallback.png">$INFO[MusicPlayer.Codec,flags/video/white/audiocodec/,.png]</texture>
-                                <aspectratio align="left">keep</aspectratio>
-                                <visible>!String.IsEmpty(MusicPlayer.Codec)</visible>
-                            </control>
-
-                            <control type="grouplist">
-                                <width min="20" max="100">auto</width>
-                                <height>64</height>
-                                <orientation>vertical</orientation>
-                                <centertop>57%</centertop>
-                                <itemgap>-17</itemgap>
-                                <visible>!String.IsEmpty(MusicPlayer.BitRate)</visible>
-                                <control type="label">
-                                    <height>28</height>
-                                    <align>center</align>
-                                    <aligny>bottom</aligny>
-                                    <label>$INFO[MusicPlayer.BitRate]</label>
-                                    <font>Small20</font>
-                                    <textcolor>Dark1</textcolor>
-                                </control>
-                                <control type="image">
-                                    <height>44</height>
-                                    <aspectratio>keep</aspectratio>
-                                    <texture colordiffuse="Dark1">flags/audio/white/bit.png</texture>
-                                    <aspectratio>keep</aspectratio>
-                                </control>
-                            </control>
-
-                            <control type="grouplist">
-                                <width min="20" max="100">auto</width>
-                                <height>64</height>
-                                <orientation>vertical</orientation>
-                                <centertop>57%</centertop>
-                                <itemgap>-17</itemgap>
-                                <visible>!String.IsEmpty(MusicPlayer.Samplerate)</visible>
-                                <control type="label">
-                                    <height>28</height>
-                                    <align>center</align>
-                                    <aligny>bottom</aligny>
-                                    <label>$INFO[MusicPlayer.Samplerate]</label>
-                                    <font>Small20</font>
-                                    <textcolor>Dark1</textcolor>
-                                </control>
-                                <control type="image">
-                                    <height>44</height>
-                                    <aspectratio>keep</aspectratio>
-                                    <texture colordiffuse="Dark1">flags/audio/white/khz.png</texture>
-                                    <aspectratio>keep</aspectratio>
-                                </control>
-                            </control>
-                        </control>
+                        <include>Furniture_NowPlaying_Audio_Flags</include>
                     </control>
                     <control type="group">
                         <width>452</width>
@@ -480,7 +364,7 @@
 
                 <control type="group">
                     <visible>Player.HasAudio</visible>
-                    <visible>!Skin.HasSetting(home.extended.nowplaying.scrolling.text) + !Skin.HasSetting(home.extended.nowplaying.tracklist)</visible>
+                    <visible>!Skin.HasSetting(home.extended.nowplaying.scrolling.text) + [!$EXP[Now_Playing_Audio_Show_Tracklist] | !String.IsEmpty(VideoPlayer.Plot)]</visible>
 
                     <orientation>vertical</orientation>
                     <width>100%</width>
@@ -492,7 +376,7 @@
                     </control>
 
                     <control type="textbox">
-                        <visible>!String.IsEmpty(MusicPlayer.Property(Artist_Description)) | !String.IsEmpty(MusicPlayer.Property(Album_Description))</visible>
+                        <visible>!String.IsEmpty(MusicPlayer.Property(Artist_Description)) | !String.IsEmpty(MusicPlayer.Property(Album_Description)) | !String.IsEmpty(VideoPlayer.Plot)</visible>
                         <top>66</top>
                         <include>Widgets_Plot_Definition_Netflix</include>
                         <label>$VAR[Label_NowPlaying_Plot]</label>
@@ -502,7 +386,7 @@
                 <control type="label">
                     <include>Widgets_Item_Sub_Title_Definition</include>
                     <label>$VAR[Label_NowPlaying_Music_Sub_Header]</label>
-                    <visible>Skin.HasSetting(home.extended.nowplaying.tracklist) + Player.HasAudio</visible>
+                    <visible>$EXP[Now_Playing_Audio_Show_Tracklist] + Player.HasAudio + String.IsEmpty(VideoPlayer.Plot)</visible>
                 </control>
 
                 <control type="button" id="779" description="Helper">
@@ -513,9 +397,11 @@
                 </control>
 
                 <control type="list" id="778">
-                    <visible allowhiddenfocus="true">Skin.HasSetting(home.extended.nowplaying.tracklist) + Player.HasAudio</visible>
+                    <visible allowhiddenfocus="true">$EXP[Now_Playing_Audio_Show_Tracklist] + Player.HasAudio</visible>
+
                     <height>200</height>
                     <width>100%</width>
+
                     <onleft condition="!Skin.HasSetting(hide.home.nowplaying.extended.osd.control.button)">777</onleft>
                     <onright condition="!Skin.HasSetting(hide.home.nowplaying.extended.osd.control.button)">777</onright>
                     <onleft condition="Skin.HasSetting(hide.home.nowplaying.extended.osd.control.button)">301</onleft>
@@ -524,6 +410,7 @@
                     <ondown>780</ondown>
                     <onback>300</onback>
                     <onfocus condition="$EXP[Has_Home_Menu_Auto_Slide_Out_Animation]">CancelAlarm(slide_out_setfocus_2011,true)</onfocus>
+
                     <orientation>vertical</orientation>
 
                     <itemlayout height="35">
@@ -861,9 +748,9 @@
                     <include content="Layout_Widget_Focus">
                         <param name="pad_focus" value="-6" />
                         <param name="pad_focus_zoom" value="-7" />
-                        <param name="glow_top" value="-7" />
-                        <param name="glow_left" value="-9" />
-                        <param name="glow_right" value="-8" />
+                        <param name="glow_top" value="-4" />
+                        <param name="glow_left" value="-5" />
+                        <param name="glow_right" value="-6" />
                         <param name="id" value="25" />
                     </include>
                 </control>
@@ -905,7 +792,8 @@
                     <width>100%</width>
                     <height>100%</height>
                     <aspectratio scalediffuse="false">keep</aspectratio>
-                    <texture diffuse="diffuse/square_w305_h305.png" background="true" fallback="$PARAM[fallback_image]">$VAR[Image_Player_Poster]</texture>
+                    <texture diffuse="diffuse/square_w305_h305.png" background="true" fallback="$PARAM[fallback_image]">$VAR[Image_OSD_Channel_Logo]</texture>
+                    <!-- <texture diffuse="diffuse/square_w305_h305.png" background="true" fallback="$PARAM[fallback_image]">$VAR[Image_NowPlaying_EPG]</texture> -->
                     <visible>VideoPlayer.Content(livetv)</visible>
                 </control>
                 <control type="group">
@@ -916,9 +804,9 @@
                     <include content="Layout_Widget_Focus">
                         <param name="pad_focus" value="-6" />
                         <param name="pad_focus_zoom" value="-7" />
-                        <param name="glow_top" value="-7" />
-                        <param name="glow_left" value="-9" />
-                        <param name="glow_right" value="-8" />
+                        <param name="glow_top" value="-4" />
+                        <param name="glow_left" value="-5" />
+                        <param name="glow_right" value="-4" />
                         <param name="id" value="25" />
                     </include>
                 </control>
@@ -929,7 +817,7 @@
     <!-- DEF - OSD - UPDOWN -->
 
     <include name="Def_OSD_UpDown_Home_NowPlaying">
-        <onup condition="Skin.HasSetting(home.extended.nowplaying.tracklist) + Integer.IsGreater(Container(778).NumItems,0) + Player.HasAudio">778</onup>
+        <onup condition="$EXP[Now_Playing_Audio_Show_Tracklist] + Integer.IsGreater(Container(778).NumItems,0) + Player.HasAudio">778</onup>
         <onup>301</onup>
         <ondown>300</ondown>
         <onback>300</onback>

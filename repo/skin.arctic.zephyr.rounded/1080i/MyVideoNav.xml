@@ -70,6 +70,7 @@
 
         <control type="group">
             <visible>!$EXP[View_Info_Dialog]</visible>
+            <include>Animation_Feature_Slide_Up</include>
             <include>Animation_Feature_NowPlaying</include>
             <include condition="!Skin.HasSetting(hide.furniture.nowplaying.views)">Furniture_Header_NowPlaying</include>
         </control>
@@ -235,12 +236,24 @@
                     <label>31051</label>
                     <visible>!Control.IsVisible(500) + !Control.IsVisible(58) + !Control.IsVisible(52) + !Control.IsVisible(547) + ![Control.IsVisible(557) + $EXP[IsYoutube]] + ![Control.IsVisible(555) + $EXP[IsYoutube]] + !Control.IsVisible(5218) + !Control.IsVisible(59)</visible>
                 </control>
+
+                <!-- SHOW HEADER INFO -->
+
+                <control type="radiobutton" id="9257">
+                    <include>Def_Dialog_Menu_Button_Focus_Select</include>
+                    <label>$LOCALIZE[31085]</label>
+                    <selected>!Skin.HasSetting(hide.view.flix.furniture.header)</selected>
+                    <onclick>Skin.ToggleSetting(hide.view.flix.furniture.header)</onclick>
+                    <visible>!Skin.HasSetting(hide.furniture.header)</visible>
+                    <visible>Control.IsVisible(521) | Control.IsVisible(522) | Control.IsVisible(523) | Control.IsVisible(524)</visible>
+                    <onclick>SetProperty(reloadskin,1,Home)</onclick>
+                </control>
                 <control type="radiobutton" id="90445">
                     <include>Def_Dialog_Menu_Button_Focus_Select</include>
                     <label>31503</label>
                     <selected>Skin.HasSetting(enable.view.flix.scroll.wall.video)</selected>
                     <onclick>Skin.ToggleSetting(enable.view.flix.scroll.wall.video)</onclick>
-                    <visible>Control.IsVisible(521) | Control.IsVisible(522) | Control.IsVisible(523) | Control.IsVisible(524)</visible>
+                    <visible>Control.IsVisible(521) | Control.IsVisible(522) | Control.IsVisible(523)</visible>
                 </control>
                 <control type="radiobutton" id="90444">
                     <include>Def_Dialog_Menu_Button_Focus_Select</include>

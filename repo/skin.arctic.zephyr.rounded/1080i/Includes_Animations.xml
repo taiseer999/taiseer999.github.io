@@ -397,46 +397,6 @@
 
     <!--   ANIMATION - HOME - VERTICAL  -->
 
-    <include name="Animation_Vertical_Menu_RightSide">
-        <animation effect="slide" start="0,0" end="-230,0" time="0" condition="$EXP[Home_Is_Vertical] + Skin.HasSetting(home.show.menu.icons)">Conditional</animation>
-
-        <animation type="WindowOpen" reversible="false">
-            <effect type="fade" start="0" end="100" time="200" tween="sine" easing="in" />
-            <effect type="slide" start="1920" end="0" time="350" center="auto" tween="sine" easing="out" />
-        </animation>
-        <animation type="WindowClose" reversible="false">
-            <effect type="fade" end="0" start="100" time="200" tween="sine" easing="out" />
-            <effect type="slide" end="1920" start="0" time="300" center="auto" tween="quadratic" easing="in" />
-        </animation>
-        <animation type="Visible" reversible="false">
-            <effect type="fade" start="0" end="100" time="200" tween="sine" easing="in" />
-            <effect type="slide" start="1920" end="0" time="350" center="auto" tween="sine" easing="out" />
-        </animation>
-        <animation type="Hidden" reversible="false">
-            <effect type="fade" end="0" start="100" time="200" tween="sine" easing="out" />
-            <effect type="slide" end="1920" start="0" time="300" center="auto" tween="quadratic" easing="in" />
-        </animation>
-    </include>
-
-    <include name="Animation_Vertical_Menu_LeftSide">
-        <animation type="WindowOpen" reversible="false">
-            <effect type="fade" start="0" end="100" time="200" tween="sine" easing="in" />
-            <effect type="slide" start="-1920" end="0" time="350" center="auto" tween="quadratic" easing="out" />
-        </animation>
-        <animation type="WindowClose" reversible="false">
-            <effect type="fade" end="0" start="100" time="200" tween="sine" easing="out" />
-            <effect type="slide" end="-1920" start="0" time="300" center="auto" tween="quadratic" easing="in" />
-        </animation>
-        <animation type="Visible" reversible="false">
-            <effect type="fade" start="0" end="100" time="200" tween="sine" easing="in" />
-            <effect type="slide" start="-1920" end="0" time="350" center="auto" tween="quadratic" easing="out" />
-        </animation>
-        <animation type="Hidden" reversible="false">
-            <effect type="fade" end="0" start="100" time="200" tween="sine" easing="out" />
-            <effect type="slide" end="-1920" start="0" time="300" center="auto" tween="quadratic" easing="in" />
-        </animation>
-    </include>
-
     <include name="Animation_Select_Focus">
         <animation type="Focus">
             <effect type="zoom" start="95" end="100" time="150" tween="sine" easing="inout" center="auto" />
@@ -766,16 +726,18 @@
     <!-- ========================================== -->
 
     <include name="Animation_Feature_NowPlaying">
-        <animation type="Visible" reversible="false">
-            <effect type="fade" start="0" end="100" time="300" delay="600" />
-            <effect type="slide" start="0,-48" end="0" center="auto" tween="back" easing="out" time="450" delay="600" />
+        <animation type="WindowOpen" reversible="true">
+            <effect type="fade" start="0" end="100" time="350" tween="cubic" easing="inout" delay="600" />
+            <effect type="slide" start="0,-80" end="0" easing="out" time="350" delay="600" />
         </animation>
-        <animation type="WindowOpen" reversible="false">
-            <effect type="fade" start="0" end="100" time="300" delay="600" />
-            <effect type="slide" start="0,-48" end="0" center="auto" tween="back" easing="out" time="450" delay="600" />
+        <animation type="Visible" reversible="true">
+            <effect type="fade" start="0" end="100" time="350" tween="cubic" easing="inout" delay="600" />
+            <effect type="slide" start="0,-80" end="0" easing="out" time="350" delay="600" />
         </animation>
+    </include>
 
-        <include>Animation_Common_Fade_Out</include>
+    <include name="Animation_Feature_Slide_Up">
+         <animation effect="slide" start="0" end="0,-40" time="0" condition="[$EXP[View_Flix_Hide_Header_Info] + $EXP[View_Flix_Is_Visible]]">Conditional</animation>
     </include>
 
     <include name="Animation_Feature_Header_Icon">
@@ -805,6 +767,6 @@
     </include>
 
     <include name="Animation_Fade_Background_Marker_Icon">
-        <animation effect="fade" start="100" end="60" condition="true">Conditional</animation>
+        <animation effect="fade" start="100" end="80" condition="true">Conditional</animation>
     </include>
 </includes>

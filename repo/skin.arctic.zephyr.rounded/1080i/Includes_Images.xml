@@ -183,11 +183,6 @@
         <value condition="String.IsEqual(Window(Home).Property(last_video_focus),90122) + !Skin.HasSetting(filter.video.only.local)">special://skin/extras/icons/tmdb.png</value>
         <value condition="String.IsEqual(Window(Home).Property(last_video_focus),90122) + Skin.HasSetting(filter.video.only.local)">special://skin/extras/icons/database.png</value>
 
-        <!-- LOCAL ONLY IF TMDB HELPER DISABLE -->
-
-        <value condition="String.IsEqual(Window(Home).Property(last_video_focus),90123) + Skin.HasSetting(filter.video.only.local)">special://skin/extras/icons/database.png</value>
-        <value condition="String.IsEqual(Window(Home).Property(last_video_focus),90124) + Skin.HasSetting(filter.video.only.local)">special://skin/extras/icons/database.png</value>
-
         <!-- OTHERS -->
 
         <value condition="String.IsEqual(Window(Home).Property(last_video_focus),7)">special://skin/extras/icons/star-regular.png</value>
@@ -704,7 +699,6 @@
         <value>DefaultGenre.png</value>
     </variable>
 
-
     <variable name="Image_Thumb_Studios_Dialog_Info">
         <value condition="!String.IsEmpty(Skin.String(studio.logos.path))">$INFO[Skin.String(studio.logos.path)]$INFO[ListItem.Studio,,.png]</value>
         <value condition="!String.IsEmpty(Skin.String(record.labels.path))">$INFO[Skin.String(record.labels.path)]$INFO[ListItem.Studio,,.png]</value>
@@ -800,6 +794,14 @@
         <value condition="!String.IsEmpty(Player.Art(artist.clearart))">$INFO[Player.Art(artist.clearart)]</value>
     </variable>
 
+    <variable name="Image_NowPlaying_EPG">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.poster))">$INFO[Window(Home).Property(TMDbHelper.Player.poster)]</value>
+        <value condition="!String.IsEmpty(PVR.EpgEventIcon) + VideoPlayer.Content(livetv)">$INFO[PVR.EpgEventIcon]</value>
+        <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(thumb))">$INFO[Player.Art(thumb)]</value>
+    </variable>
+
     <!-- IMAGE - TRAKT -->
 
     <variable name="Image_Trakt_Colored">
@@ -852,6 +854,33 @@
     <variable name="Image_RottenTomatoes_Audience_White">
         <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter),59) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter))">flags/rating/white/rottentomatoes/good_white.png</value>
         <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter),0) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter))">flags/rating/white/rottentomatoes/notgood_white.png</value>
+    </variable>
+
+    <!-- IMAGE - RATING FLAG WRAPPERS (colored vs white) -->
+
+    <variable name="Image_Letterboxd">
+        <value condition="Skin.HasSetting(enable.furniture.flags.colored)">$VAR[Image_Letterboxd_Colored]</value>
+        <value>$VAR[Image_Letterboxd_White]</value>
+    </variable>
+
+    <variable name="Image_Trakt">
+        <value condition="Skin.HasSetting(enable.furniture.flags.colored)">$VAR[Image_Trakt_Colored]</value>
+        <value>$VAR[Image_Trakt_White]</value>
+    </variable>
+
+    <variable name="Image_Mdblist">
+        <value condition="Skin.HasSetting(enable.furniture.flags.colored)">$VAR[Image_Mdblist_Colored]</value>
+        <value>$VAR[Image_Mdblist_White]</value>
+    </variable>
+
+    <variable name="Image_RottenTomatoes">
+        <value condition="Skin.HasSetting(enable.furniture.flags.colored)">$VAR[Image_RottenTomatoes_Colored]</value>
+        <value>$VAR[Image_RottenTomatoes_White]</value>
+    </variable>
+
+    <variable name="Image_RottenTomatoes_Audience">
+        <value condition="Skin.HasSetting(enable.furniture.flags.colored)">$VAR[Image_RottenTomatoes_Audience_Colored]</value>
+        <value>$VAR[Image_RottenTomatoes_Audience_White]</value>
     </variable>
 
     <!-- IMAGE - BACKGROUND -->
@@ -917,6 +946,23 @@
         <value condition="$EXP[IsAudioCodecDTSX]">dts-x</value>
         <value condition="[VideoPlayer.IsFullscreen | $EXP[Extended_Now_Playing_Is_Visible]]">$INFO[VideoPlayer.AudioCodec]</value>
         <value>$INFO[ListItem.AudioCodec]</value>
+    </variable>
+
+    <variable name="Image_Media_Flag_Video_HDR">
+        <value condition="!VideoPlayer.IsFullscreen + $EXP[IsVideoHDR10Plus]">flags/video/$VAR[Def_Flag_Color]/hdr/hdr10plus.png</value>
+        <value condition="!VideoPlayer.IsFullscreen + !String.IsEmpty(ListItem.HdrType)">flags/video/$VAR[Def_Flag_Color]/hdr/$INFO[ListItem.HdrType].png</value>
+        <value condition="VideoPlayer.IsFullscreen + $EXP[IsVideoHDR10Plus]">flags/video/$VAR[Def_VideoPlayer_Flag_Color]/hdr/hdr10plus.png</value>
+        <value condition="VideoPlayer.IsFullscreen + !String.IsEmpty(VideoPlayer.HdrType)">flags/video/$VAR[Def_VideoPlayer_Flag_Color]/hdr/$INFO[VideoPlayer.HdrType].png</value>
+    </variable>
+
+    <variable name="Image_Media_Flag_Bluray">
+        <value condition="String.IsEqual(ListItem.VideoResolution,4K) | Integer.IsEqual(ListItem.VideoResolution,2160)">ultrahd</value>
+        <value>bluray</value>
+    </variable>
+
+    <variable name="Image_Media_Flag_Bluray_9500">
+        <value condition="String.IsEqual(Container(9500).ListItem.VideoResolution,4K) | Integer.IsEqual(Container(9500).ListItem.VideoResolution,2160)">ultrahd</value>
+        <value>bluray</value>
     </variable>
 
     <!-- IMAGE - STAR FLAG -->
@@ -1252,5 +1298,23 @@
     <variable name="Image_9505_Thumb_Label">
         <value condition="!String.IsEmpty(Container(9505).ListItem.Thumb)">$INFO[Container(9505).ListItem.Thumb]</value>
         <value>$INFO[Container(9505).ListItem.Label]</value>
+    </variable>
+    <!-- HOME - SYSTEM STATS ICONS - COLORED / MONOCHROME TOGGLE -->
+
+    <variable name="SysStats_CPU_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/sysinfo1.png</value>
+        <value>special://skin/extras/icons/cpu.png</value>
+    </variable>
+    <variable name="SysStats_RAM_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/raminfo1.png</value>
+        <value>special://skin/extras/icons/ram.png</value>
+    </variable>
+    <variable name="SysStats_Connected_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/networkinfo1.png</value>
+        <value>special://skin/extras/icons/connected.png</value>
+    </variable>
+    <variable name="SysStats_Disconnected_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/networkinfono1.png</value>
+        <value>special://skin/extras/icons/disconnected.png</value>
     </variable>
 </includes>
