@@ -28,7 +28,7 @@ ICONS  = {
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
-    'autopatch':      ADDON_PATH + 'resources/icons/patcher.png',
+    'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
     # category folder icons
@@ -51,13 +51,13 @@ CATEGORIES = [
     ]),
     ('patch',  30015, 'cat_patch', [
         ('patcher',        30005),
-        ('autopatch',      30006),
         ('origin_fix',     30007),
     ]),
     ('maint',  30016, 'cat_maint', [
         ('openwizard',     30008),
         ('total_clean',    30012),
         ('old_thumbs',     30013),
+        ('rebuild_addons33', 30018),
     ]),
     ('toggle', 30017, 'cat_toggle', [
         ('skin_switch',    30009),
@@ -108,8 +108,6 @@ def _ensure_patches():
     """
     try:
         from resources.lib import patch_watchdog
-        if not patch_watchdog.is_enabled():
-            return
         import threading
         from resources.lib import patcher
 
@@ -127,8 +125,20 @@ def _ensure_patches():
         pass
 
 
+def _continue_addons33_rebuild():
+    """If an Addons33 rebuild is mid-flight (phase 2: DB deleted, Kodi has
+    rebuilt a fresh one), finish it when the menu is opened even if the boot
+    service never ran. Enables all add-ons then restarts. No-op otherwise."""
+    try:
+        from resources.lib import addons33_rebuild
+        addons33_rebuild.continue_if_pending()
+    except Exception:
+        pass
+
+
 def main_menu():
     from resources.lib.i18n import T
+    _continue_addons33_rebuild()
     _ensure_fallback_font()
     _ensure_patches()
     for cat_key, label_id, icon_key, _items in CATEGORIES:
@@ -234,10 +244,10 @@ def router():
         from resources.lib import patcher
         patcher.run()
 
-    elif mode == 'autopatch':
+    elif mode == 'rebuild_addons33':
         _end_directory()
-        from resources.lib import patch_watchdog
-        patch_watchdog.run()
+        from resources.lib import addons33_rebuild
+        addons33_rebuild.run()
 
     elif mode == 'binary_install':
         _end_directory()

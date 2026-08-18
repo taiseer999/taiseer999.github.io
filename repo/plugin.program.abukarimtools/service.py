@@ -680,6 +680,17 @@ def _cleanup_stale_autostart():
 def main():
     monitor = xbmc.Monitor()
 
+    # Finish an in-progress Addons33 rebuild first (phase 2): if the add-on
+    # DB was just deleted and Kodi has rebuilt a clean one, re-enable every
+    # add-on and restart. This reboots when it fires, so it runs before the
+    # other boot chores. Fully fenced; no-op unless a rebuild is pending.
+    try:
+        from resources.lib import addons33_rebuild
+        addons33_rebuild.continue_if_pending(monitor)
+    except Exception:
+        _log('Addons33 rebuild continuation crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # The boot chore below is strictly best-effort: it is not allowed to
     # prevent the first-run trigger further down from being evaluated. It is
     # fenced so an unexpected exception is logged and skipped rather than

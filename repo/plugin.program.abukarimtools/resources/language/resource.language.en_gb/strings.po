@@ -76,6 +76,10 @@ msgctxt "#30017"
 msgid "Toggles"
 msgstr ""
 
+msgctxt "#30018"
+msgid "Rebuild Add-on Database"
+msgstr ""
+
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer."
 msgstr ""
@@ -446,5 +450,29 @@ msgstr ""
 
 msgctxt "#30325"
 msgid "Selected Skin"
+msgstr ""
+
+msgctxt "#30330"
+msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one, then re-enables every add-on for you. The box will restart [B]twice[/B] and take a few minutes.[CR][CR]If the rebuild leaves ABUKARIM TOOLS itself disabled, just re-enable it once from My add-ons and it will finish the rest."
+msgstr ""
+
+msgctxt "#30331"
+msgid "Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling your add-ons and repairing their update sources.[CR][CR]Do not power off during this."
+msgstr ""
+
+msgctxt "#30332"
+msgid "Re-enabling add-ons after database rebuild…"
+msgstr ""
+
+msgctxt "#30334"
+msgid "No Addons33.db was found (Kodi may already be on a fresh one).[CR][CR]Re-enable all add-ons and restart anyway?"
+msgstr ""
+
+msgctxt "#30335"
+msgid "Could not delete the add-on database file."
+msgstr ""
+
+msgctxt "#30336"
+msgid "The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform."
 msgstr ""
 

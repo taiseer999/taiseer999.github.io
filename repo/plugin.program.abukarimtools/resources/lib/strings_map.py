@@ -42,6 +42,7 @@ STRINGS = {
     30015: ("Patching",                         "التعديلات والترقيعات"),
     30016: ("Maintenance",                      "الصيانة والتنظيف"),
     30017: ("Toggles",                          "التبديلات"),
+    30018: ("Rebuild Add-on Database",          "إعادة بناء قاعدة بيانات الإضافات"),
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer.",
@@ -194,4 +195,18 @@ STRINGS = {
             "موافق للاختيار  ·  رجوع للإلغاء"),
     30324: ("ABUKARIM PORTAL V2",              "بوابة أبوكريم V2"),
     30325: ("Selected Skin",                   "الواجهة المختارة"),
+
+    # ---- Addons33 rebuild (maintenance) (30330-30349) ----
+    30330: ("Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one, then re-enables every add-on for you. The box will restart [B]twice[/B] and take a few minutes.[CR][CR]If the rebuild leaves ABUKARIM TOOLS itself disabled, just re-enable it once from My add-ons and it will finish the rest.",
+            "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، ثم إعادة تفعيل جميع الإضافات تلقائياً. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR]إذا بقيت إضافة ABUKARIM TOOLS نفسها معطّلة بعد إعادة البناء، فعّلها مرة واحدة من (إضافاتي) وستُكمل الباقي تلقائياً."),
+    30331: ("Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling your add-ons and repairing their update sources.[CR][CR]Do not power off during this.",
+            "تمت جدولة إعادة البناء. سيُعيد الجهاز التشغيل الآن، وسيحذف قاعدة البيانات قبل بدء كودي، ثم يُعيد التشغيل مرة أخرى بعد إعادة تفعيل إضافاتك وإصلاح مصادر تحديثها.[CR][CR]لا تُطفئ الجهاز أثناء ذلك."),
+    30332: ("Re-enabling add-ons after database rebuild…",
+            "جارٍ إعادة تفعيل الإضافات بعد إعادة بناء قاعدة البيانات…"),
+    30336: ("The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform.",
+            "تم حذف قاعدة البيانات. سيُغلق كودي الآن.[CR][CR]افتح كودي مرة أخرى وسيُكمل إعادة البناء تلقائياً - لا يستطيع كودي إعادة تشغيل نفسه على هذا النظام."),
+    30334: ("No Addons33.db was found (Kodi may already be on a fresh one).[CR][CR]Re-enable all add-ons and restart anyway?",
+            "لم يتم العثور على Addons33.db (قد يكون كودي يعمل على قاعدة جديدة بالفعل).[CR][CR]هل تريد إعادة تفعيل جميع الإضافات وإعادة التشغيل على أي حال؟"),
+    30335: ("Could not delete the add-on database file.",
+            "تعذّر حذف ملف قاعدة بيانات الإضافات."),
 }

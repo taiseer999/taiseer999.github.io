@@ -50,9 +50,6 @@ PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 STATE_FILE  = os.path.join(PROFILE, 'patch_state.json')
 ADDONS_DIR  = os.path.join(xbmcvfs.translatePath('special://home/'), 'addons')
 
-# Kill switch: create this file to stop auto-patching without uninstalling.
-DISABLE_FILE = os.path.join(PROFILE, 'autopatch.off')
-
 POLL_SECONDS        = 15      # signature check — stat() only
 SETTLE_SECONDS      = 5       # gap between stability probes after a change
 SETTLE_MAX_SECONDS  = 120     # give up waiting for a folder to go quiet
@@ -225,23 +222,18 @@ def watch(monitor):
     last_verify = 0.0
 
     # Boot sweep: catches updates that happened while Kodi was closed, and
-    # any patch that went missing for a reason we never saw.
-    if not os.path.exists(DISABLE_FILE):
-        changed, failed = _run_pass(reason='boot sweep')
-        if not changed and not failed:
-            _log('Boot sweep: all patches already in place (nothing to do).')
-        state = _signatures(targets)
-        _save_state(state)
-        last_verify = time.time()
-    else:
-        _log('Boot sweep skipped: auto-patch kill switch (autopatch.off) is set.')
+    # any patch that went missing for a reason we never saw. Always runs —
+    # auto-patching has no kill switch (it is a fix, not a user option).
+    changed, failed = _run_pass(reason='boot sweep')
+    if not changed and not failed:
+        _log('Boot sweep: all patches already in place (nothing to do).')
+    state = _signatures(targets)
+    _save_state(state)
+    last_verify = time.time()
 
     while not monitor.abortRequested():
         if monitor.waitForAbort(POLL_SECONDS):
             break
-
-        if os.path.exists(DISABLE_FILE):
-            continue                        # kill switch engaged
 
         try:
             current = _signatures(targets)
@@ -271,33 +263,3 @@ def watch(monitor):
             last_verify = time.time()
 
     _log('Watchdog stopped.')
-
-
-# ---------------------------------------------------------------------------
-def is_enabled():
-    return not os.path.exists(DISABLE_FILE)
-
-
-def toggle():
-    """Menu entry: flip the auto-patch kill switch."""
-    if is_enabled():
-        try:
-            os.makedirs(PROFILE, exist_ok=True)
-            open(DISABLE_FILE, 'w').close()
-        except Exception as e:
-            _log('Could not write kill switch: %s' % e, xbmc.LOGWARNING)
-        state = 'OFF'
-        body  = T(30292)
-    else:
-        try:
-            os.remove(DISABLE_FILE)
-        except Exception:
-            pass
-        state = 'ON'
-        body  = T(30291)
-    _log('Auto-patch toggled %s by user.' % state)
-    xbmcgui.Dialog().ok(ADDON_NAME, body)
-
-
-def run():
-    toggle()

@@ -76,6 +76,10 @@ msgctxt "#30017"
 msgid "Toggles"
 msgstr "التبديلات"
 
+msgctxt "#30018"
+msgid "Rebuild Add-on Database"
+msgstr "إعادة بناء قاعدة بيانات الإضافات"
+
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer."
 msgstr "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، ثم فتح مثبت الواجهات."
@@ -447,4 +451,28 @@ msgstr "بوابة أبوكريم V2"
 msgctxt "#30325"
 msgid "Selected Skin"
 msgstr "الواجهة المختارة"
+
+msgctxt "#30330"
+msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one, then re-enables every add-on for you. The box will restart [B]twice[/B] and take a few minutes.[CR][CR]If the rebuild leaves ABUKARIM TOOLS itself disabled, just re-enable it once from My add-ons and it will finish the rest."
+msgstr "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، ثم إعادة تفعيل جميع الإضافات تلقائياً. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR]إذا بقيت إضافة ABUKARIM TOOLS نفسها معطّلة بعد إعادة البناء، فعّلها مرة واحدة من (إضافاتي) وستُكمل الباقي تلقائياً."
+
+msgctxt "#30331"
+msgid "Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling your add-ons and repairing their update sources.[CR][CR]Do not power off during this."
+msgstr "تمت جدولة إعادة البناء. سيُعيد الجهاز التشغيل الآن، وسيحذف قاعدة البيانات قبل بدء كودي، ثم يُعيد التشغيل مرة أخرى بعد إعادة تفعيل إضافاتك وإصلاح مصادر تحديثها.[CR][CR]لا تُطفئ الجهاز أثناء ذلك."
+
+msgctxt "#30332"
+msgid "Re-enabling add-ons after database rebuild…"
+msgstr "جارٍ إعادة تفعيل الإضافات بعد إعادة بناء قاعدة البيانات…"
+
+msgctxt "#30334"
+msgid "No Addons33.db was found (Kodi may already be on a fresh one).[CR][CR]Re-enable all add-ons and restart anyway?"
+msgstr "لم يتم العثور على Addons33.db (قد يكون كودي يعمل على قاعدة جديدة بالفعل).[CR][CR]هل تريد إعادة تفعيل جميع الإضافات وإعادة التشغيل على أي حال؟"
+
+msgctxt "#30335"
+msgid "Could not delete the add-on database file."
+msgstr "تعذّر حذف ملف قاعدة بيانات الإضافات."
+
+msgctxt "#30336"
+msgid "The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform."
+msgstr "تم حذف قاعدة البيانات. سيُغلق كودي الآن.[CR][CR]افتح كودي مرة أخرى وسيُكمل إعادة البناء تلقائياً - لا يستطيع كودي إعادة تشغيل نفسه على هذا النظام."
 

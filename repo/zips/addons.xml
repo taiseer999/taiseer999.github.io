@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.9.3" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.9.5" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -659,7 +659,20 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.9.3
+    <news>v2.9.5
+- REBUILD ADD-ON DATABASE: phase 1 now deletes Addons33.db from autostart.sh instead of from inside Kodi. Kodi holds the database open for the whole session and rewrites it during shutdown, so an in-process delete did not reliably survive the reboot - which is why the rebuild appeared to do nothing. autostart.sh runs before Kodi, so the delete always sticks.
+- The injected block is guarded by a trigger file (/storage/.addons33_rebuild_pending) and deletes only that trigger, never itself: rewriting a running shell script mid-read is unsafe on BusyBox ash. A block left behind for any reason is therefore inert on every later boot. Phase 2 removes the block text from Python, from a separate process, and leaves any other content in autostart.sh (including the backup/restore block) untouched.
+- REBUILD: phase 2 now runs Fix Add-on Update Origins automatically once the add-ons are back. A freshly built Addons33.db has empty origin fields, so add-ons would not resolve to their repository for updates; origin_fix repairs them just before the final restart.
+- REBUILD: on non-CoreELEC platforms (macOS dev box) the tool no longer quits silently. Kodi cannot relaunch itself there, so it now deletes the database, tells you Kodi is about to close, and finishes the rebuild automatically the next time you open Kodi.
+
+v2.9.4
+- PATCHER: removed the a4kSubtitles "Disable OpenSubtitles" patch entirely (both entries + the "a4kSubtitles: Disable OpenSubtitles" toggle). service.subtitles.a4ksubtitles is no longer a watched/patched target.
+- AUTO-PATCH: now always active. Removed the on/off kill switch (autopatch.off) and the "Auto-Patch On Update: On/Off" menu item - patching is a fix, not a user option. Boot sweep, update re-patching and the menu-open self-heal all run unconditionally.
+- PATCHER: restored the TMDbHelper player.py dead-player guard. onAVChange/onAVStarted call get_playingitem() while the player tears down; getPlayingFile() then raises RuntimeError ("Kodi is not playing any file") at player.py:414, killing the callback thread (Kodi warns about memory leaks). Guarded with isPlaying() + try/except RuntimeError and the doubled getPlayingFile() call collapsed to one. Lives under the "TMDbHelper: Stability" toggle; exact-blob + regex fallback, idempotent.
+- PATCHER: fixed the false "N written" count. apply_set now counts only genuine writes (messages carrying "Patched OK"/"File injected OK"); skip messages such as Seren's "native support present ... skipping" no longer inflate the count, so a settled box reports "0 written" and the watchdog stops firing a false "patches re-applied" toast every sweep.
+- MAINTENANCE: new "Rebuild Add-on Database" tool. Deletes the corrupt Addons33.db (+ -wal/-shm), lets Kodi build a clean one, re-enables every add-on automatically via JSON-RPC, and restarts the box twice. Targets the recurring "Can't update database Addons33 from version 0 - it's too old" state that can stop Kodi auto-starting services on boot - including this add-on's own service, which is why background auto-patching sometimes never ran. Survives the reboots via a marker; if the rebuild leaves ABUKARIM TOOLS itself disabled, re-enabling it once finishes the rest.
+
+v2.9.3
 - PATCHER: removed the DPlex patch entry (plugin.video.dplex addon.xml reuselanguageinvoker=false) and its 'dplex_stability' toggle. plugin.video.dplex is no longer a watched/patched target. The DPlex tab toggle, its data files, menu entry, and strings are unchanged — only the patcher stops touching DPlex.
 
 v2.9.2

@@ -631,44 +631,56 @@ PATCHES = [
         'description': 'PPI AF3 - register legacy PPI includes',
     },
 
-    # ── a4kSubtitles: disable OpenSubtitles (by ABUKARIM TOOLS) ──
-    # search.py skips a service when get_bool_setting(service_name, 'enabled') is
-    # False. That value is addon.getSetting('opensubtitles.enabled'), which Kodi
-    # reads from userdata/addon_data/service.subtitles.a4ksubtitles/settings.xml,
-    # falling back to the default in the addon's own resources/settings.xml.
-    # Disable in BOTH places: the addon default covers a fresh profile / cleared
-    # userdata, and the userdata edit covers the live device where the user already
-    # has a stored 'true'. Nothing else in settings.xml is touched (no whole-file
-    # rewrite), so the OpenSubtitles account fields and every other service stay
-    # intact; a4kSubtitles simply never queries OpenSubtitles.
+    # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
+    # onAVChange / onAVStarted call get_playingitem() while the player is
+    # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not
+    # playing any file"), the callback thread dies and Kodi warns about memory
+    # leaks (seen every teardown as player.py:414). Guard with isPlaying() +
+    # try/except RuntimeError and collapse the doubled getPlayingFile() call.
     {
-        'addon_id': 'service.subtitles.a4ksubtitles',
-        'rel_path': os.path.join('resources', 'settings.xml'),
-        'old': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="true"/>',
-        'new': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="false"/>  <!-- ABUKARIM: OpenSubtitles disabled -->',
-        'already_patched_check': '<setting id="opensubtitles.enabled" label="33201" type="bool" default="false"/>',
-        'fallback_pattern': r'(<setting id="opensubtitles\.enabled"[^>]*?)default="true"([^>]*/>)',
-        'fallback_repl': r'\1default="false"\2',
-        'toggle': 'a4k_no_opensubtitles',
-        'description': 'a4kSubtitles settings.xml \u2013 OpenSubtitles default OFF',
-    },
-    {
-        # userdata copy: the value Kodi actually reads on the live device. Kodi
-        # writes the enabled flag as an element (<setting id="opensubtitles.enabled">true</setting>).
-        # Exact-match the true form; regex fallback tolerates attributes/whitespace.
-        # not_found_ok: if the addon was never opened (no userdata settings.xml) or
-        # the key is absent, the addon default (now false) governs — nothing to do.
-        'addon_id': 'service.subtitles.a4ksubtitles',
-        'base': 'addon_data',
-        'rel_path': os.path.join('settings.xml'),
-        'old': '<setting id="opensubtitles.enabled">true</setting>',
-        'new': '<setting id="opensubtitles.enabled">false</setting>',
-        'already_patched_check': '<setting id="opensubtitles.enabled">false</setting>',
-        'fallback_pattern': r'(<setting id="opensubtitles\.enabled"[^>]*>)true(</setting>)',
-        'fallback_repl': r'\1false\2',
-        'not_found_ok': True,
-        'toggle': 'a4k_no_opensubtitles',
-        'description': 'a4kSubtitles userdata settings.xml \u2013 OpenSubtitles OFF',
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py'),
+        'old': (
+            "    def get_playingitem(self):\n"
+            "        # Check that video other than dummy splash video is playing\n"
+            "        if self.getPlayingFile() and self.getPlayingFile().endswith('dummy.mp4'):\n"
+            "            self.reset_properties()\n"
+            "            return\n"
+        ),
+        'new': (
+            "    def get_playingitem(self):\n"
+            "        # Check that video other than dummy splash video is playing\n"
+            "        # -- TMDbHelper dead-player guard (by ABUKARIM TOOLS) --\n"
+            "        try:\n"
+            "            if not self.isPlaying():\n"
+            "                self.reset_properties()\n"
+            "                return\n"
+            "            _abk_playing_file = self.getPlayingFile()\n"
+            "        except RuntimeError:\n"
+            "            self.reset_properties()\n"
+            "            return\n"
+            "        if _abk_playing_file and _abk_playing_file.endswith('dummy.mp4'):\n"
+            "            self.reset_properties()\n"
+            "            return\n"
+        ),
+        'already_patched_check': '# -- TMDbHelper dead-player guard (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r"        if self\.getPlayingFile\(\) and self\.getPlayingFile\(\)\.endswith\('dummy\.mp4'\):\n            self\.reset_properties\(\)\n            return\n",
+        'fallback_repl': (
+            "        # -- TMDbHelper dead-player guard (by ABUKARIM TOOLS) --\n"
+            "        try:\n"
+            "            if not self.isPlaying():\n"
+            "                self.reset_properties()\n"
+            "                return\n"
+            "            _abk_playing_file = self.getPlayingFile()\n"
+            "        except RuntimeError:\n"
+            "            self.reset_properties()\n"
+            "            return\n"
+            "        if _abk_playing_file and _abk_playing_file.endswith('dummy.mp4'):\n"
+            "            self.reset_properties()\n"
+            "            return\n"
+        ),
+        'toggle': 'tmdbh_stability',
+        'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
 
 ]
@@ -904,7 +916,6 @@ TOGGLE_GROUPS = [
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
-    ('a4k_no_opensubtitles', 'a4kSubtitles: Disable OpenSubtitles'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -935,6 +946,9 @@ _TOGGLE_OF = {
     # TMDbHelper: Stability — Trakt stats dict guard (freeze fix)
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py')): 'tmdbh_stability',
+    # TMDbHelper: Stability — dead-player guard (getPlayingFile RuntimeError on teardown)
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py')): 'tmdbh_stability',
     # TinyPPI: Run on non-CE
     ('script.tinyppi',
      os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',
@@ -1095,9 +1109,14 @@ def apply_set(group=None, addon_ids=None):
         results.append((ok, msg))
         if ok:
             succeeded += 1
-            # _apply_patch signals a no-op with 'Already patched' /
-            # 'Already present'; anything else means the file was written.
-            if 'Already' not in msg:
+            # Count ONLY genuine writes. Every real write message carries
+            # 'Patched OK' or 'File injected OK'; every no-op/skip does not
+            # ('Already patched', 'Already present', 'Native support present
+            # … skipping', optional 'not present – skipping'). The old
+            # "'Already' not in msg" test mis-counted those skip messages as
+            # writes, so a settled box reported "3 written" every sweep and the
+            # watchdog popped a false 're-applied' toast.
+            if ('Patched OK' in msg) or ('File injected OK' in msg):
                 changed += 1
         else:
             failed += 1
