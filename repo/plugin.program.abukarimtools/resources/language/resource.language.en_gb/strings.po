@@ -80,6 +80,10 @@ msgctxt "#30018"
 msgid "Rebuild Add-on Database"
 msgstr ""
 
+msgctxt "#30019"
+msgid "Speed Test"
+msgstr ""
+
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer."
 msgstr ""

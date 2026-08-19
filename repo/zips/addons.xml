@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.9.6" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="2.9.7" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -659,7 +659,10 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.9.5
+    <news>v2.9.7
+- SPEED TEST: new Maintenance item "Speed Test" that runs an Ookla speedtest.net bandwidth test (download / upload) and shows the shareable result image, with a matching Kodi Speed Test icon. Ported from ez Maintenance+ and made Python 3.14 clean.
+
+v2.9.5
 - REBUILD ADD-ON DATABASE: phase 1 now deletes Addons33.db from autostart.sh instead of from inside Kodi. Kodi holds the database open for the whole session and rewrites it during shutdown, so an in-process delete did not reliably survive the reboot - which is why the rebuild appeared to do nothing. autostart.sh runs before Kodi, so the delete always sticks.
 - The injected block is guarded by a trigger file (/storage/.addons33_rebuild_pending) and deletes only that trigger, never itself: rewriting a running shell script mid-read is unsafe on BusyBox ash. A block left behind for any reason is therefore inert on every later boot. Phase 2 removes the block text from Python, from a separate process, and leaves any other content in autostart.sh (including the backup/restore block) untouched.
 - REBUILD: phase 2 now runs Fix Add-on Update Origins automatically once the add-ons are back. A freshly built Addons33.db has empty origin fields, so add-ons would not resolve to their repository for updates; origin_fix repairs them just before the final restart.

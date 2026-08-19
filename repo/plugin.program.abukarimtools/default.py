@@ -31,6 +31,7 @@ ICONS  = {
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
+    'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
     # category folder icons
     'cat_setup':      ADDON_PATH + 'resources/icons/first_run.png',
     'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
@@ -58,6 +59,7 @@ CATEGORIES = [
         ('total_clean',    30012),
         ('old_thumbs',     30013),
         ('rebuild_addons33', 30018),
+        ('speedtest',      30019),
     ]),
     ('toggle', 30017, 'cat_toggle', [
         ('skin_switch',    30009),
@@ -248,6 +250,15 @@ def router():
         _end_directory()
         from resources.lib import addons33_rebuild
         addons33_rebuild.run()
+
+    elif mode == 'speedtest':
+        _end_directory()
+        # Ookla speedtest-cli vendored at resources/lib/modules/speedtest.py.
+        # Run it as a standalone script (RunScript adds its own directory to
+        # sys.path so the sibling backtothefuture import resolves) — it draws
+        # its own DialogProgress and shows the result image on completion.
+        script = ADDON_PATH + 'resources/lib/modules/speedtest.py'
+        xbmc.executebuiltin('RunScript(%s)' % script)
 
     elif mode == 'binary_install':
         _end_directory()

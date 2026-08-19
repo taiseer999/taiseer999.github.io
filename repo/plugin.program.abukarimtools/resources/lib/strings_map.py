@@ -43,6 +43,7 @@ STRINGS = {
     30016: ("Maintenance",                      "الصيانة والتنظيف"),
     30017: ("Toggles",                          "التبديلات"),
     30018: ("Rebuild Add-on Database",          "إعادة بناء قاعدة بيانات الإضافات"),
+    30019: ("Speed Test",                       "اختبار السرعة"),
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer.",
