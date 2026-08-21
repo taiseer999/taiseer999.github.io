@@ -677,6 +677,68 @@ def _cleanup_stale_autostart():
              xbmc.LOGWARNING)
 
 
+def _restart_if_updated(monitor):
+    """Self-restart once when THIS add-on was updated in place.
+
+    Kodi registers the new add-on folder on its mid-session rescan but does NOT
+    launch the newly-registered xbmc.service until a restart, so the auto-patch
+    watchdog (started only from this service) would stay dormant until the next
+    manual reboot — updated targets (Seren/TinyPPI/AF3/DexWorld/TMDbHelper/
+    RedLight) would not get re-patched in the meantime. Detect a version change
+    against a stamp in addon_data and bounce Kodi once so the new service and
+    its watchdog actually run.
+
+    One-shot and loop-safe: the stamp is rewritten to the CURRENT version
+    *before* the restart, so it fires exactly once per version bump. The very
+    first run (no stamp yet — fresh install/build) is skipped, because the
+    build/first-run flow already reboots on a fresh apply.
+    """
+    stamp   = os.path.join(PROFILE, 'service_version.stamp')
+    current = ''
+    try:
+        current = ADDON.getAddonInfo('version') or ''
+    except Exception:
+        return
+    if not current:
+        return
+
+    last = _read_text(stamp)
+    if last == current:
+        return
+
+    # Write the new stamp FIRST. If we cannot persist it, do not restart —
+    # a restart without a recorded stamp would repeat on every boot.
+    try:
+        os.makedirs(PROFILE, exist_ok=True)
+        with open(stamp, 'w', encoding='utf-8') as f:
+            f.write(current)
+    except OSError as e:
+        _log('Could not write service version stamp (%s) — skipping the '
+             'post-update restart to avoid a reboot loop.' % e,
+             xbmc.LOGWARNING)
+        return
+
+    if not last:
+        _log('First service run for version %s — stamped, no restart '
+             '(fresh install/build handles its own restart).' % current)
+        return
+
+    _log('Tools updated %s -> %s; restarting Kodi once so the new service '
+         'and auto-patch watchdog start.' % (last, current))
+    # Brief heads-up so the restart is not mistaken for a crash.
+    try:
+        xbmc.executebuiltin(
+            'Notification(%s, %s, 5000)'
+            % (ADDON_NAME,
+               'Tools updated — restarting to finish. / '
+               'تم تحديث الأدوات — سيُعاد التشغيل.'))
+    except Exception:
+        pass
+    if monitor.waitForAbort(3):
+        return
+    xbmc.executebuiltin('Reboot' if _is_coreelec() else 'RestartApp')
+
+
 def main():
     monitor = xbmc.Monitor()
 
@@ -689,6 +751,16 @@ def main():
         addons33_rebuild.continue_if_pending(monitor)
     except Exception:
         _log('Addons33 rebuild continuation crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # Self-restart once if this add-on was just updated in place, so Kodi
+    # actually starts the freshly-registered service (and its watchdog) this
+    # session instead of on the next manual reboot. Fenced; reboots when it
+    # fires, so it runs before the remaining boot chores. No-op otherwise.
+    try:
+        _restart_if_updated(monitor)
+    except Exception:
+        _log('Post-update restart check crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # The boot chore below is strictly best-effort: it is not allowed to

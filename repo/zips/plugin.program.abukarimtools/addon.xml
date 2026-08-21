@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.abukarimtools"
        name="ABUKARIM TOOLS"
-       version="2.9.7"
+       version="2.9.8"
        provider-name="Abukarim">
 
   <requires>
@@ -26,7 +26,8 @@
       <fanart>fanart.jpg</fanart>
     </assets>
     <platform>all</platform>
-    <news>v2.9.7
+    <news>v2.9.8
+- AUTO-PATCH: the service now self-restarts Kodi once after an in-place update of ABUKARIM TOOLS itself. Kodi registers the new add-on folder mid-session but does not launch the freshly-registered service until a restart, so the auto-patch watchdog stayed dormant until the next manual reboot - meaning updates to Seren/TinyPPI/AF3/DexWorld/TMDbHelper/RedLight were not re-patched in the meantime. A version stamp in addon_data triggers a single reboot on the first boot after the tools update; one-shot and loop-safe, and the first-ever run (fresh install/build) is skipped since the build flow already reboots.
 - SPEED TEST: new Maintenance item "Speed Test" that runs an Ookla speedtest.net bandwidth test (download / upload) and shows the shareable result image, with a matching Kodi Speed Test icon. Ported from ez Maintenance+ and made Python 3.14 clean.
 
 v2.9.5
