@@ -1,0 +1,333 @@
+v2.9.8
+- AUTO-PATCH: the service now self-restarts Kodi once after an in-place update of ABUKARIM TOOLS itself. Kodi registers the new add-on folder mid-session but does not launch the freshly-registered service until a restart, so the auto-patch watchdog stayed dormant until the next manual reboot - meaning updates to Seren/TinyPPI/AF3/DexWorld/TMDbHelper/RedLight were not re-patched in the meantime. A version stamp in addon_data triggers a single reboot on the first boot after the tools update; one-shot and loop-safe, and the first-ever run (fresh install/build) is skipped since the build flow already reboots.
+- SPEED TEST: new Maintenance item "Speed Test" that runs an Ookla speedtest.net bandwidth test (download / upload) and shows the shareable result image, with a matching Kodi Speed Test icon. Ported from ez Maintenance+ and made Python 3.14 clean.
+
+v2.9.5
+- REBUILD ADD-ON DATABASE: phase 1 now deletes Addons33.db from autostart.sh instead of from inside Kodi. Kodi holds the database open for the whole session and rewrites it during shutdown, so an in-process delete did not reliably survive the reboot - which is why the rebuild appeared to do nothing. autostart.sh runs before Kodi, so the delete always sticks.
+- The injected block is guarded by a trigger file (/storage/.addons33_rebuild_pending) and deletes only that trigger, never itself: rewriting a running shell script mid-read is unsafe on BusyBox ash. A block left behind for any reason is therefore inert on every later boot. Phase 2 removes the block text from Python, from a separate process, and leaves any other content in autostart.sh (including the backup/restore block) untouched.
+- REBUILD: phase 2 now runs Fix Add-on Update Origins automatically once the add-ons are back. A freshly built Addons33.db has empty origin fields, so add-ons would not resolve to their repository for updates; origin_fix repairs them just before the final restart.
+- REBUILD: on non-CoreELEC platforms (macOS dev box) the tool no longer quits silently. Kodi cannot relaunch itself there, so it now deletes the database, tells you Kodi is about to close, and finishes the rebuild automatically the next time you open Kodi.
+
+v2.9.4
+- PATCHER: removed the a4kSubtitles "Disable OpenSubtitles" patch entirely (both entries + the "a4kSubtitles: Disable OpenSubtitles" toggle). service.subtitles.a4ksubtitles is no longer a watched/patched target.
+- AUTO-PATCH: now always active. Removed the on/off kill switch (autopatch.off) and the "Auto-Patch On Update: On/Off" menu item - patching is a fix, not a user option. Boot sweep, update re-patching and the menu-open self-heal all run unconditionally.
+- PATCHER: restored the TMDbHelper player.py dead-player guard. onAVChange/onAVStarted call get_playingitem() while the player tears down; getPlayingFile() then raises RuntimeError ("Kodi is not playing any file") at player.py:414, killing the callback thread (Kodi warns about memory leaks). Guarded with isPlaying() + try/except RuntimeError and the doubled getPlayingFile() call collapsed to one. Lives under the "TMDbHelper: Stability" toggle; exact-blob + regex fallback, idempotent.
+- PATCHER: fixed the false "N written" count. apply_set now counts only genuine writes (messages carrying "Patched OK"/"File injected OK"); skip messages such as Seren's "native support present ... skipping" no longer inflate the count, so a settled box reports "0 written" and the watchdog stops firing a false "patches re-applied" toast every sweep.
+- MAINTENANCE: new "Rebuild Add-on Database" tool. Deletes the corrupt Addons33.db (+ -wal/-shm), lets Kodi build a clean one, re-enables every add-on automatically via JSON-RPC, and restarts the box twice. Targets the recurring "Can't update database Addons33 from version 0 - it's too old" state that can stop Kodi auto-starting services on boot - including this add-on's own service, which is why background auto-patching sometimes never ran. Survives the reboots via a marker; if the rebuild leaves ABUKARIM TOOLS itself disabled, re-enabling it once finishes the rest.
+
+v2.9.3
+- PATCHER: removed the DPlex patch entry (plugin.video.dplex addon.xml reuselanguageinvoker=false) and its 'dplex_stability' toggle. plugin.video.dplex is no longer a watched/patched target. The DPlex tab toggle, its data files, menu entry, and strings are unchanged — only the patcher stops touching DPlex.
+
+v2.9.2
+- SEREN 3.4.25 QR AUTH: Seren now ships native Trakt QR auth (QRAuthWindow + qr_auth_window.xml + common/tools.make_qr), and its trakt.py auth() was restructured so the old DialogProgress block our patch targeted no longer exists — that was the "Patch string not found in resources/lib/indexers/trakt.py" failure the watchdog reported. All three QR injection entries (qr_utils.py, trakt_auth_qr.xml, trakt.py) now carry skip_if_present: when Seren's native qr_auth_window.xml is on disk they skip cleanly as obsolete instead of failing or injecting unused files. New generic 'skip_if_present' patch mechanism added for exactly this "upstream absorbed the feature" case. The two Seren maintenance.py py3.14 UTF-8 fixes still apply as before. Result on 3.4.25: 3 skipped, 2 applied, 0 failed.
+- SEREN QR TROUBLESHOOTING FALLBACK: for builds between the old and native layouts, the trakt.py QR entry also gained a line-ending/edit-tolerant regex fallback (anchored on copy2clip(user_code)…del progress_dialog) so an upstream edit inside the block no longer silently drops the patch.
+- WATCHDOG OBSERVABILITY: the auto-patch watchdog now logs "Watchdog started…" immediately on boot (before the boot delay), and the boot sweep logs even when nothing needed doing, so a short boot log can distinguish "watchdog alive, nothing to do" from "watchdog never ran". Boot delay 60s→20s and poll 30s→15s so update re-patching is quicker to observe.
+
+v2.9.1
+- A4KSUBTITLES: restored the "Disable OpenSubtitles" patch (ported from 2.8.5, dropped in 2.9). Two idempotent entries under a new 'a4kSubtitles: Disable OpenSubtitles' toggle — the addon's own resources/settings.xml default (fresh profiles) and the userdata addon_data settings.xml (live devices). service.subtitles.a4ksubtitles is now a watched patch target, so the change survives a4kSubtitles updates. Also restored the not_found_ok guard in the addon_data base resolver so the userdata edit skips cleanly (not a failure) when a4kSubtitles was never opened.
+- AUTO-PATCH RELIABILITY: opening ABUKARIM TOOLS now kicks off a background patch sweep (daemon thread, honours the autopatch.off kill switch) as a self-heal, mirroring the existing font self-heal. Fixes patches not re-applying after an add-on update on sessions where Kodi never launched the background service (e.g. the xbmc.service extension not started after an in-place update). Every patch is idempotent so a redundant sweep writes nothing. NOTE: for the always-on background watchdog itself, a full Kodi restart after updating this add-on is still required the first time, because Kodi only starts a newly-registered service on restart.
+
+v2.8.0
+- Patcher refreshed for TinyPPI 2.3.1 (new upstream resources/lib/{core,info,
+  service,ui} layout). The PPI Arabic (colon-removal) and classic PPI (Arctic
+  Fuse 3 dialog recolor) whole-file overlay skins were rebuilt from the 2.3.1
+  base, so applying them no longer reverts the new script-tinyppi-main.xml to an
+  older copy. Arabic strips the trailing ':' from all 45 $ADDON labels; classic
+  adds the Dialog* colour tokens + dialog-bg caps on top.
+- TinyPPI fonts.py freeze-on-stop patch: exact-match blob updated to the 2.3.1
+  install_fonts() (upstream reworded its docstring), so it matches on the primary
+  path again instead of relying on the regex fallback.
+- Verified against 2.3.1: non-CE launch flag, codec/audio badge swaps, and the
+  PPI AF3 Home-bridge (home_publish.py + monitor.py inject) all still apply and
+  are idempotent; update_properties/get_CpuTemperatureProgressVar and the
+  "KodiMonitor started" anchor are unchanged upstream.
+
+v2.7.0
+- TinyPPI overlay font is now fully handled skin-side: Arctic Fuse 3 and Arctic
+  Zephyr Rounded each ship the Arabic-capable Noto-Regular/Bold.ttf and pin
+  font23_narrow/font32 themselves, so the patcher no longer installs or manages any
+  skin fonts. The TinyPPI fonts.py patch remains (install_fonts() stays disabled) -
+  it is now purely the freeze-on-stop guard, not a font installer.
+
+v2.4.5
+- Restored the TMDbHelper Trakt-stats guard (removed in v2.3.5). kodi.log showed it
+  was the cause of the ~40s UI freeze: Trakt returns a plain int where a dict is
+  expected, trakt_stats.py raises 'int object has no attribute items', the Cron
+  Thread aborts and Kodi stalls. The guard skips non-dict values. Under a new
+  "TMDbHelper: Stability" toggle (on by default).
+
+v2.4.4
+- New patch "PPI Arabic": fully translates TinyPPI's Arabic (ar_sa) - the 38
+  untranslated overlay field labels (Display output, Audio codec, Bit depth, etc.)
+  are now translated - and removes the trailing colon after every overlay label in
+  the TinyPPI skin (44 labels). Under its own "PPI Arabic" toggle.
+
+v2.4.3
+- New patch: replace the 5 TinyPPI Dolby audio badges (Dolby Digital, Digital Plus,
+  Digital Plus Atmos, TrueHD, TrueHD Atmos) with ABUKARIM TOOLS artwork, under a new
+  "TinyPPI: Audio Badges" toggle. Same binary swap as the HDR badges: overwrites the
+  PNGs in TinyPPI's skins/Default/media/codecs, idempotent on byte-compare.
+
+v2.3.6
+- New patch: replace the TinyPPI SDR / HDR10 / HDR10+ codec badge graphics with
+  ABUKARIM TOOLS artwork (overwrites the three PNGs in TinyPPI's
+  skins/Default/media/codecs). Grouped under a new "TinyPPI: Codec Badges" toggle;
+  applies on a byte-compare so re-runs and the watchdog skip once installed.
+
+v2.3.5
+- Patch selection is now a checklist of 6 named toggles shown at the start of "Apply
+  Patches" (mandatory pre-step; the standalone Select Patches item was removed):
+  Seren Trakt Auth, TMDbHelper Trakt Auth QR, MPAA for KSA, TinyPPI: Run on non-CE,
+  TinyPPI: Fix Font, RedLight: Fix Sound & Theme. Only toggles whose add-on is
+  installed are shown; the choice is remembered and honoured by the auto-patch
+  watchdog too.
+- Removed 3 crash/thread-leak patches: TMDbHelper trakt_stats.py, TMDbHelper
+  player.py, and Last Played default.py. TMDbHelper now carries only the Trakt QR
+  auth (3 files) and the MPAA-for-KSA certification fix. Patch set is 14 entries.
+
+v2.3.4
+- Removed the 3 TMDbHelper AM6B/Py3.14 stability patches: reuselanguageinvoker=true
+  in addon.xml, and the two settings.xml max_threads=3 entries (pin + insert). The
+  patch set is now 17 entries; TMDbHelper keeps its 3 Trakt-QR entries and the
+  info.py / trakt_stats.py / player.py fixes.
+
+v2.3.3
+- Patches are now individually selectable. New "Select Patches" menu item (اختيار
+  التعديلات) opens a checklist of every patch; untick any you don't want and only
+  the ticked ones are applied. The choice is remembered and honoured everywhere -
+  "Apply Patches" and the automatic post-update re-patch watchdog both skip patches
+  you've turned off, so a disabled patch stays off even after an add-on updates.
+  New patches added in future builds default to enabled.
+
+v2.3.2
+- Arabic no longer shows as empty boxes on a fresh install. The main menu and
+  the ABUKARIM wizard menu are plugin directory listings whose font is set by
+  the active skin, not by the add-on; when that skin's font (or Kodi's default
+  fallback arial.ttf) has no Arabic glyphs the labels render as tofu. The
+  add-on now installs an Arabic-capable global fallback font into
+  media/fonts/arial.ttf on boot (and when the menu is first opened, so it works
+  even before a restart), which every skin falls back to - so both menus, the
+  wizard's popups, and any other skin surface become readable at once. Takes
+  effect on the next Kodi start; only rewritten when it actually differs.
+- Fixed the add-on's own portal/repo-select windows: their NotoSans fonts had
+  no Arabic glyphs, so Arabic there was tofu too. Replaced with the
+  Arabic-capable copies the add-on already ships.
+
+v2.2.3
+- Skin installer: skins installed via the portal now register their repository
+  origin deterministically (from the chosen Kodi/CoreELEC/Piers repo) instead of
+  depending on a cached repo listing, so they show in Add-on browser and receive
+  updates. Forces a real repo-listing refresh (UpdateAddonRepos) before linking,
+  applies the same fix to silently-installed companions (e.g. TMDbHelper), and
+  offers a Kodi restart afterwards so the new origins take effect for updates.
+
+v2.2
+- Added two OpenWizard maintenance shortcuts to the main menu: Total Clean (cache, packages, thumbnails) and Clear Old Thumbnails, both run directly without opening the wizard UI.
+- New clear_cache icon.
+
+v1.9.22
+- Skin switcher and skin installer now leave you on the newly selected skin's Home
+  screen instead of reopening the AbukarimTools menu. The switch/close happens
+  silently (no dialogs, no flicker). Reverses the v1.9.16 return-to-menu behaviour.
+
+v1.9.21
+- Fixes AZR Arabic still showing Arial after 1.9.20. Devices that took 1.9.19 still
+  had _REQUIRED_FONTS pointing at monadit.ttf (a name the skin never ships), and the
+  1.9.20 repoint entry skipped them because its sentinel was already present. New entry
+  flips those names back to Noto-Regular/Bold.ttf (the Arabic-capable copies we ship).
+  AZR needs a clean Font.xml (reinstall from repo) + reboot so TinyPPI re-injects with
+  the Noto names instead of the stale monadit ones.
+
+v1.9.20
+- TinyPPI overlay: Arabic labels no longer fall back to Arial. The Noto-Regular/
+  Bold.ttf that TinyPPI copies into the skin had no Arabic glyphs; abukarimtools now
+  ships Arabic-capable Noto-Regular/Bold.ttf and TinyPPI copies those instead, so the
+  skin's existing font23_narrow/font32 entries resolve to Arabic. Also removes the
+  v1.9.18 install_fonts() disable that was blocking the font copy entirely.
+
+v1.9.15
+- Two dead-player guards, both for the same crash: a player callback fires while the
+  player is tearing down, getPlayingFile() raises RuntimeError, and Kodi warns
+  "IGNORING THIS CAN LEAD TO MEMORY LEAKS" as the callback thread dies. Seen every
+  time the TMDbHelper dummy splash file is closed before it resolves (Amlogic
+  CRenderManager::Configure timeout).
+  * TMDbHelper monitor/player.py get_playingitem(): now checks isPlaying() and
+    catches RuntimeError. Also collapses a duplicated getPlayingFile() call.
+  * Last Played default.py onPlayBackStarted(): its Player.HasMedia check is a GUI
+    condition that can read true after teardown, so the same guard is applied.
+    Long-standing upstream bug (5-star/plugin.video.last_played issue #23), verified
+    against v6.4.0 where the offending line is default.py:274.
+  Neither patch changes behaviour during normal playback - all four/three simulated
+  states were checked. This stops the leak and the log noise; it does NOT fix the
+  underlying renderer timeout that makes playback fail.
+
+v1.9.14
+- Removed the standalone "Patch RedLight" menu item. It existed only because the
+  RedLight entries used to be tagged group='redlight', which kept them out of every
+  automatic path - that separate button was the ONLY way to run them, and forgetting
+  it is exactly why the RedLight patches appeared not to work. Since 1.9.11 they are
+  part of the normal set, so "Apply Patches", the boot sweep and the update watchdog
+  all cover them and the extra button was a redundant duplicate. Menu is one item
+  shorter; no patch coverage is lost.
+
+v1.9.13
+- Stopped the false "Patches re-applied after add-on update" toast. The four
+  sentinel-less injections (Seren trakt_auth_qr.xml and the three TMDbHelper player
+  JSONs) were rewritten on every pass, so every sweep reported "4 written" and the
+  watchdog notified every 30 minutes even though nothing had changed. They are now
+  compared by content first: identical file, nothing written. A real add-on update
+  that wipes them still re-applies them, and a missing file is still injected - so
+  "re-applied" in the log finally means something actually happened.
+
+v1.9.12
+- Fixed the RedLight busy-player entry reporting "1 failed" on every sweep. Its
+  already_patched_check was '... (by ABUKARIM TOOLS) --' but the comment it writes
+  is '... (by ABUKARIM TOOLS): wait for teardown instead of silent bail --', so the
+  sentinel was never a substring of its own output. The patch applied fine, it just
+  could not recognise its own work: every sweep retried, could not find 'old' (already
+  replaced), and logged a permanent failure. A latent bug that only surfaced once
+  RedLight joined the automatic sweeps in 1.9.11.
+- Added _audit_sentinels(): apply_set() now warns in kodi.log about any entry whose
+  sentinel cannot match what it writes, so this can never fail silently again.
+
+v1.9.11
+- FIX: the three RedLight patches (volume, sources-window background, busy-player)
+  were tagged group='redlight', which meant "Apply Patches", the boot sweep and the
+  update watchdog ALL skipped them - they only ran from the separate "Patch RedLight"
+  menu item. kodi.log confirmed it: every run said group=default / 18 OK, and the
+  watchdog reported "Watching 3 add-on(s)" with RedLight absent. The group tag is
+  gone; all 21 entries are now one set, so RedLight is patched like everything else
+  and re-applied automatically after a RedLight update. Add-ons that are not
+  installed are filtered out anyway, which is what the group was guarding against.
+  "Patch RedLight" still exists and now narrows the same set by add-on id.
+
+v1.9.10
+- Added RedLight volume patch: volume_checker() in resources/lib/modules/kodi_utils.py
+  clamps the player to redlight.playback.volumecheck_percent (default '50') on every
+  playback start, and SetVolume(50) on Kodi's 0..-60 dB scale is -30 dB - so every
+  title began at half volume. Its only opt-out is an internal property with no
+  settings-screen exposure. Body replaced with an immediate return. Group 'redlight'.
+  Verified against the installed RedLight 1.4.9 copy: exact blob match, patched file
+  ast-clean, regex fallback also matches, idempotent via sentinel.
+- Composite for Plex and Fenlight patches stay removed (neither add-on is installed).
+
+v1.9.9
+- Removed all Composite for Plex patches (7 entries: QR auth, PIN layout, v2
+  sign-in, strong=false fix) and the Fenlight patch (1 entry), plus the 18
+  base64 blobs they used. Neither add-on is installed. patcher.py drops from
+  95k to 62k; 20 entries remain across tinyppi, seren, TMDbHelper and RedLight.
+- NOTE: the Fenlight entry WAS the -30 dB volume fix. Removing it means no
+  volume patch is left in the patcher at all. RedLight keeps only two entries
+  (sources window theme fallback, busy-player fix) - neither touches volume.
+
+v1.9.8
+- RedLight sources window: fixed the white background that showed up at random.
+  sources_results.xml tints a WHITE texture (redlight_common/circle.png) with a
+  window property; when that property is empty Kodi applies no tint at all and the
+  white texture renders as-is. It was never a light theme - it was the theme colour
+  going missing, which is why it came and went. Each of the four themed controls now
+  has a twin pinned to the correct dark value, shown only while the property is
+  empty. Group 'redlight', so run it from the RedLight patch menu.
+- Watchdog no longer spams kodi.log with "Unknown addon id" for targets that are
+  not installed. Catching the Python exception was never enough: Kodi writes that
+  line from the C++ side before it reaches us. _addon_path now checks the addons
+  folder first and remembers ids Kodi has disowned, so a missing target costs one
+  line per session instead of one per 30s sweep.
+
+v1.9.7
+- Added TMDbHelper certification fallback: with the language set to Arabic (Saudi
+  Arabia) the MPAA badge was blank on nearly every title. TMDbHelper selects the
+  certification with iso_country=? taken from the last 2 letters of the language
+  setting ('SA'), and TMDb carries almost no Saudi certifications. It already
+  caches every country's certification in the same table, so the patch widens the
+  query to fall back to the US value when the configured country has none. Covers
+  movies and tv (both feed the one certification table). Your own country still
+  wins when it has a rating; US users see no change; no cache flush needed.
+
+v1.9.6
+- Added TMDbHelper trakt_stats.py patch: Trakt's users/me/stats payload now
+  carries plain numbers at the top level, and TMDbHelper assumed every value was
+  a dict - AttributeError: 'int' object has no attribute 'items' killed the whole
+  Cron Thread at startup, so no periodic Trakt sync or cache housekeeping for the
+  rest of the session. The patch skips non-dict values in the comprehension.
+  Picked up automatically by the v1.9.5 auto-patch watchdog.
+- Skin Switcher: selecting a skin now closes the dialog and applies the skin
+  directly. The active skin is marked [active] and re-selecting it is a no-op
+  (the old 'Current Skin' placeholder row is gone). The skin is enabled first
+  via JSON-RPC so the 'enable this add-on?' prompt never appears, and Kodi's
+  'Keep this change?' revert timer is confirmed automatically (control 11 =
+  Yes) so the skin can no longer flip back.
+
+v1.9.5
+- AUTO-PATCH: the patcher no longer has to be run by hand. service.py now stays
+  alive for the whole session and watches every add-on the patcher targets
+  (version + addon.xml stat, once every 30s). When one is updated or reinstalled
+  - which replaces the folder and silently wipes our patches - the watchdog waits
+  for the unpack to settle, then re-applies only that add-on's entries, silently.
+  Also: a boot sweep (catches updates made while Kodi was closed) and a 30-minute
+  verify sweep. All entries are idempotent so an unchanged system writes nothing.
+  New menu item "Auto-Patch On Update: On/Off" (kill switch: addon_data/autopatch.off).
+  Optional groups (RedLight) stay manual by design.
+
+v1.9.4
+- Added Fenlight patch: disables the built-in volume_checker() so playback
+  no longer auto-drops Kodi volume to -30 dB on every start.
+
+v1.8.9.2
+- Removed all DPlex patch entries and blob constants from the patcher (8 constants + 8 entries covering QR auth injection, geometry, controls layout, v2 PIN, and display flow).
+v1.8.9.1
+- Patcher: TinyPPI _ALLOW_NON_COREELEC entry now targets resources/lib/ui/overlay.py (the 1.9.7+ package layout) with resources/lib/overlay.py kept as a fallback for TinyPPI <= 1.8.6.  Adds general rel_path_alternates support to any patch entry (first existing candidate wins).
+v1.8.5
+- New tool: Fix Add-on Update Origins - links zip/portal-installed add-ons back to their repository in the Addons DB so they show as installed and auto-update again
+- Skin Installer now sets the repository origin automatically after every skin/companion install
+
+v1.7.4.0
+- New tool: AM6B CoreELEC Fix - applies/reverts the AF3 GBM poster flicker workaround (bordersize inset on Layout_Poster, same as Aeon Nox Silvo)
+
+v1.7.3.8
+- Added TinyPPI patch: set _ALLOW_NON_COREELEC = True in resources/lib/overlay.py so the overlay can launch on non-CoreELEC platforms (macOS dev/testing).
+v1.7.3.7
+- BINGIE REMOVAL: removed everything pertaining to the Bingie TMDbHelper fork (plugin.video.tmdb.bingie.helper / skin.bingie). Patcher: dropped the 3 Bingie Trakt QR patch entries and both Bingie blobs. Skin Switcher + Skin Installer: removed the stock/Bingie fork toggle (_apply_helper_for_skin) and its enable/disable helpers; skin.bingie companion mapping removed. service.py: removed the boot-time _reconcile_helper_forks() one-fork rule (moot with a single helper). Backup Manager: bingie helper removed from OpenWizard EXCLUDES.
+v1.7.3.3
+- FIRST-RUN "sometimes does not auto start" FIX (3 root causes):
+  1) Crash-resilient trigger: the self-trigger now keys off first_run.done (written only on COMPLETION, storing the build id) instead of last_build.id (written at ARM time). Previously a kernel panic / power-cycle mid-sequence (flag already consumed, done never written) left the trigger permanently satisfied and first-run silently never ran again. An interrupted run now simply re-arms on the next boot. Legacy 'done' markers are migrated in place, so devices that already completed first-run do NOT re-run it.
+  2) Service-killing UnicodeDecodeError: _cleanup_stale_autostart read autostart.sh as strict UTF-8 catching only OSError; corrupted bytes (a possible leftover of the pre-1.7.3 sed self-edit bug) raised UnicodeDecodeError, killed service.py before the first-run trigger was ever evaluated. Now reads with errors='replace', and the boot chores are individually fenced so nothing can block the trigger.
+  3) Reboot race: the CoreELEC reboot prompt moved out of _run_steps to AFTER the done marker is written — a user-approved Reboot could previously race the finally block and (with the new done-keyed trigger) would have re-run the whole sequence next boot.
+v1.7.3.1
+- Removed all script.tinyppi patch entries: the AF3 font remap (TinyPPI 1.6.1.1 now manages its own Noto fonts via tools.tinyppi) and the set_ui_position crash fixes + CpuTopUsageVar paren fix (both fixed upstream in 1.6.1; old code paths no longer exist).
+v1.7.3
+- AUTOSTART SELF-EDIT FIX: autostart.sh's guisettings-restore block no longer removes itself via sed -i on its own file — rewriting a running shell script's own file mid-read is unsafe on BusyBox ash and could corrupt/delete autostart.sh outright. Cleanup now happens from service.py on the next Kodi start instead (a separate, already-exited process by that point, so it's safe).
+- OE_SETTINGS.XML RESTORE: the autostart restore now also stages and restores /storage/.kodi/userdata/addon_data/service.coreelec.settings/oe_settings.xml, not just guisettings.xml. CoreELEC's own settings service re-syncs its remembered audiooutput.audiodevice etc. from oe_settings.xml back over guisettings.xml during the session, so restoring guisettings.xml alone didn't stick — a stale device value in oe_settings.xml (e.g. a dev-machine placeholder) kept reappearing every boot regardless.
+v1.6.9.10
+- TMDbHelper Trakt QR ROOT-CAUSE FIX: QR window injected to resources/skins/Default (capital D) and dialog now loads from 'Default' — was lowercase 'default', which works on macOS but NOT on case-sensitive CoreELEC, so the device silently fell back to the stock code+URL dialog (no QR).
+v1.6.9.9
+- TMDbHelper Trakt QR: poller patch now has a version-resilient regex fallback (re-applies after TMDbHelper updates / reinstalls; was silently reverting to the stock code+URL dialog).
+v1.6.9.7
+- Backup Manager: exclude script.autoruns from backups (added to OpenWizard EXCLUDES).
+v1.6.9.5
+- Removed Umbrella player deploy entry from patcher.
+v1.6.9.4
+- TMDbHelper: patch pins max_threads=3 in addon_data settings.xml (caps CPythonInvoker storm causing UI freeze on AM6B; survives restore).
+v1.6.9.3
+- RedLight: patch kills volume_checker (was forcing SetVolume() and dropping playback volume ~30%).
+v1.6.9.0
+- First-run: CoreELEC reboot prompt 10s after skin loads (YES reboots so autostart.sh runs).
+v1.6.8.9
+- Auto-run first-run on new build apply via shipped resources/build.id (wipe-proof self-trigger).
+- Re-enabled xbmc.service so first-run triggers automatically on boot.
+v1.6.8.8
+- Skin installer (first-run + manual): auto-confirm YES on the final "Keep this skin?" dialog.
+v1.6.8.7
+- Removed AF3 ColorHighlight patch entry.
+v1.6.8.6
+- POV/Umbrella players switched to RunPlugin (search-mode caused GetDirectory loop). All 4 players now consistent.
+v1.6.8.5
+- Patcher: addon_data target support. Deploy 4 TMDbHelper player JSONs (POV/Umbrella search-mode) post-restore.
+v1.6.8.4
+- TMDbHelper: suppress "not playable" popup for source-select players (dummy strm-gate fix).
+v1.6.8.3
+- RedLight sources_results: dark unfocused card (FF1F2020) - fixes white rows in TIDB results window.
+v1.6.8.2
+- AF3: dark focus highlight (ff202020) fixes white select-dialog rows (TIDB/Seren etc).
+v1.6.6
+- Removed all RedLight patch entries and theme-reset logic.
