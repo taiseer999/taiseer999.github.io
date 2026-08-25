@@ -76,6 +76,14 @@ DIALOG      = xbmcgui.Dialog()
 _REDLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgncmVkbGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNzDQo='
 _REDLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBSZWRMaWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
+# ── Fenlight volume auto-drop kill (by ABUKARIM TOOLS) ──
+# Fenlight ships the same volume_checker() as RedLight: it runs on every playback
+# start and clamps Kodi's player volume to fenlight.playback.volumecheck_percent
+# (default '50').  On Kodi's 0 dB .. -60 dB scale SetVolume(50) lands on -30 dB, so
+# every title starts at half volume.  Same treatment: replace the body with `return`.
+_FENLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBkYiwgMTAwJSA9PSAwZGINCgl0cnk6DQoJCWlmIGdldF9wcm9wZXJ0eSgnZmVubGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfZW5hYmxlZCcpID09ICdmYWxzZScgb3IgZ2V0X3Zpc2liaWxpdHkoJ1BsYXllci5NdXRlZCcpOiByZXR1cm4NCgkJZnJvbSBtb2R1bGVzLnV0aWxzIGltcG9ydCBzdHJpbmdfYWxwaGFudW1fdG9fbnVtDQoJCW1heF92b2x1bWUgPSBtaW4oaW50KGdldF9wcm9wZXJ0eSgnZmVubGlnaHQucGxheWJhY2sudm9sdW1lY2hlY2tfcGVyY2VudCcpIG9yICc1MCcpLCAxMDApDQoJCWlmIGludCgxMDAgLSAoZmxvYXQoc3RyaW5nX2FscGhhbnVtX3RvX251bShnZXRfaW5mb2xhYmVsKCdQbGF5ZXIuVm9sdW1lJykuc3BsaXQoJy4nKVswXSkpLzYwKSoxMDApID4gbWF4X3ZvbHVtZTogZXhlY3V0ZV9idWlsdGluKCdTZXRWb2x1bWUoJWQpJyAlIG1heF92b2x1bWUpDQoJZXhjZXB0OiBwYXNzDQo='
+_FENLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBGZW5saWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
+
 
 # ── TinyPPI: hand overlay fonts to the skin (by ABUKARIM TOOLS) ──
 # TinyPPI's install_fonts() would otherwise inject its own font23_narrow/font32
@@ -314,6 +322,19 @@ PATCHES = [
         'fallback_pattern': r'def volume_checker\(\):[\s\S]*?except:\s*pass',
         'fallback_repl': ("def volume_checker():\r\n"
                           "\t# -- RedLight volume auto-drop disabled (by ABUKARIM TOOLS) --\r\n"
+                          "\treturn"),
+    },
+    # ── Fenlight – kill automatic volume drop to -30 dB on playback start ──
+    {
+        'addon_id': 'plugin.video.fenlight',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'kodi_utils.py'),
+        'old': base64.b64decode(_FENLIGHT_VOLCHECKER_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_FENLIGHT_VOLCHECKER_NEW_B64).decode('utf-8'),
+        'description': 'Fenlight kodi_utils.py - disable auto volume drop to -30 dB on every playback',
+        'already_patched_check': '-- Fenlight volume auto-drop disabled (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'def volume_checker\(\):[\s\S]*?except:\s*pass',
+        'fallback_repl': ("def volume_checker():\r\n"
+                          "\t# -- Fenlight volume auto-drop disabled (by ABUKARIM TOOLS) --\r\n"
                           "\treturn"),
     },
 
@@ -944,6 +965,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
+    ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('dexsubs_autodl',   'DexSubtitles: Auto-Download'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
@@ -1005,6 +1027,9 @@ _TOGGLE_OF = {
     # PPI Arabic — colon removal only (ar_sa strings.po fixed at source, not patched)
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml')): 'tinyppi_arabic',
+    # Fenlight: Kill Volume Auto-Drop
+    ('plugin.video.fenlight',
+     os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'fenlight_volume',
     # RedLight: Fix Sound & Theme — all three RedLight entries
     ('plugin.video.redlight',
      os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'redlight_fixes',

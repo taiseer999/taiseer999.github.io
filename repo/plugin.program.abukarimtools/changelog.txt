@@ -1,3 +1,12 @@
+v3.0.1
+- Fenlight: kill volume auto-drop. Fenlight's volume_checker() in resources/lib/modules/kodi_utils.py
+  is the same as RedLight's - it runs on every playback start and clamps the player to
+  fenlight.playback.volumecheck_percent (default '50'), which on Kodi's 0..-60 dB scale lands
+  on -30 dB, so every title starts at half volume with no settings-screen opt-out. Body replaced
+  with an immediate return (exact-blob match against Fenlight 2.5.3, with a def volume_checker()..
+  except:pass fallback regex). New toggle 'Fenlight: Kill Volume Auto-Drop'; joins the automatic
+  boot/update sweeps and is re-applied after a Fenlight update like every other patch.
+
 v2.9.8
 - AUTO-PATCH: the service now self-restarts Kodi once after an in-place update of ABUKARIM TOOLS itself. Kodi registers the new add-on folder mid-session but does not launch the freshly-registered service until a restart, so the auto-patch watchdog stayed dormant until the next manual reboot - meaning updates to Seren/TinyPPI/AF3/DexWorld/TMDbHelper/RedLight were not re-patched in the meantime. A version stamp in addon_data triggers a single reboot on the first boot after the tools update; one-shot and loop-safe, and the first-ever run (fresh install/build) is skipped since the build flow already reboots.
 - SPEED TEST: new Maintenance item "Speed Test" that runs an Ookla speedtest.net bandwidth test (download / upload) and shows the shareable result image, with a matching Kodi Speed Test icon. Ported from ez Maintenance+ and made Python 3.14 clean.
