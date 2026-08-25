@@ -1,3 +1,14 @@
+v3.0.3
+- PPI AF3 Home bridge: home_publish.py no longer hard-codes info.properties.update_properties.
+  The installed TinyPPI build had dropped/renamed that function, so the 1 Hz publisher raised
+  "module 'info.properties' has no attribute 'update_properties'" every second during playback
+  (and through the stop/next-episode handoff), flooding the log and adding load while other
+  addons stalled. Now the update callable is resolved once from a list of known names
+  (update_properties/set_properties/update/refresh/publish/...) with a single-arg-signature
+  fallback, then cached; if none match, the bridge disables itself for the session with one
+  warning instead of erroring forever. The publisher thread also backs off after 5 consecutive
+  failures (idles 5 s, logs once) so a broken/renamed TinyPPI API can never spam or add load.
+
 v3.0.2
 - TMDbHelper: retire the obsolete Trakt-stats dict-guard patch. TMDbHelper rewrote
   trakt_stats.py get_items() with its own recursive int/dict guard (bare-int base case
