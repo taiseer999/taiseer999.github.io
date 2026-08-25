@@ -301,6 +301,14 @@ PATCHES = [
         'new': base64.b64decode(_TMDBH_TRAKTSTATS_NEW_B64).decode('utf-8'),
         'description': 'TMDbHelper trakt_stats.py - skip non-dict values in Trakt stats (int payload killed the Cron Thread + caused ~40s freeze)',
         'already_patched_check': '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --',
+        # TMDbHelper rewrote get_items() with its own recursive int/dict guard
+        # (bare-int base case + trailing `if isinstance(stat, dict) else []`),
+        # so the AttributeError this patch fixed can no longer occur and our
+        # 'old' anchor is gone for good. Detect the upstream fix and skip cleanly.
+        'obsolete_if_contains': (
+            'def get_items(self, stat, name=None, base=None):',
+            'if isinstance(stat, dict) else []',
+        ),
         'fallback_pattern': r'for base_k, base_v in self\.response_json\.items\(\)\r?\n(\s*)for item_k, item_v in base_v\.items\(\)',
         'fallback_repl': (
             lambda m: (
@@ -897,6 +905,22 @@ def _apply_patch(patch):
     already_check = patch.get('already_patched_check', patch['new'])
     if already_check is not None and already_check in content:
         return True, '[%s] Already patched – skipping.' % patch['addon_id']
+
+    # obsolete_if_contains: upstream has since fixed this itself, so the file no
+    # longer contains our 'old' anchor and never will. Unlike skip_if_present
+    # (which keys on a file existing), this keys on a marker string inside the
+    # target file — the fingerprint of the upstream fix. When present, the patch
+    # is obsolete on this build: skip cleanly instead of reporting a permanent
+    # "Patch string not found" failure on every sweep. Example: TMDbHelper
+    # rewrote trakt_stats.py get_items() with its own recursive dict/int guard,
+    # replacing our dict-guard comprehension patch entirely.
+    obsolete_markers = patch.get('obsolete_if_contains')
+    if obsolete_markers:
+        if isinstance(obsolete_markers, str):
+            obsolete_markers = (obsolete_markers,)
+        if all(m in content for m in obsolete_markers):
+            return True, ('[%s] Upstream fix present in %s – patch obsolete, '
+                          'skipping.' % (patch['addon_id'], patch['rel_path']))
 
     # Exact match replacement (skip when old is empty, e.g. regex-only entries)
     if patch['old'] and patch['old'] in content:

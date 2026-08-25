@@ -1,3 +1,15 @@
+v3.0.2
+- TMDbHelper: retire the obsolete Trakt-stats dict-guard patch. TMDbHelper rewrote
+  trakt_stats.py get_items() with its own recursive int/dict guard (bare-int base case
+  plus a trailing 'if isinstance(stat, dict) else []'), so the AttributeError that
+  killed the Cron Thread can no longer occur and our old comprehension anchor is gone
+  for good. The entry was reporting 'Patch string not found' on every sweep (the '1 failed'
+  in the boot/update logs). New patcher hook 'obsolete_if_contains': when the named marker
+  string(s) are found in the target file, the patch is treated as obsolete and skipped
+  cleanly (like skip_if_present, but keyed on file CONTENT rather than a file existing).
+  Set on the trakt_stats entry, so it now logs 'Upstream fix present - patch obsolete,
+  skipping' instead of a failure. No more false 'X OK, 1 failed' on the sweeps.
+
 v3.0.1
 - Fenlight: kill volume auto-drop. Fenlight's volume_checker() in resources/lib/modules/kodi_utils.py
   is the same as RedLight's - it runs on every playback start and clamps the player to
