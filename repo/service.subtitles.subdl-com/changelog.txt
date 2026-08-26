@@ -1,3 +1,6 @@
+[B]1.0.2.2[/B]
+- Added editable setting to enter subdl.com API key (and TMDB API key)
+
 v1.0.4 (2024-01-17)
 - Sanitize language query
 - Improved sorting

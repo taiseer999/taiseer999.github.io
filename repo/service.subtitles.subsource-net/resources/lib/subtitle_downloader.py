@@ -34,6 +34,8 @@ class SubtitleDownloader:
 
     def __init__(self):
 
+        self.api_key = __addon__.getSetting("APIKey")
+
         log(__name__, sys.argv)
 
         self.sub_format = "srt"
@@ -44,7 +46,7 @@ class SubtitleDownloader:
         self.file = {}
 
         try:
-            self.open_subtitles = SubtitlesProvider()
+            self.open_subtitles = SubtitlesProvider(self.api_key)
         except ConfigurationError as e:
             error(__name__, 32002, e)
 

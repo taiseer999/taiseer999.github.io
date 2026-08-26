@@ -6718,7 +6718,7 @@ COMPATIBILITY
             <icon>icon.png</icon>			
         </assets>    
     </extension>
-</addon><addon id="service.subtitles.subdl-com" name="SubDL.com" version="1.0.2.1" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
+</addon><addon id="service.subtitles.subdl-com" name="SubDL.com" version="1.0.2.3" provider-name="amet, opensubtitles, juokelis, opensubtitlesdev">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />
@@ -6818,7 +6818,7 @@ Other languages with a great number of subtitles are: Danish, French, Swedish, D
             <icon>icon.jpg</icon>
         </assets>
     </extension>
-</addon><addon id="service.subtitles.subsource-net" name="Subsource" version="1.0.1.1" provider-name="opensubtitles, subsource">
+</addon><addon id="service.subtitles.subsource-net" name="Subsource" version="1.0.1.3" provider-name="opensubtitles, subsource">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.25.1+matrix.1" />

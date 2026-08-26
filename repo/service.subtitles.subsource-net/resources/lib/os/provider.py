@@ -17,7 +17,8 @@ def logging(msg):
     return log(__name__, msg)
 
 class SubtitlesProvider:
-    def __init__(self):
+    def __init__(self, api_key=""):
+        self.api_key = api_key
         self.request_headers = {
             'accept': 'application/json, text/plain, */*',
             'accept-language': 'en-US,en;q=0.9,vi;q=0.8',
@@ -33,6 +34,8 @@ class SubtitlesProvider:
             'sec-fetch-site': 'same-site',
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
             }
+        if self.api_key:
+            self.request_headers["Authorization"] = "Bearer " + self.api_key
         self.session = Session()
         self.session.headers = self.request_headers
         # Use any other cache outside of module/Kodi

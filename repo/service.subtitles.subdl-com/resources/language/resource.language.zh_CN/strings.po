@@ -57,3 +57,15 @@ msgctxt "#32214"
 msgid "Bad username. Make sure you have entered your username and not your email in the username field"
 msgstr "用户名错误。请确保在用户名栏中输入的是用户名而不是电子邮件."
 
+
+msgctxt "#32204"
+msgid "Enter your subdl.com API key"
+msgstr ""
+
+msgctxt "#32205"
+msgid "TMDB API Key"
+msgstr ""
+
+msgctxt "#32206"
+msgid "Enter your TMDB API key"
+msgstr ""
