@@ -1,4 +1,6 @@
 
+import os
+import re
 import sys
 import unicodedata
 
@@ -13,8 +15,53 @@ __addon_name__ = __addon__.getAddonInfo("name")
 __language__ = __addon__.getLocalizedString
 
 
+def get_user_agent():
+    """The ONE User-Agent for every outbound request (API, guessit, GitHub).
+
+    Policy: a single identity everywhere - "Opensubtitles.com Kodi plugin v<version>".
+    tests/test_utilities.py fails the suite if any file hardcodes its own.
+    """
+    return f"Opensubtitles.com Kodi plugin v{__addon__.getAddonInfo('version')}"
+
+
 def log(module, msg):
     xbmc.log(f"### [{__addon_name__}:{module}] - {msg}", level=xbmc.LOGDEBUG)
+
+
+_install_origin = None
+
+
+def get_install_origin():
+    """Repository id that installed this add-on, for the X-Kodi-Origin-Repo header.
+
+    Kodi records the installing repository per add-on but exposes it nowhere in
+    the Python API - only the addon database has it (installed.origin). Values:
+    a repository id ('repository.opensubtitles-com', 'repository.xbmc.org'),
+    'zip' for a manual zip install (empty origin in the DB), or 'unknown' when
+    the DB cannot be read. Cached per process; read-only connection so we can
+    never touch Kodi's DB state.
+    """
+    global _install_origin
+    if _install_origin is None:
+        _install_origin = "unknown"
+        try:
+            import glob
+            import sqlite3
+            import xbmcvfs
+            db_dir = xbmcvfs.translatePath("special://database/")
+            dbs = glob.glob(os.path.join(db_dir, "Addons*.db"))
+            if dbs:
+                # highest schema number = the database this Kodi actually uses
+                newest = max(dbs, key=lambda p: int(re.sub(r"\D", "", os.path.basename(p)) or 0))
+                con = sqlite3.connect(f"file:{newest}?mode=ro", uri=True)
+                row = con.execute("SELECT origin FROM installed WHERE addonID = ?",
+                                  (__addon__.getAddonInfo("id"),)).fetchone()
+                con.close()
+                if row is not None:
+                    _install_origin = row[0] or "zip"
+        except Exception:
+            pass
+    return _install_origin
 
 
 # prints out msg to log and gives Kodi message with msg_id to user if msg_id provided
@@ -47,4 +94,28 @@ def get_params(string=""):
 
 
 def normalize_string(str_):
-    return unicodedata.normalize("NFKD", str_)
+    if not str_:
+        return ""
+    return unicodedata.normalize("NFC", str_)
+
+
+def check_and_get_account_status():
+    """Returns the current account status, checking 24-hour expiration."""
+    verified_at = __addon__.getSetting("account_verified_at")
+    status = __addon__.getSetting("account_status")
+
+    if not status or not verified_at or verified_at == "0":
+        return "Not Verified"
+
+    try:
+        import time
+        age = time.time() - float(verified_at)
+        if age > 86400:  # Older than 24 hours
+            expired_status = "Expired (>24h)"
+            __addon__.setSetting("account_status", expired_status)
+            __addon__.setSetting("account_details", "Click Test Connection to re-verify")
+            return expired_status
+        return status
+    except (ValueError, TypeError):
+        return "Not Verified"
+

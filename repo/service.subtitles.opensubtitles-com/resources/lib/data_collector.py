@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 import xbmc
 import xbmcaddon
 
-from resources.lib.utilities import log, normalize_string
+from resources.lib.utilities import log, normalize_string, get_user_agent
 
 # Simple cache for library queries to avoid repeated calls
 _library_cache = {}
@@ -46,7 +46,8 @@ def _store_in_cache(method, params, result):
     }
     log(__name__, f"📋 Cached result for {method}")
 
-__addon__ = xbmcaddon.Addon()
+__addon__ = xbmcaddon.Addon("service.subtitles.opensubtitles-com")
+__scriptid__ = __addon__.getAddonInfo("id")
 
 
 def get_file_path():
@@ -55,12 +56,23 @@ def get_file_path():
 
 # ---------- Small helpers ----------
 
-def _strip_imdb_tt(value):
+def _strip_imdb_tt(value, require_tt=False):
+    """Return the digits of an IMDb id, or None.
+
+    Set require_tt when the value comes from Kodi's `imdbnumber` field. That field holds
+    whatever the scraper treats as the item's primary id, which for a TVDB- or TMDb-scraped
+    show is *not* an IMDb id - and once you look only at the digits, a foreign id is
+    indistinguishable from a real one. Sending one as imdb_id/parent_imdb_id matches nothing:
+    a user log had Succession's library id 338186 go out as parent_imdb_id (0 results) while
+    the correct episode id was discarded. So only accept an explicit "tt" prefix there.
+    """
     if not value:
         return None
     s = str(value).strip()
     if s.startswith("tt"):
         s = s[2:]
+    elif require_tt:
+        return None
     return s if s.isdigit() else None
 
 
@@ -184,9 +196,12 @@ def _extract_movie_ids(movie):
     movie_tmdb = None
     file_path = movie.get('file', '')
 
-    # IMDb ID extraction
-    imdb_raw = movie.get("imdbnumber", "")
-    imdb_digits = _strip_imdb_tt(imdb_raw)
+    # IMDb ID extraction: prefer the explicitly typed uniqueid; "imdbnumber" is only the
+    # scraper's primary id and may hold a TVDB/TMDb one (see _strip_imdb_tt)
+    uniqueids = movie.get("uniqueid") or {}
+    imdb_digits = _strip_imdb_tt(uniqueids.get("imdb") if isinstance(uniqueids, dict) else None)
+    if not imdb_digits:
+        imdb_digits = _strip_imdb_tt(movie.get("imdbnumber"), require_tt=True)
     if imdb_digits and 6 <= len(imdb_digits) <= 8:
         movie_imdb = int(imdb_digits)
         log(__name__, f"Found Movie IMDb: {movie_imdb}")
@@ -282,9 +297,12 @@ def _extract_show_ids(tvshow):
     parent_tmdb = None
     tvshow_id = tvshow.get('tvshowid')
 
-    # IMDb ID
-    imdb_raw = tvshow.get("imdbnumber", "")
-    imdb_digits = _strip_imdb_tt(imdb_raw)
+    # IMDb ID: prefer the explicitly typed uniqueid; "imdbnumber" is only the scraper's
+    # primary id and may hold a TVDB/TMDb one (see _strip_imdb_tt)
+    uniqueids = tvshow.get("uniqueid") or {}
+    imdb_digits = _strip_imdb_tt(uniqueids.get("imdb") if isinstance(uniqueids, dict) else None)
+    if not imdb_digits:
+        imdb_digits = _strip_imdb_tt(tvshow.get("imdbnumber"), require_tt=True)
     if imdb_digits and 6 <= len(imdb_digits) <= 8:
         parent_imdb = int(imdb_digits)
         log(__name__, f"Found Parent IMDb: {parent_imdb}")
@@ -313,41 +331,56 @@ def _extract_show_ids(tvshow):
     return parent_imdb, parent_tmdb, tvshow_id
 
 def _call_guessit_api(filename):
-    """Call OpenSubtitles guessit API to parse filename"""
+    """Call OpenSubtitles guessit API to parse filename with caching"""
+    if not filename:
+        return None
+
     try:
-        import urllib.request
-        import urllib.parse
+        import hashlib
         import json
-        
+        import urllib.parse
+        import urllib.request
+        from resources.lib.cache import Cache
+
+        clean_filename = filename.strip()
+        cache_key = f"guessit_{hashlib.sha256(clean_filename.encode('utf-8')).hexdigest()}"
+        cache = Cache(key_prefix="os_com")
+
+        cached = cache.get(cache_key)
+        if cached is not None:
+            log(__name__, f"📋 Cache hit for guessit: {clean_filename}")
+            return cached or None
+
         # Get API key from addon settings
         api_key = __addon__.getSetting("APIKey")
         if not api_key:
             log(__name__, "No API key found for guessit call")
             return None
-        
+
         # Prepare the request
         base_url = "https://api.opensubtitles.com/api/v1/utilities/guessit"
-        params = {"filename": filename}
+        params = {"filename": clean_filename}
         url = f"{base_url}?{urllib.parse.urlencode(params)}"
-        
+
         # Create request with headers
         req = urllib.request.Request(url)
         req.add_header("Api-Key", api_key)
-        req.add_header("User-Agent", f"Kodi OpenSubtitles.com v{__addon__.getAddonInfo('version')}")
+        req.add_header("User-Agent", get_user_agent())
         req.add_header("Accept", "application/json")
-        
-        log(__name__, f"🔍 Calling guessit API for: {filename}")
-        
-        # Make the request
-        with urllib.request.urlopen(req) as response:
+
+        log(__name__, f"🔍 Calling guessit API for: {clean_filename}")
+
+        # Make the request with a safe timeout
+        with urllib.request.urlopen(req, timeout=10) as response:
             if response.getcode() == 200:
-                data = json.loads(response.read().decode('utf-8'))
-                log(__name__, f"✅ Guessit API response: {data}")
+                data = json.loads(response.read().decode("utf-8"))
+                cache.set(cache_key, data or {}, expires=60 * 60 * 24 * 30)
+                log(__name__, f"✅ Guessit API response (cached): {data}")
                 return data
             else:
                 log(__name__, f"❌ Guessit API error: HTTP {response.getcode()}")
                 return None
-                
+
     except Exception as e:
         log(__name__, f"❌ Failed to call guessit API: {e}")
         return None
@@ -491,7 +524,14 @@ def get_media_data():
 
         # 1) Try to get TRUE parent show IDs first (these are more reliable)
         try:
-            # True parent show IMDb ID from TvShow properties
+            # True parent show IMDb ID from TvShow properties. Neither of these is a core
+            # Kodi InfoLabel, so both are usually empty and step 3 below (JSON-RPC on
+            # VideoPlayer.TvShowDBID) is what actually resolves the parent ID; they are kept
+            # because a skin or video add-on may set the ListItem property itself.
+            # Do NOT "fix" this to VideoPlayer.IMDBNumber (suggested in issue #40): during
+            # episode playback that label returns the *episode's* id, so it would be filed
+            # as a parent id and then searched together with season/episode - which matches
+            # nothing. It is already read as an episode id in step 2 below.
             parent_imdb_raw = (xbmc.getInfoLabel("ListItem.Property(TvShow.IMDBNumber)")
                                or xbmc.getInfoLabel("VideoPlayer.TvShow.IMDBNumber"))
             imdb_digits = _strip_imdb_tt(parent_imdb_raw)
@@ -507,53 +547,81 @@ def get_media_data():
         except Exception as e:
             log(__name__, f"Failed to read true parent IDs from InfoLabels: {e}")
 
-        # 2) If no true parent IDs found, check if we have episode-specific IDs
+        # 2) No true parent IDs, so fall back to whatever id the player exposes.
+        #    These labels describe "the thing being played", and video add-ons disagree about
+        #    what they put there: Seren reports the *episode's* IMDb id, Umbrella and POV
+        #    report the *show's* (peno64's logs, issue #40). Nothing local tells them apart,
+        #    so record the id but flag its role as unknown - the search plan at the end of
+        #    this function tries both readings instead of guessing.
         if not item.get("parent_imdb_id") and not item.get("parent_tmdb_id"):
             try:
-                # These might be episode IDs, not parent IDs
                 possible_episode_imdb = (xbmc.getInfoLabel("VideoPlayer.UniqueID(imdb)")
                                          or xbmc.getInfoLabel("VideoPlayer.IMDBNumber")
                                          or xbmc.getInfoLabel("ListItem.IMDBNumber"))
                 imdb_digits = _strip_imdb_tt(possible_episode_imdb)
                 if imdb_digits and 6 <= len(imdb_digits) <= 8:
                     item["imdb_id"] = int(imdb_digits)
-                    log(__name__, f"Episode-specific IMDb ID (not parent): {item['imdb_id']}")
+                    item["_player_id_role_unknown"] = True
+                    log(__name__, f"Player IMDb ID (show or episode, role unknown): {item['imdb_id']}")
 
                 possible_episode_tmdb = xbmc.getInfoLabel("VideoPlayer.UniqueID(tmdb)")
                 if possible_episode_tmdb and possible_episode_tmdb.isdigit():
                     item["tmdb_id"] = int(possible_episode_tmdb)
-                    log(__name__, f"Episode-specific TMDb ID (not parent): {item['tmdb_id']}")
+                    item["_player_id_role_unknown"] = True
+                    log(__name__, f"Player TMDb ID (show or episode, role unknown): {item['tmdb_id']}")
             except Exception as e:
                 log(__name__, f"Failed to read episode IDs from InfoLabels: {e}")
 
-        # 3) If still missing, fall back to library JSON-RPC (when the show is in the library)
-        if len(item["tvshowid"]) != 0 and (not item["parent_tmdb_id"] or not item["parent_imdb_id"]):
+        # 3) Query the library (when the show is in it) for the true parent IDs and the
+        #    show's ORIGINAL title. Runs whenever we have a tvshowid: even when parent IDs
+        #    are already known we still want originaltitle so localized libraries
+        #    (e.g. Polish "Żywe trupy" -> "The Walking Dead") match on OS.com.
+        #    NB: this is the *show's* originaltitle from the library, unlike
+        #    VideoPlayer.OriginalTitle, which during episode playback returns the
+        #    *episode's* original title (usually empty). Thanks to @notoco (PR #38)
+        #    for reporting the localized-title search failure.
+        if len(item["tvshowid"]) != 0:
             try:
                 TVShowDetails = xbmc.executeJSONRPC(
                     '{ "jsonrpc": "2.0", "id":"1", "method": "VideoLibrary.GetTVShowDetails", '
-                    '"params":{"tvshowid":' + item["tvshowid"] + ', "properties": ["episodeguide", "imdbnumber", "uniqueid"]} }'
+                    '"params":{"tvshowid":' + item["tvshowid"] + ', "properties": ["originaltitle", "episodeguide", "imdbnumber", "uniqueid"]} }'
                 )
                 TVShowDetails_dict = json.loads(TVShowDetails)
                 if "result" in TVShowDetails_dict and "tvshowdetails" in TVShowDetails_dict["result"]:
                     tvshow_details = TVShowDetails_dict["result"]["tvshowdetails"]
 
-                    # parent IMDb
+                    # Prefer the show's original title for the search query (localized-library fix)
+                    original_show_title = normalize_string(tvshow_details.get("originaltitle") or "")
+                    if original_show_title:
+                        item["query"] = original_show_title
+                        log(__name__, f"Using show original title for query: '{original_show_title}'")
+
+                    uniqueids = tvshow_details.get("uniqueid", {})
+                    if not isinstance(uniqueids, dict):
+                        uniqueids = {}
+
+                    # parent IMDb: uniqueid["imdb"] is explicitly typed, so trust it first.
+                    # "imdbnumber" is only the scraper's primary id and may be a TVDB/TMDb
+                    # one, hence require_tt (see _strip_imdb_tt).
                     if not item["parent_imdb_id"]:
-                        imdb_raw = str(tvshow_details.get("imdbnumber") or "")
-                        imdb_digits = _strip_imdb_tt(imdb_raw)
+                        imdb_digits = _strip_imdb_tt(uniqueids.get("imdb"))
+                        source = "uniqueid"
+                        if not imdb_digits:
+                            imdb_digits = _strip_imdb_tt(tvshow_details.get("imdbnumber"), require_tt=True)
+                            source = "imdbnumber"
                         if imdb_digits and 6 <= len(imdb_digits) <= 8:
                             item["parent_imdb_id"] = int(imdb_digits)
-                            log(__name__, f"Parent IMDb via JSON-RPC: {item['parent_imdb_id']}")
+                            log(__name__, f"Parent IMDb via JSON-RPC ({source}): {item['parent_imdb_id']}")
+                        elif tvshow_details.get("imdbnumber"):
+                            log(__name__, "Library imdbnumber is not an IMDb id (no 'tt' prefix), ignoring it")
 
                     # parent TMDb (first try uniqueid, then episodeguide fallback)
                     if not item["parent_tmdb_id"]:
                         # Method 1: Try uniqueid field first (more reliable)
-                        uniqueids = tvshow_details.get("uniqueid", {})
-                        if isinstance(uniqueids, dict):
-                            tmdb_raw = uniqueids.get("tmdb", "")
-                            if tmdb_raw and str(tmdb_raw).isdigit():
-                                item["parent_tmdb_id"] = int(tmdb_raw)
-                                log(__name__, f"Parent TMDb via JSON-RPC (uniqueid): {item['parent_tmdb_id']}")
+                        tmdb_raw = uniqueids.get("tmdb", "")
+                        if tmdb_raw and str(tmdb_raw).isdigit():
+                            item["parent_tmdb_id"] = int(tmdb_raw)
+                            log(__name__, f"Parent TMDb via JSON-RPC (uniqueid): {item['parent_tmdb_id']}")
 
                         # Method 2: Fallback to episodeguide if uniqueid didn't work
                         if not item["parent_tmdb_id"]:
@@ -572,16 +640,19 @@ def get_media_data():
             except (json.JSONDecodeError, ET.ParseError, ValueError, KeyError) as e:
                 log(__name__, f"Failed to extract TV show IDs via JSON-RPC: {e}")
 
-        # 4) Try to get specific episode IDs from dedicated episode fields (if available)
+        # 4) Try to get specific episode IDs from dedicated episode fields (if available).
+        #    Unlike step 2 these name the episode explicitly, so the id's role is not in doubt.
         try:
             ep_tmdb = xbmc.getInfoLabel("VideoPlayer.UniqueID(tmdbepisode)")
             if ep_tmdb and ep_tmdb.isdigit():
                 item["tmdb_id"] = int(ep_tmdb)
+                item["_player_id_role_unknown"] = False
                 log(__name__, f"Dedicated Episode TMDb ID: {item['tmdb_id']}")
             ep_imdb = xbmc.getInfoLabel("VideoPlayer.UniqueID(imdbepisode)")
             ep_imdb_digits = _strip_imdb_tt(ep_imdb)
             if ep_imdb_digits and ep_imdb_digits.isdigit():
                 item["imdb_id"] = int(ep_imdb_digits)
+                item["_player_id_role_unknown"] = False
                 log(__name__, f"Dedicated Episode IMDb ID: {item['imdb_id']}")
         except Exception as e:
             log(__name__, f"Failed to read dedicated episode IDs from InfoLabels: {e}")
@@ -650,6 +721,12 @@ def get_media_data():
     # ---------- Final ID Strategy Selection (TV Episodes Only) ----------
     # Ensure we only use ONE strategy: parent IDs + season/episode OR episode-specific IDs
     if item.get("tv_show_title"):
+        # Keep whatever the player gave us before the parent strategies clear it: a parent id
+        # can be wrong (a mis-scraped library, or a foreign id), and then the episode id is
+        # the only thing left that identifies the episode. Used as a last attempt below.
+        item["_player_episode_ids"] = {"imdb_id": item.get("imdb_id"),
+                                       "tmdb_id": item.get("tmdb_id")}
+
         if item.get("parent_imdb_id"):
             # Strategy: Use parent IMDb ID with season/episode
             item["parent_tmdb_id"] = None  # Clear conflicting parent ID
@@ -690,32 +767,132 @@ def get_media_data():
             log(__name__, f"🎯 API Strategy: title search only '{item['query']}' (no IDs available)")
     else:
         # For movies: Use specific movie IDs
-        if item.get("imdb_id"):
-            log(__name__, f"🎯 API Strategy: imdb_id={item['imdb_id']} (movie)")
-        elif item.get("tmdb_id"):
-            log(__name__, f"🎯 API Strategy: tmdb_id={item['tmdb_id']} (movie)")
+        if item.get("imdb_id") or item.get("tmdb_id"):
+            id_name = f"imdb_id={item.get('imdb_id')}" if item.get("imdb_id") else f"tmdb_id={item.get('tmdb_id')}"
+            log(__name__, f"🎯 API Strategy: {id_name} (movie)")
         else:
             log(__name__, f"🎯 API Strategy: title search only '{item['query']}' (movie, no IDs available)")
 
-    if not item.get("query"):
-        fallback_title = normalize_string(xbmc.getInfoLabel("VideoPlayer.Title"))
-        if fallback_title:
-            item["query"] = fallback_title
-        else:
-            # Last resort: use filename
-            try:
-                playing_file = get_file_path()
-                if playing_file:
-                    import os
-                    filename = os.path.basename(playing_file)
-                    item["query"] = filename
-            except:
-                item["query"] = "Unknown"
+    fallback_title = item.get("query") or item.get("original_title") or normalize_string(xbmc.getInfoLabel("VideoPlayer.Title"))
+    if not fallback_title:
+        # Last resort: use filename
+        try:
+            playing_file = get_file_path()
+            if playing_file:
+                import os
+                fallback_title = os.path.basename(playing_file)
+        except:
+            fallback_title = "Unknown"
+
+    item["query"] = fallback_title
 
     # Specials handling
     if isinstance(item.get("episode_number"), str) and item["episode_number"] and item["episode_number"].lower().find("s") > -1:
         item["season_number"] = "0"
         item["episode_number"] = item["episode_number"][-1:]
+
+    # ---------- Search plan for TV episodes & Movies ----------
+    # When unique IDs (IMDb/TMDb) are available, sending 'query' or 'year' introduces
+    # over-constrained text matching (e.g. original titles in other languages or release year discrepancies).
+    # We clear 'query' and 'year' for the primary ID search, keeping title_attempt as a fallback.
+    if item.get("tv_show_title"):
+        title_attempt = {"query": fallback_title,
+                         "season_number": item.get("season_number"),
+                         "episode_number": item.get("episode_number"),
+                         "imdb_id": None, "tmdb_id": None,
+                         "parent_imdb_id": None, "parent_tmdb_id": None}
+        role_unknown = item.pop("_player_id_role_unknown", False)
+        episode_ids = item.pop("_player_episode_ids", None) or {}
+
+        if role_unknown and (item.get("imdb_id") or item.get("tmdb_id")):
+            if item.get("imdb_id"):
+                id_key, parent_key, value = "imdb_id", "parent_imdb_id", item["imdb_id"]
+            else:
+                id_key, parent_key, value = "tmdb_id", "parent_tmdb_id", item["tmdb_id"]
+            item[parent_key] = value
+            item[id_key] = None
+            item["query"] = ""
+            item["year"] = None
+            item["ambiguous_player_id"] = {id_key: value}
+            item["search_fallbacks"] = [
+                # then as the episode's id, which has to be sent on its own (Seren)
+                {parent_key: None, id_key: value,
+                 "query": "", "season_number": None, "episode_number": None},
+                # and only if neither id matches anything, fall back to a title search
+                title_attempt,
+            ]
+            log(__name__, f"Ambiguous player ID {value}: trying {parent_key} + season/episode, "
+                          f"then {id_key} alone, then title search")
+        elif item.get("imdb_id") or item.get("tmdb_id"):
+            # Known to be the episode's own id, so it must travel alone.
+            item["query"] = ""
+            item["year"] = None
+            item["season_number"] = None
+            item["episode_number"] = None
+            item["search_fallbacks"] = [title_attempt]
+            log(__name__, "Episode-level ID search: dropped query/year/season/episode (kept for retry)")
+        elif item.get("parent_imdb_id") or item.get("parent_tmdb_id"):
+            # Show ID + season/episode: drop redundant query and year.
+            # A parent id from the library is usually right, but a mis-scraped show yields
+            # one OS.com has never seen and the search returns nothing - so keep the episode
+            # id the player gave us as a second attempt rather than discarding it. Seen in a
+            # user log: a library "imdbnumber" that was not an IMDb id at all went out as
+            # parent_imdb_id (0 results) while the episode's own id matched 10 subtitles.
+            item["query"] = ""
+            item["year"] = None
+            fallbacks = []
+            if episode_ids.get("imdb_id") or episode_ids.get("tmdb_id"):
+                fallbacks.append({"parent_imdb_id": None, "parent_tmdb_id": None,
+                                  "imdb_id": episode_ids.get("imdb_id"),
+                                  "tmdb_id": episode_ids.get("tmdb_id"),
+                                  "query": "", "season_number": None, "episode_number": None})
+                log(__name__, f"Show-level ID search, keeping episode ID "
+                              f"{episode_ids.get('imdb_id') or episode_ids.get('tmdb_id')} as a fallback")
+            fallbacks.append(title_attempt)
+            item["search_fallbacks"] = fallbacks
+            log(__name__, "Show-level ID search: dropped redundant query and year (kept for retry)")
+    else:
+        # Movie search: If unique IMDb/TMDb ID is present, drop query and year from primary request
+        if item.get("imdb_id") or item.get("tmdb_id"):
+            title_attempt = {"query": fallback_title, "year": item.get("year"),
+                             "imdb_id": None, "tmdb_id": None}
+            item["query"] = ""
+            item["year"] = None
+            item["search_fallbacks"] = [title_attempt]
+            log(__name__, "Movie ID search: dropped redundant query and year (kept for retry)")
+
+        # NB: no parent_* branch here. Movies never carry a parent id (those are set only in
+        # the TV block above), and the episode-id fallback that used to live here referenced
+        # `episode_ids`, which is not bound on this path - it was unreachable dead code that
+        # would have raised NameError if it ever ran. The real logic is in the TV branch.
+
+    # ---------- Tier 4: the raw release filename, as a last resort ----------
+    # Everything above searches by id or by a cleaned-up title. When all of those miss - a
+    # mis-scraped library, an unusual release, a feature OS.com files under something else -
+    # the release filename itself sometimes matches, because uploaders name subtitles after
+    # it. Only reached when every earlier attempt returned nothing, so it costs a request
+    # exactly when we would otherwise show the user nothing at all.
+    # Skipped for streams: there the "filename" is a CDN path with no release info in it,
+    # which is what the extension check below screens out.
+    try:
+        # both are only imported inside other branches of this module, so bind them here
+        import os
+        import re
+
+        playing_file = get_file_path()
+        basename = os.path.basename(playing_file) if playing_file else ""
+        stem = re.sub(r"\.(mkv|mp4|avi|m4v|ts|mov|wmv|iso|m2ts|flv|webm)$", "", basename,
+                      flags=re.IGNORECASE)
+        # stem != basename means a real video extension was stripped, i.e. this looks like a
+        # release filename rather than a CDN URL or an opaque id
+        if stem and stem != basename and stem.lower() != (fallback_title or "").lower():
+            item.setdefault("search_fallbacks", []).append(
+                {"query": stem, "year": None, "season_number": None, "episode_number": None,
+                 "imdb_id": None, "tmdb_id": None,
+                 "parent_imdb_id": None, "parent_tmdb_id": None})
+            log(__name__, f"Added filename fallback: '{stem}'")
+    except Exception as e:
+        log(__name__, f"Could not build the filename fallback: {e}")
 
     # Remove internal-only key
     if "tvshowid" in item:
@@ -726,14 +903,31 @@ def get_media_data():
     return item
 
 
+def is_kodi_hearing_impaired_preferred():
+    """Checks if Kodi has 'prefer subtitles for hearing impaired' enabled in system settings."""
+    try:
+        query = json.dumps({
+            "jsonrpc": "2.0",
+            "method": "Settings.GetSettingValue",
+            "params": {"setting": "subtitles.hearingimpaired"},
+            "id": 1
+        })
+        response = json.loads(xbmc.executeJSONRPC(query))
+        return bool(response.get("result", {}).get("value", False))
+    except Exception:
+        return False
+
+
 def get_language_data(params):
     search_languages = unquote(params.get("languages")).split(",")
     search_languages_str = ""
     preferred_language = params.get("preferredlanguage")
 
     if preferred_language and preferred_language not in search_languages and preferred_language != "Unknown" and preferred_language != "Undetermined":
+        # Only queue the name for conversion below - seeding the string with the
+        # raw English name put ",Slovak,sl,sk" on the wire (leading comma + a
+        # value the API cannot parse as a language code). Backport of the 2.0.0 fix.
         search_languages.append(preferred_language)
-        search_languages_str = search_languages_str + "," + preferred_language
 
     for language in search_languages:
         lang = convert_language(language)
@@ -746,8 +940,13 @@ def get_language_data(params):
         else:
             log(__name__, f"Language code not found: '{language}'")
 
+    hi_setting = __addon__.getSetting("hearing_impaired")
+    # If add-on setting is default "exclude", but Kodi system has prefer hearing impaired ON, reflect Kodi
+    if (not hi_setting or hi_setting == "exclude") and is_kodi_hearing_impaired_preferred():
+        hi_setting = "include"
+
     item = {
-        "hearing_impaired": __addon__.getSetting("hearing_impaired"),
+        "hearing_impaired": hi_setting or "exclude",
         "foreign_parts_only": __addon__.getSetting("foreign_parts_only"),
         "machine_translated": __addon__.getSetting("machine_translated"),
         "ai_translated": __addon__.getSetting("ai_translated"),
@@ -760,11 +959,45 @@ def get_language_data(params):
 def convert_language(language, reverse=False):
     language_list = {
         "English": "en",
+        "Czech": "cs",
+        "Slovak": "sk",
+        "Spanish": "es",
         "Portuguese (Brazil)": "pt-br",
+        "Portuguese (Portugal)": "pt-pt",
         "Portuguese": "pt-pt",
+        "French": "fr",
+        "German": "de",
+        "Italian": "it",
+        "Dutch": "nl",
+        "Polish": "pl",
+        "Russian": "ru",
+        "Ukrainian": "uk",
+        "Turkish": "tr",
+        "Arabic": "ar",
+        "Hebrew": "he",
+        "Greek": "el",
+        "Romanian": "ro",
+        "Hungarian": "hu",
+        "Bulgarian": "bg",
+        "Serbian": "sr",
+        "Croatian": "hr",
+        "Slovenian": "sl",
+        "Swedish": "sv",
+        "Danish": "da",
+        "Norwegian": "no",
+        "Finnish": "fi",
         "Chinese": "zh-cn",
         "Chinese (simplified)": "zh-cn",
-        "Chinese (traditional)": "zh-tw"}
+        "Chinese (traditional)": "zh-tw",
+        "Japanese": "ja",
+        "Korean": "ko",
+        "Vietnamese": "vi",
+        "Thai": "th",
+        "Indonesian": "id",
+        "Malay": "ms",
+        "Hindi": "hi",
+        "Persian": "fa"
+    }
 
     reverse_language_list = {v: k for k, v in list(language_list.items())}
 
