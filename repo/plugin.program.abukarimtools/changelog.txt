@@ -1,3 +1,10 @@
+v3.0.5
+- Skin Installer: fixed "[Errno 66] Directory not empty" when reinstalling a skin that is
+  currently active. The extractor no longer deletes-and-renames the destination folder
+  (which fails on macOS because Kodi holds the live skin's files open, leaving residue that
+  blocks the rename). It now merges/overwrites file-by-file in place, so a loaded skin
+  updates cleanly without switching to Estuary first. Applies to companion installs too.
+
 v3.0.3
 - PPI AF3 Home bridge: home_publish.py no longer hard-codes info.properties.update_properties.
   The installed TinyPPI build had dropped/renamed that function, so the 1 Hz publisher raised

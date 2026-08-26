@@ -69,6 +69,30 @@ def _error(msg):
     xbmcgui.Dialog().ok(TITLE, msg)
 
 
+def _merge_tree(src, dest):
+    """Overwrite dest with src's contents in place, without requiring dest to
+    be empty or removable.
+
+    os.rename onto an existing non-empty dir raises ENOTEMPTY (Errno 66), and
+    rmtree can't clear a directory whose files Kodi holds open (the active
+    skin) -- on macOS the unlink fails mid-walk, leaving residue that then
+    blocks the rename. So instead of replacing the top folder, recurse and
+    overwrite each file individually: open files can still be rewritten in
+    place, so a live skin updates cleanly.
+    """
+    if os.path.isdir(src):
+        os.makedirs(dest, exist_ok=True)
+        for name in os.listdir(src):
+            _merge_tree(os.path.join(src, name), os.path.join(dest, name))
+    else:
+        parent = os.path.dirname(dest)
+        if parent:
+            os.makedirs(parent, exist_ok=True)
+        if os.path.isdir(dest):
+            shutil.rmtree(dest, ignore_errors=True)
+        shutil.copy2(src, dest)
+
+
 def _fetch_json(url, timeout=15):
     req = urllib.request.Request(url, headers={'User-Agent': 'Kodi'})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
@@ -305,12 +329,7 @@ def _extract_zip(zip_path):
         for top_name in os.listdir(staging_dir):
             src  = os.path.join(staging_dir, top_name)
             dest = os.path.join(ADDONS_PATH, top_name)
-            if os.path.exists(dest):
-                shutil.rmtree(dest) if os.path.isdir(dest) else os.remove(dest)
-            try:
-                os.rename(src, dest)
-            except OSError:
-                shutil.copytree(src, dest) if os.path.isdir(src) else shutil.copy2(src, dest)
+            _merge_tree(src, dest)
 
         progress.update(100, T(30113))
         progress.close()
@@ -666,13 +685,7 @@ def _extract_zip_silent(zip_path):
         for top_name in os.listdir(staging_dir):
             src = os.path.join(staging_dir, top_name)
             dest = os.path.join(ADDONS_PATH, top_name)
-            if os.path.exists(dest):
-                shutil.rmtree(dest) if os.path.isdir(dest) else os.remove(dest)
-            try:
-                os.rename(src, dest)
-            except OSError:
-                (shutil.copytree(src, dest) if os.path.isdir(src)
-                 else shutil.copy2(src, dest))
+            _merge_tree(src, dest)
         return True
     except Exception as e:
         _log('companion extract failed: %s' % e)
