@@ -44,7 +44,7 @@
                 <height>38</height>
                 <align>center</align>
                 <aligny>center</aligny>
-                <font>font12</font>
+                <font>10</font>
                 <textcolor>FF111111</textcolor>
                 <focusedcolor>FF000000</focusedcolor>
                 <texturefocus colordiffuse="FFFFFFFF" border="12">rounded_rect.png</texturefocus>
