@@ -1,25 +1,51 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Simone Bianchelli
+# OptiKlean - Kodi Cleaning and Optimization Addon
+
 import os
 import json
 import urllib.request
 import urllib.parse
+import urllib.error
 import re
 import shutil
 import zipfile
 import hashlib
 import glob
 from datetime import datetime, timedelta
-from distutils.version import LooseVersion
 
 import xbmc
 import xbmcaddon
 import xbmcvfs
 import xbmcgui
 
+from resources.lib.update_state import set_restart_pending
+
+
+def _parse_version(v):
+    """Parse a version string into a comparable tuple of ints."""
+    try:
+        return tuple(int(x) for x in re.split(r'[.\-]', str(v))[:3])
+    except (ValueError, TypeError):
+        return (0, 0, 0)
+
+
+def _try_restart_kodi():
+    try:
+        xbmc.executebuiltin("RestartApp")
+        return
+    except Exception:
+        pass
+    try:
+        xbmc.executebuiltin("Quit")
+    except Exception:
+        pass
+
 class AutoUpdater:
     # 1. Configurazione GitLab
     GITLAB_PROJECT_PATH = "personal4143605/optiklean"  # Formato: "user_or_group/repo"
     GITLAB_BRANCH = "main"                            # Branch di default
-    GITLAB_ACCESS_TOKEN = ""                          # Lasciare vuoto per repo pubblici
+    GITLAB_ACCESS_TOKEN = ""  # nosec B105 - Empty string for public repos, not a hardcoded password
     ADDON_ZIP_NAME = "program.optiklean.zip"          # nome dello zip dell'addon
     
     # 2. Costanti derivate (NON MODIFICARE MANUALMENTE)
@@ -51,7 +77,11 @@ class AutoUpdater:
         self.profile_path = xbmcvfs.translatePath(self.addon.getAddonInfo('profile'))
         self.commit_file = os.path.join(self.profile_path, 'last_commit.json')
         self.temp_dir = os.path.join(self.profile_path, 'temp')
-        
+
+        # Configurazione logo
+        media_path = os.path.join(self.addon_path, 'resources', 'media')
+        self.logo_path = os.path.join(media_path, 'logo.png')
+
         # Crea cartelle se non esistono
         self._ensure_directories()
             
@@ -122,13 +152,18 @@ class AutoUpdater:
                 f"{self.GITLAB_PROJECT_URL}/repository/commits"
                 f"?ref_name={self.GITLAB_BRANCH}&per_page=1&path={self.ADDON_ZIP_NAME}"
             )
+            
+            # Validate URL scheme for security
+            if not url.startswith('https://'):
+                xbmc.log("OptiKlean: Invalid URL scheme, only HTTPS allowed", xbmc.LOGERROR)
+                return None
 
             headers = {}
             if self.GITLAB_ACCESS_TOKEN:
                 headers["Private-Token"] = self.GITLAB_ACCESS_TOKEN
 
             req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with urllib.request.urlopen(req, timeout=10) as response:  # nosec B310
                 commits = json.loads(response.read().decode('utf-8'))
 
                 if not commits:
@@ -141,16 +176,14 @@ class AutoUpdater:
                     'message': commit.get('message', ''),
                     'date': commit['committed_date']
                 }
-        except Exception as e:
+        except (urllib.error.URLError, json.JSONDecodeError) as e:
             xbmc.log(f"OptiKlean: GitLab API error: {str(e)}", xbmc.LOGERROR)
             return None
 
     def _should_update(self, gitlab_commit, local_data):
         xbmc.log("OptiKlean: _should_update() chiamata", xbmc.LOGDEBUG)
         """Determina se è necessario aggiornare"""
-        if self._should_skip_check(local_data):
-            return False
-
+        
         # Estrazione versione dal commit remoto
         version_match = self._extract_version(gitlab_commit['message'])
         gitlab_version = version_match.group(1) if version_match else None
@@ -168,9 +201,10 @@ class AutoUpdater:
             xbmc.log("OptiKlean: No previous commit data, considering update", xbmc.LOGINFO)
             return True
 
-        # Commit ID immutato
+        # Commit ID immutato - solo in questo caso controlliamo il limite temporale
         if local_data['commit_id'] == gitlab_commit['id']:
-            xbmc.log("OptiKlean: Commit ID unchanged, no update needed", xbmc.LOGDEBUG)
+            xbmc.log("OptiKlean: Commit ID unchanged, checking time limits", xbmc.LOGDEBUG)
+            self._should_skip_check(local_data)
             return False
 
         if not gitlab_version:
@@ -180,7 +214,10 @@ class AutoUpdater:
         xbmc.log(f"OptiKlean: Version comparison - Remote: {gitlab_version}, Local: {local_version}", xbmc.LOGINFO)
 
         try:
-            return LooseVersion(gitlab_version) > LooseVersion(local_version)
+            is_newer = _parse_version(gitlab_version) > _parse_version(local_version)
+            if is_newer:
+                xbmc.log("OptiKlean: New version found, ignoring time limits for update", xbmc.LOGINFO)
+            return is_newer
         except Exception as e:
             xbmc.log(f"OptiKlean: Version comparison error: {str(e)}, updating for safety", xbmc.LOGWARNING)
             return True
@@ -188,6 +225,7 @@ class AutoUpdater:
     def _should_skip_check(self, local_data):
         """Determina se saltare il controllo per limiti di frequenza"""
         if not local_data.get('last_check'):
+            xbmc.log("OptiKlean: No previous check time, not skipping", xbmc.LOGDEBUG)
             return False
 
         try:
@@ -196,8 +234,10 @@ class AutoUpdater:
 
             # Usa il valore parametrico invece della costante
             if time_diff < timedelta(hours=self.update_check_interval):
-                xbmc.log(f"OptiKlean: Skipping check, last one was {time_diff.total_seconds()/3600:.1f} hours ago", xbmc.LOGDEBUG)
+                xbmc.log(f"OptiKlean: Skipping check, last one was {time_diff.total_seconds()/3600:.1f} hours ago (interval: {self.update_check_interval}h)", xbmc.LOGDEBUG)
                 return True
+            else:
+                xbmc.log(f"OptiKlean: Time limit passed ({time_diff.total_seconds()/3600:.1f}h > {self.update_check_interval}h), check allowed", xbmc.LOGDEBUG)
 
         except Exception as e:
             xbmc.log(f"OptiKlean: Error calculating check interval: {str(e)}", xbmc.LOGWARNING)
@@ -288,118 +328,194 @@ class AutoUpdater:
         except Exception as e:
             xbmc.log(f"OptiKlean: Settings backup error: {str(e)}", xbmc.LOGWARNING)
 
-    def _show_update_notification(self, commit_info):
+    def _localized(self, string_id, fallback=""):
+        try:
+            return self.addon.getLocalizedString(string_id) or fallback
+        except Exception:
+            return fallback
+
+    @staticmethod
+    def _build_update_summary(version, commit_id):
+        if version and version.lower() != "unknown":
+            return version
+        if commit_id:
+            return commit_id[:8]
+        return ""
+
+    def _build_restart_pending_message(self, summary):
+        parts = [
+            self._localized(31283, "OptiKlean has been updated. Restart Kodi before using the addon."),
+        ]
+        if summary:
+            parts.append(
+                self._localized(31285, "Installed update: {summary}").format(summary=summary)
+            )
+        parts.append(self._localized(31173, "Would you like to restart Kodi now?"))
+        return "[CR][CR]".join(part for part in parts if part)
+
+    def _show_restart_pending_notice(self):
+        xbmcgui.Dialog().notification(
+            self.addon.getAddonInfo("name"),
+            self._localized(
+                31284,
+                "Restart postponed. OptiKlean will stay unavailable until Kodi is restarted.",
+            ),
+            xbmcgui.NOTIFICATION_WARNING,
+            4000,
+        )
+
+    def _show_update_notification(self, commit_info, version):
         """Mostra notifica e dialog all'utente"""
         short_id = commit_info['id'][:8]
+        summary = self._build_update_summary(version, commit_info.get('id', ''))
         commit_message = commit_info['message'].replace('\n', '[CR]')
         
-        # 1. Notifica popup
-        xbmc.executebuiltin(
-            f'Notification("OptiKlean", "Updated to commit {short_id}", 4000)'
+        xbmcgui.Dialog().notification(
+            self._localized(31236, "OptiKlean update"),
+            self._localized(31285, "Installed update: {summary}").format(
+                summary=summary or short_id
+            ),
+            self.logo_path, 
+            4000
         )
-        xbmc.sleep(4000)  # Attesa per la notifica
         
-        # 2. Finestra di dialogo dettagliata
         try:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(
-                f"OptiKlean update {short_id}",
-                f"{commit_message}\n\nTo apply the update, it is recommended to restart Kodi."
+            xbmcgui.Dialog().ok(
+                f"{self._localized(31236, 'OptiKlean update')} {summary or short_id}",
+                f"{commit_message}\n\n{self._localized(31283, 'OptiKlean has been updated. Restart Kodi before using the addon.')}"
             )
+            if xbmcgui.Dialog().yesno(
+                self._localized(31282, "Restart required"),
+                self._build_restart_pending_message(summary or short_id),
+            ):
+                xbmc.log("OptiKlean: User accepted restart prompt after addon update", xbmc.LOGINFO)
+                _try_restart_kodi()
+            else:
+                xbmc.log("OptiKlean: User deferred restart after addon update", xbmc.LOGINFO)
+                self._show_restart_pending_notice()
         except Exception as e:
             xbmc.log(f"OptiKlean: Dialog error: {str(e)}", xbmc.LOGERROR)
 
-    def _download_with_retry(self, url, destination, max_retries=MAX_DOWNLOAD_RETRY):
-        """Scarica un file con gestione dei tentativi"""
+    def _build_request_headers(self):
         headers = {}
         if self.GITLAB_ACCESS_TOKEN:
             headers["Private-Token"] = self.GITLAB_ACCESS_TOKEN
-            
+        return headers
+
+    @staticmethod
+    def _log_download_progress(downloaded, file_size):
+        if file_size <= 0:
+            return
+        percent = downloaded * 100 / file_size
+        if percent % 10 == 0:
+            xbmc.log(f"OptiKlean: Download {percent:.1f}% complete", xbmc.LOGDEBUG)
+
+    def _download_once(self, url, destination):
+        req = urllib.request.Request(url, headers=self._build_request_headers())
+        with urllib.request.urlopen(req, timeout=30) as response, open(destination, 'wb') as out_file:  # nosec B310
+            file_size = int(response.info().get('Content-Length', 0))
+            downloaded = 0
+            block_size = 8192
+
+            while True:
+                buffer = response.read(block_size)
+                if not buffer:
+                    break
+
+                downloaded += len(buffer)
+                out_file.write(buffer)
+                self._log_download_progress(downloaded, file_size)
+
+        xbmc.log(f"OptiKlean: Download complete: {downloaded} bytes", xbmc.LOGINFO)
+        return True
+
+    def _notify_download_failed(self):
+        xbmcgui.Dialog().notification(
+            self.addon.getLocalizedString(30998),
+            self.addon.getLocalizedString(30220),
+            xbmcgui.NOTIFICATION_ERROR,
+            3000,
+        )
+
+    @staticmethod
+    def _cleanup_download_artifacts(temp_extract, zip_path):
+        try:
+            if os.path.exists(temp_extract):
+                shutil.rmtree(temp_extract, ignore_errors=True)
+            if os.path.exists(zip_path):
+                os.remove(zip_path)
+        except Exception as error:
+            xbmc.log(f"OptiKlean: Cleanup error: {str(error)}", xbmc.LOGWARNING)
+
+    def _build_update_zip_url(self, commit_info):
+        return (
+            f"{self.GITLAB_PROJECT_URL}/repository/files/"
+            f"{urllib.parse.quote(self.ADDON_ZIP_NAME, safe='')}/raw"
+            f"?ref={commit_info['id']}"
+        )
+
+    def _download_with_retry(self, url, destination, max_retries=MAX_DOWNLOAD_RETRY):
+        """Scarica un file con gestione dei tentativi"""
+        # Validate URL scheme for security
+        if not url.startswith('https://'):
+            xbmc.log("OptiKlean: Invalid URL scheme, only HTTPS allowed", xbmc.LOGERROR)
+            return False
+
         for attempt in range(1, max_retries + 1):
             try:
-                req = urllib.request.Request(url, headers=headers)
-                with urllib.request.urlopen(req, timeout=30) as response, open(destination, 'wb') as out_file:
-                    file_size = int(response.info().get('Content-Length', 0))
-                    downloaded = 0
-                    block_size = 8192
-                    
-                    while True:
-                        buffer = response.read(block_size)
-                        if not buffer:
-                            break
-                            
-                        downloaded += len(buffer)
-                        out_file.write(buffer)
-                        
-                        if file_size > 0:
-                            percent = downloaded * 100 / file_size
-                            if percent % 10 == 0:  # Log ogni 10%
-                                xbmc.log(f"OptiKlean: Download {percent:.1f}% complete", xbmc.LOGDEBUG)
-                
-                xbmc.log(f"OptiKlean: Download complete: {downloaded} bytes", xbmc.LOGINFO)
-                return True
-                
-            except Exception as e:
-                xbmc.log(f"OptiKlean: Download attempt {attempt} failed: {str(e)}", xbmc.LOGWARNING)
-                
+                return self._download_once(url, destination)
+            except urllib.error.URLError as error:
+                xbmc.log(f"OptiKlean: Download attempt {attempt} failed: {str(error)}", xbmc.LOGWARNING)
                 if attempt < max_retries:
                     xbmc.sleep(2000)  # Attendi prima di riprovare
-                else:
-                    xbmc.log("OptiKlean: Download failed after maximum retries", xbmc.LOGERROR)
-                    return False
-        
+
+        xbmc.log("OptiKlean: Download failed after maximum retries", xbmc.LOGERROR)
         return False
 
     def _perform_update(self, commit_info):
         """Esegue l'aggiornamento completo con notifiche"""
         try:
-            # Download
-            zip_url = (
-                f"{self.GITLAB_PROJECT_URL}/repository/files/"
-                f"{urllib.parse.quote(self.ADDON_ZIP_NAME, safe='')}/raw"
-                f"?ref={commit_info['id']}"
-            )
+            zip_url = self._build_update_zip_url(commit_info)
             zip_path = os.path.join(self.temp_dir, 'update.zip')
 
-            # Verifica se il file esiste già e rimuovilo
             if os.path.exists(zip_path):
                 os.remove(zip_path)
 
-            # Download con retry
             if not self._download_with_retry(zip_url, zip_path):
-                xbmc.executebuiltin('Notification("OptiKlean", "Download failed", 3000)')
+                self._notify_download_failed()
                 return False
 
-            # Installazione
-            if self._install_update(zip_path):
-                version_match = self._extract_version(commit_info['message'])
-                gitlab_version = version_match.group(1) if version_match else "unknown"
-                self._save_commit_data(commit_info['id'], gitlab_version)
+            if not self._install_update(zip_path):
+                return False
 
-                if self._is_auto_update_enabled():
-                    # xbmc.executebuiltin('Notification("OptiKlean", "Update installed", 2000)')
-                    self._show_update_notification(commit_info)
+            version_match = self._extract_version(commit_info['message'])
+            gitlab_version = version_match.group(1) if version_match else "unknown"
+            self._save_commit_data(commit_info['id'], gitlab_version)
+            if not set_restart_pending(
+                commit_id=commit_info.get('id', ''),
+                version=gitlab_version,
+                message=commit_info.get('message', ''),
+            ):
+                xbmc.log("OptiKlean: Failed to persist restart-pending marker after update", xbmc.LOGWARNING)
 
-                    # Pulizia SOLO dopo successo e notifica
-                    temp_extract = os.path.join(self.temp_dir, 'extracted')
-                    try:
-                        if os.path.exists(temp_extract):
-                            shutil.rmtree(temp_extract, ignore_errors=True)
-                        if os.path.exists(zip_path):
-                            os.remove(zip_path)
-                    except Exception as e:
-                        xbmc.log(f"OptiKlean: Cleanup error: {str(e)}", xbmc.LOGWARNING)
-                else:
-                    xbmc.log("OptiKlean: Update installed but auto-update disabled", xbmc.LOGINFO)
+            if self._is_auto_update_enabled():
+                self._show_update_notification(commit_info, gitlab_version)
+                self._cleanup_download_artifacts(os.path.join(self.temp_dir, 'extracted'), zip_path)
+            else:
+                xbmc.log("OptiKlean: Update installed but auto-update disabled", xbmc.LOGINFO)
 
-                return True
+            return True
 
         except Exception as e:
             xbmc.log(f"OptiKlean: Update failed: {str(e)}", xbmc.LOGERROR)
-            xbmc.executebuiltin(
-                f'Notification("OptiKlean Error", "Update failed: {str(e)}", 5000)'
+            # 30221: "Update failed"
+            xbmcgui.Dialog().notification(
+                self.addon.getLocalizedString(30998),  # "Error"
+                f"{self.addon.getLocalizedString(30221)}: {str(e)}", 
+                xbmcgui.NOTIFICATION_ERROR, 
+                5000
             )
-        return False
+            return False
 
     def check_and_update(self):
         """Controlla gli aggiornamenti e li installa se necessario"""
@@ -419,6 +535,12 @@ class AutoUpdater:
 
             if not gitlab_commit:
                 xbmc.log("OptiKlean: Failed to retrieve commit information", xbmc.LOGWARNING)
+                # Save last_check even on API failure so the rate-limit is respected
+                # and we don't hammer the API every cycle when the repo is empty or unreachable.
+                self._save_commit_data(
+                    local_data.get('commit_id', ''),
+                    local_data.get('gitlab_version', self.current_version),
+                )
                 return False
                 
             if self._should_update(gitlab_commit, local_data):
@@ -426,11 +548,18 @@ class AutoUpdater:
                 return self._perform_update(gitlab_commit)
             else:
                 xbmc.log("OptiKlean: No update needed", xbmc.LOGDEBUG)
+                version_match = self._extract_version(gitlab_commit['message'])
+                gitlab_version = version_match.group(1) if version_match else local_data.get('gitlab_version', self.current_version)
+                self._save_commit_data(gitlab_commit['id'], gitlab_version)
                 return False
                 
         except Exception as e:
             xbmc.log(f"OptiKlean: Critical update error: {str(e)}", xbmc.LOGERROR)
-            xbmc.executebuiltin(
-                'Notification("OptiKlean Error", "Update check failed", 5000)'
+            # 30221: "Update failed"
+            xbmcgui.Dialog().notification(
+                self.addon.getLocalizedString(30998),  # "Error"
+                self.addon.getLocalizedString(30221), 
+                xbmcgui.NOTIFICATION_ERROR, 
+                5000
             )
         return False

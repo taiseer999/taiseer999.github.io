@@ -1,38 +1,50 @@
 <settings>
-    <category label="Settings">
+    <category label="30000">
 
-		<setting type="label" visible="false" />
-
-        <setting type="lsep" label="Automatic Cleaning Settings" />
+        <setting type="lsep" label="30001" />
         
         <!-- Cache and Temp -->
-        <setting id="clear_cache_and_temp_enable" type="bool" label="Enable clear cache/temp" default="false" />
-        <setting id="clear_cache_and_temp_interval" type="number" label="Days between cache/temp cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        <setting id="clear_cache_and_temp_enable" type="bool" label="30002" default="false" />
+        <setting id="clear_cache_and_temp_interval" type="slider" label="30003" default="7" range="1,1,30" option="int" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)" />
         
         <!-- Thumbnails -->
-        <setting id="clear_unused_thumbnails_enable" type="bool" label="Enable clear unused thumbnails" default="false" />
-        <setting id="clear_unused_thumbnails_interval" type="number" label="Days between unused thumbnails cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        <setting id="clear_unused_thumbnails_enable" type="bool" label="30004" default="false" />
+        <setting id="clear_unused_thumbnails_interval" type="slider" label="30005" default="7" range="1,1,30" option="int" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)" />
         
         <!-- Addon Leftovers -->
-        <setting id="clear_addon_leftovers_enable" type="bool" label="Enable clear addon leftovers" default="false" />
-        <setting id="clear_addon_leftovers_interval" type="number" label="Days between addon leftovers cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        <setting id="clear_addon_leftovers_enable" type="bool" label="30006" default="false" />
+        <setting id="clear_addon_leftovers_interval" type="slider" label="30007" default="7" range="1,1,30" option="int" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)" />
         
         <!-- Packages -->
-        <setting id="clear_kodi_packages_enable" type="bool" label="Enable clear packages" default="false" />
-        <setting id="clear_kodi_packages_interval" type="number" label="Days between packages cleaning" default="7" minimum="1" maximum="30" subsetting="true" />
+        <setting id="clear_kodi_packages_enable" type="bool" label="30008" default="false" />
+        <setting id="clear_kodi_packages_interval" type="slider" label="30009" default="7" range="1,1,30" option="int" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)" />
         
         <!-- Databases -->
-        <setting id="optimize_databases_enable" type="bool" label="Enable databases optimization" default="false" />
-        <setting id="optimize_databases_interval" type="number" label="Days between databases optimization" default="7" minimum="1" maximum="30" subsetting="true" />
+        <setting id="optimize_databases_enable" type="bool" label="30010" default="false" />
+        <setting id="optimize_databases_interval" type="slider" label="30011" default="7" range="1,1,30" option="int" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)" />
         
-        <!-- Help Text -->
-        <setting type="lsep" label="Interval Help" />
-        <setting type="label" label="All interval values must be between 1-30 days." />
-        <setting type="label" label="Values outside this range will be automatically adjusted." />
-		
-        <!-- Auto update -->
-        <setting type="lsep" label="Auto Updates" />
-        <setting id="enable_auto_updates" type="bool" label="Auto-update" default="true" />
-        <setting id="update_check_interval" type="number" label="Update check interval (hours)" default="24" min="1" max="168" step="1" />
+        <!-- Autostart Delay - visible only if ANY automatic cleaning is enabled -->
+        <setting id="autostart_delay" type="slider" label="30012" default="0" range="0,1,30" option="int" visible="eq(-2,true) + eq(-4,true) + eq(-6,true) + eq(-8,true) + eq(-10,true)" />
+
+    </category>
+
+    <category label="30013">
+
+        <!-- Backup Settings -->
+        <setting type="lsep" label="30013" />
+        <setting id="backup_path" type="folder" label="30014" default="" />
+
+        <setting type="lsep" label="30015" />
+        <setting type="label" label="30016" />
+        <setting type="label" label="30017" />
+        <setting type="label" label="30018" />
+    </category>
+
+    <category label="30019">
+
+        <setting type="lsep" label="30019" />
+        <setting id="enable_auto_updates" type="bool" label="30020" default="true" />
+        <setting id="update_check_interval" type="slider" label="30021" default="24" range="1,1,72" option="int" />
+
     </category>
 </settings>
