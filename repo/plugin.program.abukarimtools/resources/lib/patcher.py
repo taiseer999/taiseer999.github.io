@@ -49,6 +49,14 @@ _DEXAUTO_ADDONXML_OLD_B64 = 'ICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc3VidGl0bGUubW9
 _DEXAUTO_ADDONXML_NEW_B64 = 'ICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc3VidGl0bGUubW9kdWxlIiBsaWJyYXJ5PSJzZXJ2aWNlLnB5Ij4KICAgICAgICA8cHJvdmlkZXM+c3VidGl0bGVzPC9wcm92aWRlcz4KICAgIDwvZXh0ZW5zaW9uPgoKICAgIDwhLS0gQVVUT19ETF9WNTU1OiBhdXRvLWRvd25sb2FkIHNlcnZpY2UgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLT4KICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc2VydmljZSIgbGlicmFyeT0ic2VydmljZV9hdXRvLnB5Ii8+Cg=='
 
 
+# ── Prism TMDbHelper external-id play bridge (by ABUKARIM TOOLS) ──
+# Prism (a Seren fork) identifies media by its own simkl_id and getSources cannot
+# consume a TMDbHelper {tmdb}/{imdb} id. This module resolves tmdb/imdb -> simkl_id
+# via the Simkl /redirect endpoint, mills the item into Prism's sync DB, then hands
+# off to the normal getSources flow. Shipped inline (base64) like the QR helpers.
+_PRISM_BRIDGE_B64 = 'IyAtKi0gY29kaW5nOiB1dGYtOCAtKi0KIiIiCnRtZGJoZWxwZXJfYnJpZGdlLnB5ICDigJQgIFByaXNtIChTZXJlbiBmb3JrKQoKRXh0ZXJuYWwtSUQgcGxheWJhY2sgYnJpZGdlIGZvciBUTURiSGVscGVyIChhbmQgYW55IGNhbGxlciB0aGF0IG9ubHkgaGFzCnRtZGIgLyBpbWRiIGlkcykuICBUTURiSGVscGVyIHBsYXllcnMgcGFzcyB7dG1kYn0ve2ltZGJ9L3tzZWFzb259L3tlcGlzb2RlfTsKUHJpc20ncyBuYXRpdmUgYGdldFNvdXJjZXNgIGFjdGlvbiBvbmx5IHVuZGVyc3RhbmRzIGl0cyBPV04gYHNpbWtsX2lkYCwgbG9va2VkCnVwIGluIHRoZSBsb2NhbCBTaW1rbCBzeW5jIGRhdGFiYXNlLiAgVGhpcyBtb2R1bGUgcmVzb2x2ZXMgYW4gZXh0ZXJuYWwgaWQgaW50bwp0aGUgbWF0Y2hpbmcgU2lta2wgZW50aXR5LCBtYWtlcyBzdXJlIGl0IGV4aXN0cyBpbiB0aGUgc3luYyBEQiwgYnVpbGRzIHRoZQpjYW5vbmljYWwgYGFjdGlvbl9hcmdzYCB0aGF0IGBnZXRfaXRlbV9pbmZvcm1hdGlvbigpYCBleHBlY3RzLCBhbmQgaGFuZHMgb2ZmIHRvCnRoZSBub3JtYWwgZ2V0U291cmNlcyBwbGF5YmFjayBmbG93LgoKSW5qZWN0ZWQvcmVnaXN0ZXJlZCBieSBBQlVLQVJJTSBUT09MUy4gIFNlbGYtY29udGFpbmVkOiBpdCB1c2VzIG9ubHkgcHVibGljClByaXNtIGhlbHBlcnMgKHNpbWtsIGluZGV4ZXIgcmVkaXJlY3QgKyBzeW5jIGRhdGFiYXNlKSwgc28gaXQgc3Vydml2ZXMgbWlub3IKdXBzdHJlYW0gY2h1cm4uCiIiIgpmcm9tIF9fZnV0dXJlX18gaW1wb3J0IGFubm90YXRpb25zCgppbXBvcnQganNvbgoKaW1wb3J0IHhibWNndWkKCmZyb20gcmVzb3VyY2VzLmxpYi5tb2R1bGVzLmdsb2JhbHMgaW1wb3J0IGcKCgpkZWYgX2RpYWxvZ19ub3RpZnkobXNnOiBzdHIpIC0+IE5vbmU6CiAgICB0cnk6CiAgICAgICAgeGJtY2d1aS5EaWFsb2coKS5ub3RpZmljYXRpb24oZy5BRERPTl9OQU1FLCBtc2csIHRpbWU9NDAwMCkKICAgIGV4Y2VwdCBFeGNlcHRpb246CiAgICAgICAgZy5sb2dfc3RhY2t0cmFjZSgpCgoKZGVmIF9yZXNvbHZlX3NpbWtsX2lkKHRtZGI9Tm9uZSwgaW1kYj1Ob25lLCBtZWRpYV90eXBlPU5vbmUpOgogICAgIiIiUmVzb2x2ZSBhbiBleHRlcm5hbCBpZCB0byAoc2lta2xfaWQsIGNhdGFsb2cpIHZpYSB0aGUgU2lta2wgL3JlZGlyZWN0IGVuZHBvaW50LgoKICAgIG1lZGlhX3R5cGUgaXMgVE1EYkhlbHBlcidzICgibW92aWUiIHwgInR2Iik7IGNhdGFsb2cgcmV0dXJuZWQgaXMgUHJpc20ncwogICAgKCJtb3ZpZSIgfCAidHYiIHwgImFuaW1lIikuCiAgICAiIiIKICAgIGZyb20gcmVzb3VyY2VzLmxpYi5pbmRleGVycy5zaW1rbCBpbXBvcnQgU2lta2xBUEkKCiAgICBhcGkgPSBTaW1rbEFQSSgpCiAgICByZXNvbHZlZCA9IGFwaS5yZWRpcmVjdF9zaW1rbF9pZCgKICAgICAgICBpbWRiPWltZGIgb3IgTm9uZSwKICAgICAgICB0bWRiPWludCh0bWRiKSBpZiB0bWRiIG5vdCBpbiAoTm9uZSwgIiIsICJOb25lIikgZWxzZSBOb25lLAogICAgICAgIHR5cGU9bWVkaWFfdHlwZSBpZiBtZWRpYV90eXBlIGluICgibW92aWUiLCAidHYiKSBlbHNlIE5vbmUsCiAgICApCiAgICByZXR1cm4gcmVzb2x2ZWQgICMgKHNpbWtsX2lkLCBjYXRhbG9nKSBvciBOb25lCgoKZGVmIF9lbnN1cmVfbW92aWVfcm93KHNpbWtsX2lkOiBpbnQpOgogICAgIiIiTWFrZSBzdXJlIHRoZSBtb3ZpZSBleGlzdHMgaW4gdGhlIHN5bmMgREI7IHJldHVybiBpdHMgaXRlbV9pbmZvcm1hdGlvbi4iIiIKICAgIGZyb20gcmVzb3VyY2VzLmxpYi5kYXRhYmFzZS5zZXNzaW9uIGltcG9ydCBnZXRfc3luY19kYXRhYmFzZQogICAgZnJvbSByZXNvdXJjZXMubGliLmluZGV4ZXJzLnNpbWtsIGltcG9ydCBTaW1rbEFQSQoKICAgIGRiID0gZ2V0X3N5bmNfZGF0YWJhc2UoKQogICAgcm93ID0gZGIuZmV0Y2hvbmUoIlNFTEVDVCBzaW1rbF9pZCBGUk9NIG1vdmllcyBXSEVSRSBzaW1rbF9pZCA9ID8iLCAoaW50KHNpbWtsX2lkKSwpKQogICAgaWYgbm90IHJvdzoKICAgICAgICBzaW1rbF9vYmplY3QgPSBTaW1rbEFQSSgpLmdldF9tb3ZpZV9qc29uKGludChzaW1rbF9pZCkpCiAgICAgICAgaWYgc2lta2xfb2JqZWN0OgogICAgICAgICAgICBpdGVtID0geyJzaW1rbF9pZCI6IGludChzaW1rbF9pZCksICJzaW1rbF9vYmplY3QiOiBzaW1rbF9vYmplY3R9CiAgICAgICAgICAgIGRiLmluc2VydF9zaW1rbF9tb3ZpZXMoW2l0ZW1dLCBmb3JjZV9tZXRhPVRydWUpCiAgICByZXR1cm4geyJtZWRpYXR5cGUiOiAibW92aWUiLCAic2lta2xfaWQiOiBpbnQoc2lta2xfaWQpfQoKCmRlZiBfZW5zdXJlX3Nob3dfcm93KHNpbWtsX2lkOiBpbnQpOgogICAgIiIiTWFrZSBzdXJlIHRoZSBzaG93IGV4aXN0cyBpbiB0aGUgc3luYyBEQjsgcmV0dXJuIGl0cyBzaG93IHNpbWtsX2lkLiIiIgogICAgZnJvbSByZXNvdXJjZXMubGliLmRhdGFiYXNlLnNlc3Npb24gaW1wb3J0IGdldF9zeW5jX2RhdGFiYXNlCiAgICBmcm9tIHJlc291cmNlcy5saWIuaW5kZXhlcnMuc2lta2wgaW1wb3J0IFNpbWtsQVBJCgogICAgZGIgPSBnZXRfc3luY19kYXRhYmFzZSgpCiAgICByb3cgPSBkYi5mZXRjaG9uZSgiU0VMRUNUIHNpbWtsX2lkIEZST00gc2hvd3MgV0hFUkUgc2lta2xfaWQgPSA/IiwgKGludChzaW1rbF9pZCksKSkKICAgIGlmIG5vdCByb3c6CiAgICAgICAgc2lta2xfb2JqZWN0ID0gU2lta2xBUEkoKS5nZXRfc2hvd19qc29uKGludChzaW1rbF9pZCkpCiAgICAgICAgaWYgc2lta2xfb2JqZWN0OgogICAgICAgICAgICBpdGVtID0geyJzaW1rbF9pZCI6IGludChzaW1rbF9pZCksICJzaW1rbF9vYmplY3QiOiBzaW1rbF9vYmplY3R9CiAgICAgICAgICAgIGRiLmluc2VydF9zaW1rbF9zaG93cyhbaXRlbV0sIGZvcmNlX21ldGE9VHJ1ZSkKICAgIHJldHVybiBpbnQoc2lta2xfaWQpCgoKZGVmIF9yZXNvbHZlX2VwaXNvZGVfc2lta2xfaWQoc2hvd19zaW1rbF9pZDogaW50LCBzZWFzb246IGludCwgZXBpc29kZTogaW50KToKICAgICIiIk1pbGwgdGhlIHNob3cncyBlcGlzb2RlIHRyZWUgYW5kIHJldHVybiB0aGUgdGFyZ2V0IGVwaXNvZGUncyBzaW1rbF9pZC4iIiIKICAgIGZyb20gcmVzb3VyY2VzLmxpYi5kYXRhYmFzZS5zZXNzaW9uIGltcG9ydCBnZXRfc3luY19kYXRhYmFzZQoKICAgIGRiID0gZ2V0X3N5bmNfZGF0YWJhc2UoKQogICAgIyBnZXRfZXBpc29kZV9saXN0IG1pbGxzIHRoZSBzZWFzb24gZnJvbSBTaW1rbCBvbiBkZW1hbmQgYW5kIHJldHVybnMgcm93cwogICAgIyBjYXJyeWluZyBlYWNoIGVwaXNvZGUncyBvd24gc2lta2xfaWQuCiAgICByb3dzID0gZGIuZ2V0X2VwaXNvZGVfbGlzdCgKICAgICAgICBpbnQoc2hvd19zaW1rbF9pZCksCiAgICAgICAgc2Vhc29uPWludChzZWFzb24pLAogICAgICAgIGhpZGVfdW5haXJlZD1GYWxzZSwKICAgICAgICBoaWRlX3dhdGNoZWQ9RmFsc2UsCiAgICApIG9yIFtdCiAgICBmb3Igcm93IGluIHJvd3M6CiAgICAgICAgaW5mbyA9IHJvdy5nZXQoImluZm8iKSBpZiBpc2luc3RhbmNlKHJvdywgZGljdCkgZWxzZSBOb25lCiAgICAgICAgcyA9IE5vbmUKICAgICAgICBlID0gTm9uZQogICAgICAgIGlmIGlzaW5zdGFuY2UoaW5mbywgZGljdCk6CiAgICAgICAgICAgIHMgPSBpbmZvLmdldCgic2Vhc29uIikKICAgICAgICAgICAgZSA9IGluZm8uZ2V0KCJudW1iZXIiKSBpZiBpbmZvLmdldCgibnVtYmVyIikgaXMgbm90IE5vbmUgZWxzZSBpbmZvLmdldCgiZXBpc29kZSIpCiAgICAgICAgaWYgcyBpcyBOb25lOgogICAgICAgICAgICBzID0gcm93LmdldCgic2Vhc29uIikKICAgICAgICBpZiBlIGlzIE5vbmU6CiAgICAgICAgICAgIGUgPSByb3cuZ2V0KCJudW1iZXIiKSBpZiByb3cuZ2V0KCJudW1iZXIiKSBpcyBub3QgTm9uZSBlbHNlIHJvdy5nZXQoImVwaXNvZGUiKQogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgcyBpcyBub3QgTm9uZSBhbmQgZSBpcyBub3QgTm9uZSBhbmQgaW50KHMpID09IGludChzZWFzb24pIGFuZCBpbnQoZSkgPT0gaW50KGVwaXNvZGUpOgogICAgICAgICAgICAgICAgcmV0dXJuIGludChyb3cuZ2V0KCJzaW1rbF9pZCIpKQogICAgICAgIGV4Y2VwdCAoVHlwZUVycm9yLCBWYWx1ZUVycm9yKToKICAgICAgICAgICAgY29udGludWUKICAgIHJldHVybiBOb25lCgoKZGVmIHBsYXkocGFyYW1zOiBkaWN0KSAtPiBOb25lOgogICAgIiIiUm91dGVyIGVudHJ5OiBhY3Rpb249dG1kYmhlbHBlcl9wbGF5LgoKICAgIEFjY2VwdHMgKGZyb20gdGhlIHBsYXllciBKU09OKToKICAgICAgICBtZWRpYV90eXBlID0gbW92aWUgfCB0diAgICAgICAgKHJlcXVpcmVkKQogICAgICAgIHRtZGIgLyBpbWRiICAgICAgICAgICAgICAgICAgICAoYXQgbGVhc3Qgb25lOyBzaG93LWxldmVsIGZvciBlcGlzb2RlcykKICAgICAgICBzZWFzb24gLyBlcGlzb2RlICAgICAgICAgICAgICAgKHJlcXVpcmVkIGZvciB0diBlcGlzb2RlcykKICAgIFJlc29sdmVzIHRvIGEgUHJpc20gc2lta2wgaXRlbSBhbmQgZGlzcGF0Y2hlcyBnZXRTb3VyY2VzLgogICAgIiIiCiAgICBtZWRpYV90eXBlID0gKHBhcmFtcy5nZXQoIm1lZGlhX3R5cGUiKSBvciAiIikuc3RyaXAoKQogICAgdG1kYiA9IHBhcmFtcy5nZXQoInRtZGIiKQogICAgaW1kYiA9IHBhcmFtcy5nZXQoImltZGIiKQogICAgc2Vhc29uID0gcGFyYW1zLmdldCgic2Vhc29uIikKICAgIGVwaXNvZGUgPSBwYXJhbXMuZ2V0KCJlcGlzb2RlIikKCiAgICBpZiB0bWRiIGluICgiIiwgIk5vbmUiKToKICAgICAgICB0bWRiID0gTm9uZQogICAgaWYgaW1kYiBpbiAoIiIsICJOb25lIik6CiAgICAgICAgaW1kYiA9IE5vbmUKCiAgICBpZiBub3QgKHRtZGIgb3IgaW1kYik6CiAgICAgICAgX2RpYWxvZ19ub3RpZnkoIk5vIFRNRGIvSU1EYiBpZCBzdXBwbGllZCIpCiAgICAgICAgcmV0dXJuCgogICAgdHJ5OgogICAgICAgIGlmIG1lZGlhX3R5cGUgPT0gIm1vdmllIjoKICAgICAgICAgICAgcmVzb2x2ZWQgPSBfcmVzb2x2ZV9zaW1rbF9pZCh0bWRiPXRtZGIsIGltZGI9aW1kYiwgbWVkaWFfdHlwZT0ibW92aWUiKQogICAgICAgICAgICBpZiBub3QgcmVzb2x2ZWQ6CiAgICAgICAgICAgICAgICBfZGlhbG9nX25vdGlmeSgiTW92aWUgbm90IGZvdW5kIG9uIFNpbWtsIikKICAgICAgICAgICAgICAgIHJldHVybgogICAgICAgICAgICBzaW1rbF9pZCwgX2NhdGFsb2cgPSByZXNvbHZlZAogICAgICAgICAgICBfZW5zdXJlX21vdmllX3JvdyhpbnQoc2lta2xfaWQpKQogICAgICAgICAgICBhY3Rpb25fYXJncyA9IHsibWVkaWF0eXBlIjogIm1vdmllIiwgInNpbWtsX2lkIjogaW50KHNpbWtsX2lkKX0KCiAgICAgICAgZWxzZTogICMgdHYgLyBlcGlzb2RlCiAgICAgICAgICAgIGlmIHNlYXNvbiBpbiAoTm9uZSwgIiIpIG9yIGVwaXNvZGUgaW4gKE5vbmUsICIiKToKICAgICAgICAgICAgICAgIF9kaWFsb2dfbm90aWZ5KCJTZWFzb24vZXBpc29kZSBtaXNzaW5nIGZvciBUViBwbGF5YmFjayIpCiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgcmVzb2x2ZWQgPSBfcmVzb2x2ZV9zaW1rbF9pZCh0bWRiPXRtZGIsIGltZGI9aW1kYiwgbWVkaWFfdHlwZT0idHYiKQogICAgICAgICAgICBpZiBub3QgcmVzb2x2ZWQ6CiAgICAgICAgICAgICAgICBfZGlhbG9nX25vdGlmeSgiU2hvdyBub3QgZm91bmQgb24gU2lta2wiKQogICAgICAgICAgICAgICAgcmV0dXJuCiAgICAgICAgICAgIHNob3dfc2lta2xfaWQsIF9jYXRhbG9nID0gcmVzb2x2ZWQKICAgICAgICAgICAgc2hvd19zaW1rbF9pZCA9IF9lbnN1cmVfc2hvd19yb3coaW50KHNob3dfc2lta2xfaWQpKQogICAgICAgICAgICBlcGlzb2RlX3NpbWtsX2lkID0gX3Jlc29sdmVfZXBpc29kZV9zaW1rbF9pZCgKICAgICAgICAgICAgICAgIGludChzaG93X3NpbWtsX2lkKSwgaW50KHNlYXNvbiksIGludChlcGlzb2RlKQogICAgICAgICAgICApCiAgICAgICAgICAgIGlmIG5vdCBlcGlzb2RlX3NpbWtsX2lkOgogICAgICAgICAgICAgICAgX2RpYWxvZ19ub3RpZnkoIkVwaXNvZGUgbm90IGZvdW5kIChTJXMgRSVzKSIgJSAoc2Vhc29uLCBlcGlzb2RlKSkKICAgICAgICAgICAgICAgIHJldHVybgogICAgICAgICAgICBhY3Rpb25fYXJncyA9IHsKICAgICAgICAgICAgICAgICJtZWRpYXR5cGUiOiAiZXBpc29kZSIsCiAgICAgICAgICAgICAgICAic2lta2xfaWQiOiBpbnQoZXBpc29kZV9zaW1rbF9pZCksCiAgICAgICAgICAgICAgICAic2lta2xfc2hvd19pZCI6IGludChzaG93X3NpbWtsX2lkKSwKICAgICAgICAgICAgICAgICJzZWFzb24iOiBpbnQoc2Vhc29uKSwKICAgICAgICAgICAgICAgICJlcGlzb2RlIjogaW50KGVwaXNvZGUpLAogICAgICAgICAgICB9CiAgICBleGNlcHQgRXhjZXB0aW9uOgogICAgICAgIGcubG9nX3N0YWNrdHJhY2UoKQogICAgICAgIF9kaWFsb2dfbm90aWZ5KCJQbGF5YmFjayBicmlkZ2UgZXJyb3IgKHNlZSBsb2cpIikKICAgICAgICByZXR1cm4KCiAgICAjIEhhbmQgb2ZmIHRvIHRoZSBub3JtYWwgZ2V0U291cmNlcyBmbG93LCBwcmVzZXJ2aW5nIHNvdXJjZS1zZWxlY3QgLyByZXN1bWUgYXJncy4KICAgIGZyb20gcmVzb3VyY2VzLmxpYi5tb2R1bGVzIGltcG9ydCByb3V0ZXIKCiAgICBwbGF5X3BhcmFtcyA9IHsKICAgICAgICAiYWN0aW9uIjogImdldFNvdXJjZXMiLAogICAgICAgICJhY3Rpb25fYXJncyI6IGFjdGlvbl9hcmdzLAogICAgICAgICJzb3VyY2Vfc2VsZWN0IjogcGFyYW1zLmdldCgic291cmNlX3NlbGVjdCIsICJmYWxzZSIpLAogICAgICAgICJmb3JjZXJlc3VtZWNoZWNrIjogcGFyYW1zLmdldCgiZm9yY2VyZXN1bWVjaGVjayIsICJ0cnVlIiksCiAgICB9CiAgICAjIHNtYXJ0UGxheSBvbmx5IG1ha2VzIHNlbnNlIGZvciBlcGlzb2RlcyAocGxheWxpc3QgYnVpbGRpbmcpOyBwYXNzIHRocm91Z2ggaWYgZ2l2ZW4uCiAgICBpZiBwYXJhbXMuZ2V0KCJzbWFydFBsYXkiKToKICAgICAgICBwbGF5X3BhcmFtc1sic21hcnRQbGF5Il0gPSBwYXJhbXMuZ2V0KCJzbWFydFBsYXkiKQoKICAgIGcuUkVRVUVTVF9QQVJBTVMgPSBwbGF5X3BhcmFtcwogICAgcm91dGVyLmRpc3BhdGNoKHBsYXlfcGFyYW1zKQo='
+
+
 # ---------------------------------------------------------------------------
 ADDON_NAME  = 'ABUKARIM TOOLS'
 HOME        = xbmcvfs.translatePath('special://home/')
@@ -740,6 +748,32 @@ PATCHES = [
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
 
+    # ── Prism (Seren fork): TMDbHelper external-id play bridge ──
+    # 1) inject the self-contained bridge module
+    {
+        'addon_id': 'plugin.video.prism',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'tmdbhelper_bridge.py'),
+        'old': '', 'new': '',
+        'description': 'Prism – inject tmdbhelper_bridge.py (external-id play)',
+        'inject_file': True,
+        'inject_content_b64': _PRISM_BRIDGE_B64,
+        'replace': True,
+        'already_patched_check': 'tmdbhelper_bridge',
+        'not_found_ok': True,
+    },
+    # 2) register action=tmdbhelper_play in the router
+    {
+        'addon_id': 'plugin.video.prism',
+        'rel_path': os.path.join('resources', 'lib', 'modules', 'router.py'),
+        'old': '        homeMenu.Menus().home()\n\n    elif action == "genericEndpoint":',
+        'new': '        homeMenu.Menus().home()\n\n    elif action == "tmdbhelper_play":\n        from resources.lib.modules import tmdbhelper_bridge\n\n        tmdbhelper_bridge.play(params)\n\n    elif action == "genericEndpoint":',
+        'description': 'Prism router.py – register action=tmdbhelper_play',
+        'already_patched_check': 'action == "tmdbhelper_play"',
+        'fallback_pattern': r'        homeMenu\.Menus\(\)\.home\(\)\n\n    elif action == "genericEndpoint":',
+        'fallback_repl': '        homeMenu.Menus().home()\n\n    elif action == "tmdbhelper_play":\n        from resources.lib.modules import tmdbhelper_bridge\n\n        tmdbhelper_bridge.play(params)\n\n    elif action == "genericEndpoint":',
+        'not_found_ok': True,
+    },
+
 ]
 
 
@@ -981,6 +1015,7 @@ TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
+    ('prism_tmdbh_play', 'Prism: TMDbHelper Play'),
     ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
@@ -1024,6 +1059,11 @@ _TOGGLE_OF = {
     # TMDbHelper: Stability — dead-player guard (getPlayingFile RuntimeError on teardown)
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py')): 'tmdbh_stability',
+    # Prism: TMDbHelper Play – bridge module + router hook
+    ('plugin.video.prism',
+     os.path.join('resources', 'lib', 'modules', 'tmdbhelper_bridge.py')): 'prism_tmdbh_play',
+    ('plugin.video.prism',
+     os.path.join('resources', 'lib', 'modules', 'router.py')): 'prism_tmdbh_play',
     # TinyPPI: Run on non-CE
     ('script.tinyppi',
      os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',

@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="3.0.5" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="3.0.6" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -651,7 +651,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">ABUKARIM TOOLS - all-in-one Kodi maintenance and skin toolkit</summary>
-    <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, OpenWizard maintenance shortcuts (cache, packages and thumbnail cleanup), and the ABUKARIM Wizard. A built-in patcher keeps popular add-ons (Seren, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test and an add-on database rebuild.</description>
+    <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, OpenWizard maintenance shortcuts (cache, packages and thumbnail cleanup), and the ABUKARIM Wizard. A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، واختصارات صيانة OpenWizard (تنظيف الذاكرة المؤقتة والحزم والصور المصغّرة)، ومعالج أبوكريم. كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة وإعادة بناء قاعدة بيانات الإضافات.</description>
     <assets>
@@ -3802,7 +3802,7 @@ v.3.3.7
             <icon>resources/images/icon.png</icon>
         </assets>
     </extension>
-</addon><addon id="script.module.acctmgr" version="1.1.5.5" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709،AK">
+</addon><addon id="script.module.acctmgr" version="1.1.5.6" name="[COLOR FF32D3FE][B]Account Manager[/B][/COLOR] [COLOR gold][B]Lite[/B][/COLOR]" provider-name="Zaxxon709،AK">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 		<import addon="script.module.requests" version="2.19.1" />

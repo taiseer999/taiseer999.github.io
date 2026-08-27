@@ -92,3 +92,7 @@ class Auth:
                             addon.setSetting(k, v)
             except Exception as e:
                 log_utils.error(f"{name} OffCloud Failed: {e}")
+
+        # ========================= Prism (Seren fork) =========================
+        from acctmgr.modules.sync import prism_sync
+        prism_sync.sync_oc(your_username, your_token, master_token)

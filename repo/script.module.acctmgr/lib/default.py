@@ -354,6 +354,7 @@ elif action == 'realdebridRevoke':                                              
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                                           # Remake settings
                                 xbmc.sleep(1000)
+                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_rd()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_rd")')                   # Revoke all add-ons with a settings.xml
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', rd_icon, 3000)
                 xbmc.sleep(3000)
@@ -426,6 +427,7 @@ elif action == 'premiumizeRevoke':
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                           
                                 xbmc.sleep(1000)
+                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_pm()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_pm")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', pm_icon, 3000)
                 xbmc.sleep(3000)
@@ -498,6 +500,7 @@ elif action == 'alldebridRevoke':
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                           
                                 xbmc.sleep(1000)
+                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_ad()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_ad")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', ad_icon, 3000)
                 xbmc.sleep(3000)
@@ -623,6 +626,7 @@ elif action == 'torboxRevoke':
                                 xbmc.sleep(200)
                                 control.remake_red_settings()                           
                                 xbmc.sleep(1000)
+                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_tb()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_tb")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', torbox_icon, 3000)
                 xbmc.sleep(3000)
@@ -682,6 +686,7 @@ elif action == 'offcloudRevoke':
                                 xbmc.sleep(200)
                                 control.remake_gears_settings()                           
                                 xbmc.sleep(1000)
+                from acctmgr.modules.sync import prism_sync; prism_sync.revoke_oc()
                 execute('RunPlugin("plugin://script.module.acctvwr/?mode=clear_oc")')
                 dialog.notification('AM Lite', 'All Add-ons Revoked!', offcloud_icon, 3000)
                 xbmc.sleep(3000)
@@ -858,6 +863,9 @@ elif action == 'allRevoke':
                 control.delete_synclist()
                 control.updates_on()
 
+        from acctmgr.modules.sync import prism_sync
+        for _rev in (prism_sync.revoke_rd, prism_sync.revoke_pm, prism_sync.revoke_ad, prism_sync.revoke_tb, prism_sync.revoke_oc):
+                _rev()
         execute('RunPlugin("plugin://script.module.acctvwr/?mode=wipeclean")')  # Trakt Client/Secret are NOT revoked for (POV, The Coalition, Dradis, Genocide)
 
 #EXTERNAL PROVIDERS

@@ -242,3 +242,7 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL All-Debrid Failed: {e}")
+
+        # ========================= Prism (Seren fork) =========================
+        from acctmgr.modules.sync import prism_sync
+        prism_sync.sync_ad(your_ad_username, your_ad_token, ad_master_token)

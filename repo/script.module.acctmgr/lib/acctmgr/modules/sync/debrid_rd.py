@@ -290,3 +290,10 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL Real-Debrid Failed: {e}")
+
+        # ========================= Prism (Seren fork) =========================
+        from acctmgr.modules.sync import prism_sync
+        prism_sync.sync_rd(
+            your_rd_username, your_rd_token, your_rd_client_id,
+            your_rd_refresh, your_rd_secret, rd_master_token,
+        )

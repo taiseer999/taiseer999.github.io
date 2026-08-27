@@ -504,6 +504,7 @@ def install_tmdbh_players():
 		('Umbrella', 'plugin.video.umbrella', 'umbrella.json'),
 		('POV', 'plugin.video.pov', 'pov.json'),
 		('Seren', 'plugin.video.seren', 'seren.json'),
+		('Prism', 'plugin.video.prism', 'prism.json'),
 		('Genocide', 'plugin.video.genocide', 'genocide.json'),
 		('Shadow', 'plugin.video.shadow', 'shadow.json'),
 		('Ghost', 'plugin.video.ghost', 'ghost.json'),

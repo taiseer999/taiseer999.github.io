@@ -255,3 +255,7 @@ class Auth:
                         addon.setSetting(k, v)
         except Exception as e:
             log_utils.error(f"ResolveURL Premiumize Failed: {e}")
+
+        # ========================= Prism (Seren fork) =========================
+        from acctmgr.modules.sync import prism_sync
+        prism_sync.sync_pm(your_pm_username, your_pm_token, pm_master_token)
