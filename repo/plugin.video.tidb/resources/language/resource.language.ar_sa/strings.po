@@ -1,136 +1,137 @@
 # Smart Intro Skip language file
+# Arabic translation
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.tidb\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: TheIntroDB\n"
-"Language-Team: English\n"
-"Language: en_GB\n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "#32001"
 msgid "Skip Intro"
-msgstr ""
+msgstr "تخطي المقدمة"
 
 msgctxt "#32003"
 msgid "Skip Recap"
-msgstr ""
+msgstr "تخطي الملخص"
 
 msgctxt "#32004"
 msgid "Skip Credits"
-msgstr ""
+msgstr "تخطي الشارة"
 
 msgctxt "#32005"
 msgid "Skip Preview"
-msgstr ""
+msgstr "تخطي الإعلان الترويجي"
 
 msgctxt "#32006"
 msgid "Enable intro skipping"
-msgstr ""
+msgstr "تفعيل تخطي المقدمة"
 
 msgctxt "#32007"
 msgid "Enable recap skipping"
-msgstr ""
+msgstr "تفعيل تخطي الملخص"
 
 msgctxt "#32008"
 msgid "Enable credits skipping"
-msgstr ""
+msgstr "تفعيل تخطي الشارة"
 
 msgctxt "#32009"
 msgid "Enable preview skipping"
-msgstr ""
+msgstr "تفعيل تخطي الإعلان الترويجي"
 
 msgctxt "#32011"
 msgid "Extra seconds to skip past segment end"
-msgstr ""
+msgstr "ثوانٍ إضافية للتخطي بعد نهاية المقطع"
 
 msgctxt "#32012"
 msgid "Next Episode"
-msgstr ""
+msgstr "الحلقة التالية"
 
 msgctxt "#32020"
 msgid "Mark Intro Start"
-msgstr ""
+msgstr "تحديد بداية المقدمة"
 
 msgctxt "#32021"
 msgid "Mark Intro End"
-msgstr ""
+msgstr "تحديد نهاية المقدمة"
 
 msgctxt "#32022"
 msgid "Submitted!"
-msgstr ""
+msgstr "تم الإرسال!"
 
 msgctxt "#32023"
 msgid "Submission failed"
-msgstr ""
+msgstr "فشل الإرسال"
 
 msgctxt "#32024"
 msgid "Offer to submit intros on pause (needs API key)"
-msgstr ""
+msgstr "اقتراح إرسال المقدمات عند الإيقاف المؤقت (يتطلب مفتاح API)"
 
 msgctxt "#32025"
 msgid "General"
-msgstr ""
+msgstr "عام"
 
 msgctxt "#32026"
 msgid "Segment Types"
-msgstr ""
+msgstr "أنواع المقاطع"
 
 msgctxt "#32027"
 msgid "TheIntroDB"
-msgstr ""
+msgstr "TheIntroDB"
 
 msgctxt "#32028"
 msgid "Submissions"
-msgstr ""
+msgstr "الإرسالات"
 
 msgctxt "#32029"
 msgid "Privacy"
-msgstr ""
+msgstr "الخصوصية"
 
 msgctxt "#32030"
 msgid "Debug"
-msgstr ""
+msgstr "تصحيح الأخطاء"
 
 msgctxt "#32031"
 msgid "Enable lookups"
-msgstr ""
+msgstr "تفعيل البحث"
 
 msgctxt "#32032"
 msgid "Optional TheIntroDB API key"
-msgstr ""
+msgstr "مفتاح TheIntroDB API (اختياري)"
 
 msgctxt "#32033"
 msgid "Anonymous usage reporting"
-msgstr ""
+msgstr "إرسال تقارير استخدام مجهولة المصدر"
 
 msgctxt "#32034"
 msgid "Verbose logging (kodi.log)"
-msgstr ""
+msgstr "تسجيل مفصّل (kodi.log)"
 
 msgctxt "#32035"
 msgid "On-screen debug notifications"
-msgstr ""
+msgstr "إشعارات تصحيح الأخطاء على الشاشة"
 
 msgctxt "#32036"
 msgid "Auto-skip intro segments"
-msgstr ""
+msgstr "تخطي مقاطع المقدمة تلقائياً"
 
 msgctxt "#32037"
 msgid "Auto-skip recap segments"
-msgstr ""
+msgstr "تخطي مقاطع الملخص تلقائياً"
 
 msgctxt "#32038"
 msgid "Auto-skip credits segments"
-msgstr ""
+msgstr "تخطي مقاطع الشارة تلقائياً"
 
 msgctxt "#32039"
 msgid "Auto-skip preview segments"
-msgstr ""
+msgstr "تخطي مقاطع الإعلان الترويجي تلقائياً"
 
 msgctxt "#32040"
 msgid "Hide skip button after (seconds, 0 = keep until segment ends)"
-msgstr ""
+msgstr "إخفاء زر التخطي بعد (ثوانٍ، 0 = إبقاؤه حتى نهاية المقطع)"
