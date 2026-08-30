@@ -93,6 +93,21 @@ _FENLIGHT_VOLCHECKER_OLD_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAwJSA9PSAtNjBk
 _FENLIGHT_VOLCHECKER_NEW_B64 = 'ZGVmIHZvbHVtZV9jaGVja2VyKCk6DQoJIyAtLSBGZW5saWdodCB2b2x1bWUgYXV0by1kcm9wIGRpc2FibGVkIChieSBBQlVLQVJJTSBUT09MUykgLS0NCglyZXR1cm4NCg=='
 
 
+# ── a4kSubtitles: UTF-8-first decode (by ABUKARIM TOOLS) ──
+# a4kSubtitles' download.py __postprocess() re-decodes every subtitle. With
+# general.use_chardet ON (the default), an Arabic sub rarely chardet-detects at
+# confidence 1.0 / matching lang, so `encoding` stays empty and the code falls
+# back to the hardcoded code_pages table -> cp1256 for 'ar'/'ara'. But
+# OpenSubtitles.com serves Arabic subs ALREADY as UTF-8, so decoding those bytes
+# as cp1256 turns every Arabic glyph into mojibake, then re-saves it as UTF-8 —
+# baking in the corruption. (The standalone OpenSubtitles.com addon just writes
+# the raw bytes, which is why the same sub looks correct there.) Fix: try UTF-8
+# first and only fall back to the legacy code page when UTF-8 actually fails, so
+# genuinely-legacy cp1256 files still convert while UTF-8 files are left intact.
+_A4KSUBS_DECODE_OLD_B64 = 'ICAgICAgICAgICAgaWYgbm90IGVuY29kaW5nOgogICAgICAgICAgICAgICAgZW5jb2RpbmcgPSBjb3JlLnV0aWxzLmNvZGVfcGFnZXMuZ2V0KGxhbmdfY29kZSwgY29yZS51dGlscy5kZWZhdWx0X2VuY29kaW5nKQoKICAgICAgICAgICAgdGV4dCA9IHRleHRfYnl0ZXMuZGVjb2RlKGVuY29kaW5nKQ=='
+_A4KSUBS_DECODE_NEW_B64 = 'ICAgICAgICAgICAgaWYgbm90IGVuY29kaW5nOgogICAgICAgICAgICAgICAgZW5jb2RpbmcgPSBjb3JlLnV0aWxzLmNvZGVfcGFnZXMuZ2V0KGxhbmdfY29kZSwgY29yZS51dGlscy5kZWZhdWx0X2VuY29kaW5nKQoKICAgICAgICAgICAgIyAtLSBhNGtTdWJ0aXRsZXMgVVRGLTgtZmlyc3QgZGVjb2RlIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAgICAgIyBPcGVuU3VidGl0bGVzLmNvbSBzZXJ2ZXMgQXJhYmljIHN1YnMgYWxyZWFkeSBhcyBVVEYtODsgdGhlIG9sZCBjb2RlCiAgICAgICAgICAgICMgZm9yY2VkIHRoZSBsZWdhY3kgY29kZSBwYWdlIChjcDEyNTYgZm9yIGFyKSBhbmQgbWFuZ2xlZCB0aGVtLiBUcnkKICAgICAgICAgICAgIyBVVEYtOCBmaXJzdCBhbmQgb25seSBmYWxsIGJhY2sgdG8gdGhlIGNvZGUgcGFnZSB3aGVuIFVURi04IGZhaWxzLgogICAgICAgICAgICBpZiBlbmNvZGluZyBhbmQgZW5jb2RpbmcubG93ZXIoKS5yZXBsYWNlKCctJywgJycpIG5vdCBpbiAoJ3V0ZjgnLCAndXRmXzgnKToKICAgICAgICAgICAgICAgIHRyeToKICAgICAgICAgICAgICAgICAgICB0ZXh0ID0gdGV4dF9ieXRlcy5kZWNvZGUoJ3V0Zi04JykKICAgICAgICAgICAgICAgICAgICBlbmNvZGluZyA9ICd1dGYtOCcKICAgICAgICAgICAgICAgIGV4Y2VwdCAoVW5pY29kZURlY29kZUVycm9yLCBMb29rdXBFcnJvcik6CiAgICAgICAgICAgICAgICAgICAgdGV4dCA9IHRleHRfYnl0ZXMuZGVjb2RlKGVuY29kaW5nLCBlcnJvcnM9J3JlcGxhY2UnKQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAgdGV4dCA9IHRleHRfYnl0ZXMuZGVjb2RlKGVuY29kaW5nIG9yICd1dGYtOCcsIGVycm9ycz0ncmVwbGFjZScp'
+
+
 # ── TinyPPI: hand overlay fonts to the skin (by ABUKARIM TOOLS) ──
 # TinyPPI's install_fonts() would otherwise inject its own font23_narrow/font32
 # into the active skin's Font.xml (and ReloadSkin), clobbering the skin's own
@@ -352,6 +367,21 @@ PATCHES = [
         'fallback_repl': ("def volume_checker():\r\n"
                           "\t# -- Fenlight volume auto-drop disabled (by ABUKARIM TOOLS) --\r\n"
                           "\treturn"),
+    },
+
+    # ── a4kSubtitles – decode Arabic (and other) subtitles as UTF-8 first ──
+    # Fixes OpenSubtitles.com Arabic subs showing as mojibake in a4kSubtitles
+    # while the standalone OpenSubtitles.com addon shows them correctly. See the
+    # blob comment above: __postprocess() forced cp1256 on already-UTF-8 subs.
+    {
+        'addon_id': 'service.subtitles.a4ksubtitles',
+        'rel_path': os.path.join('a4kSubtitles', 'download.py'),
+        'old': base64.b64decode(_A4KSUBS_DECODE_OLD_B64).decode('utf-8'),
+        'new': base64.b64decode(_A4KSUBS_DECODE_NEW_B64).decode('utf-8'),
+        'description': 'a4kSubtitles download.py - decode subtitles as UTF-8 first (fixes OpenSubtitles.com Arabic mojibake)',
+        'already_patched_check': '# -- a4kSubtitles UTF-8-first decode (by ABUKARIM TOOLS) --',
+        'not_found_ok': True,
+        'toggle': 'a4ksubs_utf8',
     },
 
     # ── RedLight – dark fallback for the sources window (group 'redlight') ──
@@ -1026,6 +1056,7 @@ TOGGLE_GROUPS = [
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('dexsubs_autodl',   'DexSubtitles: Auto-Download'),
+    ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -1101,6 +1132,9 @@ _TOGGLE_OF = {
      os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml')): 'redlight_fixes',
     ('plugin.video.redlight',
      os.path.join('resources', 'lib', 'modules', 'sources.py')):             'redlight_fixes',
+    # a4kSubtitles: UTF-8 Subtitles Fix
+    ('service.subtitles.a4ksubtitles',
+     os.path.join('a4kSubtitles', 'download.py')):                           'a4ksubs_utf8',
 }
 
 _SELECTION_FILE = os.path.join(
