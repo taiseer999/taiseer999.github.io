@@ -545,6 +545,73 @@ PATCHES = [
         'description': 'TinyPPI codecs - replace Dolby_TrueHD_Atmos.png badge',
     },
 
+    # ── TinyPPI – keep UI English regardless of Kodi language (by ABUKARIM TOOLS) ──
+    # TinyPPI resolves every visible string through Addon.getLocalizedString()
+    # (Python) and $ADDON[script.tinyppi NNNNN] (skin XML). Both pick the folder
+    # under resources/language/ that matches Kodi's CURRENT UI language, so when
+    # Kodi runs in Arabic (or de/hu/zh) the whole PPI overlay switches to that
+    # translation. There is no per-addon language override in Kodi, and patching
+    # each getLocalizedString call site (spread across ui/, web/, info/ plus the
+    # skin XML) would be brittle. Instead we overwrite each NON-English strings.po
+    # with the en_gb master: the msgctxt ids stay identical but every msgstr is
+    # empty, so Kodi falls back to the English msgid for every id — forcing the
+    # overlay to English text no matter which UI language is active, while the
+    # en_gb file itself is left untouched. inject_source + replace + byte-compare
+    # idempotency (same mechanism as the codec badges / PPI Arabic XML). Opt-in
+    # under the 'tinyppi_english' toggle so it never fights the PPI Arabic work.
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'language',
+                                 'resource.language.ar_sa', 'strings.po'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
+                                      'resource.language.ar_sa', 'strings.po'),
+        'toggle': 'tinyppi_english',
+        'description': 'TinyPPI English lock - force en strings over ar_sa',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'language',
+                                 'resource.language.de_de', 'strings.po'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
+                                      'resource.language.de_de', 'strings.po'),
+        'toggle': 'tinyppi_english',
+        'description': 'TinyPPI English lock - force en strings over de_de',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'language',
+                                 'resource.language.hu_hu', 'strings.po'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
+                                      'resource.language.hu_hu', 'strings.po'),
+        'toggle': 'tinyppi_english',
+        'description': 'TinyPPI English lock - force en strings over hu_hu',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'language',
+                                 'resource.language.zh_cn', 'strings.po'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'not_found_ok': True,
+        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
+                                      'resource.language.zh_cn', 'strings.po'),
+        'toggle': 'tinyppi_english',
+        'description': 'TinyPPI English lock - force en strings over zh_cn',
+    },
+
     # ── TinyPPI – PPI Arabic: remove label colons ──
     # NOTE: the ar_sa strings.po whole-file replacement was REMOVED — the TinyPPI
     # Arabic translation is now fixed at source upstream, so we must NOT overwrite
@@ -1050,6 +1117,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
+    ('tinyppi_english',  'TinyPPI: Keep English'),
     ('tinyppi_arabic',   'PPI Arabic'),
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
