@@ -545,73 +545,6 @@ PATCHES = [
         'description': 'TinyPPI codecs - replace Dolby_TrueHD_Atmos.png badge',
     },
 
-    # ── TinyPPI – keep UI English regardless of Kodi language (by ABUKARIM TOOLS) ──
-    # TinyPPI resolves every visible string through Addon.getLocalizedString()
-    # (Python) and $ADDON[script.tinyppi NNNNN] (skin XML). Both pick the folder
-    # under resources/language/ that matches Kodi's CURRENT UI language, so when
-    # Kodi runs in Arabic (or de/hu/zh) the whole PPI overlay switches to that
-    # translation. There is no per-addon language override in Kodi, and patching
-    # each getLocalizedString call site (spread across ui/, web/, info/ plus the
-    # skin XML) would be brittle. Instead we overwrite each NON-English strings.po
-    # with the en_gb master: the msgctxt ids stay identical but every msgstr is
-    # empty, so Kodi falls back to the English msgid for every id — forcing the
-    # overlay to English text no matter which UI language is active, while the
-    # en_gb file itself is left untouched. inject_source + replace + byte-compare
-    # idempotency (same mechanism as the codec badges / PPI Arabic XML). Opt-in
-    # under the 'tinyppi_english' toggle so it never fights the PPI Arabic work.
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'language',
-                                 'resource.language.ar_sa', 'strings.po'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
-                                      'resource.language.ar_sa', 'strings.po'),
-        'toggle': 'tinyppi_english',
-        'description': 'TinyPPI English lock - force en strings over ar_sa',
-    },
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'language',
-                                 'resource.language.de_de', 'strings.po'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
-                                      'resource.language.de_de', 'strings.po'),
-        'toggle': 'tinyppi_english',
-        'description': 'TinyPPI English lock - force en strings over de_de',
-    },
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'language',
-                                 'resource.language.hu_hu', 'strings.po'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
-                                      'resource.language.hu_hu', 'strings.po'),
-        'toggle': 'tinyppi_english',
-        'description': 'TinyPPI English lock - force en strings over hu_hu',
-    },
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'language',
-                                 'resource.language.zh_cn', 'strings.po'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'tinyppi_english', 'language',
-                                      'resource.language.zh_cn', 'strings.po'),
-        'toggle': 'tinyppi_english',
-        'description': 'TinyPPI English lock - force en strings over zh_cn',
-    },
-
     # ── TinyPPI – PPI Arabic: remove label colons ──
     # NOTE: the ar_sa strings.po whole-file replacement was REMOVED — the TinyPPI
     # Arabic translation is now fixed at source upstream, so we must NOT overwrite
@@ -1117,7 +1050,6 @@ TOGGLE_GROUPS = [
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
-    ('tinyppi_english',  'TinyPPI: Keep English'),
     ('tinyppi_arabic',   'PPI Arabic'),
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
@@ -1305,6 +1237,97 @@ def target_addon_ids(group=None):
     return seen
 
 
+# ---------------------------------------------------------------------------
+# TinyPPI Arabic language reconcile (tied to the 'tinyppi_arabic' toggle STATE)
+# ---------------------------------------------------------------------------
+# Unlike a normal PATCHES entry (which only ever ACTS when its toggle is ON and
+# is silently skipped when OFF), the Arabic language folder must react to the
+# toggle in BOTH directions: PPI Arabic ON keeps TinyPPI's Arabic UI; PPI Arabic
+# OFF makes the overlay fall back to English. Kodi has no per-addon language
+# override and the patcher has no delete op, so we neutralise the folder without
+# removing it: when disabled we replace ar_sa/strings.po with a HEADER-ONLY .po
+# (no msgctxt entries), so Kodi finds no Arabic translations and falls back to
+# the English msgid for every string. The real Arabic file is kept alongside as
+# strings.po.abk_arabic_bak and restored verbatim when PPI Arabic is switched
+# back on. Both directions are content-compared, so a settled box rewrites
+# nothing and the watchdog stays quiet.
+_TINYPPI_ARABIC_PO_REL = os.path.join(
+    'resources', 'language', 'resource.language.ar_sa', 'strings.po')
+
+# Header-only ar_sa strings.po: valid PO metadata, ZERO translated entries.
+_TINYPPI_ARABIC_PO_EMPTY = (
+    'msgid ""\n'
+    'msgstr ""\n'
+    '"MIME-Version: 1.0\\n"\n'
+    '"Content-Type: text/plain; charset=UTF-8\\n"\n'
+    '"Content-Transfer-Encoding: 8bit\\n"\n'
+    '"X-Generator: POEditor.com\\n"\n'
+    '"Project-Id-Version: TinyPPI\\n"\n'
+    '"Language: ar\\n"\n'
+    '\n'
+    '# -- TinyPPI Arabic disabled by ABUKARIM TOOLS (PPI Arabic toggle OFF) --\n'
+    '# Original Arabic translation preserved as strings.po.abk_arabic_bak;\n'
+    '# re-enable the PPI Arabic toggle and re-run Apply Patches to restore it.\n'
+)
+
+
+def _reconcile_tinyppi_arabic():
+    """Enforce the ar_sa strings.po state that matches the tinyppi_arabic toggle.
+
+    Returns (ok, msg) using the same shape as _apply_patch so apply_set can fold
+    it into its counters. Never raises: a problem here must not abort the sweep.
+    """
+    addon_id = 'script.tinyppi'
+    # Resolve TinyPPI's path the same way _apply_patch does (registry first).
+    addon_path = None
+    try:
+        import xbmcaddon
+        addon_path = xbmcaddon.Addon(addon_id).getAddonInfo('path')
+    except Exception:
+        addon_path = None
+    if not addon_path or not os.path.isdir(addon_path):
+        addon_path = os.path.join(ADDONS_DIR, addon_id)
+    if not os.path.isdir(addon_path):
+        return True, '[%s] Addon not present – skipping (optional).' % addon_id
+
+    po_path  = os.path.join(addon_path, _TINYPPI_ARABIC_PO_REL)
+    bak_path = po_path + '.abk_arabic_bak'
+    arabic_disabled = 'tinyppi_arabic' in _load_disabled()
+
+    try:
+        if arabic_disabled:
+            # Back up the genuine Arabic file once (only if the current file is
+            # NOT already our header-only stub), then write the stub.
+            current = None
+            if os.path.isfile(po_path):
+                try:
+                    current = _read(po_path)
+                except Exception:
+                    current = None
+            if current == _TINYPPI_ARABIC_PO_EMPTY:
+                return True, '[%s] Arabic already disabled – skipping.' % addon_id
+            if current is not None and not os.path.isfile(bak_path):
+                _write(bak_path, current)
+            os.makedirs(os.path.dirname(po_path), exist_ok=True)
+            _write(po_path, _TINYPPI_ARABIC_PO_EMPTY)
+            return True, ('[%s] Patched OK: TinyPPI Arabic disabled '
+                          '(en fallback; original backed up).' % addon_id)
+        else:
+            # PPI Arabic ON: restore the real Arabic file from backup if we have
+            # one and the live file is still our stub.
+            if not os.path.isfile(bak_path):
+                return True, '[%s] Arabic active – nothing to restore.' % addon_id
+            current = _read(po_path) if os.path.isfile(po_path) else None
+            backup  = _read(bak_path)
+            if current == backup:
+                return True, '[%s] Arabic already restored – skipping.' % addon_id
+            _write(po_path, backup)
+            return True, ('[%s] Patched OK: TinyPPI Arabic restored '
+                          'from backup.' % addon_id)
+    except Exception as e:
+        return False, '[%s] Arabic reconcile failed: %s' % (addon_id, e)
+
+
 def apply_set(group=None, addon_ids=None):
     """Silent patch core — no dialogs, safe to call from the service thread.
 
@@ -1322,6 +1345,20 @@ def apply_set(group=None, addon_ids=None):
     succeeded = 0
     failed    = 0
     changed   = 0
+
+    # Reconcile the TinyPPI Arabic language folder to match the tinyppi_arabic
+    # toggle STATE (handles both enable and disable; see _reconcile_tinyppi_arabic).
+    # Only when TinyPPI is in scope for this run.
+    if not addon_ids or 'script.tinyppi' in set(addon_ids):
+        ok, msg = _reconcile_tinyppi_arabic()
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+            if ('Patched OK' in msg) or ('File injected OK' in msg):
+                changed += 1
+        else:
+            failed += 1
 
     for patch in _select(group, addon_ids):
         ok, msg = _apply_patch(patch)
