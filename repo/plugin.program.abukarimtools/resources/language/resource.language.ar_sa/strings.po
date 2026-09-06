@@ -480,3 +480,35 @@ msgctxt "#30336"
 msgid "The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform."
 msgstr "تم حذف قاعدة البيانات. سيُغلق كودي الآن.[CR][CR]افتح كودي مرة أخرى وسيُكمل إعادة البناء تلقائياً - لا يستطيع كودي إعادة تشغيل نفسه على هذا النظام."
 
+
+msgctxt "#30020"
+msgid "Node Icons (Color / Mono)"
+msgstr "أيقونات العقد (ملوّن / أحادي)"
+
+msgctxt "#30340"
+msgid "Icon folder not found:[CR]%s"
+msgstr "مجلد الأيقونات غير موجود:[CR]%s"
+
+msgctxt "#30341"
+msgid "Node icons are currently: %s[CR]Choose a style"
+msgstr "أيقونات العقد حالياً: %s[CR]اختر النمط"
+
+msgctxt "#30342"
+msgid "Colored"
+msgstr "ملوّن"
+
+msgctxt "#30343"
+msgid "Monochrome"
+msgstr "أحادي اللون"
+
+msgctxt "#30344"
+msgid "Unknown"
+msgstr "غير معروف"
+
+msgctxt "#30345"
+msgid "Node icons set to %s (%d icons)"
+msgstr "تم ضبط أيقونات العقد على %s (%d أيقونة)"
+
+msgctxt "#30346"
+msgid "Node icon switching only works on Arctic Fuse 3 or Arctic Zephyr Rounded. Switch to one of those skins first."
+msgstr "تبديل أيقونات العقد يعمل فقط على Arctic Fuse 3 أو Arctic Zephyr Rounded. بدّل إلى أحد هذين السكنين أولاً."

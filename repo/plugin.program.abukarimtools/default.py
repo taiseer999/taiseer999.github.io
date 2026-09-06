@@ -27,6 +27,7 @@ ICONS  = {
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
+    'icons_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
@@ -65,6 +66,7 @@ CATEGORIES = [
         ('skin_switch',    30009),
         ('dplex_toggle',   30010),
         ('korean_toggle',  30011),
+        ('icons_toggle',   30020),
     ]),
 ]
 
@@ -274,6 +276,11 @@ def router():
         _end_directory()
         from resources.lib import korean_toggle
         korean_toggle.run()
+
+    elif mode == 'icons_toggle':
+        _end_directory()
+        from resources.lib import icons_toggle
+        icons_toggle.run()
 
     elif mode == 'origin_fix':
         _end_directory()
