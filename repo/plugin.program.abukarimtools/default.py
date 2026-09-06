@@ -27,7 +27,7 @@ ICONS  = {
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
-    'icons_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
+    'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
