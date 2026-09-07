@@ -109,6 +109,49 @@ def _apply(src_dir, live_dir):
     return copied
 
 
+
+def _bust_texture_cache(live_dir):
+    """Remove cached thumbnails for the swapped icons so Kodi re-reads the new
+    files without a full restart. Kodi caches by source path in Textures13.db
+    plus a copy under special://thumbnails; we clear both the DB rows and the
+    cached files for our icon paths, then let ReloadSkin repopulate them."""
+    import sqlite3
+    import glob
+
+    prof = xbmcvfs.translatePath('special://masterprofile/')
+    dbdir = os.path.join(prof, 'Database')
+    thumbs = xbmcvfs.translatePath('special://thumbnails/')
+
+    # Build the list of source URLs Kodi would have cached (skin-relative).
+    urls = ['special://skin/extras/icons/%s' % n for n in NAMES]
+
+    # Find the newest Textures*.db
+    dbs = sorted(glob.glob(os.path.join(dbdir, 'Textures*.db')))
+    if not dbs:
+        return
+    db = dbs[-1]
+    try:
+        con = sqlite3.connect(db)
+        cur = con.cursor()
+        for u in urls:
+            cur.execute("SELECT id, cachedurl FROM texture WHERE url = ?", (u,))
+            for tid, cached in cur.fetchall():
+                # delete the cached image file
+                if cached:
+                    fp = os.path.join(thumbs, cached)
+                    try:
+                        if os.path.isfile(fp):
+                            os.remove(fp)
+                    except OSError:
+                        pass
+                cur.execute("DELETE FROM sizes WHERE idtexture = ?", (tid,))
+            cur.execute("DELETE FROM texture WHERE url = ?", (u,))
+        con.commit()
+        con.close()
+    except sqlite3.Error as e:
+        _log('cache bust failed: %s' % e)
+
+
 def run():
     skin_id = _active_skin()
     if not skin_id:
@@ -147,6 +190,7 @@ def run():
 
     src = bw_dir if mono else color_dir
     n = _apply(src, live_dir)
+    _log('applied %s set: copied %d/%d icons into %s' % ('mono' if mono else 'color', n, len(NAMES), live_dir))
 
     xbmc.executebuiltin(
         'Skin.SetString(NodeIcons.Mode,%s)' % ('mono' if mono else 'color'))
@@ -157,6 +201,8 @@ def run():
         T(30345) % (T(30343) if mono else T(30342), n),
         xbmcgui.NOTIFICATION_INFO, 3000)
 
-    # Live change, no restart: reload the skin so the nodes repaint at once.
+    # Bust cached thumbnails for the swapped icons, then reload the skin so
+    # the nodes repaint with the new files (no full restart needed).
+    _bust_texture_cache(live_dir)
     xbmc.sleep(300)
     xbmc.executebuiltin('ReloadSkin()')
