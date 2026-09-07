@@ -39,16 +39,20 @@ DIALOG = xbmcgui.Dialog()
 
 # The node icon filenames, and only these, are swapped.
 NAMES = [
-    'Action.png', 'Adventure.png', 'Animation.png', 'Anime.png', 'Comedy.png',
-    'Crime.png', 'Documentary.png', 'Drama.png', 'Family.png', 'Fantasy.png',
-    'History.png', 'Horror.png', 'Mystery.png', 'Romance.png', 'Science Fiction.png',
-    'Superhero.png', 'Thriller.png', 'War.png', 'Western.png',
-    'netflix1.png', 'Aptv.png', 'prime.png', 'OSN.png', 'disney.png',
-    'paramount.png', 'hulu.png', 'mag.png', 'Rakuten.png', 'starz.png',
-    'SHAHID.png', 'tod.png', 'ADTV.png', 'pea.png', 'his.png', 'hbo.png',
-    'food.png', 'fx.png', 'disc.png', 'AE.png',
-    'watchlist.png', 'collection.png', 'likedlist.png', 'recentlywatched.png',
-    'mostwatched.png', 'recommended.png',
+    '1001.png', '4k.png', 'ADTV.png', 'AE.png', 'Action.png', 'Adventure.png',
+    'Animation.png', 'Anime.png', 'Aptv.png', 'Comedy.png', 'Crime.png', 'Dc.png',
+    'Documentary.png', 'Drama.png', 'Family.png', 'Fantasy.png', 'History.png',
+    'Horror.png', 'Mar.png', 'Mf.png', 'Mystery.png', 'OSN.png', 'Rakuten.png',
+    'Remux4K.png', 'Romance.png', 'SHAHID.png', 'Science Fiction.png', 'Superhero.png',
+    'Thriller.png', 'Ts.png', 'War.png', 'Western.png', 'awardbp.png', 'boxsets1.png',
+    'br.png', 'collection.png', 'couchmoney.png', 'dd.png', 'disc.png', 'disney.png',
+    'dv1.png', 'fel7.png', 'food.png', 'fx.png', 'genre.png', 'hbo.png', 'hd2.png',
+    'his.png', 'hulu.png', 'imdbtv.png', 'inprogresse.png', 'kdramaw.png', 'likedlist.png',
+    'ma.png', 'mag.png', 'money-bill-trend-up.png', 'mostwatched.png', 'movie-icon.png',
+    'moviesl.png', 'netflix1.png', 'new2.png', 'paramount.png', 'pea.png', 'popular.png',
+    'prime.png', 'random2.png', 'recentlywatched.png', 'recommended.png', 'rt.png',
+    'shutup.png', 'starz.png', 'tod.png', 'trend.png', 'tv-channels.png', 'tv2.png',
+    'tva.png', 'tvsort.png', 'unkownmovies.png', 'watchlist.png', 'ww.png',
 ]
 
 
