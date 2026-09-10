@@ -430,12 +430,26 @@ PATCHES = [
 
     # ── RedLight – busy-player fix (separate patch, group 'redlight') ──
     # Root cause (kodi.log): clicking a widget item while the previous video is
-    # still playing / tearing down trips _playback_already_active() in
+    # still playing / tearing down tripped _playback_already_active() in
     # playback_prep(), which bailed with a silent `return`.  The plugin then
-    # exits without starting playback, Kodi's pending play item stays
+    # exited without starting playback, Kodi's pending play item stayed
     # unresolved -> "One or more items failed to play" popup right after the
-    # player stops.  Fix: wait (bounded) for the player to finish tearing down,
-    # then continue into the normal scrape/play flow instead of bailing.
+    # player stopped.  Old fix: wait (bounded) for the player to finish tearing
+    # down, then continue into the normal scrape/play flow instead of bailing.
+    #
+    # OBSOLETE on RedLight 2.5.9+: upstream rewrote playback_prep(). The silent
+    # `if self._playback_already_active() and not self.background: return` bail is
+    # GONE; the end-of-episode busy cover is now handled explicitly with a guarded
+    # kodi_utils.hide_busy_dialog() (it is deliberately NOT dismissed during the
+    # background next-episode prep that runs while the current episode still
+    # plays). That is exactly the case this patch existed to fix, so on 2.5.9+ the
+    # anchor no longer exists and never will. obsolete_if_contains keys on the
+    # unique upstream comment fingerprint and skips cleanly; not_found_ok covers
+    # any intermediate build where neither the old anchor nor the fingerprint is
+    # present, so a settled box reports a clean skip instead of a permanent
+    # "Patch string not found" failure on every sweep. The exact + regex anchors
+    # are kept so a genuinely-old RedLight that still has the silent bail is still
+    # fixed.
     {
         'addon_id': 'plugin.video.redlight',
         'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
@@ -452,6 +466,11 @@ PATCHES = [
         # sentinel ending in ') --' never matched and the entry could not recognise its
         # own work: every sweep retried, failed to find 'old', and logged 1 failed.
         'already_patched_check': '# -- RedLight busy-player fix (by ABUKARIM TOOLS)',
+        # RedLight 2.5.9+ handles this natively (see comment above). The fingerprint
+        # is a stable, unique comment upstream added next to the new hide_busy_dialog()
+        # guard; when present, the silent bail is gone and this patch is obsolete.
+        'obsolete_if_contains': 'do not dismiss the end-of-episode busy cover',
+        'not_found_ok': True,
         'fallback_pattern': r'\t\tif self\._playback_already_active\(\) and not self\.background:\r?\n\t\t\treturn\r?\n',
         'fallback_repl': ('\t\tif self._playback_already_active() and not self.background:\n'
                           '\t\t\t# -- RedLight busy-player fix (by ABUKARIM TOOLS): wait for teardown instead of silent bail --\n'

@@ -1,3 +1,11 @@
+v3.0.9.9
+- RedLight patcher: rewritten for RedLight 2.5.9.
+  * Busy-player fix marked obsolete on 2.5.9+ (upstream rewrote playback_prep and now
+    handles the end-of-episode busy cover natively via a guarded hide_busy_dialog(); the
+    old silent-bail return is gone). The entry now skips cleanly instead of reporting a
+    permanent "Patch string not found" failure on every sweep.
+  * Volume auto-drop kill and dark-theme fallback verified still valid on 2.5.9 (unchanged).
+
 v3.0.5
 - Skin Installer: fixed "[Errno 66] Directory not empty" when reinstalling a skin that is
   currently active. The extractor no longer deletes-and-renames the destination folder
