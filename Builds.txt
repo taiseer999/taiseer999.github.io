@@ -5,7 +5,7 @@ zip="url.to.wizard"
 
 name="Select your skin"
 version="2.4"
-url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=fHLhwWQZ7FbVCddLy2zyIjtmFpqYuxDNpBNcdvFKwMtl9EgC4s4aylqnDGtjcS3V&expiry=1ySfAwnsyEVT8nsi6Aa9eg%3D%3D&mac=9aeaa2643a285ed22fbaa9747d6cdaea0e975ad85d7f26c32978b3fef3c20eec"
+url="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=L%2BjGfKh9Dx4zv0no%2BFewwNtL1v3vbr8WSDL%2BUIpUkYAzVioYp3jQ%2BF2UYKdEtjvj&expiry=AJVOWczXUpBRZxWif9ozMQ%3D%3D&mac=8d55a9cf5910511249dccd970e4edd041a87bfa8872e6020167fa68460c6fe98"
 minor="http://"
 gui="https://abukarimbuilds.tashouri.workers.dev/download.aspx?file=fKuTTspvrub0XBjfizpX2JUzpQr3ZOtRcjA4yH%2BOUPh%2BU4evJ%2Bl7v3fOIV32ySHI&expiry=oqyShUKWpCx604SOrSl0fA%3D%3D&mac=d28e390ad31cc7a7268c81dc750090522bd372a92410b9ddd9e343ebee536adc"
 kodi="21"
