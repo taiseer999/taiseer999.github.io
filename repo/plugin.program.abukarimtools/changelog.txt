@@ -1,3 +1,11 @@
+v3.1.0.1
+- Fixed: skins installed via the Skin Portal never received future updates. The
+  origin written to the Addons DB used lowercase repo ids (repository.taiseerce,
+  repository.taiseerkodi22) but the real repository add-on ids are case-sensitive
+  (repository.taiseerCE, repository.taiseerKODI22). Skins were linked to a
+  non-existent repo, so Kodi never checked it for updates. Corrected the mapping
+  in skin_installer.py and origin_fix.py. (Kodi 21 repo was unaffected.)
+
 v3.1.0.0
 - Fixed: first-run automation never started on fresh install (xbmc.service extension
   in addon.xml was commented out, so service.py never launched at boot). Re-enabled.

@@ -38,8 +38,8 @@ PIERS_JSON = ('https://raw.githubusercontent.com/taiseer999/'
 # listing was never cached into the Addons DB.
 _REPO_ID_FOR_JSON = {
     KODI_JSON:  'repository.taiseer',
-    CE_JSON:    'repository.taiseerce',
-    PIERS_JSON: 'repository.taiseerkodi22',
+    CE_JSON:    'repository.taiseerCE',
+    PIERS_JSON: 'repository.taiseerKODI22',
 }
 
 TITLE = 'ABUKARIM – Skin Installer'

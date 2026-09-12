@@ -40,8 +40,8 @@ DATABASE_PATH = xbmcvfs.translatePath('special://database/')
 # case-insensitively, first match wins), otherwise fall back to the
 # alphabetically-first candidate so the result is deterministic.
 PREFERRED_REPOS = [
-    'repository.taiseerkodi22',   # Piers / Kodi 22 repo
-    'repository.taiseerce',       # CoreELEC NG repo
+    'repository.taiseerKODI22',   # Piers / Kodi 22 repo
+    'repository.taiseerCE',       # CoreELEC NG repo
     'repository.taiseer',         # Kodi 21 repo
 ]
 
