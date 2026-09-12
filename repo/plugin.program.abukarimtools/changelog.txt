@@ -1,3 +1,7 @@
+v3.1.0.0
+- Fixed: first-run automation never started on fresh install (xbmc.service extension
+  in addon.xml was commented out, so service.py never launched at boot). Re-enabled.
+
 v3.0.9.9
 - RedLight patcher: rewritten for RedLight 2.5.9.
   * Busy-player fix marked obsolete on 2.5.9+ (upstream rewrote playback_prep and now
