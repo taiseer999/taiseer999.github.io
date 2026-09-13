@@ -2,25 +2,26 @@
 <includes>
 
     <include name="Furniture_Header_Left">
-        <control type="group">
-            <left>0</left>
-            <width>720</width>
-            <include content="View_Line_Divider">
-                <param name="align">left</param>
-            </include>
-            <control type="label">
-                <label>$PARAM[label]</label>
-                <align>left</align>
-                <aligny>center</aligny>
-                <textcolor>$PARAM[textcolor]</textcolor>
-                <font>font_Topbar_bold</font>
-                <height>80</height>
+        <definition>
+            <control type="group">
+                <left>0</left>
+                <width>720</width>
+                <include content="View_Line_Divider">
+                    <param name="align">left</param>
+                </include>
+                <control type="label">
+                    <label>$PARAM[label]</label>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>$PARAM[textcolor]</textcolor>
+                    <font>font_Topbar_bold</font>
+                    <height>80</height>
 
-                <right>0</right>
+                    <right>0</right>
+                </control>
             </control>
-        </control>
+        </definition>
     </include>
-
     <variable name="Furniture_Header_Right_Temperature">
         <value condition="!Skin.HasSetting(Header.DisableWeather)"> $INFO[Weather.Temperature]</value>
     </variable>
@@ -72,7 +73,7 @@
                     <height>30</height>
                     <top>25</top>
                     <aspectratio>keep</aspectratio>
-                    <texture>special://skin/extras/icons/stat_temp.png</texture>
+                    <texture>$VAR[SysStats_CPU_Icon]</texture>
                 </control>
                 <control type="label">
                     <font>font_Topbarinfo</font>
@@ -83,12 +84,12 @@
                     <label>$INFO[System.CPUTemperature]</label>
                 </control>
                 <control type="image">
-                    <width>30</width>
-                    <height>30</height>
-                    <top>25</top>
+                    <width>25</width>
+                    <height>25</height>
+                    <top>28</top>
                     <left>14</left>
                     <aspectratio>keep</aspectratio>
-                    <texture>special://skin/extras/icons/stat_ram.png</texture>
+                    <texture>$VAR[SysStats_RAM_Icon]</texture>
                 </control>
                 <control type="label">
                     <font>font_Topbarinfo</font>
@@ -104,7 +105,7 @@
                     <top>20</top>
                     <left>14</left>
                     <aspectratio>keep</aspectratio>
-                    <texture>special://skin/extras/icons/stat_net_on.png</texture>
+                    <texture>$VAR[SysStats_Connected_Icon]</texture>
                     <visible>String.Contains(Network.IPAddress,1)</visible>
                 </control>
                 <control type="image">
@@ -113,16 +114,8 @@
                     <top>20</top>
                     <left>14</left>
                     <aspectratio>keep</aspectratio>
-                    <texture>special://skin/extras/icons/stat_net_off.png</texture>
+                    <texture>$VAR[SysStats_Disconnected_Icon]</texture>
                     <visible>!String.Contains(Network.IPAddress,1)</visible>
-                </control>
-                <control type="image">
-                    <width>60</width>
-                  <height>60</height>
-                    <top>9</top>
-                    <left>14</left>
-                    <aspectratio>keep</aspectratio>
-                    <texture>special://skin/extras/icons/kodi5.png</texture>
                 </control>
             </control>
 

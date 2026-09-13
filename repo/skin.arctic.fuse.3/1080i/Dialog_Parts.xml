@@ -243,6 +243,29 @@
         </definition>
     </include>
 
+    <include name="Part_ChartButton">
+        <param name="id">90001</param>
+        <param name="groupid">90101</param>
+        <param name="onclick">Close</param>
+        <param name="icon">special://skin/extras/icons/chart-simple.png</param>
+        <definition>
+            <control type="group">
+                <centerright>60</centerright>
+                <centertop>50%</centertop>
+                <height>80</height>
+                <width>80</width>
+                <include content="OSD_Button_Icon_Overlay">
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="id">$PARAM[id]</param>
+                    <param name="groupid">$PARAM[groupid]</param>
+                    <param name="itemgap">80</param>
+                    <param name="itemgap_mod"> </param>
+                    <param name="icon_colordiffuse">dialog_fg_90</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
     <include name="Part_Page_Indicator">
         <control type="image">
             <width>10</width>
@@ -517,25 +540,6 @@
         <control type="image">
             <texture colordiffuse="$VAR[Color_DialogBorder]" border="20">common/dialog-outline.png</texture>
         </control>
-    </include>
-
-    <include name="Part_Background_Blur_Standard">
-        <param name="shadow">true</param>
-        <param name="border">20</param>
-        <param name="transparency">false</param>
-        <definition>
-            <control type="group">
-                <include condition="$PARAM[transparency]">Part_Background_Transparency</include>
-                <control type="image">
-                    <texture border="20">$VAR[Image_SimpleDialogBackground]</texture>
-                    <include condition="$PARAM[shadow]">Texture_Shadow_80</include>
-                </control>
-                <control type="image">
-                    <texture colordiffuse="dialog_overlay" border="20">common/dialog.png</texture>
-                </control>
-            </control>
-            <include>Part_Background_Glass_Border</include>
-        </definition>
     </include>
 
     <include name="Part_Background_Blur_Standard">

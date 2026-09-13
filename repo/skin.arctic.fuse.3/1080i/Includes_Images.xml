@@ -233,7 +233,6 @@
         <value>special://skin/extras/backgrounds/dialogs/classic_blur.png</value>
     </variable>
 
-
     <variable name="Image_SimpleBackground">
         <value condition="!String.IsEmpty(Skin.String(Background.Image))">$INFO[Skin.String(Background.Image)]</value>
         <value>special://skin/extras/backgrounds/blur/purle_blur.jpg</value>
@@ -438,8 +437,9 @@
         <value>special://skin/extras/icons/play2.png</value>
     </variable>
 
-    <variable name="Image_CombinedStudio">
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_studio))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_studio),resource://resource.images.studios.coloured/,.png]</value>
+   <variable name="Image_CombinedStudio">
+        <value condition="!String.IsEmpty(ListItem.Studio) + !String.Contains(ListItem.Studio,/)">$INFO[ListItem.Studio,resource://resource.images.studios.coloured/,.png]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_first_studio))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_first_studio),resource://resource.images.studios.coloured/,.png]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Network.1.Name),resource://resource.images.studios.coloured/,.png]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name),resource://resource.images.studios.coloured/,.png]</value>
     </variable>
@@ -814,4 +814,22 @@
         <value condition="!String.IsEmpty(Player.Art(clearlogo))">$INFO[Player.Art(clearlogo)]</value>
     </variable>
 
+    <!-- HOME - SYSTEM STATS ICONS - COLORED / MONOCHROME TOGGLE -->
+
+    <variable name="SysStats_CPU_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/sysinfo1.png</value>
+        <value>special://skin/extras/icons/cpu.png</value>
+    </variable>
+    <variable name="SysStats_RAM_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/raminfo1.png</value>
+        <value>special://skin/extras/icons/ram.png</value>
+    </variable>
+    <variable name="SysStats_Connected_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/networkinfo1.png</value>
+        <value>special://skin/extras/icons/connected.png</value>
+    </variable>
+    <variable name="SysStats_Disconnected_Icon">
+        <value condition="Skin.HasSetting(sysstats.icons.mono)">special://skin/extras/icons/networkinfono1.png</value>
+        <value>special://skin/extras/icons/disconnected.png</value>
+    </variable>
 </includes>

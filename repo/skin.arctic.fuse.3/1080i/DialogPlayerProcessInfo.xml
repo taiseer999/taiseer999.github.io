@@ -1153,7 +1153,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(videodecoder), ]$VAR[Label_VideoHWDecoder, [COLOR dimgrey]([/COLOR],[COLOR dimgrey])[/COLOR]] $VAR[|] $INFO[Player.Process(deintmethod)]</label>
+						<label>[UPPERCASE]$INFO[Player.Process(videodecoder)][/UPPERCASE] $VAR[VideoDecoder,[COLOR dialog_fg_70](,)[/COLOR]]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1397,7 +1397,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.bit.depth),,-bit] $VAR[|] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)]</label>
+						<label>$VAR[VideoBitDepth]-bit] $VAR[|] $INFO[Player.Process(video.width.raw)]x$INFO[Player.Process(video.height.raw)]$INFO[Player.Process(videoscantype)]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
@@ -1796,7 +1796,7 @@
 						<height>40</height>
 						<aligny>bottom</aligny>
 						<align>right</align>
-						<label>$VAR[DVTunnelVar,[COLOR dimgrey][,][/COLOR] ]$INFO[Player.Process(amlogic.pixformat)]</label>
+						<label>$VAR[VideoPixelFormat] $VAR[DVTunnelVar,-> [COLOR dialog_fg_70](,)[/COLOR]]</label>
 						<font>font_tiny_iconic_regular1</font>
 						<shadowcolor>black</shadowcolor>
 					</control>
