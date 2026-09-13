@@ -8,13 +8,21 @@ msgstr ""
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: \n"f
+"Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.1\n"
+
+msgctxt "#31994"
+msgid "Information bar"
+msgstr ""
+
+msgctxt "#31995"
+msgid "Two-line information bar"
+msgstr ""
 
 msgctxt "#31000"
 msgid "Live TV / PVR"
@@ -719,8 +727,7 @@ msgctxt "#31148"
 msgid "Black Onyx"
 msgstr ""
 
-#: /1080i/Settings.xml
-#: /1080i/SettingsSystemInfo.xml 
+#: /1080i/Settings.xml /1080i/SettingsSystemInfo.xml
 msgctxt "#31149"
 msgid "Used memory"
 msgstr ""
@@ -735,8 +742,18 @@ msgctxt "#31151"
 msgid "Customise video info"
 msgstr ""
 
+#: /1080i/AddonBrowser.xml
+msgctxt "#31152"
+msgid "Running add-ons"
+msgstr ""
+
 msgctxt "#31154"
 msgid "Misc options"
+msgstr ""
+
+#: /1080i/Includes_Search.xml
+msgctxt "#31155"
+msgid "Decades"
 msgstr ""
 
 #: /1080i/Includes_Keyboard_Mini.xml
@@ -1319,8 +1336,7 @@ msgctxt "#31320"
 msgid "Square"
 msgstr ""
 
-#: /1080i/Includes_SkinSettings.xml
-#: /1080i/Settings.xml
+#: /1080i/Includes_SkinSettings.xml /1080i/Settings.xml
 msgctxt "#31321"
 msgid "Customise viewtypes"
 msgstr ""
@@ -1721,8 +1737,7 @@ msgctxt "#31430"
 msgid "Customise style"
 msgstr ""
 
-#: /1080i/SkinSettings.xml 
-#: /1080i/Includes_Views_Row.xml
+#: /1080i/SkinSettings.xml /1080i/Includes_Views_Row.xml
 msgctxt "#31431"
 msgid "Circle"
 msgstr ""
@@ -1732,8 +1747,7 @@ msgctxt "#31432"
 msgid "Adaptive"
 msgstr ""
 
-#: /1080i/Includes_SkinSettings.xml
-#: /1080i/Settings.xml
+#: /1080i/Includes_SkinSettings.xml /1080i/Settings.xml
 msgctxt "#31434"
 msgid "Customise video OSD"
 msgstr ""
@@ -2353,380 +2367,116 @@ msgctxt "#31605"
 msgid "Next aired"
 msgstr ""
 
-msgctxt "#52074"
-msgid "Video OSD extras"
-msgstr ""
-
-msgctxt "#52074"
-msgid "Video OSD extras"
-msgstr ""
-
 #: /1080i/Includes_Labels.xml
-msgctxt "#52077"
+msgctxt "#31606"
 msgid "CPU + RAM above the clock"
 msgstr ""
 
-msgctxt "#52075"
+msgctxt "#31607"
 msgid "Network Connected"
 msgstr ""
 
-msgctxt "#52076"
+msgctxt "#31608"
 msgid "No connection"
 msgstr ""
 
-msgctxt "#31900"
-msgid "Display mode"
+#: /1080i/Includes_Labels.xml
+msgctxt "#31609"
+msgid "Show CoreELEC logo above date"
 msgstr ""
 
-msgctxt "#31901"
-msgid "Video mode"
+msgctxt "#31610"
+msgid "Colored system stats icons (RAM / CPU / connection)"
 msgstr ""
 
-msgctxt "#31902"
-msgid "Color space"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31611"
+msgid "Christmas Theme"
 msgstr ""
 
-msgctxt "#31903"
-msgid "Mb/s"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31612"
+msgid "Dec 7 - Jan 7"
 msgstr ""
 
-msgctxt "#31904"
-msgid "Bit depth"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31613"
+msgid "Winter Frost"
 msgstr ""
 
-msgctxt "#31905"
-msgid "Decoder"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31614"
+msgid "Aussie Christmas"
 msgstr ""
 
-msgctxt "#31906"
-msgid "VS10 | VP mode"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31615"
+msgid "Summer Breeze"
 msgstr ""
 
-msgctxt "#31907"
-msgid "Processing"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31616"
+msgid "Jun 21 - Aug 15"
 msgstr ""
 
-msgctxt "#31908"
-msgid "Video queue"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31617"
+msgid "Halloween Spook"
 msgstr ""
 
-msgctxt "#31909"
-msgid "Video queue data"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31618"
+msgid "Oct 1 - Nov 1"
 msgstr ""
 
-msgctxt "#31910"
-msgid "Audio queue"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31619"
+msgid "Background Overlay"
 msgstr ""
 
-msgctxt "#31911"
-msgid "Audio queue data"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31620"
+msgid "Background Atmosphere"
 msgstr ""
 
-msgctxt "#31912"
-msgid "Kb/s"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31621"
+msgid "Fly-by Animations"
 msgstr ""
 
-msgctxt "#31913"
-msgid "Playback time"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31622"
+msgid "Falling Props Density"
 msgstr ""
 
-msgctxt "#31914"
-msgid "Processor"
-msgstr ""
-
-msgctxt "#31915"
-msgid "Metadata"
-msgstr ""
-
-msgctxt "#31916"
-msgid "Profile"
-msgstr ""
-
-msgctxt "#31917"
-msgid "Level"
-msgstr ""
-
-msgctxt "#31918"
-msgid "RPU"
-msgstr ""
-
-msgctxt "#31919"
-msgid "Base Layer"
-msgstr ""
-
-msgctxt "#31920"
-msgid "Enhancement Layer"
-msgstr ""
-
-msgctxt "#31921"
-msgid "CMv2.9 -> CMv4.0"
-msgstr ""
-
-msgctxt "#31922"
-msgid "Metadata"
-msgstr ""
-
-msgctxt "#31923"
-msgid "Pixel format"
-msgstr ""
-
-msgctxt "#31924"
-msgid "Aspect ratio"
-msgstr ""
-
-msgctxt "#31925"
-msgid "HDR10 MDL"
-msgstr ""
-
-msgctxt "#31926"
-msgid "HDR10 MaxCLL/FALL"
-msgstr ""
-
-msgctxt "#31927"
-msgid "Media source"
-msgstr ""
-
-msgctxt "#31928"
-msgid "Unknown"
-msgstr ""
-
-msgctxt "#31929"
-msgid "On"
-msgstr ""
-
-msgctxt "#31930"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31623"
 msgid "Off"
 msgstr ""
 
-msgctxt "#31931"
-msgid "Deinterlacing"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31624"
+msgid "Normal"
 msgstr ""
 
-msgctxt "#31932"
-msgid "Player cache"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31625"
+msgid "High"
 msgstr ""
 
-msgctxt "#31933"
-msgid "N/A"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31626"
+msgid "Hub clearlogo on right (watermark)"
 msgstr ""
 
-msgctxt "#31934"
-msgid "Memory usage"
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31627"
+msgid "Codec logos"
 msgstr ""
 
-msgctxt "#31935"
-msgid "Passthrough"
-msgstr ""
 
-msgctxt "#31936"
-msgid "AML FPS"
+#: /1080i/Includes_Extra.xml
+msgctxt "#31996"
+msgid "Video OSD extras"
 msgstr ""
-
-msgctxt "#31937"
-msgid "Dolby Vision"
-msgstr ""
-
-msgctxt "#31938"
-msgid "Metadata"
-msgstr ""
-
-msgctxt "#31939"
-msgid "HDR Static Metadata"
-msgstr ""
-
-msgctxt "#31940"
-msgid "cd/m²"
-msgstr ""
-
-msgctxt "#31941"
-msgid "RPU MDL"
-msgstr ""
-
-msgctxt "#31942"
-msgid "RPU MaxCLL/FALL"
-msgstr ""
-
-msgctxt "#31943"
-msgid "FLL MIN / MAX / Ø"
-msgstr ""
-
-msgctxt "#31944"
-msgid "PQ  MIN / MAX / Ø"
-msgstr ""
-
-msgctxt "#31945"
-msgid "12-bit"
-msgstr ""
-
-msgctxt "#31946"
-msgid "Codec"
-msgstr ""
-
-msgctxt "#31947"
-msgid "Bitrate"
-msgstr ""
-
-msgctxt "#31948"
-msgid "VS10 status"
-msgstr ""
-
-msgctxt "#31951"
-msgid "Input"
-msgstr ""
-
-msgctxt "#31952"
-msgid "Audio language"
-msgstr ""
-
-msgctxt "#31953"
-msgid "Subtitle language"
-msgstr ""
-
-msgctxt "#31954"
-msgid "Video"
-msgstr ""
-
-msgctxt "#31955"
-msgid "Output"
-msgstr ""
-
-msgctxt "#31956"
-msgid "Audio"
-msgstr ""
-
-msgctxt "#31957"
-msgid "Top left"
-msgstr ""
-
-msgctxt "#31958"
-msgid "Top center"
-msgstr ""
-
-msgctxt "#31959"
-msgid "Top right"
-msgstr ""
-
-msgctxt "#31960"
-msgid "Codec logos (OSD)"
-msgstr ""
-
-msgctxt "#31961"
-msgid "Codec logos (PlayerProcessInfo)"
-msgstr ""
-
-msgctxt "#31962"
-msgid "Codec logos (Start)"
-msgstr ""
-
-msgctxt "#31963"
-msgid "Position of codec logos"
-msgstr ""
-
-msgctxt "#31964"
-msgid "Original"
-msgstr ""
-
-msgctxt "#31965"
-msgid "VS10"
-msgstr ""
-
-msgctxt "#31966"
-msgid "Audio codec"
-msgstr ""
-
-msgctxt "#31967"
-msgid "L5 Active Offsets"
-msgstr ""
-
-msgctxt "#31968"
-msgid "Version"
-msgstr ""
-
-msgctxt "#31969"
-msgid "Bit depth"
-msgstr ""
-
-msgctxt "#31970"
-msgid "EOTF & Gamut"
-msgstr ""
-
-msgctxt "#31971"
-msgid "- Duration"
-msgstr ""
-
-msgctxt "#31972"
-msgid "- Show path"
-msgstr ""
-
-msgctxt "#31973"
-msgid "Artwork Style"
-msgstr ""
-
-msgctxt "#31974"
-msgid "PlayerProcessInfo type"
-msgstr ""
-
-msgctxt "#31975"
-msgid "second"
-msgstr ""
-
-msgctxt "#31976"
-msgid "- Show file name"
-msgstr ""
-
-msgctxt "#31977"
-msgid "Modern"
-msgstr ""
-
-msgctxt "#31978"
-msgid "Classic"
-msgstr ""
-
-msgctxt "#31979"
-msgid "Original"
-msgstr ""
-
-msgctxt "#31980"
-msgid "VHS Art"
-msgstr ""
-
-msgctxt "#31981"
-msgid "Show file name in the version selection"
-msgstr ""
-
-msgctxt "#31982"
-msgid "Customise video osd"
-msgstr ""
-
-msgctxt "#31983"
-msgid "Customise video info"
-msgstr ""
-
-msgctxt "#31984"
-msgid "Show two-row information bar"
-msgstr ""
-
-msgctxt "#31985"
-msgid "Disc Art"
-msgstr ""
-
-msgctxt "#31986"
-msgid "Rotating disc"
-msgstr ""
-
-msgctxt "#31987"
-msgid "Decoding"
-msgstr ""
-
-msgctxt "#31988"
-msgid "System"
-msgstr ""
-
-msgctxt "#31989"
-msgid "Info line"
-msgstr ""
-
-msgctxt "#31990"
-msgid "L5 Offsets (detected)"
-msgstr ""
-

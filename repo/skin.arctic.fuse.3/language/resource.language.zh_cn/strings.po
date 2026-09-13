@@ -33,7 +33,7 @@ msgstr "混合：方形"
 #: /1080i/Includes_Views_Combined.xml
 msgctxt "#31003"
 msgid "Combined Landscape"
-msgstr "混合：横幅"
+msgstr "混合：横版"
 
 #: /1080i/Includes_Views_Combined.xml
 msgctxt "#31004"
@@ -115,7 +115,7 @@ msgstr "列表：节目单"
 #: /1080i/Includes_Views_PVR.xml
 msgctxt "#31020"
 msgid "List Outline"
-msgstr "列表：内容提要"
+msgstr "列表：大纲"
 
 #: /1080i/Includes_Views_Combined.xml
 msgctxt "#31021"
@@ -233,7 +233,7 @@ msgstr "视图类型"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31045"
 msgid "Landscape"
-msgstr "横幅"
+msgstr "横版"
 
 #: /1080i/Includes_Search.xml
 msgctxt "#31046"
@@ -293,17 +293,17 @@ msgstr "岁"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31058"
 msgid "Wrap"
-msgstr "列表循环"
+msgstr "循环环绕"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31059"
 msgid "Side"
-msgstr "侧边行为"
+msgstr "侧边"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31060"
 msgid "Slide"
-msgstr "沉浸模式"
+msgstr "滑动"
 
 #: /shortcuts/template.xml
 msgctxt "#31061"
@@ -318,7 +318,7 @@ msgstr "播放列表顺序"
 #: /shortcuts/template.xml
 msgctxt "#31063"
 msgid "Watched episodes"
-msgstr "已观看集数"
+msgstr "已观看剧集"
 
 msgctxt "#31064"
 msgid "Awards"
@@ -387,17 +387,37 @@ msgstr "更多信息"
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31078"
 msgid "Use fake label textboxes"
-msgstr "启用简易标签文本框"
+msgstr "禁用剧情简介自动滚动"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31079"
 msgid "improves performance on Omega"
-msgstr "提升 Omega 版本的运行性能"
+msgstr "提升在 Omega 版本上的性能"
+
+#: /1080i/Dialog_DialogCustom.xml
+msgctxt "#31080"
+msgid "Button"
+msgstr "按钮"
+
+#: /1080i/Dialog_DialogCustom.xml
+msgctxt "#31081"
+msgid "Others"
+msgstr "其他"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31082"
+msgid "Ratings style"
+msgstr "评分样式"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31083"
 msgid "Combined"
 msgstr "混合"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31084"
+msgid "Preload hubs during startup initialisation"
+msgstr "启动初始化时预加载内容分类中心"
 
 msgctxt "#31085"
 msgid "Live TV"
@@ -406,6 +426,11 @@ msgstr "电视直播"
 msgctxt "#31086"
 msgid "Customise options"
 msgstr "自定义选项"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31087"
+msgid "Game Saves"
+msgstr "游戏存档"
 
 #: /1080i/VideoOSDBookmarks.xml
 msgctxt "#31088"
@@ -421,10 +446,20 @@ msgctxt "#31090"
 msgid "In-Progress"
 msgstr "正在观看"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31091"
+msgid "In-Game Saves"
+msgstr "游戏内存档"
+
 #: /1080i/SkinSettings.xml /1080i/Includes_Shortcuts_Window.xml
 msgctxt "#31092"
 msgid "Detailed information"
 msgstr "详细信息"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31093"
+msgid "Cycle extra fanart"
+msgstr "循环切换额外背景图"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31094"
@@ -435,6 +470,16 @@ msgstr "鼠标指针大小"
 msgctxt "#31095"
 msgid "Translations"
 msgstr "翻译"
+
+#: /1080i/Dialog_DialogPictureInfo.xml
+msgctxt "#31096"
+msgid "plays"
+msgstr "播放次数"
+
+#: /1080i/Includes_DialogInfo.xml
+msgctxt "#31097"
+msgid "File details"
+msgstr "文件详情"
 
 #: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
 msgctxt "#31098"
@@ -456,17 +501,47 @@ msgctxt "#31101"
 msgid "Wall Board"
 msgstr "墙：看板"
 
+#: /1080i/Includes_DialogInfo.xml
+msgctxt "#31102"
+msgid "Extension"
+msgstr "扩展名"
+
 msgctxt "#31103"
 msgid "Widgets"
 msgstr "小组件"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31104"
+msgid "Position"
+msgstr "位置"
 
 msgctxt "#31105"
 msgid "Spotlight"
 msgstr "精选推荐"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31106"
+msgid "Top"
+msgstr "顶部"
+
+#: /1080i/Dialog_DialogGameControllers.xml
+msgctxt "#31107"
+msgid "Edit buttons"
+msgstr "编辑按钮"
+
 msgctxt "#31108"
 msgid "Collections"
 msgstr "合集"
+
+#: /1080i/Dialog_DialogPVRGroupManager.xml
+msgctxt "#31109"
+msgid "Edit group"
+msgstr "编辑分组"
+
+#: /1080i/Includes_Info.xml
+msgctxt "#31110"
+msgid "Starts at"
+msgstr "开始于"
 
 msgctxt "#31111"
 msgid "Row Poster"
@@ -474,7 +549,7 @@ msgstr "行：海报"
 
 msgctxt "#31112"
 msgid "Row Landscape"
-msgstr "行：横幅"
+msgstr "行：横版"
 
 msgctxt "#31113"
 msgid "Row Square"
@@ -515,10 +590,20 @@ msgctxt "#31120"
 msgid "List Basic"
 msgstr "列表：基础"
 
+#: /1080i/Dialog_FileBrowser.xml
+msgctxt "#31121"
+msgid "Mirror"
+msgstr "镜像"
+
 #: /1080i/Includes_MediaFilter.xml
 msgctxt "#31122"
 msgid "Watchlist"
 msgstr "待看列表"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31123"
+msgid "Plot line"
+msgstr "剧情简介"
 
 msgctxt "#31124"
 msgid "Indicator"
@@ -527,6 +612,16 @@ msgstr "指示器"
 msgctxt "#31125"
 msgid "Invert Text Colour"
 msgstr "反转文本颜色"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31126"
+msgid "Plotline"
+msgstr "剧情简介"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31127"
+msgid "Genre colours"
+msgstr "类型配色"
 
 #: /1080i/Includes_MediaFilter.xml
 msgctxt "#31128"
@@ -772,7 +867,7 @@ msgctxt "#31207"
 msgid "Codecs"
 msgstr "编解码器"
 
-#: /1080i/SkinSettings.xml
+#: /1080i/SkinSettings.xml /1080i/SkinSettings.xml
 msgctxt "#31208"
 msgid "Header"
 msgstr "页眉"
@@ -804,7 +899,7 @@ msgstr "可视化设置"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31214"
 msgid "Series Finale"
-msgstr "系列完结"
+msgstr "电视剧完结"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31215"
@@ -985,23 +1080,23 @@ msgstr "处理器"
 
 msgctxt "#31259"
 msgid "FPS"
-msgstr "帧率"
+msgstr "FPS"
 
 msgctxt "#31260"
 msgid "AR"
-msgstr "宽高比"
+msgstr "AR"
 
 msgctxt "#31261"
 msgid "px"
-msgstr "像素"
+msgstr "px"
 
 msgctxt "#31262"
 msgid "Hz"
-msgstr "赫兹"
+msgstr "Hz"
 
 msgctxt "#31263"
 msgid "bits"
-msgstr "位"
+msgstr "bits"
 
 msgctxt "#31264"
 msgid "Revenue"
@@ -1056,7 +1151,7 @@ msgstr "已播放"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31284"
 msgid "Discover movies and tvshows on TMDb."
-msgstr "在 TMDb 上探索电影和剧集。"
+msgstr "在 TMDb 上探索电影和电视剧。"
 
 msgctxt "#31285"
 msgid "Classification (MPAA)"
@@ -1088,7 +1183,7 @@ msgstr "署名"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31291"
 msgid "Search for movies$COMMA tvshows$COMMA and more."
-msgstr "搜索电影$COMMA 剧集$COMMA 等更多内容。"
+msgstr "搜索电影$COMMA 电视剧$COMMA 等更多内容。"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31292"
@@ -1114,11 +1209,11 @@ msgstr "播放列表"
 #: /1080i/SkinSettings.xml
 msgctxt "#31297"
 msgid "Extra fanart"
-msgstr "额外同人画"
+msgstr "额外背景图"
 
 msgctxt "#31298"
 msgid "Movies and tv shows starring this actor"
-msgstr "该演员主演的电影和剧集"
+msgstr "该演员主演的电影和电视剧"
 
 msgctxt "#31299"
 msgid "Information is loading"
@@ -1202,7 +1297,7 @@ msgstr "编辑小组件"
 #: /1080i/Includes_Labels.xml
 msgctxt "#31329"
 msgid "Text"
-msgstr "文字"
+msgstr "文本"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31330"
@@ -1231,12 +1326,12 @@ msgstr "Select + X"
 #: /1080i/GameOSD.xml
 msgctxt "#31337"
 msgid "Select + Start"
-msgstr "Select + Start"
+msgstr "Select + 开始"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31338"
 msgid "Select + Right Stick"
-msgstr "Select + Right Stick"
+msgstr "Select + 右摇杆"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31340"
@@ -1302,7 +1397,7 @@ msgstr "切换用户"
 #: /1080i/Includes_Items.xml
 msgctxt "#31362"
 msgid "Side items"
-msgstr "侧边栏项目"
+msgstr "侧边项目"
 
 #: /1080i/Includes_Items.xml
 msgctxt "#31363"
@@ -1447,31 +1542,31 @@ msgstr "最近电影"
 
 msgctxt "#31397"
 msgid "Recent Tv Shows"
-msgstr "最近剧集"
+msgstr "最近电视剧"
 
 msgctxt "#31398"
 msgid "New Movies"
-msgstr "新增电影"
+msgstr "最近添加的电影"
 
 msgctxt "#31399"
 msgid "New TV Shows"
-msgstr "新增剧集"
+msgstr "最近添加的电视剧"
 
 msgctxt "#31400"
 msgid "New Episodes"
-msgstr "新增剧集分集"
+msgstr "最近添加的剧集"
 
 msgctxt "#31401"
 msgid "New Artists"
-msgstr "新增艺术家"
+msgstr "最近添加的艺术家"
 
 msgctxt "#31402"
 msgid "New Albums"
-msgstr "新增专辑"
+msgstr "最近添加的专辑"
 
 msgctxt "#31403"
 msgid "In-Progress TV Shows"
-msgstr "正在观看的剧集"
+msgstr "正在观看的电视剧"
 
 msgctxt "#31404"
 msgid "In-Progress Movies"
@@ -1487,7 +1582,7 @@ msgstr "高分电影"
 
 msgctxt "#31407"
 msgid "Top Rated TV Shows"
-msgstr "高分剧集"
+msgstr "高分电视剧"
 
 msgctxt "#31408"
 msgid "Random Movies"
@@ -1495,11 +1590,11 @@ msgstr "随机电影"
 
 msgctxt "#31409"
 msgid "Random TV Shows"
-msgstr "随机剧集"
+msgstr "随机电视剧"
 
 msgctxt "#31410"
 msgid "Random Episodes"
-msgstr "随机分集"
+msgstr "随机剧集"
 
 msgctxt "#31411"
 msgid "Random Songs"
@@ -1515,11 +1610,11 @@ msgstr "全部电影"
 
 msgctxt "#31414"
 msgid "All TV Shows"
-msgstr "全部剧集"
+msgstr "全部电视剧"
 
 msgctxt "#31415"
 msgid "Movies and TV Shows"
-msgstr "电影与剧集"
+msgstr "电影与电视剧"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31416"
@@ -1718,7 +1813,7 @@ msgstr "火险等级"
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31472"
 msgid "Rain since 9am"
-msgstr "9 点以来降雨量"
+msgstr "自上午9点起的降雨量"
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31473"
@@ -1908,7 +2003,7 @@ msgstr "反向排序"
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31519"
 msgid "Empty widget placeholder"
-msgstr "空小组件占位符"
+msgstr "显示无内容小组件"
 
 #: /1080i/Includes_Weather_Radar.xml
 msgctxt "#31520"
@@ -2048,7 +2143,7 @@ msgstr "墙：海报"
 #: /1080i/Includes_Views_Wall.xml
 msgctxt "#31555"
 msgid "Wall Landscape"
-msgstr "墙：横幅"
+msgstr "墙：横版"
 
 #: /1080i/Includes_Views_Wall.xml
 msgctxt "#31556"
@@ -2083,7 +2178,7 @@ msgstr "更细致的调整及额外分类中心自定义。"
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31566"
 msgid "Development tools and experimental options."
-msgstr "开发工具与实验性选项。"
+msgstr "额外的开发工具与实验性选项。"
 
 #: /1080i/Custom_1116_Dialog_Shortcuts.xml
 msgctxt "#31567"
@@ -2209,3 +2304,8 @@ msgstr "更多"
 msgctxt "#31605"
 msgid "Next aired"
 msgstr "下次播出"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31627"
+msgid "Codec logos"
+msgstr ""

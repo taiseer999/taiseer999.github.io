@@ -2,7 +2,6 @@
 <window>
     <onload>ClearProperty(OSDRelaunchFullscreen,Home)</onload>
     <controls>
-      
         <control type="grouplist" id="0">
             <orientation>vertical</orientation>
             <centertop>100</centertop>
@@ -26,7 +25,6 @@
                 <textoffsetx>10</textoffsetx>
                 <font>font_mini</font>
             </include>
-        </control>	
-       
+        </control>
     </controls>
 </window>

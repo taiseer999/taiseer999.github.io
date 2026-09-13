@@ -235,15 +235,14 @@
                     <control type="label">
                         <textcolor>$PARAM[color_fg]</textcolor>
                         <label>$VAR[Label_StreamLanguage,[UPPERCASE],[/UPPERCASE]]$INFO[ListItem.Label2, | ,]</label>
-                         <font>font_tiny_bold</font>
-
+                        <width>$PARAM[label_width]</width>
                     </control>
                     <control type="label">
                         <right>240</right>
                         <align>right</align>
                         <label>$VAR[Label_PlayerStream_IsForced,  ,]$VAR[Label_PlayerStream_IsDefault,  ,]$VAR[Label_PlayerStream_IsOriginal,  ,]$INFO[ListItem.Property(codec),  ,]$INFO[ListItem.Property(channels),  , $LOCALIZE[10127]]$INFO[ListItem.Property(bitrate),  , bps]</label>
                         <bottom>2</bottom>
-                        <font>font_hint_bold</font>
+                        <font>font_tiny_bold</font>
                         <textcolor>$PARAM[color_fg]</textcolor>
                     </control>
 
@@ -287,7 +286,7 @@
         </definition>
     </include>
 
-   <include name="OSD_VideoBackground_Dialog">
+    <include name="OSD_VideoBackground_Dialog">
         <control type="group">
             <control type="image">
                 <texture colordiffuse="black">common/white.png</texture>
@@ -320,7 +319,7 @@
         <control type="image">
             <bottom>0</bottom>
             <height>256</height>
-            <texture colordiffuse="panel_bg_50" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
         </control>
@@ -328,10 +327,10 @@
         <control type="image">
             <bottom>0</bottom>
             <height>768</height>
-            <texture colordiffuse="panel_bg_50" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
-            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)</visible>
+            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsActive(1159) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)</visible>
         </control>
     </include>
 
@@ -461,6 +460,7 @@
                         <itemlayout height="80">
                             <include content="OSD_Stream_Selector_Layout">
                                 <param name="enabled">$PARAM[enabled]</param>
+                                <param name="label_width">$PARAM[label_width]</param>
                             </include>
                         </itemlayout>
                         <focusedlayout height="80">
@@ -468,6 +468,7 @@
                                 <param name="selected">true</param>
                                 <param name="color_fg">$VAR[ColorSelected]</param>
                                 <param name="enabled">$PARAM[enabled]</param>
+                                <param name="label_width">$PARAM[label_width]</param>
                             </include>
                         </focusedlayout>
                         <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
@@ -558,9 +559,9 @@
                         <include>Object_ItemBack</include>
                         <control type="image">
                             <texture background="true" diffuse="diffuse/landscape_w410_h231.png">$VAR[Image_OSD_Landscape]</texture>
-                            <aspectratio scalediffuse="false">keep</aspectratio>
                         </control>
                         <control type="group">
+                            <visible>!Window.IsActive(DialogSeekBar.xml)</visible>
                             <control type="group">
                                 <visible>VideoPlayer.Content(livetv)</visible>
                                 <include content="Object_ProgressLine">
@@ -633,7 +634,7 @@
                     <param name="listitem">VideoPlayer</param>
                     <param name="service">Player</param>
                     <param name="override_tvshow">VideoPlayer.Content(episodes)</param>
-                    <param name="override_movie">!VideoPlayer.Content(episodes)</param>
+                    <param name="override_movie">VideoPlayer.Content(movies)</param>
                 </include>
 
                 <control type="group" description="Avoid grouplist chop with spacer">
@@ -644,24 +645,22 @@
     </include>
 
     <include name="OSD_Progress_Labels">
-        <!-- Elapsed time label - left aligned above progress bar -->
         <control type="label">
-            <height>40</height>
+            <height>12</height>
             <left>view_pad</left>
             <right>view_pad</right>
-            <centerbottom>172</centerbottom>
+            <centerbottom>182</centerbottom>
             <align>left</align>
             <aligny>center</aligny>
             <label>$VAR[Label_OSD_Time]</label>
             <textcolor>panel_fg_100</textcolor>
             <font>font_main</font>
         </control>
-        <!-- Total duration label - right aligned above progress bar -->
         <control type="label">
-            <height>40</height>
+            <height>12</height>
             <left>view_pad</left>
             <right>view_pad</right>
-            <centerbottom>172</centerbottom>
+            <centerbottom>182</centerbottom>
             <align>right</align>
             <aligny>center</aligny>
             <label>$VAR[Label_OSD_Duration]</label>
@@ -793,7 +792,6 @@
                     <param name="infolabel_videocodec">VideoPlayer.VideoCodec</param>
                     <param name="infolabel_audiocodec">VideoPlayer.AudioCodec</param>
                     <param name="infolabel_audiochannels">VideoPlayer.AudioChannels</param>
-                    <param name="visible">!Skin.HasSetting(ExtraOSD)</param>
                     <param name="itemgap">$PARAM[itemgap]</param>
                     <param name="align">$PARAM[align]</param>
                 </include>
@@ -810,152 +808,76 @@
         </definition>
     </include>
 
-    <include name="OSD_VS10_Original">
-        <param name="textcolor_sub">panel_fg_70</param>
-        <param name="textcolor_top">panel_fg_90</param>
-        <definition>
-            <control type="group">
-                <centertop>50%</centertop>
-                <height>80</height>
-                <include content="Object_InfoCircle">
-                    <param name="name">$LOCALIZE[32064]</param>
-                    <param name="role">ORIGINAL</param>
-                    <param name="icon">special://skin/extras/icons/orig.png</param>
-                    <param name="fallback_role">ORIGINAL</param>
-                    <param name="textcolor_top">$PARAM[textcolor_top]</param>
-                    <param name="textcolor_sub">$PARAM[textcolor_sub]</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
-    <include name="OSD_VS10_SDR">
-        <param name="textcolor_sub">panel_fg_70</param>
-        <param name="textcolor_top">panel_fg_90</param>
-        <definition>
-            <control type="group">
-                <centertop>50%</centertop>
-                <height>80</height>
-                <include content="Object_InfoCircle">
-                    <param name="name">$INFO[Player.Process(video.source.hdr.type)] -&gt; SDR</param>
-                    <param name="role">SDR</param>
-                    <param name="icon">special://skin/extras/icons/sdr.png</param>
-                    <param name="fallback_role">SDR</param>
-                    <param name="textcolor_top">$PARAM[textcolor_top]</param>
-                    <param name="textcolor_sub">$PARAM[textcolor_sub]</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
-    <include name="OSD_VS10_HDR">
-        <param name="textcolor_sub">panel_fg_70</param>
-        <param name="textcolor_top">panel_fg_90</param>
-        <definition>
-            <control type="group">
-                <centertop>50%</centertop>
-                <height>80</height>
-                <include content="Object_InfoCircle">
-                    <param name="name">$INFO[Player.Process(video.source.hdr.type)] -&gt; HDR10</param>
-                    <param name="role">HDR 10</param>
-                    <param name="icon">special://skin/extras/icons/hdr10.png</param>
-                    <param name="fallback_role">HDR 10</param>
-                    <param name="textcolor_top">$PARAM[textcolor_top]</param>
-                    <param name="textcolor_sub">$PARAM[textcolor_sub]</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
-    <include name="OSD_VS10_DV">
-        <param name="textcolor_sub">panel_fg_70</param>
-        <param name="textcolor_top">panel_fg_90</param>
-        <definition>
-            <control type="group">
-                <centertop>50%</centertop>
-                <height>80</height>
-                <include content="Object_InfoCircle">
-                    <param name="name">$INFO[Player.Process(video.source.hdr.type)] -&gt; Dolby Vision</param>
-                    <param name="role">Dolby Vision</param>
-                    <param name="icon">special://skin/extras/icons/dolbyvision.png</param>
-                    <param name="fallback_role">Dolby Vision</param>
-                    <param name="textcolor_top">$PARAM[textcolor_top]</param>
-                    <param name="textcolor_sub">$PARAM[textcolor_sub]</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
     <include name="OSD_TempoControl_FFRW_Steps">
         <control type="grouplist">
-            <left>20</left>
+            <left>-9</left>
             <right>-9</right>
             <height>70</height>
             <bottom>0</bottom>
             <orientation>horizontal</orientation>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
-                <param name="label">$NUMBER[32]x</param>
+                <param name="width">38</param>
+                <param name="label">$NUMBER[32]</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
-                <param name="label">$NUMBER[16]x</param>
+                <param name="width">38</param>
+                <param name="label">$NUMBER[16]</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">$NUMBER[8]x</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">$NUMBER[4]x</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">$NUMBER[2]x</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">|</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">$NUMBER[2]x</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">$NUMBER[4]x</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
+                <param name="width">38</param>
                 <param name="label">$NUMBER[8]x</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
-                <param name="label">$NUMBER[16]x</param>
+                <param name="width">38</param>
+                <param name="label">$NUMBER[16]</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
             <include content="OSD_PlaySpeed_Label">
-                <param name="width">42</param>
-                <param name="label">$NUMBER[32]x</param>
+                <param name="width">38</param>
+                <param name="label">$NUMBER[32]</param>
                 <param name="textcolor">$PARAM[textcolor]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
@@ -964,7 +886,7 @@
 
     <include name="OSD_TempoControl_Steps">
         <control type="grouplist">
-            <left>37</left>
+            <left>-8</left>
             <right>-8</right>
             <height>70</height>
             <bottom>0</bottom>
@@ -1049,7 +971,7 @@
                 <height>12</height>
             </control>
             <control type="group">
-                <left>57</left>
+                <left>6</left>
                 <centertop>50%</centertop>
                 <height>24</height>
                 <width>24</width>
@@ -1061,17 +983,17 @@
                 <animation effect="slide" end="312" condition="$PARAM[istempo] + String.IsEqual(Player.PlaySpeed,1.40)">Conditional</animation>
                 <animation effect="slide" end="364" condition="$PARAM[istempo] + String.IsEqual(Player.PlaySpeed,1.50)">Conditional</animation>
 
-                <animation effect="slide" end="-28" condition="!$PARAM[istempo] + Player.Rewinding32x">Conditional</animation>
-                <animation effect="slide" end="14" condition="!$PARAM[istempo] + Player.Rewinding16x">Conditional</animation>
-                <animation effect="slide" end="56" condition="!$PARAM[istempo] + Player.Rewinding8x">Conditional</animation>
-                <animation effect="slide" end="98" condition="!$PARAM[istempo] + Player.Rewinding4x">Conditional</animation>
-                <animation effect="slide" end="140" condition="!$PARAM[istempo] + Player.Rewinding2x">Conditional</animation>
+                <animation effect="slide" end="-8" condition="!$PARAM[istempo] + Player.Rewinding32x">Conditional</animation>
+                <animation effect="slide" end="30" condition="!$PARAM[istempo] + Player.Rewinding16x">Conditional</animation>
+                <animation effect="slide" end="68" condition="!$PARAM[istempo] + Player.Rewinding8x">Conditional</animation>
+                <animation effect="slide" end="106" condition="!$PARAM[istempo] + Player.Rewinding4x">Conditional</animation>
+                <animation effect="slide" end="144" condition="!$PARAM[istempo] + Player.Rewinding2x">Conditional</animation>
                 <animation effect="slide" end="182" condition="!$PARAM[istempo] + !Player.Rewinding + !Player.Forwarding">Conditional</animation>
-                <animation effect="slide" end="224" condition="!$PARAM[istempo] + Player.Forwarding2x">Conditional</animation>
-                <animation effect="slide" end="266" condition="!$PARAM[istempo] + Player.Forwarding4x">Conditional</animation>
-                <animation effect="slide" end="308" condition="!$PARAM[istempo] + Player.Forwarding8x">Conditional</animation>
-                <animation effect="slide" end="350" condition="!$PARAM[istempo] + Player.Forwarding16x">Conditional</animation>
-                <animation effect="slide" end="392" condition="!$PARAM[istempo] + Player.Forwarding32x">Conditional</animation>
+                <animation effect="slide" end="220" condition="!$PARAM[istempo] + Player.Forwarding2x">Conditional</animation>
+                <animation effect="slide" end="258" condition="!$PARAM[istempo] + Player.Forwarding4x">Conditional</animation>
+                <animation effect="slide" end="296" condition="!$PARAM[istempo] + Player.Forwarding8x">Conditional</animation>
+                <animation effect="slide" end="334" condition="!$PARAM[istempo] + Player.Forwarding16x">Conditional</animation>
+                <animation effect="slide" end="372" condition="!$PARAM[istempo] + Player.Forwarding32x">Conditional</animation>
                 <control type="image">
                     <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
                         <param name="colordiffuse">$VAR[ColorSelected]</param>
@@ -1342,7 +1264,6 @@
                     <param name="label">$PARAM[label]</param>
                     <param name="iconoffset_condition">$PARAM[iconoffset_condition]</param>
                 </include>
-
             </control>
         </definition>
     </include>

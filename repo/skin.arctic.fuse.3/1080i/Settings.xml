@@ -27,6 +27,10 @@
                                     <label>$LOCALIZE[14116]</label>
                                     <onclick>ActivateWindow(systeminfo)</onclick>
                                 </item>
+                                <item id="4">
+                                    <label>$LOCALIZE[24001]</label>
+                                    <onclick>ActivateWindow(addonbrowser)</onclick>
+                                </item>
                             </content>
                         </include>
                     </include>
@@ -88,7 +92,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[31934]: ,]</label>
+                                                <label fallback="19055">$INFO[system.memory(used.percent),$LOCALIZE[31149]: ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -109,7 +113,7 @@
                                             <control type="label">
                                                 <height>40</height>
                                                 <textcolor>main_fg_70</textcolor>
-                                                <label fallback="19055">$LOCALIZE[31914]: $INFO[System.CPUTemperature] | $INFO[System.CpuAltUsage]</label>
+                                                <label fallback="19055">$INFO[System.CPUUsage,$LOCALIZE[13271] ,]</label>
                                             </control>
                                             <control type="group">
                                                 <height>12</height>
@@ -162,7 +166,6 @@
                             </control>
                         </control>
 
-
                         <control type="group">
                             <visible>Container(3).HasFocus(3)</visible>
                             <include content="List_DialogSelect">
@@ -196,6 +199,14 @@
                                         <icon>special://skin/extras/icons/coreelec.png</icon>
                                         <onclick>RunAddon(service.coreelec.settings)</onclick>
                                         <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
+                                    </item>
+                                    <item>
+                                        <label>Codec Logos</label>
+                                        <label2>skin.arctic.fuse.3</label2>
+                                        <icon>special://skin/extras/icons/configure.png</icon>
+                                        <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_u3k_Items,Home)</onclick>
+                                        <onclick>SetProperty(CustomDialogSettingsTitle,u3k,Home)</onclick>
+                                        <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                     <item>
                                         <label>TMDbHelper</label>
@@ -241,7 +252,7 @@
                                         <onclick>ActivateWindow(1116)</onclick>
                                     </item>
                                     <item>
-                                        <label>$LOCALIZE[31982]</label>
+                                        <label>$LOCALIZE[31434]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/gauge.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoOSD_Items,Home)</onclick>
@@ -249,7 +260,7 @@
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                     <item>
-                                        <label>$LOCALIZE[31983]</label>
+                                        <label>$LOCALIZE[31151]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/circle-info.png</icon>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoInfo_Items,Home)</onclick>
@@ -257,7 +268,7 @@
                                         <onclick>ActivateWindow(1118)</onclick>
                                     </item>
                                     <item>
-                                        <label>$LOCALIZE[31538]</label>
+                                        <label>$LOCALIZE[31321]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/table.png</icon>
                                         <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
@@ -273,6 +284,30 @@
                                 </content>
                             </include>
 
+                        </control>
+
+                            <control type="group">
+                            <visible>Container(3).HasFocus(4)</visible>
+                            <include content="List_DialogSelect">
+                                <param name="detailed">True</param>
+                                <param name="item_height">120</param>
+                                <param name="control">panel</param>
+                                <param name="id">8004</param>
+                                <param name="item_w">view_addonbrowser_item_w</param>
+                                <param name="itemlayout_w">view_addonbrowser_itemlayout_w</param>
+                                <param name="variation">true</param>
+                                <param name="icon">$VAR[Image_AddonStatus]</param>
+                                <param name="textcolor">main_fg</param>
+                                <onleft>3</onleft>
+                                <onright>60</onright>
+                                <pagecontrol>60</pagecontrol>
+                                <top>20</top>
+                                <left>20</left>
+                                <right>0</right>
+                                <bottom>20</bottom>
+                                <onclick>Action(Info)</onclick>
+                                <content sortby="label">addons://user/all</content>
+                            </include>
                         </control>
 
                     </control>

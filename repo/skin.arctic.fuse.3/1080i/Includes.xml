@@ -3,7 +3,6 @@
 
     <include file="Includes_Font.xml" />
 
-    <include file="Includes_Constants_FlixArt_Small.xml" condition="Skin.String(Skin.FlixArt.Size,Small)" />
     <include file="Includes_Constants_FlixArt_Large.xml" condition="Skin.String(Skin.FlixArt.Size,Large)" />
     <include file="Includes_Constants_FlixArt_ExtraLarge.xml" condition="Skin.String(Skin.FlixArt.Size,ExtraLarge)" />
     <include file="Includes_Constants_4x3.xml" condition="String.IsEqual(Skin.AspectRatio,4:3)" />
@@ -37,6 +36,7 @@
     <include file="Dialog_DialogPVRInfo.xml" />
     <include file="Dialog_DialogPVRGuideSearch.xml" />
     <include file="Dialog_DialogPictureInfo.xml" />
+    <include file="Dialog_DialogProcessInfo.xml" />
     <include file="Dialog_DialogSelect.xml" />
     <include file="Dialog_DialogContextMenu.xml" />
     <include file="Dialog_DialogWeather.xml" />
@@ -57,7 +57,7 @@
     <include file="Dialog_DialogView.xml" />
     <include file="Dialog_SmartPlaylistEditor.xml" />
     <include file="Dialog_FileBrowser.xml" />
-
+    
     <include file="Includes_DialogInfo.xml" />
     <include file="Includes_Furniture.xml" />
     <include file="Includes_Textures.xml" />
@@ -72,13 +72,10 @@
     <include file="Includes_Layouts.xml" />
     <include file="Includes_Widgets.xml" />
     <include file="Includes_NextAired.xml" />
-    <include file="Includes_Addons.xml" />
     <include file="Includes_LiveTV.xml" />
+    <include file="Includes_Addons.xml" />
     <include file="Includes_Paths.xml" />
-    <include file="Includes_CodecLogos.xml"/>
-    <include file="Includes_PPI_Classic.xml"/>
-    <include file="Includes_PPI_Modern.xml"/>
-    <include file="Includes_Extra.xml"/>
+    <include file="Includes_u3k.xml"/>
 
     <include file="Includes_Views.xml" />
     <include file="Includes_Views_List.xml" />
@@ -98,5 +95,5 @@
 
     <include file="Includes_Overlay.xml" />
     <include file="Includes_Fallbacks.xml" />
-
+    <include file="Includes_Extra.xml" />
 </includes>

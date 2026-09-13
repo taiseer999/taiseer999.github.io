@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2026-01-29 8:25+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hu\n"
@@ -185,6 +185,16 @@ msgctxt "#31035"
 msgid "Crew member"
 msgstr "Stábtag"
 
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31036"
+msgid "Limited widgets use Show More folder item"
+msgstr "Korlátozott widgeteknél, a több mappa-elem mutatása"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31037"
+msgid "Side submenu"
+msgstr "Oldalsó almenü"
+
 #: /1080i/Includes_Labels.xml
 msgctxt "#31038"
 msgid "Directing"
@@ -195,10 +205,25 @@ msgctxt "#31039"
 msgid "Writing"
 msgstr "Író"
 
+#: /1080i/Includes_Views_List.xml
+msgctxt "#31040"
+msgid "List Flixart 2"
+msgstr "Flixart 2 lista"
+
 #: /1080i/Includes_Items.xml
 msgctxt "#31041"
 msgid "Similar"
 msgstr "Hasonló"
+
+#: /1080i/Dialog_DialogShortcuts.xml
+msgctxt "#31042"
+msgid "Jump to widget"
+msgstr "Ugrás a widgetre"
+
+#: /1080i/Custom_1115_Window_Shortcuts.xml
+msgctxt "#31043"
+msgid "Tray"
+msgstr "Tálca"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31044"
@@ -219,6 +244,16 @@ msgstr "Nincs találat"
 msgctxt "#31047"
 msgid "Popularity"
 msgstr "Népszerűség"
+
+#: /1080i/Custom_1115_Window_Shortcuts.xml
+msgctxt "#31048"
+msgid "tiles"
+msgstr "csempék"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31049"
+msgid "Customise shortcuts and widgets"
+msgstr "Widgetek és parancsikonok beállítása"
 
 #: /1080i/Includes_Search.xml
 msgctxt "#31050"
@@ -254,6 +289,21 @@ msgstr "kritikák"
 msgctxt "#31057"
 msgid "Years Old"
 msgstr "éves múlt"
+
+#: /1080i/Includes_Labels.xml
+msgctxt "#31058"
+msgid "Wrap"
+msgstr "Borító (nincs oldalsáv)"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31059"
+msgid "Side"
+msgstr "Oldalsáv"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31060"
+msgid "Slide"
+msgstr "Csúsztatás"
 
 #: /shortcuts/template.xml
 msgctxt "#31061"
@@ -334,6 +384,31 @@ msgctxt "#31077"
 msgid "More Information"
 msgstr "Több infó"
 
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31078"
+msgid "Use fake label textboxes"
+msgstr "Használj hamis szövegdoboz címkéket"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31079"
+msgid "improves performance on Omega"
+msgstr "Teljesítnyény optimalizálás az Omegán"
+
+#: /1080i/Dialog_DialogCustom.xml
+msgctxt "#31080"
+msgid "Button"
+msgstr "Gomb"
+
+#: /1080i/Dialog_DialogCustom.xml
+msgctxt "#31081"
+msgid "Others"
+msgstr "Egyebek"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31082"
+msgid "Ratings style"
+msgstr "Értékelés stílusa"
+
 #: /1080i/Includes_Labels.xml
 msgctxt "#31083"
 msgid "Combined"
@@ -366,6 +441,11 @@ msgctxt "#31092"
 msgid "Detailed information"
 msgstr "Részletes infó"
 
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31093"
+msgid "Cycle extra fanart"
+msgstr "Extra fanartok mutatása"
+
 #: /1080i/SkinSettings.xml
 msgctxt "#31094"
 msgid "Mouse pointer size"
@@ -375,6 +455,16 @@ msgstr "Egérmutató mérete"
 msgctxt "#31095"
 msgid "Translations"
 msgstr "Fordítások"
+
+#: /1080i/Dialog_DialogPictureInfo.xml
+msgctxt "#31096"
+msgid "plays"
+msgstr "lejátszva"
+
+#: /1080i/Includes_DialogInfo.xml
+msgctxt "#31097"
+msgid "File details"
+msgstr "Fájlrészletek"
 
 #: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
 msgctxt "#31098"
@@ -396,17 +486,47 @@ msgctxt "#31101"
 msgid "Wall Board"
 msgstr "Fal tabló"
 
+#: /1080i/Includes_DialogInfo.xml
+msgctxt "#31102"
+msgid "Extension"
+msgstr "Kiterjesztés"
+
 msgctxt "#31103"
 msgid "Widgets"
 msgstr "Widgetek"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31104"
+msgid "Position"
+msgstr "Pozíció"
 
 msgctxt "#31105"
 msgid "Spotlight"
 msgstr "Kiemelt"
 
+#: /1080i/Includes_Labels.xml
+msgctxt "#31106"
+msgid "Top"
+msgstr "Fennt"
+
+#: /1080i/Dialog_DialogGameControllers.xml
+msgctxt "#31107"
+msgid "Edit buttons"
+msgstr "Gombok beállítása"
+
 msgctxt "#31108"
 msgid "Collections"
 msgstr "Gyűjtemények"
+
+#: /1080i/Dialog_DialogPVRGroupManager.xml
+msgctxt "#31109"
+msgid "Edit group"
+msgstr "Csoport beállítása"
+
+#: /1080i/Includes_Info.xml
+msgctxt "#31110"
+msgid "Starts at"
+msgstr "Indítás innen"
 
 msgctxt "#31111"
 msgid "Row Poster"
@@ -455,6 +575,11 @@ msgctxt "#31120"
 msgid "List Basic"
 msgstr "Alap lista"
 
+#: /1080i/Dialog_FileBrowser.xml
+msgctxt "#31121"
+msgid "Mirror"
+msgstr "Tükör"
+
 #: /1080i/Includes_MediaFilter.xml
 msgctxt "#31122"
 msgid "Watchlist"
@@ -466,7 +591,7 @@ msgstr "Indikátor"
 
 msgctxt "#31125"
 msgid "Invert Text Colour"
-msgstr "Szövegszín felcsrélése"
+msgstr "Szövegszín felcserélése"
 
 #: /1080i/Includes_MediaFilter.xml
 msgctxt "#31128"
@@ -640,7 +765,7 @@ msgstr "Viselkedés"
 
 msgctxt "#31187"
 msgid "Autoscroll time interval"
-msgstr "Auto görgetés időtartam"
+msgstr "Auto görgetés időtartama"
 
 msgctxt "#31188"
 msgid "Limit"
@@ -653,7 +778,7 @@ msgstr "OSD bezárása X másodperc után"
 #: /1080i/Includes_Info.xml
 msgctxt "#31194"
 msgid "Album duration"
-msgstr "Album hossz"
+msgstr "Album hossza"
 
 #: /1080i/Includes_Labels.xml
 msgctxt "#31195"
@@ -672,7 +797,7 @@ msgstr "Felszín téma"
 #: /1080i/Includes_Info.xml
 msgctxt "#31198"
 msgid "Track duration"
-msgstr "Szám hossz"
+msgstr "Szám hossza"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31199"
@@ -883,7 +1008,7 @@ msgstr "Most játszott"
 
 msgctxt "#31245"
 msgid "Autoscroll labels"
-msgstr "Címkék auto görgetése"
+msgstr "Címkék automatikus görgetése"
 
 msgctxt "#31246"
 msgid "Autoscroll textboxes"
@@ -1228,7 +1353,7 @@ msgstr "Online szereplő lista használata"
 #: /1080i/SkinSettings.xml /1080i/Includes_Items.xml
 msgctxt "#31357"
 msgid "Artwork Overlay"
-msgstr ""
+msgstr "Kép fedvény"
 
 msgctxt "#31358"
 msgid "Waiting for plugins"
@@ -1327,7 +1452,7 @@ msgstr "Időjárás"
 
 msgctxt "#31381"
 msgid "Returning"
-msgstr "Viszatér"
+msgstr "Viszatérő"
 
 msgctxt "#31382"
 msgid "All items"
@@ -1340,7 +1465,7 @@ msgstr "Gyártás"
 #: /1080i/SkinSettings.xml
 msgctxt "#31384"
 msgid "Tray labels"
-msgstr ""
+msgstr "Tálca címkék"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31385"
@@ -1518,7 +1643,7 @@ msgstr "Fejezetek"
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31430"
 msgid "Customise style"
-msgstr "Stílus beállítás"
+msgstr "Stílus beállítása"
 
 #: /1080i/SkinSettings.xml /1080i/Includes_Views_Row.xml
 msgctxt "#31431"
@@ -1588,7 +1713,7 @@ msgstr "Összetett"
 #: /1080i/Custom_1180_Wizard.xml
 msgctxt "#31452"
 msgid "Composite"
-msgstr ""
+msgstr "Összetett"
 
 #: /1080i/Custom_1115_Dialog_WideSettings.xml
 msgctxt "#31456"
@@ -1623,7 +1748,7 @@ msgstr "Válassz előre beállítottat"
 #: /1080i/Includes_Views_Wall.xml
 msgctxt "#31462"
 msgid "Wall Banner"
-msgstr ""
+msgstr "Banner fal"
 
 #: /1080i/Custom_1161_Dialog_Weather.xml
 msgctxt "#31465"
@@ -1753,7 +1878,7 @@ msgstr "Feloldva"
 #: /1080i/Includes_Items.xml
 msgctxt "#31496"
 msgid "Customise widgets"
-msgstr "Widgetek tesztreszabása"
+msgstr "Widgetek testreszabása"
 
 #: /1080i/SkinSettings.xml
 msgctxt "#31497"
@@ -2088,7 +2213,7 @@ msgstr "Újratöltés megakadályozása"
 #: /1080i/Includes_Items.xml
 msgctxt "#31585"
 msgid "Overlay"
-msgstr ""
+msgstr "Fedvény"
 
 #: /1080i/Includes_SkinSettings.xml
 msgctxt "#31586"
@@ -2149,3 +2274,8 @@ msgstr "Kiegészítő"
 msgctxt "#31605"
 msgid "Next aired"
 msgstr "Következő sugárzott"
+
+#: /1080i/Includes_SkinSettings.xml
+msgctxt "#31627"
+msgid "Codec logos"
+msgstr ""

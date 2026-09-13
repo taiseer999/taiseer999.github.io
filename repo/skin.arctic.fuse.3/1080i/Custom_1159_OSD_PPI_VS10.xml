@@ -10,11 +10,9 @@
             <visible>!Window.IsActive(DialogPlayerProcessInfo.xml)</visible>
             <visible>!Window.IsVisible(DialogSlider.xml)</visible>
 			
-            <!-- Group for Original, SDR, HDR10 & Dolby Vision (4 Row) -->
+            <!-- Group for Original, HDR10 & Dolby Vision (3 Row) -->
             <control type="group">
-                <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
-                <visible>!Integer.IsEqual(Player.Process(video.source.hdr.type.raw),2)</visible>
-                <visible>!Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3)</visible>
+                <visible>String.IsEmpty(VideoPlayer.HdrType)</visible>
                 <visible>!Window.IsVisible(DialogSettings.xml)</visible>
                 <include>OSD_Part_Background_Blur</include>
                 <include content="Animation_SlideIn_Dialog">
@@ -24,10 +22,10 @@
                 <right>-40</right>
                 <bottom>220</bottom>
                 <width>450</width>
-                <height>520</height>
+                <height>440</height>
 				
                 <include content="Object_MenuHeader">
-                    <param name="label">$LOCALIZE[31965]</param>
+                    <param name="label">VS10</param>
                     <param name="icon">special://skin/extras/icons/vs10.png</param>
                 </include>
 				
@@ -49,8 +47,7 @@
                         <include content="Settings_Button">
                             <param name="id">8490</param>
                             <param name="control">button</param>
-                            <selected>[Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) | Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)] + !String.Contains(Player.Process(video.hdr.type),Dolby)</selected>
-                            <onclick>Action(vs10.dv)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,dv)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6894">
@@ -78,8 +75,7 @@
                         <include content="Settings_Button">
                             <param name="id">8491</param>
                             <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),2)</selected>
-                            <onclick>Action(vs10.hdr10)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,hdr10)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6895">
@@ -103,41 +99,11 @@
                             </control>
                         </control>
 						
-                        <!-- VS10 SDR -->
-                        <include content="Settings_Button">
-                            <param name="id">8492</param>
-                            <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),3)</selected>
-                            <onclick>Action(vs10.sdr)</onclick>
-                            <onclick>Dialog.Close(all)</onclick>
-                        </include>
-                        <control type="group" id="6896">
-                            <height>80</height>
-                            <top>-80</top>
-                            <left>-20</left>
-                            <visible>Control.IsEnabled(8492) + Control.IsVisible(8492)</visible>
-                            <control type="group">
-                                <visible>!Control.HasFocus(8492)</visible>
-                                <include content="OSD_VS10_SDR">
-                                    <param name="textcolor_top">dialog_fg_90</param>
-                                    <param name="textcolor_sub">dialog_fg_70</param>
-                                </include>
-                            </control>
-                            <control type="group">
-                                <visible>Control.HasFocus(8492)</visible>
-                                <include content="OSD_VS10_SDR">
-                                    <param name="textcolor_top">$VAR[ColorSelected]</param>
-                                    <param name="textcolor_sub">$VAR[ColorSelected]</param>
-                                </include>
-                            </control>
-                        </control>
-						
                         <!-- VS10 Original -->
                         <include content="Settings_Button">
                             <param name="id">8493</param>
                             <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),5) | [[Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) | Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)] + String.Contains(Player.Process(video.hdr.type),Dolby)]</selected>
-                            <onclick>Action(vs10.original)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,original_sdr)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6897">
@@ -164,8 +130,7 @@
 
             <!-- Group for Original & SDR & Dolby Vision (3 Row) -->
             <control type="group">
-                <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
-                <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),2)</visible>
+                <visible>String.Contains(VideoPlayer.HdrType,hdr10)</visible>
                 <visible>!Window.IsVisible(DialogSettings.xml)</visible>
                 <include>OSD_Part_Background_Blur</include>
                 <include content="Animation_SlideIn_Dialog">
@@ -178,7 +143,7 @@
                 <height>440</height>
 				
                 <include content="Object_MenuHeader">
-                    <param name="label">$LOCALIZE[31965]</param>
+                    <param name="label">VS10</param>
                     <param name="icon">special://skin/extras/icons/vs10.png</param>
                 </include>
 				
@@ -201,8 +166,7 @@
                         <include content="Settings_Button">
                             <param name="id">8490</param>
                             <param name="control">button</param>
-                            <selected>[Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) | Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)] + !String.Contains(Player.Process(video.hdr.type),Dolby)</selected>
-                            <onclick>Action(vs10.dv)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,dv)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6894">
@@ -230,8 +194,7 @@
                         <include content="Settings_Button">
                             <param name="id">8492</param>
                             <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),3)</selected>
-                            <onclick>Action(vs10.sdr)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,sdr8)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6896">
@@ -259,8 +222,7 @@
                         <include content="Settings_Button">
                             <param name="id">8493</param>
                             <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),5) | [[Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) | Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)] + String.Contains(Player.Process(video.hdr.type),Dolby)]</selected>
-                            <onclick>Action(vs10.original)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,original_hdr)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6897">
@@ -285,10 +247,9 @@
                 </control>
             </control>
 			
-            <!-- Group for Original & SDR & HDR (3 Row) -->
+            <!-- Group for Original & SDR (2 Row) -->
             <control type="group">
-                <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
-                <visible>Integer.IsEqual(Player.Process(video.source.hdr.type.raw),3)</visible>
+                <visible>String.Contains(VideoPlayer.HdrType,dolby)</visible>
                 <visible>!Window.IsVisible(DialogSettings.xml)</visible>
                 <include>OSD_Part_Background_Blur</include>
                 <include content="Animation_SlideIn_Dialog">
@@ -298,10 +259,10 @@
                 <right>-40</right>
                 <bottom>220</bottom>
                 <width>450</width>
-                <height>440</height>
+                <height>360</height>
 				
                 <include content="Object_MenuHeader">
-                    <param name="label">$LOCALIZE[31965]</param>
+                    <param name="label">VS10</param>
                     <param name="icon">special://skin/extras/icons/vs10.png</param>
                 </include>
 				
@@ -320,41 +281,11 @@
                         <onup>6211</onup>
                         <orientation>vertical</orientation>
 						
-                        <!-- VS10 HDR10 -->
-                        <include content="Settings_Button">
-                            <param name="id">8491</param>
-                            <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),2)</selected>
-                            <onclick>Action(vs10.hdr10)</onclick>
-                            <onclick>Dialog.Close(all)</onclick>
-                        </include>
-                        <control type="group" id="6895">
-                            <height>80</height>
-                            <top>-80</top>
-                            <left>-20</left>
-                            <visible>Control.IsEnabled(8491) + Control.IsVisible(8491)</visible>
-                            <control type="group">
-                                <visible>!Control.HasFocus(8491)</visible>
-                                <include content="OSD_VS10_HDR">
-                                    <param name="textcolor_top">dialog_fg_90</param>
-                                    <param name="textcolor_sub">dialog_fg_70</param>
-                                </include>
-                            </control>
-                            <control type="group">
-                                <visible>Control.HasFocus(8491)</visible>
-                                <include content="OSD_VS10_HDR">
-                                    <param name="textcolor_top">$VAR[ColorSelected]</param>
-                                    <param name="textcolor_sub">$VAR[ColorSelected]</param>
-                                </include>
-                            </control>
-                        </control>
-						
                         <!-- VS10 SDR -->
                         <include content="Settings_Button">
                             <param name="id">8492</param>
                             <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),3)</selected>
-                            <onclick>Action(vs10.sdr)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,sdr8)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6896">
@@ -382,8 +313,7 @@
                         <include content="Settings_Button">
                             <param name="id">8493</param>
                             <param name="control">button</param>
-                            <selected>Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),5) | [[Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),0) | Integer.IsEqual(Player.Process(amlogic.vs10.mode.raw),1)] + String.Contains(Player.Process(video.hdr.type),Dolby)]</selected>
-                            <onclick>Action(vs10.original)</onclick>
+                            <onclick>RunScript(script.tinyppi,run_mode,original_dv)</onclick>
                             <onclick>Dialog.Close(all)</onclick>
                         </include>
                         <control type="group" id="6897">
@@ -409,7 +339,7 @@
             </control>
 
             <include content="OSD_CustomDialog_GroupList">
-                <param name="onclick">ActivateWindow(playerprocessinfo)</param>
+                <param name="onclick">RunScript(script.tinyppi)</param>
                 <param name="onup">SetFocus(8493)</param>
                 <param name="icon">special://skin/extras/icons/ppi.png</param>
                 <param name="button_9">true</param>
