@@ -1,0 +1,161 @@
+<window type="dialog" id="13001">
+    <defaultcontrol always="true">100</defaultcontrol>
+    <zorder>1</zorder>
+
+    <controls>
+
+        <!-- Background photo: static fallback -->
+        <control type="image">
+            <left>0</left><top>0</top>
+            <width>1920</width><height>1080</height>
+            <texture>$INFO[Window.Property(background)]</texture>
+            <aspectratio>stretch</aspectratio>
+        </control>
+
+        <!-- Background photo: follows the focused repository (fades on change) -->
+        <control type="image">
+            <left>0</left><top>0</top>
+            <width>1920</width><height>1080</height>
+            <texture>$INFO[ListItem.Property(repo_bg)]</texture>
+            <aspectratio>stretch</aspectratio>
+            <animation effect="fade" start="0" end="100" time="300">VisibleChange</animation>
+        </control>
+
+        <!-- Dimmed backdrop -->
+        <control type="image">
+            <left>0</left><top>0</top>
+            <width>1920</width><height>1080</height>
+            <colordiffuse>B3000000</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Dialog box -->
+        <control type="image">
+            <left>260</left><top>90</top>
+            <width>1400</width><height>830</height>
+            <colordiffuse>F0111827</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Top gold border -->
+        <control type="image">
+            <left>260</left><top>90</top>
+            <width>1400</width><height>5</height>
+            <colordiffuse>FFC8A86A</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Title bar -->
+        <control type="image">
+            <left>260</left><top>95</top>
+            <width>1400</width><height>110</height>
+            <colordiffuse>E01A2030</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Title label -->
+        <control type="label" id="9001">
+            <left>260</left><top>108</top>
+            <width>1400</width><height>84</height>
+            <font>AbkTitle</font>
+            <align>center</align>
+            <textcolor>FFC8A86A</textcolor>
+            <shadowcolor>CC000000</shadowcolor>
+            <label></label>
+        </control>
+
+        <!-- Separator -->
+        <control type="image">
+            <left>260</left><top>205</top>
+            <width>1400</width><height>3</height>
+            <colordiffuse>604433AA</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+
+        <!-- Repo list -->
+        <control type="list" id="100">
+            <left>260</left><top>210</top>
+            <width>1400</width><height>660</height>
+            <onup>100</onup>
+            <ondown>100</ondown>
+            <onleft>100</onleft>
+            <onright>100</onright>
+            <pagecontrol>-</pagecontrol>
+            <scrolltime>200</scrolltime>
+            <itemlayout width="1400" height="220">
+                <!-- row bg -->
+                <control type="image">
+                    <left>4</left><top>6</top>
+                    <width>1392</width><height>208</height>
+                    <colordiffuse>301A2030</colordiffuse>
+                    <texture>white.png</texture>
+                </control>
+                <!-- icon -->
+                <control type="image">
+                    <left>28</left><top>20</top>
+                    <width>180</width><height>180</height>
+                    <texture>$INFO[ListItem.Art(icon)]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+                <!-- label -->
+                <control type="label">
+                    <left>240</left><top>80</top>
+                    <width>1130</width><height>60</height>
+                    <font>AbkItem</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>CC000000</shadowcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </itemlayout>
+            <focusedlayout width="1400" height="220">
+                <!-- highlight bg -->
+                <control type="image">
+                    <left>4</left><top>6</top>
+                    <width>1392</width><height>208</height>
+                    <colordiffuse>F0C8A86A</colordiffuse>
+                    <texture>white.png</texture>
+                </control>
+                <!-- left accent -->
+                <control type="image">
+                    <left>4</left><top>6</top>
+                    <width>7</width><height>208</height>
+                    <colordiffuse>FFFFD700</colordiffuse>
+                    <texture>white.png</texture>
+                </control>
+                <!-- icon -->
+                <control type="image">
+                    <left>28</left><top>20</top>
+                    <width>180</width><height>180</height>
+                    <texture>$INFO[ListItem.Art(icon)]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+                <!-- label -->
+                <control type="label">
+                    <left>240</left><top>80</top>
+                    <width>1130</width><height>60</height>
+                    <font>AbkItem</font>
+                    <textcolor>FF111827</textcolor>
+                    <shadowcolor>40FFFFFF</shadowcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </focusedlayout>
+        </control>
+
+        <!-- Bottom hint -->
+        <control type="image">
+            <left>260</left><top>870</top>
+            <width>1400</width><height>50</height>
+            <colordiffuse>E01A2030</colordiffuse>
+            <texture>white.png</texture>
+        </control>
+        <control type="label" id="9002">
+            <left>260</left><top>880</top>
+            <width>1400</width><height>32</height>
+            <font>AbkHint</font>
+            <align>center</align>
+            <textcolor>70C8A86A</textcolor>
+            <label></label>
+        </control>
+
+    </controls>
+</window>

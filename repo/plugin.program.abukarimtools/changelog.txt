@@ -1,10 +1,3 @@
-v3.1.0.2
-- New: DexHub Plots On/Off toggle (Toggles menu). Switches DexHub between Fast
-  mode (lightweight, speed-first, no plots on home-widget cards) and Plots
-  (Hybrid index + full metadata enrichment) so the Arctic Fuse 3 info panel
-  shows a description for focused Dex Hub items. Slot-scoped write to DexHub's
-  own settings (other settings preserved), timestamped backup, then restart.
-
 v3.1.0.1
 - Fixed: skins installed via the Skin Portal never received future updates. The
   origin written to the Addons DB used lowercase repo ids (repository.taiseerce,
