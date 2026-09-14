@@ -44,6 +44,7 @@ STRINGS = {
     30017: ("Toggles",                          "التبديلات"),
     30018: ("Rebuild Add-on Database",          "إعادة بناء قاعدة بيانات الإضافات"),
     30019: ("Speed Test",                       "اختبار السرعة"),
+    30021: ("DexHub Plots On/Off",              "وصف DexHub تشغيل/إيقاف"),
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer.",
@@ -174,6 +175,20 @@ STRINGS = {
             "\u062a\u0628\u0648\u064a\u0628 %s %s \u2013 \u062c\u0627\u0631\u064d \u0625\u0639\u0627\u062f\u0629 \u062a\u0634\u063a\u064a\u0644 Kodi\u2026"),
     30273: ("enabled",                         "\u0645\u064f\u0641\u0639\u0651\u0644"),
     30274: ("disabled",                        "\u0645\u0639\u0637\u0651\u0644"),
+
+    # ---- DexHub plots toggle (30281-30289) ----
+    30281: ("DexHub is not installed.",
+            "\u0625\u0636\u0627\u0641\u0629 DexHub \u063a\u064a\u0631 \u0645\u062b\u0628\u062a\u0629."),
+    30282: ("DexHub plots  \u2013  currently %s",
+            "\u0648\u0635\u0641 DexHub  \u2013  \u0627\u0644\u062d\u0627\u0644\u0629 %s"),
+    30283: ("[COLOR lime]Show plots[/COLOR]  (Hybrid \u2013 slightly slower)",
+            "[COLOR lime]\u0625\u0638\u0647\u0627\u0631 \u0627\u0644\u0648\u0635\u0641[/COLOR]  (\u0647\u062c\u064a\u0646 \u2013 \u0623\u0628\u0637\u0623 \u0642\u0644\u064a\u0644\u0627\u064b)"),
+    30284: ("[COLOR red]Fast mode[/COLOR]  (no plots on cards)",
+            "[COLOR red]\u0627\u0644\u0648\u0636\u0639 \u0627\u0644\u0633\u0631\u064a\u0639[/COLOR]  (\u0628\u062f\u0648\u0646 \u0648\u0635\u0641 \u0639\u0644\u0649 \u0627\u0644\u0628\u0637\u0627\u0642\u0627\u062a)"),
+    30285: ("This will %s DexHub plots and[CR][B]restart Kodi[/B] to apply the change.[CR][CR]Continue?",
+            "\u0633\u064a\u0624\u062f\u064a \u0647\u0630\u0627 \u0625\u0644\u0649 %s \u0648\u0635\u0641 DexHub \u0648[CR][B]\u0625\u0639\u0627\u062f\u0629 \u062a\u0634\u063a\u064a\u0644 Kodi[/B] \u0644\u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u062a\u063a\u064a\u064a\u0631.[CR][CR]\u0645\u062a\u0627\u0628\u0639\u0629\u061f"),
+    30286: ("DexHub plots %s \u2013 restarting Kodi\u2026",
+            "\u0648\u0635\u0641 DexHub %s \u2013 \u062c\u0627\u0631\u064d \u0625\u0639\u0627\u062f\u0629 \u062a\u0634\u063a\u064a\u0644 Kodi\u2026"),
 
     # ---- patcher / auto-patch (30290-30319) ----
     30290: ("Patches re-applied after add-on update",
