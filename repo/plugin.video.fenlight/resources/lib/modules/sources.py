@@ -11,7 +11,7 @@ from scrapers import external, folders
 from modules import debrid, kodi_utils, settings, metadata, watched_status
 from modules.player import FenLightPlayer
 from modules.pack_continuity import find_episode_file as pack_continuity_find, build_items as pack_continuity_build
-from modules.source_utils import get_cache_expiry, make_alias_dict
+from modules.source_utils import get_cache_expiry, make_alias_dict, max_size_for_line_speed
 from modules.utils import clean_file_name, string_to_float, safe_string, remove_accents, get_datetime, append_module_to_syspath, manual_function_import, manual_module_import
 # logger = kodi_utils.logger
 
@@ -49,6 +49,12 @@ scraper_timeout = 25
 filter_keys = {'hevc': '[B]HEVC[/B]', '3d': '[B]3D[/B]', 'hdr': '[B]HDR[/B]', 'dv': '[B]D/VISION[/B]', 'av1': '[B]AV1[/B]', 'enhanced_upscaled': '[B]AI ENHANCED/UPSCALED[/B]'}
 preference_values = {0:100, 1:50, 2:20, 3:10, 4:5, 5:2}
 
+def delete_pack_transfer(debrid_function, link):
+	try:
+		result = debrid_function().delete_torrent(int(link.split(',')[0]))
+		if not (result or {}).get('success'): kodi_utils.logger('TorBox pack cleanup', 'delete refused: %s' % str(result))
+	except Exception as e: kodi_utils.logger('TorBox pack cleanup', str(e))
+
 class Sources():
 	def __init__(self):
 		self.params = {}
@@ -56,7 +62,7 @@ class Sources():
 		self.prescrape_scrapers, self.prescrape_threads, self.prescrape_sources, self.uncached_results = [], [], [], []
 		self.threads, self.providers, self.sources, self.internal_scraper_names, self.remove_scrapers = [], [], [], [], ['external']
 		self.rescrape_with_all, self.rescrape_with_episode_group = False, False
-		self.pack_cache_tried, self.in_pack_fast_path = False, False
+		self.pack_cache_tried, self.in_pack_fast_path, self.nextep_gate_passed = False, False, False
 		self.clear_properties, self.filters_ignored, self.active_folders, self.resolve_dialog_made, self.episode_group_used = True, False, False, False, False
 		self.sources_total = self.sources_4k = self.sources_1080p = self.sources_720p = self.sources_sd = 0
 		self.prescrape, self.disabled_ext_ignored, self.default_ext_only = 'true', 'false', 'false'
@@ -284,7 +290,7 @@ class Sources():
 			if min_size == 0.0 and not self.include_unknown_size: min_size = 0.02
 			if self.filter_size_method == 1:
 				duration = self.meta['duration'] or (5400 if self.media_type == 'movie' else 2400)
-				max_size = ((0.125 * (0.90 * string_to_float(get_setting('results.line_speed', '25'), '25'))) * duration)/1000
+				max_size = max_size_for_line_speed(string_to_float(get_setting('fenlight.results.line_speed', '25'), '25'), duration)
 			elif self.filter_size_method == 2:
 				max_size = string_to_float(get_setting('fenlight.results.%s_size_max' % self.media_type, '10000'), '10000') / 1000
 			results = [i for i in results if i['scrape_provider'] == 'folders' or min_size <= i['size'] <= max_size]
@@ -657,18 +663,22 @@ class Sources():
 		debrid_info = {'Real-Debrid': 'rd_browse', 'Premiumize.me': 'pm_browse', 'AllDebrid': 'ad_browse',
 						'Offcloud': 'oc_browse', 'EasyDebrid': 'ed_browse', 'TorBox': 'tb_browse'}[debrid_provider]
 		debrid_function = self.debrid_importer(debrid_info)
+		tb_cleanup = debrid_provider == 'TorBox' and not debrid_function().hash_in_user_cloud(info_hash)
 		try: debrid_files = debrid_function().display_magnet_pack(magnet_url, info_hash)
 		except: debrid_files = None
 		hide_busy_dialog()
 		if not debrid_files: return notification('Error')
 		debrid_files.sort(key=lambda k: k['filename'].lower())
-		if download: return debrid_files, debrid_function
+		if download: return debrid_files, debrid_function, tb_cleanup
 		list_items = [{'line1': '%.2f GB | %s' % (float(item['size'])/1073741824, clean_file_name(item['filename']).upper())} for item in debrid_files]
 		kwargs = {'items': json.dumps(list_items), 'heading': name, 'enumerate': 'true', 'narrow_window': 'true'}
 		chosen_result = select_dialog(debrid_files, **kwargs)
-		if chosen_result is None: return None
+		if chosen_result is None:
+			if tb_cleanup: delete_pack_transfer(debrid_function, debrid_files[0]['link'])
+			return None
 		link = self.resolve_internal(debrid_info, chosen_result['link'], '')
 		name = chosen_result['filename']
+		if tb_cleanup: Thread(target=delete_pack_transfer, args=(debrid_function, chosen_result['link'])).start()
 		self._kill_progress_dialog()
 		return FenLightPlayer().run(link, 'video')
 
@@ -775,6 +785,14 @@ class Sources():
 			self.get_sources()
 
 	def continue_resolve_check(self):
+		if self.nextep_gate_passed:
+			self.nextep_gate_passed = False
+			return True
+		result = self._continue_resolve_check()
+		if result and self.in_pack_fast_path: self.nextep_gate_passed = True
+		return result
+
+	def _continue_resolve_check(self):
 		try:
 			if not self.background or self.autoscrape_nextep: return True
 			if self.num_episodes and int(self.num_episodes) > 1: 
@@ -905,7 +923,7 @@ class Sources():
 						if stashed: item['pack_info'] = {'source_type': 'debrid', 'provider': cache_provider, 'magnet': item['url'],
 														'hash': item['hash'], 'direct': stashed['direct'], 'files': stashed['files']}
 			elif item.get('scrape_provider', None) in default_internal_scrapers:
-				url = self.resolve_internal(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False), no_seek_override)
+				url = self.resolve_internal(item['scrape_provider'], item['id'], item['url_dl'], item.get('direct_debrid_link', False), no_seek_override, item.get('usenet', False))
 			else: url = item['url']
 		except: pass
 		return url
@@ -921,7 +939,7 @@ class Sources():
 			kodi_utils.logger('resolve_cached', 'Failed to resolve %s [%s] hash=%s' % (title, debrid_provider, _hash[:16] if _hash else 'N/A'))
 		return url
 
-	def resolve_internal(self, scrape_provider, item_id, url_dl, direct_debrid_link=False, no_seek_override=None):
+	def resolve_internal(self, scrape_provider, item_id, url_dl, direct_debrid_link=False, no_seek_override=None, usenet=False):
 		url = None
 		try:
 			if direct_debrid_link or scrape_provider == 'folders': url = url_dl
@@ -932,7 +950,8 @@ class Sources():
 			else:
 				debrid_function = self.debrid_importer(scrape_provider)
 				if any(i in scrape_provider for i in ('rd_', 'ad_', 'tb_')):
-					url = debrid_function().unrestrict_link(item_id)
+					if usenet: url = debrid_function().unrestrict_usenet(item_id)
+					else: url = debrid_function().unrestrict_link(item_id)
 				else:
 					if '_cloud' in scrape_provider: item_id = debrid_function().get_item_details(item_id)['link']
 					url = debrid_function().add_headers_to_url(item_id)
