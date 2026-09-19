@@ -994,22 +994,29 @@ def _run_impl(first_run=False):
                 _log('close-to-home failed: %s' % e)
             # Kodi keeps add-on origins in memory and only uses them for update
             # checks after a restart. The skin (and any companion) was just
-            # linked to its repo. On a MANUAL install, restart automatically to
-            # make updates active now. During first-run we must NOT restart
-            # here — the service still has to flip the UI language and (on
-            # CoreELEC) reboot the box after this step; restarting now would
-            # cut that off. First-run does its own single restart at the end.
+            # linked to its repo (written to the Addons DB above). During
+            # first-run we must NOT restart here — the service still has other
+            # steps to run. On a MANUAL install we no longer FORCE a restart:
+            # recommend one instead. The linking is already on disk, so if the
+            # user declines it simply takes effect on the next normal start,
+            # and the service re-applies linking on every boot as a safety net.
             if first_run:
                 _log('skin installed (first-run) — deferring restart to the '
                      'end of the first-run sequence.')
             else:
                 try:
                     from resources.lib import origin_fix
-                    _log('skin installed — restarting automatically.')
+                    _log('skin installed — recommending a restart (not forced).')
                     xbmc.sleep(500)
-                    origin_fix._restart_kodi()
+                    origin_fix.recommend_restart(
+                        message=('The skin was installed and linked to its '
+                                 'repository.\nA restart is recommended so its '
+                                 'updates become active.\n'
+                                 'تم تثبيت الواجهة وربطها بالمستودع.\n'
+                                 'يُنصح بإعادة التشغيل حتى تصبح تحديثاتها '
+                                 'فعّالة.'))
                 except Exception as e:
-                    _log('post-install auto-restart failed: %s' % e)
+                    _log('post-install restart recommendation failed: %s' % e)
         return ok
 
     _log('portal closed with no pending skin to apply')

@@ -11,10 +11,6 @@ import xbmc
 import xbmcvfs
 import xbmcgui
 
-_SEREN_QR_UTILS_B64 = 'IyAtKi0gY29kaW5nOiB1dGYtOCAtKi0KIiIiClFSIENvZGUgdXRpbGl0aWVzIGZvciBTZXJlbgrZitmD2KrYqCDYp9mE2LXZiNix2Kkg2LnYqNixIHhibWN2ZnMg2YjZitix2KzYuSBzcGVjaWFsOi8vIHBhdGgKIiIiCmltcG9ydCBvcwppbXBvcnQgc3lzCmltcG9ydCB4Ym1jCmltcG9ydCB4Ym1jYWRkb24KaW1wb3J0IHhibWN2ZnMKCgpkZWYgX2luamVjdF9xcl9wYXRocygpOgogICAgdHJ5OgogICAgICAgIG91cl9wYXRoICAgID0geGJtY2FkZG9uLkFkZG9uKCdwbHVnaW4udmlkZW8uc2VyZW4nKS5nZXRBZGRvbkluZm8oJ3BhdGgnKQogICAgICAgIGFkZG9uc19yb290ID0gb3MucGF0aC5kaXJuYW1lKG91cl9wYXRoKQogICAgICAgIGZvciBtb2R1bGUgaW4gKCdzY3JpcHQubW9kdWxlLnFyY29kZScsICdzY3JpcHQubW9kdWxlLnBpbCcpOgogICAgICAgICAgICBsaWJfcGF0aCA9IG9zLnBhdGguam9pbihhZGRvbnNfcm9vdCwgbW9kdWxlLCAnbGliJykKICAgICAgICAgICAgaWYgb3MucGF0aC5pc2RpcihsaWJfcGF0aCkgYW5kIGxpYl9wYXRoIG5vdCBpbiBzeXMucGF0aDoKICAgICAgICAgICAgICAgIHN5cy5wYXRoLmluc2VydCgwLCBsaWJfcGF0aCkKICAgIGV4Y2VwdCBFeGNlcHRpb246CiAgICAgICAgcGFzcwoKCmRlZiBfZ2V0X3FyX3NwZWNpYWxfcGF0aCgpOgogICAgIiIi2YXYs9in2LEg2KvYp9io2Kog2YHZiiBhZGRvbl9kYXRhINmK2LbZhdmGINmI2LXZiNmEIEtvZGkg2KXZhNmK2YciIiIKICAgIHJldHVybiAnc3BlY2lhbDovL3Byb2ZpbGUvYWRkb25fZGF0YS9wbHVnaW4udmlkZW8uc2VyZW4vc2VyZW5fcXIucG5nJwoKCmRlZiBfbWFrZV9xcl9sb2NhbCh1cmwsIG9zX3BhdGgpOgogICAgaW1wb3J0IHFyY29kZQogICAgaW1nID0gcXJjb2RlLm1ha2UodXJsKQogICAgaW1nLnNhdmUob3NfcGF0aCkKICAgIHJldHVybiBUcnVlCgoKZGVmIF9tYWtlX3FyX3JlbW90ZSh1cmwsIG9zX3BhdGgpOgogICAgZnJvbSB1cmxsaWIucmVxdWVzdCBpbXBvcnQgdXJsb3BlbgogICAgZnJvbSB1cmxsaWIucGFyc2UgICBpbXBvcnQgcXVvdGUKICAgIGFwaV91cmwgPSAnaHR0cHM6Ly9hcGkucXJzZXJ2ZXIuY29tL3YxL2NyZWF0ZS1xci1jb2RlLz9zaXplPTQwMHg0MDAmZGF0YT0nICsgcXVvdGUodXJsLCBzYWZlPScnKQogICAgd2l0aCB1cmxvcGVuKGFwaV91cmwsIHRpbWVvdXQ9MTApIGFzIHJlc3A6CiAgICAgICAgZGF0YSA9IHJlc3AucmVhZCgpCiAgICBpZiBsZW4oZGF0YSkgPCAxMDA6CiAgICAgICAgcmFpc2UgVmFsdWVFcnJvcignRW1wdHkgUVIgcmVzcG9uc2UnKQogICAgd2l0aCBvcGVuKG9zX3BhdGgsICd3YicpIGFzIGY6CiAgICAgICAgZi53cml0ZShkYXRhKQogICAgcmV0dXJuIFRydWUKCgpkZWYgbWFrZV9xcih1cmwpOgogICAgIiIiCiAgICDZitmI2YTZkdivIFFSIFBORyDZgdmKIGFkZG9uX2RhdGEg2YjZitix2KzYuSBzcGVjaWFsOi8vIHBhdGgKICAgIGFkZG9uX2RhdGEg2YXYttmF2YjZhiDYo9mGIEtvZGkg2YrYrdmF2ZHZhCDZhdmG2Ycg2KfZhNi12YjYsSDZhdio2KfYtNix2KkKICAgICIiIgogICAgX2luamVjdF9xcl9wYXRocygpCgogICAgc3BlY2lhbF9wYXRoID0gX2dldF9xcl9zcGVjaWFsX3BhdGgoKQogICAgb3NfcGF0aCAgICAgID0geGJtY3Zmcy50cmFuc2xhdGVQYXRoKHNwZWNpYWxfcGF0aCkKCiAgICAjINmG2KrYo9mD2K8g2YXZhiDZiNis2YjYryDYp9mE2YXYrNmE2K8KICAgIG9zLm1ha2VkaXJzKG9zLnBhdGguZGlybmFtZShvc19wYXRoKSwgZXhpc3Rfb2s9VHJ1ZSkKCiAgICAjINmF2K3Yp9mI2YTYqSAxOiDZhdit2YTZigogICAgdHJ5OgogICAgICAgIF9tYWtlX3FyX2xvY2FsKHVybCwgb3NfcGF0aCkKICAgICAgICB4Ym1jLmxvZyhmJ1NlcmVuIFFSIGxvY2FsIE9LOiB7c3BlY2lhbF9wYXRofScsIHhibWMuTE9HSU5GTykKICAgICAgICByZXR1cm4gc3BlY2lhbF9wYXRoCiAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgeGJtYy5sb2coZidTZXJlbiBRUiBsb2NhbCBmYWlsZWQ6IHtlfSDigJQgdHJ5aW5nIHJlbW90ZScsIHhibWMuTE9HSU5GTykKCiAgICAjINmF2K3Yp9mI2YTYqSAyOiBBUEkKICAgIHRyeToKICAgICAgICBfbWFrZV9xcl9yZW1vdGUodXJsLCBvc19wYXRoKQogICAgICAgIHhibWMubG9nKGYnU2VyZW4gUVIgcmVtb3RlIE9LOiB7c3BlY2lhbF9wYXRofScsIHhibWMuTE9HSU5GTykKICAgICAgICByZXR1cm4gc3BlY2lhbF9wYXRoCiAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgeGJtYy5sb2coZidTZXJlbiBRUiByZW1vdGUgZmFpbGVkOiB7ZX0nLCB4Ym1jLkxPR1dBUk5JTkcpCgogICAgcmV0dXJuICcnCgoKZGVmIHJlbW92ZV9xcihwYXRoKToKICAgIHRyeToKICAgICAgICBpZiBwYXRoOgogICAgICAgICAgICBvc19wYXRoID0geGJtY3Zmcy50cmFuc2xhdGVQYXRoKHBhdGgpIGlmIHBhdGguc3RhcnRzd2l0aCgnc3BlY2lhbDovLycpIGVsc2UgcGF0aAogICAgICAgICAgICBpZiBvcy5wYXRoLmV4aXN0cyhvc19wYXRoKToKICAgICAgICAgICAgICAgIG9zLnJlbW92ZShvc19wYXRoKQogICAgZXhjZXB0IEV4Y2VwdGlvbjoKICAgICAgICBwYXNzCg=='
-_SEREN_XML_B64 = 'PHdpbmRvdyB0eXBlPSJkaWFsb2ciPgogICAgPGNvb3JkaW5hdGVzPgogICAgICAgIDxsZWZ0PjA8L2xlZnQ+CiAgICAgICAgPHRvcD4wPC90b3A+CiAgICAgICAgPHdpZHRoPjE5MjA8L3dpZHRoPgogICAgICAgIDxoZWlnaHQ+MTA4MDwvaGVpZ2h0PgogICAgPC9jb29yZGluYXRlcz4KICAgIDxjb250cm9scz4KCiAgICAgICAgPCEtLSBEaW0gb3ZlcmxheSAtLT4KICAgICAgICA8Y29udHJvbCB0eXBlPSJpbWFnZSI+CiAgICAgICAgICAgIDxsZWZ0PjA8L2xlZnQ+PHRvcD4wPC90b3A+CiAgICAgICAgICAgIDx3aWR0aD4xOTIwPC93aWR0aD48aGVpZ2h0PjEwODA8L2hlaWdodD4KICAgICAgICAgICAgPHRleHR1cmUgYmFja2dyb3VuZD0idHJ1ZSI+d2hpdGUucG5nPC90ZXh0dXJlPgogICAgICAgICAgICA8Y29sb3JkaWZmdXNlPkQwMDAwMDAwPC9jb2xvcmRpZmZ1c2U+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIENhcmQgYmFja2dyb3VuZCAtLT4KICAgICAgICA8Y29udHJvbCB0eXBlPSJpbWFnZSI+CiAgICAgICAgICAgIDxsZWZ0PjQxMDwvbGVmdD48dG9wPjE2NTwvdG9wPgogICAgICAgICAgICA8d2lkdGg+MTEwMDwvd2lkdGg+PGhlaWdodD43NTA8L2hlaWdodD4KICAgICAgICAgICAgPHRleHR1cmUgYmFja2dyb3VuZD0idHJ1ZSI+d2hpdGUucG5nPC90ZXh0dXJlPgogICAgICAgICAgICA8Y29sb3JkaWZmdXNlPkZGMUExQTFBPC9jb2xvcmRpZmZ1c2U+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIFJlZCB0b3AgYmFyIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImltYWdlIj4KICAgICAgICAgICAgPGxlZnQ+NDEwPC9sZWZ0Pjx0b3A+MTY1PC90b3A+CiAgICAgICAgICAgIDx3aWR0aD4xMTAwPC93aWR0aD48aGVpZ2h0Pjg8L2hlaWdodD4KICAgICAgICAgICAgPHRleHR1cmUgYmFja2dyb3VuZD0idHJ1ZSI+d2hpdGUucG5nPC90ZXh0dXJlPgogICAgICAgICAgICA8Y29sb3JkaWZmdXNlPkZGRUQxQzI0PC9jb2xvcmRpZmZ1c2U+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIFRpdGxlIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImxhYmVsIj4KICAgICAgICAgICAgPGxlZnQ+NDEwPC9sZWZ0Pjx0b3A+MTk1PC90b3A+CiAgICAgICAgICAgIDx3aWR0aD4xMTAwPC93aWR0aD48aGVpZ2h0PjYwPC9oZWlnaHQ+CiAgICAgICAgICAgIDxhbGlnbj5jZW50ZXI8L2FsaWduPgogICAgICAgICAgICA8Zm9udD5mb250Mjc8L2ZvbnQ+CiAgICAgICAgICAgIDx0ZXh0Y29sb3I+RkZFRDFDMjQ8L3RleHRjb2xvcj4KICAgICAgICAgICAgPGxhYmVsPlRyYWt0IEF1dGhvcml6YXRpb248L2xhYmVsPgogICAgICAgIDwvY29udHJvbD4KCiAgICAgICAgPCEtLSBRUiB3aGl0ZSBiYWNrZ3JvdW5kIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImltYWdlIj4KICAgICAgICAgICAgPGxlZnQ+NDU1PC9sZWZ0Pjx0b3A+Mjc1PC90b3A+CiAgICAgICAgICAgIDx3aWR0aD40MjA8L3dpZHRoPjxoZWlnaHQ+NDIwPC9oZWlnaHQ+CiAgICAgICAgICAgIDx0ZXh0dXJlIGJhY2tncm91bmQ9InRydWUiPndoaXRlLnBuZzwvdGV4dHVyZT4KICAgICAgICAgICAgPGNvbG9yZGlmZnVzZT5GRkZGRkZGRjwvY29sb3JkaWZmdXNlPgogICAgICAgIDwvY29udHJvbD4KCiAgICAgICAgPCEtLSBRUiBDb2RlIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImltYWdlIj4KICAgICAgICAgICAgPGxlZnQ+NDY1PC9sZWZ0Pjx0b3A+Mjg1PC90b3A+CiAgICAgICAgICAgIDx3aWR0aD40MDA8L3dpZHRoPjxoZWlnaHQ+NDAwPC9oZWlnaHQ+CiAgICAgICAgICAgIDxhc3BlY3RyYXRpbz5zdHJldGNoPC9hc3BlY3RyYXRpbz4KICAgICAgICAgICAgPHRleHR1cmU+JElORk9bV2luZG93KCkuUHJvcGVydHkocXJfaW1hZ2UpXTwvdGV4dHVyZT4KICAgICAgICA8L2NvbnRyb2w+CgogICAgICAgIDwhLS0gU2NhbiBpbnN0cnVjdGlvbiAtLT4KICAgICAgICA8Y29udHJvbCB0eXBlPSJsYWJlbCI+CiAgICAgICAgICAgIDxsZWZ0PjkzMDwvbGVmdD48dG9wPjI5NTwvdG9wPgogICAgICAgICAgICA8d2lkdGg+NTMwPC93aWR0aD48aGVpZ2h0PjQwPC9oZWlnaHQ+CiAgICAgICAgICAgIDxmb250PmZvbnQxMjwvZm9udD4KICAgICAgICAgICAgPHRleHRjb2xvcj5GRkFBQUFBQTwvdGV4dGNvbG9yPgogICAgICAgICAgICA8bGFiZWw+U2NhbiBRUiBjb2RlIG9yIHZpc2l0OjwvbGFiZWw+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIFVSTCAtLT4KICAgICAgICA8Y29udHJvbCB0eXBlPSJsYWJlbCI+CiAgICAgICAgICAgIDxsZWZ0PjkzMDwvbGVmdD48dG9wPjM1MDwvdG9wPgogICAgICAgICAgICA8d2lkdGg+NTMwPC93aWR0aD48aGVpZ2h0PjQwPC9oZWlnaHQ+CiAgICAgICAgICAgIDxmb250PmZvbnQxMjwvZm9udD4KICAgICAgICAgICAgPHRleHRjb2xvcj5GRkVEMUMyNDwvdGV4dGNvbG9yPgogICAgICAgICAgICA8bGFiZWw+aHR0cHM6Ly90cmFrdC50di9hY3RpdmF0ZTwvbGFiZWw+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIERpdmlkZXIgLS0+CiAgICAgICAgPGNvbnRyb2wgdHlwZT0iaW1hZ2UiPgogICAgICAgICAgICA8bGVmdD45MzA8L2xlZnQ+PHRvcD40MTA8L3RvcD4KICAgICAgICAgICAgPHdpZHRoPjUzMDwvd2lkdGg+PGhlaWdodD4yPC9oZWlnaHQ+CiAgICAgICAgICAgIDx0ZXh0dXJlIGJhY2tncm91bmQ9InRydWUiPndoaXRlLnBuZzwvdGV4dHVyZT4KICAgICAgICAgICAgPGNvbG9yZGlmZnVzZT40NEZGRkZGRjwvY29sb3JkaWZmdXNlPgogICAgICAgIDwvY29udHJvbD4KCiAgICAgICAgPCEtLSBFbnRlciBDb2RlIGxhYmVsIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImxhYmVsIj4KICAgICAgICAgICAgPGxlZnQ+OTMwPC9sZWZ0Pjx0b3A+NDMwPC90b3A+CiAgICAgICAgICAgIDx3aWR0aD41MzA8L3dpZHRoPjxoZWlnaHQ+NDA8L2hlaWdodD4KICAgICAgICAgICAgPGZvbnQ+Zm9udDEyPC9mb250PgogICAgICAgICAgICA8dGV4dGNvbG9yPkZGQUFBQUFBPC90ZXh0Y29sb3I+CiAgICAgICAgICAgIDxsYWJlbD5FbnRlciB0aGlzIGNvZGU6PC9sYWJlbD4KICAgICAgICA8L2NvbnRyb2w+CgogICAgICAgIDwhLS0gQ29kZSBib3ggYm9yZGVyIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImltYWdlIj4KICAgICAgICAgICAgPGxlZnQ+OTMwPC9sZWZ0Pjx0b3A+NDgwPC90b3A+CiAgICAgICAgICAgIDx3aWR0aD41MzA8L3dpZHRoPjxoZWlnaHQ+ODA8L2hlaWdodD4KICAgICAgICAgICAgPHRleHR1cmUgYmFja2dyb3VuZD0idHJ1ZSI+d2hpdGUucG5nPC90ZXh0dXJlPgogICAgICAgICAgICA8Y29sb3JkaWZmdXNlPkZGRUQxQzI0PC9jb2xvcmRpZmZ1c2U+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIENvZGUgYm94IGZpbGwgLS0+CiAgICAgICAgPGNvbnRyb2wgdHlwZT0iaW1hZ2UiPgogICAgICAgICAgICA8bGVmdD45MzQ8L2xlZnQ+PHRvcD40ODQ8L3RvcD4KICAgICAgICAgICAgPHdpZHRoPjUyMjwvd2lkdGg+PGhlaWdodD43MjwvaGVpZ2h0PgogICAgICAgICAgICA8dGV4dHVyZSBiYWNrZ3JvdW5kPSJ0cnVlIj53aGl0ZS5wbmc8L3RleHR1cmU+CiAgICAgICAgICAgIDxjb2xvcmRpZmZ1c2U+RkYxQTFBMUE8L2NvbG9yZGlmZnVzZT4KICAgICAgICA8L2NvbnRyb2w+CgogICAgICAgIDwhLS0gVXNlciBDb2RlIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImxhYmVsIj4KICAgICAgICAgICAgPGxlZnQ+OTMwPC9sZWZ0Pjx0b3A+NDg0PC90b3A+CiAgICAgICAgICAgIDx3aWR0aD41MzA8L3dpZHRoPjxoZWlnaHQ+NzI8L2hlaWdodD4KICAgICAgICAgICAgPGFsaWduPmNlbnRlcjwvYWxpZ24+CiAgICAgICAgICAgIDxhbGlnbnk+Y2VudGVyPC9hbGlnbnk+CiAgICAgICAgICAgIDxmb250PmZvbnQzNzwvZm9udD4KICAgICAgICAgICAgPHRleHRjb2xvcj5GRkVEMUMyNDwvdGV4dGNvbG9yPgogICAgICAgICAgICA8bGFiZWw+JElORk9bV2luZG93KCkuUHJvcGVydHkodXNlcl9jb2RlKV08L2xhYmVsPgogICAgICAgIDwvY29udHJvbD4KCiAgICAgICAgPCEtLSBQcm9ncmVzcyBiYXIgYmFja2dyb3VuZCAtLT4KICAgICAgICA8Y29udHJvbCB0eXBlPSJpbWFnZSI+CiAgICAgICAgICAgIDxsZWZ0PjkzMDwvbGVmdD48dG9wPjU5MDwvdG9wPgogICAgICAgICAgICA8d2lkdGg+NTMwPC93aWR0aD48aGVpZ2h0Pjg8L2hlaWdodD4KICAgICAgICAgICAgPHRleHR1cmUgYmFja2dyb3VuZD0idHJ1ZSI+d2hpdGUucG5nPC90ZXh0dXJlPgogICAgICAgICAgICA8Y29sb3JkaWZmdXNlPjQ0RkZGRkZGPC9jb2xvcmRpZmZ1c2U+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIFByb2dyZXNzIGJhciBmaWxsIC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImltYWdlIj4KICAgICAgICAgICAgPGxlZnQ+OTMwPC9sZWZ0Pjx0b3A+NTkwPC90b3A+CiAgICAgICAgICAgIDx3aWR0aD4kSU5GT1tXaW5kb3coKS5Qcm9wZXJ0eShwcm9ncmVzc193aWR0aCldPC93aWR0aD48aGVpZ2h0Pjg8L2hlaWdodD4KICAgICAgICAgICAgPHRleHR1cmUgYmFja2dyb3VuZD0idHJ1ZSI+d2hpdGUucG5nPC90ZXh0dXJlPgogICAgICAgICAgICA8Y29sb3JkaWZmdXNlPkZGRUQxQzI0PC9jb2xvcmRpZmZ1c2U+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIEV4cGlyZXMgbGFiZWwgLS0+CiAgICAgICAgPGNvbnRyb2wgdHlwZT0ibGFiZWwiPgogICAgICAgICAgICA8bGVmdD45MzA8L2xlZnQ+PHRvcD42MTA8L3RvcD4KICAgICAgICAgICAgPHdpZHRoPjUzMDwvd2lkdGg+PGhlaWdodD4zNTwvaGVpZ2h0PgogICAgICAgICAgICA8Zm9udD5mb250X3Rpbnk8L2ZvbnQ+CiAgICAgICAgICAgIDx0ZXh0Y29sb3I+RkY4ODg4ODg8L3RleHRjb2xvcj4KICAgICAgICAgICAgPGxhYmVsPiRJTkZPW1dpbmRvdygpLlByb3BlcnR5KGV4cGlyZXNfbGFiZWwpXTwvbGFiZWw+CiAgICAgICAgPC9jb250cm9sPgoKICAgICAgICA8IS0tIENhbmNlbCBoaW50IC0tPgogICAgICAgIDxjb250cm9sIHR5cGU9ImxhYmVsIj4KICAgICAgICAgICAgPGxlZnQ+NDEwPC9sZWZ0Pjx0b3A+ODcwPC90b3A+CiAgICAgICAgICAgIDx3aWR0aD4xMTAwPC93aWR0aD48aGVpZ2h0PjM1PC9oZWlnaHQ+CiAgICAgICAgICAgIDxhbGlnbj5jZW50ZXI8L2FsaWduPgogICAgICAgICAgICA8Zm9udD5mb250X3Rpbnk8L2ZvbnQ+CiAgICAgICAgICAgIDx0ZXh0Y29sb3I+RkY2NjY2NjY8L3RleHRjb2xvcj4KICAgICAgICAgICAgPGxhYmVsPlByZXNzIEJhY2sgdG8gY2FuY2VsPC9sYWJlbD4KICAgICAgICA8L2NvbnRyb2w+CgogICAgPC9jb250cm9scz4KPC93aW5kb3c+Cg=='
-_SEREN_OLD_B64 = 'ICAgICAgICB0b29scy5jb3B5MmNsaXAodXNlcl9jb2RlKQ0KICAgICAgICBmYWlsZWQgPSBGYWxzZQ0KICAgICAgICB0cnk6DQogICAgICAgICAgICBwcm9ncmVzc19kaWFsb2cgPSB4Ym1jZ3VpLkRpYWxvZ1Byb2dyZXNzKCkNCiAgICAgICAgICAgIHByb2dyZXNzX2RpYWxvZy5jcmVhdGUoDQogICAgICAgICAgICAgICAgZiJ7Zy5BRERPTl9OQU1FfToge2cuZ2V0X2xhbmd1YWdlX3N0cmluZygzMDAyMil9IiwNCiAgICAgICAgICAgICAgICB0b29scy5jcmVhdGVfbXVsdGlsaW5lX21lc3NhZ2UoDQogICAgICAgICAgICAgICAgICAgIGxpbmUxPWcuZ2V0X2xhbmd1YWdlX3N0cmluZygzMDAxOCkuZm9ybWF0KGcuY29sb3Jfc3RyaW5nKCJodHRwczovL3RyYWt0LnR2L2FjdGl2YXRlIikpLA0KICAgICAgICAgICAgICAgICAgICBsaW5lMj1nLmdldF9sYW5ndWFnZV9zdHJpbmcoMzAwMTkpLmZvcm1hdChnLmNvbG9yX3N0cmluZyh1c2VyX2NvZGUpKSwNCiAgICAgICAgICAgICAgICAgICAgbGluZTM9Zy5nZXRfbGFuZ3VhZ2Vfc3RyaW5nKDMwMDQ3KSwNCiAgICAgICAgICAgICAgICApLA0KICAgICAgICAgICAgKQ0KICAgICAgICAgICAgcHJvZ3Jlc3NfZGlhbG9nLnVwZGF0ZSgxMDApDQogICAgICAgICAgICB3aGlsZSBub3QgZmFpbGVkIGFuZCBzZWxmLnVzZXJuYW1lIGlzIE5vbmUgYW5kIHRva2VuX3R0bCA+IDAgYW5kIG5vdCBwcm9ncmVzc19kaWFsb2cuaXNjYW5jZWxlZCgpOg0KICAgICAgICAgICAgICAgIHhibWMuc2xlZXAoMTAwMCkNCiAgICAgICAgICAgICAgICBpZiB0b2tlbl90dGwgJSBpbnRlcnZhbCA9PSAwOg0KICAgICAgICAgICAgICAgICAgICBmYWlsZWQgPSBzZWxmLl9hdXRoX3BvbGwoZGV2aWNlKQ0KICAgICAgICAgICAgICAgIHByb2dyZXNzX3BlcmNlbnQgPSBpbnQoZmxvYXQoKHRva2VuX3R0bCAqIDEwMCkgLyBleHBpcnkpKQ0KICAgICAgICAgICAgICAgIHByb2dyZXNzX2RpYWxvZy51cGRhdGUocHJvZ3Jlc3NfcGVyY2VudCkNCiAgICAgICAgICAgICAgICB0b2tlbl90dGwgLT0gMQ0KDQogICAgICAgICAgICBwcm9ncmVzc19kaWFsb2cuY2xvc2UoKQ0KICAgICAgICBmaW5hbGx5Og0KICAgICAgICAgICAgZGVsIHByb2dyZXNzX2RpYWxvZw0KDQo='
-_SEREN_NEW_B64 = 'ICAgICAgICB0b29scy5jb3B5MmNsaXAodXNlcl9jb2RlKQ0KDQogICAgICAgICMgLS0gU2VyZW4gUVIgQXV0aCBwYXRjaCAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tDQogICAgICAgIGZyb20gcmVzb3VyY2VzLmxpYi5xcl91dGlscyBpbXBvcnQgbWFrZV9xciwgcmVtb3ZlX3FyDQogICAgICAgIHFyX3VybCAgICA9ICJodHRwczovL3RyYWt0LnR2L2FjdGl2YXRlLyIgKyB1c2VyX2NvZGUNCiAgICAgICAgcXJfcGF0aCAgID0gbWFrZV9xcihxcl91cmwpDQogICAgICAgIGFkZG9uX3BhdGggPSBnLkFERE9OLmdldEFkZG9uSW5mbygicGF0aCIpDQogICAgICAgIHFyX2RpYWxvZyA9IHhibWNndWkuV2luZG93WE1MRGlhbG9nKCJ0cmFrdF9hdXRoX3FyLnhtbCIsIGFkZG9uX3BhdGgsICJEZWZhdWx0IikNCiAgICAgICAgcXJfZGlhbG9nLnNldFByb3BlcnR5KCJ1c2VyX2NvZGUiLCAgICAgIHVzZXJfY29kZSkNCiAgICAgICAgcXJfZGlhbG9nLnNldFByb3BlcnR5KCJxcl9pbWFnZSIsICAgICAgIHFyX3BhdGgpDQogICAgICAgIHFyX2RpYWxvZy5zZXRQcm9wZXJ0eSgicHJvZ3Jlc3Nfd2lkdGgiLCAiNTMwIikNCiAgICAgICAgcXJfZGlhbG9nLnNldFByb3BlcnR5KCJleHBpcmVzX2xhYmVsIiwgIGYiRXhwaXJlcyBpbiB7dG9rZW5fdHRsfXMiKQ0KICAgICAgICBxcl9kaWFsb2cuc2hvdygpDQogICAgICAgIGZhaWxlZCA9IEZhbHNlDQogICAgICAgIHRyeToNCiAgICAgICAgICAgIHdoaWxlIG5vdCBmYWlsZWQgYW5kIHNlbGYudXNlcm5hbWUgaXMgTm9uZSBhbmQgdG9rZW5fdHRsID4gMDoNCiAgICAgICAgICAgICAgICB4Ym1jLnNsZWVwKDEwMDApDQogICAgICAgICAgICAgICAgdG9rZW5fdHRsIC09IDENCiAgICAgICAgICAgICAgICBpZiB0b2tlbl90dGwgJSBpbnRlcnZhbCA9PSAwOg0KICAgICAgICAgICAgICAgICAgICBmYWlsZWQgPSBzZWxmLl9hdXRoX3BvbGwoZGV2aWNlKQ0KICAgICAgICAgICAgICAgIHByb2dyZXNzX3dpZHRoID0gaW50KGZsb2F0KHRva2VuX3R0bCAqIDUzMCkgLyBleHBpcnkpDQogICAgICAgICAgICAgICAgcXJfZGlhbG9nLnNldFByb3BlcnR5KCJwcm9ncmVzc193aWR0aCIsIHN0cihwcm9ncmVzc193aWR0aCkpDQogICAgICAgICAgICAgICAgcXJfZGlhbG9nLnNldFByb3BlcnR5KCJleHBpcmVzX2xhYmVsIiwgIGYiRXhwaXJlcyBpbiB7dG9rZW5fdHRsfXMiKQ0KICAgICAgICBmaW5hbGx5Og0KICAgICAgICAgICAgcXJfZGlhbG9nLmNsb3NlKCkNCiAgICAgICAgICAgIGRlbCBxcl9kaWFsb2cNCiAgICAgICAgICAgIHJlbW92ZV9xcihxcl9wYXRoKQ0KICAgICAgICAjIC0tIGVuZCBTZXJlbiBRUiBBdXRoIHBhdGNoIC0tDQo='
 
 
 # ── Composite for Plex QR Auth blobs (by ABUKARIM TOOLS) ──
@@ -188,56 +184,6 @@ PATCHES = [
         'already_patched_check': '_ALLOW_NON_COREELEC = True',
         'fallback_pattern': r'_ALLOW_NON_COREELEC\s*(?::[^=\n]+)?=\s*False',
         'fallback_repl': lambda m: '_ALLOW_NON_COREELEC = True',
-    },
-    # ── Seren QR Auth ──
-    {
-        'addon_id': 'plugin.video.seren',
-        'rel_path': os.path.join('resources', 'lib', 'qr_utils.py'),
-        'old': '', 'new': '',
-        'description': 'Seren – inject qr_utils.py',
-        'inject_file': True,
-        'inject_content_b64': _SEREN_QR_UTILS_B64,
-        'already_patched_check': 'api.qrserver.com',
-        # Obsolete on Seren 3.4.25+ (native QR auth) — don't inject an unused helper.
-        'skip_if_present': (os.path.join('resources', 'skins', 'Default', '1080i', 'qr_auth_window.xml'),),
-    },
-    {
-        'addon_id': 'plugin.video.seren',
-        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i', 'trakt_auth_qr.xml'),
-        'old': '', 'new': '',
-        'description': 'Seren – inject trakt_auth_qr.xml',
-        'inject_file': True,
-        'inject_content_b64': _SEREN_XML_B64,
-        'already_patched_check': 'trakt_auth_qr',
-        # Obsolete on Seren 3.4.25+ (native QR auth) — don't inject an unused dialog.
-        'skip_if_present': (os.path.join('resources', 'skins', 'Default', '1080i', 'qr_auth_window.xml'),),
-    },
-    {
-        'addon_id': 'plugin.video.seren',
-        'rel_path': os.path.join('resources', 'lib', 'indexers', 'trakt.py'),
-        'old': base64.b64decode(_SEREN_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_SEREN_NEW_B64).decode('utf-8'),
-        'description': 'Seren trakt.py – QR auth dialog',
-        'already_patched_check': '# -- Seren QR Auth patch (by ABUKARIM TOOLS) --',
-        # Seren 3.4.25+ ships native Trakt QR auth (QRAuthWindow +
-        # qr_auth_window.xml + common/tools.make_qr), which fully replaces this
-        # injection. On those builds the old DialogProgress block this patch
-        # targeted no longer exists, so skip cleanly rather than fail.
-        'skip_if_present': (os.path.join('resources', 'skins', 'Default', '1080i', 'qr_auth_window.xml'),),
-        # Resilient fallback: the exact 'old' blob breaks the moment Seren edits
-        # ANY line inside the auth block (a new upstream build did exactly that,
-        # so a device on that build silently lost the QR dialog). This regex
-        # anchors only on the two stable boundary lines — copy2clip(user_code)
-        # at the top and 'del progress_dialog' at the bottom — and swallows
-        # everything between them regardless of what upstream changed in the
-        # middle or which line endings the file uses (\r?\n). The replacement
-        # is the full QR block (LF); it contains no 'del progress_dialog' line,
-        # so it can never re-match — the pass is idempotent and the sentinel
-        # above short-circuits it anyway once applied.
-        'fallback_pattern': (r'[ \t]*tools\.copy2clip\(user_code\)[^\n]*\r?\n'
-                             r'[\s\S]*?'
-                             r'[ \t]*del progress_dialog[^\n]*\r?\n'),
-        'fallback_repl': base64.b64decode(_SEREN_NEW_B64).decode('utf-8').replace('\r\n', '\n'),
     },
     # ── Seren maintenance.py – UTF-8 addon.xml I/O (py3.14 C-locale opens ascii; 0xe2 in addon.xml crashes service at boot) ──
     {
@@ -426,58 +372,6 @@ PATCHES = [
                 + m.group(6) + '</control>'
             )
         ),
-    },
-
-    # ── RedLight – busy-player fix (separate patch, group 'redlight') ──
-    # Root cause (kodi.log): clicking a widget item while the previous video is
-    # still playing / tearing down tripped _playback_already_active() in
-    # playback_prep(), which bailed with a silent `return`.  The plugin then
-    # exited without starting playback, Kodi's pending play item stayed
-    # unresolved -> "One or more items failed to play" popup right after the
-    # player stopped.  Old fix: wait (bounded) for the player to finish tearing
-    # down, then continue into the normal scrape/play flow instead of bailing.
-    #
-    # OBSOLETE on RedLight 2.5.9+: upstream rewrote playback_prep(). The silent
-    # `if self._playback_already_active() and not self.background: return` bail is
-    # GONE; the end-of-episode busy cover is now handled explicitly with a guarded
-    # kodi_utils.hide_busy_dialog() (it is deliberately NOT dismissed during the
-    # background next-episode prep that runs while the current episode still
-    # plays). That is exactly the case this patch existed to fix, so on 2.5.9+ the
-    # anchor no longer exists and never will. obsolete_if_contains keys on the
-    # unique upstream comment fingerprint and skips cleanly; not_found_ok covers
-    # any intermediate build where neither the old anchor nor the fingerprint is
-    # present, so a settled box reports a clean skip instead of a permanent
-    # "Patch string not found" failure on every sweep. The exact + regex anchors
-    # are kept so a genuinely-old RedLight that still has the silent bail is still
-    # fixed.
-    {
-        'addon_id': 'plugin.video.redlight',
-        'rel_path': os.path.join('resources', 'lib', 'modules', 'sources.py'),
-        'old': '\t\tif self._playback_already_active() and not self.background:\n\t\t\treturn\n',
-        'new': ('\t\tif self._playback_already_active() and not self.background:\n'
-                '\t\t\t# -- RedLight busy-player fix (by ABUKARIM TOOLS): wait for teardown instead of silent bail --\n'
-                '\t\t\t_pw = 0\n'
-                '\t\t\twhile self._playback_already_active() and _pw < 8000:\n'
-                '\t\t\t\tkodi_utils.sleep(200)\n'
-                '\t\t\t\t_pw += 200\n'),
-        'description': 'RedLight sources.py - wait for player teardown instead of silent bail (kills "Playback failed" popup on widget clicks)',
-        # Sentinel must be a SUBSTRING of what 'new' writes. The written comment is
-        # "... (by ABUKARIM TOOLS): wait for teardown instead of silent bail --", so a
-        # sentinel ending in ') --' never matched and the entry could not recognise its
-        # own work: every sweep retried, failed to find 'old', and logged 1 failed.
-        'already_patched_check': '# -- RedLight busy-player fix (by ABUKARIM TOOLS)',
-        # RedLight 2.5.9+ handles this natively (see comment above). The fingerprint
-        # is a stable, unique comment upstream added next to the new hide_busy_dialog()
-        # guard; when present, the silent bail is gone and this patch is obsolete.
-        'obsolete_if_contains': 'do not dismiss the end-of-episode busy cover',
-        'not_found_ok': True,
-        'fallback_pattern': r'\t\tif self\._playback_already_active\(\) and not self\.background:\r?\n\t\t\treturn\r?\n',
-        'fallback_repl': ('\t\tif self._playback_already_active() and not self.background:\n'
-                          '\t\t\t# -- RedLight busy-player fix (by ABUKARIM TOOLS): wait for teardown instead of silent bail --\n'
-                          '\t\t\t_pw = 0\n'
-                          '\t\t\twhile self._playback_already_active() and _pw < 8000:\n'
-                          '\t\t\t\tkodi_utils.sleep(200)\n'
-                          '\t\t\t\t_pw += 200\n'),
     },
 
     # ── TinyPPI – replace the SDR/HDR10/HDR10+ codec badge graphics ──
@@ -1060,7 +954,6 @@ import json
 
 # Ordered list of (toggle_id, display label). Order = order shown in the dialog.
 TOGGLE_GROUPS = [
-    ('seren_trakt_auth', 'Seren Trakt Auth'),
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
@@ -1083,15 +976,6 @@ _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 # the same construction in PATCHES on every platform. Any patch not listed here
 # is always-on (no toggle).
 _TOGGLE_OF = {
-    # Seren Trakt Auth — every Seren entry
-    ('plugin.video.seren',
-     os.path.join('resources', 'lib', 'qr_utils.py')):                       'seren_trakt_auth',
-    ('plugin.video.seren',
-     os.path.join('resources', 'skins', 'Default', '1080i', 'trakt_auth_qr.xml')): 'seren_trakt_auth',
-    ('plugin.video.seren',
-     os.path.join('resources', 'lib', 'indexers', 'trakt.py')):              'seren_trakt_auth',
-    ('plugin.video.seren',
-     os.path.join('resources', 'lib', 'common', 'maintenance.py')):          'seren_trakt_auth',
     # TMDbHelper Trakt Auth QR — the three QR entries
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'qr_utils.py')):      'tmdbh_trakt_auth',
@@ -1149,8 +1033,6 @@ _TOGGLE_OF = {
      os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'redlight_fixes',
     ('plugin.video.redlight',
      os.path.join('resources', 'skins', 'Default', '1080i', 'sources_results.xml')): 'redlight_fixes',
-    ('plugin.video.redlight',
-     os.path.join('resources', 'lib', 'modules', 'sources.py')):             'redlight_fixes',
     # a4kSubtitles: UTF-8 Subtitles Fix
     ('service.subtitles.a4ksubtitles',
      os.path.join('a4kSubtitles', 'download.py')):                           'a4ksubs_utf8',

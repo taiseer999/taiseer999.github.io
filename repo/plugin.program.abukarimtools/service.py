@@ -2,6 +2,14 @@
 """
 service.py – ABUKARIM TOOLS first-run automation.
 
+NOTE: the AUTOMATIC first-run at boot is currently DISABLED via the
+AUTO_FIRST_RUN switch below (it caused problems in the field). The service
+still runs on every boot for its other duties (post-update restart, autostart
+cleanup, Arabic fallback font, and the auto-patch watchdog), but it no longer
+arms or runs setup on its own. Setup is now manual only — the Tools menu item
+or RunScript(plugin.program.abukarimtools, firstrun). The description below
+documents the behaviour that AUTO_FIRST_RUN=True would restore.
+
 Runs as a Kodi service on every start. It only does something when the
 one-shot flag file (shipped inside the build's userdata) is present:
 
@@ -60,6 +68,22 @@ BUILD_ID_FILE   = os.path.join(ADDON_PATH, 'resources', 'build.id')   # shipped
 LAST_BUILD_FILE = os.path.join(PROFILE, 'last_build.id')              # addon_data
 
 WIZARD_ID   = 'plugin.program.ABUKARIMwizard'
+
+# --------------------------------------------------------------------------
+# Master switch for the AUTOMATIC first-run at boot.
+#
+# When False (current setting) the service NEVER arms or runs the first-run
+# sequence by itself on startup, and never force-switches the UI language on
+# boot. It caused too many problems in the field: the build.id self-trigger
+# below re-armed on any build.id/done-marker mismatch (fresh apply, wiped
+# addon_data, or a run interrupted by a crash/power-cycle), so setup could
+# fire unexpectedly or loop, and the CoreELEC path auto-reboots at the end.
+#
+# Manual setup is UNAFFECTED — the menu item (default.py -> first_run) and
+# RunScript(plugin.program.abukarimtools, firstrun) both call run_now()
+# directly and still work exactly as before. Flip this back to True only if
+# you deliberately want boot-time auto setup again.
+AUTO_FIRST_RUN = False
 
 # How long (seconds) to wait for Kodi/wizard to settle before starting.
 STARTUP_TIMEOUT = 180
@@ -677,21 +701,20 @@ def _cleanup_stale_autostart():
              xbmc.LOGWARNING)
 
 
-def _restart_if_updated(monitor):
-    """Self-restart once when THIS add-on was updated in place.
+def _recommend_restart_if_updated(monitor):
+    """Recommend a restart once when THIS add-on was updated in place.
 
     Kodi registers the new add-on folder on its mid-session rescan but does NOT
     launch the newly-registered xbmc.service until a restart, so the auto-patch
-    watchdog (started only from this service) would stay dormant until the next
-    manual reboot — updated targets (Seren/TinyPPI/AF3/DexWorld/TMDbHelper/
-    RedLight) would not get re-patched in the meantime. Detect a version change
-    against a stamp in addon_data and bounce Kodi once so the new service and
-    its watchdog actually run.
+    watchdog (started only from this service) stays dormant until the next
+    reboot. We used to force that reboot; now we only RECOMMEND it (a dialog the
+    user can decline). If they decline, the new service/watchdog simply start on
+    the next normal boot instead — nothing is lost, and repo linking is
+    re-applied on every boot by the origin-fix chore in main().
 
     One-shot and loop-safe: the stamp is rewritten to the CURRENT version
-    *before* the restart, so it fires exactly once per version bump. The very
-    first run (no stamp yet — fresh install/build) is skipped, because the
-    build/first-run flow already reboots on a fresh apply.
+    *before* we prompt, so the recommendation appears exactly once per version
+    bump. The very first run (no stamp yet — fresh install/build) is skipped.
     """
     stamp   = os.path.join(PROFILE, 'service_version.stamp')
     current = ''
@@ -706,37 +729,40 @@ def _restart_if_updated(monitor):
     if last == current:
         return
 
-    # Write the new stamp FIRST. If we cannot persist it, do not restart —
-    # a restart without a recorded stamp would repeat on every boot.
+    # Write the new stamp FIRST. If we cannot persist it, do not prompt —
+    # an un-stamped prompt would reappear on every boot.
     try:
         os.makedirs(PROFILE, exist_ok=True)
         with open(stamp, 'w', encoding='utf-8') as f:
             f.write(current)
     except OSError as e:
         _log('Could not write service version stamp (%s) — skipping the '
-             'post-update restart to avoid a reboot loop.' % e,
-             xbmc.LOGWARNING)
+             'post-update restart recommendation to avoid repeating it every '
+             'boot.' % e, xbmc.LOGWARNING)
         return
 
     if not last:
-        _log('First service run for version %s — stamped, no restart '
-             '(fresh install/build handles its own restart).' % current)
+        _log('First service run for version %s — stamped, no recommendation '
+             '(fresh install/build).' % current)
         return
 
-    _log('Tools updated %s -> %s; restarting Kodi once so the new service '
-         'and auto-patch watchdog start.' % (last, current))
-    # Brief heads-up so the restart is not mistaken for a crash.
-    try:
-        xbmc.executebuiltin(
-            'Notification(%s, %s, 5000)'
-            % (ADDON_NAME,
-               'Tools updated — restarting to finish. / '
-               'تم تحديث الأدوات — سيُعاد التشغيل.'))
-    except Exception:
-        pass
+    _log('Tools updated %s -> %s; recommending a restart (not forced) so the '
+         'new service and auto-patch watchdog start.' % (last, current))
+    # Let the UI settle a moment before showing the dialog.
     if monitor.waitForAbort(3):
         return
-    xbmc.executebuiltin('Reboot' if _is_coreelec() else 'RestartApp')
+    try:
+        from resources.lib import origin_fix
+        origin_fix.recommend_restart(
+            message=('ABUKARIM TOOLS were updated to %s.\n'
+                     'A restart is recommended to finish applying the update '
+                     'and start the auto-patch service.\n'
+                     'تم تحديث أدوات أبوكريم إلى %s.\n'
+                     'يُنصح بإعادة التشغيل لإكمال تطبيق التحديث وتشغيل خدمة '
+                     'الترقيع التلقائي.' % (current, current)))
+    except Exception:
+        _log('Post-update restart recommendation crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
 
 def main():
@@ -753,12 +779,12 @@ def main():
         _log('Addons33 rebuild continuation crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
-    # Self-restart once if this add-on was just updated in place, so Kodi
-    # actually starts the freshly-registered service (and its watchdog) this
-    # session instead of on the next manual reboot. Fenced; reboots when it
-    # fires, so it runs before the remaining boot chores. No-op otherwise.
+    # Recommend (never force) a restart if this add-on was just updated in
+    # place, so Kodi starts the freshly-registered service (and its watchdog)
+    # once the user agrees; otherwise they start on the next normal boot.
+    # Fenced; no longer reboots, so ordering no longer matters, but kept here.
     try:
-        _restart_if_updated(monitor)
+        _recommend_restart_if_updated(monitor)
     except Exception:
         _log('Post-update restart check crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
@@ -774,6 +800,23 @@ def main():
         _cleanup_stale_autostart()
     except Exception:
         _log('autostart cleanup crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # Runs on every boot: re-apply repository linking (installed.origin) for
+    # any add-on that has an empty origin — skins/companions installed from the
+    # portal or a zip. This is the "do the necessary linking after a restart"
+    # safety net: because we no longer FORCE a reboot after a portal install or
+    # a tools update, this guarantees the linking is in place on whatever boot
+    # actually happens next. Idempotent (only touches empty origins) and fully
+    # fenced. No-op when everything is already linked.
+    try:
+        from resources.lib import origin_fix
+        res = origin_fix.fix_addons(None)
+        if res.get('fixed'):
+            _log('Repo linking applied on boot for: %s'
+                 % ', '.join(sorted(res['fixed'])))
+    except Exception:
+        _log('Boot-time repo linking crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # Make Arabic readable in every skin (including plugin directory listings
@@ -793,12 +836,13 @@ def main():
     # flipping it back to English on every boot — so this is gated on first-run
     # still being pending. Only switches away from Arabic; a deliberately-chosen
     # non-English language is left alone. Best-effort and fully fenced.
+    # Only relevant while auto first-run is active — it makes the auto setup
+    # dialogs readable. With AUTO_FIRST_RUN off we never touch the UI language
+    # on boot (manual setup handles its own English/Arabic switch in _run_steps).
     try:
-        if not os.path.exists(DONE_FILE):
+        if AUTO_FIRST_RUN and not os.path.exists(DONE_FILE):
             from resources.lib import set_language
             set_language.force_english(only_if_arabic=True)
-        else:
-            _log('First-run complete — leaving UI language as set.')
     except Exception:
         _log('UI language switch crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
@@ -808,7 +852,7 @@ def main():
     # apply and a previous run that was interrupted (crash / power-cycle)
     # before it could finish — the old last_build.id comparison covered only
     # the former. Manual first_run.flag still works as before.
-    pending, build_id = _first_run_pending()
+    pending, build_id = _first_run_pending() if AUTO_FIRST_RUN else (False, '')
     if pending:
         _log('First-run pending for build %s — arming.' % build_id)
         for stale in (DONE_FILE, LOCK_FILE):
@@ -826,9 +870,19 @@ def main():
         # DONE_FILE now, not here.
         _record_build(build_id)
 
-    if os.path.exists(FLAG_FILE):
+    if AUTO_FIRST_RUN and os.path.exists(FLAG_FILE):
         _log('First-run flag detected: %s' % FLAG_FILE)
         run_first_run_sequence(monitor)
+    elif os.path.exists(FLAG_FILE):
+        # Auto first-run is disabled: a stale flag (shipped in the build's
+        # userdata, or left by an older version) must NOT start setup on boot.
+        # Clear it so it can't fire later either. Manual setup is unaffected.
+        _log('Auto first-run disabled — ignoring and clearing stale flag: %s'
+             % FLAG_FILE)
+        try:
+            os.remove(FLAG_FILE)
+        except OSError:
+            pass
 
     # From here the service stays alive for the rest of the Kodi session and
     # watches the patch targets: a Kodi add-on update replaces the add-on

@@ -352,6 +352,40 @@ def _notify_quit():
         pass
 
 
+def recommend_restart(message=None, title='ABUKARIM TOOLS',
+                      yeslabel=None, nolabel=None):
+    """Recommend — but never force — a restart so pending changes take effect.
+
+    Used after repo linking, an in-place tools update, or a portal skin
+    install. The repo linking is already written to the Addons DB by the time
+    this is called, so declining loses nothing: Kodi reads the new origins on
+    its next normal start, and the service re-applies linking on every boot as
+    a safety net (see origin_fix.fix_addons run from service.py). Shows a
+    dialog and restarts ONLY if the user agrees. Returns True only if the user
+    accepted and a restart was triggered.
+    """
+    if message is None:
+        message = ('A restart is recommended so the changes take effect.\n'
+                   'يُنصح بإعادة التشغيل حتى تصبح التغييرات فعّالة.')
+    if yeslabel is None:
+        yeslabel = 'Restart now / أعد التشغيل الآن'
+    if nolabel is None:
+        nolabel = 'Later / لاحقاً'
+    try:
+        agreed = xbmcgui.Dialog().yesno(title, message,
+                                        yeslabel=yeslabel, nolabel=nolabel)
+    except Exception as e:
+        _log('recommend_restart dialog failed: %s' % e)
+        return False
+    if not agreed:
+        _log('Restart recommended — user chose Later.')
+        return False
+    _log('Restart recommended — user accepted.')
+    xbmc.sleep(300)
+    _restart_kodi()
+    return True
+
+
 def run():
     dialog = xbmcgui.Dialog()
     if not dialog.yesno(
@@ -391,8 +425,10 @@ def run():
 
     if fixed:
         # Kodi only uses the repaired origins for update checks after a
-        # restart, so restart automatically (no prompt) once something was
-        # actually fixed.
-        _log('Origins fixed — restarting automatically.')
-        xbmc.sleep(500)
-        _restart_kodi()
+        # restart. Recommend one (don't force it) — the origins are already on
+        # disk, so they take effect on the next normal start regardless.
+        recommend_restart(
+            message=('Repository links were repaired.\n'
+                     'A restart is recommended so updates become active.\n'
+                     'تم إصلاح روابط المستودعات.\n'
+                     'يُنصح بإعادة التشغيل حتى تصبح التحديثات فعّالة.'))

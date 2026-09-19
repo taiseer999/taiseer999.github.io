@@ -1,3 +1,48 @@
+v3.1.0.7
+- Removed: Seren Trakt QR-auth patches (qr_utils.py, trakt_auth_qr.xml,
+  trakt.py) and their base64 blobs. Obsolete on Seren 3.4.25+, which ships
+  native Trakt QR auth. The 'Seren Trakt Auth' toggle group is gone with them.
+- Removed: RedLight busy-player fix (sources.py "wait for teardown"). Obsolete
+  on RedLight 2.5.9+ (upstream handles the end-of-episode busy cover natively);
+  confirmed on 2.6.4. RedLight sound (volume auto-drop) and the dark sources
+  theme fix are UNCHANGED, still under the 'RedLight: Fix Sound & Theme' toggle.
+- Kept: Seren maintenance.py UTF-8 I/O patches — now always-on (no longer under
+  the removed Seren toggle). They are a py3.14 boot-crash fix and shouldn't be
+  user-disabled.
+- TMDbHelper patches unchanged and remain individually switchable from
+  Apply Patches -> checklist: "TMDbHelper Trakt Auth QR", "MPAA for KSA",
+  "TMDbHelper: Stability". Note: per current logs the Stability group (player.py
+  dead-player guard) is still needed on 6.17.3 — leave it ON.
+
+v3.1.0.6
+- Changed: no more FORCED reboots. A restart is now only recommended, never
+  forced:
+  * Tools updated in place: the service used to reboot automatically to start
+    the new service/watchdog — it now shows a recommendation dialog (Restart
+    now / Later). Decline and the new service starts on the next normal boot.
+  * Portal skin install: used to restart automatically to activate the skin's
+    repo updates — now recommends a restart instead. The repo link is already
+    written to the Addons DB, so declining loses nothing.
+  * Origin Fix menu: same change — recommends a restart instead of forcing it.
+- Added: on every boot the service re-applies repository linking
+  (installed.origin) for any add-on with an empty origin (portal/zip skins and
+  companions). This is the "do the necessary linking after a restart" safety
+  net now that reboots are no longer forced — idempotent and best-effort.
+
+v3.1.0.5
+- Changed: the automatic first-run at boot is now DISABLED (new AUTO_FIRST_RUN
+  switch in service.py, default False). It caused too many problems: the
+  build.id self-trigger re-armed on any build.id/done-marker mismatch (fresh
+  apply, wiped addon_data, or a run interrupted by a crash/power-cycle), so
+  setup could fire unexpectedly or loop, and the CoreELEC path auto-rebooted
+  at the end. The service no longer arms/runs setup or force-switches the UI
+  language on boot; a stale first_run.flag is ignored and cleared. Its other
+  boot duties are unchanged (post-update restart, autostart cleanup, Arabic
+  fallback font, auto-patch watchdog).
+- Manual setup is unaffected: Tools menu -> first-run, or
+  RunScript(plugin.program.abukarimtools, firstrun). Flip AUTO_FIRST_RUN back
+  to True to restore boot-time auto setup.
+
 v3.1.0.1
 - Fixed: skins installed via the Skin Portal never received future updates. The
   origin written to the Addons DB used lowercase repo ids (repository.taiseerce,
