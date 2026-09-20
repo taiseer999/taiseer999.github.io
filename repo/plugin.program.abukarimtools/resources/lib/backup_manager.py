@@ -53,6 +53,20 @@ EXCLUDED_ADDONS = [
 PARTIAL_ADDONS = {
     'plugin.video.themoviedb.helper': {'settings.xml'},
 }
+
+#  Partial SKIP: for these addons EVERYTHING is kept EXCEPT these filenames.
+#  These are machine-/build-specific first-run lifecycle files: restoring them
+#  re-imports another box's setup state and makes first-run re-fire after a
+#  restore (a completed box would otherwise get a foreign first_run.flag / an
+#  old-build first_run.done dragged in during the restore step, and re-run
+#  setup on the next boot). The user's own patch choices (patch_toggles.json)
+#  are deliberately NOT listed here, so those still travel between installs.
+SKIP_FILES = {
+    'plugin.program.abukarimtools': {
+        'first_run.flag', 'first_run.done', 'first_run.lock',
+        'last_build.id', 'service_version.stamp',
+    },
+}
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -215,6 +229,18 @@ class BackupManager:
                     if (len(member_parts) >= 2
                             and member_parts[0] == 'addon_data'
                             and member_parts[1] in EXCLUDED_ADDONS):
+                        continue
+
+                    # Skip machine-/build-specific first-run lifecycle files
+                    # but keep the rest of the addon's data (e.g. patch
+                    # toggles). Restoring these re-imports another box's setup
+                    # state and makes first-run re-fire on the next boot after
+                    # a restore.
+                    if (len(member_parts) >= 3
+                            and member_parts[0] == 'addon_data'
+                            and member_parts[1] in SKIP_FILES
+                            and member_parts[-1] in SKIP_FILES[member_parts[1]]):
+                        _log('Skipping first-run state file: %s' % norm_member)
                         continue
 
                     # guisettings.xml must be staged — writing it while Kodi
@@ -409,6 +435,21 @@ class BackupManager:
                             rel      = os.path.relpath(abs_path, self.userdata_path)
                             arc_name = rel.replace('\\', '/')
                             collected.append((abs_path, arc_name))
+                continue
+
+            # ── Skip-list addons – include everything EXCEPT named files ───
+            if addon_id in SKIP_FILES:
+                skip = SKIP_FILES[addon_id]
+                _log('Including %s (skipping first-run state: %s)'
+                     % (addon_id, ', '.join(sorted(skip))))
+                for root, dirs, files in os.walk(addon_dir):
+                    for fname in files:
+                        if fname in skip:
+                            continue
+                        abs_path = os.path.join(root, fname)
+                        rel      = os.path.relpath(abs_path, self.userdata_path)
+                        arc_name = rel.replace('\\', '/')
+                        collected.append((abs_path, arc_name))
                 continue
 
             # ── Normal addon – include everything ─────────────────────────

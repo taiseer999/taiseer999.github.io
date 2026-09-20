@@ -421,6 +421,12 @@ def run_now(monitor=None, remove_flag=True, force=False):
     try:
         _run_steps(monitor)
     finally:
+        # A restore during _run_steps (Step 2) can re-create first_run.flag from
+        # the backup; drop it again so no stale flag survives this completed run.
+        try:
+            os.remove(FLAG_FILE)
+        except OSError:
+            pass
         # Mark complete (with the shipped build id) and release the lock.
         _mark_done()
         try:

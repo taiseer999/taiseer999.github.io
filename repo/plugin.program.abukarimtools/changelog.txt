@@ -1,3 +1,20 @@
+v3.1.0.8
+- Fixed: first-run re-launching itself after a completed manual run. Root
+  cause was the backup/restore step: plugin.program.abukarimtools was NOT in
+  the exclusion list (only the wizard was), so restoring a backup imported
+  another box's first-run state — a foreign first_run.flag / an old-build
+  first_run.done — during setup, and the box re-ran first-run on the next boot.
+  Now the machine-/build-specific first-run lifecycle files (first_run.flag,
+  first_run.done, first_run.lock, last_build.id, service_version.stamp) are
+  excluded from BOTH backup and restore. The user's own patch choices
+  (patch_toggles.json) are intentionally kept, so they still travel.
+- Hardened: run_now now also clears first_run.flag at completion (a restore in
+  Step 2 could re-create it mid-sequence), so no stale flag survives a run.
+- Note: the auto first-run remains disabled (AUTO_FIRST_RUN, since 3.1.0.5) and
+  a restored/stale flag is ignored+cleared on boot. If setup still re-launches
+  after this, the trigger is external to the service — an AF3 skin onload hook
+  / keymap / favourite calling "firstrun"; that lives in the skin, not here.
+
 v3.1.0.7
 - Removed: Seren Trakt QR-auth patches (qr_utils.py, trakt_auth_qr.xml,
   trakt.py) and their base64 blobs. Obsolete on Seren 3.4.25+, which ships
