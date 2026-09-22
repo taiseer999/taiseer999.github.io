@@ -104,29 +104,31 @@ def _ensure_fallback_font():
 
 def _ensure_patches():
     """Self-heal: re-apply the automatic patch set when the menu is opened, in
-    case the background watchdog service never ran this session (e.g. Kodi did
-    not launch the freshly-registered xbmc.service after an in-place update, or
-    the kill switch/service was disabled). Runs in a daemon thread so opening
-    the menu is never blocked; every patch is idempotent, so a redundant sweep
-    writes nothing. Honours the same autopatch.off kill switch as the watchdog.
+    case the background watchdog service never ran this session.
+
+    3.1.0.11: no longer a daemon thread inside this plugin invocation. The
+    plugin exits in milliseconds and Kodi finalized the interpreter while the
+    thread was mid-sweep, which on Kodi 22 / Python 3.14 stopped the menu from
+    opening. The sweep now runs as its own RunPlugin invocation (mode
+    'menu_sweep'), synchronously on that invocation's main thread, so the menu
+    never waits on it and nothing is left running when either script ends.
+    Every patch is idempotent, so a redundant sweep writes nothing.
     """
     try:
-        from resources.lib import patch_watchdog
-        import threading
-        from resources.lib import patcher
-
-        def _sweep():
-            try:
-                ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
-                if ids:
-                    patcher.apply_set(addon_ids=ids)
-            except Exception:
-                pass
-
-        threading.Thread(target=_sweep, name='AbukarimMenuPatchSweep',
-                         daemon=True).start()
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=menu_sweep)' % ADDON_ID)
     except Exception:
         pass
+
+
+def _menu_sweep():
+    """Body of the 'menu_sweep' invocation. Main thread, no directory."""
+    try:
+        from resources.lib import patch_watchdog, patcher
+        ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
+        if ids:
+            patcher.apply_set(addon_ids=ids)
+    except Exception as e:
+        xbmc.log('[AbukarimTools MenuSweep] failed: %s' % e, xbmc.LOGWARNING)
 
 
 def _continue_addons33_rebuild():
@@ -194,6 +196,10 @@ def router():
     # --- Top-level menu ---
     if mode is None:
         main_menu()
+        return
+
+    if mode == 'menu_sweep':
+        _menu_sweep()
         return
 
     if mode == 'first_run':

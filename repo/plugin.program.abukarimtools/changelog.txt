@@ -1,3 +1,12 @@
+v3.1.0.11
+- Fixed: add-on menu not opening on Kodi 22 (Python 3.14). Opening the menu
+  started the self-heal patch sweep as a daemon thread inside the plugin
+  invocation; the plugin finished in ms and Kodi finalized the interpreter
+  with that thread still running. Log showed the sweep dying right after the
+  first "[service.subtitles.dexworld] Already patched" line, every time.
+  The sweep now runs as its own RunPlugin(?mode=menu_sweep) invocation, on
+  that invocation's main thread - no background thread left behind.
+
 v3.1.0.10
 - Fixed: repo update failing with "Broken file ... invalid package". The zip
   was ~41MB (33MB of it menu icons at 1254x1254), so downloads could arrive
