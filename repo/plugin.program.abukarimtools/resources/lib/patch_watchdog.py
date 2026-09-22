@@ -32,6 +32,7 @@ silently re-applying an opt-in patch after an update would be a surprise.
 
 import json
 import os
+import re
 import time
 
 import xbmc
@@ -118,16 +119,17 @@ def _signature(addon_id):
     if not path:
         return None
 
-    version = ''
+    # Version straight from addon.xml - no xbmcaddon.Addon(<other id>) call on
+    # every poll (see patcher._resolve_addon_dir for why that is avoided).
+    xml_path = os.path.join(path, 'addon.xml')
     try:
-        version = xbmcaddon.Addon(addon_id).getAddonInfo('version') or ''
-    except Exception:
-        version = ''
-
-    try:
-        st = os.stat(os.path.join(path, 'addon.xml'))
+        st = os.stat(xml_path)
+        with open(xml_path, 'rb') as f:
+            head = f.read(4096).decode('utf-8', 'replace')
     except OSError:
         return None
+    m = re.search(r'<addon\b[^>]*?\bversion="([^"]+)"', head, re.S)
+    version = m.group(1) if m else ''
 
     return '%s|%d|%d' % (version, st.st_size, st.st_mtime_ns)
 

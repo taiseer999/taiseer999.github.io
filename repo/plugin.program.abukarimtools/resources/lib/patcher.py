@@ -57,6 +57,37 @@ _PRISM_BRIDGE_B64 = 'IyAtKi0gY29kaW5nOiB1dGYtOCAtKi0KIiIiCnRtZGJoZWxwZXJfYnJpZGd
 ADDON_NAME  = 'ABUKARIM TOOLS'
 HOME        = xbmcvfs.translatePath('special://home/')
 ADDONS_DIR  = os.path.join(HOME, 'addons')
+
+
+def _resolve_addon_dir(addon_id):
+    """Folder of an installed add-on, filesystem FIRST.
+
+    3.1.0.12: every sweep used to call xbmcaddon.Addon(<other id>) once per
+    patch entry. On Kodi 22 / Python 3.14 (with a broken Addons33.db) that call
+    can block inside Kodi's addon manager while holding the Python GIL, which
+    freezes every Python add-on at once - the sweep stopped dead after the
+    first dexworld entry and the ABUKARIM menu never opened. The standard
+    addons/ folder answers in almost every case without touching Kodi; the
+    registry is only asked when the folder is absent (portable/non-default
+    installs), and a miss is cached for the session.
+    """
+    local = os.path.join(ADDONS_DIR, addon_id)
+    if os.path.isdir(local):
+        return local
+    if addon_id in _REGISTRY_MISSES:
+        return None
+    try:
+        import xbmcaddon
+        path = xbmcvfs.translatePath(xbmcaddon.Addon(addon_id).getAddonInfo('path'))
+        if path and os.path.isdir(path):
+            return path
+    except Exception:
+        pass
+    _REGISTRY_MISSES.add(addon_id)
+    return None
+
+
+_REGISTRY_MISSES = set()
 ADDON_DATA  = xbmcvfs.translatePath('special://profile/addon_data/')
 
 DIALOG      = xbmcgui.Dialog()
@@ -795,14 +826,8 @@ def _apply_patch(patch):
     else:
         # Prefer Kodi's own registry: robust across platforms, portable installs,
         # and non-default addon directories (e.g. macOS test environments).
-        addon_path = None
-        try:
-            import xbmcaddon
-            addon_path = xbmcaddon.Addon(patch['addon_id']).getAddonInfo('path')
-        except Exception:
-            addon_path = None
-        if not addon_path or not os.path.isdir(addon_path):
-            addon_path = os.path.join(ADDONS_DIR, patch['addon_id'])
+        addon_path = (_resolve_addon_dir(patch['addon_id'])
+                      or os.path.join(ADDONS_DIR, patch['addon_id']))
         if not os.path.isdir(addon_path):
             # Optional target (e.g. a skin that may not be installed): skip
             # cleanly instead of counting a failure, so a toggle spanning two
@@ -1201,14 +1226,8 @@ def _reconcile_tinyppi_arabic():
     """
     addon_id = 'script.tinyppi'
     # Resolve TinyPPI's path the same way _apply_patch does (registry first).
-    addon_path = None
-    try:
-        import xbmcaddon
-        addon_path = xbmcaddon.Addon(addon_id).getAddonInfo('path')
-    except Exception:
-        addon_path = None
-    if not addon_path or not os.path.isdir(addon_path):
-        addon_path = os.path.join(ADDONS_DIR, addon_id)
+    addon_path = (_resolve_addon_dir(addon_id)
+                  or os.path.join(ADDONS_DIR, addon_id))
     if not os.path.isdir(addon_path):
         return True, '[%s] Addon not present – skipping (optional).' % addon_id
 
@@ -1318,13 +1337,8 @@ def _choose_toggles():
     # Which add-ons are actually present, so we only show usable toggles.
     present = set()
     for patch in PATCHES:
-        try:
-            import xbmcaddon
-            xbmcaddon.Addon(patch['addon_id'])
+        if _resolve_addon_dir(patch['addon_id']):
             present.add(patch['addon_id'])
-        except Exception:
-            if os.path.isdir(os.path.join(ADDONS_DIR, patch['addon_id'])):
-                present.add(patch['addon_id'])
 
     toggle_has_installed = set()
     for patch in PATCHES:

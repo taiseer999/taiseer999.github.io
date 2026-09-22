@@ -1,3 +1,15 @@
+v3.1.0.12
+- Fixed: patch sweep freezing (and the menu never opening) on Kodi 22 /
+  Python 3.14. 3.1.0.11 moved the sweep out of the thread but the log still
+  stopped dead after "[service.subtitles.dexworld] Already patched", and every
+  Python add-on went silent afterwards (GIL held). The sweep called
+  xbmcaddon.Addon(<target id>) for EVERY patch entry; with Addons33.db broken
+  ("version 0 - too old") that call can block inside Kodi's addon manager.
+  Add-on folders now resolve from special://home/addons first; the registry is
+  only asked when the folder is missing, and misses are cached per session.
+- Watchdog: target version is read from addon.xml instead of xbmcaddon, so the
+  30s poll no longer touches Kodi's addon manager at all.
+
 v3.1.0.11
 - Fixed: add-on menu not opening on Kodi 22 (Python 3.14). Opening the menu
   started the self-heal patch sweep as a daemon thread inside the plugin
