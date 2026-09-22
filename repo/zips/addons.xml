@@ -635,7 +635,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="3.1.0.8" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="3.1.0.9" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -654,6 +654,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
     <description lang="en_GB">ABUKARIM TOOLS is an all-in-one utility for managing your Kodi setup. It bundles a Skin Installer and Skin Switcher, full backup and restore of your userdata, OpenWizard maintenance shortcuts (cache, packages and thumbnail cleanup), and the ABUKARIM Wizard. A built-in patcher keeps popular add-ons (Seren, Prism, TinyPPI, Arctic Fuse 3, TMDbHelper, RedLight and more) working correctly on CoreELEC and Kodi, and re-applies its fixes automatically after those add-ons update. Also includes handy maintenance tools such as a speed test and an add-on database rebuild.</description>
     <summary lang="ar_SA">أدوات أبوكريم - حزمة متكاملة لصيانة كودي وإدارة الواجهات</summary>
     <description lang="ar_SA">أدوات أبوكريم هي أداة شاملة لإدارة نظام كودي لديك. تجمع بين مثبّت الواجهات ومبدّل الواجهات، والنسخ الاحتياطي الكامل لبيانات المستخدم واستعادتها، واختصارات صيانة OpenWizard (تنظيف الذاكرة المؤقتة والحزم والصور المصغّرة)، ومعالج أبوكريم. كما تتضمّن أداة ترقيع مدمجة تُبقي الإضافات الشائعة (Seren وTinyPPI وArctic Fuse 3 وTMDbHelper وRedLight وغيرها) تعمل بشكل صحيح على CoreELEC وكودي، وتعيد تطبيق إصلاحاتها تلقائياً بعد تحديث تلك الإضافات. وتشمل أيضاً أدوات صيانة مفيدة مثل اختبار السرعة وإعادة بناء قاعدة بيانات الإضافات.</description>
+    <news>v3.1.0.9 - Fix TMDbHelper Trakt QR screen: ship white.png into the dialog's skin media folder so the card, dim overlay and code box render (missing texture left them invisible over the live background).</news>
     <assets>
       <icon>icon.png</icon>
       <fanart>fanart.jpg</fanart>
@@ -7187,7 +7188,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="5.5.13">
+</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="5.5.14">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.2.4" />

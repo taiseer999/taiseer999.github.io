@@ -225,6 +225,25 @@ PATCHES = [
         'inject_content_b64': _TMDBH_TRAKT_XML_B64,
         'already_patched_check': 'Trakt Authentication',
     },
+    # trakt_auth_qr.xml is loaded as a WindowXMLDialog from TMDbHelper's OWN skin
+    # folder (get_qr_dialog -> WindowXMLDialog('trakt_auth_qr.xml', addon_path,
+    # 'Default', '1080i')), so bare texture names resolve against that addon skin's
+    # media dir — NOT the active Kodi skin. TMDbHelper ships no white.png there, so
+    # every <texture background="true">white.png</texture> fill (dim overlay, dark
+    # card, green bar, dividers, code box, progress bar) failed to load
+    # ("CGUITextureManager::GetTexturePath: could not find texture 'white.png'"),
+    # leaving only the labels + self-white QR floating over the un-dimmed live
+    # background. Ship a solid-opaque white.png so all the colordiffuse fills paint.
+    # Same binary inject_source + replace + byte-compare idempotency as the badges.
+    {
+        'addon_id': 'plugin.video.themoviedb.helper',
+        'rel_path': os.path.join('resources', 'skins', 'Default', 'media', 'white.png'),
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'inject_source': os.path.join('resources', 'tmdbhelper_qr', 'white.png'),
+        'description': 'TMDbHelper - inject white.png (QR dialog fill texture)',
+    },
     {
         'addon_id': 'plugin.video.themoviedb.helper',
         'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'authenticator.py'),
@@ -976,11 +995,13 @@ _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 # the same construction in PATCHES on every platform. Any patch not listed here
 # is always-on (no toggle).
 _TOGGLE_OF = {
-    # TMDbHelper Trakt Auth QR — the three QR entries
+    # TMDbHelper Trakt Auth QR — the four QR entries
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'qr_utils.py')):      'tmdbh_trakt_auth',
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'skins', 'Default', '1080i', 'trakt_auth_qr.xml')):        'tmdbh_trakt_auth',
+    ('plugin.video.themoviedb.helper',
+     os.path.join('resources', 'skins', 'Default', 'media', 'white.png')):                'tmdbh_trakt_auth',
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'api', 'trakt', 'authenticator.py')): 'tmdbh_trakt_auth',
     # MPAA for KSA — the certification fallback
