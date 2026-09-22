@@ -1,3 +1,14 @@
+v3.1.0.10
+- Fixed: repo update failing with "Broken file ... invalid package". The zip
+  was ~41MB (33MB of it menu icons at 1254x1254), so downloads could arrive
+  truncated and Kodi kept reusing the broken file from packages/.
+- Changed: all menu icons + icon.png resized to 512x512 and palette-optimized
+  (35MB -> 0.8MB). No code or path changes.
+
+v3.1.0.9
+- Fix TMDbHelper Trakt QR screen: ship white.png into the dialog's skin media
+  folder so the card, dim overlay and code box render.
+
 v3.1.0.8
 - Fixed: first-run re-launching itself after a completed manual run. Root
   cause was the backup/restore step: plugin.program.abukarimtools was NOT in
