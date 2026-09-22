@@ -142,15 +142,35 @@ def _continue_addons33_rebuild():
         pass
 
 
+def _mlog(msg):
+    """Menu-open trace (DEBUG level; was WARNING in the 3.1.0.13/14 diagnostics)."""
+    try:
+        xbmc.log('[AbukarimTools Menu] %s' % msg, xbmc.LOGDEBUG)
+    except Exception:
+        pass
+
+
 def main_menu():
+    _mlog('open: start (argv=%r)' % (sys.argv,))
     from resources.lib.i18n import T
+    _mlog('i18n imported')
     _continue_addons33_rebuild()
+    _mlog('addons33 continue checked')
     _ensure_fallback_font()
-    _ensure_patches()
+    _mlog('fallback font checked')
     for cat_key, label_id, icon_key, _items in CATEGORIES:
-        _add_folder(T(label_id), cat_key, icon_key)
+        label = T(label_id)
+        _mlog('item %s: label ok' % cat_key)
+        _add_folder(label, cat_key, icon_key)
+        _mlog('item %s: added' % cat_key)
     xbmcplugin.setContent(HANDLE, 'files')
+    _mlog('setContent done - calling endOfDirectory')
     xbmcplugin.endOfDirectory(HANDLE)
+    _mlog('endOfDirectory returned')
+    # The self-heal sweep is queued only AFTER the listing is handed back, so
+    # nothing it does can overlap with building the menu.
+    _ensure_patches()
+    _mlog('sweep queued - done')
 
 
 def category_menu(cat_key):

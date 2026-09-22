@@ -1,3 +1,35 @@
+v3.1.0.15
+- FIXED (root cause of the Kodi 22 freeze): the 3.1.0.14 trace stopped at
+  "#04 BEGIN script.tinyppi -> resources/lib/ui/fonts.py" / "read fonts.py".
+  Newer TinyPPI no longer contains the exact anchor, so the sweep fell through
+  to the regex fallback: (?:    .*\n)*? run with re.DOTALL. Nested,
+  overlapping quantifiers = catastrophic backtracking; runtime doubled for
+  every line of install_fonts() (24 lines ~2s, 28 lines ~33s, a real file:
+  effectively forever). Python's re never releases the GIL, so every add-on
+  and Kodi's UI froze with the busy spinner up. Opening the menu (and the
+  watchdog's boot sweep) always hit it.
+- Regex now uses [^\n]* (linear). Generic fallback no longer forces re.DOTALL
+  (this was the only pattern using '.'); entries can opt in via 'regex_flags'.
+- _log() accepts an optional level (toggle-save error path called it with two
+  args and would have raised TypeError).
+- Menu/patch traces from 3.1.0.13/14 kept, but at DEBUG level.
+
+v3.1.0.14
+- Diagnostic: numbered "[AbukarimTools Trace] #NN BEGIN/END" lines (WARNING)
+  for every patch entry, plus read/write trace around file I/O. Kodi's log
+  collapses identical consecutive lines, so the three dexworld "Already
+  patched" results were being merged - the freeze may be later in the sweep
+  than the last visible line suggested. Numbered lines are never identical.
+
+v3.1.0.13
+- Changed: the open-menu self-heal sweep is queued only AFTER endOfDirectory,
+  so it can no longer run alongside the menu being built. In every log so far
+  (3.1.0.4, .9, .11, .12) the sweep froze at the same spot a few ms after it
+  started, even with no xbmcaddon calls left in it - which points at the menu
+  invocation running in parallel, not the sweep itself.
+- Diagnostic: "[AbukarimTools Menu]" trace (WARNING level) around every step of
+  opening the menu, so the next kodi.log shows the exact call it stops in.
+
 v3.1.0.12
 - Fixed: patch sweep freezing (and the menu never opening) on Kodi 22 /
   Python 3.14. 3.1.0.11 moved the sweep out of the thread but the log still

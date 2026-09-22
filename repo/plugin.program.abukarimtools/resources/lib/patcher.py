@@ -193,7 +193,12 @@ PATCHES = [
         'new': base64.b64decode(_TINYPPI_NOFONTS_NEW_B64).decode('utf-8'),
         'description': 'TinyPPI fonts.py \u2013 disable install_fonts() entirely (overlay uses skin font; stops freeze on stop)',
         'already_patched_check': '# -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'(def install_fonts\(\) -> None:\n(?:    .*\n)*?)    skin_path = _get_skin_path\(\)',
+        # [^\n]* (not .*): with the generic re.DOTALL this used to be
+        # (?:    .*\n)*? - nested, overlapping quantifiers = catastrophic
+        # backtracking whenever the anchor is missing (newer TinyPPI).
+        # Runtime doubled per line of install_fonts(); the sweep held the GIL
+        # forever and froze Kodi (3.1.0.15).
+        'fallback_pattern': r'(def install_fonts\(\) -> None:\n(?:    [^\n]*\n)*?)    skin_path = _get_skin_path\(\)',
         'fallback_repl': (
             r'\1'
             '    # -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --\n'
@@ -771,8 +776,13 @@ PATCHES = [
 
 
 # ---------------------------------------------------------------------------
-def _log(msg):
-    xbmc.log('[AbukarimTools Patcher] %s' % msg, xbmc.LOGINFO)
+def _log(msg, level=None):
+    xbmc.log('[AbukarimTools Patcher] %s' % msg,
+             xbmc.LOGINFO if level is None else level)
+
+
+def _trace(msg):
+    xbmc.log('[AbukarimTools Trace] %s' % msg, xbmc.LOGDEBUG)
 
 
 def _read(path):
@@ -962,7 +972,13 @@ def _apply_patch(patch):
     repl    = patch.get('fallback_repl')
     if pattern and repl:
         _count = patch.get('count', 1)
-        new_content, n = re.subn(pattern, repl, content, count=_count, flags=re.DOTALL)
+        # No re.DOTALL by default (3.1.0.15): patterns that must cross lines
+        # say so explicitly with [\s\S] / \n. DOTALL turned '.*' into a
+        # multi-line wildcard, which is what made the TinyPPI fonts.py pattern
+        # backtrack exponentially and freeze Kodi. An entry can still opt in
+        # with 'regex_flags': re.DOTALL.
+        new_content, n = re.subn(pattern, repl, content, count=_count,
+                                 flags=patch.get('regex_flags', 0))
         if n:
             _write(target, new_content)
             return True, '[%s] Patched OK (regex): %s' % (patch['addon_id'], patch['description'])
@@ -1301,8 +1317,13 @@ def apply_set(group=None, addon_ids=None):
         else:
             failed += 1
 
-    for patch in _select(group, addon_ids):
+    for _n, patch in enumerate(_select(group, addon_ids), 1):
+        # Numbered trace (DEBUG since 3.1.0.15) so Kodi's duplicate-message filter
+        # (which swallows identical consecutive lines like the three dexworld
+        # "Already patched" results) can't hide where a sweep stops.
+        _trace('#%02d BEGIN %s -> %s' % (_n, patch['addon_id'], patch.get('rel_path')))
         ok, msg = _apply_patch(patch)
+        _trace('#%02d END   %s' % (_n, msg))
         _log(msg)
         results.append((ok, msg))
         if ok:
