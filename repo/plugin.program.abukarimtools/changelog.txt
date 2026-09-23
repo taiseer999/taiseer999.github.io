@@ -1,3 +1,9 @@
+v3.1.0.16
+- Backup Manager: userdata/addon_data/plugin.program.abukarimtools is now
+  excluded entirely from backups AND restores (moved to EXCLUDED_ADDONS).
+  Restoring an older backup that still contains the folder skips it. Note:
+  patch_toggles.json no longer travels between installs either.
+
 v3.1.0.15
 - FIXED (root cause of the Kodi 22 freeze): the 3.1.0.14 trace stopped at
   "#04 BEGIN script.tinyppi -> resources/lib/ui/fonts.py" / "read fonts.py".

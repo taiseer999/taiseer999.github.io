@@ -41,10 +41,13 @@ SKIN_ADDONS = [
 ]
 
 #  Addons whose addon_data is ALWAYS excluded from backups/restores.
-#  These hold machine-/build-specific first-run state that should not travel
-#  between installs (e.g. the ABUKARIM build wizard's firstrun flag).
+#  These hold machine-/build-specific state that should not travel between
+#  installs (e.g. the ABUKARIM build wizard's firstrun flag). ABUKARIM TOOLS'
+#  own folder is excluded whole since 3.1.0.16 - first-run lifecycle files,
+#  patch toggles, sentinels and everything else stay with the box.
 EXCLUDED_ADDONS = [
     'plugin.program.ABUKARIMwizard',
+    'plugin.program.abukarimtools',
 ]
 
 #  Partial exclusion: for these addons only specific files are KEPT;
@@ -55,18 +58,10 @@ PARTIAL_ADDONS = {
 }
 
 #  Partial SKIP: for these addons EVERYTHING is kept EXCEPT these filenames.
-#  These are machine-/build-specific first-run lifecycle files: restoring them
-#  re-imports another box's setup state and makes first-run re-fire after a
-#  restore (a completed box would otherwise get a foreign first_run.flag / an
-#  old-build first_run.done dragged in during the restore step, and re-run
-#  setup on the next boot). The user's own patch choices (patch_toggles.json)
-#  are deliberately NOT listed here, so those still travel between installs.
-SKIP_FILES = {
-    'plugin.program.abukarimtools': {
-        'first_run.flag', 'first_run.done', 'first_run.lock',
-        'last_build.id', 'service_version.stamp',
-    },
-}
+#  Format:  { addon_id: set_of_filenames_to_skip }
+#  (plugin.program.abukarimtools used to be here for its first-run files; it is
+#  now fully excluded via EXCLUDED_ADDONS, which covers those files too.)
+SKIP_FILES = {}
 # ─────────────────────────────────────────────────────────────────────────────
 
 
