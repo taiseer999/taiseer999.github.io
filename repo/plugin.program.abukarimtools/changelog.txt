@@ -1,3 +1,20 @@
+v3.1.0.23
+- Add-on Portal: a Yes-watchdog now covers the ENTIRE install run plus an
+  8 s tail. The 3.1.0.21 log shows POV's "Add-on required" prompt 1 s after
+  POV's own service started (17:56:04 enable -> service -> 17:56:05 prompt),
+  i.e. raised by the add-on/Kodi after our enable, which 3.1.0.22's silent
+  enable alone cannot prevent. Only 24076/24135 yes/no + install prompts can
+  appear in that window; the portal's own confirm/summary are outside it.
+
+v3.1.0.22
+- Silent enable: skin_installer._enable_addon (shared by the Add-on Portal,
+  skin installs and companions) no longer fires the EnableAddon() builtin
+  unconditionally. That builtin always shows Kodi's "Add-on required ...
+  Would you like to enable this add-on?" (24076/24135/24136) even when the
+  JSON-RPC SetAddonEnabled had already worked - one popup per installed
+  add-on (seen for POV). Now: JSON-RPC, verify for 2 s, and only if still
+  disabled fall back to the builtin with its prompt auto-answered Yes.
+
 v3.1.0.21
 - FIX (3.1.0.20 regression): "Run First-Time Setup" crashed immediately -
   RunScript(<path>/run.py) runs with NO add-on context, so

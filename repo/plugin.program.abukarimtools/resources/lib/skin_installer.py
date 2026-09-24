@@ -398,8 +398,16 @@ def _addon_is_enabled(addonid):
 
 
 def _enable_addon(addonid):
-    """Enable the addon reliably via JSON-RPC (synchronous), plus the builtin
-    as a secondary path."""
+    """Enable the addon silently via JSON-RPC (synchronous).
+
+    3.1.0.22: the EnableAddon() builtin used to be fired unconditionally as a
+    "secondary path". That builtin ALWAYS shows Kodi's "Add-on required - To
+    use this feature you must enable an add-on: X - Would you like to enable
+    this add-on?" yes/no (strings 24076/24135/24136) - even when JSON-RPC had
+    already enabled it - so every portal install left one popup per add-on
+    for the user to click. Now the builtin is only a fallback when JSON-RPC
+    did not take, and its prompt is answered Yes automatically.
+    """
     try:
         resp = xbmc.executeJSONRPC(
             '{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled",'
@@ -407,7 +415,27 @@ def _enable_addon(addonid):
         _log('SetAddonEnabled(%s) -> %s' % (addonid, resp))
     except Exception as e:
         _log('SetAddonEnabled failed: %s' % e)
+
+    waited = 0
+    while waited < 2000:
+        if _addon_is_enabled(addonid):
+            return
+        xbmc.sleep(200)
+        waited += 200
+
+    _log('JSON-RPC enable did not take for %s - builtin fallback '
+         '(auto-confirmed)' % addonid)
     xbmc.executebuiltin('EnableAddon(%s)' % addonid)
+    waited = 0
+    while waited < 6000:
+        if xbmc.getCondVisibility('Window.IsActive(yesnodialog)'):
+            xbmc.executebuiltin('SendClick(yesnodialog, 11)')   # 11 = Yes
+            _log('auto-confirmed "Add-on required" for %s' % addonid)
+            xbmc.sleep(300)
+        if _addon_is_enabled(addonid):
+            return
+        xbmc.sleep(100)
+        waited += 100
 
 
 def _wait_addon_enabled(addonid, timeout_ms=10000):

@@ -405,6 +405,14 @@ def _install_selection(entries):
     results = []
     prog = xbmcgui.DialogProgress()
     prog.create(TITLE, T(30401))
+    # Answer every "Add-on required / enable this add-on?" (and install)
+    # yes/no for the WHOLE run, plus a short tail after it: freshly enabled
+    # add-ons can fire EnableAddon() on themselves from their own service
+    # (POV re-enables itself right after its service starts - the prompt in
+    # the 3.1.0.21 log came 1 s after POV's service started). Nothing of ours
+    # asks a yes/no during this window, so auto-Yes is safe here.
+    guard = _YesWatchdog()
+    guard.__enter__()
     try:
         # 1) repositories -------------------------------------------------
         repos = []
@@ -481,7 +489,11 @@ def _install_selection(entries):
             else:
                 results.append((name, enabled, '' if enabled else T(30413)))
         prog.update(100, T(30406))
+        # tail: catch self-enable prompts from add-on services starting now
+        mon = xbmc.Monitor()
+        mon.waitForAbort(8)
     finally:
+        guard.__exit__(None, None, None)
         prog.close()
     return results
 
