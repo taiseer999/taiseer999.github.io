@@ -15,8 +15,8 @@ from resources import downloader, extract
 from datetime import datetime
 from sqlite3 import dbapi2 as database
 
-ADDON_ID       = xbmcaddon.Addon().getAddonInfo('id')
-ADDON_NAME = xbmcaddon.Addon().getAddonInfo('name')
+ADDON_ID       = xbmcaddon.Addon('plugin.program.abukarimtools').getAddonInfo('id')
+ADDON_NAME = xbmcaddon.Addon('plugin.program.abukarimtools').getAddonInfo('name')
 fanart         = xbmcvfs.translatePath(os.path.join('special://home/addons/' + ADDON_ID , 'fanart.jpg'))
 icon           = xbmcvfs.translatePath(os.path.join('special://home/addons/' + ADDON_ID, 'icon.png'))
 HOME             = xbmcvfs.translatePath('special://home/')

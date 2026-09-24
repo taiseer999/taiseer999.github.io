@@ -9,7 +9,7 @@ import xbmcgui
 import xbmcaddon
 import xbmcvfs
 
-ADDON      = xbmcaddon.Addon()
+ADDON      = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_ID   = ADDON.getAddonInfo('id')
 HANDLE     = int(sys.argv[1]) if len(sys.argv) > 1 else -1
 ADDON_PATH = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
@@ -33,6 +33,7 @@ ICONS  = {
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
     'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
+    'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
     # category folder icons
     'cat_setup':      ADDON_PATH + 'resources/icons/first_run.png',
     'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
@@ -49,6 +50,7 @@ CATEGORIES = [
         ('first_run',      30001),
         ('backup',         30002),
         ('skin_install',   30003),
+        ('addon_portal',   30021),
         ('binary_install', 30004),
     ]),
     ('patch',  30015, 'cat_patch', [
@@ -71,7 +73,7 @@ CATEGORIES = [
 ]
 
 # Modes that are leaf actions (run then return), not plugin folders.
-ACTION_MODES = {'skin_switch'}
+ACTION_MODES = {'skin_switch', 'first_run'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -124,6 +126,8 @@ def _menu_sweep():
     """Body of the 'menu_sweep' invocation. Main thread, no directory."""
     try:
         from resources.lib import patch_watchdog, patcher
+        if patch_watchdog.first_run_active():
+            return                      # never sweep under first-run dialogs
         ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
         if ids:
             patcher.apply_set(addon_ids=ids)
@@ -223,25 +227,39 @@ def router():
         return
 
     if mode == 'first_run':
-        _end_directory()
-        # Run the same first-run sequence the service runs on first boot,
-        # on demand. Confirm first so it isn't triggered by accident.
+        # Non-folder action (3.1.0.20): no plugin listing is opened, and the
+        # sequence runs as its own RunPlugin invocation (mode=first_run_exec), detached from this
+        # plugin call and from the Programs container (whose refreshes during
+        # add-on rescans were tearing setup dialogs down).
         from resources.lib.i18n import T
         if xbmcgui.Dialog().yesno(
                 'ABUKARIM TOOLS',
                 T(30050),
                 yeslabel=T(30051), nolabel=T(30052)):
-            import_root = ADDON_PATH.rstrip('/\\')
-            if import_root not in sys.path:
-                sys.path.insert(0, import_root)
-            import service
-            service.run_now(remove_flag=True, force=True)
+            # RunPlugin (not RunScript-by-path, which has no add-on context:
+            # 3.1.0.20 crashed with "No valid addon id could be obtained").
+            # handle=-1 invocation, detached from any directory listing.
+            xbmc.executebuiltin(
+                'RunPlugin(plugin://%s/?mode=first_run_exec)' % ADDON_ID)
+        return
+
+    if mode == 'first_run_exec':
+        import_root = ADDON_PATH.rstrip('/\\')
+        if import_root not in sys.path:
+            sys.path.insert(0, import_root)
+        import service
+        service.run_now(remove_flag=True, force=True)
         return
 
     if mode == 'skin_install':
         _end_directory()
         from resources.lib import skin_installer
         skin_installer.run()
+
+    elif mode == 'addon_portal':
+        _end_directory()
+        from resources.lib import addon_portal
+        addon_portal.run()
 
     elif mode == 'skin_switch':
         # Non-folder action: don't open/close a plugin listing (that leaves an

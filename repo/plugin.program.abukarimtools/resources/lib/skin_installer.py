@@ -167,10 +167,22 @@ class _RepoSelectDialog(xbmcgui.WindowXMLDialog):
 
 
 def _choose_source():
-    dlg = _RepoSelectDialog('select_repo.xml', ADDON_PATH, 'Default', '1080i')
-    dlg.doModal()
-    idx = dlg._result[0]
-    del dlg
+    import time
+    idx = -1
+    # Closed in under 1.5 s with no pick = swallowed by a reload/rescan, not
+    # the user pressing Back: reopen (3.1.0.19 first-run log showed exactly
+    # this — the repo picker vanished 2 s after opening).
+    for attempt in range(3):
+        started = time.time()
+        dlg = _RepoSelectDialog('select_repo.xml', ADDON_PATH, 'Default', '1080i')
+        dlg.doModal()
+        idx = dlg._result[0]
+        del dlg
+        if idx >= 0 or time.time() - started > 1.5:
+            break
+        _log('repo picker closed instantly (attempt %d) - reopening'
+             % (attempt + 1))
+        xbmc.sleep(1500)
     if idx < 0:
         return None, None
     _label, _icon, json_url, bg = _REPO_ENTRIES[idx]
@@ -825,6 +837,8 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         bg_path = ('special://home/addons/plugin.program.abukarimtools'
                    '/resources/media/%s' % self.background)
         self.setProperty('background', bg_path)
+        self.setProperty('portal_icon', os.path.join(
+            ADDON_PATH, 'resources', 'icons', 'skin_installer.png'))
         panel = self.getControl(100)
         panel.reset()
         for item in self.items:

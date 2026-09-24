@@ -37,7 +37,7 @@ from resources.lib.i18n import T
 import xbmcvfs
 import xbmcaddon
 
-ADDON       = xbmcaddon.Addon()
+ADDON       = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_NAME  = 'ABUKARIM TOOLS'
 ADDON_PATH  = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
 SKIN_ID     = 'skin.arctic.fuse.3'

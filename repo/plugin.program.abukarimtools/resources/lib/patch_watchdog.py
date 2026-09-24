@@ -44,7 +44,7 @@ import xbmcvfs
 
 from resources.lib import patcher
 
-ADDON       = xbmcaddon.Addon()
+ADDON       = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_NAME  = 'ABUKARIM TOOLS'
 ADDON_ICON  = xbmcvfs.translatePath(ADDON.getAddonInfo('icon'))
 PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
@@ -76,7 +76,7 @@ _MISSING_ADDONS = set()   # ids Kodi has already told us it does not know
 def _addon_path(addon_id):
     """Resolve an add-on's folder, preferring Kodi's own registry.
 
-    Ordering matters for the log, not just for speed.  xbmcaddon.Addon() on an
+    Ordering matters for the log, not just for speed.  xbmcaddon.Addon('plugin.program.abukarimtools') on an
     id Kodi does not know writes "EXCEPTION: Unknown addon id '<x>'" into
     kodi.log from the C++ side *before* the Python exception reaches our
     except: clause, so catching it is not enough to keep the log clean.  With a
@@ -187,6 +187,22 @@ def _installed(addon_ids):
     return [a for a in addon_ids if _addon_path(a)]
 
 
+_FIRST_RUN_LOCK = os.path.join(
+    xbmcvfs.translatePath('special://profile/addon_data/'
+                          'plugin.program.abukarimtools/'), 'first_run.lock')
+
+
+def first_run_active():
+    """True while a first-run sequence holds its lock (and the lock is fresh:
+    a lock older than 2 h is an abandoned one from a crash). Sweeps and their
+    toasts must not run under the setup dialogs."""
+    try:
+        return (os.path.exists(_FIRST_RUN_LOCK) and
+                time.time() - os.path.getmtime(_FIRST_RUN_LOCK) < 7200)
+    except Exception:
+        return False
+
+
 def _run_pass(addon_ids=None, reason=''):
     """Apply the default patch set (optionally narrowed) and report."""
     addon_ids = _installed(addon_ids or patcher.target_addon_ids())
@@ -220,6 +236,13 @@ def watch(monitor):
     if monitor.waitForAbort(BOOT_DELAY_SECONDS):
         return
 
+    # Never sweep underneath a running first-run: wait it out.
+    if first_run_active():
+        _log('First-run in progress — boot sweep deferred until it finishes.')
+    while first_run_active():
+        if monitor.waitForAbort(5):
+            return
+
     state       = _load_state()
     last_verify = 0.0
 
@@ -236,6 +259,11 @@ def watch(monitor):
     while not monitor.abortRequested():
         if monitor.waitForAbort(POLL_SECONDS):
             break
+
+        # Hold off while first-run is on screen; state is not updated, so any
+        # change that happened meanwhile is still detected afterwards.
+        if first_run_active():
+            continue
 
         try:
             current = _signatures(targets)

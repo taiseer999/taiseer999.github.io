@@ -19,6 +19,7 @@ ID ranges:
   30220-30259  backup / restore
   30260-30289  tab toggles (DPlex / Korean)
   30290-30319  patcher / auto-patch watchdog
+  30400-30429  add-on portal
 """
 
 STRINGS = {
@@ -44,10 +45,11 @@ STRINGS = {
     30017: ("Toggles",                          "التبديلات"),
     30018: ("Rebuild Add-on Database",          "إعادة بناء قاعدة بيانات الإضافات"),
     30019: ("Speed Test",                       "اختبار السرعة"),
+    30021: ("Add-on Portal",                    "بوابة الإضافات"),
 
     # ---- first-run / service (30050-30099) ----
-    30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, then opens the Skin Installer.",
-            "\u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0625\u0639\u062f\u0627\u062f \u0644\u0623\u0648\u0644 \u0645\u0631\u0629 \u0627\u0644\u0622\u0646\u061f[CR][CR]\u0633\u064a\u062a\u0645 \u062a\u062b\u0628\u064a\u062a \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0627\u0644\u062b\u0646\u0627\u0626\u064a\u0629\u060c \u0648\u0639\u0631\u0636 \u0627\u0633\u062a\u0639\u0627\u062f\u0629 \u0646\u0633\u062e\u0629 \u0627\u062d\u062a\u064a\u0627\u0637\u064a\u0629\u060c \u062b\u0645 \u0641\u062a\u062d \u0645\u062b\u0628\u062a \u0627\u0644\u0648\u0627\u062c\u0647\u0627\u062a."),
+    30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, applies patches, then opens the Skin Installer.",
+            "تشغيل الإعداد لأول مرة الآن؟[CR][CR]سيتم تثبيت الملفات الثنائية، وعرض استعادة نسخة احتياطية، وفتح بوابة الإضافات، وتطبيق الترقيعات، ثم فتح مثبت الواجهات."),
     30051: ("Run setup",                       "\u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0625\u0639\u062f\u0627\u062f"),
     30052: ("Cancel",                          "\u0625\u0644\u063a\u0627\u0621"),
     30053: ("Apply Patches failed \u2014 run it from ABUKARIM TOOLS",
@@ -58,6 +60,8 @@ STRINGS = {
             "\u0641\u0634\u0644 \u0645\u062b\u0628\u062a \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0627\u0644\u062b\u0646\u0627\u0626\u064a\u0629 \u2014 \u0634\u063a\u0651\u0644\u0647 \u0645\u0646 ABUKARIM TOOLS"),
     30056: ("Restore could not be started.[CR]You can run it later from ABUKARIM TOOLS \u2192 Backup/Restore.",
             "\u062a\u0639\u0630\u0631 \u0628\u062f\u0621 \u0627\u0644\u0627\u0633\u062a\u0639\u0627\u062f\u0629.[CR]\u064a\u0645\u0643\u0646\u0643 \u062a\u0634\u063a\u064a\u0644\u0647\u0627 \u0644\u0627\u062d\u0642\u0627\u064b \u0645\u0646 ABUKARIM TOOLS \u2190 \u0646\u0633\u062e \u0627\u062d\u062a\u064a\u0627\u0637\u064a/\u0627\u0633\u062a\u0639\u0627\u062f\u0629."),
+    30060: ("Add-on Portal failed \u2014 run it from ABUKARIM TOOLS",
+            "فشل فتح بوابة الإضافات \u2014 شغّلها من ABUKARIM TOOLS"),
     30057: ("Setup is almost complete.[CR][CR]Would you like to restore a previous backup?",
             "\u0627\u0644\u0625\u0639\u062f\u0627\u062f \u0623\u0648\u0634\u0643 \u0639\u0644\u0649 \u0627\u0644\u0627\u0643\u062a\u0645\u0627\u0644.[CR][CR]\u0647\u0644 \u062a\u0631\u064a\u062f \u0627\u0633\u062a\u0639\u0627\u062f\u0629 \u0646\u0633\u062e\u0629 \u0627\u062d\u062a\u064a\u0627\u0637\u064a\u0629 \u0633\u0627\u0628\u0642\u0629\u061f"),
     30058: ("Restore Backup",                  "\u0627\u0633\u062a\u0639\u0627\u062f\u0629 \u0646\u0633\u062e\u0629"),
@@ -210,4 +214,29 @@ STRINGS = {
             "لم يتم العثور على Addons33.db (قد يكون كودي يعمل على قاعدة جديدة بالفعل).[CR][CR]هل تريد إعادة تفعيل جميع الإضافات وإعادة التشغيل على أي حال؟"),
     30335: ("Could not delete the add-on database file.",
             "تعذّر حذف ملف قاعدة بيانات الإضافات."),
+
+    # ---- add-on portal (30400-30429) ----
+    30400: ("ADD-ON PORTAL",                   "بوابة الإضافات"),
+    30401: ("Preparing…",                      "جارٍ التحضير…"),
+    30402: ("Checking repository: %s",         "جارٍ فحص المستودع: %s"),
+    30403: ("Refreshing repositories…",        "جارٍ تحديث المستودعات…"),
+    30404: ("[B]Installing:[/B] %s[CR]from %s", "[B]جارٍ التثبيت:[/B] %s[CR]من %s"),
+    30405: ("%s[CR]Dependency: %s",            "%s[CR]اعتمادية: %s"),
+    30406: ("Done",                            "تم"),
+    30407: ("Installed",                       "مثبّتة"),
+    30408: ("Tick the add-ons to install, then press Install · Back to exit",
+            "حدّد الإضافات المطلوبة ثم اضغط تثبيت · رجوع للخروج"),
+    30409: ("Install Selected",                "تثبيت المحدد"),
+    30410: ("cancelled",                       "أُلغي"),
+    30411: ("install failed",                  "فشل التثبيت"),
+    30412: ("missing: %s",                     "ناقص: %s"),
+    30413: ("installed but not enabled",       "مثبّتة لكن غير مفعّلة"),
+    30414: ("%d selected",                     "المحدد: %d"),
+    30415: ("Select All",                      "تحديد الكل"),
+    30416: ("Clear All",                       "إلغاء التحديد"),
+    30417: ("Nothing selected",                "لم يتم تحديد شيء"),
+    30418: ("Install these add-ons from their repositories?[CR][CR]%s",
+            "تثبيت هذه الإضافات من مستودعاتها؟[CR][CR]%s"),
+    30419: ("The add-ons were installed and linked to their repositories.\nA restart is recommended so their updates become active.\nتم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة.",
+            "تم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."),
 }

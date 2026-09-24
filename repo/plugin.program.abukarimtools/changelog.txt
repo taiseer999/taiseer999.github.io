@@ -1,3 +1,67 @@
+v3.1.0.21
+- FIX (3.1.0.20 regression): "Run First-Time Setup" crashed immediately -
+  RunScript(<path>/run.py) runs with NO add-on context, so
+  xbmcaddon.Addon() raised "No valid addon id could be obtained". The menu
+  now launches the sequence with RunPlugin(plugin://.../?mode=first_run_exec)
+  (own invocation, handle -1, still detached from the listing).
+- Hardening: every id-less xbmcaddon.Addon() in the add-on (service, run.py,
+  patch_watchdog, backup_manager, tab_toggle, tools, font_fallback,
+  icons_toggle, default) now passes 'plugin.program.abukarimtools', so the
+  documented RunScript(.../run.py) favourite path works too.
+
+v3.1.0.20
+- First-run: welcome splash REMOVED.
+- Sequence/overlap fixes (from the 3.1.0.19 kodi.log):
+  * Restore popup was dismissed 3x within 2 s right after the Binary
+    Installer's UpdateLocalAddons rescan and then logged as "User skipped".
+    Now: 3 s settle + clear-screen wait after step 1, and the prompt is a
+    select (Restore / Skip) so a swallowed dialog (-1 in <1.5 s) is re-asked
+    (up to 6x) instead of being read as Skip. Back after >1.5 s = Skip.
+  * The auto-patch watchdog boot sweep ran in the middle of setup (and its
+    toast). patch_watchdog.first_run_active() (fresh first_run.lock) now
+    defers the boot sweep and pauses polling until setup ends; the menu
+    self-heal sweep is skipped too.
+  * Tools-menu "Run First-Time Setup" is now a non-folder action that
+    confirms, then launches run.py via RunScript(...,silent,force) - the
+    sequence no longer lives inside a plugin directory invocation.
+  * Skin repo picker and Add-on Portal reopen if closed in <1.5 s with no
+    choice (the repo picker vanished after 2 s in the log).
+  * After the language switch (skin reload) the first dialog waits for the
+    reload to settle.
+
+v3.1.0.19
+- First-run sequence: new Step 3 "Add-on Portal" (after Binary Installer +
+  Restore, before Apply Patches and Skin Selection). Placed before the
+  patcher on purpose so freshly installed add-ons (Seren, Red Light...) get
+  patched in the same run. Back in the portal = skip the step.
+- addon_portal.run(first_run=True) skips its restart recommendation; the
+  first-run sequence's own final reboot prompt covers it.
+- String 30050 (manual first-run confirm) lists the new step; new 30060.
+
+v3.1.0.18
+- Skin Selection redesigned to match the Add-on Portal (dark glass, neon
+  blue -> orange):
+  * select_repo.xml: three large horizontal repo cards, focused card gets a
+    blue/orange rim + zoom, backdrop follows the focused repo.
+  * portal.xml: left details panel (portal art, large preview of the focused
+    skin, name, version, Installed badge) + right 3-column 16:9 gallery; the
+    focused skin's screenshot is the dimmed full-screen backdrop.
+  * No more dependency on the ACTIVE skin's fonts (font30_title/font12...):
+    everything uses the add-on's own Abk* fonts (new AbkRow/AbkCard sizes).
+  * Python contract unchanged (same control ids/properties); SkinPortal now
+    also sets Window.Property(portal_icon).
+
+v3.1.0.17
+- NEW Add-on Portal (Setup & Install): checklist of 9 video add-ons, each
+  pinned to its repository (Dex Hub/DPlex <- DexWorld; Fen Light+/Last
+  Played/Seren <- ABUKARIM; POV <- kodifitzwell; Red Light/YouTube <- The Red
+  Repo; Umbrella <- Umbrella). Missing repos are installed from the
+  repository.taiseer mirror; the add-on zip is resolved from the pinned repo's
+  own addons.xml (so YouTube/Red Light never come from a competing repo);
+  dependencies go through Kodi's InstallAddon with auto-confirm; origin is
+  written to the pinned repo. Falls back to InstallAddon(id) if the pinned
+  repo can't be reached.
+
 v3.1.0.16
 - Backup Manager: userdata/addon_data/plugin.program.abukarimtools is now
   excluded entirely from backups AND restores (moved to EXCLUDED_ADDONS).

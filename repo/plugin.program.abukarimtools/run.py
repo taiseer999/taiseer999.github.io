@@ -3,7 +3,7 @@
 run.py — Manually trigger the ABUKARIM TOOLS first-run sequence.
 
 This runs the SAME steps the service runs on first boot (Binary Installer ->
-Restore popup -> Skin Installer), but on demand — it does NOT wait for the
+Restore popup -> Add-on Portal -> Patches -> Skin Installer), but on demand — it does NOT wait for the
 home screen or any wizard. Use it whenever you want to (re)run setup without
 rebooting.
 
@@ -24,7 +24,7 @@ import xbmcvfs
 
 # Make sure the addon root is importable so 'service' and 'resources.lib.*'
 # resolve the same way they do when Kodi launches the service.
-ADDON      = xbmcaddon.Addon()
+ADDON      = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_ROOT = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
 if ADDON_ROOT not in sys.path:
     sys.path.insert(0, ADDON_ROOT)
@@ -37,8 +37,8 @@ def _confirm():
     return xbmcgui.Dialog().yesno(
         'ABUKARIM TOOLS',
         'Run first-time setup now?\n\n'
-        'This will install binaries, offer a backup restore, '
-        'then open the Skin Installer.',
+        'This will install binaries, offer a backup restore, open the '
+        'Add-on Portal, apply patches, then open the Skin Installer.',
         yeslabel='Run setup',
         nolabel='Cancel',
     )
@@ -48,6 +48,9 @@ def main():
     # Allow a silent mode: RunScript(..., firstrun, silent)
     args = [a.lower() for a in sys.argv[1:]]
     silent = 'silent' in args
+    # 'force' = deliberate re-run from the Tools menu (clears a stale lock and
+    # ignores the done marker), same as the old in-plugin path did.
+    force = 'force' in args
 
     if not silent and not _confirm():
         return
@@ -55,7 +58,7 @@ def main():
     monitor = xbmc.Monitor()
     # remove_flag=True keeps it one-shot on the next boot too; the manual run
     # has effectively done first-run already.
-    service.run_now(monitor, remove_flag=True, force=False)
+    service.run_now(monitor, remove_flag=True, force=force)
 
 
 if __name__ == '__main__':

@@ -24,7 +24,10 @@ on the first Kodi start after a fresh build install. The service then:
     3. Runs the Binary Installer silently (resources/lib/binary_installer.py).
     4. Shows a popup: Restore Backup / Skip.
          - Restore -> backup_manager.py restore flow
-    5. Opens the Skin Installer last (resources/lib/skin_installer.py).
+    5. Opens the Add-on Portal (resources/lib/addon_portal.py) so the user
+       can tick the video add-ons they want (Back = skip).
+    6. Applies patches (so freshly installed add-ons get patched too).
+    7. Opens the Skin Installer last (resources/lib/skin_installer.py).
 """
 
 import os
@@ -38,18 +41,12 @@ import xbmcvfs
 
 from resources.lib.i18n import T
 
-ADDON       = xbmcaddon.Addon()
+ADDON       = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_NAME  = 'ABUKARIM TOOLS'
 ADDON_PATH  = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
 PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 
-WELCOME_IMAGE = os.path.join(ADDON_PATH, 'resources', 'media', 'welcome.jpg')
-# Kodi-native VFS path form — more reliable for ControlImage than an absolute
-# OS path that may contain spaces (e.g. macOS "Application Support").
-WELCOME_IMAGE_VFS = 'special://home/addons/%s/resources/media/welcome.jpg' % (
-    ADDON.getAddonInfo('id'),)
-WELCOME_SECONDS = 7
 
 # Marker written once first-run has completed, so it can never repeat (this is
 # what stops the skin's startup from re-triggering the whole sequence in a
@@ -219,6 +216,21 @@ def _step_patcher(monitor):
         return False
 
 
+def _step_addon_portal():
+    try:
+        from resources.lib import addon_portal
+        _log('Opening Add-on Portal…')
+        # first_run=True: no restart recommendation at the end (the sequence
+        # still has steps to run; the caller handles the final reboot).
+        addon_portal.run(first_run=True)
+        return True
+    except Exception:
+        _log('Add-on Portal failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, T(30060),
+                                      xbmcgui.NOTIFICATION_ERROR, 6000)
+        return False
+
+
 def _step_skin_installer():
     try:
         from resources.lib import skin_installer
@@ -300,23 +312,36 @@ def _step_restore():
         xbmcgui.Dialog().ok(ADDON_NAME, T(30056))
 
 
+def _settle(monitor, seconds):
+    """Plain wait that still honours Kodi shutdown."""
+    return not monitor.waitForAbort(seconds)
+
+
 def _final_choice(monitor):
-    """Popup: Restore Backup / Skip."""
-    choice = False
-    for attempt in (1, 2, 3):
+    """Popup: Restore Backup / Skip.
+
+    A select dialog instead of yes/no: yes/no returns False both for "Skip"
+    and for "dismissed by something else", so a swallowed popup used to be
+    read as the user skipping (3.1.0.19 log: dismissed 3x in 2 s, then
+    "User skipped the restore step" without the user ever seeing it).
+    select() returns -1 only on Back/dismiss, so:
+      0  -> restore        1 -> skip (explicit)
+     -1 fast (<1.5 s)     -> swallowed: wait for a clear screen, ask again
+     -1 slow              -> user pressed Back: treat as skip
+    """
+    choice = None
+    for attempt in range(1, 7):
         _wait_no_modal(monitor)
         started = time.time()
-        choice = xbmcgui.Dialog().yesno(
-            ADDON_NAME, T(30057),
-            yeslabel=T(30058),
-            nolabel=T(30059),
-        )
-        # An answer in under 1.5 s almost certainly means our dialog was
-        # swallowed by another addon's popup — wait for the screen to clear
-        # and ask again.
-        if time.time() - started > 1.5:
+        idx = xbmcgui.Dialog().select(T(30057).replace('[CR]', ' '),
+                                      [T(30058), T(30059)])
+        if idx >= 0 or time.time() - started > 1.5:
+            choice = (idx == 0)
             break
-        _log('Restore popup was dismissed instantly — retrying.')
+        _log('Restore popup was dismissed instantly (attempt %d) — waiting '
+             'and asking again.' % attempt)
+        if not _settle(monitor, 2):
+            return
     if choice:
         _step_restore()
     else:
@@ -439,63 +464,6 @@ def run_now(monitor=None, remove_flag=True, force=False):
     _prompt_reboot_if_coreelec(monitor)
 
 
-class _WelcomeWindow(xbmcgui.WindowDialog):
-    """Fullscreen welcome image shown at the start of first-run.
-
-    Closes automatically after WELCOME_SECONDS, or immediately on any key /
-    click so the user is never stuck waiting on it.
-    """
-    def __init__(self, image_path):
-        super(_WelcomeWindow, self).__init__()
-        # Fullscreen image (coordinates are in Kodi's 1280x720 skin space).
-        img = xbmcgui.ControlImage(0, 0, 1280, 720, image_path,
-                                   aspectRatio=0)
-        self.addControl(img)
-
-    def onAction(self, action):
-        # Any Back/Select/nav key closes the splash early.
-        self.close()
-
-
-def _show_welcome(monitor):
-    """Show the welcome image for WELCOME_SECONDS, then continue."""
-    if monitor is None:
-        monitor = xbmc.Monitor()
-
-    _log('Welcome splash: preparing (image=%s).' % WELCOME_IMAGE)
-    if not os.path.exists(WELCOME_IMAGE):
-        _log('Welcome image not found, skipping splash: %s' % WELCOME_IMAGE)
-        return
-
-    win = None
-    try:
-        win = _WelcomeWindow(WELCOME_IMAGE_VFS)
-        win.show()
-        # Give Kodi a moment to actually draw the window before we start the
-        # countdown — without this the dialog can open and close in the same
-        # frame on slower / first-boot systems and never become visible.
-        xbmc.sleep(300)
-        _log('Welcome splash shown — holding for %ss.' % WELCOME_SECONDS)
-
-        # Keep it up for the requested duration (abort early if Kodi quits).
-        waited = 0
-        while waited < WELCOME_SECONDS * 1000:
-            if monitor.abortRequested():
-                break
-            xbmc.sleep(200)
-            waited += 200
-    except Exception:
-        _log('Welcome splash failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
-    finally:
-        try:
-            if win is not None:
-                win.close()
-                del win
-        except Exception:
-            pass
-        _log('Welcome splash closed.')
-
-
 def _run_steps(monitor):
     _log('Starting first-run sequence.')
 
@@ -510,20 +478,32 @@ def _run_steps(monitor):
         _log('UI language switch crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
-    # Welcome splash first — shown for a few seconds before setup begins.
-    _show_welcome(monitor)
+    # (Welcome splash removed in 3.1.0.20.) The language switch above reloads
+    # the skin; let that finish before the first dialog, otherwise the reload
+    # tears down whatever we open.
+    _wait_skin_settle(monitor)
+    _wait_no_modal(monitor)
 
     _log('Step 1 — Binary Installer.')
     _step_binary_installer(monitor)
+    # The binary installer ends with UpdateLocalAddons; Kodi's add-on rescan
+    # that follows is what dismissed the restore popup instantly (3.1.0.19
+    # log). Give it time to finish before showing anything.
+    _settle(monitor, 3)
+    _wait_no_modal(monitor)
 
     _log('Step 2 — Restore popup.')
     _final_choice(monitor)
 
-    _log('Step 3 — Apply Patches.')
+    _log('Step 3 — Add-on Portal.')
+    _wait_no_modal(monitor)
+    _step_addon_portal()
+
+    _log('Step 4 — Apply Patches.')
     _wait_no_modal(monitor)
     _step_patcher(monitor)
 
-    _log('Step 4 — Skin Installer (last).')
+    _log('Step 5 — Skin Installer (last).')
     _wait_no_modal(monitor)
     _step_skin_installer()
 

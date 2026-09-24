@@ -39,7 +39,7 @@ import xbmc
 import xbmcaddon
 import xbmcvfs
 
-ADDON     = xbmcaddon.Addon()
+ADDON     = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_ID  = ADDON.getAddonInfo('id')
 
 # The Arabic-capable font we ship. Noto-Regular.ttf is the monadit/Figtree copy

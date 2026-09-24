@@ -11,7 +11,7 @@ import xbmcgui
 import xbmcaddon
 import xbmcvfs
 
-ADDON = xbmcaddon.Addon()
+ADDON = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_NAME = ADDON.getAddonInfo('name')
 
 # guisettings.xml cannot be overwritten while Kodi is running — Kodi holds it

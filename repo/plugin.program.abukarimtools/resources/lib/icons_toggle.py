@@ -31,7 +31,7 @@ import xbmcvfs
 
 from resources.lib.i18n import T
 
-ADDON      = xbmcaddon.Addon()
+ADDON      = xbmcaddon.Addon('plugin.program.abukarimtools')
 ADDON_NAME = 'ABUKARIM TOOLS'
 SUPPORTED_SKINS = ('skin.arctic.fuse.3', 'skin.arctic.zephyr.rounded')
 
