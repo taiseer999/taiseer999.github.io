@@ -694,6 +694,41 @@ PATCHES = [
         'description': 'PPI AF3 - register legacy PPI includes',
     },
 
+    # ── AF3: Vertical Plot on Home (by ABUKARIM TOOLS) ──
+    # AF3 draws the Info_Panel plot as a "fake box" (a wrapmultiline LABEL)
+    # unless Skin.HasSetting(Textboxes.DisableFakeBox). A label cannot scroll
+    # vertically, and with Labels.Autoscroll on it marquees HORIZONTALLY.
+    # AF2 uses a real textbox (vertical autoscroll). Passing use_textbox=true
+    # to the two Home Info_Panel calls (Hub_Combined_Info plot panel + the
+    # Spotlight panel) switches ONLY the Home plot to a real textbox; the rest
+    # of the skin and the "Use fake textbox" setting are untouched.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="include_title">false</param>',
+        'new': ('<param name="include_title">false</param>\n'
+                '                    <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (hub) -->'),
+        'already_patched_check': '<!-- ABUKARIM: vertical plot (hub) -->',
+        'fallback_pattern': r'(<param name="include_title">false</param>)',
+        'fallback_repl': r'\1\n                    <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (hub) -->',
+        'description': 'AF3 - Home hub plot scrolls vertically (textbox)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="container">Container(301).</param>',
+        'new': ('<param name="container">Container(301).</param>\n'
+                '                <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (spotlight) -->'),
+        'already_patched_check': '<!-- ABUKARIM: vertical plot (spotlight) -->',
+        'fallback_pattern': r'(<param name="container">Container\(301\)\.</param>)',
+        'fallback_repl': r'\1\n                <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (spotlight) -->',
+        'description': 'AF3 - Home spotlight plot scrolls vertically (textbox)',
+    },
+
     # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
     # onAVChange / onAVStarted call get_playingitem() while the player is
     # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not
@@ -1025,6 +1060,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_arabic',   'PPI Arabic'),
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
+    ('af3_vplot',        'AF3: Vertical Plot (Home)'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('dexsubs_autodl',   'DexSubtitles: Auto-Download'),
