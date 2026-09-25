@@ -729,6 +729,92 @@ PATCHES = [
         'description': 'AF3 - Home spotlight plot scrolls vertically (textbox)',
     },
 
+    # ── AF3: Vertical Plot — smaller plot font on Home (font_mini_plot) ──
+    # Info_Plot_TextBox hard-codes font_main_plot (size_main). Thread a new
+    # 'plotfont' param through the Info_* chain (default font_main_plot, so
+    # every other caller is unchanged) and pass font_mini_plot (size_mini,
+    # with the skin's own plot linespacing) from the two Home panels only.
+    {   # 1) Info_Plot_TextBox: declare the default
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="use_textbox">Skin.HasSetting(Textboxes.DisableFakeBox)</param>',
+        'new': ('<param name="use_textbox">Skin.HasSetting(Textboxes.DisableFakeBox)</param>\n'
+                '        <param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (default) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot font (default) -->',
+        'description': 'AF3 - plot font param default (Info_Plot_TextBox)',
+    },
+    {   # 2) Info_Plot_TextBox: the real-textbox branch uses the param
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<font>font_main_plot</font>\n                <nested />',
+        'new': '<font>$PARAM[plotfont]</font>  <!-- ABUKARIM: plot font (textbox) -->\n                <nested />',
+        'already_patched_check': '<!-- ABUKARIM: plot font (textbox) -->',
+        'fallback_pattern': r'<font>font_main_plot</font>(\s*<nested />)',
+        'fallback_repl': r'<font>$PARAM[plotfont]</font>  <!-- ABUKARIM: plot font (textbox) -->\1',
+        'description': 'AF3 - plot textbox uses plotfont param',
+    },
+    {   # 3) forward plotfont everywhere use_textbox is forwarded (17 sites)
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<param name="plotfont">$PARAM[plotfont]</param>',
+        'fallback_pattern': r'([ \t]*)(<param name="use_textbox">\$PARAM\[use_textbox\]</param>)',
+        'fallback_repl': r'\1\2\n\1<param name="plotfont">$PARAM[plotfont]</param>',
+        'count': 0,
+        'description': 'AF3 - forward plotfont through the Info_* chain',
+    },
+    {   # 4) defaults at the chain entry points so nothing forwards an empty font
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="plotaligny">center</param>',
+        'new': ('<param name="plotaligny">center</param>\n'
+                '        <param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (Info_Panel) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot font (Info_Panel) -->',
+        'description': 'AF3 - plot font default (Info_Panel)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="include_other">true</param>',
+        'new': ('<param name="include_other">true</param>\n'
+                '        <param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (Info_Plot) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot font (Info_Plot) -->',
+        'description': 'AF3 - plot font default (Info_Plot)',
+    },
+    {   # 5) Home panels pass the smaller font (anchored on our own vplot lines)
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (hub) -->',
+        'new': ('<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (hub) -->\n'
+                '                    <param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot font (hub) -->',
+        'description': 'AF3 - Home hub plot uses font_mini_plot',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (spotlight) -->',
+        'new': ('<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (spotlight) -->\n'
+                '                <param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot font (spotlight) -->',
+        'description': 'AF3 - Home spotlight plot uses font_mini_plot',
+    },
+
     # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
     # onAVChange / onAVStarted call get_playingitem() while the player is
     # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not
