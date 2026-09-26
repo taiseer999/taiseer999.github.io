@@ -2,6 +2,8 @@
 # Copyright (C) 2026 TheIntroDB
 #
 # kodi service entry: poll playback, query theintrodb, show skip ui or auto-seek
+import json
+import re
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -52,6 +54,70 @@ def _fresh_bool(key: str) -> bool:
 
 def _debug_logging() -> bool:
     return ADDON.getSetting('debug_logging') == 'true'
+
+
+# ── Media ID fallback (Piers) ─────────────────────────────────────────────
+# Fen Light (via TMDbHelper) doesn't put uniqueids/season/episode on the
+# ListItem for episodes, so player.get_media_ids() returns all None and no
+# query is ever made. Fill the gaps from TMDbHelper's playerstring, then
+# from SxxEyy in the filename.
+
+_SXE_RE = re.compile(r'[Ss](\d{1,2})[ ._-]?[Ee](\d{1,3})')
+
+
+def _se_from_filename(path: str) -> Tuple[Optional[int], Optional[int]]:
+    m = _SXE_RE.search(path or '')
+    return (int(m.group(1)), int(m.group(2))) if m else (None, None)
+
+
+def _ids_from_tmdbhelper() -> Dict[str, Any]:
+    raw = xbmcgui.Window(10000).getProperty('TMDbHelper.PlayerInfoString')
+    if not raw:
+        return {}
+    try:
+        d = json.loads(raw)
+    except ValueError:
+        return {}
+    t = d.get('tmdb_type')
+    is_ep = t in ('episode', 'tv')
+    try:
+        season = int(d['season']) if is_ep and d.get('season') is not None else None
+        episode = int(d['episode']) if is_ep and d.get('episode') is not None else None
+    except (TypeError, ValueError):
+        season = episode = None
+    return {
+        'tmdb_id': str(d['tmdb_id']) if d.get('tmdb_id') else None,  # show id for episodes
+        'imdb_id': d.get('imdb_id') or None,                         # show imdb for episodes
+        'season': season,
+        'episode': episode,
+        'is_movie': t == 'movie',
+    }
+
+
+def _fill_missing_ids(ids: Dict[str, Any], filename: str) -> Dict[str, Any]:
+    ids = dict(ids or {})
+    fs, fe = _se_from_filename(filename)
+
+    if not ids.get('tmdb_id') and not ids.get('imdb_id'):
+        th = _ids_from_tmdbhelper()
+        # stale-property guard: if filename has SxxEyy, it must agree
+        stale = (th.get('season') is not None and fs is not None
+                 and (th['season'], th['episode']) != (fs, fe))
+        if th and not stale:
+            for k, v in th.items():
+                if ids.get(k) in (None, '') and v not in (None, ''):
+                    ids[k] = v
+            if th.get('is_movie') is False:
+                ids['is_movie'] = False
+            xbmc.log('[TheIntroDB] IDs filled from TMDbHelper playerstring', xbmc.LOGINFO)
+        elif stale:
+            xbmc.log('[TheIntroDB] Ignoring stale TMDbHelper playerstring', xbmc.LOGINFO)
+
+    if not ids.get('is_movie') and ids.get('season') is None and fs is not None:
+        ids['season'], ids['episode'] = fs, fe
+        xbmc.log('[TheIntroDB] Season/episode filled from filename: S{}E{}'.format(fs, fe),
+                 xbmc.LOGINFO)
+    return ids
 
 
 # ── Playback session state ────────────────────────────────────────────────
@@ -159,7 +225,10 @@ def _handle_segment(segment: Dict[str, Any], segment_idx: int, player: TIDBPlaye
         xbmc.log('[TheIntroDB] Processing {} segment {}: start={}, end={}'.format(
             segment_type, segment_idx, api_start, api_end), xbmc.LOGINFO)
 
-    current_time = player.getTime() if player.isPlaying() else 0
+    try:
+        current_time = player.getTime() if player.isPlaying() else 0
+    except RuntimeError:
+        return None
 
     if not _should_show_segment_button(session.processed_segments, segment_key,
                                        current_time, api_start, api_end):
@@ -430,7 +499,7 @@ def _run_service() -> None:
 
         # ── Fetch media IDs (cached) ──
         if session.media_ids is None:
-            session.media_ids = player.get_media_ids()
+            session.media_ids = _fill_missing_ids(player.get_media_ids(), filename)
             xbmc.log('[TheIntroDB] Media IDs: tmdb={} imdb={} S{}E{} movie={}'.format(
                 session.media_ids.get('tmdb_id'), session.media_ids.get('imdb_id'),
                 session.media_ids.get('season'), session.media_ids.get('episode'),
