@@ -98,6 +98,13 @@ def _fill_missing_ids(ids: Dict[str, Any], filename: str) -> Dict[str, Any]:
     ids = dict(ids or {})
     fs, fe = _se_from_filename(filename)
 
+    # Piers: a bogus tiny duration (seen: 30000ms on a 131-min movie, likely
+    # leaked from TMDbHelper's dummy.mp4) breaks duration matching. Drop it.
+    dur = ids.get('duration_ms')
+    if isinstance(dur, (int, float)) and 0 < dur < 120000:
+        xbmc.log('[TheIntroDB] Dropping implausible duration_ms={}'.format(dur), xbmc.LOGINFO)
+        ids['duration_ms'] = None
+
     if not ids.get('tmdb_id') and not ids.get('imdb_id'):
         th = _ids_from_tmdbhelper()
         # stale-property guard: if filename has SxxEyy, it must agree
@@ -326,6 +333,9 @@ def _handle_submit_tick(session: PlaybackSession, player: TIDBPlayer, monitor: x
         session.last_seen_pause_count = current_pause_count
 
     if not _should_offer_submit(session, is_paused, all_segments):
+        # Piers: log the block reason once per pause, not every loop tick
+        if is_paused:
+            session.submit_prompted_this_pause = True
         return False
 
     try:
