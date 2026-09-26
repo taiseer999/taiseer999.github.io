@@ -223,6 +223,18 @@ def _run_pass(addon_ids=None, reason=''):
     return changed, failed
 
 
+def patch_after_install(reason='post-install'):
+    """Silent default-set sweep right after the Skin Portal / Add-on Portal
+    installs something, so a freshly installed skin/add-on is patched at once
+    instead of waiting for the watchdog poll (or for the menu self-heal when
+    the service is not running). Idempotent; never raises."""
+    try:
+        return _run_pass(reason=reason)
+    except Exception as e:
+        _log('post-install sweep failed (%s): %s' % (reason, e), xbmc.LOGWARNING)
+        return 0, 0
+
+
 def watch(monitor):
     """Main loop. Returns when Kodi asks the service to abort."""
     # Log immediately, BEFORE the boot delay, so the log proves the watchdog
