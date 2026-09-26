@@ -815,6 +815,55 @@ PATCHES = [
         'description': 'AF3 - Home spotlight plot uses font_mini_plot',
     },
 
+    # ── AF3: Highlight Colour — Genre plotline + widget titles (by ABUKARIM TOOLS) ──
+    # Paint the Genre plotline (the line above the plot when Plotline = Genre)
+    # and every widget header title in the skin's own focus/highlight colour,
+    # $VAR[ColorHighlight] — the same var AF3 uses for colordiffuse on its focus
+    # textures, so it follows whatever colour the user picked in skin settings.
+    {   # 1) Genre plotline — label wrapped in [COLOR=$VAR[ColorHighlight]]
+        #    (AF3 uses this exact label syntax itself in Includes_OSD.xml).
+        #    Regex fallback also converts the earlier hand-edited red version.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_highlight',
+        'not_found_ok': True,
+        'old': '<param name="label">$INFO[$PARAM[container]$PARAM[listitem].Genre]</param>',
+        'new': ('<param name="label">[COLOR=$VAR[ColorHighlight]]$INFO[$PARAM[container]$PARAM[listitem].Genre][/COLOR]</param>'
+                '  <!-- ABUKARIM: genre highlight -->'),
+        'already_patched_check': '<!-- ABUKARIM: genre highlight -->',
+        'fallback_pattern': (r'<param name="label">\$INFO\[\$PARAM\[container\]\$PARAM\[listitem\]\.Genre[^\n<]*</param>'
+                             r'(?:[ \t]*<!-- ABUKARIM: genre in red -->)?'),
+        'fallback_repl': ('<param name="label">[COLOR=$VAR[ColorHighlight]]$INFO[$PARAM[container]$PARAM[listitem].Genre][/COLOR]</param>'
+                          '  <!-- ABUKARIM: genre highlight -->'),
+        'description': 'AF3 - Genre plotline in highlight colour',
+    },
+    {   # 2) Widget titles — Widget_Label's default-label View_Line
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Widgets.xml'),
+        'toggle': 'af3_highlight',
+        'not_found_ok': True,
+        'old': '<param name="label_fallback">31282</param>',
+        'new': ('<param name="label_fallback">31282</param>\n'
+                '                    <param name="textcolor">$VAR[ColorHighlight]</param>  <!-- ABUKARIM: widget title highlight (label) -->'),
+        'already_patched_check': '<!-- ABUKARIM: widget title highlight (label) -->',
+        'fallback_pattern': r'([ \t]*)(<param name="label_fallback">31282</param>)',
+        'fallback_repl': r'\1\2\n\1<param name="textcolor">$VAR[ColorHighlight]</param>  <!-- ABUKARIM: widget title highlight (label) -->',
+        'description': 'AF3 - widget titles in highlight colour',
+    },
+    {   # 3) Widget titles — Widget_Label's usewidgetlabel View_Line
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Widgets.xml'),
+        'toggle': 'af3_highlight',
+        'not_found_ok': True,
+        'old': '<param name="label_fallback">$PARAM[label]</param>',
+        'new': ('<param name="label_fallback">$PARAM[label]</param>\n'
+                '                    <param name="textcolor">$VAR[ColorHighlight]</param>  <!-- ABUKARIM: widget title highlight (widget) -->'),
+        'already_patched_check': '<!-- ABUKARIM: widget title highlight (widget) -->',
+        'fallback_pattern': r'([ \t]*)(<param name="label_fallback">\$PARAM\[label\]</param>)',
+        'fallback_repl': r'\1\2\n\1<param name="textcolor">$VAR[ColorHighlight]</param>  <!-- ABUKARIM: widget title highlight (widget) -->',
+        'description': 'AF3 - widget titles (widget-property label) in highlight colour',
+    },
+
     # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
     # onAVChange / onAVStarted call get_playingitem() while the player is
     # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not
@@ -1147,6 +1196,7 @@ TOGGLE_GROUPS = [
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('af3_vplot',        'AF3: Vertical Plot (Home)'),
+    ('af3_highlight',    'AF3: Highlight Genre & Widget Titles'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('dexsubs_autodl',   'DexSubtitles: Auto-Download'),

@@ -1,3 +1,11 @@
+v3.1.0.26
+- New patch toggle "AF3: Highlight Genre & Widget Titles" (af3_highlight):
+  the Genre plotline (Includes_Info.xml, shown when Plotline = Genre) and
+  every widget header title (Includes_Widgets.xml Widget_Label) are drawn in
+  $VAR[ColorHighlight], the same colour AF3 uses for its focus textures, so
+  they follow the user's chosen highlight colour. The Genre regex fallback
+  also converts the earlier hand-edited red [COLOR FFE50914] version.
+
 v3.1.0.23
 - Add-on Portal: a Yes-watchdog now covers the ENTIRE install run plus an
   8 s tail. The 3.1.0.21 log shows POV's "Add-on required" prompt 1 s after
