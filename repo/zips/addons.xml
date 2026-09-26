@@ -1897,7 +1897,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
     <screenshot>resources/screenshot-02.jpg</screenshot>
   </assets>
 </extension>
-</addon><addon id="plugin.video.tidb" name="TheIntroDB Kodi Addon" version="1.8.4.3" provider-name="TheIntroDB">
+</addon><addon id="plugin.video.tidb" name="TheIntroDB Kodi Addon" version="1.8.4.4" provider-name="TheIntroDB">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
     </requires>
@@ -7188,7 +7188,7 @@ Många befintliga tillägg integreras redan med den här utanför lådan-tjänst
             <fanart>fanart.jpg</fanart>
         </assets>
     </extension>
-</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="5.5.18">
+</addon><addon id="skin.arctic.fuse.3" name="Arctic Fuse 3" provider-name="jurialmunkey" version="5.5.19">
     <requires>
         <import addon="xbmc.gui" version="5.17.0" />
         <import addon="script.skinvariables" version="2.2.4" />

@@ -114,8 +114,11 @@ def _fill_missing_ids(ids: Dict[str, Any], filename: str) -> Dict[str, Any]:
             for k, v in th.items():
                 if ids.get(k) in (None, '') and v not in (None, ''):
                     ids[k] = v
-            if th.get('is_movie') is False:
-                ids['is_movie'] = False
+            # extractor defaults is_movie=False when the InfoTag is empty,
+            # so the playerstring's type must win in both directions
+            ids['is_movie'] = bool(th.get('is_movie'))
+            if ids['is_movie']:
+                ids['season'] = ids['episode'] = None
             xbmc.log('[TheIntroDB] IDs filled from TMDbHelper playerstring', xbmc.LOGINFO)
         elif stale:
             xbmc.log('[TheIntroDB] Ignoring stale TMDbHelper playerstring', xbmc.LOGINFO)
