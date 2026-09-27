@@ -12,6 +12,7 @@ prompt ourselves and dismissing the revert dialog immediately if it appears.
 import os
 import glob
 import json
+import re
 
 import xbmc
 import xbmcgui
@@ -19,12 +20,6 @@ import xbmcgui
 from resources.lib.i18n import T
 import xbmcaddon
 import xbmcvfs
-
-try:
-    from resources.lib import tools as _tools
-    _HAS_TOOLS = True
-except Exception:
-    _HAS_TOOLS = False
 
 HOME   = xbmcvfs.translatePath('special://home/')
 ADDONS = os.path.join(HOME, 'addons')
@@ -49,13 +44,6 @@ def _jsonrpc(method, params=None):
 def _curr_skin_id():
     return xbmc.getSkinDir()
 
-
-def _curr_skin_name():
-    skin_id = _curr_skin_id()
-    try:
-        return xbmcaddon.Addon(skin_id).getAddonInfo('name')
-    except Exception:
-        return skin_id
 
 
 def _is_enabled(addon_id):
@@ -91,27 +79,6 @@ def _dismiss_confirm_dialogs(deadline_ms):
         xbmc.sleep(80)
         waited += 80
 
-
-def _return_to_abukarim(settle=True):
-    """
-    After the skin has changed, Kodi shows the new skin's Home window. Bring the
-    user back to the AbukarimTools main menu silently — no dialogs, no flicker.
-    We reopen the plugin's root inside the Programs window so it looks like the
-    menu the switch was launched from.
-
-    settle=True waits for a freshly loaded skin to settle before reactivating;
-    pass settle=False on cancel/no-change where no skin reload happened.
-    """
-    try:
-        xbmc.executebuiltin('Dialog.Close(all, true)')
-    except Exception:
-        pass
-    # Give the freshly loaded skin a moment to settle its Home window first,
-    # otherwise the ActivateWindow can be swallowed during the skin reload.
-    if settle:
-        xbmc.sleep(1200)
-    xbmc.executebuiltin(
-        'ActivateWindow(Programs,plugin://plugin.program.abukarimtools/,return)')
 
 
 def _close_to_home(settle=True):
@@ -225,14 +192,8 @@ def _run_impl():
         try:
             with open(xml_path, encoding='utf-8') as f:
                 content = f.read()
-            # Parse addon id — try tools.parseDOM if available, else simple find
-            if _HAS_TOOLS:
-                match = _tools.parseDOM(content, 'addon', ret='id')
-                addon_id = foldername if not match else match[0]
-            else:
-                import re
-                m = re.search(r'<addon[^>]+id=["\']([^"\']+)["\']', content)
-                addon_id = m.group(1) if m else foldername
+            m = re.search(r'<addon[^>]+id=["\']([^"\']+)["\']', content)
+            addon_id = m.group(1) if m else foldername
             addon = xbmcaddon.Addon(id=addon_id)
             names.append(addon.getAddonInfo('name'))
             addon_ids.append(addon_id)

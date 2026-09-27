@@ -150,10 +150,6 @@ def _wizard_first_run_done():
         return True
 
 
-def _addon_enabled(addon_id):
-    return xbmc.getCondVisibility('System.AddonIsEnabled(%s)' % addon_id)
-
-
 def _wait_until_ready(monitor):
     """Decide when it's safe to start the first-run sequence.
 

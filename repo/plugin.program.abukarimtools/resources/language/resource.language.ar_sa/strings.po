@@ -28,10 +28,6 @@ msgctxt "#30005"
 msgid "Apply Patches"
 msgstr "تطبيق الترقيعات"
 
-msgctxt "#30006"
-msgid "Auto-Patch On Update: On/Off"
-msgstr "الترقيع التلقائي عند التحديث: تشغيل/إيقاف"
-
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
 msgstr "إصلاح مصادر تحديث الإضافات"
@@ -240,18 +236,6 @@ msgctxt "#30126"
 msgid "✓ %s installed successfully."
 msgstr "✓ تم تثبيت %s بنجاح."
 
-msgctxt "#30127"
-msgid "The skin was linked to its repository so it can auto-update.[CR]Kodi must restart before updates take effect. Restart now?"
-msgstr "تم ربط الواجهة بمستودعها لتصلها التحديثات تلقائياً.[CR]يجب إعادة تشغيل Kodi لتفعيل التحديثات. إعادة التشغيل الآن؟"
-
-msgctxt "#30128"
-msgid "Restart"
-msgstr "إعادة التشغيل"
-
-msgctxt "#30129"
-msgid "Later"
-msgstr "لاحقاً"
-
 msgctxt "#30150"
 msgid "No installed skins found."
 msgstr "لم يُعثر على واجهات مثبتة."
@@ -416,30 +400,6 @@ msgctxt "#30290"
 msgid "Patches re-applied after add-on update"
 msgstr "أُعيد تطبيق الترقيعات بعد تحديث الإضافة"
 
-msgctxt "#30291"
-msgid "Auto-patching is now [B]ON[/B].[CR][CR]Patches are re-applied automatically whenever a patched add-on is updated or reinstalled."
-msgstr "الترقيع التلقائي الآن [B]مُفعّل[/B].[CR][CR]تُعاد الترقيعات تلقائياً كلما تم تحديث أو إعادة تثبيت إضافة مُرقّعة."
-
-msgctxt "#30292"
-msgid "Auto-patching is now [B]OFF[/B].[CR][CR]Patches will no longer be re-applied automatically after an add-on update - use Apply Patches manually."
-msgstr "الترقيع التلقائي الآن [B]معطّل[/B].[CR][CR]لن تُعاد الترقيعات تلقائياً بعد تحديث الإضافة - استخدم تطبيق الترقيعات يدوياً."
-
-msgctxt "#30300"
-msgid "[B]Downloading:[/B] %s"
-msgstr "[B]جارٍ التنزيل:[/B] %s"
-
-msgctxt "#30301"
-msgid "Please Wait"
-msgstr "الرجاء الانتظار"
-
-msgctxt "#30302"
-msgid "Installing Dependencies"
-msgstr "جارٍ تثبيت الاعتماديات"
-
-msgctxt "#30303"
-msgid "[B]Installing:[/B] %s"
-msgstr "[B]جارٍ التثبيت:[/B] %s"
-
 msgctxt "#30320"
 msgid "SKIN SELECTION"
 msgstr "اختيار الواجهة"
@@ -455,10 +415,6 @@ msgstr "اختر المستودع"
 msgctxt "#30323"
 msgid "OK to select  ·  Back to cancel"
 msgstr "موافق للاختيار  ·  رجوع للإلغاء"
-
-msgctxt "#30324"
-msgid "ABUKARIM PORTAL V2"
-msgstr "بوابة أبوكريم V2"
 
 msgctxt "#30325"
 msgid "Selected Skin"

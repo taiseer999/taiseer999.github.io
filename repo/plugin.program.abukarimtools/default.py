@@ -28,14 +28,14 @@ ICONS  = {
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
-    'origin_fix':     ADDON_PATH + 'resources/icons/patcher.png',
+    'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
     'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
     # category folder icons
-    'cat_setup':      ADDON_PATH + 'resources/icons/first_run.png',
+    'cat_setup':      ADDON_PATH + 'resources/icons/install_setup.png',
     'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
     'cat_maint':      ADDON_PATH + 'resources/icons/clear_cache.png',
     'cat_toggle':     ADDON_PATH + 'resources/icons/skin_switcher.png',
@@ -264,8 +264,8 @@ def router():
 
     elif mode == 'skin_switch':
         # Non-folder action: don't open/close a plugin listing (that leaves an
-        # empty container with a back arrow). Just run; the switcher returns to
-        # the main menu itself via _return_to_abukarim().
+        # empty container with a back arrow). Just run; the switcher closes
+        # to the new skin's Home itself via _close_to_home().
         from resources.lib import skin_switcher
         skin_switcher.run()
 

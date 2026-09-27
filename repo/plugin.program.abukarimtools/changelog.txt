@@ -1,3 +1,20 @@
+v3.1.0.29
+- Icons: "Setup & Install" category now uses install_setup.png (renamed from
+  "install setup.png" - no spaces in paths); "Fix Add-on Update Origins" now
+  uses sources.png. dplex_toggledplex_toggle.png renamed to dplex_toggle.png
+  (the DPlex toggle had no icon because the file name did not match).
+- Service re-enabled in addon.xml (it was commented out again, so the
+  watchdog / first-run / boot chores were not running).
+- patch_watchdog.patch_after_install() is now actually called after a manual
+  Skin Portal / Add-on Portal install (the 3.1.0.27 wiring was missing).
+- Removed unused: resources/lib/tools.py (its import of resources.downloader
+  always failed, so it never loaded), skin_switcher _curr_skin_name /
+  _return_to_abukarim, service _addon_enabled, backup_manager posixpath
+  import, portal_v2.xml, media/welcome.jpg, resources/icon.png, 11 unused
+  strings (.po regenerated, 129 each), and unreferenced OpenWizard assets
+  (Bellota fonts, IconTemplate.psd, 16 skin images, apks/themes.txt,
+  README.md, segno/cli.py). .DS_Store and __pycache__ stripped.
+
 v3.1.0.26
 - New patch toggle "AF3: Highlight Genre & Widget Titles" (af3_highlight):
   the Genre plotline (Includes_Info.xml, shown when Plotline = Genre) and

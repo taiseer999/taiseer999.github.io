@@ -579,6 +579,16 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
             self.close()
 
 
+def _patch_now():
+    """Patch what was just installed right away (3.1.0.27) instead of waiting
+    for the watchdog poll. Idempotent, never raises."""
+    try:
+        from resources.lib import patch_watchdog
+        patch_watchdog.patch_after_install(reason='addon-portal')
+    except Exception as e:
+        _log('post-install patch failed: %s' % e)
+
+
 def run(first_run=False):
     import time
     selection = None
@@ -608,6 +618,10 @@ def run(first_run=False):
         mark = '[COLOR FF33D17A]OK[/COLOR]' if good else '[COLOR FFFF5555]X[/COLOR]'
         lines.append('%s  %s%s' % (mark, name, ('  - ' + note) if note else ''))
     xbmcgui.Dialog().textviewer(TITLE, '\n'.join(lines))
+
+    # First-run applies patches as its own next step.
+    if ok and not first_run:
+        _patch_now()
 
     if ok and not first_run:
         try:

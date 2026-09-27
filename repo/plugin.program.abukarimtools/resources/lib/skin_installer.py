@@ -964,6 +964,16 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             self.close()
 
 
+def _patch_now():
+    """Patch what was just installed right away (3.1.0.27) instead of waiting
+    for the watchdog poll. Idempotent, never raises."""
+    try:
+        from resources.lib import patch_watchdog
+        patch_watchdog.patch_after_install(reason='skin-portal')
+    except Exception as e:
+        _log('post-install patch failed: %s' % e)
+
+
 def run(first_run=False):
     """Guarded entry point for the skin installer.
 
@@ -1029,6 +1039,8 @@ def _run_impl(first_run=False):
         ok = _apply_skin(addonid, title)
         if ok:
             _notify(T(30126) % title)
+            if not first_run:
+                _patch_now()
             try:
                 from resources.lib import skin_switcher
                 skin_switcher._close_to_home()

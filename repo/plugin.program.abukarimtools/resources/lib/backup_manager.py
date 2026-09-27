@@ -4,7 +4,6 @@ import zipfile
 
 from resources.lib.i18n import T
 import datetime
-import posixpath
 
 import xbmc
 import xbmcgui

@@ -28,10 +28,6 @@ msgctxt "#30005"
 msgid "Apply Patches"
 msgstr ""
 
-msgctxt "#30006"
-msgid "Auto-Patch On Update: On/Off"
-msgstr ""
-
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
 msgstr ""
@@ -240,18 +236,6 @@ msgctxt "#30126"
 msgid "✓ %s installed successfully."
 msgstr ""
 
-msgctxt "#30127"
-msgid "The skin was linked to its repository so it can auto-update.[CR]Kodi must restart before updates take effect. Restart now?"
-msgstr ""
-
-msgctxt "#30128"
-msgid "Restart"
-msgstr ""
-
-msgctxt "#30129"
-msgid "Later"
-msgstr ""
-
 msgctxt "#30150"
 msgid "No installed skins found."
 msgstr ""
@@ -416,30 +400,6 @@ msgctxt "#30290"
 msgid "Patches re-applied after add-on update"
 msgstr ""
 
-msgctxt "#30291"
-msgid "Auto-patching is now [B]ON[/B].[CR][CR]Patches are re-applied automatically whenever a patched add-on is updated or reinstalled."
-msgstr ""
-
-msgctxt "#30292"
-msgid "Auto-patching is now [B]OFF[/B].[CR][CR]Patches will no longer be re-applied automatically after an add-on update - use Apply Patches manually."
-msgstr ""
-
-msgctxt "#30300"
-msgid "[B]Downloading:[/B] %s"
-msgstr ""
-
-msgctxt "#30301"
-msgid "Please Wait"
-msgstr ""
-
-msgctxt "#30302"
-msgid "Installing Dependencies"
-msgstr ""
-
-msgctxt "#30303"
-msgid "[B]Installing:[/B] %s"
-msgstr ""
-
 msgctxt "#30320"
 msgid "SKIN SELECTION"
 msgstr ""
@@ -454,10 +414,6 @@ msgstr ""
 
 msgctxt "#30323"
 msgid "OK to select  ·  Back to cancel"
-msgstr ""
-
-msgctxt "#30324"
-msgid "ABUKARIM PORTAL V2"
 msgstr ""
 
 msgctxt "#30325"
