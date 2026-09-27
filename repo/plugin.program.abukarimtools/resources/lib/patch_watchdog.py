@@ -94,6 +94,12 @@ def _addon_path(addon_id):
         return local
     if addon_id in _MISSING_ADDONS:
         return None
+    # 3.1.0.30: System.HasAddon is a silent GUI-condition check. Without it the
+    # registry call below logged "EXCEPTION: Unknown addon id" on every menu
+    # open, because the miss cache only lives for one plugin invocation.
+    if not xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id):
+        _MISSING_ADDONS.add(addon_id)
+        return None
     try:
         path = xbmcaddon.Addon(addon_id).getAddonInfo('path')
         path = xbmcvfs.translatePath(path)

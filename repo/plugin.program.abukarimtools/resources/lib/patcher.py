@@ -77,6 +77,11 @@ def _resolve_addon_dir(addon_id):
         return local
     if addon_id in _REGISTRY_MISSES:
         return None
+    # Silent pre-check: never ask the registry about an id Kodi doesn't know
+    # (that call logs "EXCEPTION: Unknown addon id" C++-side).
+    if not xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id):
+        _REGISTRY_MISSES.add(addon_id)
+        return None
     try:
         import xbmcaddon
         path = xbmcvfs.translatePath(xbmcaddon.Addon(addon_id).getAddonInfo('path'))
@@ -199,14 +204,20 @@ PATCHES = [
         # backtracking whenever the anchor is missing (newer TinyPPI).
         # Runtime doubled per line of install_fonts(); the sweep held the GIL
         # forever and froze Kodi (3.1.0.15).
-        'fallback_pattern': r'(def install_fonts\(\) -> None:\n(?:    [^\n]*\n)*?)    skin_path = _get_skin_path\(\)',
-        'fallback_repl': (
-            r'\1'
-            '    # -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --\n'
-            '    _log("Font install disabled (ABUKARIM) - using skin font")\n'
-            '    return\n'
-            '    skin_path = _get_skin_path()'
+        # 3.1.0.30: signature-agnostic. Newer TinyPPI changed install_fonts()
+        # (the old '-> None' + skin_path anchor is gone), so this failed on
+        # every sweep. Now: any `def install_fonts(...)`, early return inserted
+        # as the first body line using the file's own indent. Linear regex,
+        # no nested quantifiers. not_found_ok: if TinyPPI drops install_fonts
+        # entirely there is nothing left to disable.
+        'fallback_pattern': r'(def install_fonts\([^)\n]*\)[^:\n]*:[ \t]*\n)([ \t]+)',
+        'fallback_repl': lambda m: (
+            m.group(1)
+            + m.group(2) + '# -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --\n'
+            + m.group(2) + 'return\n'
+            + m.group(2)
         ),
+        'not_found_ok': True,
     },
 # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {

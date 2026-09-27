@@ -44,6 +44,7 @@ STRINGS = {
     30017: ("Toggles",                          "التبديلات"),
     30018: ("Rebuild Add-on Database",          "إعادة بناء قاعدة بيانات الإضافات"),
     30019: ("Speed Test",                       "اختبار السرعة"),
+    30020: ("Node Icons: Color / Black & White", "أيقونات الأقسام: ملونة / أبيض وأسود"),
     30021: ("Add-on Portal",                    "بوابة الإضافات"),
 
     # ---- first-run / service (30050-30099) ----
@@ -198,6 +199,15 @@ STRINGS = {
             "لم يتم العثور على Addons33.db (قد يكون كودي يعمل على قاعدة جديدة بالفعل).[CR][CR]هل تريد إعادة تفعيل جميع الإضافات وإعادة التشغيل على أي حال؟"),
     30335: ("Could not delete the add-on database file.",
             "تعذّر حذف ملف قاعدة بيانات الإضافات."),
+    # ---- AF3 node icons toggle (icons_toggle.py) ----
+    30340: ("Icon folder not found:[CR]%s[CR][CR]This skin does not ship colored/monochrome icon sets.",
+            "مجلد الأيقونات غير موجود:[CR]%s[CR][CR]هذه الواجهة لا تحتوي على مجموعتي الأيقونات الملونة والأحادية."),
+    30341: ("Node Icons - current: %s",            "أيقونات الأقسام - الحالية: %s"),
+    30342: ("Colored",                              "ملونة"),
+    30343: ("Monochrome",                           "أبيض وأسود"),
+    30344: ("Unknown",                              "غير معروفة"),
+    30345: ("%s icons applied (%d files)",          "تم تطبيق الأيقونات %s (%d ملف)"),
+    30346: ("No active skin found.",                "لم يتم العثور على واجهة نشطة."),
 
     # ---- add-on portal (30400-30429) ----
     30400: ("ADD-ON PORTAL",                   "بوابة الإضافات"),

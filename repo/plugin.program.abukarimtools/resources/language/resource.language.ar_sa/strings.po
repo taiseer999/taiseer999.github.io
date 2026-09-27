@@ -80,6 +80,10 @@ msgctxt "#30019"
 msgid "Speed Test"
 msgstr "اختبار السرعة"
 
+msgctxt "#30020"
+msgid "Node Icons: Color / Black & White"
+msgstr "أيقونات الأقسام: ملونة / أبيض وأسود"
+
 msgctxt "#30021"
 msgid "Add-on Portal"
 msgstr "بوابة الإضافات"
@@ -443,6 +447,34 @@ msgstr "تعذّر حذف ملف قاعدة بيانات الإضافات."
 msgctxt "#30336"
 msgid "The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform."
 msgstr "تم حذف قاعدة البيانات. سيُغلق كودي الآن.[CR][CR]افتح كودي مرة أخرى وسيُكمل إعادة البناء تلقائياً - لا يستطيع كودي إعادة تشغيل نفسه على هذا النظام."
+
+msgctxt "#30340"
+msgid "Icon folder not found:[CR]%s[CR][CR]This skin does not ship colored/monochrome icon sets."
+msgstr "مجلد الأيقونات غير موجود:[CR]%s[CR][CR]هذه الواجهة لا تحتوي على مجموعتي الأيقونات الملونة والأحادية."
+
+msgctxt "#30341"
+msgid "Node Icons - current: %s"
+msgstr "أيقونات الأقسام - الحالية: %s"
+
+msgctxt "#30342"
+msgid "Colored"
+msgstr "ملونة"
+
+msgctxt "#30343"
+msgid "Monochrome"
+msgstr "أبيض وأسود"
+
+msgctxt "#30344"
+msgid "Unknown"
+msgstr "غير معروفة"
+
+msgctxt "#30345"
+msgid "%s icons applied (%d files)"
+msgstr "تم تطبيق الأيقونات %s (%d ملف)"
+
+msgctxt "#30346"
+msgid "No active skin found."
+msgstr "لم يتم العثور على واجهة نشطة."
 
 msgctxt "#30400"
 msgid "ADD-ON PORTAL"

@@ -1,3 +1,23 @@
+v3.1.0.31
+- FIX: Toggles > Node Icons item had an empty label - menu string 30020
+  was never defined in strings_map. Added EN+AR; full scan: no other
+  undefined string ids left.
+
+v3.1.0.30
+- FIX: "Node Icons" toggle crashed with TypeError (not all arguments
+  converted) - strings 30340-30346 used by icons_toggle.py were never added to
+  strings_map, so T() returned "" and "" % label raised. Added EN+AR, .po
+  regenerated (136 each).
+- FIX: TinyPPI fonts.py entry failed on every sweep ("53 OK, 1 failed") -
+  the installed TinyPPI no longer has the "def install_fonts() -> None: ...
+  skin_path = _get_skin_path()" anchor. Fallback is now signature-agnostic
+  (any def install_fonts(...), early return inserted with the file's own
+  indent) + not_found_ok.
+- FIX: "EXCEPTION: Unknown addon id 'plugin.video.prism'" logged on every
+  menu open - the miss cache only lives one plugin invocation. Both
+  patcher._resolve_addon_dir and patch_watchdog._addon_path now check the
+  silent System.HasAddon() condition before asking the registry.
+
 v3.1.0.29
 - Icons: "Setup & Install" category now uses install_setup.png (renamed from
   "install setup.png" - no spaces in paths); "Fix Add-on Update Origins" now
