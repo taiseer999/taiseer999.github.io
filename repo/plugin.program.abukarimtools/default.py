@@ -131,6 +131,7 @@ def _menu_sweep():
         ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
         if ids:
             patcher.apply_set(addon_ids=ids)
+            patcher.reload_skin_if_pending()
     except Exception as e:
         xbmc.log('[AbukarimTools MenuSweep] failed: %s' % e, xbmc.LOGWARNING)
 

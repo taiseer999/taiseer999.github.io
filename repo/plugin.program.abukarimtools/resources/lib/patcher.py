@@ -7,6 +7,7 @@ Applies patches to installed Kodi addons.
 import base64
 import os
 import re
+import time
 import xbmc
 import xbmcvfs
 import xbmcgui
@@ -815,6 +816,93 @@ PATCHES = [
         'description': 'AF3 - Home spotlight plot uses font_mini_plot',
     },
 
+    # ── AF3: Vertical Plot — breathing room between the genre/tagline header
+    # and the first plot line on Home. The header label is 40px and the plot
+    # textbox starts at exactly top=40 (height 80), so the plot's first line
+    # sits right under the header, and while scrolling the text clips against
+    # it. New params plottop/plotboxh (defaults 40/80 = stock) replace the
+    # hard-coded values in Info_Plot_Episode + Info_Plot_Main_Plotline_Content;
+    # Home passes top 54 / box 80: the plot moves 14px down (even spacing
+    # between the genre line above and the ratings row below); the block
+    # height and the ratings row stay put. Every other caller keeps 40/80.
+    {   # 1) forward plottop/plotboxh next to every forwarded plotfont
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<param name="plottop">$PARAM[plottop]</param>',
+        'fallback_pattern': r'([ \t]*)(<param name="plotfont">\$PARAM\[plotfont\]</param>)',
+        'fallback_repl': (r'\1\2\n\1<param name="plottop">$PARAM[plottop]</param>'
+                          r'\n\1<param name="plotboxh">$PARAM[plotboxh]</param>'),
+        'count': 0,
+        'description': 'AF3 - forward plot gap params through the Info_* chain',
+    },
+    {   # 2) header+plot blocks use the params instead of hard-coded 80/40
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': '<!-- ABUKARIM: plot gap -->',
+        'fallback_pattern': (r'<param name="height">80</param>(\s*<param name="width">\$PARAM\[width\]</param>\s*)'
+                             r'<param name="top">40</param>'),
+        'fallback_repl': (r'<param name="height">$PARAM[plotboxh]</param>\1'
+                          r'<param name="top">$PARAM[plottop]</param>  <!-- ABUKARIM: plot gap -->'),
+        'count': 0,
+        'description': 'AF3 - plot textbox top/height from params',
+    },
+    {   # 3) stock defaults at the chain entry points
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (Info_Panel) -->',
+        'new': ('<param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (Info_Panel) -->\n'
+                '        <param name="plottop">40</param>\n'
+                '        <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap default (Info_Panel) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot gap default (Info_Panel) -->',
+        'description': 'AF3 - plot gap defaults (Info_Panel)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Info.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (Info_Plot) -->',
+        'new': ('<param name="plotfont">font_main_plot</param>  <!-- ABUKARIM: plot font (Info_Plot) -->\n'
+                '        <param name="plottop">40</param>\n'
+                '        <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap default (Info_Plot) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot gap default (Info_Plot) -->',
+        'description': 'AF3 - plot gap defaults (Info_Plot)',
+    },
+    {   # 4) Home panels: gap + two full lines + taller block
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->',
+        'new': ('<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (hub) -->\n'
+                '                    <param name="plottop">54</param>\n'
+                '                    <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (hub) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot gap (hub) -->',
+        'description': 'AF3 - Home hub plot gap under the genre line',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->',
+        'new': ('<param name="plotfont">font_mini_plot</param>  <!-- ABUKARIM: plot font (spotlight) -->\n'
+                '                <param name="plottop">54</param>\n'
+                '                <param name="plotboxh">80</param>  <!-- ABUKARIM: plot gap (spotlight) -->'),
+        'already_patched_check': '<!-- ABUKARIM: plot gap (spotlight) -->',
+        'description': 'AF3 - Home spotlight plot gap under the genre line',
+    },
+
     # ── AF3: Highlight Colour — Genre plotline + widget titles (by ABUKARIM TOOLS) ──
     # Paint the Genre plotline (the line above the plot when Plotline = Genre)
     # and every widget header title in the skin's own focus/highlight colour,
@@ -1457,6 +1545,73 @@ def _reconcile_tinyppi_arabic():
         return False, '[%s] Arabic reconcile failed: %s' % (addon_id, e)
 
 
+# ---------------------------------------------------------------------------
+# Automatic ReloadSkin (3.1.0.28)
+# ---------------------------------------------------------------------------
+# Kodi reads a skin's XML once, when the skin loads, so a patch written into the
+# ACTIVE skin does nothing on screen until the skin is reloaded. When a write
+# lands in the active skin, apply_set() drops a marker file; the callers (the
+# manual "Apply Patches" run after its results dialog, the watchdog sweeps and
+# the menu sweep) then call reload_skin_if_pending(), which fires ReloadSkin()
+# only when it is safe: no first-run in progress, nothing playing, no modal
+# dialog up. Otherwise the marker stays and the watchdog retries on its next
+# poll. A marker file (not a module flag) because the service and the plugin
+# run in separate interpreters.
+_SKIN_RELOAD_MARKER = os.path.join(
+    ADDON_DATA, 'plugin.program.abukarimtools', 'skin_reload.pending')
+_FIRST_RUN_LOCK_FILE = os.path.join(
+    ADDON_DATA, 'plugin.program.abukarimtools', 'first_run.lock')
+
+
+def _is_active_skin(addon_id):
+    try:
+        return addon_id == xbmc.getSkinDir()
+    except Exception:
+        return False
+
+
+def _mark_skin_reload():
+    try:
+        os.makedirs(os.path.dirname(_SKIN_RELOAD_MARKER), exist_ok=True)
+        with open(_SKIN_RELOAD_MARKER, 'w') as f:
+            f.write(xbmc.getSkinDir())
+    except Exception as e:
+        _log('Could not mark skin reload: %s' % e, xbmc.LOGWARNING)
+
+
+def reload_skin_if_pending():
+    """Fire ReloadSkin() if a patch wrote into the active skin and it is safe
+    to do so now. Returns True if a reload was issued. Never raises."""
+    try:
+        if not os.path.exists(_SKIN_RELOAD_MARKER):
+            return False
+        try:
+            with open(_SKIN_RELOAD_MARKER, 'r') as f:
+                skin = f.read().strip()
+        except Exception:
+            skin = ''
+        if skin and skin != xbmc.getSkinDir():
+            # The user switched skins since; the new skin loaded fresh files.
+            os.remove(_SKIN_RELOAD_MARKER)
+            return False
+        if (os.path.exists(_FIRST_RUN_LOCK_FILE) and
+                time.time() - os.path.getmtime(_FIRST_RUN_LOCK_FILE) < 7200):
+            return False                      # never under first-run dialogs
+        if xbmc.getCondVisibility('Player.HasMedia'):
+            return False                      # don't disturb playback; retry later
+        if xbmc.getCondVisibility('System.HasActiveModalDialog | '
+                                  'Window.IsActive(busydialog) | '
+                                  'Window.IsActive(busydialognocancel)'):
+            return False
+        os.remove(_SKIN_RELOAD_MARKER)
+        _log('Patched files in the active skin changed - reloading skin.')
+        xbmc.executebuiltin('ReloadSkin()')
+        return True
+    except Exception as e:
+        _log('Skin reload check failed: %s' % e, xbmc.LOGWARNING)
+        return False
+
+
 def apply_set(group=None, addon_ids=None):
     """Silent patch core — no dialogs, safe to call from the service thread.
 
@@ -1509,6 +1664,8 @@ def apply_set(group=None, addon_ids=None):
             # watchdog popped a false 're-applied' toast.
             if ('Patched OK' in msg) or ('File injected OK' in msg):
                 changed += 1
+                if _is_active_skin(patch['addon_id']):
+                    _mark_skin_reload()
         else:
             failed += 1
 
@@ -1600,3 +1757,4 @@ def run(group=None, addon_ids=None):
         summary += '[CR]Disabled: %s' % off
 
     DIALOG.ok(ADDON_NAME, summary)
+    reload_skin_if_pending()

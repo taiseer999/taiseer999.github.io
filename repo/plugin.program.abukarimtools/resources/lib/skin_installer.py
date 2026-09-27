@@ -1028,15 +1028,6 @@ def _run_impl(first_run=False):
         _log('deferred apply: %s' % addonid)
         ok = _apply_skin(addonid, title)
         if ok:
-            # Patch the new skin + companions now (AF3 PPI, plot, highlight,
-            # TMDbHelper QR...). Runs in first-run too: there the patch step
-            # comes BEFORE skin selection, so the skin would otherwise stay
-            # unpatched until the watchdog's next poll.
-            try:
-                from resources.lib import patch_watchdog
-                patch_watchdog.patch_after_install('skin portal: %s' % addonid)
-            except Exception as e:
-                _log('post-install patch failed: %s' % e)
             _notify(T(30126) % title)
             try:
                 from resources.lib import skin_switcher

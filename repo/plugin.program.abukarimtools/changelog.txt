@@ -1,17 +1,3 @@
-v3.1.0.27
-- FIX (regression): auto-patching stopped completely. addon.xml had the
-  xbmc.service extension commented out again (same bug as 3.1.0.0), so
-  service.py never started: no patch watchdog (no re-patch after add-on
-  updates), no boot repo linking, no boot sweep. The 3.1.0.26 kodi.log has
-  zero [AbukarimTools AutoPatch] lines; patches only landed when the menu
-  was reopened (menu self-heal). Service re-enabled.
-- Skin Portal: after a skin is installed+applied, the default patch set is
-  run immediately (patch_watchdog.patch_after_install), including during
-  first-run where the patch step precedes skin selection.
-- Add-on Portal: same immediate patch pass after a successful install.
-- NOTE: Kodi only starts a newly registered service after a restart, so
-  restart Kodi once after installing this update.
-
 v3.1.0.26
 - New patch toggle "AF3: Highlight Genre & Widget Titles" (af3_highlight):
   the Genre plotline (Includes_Info.xml, shown when Plotline = Genre) and

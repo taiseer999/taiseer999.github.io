@@ -214,6 +214,10 @@ def _run_pass(addon_ids=None, reason=''):
         _log('Patch pass crashed (%s): %s' % (reason, e), xbmc.LOGERROR)
         return 0, 0
 
+    # A write into the active skin only shows after ReloadSkin (Kodi reads the
+    # skin XML once at load). Deferred automatically if unsafe right now.
+    patcher.reload_skin_if_pending()
+
     if changed:
         _log('%s: re-applied %d patch(es), %d failed.' % (reason, changed, failed))
         _notify(T(30290))
@@ -276,6 +280,9 @@ def watch(monitor):
         # change that happened meanwhile is still detected afterwards.
         if first_run_active():
             continue
+
+        # Retry a skin reload that was deferred (playback / modal dialog).
+        patcher.reload_skin_if_pending()
 
         try:
             current = _signatures(targets)

@@ -607,13 +607,6 @@ def run(first_run=False):
     for name, good, note in results:
         mark = '[COLOR FF33D17A]OK[/COLOR]' if good else '[COLOR FFFF5555]X[/COLOR]'
         lines.append('%s  %s%s' % (mark, name, ('  - ' + note) if note else ''))
-    if ok:
-        # Patch freshly installed add-ons (Seren, Red Light, Fen Light...) now.
-        try:
-            from resources.lib import patch_watchdog
-            patch_watchdog.patch_after_install('add-on portal')
-        except Exception as e:
-            _log('post-install patch failed: %s' % e)
     xbmcgui.Dialog().textviewer(TITLE, '\n'.join(lines))
 
     if ok and not first_run:
