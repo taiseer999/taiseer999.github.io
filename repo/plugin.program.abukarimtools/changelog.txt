@@ -1,3 +1,15 @@
+v3.1.7
+- FIX: xbmc.service was commented out in addon.xml AGAIN (4th time - see
+  3.1.0.19/.27/.29). Seen on AM9 Pro 2026-09-28: zero [AbukarimTools] lines
+  in a full boot log, AF3 logging "invalid include: CodecLogosLeftOSD" (PPI
+  AF3 patch not re-applied), no boot repo linking, and the Addons33 phase 2
+  only ran when the menu was opened by hand. Re-enabled. Anyone editing
+  addon.xml: keep the service line uncommented.
+- FIX: Addons33 phase 2 from the MENU ran inline inside the directory
+  listing (20 s wait + enabling + reboot), so the Programs window froze -
+  the "stuck" state on the AM9. The menu now only queues it as its own
+  RunPlugin invocation (mode=addons33_continue, with a real Monitor).
+
 v3.1.6
 - Rebuild Add-on Database confirm text (30330, EN+AR) now states plainly
   that after the first restart Kodi opens on Estuary with ALL add-ons

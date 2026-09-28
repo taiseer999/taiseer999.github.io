@@ -148,10 +148,17 @@ def _menu_sweep():
 def _continue_addons33_rebuild():
     """If an Addons33 rebuild is mid-flight (phase 2: DB deleted, Kodi has
     rebuilt a fresh one), finish it when the menu is opened even if the boot
-    service never ran. Enables all add-ons then restarts. No-op otherwise."""
+    service never ran. No-op otherwise.
+
+    3.1.7: no longer runs inline. Phase 2 waits ~25 s, enables add-ons and
+    reboots; doing that inside this directory listing blocked the menu (the
+    box looked frozen on "Programs"). It now runs as its own RunPlugin
+    invocation (mode=addons33_continue), like the menu sweep."""
     try:
         from resources.lib import addons33_rebuild
-        addons33_rebuild.continue_if_pending()
+        if addons33_rebuild._read_step() == '2':
+            xbmc.executebuiltin(
+                'RunPlugin(plugin://%s/?mode=addons33_continue)' % ADDON_ID)
     except Exception:
         pass
 
@@ -223,6 +230,15 @@ def router():
 
     if mode == 'menu_sweep':
         _menu_sweep()
+        return
+
+    if mode == 'addons33_continue':
+        try:
+            from resources.lib import addons33_rebuild
+            addons33_rebuild.continue_if_pending(xbmc.Monitor())
+        except Exception as e:
+            xbmc.log('[AbukarimTools Addons33] continue failed: %s' % e,
+                     xbmc.LOGWARNING)
         return
 
     if mode == 'first_run':
