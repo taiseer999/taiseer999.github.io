@@ -131,8 +131,50 @@ def _ensure_patches():
         pass
 
 
+def _ensure_service():
+    """3.1.10: Kodi sometimes never launches our xbmc.service at boot (zero
+    [AbukarimTools] lines in a full boot log), which silently kills the
+    auto-patch watchdog and the boot-time repo linking. The service sets a Home
+    heartbeat property; if it is missing when the menu opens, start
+    service.py ourselves as a script (it runs for the whole session)."""
+    try:
+        home = xbmcgui.Window(10000)
+        if home.getProperty('abukarimtools.service.alive'):
+            return
+        if home.getProperty('abukarimtools.service.alive.kick'):
+            return                      # already kicked this session
+        home.setProperty('abukarimtools.service.alive.kick', '1')
+        xbmc.log('[AbukarimTools Menu] service not running - starting it',
+                 xbmc.LOGWARNING)
+        xbmc.executebuiltin('RunScript(%s)'
+                            % os.path.join(ADDON_PATH.rstrip('/\\'), 'service.py'))
+    except Exception as e:
+        xbmc.log('[AbukarimTools Menu] could not start service: %s' % e,
+                 xbmc.LOGWARNING)
+
+
+def _menu_relink():
+    """Link add-ons with an empty update source whenever the menu opens,
+    independent of the service. Quick: one SQLite pass over the cached repo
+    listings; a repo refresh (slow) is left to the service."""
+    try:
+        from resources.lib import origin_fix
+        res = origin_fix.fix_addons(None)
+        if res.get('fixed'):
+            xbmc.log('[AbukarimTools Menu] linked on menu open: %s'
+                     % ', '.join('%s -> %s' % kv for kv in sorted(res['fixed'].items())),
+                     xbmc.LOGINFO)
+        if res.get('unmatched'):
+            xbmc.log('[AbukarimTools Menu] no repository carries: %s'
+                     % ', '.join(sorted(res['unmatched'])), xbmc.LOGINFO)
+    except Exception as e:
+        xbmc.log('[AbukarimTools Menu] relink failed: %s' % e, xbmc.LOGWARNING)
+
+
 def _menu_sweep():
     """Body of the 'menu_sweep' invocation. Main thread, no directory."""
+    _ensure_service()
+    _menu_relink()
     try:
         from resources.lib import patch_watchdog, patcher
         if patch_watchdog.first_run_active():

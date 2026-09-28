@@ -1,3 +1,18 @@
+v3.1.10
+- FIX: add-ons (e.g. skin.arctic.fuse.3) stayed without an update source.
+  Two full boot logs on the AM9 (15:52 and 17:40) had ZERO [AbukarimTools]
+  lines: Kodi never launched our xbmc.service on those boots (every other
+  service started), so the boot-time relink - and the auto-patch watchdog -
+  never ran. The repo listing is fine: repository.taiseerKODI22 carries
+  skin.arctic.fuse.3 5.10.18, so the linker just never got the chance.
+  * service.py logs "[AbukarimTools Service] started vX (boot|menu)" first
+    thing and sets a Home heartbeat property (also blocks a 2nd copy).
+  * Opening the menu (menu_sweep, detached) now: if the heartbeat is
+    missing, starts service.py via RunScript (once per session, logged as
+    "service not running - starting it"); and links every add-on with an
+    empty origin from the cached repo listings, logging what it linked and
+    what no repository carries - independent of the service.
+
 v3.1.9
 - Addons33 rebuild is now hands-free: no more enabling ABUKARIM TOOLS by
   hand after the first restart. A fresh Addons33.db registers every

@@ -771,8 +771,29 @@ def _relink_after_rebuild(monitor):
             pass
 
 
+SERVICE_PROP = 'abukarimtools.service.alive'
+
+
 def main():
     monitor = xbmc.Monitor()
+
+    # 3.1.10: prove in the log that the service launched (on the AM9 it
+    # silently never started on some boots), and publish a heartbeat that the
+    # menu checks - if it is missing the menu starts this file via RunScript.
+    # The property also stops a second copy from running in the same session.
+    home = xbmcgui.Window(10000)
+    if home.getProperty(SERVICE_PROP):
+        _log('Service already running (%s) - this copy exits.'
+             % home.getProperty(SERVICE_PROP))
+        return
+    try:
+        ver = ADDON.getAddonInfo('version')
+    except Exception:
+        ver = '?'
+    started_by = 'menu' if home.getProperty(SERVICE_PROP + '.kick') else 'boot'
+    home.setProperty(SERVICE_PROP, '%s/%s' % (ver, started_by))
+    xbmc.log('[AbukarimTools Service] started v%s (%s)' % (ver, started_by),
+             xbmc.LOGINFO)
 
     # Finish an in-progress Addons33 rebuild first (phase 2): if the add-on
     # DB was just deleted and Kodi has rebuilt a clean one, re-enable every
