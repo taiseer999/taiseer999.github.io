@@ -751,7 +751,11 @@ def _relink_after_rebuild(monitor):
     from resources.lib import addons33_rebuild, origin_fix
     pending = addons33_rebuild.relink_pending()
     if not pending and not origin_fix.repo_cache_empty():
-        return
+        # 3.1.11: still refresh+retry when something is linked only to an
+        # out-of-date listing (or not at all) - cheap check first.
+        quick = origin_fix.fix_addons(None)
+        if not quick.get('stale'):
+            return
     if addons33_rebuild._read_step() == '2':
         return                      # phase 2 still to run; it reboots anyway
     origins = addons33_rebuild.read_origins() if pending else None

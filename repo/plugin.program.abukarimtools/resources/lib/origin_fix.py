@@ -39,11 +39,26 @@ DATABASE_PATH = xbmcvfs.translatePath('special://database/')
 # When several repos carry the same add-on id, prefer these (compared
 # case-insensitively, first match wins), otherwise fall back to the
 # alphabetically-first candidate so the result is deterministic.
-PREFERRED_REPOS = [
+PREFERRED_REPOS_22 = [
     'repository.taiseerKODI22',   # Piers / Kodi 22 repo
     'repository.taiseerCE',       # CoreELEC NG repo
     'repository.taiseer',         # Kodi 21 repo
 ]
+PREFERRED_REPOS_21 = [
+    'repository.taiseer',         # Kodi 21 repo
+    'repository.taiseerCE',       # CoreELEC NG repo
+    'repository.taiseerKODI22',   # Piers / Kodi 22 repo - last below Kodi 22
+]
+
+
+def _kodi_major():
+    try:
+        return int(re.match(r'\d+', xbmc.getInfoLabel('System.BuildVersion')).group(0))
+    except Exception:
+        return 22
+
+
+PREFERRED_REPOS = PREFERRED_REPOS_22 if _kodi_major() >= 22 else PREFERRED_REPOS_21
 
 # Never rewrite the origin of these ids even if a repo carries them.
 SKIP_IDS = set()
@@ -82,25 +97,88 @@ def _tables(cur):
     return {row[0] for row in cur.fetchall()}
 
 
+def _vkey(v):
+    """Sortable key for Kodi version strings (5.10.18, 100.0.30i, 2.0.2.2.1)."""
+    out = []
+    for tok in re.findall(r'\d+|[A-Za-z]+', str(v or '')):
+        out.append((0, int(tok)) if tok.isdigit() else (1, tok.lower()))
+    return tuple(out)
+
+
+def _installed_version(addon_id):
+    """Version attribute of the local addon.xml, or ''."""
+    try:
+        with open(os.path.join(ADDONS_PATH, addon_id, 'addon.xml'),
+                  'r', encoding='utf-8', errors='replace') as f:
+            head = f.read(4096)
+        m = re.search(r'<addon\b[^>]*?\bversion="([^"]+)"', head, re.S)
+        return m.group(1) if m else ''
+    except Exception:
+        return ''
+
+
+_HAS_VERSION_COL = {}
+
+
 def _repo_candidates(cur, addon_id):
-    """All repository ids whose cached listing carries addon_id."""
+    """[(repo_id, cached_version), ...] for every repository whose cached
+    listing carries addon_id. cached_version is '' when unknown."""
+    key = id(cur.connection)
+    if key not in _HAS_VERSION_COL:
+        try:
+            cur.execute('PRAGMA table_info(addons)')
+            _HAS_VERSION_COL[key] = any(r[1] == 'version' for r in cur.fetchall())
+        except Exception:
+            _HAS_VERSION_COL[key] = False
+    col = 'a.version' if _HAS_VERSION_COL[key] else "''"
     cur.execute(
-        'SELECT DISTINCT r.addonID '
+        'SELECT r.addonID, %s '
         'FROM repo r '
         'JOIN addonlinkrepo l ON l.idRepo = r.id '
         'JOIN addons a       ON a.id     = l.idAddon '
-        'WHERE a.addonID = ?', (addon_id,))
-    return sorted(row[0] for row in cur.fetchall() if row[0])
+        'WHERE a.addonID = ?' % col, (addon_id,))
+    best = {}
+    for rid, ver in cur.fetchall():
+        if not rid:
+            continue
+        if rid not in best or _vkey(ver) > _vkey(best[rid]):
+            best[rid] = ver or ''
+    return sorted(best.items())
 
 
-def _pick_repo(candidates):
+def _pick_repo(candidates, installed_version=''):
+    """Choose the origin among [(repo, cached_version)].
+
+    3.1.11: (1) repositories that carry AT LEAST the installed version win -
+    linking AF3 5.10.18 to a repo that only has 5.5.25 means it never updates;
+    (2) PREFERRED_REPOS is now really case-insensitive (the old code lowercased
+    the candidates but not the preferences, so repository.taiseerKODI22 /
+    repository.taiseerCE could never match and repository.taiseer always won).
+    """
     if not candidates:
         return None
-    lower = {c.lower(): c for c in candidates}
+    pool = candidates
+    if installed_version:
+        ok = [c for c in candidates
+              if c[1] and _vkey(c[1]) >= _vkey(installed_version)]
+        if ok:
+            pool = ok
+    lower = {c[0].lower(): c[0] for c in pool}
     for pref in PREFERRED_REPOS:
-        if pref in lower:
-            return lower[pref]
-    return candidates[0]
+        if pref.lower() in lower:
+            return lower[pref.lower()]
+    # otherwise the repo with the newest cached version, then alphabetical
+    return sorted(pool, key=lambda c: (_vkey(c[1]), c[0]), reverse=True)[0][0] \
+        if any(c[1] for c in pool) else sorted(c[0] for c in pool)[0]
+
+
+def _covers(candidates, repo_id, installed_version):
+    """True when repo_id carries at least installed_version."""
+    for rid, ver in candidates:
+        if rid.lower() == (repo_id or '').lower():
+            return (not installed_version or not ver
+                    or _vkey(ver) >= _vkey(installed_version))
+    return False
 
 
 def _locally_installed(addon_id):
@@ -165,9 +243,13 @@ def fix_addons(addon_ids=None):
             if row is None or (row[0] or '') != '':
                 continue  # not registered yet, or already has an origin
 
-            repo_id = _pick_repo(_repo_candidates(cur, addon_id))
+            inst = _installed_version(addon_id)
+            cands = _repo_candidates(cur, addon_id)
+            repo_id = _pick_repo(cands, inst)
             if repo_id:
                 updates.append((repo_id, addon_id))
+                if not _covers(cands, repo_id, inst):
+                    result.setdefault('stale', []).append(addon_id)
             else:
                 result['unmatched'].append(addon_id)
 
@@ -178,6 +260,39 @@ def fix_addons(addon_ids=None):
             if cur.rowcount:
                 result['fixed'][addon_id] = repo_id
                 _log('origin set: %s -> %s' % (addon_id, repo_id))
+
+        # Correction pass (3.1.11): an origin that points at a repository
+        # which does NOT carry the installed version (e.g. AF3 5.10.18 linked
+        # to repository.taiseer, which only has 5.5.25, by the old
+        # preference bug) is moved to a repository that does. Origins Kodi set
+        # itself always carry the installed version, so they are left alone.
+        if addon_ids is None:
+            cur.execute("SELECT addonID, origin FROM installed "
+                        "WHERE origin IS NOT NULL AND origin != ''")
+            for addon_id, origin in cur.fetchall():
+                if not addon_id or addon_id in SKIP_IDS or addon_id in result['fixed']:
+                    continue
+                if not _locally_installed(addon_id):
+                    continue
+                inst = _installed_version(addon_id)
+                if not inst:
+                    continue
+                cands = _repo_candidates(cur, addon_id)
+                if not cands or _covers(cands, origin, inst):
+                    continue
+                better = _pick_repo(cands, inst)
+                if not (better and _covers(cands, better, inst)):
+                    # nothing cached carries the installed version yet ->
+                    # the caller refreshes the repositories and retries
+                    result.setdefault('stale', []).append(addon_id)
+                    continue
+                if better.lower() != origin.lower():
+                    cur.execute('UPDATE installed SET origin = ? WHERE addonID = ?',
+                                (better, addon_id))
+                    result['fixed'][addon_id] = better
+                    result.setdefault('corrected', []).append(addon_id)
+                    _log('origin corrected: %s %s -> %s (installed %s)'
+                         % (addon_id, origin, better, inst))
         conn.commit()
 
     except sqlite3.DatabaseError as e:
@@ -311,10 +426,12 @@ def relink_with_repo_refresh(monitor=None, origins=None, budget=180, step=15):
     """Link empty origins, refreshing the repositories first when needed.
 
     1. restore a phase-1 snapshot (origins) verbatim, if given;
-    2. fix_addons() from the cached repo listings;
-    3. if add-ons are still unmatched, run UpdateAddonRepos and retry every
-       `step` s for up to `budget` s while Kodi fills the listing cache.
-    Returns {'fixed': {...}, 'unmatched': [...]} (cumulative).
+    2. fix_addons() from the cached repo listings (incl. the correction pass);
+    3. if add-ons are still unmatched, or only matched a repo with an OLDER
+       version than installed ("stale" - an out-of-date cached listing), run
+       UpdateAddonRepos and retry every `step` s for up to `budget` s while
+       Kodi refreshes the listings.
+    Returns {'fixed': {...}, 'unmatched': [...], 'stale': [...]} (cumulative).
     """
     fixed = {}
     if origins:
@@ -322,14 +439,15 @@ def relink_with_repo_refresh(monitor=None, origins=None, budget=180, step=15):
     res = fix_addons(None)
     fixed.update(res.get('fixed') or {})
     unmatched = list(res.get('unmatched') or [])
-    if not unmatched:
-        return {'fixed': fixed, 'unmatched': []}
+    stale = list(res.get('stale') or [])
+    if not unmatched and not stale:
+        return {'fixed': fixed, 'unmatched': [], 'stale': []}
 
-    _log('%d add-on(s) unmatched - refreshing repositories and retrying.'
-         % len(unmatched))
+    _log('%d unmatched, %d only in an out-of-date listing - refreshing '
+         'repositories and retrying.' % (len(unmatched), len(stale)))
     xbmc.executebuiltin('UpdateAddonRepos')
     waited = 0
-    while unmatched and waited < budget:
+    while (unmatched or stale) and waited < budget:
         if monitor is not None:
             if monitor.waitForAbort(step):
                 break
@@ -338,12 +456,13 @@ def relink_with_repo_refresh(monitor=None, origins=None, budget=180, step=15):
         waited += step
         if origins:
             fixed.update(restore_origins(origins)['fixed'])
-        res = fix_addons(unmatched)
+        res = fix_addons(None)
         fixed.update(res.get('fixed') or {})
-        unmatched = [a for a in unmatched if a not in fixed]
-    _log('relink done: %d linked, %d still without a repository.'
-         % (len(fixed), len(unmatched)))
-    return {'fixed': fixed, 'unmatched': unmatched}
+        unmatched = [a for a in (res.get('unmatched') or []) if a not in fixed]
+        stale = list(res.get('stale') or [])
+    _log('relink done: %d linked, %d still without a repository, %d only in '
+         'an older listing.' % (len(fixed), len(unmatched), len(stale)))
+    return {'fixed': fixed, 'unmatched': unmatched, 'stale': stale}
 
 
 def fix_addons_silent(addon_ids):

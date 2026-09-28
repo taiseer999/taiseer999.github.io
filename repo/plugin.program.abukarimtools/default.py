@@ -167,6 +167,21 @@ def _menu_relink():
         if res.get('unmatched'):
             xbmc.log('[AbukarimTools Menu] no repository carries: %s'
                      % ', '.join(sorted(res['unmatched'])), xbmc.LOGINFO)
+        home = xbmcgui.Window(10000)
+        if res.get('stale') and not home.getProperty('abukarimtools.reporefresh'):
+            # Only an out-of-date cached listing carries these (e.g. AF3 5.10.18
+            # vs a cached 5.5.25): refresh the repos once per session; the next
+            # menu open / boot corrects the origin from the fresh listing.
+            home.setProperty('abukarimtools.reporefresh', '1')
+            xbmc.log('[AbukarimTools Menu] out-of-date repo listing for %s - '
+                     'refreshing repositories' % ', '.join(sorted(res['stale'])),
+                     xbmc.LOGINFO)
+            xbmc.executebuiltin('UpdateAddonRepos')
+        if res.get('fixed'):
+            from resources.lib.i18n import T
+            xbmcgui.Dialog().notification(
+                'ABUKARIM TOOLS', T(30337) % len(res['fixed']),
+                xbmcgui.NOTIFICATION_INFO, 8000)
     except Exception as e:
         xbmc.log('[AbukarimTools Menu] relink failed: %s' % e, xbmc.LOGWARNING)
 

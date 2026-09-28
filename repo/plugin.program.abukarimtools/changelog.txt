@@ -1,3 +1,29 @@
+v3.1.11
+- FIX: add-ons were linked to the WRONG repository (seen on the Mac,
+  2026-09-28 19:31: skin.arctic.fuse.3 5.10.18 -> repository.taiseer, which
+  only carries AF3 5.5.25, so AF3 could never update; Piers repo
+  repository.taiseerKODI22 carries 5.10.18). Causes:
+  * origin_fix._pick_repo compared the LOWERCASED candidate ids against the
+    mixed-case PREFERRED_REPOS, so 'repository.taiseerKODI22' and
+    'repository.taiseerCE' never matched and repository.taiseer won every
+    time it was a candidate. Now truly case-insensitive.
+  * the pick ignored versions. Candidates now carry the cached listing
+    version; a repo that carries at least the installed version (local
+    addon.xml) always wins, then the preference, then the newest version.
+  * preference is Kodi-version aware: Kodi 22+ taiseerKODI22 > taiseerCE >
+    taiseer; below 22 taiseer > taiseerCE > taiseerKODI22.
+- Correction pass in fix_addons(None): an existing origin whose repo does not
+  carry the installed version is moved to one that does ("origin corrected:
+  ..." in the log). Kodi-set origins always carry it, so they are untouched.
+- Out-of-date cached listings: if only an older version is cached (the Mac's
+  taiseerKODI22 listing had no AF3 yet), the add-on is reported as 'stale';
+  the menu then runs UpdateAddonRepos once per session and the service
+  refresh+retry loop (up to 3 min) also runs on stale, not only on an empty
+  cache - the next pass corrects the origin from the fresh listing.
+- Menu relink shows "Update sources linked for N add-on(s) - active after
+  the next restart" (30337): Kodi reads origins at startup, so a link made
+  mid-session only shows in Add-on info after a restart.
+
 v3.1.10
 - FIX: add-ons (e.g. skin.arctic.fuse.3) stayed without an update source.
   Two full boot logs on the AM9 (15:52 and 17:40) had ZERO [AbukarimTools]
