@@ -189,6 +189,11 @@ class Startup:
             setting_set('firstrun', 'false')
         else:
             clear_packages_startup()
+            try:
+                from .maint_tools import auto_clean
+                auto_clean()
+            except Exception as e:
+                xbmc.log('Auto Clean failed: %s' % e, xbmc.LOGERROR)
             xbmc.sleep(1000)
             self.notify_check()
             xbmc.sleep(3000)  # Delay Build Update Notification

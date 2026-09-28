@@ -150,6 +150,7 @@ def backup_restore():
     add_dir(COLOR2('Restore Backup'),'',14, addon_icon,addon_fanart, COLOR2('Restore Backup'))  # Restore Backup
     add_dir(COLOR2('Change Backups Folder Location'),'',16,addon_icon,addon_fanart, COLOR2('Change the location where backups will be stored and accessed.'), isFolder=False)  # Backup Location
     add_dir(COLOR2('Reset Backups Folder Location'),'',17,addon_icon,addon_fanart, COLOR2('Set the backup location to its default.'), isFolder=False)  # Reset Backup Location
+    add_dir(COLOR2(local_string(30238) or 'Clean Up Backup Folder'),'',254,addon_icon,addon_fanart, COLOR2(local_string(30239) or 'Delete all backups in the backup folder.'), isFolder=False)  # Clean Up Backup Folder
 
 def restore_gui_skin():
     add_dir(COLOR1('<><> [B]Backup/Restore GUI & Skin Settings[/B] <><>'),'','',addon_icon,addon_fanart, COLOR1('Backup/Restore'), isFolder=False)

@@ -59,13 +59,16 @@ def router(paramstring):
         fresh_start(standalone=True)
     
     elif mode == 5:
-        submenu_maintenance()
+        from .maint_tools import maintenance_menu
+        maintenance_menu()
     
     elif mode == 6:
         clear_packages()
+        xbmc.executebuiltin('Container.Refresh()')
     
     elif mode == 7:
         clear_thumbnails()
+        xbmc.executebuiltin('Container.Refresh()')
     
     elif mode == 8:
         advanced_settings(advancedsettings_k20)
@@ -164,6 +167,47 @@ def router(paramstring):
             url = url.replace('dl=0', 'dl=1')
         patch_gui_no_wipe(url)
     
+    # ---- Maintenance tools (ported from OpenWizard) ----
+    elif mode is not None and 200 <= mode <= 259:
+        from . import maint_tools as mt
+        if mode == 200: mt.clean_menu()
+        elif mode == 201: mt.addon_menu()
+        elif mode == 202: mt.logging_menu()
+        elif mode == 203: mt.misc_menu()
+        elif mode == 204: mt.tweaks_menu()
+        elif mode == 210: mt.total_clean(); mt._refresh()
+        elif mode == 211: mt.clear_cache(); mt._refresh()
+        elif mode == 212: mt.clear_function_cache()
+        elif mode == 213: mt.clear_archive(); mt._refresh()
+        elif mode == 214: mt.old_thumbs(); mt._refresh()
+        elif mode == 215: mt.clear_crash()
+        elif mode == 216: mt.purge_databases()
+        elif mode == 217: mt.toggle_setting(url)
+        elif mode == 218: mt.change_freq()
+        elif mode == 219: mt.change_package_freq()
+        elif mode == 220: mt.remove_addons_menu()
+        elif mode == 221: mt.remove_addon_data_menu()
+        elif mode == 222: mt.enable_addons_menu()
+        elif mode == 223: mt.enable_all_addons()
+        elif mode == 224: mt.toggle_addon(name2, url)
+        elif mode == 225: mt.force_check_updates()
+        elif mode == 226: mt.force_check_updates(auto=True)
+        elif mode == 227: mt.remove_addon_data(url)
+        elif mode == 230: mt.swap_debug()
+        elif mode == 231: mt.error_checking()
+        elif mode == 232: mt.error_checking(last=True)
+        elif mode == 240: mt.view_ip()
+        elif mode == 241: mt.swap_unknown_sources()
+        elif mode == 242: mt.toggle_addon_updates()
+        elif mode == 243: xbmc.executebuiltin('ReloadSkin()')
+        elif mode == 244: mt.reload_profile()
+        elif mode == 245: mt.force_close()
+        elif mode == 250: mt.check_sources()
+        elif mode == 251: mt.check_repos()
+        elif mode == 252: mt.convert_special()
+        elif mode == 253: mt.system_info()
+        elif mode == 254: mt.cleanup_backup_folder()
+
     elif mode == 100:
         if notify_url in ('http://CHANGEME', 'http://slamiousproject.com/wzrd/notify19.txt', ''):
             xbmcgui.Dialog().notification(addon_name, 'No Notifications to Display!!', addon_icon, 3000)

@@ -14,47 +14,47 @@ msgstr "تشغيل الإعداد لأول مرة"
 
 msgctxt "#30002"
 msgid "Backup/Restore"
-msgstr "باك اب / استعادة"
+msgstr "نسخ احتياطي / استعادة"
 
 msgctxt "#30003"
 msgid "Skin Selection"
-msgstr "تنصيب سكن"
+msgstr "اختيار الواجهة"
 
 msgctxt "#30004"
 msgid "New Build Tools"
-msgstr "اضافات اساسية"
+msgstr "أدوات البناء الجديد"
 
 msgctxt "#30005"
 msgid "Apply Patches"
-msgstr "تطبيق التعديلات"
+msgstr "تطبيق الترقيعات"
 
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
-msgstr "إصلاح مصادر الإضافات"
+msgstr "إصلاح مصادر تحديث الإضافات"
 
 msgctxt "#30008"
-msgid "OpenWizard"
-msgstr "OpenWizard"
+msgid "ABUKARIM Wizard"
+msgstr "معالج أبوكريم"
 
 msgctxt "#30009"
 msgid "Skin Switcher"
-msgstr "تحول بين السكنات"
+msgstr "مبدل الواجهات"
 
 msgctxt "#30010"
 msgid "DPlex Tab On/Off"
-msgstr "DPlex tab تشغيل/إيقاف"
+msgstr "تبويب DPlex تشغيل/إيقاف"
 
 msgctxt "#30011"
 msgid "Korean Media Tab On/Off"
-msgstr "تشغيل/إيقاف المحتوى الكوري "
+msgstr "تبويب المحتوى الكوري تشغيل/إيقاف"
 
 msgctxt "#30012"
 msgid "Total Clean (Cache, Packages, Thumbnails)"
-msgstr "تنظيف (الكاش، الحزم، الثمبز)"
+msgstr "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
 
 msgctxt "#30013"
 msgid "Clear Old Thumbnails"
-msgstr "حذف الثمبز"
+msgstr "حذف الصور المصغرة القديمة"
 
 msgctxt "#30014"
 msgid "Setup & Install"
@@ -62,7 +62,7 @@ msgstr "الإعداد والتنصيب"
 
 msgctxt "#30015"
 msgid "Patching"
-msgstr "التعديلات والتحسينات"
+msgstr "التعديلات والترقيعات"
 
 msgctxt "#30016"
 msgid "Maintenance"
@@ -87,6 +87,10 @@ msgstr "أيقونات الأقسام: ملونة / أبيض وأسود"
 msgctxt "#30021"
 msgid "Add-on Portal"
 msgstr "بوابة الإضافات"
+
+msgctxt "#30022"
+msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
+msgstr "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"
 
 msgctxt "#30050"
 msgid "Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, applies patches, then opens the Skin Installer."

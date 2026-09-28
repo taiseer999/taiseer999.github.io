@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
-from urllib.parse import parse_qsl, urlencode
+from urllib.parse import parse_qsl
 
 import xbmc
 import xbmcplugin
@@ -21,7 +21,7 @@ ICONS  = {
     'skin_install':   ADDON_PATH + 'resources/icons/skin_installer.png',
     'skin_switch':    ADDON_PATH + 'resources/icons/skin_switcher.png',
     'backup':         ADDON_PATH + 'resources/icons/backup.png',
-    'openwizard':     ADDON_PATH + 'resources/icons/openwizard.png',
+    'abukarimwizard': ADDON_PATH + 'resources/icons/abukarimwizard.png',
     'patcher':        ADDON_PATH + 'resources/icons/patcher.png',
     'binary_install': ADDON_PATH + 'resources/icons/binary_install.png',
     'first_run':      ADDON_PATH + 'resources/icons/first_run.png',
@@ -58,7 +58,7 @@ CATEGORIES = [
         ('origin_fix',     30007),
     ]),
     ('maint',  30016, 'cat_maint', [
-        ('openwizard',     30008),
+        ('abukarimwizard', 30008),
         ('total_clean',    30012),
         ('old_thumbs',     30013),
         ('rebuild_addons33', 30018),
@@ -73,7 +73,8 @@ CATEGORIES = [
 ]
 
 # Modes that are leaf actions (run then return), not plugin folders.
-ACTION_MODES = {'skin_switch', 'first_run'}
+ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
+                'total_clean', 'old_thumbs'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -85,6 +86,14 @@ def _add_folder(label, cat_key, icon_key):
 
 def _add_item(label, mode, is_folder=True):
     url = sys.argv[0] + '?mode=' + mode
+    if mode == 'abukarimwizard':
+        # Installed: link straight into the wizard's Maintenance menu, so it
+        # opens with its own add-on context and Back returns here. Missing:
+        # keep our own mode, which offers to install it.
+        from resources.lib import wizard_runner
+        if wizard_runner.wizard_installed():
+            url = wizard_runner.wizard_url(wizard_runner.MODE_MAINTENANCE)
+            is_folder = True
     li  = xbmcgui.ListItem(label)
     li.setArt({'icon': ICONS[mode], 'thumb': ICONS[mode], 'fanart': FANART})
     if not is_folder:
@@ -201,17 +210,6 @@ def router():
     params  = dict(parse_qsl(raw))
     mode    = params.get('mode')
     cat     = params.get('cat')      # set when a category folder is opened
-    wizard  = params.get('wizard')   # set when a wizard sub-page is clicked
-
-    # --- Wizard sub-navigation (re-entry from a wizard menu item click) ---
-    if wizard:
-        # Strip 'wizard' key; pass everything else back as the paramstring
-        sub_params = {k: v for k, v in params.items() if k != 'wizard'}
-        paramstring = urlencode(sub_params)
-        from resources.lib.wizard_runner import run_openwizard
-        if wizard == 'openwizard':
-            run_openwizard(HANDLE, ADDON_PATH, paramstring)
-        return
 
     # --- Category folder ---
     if cat is not None and mode is None:
@@ -274,19 +272,27 @@ def router():
         from resources.lib import backup_manager
         backup_manager.BackupManager().run()
 
-    elif mode == 'openwizard':
-        from resources.lib.wizard_runner import run_openwizard
-        run_openwizard(HANDLE, ADDON_PATH)
+    elif mode == 'abukarimwizard':
+        # Non-folder action: only reached when the wizard link could not be
+        # used (wizard missing) or from an old favourite/shortcut.
+        from resources.lib import wizard_runner
+        wizard_runner.open_wizard()
 
     elif mode == 'total_clean':
-        _end_directory()
-        from resources.lib.wizard_runner import run_openwizard_total_clean
-        run_openwizard_total_clean(ADDON_PATH)
+        from resources.lib import wizard_runner
+        wizard_runner.run_total_clean()
 
     elif mode == 'old_thumbs':
-        _end_directory()
-        from resources.lib.wizard_runner import run_openwizard_old_thumbs
-        run_openwizard_old_thumbs(ADDON_PATH)
+        from resources.lib import wizard_runner
+        wizard_runner.run_old_thumbs()
+
+    elif mode == 'openwizard':
+        # Legacy URL (<= 3.1.2 favourites / skin shortcuts), which were
+        # opened as a folder: close that listing, then hand off.
+        if HANDLE >= 0:
+            xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+        from resources.lib import wizard_runner
+        wizard_runner.open_wizard()
 
     elif mode == 'patcher':
         _end_directory()

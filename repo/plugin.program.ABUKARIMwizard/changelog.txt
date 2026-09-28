@@ -1,3 +1,17 @@
+v3.9.20
+- Ported the OpenWizard 2.0.8.1 Maintenance feature (new module resources/lib/modules/maint_tools.py, router modes 200-259).
+- Maintenance menu is now split into: Cleaning Tools, Addon Tools, Logging Tools, Misc Maintenance, Backup/Restore Build, Backup/Restore GUI & Skin, System Tweaks/Fixes. Every previous Maintenance item is kept, just moved into its section.
+- Cleaning: Total Clean Up, Clear Cache, Clear Packages, Clear Thumbnails, Clear Archive_Cache (all with live sizes), Clear Resolver Function Caches, Clear Old Thumbnails, Clear Crash Logs, Purge Databases, Fresh Start. Auto Clean on startup (frequency, cache, old thumbs) + the existing packages-on-startup option, also in Settings.
+- Addons: Remove Addons (multi-select, optional data removal, pauses Kodi auto-update while removing), Remove Addon Data (all / uninstalled / empty / per addon), Enable/Disable Addons, Force Refresh Repositories, Force Update Addons, Edit Whitelist.
+- Logging: Debug Logging toggle, View Log, View Errors in Log (with count), View Last Error.
+- Misc: Network Information, Speed Test, Unknown Sources toggle, Addon Updates mode, Reload Skin, Reload Profile, Force Close.
+- Tweaks: Advanced Settings (K20/K21/K22), Scan Sources for broken links (local/smb/nfs checked through Kodi VFS, sources.xml backed up to sources.xml.bak before edits), Scan for Broken Repositories, Convert Paths to special://, System Information.
+- Backup/Restore Build: added Clean Up Backup Folder.
+- Safety: whitelist, the wizard itself and the active skin are never removed/disabled/wiped; kodi.log / kodi.old.log and archive_cache are never touched by Clear Cache.
+- Not ported on purpose: Kodi 17 Fix, dead video-addon cache toggles (Exodus/Gaia/Venom...), Upload Log (paste service), Wizard log, Remove Non-ASCII Filenames (would delete Arabic-named files).
+- Remove Addons and Misc > Force Close Kodi force-close Kodi immediately, no prompt.
+- English + Arabic strings 30200-30372.
+
 v3.9.19
 - Merged upstream Simple Wizard 3.0.9 into the fork. Kept all ABUKARIM features (Arabic fallback font, Patch GUI, No-Wipe Option 2, custom background/artwork, Kodi 22 xbmc.python 3.0.0.1).
 - From 3.0.9: adaptive video cache read factor for Omega/Piers advancedsettings; build install and fresh start auto-close Kodi instead of showing confirm dialogs; startup package cleanup is now an enum (Disabled / every startup / 10 / 20 packages) and only runs at threshold; Build Menu shows a build count; Kodi system stats added to the main menu (new settings toggles showinstalledbuild / showkodistats); refined binary add-on handling and targeted DB truncation; Fresh Start and Skip Swap fixes; whitelist add-on name formatting cleanup; general code cleanup.

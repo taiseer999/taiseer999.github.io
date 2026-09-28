@@ -33,7 +33,7 @@ msgid "Fix Add-on Update Origins"
 msgstr ""
 
 msgctxt "#30008"
-msgid "OpenWizard"
+msgid "ABUKARIM Wizard"
 msgstr ""
 
 msgctxt "#30009"
@@ -86,6 +86,10 @@ msgstr ""
 
 msgctxt "#30021"
 msgid "Add-on Portal"
+msgstr ""
+
+msgctxt "#30022"
+msgid "ABUKARIM Wizard is not installed or is disabled. Install it now?"
 msgstr ""
 
 msgctxt "#30050"

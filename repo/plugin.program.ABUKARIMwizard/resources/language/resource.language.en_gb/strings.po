@@ -456,3 +456,698 @@ msgstr ""
 msgctxt "#30119"
 msgid "Update applied. Kodi will now close - reopen it to finish."
 msgstr ""
+
+# ----- Maintenance tools (ported from OpenWizard) -----#####
+# ----- 30200->30368 -------#####
+msgctxt "#30200"
+msgid "Cleaning Tools"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Addon Tools"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Logging Tools"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Misc Maintenance"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Backup/Restore Build"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Backup/Restore GUI & Skin Settings"
+msgstr ""
+
+msgctxt "#30206"
+msgid "System Tweaks/Fixes"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Total Clean Up"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Clear Cache"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Clear Resolver Function Caches"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Clear Archive_Cache"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Clear Old Thumbnails"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Clear Crash Logs"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Purge Databases"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Auto Clean"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Auto Clean Up On Startup"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Auto Clean Frequency"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Clear Cache on Startup"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Clear Old Thumbs on Startup"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Remove Addons"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Force Refresh All Repositories"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Force Update All Addons"
+msgstr ""
+
+msgctxt "#30222"
+msgid "%s Error(s) Found"
+msgstr ""
+
+msgctxt "#30223"
+msgid "None Found"
+msgstr ""
+
+msgctxt "#30224"
+msgid "View Log File"
+msgstr ""
+
+msgctxt "#30225"
+msgid "View Errors in Log"
+msgstr ""
+
+msgctxt "#30226"
+msgid "View Last Error in Log"
+msgstr ""
+
+msgctxt "#30227"
+msgid "Auto"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Notify"
+msgstr ""
+
+msgctxt "#30229"
+msgid "Never"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Speed Test"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Addon Updates"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Reload Skin"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Reload Profile"
+msgstr ""
+
+msgctxt "#30234"
+msgid "Force Close Kodi"
+msgstr ""
+
+msgctxt "#30235"
+msgid "Scan Sources for Broken Links"
+msgstr ""
+
+msgctxt "#30236"
+msgid "Scan for Broken Repositories"
+msgstr ""
+
+msgctxt "#30237"
+msgid "Convert Paths to special://"
+msgstr ""
+
+msgctxt "#30238"
+msgid "Clean Up Backup Folder"
+msgstr ""
+
+msgctxt "#30239"
+msgid "Delete all backups in the backup folder."
+msgstr ""
+
+msgctxt "#30240"
+msgid "Clear Cache: Removed %s items"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Would you like to clear resolver function caches?"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Clear Cache"
+msgstr ""
+
+msgctxt "#30243"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30244"
+msgid "Would you like to clear the 'Archive_Cache' folder?"
+msgstr ""
+
+msgctxt "#30245"
+msgid "Yes, Clear"
+msgstr ""
+
+msgctxt "#30246"
+msgid "Would you like to clear cache, packages and thumbnails?"
+msgstr ""
+
+msgctxt "#30247"
+msgid "Clean All"
+msgstr ""
+
+msgctxt "#30248"
+msgid "Total Clean Up complete (%s cache items)"
+msgstr ""
+
+msgctxt "#30249"
+msgid "Clear Old Thumbs: %s files / %s"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Clear Old Thumbs: none found"
+msgstr ""
+
+msgctxt "#30251"
+msgid "No crash logs found"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Delete the crash logs?"
+msgstr ""
+
+msgctxt "#30253"
+msgid "%s files found"
+msgstr ""
+
+msgctxt "#30254"
+msgid "Remove Logs"
+msgstr ""
+
+msgctxt "#30255"
+msgid "Keep Logs"
+msgstr ""
+
+msgctxt "#30256"
+msgid "%s crash logs removed"
+msgstr ""
+
+msgctxt "#30257"
+msgid "No databases found"
+msgstr ""
+
+msgctxt "#30258"
+msgid "Select DB files to purge"
+msgstr ""
+
+msgctxt "#30259"
+msgid "Purged %s database(s)"
+msgstr ""
+
+msgctxt "#30260"
+msgid "Every Startup"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Every Day"
+msgstr ""
+
+msgctxt "#30262"
+msgid "Every Three Days"
+msgstr ""
+
+msgctxt "#30263"
+msgid "Every Week"
+msgstr ""
+
+msgctxt "#30264"
+msgid "Every Month"
+msgstr ""
+
+msgctxt "#30265"
+msgid "How often would you like to Auto Clean on Startup?"
+msgstr ""
+
+msgctxt "#30266"
+msgid "Auto Clean frequency: %s"
+msgstr ""
+
+msgctxt "#30267"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "#30268"
+msgid "10 packages"
+msgstr ""
+
+msgctxt "#30269"
+msgid "20 packages"
+msgstr ""
+
+msgctxt "#30270"
+msgid "Clear Packages on Startup"
+msgstr ""
+
+msgctxt "#30271"
+msgid "No addons to remove"
+msgstr ""
+
+msgctxt "#30272"
+msgid "Select the addons you wish to remove"
+msgstr ""
+
+msgctxt "#30273"
+msgid "Also remove the addon data (settings) of the selected addons?"
+msgstr ""
+
+msgctxt "#30274"
+msgid "Remove Data"
+msgstr ""
+
+msgctxt "#30275"
+msgid "Keep Data"
+msgstr ""
+
+msgctxt "#30276"
+msgid "Addons removed. Kodi needs to be force closed to finish. Close Kodi now?"
+msgstr ""
+
+msgctxt "#30277"
+msgid "Remove Addon Data"
+msgstr ""
+
+msgctxt "#30278"
+msgid "No addon data folder found."
+msgstr ""
+
+msgctxt "#30279"
+msgid "REMOVE"
+msgstr ""
+
+msgctxt "#30280"
+msgid "All Addon Data"
+msgstr ""
+
+msgctxt "#30281"
+msgid "All Addon Data for Uninstalled Addons"
+msgstr ""
+
+msgctxt "#30282"
+msgid "All Empty Folders in Addon Data"
+msgstr ""
+
+msgctxt "#30283"
+msgid "PROTECTED"
+msgstr ""
+
+msgctxt "#30284"
+msgid "Remove ALL addon data stored in your userdata folder?"
+msgstr ""
+
+msgctxt "#30285"
+msgid "Addon data removed"
+msgstr ""
+
+msgctxt "#30286"
+msgid "Remove addon data of addons that are no longer installed?"
+msgstr ""
+
+msgctxt "#30287"
+msgid "%s folder(s) removed"
+msgstr ""
+
+msgctxt "#30288"
+msgid "Remove ALL empty folders in addon data?"
+msgstr ""
+
+msgctxt "#30289"
+msgid "Protected addon - data not removed"
+msgstr ""
+
+msgctxt "#30290"
+msgid "Remove the addon data for:"
+msgstr ""
+
+msgctxt "#30291"
+msgid "Enable/Disable Addons"
+msgstr ""
+
+msgctxt "#30292"
+msgid "No addons found to enable or disable."
+msgstr ""
+
+msgctxt "#30293"
+msgid "!! Notice: Disabling some addons can cause issues !!"
+msgstr ""
+
+msgctxt "#30294"
+msgid "Enable All Addons"
+msgstr ""
+
+msgctxt "#30295"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30296"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "#30297"
+msgid "Error toggling %s. Make sure the addon list is up to date and try again."
+msgstr ""
+
+msgctxt "#30298"
+msgid "Force checking for updates..."
+msgstr ""
+
+msgctxt "#30299"
+msgid "%s repositories force checked"
+msgstr ""
+
+msgctxt "#30300"
+msgid "No errors found"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Last Error in Log:"
+msgstr ""
+
+msgctxt "#30302"
+msgid "ERROR NUMBER"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Setting not available: %s"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Debug Logging"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Unknown Sources"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Install updates automatically"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Notify, but don't install updates"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Never check for updates"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Addon updates: %s"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Unavailable"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Network Information"
+msgstr ""
+
+msgctxt "#30312"
+msgid "MAC:"
+msgstr ""
+
+msgctxt "#30313"
+msgid "Internal IP:"
+msgstr ""
+
+msgctxt "#30314"
+msgid "External IP:"
+msgstr ""
+
+msgctxt "#30315"
+msgid "City:"
+msgstr ""
+
+msgctxt "#30316"
+msgid "State:"
+msgstr ""
+
+msgctxt "#30317"
+msgid "Country:"
+msgstr ""
+
+msgctxt "#30318"
+msgid "ISP:"
+msgstr ""
+
+msgctxt "#30319"
+msgid "System Information"
+msgstr ""
+
+msgctxt "#30320"
+msgid "Media Center Info:"
+msgstr ""
+
+msgctxt "#30321"
+msgid "Name:"
+msgstr ""
+
+msgctxt "#30322"
+msgid "Version:"
+msgstr ""
+
+msgctxt "#30323"
+msgid "Kernel:"
+msgstr ""
+
+msgctxt "#30324"
+msgid "CPU Usage:"
+msgstr ""
+
+msgctxt "#30325"
+msgid "CPU Temperature:"
+msgstr ""
+
+msgctxt "#30326"
+msgid "Screen Mode:"
+msgstr ""
+
+msgctxt "#30327"
+msgid "Uptime:"
+msgstr ""
+
+msgctxt "#30328"
+msgid "Current Uptime:"
+msgstr ""
+
+msgctxt "#30329"
+msgid "Total Uptime:"
+msgstr ""
+
+msgctxt "#30330"
+msgid "Local Storage:"
+msgstr ""
+
+msgctxt "#30331"
+msgid "Used Storage:"
+msgstr ""
+
+msgctxt "#30332"
+msgid "Free Storage:"
+msgstr ""
+
+msgctxt "#30333"
+msgid "Total Storage:"
+msgstr ""
+
+msgctxt "#30334"
+msgid "RAM Usage:"
+msgstr ""
+
+msgctxt "#30335"
+msgid "Used Memory:"
+msgstr ""
+
+msgctxt "#30336"
+msgid "Free Memory:"
+msgstr ""
+
+msgctxt "#30337"
+msgid "Total Memory:"
+msgstr ""
+
+msgctxt "#30338"
+msgid "Network:"
+msgstr ""
+
+msgctxt "#30339"
+msgid "Addons"
+msgstr ""
+
+msgctxt "#30340"
+msgid "Video Addons:"
+msgstr ""
+
+msgctxt "#30341"
+msgid "Program Addons:"
+msgstr ""
+
+msgctxt "#30342"
+msgid "Music Addons:"
+msgstr ""
+
+msgctxt "#30343"
+msgid "Picture Addons:"
+msgstr ""
+
+msgctxt "#30344"
+msgid "Repositories:"
+msgstr ""
+
+msgctxt "#30345"
+msgid "Skins:"
+msgstr ""
+
+msgctxt "#30346"
+msgid "Scripts/Modules:"
+msgstr ""
+
+msgctxt "#30347"
+msgid "No sources.xml file found"
+msgstr ""
+
+msgctxt "#30348"
+msgid "sources.xml could not be read"
+msgstr ""
+
+msgctxt "#30349"
+msgid "No sources found"
+msgstr ""
+
+msgctxt "#30350"
+msgid "Scanning sources for broken links"
+msgstr ""
+
+msgctxt "#30351"
+msgid "All sources are working"
+msgstr ""
+
+msgctxt "#30352"
+msgid "%s source(s) appear to be broken.\\nRemove all, or choose one by one?"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Remove All"
+msgstr ""
+
+msgctxt "#30354"
+msgid "Choose"
+msgstr ""
+
+msgctxt "#30355"
+msgid "%s was reported as not working:\\n%s"
+msgstr ""
+
+msgctxt "#30356"
+msgid "Remove Source"
+msgstr ""
+
+msgctxt "#30357"
+msgid "Keep Source"
+msgstr ""
+
+msgctxt "#30358"
+msgid "Source check complete.\\nBroken: %s | Removed: %s"
+msgstr ""
+
+msgctxt "#30359"
+msgid "No repositories found"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Checking repositories..."
+msgstr ""
+
+msgctxt "#30361"
+msgid "These repositories did not resolve. Hosts can be down temporarily, so scan a few times before removing one."
+msgstr ""
+
+msgctxt "#30362"
+msgid "All repositories working"
+msgstr ""
+
+msgctxt "#30363"
+msgid "Changing physical paths to special://home/"
+msgstr ""
+
+msgctxt "#30364"
+msgid "Convert paths complete: %s file(s) changed"
+msgstr ""
+
+msgctxt "#30365"
+msgid "Backup folder is empty"
+msgstr ""
+
+msgctxt "#30366"
+msgid "Delete everything in the backup folder?"
+msgstr ""
+
+msgctxt "#30367"
+msgid "Clean Up"
+msgstr ""
+
+msgctxt "#30368"
+msgid "Backup folder cleaned"
+msgstr ""
+
+msgctxt "#30369"
+msgid "Close Now"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Later"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Changes will apply after Kodi restarts"
+msgstr ""
+
+msgctxt "#30372"
+msgid "You are about to force close Kodi. Continue?"
+msgstr ""
+

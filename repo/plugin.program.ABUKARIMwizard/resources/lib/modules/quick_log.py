@@ -43,7 +43,11 @@ def log_viewer() -> None:
     message = get_log()
     if not message:
         return
-    
+    show_text(message)
+
+
+def show_text(message: str) -> None:
+    """Show any text in the wizard's log viewer window (used by Maintenance tools too)."""
     
     class Logview(xbmcgui.WindowXMLDialog):
         
@@ -51,7 +55,7 @@ def log_viewer() -> None:
             self.getControl(TEXTBOX).setText(message)
             
         def onAction(self, action):
-            if action.getId() == KEY_NAV_BACK:
+            if action.getId() in (KEY_NAV_BACK, 10):
                 self.Close()
     
         def onClick(self, controlId):

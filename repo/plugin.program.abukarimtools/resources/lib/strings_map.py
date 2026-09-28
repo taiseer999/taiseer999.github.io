@@ -30,7 +30,7 @@ STRINGS = {
     30004: ("New Build Tools",                 "\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0628\u0646\u0627\u0621 \u0627\u0644\u062c\u062f\u064a\u062f"),
     30005: ("Apply Patches",                   "\u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u062a\u0631\u0642\u064a\u0639\u0627\u062a"),
     30007: ("Fix Add-on Update Origins",       "\u0625\u0635\u0644\u0627\u062d \u0645\u0635\u0627\u062f\u0631 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0625\u0636\u0627\u0641\u0627\u062a"),
-    30008: ("OpenWizard",                      "OpenWizard"),
+    30008: ("ABUKARIM Wizard",                 "معالج أبوكريم"),
     30009: ("Skin Switcher",                   "\u0645\u0628\u062f\u0644 \u0627\u0644\u0648\u0627\u062c\u0647\u0627\u062a"),
     30010: ("DPlex Tab On/Off",                "\u062a\u0628\u0648\u064a\u0628 DPlex \u062a\u0634\u063a\u064a\u0644/\u0625\u064a\u0642\u0627\u0641"),
     30011: ("Korean Media Tab On/Off",         "\u062a\u0628\u0648\u064a\u0628 \u0627\u0644\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0643\u0648\u0631\u064a \u062a\u0634\u063a\u064a\u0644/\u0625\u064a\u0642\u0627\u0641"),
@@ -46,6 +46,8 @@ STRINGS = {
     30019: ("Speed Test",                       "اختبار السرعة"),
     30020: ("Node Icons: Color / Black & White", "أيقونات الأقسام: ملونة / أبيض وأسود"),
     30021: ("Add-on Portal",                    "بوابة الإضافات"),
+    30022: ("ABUKARIM Wizard is not installed or is disabled. Install it now?",
+            "معالج أبوكريم غير مثبّت أو معطّل. هل تريد تثبيته الآن؟"),
 
     # ---- first-run / service (30050-30099) ----
     30050: ("Run first-time setup now?[CR][CR]This installs binaries, offers a backup restore, opens the Add-on Portal, applies patches, then opens the Skin Installer.",
