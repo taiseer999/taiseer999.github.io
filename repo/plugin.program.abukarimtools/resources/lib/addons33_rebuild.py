@@ -48,6 +48,15 @@ ADDON_NAME  = 'ABUKARIM TOOLS'
 ADDON_ICON  = xbmcvfs.translatePath(ADDON.getAddonInfo('icon'))
 PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
 MARKER      = os.path.join(PROFILE, 'addons33_rebuild.step')
+# Phase-1 snapshot: which add-ons were enabled and which skin was active, so
+# phase 2 restores exactly that state instead of enabling everything (3.1.5).
+SNAPSHOT    = os.path.join(PROFILE, 'addons33_rebuild.snapshot.json')
+
+# Never re-enabled by the no-snapshot fallback: known leftovers that must stay
+# off (the standalone OpenWizard runs its own first-run/auto-update service).
+NEVER_ENABLE = {
+    'plugin.program.openwizard',
+}
 
 # CoreELEC one-shot: the DB must be deleted BEFORE Kodi starts, because Kodi
 # holds Addons33.db open for the whole session and rewrites it during shutdown
@@ -208,27 +217,6 @@ def cleanup_autostart_block():
         pass
 
 
-def _run_origin_fix():
-    """Repair empty add-on origin fields after the rebuild.
-
-    A freshly built Addons33.db loses the origin column for locally installed
-    add-ons, which is exactly what origin_fix repairs. Best-effort: never
-    allowed to break the rebuild.
-    """
-    try:
-        from resources.lib import origin_fix
-        res = origin_fix.fix_addons()
-        if res.get('error'):
-            _log('Origin fix reported: %s' % res['error'], xbmc.LOGWARNING)
-        else:
-            _log('Origin fix: %d origin(s) repaired, %d unmatched.'
-                 % (len(res.get('fixed') or {}), len(res.get('unmatched') or [])))
-        return res
-    except Exception as e:
-        _log('Origin fix crashed (ignored): %s' % e, xbmc.LOGERROR)
-        return None
-
-
 def _read_step():
     try:
         with open(MARKER, 'r', encoding='utf-8') as f:
@@ -264,8 +252,68 @@ def _settle(monitor, seconds):
         xbmc.sleep(int(seconds * 1000))
 
 
-def _enable_all_addons():
-    """Enable every installed-but-disabled add-on via JSON-RPC.
+def _jsonrpc(method, params):
+    try:
+        return json.loads(xbmc.executeJSONRPC(json.dumps(
+            {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params})))
+    except Exception as e:
+        _log('%s failed: %s' % (method, e), xbmc.LOGWARNING)
+        return {}
+
+
+def _take_snapshot():
+    """Phase 1: remember the enabled add-ons and the active skin."""
+    res = _jsonrpc('Addons.GetAddons', {'enabled': True})
+    ids = [a.get('addonid') for a in
+           (res.get('result', {}).get('addons') or []) if a.get('addonid')]
+    snap = {'enabled': sorted(ids), 'skin': xbmc.getSkinDir()}
+    try:
+        os.makedirs(PROFILE, exist_ok=True)
+        with open(SNAPSHOT, 'w', encoding='utf-8') as f:
+            json.dump(snap, f)
+        _log('Phase 1: snapshot of %d enabled add-on(s), skin %s.'
+             % (len(ids), snap['skin']))
+    except Exception as e:
+        _log('Could not write snapshot: %s' % e, xbmc.LOGWARNING)
+
+
+def _read_snapshot():
+    try:
+        with open(SNAPSHOT, 'r', encoding='utf-8') as f:
+            snap = json.load(f)
+        if isinstance(snap, dict) and snap.get('enabled'):
+            return snap
+    except Exception:
+        pass
+    return None
+
+
+def _clear_snapshot():
+    try:
+        if os.path.exists(SNAPSHOT):
+            os.remove(SNAPSHOT)
+    except Exception:
+        pass
+
+
+def _restore_skin(skin_id):
+    """Put the pre-rebuild skin back. The fresh DB registers home add-ons
+    disabled, so Kodi fails to load the saved skin at boot and RESETS
+    lookandfeel.skin to Estuary; without this the box comes back on Estuary."""
+    if not skin_id or xbmc.getSkinDir() == skin_id:
+        return
+    try:
+        from resources.lib import skin_switcher
+        skin_switcher._swap_skin(skin_id)
+    except Exception as e:
+        _log('Skin restore failed (%s): %s' % (skin_id, e), xbmc.LOGWARNING)
+
+
+def _enable_all_addons(only=None):
+    """Enable installed-but-disabled add-ons via JSON-RPC.
+
+    only: set of ids to enable (the phase-1 snapshot). None = every disabled
+    add-on except NEVER_ENABLE (fallback for rebuilds scheduled before 3.1.5).
 
     Two passes: enabling an add-on whose dependency is still disabled can fail
     the first time, so a second sweep mops those up. Returns (enabled, failed).
@@ -285,6 +333,11 @@ def _enable_all_addons():
         for a in addons:
             aid = a.get('addonid')
             if not aid:
+                continue
+            if only is not None:
+                if aid not in only:
+                    continue
+            elif aid in NEVER_ENABLE:
                 continue
             try:
                 er = {'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.SetAddonEnabled',
@@ -313,6 +366,7 @@ def run():
         return
 
     if _is_coreelec():
+        _take_snapshot()
         if not _inject_autostart_delete():
             dlg.ok(ADDON_NAME, T(30335))
             return
@@ -326,10 +380,12 @@ def run():
     files = _addons33_files()
     if not files:
         if dlg.yesno(ADDON_NAME, T(30334), yeslabel=T(30051), nolabel=T(30052)):
+            _take_snapshot()
             _write_step('2')
             _notify_manual_restart(dlg)
         return
 
+    _take_snapshot()
     removed = 0
     for f in files:
         try:
@@ -359,8 +415,18 @@ def _notify_manual_restart(dlg):
 
 
 def continue_if_pending(monitor=None):
-    """Phase 2: after the rebuild reboot, enable all add-ons, repair origins,
-    clean up the one-shot, then restart.
+    """Phase 2: after the rebuild reboot, re-enable the add-ons that were
+    enabled before (phase-1 snapshot), put the skin back, then restart.
+
+    3.1.5 hardening (a 3.1.4 run hung inside the origin repair and never
+    rebooted, leaving the box on Estuary with every add-on force-enabled):
+      * the step marker is cleared FIRST, so a hang or crash can never make
+        phase 2 run again on the next boot;
+      * only the snapshot's add-ons are enabled (fallback: all but
+        NEVER_ENABLE), so deliberately-disabled add-ons stay disabled;
+      * no direct SQLite work here any more - the origin repair runs from the
+        service on the next (quiet) boot, as it does on every boot;
+      * the pre-rebuild skin is restored before the restart.
 
     Safe to call from the service on boot and from the menu on open; runs at
     most once per session and no-ops unless a rebuild is mid-flight.
@@ -372,25 +438,29 @@ def continue_if_pending(monitor=None):
         return False
     _CONTINUE_STARTED = True
 
-    _log('Phase 2: Addons33 rebuilt - re-enabling all add-ons.')
+    # Disarm before doing anything that could hang.
+    _clear_step()
+    cleanup_autostart_block()
+
+    snap = _read_snapshot()
+    _log('Phase 2: Addons33 rebuilt - re-enabling %s.'
+         % ('%d snapshot add-on(s)' % len(snap['enabled']) if snap
+            else 'all add-ons (no snapshot)'))
     _notify(T(30332))
     # Give Kodi time to finish rebuilding the DB and scanning add-ons.
     _settle(monitor, 20)
+    if monitor is not None and monitor.abortRequested():
+        return True
 
-    enabled, failed = _enable_all_addons()
+    enabled, failed = _enable_all_addons(set(snap['enabled']) if snap else None)
     _log('Phase 2: enabled %d add-on(s), %d could not be enabled.'
          % (enabled, failed))
-
-    # Let the enable writes land before touching the DB directly.
     _settle(monitor, 3)
 
-    # A fresh Addons33.db has empty origin fields, so updates would not resolve
-    # back to their repo. Repair them now, while we still have a restart coming
-    # anyway (origin_fix writes to the DB; Kodi picks it up on the next start).
-    _run_origin_fix()
+    if snap:
+        _restore_skin(snap.get('skin'))
+    _clear_snapshot()
 
-    _clear_step()
-    cleanup_autostart_block()
     _settle(monitor, 2)
     _log('Phase 2 complete - restarting into the clean database.')
     _restart()

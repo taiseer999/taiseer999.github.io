@@ -429,12 +429,12 @@ msgid "Selected Skin"
 msgstr "الواجهة المختارة"
 
 msgctxt "#30330"
-msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one, then re-enables every add-on for you. The box will restart [B]twice[/B] and take a few minutes.[CR][CR]If the rebuild leaves ABUKARIM TOOLS itself disabled, just re-enable it once from My add-ons and it will finish the rest."
-msgstr "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، ثم إعادة تفعيل جميع الإضافات تلقائياً. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR]إذا بقيت إضافة ABUKARIM TOOLS نفسها معطّلة بعد إعادة البناء، فعّلها مرة واحدة من (إضافاتي) وستُكمل الباقي تلقائياً."
+msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one. Your enabled add-ons and current skin are remembered first. The box will restart [B]twice[/B] and take a few minutes.[CR][CR][B]After the first restart[/B] Kodi opens on Estuary with all add-ons disabled - this is normal. Go to Add-ons > My add-ons > Program add-ons > ABUKARIM TOOLS and press Enable. It then re-enables only the add-ons that were enabled before, restores your skin and restarts."
+msgstr "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، بعد حفظ قائمة الإضافات المفعّلة والواجهة الحالية. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR][B]بعد إعادة التشغيل الأولى[/B] سيفتح كودي على واجهة Estuary وكل الإضافات معطّلة - وهذا طبيعي. اذهب إلى الإضافات > إضافاتي > إضافات البرامج > ABUKARIM TOOLS واضغط تفعيل. بعدها تُعاد فقط الإضافات التي كانت مفعّلة سابقاً، وتُستعاد واجهتك، ثم يُعاد التشغيل."
 
 msgctxt "#30331"
-msgid "Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling your add-ons and repairing their update sources.[CR][CR]Do not power off during this."
-msgstr "تمت جدولة إعادة البناء. سيُعيد الجهاز التشغيل الآن، وسيحذف قاعدة البيانات قبل بدء كودي، ثم يُعيد التشغيل مرة أخرى بعد إعادة تفعيل إضافاتك وإصلاح مصادر تحديثها.[CR][CR]لا تُطفئ الجهاز أثناء ذلك."
+msgid "Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling the add-ons that were enabled and restoring your skin. Update sources are repaired on the boot after that.[CR][CR]Do not power off during this."
+msgstr "تمت جدولة إعادة البناء. سيُعيد الجهاز التشغيل الآن، وسيحذف قاعدة البيانات قبل بدء كودي، ثم يُعيد التشغيل مرة أخرى بعد إعادة تفعيل الإضافات التي كانت مفعّلة واستعادة واجهتك. تُصلَح مصادر التحديث في التشغيل الذي يليه.[CR][CR]لا تُطفئ الجهاز أثناء ذلك."
 
 msgctxt "#30332"
 msgid "Re-enabling add-ons after database rebuild…"

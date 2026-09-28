@@ -1,3 +1,31 @@
+v3.1.6
+- Rebuild Add-on Database confirm text (30330, EN+AR) now states plainly
+  that after the first restart Kodi opens on Estuary with ALL add-ons
+  disabled (a fresh Addons33.db registers every non-system add-on disabled,
+  ABUKARIM TOOLS included), and exactly where to enable ABUKARIM TOOLS.
+  Enabling it starts its service, which re-enables only the add-ons from the
+  phase-1 snapshot (3.1.5), restores the skin and restarts.
+
+v3.1.5
+- FIX: Addons33 rebuild could leave the box stuck after the first reboot
+  (seen on AM9 Pro): phase 2 enabled every add-on at once (117, including the
+  leftover standalone plugin.program.openwizard and its first-run service),
+  then opened Addons33.db directly for the origin repair while Kodi was still
+  writing to it, and never got to "Phase 2 complete" / the second reboot. The
+  step marker was only cleared at the very end, so any hang would repeat on
+  every boot. Phase 2 now:
+  * clears the step marker and the autostart block FIRST (a hang can no
+    longer loop);
+  * re-enables only the add-ons that were enabled before the rebuild
+    (snapshot taken in phase 1, addons33_rebuild.snapshot.json); a rebuild
+    scheduled by an older version falls back to "all except
+    plugin.program.openwizard";
+  * restores the pre-rebuild skin (the fresh DB made Kodi fail AF3 at boot
+    and reset lookandfeel.skin to Estuary);
+  * no longer touches SQLite - the origin repair runs from the service on the
+    next boot, as it already does on every boot.
+- String 30331 updated to match (EN+AR).
+
 v3.1.4
 - FIX: "ABUKARIM Wizard is not installed or is disabled" was shown even with
   the wizard installed. The check used System.HasAddon(), and Kodi lowercases
