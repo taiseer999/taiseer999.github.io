@@ -75,6 +75,13 @@ NEVER_ENABLE = {
 AUTOSTART_PATH   = '/storage/.config/autostart.sh'
 AUTOSTART_MARKER = '# [abukarimtools] addons33 rebuild'
 TRIGGER_FILE     = '/storage/.addons33_rebuild_pending'
+# 3.1.9: a fresh Addons33.db registers every non-system add-on DISABLED,
+# ABUKARIM TOOLS included, so nothing of ours can run to start phase 2 and the
+# user had to enable it by hand. autostart.sh now also launches this helper in
+# the background: it waits for Kodi's web server and enables ABUKARIM TOOLS over
+# JSON-RPC (HTTP), which starts our service -> phase 2 runs by itself.
+HELPER_PATH      = '/storage/.config/abukarimtools_addons33_enable.sh'
+SELF_ID          = 'plugin.program.abukarimtools'
 
 # Set once per Kodi session so a phase-2 continuation can never run twice (e.g.
 # the service starts it and the user also opens the menu before the reboot).
@@ -144,8 +151,10 @@ def _inject_autostart_delete():
         'if [ -f "%(trigger)s" ]; then\n'
         '    rm -f "%(db)s" "%(db)s-wal" "%(db)s-shm"\n'
         '    rm -f "%(trigger)s"\n'
+        '    [ -f "%(helper)s" ] && (sh "%(helper)s" >/dev/null 2>&1 &)\n'
         'fi\n'
-    ) % {'marker': AUTOSTART_MARKER, 'trigger': TRIGGER_FILE, 'db': db_glob}
+    ) % {'marker': AUTOSTART_MARKER, 'trigger': TRIGGER_FILE, 'db': db_glob,
+         'helper': HELPER_PATH}
 
     try:
         with open(AUTOSTART_PATH, 'r', encoding='utf-8', errors='replace') as f:
@@ -157,13 +166,13 @@ def _inject_autostart_delete():
         return False
 
     try:
-        if AUTOSTART_MARKER not in content:
-            os.makedirs(os.path.dirname(AUTOSTART_PATH), exist_ok=True)
-            with open(AUTOSTART_PATH, 'w', encoding='utf-8') as f:
-                f.write(content.rstrip('\n') + block)
-            _log('Injected Addons33 delete block into %s' % AUTOSTART_PATH)
-        else:
-            _log('Addons33 delete block already present in %s' % AUTOSTART_PATH)
+        if AUTOSTART_MARKER in content:
+            # Replace a block left by an older version (no helper launch).
+            content = _strip_block(content)
+        os.makedirs(os.path.dirname(AUTOSTART_PATH), exist_ok=True)
+        with open(AUTOSTART_PATH, 'w', encoding='utf-8') as f:
+            f.write((content.rstrip('\n') or '#!/bin/sh') + block)
+        _log('Injected Addons33 delete block into %s' % AUTOSTART_PATH)
         try:
             os.chmod(AUTOSTART_PATH, 0o755)
         except Exception:
@@ -174,6 +183,88 @@ def _inject_autostart_delete():
         return True
     except Exception as e:
         _log('Could not write autostart block: %s' % e, xbmc.LOGERROR)
+        return False
+
+
+def _strip_block(content):
+    """content with our marker..closing 'fi' block removed."""
+    head, _, tail = content.partition(AUTOSTART_MARKER)
+    _, _, after = tail.partition('\nfi\n')
+    return head.rstrip('\n') + '\n' + after.lstrip('\n')
+
+
+def _webserver_info():
+    """Kodi web server settings for the helper, turning the server on if it
+    is off. Returns a dict, or None when JSON-RPC over HTTP is not usable
+    (the user then enables ABUKARIM TOOLS by hand, as before)."""
+    def get(name):
+        r = _jsonrpc('Settings.GetSettingValue', {'setting': name})
+        return (r.get('result') or {}).get('value')
+
+    info = {'was_off': False}
+    if not get('services.webserver'):
+        r = _jsonrpc('Settings.SetSettingValue',
+                     {'setting': 'services.webserver', 'value': True})
+        if r.get('result') is not True or not get('services.webserver'):
+            _log('Web server is off and could not be enabled - the user will '
+                 'have to enable ABUKARIM TOOLS by hand after the rebuild.',
+                 xbmc.LOGWARNING)
+            return None
+        info['was_off'] = True
+    info['port'] = int(get('services.webserverport') or 8080)
+    auth = get('services.webserverauthentication')
+    info['user'] = (get('services.webserverusername') or 'kodi') if auth is not False else ''
+    info['password'] = (get('services.webserverpassword') or '') if auth is not False else ''
+    return info
+
+
+def _sh_quote(s):
+    return "'" + str(s).replace("'", "'\\''") + "'"
+
+
+def _write_helper(info):
+    """Write the background enabler run by autostart.sh after the DB delete.
+
+    Polls http://127.0.0.1:<port>/jsonrpc every 5 s for up to 15 min: once
+    Kodi has registered ABUKARIM TOOLS (disabled) it enables it, which starts
+    our service and with it phase 2. Exits as soon as it reads enabled:true.
+    """
+    auth = ''
+    if info.get('user') or info.get('password'):
+        auth = '-u %s' % _sh_quote('%s:%s' % (info.get('user', ''),
+                                                info.get('password', '')))
+    script = """#!/bin/sh
+# [abukarimtools] addons33 rebuild - re-enable ABUKARIM TOOLS once Kodi is up.
+# Written by ABUKARIM TOOLS phase 1, started by autostart.sh, removed in phase 2.
+URL='http://127.0.0.1:%(port)d/jsonrpc'
+HDR='Content-Type: application/json'
+GET='{"jsonrpc":"2.0","id":1,"method":"Addons.GetAddonDetails","params":{"addonid":"%(id)s","properties":["enabled"]}}'
+SET='{"jsonrpc":"2.0","id":1,"method":"Addons.SetAddonEnabled","params":{"addonid":"%(id)s","enabled":true}}'
+i=0
+while [ $i -lt 180 ]; do
+    sleep 5
+    i=$((i+1))
+    R=$(curl -s -m 5 %(auth)s -H "$HDR" -d "$GET" "$URL" 2>/dev/null)
+    if echo "$R" | grep -Eq '"enabled": ?true'; then
+        exit 0
+    fi
+    if echo "$R" | grep -Eq '"enabled": ?false'; then
+        curl -s -m 5 %(auth)s -H "$HDR" -d "$SET" "$URL" >/dev/null 2>&1
+    fi
+done
+exit 1
+""" % {'port': int(info.get('port') or 8080), 'id': SELF_ID, 'auth': auth}
+    try:
+        os.makedirs(os.path.dirname(HELPER_PATH), exist_ok=True)
+        with open(HELPER_PATH, 'w', encoding='utf-8') as f:
+            f.write(script)
+        os.chmod(HELPER_PATH, 0o700)
+        _log('Wrote self-enable helper %s (port %d%s).'
+             % (HELPER_PATH, info.get('port') or 8080,
+                ', auth' if auth else ''))
+        return True
+    except Exception as e:
+        _log('Could not write helper: %s' % e, xbmc.LOGWARNING)
         return False
 
 
@@ -197,10 +288,7 @@ def cleanup_autostart_block():
     if AUTOSTART_MARKER not in content:
         return
 
-    # Drop from our marker up to the closing 'fi' of our block.
-    head, _, tail = content.partition(AUTOSTART_MARKER)
-    _, _, after = tail.partition('\nfi\n')
-    remainder = (head.rstrip('\n') + '\n' + after.lstrip('\n')).strip()
+    remainder = _strip_block(content).strip()
 
     try:
         if remainder in ('', '#!/bin/sh'):
@@ -213,11 +301,12 @@ def cleanup_autostart_block():
     except Exception as e:
         _log('Could not clean %s: %s' % (AUTOSTART_PATH, e), xbmc.LOGWARNING)
 
-    try:
-        if os.path.exists(TRIGGER_FILE):
-            os.remove(TRIGGER_FILE)
-    except Exception:
-        pass
+    for path in (TRIGGER_FILE, HELPER_PATH):
+        try:
+            if os.path.exists(path):
+                os.remove(path)
+        except Exception:
+            pass
 
 
 def _read_step():
@@ -297,6 +386,17 @@ def _read_snapshot():
     except Exception:
         pass
     return None
+
+
+def _snapshot_set(key, value):
+    try:
+        with open(SNAPSHOT, 'r', encoding='utf-8') as f:
+            snap = json.load(f)
+        snap[key] = value
+        with open(SNAPSHOT, 'w', encoding='utf-8') as f:
+            json.dump(snap, f)
+    except Exception as e:
+        _log('Could not update snapshot (%s): %s' % (key, e), xbmc.LOGWARNING)
 
 
 def read_origins():
@@ -400,6 +500,10 @@ def run():
 
     if _is_coreelec():
         _take_snapshot()
+        info = _webserver_info()
+        if info:
+            _write_helper(info)
+            _snapshot_set('webserver_was_off', info['was_off'])
         if not _inject_autostart_delete():
             dlg.ok(ADDON_NAME, T(30335))
             return
@@ -505,6 +609,9 @@ def continue_if_pending(monitor=None):
 
     if snap:
         _restore_skin(snap.get('skin'))
+        if snap.get('webserver_was_off'):
+            _jsonrpc('Settings.SetSettingValue',
+                     {'setting': 'services.webserver', 'value': False})
     _clear_snapshot()
 
     _settle(monitor, 2)

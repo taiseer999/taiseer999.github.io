@@ -1,3 +1,21 @@
+v3.1.9
+- Addons33 rebuild is now hands-free: no more enabling ABUKARIM TOOLS by
+  hand after the first restart. A fresh Addons33.db registers every
+  non-system add-on disabled (ours included), so nothing inside Kodi could
+  start phase 2. Phase 1 now also writes
+  /storage/.config/abukarimtools_addons33_enable.sh, and the autostart.sh
+  block launches it in the background right after deleting the DB. It polls
+  Kodi's JSON-RPC over HTTP (127.0.0.1:<webserverport>, with the web server
+  user/password when authentication is on) every 5 s for up to 15 min, and
+  as soon as ABUKARIM TOOLS shows up disabled it enables it -> our service
+  starts -> phase 2 runs by itself. Exits on enabled:true.
+  * Web server off: phase 1 switches it on and phase 2 switches it back off.
+    If it cannot be switched on, the rebuild falls back to the manual enable.
+  * An older block already in autostart.sh is replaced; the rest of the
+    file is kept. Phase 2 removes the block AND the helper script.
+- String 30330 (EN+AR) updated: explains the automatic re-enable, with the
+  manual path as a fallback after 3 minutes.
+
 v3.1.8
 - FIX: Addons33 rebuild never relinked add-ons to their repositories. Two
   causes: (1) the repair ran in phase 2 / at boot, which never happened

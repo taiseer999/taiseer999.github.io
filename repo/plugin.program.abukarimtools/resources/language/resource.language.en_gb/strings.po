@@ -429,7 +429,7 @@ msgid "Selected Skin"
 msgstr ""
 
 msgctxt "#30330"
-msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one. Your enabled add-ons and current skin are remembered first. The box will restart [B]twice[/B] and take a few minutes.[CR][CR][B]After the first restart[/B] Kodi opens on Estuary with all add-ons disabled - this is normal. Go to Add-ons > My add-ons > Program add-ons > ABUKARIM TOOLS and press Enable. It then re-enables only the add-ons that were enabled before, restores your skin and restarts."
+msgid "Rebuild the Kodi add-on database (Addons33.db)?[CR][CR]This deletes the database so Kodi builds a clean one. Your enabled add-ons, current skin and update sources are remembered first. The box restarts [B]twice[/B] and takes a few minutes.[CR][CR]After the first restart Kodi opens on Estuary with all add-ons disabled - this is normal. ABUKARIM TOOLS re-enables itself within about a minute and finishes the rest. If nothing happens after 3 minutes, enable it once in Add-ons > My add-ons > Program add-ons."
 msgstr ""
 
 msgctxt "#30331"
