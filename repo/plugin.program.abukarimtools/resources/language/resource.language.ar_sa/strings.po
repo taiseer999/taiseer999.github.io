@@ -14,23 +14,23 @@ msgstr "تشغيل الإعداد لأول مرة"
 
 msgctxt "#30002"
 msgid "Backup/Restore"
-msgstr "نسخ احتياطي / استعادة"
+msgstr "باك اب / استعادة"
 
 msgctxt "#30003"
 msgid "Skin Selection"
-msgstr "اختيار الواجهة"
+msgstr "تنصيب سكن"
 
 msgctxt "#30004"
 msgid "New Build Tools"
-msgstr "أدوات البناء الجديد"
+msgstr "اضافات اساسية"
 
 msgctxt "#30005"
 msgid "Apply Patches"
-msgstr "تطبيق الترقيعات"
+msgstr "تطبيق التعديلات"
 
 msgctxt "#30007"
 msgid "Fix Add-on Update Origins"
-msgstr "إصلاح مصادر تحديث الإضافات"
+msgstr "إصلاح مصادر الإضافات"
 
 msgctxt "#30008"
 msgid "OpenWizard"
@@ -38,23 +38,23 @@ msgstr "OpenWizard"
 
 msgctxt "#30009"
 msgid "Skin Switcher"
-msgstr "مبدل الواجهات"
+msgstr "تحول بين السكنات"
 
 msgctxt "#30010"
 msgid "DPlex Tab On/Off"
-msgstr "تبويب DPlex تشغيل/إيقاف"
+msgstr "DPlex tab تشغيل/إيقاف"
 
 msgctxt "#30011"
 msgid "Korean Media Tab On/Off"
-msgstr "تبويب المحتوى الكوري تشغيل/إيقاف"
+msgstr "تشغيل/إيقاف المحتوى الكوري "
 
 msgctxt "#30012"
 msgid "Total Clean (Cache, Packages, Thumbnails)"
-msgstr "تنظيف شامل (الذاكرة المؤقتة، الحزم، الصور المصغرة)"
+msgstr "تنظيف (الكاش، الحزم، الثمبز)"
 
 msgctxt "#30013"
 msgid "Clear Old Thumbnails"
-msgstr "حذف الصور المصغرة القديمة"
+msgstr "حذف الثمبز"
 
 msgctxt "#30014"
 msgid "Setup & Install"
@@ -62,7 +62,7 @@ msgstr "الإعداد والتنصيب"
 
 msgctxt "#30015"
 msgid "Patching"
-msgstr "التعديلات والترقيعات"
+msgstr "التعديلات والتحسينات"
 
 msgctxt "#30016"
 msgid "Maintenance"
