@@ -452,6 +452,10 @@ msgctxt "#30336"
 msgid "The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform."
 msgstr "تم حذف قاعدة البيانات. سيُغلق كودي الآن.[CR][CR]افتح كودي مرة أخرى وسيُكمل إعادة البناء تلقائياً - لا يستطيع كودي إعادة تشغيل نفسه على هذا النظام."
 
+msgctxt "#30337"
+msgid "Update sources linked for %d add-on(s) - active after the next restart."
+msgstr "تم ربط مصادر التحديث لـ %d إضافة - تصبح فعّالة بعد إعادة التشغيل القادمة."
+
 msgctxt "#30340"
 msgid "Icon folder not found:[CR]%s[CR][CR]This skin does not ship colored/monochrome icon sets."
 msgstr "مجلد الأيقونات غير موجود:[CR]%s[CR][CR]هذه الواجهة لا تحتوي على مجموعتي الأيقونات الملونة والأحادية."

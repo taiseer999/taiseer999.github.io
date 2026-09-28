@@ -51,6 +51,9 @@ MARKER      = os.path.join(PROFILE, 'addons33_rebuild.step')
 # Phase-1 snapshot: which add-ons were enabled and which skin was active, so
 # phase 2 restores exactly that state instead of enabling everything (3.1.5).
 SNAPSHOT    = os.path.join(PROFILE, 'addons33_rebuild.snapshot.json')
+# {addonID: origin} from the OLD database, restored after the rebuild (3.1.8).
+# Separate file, kept until the service has relinked on the following boot.
+ORIGINS     = os.path.join(PROFILE, 'addons33_rebuild.origins.json')
 
 # Never re-enabled by the no-snapshot fallback: known leftovers that must stay
 # off (the standalone OpenWizard runs its own first-run/auto-update service).
@@ -268,9 +271,17 @@ def _take_snapshot():
            (res.get('result', {}).get('addons') or []) if a.get('addonid')]
     snap = {'enabled': sorted(ids), 'skin': xbmc.getSkinDir()}
     try:
+        from resources.lib import origin_fix
+        origins = origin_fix.snapshot_origins()
+    except Exception as e:
+        _log('Origin snapshot failed: %s' % e, xbmc.LOGWARNING)
+        origins = {}
+    try:
         os.makedirs(PROFILE, exist_ok=True)
         with open(SNAPSHOT, 'w', encoding='utf-8') as f:
             json.dump(snap, f)
+        with open(ORIGINS, 'w', encoding='utf-8') as f:
+            json.dump(origins, f)
         _log('Phase 1: snapshot of %d enabled add-on(s), skin %s.'
              % (len(ids), snap['skin']))
     except Exception as e:
@@ -286,6 +297,28 @@ def _read_snapshot():
     except Exception:
         pass
     return None
+
+
+def read_origins():
+    try:
+        with open(ORIGINS, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def relink_pending():
+    """True from the rebuild until the service has relinked once."""
+    return os.path.exists(ORIGINS)
+
+
+def clear_origins():
+    try:
+        if os.path.exists(ORIGINS):
+            os.remove(ORIGINS)
+    except Exception:
+        pass
 
 
 def _clear_snapshot():
@@ -456,6 +489,19 @@ def continue_if_pending(monitor=None):
     _log('Phase 2: enabled %d add-on(s), %d could not be enabled.'
          % (enabled, failed))
     _settle(monitor, 3)
+
+    # Put the update sources back from the phase-1 snapshot now, so they are
+    # active after the restart below. One transaction, one connection; the
+    # service repeats it on the next boot (plus a repo-refresh match for the
+    # rest) and only then deletes ORIGINS.
+    origins = read_origins()
+    if origins:
+        try:
+            from resources.lib import origin_fix
+            origin_fix.restore_origins(origins)
+        except Exception as e:
+            _log('Origin restore failed (service retries): %s' % e,
+                 xbmc.LOGWARNING)
 
     if snap:
         _restore_skin(snap.get('skin'))

@@ -193,6 +193,8 @@ STRINGS = {
             "إعادة بناء قاعدة بيانات إضافات كودي (Addons33.db)؟[CR][CR]سيتم حذف القاعدة ليبنيها كودي من جديد، بعد حفظ قائمة الإضافات المفعّلة والواجهة الحالية. سيُعيد الجهاز التشغيل [B]مرتين[/B] وقد يستغرق بضع دقائق.[CR][CR][B]بعد إعادة التشغيل الأولى[/B] سيفتح كودي على واجهة Estuary وكل الإضافات معطّلة - وهذا طبيعي. اذهب إلى الإضافات > إضافاتي > إضافات البرامج > ABUKARIM TOOLS واضغط تفعيل. بعدها تُعاد فقط الإضافات التي كانت مفعّلة سابقاً، وتُستعاد واجهتك، ثم يُعاد التشغيل."),
     30331: ("Rebuild scheduled. The box will restart now, delete the database before Kodi starts, then restart once more after re-enabling the add-ons that were enabled and restoring your skin. Update sources are repaired on the boot after that.[CR][CR]Do not power off during this.",
             "تمت جدولة إعادة البناء. سيُعيد الجهاز التشغيل الآن، وسيحذف قاعدة البيانات قبل بدء كودي، ثم يُعيد التشغيل مرة أخرى بعد إعادة تفعيل الإضافات التي كانت مفعّلة واستعادة واجهتك. تُصلَح مصادر التحديث في التشغيل الذي يليه.[CR][CR]لا تُطفئ الجهاز أثناء ذلك."),
+    30337: ("Update sources linked for %d add-on(s) - active after the next restart.",
+            "تم ربط مصادر التحديث لـ %d إضافة - تصبح فعّالة بعد إعادة التشغيل القادمة."),
     30332: ("Re-enabling add-ons after database rebuild…",
             "جارٍ إعادة تفعيل الإضافات بعد إعادة بناء قاعدة البيانات…"),
     30336: ("The database was deleted. Kodi will now close.[CR][CR]Open Kodi again and it will finish the rebuild automatically - Kodi cannot relaunch itself on this platform.",

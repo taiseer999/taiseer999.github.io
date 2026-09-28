@@ -1,3 +1,23 @@
+v3.1.8
+- FIX: Addons33 rebuild never relinked add-ons to their repositories. Two
+  causes: (1) the repair ran in phase 2 / at boot, which never happened
+  (hang in 3.1.4, service off until 3.1.7); (2) even when it ran, origin_fix
+  matches add-ons against the repository listings cached in Addons33.db, and
+  a freshly rebuilt DB has none cached until Kodi refreshes its repos, so
+  every add-on came back "unmatched". Now:
+  * phase 1 saves every local add-on's origin from the old DB
+    (origin_fix.snapshot_origins -> addons33_rebuild.origins.json);
+  * phase 2 writes them back verbatim in one transaction
+    (origin_fix.restore_origins) before its restart, so they are live after
+    that restart - no repo listing needed;
+  * on the next boot the service restores again (catches add-ons registered
+    late), then matches the rest from the repos: if anything is unmatched it
+    runs UpdateAddonRepos and retries every 15 s for up to 3 min
+    (origin_fix.relink_with_repo_refresh), notifies the count (30337), and
+    deletes the snapshot. Also runs on any boot where the repo cache is empty.
+  * Menu "Fix Add-on Update Origins": refreshes the repositories first
+    when the cache is empty, instead of reporting everything unmatched.
+
 v3.1.7
 - FIX: xbmc.service was commented out in addon.xml AGAIN (4th time - see
   3.1.0.19/.27/.29). Seen on AM9 Pro 2026-09-28: zero [AbukarimTools] lines

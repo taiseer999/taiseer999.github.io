@@ -198,6 +198,154 @@ def fix_addons(addon_ids=None):
     return result
 
 
+def snapshot_origins():
+    """{addonID: origin} for every locally installed add-on that HAS an origin.
+
+    Taken by the Addons33 rebuild (phase 1) from the old, still-working
+    database so the links can be written back verbatim afterwards - a fresh
+    Addons33.db has no repository listings cached, so fix_addons() alone
+    cannot match anything right after a rebuild.
+    """
+    out = {}
+    db_path = _find_addons_db()
+    if not db_path:
+        return out
+    conn = None
+    try:
+        conn = _connect(db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT addonID, origin FROM installed "
+                    "WHERE origin IS NOT NULL AND origin != ''")
+        for aid, origin in cur.fetchall():
+            if aid and origin and _locally_installed(aid):
+                out[aid] = origin
+    except sqlite3.DatabaseError as e:
+        _log('snapshot_origins db error: %s' % e)
+    finally:
+        try:
+            if conn:
+                conn.close()
+        except sqlite3.Error:
+            pass
+    _log('snapshot_origins: %d origin(s) saved' % len(out))
+    return out
+
+
+def restore_origins(mapping):
+    """Write a snapshot_origins() mapping back, in ONE transaction.
+
+    Only fills rows whose origin is currently empty and whose add-on is local
+    (never overrides what Kodi set itself). Returns {'fixed': {id: origin},
+    'pending': [ids not registered yet], 'error': str|None}.
+    """
+    result = {'fixed': {}, 'pending': [], 'error': None}
+    if not mapping:
+        return result
+    db_path = _find_addons_db()
+    if not db_path:
+        result['error'] = 'No Addons database found.'
+        return result
+    conn = None
+    try:
+        conn = _connect(db_path)
+        cur = conn.cursor()
+        for aid, origin in sorted(mapping.items()):
+            if not aid or not origin or aid in SKIP_IDS:
+                continue
+            if not _locally_installed(aid):
+                continue
+            cur.execute('SELECT origin FROM installed WHERE addonID = ?', (aid,))
+            row = cur.fetchone()
+            if row is None:
+                result['pending'].append(aid)
+                continue
+            if (row[0] or '') != '':
+                continue
+            cur.execute("UPDATE installed SET origin = ? "
+                        "WHERE addonID = ? AND (origin IS NULL OR origin = '')",
+                        (origin, aid))
+            if cur.rowcount:
+                result['fixed'][aid] = origin
+        conn.commit()
+    except sqlite3.DatabaseError as e:
+        result['error'] = 'Database error: %s' % e
+        try:
+            if conn:
+                conn.rollback()
+        except sqlite3.Error:
+            pass
+    finally:
+        try:
+            if conn:
+                conn.close()
+        except sqlite3.Error:
+            pass
+    _log('restore_origins: %d restored, %d not registered yet%s'
+         % (len(result['fixed']), len(result['pending']),
+            (', error: %s' % result['error']) if result['error'] else ''))
+    return result
+
+
+def repo_cache_empty():
+    """True when no repository listing is cached yet (fresh Addons33.db)."""
+    db_path = _find_addons_db()
+    if not db_path:
+        return True
+    conn = None
+    try:
+        conn = _connect(db_path)
+        cur = conn.cursor()
+        cur.execute('SELECT COUNT(*) FROM addonlinkrepo')
+        return (cur.fetchone() or [0])[0] == 0
+    except sqlite3.DatabaseError:
+        return True
+    finally:
+        try:
+            if conn:
+                conn.close()
+        except sqlite3.Error:
+            pass
+
+
+def relink_with_repo_refresh(monitor=None, origins=None, budget=180, step=15):
+    """Link empty origins, refreshing the repositories first when needed.
+
+    1. restore a phase-1 snapshot (origins) verbatim, if given;
+    2. fix_addons() from the cached repo listings;
+    3. if add-ons are still unmatched, run UpdateAddonRepos and retry every
+       `step` s for up to `budget` s while Kodi fills the listing cache.
+    Returns {'fixed': {...}, 'unmatched': [...]} (cumulative).
+    """
+    fixed = {}
+    if origins:
+        fixed.update(restore_origins(origins)['fixed'])
+    res = fix_addons(None)
+    fixed.update(res.get('fixed') or {})
+    unmatched = list(res.get('unmatched') or [])
+    if not unmatched:
+        return {'fixed': fixed, 'unmatched': []}
+
+    _log('%d add-on(s) unmatched - refreshing repositories and retrying.'
+         % len(unmatched))
+    xbmc.executebuiltin('UpdateAddonRepos')
+    waited = 0
+    while unmatched and waited < budget:
+        if monitor is not None:
+            if monitor.waitForAbort(step):
+                break
+        else:
+            xbmc.sleep(step * 1000)
+        waited += step
+        if origins:
+            fixed.update(restore_origins(origins)['fixed'])
+        res = fix_addons(unmatched)
+        fixed.update(res.get('fixed') or {})
+        unmatched = [a for a in unmatched if a not in fixed]
+    _log('relink done: %d linked, %d still without a repository.'
+         % (len(fixed), len(unmatched)))
+    return {'fixed': fixed, 'unmatched': unmatched}
+
+
 def fix_addons_silent(addon_ids):
     """Targeted, exception-proof variant for use right after an install.
     A best-effort helper: failures are logged, never raised."""
@@ -396,7 +544,18 @@ def run():
             yeslabel='Scan && fix', nolabel='Cancel'):
         return
 
-    res = fix_addons(None)
+    if repo_cache_empty():
+        # Fresh Addons33.db: no repository listing cached yet, so nothing
+        # could match. Refresh the repos and retry while Kodi fetches them.
+        pd = xbmcgui.DialogProgress()
+        pd.create(TITLE, 'Refreshing repositories... / تحديث المستودعات...')
+        try:
+            r = relink_with_repo_refresh(None, budget=120, step=10)
+        finally:
+            pd.close()
+        res = {'fixed': r['fixed'], 'unmatched': r['unmatched'], 'error': None}
+    else:
+        res = fix_addons(None)
 
     if res['error']:
         dialog.ok(TITLE,

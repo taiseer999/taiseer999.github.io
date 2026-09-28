@@ -747,6 +747,30 @@ def _recommend_restart_if_updated(monitor):
              % traceback.format_exc(), xbmc.LOGERROR)
 
 
+def _relink_after_rebuild(monitor):
+    from resources.lib import addons33_rebuild, origin_fix
+    pending = addons33_rebuild.relink_pending()
+    if not pending and not origin_fix.repo_cache_empty():
+        return
+    if addons33_rebuild._read_step() == '2':
+        return                      # phase 2 still to run; it reboots anyway
+    origins = addons33_rebuild.read_origins() if pending else None
+    _log('Relinking add-ons to their repositories (%s).'
+         % ('after rebuild' if pending else 'repo cache empty'))
+    res = origin_fix.relink_with_repo_refresh(monitor, origins)
+    if pending:
+        addons33_rebuild.clear_origins()
+    n = len(res['fixed'])
+    if n:
+        _log('Relinked %d add-on(s): %s' % (n, ', '.join(sorted(res['fixed']))))
+        try:
+            xbmcgui.Dialog().notification(
+                'ABUKARIM TOOLS', T(30337) % n,
+                xbmcgui.NOTIFICATION_INFO, 8000)
+        except Exception:
+            pass
+
+
 def main():
     monitor = xbmc.Monitor()
 
@@ -865,6 +889,16 @@ def main():
             os.remove(FLAG_FILE)
         except OSError:
             pass
+
+    # After an Addons33 rebuild (or whenever the repo listing cache is still
+    # empty) the plain boot linking above cannot match anything: restore the
+    # phase-1 origin snapshot and refresh the repositories, retrying for up to
+    # 3 minutes. Runs before the watchdog; only on those boots. Fenced.
+    try:
+        _relink_after_rebuild(monitor)
+    except Exception:
+        _log('Post-rebuild repo linking crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
     # From here the service stays alive for the rest of the Kodi session and
     # watches the patch targets: a Kodi add-on update replaces the add-on
