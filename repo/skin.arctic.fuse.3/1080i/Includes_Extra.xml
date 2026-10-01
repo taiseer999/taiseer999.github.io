@@ -67,8 +67,8 @@
                 <control type="image" id="78883">
                     <fadetime>100</fadetime>
                     <centertop>50%</centertop>
-                    <width>104</width>
-                    <height>56</height>
+                    <width>98</width>
+                    <height>49</height>
                     <aspectratio>keep</aspectratio>
                     <texture colordiffuse="panel_fg_100">flags/colorful/source/$INFO[VideoPlayer.VideoCodec].png</texture>
                     <visible>!String.IsEmpty(VideoPlayer.VideoCodec)</visible>

@@ -34,24 +34,14 @@ _TMDBH_CERTFALLBACK_NEW_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpO
 
 
 
-# ── DexSubtitles auto-download service (by ABUKARIM TOOLS) ──
-# service.subtitles.dexworld is a passive subtitle module: Kodi only calls it
-# on manual search or its own auto-download, and Kodi never fires auto-download
-# for plugin-resolved playback (DexHub / TMDbHelper). These entries add a
-# background xbmc.service (service_auto.py) that listens for playback start and
-# drives search+download+attach itself, reusing the addon's own service.py.
-_DEXAUTO_SERVICE_B64 = 'IyAtKi0gY29kaW5nOiB1dGYtOCAtKi0KIyBBVVRPX0RMX1Y1NTUKIyDYrtiv2YXYqSDYrtmE2YHZitipINiq2YbYstmR2YQg2KPZgdi22YQg2KrYsdis2YXYqSDYudix2KjZitipINiq2YTZgtin2KbZitin2Ysg2LnZhtivINio2K/Yp9mK2Kkg2KfZhNiq2LTYutmK2YQuCiMg2LbYsdmI2LHZitipINmE2KPZhiBLb2RpINmE2Kcg2YrZj9i02LrZkdmEINmF2YrYstipIGF1dG8tZG93bmxvYWQg2YTYudmG2KfYtdixINin2YTYqNmE2KzZhiDYp9mE2YXZj9it2YTZkdmE2KkKIyAoRGV4SHViIC8gVE1EYkhlbHBlciDYudio2LEgc2V0UmVzb2x2ZWRVcmwpLiDZh9iw2Ycg2KfZhNiu2K/ZhdipINiq2LPZhdi5INio2K/Yp9mK2Kkg2KfZhNiq2LTYutmK2YQKIyDZiNiq2YLZiNmFINio2KfZhNio2K3YqyArINin2YTYqtmG2LLZitmEICsg2KfZhNil2LHZgdin2YIg2KjZhtmB2LPZh9in2Iwg2YXYuSDYpdi52KfYr9ipINin2LPYqtiu2K/Yp9mFINiv2YjYp9mEIHNlcnZpY2UucHkuCgppbXBvcnQgb3MKaW1wb3J0IHN5cwppbXBvcnQgaW8KaW1wb3J0IGd6aXAKaW1wb3J0IHppcGZpbGUKaW1wb3J0IHRocmVhZGluZwoKaW1wb3J0IHhibWMKaW1wb3J0IHhibWNndWkKaW1wb3J0IHhibWNhZGRvbgppbXBvcnQgeGJtY3ZmcwoKIyDilIDilIAg2KfYs9iq2YrYsdin2K8g2K/ZiNin2YQg2KfZhNil2LbYp9mB2Kkg2YbZgdiz2YfYpyAoc2VydmljZS5weSDZgdmKINis2LDYsSDYp9mE2KXYttin2YHYqSkg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACl9BRERPTiA9IHhibWNhZGRvbi5BZGRvbigpCl9BRERPTl9QQVRIID0geGJtY3Zmcy50cmFuc2xhdGVQYXRoKF9BRERPTi5nZXRBZGRvbkluZm8oJ3BhdGgnKSkKaWYgX0FERE9OX1BBVEggbm90IGluIHN5cy5wYXRoOgogICAgc3lzLnBhdGguaW5zZXJ0KDAsIF9BRERPTl9QQVRIKQoKaW1wb3J0IHNlcnZpY2UgYXMgZGV4ICAjIG5vcWE6IEU0MDIgIOKAlCBzZXJ2aWNlLnB52Jsg2KfYs9iq2YrYsdin2K/ZhyDYotmF2YYgKG1haW4oKSDZhdit2YXZitmRINio2YAgX19tYWluX18pCgoKZGVmIF9sb2cobXNnLCBsZXZlbD14Ym1jLkxPR0lORk8pOgogICAgeGJtYy5sb2coJ1tEZXhTdWJ0aXRsZXMuYXV0b10gJXMnICUgbXNnLCBsZXZlbCkKCgpkZWYgX3NldHRpbmdfYm9vbChrZXksIGRlZmF1bHQ9VHJ1ZSk6CiAgICB0cnk6CiAgICAgICAgcmF3ID0gKGRleC5BRERPTi5nZXRTZXR0aW5nKGtleSkgb3IgJycpLnN0cmlwKCkubG93ZXIoKQogICAgICAgIGlmIHJhdyBpbiAoJzEnLCAndHJ1ZScsICd5ZXMnLCAnb24nKToKICAgICAgICAgICAgcmV0dXJuIFRydWUKICAgICAgICBpZiByYXcgaW4gKCcwJywgJ2ZhbHNlJywgJ25vJywgJ29mZicpOgogICAgICAgICAgICByZXR1cm4gRmFsc2UKICAgICAgICByZXR1cm4gZGVmYXVsdAogICAgZXhjZXB0IEV4Y2VwdGlvbjoKICAgICAgICByZXR1cm4gZGVmYXVsdAoKCmRlZiBfaXNfYXJhYmljX3N1YihzdWIpOgogICAgdHJ5OgogICAgICAgIGxhbmcyLCBfbGFiZWwgPSBkZXgucmVzb2x2ZV9sYW5nKHN1YikKICAgICAgICByZXR1cm4gbGFuZzIgPT0gJ2FyJwogICAgZXhjZXB0IEV4Y2VwdGlvbjoKICAgICAgICByZXR1cm4gRmFsc2UKCgpkZWYgX3BpY2tfYmVzdF9hcmFiaWMoc3VicywgcmVxX3VybCk6CiAgICAiIiLYsdi02ZHYrSDYp9mE2LnYsdio2YrYqSDYutmK2LEg2KfZhNij2KzZhtio2YrYqSDZiNi62YrYsSBBSdiMINi32KfYqNmQ2YIg2KfZhNit2YTZgtip2Iwg2YjYsdiq2ZHYqCDZiNin2K7YqtixINin2YTYo9mB2LbZhC4iIiIKICAgIHJvd3MgPSBbXQogICAgZm9yIHMgaW4gKHN1YnMgb3IgW10pOgogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgZGV4LmlzX2ZvcmVpZ25fc3ViKHMpOgogICAgICAgICAgICAgICAgY29udGludWUKICAgICAgICAgICAgaWYgbm90IGRleC5fbWF0Y2hlc19yZXF1ZXN0ZWRfZXBpc29kZShzLCByZXFfdXJsKToKICAgICAgICAgICAgICAgIGNvbnRpbnVlCiAgICAgICAgICAgIGlmIGRleC5pc19haV9zdWIocyk6CiAgICAgICAgICAgICAgICBjb250aW51ZSAgIyDZhNinINmG2YbYstmR2YQgQUkg2KrZhNmC2KfYptmK2KfZiyDigJQg2YrYqNmC2Ykg2YTZhNin2K7YqtmK2KfYsSDYp9mE2YrYr9mI2YoKICAgICAgICAgICAgaWYgbm90IF9pc19hcmFiaWNfc3ViKHMpOgogICAgICAgICAgICAgICAgY29udGludWUKICAgICAgICAgICAgaWYgbm90IChzLmdldCgndXJsJykpOgogICAgICAgICAgICAgICAgY29udGludWUKICAgICAgICAgICAgcm93cy5hcHBlbmQocykKICAgICAgICBleGNlcHQgRXhjZXB0aW9uOgogICAgICAgICAgICBjb250aW51ZQogICAgcm93cy5zb3J0KGtleT1kZXguX3N1YnRpdGxlX3NvcnRfa2V5KQogICAgcmV0dXJuIHJvd3NbMF0gaWYgcm93cyBlbHNlIE5vbmUKCgpkZWYgX2Rvd25sb2FkX3RvX2ZpbGUodXJsLCBiYXNlX25hbWUpOgogICAgIiIi2YbYstmR2YQg2YXZhNmBINin2YTYqtix2KzZhdipICjZitiv2LnZhSB6aXAvZ3ppcCkg2YjYo9ix2KzZkNi5INin2YTZhdiz2KfYsSDYp9mE2YXYrdmE2Yog2KPZiCBOb25lLiIiIgogICAgdXJsID0gZGV4Ll9wdWJsaWNpemVfc2VydmVyX3VybCh1cmwgb3IgJycpCiAgICBpZiBub3QgdXJsOgogICAgICAgIHJldHVybiBOb25lCiAgICB0cnk6CiAgICAgICAgciA9IGRleC5TRVNTSU9OLmdldCh1cmwsIHRpbWVvdXQ9MTIwLCB2ZXJpZnk9RmFsc2UsIGFsbG93X3JlZGlyZWN0cz1UcnVlKQogICAgICAgIGlmIHIuc3RhdHVzX2NvZGUgIT0gMjAwOgogICAgICAgICAgICBfbG9nKCdkb3dubG9hZCBIVFRQICVzJyAlIHIuc3RhdHVzX2NvZGUsIHhibWMuTE9HV0FSTklORykKICAgICAgICAgICAgcmV0dXJuIE5vbmUKICAgICAgICBjb250ZW50ID0gci5jb250ZW50IG9yIGInJwogICAgICAgIGlmIG5vdCBjb250ZW50OgogICAgICAgICAgICByZXR1cm4gTm9uZQoKICAgICAgICBleHQgPSBkZXguX2d1ZXNzX2V4dCh1cmwsIHIuaGVhZGVycy5nZXQoJ0NvbnRlbnQtVHlwZScpKQogICAgICAgIHNhZmUgPSBkZXguX3NhZmVfZmlsZW5hbWUoYmFzZV9uYW1lKQogICAgICAgIG91dF9wYXRoID0gb3MucGF0aC5qb2luKGRleC5URU1QX0RJUiwgJyVzJXMnICUgKHNhZmUsIGV4dCkpCgogICAgICAgIGlmIGNvbnRlbnQuc3RhcnRzd2l0aChiJ1BLJyk6CiAgICAgICAgICAgIHogPSB6aXBmaWxlLlppcEZpbGUoaW8uQnl0ZXNJTyhjb250ZW50KSkKICAgICAgICAgICAgcGlja2VkID0gTm9uZQogICAgICAgICAgICBmb3IgZm4gaW4gei5uYW1lbGlzdCgpOgogICAgICAgICAgICAgICAgaWYgZm4ubG93ZXIoKS5lbmRzd2l0aChkZXguVEVYVElTSF9FWFRTKToKICAgICAgICAgICAgICAgICAgICBwaWNrZWQgPSBmbgogICAgICAgICAgICAgICAgICAgIGJyZWFrCiAgICAgICAgICAgIGlmIG5vdCBwaWNrZWQ6CiAgICAgICAgICAgICAgICByZXR1cm4gTm9uZQogICAgICAgICAgICBjb250ZW50ID0gei5yZWFkKHBpY2tlZCkKICAgICAgICAgICAgZXh0ID0gb3MucGF0aC5zcGxpdGV4dChwaWNrZWQpWzFdLmxvd2VyKCkgb3IgZXh0CiAgICAgICAgICAgIG91dF9wYXRoID0gb3MucGF0aC5qb2luKGRleC5URU1QX0RJUiwgJyVzJXMnICUgKHNhZmUsIGV4dCkpCiAgICAgICAgZWxpZiBjb250ZW50WzoyXSA9PSBieXRlcyhbMHgxZiwgMHg4Yl0pOgogICAgICAgICAgICBjb250ZW50ID0gZ3ppcC5kZWNvbXByZXNzKGNvbnRlbnQpCgogICAgICAgIGRleC5fd3JpdGVfYnl0ZXMob3V0X3BhdGgsIGNvbnRlbnQpCiAgICAgICAgcmV0dXJuIG91dF9wYXRoCiAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgX2xvZygnZG93bmxvYWQgZXhjZXB0aW9uOiAlcycgJSBlLCB4Ym1jLkxPR0VSUk9SKQogICAgICAgIHJldHVybiBOb25lCgoKY2xhc3MgQXV0b1BsYXllcih4Ym1jLlBsYXllcik6CiAgICBkZWYgX19pbml0X18oc2VsZik6CiAgICAgICAgc3VwZXIoKS5fX2luaXRfXygpCiAgICAgICAgc2VsZi5fbGFzdF9maWxlID0gTm9uZQogICAgICAgIHNlbGYuX2xvY2sgPSB0aHJlYWRpbmcuTG9jaygpCgogICAgZGVmIG9uQVZTdGFydGVkKHNlbGYpOgogICAgICAgICMg2YTYpyDZhtit2KzYqCBjYWxsYmFjayDYp9mE2YXYtNi62ZHZhCDigJQg2YbYt9mE2YIg2LnYp9mF2YQg2K7ZhNmB2YrYqS4KICAgICAgICB0cnk6CiAgICAgICAgICAgIHBsYXlpbmdfZmlsZSA9IHNlbGYuZ2V0UGxheWluZ0ZpbGUoKQogICAgICAgIGV4Y2VwdCBFeGNlcHRpb246CiAgICAgICAgICAgIHBsYXlpbmdfZmlsZSA9IE5vbmUKICAgICAgICB0aHJlYWRpbmcuVGhyZWFkKHRhcmdldD1zZWxmLl9hdXRvX3dvcmtlciwgYXJncz0ocGxheWluZ19maWxlLCksIGRhZW1vbj1UcnVlKS5zdGFydCgpCgogICAgZGVmIG9uUGxheUJhY2tTdG9wcGVkKHNlbGYpOgogICAgICAgIHdpdGggc2VsZi5fbG9jazoKICAgICAgICAgICAgc2VsZi5fbGFzdF9maWxlID0gTm9uZQoKICAgIGRlZiBvblBsYXlCYWNrRW5kZWQoc2VsZik6CiAgICAgICAgd2l0aCBzZWxmLl9sb2NrOgogICAgICAgICAgICBzZWxmLl9sYXN0X2ZpbGUgPSBOb25lCgogICAgZGVmIF9oYXNfYXJhYmljX3N0cmVhbShzZWxmKToKICAgICAgICB0cnk6CiAgICAgICAgICAgIGZvciBzIGluIChzZWxmLmdldEF2YWlsYWJsZVN1YnRpdGxlU3RyZWFtcygpIG9yIFtdKToKICAgICAgICAgICAgICAgIHYgPSBzdHIocykuc3RyaXAoKS5sb3dlcigpCiAgICAgICAgICAgICAgICBpZiB2LnN0YXJ0c3dpdGgoJ2FyJykgb3IgJ2FyYWInIGluIHYgb3IgJ9i52LHYqCcgaW4gdjoKICAgICAgICAgICAgICAgICAgICByZXR1cm4gVHJ1ZQogICAgICAgIGV4Y2VwdCBFeGNlcHRpb246CiAgICAgICAgICAgIHBhc3MKICAgICAgICByZXR1cm4gRmFsc2UKCiAgICBkZWYgX2F1dG9fd29ya2VyKHNlbGYsIHBsYXlpbmdfZmlsZSk6CiAgICAgICAgIyDYp9mF2YbYuSDYp9mE2KrZg9ix2KfYsTogb25BVlN0YXJ0ZWQvb25BVkNoYW5nZSDZgtivINmK2Y/Yt9mE2YLYp9mGINmE2YbZgdizINin2YTZhdmE2YEg2KPZg9ir2LEg2YXZhiDZhdix2KkuCiAgICAgICAgd2l0aCBzZWxmLl9sb2NrOgogICAgICAgICAgICBpZiBwbGF5aW5nX2ZpbGUgYW5kIHBsYXlpbmdfZmlsZSA9PSBzZWxmLl9sYXN0X2ZpbGU6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgc2VsZi5fbGFzdF9maWxlID0gcGxheWluZ19maWxlCgogICAgICAgIGlmIG5vdCBfc2V0dGluZ19ib29sKCdhdXRvX2Rvd25sb2FkJywgVHJ1ZSk6CiAgICAgICAgICAgIHJldHVybgoKICAgICAgICBtb25pdG9yID0geGJtYy5Nb25pdG9yKCkKCiAgICAgICAgIyDYp9mG2KrYuNixINiq2LnYqNim2Kkg2KfZhNmAIGluZm9sYWJlbHMg2KPZiCDYrNiz2LEgRGV4SHViICjYrdiq2YkgfjUg2KvZiNin2YbZjSkuCiAgICAgICAgaG9tZSA9IHhibWNndWkuV2luZG93KDEwMDAwKQogICAgICAgIGZvciBfIGluIHJhbmdlKDIwKToKICAgICAgICAgICAgaWYgbW9uaXRvci5hYm9ydFJlcXVlc3RlZCgpIG9yIG5vdCBzZWxmLmlzUGxheWluZ1ZpZGVvKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgaGF2ZV9pZCA9ICgKICAgICAgICAgICAgICAgIHhibWMuZ2V0SW5mb0xhYmVsKCdWaWRlb1BsYXllci5JTURCTnVtYmVyJykKICAgICAgICAgICAgICAgIG9yIGhvbWUuZ2V0UHJvcGVydHkoJ2RleGh1Yi5zdWIuaW1kYl9pZCcpCiAgICAgICAgICAgICAgICBvciBob21lLmdldFByb3BlcnR5KCdkZXhodWIuc3ViLnRtZGJfaWQnKQogICAgICAgICAgICApCiAgICAgICAgICAgIGlmIGhhdmVfaWQ6CiAgICAgICAgICAgICAgICBicmVhawogICAgICAgICAgICB4Ym1jLnNsZWVwKDI1MCkKCiAgICAgICAgIyDYqtiu2LfZjtmRINil2YYg2YPYp9mG2Kog2YfZhtin2YMg2KrYsdis2YXYqSDYudix2KjZitipINij2LXZhNin2YsgKNmF2K/Zhdis2Kkv2K7Yp9ix2KzZitipKSDigJQg2LPZhNmI2YMg2LDZg9mKINin2YHYqtix2KfYttmKLgogICAgICAgIGlmIF9zZXR0aW5nX2Jvb2woJ2F1dG9fc2tpcF9pZl9hcmFiaWMnLCBUcnVlKSBhbmQgc2VsZi5faGFzX2FyYWJpY19zdHJlYW0oKToKICAgICAgICAgICAgX2xvZygnYXJhYmljIHN0cmVhbSBhbHJlYWR5IHByZXNlbnQgLT4gc2tpcCcpCiAgICAgICAgICAgIHJldHVybgoKICAgICAgICBzZXJ2ZXJfdXJsID0gKGRleC5BRERPTi5nZXRTZXR0aW5nKCdzZXJ2ZXJfdXJsJykgb3IgJ2h0dHBzOi8vZGV4d29ybGQuY2MnKS5zdHJpcCgpLnJzdHJpcCgnLycpCiAgICAgICAgYXBpX2tleSA9IChkZXguQURET04uZ2V0U2V0dGluZygnYXBpX2tleScpIG9yICdUVi1CT1gnKS5zdHJpcCgpCiAgICAgICAgaWYgbm90IHNlcnZlcl91cmwgb3Igbm90IGFwaV9rZXk6CiAgICAgICAgICAgIHJldHVybgoKICAgICAgICByZXFfdXJsID0gZGV4LmJ1aWxkX3JlcV91cmwoc2VydmVyX3VybCwgYXBpX2tleSkKICAgICAgICBpZiBub3QgcmVxX3VybDoKICAgICAgICAgICAgX2xvZygnbm8gdXNhYmxlIGNvbnRlbnQgaWQgLT4gc2tpcCcsIHhibWMuTE9HV0FSTklORykKICAgICAgICAgICAgcmV0dXJuCgogICAgICAgICMg2KfZhNiz2YrYsdmB2LEg2YrYsdiv2ZEg2KjZg9in2LQg2YLYr9mK2YUg2KPYrdmK2KfZhtin2Ysg2KvZhSDZitmP2K3Yr9mR2Ksg2K7ZhNin2YQg2KvZiNin2YbZjSDigJQg2KPYudivINin2YTZhdit2KfZiNmE2Kkg2KjZgdmI2KfYtdmEINiq2LXYp9i52K/ZitipLgogICAgICAgIHN1YnMgPSBkZXguZmV0Y2hfc3Vic19qc29uKHJlcV91cmwsIHRpbWVvdXQ9MTUsIHJldHJpZXM9MSkKICAgICAgICB0cmllcyA9IDAKICAgICAgICB3aGlsZSBub3Qgc3VicyBhbmQgdHJpZXMgPCAzOgogICAgICAgICAgICBpZiBtb25pdG9yLndhaXRGb3JBYm9ydChbMS4yLCAyLjUsIDQuMF1bdHJpZXNdKToKICAgICAgICAgICAgICAgIHJldHVybgogICAgICAgICAgICB0cmllcyArPSAxCiAgICAgICAgICAgIGlmIG5vdCBzZWxmLmlzUGxheWluZ1ZpZGVvKCk6CiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgc3VicyA9IGRleC5mZXRjaF9zdWJzX2pzb24ocmVxX3VybCwgdGltZW91dD0xNSwgcmV0cmllcz0xKQoKICAgICAgICBpZiBub3Qgc3ViczoKICAgICAgICAgICAgX2xvZygnbm8gc3VidGl0bGVzIHJldHVybmVkJykKICAgICAgICAgICAgcmV0dXJuCgogICAgICAgIGJlc3QgPSBfcGlja19iZXN0X2FyYWJpYyhzdWJzLCByZXFfdXJsKQogICAgICAgIGlmIG5vdCBiZXN0OgogICAgICAgICAgICBfbG9nKCdubyBhcmFiaWMgY2FuZGlkYXRlJykKICAgICAgICAgICAgcmV0dXJuCgogICAgICAgIG5hbWUgPSBiZXN0LmdldCgnZGlzcGxheV9uYW1lJykgb3IgYmVzdC5nZXQoJ25hbWUnKSBvciAnQXJhYmljJwogICAgICAgIHBhdGggPSBfZG93bmxvYWRfdG9fZmlsZShiZXN0LmdldCgndXJsJykgb3IgJycsIG5hbWUpCiAgICAgICAgaWYgbm90IHBhdGg6CiAgICAgICAgICAgIHJldHVybgoKICAgICAgICBpZiBtb25pdG9yLmFib3J0UmVxdWVzdGVkKCkgb3Igbm90IHNlbGYuaXNQbGF5aW5nVmlkZW8oKToKICAgICAgICAgICAgcmV0dXJuCgogICAgICAgIHRyeToKICAgICAgICAgICAgc2VsZi5zZXRTdWJ0aXRsZXMocGF0aCkKICAgICAgICAgICAgc2VsZi5zaG93U3VidGl0bGVzKFRydWUpCiAgICAgICAgICAgIF9sb2coJ2F0dGFjaGVkOiAlcycgJSBvcy5wYXRoLmJhc2VuYW1lKHBhdGgpKQogICAgICAgICAgICBpZiBfc2V0dGluZ19ib29sKCdhdXRvX25vdGlmeScsIFRydWUpOgogICAgICAgICAgICAgICAgeGJtY2d1aS5EaWFsb2coKS5ub3RpZmljYXRpb24oCiAgICAgICAgICAgICAgICAgICAgJ0RleFN1YnRpdGxlcycsICfYqtmFINil2LHZgdin2YIg2KfZhNiq2LHYrNmF2Kkg2KfZhNi52LHYqNmK2Kkg2KrZhNmC2KfYptmK2KfZiycsCiAgICAgICAgICAgICAgICAgICAgeGJtY2d1aS5OT1RJRklDQVRJT05fSU5GTywgMjAwMCkKICAgICAgICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgICAgIF9sb2coJ3NldFN1YnRpdGxlcyBmYWlsZWQ6ICVzJyAlIGUsIHhibWMuTE9HV0FSTklORykKCgpkZWYgcnVuKCk6CiAgICBfbG9nKCdhdXRvLWRvd25sb2FkIHNlcnZpY2Ugc3RhcnRlZCcpCiAgICBwbGF5ZXIgPSBBdXRvUGxheWVyKCkKICAgIG1vbml0b3IgPSB4Ym1jLk1vbml0b3IoKQogICAgd2hpbGUgbm90IG1vbml0b3IuYWJvcnRSZXF1ZXN0ZWQoKToKICAgICAgICBpZiBtb25pdG9yLndhaXRGb3JBYm9ydCgyKToKICAgICAgICAgICAgYnJlYWsKICAgIGRlbCBwbGF5ZXIKICAgIF9sb2coJ2F1dG8tZG93bmxvYWQgc2VydmljZSBzdG9wcGVkJykKCgppZiBfX25hbWVfXyA9PSAnX19tYWluX18nOgogICAgcnVuKCkK'
-_DEXAUTO_SETTINGS_B64 = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c2V0dGluZ3M+CiAgPGNhdGVnb3J5IGxhYmVsPSJEZXhTdWJ0aXRsZXMiPgogICAgPHNldHRpbmcgaWQ9InNlcnZlcl91cmwiIHR5cGU9InRleHQiIGxhYmVsPSLYsdin2KjYtyDYp9mE2K7Yr9mF2KkiIGRlZmF1bHQ9Imh0dHBzOi8vZGV4d29ybGQuY2MiIC8+CiAgICA8c2V0dGluZyBpZD0iYXBpX2tleSIgdHlwZT0idGV4dCIgbGFiZWw9IkFQSSIgZGVmYXVsdD0iVFYtQk9YIiAvPgogICAgPHNldHRpbmcgaWQ9InNlYXJjaF90aW1lb3V0IiB0eXBlPSJudW1iZXIiIGxhYmVsPSLZhdmH2YTYqSDYp9mE2KjYrdirICjYq9in2YbZitipKSIgZGVmYXVsdD0iMTgiIC8+CiAgICA8c2V0dGluZyBpZD0iYWlfc2VhcmNoX3RpbWVvdXQiIHR5cGU9Im51bWJlciIgbGFiZWw9ItmF2YfZhNipIEFJICjYq9in2YbZitipKSIgZGVmYXVsdD0iMjUiIC8+CiAgICA8IS0tIEFVVE9fRExfVjU1NSAtLT4KICAgIDxzZXR0aW5nIGlkPSJhdXRvX2Rvd25sb2FkIiB0eXBlPSJib29sIiBsYWJlbD0i2KrZhtiy2YrZhCDYqtmE2YLYp9im2Yog2YTZhNiq2LHYrNmF2Kkg2KfZhNi52LHYqNmK2Kkg2LnZhtivINin2YTYqti02LrZitmEIiBkZWZhdWx0PSJ0cnVlIiAvPgogICAgPHNldHRpbmcgaWQ9ImF1dG9fc2tpcF9pZl9hcmFiaWMiIHR5cGU9ImJvb2wiIGxhYmVsPSLYqtiu2LfZjtmRINin2YTYqtmG2LLZitmEINil2YYg2YjZj9is2K/YqiDYqtix2KzZhdipINi52LHYqNmK2Kkg2KPYtdmE2KfZiyIgZGVmYXVsdD0idHJ1ZSIgLz4KICAgIDxzZXR0aW5nIGlkPSJhdXRvX25vdGlmeSIgdHlwZT0iYm9vbCIgbGFiZWw9Itiq2YbYqNmK2Ycg2LnZhtivINin2YTYpdix2YHYp9mCINin2YTYqtmE2YLYp9im2YoiIGRlZmF1bHQ9InRydWUiIC8+CiAgPC9jYXRlZ29yeT4KPC9zZXR0aW5ncz4K'
+# ── DexSubtitles auto-download: RETIRED in 3.1.15 ──
+# The patches were removed. These two blobs are kept ONLY so
+# _retire_dexsubs_autodl() can undo the addon.xml service registration
+# on boxes that were patched by an older build.
 _DEXAUTO_ADDONXML_OLD_B64 = 'ICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc3VidGl0bGUubW9kdWxlIiBsaWJyYXJ5PSJzZXJ2aWNlLnB5Ij4KICAgICAgICA8cHJvdmlkZXM+c3VidGl0bGVzPC9wcm92aWRlcz4KICAgIDwvZXh0ZW5zaW9uPgo='
 _DEXAUTO_ADDONXML_NEW_B64 = 'ICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc3VidGl0bGUubW9kdWxlIiBsaWJyYXJ5PSJzZXJ2aWNlLnB5Ij4KICAgICAgICA8cHJvdmlkZXM+c3VidGl0bGVzPC9wcm92aWRlcz4KICAgIDwvZXh0ZW5zaW9uPgoKICAgIDwhLS0gQVVUT19ETF9WNTU1OiBhdXRvLWRvd25sb2FkIHNlcnZpY2UgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLT4KICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc2VydmljZSIgbGlicmFyeT0ic2VydmljZV9hdXRvLnB5Ii8+Cg=='
 
 
-# ── Prism TMDbHelper external-id play bridge (by ABUKARIM TOOLS) ──
-# Prism (a Seren fork) identifies media by its own simkl_id and getSources cannot
-# consume a TMDbHelper {tmdb}/{imdb} id. This module resolves tmdb/imdb -> simkl_id
-# via the Simkl /redirect endpoint, mills the item into Prism's sync DB, then hands
-# off to the normal getSources flow. Shipped inline (base64) like the QR helpers.
-_PRISM_BRIDGE_B64 = 'IyAtKi0gY29kaW5nOiB1dGYtOCAtKi0KIiIiCnRtZGJoZWxwZXJfYnJpZGdlLnB5ICDigJQgIFByaXNtIChTZXJlbiBmb3JrKQoKRXh0ZXJuYWwtSUQgcGxheWJhY2sgYnJpZGdlIGZvciBUTURiSGVscGVyIChhbmQgYW55IGNhbGxlciB0aGF0IG9ubHkgaGFzCnRtZGIgLyBpbWRiIGlkcykuICBUTURiSGVscGVyIHBsYXllcnMgcGFzcyB7dG1kYn0ve2ltZGJ9L3tzZWFzb259L3tlcGlzb2RlfTsKUHJpc20ncyBuYXRpdmUgYGdldFNvdXJjZXNgIGFjdGlvbiBvbmx5IHVuZGVyc3RhbmRzIGl0cyBPV04gYHNpbWtsX2lkYCwgbG9va2VkCnVwIGluIHRoZSBsb2NhbCBTaW1rbCBzeW5jIGRhdGFiYXNlLiAgVGhpcyBtb2R1bGUgcmVzb2x2ZXMgYW4gZXh0ZXJuYWwgaWQgaW50bwp0aGUgbWF0Y2hpbmcgU2lta2wgZW50aXR5LCBtYWtlcyBzdXJlIGl0IGV4aXN0cyBpbiB0aGUgc3luYyBEQiwgYnVpbGRzIHRoZQpjYW5vbmljYWwgYGFjdGlvbl9hcmdzYCB0aGF0IGBnZXRfaXRlbV9pbmZvcm1hdGlvbigpYCBleHBlY3RzLCBhbmQgaGFuZHMgb2ZmIHRvCnRoZSBub3JtYWwgZ2V0U291cmNlcyBwbGF5YmFjayBmbG93LgoKSW5qZWN0ZWQvcmVnaXN0ZXJlZCBieSBBQlVLQVJJTSBUT09MUy4gIFNlbGYtY29udGFpbmVkOiBpdCB1c2VzIG9ubHkgcHVibGljClByaXNtIGhlbHBlcnMgKHNpbWtsIGluZGV4ZXIgcmVkaXJlY3QgKyBzeW5jIGRhdGFiYXNlKSwgc28gaXQgc3Vydml2ZXMgbWlub3IKdXBzdHJlYW0gY2h1cm4uCiIiIgpmcm9tIF9fZnV0dXJlX18gaW1wb3J0IGFubm90YXRpb25zCgppbXBvcnQganNvbgoKaW1wb3J0IHhibWNndWkKCmZyb20gcmVzb3VyY2VzLmxpYi5tb2R1bGVzLmdsb2JhbHMgaW1wb3J0IGcKCgpkZWYgX2RpYWxvZ19ub3RpZnkobXNnOiBzdHIpIC0+IE5vbmU6CiAgICB0cnk6CiAgICAgICAgeGJtY2d1aS5EaWFsb2coKS5ub3RpZmljYXRpb24oZy5BRERPTl9OQU1FLCBtc2csIHRpbWU9NDAwMCkKICAgIGV4Y2VwdCBFeGNlcHRpb246CiAgICAgICAgZy5sb2dfc3RhY2t0cmFjZSgpCgoKZGVmIF9yZXNvbHZlX3NpbWtsX2lkKHRtZGI9Tm9uZSwgaW1kYj1Ob25lLCBtZWRpYV90eXBlPU5vbmUpOgogICAgIiIiUmVzb2x2ZSBhbiBleHRlcm5hbCBpZCB0byAoc2lta2xfaWQsIGNhdGFsb2cpIHZpYSB0aGUgU2lta2wgL3JlZGlyZWN0IGVuZHBvaW50LgoKICAgIG1lZGlhX3R5cGUgaXMgVE1EYkhlbHBlcidzICgibW92aWUiIHwgInR2Iik7IGNhdGFsb2cgcmV0dXJuZWQgaXMgUHJpc20ncwogICAgKCJtb3ZpZSIgfCAidHYiIHwgImFuaW1lIikuCiAgICAiIiIKICAgIGZyb20gcmVzb3VyY2VzLmxpYi5pbmRleGVycy5zaW1rbCBpbXBvcnQgU2lta2xBUEkKCiAgICBhcGkgPSBTaW1rbEFQSSgpCiAgICByZXNvbHZlZCA9IGFwaS5yZWRpcmVjdF9zaW1rbF9pZCgKICAgICAgICBpbWRiPWltZGIgb3IgTm9uZSwKICAgICAgICB0bWRiPWludCh0bWRiKSBpZiB0bWRiIG5vdCBpbiAoTm9uZSwgIiIsICJOb25lIikgZWxzZSBOb25lLAogICAgICAgIHR5cGU9bWVkaWFfdHlwZSBpZiBtZWRpYV90eXBlIGluICgibW92aWUiLCAidHYiKSBlbHNlIE5vbmUsCiAgICApCiAgICByZXR1cm4gcmVzb2x2ZWQgICMgKHNpbWtsX2lkLCBjYXRhbG9nKSBvciBOb25lCgoKZGVmIF9lbnN1cmVfbW92aWVfcm93KHNpbWtsX2lkOiBpbnQpOgogICAgIiIiTWFrZSBzdXJlIHRoZSBtb3ZpZSBleGlzdHMgaW4gdGhlIHN5bmMgREI7IHJldHVybiBpdHMgaXRlbV9pbmZvcm1hdGlvbi4iIiIKICAgIGZyb20gcmVzb3VyY2VzLmxpYi5kYXRhYmFzZS5zZXNzaW9uIGltcG9ydCBnZXRfc3luY19kYXRhYmFzZQogICAgZnJvbSByZXNvdXJjZXMubGliLmluZGV4ZXJzLnNpbWtsIGltcG9ydCBTaW1rbEFQSQoKICAgIGRiID0gZ2V0X3N5bmNfZGF0YWJhc2UoKQogICAgcm93ID0gZGIuZmV0Y2hvbmUoIlNFTEVDVCBzaW1rbF9pZCBGUk9NIG1vdmllcyBXSEVSRSBzaW1rbF9pZCA9ID8iLCAoaW50KHNpbWtsX2lkKSwpKQogICAgaWYgbm90IHJvdzoKICAgICAgICBzaW1rbF9vYmplY3QgPSBTaW1rbEFQSSgpLmdldF9tb3ZpZV9qc29uKGludChzaW1rbF9pZCkpCiAgICAgICAgaWYgc2lta2xfb2JqZWN0OgogICAgICAgICAgICBpdGVtID0geyJzaW1rbF9pZCI6IGludChzaW1rbF9pZCksICJzaW1rbF9vYmplY3QiOiBzaW1rbF9vYmplY3R9CiAgICAgICAgICAgIGRiLmluc2VydF9zaW1rbF9tb3ZpZXMoW2l0ZW1dLCBmb3JjZV9tZXRhPVRydWUpCiAgICByZXR1cm4geyJtZWRpYXR5cGUiOiAibW92aWUiLCAic2lta2xfaWQiOiBpbnQoc2lta2xfaWQpfQoKCmRlZiBfZW5zdXJlX3Nob3dfcm93KHNpbWtsX2lkOiBpbnQpOgogICAgIiIiTWFrZSBzdXJlIHRoZSBzaG93IGV4aXN0cyBpbiB0aGUgc3luYyBEQjsgcmV0dXJuIGl0cyBzaG93IHNpbWtsX2lkLiIiIgogICAgZnJvbSByZXNvdXJjZXMubGliLmRhdGFiYXNlLnNlc3Npb24gaW1wb3J0IGdldF9zeW5jX2RhdGFiYXNlCiAgICBmcm9tIHJlc291cmNlcy5saWIuaW5kZXhlcnMuc2lta2wgaW1wb3J0IFNpbWtsQVBJCgogICAgZGIgPSBnZXRfc3luY19kYXRhYmFzZSgpCiAgICByb3cgPSBkYi5mZXRjaG9uZSgiU0VMRUNUIHNpbWtsX2lkIEZST00gc2hvd3MgV0hFUkUgc2lta2xfaWQgPSA/IiwgKGludChzaW1rbF9pZCksKSkKICAgIGlmIG5vdCByb3c6CiAgICAgICAgc2lta2xfb2JqZWN0ID0gU2lta2xBUEkoKS5nZXRfc2hvd19qc29uKGludChzaW1rbF9pZCkpCiAgICAgICAgaWYgc2lta2xfb2JqZWN0OgogICAgICAgICAgICBpdGVtID0geyJzaW1rbF9pZCI6IGludChzaW1rbF9pZCksICJzaW1rbF9vYmplY3QiOiBzaW1rbF9vYmplY3R9CiAgICAgICAgICAgIGRiLmluc2VydF9zaW1rbF9zaG93cyhbaXRlbV0sIGZvcmNlX21ldGE9VHJ1ZSkKICAgIHJldHVybiBpbnQoc2lta2xfaWQpCgoKZGVmIF9yZXNvbHZlX2VwaXNvZGVfc2lta2xfaWQoc2hvd19zaW1rbF9pZDogaW50LCBzZWFzb246IGludCwgZXBpc29kZTogaW50KToKICAgICIiIk1pbGwgdGhlIHNob3cncyBlcGlzb2RlIHRyZWUgYW5kIHJldHVybiB0aGUgdGFyZ2V0IGVwaXNvZGUncyBzaW1rbF9pZC4iIiIKICAgIGZyb20gcmVzb3VyY2VzLmxpYi5kYXRhYmFzZS5zZXNzaW9uIGltcG9ydCBnZXRfc3luY19kYXRhYmFzZQoKICAgIGRiID0gZ2V0X3N5bmNfZGF0YWJhc2UoKQogICAgIyBnZXRfZXBpc29kZV9saXN0IG1pbGxzIHRoZSBzZWFzb24gZnJvbSBTaW1rbCBvbiBkZW1hbmQgYW5kIHJldHVybnMgcm93cwogICAgIyBjYXJyeWluZyBlYWNoIGVwaXNvZGUncyBvd24gc2lta2xfaWQuCiAgICByb3dzID0gZGIuZ2V0X2VwaXNvZGVfbGlzdCgKICAgICAgICBpbnQoc2hvd19zaW1rbF9pZCksCiAgICAgICAgc2Vhc29uPWludChzZWFzb24pLAogICAgICAgIGhpZGVfdW5haXJlZD1GYWxzZSwKICAgICAgICBoaWRlX3dhdGNoZWQ9RmFsc2UsCiAgICApIG9yIFtdCiAgICBmb3Igcm93IGluIHJvd3M6CiAgICAgICAgaW5mbyA9IHJvdy5nZXQoImluZm8iKSBpZiBpc2luc3RhbmNlKHJvdywgZGljdCkgZWxzZSBOb25lCiAgICAgICAgcyA9IE5vbmUKICAgICAgICBlID0gTm9uZQogICAgICAgIGlmIGlzaW5zdGFuY2UoaW5mbywgZGljdCk6CiAgICAgICAgICAgIHMgPSBpbmZvLmdldCgic2Vhc29uIikKICAgICAgICAgICAgZSA9IGluZm8uZ2V0KCJudW1iZXIiKSBpZiBpbmZvLmdldCgibnVtYmVyIikgaXMgbm90IE5vbmUgZWxzZSBpbmZvLmdldCgiZXBpc29kZSIpCiAgICAgICAgaWYgcyBpcyBOb25lOgogICAgICAgICAgICBzID0gcm93LmdldCgic2Vhc29uIikKICAgICAgICBpZiBlIGlzIE5vbmU6CiAgICAgICAgICAgIGUgPSByb3cuZ2V0KCJudW1iZXIiKSBpZiByb3cuZ2V0KCJudW1iZXIiKSBpcyBub3QgTm9uZSBlbHNlIHJvdy5nZXQoImVwaXNvZGUiKQogICAgICAgIHRyeToKICAgICAgICAgICAgaWYgcyBpcyBub3QgTm9uZSBhbmQgZSBpcyBub3QgTm9uZSBhbmQgaW50KHMpID09IGludChzZWFzb24pIGFuZCBpbnQoZSkgPT0gaW50KGVwaXNvZGUpOgogICAgICAgICAgICAgICAgcmV0dXJuIGludChyb3cuZ2V0KCJzaW1rbF9pZCIpKQogICAgICAgIGV4Y2VwdCAoVHlwZUVycm9yLCBWYWx1ZUVycm9yKToKICAgICAgICAgICAgY29udGludWUKICAgIHJldHVybiBOb25lCgoKZGVmIHBsYXkocGFyYW1zOiBkaWN0KSAtPiBOb25lOgogICAgIiIiUm91dGVyIGVudHJ5OiBhY3Rpb249dG1kYmhlbHBlcl9wbGF5LgoKICAgIEFjY2VwdHMgKGZyb20gdGhlIHBsYXllciBKU09OKToKICAgICAgICBtZWRpYV90eXBlID0gbW92aWUgfCB0diAgICAgICAgKHJlcXVpcmVkKQogICAgICAgIHRtZGIgLyBpbWRiICAgICAgICAgICAgICAgICAgICAoYXQgbGVhc3Qgb25lOyBzaG93LWxldmVsIGZvciBlcGlzb2RlcykKICAgICAgICBzZWFzb24gLyBlcGlzb2RlICAgICAgICAgICAgICAgKHJlcXVpcmVkIGZvciB0diBlcGlzb2RlcykKICAgIFJlc29sdmVzIHRvIGEgUHJpc20gc2lta2wgaXRlbSBhbmQgZGlzcGF0Y2hlcyBnZXRTb3VyY2VzLgogICAgIiIiCiAgICBtZWRpYV90eXBlID0gKHBhcmFtcy5nZXQoIm1lZGlhX3R5cGUiKSBvciAiIikuc3RyaXAoKQogICAgdG1kYiA9IHBhcmFtcy5nZXQoInRtZGIiKQogICAgaW1kYiA9IHBhcmFtcy5nZXQoImltZGIiKQogICAgc2Vhc29uID0gcGFyYW1zLmdldCgic2Vhc29uIikKICAgIGVwaXNvZGUgPSBwYXJhbXMuZ2V0KCJlcGlzb2RlIikKCiAgICBpZiB0bWRiIGluICgiIiwgIk5vbmUiKToKICAgICAgICB0bWRiID0gTm9uZQogICAgaWYgaW1kYiBpbiAoIiIsICJOb25lIik6CiAgICAgICAgaW1kYiA9IE5vbmUKCiAgICBpZiBub3QgKHRtZGIgb3IgaW1kYik6CiAgICAgICAgX2RpYWxvZ19ub3RpZnkoIk5vIFRNRGIvSU1EYiBpZCBzdXBwbGllZCIpCiAgICAgICAgcmV0dXJuCgogICAgdHJ5OgogICAgICAgIGlmIG1lZGlhX3R5cGUgPT0gIm1vdmllIjoKICAgICAgICAgICAgcmVzb2x2ZWQgPSBfcmVzb2x2ZV9zaW1rbF9pZCh0bWRiPXRtZGIsIGltZGI9aW1kYiwgbWVkaWFfdHlwZT0ibW92aWUiKQogICAgICAgICAgICBpZiBub3QgcmVzb2x2ZWQ6CiAgICAgICAgICAgICAgICBfZGlhbG9nX25vdGlmeSgiTW92aWUgbm90IGZvdW5kIG9uIFNpbWtsIikKICAgICAgICAgICAgICAgIHJldHVybgogICAgICAgICAgICBzaW1rbF9pZCwgX2NhdGFsb2cgPSByZXNvbHZlZAogICAgICAgICAgICBfZW5zdXJlX21vdmllX3JvdyhpbnQoc2lta2xfaWQpKQogICAgICAgICAgICBhY3Rpb25fYXJncyA9IHsibWVkaWF0eXBlIjogIm1vdmllIiwgInNpbWtsX2lkIjogaW50KHNpbWtsX2lkKX0KCiAgICAgICAgZWxzZTogICMgdHYgLyBlcGlzb2RlCiAgICAgICAgICAgIGlmIHNlYXNvbiBpbiAoTm9uZSwgIiIpIG9yIGVwaXNvZGUgaW4gKE5vbmUsICIiKToKICAgICAgICAgICAgICAgIF9kaWFsb2dfbm90aWZ5KCJTZWFzb24vZXBpc29kZSBtaXNzaW5nIGZvciBUViBwbGF5YmFjayIpCiAgICAgICAgICAgICAgICByZXR1cm4KICAgICAgICAgICAgcmVzb2x2ZWQgPSBfcmVzb2x2ZV9zaW1rbF9pZCh0bWRiPXRtZGIsIGltZGI9aW1kYiwgbWVkaWFfdHlwZT0idHYiKQogICAgICAgICAgICBpZiBub3QgcmVzb2x2ZWQ6CiAgICAgICAgICAgICAgICBfZGlhbG9nX25vdGlmeSgiU2hvdyBub3QgZm91bmQgb24gU2lta2wiKQogICAgICAgICAgICAgICAgcmV0dXJuCiAgICAgICAgICAgIHNob3dfc2lta2xfaWQsIF9jYXRhbG9nID0gcmVzb2x2ZWQKICAgICAgICAgICAgc2hvd19zaW1rbF9pZCA9IF9lbnN1cmVfc2hvd19yb3coaW50KHNob3dfc2lta2xfaWQpKQogICAgICAgICAgICBlcGlzb2RlX3NpbWtsX2lkID0gX3Jlc29sdmVfZXBpc29kZV9zaW1rbF9pZCgKICAgICAgICAgICAgICAgIGludChzaG93X3NpbWtsX2lkKSwgaW50KHNlYXNvbiksIGludChlcGlzb2RlKQogICAgICAgICAgICApCiAgICAgICAgICAgIGlmIG5vdCBlcGlzb2RlX3NpbWtsX2lkOgogICAgICAgICAgICAgICAgX2RpYWxvZ19ub3RpZnkoIkVwaXNvZGUgbm90IGZvdW5kIChTJXMgRSVzKSIgJSAoc2Vhc29uLCBlcGlzb2RlKSkKICAgICAgICAgICAgICAgIHJldHVybgogICAgICAgICAgICBhY3Rpb25fYXJncyA9IHsKICAgICAgICAgICAgICAgICJtZWRpYXR5cGUiOiAiZXBpc29kZSIsCiAgICAgICAgICAgICAgICAic2lta2xfaWQiOiBpbnQoZXBpc29kZV9zaW1rbF9pZCksCiAgICAgICAgICAgICAgICAic2lta2xfc2hvd19pZCI6IGludChzaG93X3NpbWtsX2lkKSwKICAgICAgICAgICAgICAgICJzZWFzb24iOiBpbnQoc2Vhc29uKSwKICAgICAgICAgICAgICAgICJlcGlzb2RlIjogaW50KGVwaXNvZGUpLAogICAgICAgICAgICB9CiAgICBleGNlcHQgRXhjZXB0aW9uOgogICAgICAgIGcubG9nX3N0YWNrdHJhY2UoKQogICAgICAgIF9kaWFsb2dfbm90aWZ5KCJQbGF5YmFjayBicmlkZ2UgZXJyb3IgKHNlZSBsb2cpIikKICAgICAgICByZXR1cm4KCiAgICAjIEhhbmQgb2ZmIHRvIHRoZSBub3JtYWwgZ2V0U291cmNlcyBmbG93LCBwcmVzZXJ2aW5nIHNvdXJjZS1zZWxlY3QgLyByZXN1bWUgYXJncy4KICAgIGZyb20gcmVzb3VyY2VzLmxpYi5tb2R1bGVzIGltcG9ydCByb3V0ZXIKCiAgICBwbGF5X3BhcmFtcyA9IHsKICAgICAgICAiYWN0aW9uIjogImdldFNvdXJjZXMiLAogICAgICAgICJhY3Rpb25fYXJncyI6IGFjdGlvbl9hcmdzLAogICAgICAgICJzb3VyY2Vfc2VsZWN0IjogcGFyYW1zLmdldCgic291cmNlX3NlbGVjdCIsICJmYWxzZSIpLAogICAgICAgICJmb3JjZXJlc3VtZWNoZWNrIjogcGFyYW1zLmdldCgiZm9yY2VyZXN1bWVjaGVjayIsICJ0cnVlIiksCiAgICB9CiAgICAjIHNtYXJ0UGxheSBvbmx5IG1ha2VzIHNlbnNlIGZvciBlcGlzb2RlcyAocGxheWxpc3QgYnVpbGRpbmcpOyBwYXNzIHRocm91Z2ggaWYgZ2l2ZW4uCiAgICBpZiBwYXJhbXMuZ2V0KCJzbWFydFBsYXkiKToKICAgICAgICBwbGF5X3BhcmFtc1sic21hcnRQbGF5Il0gPSBwYXJhbXMuZ2V0KCJzbWFydFBsYXkiKQoKICAgIGcuUkVRVUVTVF9QQVJBTVMgPSBwbGF5X3BhcmFtcwogICAgcm91dGVyLmRpc3BhdGNoKHBsYXlfcGFyYW1zKQo='
 
 
 # ---------------------------------------------------------------------------
@@ -155,42 +145,6 @@ _TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiUmVn
 
 
 PATCHES = [
-    # ── DexSubtitles: auto-download service (by ABUKARIM TOOLS) ──
-    # 1) inject the background service file
-    {
-        'addon_id': 'service.subtitles.dexworld',
-        'rel_path': 'service_auto.py',
-        'old': '', 'new': '',
-        'description': 'DexSubtitles \u2013 inject auto-download service (service_auto.py)',
-        'inject_file': True,
-        'inject_content_b64': _DEXAUTO_SERVICE_B64,
-        'replace': True,  # keep in sync on every sweep (content-compared, idempotent)
-        'not_found_ok': True,  # dexworld optional: skip cleanly if not installed
-        'toggle': 'dexsubs_autodl',
-    },
-    # 2) inject settings.xml carrying the three auto-download settings
-    {
-        'addon_id': 'service.subtitles.dexworld',
-        'rel_path': os.path.join('resources', 'settings.xml'),
-        'old': '', 'new': '',
-        'description': 'DexSubtitles \u2013 settings.xml with auto-download options',
-        'inject_file': True,
-        'inject_content_b64': _DEXAUTO_SETTINGS_B64,
-        'replace': True,
-        'not_found_ok': True,
-        'toggle': 'dexsubs_autodl',
-    },
-    # 3) register the xbmc.service extension in the addon's addon.xml
-    {
-        'addon_id': 'service.subtitles.dexworld',
-        'rel_path': 'addon.xml',
-        'old': base64.b64decode(_DEXAUTO_ADDONXML_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_DEXAUTO_ADDONXML_NEW_B64).decode('utf-8'),
-        'description': 'DexSubtitles addon.xml \u2013 register auto-download xbmc.service',
-        'already_patched_check': 'service_auto.py',
-        'not_found_ok': True,
-        'toggle': 'dexsubs_autodl',
-    },
     # ── TinyPPI: disable install_fonts() entirely – fixes picture freeze on playback stop ──
     {
         'addon_id': 'script.tinyppi',
@@ -914,6 +868,77 @@ PATCHES = [
         'description': 'AF3 - Home spotlight plot gap under the genre line',
     },
 
+    # ── AF3: Vertical Plot — OSD seek bar / info overlay + library views ──
+    # Same treatment as Home (real textbox = vertical autoscroll, font_mini_plot,
+    # 54/80 plot gap), using the params the Info_* chain already carries:
+    #   * OSD_Progress_Details_Extended (Includes_OSD.xml) — the info block shown
+    #     above the seek bar (Custom_1152 / Custom_1153 overlays). It calls
+    #     Info_Plot directly, so the params go on that call.
+    #   * View_Row_Info (Includes_Views.xml) — the info panel of the library
+    #     views opened from the menus / sub-menus.
+    #   * View_Combined_Info (Includes_Views_Combined.xml) — the combined views.
+    # Every other caller (info dialogs, search, PVR, ...) is unchanged.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_OSD.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': ('<param name="include_other">false</param>\n'
+                '                    <param name="override">true</param>'),
+        'new': ('<param name="include_other">false</param>\n'
+                '                    <param name="override">true</param>\n'
+                '                    <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (osd) -->\n'
+                '                    <param name="plotfont">font_mini_plot</param>\n'
+                '                    <param name="plottop">54</param>\n'
+                '                    <param name="plotboxh">80</param>'),
+        'already_patched_check': '<!-- ABUKARIM: vertical plot (osd) -->',
+        'fallback_pattern': (r'([ \t]*)(<param name="include_other">false</param>\s*'
+                             r'<param name="override">true</param>)'),
+        'fallback_repl': (r'\1\2\n\1<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (osd) -->'
+                          r'\n\1<param name="plotfont">font_mini_plot</param>'
+                          r'\n\1<param name="plottop">54</param>'
+                          r'\n\1<param name="plotboxh">80</param>'),
+        'description': 'AF3 - OSD seek bar plot scrolls vertically (textbox)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Views.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="visible_meta">$EXP[View_Row_Info_Details_Expression]</param>',
+        'new': ('<param name="visible_meta">$EXP[View_Row_Info_Details_Expression]</param>\n'
+                '                <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (views) -->\n'
+                '                <param name="plotfont">font_mini_plot</param>\n'
+                '                <param name="plottop">54</param>\n'
+                '                <param name="plotboxh">80</param>'),
+        'already_patched_check': '<!-- ABUKARIM: vertical plot (views) -->',
+        'fallback_pattern': r'([ \t]*)(<param name="visible_meta">\$EXP\[View_Row_Info_Details_Expression\]</param>)',
+        'fallback_repl': (r'\1\2\n\1<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (views) -->'
+                          r'\n\1<param name="plotfont">font_mini_plot</param>'
+                          r'\n\1<param name="plottop">54</param>'
+                          r'\n\1<param name="plotboxh">80</param>'),
+        'description': 'AF3 - library view plot scrolls vertically (textbox)',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Views_Combined.xml'),
+        'toggle': 'af3_vplot',
+        'not_found_ok': True,
+        'old': '<param name="include_details">$PARAM[include_details]</param>',
+        'new': ('<param name="include_details">$PARAM[include_details]</param>\n'
+                '            <param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (combined) -->\n'
+                '            <param name="plotfont">font_mini_plot</param>\n'
+                '            <param name="plottop">54</param>\n'
+                '            <param name="plotboxh">80</param>'),
+        'already_patched_check': '<!-- ABUKARIM: vertical plot (combined) -->',
+        'fallback_pattern': r'([ \t]*)(<param name="include_details">\$PARAM\[include_details\]</param>)',
+        'fallback_repl': (r'\1\2\n\1<param name="use_textbox">true</param>  <!-- ABUKARIM: vertical plot (combined) -->'
+                          r'\n\1<param name="plotfont">font_mini_plot</param>'
+                          r'\n\1<param name="plottop">54</param>'
+                          r'\n\1<param name="plotboxh">80</param>'),
+        'description': 'AF3 - combined view plot scrolls vertically (textbox)',
+    },
+
     # ── AF3: Highlight Colour — Genre plotline + widget titles (by ABUKARIM TOOLS) ──
     # Paint the Genre plotline (the line above the plot when Plotline = Genre)
     # and every widget header title in the skin's own focus/highlight colour,
@@ -1014,33 +1039,6 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
-
-    # ── Prism (Seren fork): TMDbHelper external-id play bridge ──
-    # 1) inject the self-contained bridge module
-    {
-        'addon_id': 'plugin.video.prism',
-        'rel_path': os.path.join('resources', 'lib', 'modules', 'tmdbhelper_bridge.py'),
-        'old': '', 'new': '',
-        'description': 'Prism – inject tmdbhelper_bridge.py (external-id play)',
-        'inject_file': True,
-        'inject_content_b64': _PRISM_BRIDGE_B64,
-        'replace': True,
-        'already_patched_check': 'tmdbhelper_bridge',
-        'not_found_ok': True,
-    },
-    # 2) register action=tmdbhelper_play in the router
-    {
-        'addon_id': 'plugin.video.prism',
-        'rel_path': os.path.join('resources', 'lib', 'modules', 'router.py'),
-        'old': '        homeMenu.Menus().home()\n\n    elif action == "genericEndpoint":',
-        'new': '        homeMenu.Menus().home()\n\n    elif action == "tmdbhelper_play":\n        from resources.lib.modules import tmdbhelper_bridge\n\n        tmdbhelper_bridge.play(params)\n\n    elif action == "genericEndpoint":',
-        'description': 'Prism router.py – register action=tmdbhelper_play',
-        'already_patched_check': 'action == "tmdbhelper_play"',
-        'fallback_pattern': r'        homeMenu\.Menus\(\)\.home\(\)\n\n    elif action == "genericEndpoint":',
-        'fallback_repl': '        homeMenu.Menus().home()\n\n    elif action == "tmdbhelper_play":\n        from resources.lib.modules import tmdbhelper_bridge\n\n        tmdbhelper_bridge.play(params)\n\n    elif action == "genericEndpoint":',
-        'not_found_ok': True,
-    },
-
 ]
 
 
@@ -1286,7 +1284,6 @@ TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
-    ('prism_tmdbh_play', 'Prism: TMDbHelper Play'),
     ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
     ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
@@ -1294,11 +1291,10 @@ TOGGLE_GROUPS = [
     ('tinyppi_arabic',   'PPI Arabic'),
     ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
-    ('af3_vplot',        'AF3: Vertical Plot (Home)'),
+    ('af3_vplot',        'AF3: Vertical Plot (Home, OSD & Views)'),
     ('af3_highlight',    'AF3: Highlight Genre & Widget Titles'),
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
-    ('dexsubs_autodl',   'DexSubtitles: Auto-Download'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
@@ -1326,11 +1322,6 @@ _TOGGLE_OF = {
     # TMDbHelper: Stability — dead-player guard (getPlayingFile RuntimeError on teardown)
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py')): 'tmdbh_stability',
-    # Prism: TMDbHelper Play – bridge module + router hook
-    ('plugin.video.prism',
-     os.path.join('resources', 'lib', 'modules', 'tmdbhelper_bridge.py')): 'prism_tmdbh_play',
-    ('plugin.video.prism',
-     os.path.join('resources', 'lib', 'modules', 'router.py')): 'prism_tmdbh_play',
     # TinyPPI: Run on non-CE
     ('script.tinyppi',
      os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',
@@ -1574,6 +1565,52 @@ _FIRST_RUN_LOCK_FILE = os.path.join(
     ADDON_DATA, 'plugin.program.abukarimtools', 'first_run.lock')
 
 
+# ---------------------------------------------------------------------------
+# DexSubtitles auto-download — retired in 3.1.15
+# ---------------------------------------------------------------------------
+# The dexsubs_autodl patches are gone, but older builds left two things behind
+# in service.subtitles.dexworld: an <extension point="xbmc.service"> line in
+# its addon.xml and the service_auto.py it points at. Without cleanup that
+# background service would keep running forever. This undoes both (once; a
+# clean box is detected by content and nothing is written). The injected
+# settings.xml is left alone — it only adds options, and the next DexWorld
+# update/reinstall replaces it anyway.
+_DEXAUTO_REG_RE = re.compile(
+    r'\n?[ \t]*<!-- AUTO_DL_V\d+: auto-download service \(by ABUKARIM TOOLS\) -->[ \t]*\n'
+    r'[ \t]*<extension point="xbmc\.service" library="service_auto\.py"\s*/>[ \t]*\n?')
+
+
+def _retire_dexsubs_autodl():
+    addon_id = 'service.subtitles.dexworld'
+    addon_path = _resolve_addon_dir(addon_id) or os.path.join(ADDONS_DIR, addon_id)
+    if not os.path.isdir(addon_path):
+        return True, '[%s] not installed \u2013 nothing to retire.' % addon_id
+    changed = []
+    xml_path = os.path.join(addon_path, 'addon.xml')
+    try:
+        if os.path.isfile(xml_path):
+            content = _read(xml_path)
+            new_content = _DEXAUTO_REG_RE.sub('\n', content, count=1)
+            if new_content == content and 'library="service_auto.py"' in content:
+                # unexpected layout: fall back to the exact blob we injected
+                old = base64.b64decode(_DEXAUTO_ADDONXML_OLD_B64).decode('utf-8')
+                new = base64.b64decode(_DEXAUTO_ADDONXML_NEW_B64).decode('utf-8')
+                new_content = content.replace(new, old, 1)
+            if new_content != content:
+                _write(xml_path, new_content)
+                changed.append('addon.xml service entry removed')
+        svc = os.path.join(addon_path, 'service_auto.py')
+        if os.path.isfile(svc):
+            os.remove(svc)
+            changed.append('service_auto.py deleted')
+    except Exception as e:
+        return False, '[%s] DexSubtitles auto-download cleanup failed: %s' % (addon_id, e)
+    if changed:
+        return True, ('[%s] Patched OK: DexSubtitles auto-download retired (%s) '
+                      '\u2013 takes effect after a Kodi restart.' % (addon_id, ', '.join(changed)))
+    return True, '[%s] DexSubtitles auto-download already retired.' % addon_id
+
+
 def _is_active_skin(addon_id):
     try:
         return addon_id == xbmc.getSkinDir()
@@ -1651,6 +1688,20 @@ def apply_set(group=None, addon_ids=None):
         if ok:
             succeeded += 1
             if ('Patched OK' in msg) or ('File injected OK' in msg):
+                changed += 1
+        else:
+            failed += 1
+
+    # Undo the retired DexSubtitles auto-download patch. Runs on every sweep
+    # (dexworld is no longer a patch target, so it never appears in addon_ids);
+    # a clean box is a cheap no-op.
+    if True:
+        ok, msg = _retire_dexsubs_autodl()
+        _log(msg)
+        results.append((ok, msg))
+        if ok:
+            succeeded += 1
+            if 'Patched OK' in msg:
                 changed += 1
         else:
             failed += 1
