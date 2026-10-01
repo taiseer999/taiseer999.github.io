@@ -915,6 +915,16 @@ def main():
         except OSError:
             pass
 
+    # AF3 auto-trailers (3.1.16): their engine runs on its own thread for the
+    # rest of the session and idles until turned on from Toggles. Started
+    # before the boot repo-linking/watchdog so it never waits on them. Fenced.
+    try:
+        from resources.lib.af3_trailers import engine as trailers_engine
+        trailers_engine.start(monitor)
+    except Exception:
+        _log('AF3 auto-trailers failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # After an Addons33 rebuild (or whenever the repo listing cache is still
     # empty) the plain boot linking above cannot match anything: restore the
     # phase-1 origin snapshot and refresh the repositories, retrying for up to

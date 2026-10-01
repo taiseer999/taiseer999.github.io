@@ -988,6 +988,81 @@ PATCHES = [
         'description': 'AF3 - widget titles (widget-property label) in highlight colour',
     },
 
+    # ── AF3: auto-trailers support (by ABUKARIM TOOLS, 3.1.16) ──
+    # The AF3 auto-trailers (Toggles menu) play a title's trailer WINDOWED; AF3
+    # already draws any playing video as the page background. But AF3 also
+    # treats any playing media as "the user is watching something": Back on
+    # Home/the hubs jumps to full screen (309) and the footer swaps the studio
+    # logo for the now-playing panel. Every Player.HasMedia in those three
+    # files becomes "real media" = Player.HasMedia AND no trailer property, so
+    # a trailer behaves like a moving background. With no trailer playing the
+    # property is empty and AF3 behaves exactly as before.
+    # Gated by 'feature': only applied while the auto-trailers are turned on.
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Hubs.xml'),
+        'toggle': 'af3_trailers',
+        'feature': 'af3_trailers',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': 'Window(Home).Property(abk.trailer)',
+        'fallback_pattern': r'\bPlayer\.HasMedia\b',
+        'fallback_repl': '[Player.HasMedia + String.IsEmpty(Window(Home).Property(abk.trailer))]',
+        'count': 0,
+        'description': 'AF3 Includes_Hubs.xml - trailers count as background, not playback',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Home.xml'),
+        'toggle': 'af3_trailers',
+        'feature': 'af3_trailers',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': 'Window(Home).Property(abk.trailer)',
+        'fallback_pattern': r'\bPlayer\.HasMedia\b',
+        'fallback_repl': '[Player.HasMedia + String.IsEmpty(Window(Home).Property(abk.trailer))]',
+        'count': 0,
+        'description': 'AF3 Includes_Home.xml - trailers count as background, not playback',
+    },
+    {
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Furniture.xml'),
+        'toggle': 'af3_trailers',
+        'feature': 'af3_trailers',
+        'not_found_ok': True,
+        'old': '',
+        'new': '',
+        'already_patched_check': 'Window(Home).Property(abk.trailer)',
+        'fallback_pattern': r'\bPlayer\.HasMedia\b',
+        'fallback_repl': '[Player.HasMedia + String.IsEmpty(Window(Home).Property(abk.trailer))]',
+        'count': 0,
+        'description': 'AF3 Includes_Furniture.xml - trailers count as background, not playback',
+    },
+
+    {   # AF3 auto-trailers (3.1.17): Kodi does not always start the
+        # ABUKARIM TOOLS service, so Home also starts the trailer engine by
+        # itself (trailers.py) whenever it is not running yet. The condition is
+        # evaluated by the skin, so a running engine costs nothing.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Home.xml'),
+        'toggle': 'af3_trailers',
+        'feature': 'af3_trailers',
+        'not_found_ok': True,
+        'old': '<window>\n',
+        'new': ('<window>\n'
+                '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.trailers.engine))">'
+                'RunScript(special://home/addons/plugin.program.abukarimtools/trailers.py,home)</onload>'
+                '  <!-- ABUKARIM: trailers engine -->\n'),
+        'already_patched_check': '<!-- ABUKARIM: trailers engine -->',
+        'fallback_pattern': r'<window>[ \t]*\r?\n',
+        'fallback_repl': ('<window>\n'
+                          '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.trailers.engine))">'
+                          'RunScript(special://home/addons/plugin.program.abukarimtools/trailers.py,home)</onload>'
+                          '  <!-- ABUKARIM: trailers engine -->\n'),
+        'description': 'AF3 Home.xml - start the trailer engine if it is not running',
+    },
     # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
     # onAVChange / onAVStarted call get_playingitem() while the player is
     # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not
@@ -1404,6 +1479,17 @@ def _save_disabled(disabled_toggles):
         return False
 
 
+def _feature_on(name):
+    """Is a Toggles-menu feature switched on? Unknown features count as off."""
+    if name == 'af3_trailers':
+        try:
+            from resources.lib.af3_trailers import config as _trailers_config
+            return _trailers_config.load().get('enabled', False)
+        except Exception:
+            return False
+    return False
+
+
 def _select(group=None, addon_ids=None, respect_selection=True):
     """Return the patch entries to apply, optionally narrowed to addon ids.
 
@@ -1417,6 +1503,10 @@ def _select(group=None, addon_ids=None, respect_selection=True):
     if addon_ids:
         wanted   = set(addon_ids)
         selected = [p for p in selected if p['addon_id'] in wanted]
+    # Feature-gated entries (e.g. the AF3 auto-trailers skin patch) apply only
+    # while that feature is switched on from its Toggles menu entry.
+    selected = [p for p in selected
+                if not p.get('feature') or _feature_on(p['feature'])]
     if respect_selection:
         disabled = _load_disabled()
         if disabled:

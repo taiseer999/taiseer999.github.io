@@ -20,6 +20,7 @@ ID ranges:
   30260-30289  tab toggles (DPlex / Korean)
   30290-30319  patcher / auto-patch watchdog
   30400-30429  add-on portal
+  30430-30459  AF3 auto-trailers
 """
 
 STRINGS = {
@@ -237,4 +238,24 @@ STRINGS = {
             "تثبيت هذه الإضافات من مستودعاتها؟[CR][CR]%s"),
     30419: ("The add-ons were installed and linked to their repositories.\nA restart is recommended so their updates become active.\nتم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة.",
             "تم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."),
+
+    # ---- AF3 auto-trailers (30430-30459) ----
+    30430: ("AF3 Auto Trailers",               "التريلرات التلقائية (AF3)"),
+    30431: ("Auto trailers: %s",               "التريلرات التلقائية: %s"),
+    30432: ("Sound: %s",                       "الصوت: %s"),
+    30433: ("Start after: %d sec",             "التشغيل بعد: %d ثانية"),
+    30434: ("Quality: %s",                     "الجودة: %s"),
+    30435: ("How long a title waits before its trailer starts",
+            "كم ينتظر العمل قبل ما يبدأ التريلر"),
+    30436: ("On",                              "مفعّل"),
+    30437: ("Off",                             "متوقف"),
+    30438: ("Auto trailers on",                "تم تفعيل التريلرات التلقائية"),
+    30439: ("Auto trailers off",               "تم إيقاف التريلرات التلقائية"),
+    30440: ("Arctic Fuse 3 is not installed.", "واجهة Arctic Fuse 3 غير مثبّتة."),
+    30441: ("On - works when Arctic Fuse 3 is the active skin",
+            "مفعّل - يعمل عندما تكون Arctic Fuse 3 هي الواجهة الحالية"),
+    30442: ("‘Background video’ is off in the Arctic Fuse 3 skin settings, so trailers cannot show behind the page.[CR]Turn ‘Background video’ back on in the skin settings.",
+            "خيار «فيديو الخلفية» متوقف في إعدادات واجهة Arctic Fuse 3، لذلك لن تظهر التريلرات خلف الصفحة.[CR]فعّل «فيديو الخلفية» من إعدادات الواجهة."),
+    30443: ("%d sec",                          "%d ثانية"),
+    30444: ("Trailer quality",                 "جودة التريلر"),
 }

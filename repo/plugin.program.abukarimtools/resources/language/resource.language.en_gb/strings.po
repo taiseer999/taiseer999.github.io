@@ -564,3 +564,63 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr ""
 
+msgctxt "#30430"
+msgid "AF3 Auto Trailers"
+msgstr ""
+
+msgctxt "#30431"
+msgid "Auto trailers: %s"
+msgstr ""
+
+msgctxt "#30432"
+msgid "Sound: %s"
+msgstr ""
+
+msgctxt "#30433"
+msgid "Start after: %d sec"
+msgstr ""
+
+msgctxt "#30434"
+msgid "Quality: %s"
+msgstr ""
+
+msgctxt "#30435"
+msgid "How long a title waits before its trailer starts"
+msgstr ""
+
+msgctxt "#30436"
+msgid "On"
+msgstr ""
+
+msgctxt "#30437"
+msgid "Off"
+msgstr ""
+
+msgctxt "#30438"
+msgid "Auto trailers on"
+msgstr ""
+
+msgctxt "#30439"
+msgid "Auto trailers off"
+msgstr ""
+
+msgctxt "#30440"
+msgid "Arctic Fuse 3 is not installed."
+msgstr ""
+
+msgctxt "#30441"
+msgid "On - works when Arctic Fuse 3 is the active skin"
+msgstr ""
+
+msgctxt "#30442"
+msgid "‘Background video’ is off in the Arctic Fuse 3 skin settings, so trailers cannot show behind the page.[CR]Turn ‘Background video’ back on in the skin settings."
+msgstr ""
+
+msgctxt "#30443"
+msgid "%d sec"
+msgstr ""
+
+msgctxt "#30444"
+msgid "Trailer quality"
+msgstr ""
+

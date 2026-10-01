@@ -1,3 +1,72 @@
+v3.1.20
+- FIX (log 2026-10-01 17:13:54): lookups worked (trailer found, 1080p MP4
+  opened by VideoPlayer) but CVideoPlayer::CloseFile came ~0.2 s after every
+  OpenFile and the same title restarted every ~5 s. While the stream opens,
+  Kodi's busy dialog is modal and ListItem.* reads it (empty), so the engine
+  saw "focus moved" and stopped its own trailer. A missing title now stops the
+  trailer only after 1 s with no dialog open (15 s with one); another focused
+  title still stops it at once.
+- Removed the busy-dialog cancel (Action(Back,busydialog)) - it can abort the
+  stream being opened.
+
+v3.1.19
+- FIX (log 2026-10-01 17:08:50): turning the trailers on reloaded the skin
+  while the settings list was open. The entry was a FOLDER item, so its URL
+  was the Programs container path; the reload re-ran it in a second copy whose
+  select() answered 0 instantly every time -> on/off/on/off ~190 times in 3 s,
+  and the two copies raced on one temp file (FileNotFoundError
+  af3_trailers.json.tmp) which reset the settings to off.
+  * af3_trailers is now an ACTION mode (non-folder), Container.Refresh after.
+  * single copy: Window(Home).Property(abukarimtools.trailers.menu).
+  * ReloadSkin only after the list closes (finally).
+  * a select() that answers in under 0.25 s is never acted on; two in a row
+    close the list.
+  * config.save uses a private temp name per process/thread.
+- Engine re-asserts abukarimtools.trailers.engine every tick, and the Home
+  launcher waits 1.5 s before starting, so a skin reload never yields two
+  engines.
+
+v3.1.18
+- Log 2026-10-01 16:49-17:05: the menu was opened several times but the
+  trailer setting was never switched on (no TrailersToggle line, no trailer
+  patch written; the 3.1.16 engine sat idle). Picking "AF3 Auto Trailers"
+  while it is off now turns it ON immediately (patch + engine + toast), then
+  shows the settings list. Opening it while on also makes sure the engine runs.
+
+v3.1.17
+- FIX (log 2026-10-01 16:47:51): Kodi did not start the ABUKARIM TOOLS service
+  that boot (no [AbukarimTools Service] line at all), and the trailer engine
+  lived only inside it. New trailers.py runs the engine on its own; AF3
+  Home.xml gets a feature-gated onload that starts it whenever
+  Window(Home).Property(abukarimtools.trailers.engine) is empty, and turning
+  the toggle on starts it directly. The service still starts it too; the
+  property keeps it to one copy.
+- Log 16:46:35 session: the feature was never switched on (no trailer patch
+  written, no toggle line). The Toggles entry now reads
+  "AF3 Auto Trailers: On/Off" (listing no longer cached) and logs its changes.
+- Engine logs: ON/off with settings, every focused title + key, titles without
+  any IMDb/TMDb id, and each lookup result (trailer found / no trailer).
+
+v3.1.16
+- NEW Toggles entry "AF3 Auto Trailers" (icon resources/icons/af3_trailers.png):
+  on/off, sound, start delay (1/2/3/5/8/10 s), quality (720p/1080p). Settings
+  in addon_data/plugin.program.abukarimtools/af3_trailers.json; the service
+  picks changes up within a second (no restart).
+- Engine (resources/lib/af3_trailers/engine.py) runs on its own thread in the
+  service. Focused movie/tvshow on AF3 Home or hubs 1101-1104 -> IMDb id
+  (ListItem.UniqueID(imdb)/IMDBNumber/TMDbHelper props, or TMDb external_ids
+  with TMDbHelper's own key) -> IMDb GraphQL trailer (imdb.py, ported from
+  Dex Hub 5.10.104, MIT) -> played WINDOWED. AF3's own Background_Video
+  shows it behind the page. Stops on focus change, leaving the page, the info
+  dialog, the screensaver; never stops real playback (lets go of it);
+  full screen hands it over; finished trailers do not repeat until the cursor
+  moves. Silent mode uses SetVolume(0) with crash-safe restore marker.
+- Feature-gated AF3 patch (Includes_Hubs/Home/Furniture.xml): every
+  Player.HasMedia becomes [Player.HasMedia + String.IsEmpty(Window(Home).
+  Property(abk.trailer))], so Back no longer jumps to full screen and the
+  now-playing footer stays hidden while a trailer plays. New patcher key
+  'feature': entries apply only while that feature is on.
+
 v3.1.11
 - FIX: add-ons were linked to the WRONG repository (seen on the Mac,
   2026-09-28 19:31: skin.arctic.fuse.3 5.10.18 -> repository.taiseer, which

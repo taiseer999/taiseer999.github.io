@@ -28,6 +28,7 @@ ICONS  = {
     'dplex_toggle':   ADDON_PATH + 'resources/icons/dplex_toggle.png',
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
+    'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
@@ -69,12 +70,16 @@ CATEGORIES = [
         ('dplex_toggle',   30010),
         ('korean_toggle',  30011),
         ('icons_toggle',   30020),
+        ('af3_trailers',   30430),
     ]),
 ]
 
 # Modes that are leaf actions (run then return), not plugin folders.
 ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
-                'total_clean', 'old_thumbs'}
+                'total_clean', 'old_thumbs',
+                # 3.1.19: an action, not a folder - as a folder its URL became
+                # the container path, so the skin reload re-ran it in a loop
+                'af3_trailers'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -257,10 +262,19 @@ def category_menu(cat_key):
         if c_key != cat_key:
             continue
         for mode, label_id in items:
-            _add_item(T(label_id), mode, is_folder=(mode not in ACTION_MODES))
+            label = T(label_id)
+            if mode == 'af3_trailers':
+                # show the current state right in the Toggles list
+                try:
+                    from resources.lib.af3_trailers import config as _tcfg
+                    label = '%s: %s' % (label, T(30436) if _tcfg.load()['enabled'] else T(30437))
+                except Exception:
+                    pass
+            _add_item(label, mode, is_folder=(mode not in ACTION_MODES))
         break
     xbmcplugin.setContent(HANDLE, 'files')
-    xbmcplugin.endOfDirectory(HANDLE)
+    # not cached: the Toggles list shows live on/off states
+    xbmcplugin.endOfDirectory(HANDLE, cacheToDisc=False)
 
 
 def _end_directory():
@@ -405,6 +419,10 @@ def router():
         _end_directory()
         from resources.lib import icons_toggle
         icons_toggle.run()
+
+    elif mode == 'af3_trailers':
+        from resources.lib import af3_trailers_toggle
+        af3_trailers_toggle.run()
 
     elif mode == 'origin_fix':
         _end_directory()

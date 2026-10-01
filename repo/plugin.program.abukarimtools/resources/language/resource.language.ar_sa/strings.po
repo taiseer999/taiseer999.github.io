@@ -564,3 +564,63 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr "تم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 
+msgctxt "#30430"
+msgid "AF3 Auto Trailers"
+msgstr "التريلرات التلقائية (AF3)"
+
+msgctxt "#30431"
+msgid "Auto trailers: %s"
+msgstr "التريلرات التلقائية: %s"
+
+msgctxt "#30432"
+msgid "Sound: %s"
+msgstr "الصوت: %s"
+
+msgctxt "#30433"
+msgid "Start after: %d sec"
+msgstr "التشغيل بعد: %d ثانية"
+
+msgctxt "#30434"
+msgid "Quality: %s"
+msgstr "الجودة: %s"
+
+msgctxt "#30435"
+msgid "How long a title waits before its trailer starts"
+msgstr "كم ينتظر العمل قبل ما يبدأ التريلر"
+
+msgctxt "#30436"
+msgid "On"
+msgstr "مفعّل"
+
+msgctxt "#30437"
+msgid "Off"
+msgstr "متوقف"
+
+msgctxt "#30438"
+msgid "Auto trailers on"
+msgstr "تم تفعيل التريلرات التلقائية"
+
+msgctxt "#30439"
+msgid "Auto trailers off"
+msgstr "تم إيقاف التريلرات التلقائية"
+
+msgctxt "#30440"
+msgid "Arctic Fuse 3 is not installed."
+msgstr "واجهة Arctic Fuse 3 غير مثبّتة."
+
+msgctxt "#30441"
+msgid "On - works when Arctic Fuse 3 is the active skin"
+msgstr "مفعّل - يعمل عندما تكون Arctic Fuse 3 هي الواجهة الحالية"
+
+msgctxt "#30442"
+msgid "‘Background video’ is off in the Arctic Fuse 3 skin settings, so trailers cannot show behind the page.[CR]Turn ‘Background video’ back on in the skin settings."
+msgstr "خيار «فيديو الخلفية» متوقف في إعدادات واجهة Arctic Fuse 3، لذلك لن تظهر التريلرات خلف الصفحة.[CR]فعّل «فيديو الخلفية» من إعدادات الواجهة."
+
+msgctxt "#30443"
+msgid "%d sec"
+msgstr "%d ثانية"
+
+msgctxt "#30444"
+msgid "Trailer quality"
+msgstr "جودة التريلر"
+
