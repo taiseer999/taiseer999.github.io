@@ -1,3 +1,9 @@
+v3.2.2
+- FIX (screenshot 2026-10-03 09:32): Remote Access showed "http://Busy:8080"
+  - Network.IPAddress read from Python returned Kodi's "Busy" placeholder.
+  The LAN address now comes from the OS (UDP socket, nothing is sent), with
+  the info label as a retried fallback; never shows a non-IP value.
+
 v3.2.1
 - FIX (log 2026-10-03 09:07): the Remote Access / Share Log QR screen drew its
   text but not its images (xbmcgui.WindowDialog + ControlImage on Kodi 22), so

@@ -12,7 +12,9 @@ remote apps) and can be shown again or rotated from the Tools menu.
 
 import json
 import os
+import re
 import secrets
+import socket
 
 import xbmc
 import xbmcgui
@@ -52,8 +54,38 @@ def _new_password(n=8):
     return ''.join(secrets.choice(_ALPHABET) for _ in range(n))
 
 
+_IPV4 = re.compile(r'^\d{1,3}(\.\d{1,3}){3}$')
+
+
+def _local_ip():
+    """LAN address of this box.
+
+    3.2.1 field bug: Network.IPAddress read from Python returned the
+    placeholder "Busy" (Kodi had not evaluated the label yet), so the screen
+    showed http://Busy:8080. Ask the OS first (UDP "connect" sends nothing),
+    then fall back to the info label, retrying while it says Busy.
+    """
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            s.connect(('10.255.255.255', 1))
+            ip = s.getsockname()[0]
+        finally:
+            s.close()
+        if _IPV4.match(ip) and not ip.startswith('127.'):
+            return ip
+    except Exception:
+        pass
+    for _ in range(20):
+        ip = (xbmc.getInfoLabel('Network.IPAddress') or '').strip()
+        if _IPV4.match(ip) and not ip.startswith('127.'):
+            return ip
+        xbmc.sleep(250)
+    return '<box-ip>'
+
+
 def credentials():
-    ip = xbmc.getInfoLabel('Network.IPAddress') or '?'
+    ip = _local_ip()
     port = _get('services.webserverport') or 8080
     return {
         'enabled': bool(_get('services.webserver')),
