@@ -35,8 +35,9 @@ def pending():
     try:
         with open(PENDING, 'r', encoding='utf-8') as f:
             data = json.load(f)
+        from resources.lib.menu_reconcile import addon_present
         return [a for a in data.get('addons', [])
-                if a.get('id') and not xbmc.getCondVisibility('System.HasAddon(%s)' % a['id'])]
+                if a.get('id') and not addon_present(a['id'])]
     except Exception:
         return []
 

@@ -43,9 +43,31 @@ def _log(msg, level=xbmc.LOGINFO):
     xbmc.log('[AbukarimTools MenuReconcile] %s' % msg, level)
 
 
+def addon_present(aid):
+    """Installed AND enabled.
+
+    3.2.4: not System.HasAddon() for mixed-case ids - Kodi lowercases
+    condition strings, so 'plugin.program.ABUKARIMwizard' never matched and
+    the AF3 power tray's Force Close was hidden although the wizard is
+    installed (same root cause as wizard_runner 3.1.3). JSON-RPC keeps case.
+    """
+    if aid == aid.lower():
+        return bool(xbmc.getCondVisibility('System.HasAddon(%s)' % aid))
+    try:
+        req = {'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.GetAddonDetails',
+               'params': {'addonid': aid, 'properties': ['enabled']}}
+        res = json.loads(xbmc.executeJSONRPC(json.dumps(req)))
+        addon = (res.get('result') or {}).get('addon')
+        if addon is not None:
+            return bool(addon.get('enabled', True))
+    except Exception:
+        pass
+    return False
+
+
 def _installed(aid, cache):
     if aid not in cache:
-        cache[aid] = bool(xbmc.getCondVisibility('System.HasAddon(%s)' % aid))
+        cache[aid] = addon_present(aid)
     return cache[aid]
 
 
@@ -82,7 +104,9 @@ def _walk_visible(node, stats):
     if not isinstance(node, dict):
         return
     if 'name' in node:
-        ids = _refs(node)
+        # mixed-case ids can't be expressed as a skin condition (Kodi
+        # lowercases it and it would never match) - leave those unguarded
+        ids = [a for a in _refs(node) if a == a.lower()]
         cur = node.get('visible') or ''
         add = [a for a in ids if 'System.HasAddon(%s)' % a not in cur]
         if add:
@@ -103,17 +127,31 @@ def _walk(node, cache, stats):
         return
     ids = _refs(node)
     if ids:
-        missing = [a for a in ids if not _installed(a, cache)]
+        missing = sorted(a for a in ids if not _installed(a, cache))
         tagged = node.get(_TAG)
+        # 3.2.3: the tag MUST be a plain string. skinvariables hands every
+        # field of an item to ListItem.setProperties(), which only accepts
+        # str - the list stored by 3.2.0-3.2.2 made the whole menu fail
+        # ("Skin Variables error", 0 items; log 2026-10-03 09:40). Old list
+        # tags are rewritten here.
+        if isinstance(tagged, list):
+            tagged_set = set(tagged)
+            legacy = True
+        elif isinstance(tagged, str):
+            tagged_set = set(t for t in tagged.split(',') if t)
+            legacy = False
+        else:
+            tagged_set, legacy = None, False
+        tag_value = ','.join(missing)
         if missing:
-            if tagged is None and not _is_off(node.get('disabled')):
+            if tagged_set is None and not _is_off(node.get('disabled')):
                 node['disabled'] = 'True'          # skinvariables do_toggle style
-                node[_TAG] = missing
+                node[_TAG] = tag_value
                 stats['hidden'] += 1
-            elif tagged is not None and sorted(tagged) != sorted(missing):
-                node[_TAG] = missing
+            elif tagged_set is not None and (legacy or tagged_set != set(missing)):
+                node[_TAG] = tag_value
                 stats['touched'] += 1
-        elif tagged is not None:
+        elif tagged_set is not None:
             node.pop(_TAG, None)
             node.pop('disabled', None)
             stats['shown'] += 1

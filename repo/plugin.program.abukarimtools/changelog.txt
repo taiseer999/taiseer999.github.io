@@ -1,3 +1,24 @@
+v3.2.4
+- FIX (video 2026-10-03 09:49, AF3 power tray: empty slot, Force Close red in
+  the editor): menu_reconcile asked System.HasAddon() whether
+  plugin.program.ABUKARIMwizard is installed. Kodi lowercases condition
+  strings, so a mixed-case id never matches (same root cause as
+  wizard_runner 3.1.3) and the item was hidden. Mixed-case ids are now checked
+  through JSON-RPC Addons.GetAddonDetails (installed + enabled); items hidden
+  by mistake come back on the next boot or with Repair Menus & Widgets.
+- Skin conditions are never generated for mixed-case ids (they could only
+  ever evaluate false); bootstrap uses the same presence check.
+
+v3.2.3
+- FIX (log 2026-10-03 09:40, AF3 power tray "Skin Variables error", 0 items,
+  could not edit): menu_reconcile tagged the items it hid with
+  "abk_hidden": [ids] - a LIST. skinvariables passes every item field to
+  ListItem.setProperties(), which only takes strings, so any node holding a
+  hidden item raised TypeError and the whole menu failed. The tag is now a
+  comma-separated string; list tags written by 3.2.0-3.2.2 are converted on the
+  next boot (or Maintenance > Repair Menus & Widgets) and the skin's
+  templates are rebuilt.
+
 v3.2.2
 - FIX (screenshot 2026-10-03 09:32): Remote Access showed "http://Busy:8080"
   - Network.IPAddress read from Python returned Kodi's "Busy" placeholder.
