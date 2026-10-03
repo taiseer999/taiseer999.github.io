@@ -319,8 +319,8 @@ def _step_restore():
         _log('Opening Backup Manager (restore)…')
         bm     = backup_manager.BackupManager()
         dialog = xbmcgui.Dialog()
-        include_skin = bm._ask_skin_addons(dialog)
-        bm._do_restore(dialog, include_skin)
+        # 3.2.9: no customisations question - menus/widgets always restored
+        bm._do_restore(dialog, set(backup_manager.SKIN_ADDONS))
     except Exception:
         _log('Restore failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
         xbmcgui.Dialog().ok(ADDON_NAME, T(30056))

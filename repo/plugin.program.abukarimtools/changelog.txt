@@ -1,3 +1,9 @@
+v3.2.9
+- Backup/Restore (menu and first-run restore step): the "Include my
+  customisations?" checklist is gone. skinshortcuts + skinvariables (your
+  menus and widgets) are always included in a backup and always restored
+  when the backup contains them; the skin's templates are rebuilt afterwards.
+
 v3.2.8
 - FIX (log 2026-10-03 20:47): Kodi 21+ ignores the <cache> block of
   advancedsettings.xml - the box ran with "Buffer Mode 0, 256 MB, adaptive"

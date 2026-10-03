@@ -82,32 +82,14 @@ class BackupManager:
         dialog  = xbmcgui.Dialog()
         idx     = dialog.select('%s – Main Menu' % ADDON_NAME, choices)
 
+        # 3.2.9: no "Include my customisations?" question any more - menus and
+        # widgets (skinshortcuts + skinvariables) are always part of a backup
+        # and always restored when the backup contains them.
+        include_skin = set(SKIN_ADDONS)
         if idx == 0:
-            include_skin = self._ask_skin_addons(dialog)
             self._do_backup(dialog, include_skin)
         elif idx == 1:
-            include_skin = self._ask_skin_addons(dialog)
             self._do_restore(dialog, include_skin)
-
-    def _ask_skin_addons(self, dialog):
-        """
-        Ask the user whether to include skin customisations.
-        Returns a set of addon_ids to include (may be empty), or None if cancelled.
-        """
-        labels = [
-            'My AF2/AF3 widgets — تعديلاتي وترتيباتي الشخصية في السكن',
-            'My AH2/other widgets — تعديلاتي وترتيباتي الشخصية في السكن',
-        ]
-        selected = dialog.multiselect(
-            'Include my customisations?',
-            labels,
-            preselect=[]
-        )
-        # multiselect returns None on Back/cancel or [] when confirmed with nothing ticked
-        # either way treat as empty selection — skin addons will be skipped
-        if not selected:
-            return set()
-        return {SKIN_ADDONS[i] for i in selected}
 
     # --------------------------------------------------------------- Backup --
 
