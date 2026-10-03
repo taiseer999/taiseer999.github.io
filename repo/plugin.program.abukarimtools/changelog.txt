@@ -1,3 +1,18 @@
+v3.2.1
+- FIX (log 2026-10-03 09:07): the Remote Access / Share Log QR screen drew its
+  text but not its images (xbmcgui.WindowDialog + ControlImage on Kodi 22), so
+  the previous dialog's last frame showed through behind it. Rebuilt as a
+  WindowXMLDialog (skins/Default/1080i/abk_qr.xml) in the portal's style,
+  backdrop from white.png, QR kept in addon_data/.../qr/. Waits for other
+  dialogs to close and reopens if Kodi swallows it.
+- FIX (same log): right after the Add-on Portal's installs, the preset list
+  returned -1 after ~1 s and the patch checklist returned None after ~50 ms
+  with no input, so setup skipped the preset and the patch step. New
+  dialog_guard: a cancel faster than 1 s is treated as swallowed - wait for
+  the screen to settle and reopen (max 3).
+- FIX: OriginFix "corrected" add-ons whose origin is Kodi's ORIGIN_SYSTEM
+  (b6a50484-...) every 15 s; Kodi puts it straight back. They are skipped now.
+
 v3.2.0
 - NEW Remote config: patches.json / portal.json / presets.json / config.json
   are read from taiseer999Piers.github.io/abukarim/ (refreshed at boot, max

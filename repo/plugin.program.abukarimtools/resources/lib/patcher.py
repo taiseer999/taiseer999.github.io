@@ -1904,7 +1904,10 @@ def _choose_toggles():
     labels      = [label for _tid, label in shown]
     preselect   = [i for i, (tid, _l) in enumerate(shown) if tid not in disabled]
 
-    chosen = DIALOG.multiselect(
+    # 3.2.0: guarded - after the Add-on Portal's installs this dialog was
+    # being closed by Kodi within ~50 ms (field log 2026-10-03 09:07:44).
+    from resources.lib import dialog_guard
+    chosen = dialog_guard.multiselect(
         '%s – choose what to patch' % ADDON_NAME, labels, preselect=preselect)
 
     # Cancelled -> abort the whole run, leave saved toggles untouched.

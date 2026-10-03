@@ -77,7 +77,8 @@ def choose():
     for p in lst:
         li = xbmcgui.ListItem(_pick(p.get('name')) or p['id'], _pick(p.get('desc')))
         items.append(li)
-    idx = xbmcgui.Dialog().select(T(30580), items, useDetails=True)
+    from resources.lib import dialog_guard
+    idx = dialog_guard.select(T(30580), items, useDetails=True)
     if idx < 0:
         return None
     p = lst[idx]

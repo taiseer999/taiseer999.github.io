@@ -190,6 +190,10 @@ def _locally_installed(addon_id):
 # Core
 # ---------------------------------------------------------------------------
 
+# Kodi's built-in origin id for add-ons bundled with Kodi (ORIGIN_SYSTEM).
+ORIGIN_SYSTEM = 'b6a50484-93a0-4afb-a01c-8d17e059feda'
+
+
 def fix_addons(addon_ids=None):
     """Repair empty origins.
 
@@ -271,6 +275,11 @@ def fix_addons(addon_ids=None):
                         "WHERE origin IS NOT NULL AND origin != ''")
             for addon_id, origin in cur.fetchall():
                 if not addon_id or addon_id in SKIP_IDS or addon_id in result['fixed']:
+                    continue
+                # 3.2.0: Kodi's ORIGIN_SYSTEM marks add-ons that ship with Kodi
+                # itself. Kodi puts it back on every scan, so "correcting" it
+                # rewrote the same 9 rows every 15 s (log 2026-10-03 09:04-09:07).
+                if (origin or '').lower() == ORIGIN_SYSTEM:
                     continue
                 if not _locally_installed(addon_id):
                     continue
