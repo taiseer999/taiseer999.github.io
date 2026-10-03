@@ -52,7 +52,7 @@ _ALLOWED_KEYS = {
     'skip_if_present', 'inject_file', 'inject_content_b64', 'replace',
     'fallback_pattern', 'fallback_repl', 'count', 'regex_dotall', 'base',
     'min_version', 'max_version', 'target_sha256', 'supersedes', 'id',
-    'json_edit',
+    'json_edit', 'once',
 }
 
 _cache = {'mtime': None, 'patches': [], 'toggles': [], 'kill': set()}
@@ -108,6 +108,10 @@ def _convert(e):
         p['regex_flags'] = re.DOTALL
     if e.get('base') == 'addon_data':
         p['base'] = 'addon_data'
+    if e.get('once'):
+        if not e.get('id'):
+            raise ValueError('"once" needs an "id"')
+        p['once'] = True
     if e.get('json_edit'):
         ops = e['json_edit']
         if not isinstance(ops, list) or not all(isinstance(o, dict) for o in ops):
@@ -366,3 +370,46 @@ def _after_json_change(target):
                         'special://skin/shortcuts/skinvariables-build-templates.json,'
                         'use_rules)')
     _log('skinvariables rebuild queued for %s' % skin)
+
+
+# ---------------------------------------------------------------------------
+# once (3.2.7)
+# ---------------------------------------------------------------------------
+# A remote entry with "once": true is applied a single time per box and then
+# skipped forever, keyed by its "id". To push a newer version of the same fix,
+# publish it under a new id.
+
+def _once_path():
+    return os.path.join(remote_config.PROFILE, 'patches_once.json')
+
+
+def _once_state():
+    import json as _json
+    try:
+        with open(_once_path(), 'r', encoding='utf-8') as f:
+            data = _json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def once_done(patch):
+    return (patch.get('_remote') or '') in _once_state()
+
+
+def mark_once(patch):
+    import json as _json
+    import time as _time
+    key = patch.get('_remote') or ''
+    if not key:
+        return
+    st = _once_state()
+    st[key] = int(_time.time())
+    try:
+        os.makedirs(remote_config.PROFILE, exist_ok=True)
+        tmp = _once_path() + '.part'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            _json.dump(st, f, indent=1)
+        os.replace(tmp, _once_path())
+    except OSError as e:
+        _log('could not record once-patch %s: %s' % (key, e), xbmc.LOGWARNING)

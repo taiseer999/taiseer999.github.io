@@ -1164,6 +1164,12 @@ def _apply_patch(patch):
     Apply a single patch dict.
     Returns (success: bool, message: str)
     """
+    # 3.2.7: "once" entries (remote) run a single time per box, then never
+    # again - a whole-file replace must not keep reverting later edits.
+    if patch.get('once'):
+        from resources.lib import remote_patches
+        if remote_patches.once_done(patch):
+            return True, '[%s] Applied once already – skipping.' % patch['addon_id']
     # Resolve base dir: default is addons/, optionally addon_data/ for userdata targets.
     if patch.get('base') == 'addon_data':
         addon_path = os.path.join(ADDON_DATA, patch['addon_id'])
@@ -1851,6 +1857,10 @@ def apply_set(group=None, addon_ids=None):
         # "Already patched" results) can't hide where a sweep stops.
         _trace('#%02d BEGIN %s -> %s' % (_n, patch['addon_id'], patch.get('rel_path')))
         ok, msg = _apply_patch(patch)
+        if ok and patch.get('once') and 'Applied once already' not in msg \
+                and 'not present' not in msg and 'not applicable' not in msg:
+            from resources.lib import remote_patches
+            remote_patches.mark_once(patch)
         _trace('#%02d END   %s' % (_n, msg))
         _log(msg)
         results.append((ok, msg))

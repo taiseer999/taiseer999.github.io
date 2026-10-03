@@ -1,3 +1,24 @@
+v3.2.8
+- FIX (log 2026-10-03 20:47): Kodi 21+ ignores the <cache> block of
+  advancedsettings.xml - the box ran with "Buffer Mode 0, 256 MB, adaptive"
+  although the file asked for 200 MB / 20x. Device Tuning now writes
+  filecache.memorysize / filecache.readfactor through JSON-RPC, snapped to the
+  options this Kodi offers; never shrinks a larger cache on big boxes.
+- FIX: the tuning dialog showed "System.CpuInfo" as the device name on
+  macOS - now the CPU model / platform name.
+- FIX (video 2026-10-03 20:46): Restore Skin Profile only listed automatic
+  backups, so a profile just exported "did not exist". It now lists exports
+  and backups and can browse for any profile zip (Desktop, USB, SMB); the
+  skin is read from profile.json inside the zip.
+- make_build.py warns that advancedsettings <cache> is ignored.
+
+v3.2.7
+- NEW remote patch flag "once": the entry is applied a single time per box
+  (recorded by its "id" in patches_once.json) and skipped afterwards, so a
+  whole-file replacement (inject_file + replace) no longer reverts later user
+  or menu-reconcile edits on every sweep. Publish a newer file under a new id.
+- repo_validate.py: "once" needs an "id"; warns on replace without "once".
+
 v3.2.6
 - NEW remote "json_edit" patches: edit JSON files by matching items on their
   fields (guid / label / "~substring") instead of text, so formatting

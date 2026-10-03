@@ -246,18 +246,73 @@ def apply_for_item(item, first_run=False):
     return apply_from_bytes(skin_id, payload, source=url, ask=not first_run)
 
 
+def _skin_of(payload, fallback_name=''):
+    """Skin id a profile zip belongs to: profile.json, else its members."""
+    try:
+        zf = zipfile.ZipFile(io.BytesIO(payload))
+    except zipfile.BadZipFile:
+        return None
+    try:
+        meta = json.loads(zf.read('profile.json').decode('utf-8'))
+        if meta.get('skin'):
+            return meta['skin']
+    except Exception:
+        pass
+    for n in zf.namelist():
+        m = re.match(r'^addon_data/(skin\.[^/]+)/', n) or \
+            re.match(r'^addon_data/script\.skinvariables/nodes/(skin\.[^/]+)/', n)
+        if m:
+            return m.group(1)
+    m = re.match(r'^(skin\.[A-Za-z0-9_.]+?)-(?:profile|\d{8})', os.path.basename(fallback_name))
+    return m.group(1) if m else None
+
+
+def _read_any(path):
+    """Bytes of a local or VFS (smb://, nfs://, usb ...) file."""
+    if os.path.isfile(path):
+        with open(path, 'rb') as f:
+            return f.read()
+    f = xbmcvfs.File(path)
+    try:
+        return bytes(f.readBytes())
+    finally:
+        f.close()
+
+
 def restore_backup():
-    """Menu: pick a saved backup and put it back."""
-    if not os.path.isdir(BACKUP_DIR) or not os.listdir(BACKUP_DIR):
-        xbmcgui.Dialog().ok(TITLE, T(30531))
-        return
-    files = sorted(os.listdir(BACKUP_DIR), reverse=True)
-    idx = xbmcgui.Dialog().select(TITLE, files)
+    """Menu: put a profile back - an automatic backup, one of your exports,
+    or any profile zip picked from a folder / USB / network share.
+
+    3.2.8: the first version only listed profile_backups/ (made automatically
+    before a profile is applied), so a profile you had just exported never
+    showed up and the screen said "no backups" (video 2026-10-03 20:46)."""
+    entries = [(T(30537), None)]
+    for folder, tag in ((EXPORT_DIR, T(30538)), (BACKUP_DIR, T(30539))):
+        if os.path.isdir(folder):
+            for f in sorted(os.listdir(folder), reverse=True):
+                if f.endswith('.zip'):
+                    entries.append(('%s  %s' % (tag, f), os.path.join(folder, f)))
+    idx = xbmcgui.Dialog().select(TITLE, [e[0] for e in entries])
     if idx < 0:
         return
-    skin_id = files[idx].rsplit('-', 2)[0]      # <skin>-YYYYmmdd-HHMMSS.zip
-    with open(os.path.join(BACKUP_DIR, files[idx]), 'rb') as f:
-        ok = apply_from_bytes(skin_id, f.read(), source='backup', ask=False)
+    path = entries[idx][1]
+    if path is None:
+        path = xbmcgui.Dialog().browse(1, T(30537), 'files', '.zip')
+        if not path:
+            return
+    try:
+        payload = _read_any(path)
+    except Exception as e:
+        _log('cannot read %s: %s' % (path, e), xbmc.LOGWARNING)
+        xbmcgui.Dialog().ok(TITLE, T(30533))
+        return
+    skin_id = _skin_of(payload, path)
+    if not skin_id:
+        xbmcgui.Dialog().ok(TITLE, T(30533))
+        return
+    if not xbmcgui.Dialog().yesno(TITLE, T(30530) % skin_id):
+        return
+    ok = apply_from_bytes(skin_id, payload, source=path, ask=False)
     xbmcgui.Dialog().notification(TITLE, T(30532) if ok else T(30533))
     if ok and xbmc.getSkinDir() == skin_id:
         xbmc.executebuiltin('ReloadSkin()')

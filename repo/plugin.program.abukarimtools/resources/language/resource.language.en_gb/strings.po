@@ -652,6 +652,18 @@ msgctxt "#30536"
 msgid "Exported %d files to:[CR]%s[CR][CR]Upload the zip to the repo's profiles/ folder and add this to the skin's entry in skins.json:[CR][CR]%s"
 msgstr ""
 
+msgctxt "#30537"
+msgid "Browse for a profile zip..."
+msgstr ""
+
+msgctxt "#30538"
+msgid "Export:"
+msgstr ""
+
+msgctxt "#30539"
+msgid "Backup:"
+msgstr ""
+
 msgctxt "#30540"
 msgid "Video cache tuned for this device: %d MB"
 msgstr ""
