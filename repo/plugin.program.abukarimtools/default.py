@@ -35,6 +35,16 @@ ICONS  = {
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
     'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
+    # 3.2
+    'bootstrap':      ADDON_PATH + 'resources/icons/addon_portal.png',
+    'hw_tuning':      ADDON_PATH + 'resources/icons/speedtest.png',
+    'webserver':      ADDON_PATH + 'resources/icons/patcher.png',
+    'log_share':      ADDON_PATH + 'resources/icons/backup.png',
+    'remote_refresh': ADDON_PATH + 'resources/icons/patcher.png',
+    'menu_reconcile': ADDON_PATH + 'resources/icons/skin_switcher.png',
+    'profile_export': ADDON_PATH + 'resources/icons/skin_installer.png',
+    'profile_restore': ADDON_PATH + 'resources/icons/backup.png',
+    'cat_profiles':   ADDON_PATH + 'resources/icons/skin_installer.png',
     # category folder icons
     'cat_setup':      ADDON_PATH + 'resources/icons/install_setup.png',
     'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
@@ -53,10 +63,14 @@ CATEGORIES = [
         ('skin_install',   30003),
         ('addon_portal',   30021),
         ('binary_install', 30004),
+        ('bootstrap',      30590),
+        ('hw_tuning',      30591),
+        ('webserver',      30592),
     ]),
     ('patch',  30015, 'cat_patch', [
         ('patcher',        30005),
         ('origin_fix',     30007),
+        ('remote_refresh', 30594),
     ]),
     ('maint',  30016, 'cat_maint', [
         ('abukarimwizard', 30008),
@@ -64,6 +78,8 @@ CATEGORIES = [
         ('old_thumbs',     30013),
         ('rebuild_addons33', 30018),
         ('speedtest',      30019),
+        ('log_share',      30593),
+        ('menu_reconcile', 30595),
     ]),
     ('toggle', 30017, 'cat_toggle', [
         ('skin_switch',    30009),
@@ -72,6 +88,10 @@ CATEGORIES = [
         ('icons_toggle',   30020),
         ('af3_trailers',   30430),
     ]),
+    ('profiles', 30598, 'cat_profiles', [
+        ('profile_export',  30596),
+        ('profile_restore', 30597),
+    ]),
 ]
 
 # Modes that are leaf actions (run then return), not plugin folders.
@@ -79,7 +99,11 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'total_clean', 'old_thumbs',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
-                'af3_trailers'}
+                'af3_trailers',
+                # 3.2 tools: dialogs only, never folders (same reason as above)
+                'bootstrap', 'hw_tuning', 'webserver', 'log_share',
+                'remote_refresh', 'menu_reconcile', 'profile_export',
+                'profile_restore'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -428,6 +452,48 @@ def router():
         _end_directory()
         from resources.lib import origin_fix
         origin_fix.run()
+
+    # ---- 3.2 ----
+    elif mode == 'bootstrap':
+        from resources.lib import bootstrap
+        from resources.lib.i18n import T
+        if not bootstrap.pending():
+            xbmcgui.Dialog().notification('ABUKARIM TOOLS', T(30542))
+        else:
+            bootstrap.run()
+
+    elif mode == 'hw_tuning':
+        from resources.lib import hw_tuning
+        hw_tuning.run()
+
+    elif mode == 'webserver':
+        from resources.lib import webserver_secure
+        webserver_secure.run()
+
+    elif mode == 'log_share':
+        from resources.lib import log_share
+        log_share.run()
+
+    elif mode == 'remote_refresh':
+        from resources.lib import remote_config
+        from resources.lib.i18n import T
+        res = remote_config.refresh(force=True)
+        xbmcgui.Dialog().ok('ABUKARIM TOOLS', T(30599) % '[CR]'.join(
+            '%s: %s' % kv for kv in sorted(res.items())))
+
+    elif mode == 'menu_reconcile':
+        from resources.lib import menu_reconcile
+        from resources.lib.i18n import T
+        res = menu_reconcile.run(rebuild=True)
+        xbmcgui.Dialog().notification('ABUKARIM TOOLS', T(30589) % (res['hidden'], res['shown']))
+
+    elif mode == 'profile_export':
+        from resources.lib import skin_profiles
+        skin_profiles.export_current()
+
+    elif mode == 'profile_restore':
+        from resources.lib import skin_profiles
+        skin_profiles.restore_backup()
 
 
 router()

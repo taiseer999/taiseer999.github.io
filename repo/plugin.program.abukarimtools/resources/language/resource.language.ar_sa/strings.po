@@ -624,3 +624,163 @@ msgctxt "#30444"
 msgid "Trailer quality"
 msgstr "جودة التريلر"
 
+msgctxt "#30530"
+msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
+msgstr "استبدال إعدادات وقوائم %s الحالية بملف بيرز الجاهز؟[CR](يتم حفظ نسخة احتياطية من ملفاتك أولاً.)"
+
+msgctxt "#30531"
+msgid "No profile backups yet."
+msgstr "لا توجد نسخ احتياطية للملفات الشخصية بعد."
+
+msgctxt "#30532"
+msgid "Profile restored."
+msgstr "تمت استعادة الملف الشخصي."
+
+msgctxt "#30533"
+msgid "The profile could not be restored - see the log."
+msgstr "تعذّرت استعادة الملف الشخصي - راجع السجل."
+
+msgctxt "#30534"
+msgid "%s has no settings or menus to export yet."
+msgstr "لا توجد إعدادات أو قوائم لتصديرها في %s بعد."
+
+msgctxt "#30535"
+msgid "Also copy the profile to... (Back = skip)"
+msgstr "نسخ الملف أيضاً إلى... (رجوع = تخطي)"
+
+msgctxt "#30536"
+msgid "Exported %d files to:[CR]%s[CR][CR]Upload the zip to the repo's profiles/ folder and add this to the skin's entry in skins.json:[CR][CR]%s"
+msgstr "تم تصدير %d ملف إلى:[CR]%s[CR][CR]ارفع الملف إلى مجلد profiles/ في المستودع وأضف هذا إلى مدخل الواجهة في skins.json:[CR][CR]%s"
+
+msgctxt "#30540"
+msgid "Video cache tuned for this device: %d MB"
+msgstr "تم ضبط ذاكرة الفيديو المؤقتة لهذا الجهاز: %d ميغابايت"
+
+msgctxt "#30541"
+msgid "Device: %s[CR]RAM: %d MB[CR][CR]Current cache: %d MB, readfactor %d[CR]Recommended: %d MB, readfactor %d[CR][CR]Apply the recommended values?"
+msgstr "الجهاز: %s[CR]الذاكرة: %d ميغابايت[CR][CR]الذاكرة المؤقتة الحالية: %d ميغابايت، معامل القراءة %d[CR]المقترح: %d ميغابايت، معامل القراءة %d[CR][CR]تطبيق القيم المقترحة؟"
+
+msgctxt "#30542"
+msgid "Already optimal - nothing to change."
+msgstr "الإعدادات مثالية مسبقاً - لا يوجد ما يتغير."
+
+msgctxt "#30543"
+msgid "Cache settings saved. Restart Kodi to use them."
+msgstr "تم حفظ إعدادات الذاكرة المؤقتة. أعد تشغيل كودي لتفعيلها."
+
+msgctxt "#30550"
+msgid "Use these to connect a phone remote app (Kore, Yatse) or a browser.[CR][CR]Address: %s[CR]Username: %s[CR]Password: %s"
+msgstr "استخدم هذه البيانات لربط تطبيق ريموت على الجوال (Kore أو Yatse) أو من المتصفح.[CR][CR]العنوان: %s[CR]اسم المستخدم: %s[CR]كلمة المرور: %s"
+
+msgctxt "#30551"
+msgid "Show login"
+msgstr "عرض بيانات الدخول"
+
+msgctxt "#30552"
+msgid "New password"
+msgstr "كلمة مرور جديدة"
+
+msgctxt "#30553"
+msgid "Turn remote access off"
+msgstr "إيقاف التحكم عن بُعد"
+
+msgctxt "#30554"
+msgid "Turn remote access on"
+msgstr "تشغيل التحكم عن بُعد"
+
+msgctxt "#30555"
+msgid "Remote access is off."
+msgstr "التحكم عن بُعد متوقف."
+
+msgctxt "#30556"
+msgid "Remote access turned off."
+msgstr "تم إيقاف التحكم عن بُعد."
+
+msgctxt "#30560"
+msgid "Current session (kodi.log)"
+msgstr "الجلسة الحالية (kodi.log)"
+
+msgctxt "#30561"
+msgid "Previous session - use after a crash (kodi.old.log)"
+msgstr "الجلسة السابقة - بعد التعليق أو الانهيار (kodi.old.log)"
+
+msgctxt "#30562"
+msgid "Log file not found:[CR]%s"
+msgstr "ملف السجل غير موجود:[CR]%s"
+
+msgctxt "#30563"
+msgid "Reading and cleaning the log..."
+msgstr "جاري قراءة السجل وتنظيفه..."
+
+msgctxt "#30564"
+msgid "Uploading..."
+msgstr "جاري الرفع..."
+
+msgctxt "#30565"
+msgid "Upload failed:[CR]%s"
+msgstr "فشل الرفع:[CR]%s"
+
+msgctxt "#30566"
+msgid "Scan the code or send this link to Abukarim:[CR][CR][B]%s[/B][CR][CR]Passwords, keys and tokens were removed before upload."
+msgstr "امسح الرمز أو أرسل هذا الرابط لأبوكريم:[CR][CR][B]%s[/B][CR][CR]تم حذف كلمات المرور والمفاتيح قبل الرفع."
+
+msgctxt "#30570"
+msgid "Installing %d add-ons from their repositories..."
+msgstr "جاري تثبيت %d إضافة من مستودعاتها..."
+
+msgctxt "#30571"
+msgid "(%d/%d) %s"
+msgstr "(%d/%d) %s"
+
+msgctxt "#30572"
+msgid "These add-ons could not be installed yet:[CR]%s[CR][CR]Run Setup > Finish Build Install later to retry."
+msgstr "تعذّر تثبيت هذه الإضافات حالياً:[CR]%s[CR][CR]شغّل الإعداد > إكمال تثبيت البناء لاحقاً لإعادة المحاولة."
+
+msgctxt "#30580"
+msgid "Choose a setup preset"
+msgstr "اختر نوع الإعداد"
+
+msgctxt "#30589"
+msgid "Menus checked: %d hidden, %d restored."
+msgstr "تم فحص القوائم: إخفاء %d، استعادة %d."
+
+msgctxt "#30590"
+msgid "Finish Build Install"
+msgstr "إكمال تثبيت البناء"
+
+msgctxt "#30591"
+msgid "Optimize for This Device"
+msgstr "تحسين الإعدادات لهذا الجهاز"
+
+msgctxt "#30592"
+msgid "Remote Access (Web Server)"
+msgstr "التحكم عن بُعد (خادم الويب)"
+
+msgctxt "#30593"
+msgid "Share Log (QR)"
+msgstr "مشاركة السجل (QR)"
+
+msgctxt "#30594"
+msgid "Update Online Fixes & Catalogs"
+msgstr "تحديث الإصلاحات والقوائم من الإنترنت"
+
+msgctxt "#30595"
+msgid "Repair Menus & Widgets"
+msgstr "إصلاح القوائم والودجات"
+
+msgctxt "#30596"
+msgid "Export Current Skin Profile"
+msgstr "تصدير ملف الواجهة الحالية"
+
+msgctxt "#30597"
+msgid "Restore Skin Profile Backup"
+msgstr "استعادة نسخة ملف الواجهة"
+
+msgctxt "#30598"
+msgid "Skin Profiles"
+msgstr "ملفات الواجهات"
+
+msgctxt "#30599"
+msgid "Online data:[CR]%s"
+msgstr "البيانات من الإنترنت:[CR]%s"
+

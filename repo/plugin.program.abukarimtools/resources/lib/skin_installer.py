@@ -189,7 +189,57 @@ def _choose_source():
     return json_url, bg
 
 
-def _verify_zip(path, expected_bytes=None):
+def _sha256_file(path):
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1 << 20), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _kodi_major():
+    import re as _re
+    m = _re.match(r'(\d+)', xbmc.getInfoLabel('System.BuildVersion') or '')
+    return int(m.group(1)) if m else 22
+
+
+def _platform_tags():
+    tags = set()
+    if os.path.isdir('/etc/coreelec') or os.path.isfile('/etc/coreelec-release'):
+        tags.add('coreelec')
+    for cond, tag in (('System.Platform.Android', 'android'),
+                      ('System.Platform.Linux', 'linux'),
+                      ('System.Platform.OSX', 'osx'),
+                      ('System.Platform.Windows', 'windows'),
+                      ('System.Platform.IOS', 'ios'),
+                      ('System.Platform.TVOS', 'tvos')):
+        try:
+            if xbmc.getCondVisibility(cond):
+                tags.add(tag)
+        except Exception:
+            pass
+    return tags
+
+
+def _compatible(item):
+    """skins.json optional filters: min_kodi / max_kodi (major numbers) and
+    platforms (any of coreelec, android, linux, osx, windows, ios, tvos)."""
+    try:
+        major = _kodi_major()
+        if item.get('min_kodi') and major < int(item['min_kodi']):
+            return False
+        if item.get('max_kodi') and major > int(item['max_kodi']):
+            return False
+        plats = item.get('platforms')
+        if plats and not (set(p.lower() for p in plats) & _platform_tags()):
+            return False
+    except Exception:
+        return True
+    return True
+
+
+def _verify_zip(path, expected_bytes=None, expected_sha256=None):
     """Strict integrity check for a downloaded zip.
 
     is_zipfile() only proves the End-Of-Central-Directory record exists, so a
@@ -221,13 +271,19 @@ def _verify_zip(path, expected_bytes=None):
             if bad is not None:
                 _log('zip verify: CRC/truncation failure, first bad member %s' % bad)
                 return False
+        if expected_sha256:
+            got = _sha256_file(path)
+            if got.lower() != expected_sha256.lower():
+                _log('zip verify: sha256 mismatch %s (got %s, want %s)'
+                     % (path, got, expected_sha256))
+                return False
         return True
     except Exception as e:
         _log('zip verify: exception on %s: %s' % (path, e))
         return False
 
 
-def _download_zip(url, addonid):
+def _download_zip(url, addonid, sha256=None):
     if not xbmcvfs.exists(PACKAGES_PATH):
         xbmcvfs.mkdirs(PACKAGES_PATH)
 
@@ -264,7 +320,8 @@ def _download_zip(url, addonid):
                         progress.update(0, T(30103) % (downloaded // 1024))
 
         progress.update(100, T(30104))
-        if not _verify_zip(tmp_path, expected_bytes=(total or None)):
+        if not _verify_zip(tmp_path, expected_bytes=(total or None),
+                           expected_sha256=sha256):
             _error(T(30105))
             return None
 
@@ -788,7 +845,7 @@ def _resolve_companion(repo_base_first, addonid):
     return None, '', None, ''
 
 
-def _install_companions(skin_id, skin_zipurl, repo_id=''):
+def _install_companions(skin_id, skin_zipurl, repo_id='', companions=None):
     """Silently install every companion mapped to skin_id.
 
     Runs with no user-facing prompts and never changes the active skin. Any
@@ -797,7 +854,9 @@ def _install_companions(skin_id, skin_zipurl, repo_id=''):
     actually carries it (not assumed to be the skin's repo), and linked for
     updates to THAT repo.
     """
-    companions = _SKIN_COMPANIONS.get(skin_id)
+    # skins.json "companions" wins; the built-in map is the fallback.
+    if companions is None:
+        companions = _SKIN_COMPANIONS.get(skin_id)
     if not companions:
         return
 
@@ -869,8 +928,10 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
             ADDON_PATH, 'resources', 'icons', 'skin_installer.png'))
         panel = self.getControl(100)
         panel.reset()
-        for item in self.items:
+        self.items = [i for i in self.items if _compatible(i)]
+        for idx, item in enumerate(self.items):
             li = xbmcgui.ListItem(item.get('name', ''))
+            li.setProperty('item_index', str(idx))
             li.setArt({'thumb': item.get('screenshot', ''),
                        'icon':  item.get('screenshot', '')})
             li.setProperty('addonid',  item.get('id', ''))
@@ -898,6 +959,10 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         zipurl  = item.getProperty('zipurl')
         title   = item.getLabel()
         already = item.getProperty('installed') == 'true'
+        try:
+            entry = self.items[int(item.getProperty('item_index'))]
+        except Exception:
+            entry = {'id': addonid, 'zip': zipurl}
 
         if not zipurl:
             _error(T(30120))
@@ -907,7 +972,7 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         if not xbmcgui.Dialog().yesno(TITLE, msg):
             return
 
-        zip_path = _download_zip(zipurl, addonid)
+        zip_path = _download_zip(zipurl, addonid, sha256=entry.get('sha256'))
         if not zip_path:
             return
         if not _extract_zip(zip_path):
@@ -917,7 +982,17 @@ class SkinPortal(xbmcgui.WindowXMLDialog):
         # Silently pull any companion add-on(s) mapped to this skin from the
         # SAME repo (e.g. AF3 -> TMDbHelper). No
         # prompts, no skin switch — runs before we defer the skin apply.
-        _install_companions(addonid, zipurl, self.repo_id)
+        _install_companions(addonid, zipurl, self.repo_id,
+                            companions=entry.get('companions'))
+
+        # Piers profile for this skin (settings, menus, widgets) when the
+        # catalog publishes one. Applied BEFORE the skin is activated so it
+        # loads with them. Best-effort: a failure never blocks the install.
+        try:
+            from resources.lib import skin_profiles
+            skin_profiles.apply_for_item(entry, first_run=self.first_run)
+        except Exception as e:
+            _log('profile apply failed for %s: %s' % (addonid, e))
 
         # Enable the freshly-extracted skin RIGHT NOW, before anything else
         # touches it. If it's left disabled, Kodi throws the 'Add-on required /

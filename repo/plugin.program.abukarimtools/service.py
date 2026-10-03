@@ -212,13 +212,31 @@ def _step_patcher(monitor):
         return False
 
 
+def _step_guarded(name, fn):
+    """Run one optional 3.2 step; a crash is logged and setup continues."""
+    try:
+        return fn()
+    except Exception:
+        _log('Step %s crashed (ignored):\n%s' % (name, traceback.format_exc()),
+             xbmc.LOGERROR)
+        return None
+
+
 def _step_addon_portal():
     try:
         from resources.lib import addon_portal
-        _log('Opening Add-on Portal…')
+        # One question first: the preset decides what the portal pre-ticks.
+        preselect = set()
+        try:
+            from resources.lib import presets
+            preselect = presets.addon_selection(presets.choose())
+        except Exception:
+            _log('Preset step failed (portal opens unticked):\n%s'
+                 % traceback.format_exc(), xbmc.LOGWARNING)
+        _log('Opening Add-on Portal… (preselect=%s)' % sorted(preselect))
         # first_run=True: no restart recommendation at the end (the sequence
         # still has steps to run; the caller handles the final reboot).
-        addon_portal.run(first_run=True)
+        addon_portal.run(first_run=True, preselect=preselect)
         return True
     except Exception:
         _log('Add-on Portal failed:\n%s' % traceback.format_exc(), xbmc.LOGERROR)
@@ -488,16 +506,30 @@ def _run_steps(monitor):
     _settle(monitor, 3)
     _wait_no_modal(monitor)
 
+    _log('Step 1b — Thin-build bootstrap (no-op on a full build).')
+    _step_guarded('bootstrap', lambda: __import__(
+        'resources.lib.bootstrap', fromlist=['run']).run())
+    _wait_no_modal(monitor)
+
+    _log('Step 1c — Device tuning (silent).')
+    _step_guarded('hw_tuning', lambda: __import__(
+        'resources.lib.hw_tuning', fromlist=['auto']).auto())
+
     _log('Step 2 — Restore popup.')
     _final_choice(monitor)
 
-    _log('Step 3 — Add-on Portal.')
+    _log('Step 3 — Preset + Add-on Portal.')
     _wait_no_modal(monitor)
     _step_addon_portal()
 
     _log('Step 4 — Apply Patches.')
     _wait_no_modal(monitor)
     _step_patcher(monitor)
+
+    _log('Step 4b — Per-box remote access password.')
+    _wait_no_modal(monitor)
+    _step_guarded('webserver', lambda: __import__(
+        'resources.lib.webserver_secure', fromlist=['first_run']).first_run())
 
     _log('Step 5 — Skin Installer (last).')
     _wait_no_modal(monitor)
@@ -933,6 +965,27 @@ def main():
         _relink_after_rebuild(monitor)
     except Exception:
         _log('Post-rebuild repo linking crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # 3.2: hide menu items / widgets whose add-on is missing (and bring back
+    # ones whose add-on was installed since). No network, content-compared.
+    try:
+        from resources.lib import menu_reconcile
+        menu_reconcile.run(rebuild=True)
+    except Exception:
+        _log('Menu reconcile crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
+    # 3.2: pull patches.json / portal.json / presets.json / config.json from
+    # the Piers repo (at most every 6 h, short timeouts). Everything that uses
+    # them reads the cache only, so an offline boot just keeps the old copy.
+    try:
+        if not monitor.waitForAbort(5):
+            from resources.lib import remote_config
+            remote_config.refresh()
+            remote_config.boot_notices()
+    except Exception:
+        _log('Remote config refresh crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
 
     # From here the service stays alive for the rest of the Kodi session and

@@ -1188,6 +1188,17 @@ def _apply_patch(patch):
                 return True, '[%s] Addon not present – skipping (optional).' % patch['addon_id']
             return False, '[%s] Addon not found: %s' % (patch['addon_id'], addon_path)
 
+    # Version window (remote entries, optional on built-ins): a patch written
+    # for 3.4.x must never touch 3.5.0.
+    if patch.get('min_version') or patch.get('max_version'):
+        from resources.lib import remote_patches
+        ok_v, ver = remote_patches.version_ok(patch, addon_path)
+        if not ok_v:
+            return True, ('[%s] Version %s outside %s..%s – patch not applicable, '
+                          'skipping.' % (patch['addon_id'], ver,
+                                         patch.get('min_version') or '*',
+                                         patch.get('max_version') or '*'))
+
     # skip_if_present: the upstream add-on has since shipped the feature this
     # patch used to inject, so the patch is obsolete on this build. When the
     # named file exists inside the add-on, treat the patch as already satisfied
@@ -1278,6 +1289,14 @@ def _apply_patch(patch):
     already_check = patch.get('already_patched_check', patch['new'])
     if already_check is not None and already_check in content:
         return True, '[%s] Already patched – skipping.' % patch['addon_id']
+
+    # target_sha256: the entry was written against specific upstream file(s).
+    # Any other content means upstream changed it - stay out (not a failure).
+    if patch.get('target_sha256'):
+        from resources.lib import remote_patches
+        if not remote_patches.sha_ok(patch, target):
+            return True, ('[%s] %s changed upstream (sha256 mismatch) – patch '
+                          'not applicable, skipping.' % (patch['addon_id'], patch['rel_path']))
 
     # obsolete_if_contains: upstream has since fixed this itself, so the file no
     # longer contains our 'old' anchor and never will. Unlike skip_if_present
@@ -1455,6 +1474,31 @@ def _toggle_of(patch):
     return _TOGGLE_OF.get((patch['addon_id'], patch.get('rel_path', '')))
 
 
+def _all_patches():
+    """Built-in PATCHES merged with abukarim/patches.json (cached, no network).
+
+    Remote entries can add patches and kill built-ins (see remote_patches.py);
+    any problem there falls back to the built-in list unchanged.
+    """
+    try:
+        from resources.lib import remote_patches
+        return remote_patches.merged(PATCHES, _toggle_of)
+    except Exception as e:
+        _log('remote patch merge failed (built-ins only): %s' % e, xbmc.LOGWARNING)
+        return list(PATCHES)
+
+
+def _toggle_groups():
+    groups = list(TOGGLE_GROUPS)
+    try:
+        from resources.lib import remote_patches
+        known = {t for t, _l in groups}
+        groups += [(t, l) for t, l in remote_patches.extra_toggles() if t not in known]
+    except Exception:
+        pass
+    return groups
+
+
 def _load_disabled():
     """Return the set of disabled TOGGLE ids (empty set on any problem)."""
     try:
@@ -1499,7 +1543,7 @@ def _select(group=None, addon_ids=None, respect_selection=True):
     parameter is kept for signature compatibility but is unused now that
     grouping is derived from _TOGGLE_OF rather than a per-entry 'group' key.
     """
-    selected = list(PATCHES)
+    selected = _all_patches()
     if addon_ids:
         wanted   = set(addon_ids)
         selected = [p for p in selected if p['addon_id'] in wanted]
@@ -1544,7 +1588,7 @@ def target_addon_ids(group=None):
     watch list can never drift out of sync with PATCHES.
     """
     seen = []
-    for patch in PATCHES:
+    for patch in _all_patches():
         if patch.get('group') != group:
             continue
         if patch['addon_id'] not in seen:
@@ -1837,18 +1881,19 @@ def _choose_toggles():
     disabled = _load_disabled()
 
     # Which add-ons are actually present, so we only show usable toggles.
+    all_patches = _all_patches()
     present = set()
-    for patch in PATCHES:
+    for patch in all_patches:
         if _resolve_addon_dir(patch['addon_id']):
             present.add(patch['addon_id'])
 
     toggle_has_installed = set()
-    for patch in PATCHES:
+    for patch in all_patches:
         tid = _toggle_of(patch)
         if tid and patch['addon_id'] in present:
             toggle_has_installed.add(tid)
 
-    shown = [(tid, label) for tid, label in TOGGLE_GROUPS
+    shown = [(tid, label) for tid, label in _toggle_groups()
              if tid in toggle_has_installed]
 
     # No installed add-on maps to any toggle: nothing to choose, just proceed
@@ -1905,7 +1950,8 @@ def run(group=None, addon_ids=None):
     summary = '[B]Patch Results[/B][CR][CR]' + '[CR]'.join(lines)
     summary += '[CR][CR]%d succeeded,  %d failed.' % (succeeded, failed)
     if disabled:
-        off = ', '.join(_TOGGLE_LABELS.get(t, t) for t in sorted(disabled))
+        labels = dict(_toggle_groups())
+        off = ', '.join(labels.get(t, t) for t in sorted(disabled))
         summary += '[CR]Disabled: %s' % off
 
     DIALOG.ok(ADDON_NAME, summary)

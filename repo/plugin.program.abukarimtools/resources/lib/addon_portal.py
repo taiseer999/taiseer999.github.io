@@ -88,6 +88,40 @@ REPO_NAMES = {
     'repository.umbrella':     'Umbrella',
 }
 
+
+def _remote_portal():
+    try:
+        from resources.lib import remote_config
+        return remote_config.load('portal.json', {}) or {}
+    except Exception:
+        return {}
+
+
+def _catalog():
+    """CATALOG, or the list published in abukarim/portal.json.
+
+    portal.json: {"schema": 1,
+                  "addons": [{"id": .., "name": .., "repo": .., "icon": ..}],
+                  "repo_names": {"repository.x": "Nice Name"},
+                  "repo_zips": {"repository.x": "https://.../repository.x-1.0.zip"}}
+    A broken or empty list falls back to the built-in CATALOG.
+    """
+    data = _remote_portal()
+    out = []
+    for e in data.get('addons') or []:
+        try:
+            if e['id'] and e['repo']:
+                out.append((e['id'], e.get('name') or e['id'], e['repo'],
+                            e.get('icon', '')))
+        except Exception:
+            continue
+    if out:
+        names = data.get('repo_names') or {}
+        REPO_NAMES.update({k: v for k, v in names.items() if isinstance(v, str)})
+        return out
+    return list(CATALOG)
+
+
 # Import ids that are never fetched (core ABIs / always present).
 _SKIP_DEP_PREFIXES = ('xbmc.', 'kodi.')
 
@@ -230,7 +264,11 @@ def _resolve_zip_in_repo(repo_id, addon_id):
 
 
 def _resolve_repo_zip(repo_id):
-    """Repository zips come from the repository.taiseer mirror."""
+    """Repository zips come from the repository.taiseer mirror (or an explicit
+    URL published in portal.json's repo_zips map)."""
+    override = (_remote_portal().get('repo_zips') or {}).get(repo_id)
+    if override:
+        return override
     try:
         ver = _addons_xml_version(_http_get(TAISEER_ZIPS + 'addons.xml'), repo_id)
     except Exception as e:
@@ -508,14 +546,16 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self.checked = set()
+        self.catalog = kwargs.get('catalog') or _catalog()
+        ids = {c[0] for c in self.catalog}
+        self.checked = set(a for a in (kwargs.get('preselect') or ()) if a in ids)
         self.result = None           # list of (aid, name, repo) on Install
 
     def onInit(self):
         self.setProperty('portal_icon', PORTAL_ICON)
         lst = self.getControl(self.LIST)
         lst.reset()
-        for aid, name, rid, remote in CATALOG:
+        for aid, name, rid, remote in self.catalog:
             li = xbmcgui.ListItem(name)
             icon = _local_icon(aid, remote)
             li.setArt({'icon': icon, 'thumb': icon})
@@ -523,6 +563,7 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
             li.setProperty('repo', REPO_NAMES.get(rid, rid))
             li.setProperty('installed', 'true' if _is_local(aid) else '')
             li.setProperty('status', T(30407) if _is_local(aid) else '')
+            li.setProperty('checked', 'true' if aid in self.checked else '')
             lst.addItem(li)
         for cid, sid in ((9001, 30400), (9002, 30408),
                          (self.BTN_INSTALL, 30409)):
@@ -541,12 +582,12 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
         try:
             self.getControl(9003).setLabel(T(30414) % len(self.checked))
             self.getControl(self.BTN_ALL).setLabel(
-                T(30416) if len(self.checked) == len(CATALOG) else T(30415))
+                T(30416) if len(self.checked) == len(self.catalog) else T(30415))
         except Exception:
             pass
 
     def _set(self, idx, on):
-        aid = CATALOG[idx][0]
+        aid = self.catalog[idx][0]
         li = self.getControl(self.LIST).getListItem(idx)
         if on:
             self.checked.add(aid)
@@ -557,19 +598,19 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
     def onClick(self, control_id):
         if control_id == self.LIST:
             idx = self.getControl(self.LIST).getSelectedPosition()
-            if 0 <= idx < len(CATALOG):
-                self._set(idx, CATALOG[idx][0] not in self.checked)
+            if 0 <= idx < len(self.catalog):
+                self._set(idx, self.catalog[idx][0] not in self.checked)
                 self._refresh()
         elif control_id == self.BTN_ALL:
-            on = len(self.checked) != len(CATALOG)
-            for i in range(len(CATALOG)):
+            on = len(self.checked) != len(self.catalog)
+            for i in range(len(self.catalog)):
                 self._set(i, on)
             self._refresh()
         elif control_id == self.BTN_INSTALL:
             if not self.checked:
                 xbmcgui.Dialog().notification(TITLE, T(30417), PORTAL_ICON, 2500)
                 return
-            self.result = [(a, n, r) for a, n, r, _i in CATALOG
+            self.result = [(a, n, r) for a, n, r, _i in self.catalog
                            if a in self.checked]
             self.close()
 
@@ -589,14 +630,15 @@ def _patch_now():
         _log('post-install patch failed: %s' % e)
 
 
-def run(first_run=False):
+def run(first_run=False, preselect=None):
     import time
     selection = None
     # A window closed in under 1.5 s with no choice was swallowed by a skin
     # reload / add-on rescan, not dismissed by the user: open it again.
     for attempt in range(3):
         started = time.time()
-        win = AddonPortal('addon_portal.xml', ADDON_PATH, 'Default', '1080i')
+        win = AddonPortal('addon_portal.xml', ADDON_PATH, 'Default', '1080i',
+                          preselect=preselect)
         win.doModal()
         selection = win.result
         del win
@@ -622,6 +664,13 @@ def run(first_run=False):
     # First-run applies patches as its own next step.
     if ok and not first_run:
         _patch_now()
+
+    # Menus / widgets that point at the add-ons just installed come back.
+    try:
+        from resources.lib import menu_reconcile
+        menu_reconcile.run(rebuild=True)
+    except Exception as e:
+        _log('menu reconcile failed: %s' % e, xbmc.LOGWARNING)
 
     if ok and not first_run:
         try:

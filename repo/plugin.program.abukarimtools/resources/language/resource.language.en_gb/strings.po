@@ -624,3 +624,163 @@ msgctxt "#30444"
 msgid "Trailer quality"
 msgstr ""
 
+msgctxt "#30530"
+msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
+msgstr ""
+
+msgctxt "#30531"
+msgid "No profile backups yet."
+msgstr ""
+
+msgctxt "#30532"
+msgid "Profile restored."
+msgstr ""
+
+msgctxt "#30533"
+msgid "The profile could not be restored - see the log."
+msgstr ""
+
+msgctxt "#30534"
+msgid "%s has no settings or menus to export yet."
+msgstr ""
+
+msgctxt "#30535"
+msgid "Also copy the profile to... (Back = skip)"
+msgstr ""
+
+msgctxt "#30536"
+msgid "Exported %d files to:[CR]%s[CR][CR]Upload the zip to the repo's profiles/ folder and add this to the skin's entry in skins.json:[CR][CR]%s"
+msgstr ""
+
+msgctxt "#30540"
+msgid "Video cache tuned for this device: %d MB"
+msgstr ""
+
+msgctxt "#30541"
+msgid "Device: %s[CR]RAM: %d MB[CR][CR]Current cache: %d MB, readfactor %d[CR]Recommended: %d MB, readfactor %d[CR][CR]Apply the recommended values?"
+msgstr ""
+
+msgctxt "#30542"
+msgid "Already optimal - nothing to change."
+msgstr ""
+
+msgctxt "#30543"
+msgid "Cache settings saved. Restart Kodi to use them."
+msgstr ""
+
+msgctxt "#30550"
+msgid "Use these to connect a phone remote app (Kore, Yatse) or a browser.[CR][CR]Address: %s[CR]Username: %s[CR]Password: %s"
+msgstr ""
+
+msgctxt "#30551"
+msgid "Show login"
+msgstr ""
+
+msgctxt "#30552"
+msgid "New password"
+msgstr ""
+
+msgctxt "#30553"
+msgid "Turn remote access off"
+msgstr ""
+
+msgctxt "#30554"
+msgid "Turn remote access on"
+msgstr ""
+
+msgctxt "#30555"
+msgid "Remote access is off."
+msgstr ""
+
+msgctxt "#30556"
+msgid "Remote access turned off."
+msgstr ""
+
+msgctxt "#30560"
+msgid "Current session (kodi.log)"
+msgstr ""
+
+msgctxt "#30561"
+msgid "Previous session - use after a crash (kodi.old.log)"
+msgstr ""
+
+msgctxt "#30562"
+msgid "Log file not found:[CR]%s"
+msgstr ""
+
+msgctxt "#30563"
+msgid "Reading and cleaning the log..."
+msgstr ""
+
+msgctxt "#30564"
+msgid "Uploading..."
+msgstr ""
+
+msgctxt "#30565"
+msgid "Upload failed:[CR]%s"
+msgstr ""
+
+msgctxt "#30566"
+msgid "Scan the code or send this link to Abukarim:[CR][CR][B]%s[/B][CR][CR]Passwords, keys and tokens were removed before upload."
+msgstr ""
+
+msgctxt "#30570"
+msgid "Installing %d add-ons from their repositories..."
+msgstr ""
+
+msgctxt "#30571"
+msgid "(%d/%d) %s"
+msgstr ""
+
+msgctxt "#30572"
+msgid "These add-ons could not be installed yet:[CR]%s[CR][CR]Run Setup > Finish Build Install later to retry."
+msgstr ""
+
+msgctxt "#30580"
+msgid "Choose a setup preset"
+msgstr ""
+
+msgctxt "#30589"
+msgid "Menus checked: %d hidden, %d restored."
+msgstr ""
+
+msgctxt "#30590"
+msgid "Finish Build Install"
+msgstr ""
+
+msgctxt "#30591"
+msgid "Optimize for This Device"
+msgstr ""
+
+msgctxt "#30592"
+msgid "Remote Access (Web Server)"
+msgstr ""
+
+msgctxt "#30593"
+msgid "Share Log (QR)"
+msgstr ""
+
+msgctxt "#30594"
+msgid "Update Online Fixes & Catalogs"
+msgstr ""
+
+msgctxt "#30595"
+msgid "Repair Menus & Widgets"
+msgstr ""
+
+msgctxt "#30596"
+msgid "Export Current Skin Profile"
+msgstr ""
+
+msgctxt "#30597"
+msgid "Restore Skin Profile Backup"
+msgstr ""
+
+msgctxt "#30598"
+msgid "Skin Profiles"
+msgstr ""
+
+msgctxt "#30599"
+msgid "Online data:[CR]%s"
+msgstr ""
+

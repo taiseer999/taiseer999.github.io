@@ -173,7 +173,7 @@
     <setting id="SkinConstant.Numeric.03" type="string">$NUMBER[3]</setting>
     <setting id="HomeSwitcher.1105.Shortcut.Path" type="string"></setting>
     <setting id="OSD_Timeout" type="string">4</setting>
-    <setting id="HomeSwitcher.1101.Spotlight.icon" type="string">image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fgenre.png/</setting>
+    <setting id="HomeSwitcher.1101.Spotlight.icon" type="string">image://special%3a%2f%2fhome%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fgenre.png/</setting>
     <setting id="screensaver.arctic.mirage.name" type="string">TMDb Helper - مشهور</setting>
     <setting id="gradientcolor.name" type="string"></setting>
     <setting id="optionstiles.01.path" type="string"></setting>
@@ -205,7 +205,7 @@
     <setting id="HomeSwitcher.1101.Spotlight.SortMethod" type="string"></setting>
     <setting id="mid_season_premiere_color.name" type="string"></setting>
     <setting id="customrating.tvshows.item04" type="string">RottenTomatoesUser</setting>
-    <setting id="HomeSwitcher.home.Spotlight.icon" type="string">image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2ftrakt%2fpopular.png/</setting>
+    <setting id="HomeSwitcher.home.Spotlight.icon" type="string">image://special%3a%2f%2fhome%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2ftrakt%2fpopular.png/</setting>
     <setting id="HomeSwitcher.1101.Spotlight.Limit" type="string"></setting>
     <setting id="TMDbBingieHelper.Date.Format" type="string"></setting>
     <setting id="HomeSwitcher.1104.Shortcut.label" type="string">DPlex</setting>
@@ -215,7 +215,7 @@
     <setting id="mid_season_finale_color.name" type="string"></setting>
     <setting id="optionstiles.02.path" type="string"></setting>
     <setting id="TMDbHelper.Blur.Size" type="string"></setting>
-    <setting id="HomeSwitcher.1103.Spotlight.icon" type="string">image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.umbrella%2fresources%2fartwork%2fumbrella%2flanguages.png/</setting>
+    <setting id="HomeSwitcher.1103.Spotlight.icon" type="string">image://special%3a%2f%2fhome%2faddons%2fplugin.video.umbrella%2fresources%2fartwork%2fumbrella%2flanguages.png/</setting>
     <setting id="homeswitcher.1101.toggle" type="string">true</setting>
     <setting id="home.label" type="string"></setting>
     <setting id="HomeSwitcher.1102.Spotlight.Limit" type="string"></setting>
@@ -314,7 +314,7 @@
     <setting id="FallbackSourceFlag" type="string"></setting>
     <setting id="OptionsTiles.02.Icon" type="string"></setting>
     <setting id="homeswitcher.1101.spotlight.target" type="string">videos</setting>
-    <setting id="HomeSwitcher.1104.Shortcut.icon" type="string">image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.dplex%2fresources%2fmedia%2ficon.png/</setting>
+    <setting id="HomeSwitcher.1104.Shortcut.icon" type="string">image://special%3a%2f%2fhome%2faddons%2fplugin.video.dplex%2fresources%2fmedia%2ficon.png/</setting>
     <setting id="navigation.onback" type="string">Parent</setting>
     <setting id="series_finale_color.name" type="string"></setting>
     <setting id="optionstiles.03.include" type="string">Weather</setting>
@@ -341,7 +341,7 @@
     <setting id="skin.flixart.size" type="string"></setting>
     <setting id="CustomRating.TVShows.Item07" type="string">Letterboxd</setting>
     <setting id="homeswitcher.1106.toggle" type="string"></setting>
-    <setting id="HomeSwitcher.1102.Spotlight.icon" type="string">image://%2fUsers%2ftaiseerashouri%2fLibrary%2fApplication%20Support%2fKodi%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fgenre.png/</setting>
+    <setting id="HomeSwitcher.1102.Spotlight.icon" type="string">image://special%3a%2f%2fhome%2faddons%2fplugin.video.themoviedb.helper%2f%2fresources%2ficons%2fthemoviedb%2fgenre.png/</setting>
     <setting id="homeswitcher.1104.toggle" type="string"></setting>
     <setting id="homeswitcher.home.name" type="string">الصفحة الرئيسية</setting>
     <setting id="watchedprogresscolor.name" type="string"></setting>
