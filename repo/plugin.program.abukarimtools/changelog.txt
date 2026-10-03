@@ -1,3 +1,14 @@
+v3.2.6
+- NEW remote "json_edit" patches: edit JSON files by matching items on their
+  fields (guid / label / "~substring") instead of text, so formatting
+  differences between boxes don't matter. Ops: match+set/unset, remove,
+  append/insert (idempotent via "unless"), move before. Works on add-on files
+  and, with "base": "addon_data", on userdata (e.g. script.skinvariables
+  nodes). A changed node of the active skin triggers a template rebuild.
+- Patching > Update Online Fixes & Catalogs now applies the downloaded
+  patches immediately and shows the result.
+- repo_validate.py checks json_edit entries.
+
 v3.2.5
 - Dedicated icons (512x512, same neon style) for the 3.2 entries: Finish Build
   Install, Optimize for This Device, Remote Access, Share Log (QR), Update

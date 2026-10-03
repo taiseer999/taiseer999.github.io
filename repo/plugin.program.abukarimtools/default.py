@@ -478,8 +478,17 @@ def router():
         from resources.lib import remote_config
         from resources.lib.i18n import T
         res = remote_config.refresh(force=True)
-        xbmcgui.Dialog().ok('ABUKARIM TOOLS', T(30599) % '[CR]'.join(
-            '%s: %s' % kv for kv in sorted(res.items())))
+        lines = ['%s: %s' % kv for kv in sorted(res.items())]
+        # 3.2.6: apply what was just downloaded now, not at the next sweep
+        try:
+            from resources.lib import patcher, patch_watchdog
+            ids = [a for a in patcher.target_addon_ids() if patch_watchdog._addon_path(a)]
+            ok_n, fail_n, written, _r = patcher.apply_set(addon_ids=ids)
+            lines.append('')
+            lines.append('patches: %d OK, %d failed, %d written' % (ok_n, fail_n, written))
+        except Exception as e:
+            lines.append('patches: %s' % e)
+        xbmcgui.Dialog().ok('ABUKARIM TOOLS', T(30599) % '[CR]'.join(lines))
 
     elif mode == 'menu_reconcile':
         from resources.lib import menu_reconcile

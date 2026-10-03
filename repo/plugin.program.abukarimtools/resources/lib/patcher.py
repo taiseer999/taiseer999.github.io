@@ -1226,6 +1226,11 @@ def _apply_patch(patch):
             break
     if target is None:
         target = os.path.join(addon_path, patch['rel_path'])
+    # 3.2.6: structured JSON edits (remote patches.json "json_edit") - match
+    # items by key instead of text, so formatting differences don't matter.
+    if patch.get('json_edit'):
+        from resources.lib import remote_patches
+        return remote_patches.apply_json_edit(patch, target)
     # inject_file: ينشئ الملف مباشرة قبل أي فحص
     if patch.get('inject_file'):
         b64 = patch.get('inject_content_b64', '')

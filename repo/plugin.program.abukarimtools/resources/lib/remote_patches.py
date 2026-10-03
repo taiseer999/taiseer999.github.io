@@ -52,6 +52,7 @@ _ALLOWED_KEYS = {
     'skip_if_present', 'inject_file', 'inject_content_b64', 'replace',
     'fallback_pattern', 'fallback_repl', 'count', 'regex_dotall', 'base',
     'min_version', 'max_version', 'target_sha256', 'supersedes', 'id',
+    'json_edit',
 }
 
 _cache = {'mtime': None, 'patches': [], 'toggles': [], 'kill': set()}
@@ -107,6 +108,11 @@ def _convert(e):
         p['regex_flags'] = re.DOTALL
     if e.get('base') == 'addon_data':
         p['base'] = 'addon_data'
+    if e.get('json_edit'):
+        ops = e['json_edit']
+        if not isinstance(ops, list) or not all(isinstance(o, dict) for o in ops):
+            raise ValueError('json_edit must be a list of objects')
+        p['json_edit'] = ops
     if e.get('inject_file'):
         p['inject_file'] = True
         p['inject_content_b64'] = e.get('inject_content_b64', '')
@@ -213,3 +219,150 @@ def sha_ok(patch, target):
     except OSError:
         return True      # missing file is reported by the normal path
     return digest.lower() in {s.lower() for s in shas}
+
+
+# ---------------------------------------------------------------------------
+# json_edit (3.2.6)
+# ---------------------------------------------------------------------------
+#
+# "json_edit": [
+#   {"match": {"guid": "guid-65582629"}, "set": {"label": "Continue"}},
+#   {"match": {"label": "Old"}, "unset": ["disabled"]},
+#   {"remove": {"path": "plugin://plugin.video.gone/"}},
+#   {"append": {"label": "New", "path": "...", "guid": "guid-abk-1"},
+#    "unless": {"guid": "guid-abk-1"}},              # idempotent append
+#   {"insert": {...}, "before": {"label": "Power"}, "unless": {...}},
+#   {"move": {"label": "Reboot"}, "before": {"label": "Power"}}
+# ]
+#
+# match / remove / unless / before select dict items anywhere in the file
+# (any depth) whose fields equal ALL the given values; a value starting with
+# "~" is a substring test ("~plugin.video.dexhub"). Every op is idempotent,
+# the file is only rewritten when something changed, and a skinvariables node
+# that changed gets its skin's templates rebuilt when that skin is active.
+
+def _matches(item, cond):
+    if not isinstance(item, dict) or not cond:
+        return False
+    for k, v in cond.items():
+        cur = item.get(k)
+        if isinstance(v, str) and v.startswith('~'):
+            if not isinstance(cur, str) or v[1:] not in cur:
+                return False
+        elif cur != v:
+            return False
+    return True
+
+
+def _walk_lists(node):
+    """Yield every list in the document (the containers items live in)."""
+    if isinstance(node, list):
+        yield node
+        for x in node:
+            for l in _walk_lists(x):
+                yield l
+    elif isinstance(node, dict):
+        for v in node.values():
+            for l in _walk_lists(v):
+                yield l
+
+
+def _find(doc, cond):
+    for lst in _walk_lists(doc):
+        for i, item in enumerate(lst):
+            if _matches(item, cond):
+                yield lst, i, item
+
+
+def _exists(doc, cond):
+    return any(True for _ in _find(doc, cond)) if cond else False
+
+
+def _top_list(doc):
+    if isinstance(doc, list):
+        return doc
+    for lst in _walk_lists(doc):
+        return lst
+    return None
+
+
+def _json_ops(doc, ops):
+    changed = 0
+    for op in ops:
+        if 'match' in op:
+            for _l, _i, item in list(_find(doc, op['match'])):
+                for k, v in (op.get('set') or {}).items():
+                    if item.get(k) != v:
+                        item[k] = v
+                        changed += 1
+                for k in op.get('unset') or []:
+                    if k in item:
+                        del item[k]
+                        changed += 1
+        elif 'remove' in op:
+            hits = list(_find(doc, op['remove']))
+            for lst, i, _item in sorted(hits, key=lambda h: -h[1]):
+                del lst[i]
+                changed += 1
+        elif 'append' in op or 'insert' in op:
+            new = op.get('append') or op.get('insert')
+            if _exists(doc, op.get('unless') or new):
+                continue
+            if op.get('before'):
+                hit = next(_find(doc, op['before']), None)
+                if hit:
+                    hit[0].insert(hit[1], dict(new))
+                    changed += 1
+                    continue
+            lst = _top_list(doc)
+            if lst is not None:
+                lst.append(dict(new))
+                changed += 1
+        elif 'move' in op and op.get('before'):
+            src = next(_find(doc, op['move']), None)
+            dst = next(_find(doc, op['before']), None)
+            if src and dst and src[0] is dst[0] and src[1] != dst[1] - 1:
+                item = src[0].pop(src[1])
+                j = src[0].index(dst[2])
+                src[0].insert(j, item)
+                changed += 1
+    return changed
+
+
+def apply_json_edit(patch, target):
+    """Called from patcher._apply_patch. Returns (ok, message)."""
+    import json as _json
+    aid = patch['addon_id']
+    if not os.path.isfile(target):
+        if patch.get('not_found_ok'):
+            return True, '[%s] %s not present – skipping (optional).' % (aid, patch['rel_path'])
+        return False, '[%s] Target file not found: %s' % (aid, patch['rel_path'])
+    try:
+        with open(target, 'r', encoding='utf-8') as f:
+            doc = _json.load(f)
+    except Exception as e:
+        return False, '[%s] %s is not valid JSON: %s' % (aid, patch['rel_path'], e)
+    n = _json_ops(doc, patch['json_edit'])
+    if not n:
+        return True, '[%s] Already patched – skipping.' % aid
+    tmp = target + '.abk.part'
+    with open(tmp, 'w', encoding='utf-8') as f:
+        _json.dump(doc, f, ensure_ascii=False, indent=4)
+    os.replace(tmp, target)
+    _after_json_change(target)
+    return True, '[%s] Patched OK (json, %d change(s)): %s' % (aid, n, patch['description'])
+
+
+def _after_json_change(target):
+    """skinvariables node of the ACTIVE skin -> rebuild its templates."""
+    norm = target.replace(os.sep, '/')
+    marker = '/script.skinvariables/nodes/'
+    if marker not in norm:
+        return
+    skin = norm.split(marker, 1)[1].split('/', 1)[0]
+    if skin != xbmc.getSkinDir():
+        return
+    xbmc.executebuiltin('RunScript(script.skinvariables,run_executebuiltin='
+                        'special://skin/shortcuts/skinvariables-build-templates.json,'
+                        'use_rules)')
+    _log('skinvariables rebuild queued for %s' % skin)
