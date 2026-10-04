@@ -1,3 +1,14 @@
+v3.2.18
+- FIX: updating ABUKARIM TOOLS while Kodi runs did nothing until a restart
+  (log 2026-10-04 12:33): the running copy had been started by the guardian
+  (RunScript), which Kodi does not stop on an update, so the new 3.2.17
+  service waited 15 s, saw the old heartbeat and exited - no restart prompt.
+  A newer version now TAKES OVER from an older running copy (heartbeat carries
+  version + token, resources/lib/svc_state.py) and shows the restart prompt;
+  the old copy's watchdog / window rescue / update watch stop by themselves
+  (3.2.18 and later). Same version = real duplicate, still exits.
+- Guardian-run watchdog also yields to a real service copy that starts later.
+
 v3.2.17
 - Auto-patch watchdog no longer waits for repository relinking: with an empty
   repo cache the relink retries for up to 3 minutes and held the watchdog back

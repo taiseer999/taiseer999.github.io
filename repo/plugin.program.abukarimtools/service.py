@@ -830,7 +830,10 @@ def _start_update_watch(monitor, boot_version):
 
     def loop():
         stamp = os.path.join(PROFILE, 'service_version.stamp')
+        from resources.lib import svc_state
         while not monitor.waitForAbort(20):
+            if not svc_state.still_mine():
+                return
             cur = _paths.version(fresh=True)
             if not cur or cur == '?' or cur == boot_version:
                 continue
@@ -875,25 +878,30 @@ def main():
     # menu checks - if it is missing the menu starts this file via RunScript.
     # The property also stops a second copy from running in the same session.
     global _OWNS_HEARTBEAT
+    from resources.lib import svc_state
     home = xbmcgui.Window(10000)
-    # 3.2.16: after an in-place update Kodi may start the new service while the
-    # old copy is still shutting down - give it 15 s to clear its heartbeat.
+    try:
+        ver = _paths.version()
+    except Exception:
+        ver = '?'
+    # 3.2.16: after an in-place update the old copy may still be shutting down
+    # - give it 15 s to clear its heartbeat.
     for _ in range(15):
         if not home.getProperty(SERVICE_PROP):
             break
         if monitor.waitForAbort(1):
             return
-    if home.getProperty(SERVICE_PROP):
-        _log('Service already running (%s) - this copy exits.'
-             % home.getProperty(SERVICE_PROP))
-        return
+    running = home.getProperty(SERVICE_PROP)
+    if running:
+        if running.split('/')[0] == ver:
+            _log('Service already running (%s) - this copy exits.' % running)
+            return
+        # 3.2.18: an OLDER copy (e.g. one the guardian started, which Kodi does
+        # not stop on update) - take over; 3.2.18+ copies stop by themselves.
+        _log('Older service copy running (%s) - v%s takes over.' % (running, ver))
     _OWNS_HEARTBEAT = True
-    try:
-        ver = _paths.version()
-    except Exception:
-        ver = '?'
     started_by = 'menu' if home.getProperty(SERVICE_PROP + '.kick') else 'boot'
-    home.setProperty(SERVICE_PROP, '%s/%s' % (ver, started_by))
+    svc_state.claim('%s/%s/%d' % (ver, started_by, int(time.time() * 1000)))
     xbmc.log('[AbukarimTools Service] started v%s (%s)' % (ver, started_by),
              xbmc.LOGINFO)
 
@@ -1100,6 +1108,7 @@ if __name__ == '__main__':
         # shutdown) so the next copy is not turned away as a duplicate
         if _OWNS_HEARTBEAT:
             try:
-                xbmcgui.Window(10000).clearProperty(SERVICE_PROP)
+                from resources.lib import svc_state
+                svc_state.release()
             except Exception:
                 pass

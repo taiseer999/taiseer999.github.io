@@ -35,7 +35,10 @@ def _loop(monitor):
     # let Kodi finish its own startup before judging anything
     if monitor.waitForAbort(20):
         return
+    from resources.lib import svc_state
     while not monitor.abortRequested():
+        if not svc_state.still_mine():
+            return                       # a newer service copy runs its own
         try:
             wid = xbmcgui.getCurrentWindowId()
         except Exception:

@@ -82,10 +82,13 @@ def _take_over_if_hung(home, mon):
             return
     _log('ABUKARIM TOOLS service hung at start-up - guardian runs the '
          'auto-patch watchdog itself', xbmc.LOGWARNING)
-    home.setProperty(tools_prop, 'guardian')     # a late service copy exits
     root = xbmcvfs.translatePath('special://home/addons/plugin.program.abukarimtools/')
     if root not in sys.path:
         sys.path.insert(0, root)
+    import time
+    from resources.lib import svc_state
+    # a real service copy that starts later takes over; this watchdog then stops
+    svc_state.claim('guardian/guardian/%d' % int(time.time() * 1000))
     try:
         from resources.lib import window_rescue
         window_rescue.start(mon)

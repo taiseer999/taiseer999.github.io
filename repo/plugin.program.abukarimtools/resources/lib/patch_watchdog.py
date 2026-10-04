@@ -278,8 +278,14 @@ def watch(monitor):
     _save_state(state)
     last_verify = time.time()
 
+    from resources.lib import svc_state
     while not monitor.abortRequested():
         if monitor.waitForAbort(POLL_SECONDS):
+            break
+        # 3.2.18: a newer service copy took over after an update - stop here
+        if not svc_state.still_mine():
+            _log('Newer service copy is live (%s) - this watchdog stops.'
+                 % svc_state.current())
             break
 
         # Hold off while first-run is on screen; state is not updated, so any
