@@ -16,7 +16,14 @@ Usage:
 
 import xbmcaddon
 
-_ADDON = xbmcaddon.Addon('plugin.program.abukarimtools')
+_ADDON = None   # 3.2.15: created on first use, never at import
+
+
+def _addon():
+    global _ADDON
+    if _ADDON is None:
+        _ADDON = xbmcaddon.Addon('plugin.program.abukarimtools')
+    return _ADDON
 
 
 def T(string_id):
@@ -27,7 +34,7 @@ def T(string_id):
     English source of truth in strings_map if Kodi returns nothing for the id.
     """
     try:
-        s = _ADDON.getLocalizedString(int(string_id))
+        s = _addon().getLocalizedString(int(string_id))
         if s:
             return s
     except Exception:

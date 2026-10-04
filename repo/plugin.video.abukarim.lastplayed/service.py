@@ -391,7 +391,17 @@ class Monitor(xbmc.Monitor):
         self.rec.cfg.reload()
 
 
+HEARTBEAT = 'abk.lastplayed.alive'
+
+
 def main():
+    # one copy per session: Kodi's own start, or ABUKARIM TOOLS' guardian when
+    # Kodi skipped this service at boot (seen on Kodi 22 / Python 3.14)
+    home = xbmcgui.Window(10000)
+    if home.getProperty(HEARTBEAT):
+        store.log('service already running - this copy exits')
+        return
+    home.setProperty(HEARTBEAT, str(int(time.time())))
     try:
         store.migrate_old()
     except Exception as ex:
@@ -411,6 +421,7 @@ def main():
         if mon.waitForAbort(1):
             break
     rec.on_stop(False)
+    home.clearProperty(HEARTBEAT)
     del player
 
 

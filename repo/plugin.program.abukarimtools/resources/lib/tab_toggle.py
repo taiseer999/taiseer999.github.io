@@ -205,9 +205,6 @@ def _is_coreelec():
 
 
 def _restart_kodi():
-    if _is_coreelec():
-        _log('Restarting Kodi via systemctl (CoreELEC).')
-        os.system('systemctl restart kodi &')
-    else:
-        _log('Restarting Kodi via RestartApp builtin.')
-        xbmc.executebuiltin('RestartApp')
+    # 3.2.16: one restart path for the whole add-on (wizard Force Close)
+    from resources.lib import origin_fix
+    origin_fix.force_restart('tab toggle')

@@ -44,10 +44,10 @@ import xbmcvfs
 
 from resources.lib import patcher
 
-ADDON       = xbmcaddon.Addon('plugin.program.abukarimtools')
+from resources.lib import paths as _paths
 ADDON_NAME  = 'ABUKARIM TOOLS'
-ADDON_ICON  = xbmcvfs.translatePath(ADDON.getAddonInfo('icon'))
-PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
+ADDON_ICON  = _paths.ICON
+PROFILE     = _paths.PROFILE
 STATE_FILE  = os.path.join(PROFILE, 'patch_state.json')
 ADDONS_DIR  = os.path.join(xbmcvfs.translatePath('special://home/'), 'addons')
 

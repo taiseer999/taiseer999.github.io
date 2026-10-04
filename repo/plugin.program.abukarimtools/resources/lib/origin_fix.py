@@ -581,41 +581,36 @@ def _is_macos():
         return False
 
 
-def _restart_kodi():
-    """Restart (or on desktop, cleanly quit) Kodi as reliably as the platform
-    allows.
+WIZARD_ID = 'plugin.program.ABUKARIMwizard'
 
-    CoreELEC: 'systemctl restart kodi' genuinely restarts the service.
 
-    macOS / desktop Linux: the RestartApp builtin is effectively a no-op off
-    Windows, which is why the old prompt appeared to do nothing. There is no
-    in-process way to relaunch a macOS .app from inside Kodi without an
-    external helper, so we do the next best thing that always works: quit Kodi
-    cleanly via the Quit builtin. The user relaunches it. A clean Quit also
-    flushes settings/databases, so nothing pending is lost.
+def force_restart(reason=''):
+    """3.2.16: every ABUKARIM restart goes through ABUKARIM Wizard >
+    Maintenance > Force Close (plugin mode 18 = os._exit). A clean Quit /
+    RestartApp hung on Kodi 22: shutdown waits for every Python script and
+    the add-on services (ours included) did not stop within its timeout, so
+    Kodi sat on "Stopping the application..." forever (log 2026-10-04 12:14).
+    CoreELEC's systemd brings Kodi straight back after the exit; on macOS /
+    desktop Kodi closes and is reopened by hand.
+    If the wizard is missing or does not act within 5 s, exit directly - the
+    same thing the wizard does.
     """
-    if _is_coreelec():
-        _log('Restarting Kodi via systemctl (CoreELEC).')
-        os.system('systemctl restart kodi &')
-        return
-
-    if _is_macos():
-        _log('Quitting Kodi via Quit builtin (macOS — reopen to finish).')
+    _log('Force restart%s via ABUKARIM Wizard > Maintenance > Force Close'
+         % (' (%s)' % reason if reason else ''))
+    if not _is_coreelec():
         _notify_quit()
-        xbmc.sleep(400)
-        xbmc.executebuiltin('Quit')
-        return
+    xbmc.sleep(1500)          # let Kodi write pending settings / the notification show
+    wiz = xbmcvfs.translatePath('special://home/addons/%s/addon.xml' % WIZARD_ID)
+    if os.path.isfile(wiz):
+        xbmc.executebuiltin('RunPlugin(plugin://%s/?mode=18)' % WIZARD_ID)
+        xbmc.sleep(5000)
+        _log('wizard Force Close did not exit Kodi - exiting directly')
+    os._exit(1)
 
-    # Other desktop Linux / Windows: try the native restart first; if the
-    # build ignores it, a clean Quit is the dependable fallback.
-    _log('Restarting Kodi via RestartApp builtin (desktop).')
-    xbmc.executebuiltin('RestartApp')
-    xbmc.sleep(2000)
-    # If RestartApp did nothing (common off Windows), fall back to a clean quit.
-    _log('RestartApp may be unsupported here — falling back to Quit.')
-    _notify_quit()
-    xbmc.sleep(400)
-    xbmc.executebuiltin('Quit')
+
+def _restart_kodi():
+    """Kept for callers: now always the wizard force restart."""
+    force_restart()
 
 
 def _notify_quit():

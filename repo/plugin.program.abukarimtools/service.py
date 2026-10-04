@@ -35,16 +35,30 @@ import time
 import traceback
 
 import xbmc
+xbmc.log('[AbukarimTools Service] process started', xbmc.LOGINFO)   # 3.2.15: before any add-on-manager call
 import xbmcaddon
 import xbmcgui
 import xbmcvfs
 
 from resources.lib.i18n import T
 
-ADDON       = xbmcaddon.Addon('plugin.program.abukarimtools')
+from resources.lib import paths as _paths
+
+
+class _LazyAddon(object):
+    """xbmcaddon.Addon only when really needed (never at import)."""
+    _a = None
+
+    def __getattr__(self, name):
+        if _LazyAddon._a is None:
+            _LazyAddon._a = xbmcaddon.Addon('plugin.program.abukarimtools')
+        return getattr(_LazyAddon._a, name)
+
+
+ADDON       = _LazyAddon()
 ADDON_NAME  = 'ABUKARIM TOOLS'
-ADDON_PATH  = xbmcvfs.translatePath(ADDON.getAddonInfo('path'))
-PROFILE     = xbmcvfs.translatePath(ADDON.getAddonInfo('profile'))
+ADDON_PATH  = _paths.ADDON_PATH
+PROFILE     = _paths.PROFILE
 FLAG_FILE   = os.path.join(PROFILE, 'first_run.flag')
 
 
@@ -733,7 +747,7 @@ def _recommend_restart_if_updated(monitor):
     stamp   = os.path.join(PROFILE, 'service_version.stamp')
     current = ''
     try:
-        current = ADDON.getAddonInfo('version') or ''
+        current = _paths.version() or ''
     except Exception:
         return
     if not current:
@@ -808,6 +822,49 @@ def _relink_after_rebuild(monitor):
 
 
 SERVICE_PROP = 'abukarimtools.service.alive'
+_OWNS_HEARTBEAT = False
+
+
+def _start_update_watch(monitor, boot_version):
+    import threading
+
+    def loop():
+        stamp = os.path.join(PROFILE, 'service_version.stamp')
+        while not monitor.waitForAbort(20):
+            cur = _paths.version(fresh=True)
+            if not cur or cur == '?' or cur == boot_version:
+                continue
+            # wait for a quiet moment: no playback, no dialog
+            while not monitor.abortRequested() and (
+                    xbmc.getCondVisibility('Player.HasMedia')
+                    or xbmc.getCondVisibility('System.HasModalDialog')):
+                if monitor.waitForAbort(5):
+                    return
+            try:
+                os.makedirs(PROFILE, exist_ok=True)
+                with open(stamp, 'w', encoding='utf-8') as f:
+                    f.write(cur)              # the next boot won't ask again
+            except OSError:
+                pass
+            _log('Tools updated %s -> %s while running; recommending a restart.'
+                 % (boot_version, cur))
+            try:
+                from resources.lib import origin_fix
+                origin_fix.recommend_restart(
+                    message=('ABUKARIM TOOLS were updated to %s.\n'
+                             'Restart now to finish the update and start the '
+                             'new auto-patch service.\n'
+                             'تم تحديث أدوات أبوكريم إلى %s.\n'
+                             'أعد التشغيل الآن لإكمال التحديث وتشغيل خدمة '
+                             'الترقيع التلقائي الجديدة.' % (cur, cur)))
+            except Exception:
+                _log('Live-update restart prompt crashed:\n%s'
+                     % traceback.format_exc(), xbmc.LOGERROR)
+            return
+
+    t = threading.Thread(target=loop, name='abk-update-watch')
+    t.daemon = True
+    t.start()
 
 
 def main():
@@ -817,19 +874,36 @@ def main():
     # silently never started on some boots), and publish a heartbeat that the
     # menu checks - if it is missing the menu starts this file via RunScript.
     # The property also stops a second copy from running in the same session.
+    global _OWNS_HEARTBEAT
     home = xbmcgui.Window(10000)
+    # 3.2.16: after an in-place update Kodi may start the new service while the
+    # old copy is still shutting down - give it 15 s to clear its heartbeat.
+    for _ in range(15):
+        if not home.getProperty(SERVICE_PROP):
+            break
+        if monitor.waitForAbort(1):
+            return
     if home.getProperty(SERVICE_PROP):
         _log('Service already running (%s) - this copy exits.'
              % home.getProperty(SERVICE_PROP))
         return
+    _OWNS_HEARTBEAT = True
     try:
-        ver = ADDON.getAddonInfo('version')
+        ver = _paths.version()
     except Exception:
         ver = '?'
     started_by = 'menu' if home.getProperty(SERVICE_PROP + '.kick') else 'boot'
     home.setProperty(SERVICE_PROP, '%s/%s' % (ver, started_by))
     xbmc.log('[AbukarimTools Service] started v%s (%s)' % (ver, started_by),
              xbmc.LOGINFO)
+
+    # 3.2.16: prompt for the restart the moment this add-on is updated while
+    # Kodi runs (not only at the next boot). Fenced.
+    try:
+        _start_update_watch(monitor, ver)
+    except Exception:
+        _log('Update watch failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
     # 3.2.13: reopen Home if a skin reload (active-skin update) leaves Kodi
     # with no window at all - black screen that looks like a freeze. Fenced.
@@ -970,11 +1044,19 @@ def main():
     # empty) the plain boot linking above cannot match anything: restore the
     # phase-1 origin snapshot and refresh the repositories, retrying for up to
     # 3 minutes. Runs before the watchdog; only on those boots. Fenced.
-    try:
-        _relink_after_rebuild(monitor)
-    except Exception:
-        _log('Post-rebuild repo linking crashed (ignored):\n%s'
-             % traceback.format_exc(), xbmc.LOGERROR)
+    # 3.2.17: in the background - with an empty repo cache this retries for
+    # up to 3 minutes and used to hold the auto-patch watchdog back that long
+    # (log 2026-10-04 12:15:38 -> 12:18:45).
+    def _relink_bg():
+        try:
+            _relink_after_rebuild(monitor)
+        except Exception:
+            _log('Post-rebuild repo linking crashed (ignored):\n%s'
+                 % traceback.format_exc(), xbmc.LOGERROR)
+    import threading
+    _t = threading.Thread(target=_relink_bg, name='abk-relink')
+    _t.daemon = True
+    _t.start()
 
     # 3.2: hide menu items / widgets whose add-on is missing (and bring back
     # ones whose add-on was installed since). No network, content-compared.
@@ -1011,4 +1093,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    finally:
+        # 3.2.16: free the heartbeat when this copy stops (add-on update /
+        # shutdown) so the next copy is not turned away as a duplicate
+        if _OWNS_HEARTBEAT:
+            try:
+                xbmcgui.Window(10000).clearProperty(SERVICE_PROP)
+            except Exception:
+                pass

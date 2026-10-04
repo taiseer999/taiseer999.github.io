@@ -16,6 +16,7 @@ is harmless.
     RunScript(special://home/addons/plugin.program.abukarimtools/guardian.py)
 """
 import os
+import sys
 
 import xbmc
 import xbmcgui
@@ -63,6 +64,38 @@ def main():
     home.setProperty(PROP, 'done:%s' % (','.join(started) or 'none'))
     if not started:
         _log('all watched services are running')
+        return
+    if 'plugin.program.abukarimtools' in started:
+        _take_over_if_hung(home, mon)
+
+
+def _take_over_if_hung(home, mon):
+    """3.2.15: if the kicked service still shows no heartbeat after 45 s it is
+    stuck at start-up (same hang as at boot). Run the auto-patch watchdog and
+    the window rescue from this invocation instead, for the rest of the session."""
+    tools_prop = 'abukarimtools.service.alive'
+    for _ in range(45):
+        if home.getProperty(tools_prop):
+            _log('ABUKARIM TOOLS service is up (%s)' % home.getProperty(tools_prop))
+            return
+        if mon.waitForAbort(1):
+            return
+    _log('ABUKARIM TOOLS service hung at start-up - guardian runs the '
+         'auto-patch watchdog itself', xbmc.LOGWARNING)
+    home.setProperty(tools_prop, 'guardian')     # a late service copy exits
+    root = xbmcvfs.translatePath('special://home/addons/plugin.program.abukarimtools/')
+    if root not in sys.path:
+        sys.path.insert(0, root)
+    try:
+        from resources.lib import window_rescue
+        window_rescue.start(mon)
+    except Exception as e:
+        _log('window rescue failed: %s' % e, xbmc.LOGERROR)
+    try:
+        from resources.lib import patch_watchdog
+        patch_watchdog.watch(mon)
+    except Exception as e:
+        _log('watchdog failed: %s' % e, xbmc.LOGERROR)
 
 
 if __name__ == '__main__':

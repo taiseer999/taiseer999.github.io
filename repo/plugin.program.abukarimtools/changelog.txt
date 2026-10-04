@@ -1,3 +1,34 @@
+v3.2.17
+- Auto-patch watchdog no longer waits for repository relinking: with an empty
+  repo cache the relink retries for up to 3 minutes and held the watchdog back
+  (log 2026-10-04: service up 12:15:38, watchdog only 12:18:45). Relinking now
+  runs in the background.
+
+v3.2.16
+- Every restart now goes through ABUKARIM Wizard > Maintenance > Force Close
+  (plugin mode 18). The clean Quit / RestartApp hung on Kodi 22 ("Stopping the
+  application..." forever, log 2026-10-04 12:14). Used by the update prompt,
+  Origin Fix, Device Tuning, tab toggle and the add-on DB rebuild (desktop).
+  If the wizard is missing or does not act within 5 s, Kodi is exited directly
+  (same thing the wizard does). CoreELEC brings Kodi back by itself.
+- Update prompt now appears right when ABUKARIM TOOLS is updated while Kodi is
+  running (checks addon.xml every 20 s, waits until nothing plays and no
+  dialog is open), not only on the next boot.
+- The service frees its heartbeat when it stops and a new copy waits 15 s for
+  the old one, so an updated service is no longer turned away as a duplicate.
+
+v3.2.15
+- FIX: auto-patching stopped because the service never got going at boot.
+  The service, the watchdog and i18n all called xbmcaddon.Addon() at import;
+  with the damaged Addons33.db ("Can't update database Addons33 from version
+  0") that call can block at boot, so the service hung before its first log
+  line. Import-time paths/version now come from special:// paths
+  (resources/lib/paths.py); Addon() is only created on first real use.
+- First line of service.py logs "[AbukarimTools Service] process started"
+  before anything else - shows whether Kodi launched it at all.
+- Guardian: if the service it kicked still has no heartbeat after 45 s, the
+  guardian runs the auto-patch watchdog + window rescue itself.
+
 v3.2.14
 - FIX: since 2026-10-04 Kodi 22 never started the ABUKARIM TOOLS service at
   boot (no "[AbukarimTools Service] started" line in any log; DexHub and Last

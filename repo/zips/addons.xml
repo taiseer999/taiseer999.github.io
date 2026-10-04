@@ -636,7 +636,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
 				<screenshot />
 		</assets>
 	</extension>
-</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="3.2.14" provider-name="Abukarim">
+</addon><addon id="plugin.program.abukarimtools" name="ABUKARIM TOOLS" version="3.2.17" provider-name="Abukarim">
 
   <requires>
     <import addon="xbmc.python" version="3.0.0" />
@@ -854,7 +854,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
             <fanart>fanart.png</fanart>
         </assets>
     </extension>
-</addon><addon id="plugin.video.abukarim.lastplayed" name="Last Played (ABUKARIM)" version="1.0.0" provider-name="ABUKARIM">
+</addon><addon id="plugin.video.abukarim.lastplayed" name="Last Played (ABUKARIM)" version="1.0.1" provider-name="ABUKARIM">
     <requires>
         <import addon="xbmc.python" version="3.0.1" />
     </requires>
@@ -873,7 +873,7 @@ v3.2: Notify uses Arial font (Arabic support); notify pops automatically on buil
             <icon>resources/media/icon.png</icon>
             <fanart>resources/media/fanart.jpg</fanart>
         </assets>
-        <news>v1.0.0 - first release (replaces plugin.video.last_played)</news>
+        <news>v1.0.1 - heartbeat so ABUKARIM TOOLS can start the service when Kodi skips it at boot. v1.0.0 - first release (replaces plugin.video.last_played)</news>
     </extension>
 </addon><addon id="plugin.video.fenlight" name="Fen Light+" provider-name="Tikipeter/thejason40" version="2.5.3">
     <requires>

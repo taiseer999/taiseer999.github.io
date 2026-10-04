@@ -115,7 +115,8 @@ def _restart():
     if _is_coreelec():
         xbmc.executebuiltin('Reboot')
     else:
-        xbmc.executebuiltin('Quit')
+        from resources.lib import origin_fix
+        origin_fix.force_restart('add-on database rebuild')
 
 
 def _db_dir():
@@ -548,7 +549,8 @@ def _notify_manual_restart(dlg):
     rebuild looked broken even when the delete had worked.
     """
     dlg.ok(ADDON_NAME, T(30336))
-    xbmc.executebuiltin('Quit')
+    from resources.lib import origin_fix
+    origin_fix.force_restart('add-on database rebuild')
 
 
 def continue_if_pending(monitor=None):
