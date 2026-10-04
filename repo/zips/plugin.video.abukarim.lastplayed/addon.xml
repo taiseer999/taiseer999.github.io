@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.abukarim.lastplayed" name="Last Played (ABUKARIM)" version="1.0.0" provider-name="ABUKARIM">
+    <requires>
+        <import addon="xbmc.python" version="3.0.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" start="login"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Recently played movies and episodes from any add-on</summary>
+        <summary lang="ar_SA">آخر الأفلام والحلقات التي شاهدتها من أي إضافة</summary>
+        <description lang="en_GB">Records what you play - Kodi library, TMDbHelper, Fen Light, Seren, Umbrella or any other video add-on - and lists it newest first with artwork, progress and a working replay link. Widget-ready lists: all, movies, episodes, in progress. Built for Kodi 21/22.</description>
+        <description lang="ar_SA">يسجل ما تشاهده من مكتبة كودي أو أي إضافة فيديو ويعرضه من الأحدث مع الصور ونسبة المشاهدة ورابط تشغيل يعمل. قوائم جاهزة للودجات: الكل، الأفلام، الحلقات، قيد المشاهدة.</description>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+        <news>v1.0.0 - first release (replaces plugin.video.last_played)</news>
+    </extension>
+</addon>

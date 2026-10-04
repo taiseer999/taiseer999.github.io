@@ -1,0 +1,81 @@
+# Last Played (ABUKARIM)
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_GB\n"
+
+msgctxt "#30000"
+msgid "Recording"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Record movies"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Record episodes"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Record other videos (no movie/episode info)"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Seconds of playback before an item is saved"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Maximum items kept"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Exclude add-ons (comma separated ids or names)"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Extra debug logging"
+msgstr ""
+
+msgctxt "#30010"
+msgid "All"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30013"
+msgid "In progress"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Other videos"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Remove from Last Played"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Clear Last Played"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Remove every item from the list?"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Yesterday"
+msgstr ""

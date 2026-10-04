@@ -1,0 +1,81 @@
+# Last Played (ABUKARIM)
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar_SA\n"
+
+msgctxt "#30000"
+msgid "Recording"
+msgstr "التسجيل"
+
+msgctxt "#30001"
+msgid "Record movies"
+msgstr "تسجيل الأفلام"
+
+msgctxt "#30002"
+msgid "Record episodes"
+msgstr "تسجيل الحلقات"
+
+msgctxt "#30003"
+msgid "Record other videos (no movie/episode info)"
+msgstr "تسجيل فيديوهات أخرى (بدون معلومات فيلم/حلقة)"
+
+msgctxt "#30004"
+msgid "Seconds of playback before an item is saved"
+msgstr "عدد ثواني التشغيل قبل حفظ العنصر"
+
+msgctxt "#30005"
+msgid "Maximum items kept"
+msgstr "أقصى عدد للعناصر المحفوظة"
+
+msgctxt "#30006"
+msgid "Exclude add-ons (comma separated ids or names)"
+msgstr "استثناء إضافات (معرّفات أو أسماء مفصولة بفاصلة)"
+
+msgctxt "#30007"
+msgid "Extra debug logging"
+msgstr "سجل تصحيح إضافي"
+
+msgctxt "#30010"
+msgid "All"
+msgstr "الكل"
+
+msgctxt "#30011"
+msgid "Movies"
+msgstr "الأفلام"
+
+msgctxt "#30012"
+msgid "Episodes"
+msgstr "الحلقات"
+
+msgctxt "#30013"
+msgid "In progress"
+msgstr "قيد المشاهدة"
+
+msgctxt "#30014"
+msgid "Other videos"
+msgstr "فيديوهات أخرى"
+
+msgctxt "#30050"
+msgid "Remove from Last Played"
+msgstr "إزالة من آخر ما شوهد"
+
+msgctxt "#30051"
+msgid "Clear Last Played"
+msgstr "مسح آخر ما شوهد"
+
+msgctxt "#30052"
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgctxt "#30053"
+msgid "Remove every item from the list?"
+msgstr "حذف جميع العناصر من القائمة؟"
+
+msgctxt "#30060"
+msgid "Today"
+msgstr "اليوم"
+
+msgctxt "#30061"
+msgid "Yesterday"
+msgstr "أمس"
