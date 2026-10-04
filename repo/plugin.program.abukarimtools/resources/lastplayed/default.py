@@ -175,9 +175,10 @@ def send2starmovies(line):
 
 # ---------------------------------------------------------------------------
 # -- Last Played capture engine (by ABUKARIM TOOLS) --
+# Works for ANY video add-on (direct or launched from TMDbHelper widgets).
 # The stock service read the item once in onPlayBackStarted and only wrote the
-# list when playback stopped. On Kodi 21/22 with TMDbHelper -> player add-on
-# (Fen Light etc.) that never produced an entry:
+# list when playback stopped. On Kodi 21/22 with internet add-ons that rarely
+# produced an entry:
 #   * TMDbHelper first plays a dummy.mp4 and stops it, which fired the stop
 #     callback with the dummy's empty data;
 #   * the real stream's info is not settled at onPlayBackStarted, and items
@@ -187,13 +188,15 @@ def send2starmovies(line):
 # Now: capture on onAVStarted (info is final), ignore dummy.mp4 and the AF3
 # background trailers, classify internet items by their TMDb/IMDb ids, save
 # straight away (so a crash or power-off still records it) and store a
-# TMDbHelper play link so the entry can be replayed later.
+# replayable link: the add-on item the user actually clicked (tracked while
+# browsing, matched to the playing title/ids), else a TMDbHelper play link
+# built from the ids, else the raw stream.
 # ---------------------------------------------------------------------------
 import threading
 
 _lock = threading.Lock()
 TMDBH = 'plugin.video.themoviedb.helper'
-_state = {'launcher': '', 'launcher_t': 0.0, 'current': None}
+_state = {'launcher': '', 'launcher_t': 0.0, 'current': None, 'clicked': []}
 
 
 def _setting(key):
@@ -296,6 +299,77 @@ def _tmdbh_link(kind, ids, season, episode):
     return ''
 
 
+def _norm(t):
+    return ''.join(ch for ch in str(t or '').lower() if ch.isalnum())
+
+
+def _track_focus():
+    """Remember the last focused playable add-on item (polled while idle).
+
+    Most video add-ons play through their own source picker / resolver, so by
+    the time the stream starts the focused item is gone and the playing path
+    is a temporary link. The item the user clicked is the one worth saving.
+    """
+    path = xbmc.getInfoLabel('ListItem.FileNameAndPath')
+    if not path.startswith('plugin://') or xbmc.getCondVisibility('ListItem.IsFolder'):
+        return
+    if path.startswith('plugin://plugin.video.last_played'):
+        return
+    hist = _state['clicked']
+    for c in hist:
+        if c['path'] == path:
+            c['t'] = time.time()
+            hist.remove(c)
+            hist.insert(0, c)
+            return
+    gi = xbmc.getInfoLabel
+    hist.insert(0, {
+        'path': path, 't': time.time(),
+        'title': gi('ListItem.Title') or gi('ListItem.Label'),
+        'show': gi('ListItem.TVShowTitle'), 'year': gi('ListItem.Year'),
+        'season': gi('ListItem.Season'), 'episode': gi('ListItem.Episode'),
+        'tmdb': gi('ListItem.UniqueID(tmdb)'), 'imdb': gi('ListItem.IMDBNumber'),
+    })
+    del hist[8:]
+
+
+def _match_ids(c, show, season, episode, ids):
+    if ids.get('imdb') and c['imdb'] and ids['imdb'] == c['imdb']:
+        return not show or (str(season) == c['season'] and str(episode) == c['episode']) \
+            or not c['season']
+    if ids.get('tmdb') and c['tmdb'] and str(ids['tmdb']) == c['tmdb']:
+        return not show or (str(season) == c['season'] and str(episode) == c['episode'])
+    return False
+
+
+def _match_title(c, title, show, year, season, episode):
+    if show:
+        return (_norm(show) == _norm(c['show']) and str(season) == c['season']
+                and str(episode) == c['episode'])
+    a, b = _norm(title), _norm(c['title'])
+    if a and a == b:
+        return not year or not c['year'] or str(year) == c['year']
+    return False
+
+
+def _clicked_for(title, show, year, season, episode, ids):
+    """Recently-focused add-on item that is the thing now playing.
+
+    Id matches win over title matches, so a "sources as folder" entry focused
+    after the title (no ids, label like "[RD] 2160p Dune.mkv") never replaces
+    the real item.
+    """
+    now = time.time()
+    recent = [c for c in _state['clicked'] if now - c['t'] <= 1800]
+    for c in recent:
+        if _match_ids(c, show, season, episode, ids):
+            return c
+    for c in recent:
+        if _match_title(c, title, show, year, season, episode):
+            return c
+    return None
+
+
 def _capture(player):
     try:
         if not player.isPlaying():
@@ -380,31 +454,40 @@ def _capture(player):
     fanart = (art.get('fanart') or art.get('tvshow.fanart') or item.get('fanart')
               or xbmc.getInfoLabel('Player.Art(fanart)') or '')
 
-    # replay link: the TMDbHelper item the user clicked, else one built from ids,
-    # else the library/plugin path, else the raw stream
-    replay = ''
+    # replay link: TMDbHelper item that launched it > add-on item the user
+    # clicked > TMDbHelper link built from ids > library/plugin path > stream
+    replay, src_aid = '', ''
     if _state['launcher'] and time.time() - _state['launcher_t'] < 900:
         replay = _state['launcher']
     _state['launcher'] = ''
-    if not replay and (dbid in ('', None, -1) or int(dbid) <= 0):
-        replay = _tmdbh_link(xtype, ids, season, episode)
-    xfile = item.get('file') or fullpath or playing
-    if fullpath.startswith('plugin://') and not replay:
-        replay = fullpath
-    if replay:
-        xfile = replay
-
-    # source shown in the list / used by the "play with" menu
     try:
         dbnum = int(dbid)
     except (TypeError, ValueError):
         dbnum = -1
+    clicked = None
+    if not replay and dbnum <= 0:
+        clicked = _clicked_for(title, show, year, season, episode, ids)
+        if clicked:
+            replay = clicked['path']
+    if not replay and fullpath.startswith('plugin://'):
+        replay = fullpath
+    if not replay and dbnum <= 0:
+        replay = _tmdbh_link(xtype, ids, season, episode)
+        recent = [c for c in _state['clicked'] if time.time() - c['t'] < 1800]
+        if recent:
+            src_aid = _plugin_id(recent[0]['path'])
+    xfile = item.get('file') or fullpath or playing
+    if replay:
+        xfile = replay
+
+    # source shown in the list / used by the "play with" menu
     if dbnum > 0:
         source = {'movie': lang(30002), 'episode': lang(30003),
                   'musicvideo': lang(30004)}.get(xtype, xtype)
     else:
-        aid = _plugin_id(xfile) or _plugin_id(fullpath)
+        aid = src_aid or _plugin_id(xfile) or _plugin_id(fullpath)
         source = _addon_name(aid) if aid else 'player'
+    _log('replay=%s (clicked=%s)' % (xfile, bool(clicked)))
 
     _state['current'] = {
         'source': source, 'title': title, 'year': year,
@@ -517,6 +600,9 @@ while not player_monitor.abortRequested():
         if player.isPlayingVideo() or player.isPlayingAudio():
             LP.vidPos = player.getTime()
             LP.vidTot = player.getTotalTime() or 1000
+        # keep tracking while browsing - also over AF3's windowed trailers
+        if not xbmc.getCondVisibility('Window.IsActive(fullscreenvideo)'):
+            _track_focus()
     except RuntimeError:
         pass
     if player_monitor.waitForAbort(1):

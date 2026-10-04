@@ -1150,7 +1150,7 @@ PATCHES = [
         'restart_addon': True,
         'inject_source': os.path.join('resources', 'lastplayed', 'default.py'),
         'toggle': 'lastplayed_fix',
-        'description': 'Last Played - record TMDbHelper/Fen Light playback (onAVStarted, dummy/trailer skip, replayable links)',
+        'description': 'Last Played - record playback from any video add-on (onAVStarted, dummy/trailer skip, replayable add-on links)',
     },
     # ── a4kSubtitles: quiet mode (3.2.11) ──
     # The build ships OpenSubtitles / SubDL / SubSource enabled without accounts,
@@ -1497,7 +1497,7 @@ TOGGLE_GROUPS = [
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
-    ('lastplayed_fix',   'Last Played: Record Streams (TMDbHelper/Fen Light)'),
+    ('lastplayed_fix',   'Last Played: Record Streams (all video add-ons)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 

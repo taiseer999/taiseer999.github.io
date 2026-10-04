@@ -1,3 +1,14 @@
+v3.2.12
+- Last Played fix now covers EVERY video add-on, not just TMDbHelper flows.
+  While you browse, the service remembers the last 8 playable add-on items
+  you focused (also over AF3's windowed trailers). When a stream starts, the
+  one that matches it (TMDb/IMDb id first, then exact title / show+SxE) is
+  saved as the replay link, and the list shows that add-on as the source -
+  Seren, Umbrella, POV, Fen Light, anything. "Sources as folder" entries can
+  no longer win over the real title. Fallbacks unchanged: TMDbHelper link
+  from ids, then the raw stream. Toggle renamed "Record Streams (all video
+  add-ons)".
+
 v3.2.11
 - NEW Toggles > "Last Played: Record Streams (TMDbHelper/Fen Light)" (on by
   default). Last Played 6.4.0 never recorded TMDbHelper -> Fen Light playback:
