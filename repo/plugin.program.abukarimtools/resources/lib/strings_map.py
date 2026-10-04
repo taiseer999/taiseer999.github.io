@@ -309,4 +309,11 @@ STRINGS = {
     30597: ("Restore Skin Profile Backup", "استعادة نسخة ملف الواجهة"),
     30598: ("Skin Profiles", "ملفات الواجهات"),
     30599: ("Online data:[CR]%s", "البيانات من الإنترنت:[CR]%s"),
+
+    # ---- 3.2.10: AF3 busy-loader waves toggle (30600-30609) ----
+    30603: ("AF3: Waves While Loading", "AF3: الأمواج أثناء التحميل"),
+    30600: ("Waves while loading turned on", "تم تشغيل الأمواج أثناء التحميل"),
+    30601: ("Waves while loading turned off", "تم إيقاف الأمواج أثناء التحميل"),
+    30602: ("Switch to Arctic Fuse 3 first - this setting belongs to that skin.",
+            "انتقل إلى واجهة Arctic Fuse 3 أولاً - هذا الإعداد خاص بها."),
 }

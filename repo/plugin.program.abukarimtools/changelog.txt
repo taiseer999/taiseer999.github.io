@@ -1,3 +1,11 @@
+v3.2.10
+- NEW Toggles > "AF3: Waves While Loading" (own icon). Arctic Fuse 3's
+  Background_BusyLoader plays resource.images.arctic.waves full-screen while
+  Kodi's busy dialog is up - most visibly right after a movie's player is
+  picked. The toggle flips the AF3 skin bool abk.nobusywaves; an always-on
+  AF3 patch (Includes_Background.xml) makes the loader obey it. Takes effect
+  on the next busy dialog - no restart; the list shows On/Off.
+
 v3.2.9
 - Backup/Restore (menu and first-run restore step): the "Include my
   customisations?" checklist is gone. skinshortcuts + skinvariables (your

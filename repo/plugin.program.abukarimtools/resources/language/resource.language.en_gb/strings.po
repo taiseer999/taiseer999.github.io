@@ -796,3 +796,19 @@ msgctxt "#30599"
 msgid "Online data:[CR]%s"
 msgstr ""
 
+msgctxt "#30600"
+msgid "Waves while loading turned on"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Waves while loading turned off"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Switch to Arctic Fuse 3 first - this setting belongs to that skin."
+msgstr ""
+
+msgctxt "#30603"
+msgid "AF3: Waves While Loading"
+msgstr ""
+

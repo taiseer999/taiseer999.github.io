@@ -1063,6 +1063,25 @@ PATCHES = [
                           '  <!-- ABUKARIM: trailers engine -->\n'),
         'description': 'AF3 Home.xml - start the trailer engine if it is not running',
     },
+
+    {   # AF3 busy-loader waves (3.2.10): Background_BusyLoader shows the
+        # resource.images.arctic.waves animation behind everything while
+        # DialogBusy is up - i.e. right after a player is picked for a movie.
+        # The Toggles entry "AF3: Waves While Loading" flips the skin setting
+        # abk.nobusywaves; this always-on patch makes the loader obey it, so
+        # the toggle takes effect instantly (no skin reload, no re-patching).
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Includes_Background.xml'),
+        'not_found_ok': True,
+        'old': '<visible>Window.IsVisible(DialogBusy.xml)</visible>',
+        'new': ('<visible>Window.IsVisible(DialogBusy.xml) + '
+                '!Skin.HasSetting(abk.nobusywaves)</visible>'),
+        'already_patched_check': '!Skin.HasSetting(abk.nobusywaves)',
+        'fallback_pattern': r'<visible>\s*Window\.IsVisible\(DialogBusy\.xml\)\s*</visible>',
+        'fallback_repl': ('<visible>Window.IsVisible(DialogBusy.xml) + '
+                          '!Skin.HasSetting(abk.nobusywaves)</visible>'),
+        'description': 'AF3 busy loader - waves can be switched off (Toggles)',
+    },
     # ── TMDbHelper: dead-player guard (by ABUKARIM TOOLS) ──
     # onAVChange / onAVStarted call get_playingitem() while the player is
     # tearing down; getPlayingFile() then raises RuntimeError ("Kodi is not

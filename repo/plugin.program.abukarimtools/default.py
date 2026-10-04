@@ -29,6 +29,7 @@ ICONS  = {
     'korean_toggle':  ADDON_PATH + 'resources/icons/korean_toggle.png',
     'icons_toggle':   ADDON_PATH + 'resources/icons/icons_toggle.png',
     'af3_trailers':   ADDON_PATH + 'resources/icons/af3_trailers.png',
+    'af3_waves':      ADDON_PATH + 'resources/icons/af3_waves.png',
     'origin_fix':     ADDON_PATH + 'resources/icons/sources.png',
     'rebuild_addons33': ADDON_PATH + 'resources/icons/rebuild_addons33.png',
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
@@ -87,6 +88,7 @@ CATEGORIES = [
         ('korean_toggle',  30011),
         ('icons_toggle',   30020),
         ('af3_trailers',   30430),
+        ('af3_waves',      30603),
     ]),
     ('profiles', 30598, 'cat_profiles', [
         ('profile_export',  30596),
@@ -99,7 +101,7 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 'total_clean', 'old_thumbs',
                 # 3.1.19: an action, not a folder - as a folder its URL became
                 # the container path, so the skin reload re-ran it in a loop
-                'af3_trailers',
+                'af3_trailers', 'af3_waves',
                 # 3.2 tools: dialogs only, never folders (same reason as above)
                 'bootstrap', 'hw_tuning', 'webserver', 'log_share',
                 'remote_refresh', 'menu_reconcile', 'profile_export',
@@ -287,6 +289,12 @@ def category_menu(cat_key):
             continue
         for mode, label_id in items:
             label = T(label_id)
+            if mode == 'af3_waves':
+                try:
+                    from resources.lib import af3_waves_toggle as _wt
+                    label = '%s: %s' % (label, T(30436) if _wt.waves_on() else T(30437))
+                except Exception:
+                    pass
             if mode == 'af3_trailers':
                 # show the current state right in the Toggles list
                 try:
@@ -447,6 +455,10 @@ def router():
     elif mode == 'af3_trailers':
         from resources.lib import af3_trailers_toggle
         af3_trailers_toggle.run()
+
+    elif mode == 'af3_waves':
+        from resources.lib import af3_waves_toggle
+        af3_waves_toggle.run()
 
     elif mode == 'origin_fix':
         _end_directory()

@@ -796,3 +796,19 @@ msgctxt "#30599"
 msgid "Online data:[CR]%s"
 msgstr "البيانات من الإنترنت:[CR]%s"
 
+msgctxt "#30600"
+msgid "Waves while loading turned on"
+msgstr "تم تشغيل الأمواج أثناء التحميل"
+
+msgctxt "#30601"
+msgid "Waves while loading turned off"
+msgstr "تم إيقاف الأمواج أثناء التحميل"
+
+msgctxt "#30602"
+msgid "Switch to Arctic Fuse 3 first - this setting belongs to that skin."
+msgstr "انتقل إلى واجهة Arctic Fuse 3 أولاً - هذا الإعداد خاص بها."
+
+msgctxt "#30603"
+msgid "AF3: Waves While Loading"
+msgstr "AF3: الأمواج أثناء التحميل"
+
