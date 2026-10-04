@@ -807,7 +807,7 @@ def _relink_after_rebuild(monitor):
     origins = addons33_rebuild.read_origins() if pending else None
     _log('Relinking add-ons to their repositories (%s).'
          % ('after rebuild' if pending else 'repo cache empty'))
-    res = origin_fix.relink_with_repo_refresh(monitor, origins)
+    res = origin_fix.relink_with_repo_refresh(monitor, origins, budget=60)
     if pending:
         addons33_rebuild.clear_origins()
     n = len(res['fixed'])
@@ -1052,25 +1052,24 @@ def main():
     # empty) the plain boot linking above cannot match anything: restore the
     # phase-1 origin snapshot and refresh the repositories, retrying for up to
     # 3 minutes. Runs before the watchdog; only on those boots. Fenced.
-    # 3.2.17: in the background - with an empty repo cache this retries for
-    # up to 3 minutes and used to hold the auto-patch watchdog back that long
-    # (log 2026-10-04 12:15:38 -> 12:18:45).
-    def _relink_bg():
-        try:
-            _relink_after_rebuild(monitor)
-        except Exception:
-            _log('Post-rebuild repo linking crashed (ignored):\n%s'
-                 % traceback.format_exc(), xbmc.LOGERROR)
-    import threading
-    _t = threading.Thread(target=_relink_bg, name='abk-relink')
-    _t.daemon = True
-    _t.start()
+    # 3.2.19: back in line (sequential). 3.2.17 ran this in a thread; its
+    # UpdateAddonRepos then overlapped menu_reconcile's add-on lookups and the
+    # service main thread (and Kodi) hung (log 2026-10-04 15:40:31). The
+    # boot retry budget is cut from 180 s to 60 s instead, so the watchdog
+    # still starts about a minute after the service.
+    try:
+        _relink_after_rebuild(monitor)
+    except Exception:
+        _log('Post-rebuild repo linking crashed (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
 
     # 3.2: hide menu items / widgets whose add-on is missing (and bring back
     # ones whose add-on was installed since). No network, content-compared.
     try:
         from resources.lib import menu_reconcile
+        _log('Boot: menu reconcile...')
         menu_reconcile.run(rebuild=True)
+        _log('Boot: menu reconcile done.')
     except Exception:
         _log('Menu reconcile crashed (ignored):\n%s'
              % traceback.format_exc(), xbmc.LOGERROR)
@@ -1081,6 +1080,7 @@ def main():
     try:
         if not monitor.waitForAbort(5):
             from resources.lib import remote_config
+            _log('Boot: remote config refresh...')
             remote_config.refresh()
             remote_config.boot_notices()
     except Exception:

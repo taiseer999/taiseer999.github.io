@@ -1,3 +1,15 @@
+v3.2.19
+- FIX: Kodi froze at boot / on the add-on update (log 2026-10-04 15:40). The
+  3.2.17 background relink fired UpdateAddonRepos while the service main
+  thread was in menu reconcile asking Kodi's add-on manager (HasAddon /
+  JSON-RPC) - the main thread never came back (no watchdog, no remote
+  refresh) and Kodi hung with it.
+  * relink is sequential again, boot retry budget 60 s (was 180 s);
+  * menu reconcile decides "installed" from the add-on folders only - no
+    add-on manager calls at all on the boot path;
+  * boot steps log "Boot: menu reconcile..." / "...done" / "remote config
+    refresh..." so any future stall shows exactly where.
+
 v3.2.18
 - FIX: updating ABUKARIM TOOLS while Kodi runs did nothing until a restart
   (log 2026-10-04 12:33): the running copy had been started by the guardian

@@ -44,24 +44,20 @@ def _log(msg, level=xbmc.LOGINFO):
 
 
 def addon_present(aid):
-    """Installed AND enabled.
+    """Installed? - from the add-on folders only.
 
-    3.2.4: not System.HasAddon() for mixed-case ids - Kodi lowercases
-    condition strings, so 'plugin.program.ABUKARIMwizard' never matched and
-    the AF3 power tray's Force Close was hidden although the wizard is
-    installed (same root cause as wizard_runner 3.1.3). JSON-RPC keeps case.
+    3.2.19: no System.HasAddon / JSON-RPC any more. Both go through Kodi's
+    add-on manager, which is locked while repositories refresh at boot; the
+    service's main thread hung here and Kodi with it (log 2026-10-04 15:40).
+    A folder check is also case-exact, which is what the mixed-case
+    plugin.program.ABUKARIMwizard needed (3.2.4).
     """
-    if aid == aid.lower():
-        return bool(xbmc.getCondVisibility('System.HasAddon(%s)' % aid))
-    try:
-        req = {'jsonrpc': '2.0', 'id': 1, 'method': 'Addons.GetAddonDetails',
-               'params': {'addonid': aid, 'properties': ['enabled']}}
-        res = json.loads(xbmc.executeJSONRPC(json.dumps(req)))
-        addon = (res.get('result') or {}).get('addon')
-        if addon is not None:
-            return bool(addon.get('enabled', True))
-    except Exception:
-        pass
+    for root in ('special://home/addons/', 'special://xbmc/addons/'):
+        try:
+            if os.path.isfile(os.path.join(xbmcvfs.translatePath(root), aid, 'addon.xml')):
+                return True
+        except Exception:
+            pass
     return False
 
 
