@@ -1064,6 +1064,27 @@ PATCHES = [
         'description': 'AF3 Home.xml - start the trailer engine if it is not running',
     },
 
+    {   # 3.2.14: service guardian. Kodi 22 / Py3.14 sometimes never starts
+        # add-on services at boot (ABUKARIM TOOLS, Last Played, DexHub - zero
+        # log lines, no error). Home runs guardian.py once per session; it
+        # waits 25 s and starts any watched service whose heartbeat is missing.
+        'addon_id': 'skin.arctic.fuse.3',
+        'rel_path': os.path.join('1080i', 'Home.xml'),
+        'not_found_ok': True,
+        'old': '<window>\n',
+        'new': ('<window>\n'
+                '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.guardian))">'
+                'RunScript(special://home/addons/plugin.program.abukarimtools/guardian.py)</onload>'
+                '  <!-- ABUKARIM: service guardian -->\n'),
+        'already_patched_check': '<!-- ABUKARIM: service guardian -->',
+        'fallback_pattern': r'<window>[ \t]*\r?\n',
+        'fallback_repl': ('<window>\n'
+                          '    <onload condition="String.IsEmpty(Window(Home).Property(abukarimtools.guardian))">'
+                          'RunScript(special://home/addons/plugin.program.abukarimtools/guardian.py)</onload>'
+                          '  <!-- ABUKARIM: service guardian -->\n'),
+        'description': 'AF3 Home.xml - start services Kodi skipped at boot (guardian)',
+    },
+
     {   # AF3 busy-loader waves (3.2.10): Background_BusyLoader shows the
         # resource.images.arctic.waves animation behind everything while
         # DialogBusy is up - i.e. right after a player is picked for a movie.

@@ -1,3 +1,14 @@
+v3.2.14
+- FIX: since 2026-10-04 Kodi 22 never started the ABUKARIM TOOLS service at
+  boot (no "[AbukarimTools Service] started" line in any log; DexHub and Last
+  Played were skipped too - that is also why Last Played recorded nothing).
+  Without the service there was no watchdog and no window rescue, so the AF3
+  update froze again. New guardian.py: AF3 Home runs it once per session
+  (always-on Home.xml onload patch); it waits 25 s and starts every watched
+  service whose heartbeat is missing (ABUKARIM TOOLS, Last Played (ABUKARIM)),
+  and logs when one of them is disabled.
+- Window rescue now starts first thing in the service, before the boot chores.
+
 v3.2.13
 - FIX: black screen / "frozen" Kodi every time the ACTIVE skin updates
   (AF3 5.10.25 -> 5.10.26, log 2026-10-04 07:15). Kodi unloads the skin
