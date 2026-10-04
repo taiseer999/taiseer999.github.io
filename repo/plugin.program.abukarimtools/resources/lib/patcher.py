@@ -480,43 +480,58 @@ PATCHES = [
     },
 
     # ── TinyPPI – PPI Arabic: remove label colons ──
-    # NOTE: the ar_sa strings.po whole-file replacement was REMOVED — the TinyPPI
-    # Arabic translation is now fixed at source upstream, so we must NOT overwrite
-    # it. Only the colon-removal XML entry remains under the tinyppi_arabic toggle.
-    #  resources/skins/Default/1080i/script-tinyppi-main.xml — the trailing ':'
-    #  after each $ADDON[script.tinyppi NNNNN] label removed (44 labels).
-    # inject_source + replace + byte-compare idempotency (same as the badges).
+    # 3.2.20: an in-place edit of TinyPPI's OWN current file. It used to be a
+    # whole-file copy of the 2.11-era overlay; on TinyPPI 2.15.0 that old copy
+    # replaced the new file and the Arabic labels came out wrong (log
+    # 2026-10-04 20:36). Now only the trailing ':' after each
+    # $ADDON[script.tinyppi NNNNN] label is removed, whatever the version.
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
                                  'script-tinyppi-main.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'inject_source': os.path.join('resources', 'tinyppi_arabic',
-                                      'skin', 'script-tinyppi-main.xml'),
-        'description': 'TinyPPI PPI Arabic - remove label colons',
+        'old': '',
+        'new': '',
+        'already_patched_check': None,
+        'count': 0,
+        'fallback_pattern': (r'(\$ADDON\[script\.tinyppi \d+\](?:\[/?[A-Z]+\])*)'
+                             r':([ \t]*</label>)'),
+        'fallback_repl': r'\1\2',
+        'not_found_ok': True,
+        'toggle': 'tinyppi_arabic',
+        'description': 'TinyPPI PPI Arabic - remove label colons (in place)',
     },
     # ── TinyPPI – "classic PPI": Arctic Fuse 3 / DialogPlayerProcessInfo look ──
-    # Whole-file replacement of the overlay skin (same inject_source + replace +
-    # byte-compare mechanism as PPI Arabic / the badges). The shipped file is the
-    # AF3 restyle (flat DPPI floor scrim + dialog-bg caps + TinyPPI.Dialog* colour
-    # tokens) built ON TOP OF the PPI Arabic base, so it ALSO carries the colon
-    # removal. Because it targets the SAME rel_path as the PPI Arabic XML entry,
-    # 'supersedes' makes classic PPI win when both toggles are on: _select drops
-    # the superseded entry so the two never thrash rewriting the same file.
+    # 3.2.20: the AF3 restyle turned out to be a pure token swap of TinyPPI's
+    # own overlay (verified: applying it to the 2.11 base gives the old shipped
+    # file byte for byte), so it is now done IN PLACE on whatever TinyPPI
+    # version is installed instead of copying a 2.11-era file over it:
+    #   TinyPPI.<Background|Header|HeaderIcon|Line|GlobalBackground>Color
+    #       -> TinyPPI.Dialog<...>Color   (TinyPPI publishes both sets)
+    #   background/overlay-bg-start/end.png -> background/dialog-bg-start/end.png
+    # Idempotent: once swapped nothing matches. The colon removal (tinyppi_arabic)
+    # is a separate in-place edit, so the two no longer supersede each other.
     {
         'addon_id': 'script.tinyppi',
         'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
                                  'script-tinyppi-main.xml'),
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'inject_source': os.path.join('resources', 'tinyppi_classic',
-                                      'skin', 'script-tinyppi-main.xml'),
+        'old': '', 'new': '', 'already_patched_check': None, 'count': 0,
+        'fallback_pattern': (r'TinyPPI\.(BackgroundColor|HeaderColor|HeaderIconColor|'
+                             r'LineColor|GlobalBackgroundColor)\b'),
+        'fallback_repl': r'TinyPPI.Dialog\1',
+        'not_found_ok': True,
         'toggle': 'tinyppi_classic',
-        'supersedes': ['tinyppi_arabic'],
-        'description': 'TinyPPI classic PPI - AF3 dialog look (incl. colon removal)',
+        'description': 'TinyPPI classic PPI - AF3 dialog colours (in place)',
+    },
+    {
+        'addon_id': 'script.tinyppi',
+        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
+                                 'script-tinyppi-main.xml'),
+        'old': '', 'new': '', 'already_patched_check': None, 'count': 0,
+        'fallback_pattern': r'background/overlay-bg-(start|end)\.png',
+        'fallback_repl': r'background/dialog-bg-\1.png',
+        'not_found_ok': True,
+        'toggle': 'tinyppi_classic',
+        'description': 'TinyPPI classic PPI - AF3 dialog caps (in place)',
     },
     # ── PPI AF3: legacy Arctic Fuse 3 DialogPlayerProcessInfo (native + bridge) ─
     # AF3 5.7.x REWROTE its PlayerProcessInfo into a list dialog and DROPPED the
@@ -1385,6 +1400,22 @@ def _apply_patch(patch):
                     current = None
                 if current == payload:
                     return True, '[%s] Already present – skipping.' % patch['addon_id']
+                base_rel = patch.get('only_if_base')
+                if base_rel and current is not None:
+                    try:
+                        with open(os.path.join(xbmcvfs.translatePath(
+                                'special://home/addons/plugin.program.abukarimtools/'),
+                                base_rel), 'rb') as _bf0:
+                            base = _bf0.read()
+                    except Exception:
+                        base = None
+                    cur_nc = re.sub(rb'(\$ADDON\[script\.tinyppi \d+\](?:\[/?[A-Z]+\])*)'
+                                    rb':([ \t]*</label>)', rb'\1\2', current)
+                    if base is None or cur_nc != base:
+                        return True, ('[%s] %s changed upstream - %s not applied '
+                                      '(built for an older version).'
+                                      % (patch['addon_id'], patch['rel_path'],
+                                         patch['description']))
                 if not patch.get('replace') and current:
                     return True, '[%s] Already present – skipping.' % patch['addon_id']
             os.makedirs(os.path.dirname(target), exist_ok=True)
@@ -1803,6 +1834,17 @@ def _reconcile_tinyppi_arabic():
             backup  = _read(bak_path)
             if current == backup:
                 return True, '[%s] Arabic already restored – skipping.' % addon_id
+            # 3.2.20: restore ONLY over our own empty stub (or a missing file).
+            # A real Arabic file that differs is a newer TinyPPI translation -
+            # the old backup must never replace it (log 2026-10-04 19:35: the
+            # 2.11-era backup overwrote 2.15.0's strings). Drop the stale backup.
+            if current is not None and current != _TINYPPI_ARABIC_PO_EMPTY:
+                try:
+                    os.remove(bak_path)
+                except OSError:
+                    pass
+                return True, ('[%s] Arabic active (newer translation) – stale '
+                              'backup dropped.' % addon_id)
             _write(po_path, backup)
             return True, ('[%s] Patched OK: TinyPPI Arabic restored '
                           'from backup.' % addon_id)

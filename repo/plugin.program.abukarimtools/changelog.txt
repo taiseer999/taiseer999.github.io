@@ -1,3 +1,26 @@
+v3.2.21
+- classic PPI (AF3 dialog look) now works on TinyPPI 2.15.0 too: it was a pure
+  token swap of TinyPPI's own overlay (TinyPPI.*Color -> TinyPPI.Dialog*Color,
+  overlay-bg -> dialog-bg caps), so it is applied in place on the installed
+  version instead of copying the 2.11-era file. Checked against the 2.15.0
+  source: 46 label colons removed, 15 tokens swapped, XML valid, re-runs are
+  no-ops.
+
+v3.2.20
+- FIX: TinyPPI Arabic came out scrambled after patching TinyPPI 2.15.0 (log
+  2026-10-04). Two causes, both fixed:
+  * "PPI Arabic - remove label colons" was a whole-file copy of the 2.11-era
+    script-tinyppi-main.xml and overwrote 2.15.0's own file. It is now an
+    in-place edit of the CURRENT file (only the ':' after each
+    $ADDON[script.tinyppi NNNNN] label goes), on any TinyPPI version.
+  * The Arabic strings.po "restore from backup" put an old 2.11 backup over
+    2.15.0's real Arabic translation (19:35). It now restores only over our
+    own empty stub; a newer real translation wins and the stale backup is
+    dropped.
+- classic PPI (AF3 dialog look) is still a whole 2.11-era file, so it is now
+  written only over that same overlay; on a newer TinyPPI it is skipped and
+  logged ("changed upstream ... built for an older version").
+
 v3.2.19
 - FIX: Kodi froze at boot / on the add-on update (log 2026-10-04 15:40). The
   3.2.17 background relink fired UpdateAddonRepos while the service main
