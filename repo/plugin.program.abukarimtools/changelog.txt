@@ -1,3 +1,12 @@
+v3.2.13
+- FIX: black screen / "frozen" Kodi every time the ACTIVE skin updates
+  (AF3 5.10.25 -> 5.10.26, log 2026-10-04 07:15). Kodi unloads the skin
+  before extracting the update, then ReloadSkin restores "the window that was
+  open" - which by then is none, so the new skin loads with no window at all
+  and TMDbHelper floods the log with "Window id does not exist". A small
+  service thread now spots an invalid current window lasting 4 s and opens
+  Home (15 s cooldown, idle for the first 20 s of boot).
+
 v3.2.12
 - Last Played fix now covers EVERY video add-on, not just TMDbHelper flows.
   While you browse, the service remembers the last 8 playable add-on items

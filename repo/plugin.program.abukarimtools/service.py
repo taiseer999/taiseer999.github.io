@@ -947,6 +947,15 @@ def main():
         except OSError:
             pass
 
+    # 3.2.13: reopen Home if a skin reload (active-skin update) leaves Kodi
+    # with no window at all - black screen that looks like a freeze. Fenced.
+    try:
+        from resources.lib import window_rescue
+        window_rescue.start(monitor)
+    except Exception:
+        _log('Window rescue failed to start (ignored):\n%s'
+             % traceback.format_exc(), xbmc.LOGERROR)
+
     # AF3 auto-trailers (3.1.16): their engine runs on its own thread for the
     # rest of the session and idles until turned on from Toggles. Started
     # before the boot repo-linking/watchdog so it never waits on them. Fenced.
