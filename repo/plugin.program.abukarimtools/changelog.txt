@@ -1,3 +1,13 @@
+v3.2.22
+- Freeze on the AM9 ~50 s after boot (log 2026-10-04 21:52): the boot relink
+  forced UpdateAddonRepos on every boot (an add-on only an older cached
+  listing carries counts as "stale" forever), so all repositories refreshed -
+  with Kodi's auto-updates and a repo timing out - exactly while TMDbHelper /
+  Fen Light were starting playback. Ordinary boots now link from the cached
+  listings only; the forced refresh stays only right after an add-on database
+  rebuild and in the manual "Fix Add-on Update Origins". The once-per-session
+  refresh on menu open is gone too.
+
 v3.2.21
 - classic PPI (AF3 dialog look) now works on TinyPPI 2.15.0 too: it was a pure
   token swap of TinyPPI's own overlay (TinyPPI.*Color -> TinyPPI.Dialog*Color,

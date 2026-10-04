@@ -805,8 +805,21 @@ def _relink_after_rebuild(monitor):
     if addons33_rebuild._read_step() == '2':
         return                      # phase 2 still to run; it reboots anyway
     origins = addons33_rebuild.read_origins() if pending else None
-    _log('Relinking add-ons to their repositories (%s).'
-         % ('after rebuild' if pending else 'repo cache empty'))
+    if not pending:
+        # 3.2.22: never force UpdateAddonRepos on an ordinary boot. A stale or
+        # empty listing made every boot refresh all repositories (and with them
+        # Kodi's auto-updates) while the user was already browsing / starting
+        # playback - the window in which the AM9 froze (log 2026-10-04 21:52,
+        # redwizard repo timing out mid-refresh). Link from the cached listings
+        # only; Kodi refreshes its repositories on its own schedule and the next
+        # boot links whatever is new. The manual "Fix Add-on Update Origins"
+        # still refreshes.
+        res = origin_fix.fix_addons(None)
+        if res.get('fixed'):
+            _log('Linked on boot (cached listings): %s'
+                 % ', '.join(sorted(res['fixed'])))
+        return
+    _log('Relinking add-ons to their repositories (after rebuild).')
     res = origin_fix.relink_with_repo_refresh(monitor, origins, budget=60)
     if pending:
         addons33_rebuild.clear_origins()

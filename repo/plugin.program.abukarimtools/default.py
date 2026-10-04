@@ -198,16 +198,9 @@ def _menu_relink():
         if res.get('unmatched'):
             xbmc.log('[AbukarimTools Menu] no repository carries: %s'
                      % ', '.join(sorted(res['unmatched'])), xbmc.LOGINFO)
-        home = xbmcgui.Window(10000)
-        if res.get('stale') and not home.getProperty('abukarimtools.reporefresh'):
-            # Only an out-of-date cached listing carries these (e.g. AF3 5.10.18
-            # vs a cached 5.5.25): refresh the repos once per session; the next
-            # menu open / boot corrects the origin from the fresh listing.
-            home.setProperty('abukarimtools.reporefresh', '1')
-            xbmc.log('[AbukarimTools Menu] out-of-date repo listing for %s - '
-                     'refreshing repositories' % ', '.join(sorted(res['stale'])),
-                     xbmc.LOGINFO)
-            xbmc.executebuiltin('UpdateAddonRepos')
+        # 3.2.22: no automatic UpdateAddonRepos on menu open any more (an add-on
+        # that only an older listing carries kept forcing a full repo refresh
+        # every session). "Fix Add-on Update Origins" refreshes on demand.
         if res.get('fixed'):
             from resources.lib.i18n import T
             xbmcgui.Dialog().notification(
