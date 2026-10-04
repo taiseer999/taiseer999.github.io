@@ -1133,8 +1133,82 @@ PATCHES = [
         'toggle': 'tmdbh_stability',
         'description': 'TMDbHelper player.py \u2013 dead-player guard (getPlayingFile RuntimeError)',
     },
+    # ── Last Played: capture engine for TMDbHelper / Fen Light playback (3.2.11) ──
+    # Stock 6.4.0 never recorded TMDbHelper -> player add-on playback on Kodi 21/22:
+    # the dummy.mp4 splash fired the stop callback with empty data, the real stream
+    # was read in onPlayBackStarted before its info settled and anything not typed
+    # movie/episode was dropped ("videos" is off by default); the saved link was the
+    # debrid URL, dead the next day. Whole service file is replaced (same JSON
+    # format, so the stock addon.py lists it unchanged); the service is restarted
+    # after a write so it takes effect without rebooting Kodi.
+    {
+        'addon_id': 'plugin.video.last_played',
+        'rel_path': 'default.py',
+        'inject_file': True,
+        'binary': True,
+        'replace': True,
+        'restart_addon': True,
+        'inject_source': os.path.join('resources', 'lastplayed', 'default.py'),
+        'toggle': 'lastplayed_fix',
+        'description': 'Last Played - record TMDbHelper/Fen Light playback (onAVStarted, dummy/trailer skip, replayable links)',
+    },
+    # ── a4kSubtitles: quiet mode (3.2.11) ──
+    # The build ships OpenSubtitles / SubDL / SubSource enabled without accounts,
+    # so every search popped "requires authentication" / "requires API Key"
+    # notifications (plus "IMDB ID is not provided" for plugin items). Those nags
+    # now go to the log only; real messages still show. logger.debug() also
+    # stops writing player_props / "no subtitles found for ..." at INFO level
+    # unless Kodi's debug logging is on.
+    {
+        'addon_id': 'service.subtitles.a4ksubtitles',
+        'rel_path': os.path.join('a4kSubtitles', 'lib', 'kodi.py'),
+        'old': '',
+        'new': '',
+        'already_patched_check': '# -- a4kSubtitles quiet nags (by ABUKARIM TOOLS) --',
+        'fallback_pattern': r'(def notification\(text, time=3000\):[^\n]*\n)',
+        'fallback_repl': (
+            r'\1'
+            "    # -- a4kSubtitles quiet nags (by ABUKARIM TOOLS) --\n"
+            "    _abk_t = str(text).lower()\n"
+            "    if any(_k in _abk_t for _k in ('requires authentication', 'requires api key',\n"
+            "                                   'authentication failed', 'imdb id is not provided',\n"
+            "                                   'no downloads left', 'manual search is not supported')):\n"
+            "        xbmc.log('a4kSubtitles (silenced): %s' % text, xbmc.LOGINFO)\n"
+            "        return\n"
+        ),
+        'not_found_ok': True,
+        'toggle': 'a4ksubs_quiet',
+        'description': 'a4kSubtitles kodi.py - silence missing-account / API-key notifications',
+    },
+    {
+        'addon_id': 'service.subtitles.a4ksubtitles',
+        'rel_path': os.path.join('a4kSubtitles', 'lib', 'logger.py'),
+        'old': 'def debug(message):\n    __log(message, notice_type)\n',
+        'new': ('def debug(message):\n'
+                '    # -- a4kSubtitles quiet debug (by ABUKARIM TOOLS) --\n'
+                '    if not __get_debug_logenabled():\n'
+                '        return\n'
+                '    __log(message, notice_type)\n'),
+        'already_patched_check': '# -- a4kSubtitles quiet debug (by ABUKARIM TOOLS) --',
+        'not_found_ok': True,
+        'toggle': 'a4ksubs_quiet',
+        'description': 'a4kSubtitles logger.py - debug chatter only when Kodi debug logging is on',
+    },
 ]
 
+
+
+def _restart_addon(addon_id):
+    """Disable + re-enable an add-on so a patched xbmc.service reloads now."""
+    import json as _json
+    for flag in (False, True):
+        try:
+            xbmc.executeJSONRPC(_json.dumps({'jsonrpc': '2.0', 'id': 1,
+                                             'method': 'Addons.SetAddonEnabled',
+                                             'params': {'addonid': addon_id, 'enabled': flag}}))
+        except Exception:
+            pass
+        xbmc.sleep(500)
 
 # ---------------------------------------------------------------------------
 def _log(msg, level=None):
@@ -1295,6 +1369,8 @@ def _apply_patch(patch):
             os.makedirs(os.path.dirname(target), exist_ok=True)
             with open(target, 'wb') as _bf:
                 _bf.write(payload)
+            if patch.get('restart_addon'):
+                _restart_addon(patch['addon_id'])
             return True, '[%s] File injected OK: %s' % (patch['addon_id'], patch['description'])
         inject_content = base64.b64decode(b64).decode('utf-8') if b64 else patch.get('inject_content', '')
         already_check = patch.get('already_patched_check', '')
@@ -1420,6 +1496,8 @@ TOGGLE_GROUPS = [
     ('redlight_fixes',   'RedLight: Fix Sound & Theme'),
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
+    ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
+    ('lastplayed_fix',   'Last Played: Record Streams (TMDbHelper/Fen Light)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 

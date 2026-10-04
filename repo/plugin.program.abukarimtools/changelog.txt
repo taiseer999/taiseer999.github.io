@@ -1,3 +1,18 @@
+v3.2.11
+- NEW Toggles > "Last Played: Record Streams (TMDbHelper/Fen Light)" (on by
+  default). Last Played 6.4.0 never recorded TMDbHelper -> Fen Light playback:
+  the dummy.mp4 splash fired its stop with empty data, the real stream was read
+  before its info settled and anything not typed movie/episode was dropped.
+  The service is replaced: capture on onAVStarted, dummy + AF3 trailers
+  ignored, internet items classified from their TMDb/IMDb ids, entry saved at
+  start (survives a crash/power-off) and stored as a TMDbHelper play link so it
+  replays after the debrid link expires. Restarted automatically after patching.
+- NEW Toggles > "a4kSubtitles: Hide Account/API-Key Nags" (on by default).
+  OpenSubtitles / SubDL / SubSource without accounts no longer pop
+  "requires authentication / API Key" (and "IMDB ID is not provided") on every
+  search - they go to the log. a4k's debug chatter (player_props dumps,
+  "no subtitles found for ...") is written only when Kodi debug logging is on.
+
 v3.2.10
 - NEW Toggles > "AF3: Waves While Loading" (own icon). Arctic Fuse 3's
   Background_BusyLoader plays resource.images.arctic.waves full-screen while
