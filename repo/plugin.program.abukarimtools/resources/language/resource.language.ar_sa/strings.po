@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "#30001"
-msgid "Run First-Time Setup"
-msgstr "تشغيل الإعداد لأول مرة"
+msgid "Installation Wizard"
+msgstr "معالج التثبيت"
 
 msgctxt "#30002"
 msgid "Backup/Restore"

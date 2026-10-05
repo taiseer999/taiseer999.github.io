@@ -1,3 +1,33 @@
+v3.2.28
+- Skin Profiles icons now show what they are about - the home screen's menus
+  and widgets: a TV with a widget row (category), with an upload badge
+  (Export) and a download badge (Restore).
+
+v3.2.27
+- "Run First-Time Setup" is now "Installation Wizard" (معالج التثبيت) with a
+  magic-wand icon.
+- Skin Selection icon: paint palette with a download badge (skin installation).
+
+v3.2.26
+- Icon set v2 (after the AF3 screenshots):
+  * transparent background - the skin's own tile shows through, no darker
+    square inside the tile, focus colour fills the whole tile;
+  * two-tone glyphs (cyan line + soft cyan fill, white detail), slightly
+    smaller so they sit inside the tile like the skin's own icons;
+  * no more duplicates: Patches category = shield, Apply Patches = bandage;
+    Toggles category = line switch; Profiles category = ID card, Export /
+    Restore = person with up / down arrow;
+  * Toggles list: each switch keeps its own glyph (DPlex chevrons, Korean
+    circle, trailers clapper, waves) with your on/off switch as a small badge
+    in the corner; the bare switch in dialogs is padded to the same scale.
+
+v3.2.25
+- Simplified icon set: 23 menu icons redrawn as one flat line-icon family
+  (dark tile, cyan + white strokes, same weight and padding, no text baked
+  in). Brand icons kept (ABUKARIM Wizard, DPlex, Korean Media, the three
+  repositories) and the on/off switches; the Toggles category uses the
+  switch icon.
+
 v3.2.24
 - Cleanup before release - removed patches that are no longer needed:
   * Seren maintenance.py UTF-8 (2 entries);

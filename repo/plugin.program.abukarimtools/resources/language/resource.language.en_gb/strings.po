@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "#30001"
-msgid "Run First-Time Setup"
+msgid "Installation Wizard"
 msgstr ""
 
 msgctxt "#30002"

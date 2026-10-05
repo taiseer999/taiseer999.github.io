@@ -44,13 +44,13 @@ ICONS  = {
     'remote_refresh': ADDON_PATH + 'resources/icons/remote_refresh.png',
     'menu_reconcile': ADDON_PATH + 'resources/icons/menu_reconcile.png',
     'profile_export': ADDON_PATH + 'resources/icons/profile_export.png',
-    'profile_restore': ADDON_PATH + 'resources/icons/backup.png',
-    'cat_profiles':   ADDON_PATH + 'resources/icons/profile_export.png',
+    'profile_restore': ADDON_PATH + 'resources/icons/profile_restore.png',
+    'cat_profiles':   ADDON_PATH + 'resources/icons/cat_profiles.png',
     # category folder icons
     'cat_setup':      ADDON_PATH + 'resources/icons/install_setup.png',
-    'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
+    'cat_patch':      ADDON_PATH + 'resources/icons/cat_patch.png',
     'cat_maint':      ADDON_PATH + 'resources/icons/maintenance.png',
-    'cat_toggle':     ADDON_PATH + 'resources/icons/skin_switcher.png',
+    'cat_toggle':     ADDON_PATH + 'resources/icons/cat_toggle.png',
 }
 
 # Grouped menu: each category is (cat_key, category_label_id, icon_key, [items])
@@ -132,6 +132,10 @@ def _add_item(label, mode, is_folder=True, switch=None):
         # 3.2.23: on/off entries show the switch art + On/Off as label2
         from resources.lib import toggle_ui
         li = toggle_ui.item(label, switch)
+        # feature glyph + switch badge (<mode>_on/off.png) when there is one
+        own = ADDON_PATH + 'resources/icons/%s_%s.png' % (mode, 'on' if switch else 'off')
+        if os.path.isfile(own):
+            li.setArt({'icon': own, 'thumb': own})
         li.setArt({'fanart': FANART})
     if not is_folder:
         li.setProperty('IsPlayable', 'false')
