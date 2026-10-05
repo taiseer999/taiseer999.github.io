@@ -128,14 +128,19 @@ def _run():
     quick = 0
     while True:
         cfg = config.load()
+        # 3.2.23: the two on/off rows show the switch art
+        from resources.lib import toggle_ui
         items = [
-            T(30431) % _on_off(cfg['enabled']),
-            T(30432) % _on_off(cfg['sound']),
-            T(30433) % cfg['delay'],
-            T(30434) % ('%dp' % cfg['quality']),
+            toggle_ui.item((T(30431) % '').rstrip(': '), cfg['enabled']),
+            toggle_ui.item((T(30432) % '').rstrip(': '), cfg['sound']),
+            xbmcgui.ListItem(T(30433) % cfg['delay'], offscreen=True),
+            xbmcgui.ListItem(T(30434) % ('%dp' % cfg['quality']), offscreen=True),
         ]
+        ic = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'af3_trailers.png')
+        for li in items[2:]:
+            li.setArt({'icon': ic, 'thumb': ic})
         shown = time.monotonic()
-        choice = DIALOG.select(T(30430), items, preselect=pos)
+        choice = DIALOG.select(T(30430), items, preselect=pos, useDetails=True)
         if choice < 0:
             break
         # a list that answers without ever showing (Kodi busy reloading the

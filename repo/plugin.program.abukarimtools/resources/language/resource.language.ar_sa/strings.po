@@ -812,3 +812,7 @@ msgctxt "#30603"
 msgid "AF3: Waves While Loading"
 msgstr "AF3: الأمواج أثناء التحميل"
 
+msgctxt "#30604"
+msgid "[B]Done - apply[/B]"
+msgstr "[B]تم - تطبيق[/B]"
+

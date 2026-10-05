@@ -312,6 +312,7 @@ STRINGS = {
 
     # ---- 3.2.10: AF3 busy-loader waves toggle (30600-30609) ----
     30603: ("AF3: Waves While Loading", "AF3: الأمواج أثناء التحميل"),
+    30604: ("[B]Done - apply[/B]", "[B]تم - تطبيق[/B]"),
     30600: ("Waves while loading turned on", "تم تشغيل الأمواج أثناء التحميل"),
     30601: ("Waves while loading turned off", "تم إيقاف الأمواج أثناء التحميل"),
     30602: ("Switch to Arctic Fuse 3 first - this setting belongs to that skin.",

@@ -49,7 +49,7 @@ ICONS  = {
     # category folder icons
     'cat_setup':      ADDON_PATH + 'resources/icons/install_setup.png',
     'cat_patch':      ADDON_PATH + 'resources/icons/patcher.png',
-    'cat_maint':      ADDON_PATH + 'resources/icons/clear_cache.png',
+    'cat_maint':      ADDON_PATH + 'resources/icons/maintenance.png',
     'cat_toggle':     ADDON_PATH + 'resources/icons/skin_switcher.png',
 }
 
@@ -115,7 +115,7 @@ def _add_folder(label, cat_key, icon_key):
     xbmcplugin.addDirectoryItem(HANDLE, url, li, isFolder=True)
 
 
-def _add_item(label, mode, is_folder=True):
+def _add_item(label, mode, is_folder=True, switch=None):
     url = sys.argv[0] + '?mode=' + mode
     if mode == 'abukarimwizard':
         # Installed: link straight into the wizard's Maintenance menu, so it
@@ -125,8 +125,14 @@ def _add_item(label, mode, is_folder=True):
         if wizard_runner.wizard_installed():
             url = wizard_runner.wizard_url(wizard_runner.MODE_MAINTENANCE)
             is_folder = True
-    li  = xbmcgui.ListItem(label)
-    li.setArt({'icon': ICONS[mode], 'thumb': ICONS[mode], 'fanart': FANART})
+    if switch is None:
+        li  = xbmcgui.ListItem(label)
+        li.setArt({'icon': ICONS[mode], 'thumb': ICONS[mode], 'fanart': FANART})
+    else:
+        # 3.2.23: on/off entries show the switch art + On/Off as label2
+        from resources.lib import toggle_ui
+        li = toggle_ui.item(label, switch)
+        li.setArt({'fanart': FANART})
     if not is_folder:
         li.setProperty('IsPlayable', 'false')
     xbmcplugin.addDirectoryItem(HANDLE, url, li, is_folder)
@@ -275,6 +281,24 @@ def main_menu():
     _mlog('sweep queued - done')
 
 
+def _switch_state(mode):
+    """True/False for entries that are an on/off switch, None otherwise."""
+    try:
+        if mode == 'af3_waves':
+            from resources.lib import af3_waves_toggle
+            return bool(af3_waves_toggle.waves_on())
+        if mode == 'af3_trailers':
+            from resources.lib.af3_trailers import config as _tcfg
+            return bool(_tcfg.load()['enabled'])
+        if mode in ('dplex_toggle', 'korean_toggle'):
+            from resources.lib import tab_toggle
+            st = tab_toggle._current_state('1104' if mode == 'dplex_toggle' else '1103')
+            return None if st is None else bool(st)
+    except Exception:
+        return None
+    return None
+
+
 def category_menu(cat_key):
     from resources.lib.i18n import T
     for c_key, _label_id, _icon, items in CATEGORIES:
@@ -282,20 +306,8 @@ def category_menu(cat_key):
             continue
         for mode, label_id in items:
             label = T(label_id)
-            if mode == 'af3_waves':
-                try:
-                    from resources.lib import af3_waves_toggle as _wt
-                    label = '%s: %s' % (label, T(30436) if _wt.waves_on() else T(30437))
-                except Exception:
-                    pass
-            if mode == 'af3_trailers':
-                # show the current state right in the Toggles list
-                try:
-                    from resources.lib.af3_trailers import config as _tcfg
-                    label = '%s: %s' % (label, T(30436) if _tcfg.load()['enabled'] else T(30437))
-                except Exception:
-                    pass
-            _add_item(label, mode, is_folder=(mode not in ACTION_MODES))
+            _add_item(label, mode, is_folder=(mode not in ACTION_MODES),
+                      switch=_switch_state(mode))
         break
     xbmcplugin.setContent(HANDLE, 'files')
     # not cached: the Toggles list shows live on/off states

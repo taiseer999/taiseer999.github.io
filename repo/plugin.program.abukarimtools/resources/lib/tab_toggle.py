@@ -140,11 +140,13 @@ def run(key, slot, label):
     else:
         state_lbl = T(30263)
 
+    # 3.2.23: switch art - row 0 = turn on, row 1 = turn off
+    from resources.lib import toggle_ui
+    rows = [toggle_ui.item(T(30265) % label, True, ''),
+            toggle_ui.item(T(30266) % label, False, '')]
     choice = DIALOG.select(
-        T(30264) % (label, state_lbl),
-        [T(30265) % label,
-         T(30266) % label],
-        preselect=1 if state is True else 0)
+        T(30264) % (label, state_lbl), rows,
+        preselect=1 if state is True else 0, useDetails=True)
     if choice == -1:
         return
 

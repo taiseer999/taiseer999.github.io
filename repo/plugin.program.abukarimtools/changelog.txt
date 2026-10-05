@@ -1,3 +1,32 @@
+v3.2.24
+- Cleanup before release - removed patches that are no longer needed:
+  * Seren maintenance.py UTF-8 (2 entries);
+  * TMDbHelper trakt_stats dict guard (upstream fixed it - logged "obsolete"
+    on every sweep);
+  * TinyPPI "Fix Font" (install_fonts) - TinyPPI 2.15 rewrote its font
+    handling (ensure_fonts), the patch no longer matched anything;
+  * Last Played service replacement (+ its toggle) - replaced by the new
+    Last Played (ABUKARIM) add-on;
+  * DexSubtitles auto-download retirement (old-build cleanup, nothing left
+    to undo);
+  * the 2.11-era TinyPPI overlay snapshots (classic/Arabic are in-place now).
+- FIX: PPI AF3 Home publisher never started on TinyPPI 2.15 - monitor.py now
+  logs via _log("KodiMonitor started"); the inject anchor matches both forms.
+- Add-on Portal and presets install Last Played (ABUKARIM)
+  (plugin.video.abukarim.lastplayed) instead of plugin.video.last_played.
+
+v3.2.23
+- New Maintenance icon.
+- On/off switch art (toggle_on.png / toggle_off.png) wherever the add-on shows
+  a state:
+  * Toggles menu: AF3 Auto Trailers, AF3 Waves, DPlex tab, Korean Media tab
+    show the switch for their current state (+ On/Off as label2);
+  * "Apply Patches" checklist is now a list of switches - pick a row to flip
+    it, "Done - apply" runs the patches, Back cancels (swallowed-dialog guard
+    kept);
+  * AF3 Auto Trailers settings: Auto trailers / Sound rows are switches;
+  * DPlex / Korean tab dialog: turn on / turn off rows carry the switch art.
+
 v3.2.22
 - Freeze on the AM9 ~50 s after boot (log 2026-10-04 21:52): the boot relink
   forced UpdateAddonRepos on every boot (an add-on only an older cached

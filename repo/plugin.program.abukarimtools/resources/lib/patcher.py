@@ -27,19 +27,11 @@ _TMDBH_POLLER_NEW_B64 = 'ICAgIGRlZiBwb2xsZXIoc2VsZik6CgogICAgICAgICMgLS0gVE1EYkh
 # is 'SA', and TMDb carries almost no Saudi certifications, so mpaa came back empty for
 # nearly every movie and show. TMDbHelper already caches EVERY country's certification
 # in the same table, so the US value is present locally - only the WHERE clause hid it.
-_TMDBH_TRAKTSTATS_OLD_B64 = 'ICAgICAgICAgICAgZm9yIGJhc2VfaywgYmFzZV92IGluIHNlbGYucmVzcG9uc2VfanNvbi5pdGVtcygpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
-_TMDBH_TRAKTSTATS_NEW_B64 = 'ICAgICAgICAgICAgIyAtLSBUTURiSGVscGVyIFRyYWt0IHN0YXRzIGRpY3QgZ3VhcmQgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLQogICAgICAgICAgICBmb3IgYmFzZV9rLCBiYXNlX3YgaW4gc2VsZi5yZXNwb25zZV9qc29uLml0ZW1zKCkKICAgICAgICAgICAgaWYgaXNpbnN0YW5jZShiYXNlX3YsIGRpY3QpCiAgICAgICAgICAgIGZvciBpdGVtX2ssIGl0ZW1fdiBpbiBiYXNlX3YuaXRlbXMoKQogICAgICAgICAgICBpZiBpc2luc3RhbmNlKGl0ZW1fdiwgaW50KQo='
 _TMDBH_CERTFALLBACK_OLD_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpOgogICAgdGFibGUgPSAnY2VydGlmaWNhdGlvbicKICAgIGtleXMgPSB0dXBsZShDRVJUSUZJQ0FUSU9OX0NPTFVNTlMua2V5cygpKQogICAgY29uZGl0aW9ucyA9ICdwYXJlbnRfaWQ9PyBBTkQgaXNvX2NvdW50cnk9PyBBTkQgbmFtZSBJUyBOT1QgTlVMTCBBTkQgbmFtZSAhPSAiIiBPUkRFUiBCWSBJRk5VTEwocmVsZWFzZV9kYXRlLCAiOTk5OS05OS05OSIpIEFTQyBMSU1JVCAxJyAgIyBXSEVSRSBjb25kaXRpb25zCiAgICBjb25mbGljdF9jb25zdHJhaW50ID0gJ2lzb19jb3VudHJ5LCBpc29fbGFuZ3VhZ2UsIHJlbGVhc2VfZGF0ZSwgcmVsZWFzZV90eXBlLCBwYXJlbnRfaWQnCgogICAgQHByb3BlcnR5CiAgICBkZWYgdmFsdWVzKHNlbGYpOiAgIyBXSEVSRSBjb25kaXRpb25zIHZhbHVlcyBmb3IgPwogICAgICAgIHJldHVybiAoc2VsZi5wYXJlbnRfaWQsIHNlbGYuY29tbW9uX2FwaXMudG1kYl9hcGkuaXNvX2NvdW50cnkpCg=='
 _TMDBH_CERTFALLBACK_NEW_B64 = 'Y2xhc3MgQ2VydGlmaWNhdGlvbihJdGVtRGV0YWlsc0xpc3QpOgogICAgIyAtLSBVU0EgY2VydGlmaWNhdGlvbiBmYWxsYmFjayAoYnkgQUJVS0FSSU0gVE9PTFMpIC0tCiAgICB0YWJsZSA9ICdjZXJ0aWZpY2F0aW9uJwogICAga2V5cyA9IHR1cGxlKENFUlRJRklDQVRJT05fQ09MVU1OUy5rZXlzKCkpCiAgICBjb25kaXRpb25zID0gJ3BhcmVudF9pZD0/IEFORCBpc29fY291bnRyeSBJTiAoPywgIlVTIikgQU5EIG5hbWUgSVMgTk9UIE5VTEwgQU5EIG5hbWUgIT0gIiIgT1JERVIgQlkgaXNvX2NvdW50cnk9PyBERVNDLCBJRk5VTEwocmVsZWFzZV9kYXRlLCAiOTk5OS05OS05OSIpIEFTQyBMSU1JVCAxJyAgIyBXSEVSRSBjb25kaXRpb25zCiAgICBjb25mbGljdF9jb25zdHJhaW50ID0gJ2lzb19jb3VudHJ5LCBpc29fbGFuZ3VhZ2UsIHJlbGVhc2VfZGF0ZSwgcmVsZWFzZV90eXBlLCBwYXJlbnRfaWQnCgogICAgQHByb3BlcnR5CiAgICBkZWYgdmFsdWVzKHNlbGYpOiAgIyBXSEVSRSBjb25kaXRpb25zIHZhbHVlcyBmb3IgPwogICAgICAgIGlzb19jb3VudHJ5ID0gc2VsZi5jb21tb25fYXBpcy50bWRiX2FwaS5pc29fY291bnRyeQogICAgICAgIHJldHVybiAoc2VsZi5wYXJlbnRfaWQsIGlzb19jb3VudHJ5LCBpc29fY291bnRyeSkK'
 
 
 
-# ── DexSubtitles auto-download: RETIRED in 3.1.15 ──
-# The patches were removed. These two blobs are kept ONLY so
-# _retire_dexsubs_autodl() can undo the addon.xml service registration
-# on boxes that were patched by an older build.
-_DEXAUTO_ADDONXML_OLD_B64 = 'ICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc3VidGl0bGUubW9kdWxlIiBsaWJyYXJ5PSJzZXJ2aWNlLnB5Ij4KICAgICAgICA8cHJvdmlkZXM+c3VidGl0bGVzPC9wcm92aWRlcz4KICAgIDwvZXh0ZW5zaW9uPgo='
-_DEXAUTO_ADDONXML_NEW_B64 = 'ICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc3VidGl0bGUubW9kdWxlIiBsaWJyYXJ5PSJzZXJ2aWNlLnB5Ij4KICAgICAgICA8cHJvdmlkZXM+c3VidGl0bGVzPC9wcm92aWRlcz4KICAgIDwvZXh0ZW5zaW9uPgoKICAgIDwhLS0gQVVUT19ETF9WNTU1OiBhdXRvLWRvd25sb2FkIHNlcnZpY2UgKGJ5IEFCVUtBUklNIFRPT0xTKSAtLT4KICAgIDxleHRlbnNpb24gcG9pbnQ9InhibWMuc2VydmljZSIgbGlicmFyeT0ic2VydmljZV9hdXRvLnB5Ii8+Cg=='
 
 
 
@@ -145,34 +137,6 @@ _TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiUmVn
 
 
 PATCHES = [
-    # ── TinyPPI: disable install_fonts() entirely – fixes picture freeze on playback stop ──
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'ui', 'fonts.py'),
-        'old': base64.b64decode(_TINYPPI_NOFONTS_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TINYPPI_NOFONTS_NEW_B64).decode('utf-8'),
-        'description': 'TinyPPI fonts.py \u2013 disable install_fonts() entirely (overlay uses skin font; stops freeze on stop)',
-        'already_patched_check': '# -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --',
-        # [^\n]* (not .*): with the generic re.DOTALL this used to be
-        # (?:    .*\n)*? - nested, overlapping quantifiers = catastrophic
-        # backtracking whenever the anchor is missing (newer TinyPPI).
-        # Runtime doubled per line of install_fonts(); the sweep held the GIL
-        # forever and froze Kodi (3.1.0.15).
-        # 3.1.0.30: signature-agnostic. Newer TinyPPI changed install_fonts()
-        # (the old '-> None' + skin_path anchor is gone), so this failed on
-        # every sweep. Now: any `def install_fonts(...)`, early return inserted
-        # as the first body line using the file's own indent. Linear regex,
-        # no nested quantifiers. not_found_ok: if TinyPPI drops install_fonts
-        # entirely there is nothing left to disable.
-        'fallback_pattern': r'(def install_fonts\([^)\n]*\)[^:\n]*:[ \t]*\n)([ \t]+)',
-        'fallback_repl': lambda m: (
-            m.group(1)
-            + m.group(2) + '# -- TinyPPI fonts disabled entirely (by ABUKARIM TOOLS) --\n'
-            + m.group(2) + 'return\n'
-            + m.group(2)
-        ),
-        'not_found_ok': True,
-    },
 # ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'script.tinyppi',
@@ -186,27 +150,6 @@ PATCHES = [
         'already_patched_check': '_ALLOW_NON_COREELEC = True',
         'fallback_pattern': r'_ALLOW_NON_COREELEC\s*(?::[^=\n]+)?=\s*False',
         'fallback_repl': lambda m: '_ALLOW_NON_COREELEC = True',
-    },
-    # ── Seren maintenance.py – UTF-8 addon.xml I/O (py3.14 C-locale opens ascii; 0xe2 in addon.xml crashes service at boot) ──
-    {
-        'addon_id': 'plugin.video.seren',
-        'rel_path': os.path.join('resources', 'lib', 'common', 'maintenance.py'),
-        'old': '    file_path = os.path.join(g.ADDON_DATA_PATH, "addon.xml")\n\n    with open(file_path) as addon_xml:',
-        'new': '    file_path = os.path.join(g.ADDON_DATA_PATH, "addon.xml")\n\n    with open(file_path, encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
-        'description': 'Seren maintenance.py – read addon.xml as UTF-8 (fixes boot UnicodeDecodeError in toggle_reuselanguageinvoker)',
-        'already_patched_check': 'with open(file_path, encoding="utf-8") as addon_xml:',
-        'fallback_pattern': r'with open\(file_path\) as addon_xml:',
-        'fallback_repl': 'with open(file_path, encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
-    },
-    {
-        'addon_id': 'plugin.video.seren',
-        'rel_path': os.path.join('resources', 'lib', 'common', 'maintenance.py'),
-        'old': '    def _store_and_reload(output):\n        with open(file_path, "w+") as addon_xml:',
-        'new': '    def _store_and_reload(output):\n        with open(file_path, "w+", encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
-        'description': 'Seren maintenance.py – write addon.xml as UTF-8',
-        'already_patched_check': 'with open(file_path, "w+", encoding="utf-8") as addon_xml:',
-        'fallback_pattern': r'with open\(file_path, "w\+"\) as addon_xml:',
-        'fallback_repl': 'with open(file_path, "w+", encoding="utf-8") as addon_xml:  # ABUKARIM: py3.14 C-locale ascii fix',
     },
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
@@ -276,37 +219,6 @@ PATCHES = [
         'fallback_pattern': r"conditions = 'parent_id=\? AND iso_country=\? AND name IS NOT NULL",
         'fallback_repl': (
             'conditions = \'parent_id=? AND iso_country IN (?, \"US\") AND name IS NOT NULL'
-        ),
-    },
-    # ── TMDbHelper – Trakt stats dict guard (fixes Cron Thread dying + ~40s freeze) ──
-    # Root cause (kodi.log): cronjob.py _do_trakt_authorization() -> get_stats() ->
-    # trakt_stats.py get_trakt_stats() iterates base_v.items() over every top-level value
-    # of the Trakt users/me/stats payload. Trakt returns plain ints there, so the
-    # comprehension raises AttributeError: 'int' object has no attribute 'items', the
-    # Cron Thread aborts, and Kodi stalls for ~30-40s. Guard skips non-dict values.
-    {
-        'addon_id': 'plugin.video.themoviedb.helper',
-        'rel_path': os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py'),
-        'old': base64.b64decode(_TMDBH_TRAKTSTATS_OLD_B64).decode('utf-8'),
-        'new': base64.b64decode(_TMDBH_TRAKTSTATS_NEW_B64).decode('utf-8'),
-        'description': 'TMDbHelper trakt_stats.py - skip non-dict values in Trakt stats (int payload killed the Cron Thread + caused ~40s freeze)',
-        'already_patched_check': '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --',
-        # TMDbHelper rewrote get_items() with its own recursive int/dict guard
-        # (bare-int base case + trailing `if isinstance(stat, dict) else []`),
-        # so the AttributeError this patch fixed can no longer occur and our
-        # 'old' anchor is gone for good. Detect the upstream fix and skip cleanly.
-        'obsolete_if_contains': (
-            'def get_items(self, stat, name=None, base=None):',
-            'if isinstance(stat, dict) else []',
-        ),
-        'fallback_pattern': r'for base_k, base_v in self\.response_json\.items\(\)\r?\n(\s*)for item_k, item_v in base_v\.items\(\)',
-        'fallback_repl': (
-            lambda m: (
-                '# -- TMDbHelper Trakt stats dict guard (by ABUKARIM TOOLS) --\n'
-                + m.group(1) + 'for base_k, base_v in self.response_json.items()\n'
-                + m.group(1) + 'if isinstance(base_v, dict)\n'
-                + m.group(1) + 'for item_k, item_v in base_v.items()'
-            )
         ),
     },
     # ── RedLight – kill automatic volume drop to -30 dB on playback start ──
@@ -584,7 +496,8 @@ PATCHES = [
                 '    except Exception as _abk_exc:\n'
                 '        xbmc.log("TinyPPI: PPI AF3 home publisher failed: %s" % _abk_exc, xbmc.LOGWARNING)'),
         'already_patched_check': '# -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --',
-        'fallback_pattern': r'(xbmc\.log\("TinyPPI: KodiMonitor started", xbmc\.LOGINFO\))',
+        # 3.2.24: TinyPPI 2.15 logs through its own _log("KodiMonitor started", ...)
+        'fallback_pattern': r'((?:xbmc\.log|_log)\("(?:TinyPPI: )?KodiMonitor started", xbmc\.LOGINFO\))',
         'fallback_repl': ('\\1\n    # -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --\n'
                           '    try:\n'
                           '        from info import home_publish as _abk_home_publish\n'
@@ -1177,17 +1090,6 @@ PATCHES = [
     # debrid URL, dead the next day. Whole service file is replaced (same JSON
     # format, so the stock addon.py lists it unchanged); the service is restarted
     # after a write so it takes effect without rebooting Kodi.
-    {
-        'addon_id': 'plugin.video.last_played',
-        'rel_path': 'default.py',
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'restart_addon': True,
-        'inject_source': os.path.join('resources', 'lastplayed', 'default.py'),
-        'toggle': 'lastplayed_fix',
-        'description': 'Last Played - record playback from any video add-on (onAVStarted, dummy/trailer skip, replayable add-on links)',
-    },
     # ── a4kSubtitles: quiet mode (3.2.11) ──
     # The build ships OpenSubtitles / SubDL / SubSource enabled without accounts,
     # so every search popped "requires authentication" / "requires API Key"
@@ -1400,22 +1302,6 @@ def _apply_patch(patch):
                     current = None
                 if current == payload:
                     return True, '[%s] Already present – skipping.' % patch['addon_id']
-                base_rel = patch.get('only_if_base')
-                if base_rel and current is not None:
-                    try:
-                        with open(os.path.join(xbmcvfs.translatePath(
-                                'special://home/addons/plugin.program.abukarimtools/'),
-                                base_rel), 'rb') as _bf0:
-                            base = _bf0.read()
-                    except Exception:
-                        base = None
-                    cur_nc = re.sub(rb'(\$ADDON\[script\.tinyppi \d+\](?:\[/?[A-Z]+\])*)'
-                                    rb':([ \t]*</label>)', rb'\1\2', current)
-                    if base is None or cur_nc != base:
-                        return True, ('[%s] %s changed upstream - %s not applied '
-                                      '(built for an older version).'
-                                      % (patch['addon_id'], patch['rel_path'],
-                                         patch['description']))
                 if not patch.get('replace') and current:
                     return True, '[%s] Already present – skipping.' % patch['addon_id']
             os.makedirs(os.path.dirname(target), exist_ok=True)
@@ -1537,7 +1423,6 @@ TOGGLE_GROUPS = [
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
     ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
-    ('tinyppi_font',     'TinyPPI: Fix Font'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('tinyppi_arabic',   'PPI Arabic'),
@@ -1549,7 +1434,6 @@ TOGGLE_GROUPS = [
     ('fenlight_volume',  'Fenlight: Kill Volume Auto-Drop'),
     ('a4ksubs_utf8',     'a4kSubtitles: UTF-8 Subtitles Fix'),
     ('a4ksubs_quiet',    'a4kSubtitles: Hide Account/API-Key Nags'),
-    ('lastplayed_fix',   'Last Played: Record Streams (all video add-ons)'),
 ]
 _TOGGLE_LABELS = dict(TOGGLE_GROUPS)
 
@@ -1570,18 +1454,12 @@ _TOGGLE_OF = {
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'items', 'database',
                   'basemeta_factories', 'concrete_classes', 'info.py')):     'tmdbh_mpaa_ksa',
-    # TMDbHelper: Stability — Trakt stats dict guard (freeze fix)
-    ('plugin.video.themoviedb.helper',
-     os.path.join('resources', 'tmdbhelper', 'lib', 'query', 'database', 'trakt_stats.py')): 'tmdbh_stability',
     # TMDbHelper: Stability — dead-player guard (getPlayingFile RuntimeError on teardown)
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py')): 'tmdbh_stability',
     # TinyPPI: Run on non-CE
     ('script.tinyppi',
      os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',
-    # TinyPPI: Fix Font
-    ('script.tinyppi',
-     os.path.join('resources', 'lib', 'ui', 'fonts.py')):                    'tinyppi_font',
     # TinyPPI: Codec Badges — the three HDR badge PNGs
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'SDR.png')):        'tinyppi_codecs',
@@ -1870,52 +1748,6 @@ _FIRST_RUN_LOCK_FILE = os.path.join(
     ADDON_DATA, 'plugin.program.abukarimtools', 'first_run.lock')
 
 
-# ---------------------------------------------------------------------------
-# DexSubtitles auto-download — retired in 3.1.15
-# ---------------------------------------------------------------------------
-# The dexsubs_autodl patches are gone, but older builds left two things behind
-# in service.subtitles.dexworld: an <extension point="xbmc.service"> line in
-# its addon.xml and the service_auto.py it points at. Without cleanup that
-# background service would keep running forever. This undoes both (once; a
-# clean box is detected by content and nothing is written). The injected
-# settings.xml is left alone — it only adds options, and the next DexWorld
-# update/reinstall replaces it anyway.
-_DEXAUTO_REG_RE = re.compile(
-    r'\n?[ \t]*<!-- AUTO_DL_V\d+: auto-download service \(by ABUKARIM TOOLS\) -->[ \t]*\n'
-    r'[ \t]*<extension point="xbmc\.service" library="service_auto\.py"\s*/>[ \t]*\n?')
-
-
-def _retire_dexsubs_autodl():
-    addon_id = 'service.subtitles.dexworld'
-    addon_path = _resolve_addon_dir(addon_id) or os.path.join(ADDONS_DIR, addon_id)
-    if not os.path.isdir(addon_path):
-        return True, '[%s] not installed \u2013 nothing to retire.' % addon_id
-    changed = []
-    xml_path = os.path.join(addon_path, 'addon.xml')
-    try:
-        if os.path.isfile(xml_path):
-            content = _read(xml_path)
-            new_content = _DEXAUTO_REG_RE.sub('\n', content, count=1)
-            if new_content == content and 'library="service_auto.py"' in content:
-                # unexpected layout: fall back to the exact blob we injected
-                old = base64.b64decode(_DEXAUTO_ADDONXML_OLD_B64).decode('utf-8')
-                new = base64.b64decode(_DEXAUTO_ADDONXML_NEW_B64).decode('utf-8')
-                new_content = content.replace(new, old, 1)
-            if new_content != content:
-                _write(xml_path, new_content)
-                changed.append('addon.xml service entry removed')
-        svc = os.path.join(addon_path, 'service_auto.py')
-        if os.path.isfile(svc):
-            os.remove(svc)
-            changed.append('service_auto.py deleted')
-    except Exception as e:
-        return False, '[%s] DexSubtitles auto-download cleanup failed: %s' % (addon_id, e)
-    if changed:
-        return True, ('[%s] Patched OK: DexSubtitles auto-download retired (%s) '
-                      '\u2013 takes effect after a Kodi restart.' % (addon_id, ', '.join(changed)))
-    return True, '[%s] DexSubtitles auto-download already retired.' % addon_id
-
-
 def _is_active_skin(addon_id):
     try:
         return addon_id == xbmc.getSkinDir()
@@ -1997,20 +1829,6 @@ def apply_set(group=None, addon_ids=None):
         else:
             failed += 1
 
-    # Undo the retired DexSubtitles auto-download patch. Runs on every sweep
-    # (dexworld is no longer a patch target, so it never appears in addon_ids);
-    # a clean box is a cheap no-op.
-    if True:
-        ok, msg = _retire_dexsubs_autodl()
-        _log(msg)
-        results.append((ok, msg))
-        if ok:
-            succeeded += 1
-            if 'Patched OK' in msg:
-                changed += 1
-        else:
-            failed += 1
-
     for _n, patch in enumerate(_select(group, addon_ids), 1):
         # Numbered trace (DEBUG since 3.1.0.15) so Kodi's duplicate-message filter
         # (which swallows identical consecutive lines like the three dexworld
@@ -2076,26 +1894,22 @@ def _choose_toggles():
     if not shown:
         return True
 
-    labels      = [label for _tid, label in shown]
-    preselect   = [i for i, (tid, _l) in enumerate(shown) if tid not in disabled]
+    # 3.2.23: a list of on/off switches (toggle art) instead of checkboxes;
+    # picking a row flips it, "Done - apply" runs the patches.
+    from resources.lib import toggle_ui
+    states = toggle_ui.switch_list(
+        '%s – choose what to patch' % ADDON_NAME,
+        [(tid, label, tid not in disabled) for tid, label in shown])
 
-    # 3.2.0: guarded - after the Add-on Portal's installs this dialog was
-    # being closed by Kodi within ~50 ms (field log 2026-10-03 09:07:44).
-    from resources.lib import dialog_guard
-    chosen = dialog_guard.multiselect(
-        '%s – choose what to patch' % ADDON_NAME, labels, preselect=preselect)
-
-    # Cancelled -> abort the whole run, leave saved toggles untouched.
-    if chosen is None:
+    # Back -> abort the whole run, leave saved toggles untouched.
+    if states is None:
         return False
 
-    chosen_set   = set(chosen)
-    # Rebuild the disabled set: any SHOWN toggle left un-ticked is disabled.
     # Toggles not shown (add-on absent) keep their previous state so a temporary
     # uninstall doesn't silently flip them.
     new_disabled = set(disabled)
-    for i, (tid, _l) in enumerate(shown):
-        if i in chosen_set:
+    for tid, on in states.items():
+        if on:
             new_disabled.discard(tid)
         else:
             new_disabled.add(tid)
