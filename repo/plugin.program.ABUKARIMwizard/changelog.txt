@@ -1,3 +1,23 @@
+v3.9.24
+- Build Menu icon: a ready Kodi build - package with a check badge and READY BUILD.
+
+v3.9.23
+- Authorize Debrid & Trakt: key icon with the word DEBRID.
+- No-wipe build update items: icon reads UPDATE / NO WIPE.
+- Build Menu: paint-roller (themes) icon.
+- Misc > Addon Updates: add-on icon with an "A" (auto) badge.
+- "Update Available!!!" row: orange alert version of the update icon.
+- Fanart logo redrawn in the icon colours (cyan / white ring, AbuKarim Wizard).
+
+v3.9.22
+- Every menu entry has its own icon now (same flat line-icon family as
+  ABUKARIM TOOLS, transparent so the skin tile shows through): builds,
+  maintenance, cleaning/addon/logging/misc/tweak tools and each of their items,
+  backup / restore (with up / down badges), GUI & skin settings, power,
+  speed test, log, network, system info...
+- ON / OFF rows (Auto Clean, Debug Logging, Unknown Sources) show the on/off
+  switch instead of a plain icon.
+
 v3.9.20
 - Ported the OpenWizard 2.0.8.1 Maintenance feature (new module resources/lib/modules/maint_tools.py, router modes 200-259).
 - Maintenance menu is now split into: Cleaning Tools, Addon Tools, Logging Tools, Misc Maintenance, Backup/Restore Build, Backup/Restore GUI & Skin, System Tweaks/Fixes. Every previous Maintenance item is kept, just moved into its section.
