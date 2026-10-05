@@ -50,6 +50,9 @@ class Plugin():
         'get_file_exists': {
             'module_name': 'resources.lib.lists.koditools',
             'import_attr': 'ListGetFileExists'},
+        'get_file_size': {
+            'module_name': 'resources.lib.lists.koditools',
+            'import_attr': 'ListGetFileSize'},
         'get_selected_item': {
             'module_name': 'resources.lib.lists.koditools',
             'import_attr': 'ListGetSelectedItem'},
@@ -71,6 +74,9 @@ class Plugin():
         'get_container_labels': {
             'module_name': 'resources.lib.lists.filterdir',
             'import_attr': 'ListGetContainerLabels'},
+        'get_panel_labels': {
+            'module_name': 'resources.lib.lists.padpanels',
+            'import_attr': 'ListGetPanelLabels'},
         'get_shortcuts_node': {
             'module_name': 'resources.lib.shortcuts.node',
             'import_attr': 'ListGetShortcutsNode'},
