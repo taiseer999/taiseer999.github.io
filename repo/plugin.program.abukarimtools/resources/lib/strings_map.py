@@ -259,6 +259,10 @@ STRINGS = {
             "خيار «فيديو الخلفية» متوقف في إعدادات واجهة Arctic Fuse 3، لذلك لن تظهر التريلرات خلف الصفحة.[CR]فعّل «فيديو الخلفية» من إعدادات الواجهة."),
     30443: ("%d sec",                          "%d ثانية"),
     30444: ("Trailer quality",                 "جودة التريلر"),
+    30445: ("Show: %s", "طريقة العرض: %s"),
+    30446: ("Full screen", "ملء الشاشة"),
+    30447: ("Behind the page", "خلف الصفحة"),
+    30448: ("How trailers are shown", "طريقة عرض التريلر"),
     # ---- 3.2: profiles / tuning / remote access / log share / bootstrap (30530-30599) ----
     30530: ("Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)",
             "استبدال إعدادات وقوائم %s الحالية بملف بيرز الجاهز؟[CR](يتم حفظ نسخة احتياطية من ملفاتك أولاً.)"),

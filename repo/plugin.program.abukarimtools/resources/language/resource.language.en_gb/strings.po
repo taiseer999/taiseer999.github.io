@@ -624,6 +624,22 @@ msgctxt "#30444"
 msgid "Trailer quality"
 msgstr ""
 
+msgctxt "#30445"
+msgid "Show: %s"
+msgstr ""
+
+msgctxt "#30446"
+msgid "Full screen"
+msgstr ""
+
+msgctxt "#30447"
+msgid "Behind the page"
+msgstr ""
+
+msgctxt "#30448"
+msgid "How trailers are shown"
+msgstr ""
+
 msgctxt "#30530"
 msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
 msgstr ""

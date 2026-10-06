@@ -73,6 +73,13 @@ def choose_stream(streams, max_height=720):
     return None
 
 
+def stream_height(stream):
+    return _HEIGHTS.get((stream or {}).get('videoDefinition'), 0)
+
+
+EXTRA_CANDIDATES = 3    # 3.2.38: other trailers checked when the best one is low-res
+
+
 def _score_trailer(node, season=None):
     title = str(((node or {}).get('name') or {}).get('value') or '').lower()
     match = re.search(r'(?:season|series|الموسم)\s*(\d+)', title)
@@ -254,6 +261,11 @@ class TrailerResolver(object):
             video_id = row.get('vid') if now - float(row.get('t') or 0) < _VIDEO_TTL else ''
             if video_id and _VIDEO_RE.match(str(video_id)):
                 result = self._from_video(video_id, row.get('name') or '', timeout)
+                # 3.2.38: a cached trailer below the chosen quality is checked
+                # against the title's other trailers once per quality
+                if (result and result.get('height', 0) < self._quality
+                        and int(row.get('q') or 0) < self._quality):
+                    result = self._discover(imdb_id, season, timeout) or result
             if not result:
                 result = self._discover(imdb_id, season, timeout)
         except Exception as exc:
@@ -265,9 +277,11 @@ class TrailerResolver(object):
         with self._lock:
             disk = self._load()
             if result:
-                fresh = {'vid': result.get('video_id') or '', 'name': result.get('title') or ''}
+                fresh = {'vid': result.get('video_id') or '', 'name': result.get('title') or '',
+                         'q': max(self._quality, int(row.get('q') or 0))}
                 old = disk.get(key) or {}
-                if (old.get('vid'), old.get('name')) != (fresh['vid'], fresh['name']) or \
+                if (old.get('vid'), old.get('name'), old.get('q')) != \
+                        (fresh['vid'], fresh['name'], fresh['q']) or \
                         now - float(old.get('t') or 0) > _VIDEO_TTL / 2:
                     fresh['t'] = now
                     disk[key] = fresh
@@ -287,6 +301,7 @@ class TrailerResolver(object):
         mime = str(stream.get('videoMimeType') or '').upper()
         return {
             'url': stream.get('url'),
+            'height': stream_height(stream),
             'mime': 'video/mp4' if mime == 'MP4' else 'application/vnd.apple.mpegurl',
             'title': ((video or {}).get('name') or {}).get('value') or fallback_name or 'Trailer',
             'video_id': (video or {}).get('id') or '',
@@ -296,23 +311,61 @@ class TrailerResolver(object):
         data = self._request(_Q_VIDEO, {'id': video_id}, timeout=timeout)
         return self._pack(data.get('video') or {}, name)
 
+    def _good_enough(self, packed):
+        return bool(packed) and packed.get('height', 0) >= self._quality
+
     def _discover(self, imdb_id, season, timeout):
+        latest = None
         if not season:
             try:
                 data = self._request(_Q_COMBINED, {'id': imdb_id}, timeout=timeout)
                 trailer = ((data.get('title') or {}).get('latestTrailer') or {})
-                packed = self._pack(trailer) if trailer.get('playbackURLs') else None
-                if packed:
-                    return packed
+                latest = self._pack(trailer) if trailer.get('playbackURLs') else None
+                if self._good_enough(latest):
+                    return latest
             except Exception:
                 pass
+        # 3.2.38: the latest trailer is missing or below the chosen quality
+        # (old IMDb uploads are often SD only): look at the other trailers too
+        try:
+            better = self._discover_strip(imdb_id, season, timeout, latest)
+        except Exception:
+            if latest:
+                return latest
+            raise
+        return better or latest
+
+    def _discover_strip(self, imdb_id, season, timeout, latest=None):
         data = self._request(_Q_STRIP, {'id': imdb_id}, timeout=timeout)
         title = data.get('title') or {}
         nodes = [edge.get('node') or {} for edge in
                  ((title.get('videoStrip') or {}).get('edges') or []) if isinstance(edge, dict)]
         nodes = [n for n in nodes if _VIDEO_RE.match(str(n.get('id') or ''))]
-        best = max(nodes, key=lambda n: _score_trailer(n, season)) if nodes else None
-        best = best or title.get('latestTrailer')
-        if not best or not _VIDEO_RE.match(str(best.get('id') or '')):
+        ranked = sorted(nodes, key=lambda n: _score_trailer(n, season), reverse=True)
+        if not ranked and title.get('latestTrailer'):
+            ranked = [title['latestTrailer']]
+        ranked = [n for n in ranked if _VIDEO_RE.match(str(n.get('id') or ''))]
+        if not ranked:
             return None
-        return self._from_video(best['id'], (best.get('name') or {}).get('value') or '', timeout)
+        # the best-scored trailer first; if it is below the chosen quality,
+        # up to EXTRA_CANDIDATES more and keep the sharpest (ties keep rank)
+        picked = latest
+        failure = None
+        seen = {(latest or {}).get('video_id')}
+        for node in ranked[:1 + EXTRA_CANDIDATES]:
+            if node['id'] in seen:
+                continue
+            seen.add(node['id'])
+            try:
+                packed = self._from_video(node['id'], (node.get('name') or {}).get('value') or '',
+                                          timeout)
+            except Exception as exc:
+                failure = exc
+                continue
+            if packed and (not picked or packed.get('height', 0) > picked.get('height', 0)):
+                picked = packed
+            if self._good_enough(picked):
+                break
+        if picked is None and failure is not None:
+            raise failure       # network trouble, not "no trailer"
+        return picked

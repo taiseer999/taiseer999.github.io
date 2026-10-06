@@ -16,12 +16,13 @@ PATH = os.path.join(PROFILE, 'af3_trailers.json')
 CACHE_DIR = os.path.join(PROFILE, 'trailers')
 
 DELAYS = (1, 2, 3, 5, 8, 10)
-QUALITIES = (720, 1080)
+QUALITIES = (720, 1080, 2160)
 DEFAULTS = {
     'enabled': False,   # off until the user turns it on from Toggles
     'sound': True,      # heard by default (Dex Hub does the same since 5.10.104)
     'delay': 3,         # seconds the cursor rests on a title before its trailer starts
     'quality': 720,     # highest MP4 height picked from IMDb
+    'fullscreen': True, # 3.2.35: a trailer that starts opens full screen
 }
 
 _cache = {'mtime': None, 'cfg': dict(DEFAULTS)}
@@ -32,6 +33,10 @@ def _clean(data):
     if isinstance(data, dict):
         cfg['enabled'] = bool(data.get('enabled', cfg['enabled']))
         cfg['sound'] = bool(data.get('sound', cfg['sound']))
+        # 3.2.37: stored as 'show' ('fullscreen' | 'background'). The 3.2.35/36
+        # 'fullscreen' flag is ignored on purpose - 3.2.35 flipped it off when
+        # the row was merely opened, so everyone starts on full screen again.
+        cfg['fullscreen'] = data.get('show', 'fullscreen') != 'background'
         try:
             delay = int(data.get('delay', cfg['delay']))
             cfg['delay'] = delay if delay in DELAYS else DEFAULTS['delay']
@@ -66,13 +71,17 @@ def load_cached():
 
 
 def save(cfg):
+    cfg = dict(cfg)
+    cfg['show'] = 'fullscreen' if cfg.pop('fullscreen', True) else 'background'
     cfg = _clean(cfg)
     os.makedirs(PROFILE, exist_ok=True)
+    data = dict(cfg)
+    data['show'] = 'fullscreen' if data.pop('fullscreen', True) else 'background'
     # a private temp name per writer: two writers never share one file
     tmp = '%s.%d.%d.tmp' % (PATH, os.getpid(), threading.get_ident())
     try:
         with open(tmp, 'w', encoding='utf-8') as handle:
-            json.dump(cfg, handle, indent=2)
+            json.dump(data, handle, indent=2)
         os.replace(tmp, PATH)
     finally:
         try:

@@ -67,6 +67,10 @@ def _apply_skin_patch():
         _log('skin patch failed: %s' % exc)
 
 
+def _qlabel(value):
+    return '4K (2160p)' if value >= 2160 else '%dp' % value
+
+
 def _pick(heading, values, current, fmt):
     labels = [fmt(v) for v in values]
     pre = values.index(current) if current in values else 0
@@ -84,7 +88,8 @@ def _set_enabled(cfg, on):
         msg = T(30438)
         if xbmc.getSkinDir() != SKIN_ID:
             msg = T(30441)
-        elif xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)'):
+        elif (not cfg.get('fullscreen', True)
+              and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
             DIALOG.ok(ADDON_NAME, T(30442))
     else:
         msg = T(30439)
@@ -134,7 +139,10 @@ def _run():
             toggle_ui.item((T(30431) % '').rstrip(': '), cfg['enabled']),
             toggle_ui.item((T(30432) % '').rstrip(': '), cfg['sound']),
             xbmcgui.ListItem(T(30433) % cfg['delay'], offscreen=True),
-            xbmcgui.ListItem(T(30434) % ('%dp' % cfg['quality']), offscreen=True),
+            xbmcgui.ListItem(T(30434) % _qlabel(cfg['quality']), offscreen=True),
+            # 3.2.35: full screen (default) or behind the page
+            xbmcgui.ListItem(T(30445) % (T(30446) if cfg.get('fullscreen', True) else T(30447)),
+                             offscreen=True),
         ]
         ic = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'af3_trailers.png')
         for li in items[2:]:
@@ -165,5 +173,15 @@ def _run():
             config.save(cfg)
         elif choice == 3:
             cfg['quality'] = _pick(T(30444), list(config.QUALITIES), cfg['quality'],
-                                   lambda v: '%dp' % v)
+                                   _qlabel)
             config.save(cfg)
+        elif choice == 4:
+            # 3.2.36: a picker, not a flip - opening the row to look at it
+            # used to switch full screen off
+            cfg['fullscreen'] = _pick(T(30448), [True, False], cfg.get('fullscreen', True),
+                                      lambda v: T(30446) if v else T(30447))
+            config.save(cfg)
+            _log('trailers show: %s' % ('full screen' if cfg['fullscreen'] else 'behind the page'))
+            if (not cfg['fullscreen'] and xbmc.getSkinDir() == SKIN_ID
+                    and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
+                DIALOG.ok(ADDON_NAME, T(30442))

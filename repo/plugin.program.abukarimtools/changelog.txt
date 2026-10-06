@@ -1,3 +1,33 @@
+v3.2.38
+- AF3 Auto Trailers - sharper picture:
+  * when a title's latest trailer is below the chosen quality (old IMDb
+    uploads are often SD only), up to 3 more of its trailers are checked and
+    the sharpest one up to that quality plays;
+  * trailers cached by older versions are re-checked once;
+  * new quality option: 4K (2160p) - picks 4K when IMDb has it, else the best;
+  * the log shows the resolution of every trailer found and started.
+
+v3.2.37
+- AF3 Auto Trailers: the show mode is stored under a new key, so the
+  "Behind the page" that 3.2.35 saved by mistake is dropped - trailers open
+  full screen again without touching the settings.
+
+v3.2.36
+- AF3 Auto Trailers: the "Show" row opens a picker (Full screen / Behind the
+  page) instead of flipping on click - opening it just to look switched full
+  screen off. The log now prints the show mode on every settings change and
+  on every trailer start.
+
+v3.2.35
+- AF3 Auto Trailers open FULL SCREEN (new default). The trailer starts
+  windowed and, as soon as its first frames are on screen, switches to the
+  full-screen video window - no black frame, no spinner over an empty screen.
+  Back leaves full screen and stops the trailer; the same title does not
+  replay until the cursor moves. Full-screen trailers play with sound and
+  work even with AF3 'Background video' off.
+- New row in the AF3 Auto Trailers settings: "Show: Full screen / Behind the
+  page" (Behind the page = the old background behaviour).
+
 v3.2.33
 - Main menu: "Support ABUKARIM - Buy Me a Coffee" (Buy Me a Coffee icon).
   Opens a full-screen QR code to buymeacoffee.com/taiseer999.

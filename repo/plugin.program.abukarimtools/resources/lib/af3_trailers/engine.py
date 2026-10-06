@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 """AF3 auto-trailers: the background engine (ABUKARIM TOOLS).
 
+3.2.35 - FULL SCREEN mode (the default): the trailer is opened windowed as
+before, and the moment its first frames are on screen the engine switches
+Kodi to the full-screen video window, so there is no black frame and no
+spinner over an empty screen - the background video simply grows to full
+screen. Leaving full screen (Back) stops the trailer and returns to the page
+with the cursor where it was; the title is not replayed until the cursor
+moves. Full-screen trailers always play with sound and also work when AF3's
+'Background video' is off. The old behaviour ('Behind the page') is one
+setting away in the Toggles entry.
+
 Runs on its own thread inside the ABUKARIM TOOLS service. When the cursor
 rests on a movie or TV show on Arctic Fuse 3's Home or one of its hubs, the
 title's trailer is looked up on IMDb (see imdb.py) and played WINDOWED. AF3
@@ -59,6 +69,13 @@ _PAGES = ('Window.IsActive(home) | Window.IsActive(1101) | Window.IsActive(1102)
 _BLOCKERS = ('System.ScreenSaverActive | Skin.HasSetting(Background.DisableVideo) | '
              'Window.IsVisible(1123) | Window.IsVisible(movieinformation) | '
              'Window.IsVisible(DialogVideoInfo.xml)')
+# full-screen trailers do not need AF3's background video
+_BLOCKERS_FS = ('System.ScreenSaverActive | '
+                'Window.IsVisible(1123) | Window.IsVisible(movieinformation) | '
+                'Window.IsVisible(DialogVideoInfo.xml)')
+_FULLSCREEN = 'Window.IsActive(fullscreenvideo)'
+FS_FIRST_FRAME = 0.15   # seconds of video played before going full screen
+FS_TIMEOUT = 4.0        # full-screen window never came up: keep it windowed
 _OPEN_BLOCKERS = 'System.HasActiveModalDialog | Window.IsActive(1180)'
 _BUSY = 'Window.IsActive(busydialog) | Window.IsActive(busydialognocancel)'
 
@@ -216,6 +233,9 @@ class Engine(object):
         self._was_enabled = None
         self.miss_since = None
         self._focus_logs = 0
+        self.fs_mode = False           # this trailer is meant to go full screen
+        self.fs_asked = 0.0            # when ActivateWindow(fullscreenvideo) was sent
+        self.fs_seen = False           # the full-screen window has been up
 
     # ------------------------------------------------------------- helpers
     def _resolver(self, quality):
@@ -241,10 +261,10 @@ class Engine(object):
         return current.split('?', 1)[0] == self.url.split('?', 1)[0]
 
     @staticmethod
-    def _eligible():
+    def _eligible(fullscreen=False):
         if xbmc.getSkinDir() != SKIN_ID:
             return False
-        return _cond('[%s] + ![%s]' % (_PAGES, _BLOCKERS))
+        return _cond('[%s] + ![%s]' % (_PAGES, _BLOCKERS_FS if fullscreen else _BLOCKERS))
 
     @staticmethod
     def _focused():
@@ -302,7 +322,8 @@ class Engine(object):
                 if imdb_id:
                     job['stream'] = resolver.resolve(imdb_id, timeout=8.0)
                 _log('lookup "%s" (%s): %s' % (item['label'], imdb_id or item['key'],
-                     'trailer found' if job['stream'] else
+                     ('trailer found (%sp)' % (job['stream'].get('height') or '?'))
+                     if job['stream'] else
                      ('no trailer' if imdb_id else 'no IMDb id')))
             except Exception:
                 _log('lookup failed:\n%s' % traceback.format_exc(), xbmc.LOGWARNING)
@@ -348,7 +369,10 @@ class Engine(object):
         url = stream.get('url')
         if not url:
             return False
-        if not cfg.get('sound'):
+        self.fs_mode = bool(cfg.get('fullscreen', True))
+        self.fs_asked = 0.0
+        self.fs_seen = False
+        if not cfg.get('sound') and not self.fs_mode:
             self._silence()
         li = xbmcgui.ListItem(label=item['label'] or 'Trailer', path=url)
         try:
@@ -374,14 +398,28 @@ class Engine(object):
             _log('play failed: %s' % type(exc).__name__, xbmc.LOGWARNING)
             self._release()
             return False
-        _log('trailer start: %s (%s)' % (item['label'], item['key']))
+        _log('trailer start: %s (%s) - %s, %sp' % (item['label'], item['key'],
+             'full screen' if self.fs_mode else 'behind the page', stream.get('height') or '?'))
         return True
+
+    def _go_fullscreen(self):
+        """Our trailer is rendering: switch to the full-screen video window."""
+        if self.fs_asked or _cond(_FULLSCREEN):
+            return
+        if _cond(_OPEN_BLOCKERS):
+            return              # a dialog opened meanwhile; try on the next tick
+        self.fs_asked = time.monotonic()
+        xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
+        _log('trailer -> full screen: %s' % self.key)
 
     def _release(self):
         """Forget the trailer without touching the player."""
         self.state = 'idle'
         self.url = ''
         self.key = ''
+        self.fs_mode = False
+        self.fs_asked = 0.0
+        self.fs_seen = False
         try:
             self.home.clearProperty(PROP)
         except Exception:
@@ -414,18 +452,26 @@ class Engine(object):
             self.home.setProperty(ENGINE_PROP, self.origin)
         cfg = config.load_cached()
         now = time.monotonic()
-        if cfg.get('enabled') != self._was_enabled:
-            self._was_enabled = cfg.get('enabled')
-            _log('auto trailers %s (sound=%s, delay=%ss, quality=%sp, skin=%s)'
-                 % ('ON' if self._was_enabled else 'off', cfg.get('sound'), cfg.get('delay'),
-                    cfg.get('quality'), xbmc.getSkinDir()))
+        # 3.2.36: log every settings change (the show mode too)
+        snapshot = tuple(sorted(cfg.items()))
+        if snapshot != self._was_enabled:
+            self._was_enabled = snapshot
+            _log('auto trailers %s (show=%s, sound=%s, delay=%ss, quality=%sp, skin=%s)'
+                 % ('ON' if cfg.get('enabled') else 'off',
+                    'full screen' if cfg.get('fullscreen', True) else 'behind the page',
+                    cfg.get('sound'), cfg.get('delay'), cfg.get('quality'), xbmc.getSkinDir()))
         if not cfg.get('enabled'):
             if self.state != 'idle':
                 self._stop()
             self.cand_key = ''
             return False
 
-        eligible = self._eligible()
+        if self.state != 'idle' and self.fs_mode:
+            handled = self._tick_fullscreen(now)
+            if handled is not None:
+                return handled
+
+        eligible = self._eligible(cfg.get('fullscreen', True))
         item = self._focused() if eligible else None
         key = item['key'] if item else ''
 
@@ -436,7 +482,7 @@ class Engine(object):
                 _log('real playback replaced the trailer')
                 self._release()
                 return True
-            if current and _cond('Window.IsActive(fullscreenvideo)'):
+            if current and not self.fs_mode and _cond(_FULLSCREEN):
                 # the user took the trailer full screen: it is theirs now
                 _log('trailer taken full screen - handed over')
                 self.done_key = self.key
@@ -464,10 +510,13 @@ class Engine(object):
                 self.miss_since = None
                 if current:
                     try:
-                        if self.player.getTime() > 0.3:
-                            self.state = 'playing'
+                        played = self.player.getTime()
                     except Exception:
-                        pass
+                        played = 0.0
+                    if self.fs_mode and played > FS_FIRST_FRAME:
+                        self._go_fullscreen()
+                    if played > 0.3:
+                        self.state = 'playing'
                 elif now - self.started > START_TIMEOUT:
                     _log('trailer did not open in time: %s' % self.key)
                     try:
@@ -516,6 +565,64 @@ class Engine(object):
             self.done_key = key
         return True
 
+    def _tick_fullscreen(self, now):
+        """Full-screen trailer bookkeeping. None = let the normal tick decide."""
+        current = self._playing_file()
+        if not current:
+            if self.fs_seen:
+                # ended by itself (or Stop): Kodi closes full screen on its own
+                _log('full-screen trailer ended: %s' % self.key)
+                self.done_key = self.key
+                self._release()
+                return True
+            return None
+        if not self._ours(current):
+            _log('real playback replaced the trailer')
+            self._release()
+            return True
+        if _cond(_FULLSCREEN):
+            self.fs_seen = True
+            self.state = 'playing'
+            self.miss_since = None
+            return True             # ListItem.* is empty here - never stop for that
+        if self.fs_seen:
+            # the user left full screen (Back): the trailer ends with it
+            _log('left full screen - trailer stopped: %s' % self.key)
+            key = self.key
+            self._stop()
+            self.done_key = key
+            return True
+        if self.fs_asked and now - self.fs_asked > FS_TIMEOUT:
+            _log('full screen did not open - trailer stays behind the page')
+            self.fs_mode = False
+            self._release_fs_only()
+            return None
+        if self.fs_asked:
+            return True             # switching right now: the page is unreadable
+        try:
+            played = self.player.getTime()
+        except Exception:
+            played = 0.0
+        if played > FS_FIRST_FRAME:
+            # the cursor moved on, or the page was left, while it opened:
+            # the normal checks stop it instead
+            if not self._eligible(True):
+                return None
+            focused = self._focused()
+            if focused and focused['key'] != self.key:
+                return None
+            # frames are on screen: go full screen now, even while the busy
+            # spinner still hides the focused title
+            self._go_fullscreen()
+            if self.fs_asked:
+                self.state = 'playing'
+                return True
+        return None                 # still opening windowed: the normal checks apply
+
+    def _release_fs_only(self):
+        self.fs_asked = 0.0
+        self.fs_seen = False
+
     # ----------------------------------------------------------------- run
     def run(self):
         restore_after_crash()
@@ -529,7 +636,10 @@ class Engine(object):
                     if time.monotonic() - self._last_error > 60:
                         self._last_error = time.monotonic()
                         _log('tick failed:\n%s' % traceback.format_exc(), xbmc.LOGWARNING)
-                if self.monitor.waitForAbort(0.2 if busy else 1.0):
+                # 0.1 s while a trailer opens: it goes full screen right after
+                # its first frames
+                wait = 0.1 if self.state == 'starting' else (0.2 if busy else 1.0)
+                if self.monitor.waitForAbort(wait):
                     break
         finally:
             # Kodi is closing: it stops the player itself; only give the volume back

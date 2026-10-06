@@ -624,6 +624,22 @@ msgctxt "#30444"
 msgid "Trailer quality"
 msgstr "جودة التريلر"
 
+msgctxt "#30445"
+msgid "Show: %s"
+msgstr "طريقة العرض: %s"
+
+msgctxt "#30446"
+msgid "Full screen"
+msgstr "ملء الشاشة"
+
+msgctxt "#30447"
+msgid "Behind the page"
+msgstr "خلف الصفحة"
+
+msgctxt "#30448"
+msgid "How trailers are shown"
+msgstr "طريقة عرض التريلر"
+
 msgctxt "#30530"
 msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
 msgstr "استبدال إعدادات وقوائم %s الحالية بملف بيرز الجاهز؟[CR](يتم حفظ نسخة احتياطية من ملفاتك أولاً.)"
