@@ -79,3 +79,19 @@ msgstr "اليوم"
 msgctxt "#30061"
 msgid "Yesterday"
 msgstr "أمس"
+
+msgctxt "#30070"
+msgid "Support ABUKARIM - Buy Me a Coffee"
+msgstr "ادعم ABUKARIM - اشترِ لي قهوة"
+
+msgctxt "#30071"
+msgid "Buy Me a Coffee"
+msgstr "اشترِ لي قهوة"
+
+msgctxt "#30072"
+msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
+msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل."
+
+msgctxt "#30073"
+msgid "Press OK or BACK to close"
+msgstr "اضغط OK أو رجوع للإغلاق"

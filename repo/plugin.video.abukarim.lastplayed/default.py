@@ -172,13 +172,21 @@ def root():
         xbmcplugin.addDirectoryItem(HANDLE, url(list=which), li, isFolder=True)
     li = xbmcgui.ListItem(L(30051), offscreen=True)
     ic = os.path.join(MEDIA, 'clear.png')
-    li.setArt({'icon': ic, 'thumb': ic})
+    li.setArt({'icon': ic, 'thumb': ic, 'fanart': os.path.join(MEDIA, 'fanart.jpg')})
     xbmcplugin.addDirectoryItem(HANDLE, url(action='clear'), li, isFolder=False)
+    li = xbmcgui.ListItem(L(30070), offscreen=True)
+    ic = os.path.join(MEDIA, 'support.png')
+    li.setArt({'icon': ic, 'thumb': ic, 'fanart': os.path.join(MEDIA, 'fanart.jpg')})
+    xbmcplugin.addDirectoryItem(HANDLE, url(action='support'), li, isFolder=False)
     xbmcplugin.endOfDirectory(HANDLE, cacheToDisc=False)
 
 
 def main():
     action = ARGS.get('action')
+    if action == 'support':
+        import support
+        support.show()
+        return
     if action == 'remove':
         store.remove(ARGS.get('key', ''))
         xbmc.executebuiltin('Container.Refresh')
