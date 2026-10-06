@@ -41,10 +41,10 @@ def main_menu():
     add_dir(COLOR2(build_menu_label), '', 1, addon_icon, addon_fanart, COLOR2(local_string(30001)), isFolder=True)  # Build Menu
     
     if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and GUI_URL not in ('', 'http://', None):
-        add_dir(COLOR2(local_string(30113)), GUI_URL, 33, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30114)), isFolder=False)  # Patch GUI
+        add_dir(COLOR2(local_string(30113)), GUI_URL, 33, PATCH_GUI_ICON, addon_fanart, COLOR2(local_string(30114)), isFolder=False)  # Patch GUI
 
     if CURRENT_BUILD not in ['No Build Installed', 'No Build'] and OPTION2_URL not in ('', 'http://', 'https://', None):
-        add_dir(COLOR2(local_string(30118)), OPTION2_URL, 35, PATCH_GUI_ICON, PATCH_GUI_ICON, COLOR2(local_string(30118)), isFolder=False)  # No Wipe Option 2 (userdata patch, force-close)
+        add_dir(COLOR2(local_string(30118)), OPTION2_URL, 35, PATCH_GUI_ICON, addon_fanart, COLOR2(local_string(30118)), isFolder=False)  # No Wipe Option 2 (userdata patch, force-close)
     
     add_dir(COLOR2(local_string(30011)), '', 5, addon_icon, addon_fanart, COLOR2(local_string(30002)), isFolder=True)  # Maintenance Menu
     

@@ -1,3 +1,18 @@
+v3.9.28
+- All icons (main icon, menu icons, Update / No Wipe) now sit on one solid
+  dark background (#0D1116).
+
+v3.9.27
+- Fanart logo made smaller.
+- Update / No Wipe items: background uses the add-on fanart instead of a
+  giant copy of their icon.
+
+v3.9.26
+- New fanart matching the main icon: wand in a cyan ring with ABUKARIM WIZARD.
+
+v3.9.25
+- Simplified main add-on icon: magic wand in a cyan ring with ABUKARIM, matching the menu icons and fanart.
+
 v3.9.24
 - Build Menu icon: a ready Kodi build - package with a check badge and READY BUILD.
 
