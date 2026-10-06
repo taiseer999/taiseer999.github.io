@@ -318,7 +318,7 @@
         <param name="hasprogress">false</param>
         <param name="texture">dialog/loading-back.png</param>
         <param name="size">100</param>
-        <param name="icon">special://skin/extras/icons/kodi.png</param>
+        <param name="icon">special://skin/extras/icons/CE.png</param>
         <param name="progress">Control.GetLabel(32)</param>
         <param name="progress_id">32</param>
         <param name="spinprogress">false</param>
@@ -718,7 +718,7 @@
     <include name="Object_StartUp_Logo">
         <control type="grouplist">
             <height>128</height>
-            <centertop>400</centertop>
+            <centertop>350</centertop>
             <orientation>vertical</orientation>
             <align>center</align>
             <control type="image">
@@ -726,19 +726,19 @@
                 <height>96</height>
                 <centerleft>50%</centerleft>
                 <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
+                <texture>special://skin/extras/icons/CE.png</texture>
             </control>
             <control type="label">
-                <height>32</height>
+                <height>30</height>
                 <textcolor>main_fg_100</textcolor>
-                <label>KODI</label>
+                <label>CoreELEC "NG"</label>
                 <font>font_logo_large</font>
                 <align>center</align>
             </control>
         </control>
         <control type="grouplist">
-            <height>80</height>
-            <centertop>50%</centertop>
+            <height>140</height>
+            <centertop>47%</centertop>
             <orientation>horizontal</orientation>
             <itemgap>10</itemgap>
             <align>center</align>
@@ -746,8 +746,8 @@
                 <aligny>center</aligny>
                 <align>center</align>
                 <width>auto</width>
-                <font>font_title_huge</font>
-                <textcolor>main_fg_100</textcolor>
+                <font>font_info_black</font>
+                <textcolor>$VAR[ColorHighlight]</textcolor>
                 <label>[COLOR=main_logo]Arctic[/COLOR] Fuse</label>
             </control>
             <control type="label">
@@ -755,8 +755,8 @@
                 <height>50</height>
                 <align>center</align>
                 <width>auto</width>
-                <font>font_head_bold</font>
-                <textcolor>main_fg_100</textcolor>
+                <font>font_huge_bold</font>
+                <textcolor>$VAR[ColorHighlight]</textcolor>
                 <label>$NUMBER[3]</label>
             </control>
         </control>
@@ -809,10 +809,10 @@
         <param name="progress">ListItem.Progress</param>
         <definition>
             <control type="progress">
-                <height>4</height>
+                <height>0</height>
                 <left>0</left>
                 <right>0</right>
-                <centerbottom>-15</centerbottom>
+                <centerbottom>-30</centerbottom>
                 <texturebg colordiffuse="main_fg_12" border="12,0,12,0">progress/progress-nib.png</texturebg>
                 <midtexture colordiffuse="main_logo" border="12,0,12,0">progress/progress-nib.png</midtexture>
                 <info>$PARAM[progress]</info>
@@ -2093,4 +2093,36 @@
         <description>Empty include to pass to params</description>
     </include>
 
+<include name="Object_Statistics_Panel">
+        <param name="limit">10</param>
+        <param name="width">295</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[width]</width>
+                <control type="image">
+                    <texture colordiffuse="main_fg_06" border="20">common/box.png</texture>
+                </control>
+                <control type="label">
+                    <height>60</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>main_fg_90</textcolor>
+                    <label>$PARAM[label]</label>
+                    <align>center</align>
+                </control>
+                <control type="group">
+                    <left>-20</left>
+                    <right>-20</right>
+                    <height>60</height>
+                    <include>Part_Line</include>
+                </control>
+                <control type="list">
+                    <top>60</top>
+                    <content sortby="year" sortorder="descending">plugin://script.skinvariables/?info=get_quick_stats&amp;containers=$PARAM[containers]&amp;infolabel=$PARAM[infolabel]&amp;limit=$PARAM[limit]$PARAM[affix]</content>
+                    <itemlayout width="$PARAM[width]" height="60"><include>Layout_StatisticMeta</include></itemlayout>
+                    <focusedlayout width="$PARAM[width]" height="60"><include>Layout_StatisticMeta</include></focusedlayout>
+                </control>
+            </control>
+        </definition>
+    </include>
+ 
 </includes>
