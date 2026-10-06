@@ -816,3 +816,18 @@ msgctxt "#30604"
 msgid "[B]Done - apply[/B]"
 msgstr "[B]تم - تطبيق[/B]"
 
+msgctxt "#30610"
+msgid "Support ABUKARIM - Buy Me a Coffee"
+msgstr "ادعم ABUKARIM - اشترِ لي قهوة"
+
+msgctxt "#30611"
+msgid "Buy Me a Coffee"
+msgstr "اشترِ لي قهوة"
+
+msgctxt "#30612"
+msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
+msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل."
+
+msgctxt "#30613"
+msgid "Press OK or BACK to close"
+msgstr "اضغط OK أو رجوع للإغلاق"

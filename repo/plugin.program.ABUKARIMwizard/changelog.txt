@@ -1,3 +1,7 @@
+v3.9.29
+- Main menu: "Support ABUKARIM - Buy Me a Coffee" (Buy Me a Coffee icon).
+  Opens a full-screen QR code to buymeacoffee.com/taiseer999.
+
 v3.9.28
 - All icons (main icon, menu icons, Update / No Wipe) now sit on one solid
   dark background (#0D1116).

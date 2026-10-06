@@ -10,6 +10,7 @@ from .addonvar import addon_name, addon_version
 # only where the caller passed the add-on's own icon, so build / authorize /
 # video items keep their own art.
 _ICON_BY_MODE = {
+    '300': 'support',
     '1': 'builds', '32': 'update_alert', '33': 'patcher', '35': 'patcher', '5': 'maintenance',
     '10': 'debrid', '101': 'changelog', '100': 'bell', '30': 'video', '9': 'hw_tuning',
     '6': 'binary_install', '7': 'icons_toggle', '4': 'fresh', '8': 'advanced', '29': 'advanced',

@@ -59,6 +59,7 @@ def main_menu():
         add_dir(COLOR2('Videos'), videos_url, 30, addon_icon, addon_fanart, COLOR2('Videos'), isFolder=True) # Videos
     
     add_dir(COLOR2(local_string(30015)), '', 9, addon_icon, addon_fanart, COLOR2(local_string(30016)), isFolder=False)  # Settings
+    add_dir(COLOR2(local_string(30990)), '', 300, addon_icon, addon_fanart, COLOR2(local_string(30992)), isFolder=False)  # Buy Me a Coffee
 
 def build_menu():
     xbmc.executebuiltin('Dialog.Close(busydialog)')

@@ -208,6 +208,10 @@ def router(paramstring):
         elif mode == 253: mt.system_info()
         elif mode == 254: mt.cleanup_backup_folder()
 
+    elif mode == 300:
+        from .support import show as support_show
+        support_show()
+
     elif mode == 100:
         if notify_url in ('http://CHANGEME', 'http://slamiousproject.com/wzrd/notify19.txt', ''):
             xbmcgui.Dialog().notification(addon_name, 'No Notifications to Display!!', addon_icon, 3000)

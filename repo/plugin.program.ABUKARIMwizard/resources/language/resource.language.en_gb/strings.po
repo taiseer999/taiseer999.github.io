@@ -1151,3 +1151,18 @@ msgctxt "#30372"
 msgid "You are about to force close Kodi. Continue?"
 msgstr ""
 
+msgctxt "#30990"
+msgid "Support ABUKARIM - Buy Me a Coffee"
+msgstr ""
+
+msgctxt "#30991"
+msgid "Buy Me a Coffee"
+msgstr ""
+
+msgctxt "#30992"
+msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
+msgstr ""
+
+msgctxt "#30993"
+msgid "Press OK or BACK to close"
+msgstr ""

@@ -1181,3 +1181,18 @@ msgctxt "#30372"
 msgid "You are about to force close Kodi. Continue?"
 msgstr "أنت على وشك إغلاق Kodi إجبارياً. هل تريد المتابعة؟"
 
+msgctxt "#30990"
+msgid "Support ABUKARIM - Buy Me a Coffee"
+msgstr "ادعم ABUKARIM - اشترِ لي قهوة"
+
+msgctxt "#30991"
+msgid "Buy Me a Coffee"
+msgstr "اشترِ لي قهوة"
+
+msgctxt "#30992"
+msgid "Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work."
+msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل."
+
+msgctxt "#30993"
+msgid "Press OK or BACK to close"
+msgstr "اضغط OK أو رجوع للإغلاق"

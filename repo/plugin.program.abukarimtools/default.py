@@ -51,6 +51,7 @@ ICONS  = {
     'cat_patch':      ADDON_PATH + 'resources/icons/cat_patch.png',
     'cat_maint':      ADDON_PATH + 'resources/icons/maintenance.png',
     'cat_toggle':     ADDON_PATH + 'resources/icons/cat_toggle.png',
+    'support':        ADDON_PATH + 'resources/icons/support.png',
 }
 
 # Grouped menu: each category is (cat_key, category_label_id, icon_key, [items])
@@ -105,7 +106,7 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.2 tools: dialogs only, never folders (same reason as above)
                 'bootstrap', 'hw_tuning', 'webserver', 'log_share',
                 'remote_refresh', 'menu_reconcile', 'profile_export',
-                'profile_restore'}
+                'profile_restore', 'support'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -275,6 +276,8 @@ def main_menu():
         _mlog('item %s: label ok' % cat_key)
         _add_folder(label, cat_key, icon_key)
         _mlog('item %s: added' % cat_key)
+    # 3.2.33: Buy Me a Coffee (opens a QR)
+    _add_item(T(30610), 'support', is_folder=False)
     xbmcplugin.setContent(HANDLE, 'files')
     _mlog('setContent done - calling endOfDirectory')
     xbmcplugin.endOfDirectory(HANDLE)
@@ -490,6 +493,10 @@ def router():
     elif mode == 'webserver':
         from resources.lib import webserver_secure
         webserver_secure.run()
+
+    elif mode == 'support':
+        from resources.lib import support
+        support.show()
 
     elif mode == 'log_share':
         from resources.lib import log_share
