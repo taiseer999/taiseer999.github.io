@@ -330,6 +330,11 @@ class Engine(object):
             tlabel = _info('Window(Home).Property(TMDbHelper.ListItem.Label)')
             if tlabel and tlabel == label:
                 trailer = _info('Window(Home).Property(TMDbHelper.ListItem.Trailer)')
+        # 3.2.43~beta5: the labels above are separate reads; while the cursor
+        # scrolls they can come from two different rows (log: focus "A" with
+        # B's IMDb id). Only trust a read the cursor stayed still for.
+        if _info('ListItem.Label') != label or _info('ListItem.DBType').lower() != dbtype:
+            return None
         return {'key': key, 'imdb': imdb_id, 'tmdb': tmdb_id, 'dbtype': dbtype, 'label': label,
                 'trailer': trailer}
 
