@@ -33,6 +33,18 @@ ADDON_ID = store.ADDON_ID
 TMDBH = 'plugin.video.themoviedb.helper'
 CLICK_TTL = 1800          # s a focused item stays a replay candidate
 LAUNCH_TTL = 900          # s between TMDbHelper splash and the real stream
+QUIET_AFTER_STOP = 10     # s with no GUI reads after playback ends / at boot
+
+# Only look at the focused item when it is safe and useful: Home widgets or the
+# Videos window, no dialog on top (FileBrowser, Add-on info, source pickers,
+# busy spinners are all dialogs), list not being (re)built, nothing playing,
+# focused row is a playable plugin:// file. One getCondVisibility call.
+FOCUS_GATE = ('[Window.IsActive(home) | Window.IsActive(videos)]'
+              ' + !System.HasActiveModalDialog'
+              ' + !Window.IsVisible(busydialog) + !Window.IsVisible(busydialognocancel)'
+              ' + !Container.IsUpdating + !Player.HasMedia'
+              ' + !ListItem.IsFolder'
+              ' + String.StartsWith(ListItem.FileNameAndPath,plugin://)')
 
 
 def _rpc(method, params):
@@ -144,23 +156,48 @@ class Recorder(object):
         self.started = 0.0
         self.last_save = 0.0
         self.lock = threading.RLock()
+        self.quiet_until = time.time() + QUIET_AFTER_STOP   # boot: let the skin settle
+        self.last_focus = ''
 
     # ---------------------------------------------------------- browsing
     def track_focus(self):
+        """Remember the focused playable add-on item.
+
+        Kodi gives Python no focus/click event, so this still runs on the
+        service tick - but it must never touch ListItem infolabels while the
+        GUI is building or tearing down a control tree (a Python thread inside
+        getInfoLabel while the main thread frees the list = SIGSEGV, seen in
+        the Add-on Browser / Install-from-zip crashlogs). So:
+          * one compound gate call decides if it is safe AND useful to look
+            (Home or Videos only, no dialog, list not updating, nothing playing,
+            focused row is a playable plugin:// file);
+          * then one call for the path; the other labels are read only when the
+            focused path actually changed;
+          * nothing at all during the quiet window after playback ends (the
+            return-to-Home skin rebuild).
+        """
+        if time.time() < self.quiet_until:
+            return
+        if not xbmc.getCondVisibility(FOCUS_GATE):
+            return
         gi = xbmc.getInfoLabel
         path = gi('ListItem.FileNameAndPath')
         if not path.startswith('plugin://') or path.startswith('plugin://%s' % ADDON_ID):
             return
-        if xbmc.getCondVisibility('ListItem.IsFolder'):
+        now = time.time()
+        if path == self.last_focus:
+            if self.clicked and self.clicked[0]['path'] == path:
+                self.clicked[0]['t'] = now
             return
+        self.last_focus = path
         for c in self.clicked:
             if c['path'] == path:
-                c['t'] = time.time()
+                c['t'] = now
                 self.clicked.remove(c)
                 self.clicked.insert(0, c)
                 return
         self.clicked.insert(0, {
-            'path': path, 't': time.time(),
+            'path': path, 't': now,
             'title': gi('ListItem.Title') or gi('ListItem.Label'),
             'show': gi('ListItem.TVShowTitle'), 'year': gi('ListItem.Year'),
             'season': gi('ListItem.Season'), 'episode': gi('ListItem.Episode'),
@@ -168,6 +205,10 @@ class Recorder(object):
             'playable': gi('ListItem.Property(IsPlayable)').lower() != 'false',
         })
         del self.clicked[8:]
+
+    def quiet(self, seconds=QUIET_AFTER_STOP):
+        self.quiet_until = time.time() + seconds
+        self.last_focus = ''
 
     def _clicked_for(self, e):
         now = time.time()
@@ -561,12 +602,15 @@ class Player(xbmc.Player):
             store.log('capture failed: %r' % ex, xbmc.LOGWARNING)
 
     def onPlayBackStopped(self):
+        self.rec.quiet()
         self.rec.on_stop(False)
 
     def onPlayBackEnded(self):
+        self.rec.quiet()
         self.rec.on_stop(True)
 
     def onPlayBackError(self):
+        self.rec.quiet()
         self.rec.current = None
 
 
@@ -602,7 +646,7 @@ def main():
         try:
             if player.isPlayingVideo():
                 rec.tick(player)
-            if not xbmc.getCondVisibility('Window.IsActive(fullscreenvideo)'):
+            elif not player.isPlaying():
                 rec.track_focus()
         except Exception:
             pass
