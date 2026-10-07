@@ -20,6 +20,7 @@ import sys
 import time
 import json
 import threading
+from urllib.parse import parse_qsl
 
 import xbmc
 import xbmcaddon
@@ -65,6 +66,41 @@ def _int(v, default=-1):
         return int(v)
     except (TypeError, ValueError):
         return default
+
+
+_VEXT = ('.mkv', '.mp4', '.avi', '.m2ts', '.ts', '.mov', '.webm', '.m4v', '.wmv', '.iso')
+
+
+def _filename_title(t, stream=''):
+    t = (t or '').strip()
+    if not t:
+        return True
+    if t.lower().endswith(_VEXT):
+        return True
+    base = stream.split('|')[0].split('?')[0].rstrip('/').split('/')[-1]
+    return bool(base) and (t == base or t == base.rsplit('.', 1)[0])
+
+
+def _clean_name(name):
+    """'Husbands.in.Action.2026.iTA-KOR.WEBDL.2160p...mkv' -> ('Husbands in Action', 2026)"""
+    import re
+    base = name.split('|')[0].split('?')[0].rstrip('/').split('/')[-1]
+    if base.lower().endswith(_VEXT):
+        base = base.rsplit('.', 1)[0]
+    base = re.sub(r'[._]+', ' ', base)
+    m = re.search(r'^(.*?)[ (\[]*((?:19|20)\d{2})\b', base)
+    if m and m.group(1).strip():
+        return m.group(1).strip(' -'), int(m.group(2))
+    m = re.search(r'^(.*?)\b(?:S\d{1,2}E\d{1,3}|2160p|1080p|720p|480p|WEB|BluRay|HDTV)', base, re.I)
+    return (m.group(1) if m else base).strip(' -'), ''
+
+
+def _weak(e):
+    """No ids, not library, title is just the file name."""
+    ids = e.get('ids') or {}
+    return (not ids.get('tmdb') and not ids.get('imdb') and not ids.get('tvdb')
+            and (e.get('dbid') or 0) <= 0
+            and (e.get('type') not in ('movie', 'episode') or _filename_title(e.get('title'), e.get('stream', ''))))
 
 
 class Settings(object):
@@ -178,6 +214,26 @@ class Recorder(object):
         if self.current:
             self.on_stop(False)       # playlist / next episode without a stop
         entry = self._read_item(player, playing, full)
+        # Fen Light & co. start the stream first and fill the info tag a moment
+        # later - give it a few seconds before falling back to other hints
+        tries = 0
+        replay = bool(xbmcgui.Window(10000).getProperty(store.REPLAY_PROP))
+        while entry and not replay and _weak(entry) and tries < 8:
+            xbmc.sleep(500)
+            tries += 1
+            try:
+                if not player.isPlayingVideo():
+                    return
+            except RuntimeError:
+                return
+            entry = self._read_item(player, playing, full, consume=False)
+        if entry and tries:
+            store.log('metadata after %.1fs: %s "%s" ids=%s' % (tries * 0.5, entry['type'], entry['title'], entry['ids']))
+        if entry and not replay and _weak(entry):
+            entry = self._enrich(entry)
+            entry = self._finish(entry, full, playing)
+        elif entry:
+            entry = self._finish(entry, full, playing)
         if not entry:
             return
         reason = self._reject(entry)
@@ -192,7 +248,7 @@ class Recorder(object):
         if self.cfg.min_seconds == 0:
             self._write()
 
-    def _read_item(self, player, playing, full):
+    def _read_item(self, player, playing, full, consume=True):
         is_video = xbmc.getCondVisibility('Player.HasVideo')
         if not is_video:
             return None
@@ -261,6 +317,12 @@ class Recorder(object):
             'position': 0, 'total': 0,
         }
 
+        e['_item_file'] = item.get('file') or ''
+        return e
+
+    def _finish(self, e, full, playing):
+        """Pick the replay link / source for a fully read entry."""
+        item = {'file': e.pop('_item_file', '')}
         # started from our own list? keep the stored sources link, only the
         # stream/time get refreshed (a saved-link replay must not turn the
         # temporary stream URL into the replay link)
@@ -275,6 +337,9 @@ class Recorder(object):
                 e['source'] = old.get('source') or ''
                 if rp.get('mode') == 'saved':
                     e['dbid'] = old.get('dbid') or 0
+                    for k in ('type', 'title', 'year', 'show', 'season', 'episode', 'ids', 'plot'):
+                        if old.get(k) not in (None, '', {}, -1):
+                            e[k] = old[k]
                 store.log('replay (%s) of "%s" - keeping stored link' % (rp.get('mode'), old.get('title')))
                 return e
 
@@ -305,6 +370,91 @@ class Recorder(object):
         else:
             e['source'] = _addon_name(e['source_id']) if e['source_id'] else ''
         return e
+
+    def _enrich(self, e):
+        """Player gave no ids: use Home(script.trakt.ids), the TMDbHelper
+        launcher and the last item focused before playback."""
+        ids = e['ids']
+        try:
+            tk = json.loads(xbmc.getInfoLabel('Window(Home).Property(script.trakt.ids)') or '{}')
+        except ValueError:
+            tk = {}
+        for k in ('tmdb', 'imdb', 'tvdb'):
+            if tk.get(k) and not ids.get(k):
+                ids[k] = str(tk[k])
+        lp, lt = self.launcher
+        ltype = ''
+        if lp and time.time() - lt < LAUNCH_TTL:
+            q = dict(parse_qsl(lp.split('?', 1)[-1]))
+            ltype = q.get('tmdb_type', '')
+            if q.get('tmdb_id') and not ids.get('tmdb'):
+                ids['tmdb'] = q['tmdb_id']
+            if q.get('imdb_id') and not ids.get('imdb'):
+                ids['imdb'] = q['imdb_id']
+            if ltype == 'tv':
+                if e['season'] < 0:
+                    e['season'] = _int(q.get('season'), -1)
+                if e['episode'] < 0:
+                    e['episode'] = _int(q.get('episode'), -1)
+        if ids.get('imdb') and not str(ids['imdb']).startswith('tt'):
+            ids.pop('imdb')
+
+        c = self._clicked_for(e) if (ids.get('tmdb') or ids.get('imdb')) else None
+        if not c:
+            # nothing to match on: the item focused right before playback
+            # (source pickers take a while, so allow a few minutes)
+            now = time.time()
+            recent = [x for x in self.clicked if now - x['t'] <= 300]
+            remote = e['stream'].lower().startswith(('http://', 'https://'))
+            if recent and remote and not (ids.get('tmdb') or ids.get('imdb')):
+                c = recent[0]
+            elif recent:
+                for x in recent:
+                    if (x['tmdb'] and x['tmdb'] == ids.get('tmdb')) or (x['imdb'] and x['imdb'] == ids.get('imdb')):
+                        c = x
+                        break
+        if c:
+            if _filename_title(e['title'], e['stream']) and c.get('title'):
+                e['title'] = c['title']
+            for k in ('show', 'year'):
+                if not e[k] and c.get(k):
+                    e[k] = c[k]
+            if e['season'] < 0:
+                e['season'] = _int(c.get('season'), -1)
+            if e['episode'] < 0:
+                e['episode'] = _int(c.get('episode'), -1)
+            if c.get('tmdb') and not ids.get('tmdb'):
+                ids['tmdb'] = c['tmdb']
+            if c.get('imdb', '').startswith('tt') and not ids.get('imdb'):
+                ids['imdb'] = c['imdb']
+        if e['type'] not in ('movie', 'episode', 'musicvideo'):
+            if ltype == 'tv' or (e['show'] and e['season'] >= 0 and e['episode'] > 0):
+                e['type'] = 'episode'
+            elif ltype == 'movie' or ids.get('tmdb') or ids.get('imdb'):
+                e['type'] = 'movie'
+        if _filename_title(e['title'], e['stream']):
+            t, y = _clean_name(e['title'] or e['stream'])
+            if t:
+                e['title'] = t
+            if y and not e['year']:
+                e['year'] = y
+        store.log('enriched: %s "%s" ids=%s (trakt.ids=%s launcher=%s focused=%s)' % (
+            e['type'], e['title'], ids, bool(tk), bool(ltype), c['title'] if c else None))
+        return e
+
+    def on_started(self, player):
+        """onPlayBackStarted: catch the TMDbHelper launcher even when its
+        dummy.mp4 is gone before onAVStarted fires."""
+        try:
+            playing = player.getPlayingFile() or ''
+        except RuntimeError:
+            playing = ''
+        for cand in (xbmc.getInfoLabel('Player.FilenameAndPath'), playing,
+                     xbmc.getInfoLabel('Player.Folderpath')):
+            if cand.startswith('plugin://%s/' % TMDBH) and 'info=play' in cand:
+                self.launcher = (cand, time.time())
+                store.log('launcher: %s' % cand[:120])
+                return
 
     @staticmethod
     def _take_replay():
@@ -397,6 +547,12 @@ class Player(xbmc.Player):
     def __init__(self, rec):
         super(Player, self).__init__()
         self.rec = rec
+
+    def onPlayBackStarted(self):
+        try:
+            self.rec.on_started(self)
+        except Exception:
+            pass
 
     def onAVStarted(self):
         try:
