@@ -95,3 +95,75 @@ msgstr ""
 msgctxt "#30073"
 msgid "Press OK or BACK to close"
 msgstr ""
+
+msgctxt "#30020"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30021"
+msgid "When an item is selected"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Ask every time"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Saved link first (sources if expired)"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Always from sources (add-on)"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Saved link replays the exact stream that played last time - instant, no source scraping. Debrid/temporary links expire; the add-on then falls back to sources."
+msgstr ""
+
+msgctxt "#30026"
+msgid "Check saved link before playing"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Quick test that the saved stream still answers; an expired one goes straight to sources instead of a playback error."
+msgstr ""
+
+msgctxt "#30080"
+msgid "Resume from %s"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Play from start"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Resume saved link (%s)"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Play saved link"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Play from sources - %s"
+msgstr ""
+
+msgctxt "#30085"
+msgid "Saved link expired - playing from sources"
+msgstr ""
+
+msgctxt "#30086"
+msgid "No saved link for this item"
+msgstr ""
+
+msgctxt "#30087"
+msgid "Play from sources"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Play saved link"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Play from sources (add-on)"
+msgstr ""

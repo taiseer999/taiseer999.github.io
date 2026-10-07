@@ -131,6 +131,18 @@ def upsert(entry, limit=100):
     return entry
 
 
+def get(key):
+    for it in load():
+        if it.get('key') == key:
+            return it
+    return None
+
+
+# Set by the plugin right before it starts a replay, read once by the service:
+# {"key": entry key, "mode": "saved"|"sources"|"library", "t": epoch}
+REPLAY_PROP = 'abk.lastplayed.replay'
+
+
 def update(key, **fields):
     with _Lock():
         items = load()

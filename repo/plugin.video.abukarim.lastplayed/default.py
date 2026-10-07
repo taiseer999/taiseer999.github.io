@@ -9,6 +9,7 @@ Widget paths (newest first, optional &limit=N):
     plugin://plugin.video.abukarim.lastplayed/?list=other
 """
 
+import json
 import os
 import sys
 import time
@@ -79,10 +80,186 @@ def _label(e):
     return e.get('title', '')
 
 
-def _listitem(e):
+def _saved_link(e):
+    """The stream that actually played last time, if it is replayable on its own."""
+    s = (e.get('stream') or '').strip()
+    if not s or s.startswith('plugin://'):
+        return ''
+    low = s.split('|')[0].replace('\\', '/').lower()
+    if low.endswith('/dummy.mp4') or low == 'dummy.mp4':
+        return ''
+    if s == (e.get('path') or ''):
+        return ''
+    return s
+
+
+def _is_library(e):
+    p = e.get('path') or ''
+    return bool(e.get('dbid')) and not p.startswith('plugin://')
+
+
+def _setting_int(k, d):
+    try:
+        return ADDON.getSettingInt(k)
+    except Exception:
+        return d
+
+
+def _setting_bool(k, d):
+    try:
+        return ADDON.getSettingBool(k)
+    except Exception:
+        return d
+
+
+def _hms(sec):
+    sec = int(sec or 0)
+    h, m, s = sec // 3600, (sec % 3600) // 60, sec % 60
+    return '%d:%02d:%02d' % (h, m, s) if h else '%d:%02d' % (m, s)
+
+
+def _link_alive(link):
+    """Quick check that a saved stream is still served (debrid links expire)."""
+    url_, _, hdr = link.partition('|')
+    if not url_.lower().startswith(('http://', 'https://')):
+        if url_.startswith(('special://', 'smb://', 'nfs://', '/')) or (len(url_) > 2 and url_[1] == ':'):
+            import xbmcvfs
+            return xbmcvfs.exists(url_)
+        return True                     # other protocols: let the player try
+    import urllib.request
+    import urllib.error
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    headers.update(dict(parse_qsl(hdr)))
+    headers['Range'] = 'bytes=0-0'
+    try:
+        req = urllib.request.Request(url_, headers=headers)
+        with urllib.request.urlopen(req, timeout=8) as r:
+            return r.status < 400
+    except urllib.error.HTTPError as ex:
+        return ex.code in (405, 416)    # method/range not allowed but file is there
+    except Exception:
+        return False
+
+
+def _play_item(e, path, offset=0.0):
+    li = _listitem(e, for_play=True)
+    li.setPath(path)
+    if offset > 0:
+        li.setProperty('StartOffset', '%.1f' % offset)
+    xbmc.Player().play(path, li)
+
+
+def _mark_replay(e, mode):
+    xbmcgui.Window(10000).setProperty(store.REPLAY_PROP, json.dumps(
+        {'key': e.get('key', ''), 'mode': mode, 't': time.time()}))
+
+
+def play_saved(e, offset=0.0, fallback=True):
+    link = _saved_link(e)
+    if link and _setting_bool('check_saved', True):
+        xbmc.executebuiltin('ActivateWindow(busydialognocancel)')
+        try:
+            alive = _link_alive(link)
+        finally:
+            xbmc.executebuiltin('Dialog.Close(busydialognocancel)')
+        if not alive:
+            store.log('saved link expired for "%s"' % e.get('title'))
+            store.update(e.get('key', ''), stream='')
+            link = ''
+    if not link:
+        if fallback and e.get('path'):
+            xbmcgui.Dialog().notification(ADDON.getAddonInfo('name'), L(30085),
+                                          ADDON.getAddonInfo('icon'), 4000)
+            return play_sources(e)
+        xbmcgui.Dialog().notification(ADDON.getAddonInfo('name'), L(30086),
+                                      ADDON.getAddonInfo('icon'), 4000)
+        return
+    store.log('replay saved link: "%s"' % e.get('title'))
+    _mark_replay(e, 'saved')
+    _play_item(e, link, offset)
+
+
+def play_sources(e):
+    path = e.get('path') or ''
+    if not path:
+        return play_saved(e, fallback=False)
+    store.log('replay from sources: "%s" -> %s' % (e.get('title'), path[:120]))
+    _mark_replay(e, 'sources')
+    if path.startswith('plugin://'):
+        if e.get('playable', True):
+            xbmc.executebuiltin('PlayMedia("%s")' % path)
+        else:
+            xbmc.executebuiltin('RunPlugin("%s")' % path)
+    else:
+        _play_item(e, path)
+
+
+def play(key, force=''):
+    e = store.get(key)
+    if not e:
+        xbmc.executebuiltin('Container.Refresh')
+        return
+    pos = float(e.get('position') or 0)
+    resumable = 3 <= _pct(e) <= 92 and pos > 0
+    name = e.get('source') or (_plugin_id(e.get('path')) or '')
+
+    # Kodi library / local file: no sources to pick, just resume or start
+    if _is_library(e) and force != 'sources':
+        off = 0.0
+        if resumable:
+            c = xbmcgui.Dialog().contextmenu([L(30080) % _hms(pos), L(30081)])
+            if c < 0:
+                return
+            off = pos if c == 0 else 0.0
+        _mark_replay(e, 'library')
+        return _play_item(e, e['path'], off)
+
+    saved = _saved_link(e)
+    mode = {'saved': 1, 'sources': 2}.get(force, _setting_int('play_mode', 0))
+    if not saved:
+        mode = 2
+
+    if mode == 2:
+        return play_sources(e)
+
+    if mode == 1:                       # saved first, resume prompt like Kodi's
+        off = 0.0
+        if resumable:
+            c = xbmcgui.Dialog().contextmenu([L(30080) % _hms(pos), L(30081)])
+            if c < 0:
+                return
+            off = pos if c == 0 else 0.0
+        return play_saved(e, off)
+
+    # ask every time
+    opts, acts = [], []
+    if resumable:
+        opts.append(L(30082) % _hms(pos))
+        acts.append(('saved', pos))
+    opts.append(L(30083))
+    acts.append(('saved', 0.0))
+    opts.append(L(30084) % name if name else L(30087))
+    acts.append(('sources', 0.0))
+    c = xbmcgui.Dialog().select(_label(e), opts)
+    if c < 0:
+        return
+    act, off = acts[c]
+    if act == 'saved':
+        play_saved(e, off)
+    else:
+        play_sources(e)
+
+
+def _plugin_id(p):
+    if p and p.startswith('plugin://'):
+        return p[9:].split('/')[0].split('?')[0]
+    return ''
+
+
+def _listitem(e, for_play=False):
     li = xbmcgui.ListItem(_label(e), _when(e.get('played_at')), offscreen=True)
     path = e.get('path') or e.get('stream') or ''
-    li.setPath(path)
+    li.setPath(path if for_play else url(action='play', key=e.get('key', '')))
     tag = li.getVideoInfoTag()
     mtype = e.get('type') if e.get('type') in ('movie', 'episode', 'musicvideo') else 'video'
     tag.setMediaType(mtype)
@@ -118,9 +295,8 @@ def _listitem(e):
     if e.get('played_at'):
         tag.setLastPlayed(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(e['played_at'])))
     pct = _pct(e)
-    # resume point only where Kodi plays the path itself (library / direct file);
-    # plugin links re-resolve and their player add-on handles resume.
-    if pct and not path.startswith('plugin://') and e.get('total'):
+    # progress bar in lists only; resuming is decided in play() (StartOffset)
+    if pct and e.get('total') and not for_play:
         tag.setResumePoint(float(e.get('position') or 0), float(e['total']))
     li.setProperty('PercentPlayed', str(pct))
     li.setProperty('abk.source', e.get('source') or '')
@@ -134,10 +310,20 @@ def _listitem(e):
     art.setdefault('icon', art.get('poster') or art.get('thumb') or '')
     li.setArt({k: v for k, v in art.items() if v})
 
-    li.setProperty('IsPlayable', 'true' if e.get('playable', True) else 'false')
-    cm = [(L(30050), 'RunPlugin(%s)' % url(action='remove', key=e.get('key', ''))),
-          (L(30051), 'RunPlugin(%s)' % url(action='clear')),
-          (L(30052), 'Addon.OpenSettings(%s)' % store.ADDON_ID)]
+    li.setProperty('abk.saved', 'true' if _saved_link(e) else 'false')
+    if for_play:
+        return li
+    # the list item runs our play router (non-playable, it starts the player itself)
+    li.setProperty('IsPlayable', 'false')
+    key = e.get('key', '')
+    cm = []
+    if _saved_link(e) and not _is_library(e):
+        cm.append((L(30088), 'RunPlugin(%s)' % url(action='play', key=key, mode='saved')))
+    if e.get('path') and not _is_library(e):
+        cm.append((L(30089), 'RunPlugin(%s)' % url(action='play', key=key, mode='sources')))
+    cm += [(L(30050), 'RunPlugin(%s)' % url(action='remove', key=key)),
+           (L(30051), 'RunPlugin(%s)' % url(action='clear')),
+           (L(30052), 'Addon.OpenSettings(%s)' % store.ADDON_ID)]
     li.addContextMenuItems(cm)
     return li
 
@@ -183,6 +369,9 @@ def root():
 
 def main():
     action = ARGS.get('action')
+    if action == 'play':
+        play(ARGS.get('key', ''), ARGS.get('mode', ''))
+        return
     if action == 'support':
         import support
         support.show()

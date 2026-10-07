@@ -261,6 +261,23 @@ class Recorder(object):
             'position': 0, 'total': 0,
         }
 
+        # started from our own list? keep the stored sources link, only the
+        # stream/time get refreshed (a saved-link replay must not turn the
+        # temporary stream URL into the replay link)
+        rp = self._take_replay()
+        if rp:
+            old = store.get(rp.get('key', ''))
+            if old and (rp.get('mode') == 'saved' or store.same(old, e)):
+                self.launcher = ('', 0.0)
+                e['path'] = old.get('path') or playing
+                e['playable'] = old.get('playable', True)
+                e['source_id'] = old.get('source_id') or ''
+                e['source'] = old.get('source') or ''
+                if rp.get('mode') == 'saved':
+                    e['dbid'] = old.get('dbid') or 0
+                store.log('replay (%s) of "%s" - keeping stored link' % (rp.get('mode'), old.get('title')))
+                return e
+
         # replay link
         path, src, playable = '', '', True
         lp, lt = self.launcher
@@ -288,6 +305,21 @@ class Recorder(object):
         else:
             e['source'] = _addon_name(e['source_id']) if e['source_id'] else ''
         return e
+
+    @staticmethod
+    def _take_replay():
+        home = xbmcgui.Window(10000)
+        raw = home.getProperty(store.REPLAY_PROP)
+        if not raw:
+            return None
+        home.clearProperty(store.REPLAY_PROP)
+        try:
+            rp = json.loads(raw)
+        except ValueError:
+            return None
+        if time.time() - float(rp.get('t') or 0) > LAUNCH_TTL:
+            return None
+        return rp
 
     @staticmethod
     def _tmdbh_link(e):
