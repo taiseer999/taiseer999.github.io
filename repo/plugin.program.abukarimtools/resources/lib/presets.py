@@ -10,7 +10,7 @@ The list comes from abukarim/presets.json when published, else DEFAULTS:
   "presets": [
     {"id": "full", "name": ["Full", "كامل"], "desc": ["...", "..."],
      "addons": ["plugin.video.seren", ...],          # "*" = whole catalog
-     "patches_off": ["tinyppi_classic"]}              # optional toggle ids
+     "patches_off": ["af3_vplot"]}                    # optional toggle ids
   ]
 }
 The user can still change the ticks in the portal; "custom" ticks nothing.

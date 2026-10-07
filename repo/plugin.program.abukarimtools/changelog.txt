@@ -1,3 +1,36 @@
+v3.2.40
+- TinyPPI reduced to what the build needs:
+  * PPI Arabic ON  -> Arabic strings + ABUKARIM Arabic font (Noto, registered
+    in the active skin's Font.xml as abk_ppi_ar21/abk_ppi_ar32 - the skin's
+    own font23_narrow/font32 are untouched) + no ':' after the labels.
+  * PPI Arabic OFF -> TinyPPI's own English overlay, byte for byte.
+  * kept: codec/audio badge PNGs, "Run on non-CE".
+- The overlay XMLs are now derived from a pristine copy (<file>.abk_orig,
+  refreshed after every TinyPPI install/update), so OFF really restores the
+  colons and fonts - the old in-place colon edit could not be undone.
+- The Arabic font switch only happens once the font exists in every Font.xml
+  of the active skin; otherwise the overlay keeps TinyPPI's fonts.
+- REMOVED: classic PPI (AF3 dialog colours) - its swap is undone on boxes
+  that had it; the PPI AF3 Home bridge (home_publish.py + monitor.py hook),
+  which ran a full TinyPPI read pass every second during playback - both
+  files are cleaned out of TinyPPI (restart Kodi once). The AF3 legacy
+  dialog keeps working from Kodi's own infolabels.
+- Dead code removed (old TinyPPI no-fonts patch constants).
+
+v3.2.39
+- FIX: TinyPPI Arabic labels scrambled (rows showed settings help texts,
+  e.g. "Color of the playing file name." where "Video" belongs). Cause: the
+  PPI Arabic reconcile wrote strings.po.abk_arabic_bak only ONCE, so a TinyPPI
+  2.11 -> 2.15 update made while PPI Arabic was OFF kept the 2.11 backup; the
+  stub then replaced 2.15's real Arabic and switching PPI Arabic ON restored
+  the 2.11 file over 2.15.0 (different string ids).
+  * the backup is now refreshed from every real Arabic file;
+  * a backup or live Arabic file from another TinyPPI version (its English
+    msgids don't match en_gb on the same ids) is never restored/kept;
+  * self-heal: a box already carrying the wrong file gets the English
+    fallback stub and the stale backup is dropped - reinstall/update TinyPPI
+    to get its own Arabic back.
+
 v3.2.38
 - AF3 Auto Trailers - sharper picture:
   * when a title's latest trailer is below the chosen quality (old IMDb

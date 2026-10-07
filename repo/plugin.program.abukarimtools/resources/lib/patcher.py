@@ -123,17 +123,6 @@ _A4KSUBS_DECODE_OLD_B64 = 'ICAgICAgICAgICAgaWYgbm90IGVuY29kaW5nOgogICAgICAgICAgI
 _A4KSUBS_DECODE_NEW_B64 = 'ICAgICAgICAgICAgaWYgbm90IGVuY29kaW5nOgogICAgICAgICAgICAgICAgZW5jb2RpbmcgPSBjb3JlLnV0aWxzLmNvZGVfcGFnZXMuZ2V0KGxhbmdfY29kZSwgY29yZS51dGlscy5kZWZhdWx0X2VuY29kaW5nKQoKICAgICAgICAgICAgIyAtLSBhNGtTdWJ0aXRsZXMgVVRGLTgtZmlyc3QgZGVjb2RlIChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICAgICAgICAgIyBPcGVuU3VidGl0bGVzLmNvbSBzZXJ2ZXMgQXJhYmljIHN1YnMgYWxyZWFkeSBhcyBVVEYtODsgdGhlIG9sZCBjb2RlCiAgICAgICAgICAgICMgZm9yY2VkIHRoZSBsZWdhY3kgY29kZSBwYWdlIChjcDEyNTYgZm9yIGFyKSBhbmQgbWFuZ2xlZCB0aGVtLiBUcnkKICAgICAgICAgICAgIyBVVEYtOCBmaXJzdCBhbmQgb25seSBmYWxsIGJhY2sgdG8gdGhlIGNvZGUgcGFnZSB3aGVuIFVURi04IGZhaWxzLgogICAgICAgICAgICBpZiBlbmNvZGluZyBhbmQgZW5jb2RpbmcubG93ZXIoKS5yZXBsYWNlKCctJywgJycpIG5vdCBpbiAoJ3V0ZjgnLCAndXRmXzgnKToKICAgICAgICAgICAgICAgIHRyeToKICAgICAgICAgICAgICAgICAgICB0ZXh0ID0gdGV4dF9ieXRlcy5kZWNvZGUoJ3V0Zi04JykKICAgICAgICAgICAgICAgICAgICBlbmNvZGluZyA9ICd1dGYtOCcKICAgICAgICAgICAgICAgIGV4Y2VwdCAoVW5pY29kZURlY29kZUVycm9yLCBMb29rdXBFcnJvcik6CiAgICAgICAgICAgICAgICAgICAgdGV4dCA9IHRleHRfYnl0ZXMuZGVjb2RlKGVuY29kaW5nLCBlcnJvcnM9J3JlcGxhY2UnKQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAgdGV4dCA9IHRleHRfYnl0ZXMuZGVjb2RlKGVuY29kaW5nIG9yICd1dGYtOCcsIGVycm9ycz0ncmVwbGFjZScp'
 
 
-# ── TinyPPI: hand overlay fonts to the skin (by ABUKARIM TOOLS) ──
-# TinyPPI's install_fonts() would otherwise inject its own font23_narrow/font32
-# into the active skin's Font.xml (and ReloadSkin), clobbering the skin's own
-# definitions. Arctic Fuse 3 now OWNS those two font names in Includes_Font.xml
-# and exposes a user-selectable overlay font via ActivateWindow(1118); so the
-# only thing the patcher still does for fonts is neutralise install_fonts() so
-# TinyPPI accepts whatever the skin defines (this also fixes the picture freeze
-# on playback stop that the old skin-walk + ReloadSkin caused).
-# ── TinyPPI: disable font install entirely (freeze-on-stop fix, by ABUKARIM TOOLS) ──
-_TINYPPI_NOFONTS_OLD_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiUmVnaXN0ZXIgdGhlIG1pc3NpbmcgZm9udCBlbnRyaWVzIGluIHRoZSBhY3RpdmUgc2tpbiwgcmVsb2FkaW5nIGl0IGlmCiAgICBhbnl0aGluZyBjaGFuZ2VkLiAgTm8tb3Agd2hlbiB0aGV5IGFyZSBhbHJlYWR5IHRoZXJlLiIiIgogICAgc2tpbl9wYXRoID0gX2dldF9za2luX3BhdGgoKQ=='
-_TINYPPI_NOFONTS_NEW_B64 = 'ZGVmIGluc3RhbGxfZm9udHMoKSAtPiBOb25lOgogICAgIiIiUmVnaXN0ZXIgdGhlIG1pc3NpbmcgZm9udCBlbnRyaWVzIGluIHRoZSBhY3RpdmUgc2tpbiwgcmVsb2FkaW5nIGl0IGlmCiAgICBhbnl0aGluZyBjaGFuZ2VkLiAgTm8tb3Agd2hlbiB0aGV5IGFyZSBhbHJlYWR5IHRoZXJlLiIiIgogICAgIyAtLSBUaW55UFBJIGZvbnRzIGRpc2FibGVkIGVudGlyZWx5IChieSBBQlVLQVJJTSBUT09MUykgLS0KICAgICMgaW5zdGFsbF9mb250cygpIHdhbGtlZCB0aGUgYWN0aXZlIHNraW4gZGlyIGFuZCBjb3VsZCBjYWxsIFJlbG9hZFNraW4oKTsgd2hlbiB0aGF0CiAgICAjIGxhbmRlZCBvbiBhIHBsYXliYWNrIHN0b3AvZW5kIGl0IGNvbGxpZGVkIHdpdGggQ1ZpZGVvUGxheWVyOjpDbG9zZUZpbGUoKSArIHRoZSBBTFNBCiAgICAjIHBhc3N0aHJvdWdoLT5QQ00gc3dpdGNoIG9uIHRoZSBHVUkgdGhyZWFkIGFuZCBmcm96ZSB0aGUgcGljdHVyZSBvbiBzdG9wLiBUaGUgZm9udAogICAgIyBmZWF0dXJlIGlzIGRyb3BwZWQ6IG92ZXJsYXkgbGFiZWxzIGZhbGwgYmFjayB0byB0aGUgYWN0aXZlIHNraW4ncyBvd24gZm9udC4gTm8gc2tpbgogICAgIyB3YWxrLCBubyBSZWxvYWRTa2luLCBub3RoaW5nIG9uIHRoZSBwbGF5ZXIgdGhyZWFkIC0+IG5vIGZyZWV6ZS4KICAgIF9sb2coIkZvbnQgaW5zdGFsbCBkaXNhYmxlZCAoQUJVS0FSSU0pIC0gdXNpbmcgc2tpbiBmb250IikKICAgIHJldHVybgogICAgc2tpbl9wYXRoID0gX2dldF9za2luX3BhdGgoKQ=='
 
 
 PATCHES = [
@@ -391,121 +380,18 @@ PATCHES = [
         'description': 'TinyPPI codecs - replace Dolby_TrueHD_Atmos.png badge',
     },
 
-    # ── TinyPPI – PPI Arabic: remove label colons ──
-    # 3.2.20: an in-place edit of TinyPPI's OWN current file. It used to be a
-    # whole-file copy of the 2.11-era overlay; on TinyPPI 2.15.0 that old copy
-    # replaced the new file and the Arabic labels came out wrong (log
-    # 2026-10-04 20:36). Now only the trailing ':' after each
-    # $ADDON[script.tinyppi NNNNN] label is removed, whatever the version.
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
-                                 'script-tinyppi-main.xml'),
-        'old': '',
-        'new': '',
-        'already_patched_check': None,
-        'count': 0,
-        'fallback_pattern': (r'(\$ADDON\[script\.tinyppi \d+\](?:\[/?[A-Z]+\])*)'
-                             r':([ \t]*</label>)'),
-        'fallback_repl': r'\1\2',
-        'not_found_ok': True,
-        'toggle': 'tinyppi_arabic',
-        'description': 'TinyPPI PPI Arabic - remove label colons (in place)',
-    },
-    # ── TinyPPI – "classic PPI": Arctic Fuse 3 / DialogPlayerProcessInfo look ──
-    # 3.2.20: the AF3 restyle turned out to be a pure token swap of TinyPPI's
-    # own overlay (verified: applying it to the 2.11 base gives the old shipped
-    # file byte for byte), so it is now done IN PLACE on whatever TinyPPI
-    # version is installed instead of copying a 2.11-era file over it:
-    #   TinyPPI.<Background|Header|HeaderIcon|Line|GlobalBackground>Color
-    #       -> TinyPPI.Dialog<...>Color   (TinyPPI publishes both sets)
-    #   background/overlay-bg-start/end.png -> background/dialog-bg-start/end.png
-    # Idempotent: once swapped nothing matches. The colon removal (tinyppi_arabic)
-    # is a separate in-place edit, so the two no longer supersede each other.
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
-                                 'script-tinyppi-main.xml'),
-        'old': '', 'new': '', 'already_patched_check': None, 'count': 0,
-        'fallback_pattern': (r'TinyPPI\.(BackgroundColor|HeaderColor|HeaderIconColor|'
-                             r'LineColor|GlobalBackgroundColor)\b'),
-        'fallback_repl': r'TinyPPI.Dialog\1',
-        'not_found_ok': True,
-        'toggle': 'tinyppi_classic',
-        'description': 'TinyPPI classic PPI - AF3 dialog colours (in place)',
-    },
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'skins', 'Default', '1080i',
-                                 'script-tinyppi-main.xml'),
-        'old': '', 'new': '', 'already_patched_check': None, 'count': 0,
-        'fallback_pattern': r'background/overlay-bg-(start|end)\.png',
-        'fallback_repl': r'background/dialog-bg-\1.png',
-        'not_found_ok': True,
-        'toggle': 'tinyppi_classic',
-        'description': 'TinyPPI classic PPI - AF3 dialog caps (in place)',
-    },
-    # ── PPI AF3: legacy Arctic Fuse 3 DialogPlayerProcessInfo (native + bridge) ─
+    # ── PPI AF3: legacy Arctic Fuse 3 DialogPlayerProcessInfo (native) ─
     # AF3 5.7.x REWROTE its PlayerProcessInfo into a list dialog and DROPPED the
-    # old PPI_Classic/PPI_Modern variant system. The user wants the RICH legacy
-    # dialog (from AF3 5.4.28) back. We ship the legacy dialog + its includes as
-    # whole FILES the skin gains, plus ONE registration line in Includes.xml.
-    # Most legacy vars read native Kodi Player.Process/VideoPlayer infolabels
-    # (incl. DV/HDR RPU metadata). A HANDFUL of fields have NO native source and
-    # only TinyPPI's probe binaries (audioprobe/hdrprobe) can supply them — audio
-    # sample rate, live A|V bitrate, DV L5 offsets. For those we BRIDGE: two small
-    # Python entries make TinyPPI publish all its *Var onto Home(10000) (via the
-    # version-agnostic home_publish.py + a monitor.py string-inject), and the
-    # shipped skin vars (BridgeAudioSampling/BridgeAVBitrate/L5StateVar/
-    # VideoPixelFormat) prefer that Home data, falling back to native when TinyPPI
-    # isn't running. Bundling Includes_p3i also fixes the "invalid include:
-    # CodecLogos*/*_Flag" log warnings 5.7.x left behind. All under toggle
-    # 'ppi_af3'. Skin files are create-only binary (byte-compare refresh); the
-    # Includes.xml + monitor.py edits are idempotent string-inject; not_found_ok
-    # so a missing skin/addon is a clean skip.
-    {
-        # Bridge half 1: version-agnostic module that publishes TinyPPI's *Var
-        # onto Home(10000) so the AF3 dialog can read probe-only fields. Reuses
-        # the installed TinyPPI's OWN update_properties via a Home proxy — no
-        # dependency on TinyPPI internals (verified against v2.1.4). Create-only.
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'info', 'home_publish.py'),
-        'toggle': 'ppi_af3',
-        'inject_file': True,
-        'binary': True,
-        'replace': True,
-        'not_found_ok': True,
-        'inject_source': os.path.join('resources', 'ppi_af3', 'tinyppi_lib',
-                                      'home_publish.py'),
-        'description': 'PPI AF3 - TinyPPI home_publish.py (Home bridge module)',
-    },
-    {
-        # Bridge half 2: start the publisher from the service, anchored on the
-        # stable "KodiMonitor started" log line. Idempotent + regex fallback;
-        # import fenced so a missing module never breaks the service.
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'service', 'monitor.py'),
-        'toggle': 'ppi_af3',
-        'not_found_ok': True,
-        'old': '    xbmc.log("TinyPPI: KodiMonitor started", xbmc.LOGINFO)',
-        'new': ('    xbmc.log("TinyPPI: KodiMonitor started", xbmc.LOGINFO)\n'
-                '    # -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --\n'
-                '    try:\n'
-                '        from info import home_publish as _abk_home_publish\n'
-                '        _abk_home_publish.start(monitor)\n'
-                '    except Exception as _abk_exc:\n'
-                '        xbmc.log("TinyPPI: PPI AF3 home publisher failed: %s" % _abk_exc, xbmc.LOGWARNING)'),
-        'already_patched_check': '# -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --',
-        # 3.2.24: TinyPPI 2.15 logs through its own _log("KodiMonitor started", ...)
-        'fallback_pattern': r'((?:xbmc\.log|_log)\("(?:TinyPPI: )?KodiMonitor started", xbmc\.LOGINFO\))',
-        'fallback_repl': ('\\1\n    # -- PPI AF3 Home publisher (by ABUKARIM TOOLS) --\n'
-                          '    try:\n'
-                          '        from info import home_publish as _abk_home_publish\n'
-                          '        _abk_home_publish.start(monitor)\n'
-                          '    except Exception as _abk_exc:\n'
-                          '        xbmc.log("TinyPPI: PPI AF3 home publisher failed: %s" % _abk_exc, xbmc.LOGWARNING)'),
-        'description': 'PPI AF3 - start Home publisher from monitor.py',
-    },
+    # old PPI_Classic/PPI_Modern variant system. We ship the legacy dialog (from
+    # AF3 5.4.28) + its includes as whole FILES the skin gains, plus ONE
+    # registration line in Includes.xml. All vars read native Kodi
+    # Player.Process/VideoPlayer infolabels. 3.2.40: the TinyPPI Home bridge
+    # (home_publish.py + monitor.py hook) is retired - it ran a full TinyPPI read
+    # pass every second during playback; the Bridge* skin vars fall back to the
+    # native infolabels, and _cleanup_retired_tinyppi() removes the old files.
+    # Bundling Includes_p3i also fixes the "invalid include: CodecLogos*/*_Flag"
+    # log warnings 5.7.x left behind. All under toggle 'ppi_af3'; not_found_ok
+    # so a missing skin is a clean skip.
     {
         'addon_id': 'skin.arctic.fuse.3',
         'rel_path': os.path.join('1080i', 'DialogPlayerProcessInfo.xml'),
@@ -1426,7 +1312,6 @@ TOGGLE_GROUPS = [
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('tinyppi_arabic',   'PPI Arabic'),
-    ('tinyppi_classic',  'classic PPI'),
     ('ppi_af3',          'PPI AF3 Dialog (native)'),
     ('af3_vplot',        'AF3: Vertical Plot (Home, OSD & Views)'),
     ('af3_highlight',    'AF3: Highlight Genre & Widget Titles'),
@@ -1478,9 +1363,6 @@ _TOGGLE_OF = {
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD.png')):               'tinyppi_audio',
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'Dolby_TrueHD_Atmos.png')):         'tinyppi_audio',
-    # PPI Arabic — colon removal only (ar_sa strings.po fixed at source, not patched)
-    ('script.tinyppi',
-     os.path.join('resources', 'skins', 'Default', '1080i', 'script-tinyppi-main.xml')): 'tinyppi_arabic',
     # Fenlight: Kill Volume Auto-Drop
     ('plugin.video.fenlight',
      os.path.join('resources', 'lib', 'modules', 'kodi_utils.py')):          'fenlight_volume',
@@ -1668,6 +1550,34 @@ _TINYPPI_ARABIC_PO_EMPTY = (
 )
 
 
+_PO_ENTRY_RE = re.compile(r'msgctxt "#(\d+)"\s*\nmsgid "((?:[^"\\]|\\.)*)"')
+
+
+def _po_ids(text):
+    """{string id: English msgid} for a TinyPPI strings.po."""
+    try:
+        return dict(_PO_ENTRY_RE.findall(text or ''))
+    except Exception:
+        return {}
+
+
+def _tinyppi_po_is_stale(ar_text, en_text):
+    """3.2.39: True when an Arabic strings.po belongs to ANOTHER TinyPPI version.
+
+    Every translated entry carries the English msgid; in a matching file it is
+    the same as en_gb's for that id. A 2.11-era file on 2.15.0 has different
+    texts on the same ids (32218 'Video' became a settings help line), which is
+    what scrambled the overlay labels. Compared on the shared ids; >10 %
+    mismatching = stale. Unknown/unparseable -> not stale (never act blind).
+    """
+    ar, en = _po_ids(ar_text), _po_ids(en_text)
+    shared = [k for k in ar if k in en]
+    if len(shared) < 20:
+        return False
+    bad = sum(1 for k in shared if ar[k] != en[k])
+    return bad * 10 > len(shared)
+
+
 def _reconcile_tinyppi_arabic():
     """Enforce the ar_sa strings.po state that matches the tinyppi_arabic toggle.
 
@@ -1683,7 +1593,13 @@ def _reconcile_tinyppi_arabic():
 
     po_path  = os.path.join(addon_path, _TINYPPI_ARABIC_PO_REL)
     bak_path = po_path + '.abk_arabic_bak'
+    en_path  = os.path.join(addon_path, 'resources', 'language',
+                            'resource.language.en_gb', 'strings.po')
     arabic_disabled = 'tinyppi_arabic' in _load_disabled()
+    try:
+        en_text = _read(en_path) if os.path.isfile(en_path) else ''
+    except Exception:
+        en_text = ''
 
     try:
         if arabic_disabled:
@@ -1697,7 +1613,12 @@ def _reconcile_tinyppi_arabic():
                     current = None
             if current == _TINYPPI_ARABIC_PO_EMPTY:
                 return True, '[%s] Arabic already disabled – skipping.' % addon_id
-            if current is not None and not os.path.isfile(bak_path):
+            # 3.2.39: ALWAYS refresh the backup from a real (non-stub) file.
+            # It used to be written only once, so a TinyPPI update made while
+            # Arabic was OFF left the 2.11 backup in place; switching Arabic
+            # back ON then restored that 2.11 file over 2.15.0 (labels shown
+            # as random settings texts). A stale live file is not backed up.
+            if current is not None and not _tinyppi_po_is_stale(current, en_text):
                 _write(bak_path, current)
             os.makedirs(os.path.dirname(po_path), exist_ok=True)
             _write(po_path, _TINYPPI_ARABIC_PO_EMPTY)
@@ -1706,10 +1627,34 @@ def _reconcile_tinyppi_arabic():
         else:
             # PPI Arabic ON: restore the real Arabic file from backup if we have
             # one and the live file is still our stub.
+            current = _read(po_path) if os.path.isfile(po_path) else None
+            # 3.2.39 self-heal: a live Arabic file from another TinyPPI version
+            # (restored by <=3.2.38) scrambles every label. Neutralise it with
+            # the stub so the overlay is clean English until TinyPPI is
+            # reinstalled/updated and ships its own matching Arabic file.
+            if (current is not None and current != _TINYPPI_ARABIC_PO_EMPTY
+                    and _tinyppi_po_is_stale(current, en_text)):
+                _write(po_path, _TINYPPI_ARABIC_PO_EMPTY)
+                try:
+                    if os.path.isfile(bak_path) and _tinyppi_po_is_stale(
+                            _read(bak_path), en_text):
+                        os.remove(bak_path)
+                except OSError:
+                    pass
+                return True, ('[%s] Patched OK: stale Arabic strings.po (other '
+                              'TinyPPI version) replaced by English fallback - '
+                              'reinstall TinyPPI to get its Arabic back.' % addon_id)
             if not os.path.isfile(bak_path):
                 return True, '[%s] Arabic active – nothing to restore.' % addon_id
-            current = _read(po_path) if os.path.isfile(po_path) else None
             backup  = _read(bak_path)
+            # 3.2.39: never restore a backup made for another TinyPPI version.
+            if _tinyppi_po_is_stale(backup, en_text):
+                try:
+                    os.remove(bak_path)
+                except OSError:
+                    pass
+                return True, ('[%s] Arabic backup is from another TinyPPI '
+                              'version – dropped, not restored.' % addon_id)
             if current == backup:
                 return True, '[%s] Arabic already restored – skipping.' % addon_id
             # 3.2.20: restore ONLY over our own empty stub (or a missing file).
@@ -1728,6 +1673,254 @@ def _reconcile_tinyppi_arabic():
                           'from backup.' % addon_id)
     except Exception as e:
         return False, '[%s] Arabic reconcile failed: %s' % (addon_id, e)
+
+
+# ---------------------------------------------------------------------------
+# TinyPPI: Arabic or English overlay (3.2.40)
+# ---------------------------------------------------------------------------
+# What the build wants from TinyPPI is exactly this, nothing more:
+#   * PPI Arabic ON  -> Arabic strings, our Arabic font, labels without ':'
+#   * PPI Arabic OFF -> TinyPPI's own English overlay, untouched
+#   (+ the codec badge PNGs and the non-CoreELEC switch, ordinary PATCHES)
+#
+# The overlay XML has to change in BOTH directions, and a ':' that was removed
+# cannot be put back by a regex (only 46 of 73 labels carry one), so every
+# skin XML is derived from a pristine copy kept beside it:
+#   <file>.abk_orig  - TinyPPI's own file, refreshed whenever the live file is
+#                      not ours (fresh install / TinyPPI update)
+#   live file        - Arabic ON : transform(orig) + marker comment
+#                      Arabic OFF: orig, byte for byte
+# Our files carry _PPI_AR_MARKER, so "not ours" is a plain substring test.
+#
+# The Arabic font is registered under OUR OWN names (abk_ppi_ar21/abk_ppi_ar32)
+# in the active skin's Font.xml, so the skin's own font23_narrow/font32 are
+# never touched; the overlay only switches to those names once they exist in
+# every Font.xml of the active skin (otherwise it keeps TinyPPI's fonts).
+
+_PPI_AR_MARKER = '<!-- ABUKARIM TOOLS: PPI Arabic -->'
+_PPI_XML_DIR = os.path.join('resources', 'skins', 'Default', '1080i')
+_PPI_XML_FILES = ('script-tinyppi-main.xml', 'script-tinyppi-dv-metadata.xml',
+                  'script-tinyppi-dialog.xml', 'script-tinyppi-dialog-bar.xml',
+                  'script-tinyppi-dialog-single.xml')
+_PPI_AR_FONT_FILE = ('special://home/addons/plugin.program.abukarimtools/'
+                     'resources/fonts/Noto-Regular.ttf')
+_PPI_AR_FONTS = (('font23_narrow', 'abk_ppi_ar21', '21'),
+                 ('font32',        'abk_ppi_ar32', '32'))
+_PPI_COLON_RE = re.compile(
+    r'(\$ADDON\[script\.tinyppi \d+\](?:\[/?[A-Z]+\])*):([ \t]*</label>)')
+
+
+def _read_raw(path):
+    """Text read that keeps the file's own line endings (no newline mapping)."""
+    with open(path, 'r', encoding='utf-8', newline='') as f:
+        return f.read()
+
+
+def _write_raw(path, content):
+    with open(path, 'w', encoding='utf-8', newline='') as f:
+        f.write(content)
+
+
+def _ppi_arabic_xml(orig, use_font):
+    """Arabic version of one TinyPPI skin XML (from TinyPPI's own text)."""
+    text = _PPI_COLON_RE.sub(r'\1\2', orig)
+    if use_font:
+        for old, new, _size in _PPI_AR_FONTS:
+            text = text.replace('<font>%s</font>' % old, '<font>%s</font>' % new)
+    m = re.match(r'\s*<\?xml[^>]*\?>[ \t]*\r?\n?', text)
+    cut = m.end() if m else 0
+    return text[:cut] + _PPI_AR_MARKER + '\n' + text[cut:]
+
+
+def _unclassic(text):
+    """Undo the retired 'classic PPI' token swap (<=3.2.39) on an old live file.
+
+    Safe on any version: TinyPPI's own main overlay uses neither token."""
+    text = re.sub(r'TinyPPI\.Dialog(BackgroundColor|HeaderColor|HeaderIconColor|'
+                  r'LineColor|GlobalBackgroundColor)\b', r'TinyPPI.\1', text)
+    return re.sub(r'background/dialog-bg-(start|end)\.png',
+                  r'background/overlay-bg-\1.png', text)
+
+
+def _skin_font_xmls():
+    """Every Font.xml of the active skin (one per <res> folder), or []."""
+    try:
+        skin = os.path.normpath(xbmcvfs.translatePath('special://skin/'))
+    except Exception:
+        return []
+    if not os.path.isdir(skin):
+        return []
+    found = []
+    try:
+        with open(os.path.join(skin, 'addon.xml'), 'rb') as f:
+            ax = re.sub(r'<!--.*?-->', '', f.read().decode('utf-8', 'replace'), flags=re.S)
+        for tag in re.findall(r'<res\b[^>]*>', ax, re.I):
+            m = re.search(r"""\bfolder\s*=\s*(["'])(.*?)\1""", tag)
+            if not m or not m.group(2).strip():
+                continue
+            folder = os.path.normpath(os.path.join(skin, m.group(2).strip()))
+            if os.path.commonpath((skin, folder)) != skin or not os.path.isdir(folder):
+                continue
+            for name in sorted(os.listdir(folder)):
+                path = os.path.join(folder, name)
+                if name.lower() == 'font.xml' and os.path.isfile(path) and path not in found:
+                    found.append(path)
+    except Exception:
+        pass
+    return found
+
+
+def _font_block_re(name):
+    return re.compile(r'<font>\s*<name>\s*%s\s*</name>' % re.escape(name))
+
+
+def _ensure_ppi_fonts():
+    """Register abk_ppi_ar21/32 in every fontset of the active skin.
+
+    Returns (all_present, wrote). Text edit like TinyPPI's own (no XML
+    rewrite); a skin that cannot be written simply keeps TinyPPI's fonts.
+    """
+    paths = _skin_font_xmls()
+    if not paths:
+        return False, False
+    all_present, wrote = True, False
+    for path in paths:
+        try:
+            with open(path, 'rb') as f:
+                text = f.read().decode('utf-8')
+        except Exception:
+            all_present = False
+            continue
+        nl = '\r\n' if '\r\n' in text else '\n'
+        changed = False
+
+        def _fix(m):
+            nonlocal changed
+            open_tag, inner, close_tag = m.group(1), m.group(2), m.group(3)
+            add = ''
+            for _old, name, size in _PPI_AR_FONTS:
+                if not _font_block_re(name).search(inner):
+                    add += ('%s        <font>%s            <name>%s</name>%s'
+                            '            <filename>%s</filename>%s'
+                            '            <size>%s</size>%s        </font>'
+                            % (nl, nl, name, nl, _PPI_AR_FONT_FILE, nl, size, nl))
+            if not add:
+                return m.group(0)
+            changed = True
+            return open_tag + add + inner + close_tag
+
+        new = re.sub(r'(<fontset\b[^>]*>)(.*?)(</fontset>)', _fix, text, flags=re.S)
+        if not re.search(r'<fontset\b', text):
+            all_present = False
+            continue
+        if changed:
+            try:
+                tmp = path + '.abk_tmp'
+                with open(tmp, 'wb') as f:
+                    f.write(new.encode('utf-8'))
+                os.replace(tmp, path)
+                wrote = True
+                _log('PPI Arabic fonts registered in %s' % path)
+            except Exception as e:
+                _log('PPI Arabic fonts: cannot write %s: %s' % (path, e), xbmc.LOGWARNING)
+                all_present = False
+    return all_present, wrote
+
+
+def _cleanup_retired_tinyppi(addon_path):
+    """Remove what retired TinyPPI patches (<=3.2.39) left in the add-on:
+    the PPI AF3 Home publisher (home_publish.py + its monitor.py hook)."""
+    out = []
+    hp = os.path.join(addon_path, 'resources', 'lib', 'info', 'home_publish.py')
+    if os.path.isfile(hp):
+        try:
+            os.remove(hp)
+            out.append((True, '[script.tinyppi] Patched OK: retired PPI AF3 '
+                              'home_publish.py removed.'))
+        except OSError as e:
+            out.append((False, '[script.tinyppi] could not remove home_publish.py: %s' % e))
+    mon = os.path.join(addon_path, 'resources', 'lib', 'service', 'monitor.py')
+    if os.path.isfile(mon):
+        try:
+            text = _read(mon)
+            new = re.sub(r'\n[ \t]*# -- PPI AF3 Home publisher \(by ABUKARIM TOOLS\) --\n'
+                         r'[ \t]*try:\n[ \t]*from info import home_publish.*?\n'
+                         r'[ \t]*_abk_home_publish\.start\(monitor\)\n'
+                         r'[ \t]*except Exception as _abk_exc:\n[^\n]*\n?',
+                         '\n', text, flags=re.S)
+            if new != text:
+                _write(mon, new)
+                out.append((True, '[script.tinyppi] Patched OK: retired PPI AF3 '
+                                  'hook removed from monitor.py (restart Kodi).'))
+        except Exception as e:
+            out.append((False, '[script.tinyppi] monitor.py cleanup failed: %s' % e))
+    return out
+
+
+def _reconcile_tinyppi_xml(addon_path, arabic):
+    """Put every TinyPPI skin XML in the Arabic or English state."""
+    out = []
+    use_font = False
+    if arabic:
+        use_font, wrote = _ensure_ppi_fonts()
+        if wrote:
+            _mark_skin_reload()     # Font.xml is read at skin load
+            out.append((True, '[script.tinyppi] Patched OK: PPI Arabic fonts '
+                              'registered in the active skin.'))
+        if not use_font:
+            _log('PPI Arabic: Arabic font not registered in the active skin - '
+                 'overlay keeps TinyPPI fonts for now.', xbmc.LOGWARNING)
+    for name in _PPI_XML_FILES:
+        live = os.path.join(addon_path, _PPI_XML_DIR, name)
+        orig = live + '.abk_orig'
+        if not os.path.isfile(live):
+            continue
+        try:
+            cur = _read_raw(live)
+            if _PPI_AR_MARKER not in cur:
+                # TinyPPI's own file (fresh install/update) - or a main overlay
+                # edited in place by <=3.2.39, whose classic swap we undo here
+                # (main only: the VS10 dialog files use Dialog* tokens natively).
+                clean = _unclassic(cur) if name == 'script-tinyppi-main.xml' else cur
+                if not os.path.isfile(orig) or _read_raw(orig) != clean:
+                    _write_raw(orig, clean)
+            elif not os.path.isfile(orig):
+                # Ours, but the pristine copy is gone: rebuild it as well as we
+                # can (':' cannot come back - reinstall TinyPPI for those).
+                base = cur.replace(_PPI_AR_MARKER + '\n', '', 1)
+                for old, new, _size in _PPI_AR_FONTS:
+                    base = base.replace('<font>%s</font>' % new, '<font>%s</font>' % old)
+                _write_raw(orig, base)
+                _log('PPI Arabic: %s pristine copy rebuilt from the live file '
+                     '(reinstall TinyPPI to get its label colons back).' % name,
+                     xbmc.LOGWARNING)
+            base = _read_raw(orig)
+            want = _ppi_arabic_xml(base, use_font) if arabic else base
+            if cur != want:
+                _write_raw(live, want)
+                out.append((True, '[script.tinyppi] Patched OK: %s -> %s.'
+                                  % (name, 'Arabic' if arabic else 'English')))
+        except Exception as e:
+            out.append((False, '[script.tinyppi] %s reconcile failed: %s' % (name, e)))
+    return out
+
+
+def _reconcile_tinyppi():
+    """One pass that leaves TinyPPI exactly in the PPI Arabic / English state.
+    Returns a list of (ok, msg). Never raises."""
+    results = []
+    try:
+        results.append(_reconcile_tinyppi_arabic())
+        addon_path = (_resolve_addon_dir('script.tinyppi')
+                      or os.path.join(ADDONS_DIR, 'script.tinyppi'))
+        if not os.path.isdir(addon_path):
+            return results
+        arabic = 'tinyppi_arabic' not in _load_disabled()
+        results += _reconcile_tinyppi_xml(addon_path, arabic)
+        results += _cleanup_retired_tinyppi(addon_path)
+    except Exception as e:
+        results.append((False, '[script.tinyppi] reconcile failed: %s' % e))
+    return results
 
 
 # ---------------------------------------------------------------------------
@@ -1819,15 +2012,15 @@ def apply_set(group=None, addon_ids=None):
     # toggle STATE (handles both enable and disable; see _reconcile_tinyppi_arabic).
     # Only when TinyPPI is in scope for this run.
     if not addon_ids or 'script.tinyppi' in set(addon_ids):
-        ok, msg = _reconcile_tinyppi_arabic()
-        _log(msg)
-        results.append((ok, msg))
-        if ok:
-            succeeded += 1
-            if ('Patched OK' in msg) or ('File injected OK' in msg):
-                changed += 1
-        else:
-            failed += 1
+        for ok, msg in _reconcile_tinyppi():
+            _log(msg)
+            results.append((ok, msg))
+            if ok:
+                succeeded += 1
+                if ('Patched OK' in msg) or ('File injected OK' in msg):
+                    changed += 1
+            else:
+                failed += 1
 
     for _n, patch in enumerate(_select(group, addon_ids), 1):
         # Numbered trace (DEBUG since 3.1.0.15) so Kodi's duplicate-message filter
