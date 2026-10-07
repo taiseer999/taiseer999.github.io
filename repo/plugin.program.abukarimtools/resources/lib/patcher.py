@@ -126,20 +126,6 @@ _A4KSUBS_DECODE_NEW_B64 = 'ICAgICAgICAgICAgaWYgbm90IGVuY29kaW5nOgogICAgICAgICAgI
 
 
 PATCHES = [
-# ── TinyPPI: allow non-CoreELEC platforms (by ABUKARIM TOOLS) ──
-    {
-        'addon_id': 'script.tinyppi',
-        'rel_path': os.path.join('resources', 'lib', 'ui', 'overlay.py'),
-        'rel_path_alternates': [
-            os.path.join('resources', 'lib', 'overlay.py'),  # TinyPPI <= 1.8.6 (flat layout)
-        ],
-        'old': '_ALLOW_NON_COREELEC = False',
-        'new': '_ALLOW_NON_COREELEC = True',
-        'description': 'TinyPPI overlay.py \u2013 allow launch on non-CoreELEC (1.9.7+ ui/ layout with pre-1.9.7 fallback)',
-        'already_patched_check': '_ALLOW_NON_COREELEC = True',
-        'fallback_pattern': r'_ALLOW_NON_COREELEC\s*(?::[^=\n]+)?=\s*False',
-        'fallback_repl': lambda m: '_ALLOW_NON_COREELEC = True',
-    },
     # ── TMDbHelper Trakt QR Auth (by ABUKARIM TOOLS) ──
     {
         'addon_id': 'plugin.video.themoviedb.helper',
@@ -1308,7 +1294,6 @@ TOGGLE_GROUPS = [
     ('tmdbh_trakt_auth', 'TMDbHelper Trakt Auth QR'),
     ('tmdbh_mpaa_ksa',   'MPAA for KSA'),
     ('tmdbh_stability',  'TMDbHelper: Stability'),
-    ('tinyppi_non_ce',   'TinyPPI: Run on non-CE'),
     ('tinyppi_codecs',   'TinyPPI: Codec Badges'),
     ('tinyppi_audio',    'TinyPPI: Audio Badges'),
     ('tinyppi_arabic',   'PPI Arabic'),
@@ -1342,9 +1327,6 @@ _TOGGLE_OF = {
     # TMDbHelper: Stability — dead-player guard (getPlayingFile RuntimeError on teardown)
     ('plugin.video.themoviedb.helper',
      os.path.join('resources', 'tmdbhelper', 'lib', 'monitor', 'player.py')): 'tmdbh_stability',
-    # TinyPPI: Run on non-CE
-    ('script.tinyppi',
-     os.path.join('resources', 'lib', 'ui', 'overlay.py')):                  'tinyppi_non_ce',
     # TinyPPI: Codec Badges — the three HDR badge PNGs
     ('script.tinyppi',
      os.path.join('resources', 'skins', 'Default', 'media', 'codecs', 'SDR.png')):        'tinyppi_codecs',
@@ -1681,7 +1663,7 @@ def _reconcile_tinyppi_arabic():
 # What the build wants from TinyPPI is exactly this, nothing more:
 #   * PPI Arabic ON  -> Arabic strings, our Arabic font, labels without ':'
 #   * PPI Arabic OFF -> TinyPPI's own English overlay, untouched
-#   (+ the codec badge PNGs and the non-CoreELEC switch, ordinary PATCHES)
+#   (+ the codec badge PNGs, ordinary PATCHES)
 #
 # The overlay XML has to change in BOTH directions, and a ':' that was removed
 # cannot be put back by a regex (only 46 of 73 labels carry one), so every
@@ -1828,8 +1810,9 @@ def _ensure_ppi_fonts():
 
 
 def _cleanup_retired_tinyppi(addon_path):
-    """Remove what retired TinyPPI patches (<=3.2.39) left in the add-on:
-    the PPI AF3 Home publisher (home_publish.py + its monitor.py hook)."""
+    """Remove what retired TinyPPI patches left in the add-on: the PPI AF3 Home
+    publisher (home_publish.py + its monitor.py hook, <=3.2.39) and the
+    non-CoreELEC switch in overlay.py (<=3.2.40)."""
     out = []
     hp = os.path.join(addon_path, 'resources', 'lib', 'info', 'home_publish.py')
     if os.path.isfile(hp):
@@ -1839,6 +1822,22 @@ def _cleanup_retired_tinyppi(addon_path):
                               'home_publish.py removed.'))
         except OSError as e:
             out.append((False, '[script.tinyppi] could not remove home_publish.py: %s' % e))
+    # 3.2.41: "Run on non-CE" retired - put TinyPPI's own platform check back.
+    for rel in (os.path.join('resources', 'lib', 'ui', 'overlay.py'),
+                os.path.join('resources', 'lib', 'overlay.py')):
+        ov = os.path.join(addon_path, rel)
+        if not os.path.isfile(ov):
+            continue
+        try:
+            text = _read_raw(ov)
+            new = re.sub(r'_ALLOW_NON_COREELEC\s*(?::[^=\n]+)?=\s*True',
+                         '_ALLOW_NON_COREELEC = False', text)
+            if new != text:
+                _write_raw(ov, new)
+                out.append((True, '[script.tinyppi] Patched OK: retired non-CE '
+                                  'switch reverted (_ALLOW_NON_COREELEC = False).'))
+        except Exception as e:
+            out.append((False, '[script.tinyppi] overlay.py cleanup failed: %s' % e))
     mon = os.path.join(addon_path, 'resources', 'lib', 'service', 'monitor.py')
     if os.path.isfile(mon):
         try:

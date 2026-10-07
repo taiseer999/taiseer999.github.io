@@ -1,3 +1,9 @@
+v3.2.41
+- REMOVED: TinyPPI "Run on non-CE" (_ALLOW_NON_COREELEC = True) and its
+  toggle. Boxes that had it get TinyPPI's own value back
+  (_ALLOW_NON_COREELEC = False). TinyPPI is now left with only: PPI Arabic /
+  English and the codec/audio badge PNGs.
+
 v3.2.40
 - TinyPPI reduced to what the build needs:
   * PPI Arabic ON  -> Arabic strings + ABUKARIM Arabic font (Noto, registered
