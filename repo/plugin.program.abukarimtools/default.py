@@ -35,6 +35,7 @@ ICONS  = {
     'total_clean':    ADDON_PATH + 'resources/icons/clear_cache.png',
     'old_thumbs':     ADDON_PATH + 'resources/icons/clear_cache.png',
     'speedtest':      ADDON_PATH + 'resources/icons/speedtest.png',
+    'cpu_benchmark':  ADDON_PATH + 'resources/icons/cpu_benchmark.png',
     'addon_portal':   ADDON_PATH + 'resources/icons/addon_portal.png',
     # 3.2
     'bootstrap':      ADDON_PATH + 'resources/icons/bootstrap.png',
@@ -80,6 +81,7 @@ CATEGORIES = [
         ('old_thumbs',     30013),
         ('rebuild_addons33', 30018),
         ('speedtest',      30019),
+        ('cpu_benchmark',  30620),
         ('log_share',      30593),
         ('menu_reconcile', 30595),
     ]),
@@ -106,7 +108,9 @@ ACTION_MODES = {'skin_switch', 'first_run', 'abukarimwizard',
                 # 3.2 tools: dialogs only, never folders (same reason as above)
                 'bootstrap', 'hw_tuning', 'webserver', 'log_share',
                 'remote_refresh', 'menu_reconcile', 'profile_export',
-                'profile_restore', 'support'}
+                'profile_restore', 'support',
+                # 3.2.43~beta3: CPU Benchmark (its own text window)
+                'cpu_benchmark'}
 
 
 def _add_folder(label, cat_key, icon_key):
@@ -443,6 +447,12 @@ def router():
         # its own DialogProgress and shows the result image on completion.
         script = ADDON_PATH + 'resources/lib/modules/speedtest.py'
         xbmc.executebuiltin('RunScript(%s)' % script)
+
+    elif mode == 'cpu_benchmark':
+        # pystone CPU benchmark (port of script.pystone.benchmark) - runs in
+        # the active skin's DialogTextViewer, no folder listing.
+        from resources.lib import cpu_benchmark
+        cpu_benchmark.run()
 
     elif mode == 'binary_install':
         _end_directory()

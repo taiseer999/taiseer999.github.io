@@ -337,4 +337,12 @@ STRINGS = {
             'عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل.'),
     30613: ('Press OK or BACK to close',
             'اضغط OK أو رجوع للإغلاق'),
+    # ---- 3.2.43~beta3: CPU Benchmark (pystone) (30620-30626) ----
+    30620: ('CPU Benchmark', 'اختبار أداء المعالج'),
+    30621: ('Score', 'النتيجة'),
+    30622: ('View your results here', 'اعرض نتيجتك هنا'),
+    30623: ('Uploading the result...', 'جارٍ رفع النتيجة...'),
+    30624: ('Pass', 'الجولة'),
+    30625: ('Press BACK or OK to exit', 'اضغط رجوع أو OK للخروج'),
+    30626: ('CPU Benchmark failed:[CR]%s', 'فشل اختبار أداء المعالج:[CR]%s'),
 }

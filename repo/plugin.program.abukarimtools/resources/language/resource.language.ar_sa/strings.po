@@ -872,3 +872,31 @@ msgctxt "#30613"
 msgid "Press OK or BACK to close"
 msgstr "اضغط OK أو رجوع للإغلاق"
 
+msgctxt "#30620"
+msgid "CPU Benchmark"
+msgstr "اختبار أداء المعالج"
+
+msgctxt "#30621"
+msgid "Score"
+msgstr "النتيجة"
+
+msgctxt "#30622"
+msgid "View your results here"
+msgstr "اعرض نتيجتك هنا"
+
+msgctxt "#30623"
+msgid "Uploading the result..."
+msgstr "جارٍ رفع النتيجة..."
+
+msgctxt "#30624"
+msgid "Pass"
+msgstr "الجولة"
+
+msgctxt "#30625"
+msgid "Press BACK or OK to exit"
+msgstr "اضغط رجوع أو OK للخروج"
+
+msgctxt "#30626"
+msgid "CPU Benchmark failed:[CR]%s"
+msgstr "فشل اختبار أداء المعالج:[CR]%s"
+

@@ -872,3 +872,31 @@ msgctxt "#30613"
 msgid "Press OK or BACK to close"
 msgstr ""
 
+msgctxt "#30620"
+msgid "CPU Benchmark"
+msgstr ""
+
+msgctxt "#30621"
+msgid "Score"
+msgstr ""
+
+msgctxt "#30622"
+msgid "View your results here"
+msgstr ""
+
+msgctxt "#30623"
+msgid "Uploading the result..."
+msgstr ""
+
+msgctxt "#30624"
+msgid "Pass"
+msgstr ""
+
+msgctxt "#30625"
+msgid "Press BACK or OK to exit"
+msgstr ""
+
+msgctxt "#30626"
+msgid "CPU Benchmark failed:[CR]%s"
+msgstr ""
+

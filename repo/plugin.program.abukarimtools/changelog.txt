@@ -1,3 +1,16 @@
+v3.2.43~beta3 (TEST BUILD)
+- NEW (Maintenance): CPU Benchmark - port of script.pystone.benchmark 1.1.8
+  (Lunatixz, GPLv3); pystone vendored at resources/lib/modules/pystone.py,
+  tool in resources/lib/cpu_benchmark.py, new icon cpu_benchmark.png.
+  * shows Kodi build, OS, CPU (incl. /proc/device-tree model), arch, cores
+    and Python version, then one pystone pass (n=50000) per CPU core and
+    the average score; the result is uploaded to paste.kodi.tv (log_share
+    uploader) and the link is shown.
+  * no kodi_six / requests needed; passes run on a worker thread, so BACK
+    closes at any time (stops after the current pass).
+  * Kodi's debug overlay (CPU/RAM) is on during the run and always put back.
+  * strings 30620-30626 (English / Arabic).
+
 v3.2.43~beta2 (TEST BUILD)
 - addon.xml <requires>: plugin.video.newpipe 1.0.0~beta1, unicache 1.0.1,
   urldispatcher 1.1.0, scrapetube 2.8.2, resolveurl 5.1.210,
