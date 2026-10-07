@@ -71,6 +71,10 @@ def _qlabel(value):
     return '4K (2160p)' if value >= 2160 else '%dp' % value
 
 
+def _slabel(value):
+    return T(30450) if value == 'newpipe' else T(30451)
+
+
 def _pick(heading, values, current, fmt):
     labels = [fmt(v) for v in values]
     pre = values.index(current) if current in values else 0
@@ -143,6 +147,8 @@ def _run():
             # 3.2.35: full screen (default) or behind the page
             xbmcgui.ListItem(T(30445) % (T(30446) if cfg.get('fullscreen', True) else T(30447)),
                              offscreen=True),
+            # 3.2.43~beta1 TEST: where trailers come from
+            xbmcgui.ListItem(T(30449) % _slabel(cfg.get('source', 'newpipe')), offscreen=True),
         ]
         ic = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'af3_trailers.png')
         for li in items[2:]:
@@ -182,6 +188,15 @@ def _run():
                                       lambda v: T(30446) if v else T(30447))
             config.save(cfg)
             _log('trailers show: %s' % ('full screen' if cfg['fullscreen'] else 'behind the page'))
+        elif choice == 5:
+            cfg['source'] = _pick(T(30452), list(config.SOURCES), cfg.get('source', 'newpipe'),
+                                  _slabel)
+            config.save(cfg)
+            _log('trailers source: %s' % cfg['source'])
+            if (cfg['source'] == 'newpipe' and not xbmc.getCondVisibility(
+                    'System.HasAddon(plugin.video.newpipe) + '
+                    'System.AddonIsEnabled(plugin.video.newpipe)')):
+                DIALOG.ok(ADDON_NAME, T(30453))
             if (not cfg['fullscreen'] and xbmc.getSkinDir() == SKIN_ID
                     and xbmc.getCondVisibility('Skin.HasSetting(Background.DisableVideo)')):
                 DIALOG.ok(ADDON_NAME, T(30442))

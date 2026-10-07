@@ -1811,8 +1811,10 @@ def _ensure_ppi_fonts():
 
 def _cleanup_retired_tinyppi(addon_path):
     """Remove what retired TinyPPI patches left in the add-on: the PPI AF3 Home
-    publisher (home_publish.py + its monitor.py hook, <=3.2.39) and the
-    non-CoreELEC switch in overlay.py (<=3.2.40)."""
+    publisher (home_publish.py + its monitor.py hook, <=3.2.39).
+
+    _ALLOW_NON_COREELEC is deliberately NOT touched: the TinyPPI build on the
+    ABUKARIM repos (for non-CE22 boxes) ships with it set to True."""
     out = []
     hp = os.path.join(addon_path, 'resources', 'lib', 'info', 'home_publish.py')
     if os.path.isfile(hp):
@@ -1822,22 +1824,6 @@ def _cleanup_retired_tinyppi(addon_path):
                               'home_publish.py removed.'))
         except OSError as e:
             out.append((False, '[script.tinyppi] could not remove home_publish.py: %s' % e))
-    # 3.2.41: "Run on non-CE" retired - put TinyPPI's own platform check back.
-    for rel in (os.path.join('resources', 'lib', 'ui', 'overlay.py'),
-                os.path.join('resources', 'lib', 'overlay.py')):
-        ov = os.path.join(addon_path, rel)
-        if not os.path.isfile(ov):
-            continue
-        try:
-            text = _read_raw(ov)
-            new = re.sub(r'_ALLOW_NON_COREELEC\s*(?::[^=\n]+)?=\s*True',
-                         '_ALLOW_NON_COREELEC = False', text)
-            if new != text:
-                _write_raw(ov, new)
-                out.append((True, '[script.tinyppi] Patched OK: retired non-CE '
-                                  'switch reverted (_ALLOW_NON_COREELEC = False).'))
-        except Exception as e:
-            out.append((False, '[script.tinyppi] overlay.py cleanup failed: %s' % e))
     mon = os.path.join(addon_path, 'resources', 'lib', 'service', 'monitor.py')
     if os.path.isfile(mon):
         try:

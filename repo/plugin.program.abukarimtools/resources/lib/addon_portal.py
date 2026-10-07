@@ -72,6 +72,8 @@ CATALOG = [
      'resources/media/addon_icons/icon.png'),
     ('plugin.video.seren',       'Seren',       'repository.taiseer',
      TAISEER_ZIPS + 'plugin.video.seren/resources/images/ico-seren-3.png'),
+    ('script.tinyppi',           'TinyPPI',     'repository.taiseer',
+     TAISEER_ZIPS + 'script.tinyppi/icon.png'),
     ('plugin.video.umbrella',    'Umbrella',    'repository.umbrella',
      'https://raw.githubusercontent.com/umbrellaplug/umbrellaplug.github.io/'
      'master/nexus/zips/plugin.video.umbrella/icon.png'),
@@ -79,6 +81,14 @@ CATALOG = [
      'https://repo.redwizard.xyz/redwizardrepo/main/plugin.video.youtube/'
      'resources/media/icon.png'),
 ]
+
+# Optional one-line note shown after the repository name in the list
+# (string id from strings.po, or plain text from portal.json "note").
+# TinyPPI: CoreELEC 22 ships its own; the ABUKARIM build (non-CoreELEC check
+# disabled) is for every other box.
+NOTES = {
+    'script.tinyppi': 30420,
+}
 
 REPO_NAMES = {
     'repository.dexworld':     'DexWorld',
@@ -101,7 +111,8 @@ def _catalog():
     """CATALOG, or the list published in abukarim/portal.json.
 
     portal.json: {"schema": 1,
-                  "addons": [{"id": .., "name": .., "repo": .., "icon": ..}],
+                  "addons": [{"id": .., "name": .., "repo": .., "icon": ..,
+                              "note": ".. (optional)"}],
                   "repo_names": {"repository.x": "Nice Name"},
                   "repo_zips": {"repository.x": "https://.../repository.x-1.0.zip"}}
     A broken or empty list falls back to the built-in CATALOG.
@@ -113,6 +124,8 @@ def _catalog():
             if e['id'] and e['repo']:
                 out.append((e['id'], e.get('name') or e['id'], e['repo'],
                             e.get('icon', '')))
+                if isinstance(e.get('note'), str) and e['note']:
+                    NOTES[e['id']] = e['note']
         except Exception:
             continue
     if out:
@@ -120,6 +133,16 @@ def _catalog():
         REPO_NAMES.update({k: v for k, v in names.items() if isinstance(v, str)})
         return out
     return list(CATALOG)
+
+
+def _note(addon_id):
+    note = NOTES.get(addon_id)
+    if isinstance(note, int):
+        try:
+            return T(note)
+        except Exception:
+            return ''
+    return note or ''
 
 
 # Import ids that are never fetched (core ABIs / always present).
@@ -560,7 +583,9 @@ class AddonPortal(xbmcgui.WindowXMLDialog):
             icon = _local_icon(aid, remote)
             li.setArt({'icon': icon, 'thumb': icon})
             li.setProperty('addonid', aid)
-            li.setProperty('repo', REPO_NAMES.get(rid, rid))
+            repo = REPO_NAMES.get(rid, rid)
+            note = _note(aid)
+            li.setProperty('repo', '%s  ·  %s' % (repo, note) if note else repo)
             li.setProperty('installed', 'true' if _is_local(aid) else '')
             li.setProperty('status', T(30407) if _is_local(aid) else '')
             li.setProperty('checked', 'true' if aid in self.checked else '')

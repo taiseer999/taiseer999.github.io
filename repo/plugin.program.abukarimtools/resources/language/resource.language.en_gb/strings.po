@@ -564,6 +564,10 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr ""
 
+msgctxt "#30420"
+msgid "for non CE22"
+msgstr ""
+
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr ""
@@ -638,6 +642,26 @@ msgstr ""
 
 msgctxt "#30448"
 msgid "How trailers are shown"
+msgstr ""
+
+msgctxt "#30449"
+msgid "Source: %s"
+msgstr ""
+
+msgctxt "#30450"
+msgid "NewPipe (YouTube)"
+msgstr ""
+
+msgctxt "#30451"
+msgid "IMDb"
+msgstr ""
+
+msgctxt "#30452"
+msgid "Where trailers come from"
+msgstr ""
+
+msgctxt "#30453"
+msgid "NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is."
 msgstr ""
 
 msgctxt "#30530"
@@ -847,3 +871,4 @@ msgstr ""
 msgctxt "#30613"
 msgid "Press OK or BACK to close"
 msgstr ""
+

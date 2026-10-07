@@ -1,3 +1,36 @@
+v3.2.43~beta2 (TEST BUILD)
+- addon.xml <requires>: plugin.video.newpipe 1.0.0~beta1, unicache 1.0.1,
+  urldispatcher 1.1.0, scrapetube 2.8.2, resolveurl 5.1.210,
+  resolveurl.pluginsgr 0.2.5, websocket 1.6.4, magneto 6.10.01,
+  netclient 1.2.0, parsers 1.0.0, python.twitch 3.0.2 - all on
+  repository.taiseer, installed by Kodi together with ABUKARIM TOOLS.
+
+v3.2.43~beta1 (TEST BUILD)
+- AF3 Auto Trailers: new trailer source "NewPipe (YouTube)" (default in this
+  test) next to IMDb - new "Source" row in the AF3 Auto Trailers settings.
+  * YouTube id: the focused item's trailer link (ListItem.Trailer / the
+    TMDbHelper Home property), else TMDb /videos (TMDbHelper's key; official
+    YouTube Trailer > Trailer > Teaser, English or language-less).
+  * played through NewPipe's own route
+    plugin://plugin.video.newpipe/?action=play&url=<id>; the resolved stream
+    (local DASH proxy) is adopted as "ours", so full screen / stop / hand-over
+    work as with IMDb. Start timeout 25 s for NewPipe (12 s for IMDb).
+  * no YouTube trailer, or NewPipe not installed/enabled -> IMDb as before.
+  * a NewPipe trailer that opens after the cursor already moved on is stopped
+    (title + YouTube/local-proxy URL match; a real movie is never touched).
+  * the Quality setting applies to IMDb only - YouTube quality is chosen by
+    NewPipe/PluginsGR.
+
+v3.2.42
+- Add-on Portal: TinyPPI (script.tinyppi) added, pinned to the ABUKARIM
+  repository, with the note "for non CE22" after the repository name.
+  New optional "note" field per add-on in portal.json.
+- FIX (3.2.41): the cleanup no longer forces _ALLOW_NON_COREELEC back to
+  False - the TinyPPI build on the ABUKARIM repos (for non-CE22 boxes) ships
+  with it set to True and must keep it.
+- strings_map.py now carries the Buy Me a Coffee strings (30610-30613) that
+  were only in the .po files, so tools/gen_po.py no longer drops them.
+
 v3.2.41
 - REMOVED: TinyPPI "Run on non-CE" (_ALLOW_NON_COREELEC = True) and its
   toggle. Boxes that had it get TinyPPI's own value back

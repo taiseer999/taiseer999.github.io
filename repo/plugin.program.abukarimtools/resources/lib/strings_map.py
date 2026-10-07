@@ -239,6 +239,7 @@ STRINGS = {
             "تثبيت هذه الإضافات من مستودعاتها؟[CR][CR]%s"),
     30419: ("The add-ons were installed and linked to their repositories.\nA restart is recommended so their updates become active.\nتم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة.",
             "تم تثبيت الإضافات وربطها بمستودعاتها.\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."),
+    30420: ("for non CE22",                    "لغير CE22"),
 
     # ---- AF3 auto-trailers (30430-30459) ----
     30430: ("AF3 Auto Trailers",               "التريلرات التلقائية (AF3)"),
@@ -263,6 +264,12 @@ STRINGS = {
     30446: ("Full screen", "ملء الشاشة"),
     30447: ("Behind the page", "خلف الصفحة"),
     30448: ("How trailers are shown", "طريقة عرض التريلر"),
+    30449: ("Source: %s",                      "المصدر: %s"),
+    30450: ("NewPipe (YouTube)",               "NewPipe (يوتيوب)"),
+    30451: ("IMDb",                            "IMDb"),
+    30452: ("Where trailers come from",        "مصدر التريلرات"),
+    30453: ("NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is.",
+            "إضافة NewPipe (plugin.video.newpipe) مش مثبّتة أو موقفة - التريلرات رح تيجي من IMDb لحد ما تتثبّت."),
     # ---- 3.2: profiles / tuning / remote access / log share / bootstrap (30530-30599) ----
     30530: ("Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)",
             "استبدال إعدادات وقوائم %s الحالية بملف بيرز الجاهز؟[CR](يتم حفظ نسخة احتياطية من ملفاتك أولاً.)"),
@@ -321,4 +328,13 @@ STRINGS = {
     30601: ("Waves while loading turned off", "تم إيقاف الأمواج أثناء التحميل"),
     30602: ("Switch to Arctic Fuse 3 first - this setting belongs to that skin.",
             "انتقل إلى واجهة Arctic Fuse 3 أولاً - هذا الإعداد خاص بها."),
+    # ---- Buy Me a Coffee (3.2.33) ----
+    30610: ('Support ABUKARIM - Buy Me a Coffee',
+            'ادعم ABUKARIM - اشترِ لي قهوة'),
+    30611: ('Buy Me a Coffee',
+            'اشترِ لي قهوة'),
+    30612: ('Enjoying the Piers build and ABUKARIM add-ons?[CR]Scan the code with your phone to support the work.',
+            'عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكود بجوالك لدعم الشغل.'),
+    30613: ('Press OK or BACK to close',
+            'اضغط OK أو رجوع للإغلاق'),
 }

@@ -564,6 +564,10 @@ msgctxt "#30419"
 msgid "The add-ons were installed and linked to their repositories.\\nA restart is recommended so their updates become active.\\nتم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 msgstr "تم تثبيت الإضافات وربطها بمستودعاتها.\\nيُنصح بإعادة التشغيل حتى تصبح تحديثاتها فعّالة."
 
+msgctxt "#30420"
+msgid "for non CE22"
+msgstr "لغير CE22"
+
 msgctxt "#30430"
 msgid "AF3 Auto Trailers"
 msgstr "التريلرات التلقائية (AF3)"
@@ -639,6 +643,26 @@ msgstr "خلف الصفحة"
 msgctxt "#30448"
 msgid "How trailers are shown"
 msgstr "طريقة عرض التريلر"
+
+msgctxt "#30449"
+msgid "Source: %s"
+msgstr "المصدر: %s"
+
+msgctxt "#30450"
+msgid "NewPipe (YouTube)"
+msgstr "NewPipe (يوتيوب)"
+
+msgctxt "#30451"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#30452"
+msgid "Where trailers come from"
+msgstr "مصدر التريلرات"
+
+msgctxt "#30453"
+msgid "NewPipe (plugin.video.newpipe) is not installed or is disabled - trailers come from IMDb until it is."
+msgstr "إضافة NewPipe (plugin.video.newpipe) مش مثبّتة أو موقفة - التريلرات رح تيجي من IMDb لحد ما تتثبّت."
 
 msgctxt "#30530"
 msgid "Replace the current settings and menus of %s with the Piers profile?[CR](Your current files are backed up first.)"
@@ -847,3 +871,4 @@ msgstr "عاجبك بيلد Piers وإضافات ABUKARIM؟[CR]امسح الكو
 msgctxt "#30613"
 msgid "Press OK or BACK to close"
 msgstr "اضغط OK أو رجوع للإغلاق"
+

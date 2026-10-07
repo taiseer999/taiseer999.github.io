@@ -17,12 +17,14 @@ CACHE_DIR = os.path.join(PROFILE, 'trailers')
 
 DELAYS = (1, 2, 3, 5, 8, 10)
 QUALITIES = (720, 1080, 2160)
+SOURCES = ('newpipe', 'imdb')   # 3.2.43~beta1 TEST: NewPipe (YouTube) or IMDb
 DEFAULTS = {
     'enabled': False,   # off until the user turns it on from Toggles
     'sound': True,      # heard by default (Dex Hub does the same since 5.10.104)
     'delay': 3,         # seconds the cursor rests on a title before its trailer starts
     'quality': 720,     # highest MP4 height picked from IMDb
     'fullscreen': True, # 3.2.35: a trailer that starts opens full screen
+    'source': 'newpipe', # 3.2.43~beta1 TEST: YouTube via NewPipe, IMDb as fallback
 }
 
 _cache = {'mtime': None, 'cfg': dict(DEFAULTS)}
@@ -42,6 +44,8 @@ def _clean(data):
             cfg['delay'] = delay if delay in DELAYS else DEFAULTS['delay']
         except Exception:
             pass
+        source = data.get('source', cfg['source'])
+        cfg['source'] = source if source in SOURCES else DEFAULTS['source']
         try:
             quality = int(data.get('quality', cfg['quality']))
             cfg['quality'] = quality if quality in QUALITIES else DEFAULTS['quality']
