@@ -1,3 +1,6 @@
+v3.9.30
+- Icons and fanart recolored from blue to mint green (#3DDC97).
+
 v3.9.29
 - Main menu: "Support ABUKARIM - Buy Me a Coffee" (Buy Me a Coffee icon).
   Opens a full-screen QR code to buymeacoffee.com/taiseer999.
