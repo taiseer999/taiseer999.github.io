@@ -26,12 +26,12 @@ from six.moves import urllib_parse
 
 class StreamEmbedResolver(ResolveUrl):
     name = 'StreamEmbed'
-    domains = ['bullstream.xyz', 'mp4player.site', 'watch.gxplayer.xyz']
-    pattern = r'(?://|\.)((?:bullstream|mp4player|watch.gxplayer)\.(?:xyz|site))/watch\?v=([0-9a-zA-Z]+)'
+    domains = ['bullstream.xyz', 'mp4player.site', 'watch.gxplayer.xyz', 'watch.brstream.cc']
+    pattern = r'(?://|\.)((?:watch\.)?(?:br|bull|mp4|gx)(?:player|stream)\.(?:xyz|site|cc))/watch\?v=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.FF_USER_AGENT}
+        headers = {'User-Agent': common.RAND_UA}
         html = self.net.http_GET(web_url, headers=headers).content
         data = re.search(r'var\s*video\s*=\s*(.*?);\s', html)
         if data:

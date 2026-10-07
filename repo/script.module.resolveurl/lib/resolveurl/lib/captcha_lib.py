@@ -24,9 +24,11 @@ import os
 from resolveurl.lib import recaptcha_v2
 from resolveurl.lib import helpers
 import base64
+import json
 
 net = common.Net()
 IMG_FILE = 'captcha_img.gif'
+TWOCAPTCHA_API = 'https://api.2captcha.com'
 
 
 def get_response(img, x=450, y=225, w=400, h=130):
@@ -54,11 +56,11 @@ def write_img(url=None, bin=None):
 
 
 def do_captcha(html, base_url=None):
-    solvemedia = re.search('<iframe[^>]+src="((?:https?:)?//api.solvemedia.com[^"]+)', html)
-    recaptcha = re.search(r'<script\s+type="text/javascript"\s+src="(http://www.google.com[^"]+)', html)
-    recaptcha_v2 = re.search('data-sitekey="([^"]+)', html)
+    solvemedia = re.search(r'<iframe[^>]+src="((?:https?:)?//api\.solvemedia\.com[^"]+)', html)
+    recaptcha = re.search(r'<script\s+type="text/javascript"\s+src="(http://www\.google\.com[^"]+)', html)
+    recaptcha_v2 = re.search(r'data-sitekey="([^"]+)', html)
     xfilecaptcha = re.search(r'<img\s+src="([^"]+/captchas/[^"]+)', html)
-    ccapimg = re.search('key=([^"]+)"', html)
+    ccapimg = re.search(r'key=([^"]+)"', html)
 
     if solvemedia:
         return do_solvemedia_captcha(solvemedia.group(1))
@@ -130,6 +132,52 @@ def do_recaptcha_v2(sitekey):
         return {'g-recaptcha-response': token}
 
     return {}
+
+
+def do_turnstile(sitekey, page_url, timeout=120):
+    """
+    Solve a standalone Cloudflare Turnstile widget through the 2Captcha API
+    (createTask / getTaskResult). Turnstile cannot be solved in pure python,
+    so the token is bought from the service using the API key from the
+    addon settings. Returns the form fields to POST back to the site
+    (Turnstile fills both names in reCAPTCHA compatibility mode) or an
+    empty dict if no API key is configured.
+    """
+    api_key = common.get_setting('twocaptcha_key')
+    if not api_key:
+        return {}
+
+    common.logger.log_debug('Cloudflare Turnstile via 2Captcha: %s' % sitekey)
+    common.kodi.notify(msg=common.i18n('solving_captcha'), duration=8000)
+    headers = {'User-Agent': common.SMR_USER_AGENT}
+    task = {
+        'clientKey': api_key,
+        'task': {
+            'type': 'TurnstileTaskProxyless',
+            'websiteURL': page_url,
+            'websiteKey': sitekey
+        }
+    }
+    resp = json.loads(net.http_POST(TWOCAPTCHA_API + '/createTask', form_data=task, headers=headers, jdata=True).content)
+    if resp.get('errorId'):
+        raise Exception('2Captcha: %s' % resp.get('errorCode', 'createTask failed'))
+
+    result = {'clientKey': api_key, 'taskId': resp.get('taskId')}
+    waited = 0
+    # the service asks for the first poll after 5 seconds and 5 seconds between polls
+    while waited < timeout:
+        common.kodi.sleep(5000)
+        waited += 5
+        resp = json.loads(net.http_POST(TWOCAPTCHA_API + '/getTaskResult', form_data=result, headers=headers, jdata=True).content)
+        if resp.get('errorId'):
+            raise Exception('2Captcha: %s' % resp.get('errorCode', 'getTaskResult failed'))
+        if resp.get('status') == 'ready':
+            token = resp.get('solution', {}).get('token')
+            if token:
+                return {'cf-turnstile-response': token, 'g-recaptcha-response': token}
+            break
+
+    raise Exception('2Captcha: no Turnstile token received')
 
 
 def do_xfilecaptcha(captcha_url):
