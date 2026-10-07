@@ -79,6 +79,16 @@ FS_FIRST_FRAME = 0.15   # seconds of video played before going full screen
 FS_TIMEOUT = 4.0        # full-screen window never came up: keep it windowed
 _OPEN_BLOCKERS = 'System.HasActiveModalDialog | Window.IsActive(1180)'
 _BUSY = 'Window.IsActive(busydialog) | Window.IsActive(busydialognocancel)'
+# 3.2.43~beta4: after any OTHER playback activity (a real stream, TMDbHelper's
+# dummy splash, a source picker resolving under the busy spinner, a failed
+# ResolvePath) Kodi's playlist player can be left half-reset for a while. A
+# trailer posted into that state crashed Kodi in
+# CPlayListPlayer::OnApplicationMessage ("item that's out of range", core
+# 2026-10-07 20:28:10 - 10 s after Fen Light's resolve failed). So no trailer
+# starts until things have been quiet this long:
+COOLDOWN_AFTER_PLAYBACK = 30.0
+OWN_TEARDOWN = 4.0      # our own trailer closing does not count as activity
+_ACTIVITY = 'Player.HasMedia | ' + _BUSY
 
 
 def _log(msg, level=xbmc.LOGINFO):
@@ -237,6 +247,9 @@ class Engine(object):
         self.fs_mode = False           # this trailer is meant to go full screen
         self.fs_asked = 0.0            # when ActivateWindow(fullscreenvideo) was sent
         self.fs_seen = False           # the full-screen window has been up
+        self.quiet_until = time.monotonic() + COOLDOWN_AFTER_PLAYBACK   # boot settle
+        self.released_at = 0.0         # when our own trailer was let go
+        self._quiet_logged = False
 
     # ------------------------------------------------------------- helpers
     def _resolver(self, quality):
@@ -461,6 +474,7 @@ class Engine(object):
     def _release(self):
         """Forget the trailer without touching the player."""
         self.state = 'idle'
+        self.released_at = time.monotonic()
         self.url = ''
         self.key = ''
         self.via_plugin = False
@@ -586,6 +600,17 @@ class Engine(object):
             if self.state != 'idle':
                 return True
 
+        # ---- idle: first make sure nothing else has been playing/resolving
+        if self._recent_activity(now):
+            if item:
+                if key != self.cand_key:   # the delay runs during the cooldown
+                    self.cand_key = key
+                    self.cand_since = now
+                    self.done_key = ''
+            else:
+                self.cand_key = ''
+            return eligible
+
         # ---- idle: find a title to preview
         if not item:
             self.cand_key = ''
@@ -614,9 +639,41 @@ class Engine(object):
             return True
         if _cond('Player.HasMedia') or _cond(_OPEN_BLOCKERS):
             return True                  # something else plays, or a dialog is open
+        if not self._playlist_clean():
+            return True                  # cleared a leftover playlist; start next tick
         if not self._start(item, stream, cfg):
             self.done_key = key
         return True
+
+    def _recent_activity(self, now):
+        """True while another add-on's playback (or its source picker /
+        resolve) is happening or happened less than COOLDOWN ago."""
+        own = now - self.released_at < OWN_TEARDOWN
+        if not own and _cond(_ACTIVITY):
+            if now >= self.quiet_until and not self._quiet_logged:
+                _log('playback activity - trailers paused %ds' % COOLDOWN_AFTER_PLAYBACK)
+                self._quiet_logged = True
+            self.quiet_until = now + COOLDOWN_AFTER_PLAYBACK
+            return True
+        if now < self.quiet_until:
+            return True
+        self._quiet_logged = False
+        return False
+
+    def _playlist_clean(self):
+        """A failed resolve can leave items in Kodi's video playlist. Clear it
+        through JSON-RPC (handled on Kodi's main thread, in order with the
+        playlist player) and start on a later tick."""
+        try:
+            length = int(_info('Playlist.Length(video)') or 0)
+        except ValueError:
+            length = 0
+        if length <= 0:
+            return True
+        _rpc('Playlist.Clear', {'playlistid': 1})
+        _log('cleared %d leftover item(s) from the video playlist before a trailer' % length)
+        self.quiet_until = time.monotonic() + 2.0
+        return False
 
     def _tick_fullscreen(self, now):
         """Full-screen trailer bookkeeping. None = let the normal tick decide."""
